@@ -1,0 +1,13 @@
+\.orig$
+\.orig\..*$
+\.chg\..*$
+\.rej$
+\.conflict\~$
+\.settings/
+.*/target
+.*~
+re: .*\.log
+\.DS_Store
+\.classpath
+\.project
+\.factorypath

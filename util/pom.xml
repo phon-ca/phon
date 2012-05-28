@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>phon</artifactId>
+    <groupId>ca.phon</groupId>
+    <version>${build.version}</version>
+    <relativePath>..</relativePath>
+  </parent>
+ 
+  <artifactId>phon-util</artifactId>
+  <name>Phon Utility Classes</name>
+  <description>A collection of useful classes used withing the Phon libraries.</description>
+
+  <dependencies>
+  	<dependency>
+  		<groupId>de.susebox</groupId>
+  		<artifactId>jtopas</artifactId>
+  		<version>0.8</version>
+  	</dependency>
+  </dependencies>
+  
+</project>

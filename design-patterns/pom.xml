@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>phon</artifactId>
+    <groupId>ca.phon</groupId>
+    <version>${build.version}</version>
+    <relativePath>..</relativePath>
+  </parent>
+
+  <artifactId>phon-design-patterns</artifactId>
+  <name>Phon Design Patterns</name>
+  <description>Generic implementations of useful design patterns.</description>
+
+  	<build>
+		<plugins>
+  			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<!-- Disable annotation processing for this project -->
+					<compilerArgument>-proc:none</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Phon - An open source tool for research in phonology.
+    Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+    This file specifies the xml file format for Phon's feature matrix.
+    Feature sets are used in many of the internal algorithms and searches
+    in Phon.
+    
+    For more information on creating custom feature sets for use in searches,
+    see http://phon.ling.mun.ca/phontrac/wiki/search/customfeatures
+-->
+<!-- 
+    2012-01-11 (gjh): created file
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://phon.ling.mun.ca/ns/features"
+    targetNamespace="http://phon.ling.mun.ca/ns/features">
+    
+    <!--
+        Our root element
+    -->
+    <xs:element name="feature_matrix" type="featureMatrixType">
+        <!--
+            Setup constraints for references to
+            declared features
+        -->
+        <xs:key name="feature_key">
+            <xs:selector xpath="feature"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
+        </xs:key>
+        
+        <xs:keyref refer="feature_key" name="feature_key_ref">
+            <xs:selector xpath="."></xs:selector>
+            <xs:field xpath="feature_set"></xs:field>
+        </xs:keyref>
+        
+        <!--
+            Don't allow duplicate unicode entries
+        -->
+        <xs:unique name="feature_set_key">
+            <xs:selector xpath=".//feature_set"></xs:selector>
+            <xs:field xpath="@unicode"></xs:field>
+        </xs:unique>
+    </xs:element>
+    
+    <!--
+        JAXB requires elements we wish to parse in fragments 
+        to be declared at the root level of the schema
+    -->
+    <xs:element name="feature" type="featureType"/>
+    <xs:element name="feature_set" type="featureSetType"/>
+    <xs:element name="features" type="xs:IDREFS"/>
+    <xs:element name="name" type="nonEmptyString"/>
+    <xs:element name="synonym" type="nonEmptyString"/>
+    <xs:element name="primary_family" type="family"/>
+    <xs:element name="secondary_family" type="family"/>
+    
+    <xs:complexType name="featureMatrixType" mixed="false">
+        <xs:sequence>
+            <xs:element ref="feature" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="feature_set" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="featureSetType" mixed="false">
+        <xs:simpleContent>
+            <xs:extension base="xs:IDREFS">
+                <xs:attribute name="unicode" type="hexValue" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:complexType name="featureType" mixed="false">
+        <xs:sequence>
+            <xs:element ref="synonym" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="primary_family" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="secondary_family" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        
+        <xs:attribute name="name" type="xs:ID" use="required"/>
+    </xs:complexType>
+    
+    <xs:simpleType name="family">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="place"/>
+            <xs:enumeration value="manner"/>
+            <xs:enumeration value="height"/>
+            <xs:enumeration value="tongue root"/>
+            <xs:enumeration value="backness"/>
+            <xs:enumeration value="diacritic"/>
+            <xs:enumeration value="labial"/>
+            <xs:enumeration value="dorsal"/>
+            <xs:enumeration value="coronal"/>
+            <xs:enumeration value="voicing"/>
+            <xs:enumeration value="continuancy"/>
+            <xs:enumeration value="nasality"/>
+            <xs:enumeration value="stridency"/>
+            <xs:enumeration value="guttural"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="hexValue">
+        <xs:restriction base="xs:NCName">
+            <xs:pattern value="U[a-fA-F0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="nonEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+</xs:schema>
