@@ -130,33 +130,32 @@ group
 	;
 
 matcher
-	:	^(MATCHER bm=base_matcher pluginMatchers+=plugin_matcher* q=quantifier?)
+scope {
+	List<PhoneMatcher> pluginMatchers;
+}
+@init {
+	$matcher::pluginMatchers = new ArrayList<PhoneMatcher>();
+}
+	:	^(MATCHER bm=base_matcher (pluginMatcher=plugin_matcher {$matcher::pluginMatchers.add($pluginMatcher.value);})* q=quantifier?)
 	{
 		// append matcher to fsa
 		PhoneMatcher matcher = bm;
 		
-		PhoneMatcher[] pMatchers = new PhoneMatcher[0];
+		PhoneMatcher[] pMatchers = new PhoneMatcher[$matcher::pluginMatchers.size()];
+		for(int i = 0; i < $matcher::pluginMatchers.size(); i++)
+			pMatchers[i] = PhoneMatcher.class.cast($matcher::pluginMatchers.get(i));
 		
-		if($pluginMatchers != null) {
-			pMatchers = new PhoneMatcher[$pluginMatchers.size()];
-			for(int i = 0; i < $pluginMatchers.size(); i++)
-				pMatchers[i] = PhoneMatcher.class.cast($pluginMatchers.get(i));
-		}
 		
 		if(q == null)
 			getFSA().appendMatcher(matcher, pMatchers);
 		else
 			getFSA().appendMatcher(matcher, q, pMatchers);
 	}
-	|	^(groupIndex=back_reference pluginMatchers+=plugin_matcher* q=quantifier?)
+	|	^(groupIndex=back_reference (pluginMatcher=plugin_matcher {$matcher::pluginMatchers.add($pluginMatcher.value);})* q=quantifier?)
 	{
-		PhoneMatcher[] pMatchers = new PhoneMatcher[0];
-		
-		if($pluginMatchers != null) {
-			pMatchers = new PhoneMatcher[$pluginMatchers.size()];
-			for(int i = 0; i < $pluginMatchers.size(); i++)
-				pMatchers[i] = PhoneMatcher.class.cast($pluginMatchers.get(i));
-		}
+		PhoneMatcher[] pMatchers = new PhoneMatcher[$matcher::pluginMatchers.size()];
+		for(int i = 0; i < $matcher::pluginMatchers.size(); i++)
+			pMatchers[i] = PhoneMatcher.class.cast($matcher::pluginMatchers.get(i));
 		
 		if(q == null)
 			getFSA().appendBackReference(groupIndex, pMatchers);
@@ -193,11 +192,17 @@ single_phone_matcher returns [PhoneMatcher value]
 	;
 	
 class_matcher returns [PhoneMatcher value]
-	:	^(PHONE_CLASS matchers+=single_phone_matcher+)
+scope {
+	List<PhoneMatcher> innerMatchers;
+}
+@init {
+	$class_matcher::innerMatchers = new ArrayList<PhoneMatcher>();
+}
+	:	^(PHONE_CLASS (innerMatcher=single_phone_matcher {$class_matcher::innerMatchers.add($innerMatcher.value);})+)
 	{
-		PhoneMatcher[] classMatchers = new PhoneMatcher[$matchers.size()];
-		for(int i = 0; i < $matchers.size(); i++) {
-			classMatchers[i] = (PhoneMatcher)$matchers.get(i);
+		PhoneMatcher[] classMatchers = new PhoneMatcher[$class_matcher::innerMatchers.size()];
+		for(int i = 0; i < $class_matcher::innerMatchers.size(); i++) {
+			classMatchers[i] = (PhoneMatcher)$class_matcher::innerMatchers.get(i);
 		}
 		
 		$value = new PhoneClassMatcher(classMatchers);
@@ -205,6 +210,12 @@ class_matcher returns [PhoneMatcher value]
 	;
 
 plugin_matcher returns [PhoneMatcher value]
+scope {
+	List<String> scTypes;
+}
+@init {
+	$plugin_matcher::scTypes = new ArrayList<String>();
+}
 	:	^(PLUGIN STRING)
 	{
 		String typeName = $PLUGIN.text;
@@ -213,12 +224,11 @@ plugin_matcher returns [PhoneMatcher value]
 			$value = pluginMatcher.createMatcher(StringEscapeUtils.unescapeJava($STRING.text.substring(1, $STRING.text.length()-1)));
 		}
 	}
-	|	^(PLUGIN scTypes+=negatable_identifier+)
+	|	^(PLUGIN (sc=negatable_identifier {$plugin_matcher::scTypes.add($sc.text);})+)
 	{
 		SyllabificationInfoMatcher retVal = new SyllabificationInfoMatcher();
 		
-		for(Object scTypeObj:$scTypes) {
-			String scTypeString = scTypeObj.toString();
+		for(String scTypeString:$plugin_matcher::scTypes) {
 			boolean not = false;
 			if(scTypeString.startsWith("-")) {
 				not = true;
@@ -247,24 +257,28 @@ back_reference returns [Integer groupNumber]
 	;
 	
 feature_set_matcher returns [FeatureSetMatcher matcher]
-	:	^(FEATURE_SET features+=negatable_identifier*)
+scope {
+	List<String> features;
+}
+@init {
+	$feature_set_matcher::features = new ArrayList<String>();
+}
+	:	^(FEATURE_SET (f=negatable_identifier {$feature_set_matcher::features.add($f.text);})*)
 	{
 		$matcher = new FeatureSetMatcher();
 		
-		if($features != null) {
-			for(Object featureObj:$features) {
-				String feature = featureObj.toString();
-				boolean not = false;
-				if(feature.startsWith("-")) {
-					not = true;
-					feature = feature.substring(1);
-				}
-				if(not)
-					matcher.addNotFeature(feature);
-				else
-					matcher.addRequiredFeature(feature);
+		for(String feature:$feature_set_matcher::features) {
+			boolean not = false;
+			if(feature.startsWith("-")) {
+				not = true;
+				feature = feature.substring(1);
 			}
+			if(not)
+				matcher.addNotFeature(feature);
+			else
+				matcher.addRequiredFeature(feature);
 		}
+		
 	}
 	;
 	

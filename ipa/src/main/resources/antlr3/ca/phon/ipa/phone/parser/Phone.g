@@ -97,20 +97,7 @@ public void reportError(RecognitionException e) {
  * Each word is expected to be separated by a space
  */
 transcription returns [IPATranscript transcript]
-	:	wrds+=word (word_boundary wrds+=word)*
-	{
-		$transcript = new IPATranscript();
-		for(Object wordObj:$wrds) {
-			IPATranscript word = IPATranscript.class.cast(wordObj);
-			
-			if(word != null) {
-				if($transcript.size() > 0)
-					$transcript.add(factory.createWordBoundary());
-				
-				$transcript.addAll(word);
-			}
-		}
-	}
+	:	w1=word {$transcript = $w1.word;} (word_boundary {$transcript.add(factory.createWordBoundary());} w2=word {$transcript.addAll($w2.word);})*
 	;
 	
 /**
@@ -122,14 +109,8 @@ transcription returns [IPATranscript transcript]
  * @returns a list of ca.phon.phone.Phone objects
  */
 word returns [IPATranscript word]
-	:	eles+=word_element+
-	{
-		$word = new IPATranscript();
-		for(Object obj:$eles) {
-			Phone ph = Phone.class.cast(obj);
-			$word.add(ph);
-		}
-	}
+@init { $word = new IPATranscript(); }
+	:	(we=word_element {$word.add($we.p);})+
 	;
 	
 word_element returns [Phone p]
@@ -255,18 +236,17 @@ single_phone returns [BasicPhone phone]
  * Phone + optional COMBINING diacritics
  */
 base_phone returns [BasicPhone phone]
-	:	initialToken=(CONSONANT|VOWEL|COVER_SYMBOL|GLIDE) diacritics+=COMBINING_DIACRITIC* len=phone_length?
+scope {
+	List<Character> cmbDias;
+}
+@init {
+	$base_phone::cmbDias = new ArrayList<Character>();
+}
+	:	initialToken=(CONSONANT|VOWEL|COVER_SYMBOL|GLIDE) (cd=COMBINING_DIACRITIC {$base_phone::cmbDias.add($cd.text.charAt(0));})* len=phone_length?
 	{
 		Character basePhone = $initialToken.text.charAt(0);
-		List<Character> combining = new ArrayList<Character>();
-		if($diacritics != null) {
-			for(int i = 0; i < $diacritics.size(); i++) {
-				Token t = (Token)$diacritics.get(i);
-				combining.add(t.getText().charAt(0));
-			}
-		}
 		
-		$phone = factory.createPhone(basePhone, combining.toArray(new Character[0]), 0.0f);
+		$phone = factory.createPhone(basePhone, $base_phone::cmbDias.toArray(new Character[0]), 0.0f);
 	}
 	;
 	

@@ -43,15 +43,15 @@ public class VisitsAnnotationProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations,
 			RoundEnvironment roundEnv) {
-		Set<? extends Element> visitsElement = 
-				roundEnv.getElementsAnnotatedWith(Visits.class);
-		for(Element ele:visitsElement) {
-			if(ele.getKind() != ElementKind.METHOD) {
-				processingEnv.getMessager().printMessage(Kind.ERROR, 
-						"@Visits can only be used on methods.", ele);
-			}
-			checkType(ele);
-		}
+//		Set<? extends Element> visitsElement = 
+//				roundEnv.getElementsAnnotatedWith(Visits.class);
+//		for(Element ele:visitsElement) {
+//			if(ele.getKind() != ElementKind.METHOD) {
+//				processingEnv.getMessager().printMessage(Kind.ERROR, 
+//						"@Visits can only be used on methods.", ele);
+//			}
+//			checkType(ele);
+//		}
 		return false;
 	}
 	
