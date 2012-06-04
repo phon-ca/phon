@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.plugins.opgraph.app.commands.syllabifier;
+package ca.phon.syllabifier.editor.commands.syllabifier;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -31,7 +31,7 @@ import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.GraphEditor;
 import ca.gedge.opgraph.app.IconLibrary;
 import ca.gedge.opgraph.app.IconLibrary.IconType;
-import ca.phon.plugins.opgraph.app.SyllabifierEditor;
+import ca.phon.syllabifier.editor.SyllabifierEditor;
 
 /**
  * A command that steps the processing context of the active editor. If the

@@ -12,6 +12,16 @@
   <description></description>
 
   <dependencies>
+    <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-opgraph</artifactId>
+      <version>${build.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-components</artifactId>
+      <version>${build.version}</version>
+    </dependency>
   </dependencies>
   
 </project>

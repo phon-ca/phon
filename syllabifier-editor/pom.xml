@@ -7,11 +7,26 @@
     <relativePath>..</relativePath>
   </parent>
  
+  <groupId>ca.phon</groupId>
   <artifactId>phon-syllabifier-editor</artifactId>
   <name>Phon Syllabifier Editor</name>
   <description>Editor for creating/modifying syllabifiers.</description>
 
   <dependencies>
+    <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-syllabifier</artifactId>
+      <version>${build.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.infonode</groupId>
+      <artifactId>idw-gpl</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>net.infonode</groupId>
+      <artifactId>ilf-gpl</artifactId>
+      <version>1.6.1</version>
+    </dependency>
   </dependencies>
-  
 </project>

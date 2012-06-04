@@ -19,7 +19,7 @@
 /**
  * 
  */
-package ca.phon.plugins.opgraph.app.commands.syllabifier;
+package ca.phon.syllabifier.editor.commands.syllabifier;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,7 +30,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.MenuProvider;
 import ca.gedge.opgraph.app.components.PathAddressableMenu;
-import ca.phon.plugins.opgraph.app.SyllabifierEditor;
+import ca.phon.syllabifier.editor.SyllabifierEditor;
 
 /**
  * Menu provider for core functions.

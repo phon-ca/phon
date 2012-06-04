@@ -1,11 +1,10 @@
-package ca.phon.syllable.phonex;
+package ca.phon.ipa.phone.phonex;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.phon.ipa.phone.BasicPhone;
 import ca.phon.ipa.phone.Phone;
-import ca.phon.ipa.phone.phonex.PhoneMatcher;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

@@ -1,13 +1,11 @@
-package ca.phon.plugins.opgraph.nodes.phonex;
+package ca.phon.opgraph.nodes.phonex;
 
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import ca.gedge.opgraph.InputField;
@@ -21,8 +19,6 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeMetadata;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.gedge.opgraph.extensions.Publishable.PublishedInput;
-import ca.gedge.opgraph.extensions.Publishable.PublishedOutput;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.phone.phonex.PhonexMatcher;

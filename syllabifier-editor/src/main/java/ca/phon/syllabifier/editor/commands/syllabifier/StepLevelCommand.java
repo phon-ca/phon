@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.plugins.opgraph.app.commands.syllabifier;
+package ca.phon.syllabifier.editor.commands.syllabifier;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;

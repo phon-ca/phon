@@ -1,4 +1,4 @@
-package ca.phon.plugins.opgraph.app;
+package ca.phon.syllabifier.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -51,8 +51,7 @@ import ca.gedge.opgraph.app.components.PathAddressableMenu;
 import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
 import ca.gedge.opgraph.app.extensions.NodeMetadata;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.plugins.opgraph.app.commands.syllabifier.SyllabifierMenuProvider;
-import ca.phon.plugins.opgraph.nodes.syllabifier.IPASourceNode;
+import ca.phon.syllabifier.editor.commands.syllabifier.SyllabifierMenuProvider;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.ipa.SyllabificationDisplay;
@@ -154,8 +153,6 @@ public class SyllabifierEditor extends JFrame {
 			
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		JPanel topPanel = new JPanel(new VerticalLayout());

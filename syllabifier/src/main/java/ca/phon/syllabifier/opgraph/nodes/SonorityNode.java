@@ -1,4 +1,4 @@
-package ca.phon.plugins.opgraph.nodes.syllabifier;
+package ca.phon.syllabifier.opgraph.nodes;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

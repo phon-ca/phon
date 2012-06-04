@@ -1,4 +1,4 @@
-package ca.phon.plugins.opgraph.nodes.syllabifier;
+package ca.phon.syllabifier.opgraph.nodes;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OperableContext;

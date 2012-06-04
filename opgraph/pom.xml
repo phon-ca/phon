@@ -12,6 +12,26 @@
   <description>Phon extensions to the opgraph framework.</description>
 
   <dependencies>
+    <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-ipa</artifactId>
+      <version>${build.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.gedge</groupId>
+      <artifactId>opgraph-api</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.gedge</groupId>
+      <artifactId>opgraph-app</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.gedge</groupId>
+      <artifactId>opgraph-common-nodes</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   
 </project>

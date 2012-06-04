@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import ca.phon.syllabifier.*;
-import ca.phon.syllabifier.phonex.*;
+import ca.phon.fsa.*;
+import ca.phon.syllable.phonex.*;
 import ca.phon.syllable.*;
 
 import ca.phon.ipa.phone.*;

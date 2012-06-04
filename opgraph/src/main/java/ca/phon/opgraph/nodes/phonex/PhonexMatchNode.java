@@ -1,4 +1,4 @@
-package ca.phon.plugins.opgraph.nodes.phonex;
+package ca.phon.opgraph.nodes.phonex;
 
 import java.awt.Component;
 import java.util.Properties;

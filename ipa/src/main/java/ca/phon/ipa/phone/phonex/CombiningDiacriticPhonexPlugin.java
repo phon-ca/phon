@@ -1,12 +1,8 @@
-package ca.phon.syllable.phonex;
+package ca.phon.ipa.phone.phonex;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.ipa.phone.phonex.PhoneMatcher;
-import ca.phon.ipa.phone.phonex.PhonexPatternException;
-import ca.phon.ipa.phone.phonex.PhonexPlugin;
-import ca.phon.ipa.phone.phonex.PluginMatcher;
 
 /**
  * Provides a phonex plug-in for matching the 
