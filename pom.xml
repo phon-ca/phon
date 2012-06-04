@@ -53,6 +53,9 @@
 	  <module>design-patterns</module>
 	  <module>ipa</module>
 	  <module>components</module>
+	  <module>opgraph</module>
+	  <module>syllabifier</module>
+	  <module>syllabifier-editor</module>
   </modules>
 
   <build>
