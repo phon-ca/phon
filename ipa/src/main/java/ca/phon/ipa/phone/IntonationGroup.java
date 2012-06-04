@@ -1,6 +1,7 @@
 package ca.phon.ipa.phone;
 
 import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Represents Major/Minor intonation group markers.
@@ -20,6 +21,8 @@ public class IntonationGroup extends Phone {
 	 */
 	public IntonationGroup(IntonationGroupType type) {
 		this.type = type;
+		
+		setScType(SyllableConstituentType.SYLLABLEBOUNDARYMARKER);
 	}
 
 	@Override

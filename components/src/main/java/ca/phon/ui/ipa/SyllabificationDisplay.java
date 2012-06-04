@@ -18,7 +18,6 @@ import javax.swing.plaf.ComponentUI;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.phone.Phone;
-import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
@@ -199,33 +198,33 @@ public class SyllabificationDisplay extends JComponent {
 		return -1;
 	}
 
-	/**
-	 * Re-syllabifiy using given syllabifier
-	 * @param syllabifier
-	 */
-	public void resyllabifiy(Syllabifier syllabifier) {
-//		int pIdx = 0;
-//		for(int gIdx = 0; gIdx < groups.size(); gIdx++) {
-//			List<Phone> grpPhones = groups.get(gIdx);
-//
-//			String grpTxt = "";
-//			for(Phone grpP:grpPhones) grpTxt += grpP.getPhoneString();
-//			List<Phone> unsyllabifiedPhones =
-//					Phone.toPhoneList(grpTxt);
-//			syllabifier.syllabify(unsyllabifiedPhones);
-//
-//			// copy syllabification
-//			for(int i = 0; i < grpPhones.size(); i++) {
-//				if(i < unsyllabifiedPhones.size()) {
-//					Phone newSyllabifiedPhone = unsyllabifiedPhones.get(i);
-//					grpPhones.get(i).setScType(newSyllabifiedPhone.getScType());
-//				}
-//			}
-//			
-//		}
-//		repaint();
-//		super.firePropertyChange(RESYLLABIFY_PROP_ID, true, false);
-	}
+//	/**
+//	 * Re-syllabifiy using given syllabifier
+//	 * @param syllabifier
+//	 */
+//	public void resyllabifiy(Syllabifier syllabifier) {
+////		int pIdx = 0;
+////		for(int gIdx = 0; gIdx < groups.size(); gIdx++) {
+////			List<Phone> grpPhones = groups.get(gIdx);
+////
+////			String grpTxt = "";
+////			for(Phone grpP:grpPhones) grpTxt += grpP.getPhoneString();
+////			List<Phone> unsyllabifiedPhones =
+////					Phone.toPhoneList(grpTxt);
+////			syllabifier.syllabify(unsyllabifiedPhones);
+////
+////			// copy syllabification
+////			for(int i = 0; i < grpPhones.size(); i++) {
+////				if(i < unsyllabifiedPhones.size()) {
+////					Phone newSyllabifiedPhone = unsyllabifiedPhones.get(i);
+////					grpPhones.get(i).setScType(newSyllabifiedPhone.getScType());
+////				}
+////			}
+////			
+////		}
+////		repaint();
+////		super.firePropertyChange(RESYLLABIFY_PROP_ID, true, false);
+//	}
 
 	public void resyllabifiy(String name) {
 //		Syllabifier syllabifier = Syllabifier.getInstance(name);

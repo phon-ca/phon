@@ -1,6 +1,7 @@
 package ca.phon.ipa.phone;
 
 import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Represents a pause in an IPA transcription.
@@ -20,6 +21,8 @@ public final class Pause extends Phone {
 	 */
 	Pause(String len) {
 		this(PauseLength.lengthFromString(len));
+		
+		setScType(SyllableConstituentType.SYLLABLEBOUNDARYMARKER);
 	}
 	
 	/**

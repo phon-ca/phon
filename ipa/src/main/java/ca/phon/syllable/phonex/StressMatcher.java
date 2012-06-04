@@ -1,4 +1,4 @@
-package ca.phon.syllabifier.phonex;
+package ca.phon.syllable.phonex;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,7 +7,7 @@ import java.util.Set;
 
 import ca.phon.ipa.phone.Phone;
 import ca.phon.ipa.phone.phonex.PhoneMatcher;
-import ca.phon.syllabifier.SyllabificationInfo;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableStress;
 
 /**

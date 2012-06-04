@@ -3,7 +3,7 @@ package ca.phon.ipa.phone;
 import ca.phon.capability.Capability;
 import ca.phon.capability.Extendable;
 import ca.phon.ipa.featureset.FeatureSet;
-import ca.phon.syllabifier.SyllabificationInfo;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
@@ -38,6 +38,10 @@ public abstract class Phone extends Extendable implements Visitable<Phone> {
 	 * set of features will be returned by {@link #getFeatureSet()}
 	 */
 	private FeatureSet customFeatureSet = null;
+	
+	public Phone() {
+		super();
+	}
 	
 	/**
 	 * Set the custom features for this {@link Phone}
@@ -79,7 +83,7 @@ public abstract class Phone extends Extendable implements Visitable<Phone> {
 	}
 	
 	/**
-	 * Direct access to the {@link SyllabificationInfo} capability.
+	 * Direct access to {@link SyllabificationInfo#getConstituentType()}.
 	 * Will return the syllable constituent type for the phone 
 	 * (if available.)
 	 * 
@@ -96,6 +100,20 @@ public abstract class Phone extends Extendable implements Visitable<Phone> {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Direct access to {@link Phone}s {@link SyllabificationInfo#setConstituentType(SyllableConstituentType)}.
+	 * 
+	 * @param scType the constituent type for the phon
+	 */
+	public void setScType(SyllableConstituentType scType) {
+		SyllabificationInfo syllInfo = getCapability(SyllabificationInfo.class);
+		if(syllInfo == null) {
+			syllInfo = new SyllabificationInfo();
+			putCapability(SyllabificationInfo.class, syllInfo);
+		}
+		syllInfo.setConstituentType(scType);
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package ca.phon.ipa.phone;
 
 import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Represents a syllable boundary between words.
@@ -11,6 +12,12 @@ import ca.phon.ipa.featureset.FeatureSet;
  * 
  */
 public final class SyllableBoundary extends Phone {
+	
+	public SyllableBoundary() {
+		super();
+		
+		setScType(SyllableConstituentType.SYLLABLEBOUNDARYMARKER);
+	}
 
 	@Override
 	protected FeatureSet _getFeatureSet() {

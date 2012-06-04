@@ -2,6 +2,7 @@ package ca.phon.ipa.phone;
 
 import ca.phon.ipa.featureset.FeatureMatrix;
 import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * A stress marker.  Stress markers can either be
@@ -21,6 +22,8 @@ public final class StressMarker extends Phone {
 	 */
 	StressMarker(StressType stress) {
 		this.type = stress;
+		
+		setScType(SyllableConstituentType.SYLLABLESTRESSMARKER);
 	}
 
 	/**

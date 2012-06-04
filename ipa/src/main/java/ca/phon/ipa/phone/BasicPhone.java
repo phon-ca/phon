@@ -67,11 +67,15 @@ public final class BasicPhone extends Phone {
 			Character[] combiningDiacritics, float length,
 			Character suffixDiacritic) {
 		super();
-		setPrefixDiacritic(prefixDiacritic);
+		if(prefixDiacritic != null)
+			setPrefixDiacritic(prefixDiacritic);
 		setBasePhone(basePhone);
-		setCombiningDiacritics(combiningDiacritics);
-		setLength(length);
-		setSuffixDiacritic(suffixDiacritic);
+		if(combiningDiacritics != null)
+			setCombiningDiacritics(combiningDiacritics);
+		if(length > 0.0f)
+			setLength(length);
+		if(suffixDiacritic != null)
+			setSuffixDiacritic(suffixDiacritic);
 	}
 
 	/* Get/Set methods */

@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 public class TestPhoneVisitor extends TestCase {
 	
 	public void testRealPhoneVisitor() {
-		IPATranscript transcript = IPATranscript.fromString("test com\u035car");
+		IPATranscript transcript = IPATranscript.parseTranscript("test com\u035car");
 		transcript.accept(new RealPhoneVisitor());
 	}
 		

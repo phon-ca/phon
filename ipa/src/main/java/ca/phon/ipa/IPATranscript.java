@@ -18,6 +18,7 @@ import ca.phon.ipa.phone.parser.PhoneParser;
 import ca.phon.ipa.phone.phonex.PhonexMatcher;
 import ca.phon.ipa.phone.phonex.PhonexPattern;
 import ca.phon.ipa.phone.phonex.PhonexPatternException;
+import ca.phon.syllable.SyllableVisitor;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 import ca.phon.visitor.VisitorAdapter;
@@ -104,6 +105,16 @@ public final class IPATranscript extends ArrayList<Phone> implements Visitable<P
 		return retVal;
 	}
 	
+	/**
+	 * Break the transcript into syllables.
+	 * 
+	 * @return syllables
+	 */
+	public List<IPATranscript> syllables() {
+		final SyllableVisitor visitor = new SyllableVisitor();
+		accept(visitor);
+		return visitor.getSyllables();
+	}
 
 	@Override
 	public void accept(Visitor<Phone> visitor) {

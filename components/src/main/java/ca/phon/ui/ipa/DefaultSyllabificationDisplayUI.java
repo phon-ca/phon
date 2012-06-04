@@ -41,6 +41,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputAdapter;
 
+import org.jdesktop.swingx.painter.effects.GlowPathEffect;
+
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.phone.Phone;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
@@ -379,6 +382,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 //		if(displayFont == null)
 //			displayFont = PrefHelper.getTranscriptFont();
 //		FontMetrics fm = g.getFontMetrics(displayFont);
+		displayFont = new Font("Charis SIL Compact", Font.PLAIN, 12);
 
 		Rectangle phoneRect =
 				new Rectangle(pX, pY, pW, pH);
@@ -394,15 +398,17 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		List<Area> phoneAreas = new ArrayList<Area>();
 		int syllCurrentX = phoneRect.x;
 		for(int gIdx = 0; gIdx < display.getNumberOfGroups(); gIdx++) {
-			List<Phone> grpPhones = display.getPhonesForGroup(gIdx);
-			List<Syllable> grpSylls = Syllabifier.getSyllabification(grpPhones);
+			IPATranscript grpPhones = display.getPhonesForGroup(gIdx);
+			List<IPATranscript> syllables = grpPhones.syllables();
+//			List<Syllable> grpSylls = Syllabifier.getSyllabification(grpPhones);
 
-			for(Syllable s:grpSylls) {
-				List<Phone> syllablePhones =
-						new ArrayList<Phone>();
-				for(Phone p:s.getPhones()) syllablePhones.add(p);
-				syllablePhones = Phone.getSoundPhones(syllablePhones);
-
+			for(IPATranscript s:syllables) {
+//				List<Phone> syllablePhones =
+//						new ArrayList<Phone>();
+//				for(Phone p:s.getPhones()) syllablePhones.add(p);
+//				syllablePhones = Phone.getSoundPhones(syllablePhones);
+				IPATranscript syllablePhones = s.removePunctuation();
+				
 				int sX = syllCurrentX;
 				int sY = phoneRect.y;
 				int sW = syllablePhones.size() * phoneRect.width;
@@ -566,13 +572,13 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 					Font f = displayFont;
 					FontMetrics fm = g.getFontMetrics(f);
 					Rectangle2D stringBounds =
-							fm.getStringBounds(p.getPhoneString(), g);
+							fm.getStringBounds(p.getText(), g);
 					while(
 							(stringBounds.getWidth() > pBox.width)
 							|| (stringBounds.getHeight() > pBox.height)) {
 						f = f.deriveFont(f.getSize2D()-0.2f);
 						fm = g.getFontMetrics(f);
-						stringBounds = fm.getStringBounds(p.getPhoneString(), g);
+						stringBounds = fm.getStringBounds(p.getText(), g);
 					}
 
 					float phoneX =
@@ -582,7 +588,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 					g2d.setFont(f);
 					g2d.setColor(c.getForeground());
-					g2d.drawString(p.getPhoneString(), phoneX, phoneY);
+					g2d.drawString(p.getText(), phoneX, phoneY);
 
 					phoneRect.translate(phoneRect.width, 0);
 				}

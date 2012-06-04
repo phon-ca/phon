@@ -16,7 +16,7 @@ import ca.phon.ipa.phone.Phone;
  * TODO Document this
  *
  */
-public class PhonexPattern {
+public class PhonexPattern implements Comparable<PhonexPattern> {
 	
 	/**
 	 * phonex pattern 
@@ -123,5 +123,13 @@ public class PhonexPattern {
 	 */
 	public String groupName(int gIdx) {
 		return fsa.getGroupName(gIdx);
+	}
+
+	/**
+	 * Compares phonex pattern strings.
+	 */
+	@Override
+	public int compareTo(PhonexPattern arg0) {
+		return pattern().compareTo(arg0.pattern());
 	}
 }

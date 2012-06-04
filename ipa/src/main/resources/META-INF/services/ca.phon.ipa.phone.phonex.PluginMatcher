@@ -1,2 +1,4 @@
-ca.phon.syllabifier.phonex.SyllableConstituentPhonexPlugin
-ca.phon.syllabifier.phonex.StressPhonexPlugin
+ca.phon.syllable.phonex.SyllableConstituentPhonexPlugin
+ca.phon.syllable.phonex.StressPhonexPlugin
+ca.phon.syllable.phonex.CombiningDiacriticPhonexPlugin
+

@@ -1,4 +1,4 @@
-package ca.phon.syllabifier.phonex;
+package ca.phon.syllable.phonex;
 
 import ca.phon.ipa.phone.phonex.PhoneMatcher;
 import ca.phon.ipa.phone.phonex.PhonexPatternException;

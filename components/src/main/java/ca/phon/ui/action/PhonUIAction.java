@@ -33,7 +33,12 @@ import ca.phon.worker.PhonWorker;
  * calling of UI action code.  This class uses reflection
  * to find a specified method with the following signature:
  * <br/>
- * <CODE>(Lca/phon/gui/action/PhonActionEvent;)V</CODE>
+ * <CODE>(Lca/phon/gui/action/PhonActionEvent;)V</CODE>.
+ * If a method accepting a {@link PhonActionEvent} is not found,
+ * this class will look for a method accepting no parameters 
+ * (if {@link #object} is <code>null</code>) or a method
+ * accepting a single parameter with a type to which 
+ * {@link #object} is assignable.
  * </p>
  *
  * <p>By default actions will run on the EDT.  To allow
@@ -181,11 +186,20 @@ public class PhonUIAction extends AbstractAction {
 		public void run() {
 		try {
 			Method m = getMethod();
-
+			
+			Object[] params = new Object[0];
+			if(m.getParameterTypes().length > 0) {
+				Class<?> paramType = m.getParameterTypes()[0];
+				if(paramType == PhonActionEvent.class) {
+					params = new Object[]{evt};
+				} else if(data != null && paramType.isAssignableFrom(data.getClass())) {
+					params = new Object[]{data};
+				}
+			}
 			if(isStaticAction())
-				m.invoke(null, evt);
+				m.invoke(null, params);
 			else
-				m.invoke(object, evt);
+				m.invoke(object, params);
 
 		} catch (InvocationTargetException e) {
 			LOGGER.severe(e.toString());
@@ -222,7 +236,13 @@ public class PhonUIAction extends AbstractAction {
 		}
 	}
 
-	private Method getMethod() throws NoSuchMethodException {
+	/**
+	 * Find the action method.
+	 * @return the method to call - or <code>null</code> if not
+	 * found.
+	 * 
+	 */
+	private Method getMethod() {
 		Class<?> clazz = null;
 
 		if(isStaticAction()) {
@@ -234,8 +254,27 @@ public class PhonUIAction extends AbstractAction {
 		if(clazz == null) 
 			throw new NullPointerException("Class not found");
 
-		Method retVal = 
-				clazz.getMethod(methodId, PhonActionEvent.class);
+		Method retVal = null;
+		
+		try {
+			// look for a method that accepts a PhonActionEvent first
+			retVal = 
+					clazz.getMethod(methodId, PhonActionEvent.class);
+		} catch (NoSuchMethodException ex) {
+			try {
+				if(data != null) {
+					Class<?> dataType = data.getClass();
+					retVal = clazz.getMethod(methodId, new Class[]{dataType});
+				} else {
+					// now look for a method with no parameters
+					retVal = 
+							clazz.getMethod(methodId, new Class[0]);
+				}
+			} catch (NoSuchMethodException ex1) {
+				LOGGER.severe("Could not find method '" + methodId 
+						+ "' in object '" + object.toString() + "'");
+			}
+		}
 		return retVal;
 	}
 }

@@ -3,11 +3,11 @@ package ca.phon.capability;
 /**
  * 
  */
-public interface IExtension<T extends IExtendable> {
+public interface IExtension {
 
 	/**
 	 * Install extension on an extendable object.
 	 */
-	public void installExtension(T obj);
+	public void installExtension(IExtendable obj);
 	
 }

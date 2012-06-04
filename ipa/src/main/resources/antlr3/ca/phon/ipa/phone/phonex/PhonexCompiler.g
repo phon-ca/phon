@@ -296,7 +296,7 @@ identifier returns [String value]
 	;
 	
 negatable_identifier returns [String value]
-	:	^(NAME n=NOT? chars+=LETTER+)
+	:	^(NAME n=MINUS? chars+=LETTER+)
 	{
 		$value = ($n == null ? "" : "-");
 		for(Object obj:$chars) {

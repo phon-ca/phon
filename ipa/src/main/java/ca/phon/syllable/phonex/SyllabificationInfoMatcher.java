@@ -1,11 +1,11 @@
-package ca.phon.syllabifier.phonex;
+package ca.phon.syllable.phonex;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.phon.ipa.phone.Phone;
 import ca.phon.ipa.phone.phonex.PhoneMatcher;
-import ca.phon.syllabifier.SyllabificationInfo;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 
 /**
@@ -50,11 +50,15 @@ public final class SyllabificationInfoMatcher implements PhoneMatcher {
 	public boolean matches(Phone p) {
 		if(matchesAnything()) return true;
 		
-		boolean retVal = false;
+		boolean retVal = true;
 		SyllabificationInfo scInfo = p.getCapability(SyllabificationInfo.class);
 		if(scInfo != null) {
-			retVal = allowedTypes.contains(scInfo.getConstituentType());
-			retVal &= !disallowedTypes.contains(scInfo.getConstituentType());
+			if(allowedTypes.size() > 0)
+				retVal &= allowedTypes.contains(scInfo.getConstituentType());
+			if(disallowedTypes.size() > 0)
+				retVal &= !disallowedTypes.contains(scInfo.getConstituentType());
+		} else {
+			retVal = false;
 		}
 		
 		return retVal;

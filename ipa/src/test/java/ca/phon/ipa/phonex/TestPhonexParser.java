@@ -73,7 +73,7 @@ public class TestPhonexParser extends TestCase {
 		
 		PhonexParser.expr_return exprVal = null;
 		
-		IPATranscript transcript = IPATranscript.fromString("t͜ʃemɪarst");
+		IPATranscript transcript = IPATranscript.parseTranscript("t͜ʃemɪarst");
 		
 		try {
 			exprVal = parser.expr();
