@@ -9,6 +9,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
@@ -38,11 +43,13 @@ import net.infonode.docking.SplitWindow;
 import net.infonode.docking.TabWindow;
 import net.infonode.docking.View;
 import net.infonode.docking.properties.RootWindowProperties;
+import net.infonode.docking.theme.DockingWindowsTheme;
 import net.infonode.docking.util.DockingUtil;
 import net.infonode.docking.util.PropertiesUtil;
 import net.infonode.docking.util.ViewMap;
 
 import ca.gedge.opgraph.ProcessingContext;
+import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditor;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.MenuProvider;
@@ -96,6 +103,31 @@ public class SyllabifierEditor extends JFrame {
 		setupDockingWindow();
 
 		graphEditor.getModel().getConsolePanel().addMouseListener(new ContextPanelContextListener());
+		
+		graphEditor.getDocument().addPropertyChangeListener(GraphDocument.UNDO_STATE, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				getRootPane().putClientProperty("Window.documentModified", graphEditor.getDocument().hasModifications());
+			}
+		});
+		
+		super.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				boolean canClose = true;
+				if(graphEditor.getDocument().hasModifications()) {
+					canClose = graphEditor.getDocument().checkForReset();
+				}
+				if(canClose)
+					dispose();
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				
+			}
+		});
 	}
 	
 	/**
@@ -179,6 +211,10 @@ public class SyllabifierEditor extends JFrame {
 	
 		rootWindow.setWindow(mainSplit);
 		
+		final DockingWindowsTheme theme = 
+				new net.infonode.docking.theme.LookAndFeelDockingTheme();
+		rootWindow.getRootWindowProperties().addSuperObject(theme.getRootWindowProperties());
+		
 		final RootWindowProperties titleBarStyleProperties =
 				PropertiesUtil.createTitleBarStyleRootWindowProperties();
 		// Enable title bar style
@@ -245,7 +281,6 @@ public class SyllabifierEditor extends JFrame {
 		graphEditor.getModel().getConsolePanel().setText("");
 	}
 	
-	
 	public static void main(String[] args) throws Exception {
 		SwingUtilities.invokeLater(
 				new Runnable() { public void run() {
@@ -261,7 +296,7 @@ public class SyllabifierEditor extends JFrame {
 						e.printStackTrace();
 					}
 		SyllabifierEditor editor = new SyllabifierEditor();
-		editor.setDefaultCloseOperation(SyllabifierEditor.EXIT_ON_CLOSE);
+		editor.setDefaultCloseOperation(SyllabifierEditor.DO_NOTHING_ON_CLOSE);
 		editor.setSize(new Dimension(1024, 768));
 		editor.setVisible(true); }});
 	}

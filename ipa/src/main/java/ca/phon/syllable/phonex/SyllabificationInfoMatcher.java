@@ -51,7 +51,7 @@ public final class SyllabificationInfoMatcher implements PhoneMatcher {
 		if(matchesAnything()) return true;
 		
 		boolean retVal = true;
-		SyllabificationInfo scInfo = p.getCapability(SyllabificationInfo.class);
+		SyllabificationInfo scInfo = p.getExtension(SyllabificationInfo.class);
 		if(scInfo != null) {
 			if(allowedTypes.size() > 0)
 				retVal &= allowedTypes.contains(scInfo.getConstituentType());

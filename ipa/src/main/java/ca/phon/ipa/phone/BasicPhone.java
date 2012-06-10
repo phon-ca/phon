@@ -98,7 +98,9 @@ public final class BasicPhone extends Phone {
 				|| (tokenType != IPATokenType.PREFIX_DIACRITIC && tokenType != IPATokenType.SUFFIX_DIACRITIC)) {
 			throw new IllegalArgumentException("Prefix diacritic must be a space-modifiying glyph.");
 		}
+		final String oldString = getText();
 		this.prefixDiacritic = prefixDiacritic;
+		super.firePropertyChange(PHONE_TEXT, oldString, getText());
 	}
 	
 	/**
@@ -164,7 +166,9 @@ public final class BasicPhone extends Phone {
 				throw new IllegalArgumentException("Base phones must be one of: CONSONANT, COVER_SYMBOL, GLIDE, VOWEL");
 			}
 		}
+		final String oldString = getText();
 		this.basePhone = basePhone;
+		super.firePropertyChange(PHONE_TEXT, oldString, getText());
 	}
 	
 	/**

@@ -224,7 +224,7 @@ scope {
 			$value = pluginMatcher.createMatcher(StringEscapeUtils.unescapeJava($STRING.text.substring(1, $STRING.text.length()-1)));
 		}
 	}
-	|	^(PLUGIN (sc=negatable_identifier {$plugin_matcher::scTypes.add($sc.text);})+)
+	|	^(PLUGIN (sc=negatable_identifier {$plugin_matcher::scTypes.add($sc.value);})+)
 	{
 		SyllabificationInfoMatcher retVal = new SyllabificationInfoMatcher();
 		
@@ -263,7 +263,7 @@ scope {
 @init {
 	$feature_set_matcher::features = new ArrayList<String>();
 }
-	:	^(FEATURE_SET (f=negatable_identifier {$feature_set_matcher::features.add($f.text);})*)
+	:	^(FEATURE_SET (f=negatable_identifier {$feature_set_matcher::features.add($f.value);})*)
 	{
 		$matcher = new FeatureSetMatcher();
 		

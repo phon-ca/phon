@@ -101,12 +101,12 @@ public class MarkSyllableConstituentNode extends OperableVertex implements NodeS
 	public void operate(OperableContext context) throws ProcessingException {
 		// get input and set syllabification information
 		if(context.containsKey(ipaIn)) {
-			IPATranscript ipa = (IPATranscript)context.get(ipaIn);
+			final IPATranscript ipa = (IPATranscript)context.get(ipaIn);
 			for(Phone p:ipa) {
-				SyllabificationInfo sInfo = p.getCapability(SyllabificationInfo.class);
+				SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
 				if(sInfo == null) {
-					sInfo = new SyllabificationInfo();
-					p.putCapability(SyllabificationInfo.class, sInfo);
+					sInfo = new SyllabificationInfo(p);
+					p.putExtension(SyllabificationInfo.class, sInfo);
 				}
 				sInfo.setConstituentType(scType);
 			}

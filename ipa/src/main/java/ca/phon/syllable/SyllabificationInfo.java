@@ -1,17 +1,11 @@
 package ca.phon.syllable;
 
-import ca.phon.capability.Capability;
-import ca.phon.capability.Extension;
-import ca.phon.capability.IExtendable;
-import ca.phon.capability.IExtension;
-import ca.phon.ipa.phone.IntonationGroup;
-import ca.phon.ipa.phone.Pause;
+import java.lang.ref.WeakReference;
+
+import ca.phon.extensions.Extension;
+import ca.phon.extensions.ExtensionProvider;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.phone.Phone;
-import ca.phon.ipa.phone.StressMarker;
-import ca.phon.ipa.phone.SyllableBoundary;
-import ca.phon.ipa.phone.WordBoundary;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 
 /**
  * Adds syllabification information to Phones.
@@ -26,8 +20,22 @@ import ca.phon.visitor.annotation.Visits;
  * </ul>
  */
 @Extension(Phone.class)
-@Capability(Phone.class)
-public class SyllabificationInfo implements IExtension {
+public class SyllabificationInfo implements ExtensionProvider {
+	
+	/**
+	 * Property name for constituent type changes
+	 */
+	public final static String PHONE_SCTYPE = "_sctype_";
+	
+	/**
+	 * Property name for stress changes
+	 */
+	public final static String PHONE_STRESS = "_stress_";
+	
+	/**
+	 * Property name for dipthong member changes
+	 */
+	public final static String PHONE_DIPHTHONG_MEMBER = "_diphthong_member_";
 	
 	/**
 	 * The constituent type
@@ -46,13 +54,31 @@ public class SyllabificationInfo implements IExtension {
 	 */
 	private boolean isDipththongMember = false;
 	
-	public SyllabificationInfo() {
-		
+	/**
+	 * weak reference to parent
+	 */
+	private final WeakReference<Phone> phoneRef;
+	
+	public SyllabificationInfo(Phone phone) {
+		this(phone, SyllableConstituentType.UNKNOWN);
 	}
 	
-	public SyllabificationInfo(SyllableConstituentType scType) {
+	public SyllabificationInfo(Phone phone, SyllableConstituentType scType) {
+		phoneRef = new WeakReference<Phone>(phone);
 		this.scType = scType;
 	}
+	
+	/**
+	 * Get parent {@link Phone}
+	 * 
+	 * @return parent phone, may be <code>null</code>
+	 *  if the {@link WeakRefernce} to the parent is no 
+	 *  longer valid.
+	 */
+	public Phone getPhone() {
+		return phoneRef.get();
+	}
+
 	
 	/**
 	 * Return the syllable constituent type.
@@ -70,7 +96,9 @@ public class SyllabificationInfo implements IExtension {
 	 * @param scType
 	 */
 	public void setConstituentType(SyllableConstituentType scType) {
+		final SyllableConstituentType oldType = this.scType;
 		this.scType = scType;
+		getPhone().firePropertyChange(PHONE_SCTYPE, oldType, this.scType);
 	}
 	
 	/**
@@ -80,6 +108,17 @@ public class SyllabificationInfo implements IExtension {
 	 */
 	public SyllableStress getStress() {
 		return stress;
+	}
+	
+	/**
+	 * Set the stress of the parent syllable
+	 * 
+	 * @param stress
+	 */
+	public void setStress(SyllableStress stress) {
+		final SyllableStress oldStress = this.stress;
+		this.stress = stress;
+		getPhone().firePropertyChange(PHONE_STRESS, oldStress, stress);
 	}
 	
 	/**
@@ -103,13 +142,15 @@ public class SyllabificationInfo implements IExtension {
 	 */
 	public void setDiphthongMember(boolean isDiphthongMember) {
 		if(getConstituentType() == SyllableConstituentType.NUCLEUS) {
+			final boolean wasDiphthongMember = this.isDipththongMember;
 			this.isDipththongMember = isDiphthongMember;
+			getPhone().firePropertyChange(PHONE_DIPHTHONG_MEMBER, wasDiphthongMember, isDiphthongMember);
 		}
 	}
 
 	@Override
 	public void installExtension(IExtendable obj) {
-		Phone p = Phone.class.cast(obj);
-		p.putCapability(SyllabificationInfo.class, this);
+		final Phone p = Phone.class.cast(obj);
+		p.putExtension(SyllabificationInfo.class, this);
 	}
 }

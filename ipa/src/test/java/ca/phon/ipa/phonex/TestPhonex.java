@@ -27,7 +27,6 @@ public class TestPhonex extends TestCase {
 				new Range(7, 9, false)
 		};
 		performFindTest(phonex, transcript, ranges);
-		
 	}
 	
 	public void testFind() {

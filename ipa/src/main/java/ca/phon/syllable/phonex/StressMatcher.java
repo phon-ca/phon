@@ -36,7 +36,7 @@ public class StressMatcher implements PhoneMatcher {
 		boolean retVal = false;
 		
 		SyllabificationInfo info = 
-				p.getCapability(SyllabificationInfo.class);
+				p.getExtension(SyllabificationInfo.class);
 		if(info != null) {
 			SyllableStress phoneStress = info.getStress();
 			retVal = stressTypes.contains(phoneStress);

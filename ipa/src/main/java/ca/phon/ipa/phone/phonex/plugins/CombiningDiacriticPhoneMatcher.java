@@ -1,10 +1,12 @@
-package ca.phon.ipa.phone.phonex;
+package ca.phon.ipa.phone.phonex.plugins;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.phon.ipa.phone.BasicPhone;
+import ca.phon.ipa.phone.CompoundPhone;
 import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.phone.phonex.PhoneMatcher;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -14,19 +16,17 @@ import ca.phon.visitor.annotation.Visits;
  * appear in the {@link Phone}s combining diacritics.
  * 
  */
-public class CombiningDiacriticPhoneMatcher implements PhoneMatcher {
-
-	/**
-	 * Allowed diacritics
-	 */
-	private final List<Character> allowedDiacritics = 
-			new ArrayList<Character>();
+public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 	
 	/**
 	 * Constructor
 	 */
-	public CombiningDiacriticPhoneMatcher(List<Character> allowedDiacritics) {
-		this.allowedDiacritics.addAll(allowedDiacritics);
+	public CombiningDiacriticPhoneMatcher(List<Character> allowed) {
+		super(allowed, new ArrayList<Character>());
+	}
+	
+	public CombiningDiacriticPhoneMatcher(List<Character> allowed, List<Character> forbidden) {
+		super(allowed, forbidden);
 	}
 	
 	@Override
@@ -55,11 +55,21 @@ public class CombiningDiacriticPhoneMatcher implements PhoneMatcher {
 		
 		@Visits
 		public void visitBasicPhone(BasicPhone bp) {
+			boolean hasAllowed = false;
 			for(Character c:bp.getCombiningDiacritics()) {
-				matches |= allowedDiacritics.contains(c);
+				hasAllowed |= getAllowedDiacritics().contains(c);
 			}
+			boolean hasForbidden = false;
+			for(Character c:bp.getCombiningDiacritics()) {
+				hasForbidden |= getForbiddenDiacritics().contains(c);
+			}
+			matches = hasAllowed && !hasForbidden;
 		}
 		
+		@Visits
+		public void visitCompoundPhone(CompoundPhone cp) {
+			visit(cp.getFirstPhone());
+		}
 		
 	}
 	
