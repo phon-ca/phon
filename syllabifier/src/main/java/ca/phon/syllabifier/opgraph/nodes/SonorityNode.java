@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,14 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.phone.BasicPhone;
+import ca.phon.ipa.phone.CompoundPhone;
+import ca.phon.ipa.phone.Phone;
+import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
+import ca.phon.syllabifier.phonex.SonorityInfo;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * <p>Marks phones with sonority annotations for use in phonex
@@ -74,8 +82,16 @@ public class SonorityNode extends OperableVertex implements NodeSettings {
 	
 	@Override
 	public void operate(OperableContext context) throws ProcessingException {
-		// TODO Auto-generated method stub
+		// get ipa from context
+		final IPATranscript ipa = 
+				IPATranscript.class.cast(context.get(ipaIn));
+	
+		// mark sonority
+		final SonorityVisitor visitor = new SonorityVisitor();
+		ipa.accept(visitor);
 		
+		// set output
+		context.put(ipaOut, ipa);
 	}
 	
 	/**
@@ -179,6 +195,48 @@ public class SonorityNode extends OperableVertex implements NodeSettings {
 				public void focusGained(FocusEvent arg0) {
 				}
 			});
+		}
+	}
+	
+	/**
+	 * Sonority visitor
+	 */
+	public class SonorityVisitor extends VisitorAdapter<Phone> {
+		
+		private int lastSonority = 0;
+
+		@Override
+		public void fallbackVisit(Phone obj) {
+			// reset sonority
+			lastSonority = 0;
+		}
+		
+		@Visits
+		public void visitBasicPhone(BasicPhone bp) {
+			attachSonority(bp);
+		}
+		
+		@Visits
+		public void visitCompoundPhone(CompoundPhone cp) {
+			attachSonority(cp);
+		}
+		
+		private void attachSonority(Phone p) {
+			int value = 0;
+			
+			for(PhonexPattern pattern:patterns) {
+				final PhonexMatcher m = pattern.matcher(Collections.singletonList(p));
+				if(m.matches()) {
+					value = sonorityMap.get(pattern);
+					break;
+				}
+			}
+			
+			final int distance = Math.abs(value - lastSonority);
+			lastSonority = value;
+			
+			final SonorityInfo info = new SonorityInfo(value, distance);
+			p.putExtension(SonorityInfo.class, info);
 		}
 	}
 }
