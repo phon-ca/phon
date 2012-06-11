@@ -219,9 +219,9 @@ scope {
 	:	^(PLUGIN STRING)
 	{
 		String typeName = $PLUGIN.text;
-		PluginMatcher pluginMatcher = PhonexPluginManager.getSharedInstance().getMatcher(typeName);
-		if(pluginMatcher != null) {
-			$value = pluginMatcher.createMatcher(StringEscapeUtils.unescapeJava($STRING.text.substring(1, $STRING.text.length()-1)));
+		PluginProvider pluginProvider = PhonexPluginManager.getSharedInstance().getProvider(typeName);
+		if(pluginProvider != null) {
+			$value = pluginProvider.createMatcher(StringEscapeUtils.unescapeJava($STRING.text.substring(1, $STRING.text.length()-1)));
 		}
 	}
 	|	^(PLUGIN (sc=negatable_identifier {$plugin_matcher::scTypes.add($sc.value);})+)

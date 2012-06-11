@@ -13,7 +13,7 @@ public class PhonexPluginManager {
 	/**
 	 * List of available plug-in matchers
 	 */
-	private Map<String, PluginProvider> _pluginMatchers = new TreeMap<String, PluginProvider>();
+	private Map<String, PluginProvider> _pluginProviders = new TreeMap<String, PluginProvider>();
 	
 	/**
 	 * Shared instance
@@ -45,8 +45,8 @@ public class PhonexPluginManager {
 	 * 
 	 * @return the list of available plug-in matchers
 	 */
-	public PluginProvider[] getPluginMatchers() {
-		PluginProvider[] retVal = _pluginMatchers.values().toArray(new PluginProvider[0]);
+	public PluginProvider[] getPluginProviders() {
+		PluginProvider[] retVal = _pluginProviders.values().toArray(new PluginProvider[0]);
 		return retVal;
 	}
 	
@@ -58,8 +58,8 @@ public class PhonexPluginManager {
 	 * @return the requested plug-in matcher or <code>null</code>
 	 *  if not found
 	 */
-	public PluginProvider getMatcher(String name) {
-		return _pluginMatchers.get(name);
+	public PluginProvider getProvider(String name) {
+		return _pluginProviders.get(name);
 	}
 
 	
@@ -85,8 +85,8 @@ public class PhonexPluginManager {
 		PhonexPlugin pluginAnnotation = matcherClass.getAnnotation(PhonexPlugin.class);
 		if(pluginAnnotation != null) {
 			String typeName = pluginAnnotation.value();
-			if(_pluginMatchers.get(typeName) == null) {
-				_pluginMatchers.put(typeName, matcher);
+			if(_pluginProviders.get(typeName) == null) {
+				_pluginProviders.put(typeName, matcher);
 			}
 		}
 	}
