@@ -60,6 +60,7 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	
 	public Phone() {
 		super();
+		extensionSupport.initExtensions();
 	}
 	
 	/**

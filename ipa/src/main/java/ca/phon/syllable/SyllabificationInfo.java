@@ -20,7 +20,7 @@ import ca.phon.ipa.phone.Phone;
  * </ul>
  */
 @Extension(Phone.class)
-public class SyllabificationInfo implements ExtensionProvider {
+public class SyllabificationInfo {
 	
 	/**
 	 * Property name for constituent type changes
@@ -148,9 +148,4 @@ public class SyllabificationInfo implements ExtensionProvider {
 		}
 	}
 
-	@Override
-	public void installExtension(IExtendable obj) {
-		final Phone p = Phone.class.cast(obj);
-		p.putExtension(SyllabificationInfo.class, this);
-	}
 }

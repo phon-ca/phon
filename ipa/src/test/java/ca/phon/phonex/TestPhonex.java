@@ -1,4 +1,4 @@
-package ca.phon.ipa.phonex;
+package ca.phon.phonex;
 
 import java.util.List;
 import java.util.regex.Matcher;

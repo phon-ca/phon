@@ -88,14 +88,13 @@ public final class ExtensionSupport implements IExtendable {
 	public <T extends IExtendable> ExtensionSupport(Class<T> declaredType, T obj) {
 		this.declaredType = declaredType;
 		parent = obj;
-		initExtensions();
 	}
 	
 	/**
 	 * Load automatic extensions as defined in the classpath
 	 * META-INF/services files
 	 */
-	private void initExtensions() {
+	public void initExtensions() {
 		final ServiceLoader<ExtensionProvider> services =
 				ServiceLoader.load(ExtensionProvider.class);
 		for(ExtensionProvider provider:services) {
