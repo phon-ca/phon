@@ -13,9 +13,9 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.phonex.PhonexMatcher;
-import ca.phon.ipa.phone.phonex.PhonexPattern;
-import ca.phon.ipa.phone.phonex.PhonexPatternException;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 
 @OperableVertexInfo(
 		name="Phonex Matcher",

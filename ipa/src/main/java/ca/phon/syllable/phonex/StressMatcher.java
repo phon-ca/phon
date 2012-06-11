@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import ca.phon.ipa.phone.Phone;
-import ca.phon.ipa.phone.phonex.PhoneMatcher;
+import ca.phon.phonex.PhoneMatcher;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableStress;
 

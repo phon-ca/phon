@@ -28,7 +28,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPattern;
 
 /**
  * <p>Marks phones with sonority annotations for use in phonex

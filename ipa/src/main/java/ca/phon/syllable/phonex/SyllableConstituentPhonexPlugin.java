@@ -1,9 +1,9 @@
 package ca.phon.syllable.phonex;
 
-import ca.phon.ipa.phone.phonex.PhoneMatcher;
-import ca.phon.ipa.phone.phonex.PhonexPatternException;
-import ca.phon.ipa.phone.phonex.PhonexPlugin;
-import ca.phon.ipa.phone.phonex.PluginMatcher;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.PhonexPatternException;
+import ca.phon.phonex.PhonexPlugin;
+import ca.phon.phonex.PluginProvider;
 import ca.phon.syllable.SyllableConstituentType;
 
 /**
@@ -18,7 +18,7 @@ import ca.phon.syllable.SyllableConstituentType;
  * </p>
  */
 @PhonexPlugin("sctype")
-public class SyllableConstituentPhonexPlugin implements PluginMatcher {
+public class SyllableConstituentPhonexPlugin implements PluginProvider {
 	
 	@Override
 	public PhoneMatcher createMatcher(String input)

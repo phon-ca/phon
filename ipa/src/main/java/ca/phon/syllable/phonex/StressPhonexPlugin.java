@@ -1,16 +1,16 @@
 package ca.phon.syllable.phonex;
 
-import ca.phon.ipa.phone.phonex.PhoneMatcher;
-import ca.phon.ipa.phone.phonex.PhonexPatternException;
-import ca.phon.ipa.phone.phonex.PhonexPlugin;
-import ca.phon.ipa.phone.phonex.PluginMatcher;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.PhonexPatternException;
+import ca.phon.phonex.PhonexPlugin;
+import ca.phon.phonex.PluginProvider;
 import ca.phon.syllable.SyllableStress;
 
 /**
  * 
  */
 @PhonexPlugin("stress")
-public class StressPhonexPlugin implements PluginMatcher {
+public class StressPhonexPlugin implements PluginProvider {
 
 	@Override
 	public PhoneMatcher createMatcher(String input)

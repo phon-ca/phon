@@ -20,7 +20,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexMatcher;
 
 /**
  * Source node for data returned from a phonex

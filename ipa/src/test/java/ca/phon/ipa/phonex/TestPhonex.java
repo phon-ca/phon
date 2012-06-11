@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.phone.Phone;
-import ca.phon.ipa.phone.phonex.PhonexMatcher;
-import ca.phon.ipa.phone.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
 import ca.phon.util.Range;
 
 import junit.framework.TestCase;

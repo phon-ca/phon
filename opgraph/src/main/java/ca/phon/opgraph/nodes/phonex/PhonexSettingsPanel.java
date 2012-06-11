@@ -15,7 +15,7 @@ import javax.swing.event.DocumentListener;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.edits.other.NodeSettingsEdit;
-import ca.phon.ipa.phone.phonex.PhonexPatternException;
+import ca.phon.phonex.PhonexPatternException;
 
 /**
  * Phonex node settings panel.

@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <properties>
-	  <build.version>1.5.3-SNAPSHOT</build.version>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <build.version>2.0-SNAPSHOT</build.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <groupId>ca.phon</groupId>
@@ -12,9 +13,37 @@
   <version>${build.version}</version>
   <packaging>pom</packaging>
 
-  <name>phon</name>
+  <name>Phon</name>
   <url>http://phon.ling.mun.ca</url>
+  <description>Phon is a software program that greatly facilitates a number of tasks related
+    to the analysis of phonological data. Built to support research in phonological development
+    (including babbling), second language acquisition, and phonological disorders, Phon can 
+    also be used to investigate virtually all types of phonological investigations (e.g. 
+    loanword phonology, fieldwork in phonology).</description>
   
+  <developers>
+    <developer>
+      <id>ghedlund</id>
+      <name>Greg Hedlund</name>
+      <email>greg.hedlund@gmail.com</email>
+      <timezone>-3.5</timezone>
+    </developer>
+    <developer>
+      <id>yrose</id>
+      <name>Yvan Rose</name>
+      <email>yrose@mun.ca</email>
+      <timezone>-3.5</timezone>
+    </developer>
+  </developers>
+  
+  <licenses>
+    <license>
+      <name>GNU GPL v3.0+</name>
+      <distribution>repo</distribution>
+      <url>http://www.gnu.org/copyleft/gpl.html</url>
+    </license>
+  </licenses>
+
   <repositories>
     <repository>
       <snapshots>
@@ -25,7 +54,7 @@
       <url>http://phon.ling.mun.ca/artifactory/libs-release</url>
     </repository>
     <repository>
-      <snapshots />
+      <snapshots/>
       <id>snapshots</id>
       <name>libs-snapshot</name>
       <url>http://phon.ling.mun.ca/artifactory/libs-snapshot</url>
@@ -41,7 +70,7 @@
       <url>http://phon.ling.mun.ca/artifactory/plugins-release</url>
     </pluginRepository>
     <pluginRepository>
-      <snapshots />
+      <snapshots/>
       <id>snapshots</id>
       <name>plugins-snapshot</name>
       <url>http://phon.ling.mun.ca/artifactory/plugins-snapshot</url>
@@ -49,27 +78,27 @@
   </pluginRepositories>
 
   <modules>
-	  <module>util</module>
-	  <module>design-patterns</module>
-	  <module>ipa</module>
-	  <module>components</module>
-	  <module>opgraph</module>
-	  <module>syllabifier</module>
-	  <module>syllabifier-editor</module>
+    <module>util</module>
+    <module>design-patterns</module>
+    <module>ipa</module>
+    <module>components</module>
+    <module>opgraph</module>
+    <module>syllabifier</module>
+    <module>syllabifier-editor</module>
   </modules>
 
   <build>
-	  <plugins>
-		  <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-	  </plugins>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <dependencies>
