@@ -109,6 +109,11 @@ public class MarkSyllableConstituentNode extends OperableVertex implements NodeS
 					p.putExtension(SyllabificationInfo.class, sInfo);
 				}
 				sInfo.setConstituentType(scType);
+				
+				if(scType == SyllableConstituentType.NUCLEUS
+						&& ipa.size() > 1) {
+					sInfo.setDiphthongMember(true);
+				}
 			}
 		}
 	}
