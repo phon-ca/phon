@@ -1,5 +1,7 @@
 package ca.phon.extensions;
 
+import java.util.Set;
+
 /**
  * Adds the ability to add/remove capabilites to an
  * object that implements the ICapable interface.
@@ -12,7 +14,7 @@ public interface IExtendable {
 	 * Return all extension types supported
 	 * 
 	 */
-	public Class<?>[] getExtensions();
+	public Set<Class<?>> getExtensions();
 
 	/**
 	 * Get the requested extension if available.
@@ -36,6 +38,6 @@ public interface IExtendable {
 	 * 
 	 * @param cap the capability to remove
 	 */
-	public void removeExtension(Class<?> cap);
+	public <T> T removeExtension(Class<T> cap);
 	
 }

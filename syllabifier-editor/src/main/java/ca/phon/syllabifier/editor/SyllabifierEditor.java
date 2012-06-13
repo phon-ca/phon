@@ -53,6 +53,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditor;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.MenuProvider;
+import ca.gedge.opgraph.app.commands.core.SaveCommand;
 import ca.gedge.opgraph.app.components.ConsolePanel;
 import ca.gedge.opgraph.app.components.PathAddressableMenu;
 import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
@@ -119,8 +120,10 @@ public class SyllabifierEditor extends JFrame {
 				if(graphEditor.getDocument().hasModifications()) {
 					canClose = graphEditor.getDocument().checkForReset();
 				}
-				if(canClose)
+				if(canClose) {
 					dispose();
+					System.exit(0);
+				}
 			}
 			
 			@Override
@@ -168,6 +171,7 @@ public class SyllabifierEditor extends JFrame {
 			public void changedUpdate(DocumentEvent arg0) {
 			}
 		});
+		consolePanel.addLogger(Logger.getLogger(""));
 		consolePanel.setAutoscrolls(true);
 		
 		final Font ipaFont = new Font("Charis SIL Compact", Font.PLAIN, 12);

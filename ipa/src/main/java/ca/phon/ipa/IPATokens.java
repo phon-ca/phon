@@ -1,6 +1,8 @@
 package ca.phon.ipa;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -172,7 +174,11 @@ public final class IPATokens {
 			// read in token types as properties
 			Properties antlrTokenProps = new Properties();
 			try {
-				antlrTokenProps.load(getClass().getClassLoader().getResourceAsStream(antlrTokensPath));
+				final InputStream in = getClass().getClassLoader().getResourceAsStream(antlrTokensPath);
+				if(in == null) {
+					throw new FileNotFoundException(antlrTokensPath + " not found!");
+				}
+				antlrTokenProps.load(in);
 			} catch (IOException e) {
 				LOGGER.severe(e.getMessage());
 				e.printStackTrace();

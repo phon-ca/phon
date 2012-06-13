@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * for automatic extension loading during object construction.
  * 
  * The class defined by {@link #value()} is guarnteed to be the
- * type passed into the {@link ExtensionProvider#installExtension()}
+ * type passed into the {@link ExtensionProvider#installExtension(IExtendable)}
  * method.
  */
 @Documented

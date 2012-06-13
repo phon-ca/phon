@@ -1,10 +1,12 @@
 package ca.phon.extensions;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -74,9 +76,9 @@ public final class ExtensionSupport implements IExtendable {
 	private final Class<? extends IExtendable> declaredType;
 	
 	/**
-	 * parent obj
+	 * parent object ref
 	 */
-	private final IExtendable parent;
+	private final WeakReference<IExtendable> parent;
 	
 	/**
 	 * Create a new extension support object for the
@@ -87,7 +89,7 @@ public final class ExtensionSupport implements IExtendable {
 	 */
 	public <T extends IExtendable> ExtensionSupport(Class<T> declaredType, T obj) {
 		this.declaredType = declaredType;
-		parent = obj;
+		parent = new WeakReference<IExtendable>(obj);
 	}
 	
 	/**
@@ -103,7 +105,7 @@ public final class ExtensionSupport implements IExtendable {
 			// check for the @Extension annotation
 			final Extension extensionClass = providerClass.getAnnotation(Extension.class);
 			if(extensionClass != null && extensionClass.value().isAssignableFrom(declaredType)) {
-				provider.installExtension(parent);
+				provider.installExtension(parent.get());
 			} else {
 				LOGGER.warning(providerClass.getName() + 
 						" missing @Extension annotation.  Not loaded into object " + toString());
@@ -112,8 +114,8 @@ public final class ExtensionSupport implements IExtendable {
 	}
 
 	@Override
-	public Class<?>[] getExtensions() {
-		return extensions.keySet().toArray(new Class<?>[0]);
+	public Set<Class<?>> getExtensions() {
+		return Collections.unmodifiableSet(extensions.keySet());
 	}
 
 	@Override
@@ -138,8 +140,13 @@ public final class ExtensionSupport implements IExtendable {
 	}
 
 	@Override
-	public void removeExtension(Class<?> cap) {
-		extensions.remove(cap);
+	public <T> T removeExtension(Class<T> cap) {
+		final Object removed = extensions.remove(cap);
+		T retVal = null;
+		if(removed != null) {
+			retVal = cap.cast(removed);
+		}
+		return retVal;
 	}
 
 }

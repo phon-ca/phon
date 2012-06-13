@@ -74,19 +74,19 @@ public class SyllableVisitor extends VisitorAdapter<Phone> {
 	
 	private void appendSyllable(Phone p) {
 		if(lastPhone != null) {
-			SyllableConstituentType prevType = lastPhone.getScType();
-			SyllableConstituentType currentType = p.getScType();
+			final SyllableConstituentType prevType = lastPhone.getScType();
+			final SyllableConstituentType currentType = p.getScType();
 			
 			switch(prevType) {
 			case LEFTAPPENDIX:
-				if(currentType != SyllableConstituentType.LEFTAPPENDIX ||
+				if(currentType != SyllableConstituentType.LEFTAPPENDIX &&
 					currentType != SyllableConstituentType.ONSET) {
 					breakSyllable();
 				}
 				break;
 				
 			case ONSET:
-				if(currentType != SyllableConstituentType.ONSET ||
+				if(currentType != SyllableConstituentType.ONSET &&
 					currentType != SyllableConstituentType.NUCLEUS) {
 					breakSyllable();
 				}
@@ -94,14 +94,19 @@ public class SyllableVisitor extends VisitorAdapter<Phone> {
 				
 			case NUCLEUS:
 				if(currentType == SyllableConstituentType.NUCLEUS) {
-					// TODO check for diphthongs
+					final SyllabificationInfo info = lastPhone.getExtension(SyllabificationInfo.class);
+					if(info != null) {
+						if(!info.isDiphthongMember()) {
+							breakSyllable();
+						}
+					}
 				} else if(currentType != SyllableConstituentType.CODA) {
 					breakSyllable();
 				}
 				break;
 				
 			case CODA:
-				if(currentType != SyllableConstituentType.CODA ||
+				if(currentType != SyllableConstituentType.CODA &&
 					currentType != SyllableConstituentType.RIGHTAPPENDIX) {
 					breakSyllable();
 				}

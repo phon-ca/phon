@@ -3,6 +3,7 @@ package ca.phon.ipa.phone;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
@@ -220,7 +221,7 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	}
 	
 	@Override
-	public Class<?>[] getExtensions() {
+	public Set<Class<?>> getExtensions() {
 		return getExtensionSupport().getExtensions();
 	}
 
@@ -235,8 +236,8 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	}
 
 	@Override
-	public void removeExtension(Class<?> cap) {
-		getExtensionSupport().removeExtension(cap);
+	public <T> T removeExtension(Class<T> cap) {
+		return getExtensionSupport().removeExtension(cap);
 	}
 
 	@Override
