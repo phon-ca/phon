@@ -3,13 +3,13 @@ package ca.phon.phonex;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.elements.CompoundPhone;
-import ca.phon.ipa.elements.Pause;
-import ca.phon.ipa.elements.Phone;
-import ca.phon.ipa.elements.StressMarker;
-import ca.phon.ipa.elements.SyllableBoundary;
-import ca.phon.ipa.elements.WordBoundary;
+import ca.phon.ipa.Pause;
+import ca.phon.ipa.Phone;
+import ca.phon.ipa.StressMarker;
+import ca.phon.ipa.SyllableBoundary;
+import ca.phon.ipa.WordBoundary;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

@@ -7,7 +7,6 @@ import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.elements.IPAElementFactory;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;

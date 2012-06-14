@@ -10,8 +10,6 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
 
-import ca.phon.ipa.elements.CompoundPhone;
-import ca.phon.ipa.elements.Phone;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.phonex.PhonexMatcher;

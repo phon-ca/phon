@@ -17,7 +17,7 @@ import ca.phon.fsa.*;
 import ca.phon.syllable.phonex.*;
 import ca.phon.syllable.*;
 
-import ca.phon.ipa.phone.*;
+import ca.phon.ipa.*;
 
 import ca.phon.fsa.*;
 }
@@ -417,7 +417,7 @@ predefined_phone_class returns [PhoneMatcher value]
 			
 		default:
 			$value = new PhoneMatcher() {
-				public boolean matches(Phone p) {
+				public boolean matches(IPAElement p) {
 					return false;
 				}
 				
@@ -454,7 +454,7 @@ boundary_matchers returns [PhoneMatcher value]
 			
 		default:
 			$value = new PhoneMatcher() {
-				public boolean matches(Phone p) {
+				public boolean matches(IPAElement p) {
 					return false;
 				}
 				

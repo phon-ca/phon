@@ -3,9 +3,9 @@ package ca.phon.phonex.plugins;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.elements.CompoundPhone;
-import ca.phon.ipa.elements.Phone;
+import ca.phon.ipa.Phone;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;

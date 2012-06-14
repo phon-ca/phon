@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 import ca.phon.ipa.*;
 import ca.phon.ipa.features.*;
-import ca.phon.ipa.elements.*;
 }
 
 // custom methods for generated parser

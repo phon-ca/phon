@@ -1,8 +1,8 @@
 package ca.phon.phonex;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.elements.Phone;
-import ca.phon.ipa.elements.SyllableBoundary;
+import ca.phon.ipa.Phone;
+import ca.phon.ipa.SyllableBoundary;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
