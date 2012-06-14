@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.ComponentUI;
 
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.Phone;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
@@ -87,7 +87,7 @@ public class SyllabificationDisplay extends JComponent {
 		int currentFocus = focusedPhone;
 		int direction = pIdx - currentFocus;
 		if(pIdx >= 0 && pIdx < getNumberOfDisplayedPhones()) {
-			Phone p = getPhoneAtIndex(pIdx);
+			IPAElement p = getPhoneAtIndex(pIdx);
 			if(p.getText().equals(" ")) {
 				if(direction < 0)
 					pIdx--;
@@ -113,7 +113,7 @@ public class SyllabificationDisplay extends JComponent {
 		return groups.get(gIdx);
 	}
 
-	public void setPhonesForGroup(int gIdx, List<Phone> phones) {
+	public void setPhonesForGroup(int gIdx, List<IPAElement> phones) {
 		IPATranscript currentPhones = null;
 
 		if(gIdx >= 0 && gIdx < getNumberOfGroups())
@@ -140,9 +140,9 @@ public class SyllabificationDisplay extends JComponent {
 	 * phones filtered out.  WordBoundaries
 	 * are placed between groups.
 	 */
-	public List<Phone> getDisplayedPhones() {
-		List<Phone> retVal =
-				new ArrayList<Phone>();
+	public List<IPAElement> getDisplayedPhones() {
+		List<IPAElement> retVal =
+				new ArrayList<IPAElement>();
 
 		for(IPATranscript grpPhones:groups) {
 //			if(retVal.size() > 0)
@@ -153,9 +153,9 @@ public class SyllabificationDisplay extends JComponent {
 		return retVal;
 	}
 
-	public Phone getPhoneAtIndex(int idx) {
-		Phone retVal = null;
-		List<Phone> soundPhones = getDisplayedPhones();
+	public IPAElement getPhoneAtIndex(int idx) {
+		IPAElement retVal = null;
+		List<IPAElement> soundPhones = getDisplayedPhones();
 		if(idx >= 0 && idx < soundPhones.size()) {
 			retVal = soundPhones.get(idx);
 		}
@@ -166,7 +166,7 @@ public class SyllabificationDisplay extends JComponent {
 	 * Set syllabification at given index
 	 */
 	public void setSyllabificationAtIndex(int pIdx, SyllableConstituentType scType) {
-		Phone p = getPhoneAtIndex(pIdx);
+		IPAElement p = getPhoneAtIndex(pIdx);
 		if(p != null) {
 			SyllabificationChangeData oldData =
 					new SyllabificationChangeData(pIdx, p.getScType());
@@ -188,7 +188,7 @@ public class SyllabificationDisplay extends JComponent {
 			IPATranscript grpPhones = 
 					groups.get(gIdx).removePunctuation();
 
-			for(Phone p:grpPhones) {
+			for(IPAElement p:grpPhones) {
 				if(currentIdx == pIdx)
 					return gIdx;
 				currentIdx++;

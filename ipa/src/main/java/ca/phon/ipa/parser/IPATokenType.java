@@ -1,12 +1,12 @@
-package ca.phon.ipa;
+package ca.phon.ipa.parser;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.xml.TokenType;
 
 /**
  * Every IPA glyph must have an associated token type.
  * 
- * Token types are used during {@link Phone} parsing
+ * Token types are used during {@link IPAElement} parsing
  * and are available via {@link IPATokens#getTokenType(Character)}
  */
 public enum IPATokenType {

@@ -43,8 +43,8 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.Phone;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -444,7 +444,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 				Rectangle savedPhoneRect = new Rectangle(phoneRect);
 				for(int pIdx = 0; pIdx < syllablePhones.size(); pIdx++) {
-					Phone p = syllablePhones.get(pIdx);
+					IPAElement p = syllablePhones.get(pIdx);
 
 //					if(pIdx == 0 && p.getScType() == SyllableConstituentType.Ambisyllabic)
 //						continue;
@@ -558,7 +558,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 				phoneRect = new Rectangle(savedPhoneRect);
 				for(int pIdx = 0; pIdx < syllablePhones.size(); pIdx++) {
-					Phone p = syllablePhones.get(pIdx);
+					IPAElement p = syllablePhones.get(pIdx);
 
 //					if(pIdx == 0 && p.getScType() == SyllableConstituentType.Ambisyllabic)
 //						continue;
@@ -808,7 +808,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		int pIdx = 0;
 
 		for(int gIdx = 0; gIdx < display.getNumberOfGroups(); gIdx++) {
-			List<Phone> grpPhones = display.getPhonesForGroup(gIdx);
+			List<IPAElement> grpPhones = display.getPhonesForGroup(gIdx);
 
 			int grpSize = widthPerPhone * grpPhones.size();
 

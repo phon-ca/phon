@@ -3,18 +3,18 @@ package ca.phon.syllable;
 import ca.phon.extensions.Extension;
 import ca.phon.extensions.ExtensionProvider;
 import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Provides the syllable constituent type
  * annotation automagically.
  */
-@Extension(Phone.class)
+@Extension(IPAElement.class)
 public class SyllabificationInfoProvider implements ExtensionProvider {
 
 	@Override
 	public void installExtension(IExtendable obj) {
-		final Phone p = Phone.class.cast(obj);
+		final IPAElement p = IPAElement.class.cast(obj);
 		final SyllabificationInfo scInfo = new SyllabificationInfo(p);
 		p.putExtension(SyllabificationInfo.class, scInfo);
 	}

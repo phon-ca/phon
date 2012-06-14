@@ -1,7 +1,7 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.FSAState;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Transition for matching beginning of tape input.
@@ -13,7 +13,7 @@ public class BeginningOfInputTransition extends PhonexTransition {
 	}
 	
 	@Override
-	public boolean follow(FSAState<Phone> currentState) {
+	public boolean follow(FSAState<IPAElement> currentState) {
 		return currentState.getTapeIndex() == 0;
 	}
 

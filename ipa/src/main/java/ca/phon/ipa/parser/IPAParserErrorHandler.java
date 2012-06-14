@@ -1,10 +1,10 @@
-package ca.phon.ipa.phone.parser;
+package ca.phon.ipa.parser;
 
 /**
  * Interface for implementing error handlers for phone
  * lexing/parsing.
  */
-public interface PhoneParserErrorHandler {
+public interface IPAParserErrorHandler {
 	
 	/**
 	 * Handle a lexing/parser error.  This method recieves the error
@@ -13,6 +13,6 @@ public interface PhoneParserErrorHandler {
 	 * 
 	 * @param ex
 	 */
-	public void handleError(PhoneParserException ex);
+	public void handleError(IPAParserException ex);
 
 }

@@ -1,7 +1,7 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.FSAState;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 public class BackReferenceTransition extends PhonexTransition {
 	
@@ -30,15 +30,15 @@ public class BackReferenceTransition extends PhonexTransition {
 	}
 	
 	@Override
-	public boolean follow(FSAState<Phone> currentState)  {
+	public boolean follow(FSAState<IPAElement> currentState)  {
 		boolean retVal = false;
 		
-		Phone[] groupVal = currentState.getGroup(groupIndex);
+		IPAElement[] groupVal = currentState.getGroup(groupIndex);
 		if(groupVal != null && groupVal.length > 0) {
 			retVal = true;
 			int pIdx = currentState.getTapeIndex();
 			for(int i = 0; i < groupVal.length; i++) {
-				Phone groupPhone = groupVal[i];
+				IPAElement groupPhone = groupVal[i];
 				
 				// make sure there is enough input left on the tape
 				if(pIdx+1 >= currentState.getTape().length) {
@@ -46,7 +46,7 @@ public class BackReferenceTransition extends PhonexTransition {
 					break;
 				}
 	
-				Phone tapePhone = currentState.getTape()[pIdx+i];
+				IPAElement tapePhone = currentState.getTape()[pIdx+i];
 				
 				retVal &= tapePhone.getText().equals(groupPhone.getText());
 				

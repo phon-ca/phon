@@ -3,7 +3,7 @@ package ca.phon.syllable.phonex;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
@@ -47,7 +47,7 @@ public final class SyllabificationInfoMatcher implements PhoneMatcher {
 	}
 	
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		if(matchesAnything()) return true;
 		
 		boolean retVal = true;

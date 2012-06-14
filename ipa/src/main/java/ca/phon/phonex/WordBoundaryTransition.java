@@ -1,7 +1,7 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.FSAState;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Transition for matching word boundaries.
@@ -20,7 +20,7 @@ public class WordBoundaryTransition extends PhonexTransition {
 	}
 	
 	@Override
-	public boolean follow(FSAState<Phone> currentState) {
+	public boolean follow(FSAState<IPAElement> currentState) {
 		boolean retVal = false;
 		
 		if(currentState.getTapeIndex() == 0 && currentState.getCurrentState().equals("q0") ||
@@ -28,7 +28,7 @@ public class WordBoundaryTransition extends PhonexTransition {
 			retVal = true;
 			matchLength = 0;
 		} else {
-			Phone p = currentState.getTape()[currentState.getTapeIndex()];
+			IPAElement p = currentState.getTape()[currentState.getTapeIndex()];
 			if(p.getText().equals(" ")) {
 				retVal = true;
 				matchLength = 1;

@@ -1,11 +1,11 @@
-package ca.phon.ipa.phone.parser;
+package ca.phon.ipa.parser;
 
 /**
  * Exception class for errors during Phone
  * lexing/parsing.
  * 
  */
-public class PhoneParserException extends Exception {
+public class IPAParserException extends Exception {
 
 	private static final long serialVersionUID = -3052112481299193424L;
 
@@ -19,19 +19,19 @@ public class PhoneParserException extends Exception {
 	 */
 	private int lineNumber = 0;
 
-	public PhoneParserException() {
+	public IPAParserException() {
 		super();
 	}
 
-	public PhoneParserException(String message, Throwable cause) {
+	public IPAParserException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public PhoneParserException(String message) {
+	public IPAParserException(String message) {
 		super(message);
 	}
 
-	public PhoneParserException(Throwable cause) {
+	public IPAParserException(Throwable cause) {
 		super(cause);
 	}
 

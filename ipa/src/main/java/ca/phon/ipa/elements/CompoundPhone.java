@@ -1,15 +1,16 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa.elements;
 
-import ca.phon.ipa.IPATokenType;
-import ca.phon.ipa.IPATokens;
-import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 
 /**
  * A compound Phone consists of two phones connected
  * by a ligature.
  * 
  */
-public final class CompoundPhone extends Phone {
+public final class CompoundPhone extends IPAElement {
 	
 	/**
 	 * First phone

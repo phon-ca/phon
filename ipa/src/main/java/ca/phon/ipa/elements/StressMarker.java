@@ -1,14 +1,15 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa.elements;
 
-import ca.phon.ipa.featureset.FeatureMatrix;
-import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * A stress marker.  Stress markers can either be
  * PRIMARY or SECONDARY.
  */
-public final class StressMarker extends Phone {
+public final class StressMarker extends IPAElement {
 	
 	/**
 	 * Stress type

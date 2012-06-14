@@ -1,6 +1,6 @@
 package ca.phon.syllabifier.phonex;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.PhoneMatcher;
 
 /**
@@ -33,7 +33,7 @@ public class SonorityDistancePhoneMatcher implements PhoneMatcher {
 	}
 	
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		boolean retVal = false;
 		
 		SonorityInfo info = p.getExtension(SonorityInfo.class);

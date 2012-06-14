@@ -6,13 +6,13 @@ import java.util.List;
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSATransition;
 import ca.phon.fsa.TransitionType;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Transitions using {@link PhoneMatcher}s.
  * 
  */
-public class PhonexTransition extends FSATransition<Phone> implements Cloneable {
+public class PhonexTransition extends FSATransition<IPAElement> implements Cloneable {
 	
 	/**
 	 * Base matcher
@@ -89,11 +89,11 @@ public class PhonexTransition extends FSATransition<Phone> implements Cloneable 
 	}
 	
 	@Override
-	public boolean follow(FSAState<Phone> currentState) {
+	public boolean follow(FSAState<IPAElement> currentState) {
 		if(currentState.getTapeIndex() >= 
 				currentState.getTape().length)
 			return false;
-		Phone obj = currentState.getTape()[currentState.getTapeIndex()];
+		IPAElement obj = currentState.getTape()[currentState.getTapeIndex()];
 		boolean retVal = 
 				baseMatcher.matches(obj);
 		

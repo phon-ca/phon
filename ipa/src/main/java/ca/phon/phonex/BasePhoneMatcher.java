@@ -1,15 +1,15 @@
 package ca.phon.phonex;
 
-import ca.phon.ipa.phone.BasicPhone;
-import ca.phon.ipa.phone.Phone;
-import ca.phon.ipa.phone.SyllableBoundary;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.elements.Phone;
+import ca.phon.ipa.elements.SyllableBoundary;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 /**
  * Basic, single-character matcher in Phonex.
  * This will NOT matcher compound phones - only
- * {@link BasicPhone} object whose base character
+ * {@link Phone} object whose base character
  * is the same as the specified matcher character.
  */
 public class BasePhoneMatcher implements PhoneMatcher {
@@ -24,7 +24,7 @@ public class BasePhoneMatcher implements PhoneMatcher {
 	}
 
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		BasePhoneVisitor visitor = new BasePhoneVisitor();
 		p.accept(visitor);
 		return visitor.matches();
@@ -39,7 +39,7 @@ public class BasePhoneMatcher implements PhoneMatcher {
 	 * Visitor for the phone object
 	 * 
 	 */
-	public class BasePhoneVisitor extends VisitorAdapter<Phone> {
+	public class BasePhoneVisitor extends VisitorAdapter<IPAElement> {
 		
 		private boolean matches = false;
 		
@@ -48,7 +48,7 @@ public class BasePhoneMatcher implements PhoneMatcher {
 		}
 		
 		@Visits
-		public void visitBasicPhone(BasicPhone bp) {
+		public void visitBasicPhone(Phone bp) {
 			Character phoneBp = bp.getBasePhone();
 			matches = phoneBp == baseChar;
 		}
@@ -60,7 +60,7 @@ public class BasePhoneMatcher implements PhoneMatcher {
 		}
 
 		@Override
-		public void fallbackVisit(Phone obj) {
+		public void fallbackVisit(IPAElement obj) {
 		}
 	}
 	

@@ -1,21 +1,23 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa.elements;
+
+import ca.phon.ipa.IPAElement;
 
 /**
- * A factory for creating various types of {@link Phone}
+ * A factory for creating various types of {@link IPAElement}
  * objects.
  * 
  */
-public class PhoneFactory {
+public class IPAElementFactory {
 
 	/* Basic phones */
 	/**
 	 * Create a new basic phone 
 	 * 
 	 * @param basePhone
-	 * @return the created {@link Phone} object
+	 * @return the created {@link IPAElement} object
 	 */
-	public BasicPhone createPhone(Character basePhone) {
-		return new BasicPhone(basePhone);
+	public Phone createPhone(Character basePhone) {
+		return new Phone(basePhone);
 	}
 	
 	/**
@@ -24,8 +26,8 @@ public class PhoneFactory {
 	 * @param prefix
 	 * @param basePhone
 	 */
-	public BasicPhone createPhone(Character prefix, Character basePhone) {
-		return new BasicPhone(prefix, basePhone, new Character[0], 0, null);
+	public Phone createPhone(Character prefix, Character basePhone) {
+		return new Phone(prefix, basePhone, new Character[0], 0, null);
 	}
 	
 	/**
@@ -35,8 +37,8 @@ public class PhoneFactory {
 	 * @param basePhone
 	 * @param suffix
 	 */
-	public BasicPhone createPhone(Character prefix, Character basePhone, Character suffix) {
-		return new BasicPhone(prefix, basePhone, new Character[0], 0, suffix);
+	public Phone createPhone(Character prefix, Character basePhone, Character suffix) {
+		return new Phone(prefix, basePhone, new Character[0], 0, suffix);
 	}
 	
 	/**
@@ -47,32 +49,32 @@ public class PhoneFactory {
 	 * @param combining
 	 * @param suffix
 	 */
-	public BasicPhone createPhone(Character prefix, Character basePhone, Character[] combining, Character suffix) {
-		return new BasicPhone(prefix, basePhone, combining, 0, suffix);
+	public Phone createPhone(Character prefix, Character basePhone, Character[] combining, Character suffix) {
+		return new Phone(prefix, basePhone, combining, 0, suffix);
 	}
 	
 	/**
 	 * Create a new basic phone
 	 * 
 	 * @param prefix
-	 * @param basePhone
-	 * @param combining
-	 * @param length
-	 * @param suffix
-	 */
-	public BasicPhone createPhone(Character prefix, Character basePhone, Character[] combining, float length, Character suffix) {
-		return new BasicPhone(prefix, basePhone, combining, length, suffix);
-	}
-	
-	/**
-	 * Create a new basic phone
-	 * 
 	 * @param basePhone
 	 * @param combining
 	 * @param length
+	 * @param suffix
 	 */
-	public BasicPhone createPhone(Character basePhone, Character[] combining, float length) {
-		BasicPhone retVal = new BasicPhone(basePhone);
+	public Phone createPhone(Character prefix, Character basePhone, Character[] combining, float length, Character suffix) {
+		return new Phone(prefix, basePhone, combining, length, suffix);
+	}
+	
+	/**
+	 * Create a new basic phone
+	 * 
+	 * @param basePhone
+	 * @param combining
+	 * @param length
+	 */
+	public Phone createPhone(Character basePhone, Character[] combining, float length) {
+		Phone retVal = new Phone(basePhone);
 		retVal.setCombiningDiacritics(combining);
 		retVal.setLength(length);
 		return retVal;

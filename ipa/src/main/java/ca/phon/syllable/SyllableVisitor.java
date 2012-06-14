@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.BasicPhone;
-import ca.phon.ipa.phone.CompoundPhone;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.elements.CompoundPhone;
+import ca.phon.ipa.elements.Phone;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 /**
  * A phone visitor that breaks a list of phones
  * into syllable.  Requires that the {@link SyllabificationInfo}
- * capability is present for each {@link Phone}.
+ * capability is present for each {@link IPAElement}.
  *
  */
-public class SyllableVisitor extends VisitorAdapter<Phone> {
+public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	
 	/**
 	 * list of detected syllables
@@ -33,10 +33,10 @@ public class SyllableVisitor extends VisitorAdapter<Phone> {
 	/**
 	 * last phone
 	 */
-	private Phone lastPhone = null;
+	private IPAElement lastPhone = null;
 
 	@Override
-	public void fallbackVisit(Phone obj) {
+	public void fallbackVisit(IPAElement obj) {
 		// everything but basic phones and
 		// compound phones act as syllable boundaries
 		breakSyllable();
@@ -44,7 +44,7 @@ public class SyllableVisitor extends VisitorAdapter<Phone> {
 	}
 	
 	@Visits
-	public void visitBasicPhone(BasicPhone phone) {
+	public void visitBasicPhone(Phone phone) {
 		appendSyllable(phone);
 	}
 	
@@ -72,7 +72,7 @@ public class SyllableVisitor extends VisitorAdapter<Phone> {
 		return Collections.unmodifiableList(syllables);
 	}
 	
-	private void appendSyllable(Phone p) {
+	private void appendSyllable(IPAElement p) {
 		if(lastPhone != null) {
 			final SyllableConstituentType prevType = lastPhone.getScType();
 			final SyllableConstituentType currentType = p.getScType();

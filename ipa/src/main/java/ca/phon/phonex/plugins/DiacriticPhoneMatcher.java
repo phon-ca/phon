@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.PhoneMatcher;
 
 /**

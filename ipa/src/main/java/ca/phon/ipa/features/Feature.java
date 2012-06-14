@@ -1,4 +1,4 @@
-package ca.phon.ipa.featureset;
+package ca.phon.ipa.features;
 
 import java.util.List;
 

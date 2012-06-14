@@ -28,10 +28,10 @@ import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.BasicPhone;
-import ca.phon.ipa.phone.CompoundPhone;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.elements.CompoundPhone;
+import ca.phon.ipa.elements.Phone;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.syllabifier.phonex.SonorityInfo;
@@ -201,18 +201,18 @@ public class SonorityNode extends OperableVertex implements NodeSettings {
 	/**
 	 * Sonority visitor
 	 */
-	public class SonorityVisitor extends VisitorAdapter<Phone> {
+	public class SonorityVisitor extends VisitorAdapter<IPAElement> {
 		
 		private int lastSonority = 0;
 
 		@Override
-		public void fallbackVisit(Phone obj) {
+		public void fallbackVisit(IPAElement obj) {
 			// reset sonority
 			lastSonority = 0;
 		}
 		
 		@Visits
-		public void visitBasicPhone(BasicPhone bp) {
+		public void visitBasicPhone(Phone bp) {
 			attachSonority(bp);
 		}
 		
@@ -221,7 +221,7 @@ public class SonorityNode extends OperableVertex implements NodeSettings {
 			attachSonority(cp);
 		}
 		
-		private void attachSonority(Phone p) {
+		private void attachSonority(IPAElement p) {
 			int value = 0;
 			
 			for(PhonexPattern pattern:patterns) {

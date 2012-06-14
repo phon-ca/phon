@@ -1,4 +1,4 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa.elements;
 
 /**
  * Pause lengths

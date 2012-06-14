@@ -10,7 +10,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.PhonexCompiler;
 import ca.phon.phonex.PhonexLexer;
 import ca.phon.phonex.PhonexParser;
@@ -76,9 +76,9 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 * 
 	 * @param input The list of phones to be matched
 	 */
-	public PhonexMatcher matcher(Iterable<Phone> input) {
-		List<Phone> tape = new ArrayList<Phone>();
-		for(Phone p:input) tape.add(p);
+	public PhonexMatcher matcher(Iterable<IPAElement> input) {
+		List<IPAElement> tape = new ArrayList<IPAElement>();
+		for(IPAElement p:input) tape.add(p);
 		
 		return new PhonexMatcher(this, tape);
 	}

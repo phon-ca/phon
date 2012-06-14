@@ -17,8 +17,8 @@ import ca.gedge.opgraph.OperableVertexInfo;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.phone.Phone;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.syllable.SyllableConstituentComboBox;
@@ -102,7 +102,7 @@ public class MarkSyllableConstituentNode extends OperableVertex implements NodeS
 		// get input and set syllabification information
 		if(context.containsKey(ipaIn)) {
 			final IPATranscript ipa = (IPATranscript)context.get(ipaIn);
-			for(Phone p:ipa) {
+			for(IPAElement p:ipa) {
 				SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
 				if(sInfo == null) {
 					sInfo = new SyllabificationInfo(p);

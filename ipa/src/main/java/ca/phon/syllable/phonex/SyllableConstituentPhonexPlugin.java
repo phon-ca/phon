@@ -24,7 +24,7 @@ public class SyllableConstituentPhonexPlugin implements PluginProvider {
 	public PhoneMatcher createMatcher(String input)
 			throws PhonexPatternException {
 		SyllabificationInfoMatcher retVal = new SyllabificationInfoMatcher();
-		String[] scTypes = input.split("\\|");
+		String[] scTypes = input.split(",");
 		for(String scTypeId:scTypes) {
 			boolean not = (scTypeId.startsWith("-") ? true : false);
 			if(not)

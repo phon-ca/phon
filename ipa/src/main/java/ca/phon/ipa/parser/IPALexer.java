@@ -1,4 +1,4 @@
-package ca.phon.ipa.phone.parser;
+package ca.phon.ipa.parser;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,6 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 
-import ca.phon.ipa.IPATokenType;
-import ca.phon.ipa.IPATokens;
 
 /**
  * <p>Tokenize IPA strings for an ANTLR parser.  The 
@@ -18,7 +16,7 @@ import ca.phon.ipa.IPATokens;
  * 
  * 
  */
-public class PhoneLexer implements TokenSource {
+public class IPALexer implements TokenSource {
 
 	/**
 	 * Token mapper
@@ -40,15 +38,15 @@ public class PhoneLexer implements TokenSource {
 	/**
 	 * Error handlers
 	 */
-	private List<PhoneParserErrorHandler> errorHandlers = 
-			Collections.synchronizedList(new ArrayList<PhoneParserErrorHandler>());
+	private List<IPAParserErrorHandler> errorHandlers = 
+			Collections.synchronizedList(new ArrayList<IPAParserErrorHandler>());
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param string the string to tokenize
 	 */
-	public PhoneLexer(String string) {
+	public IPALexer(String string) {
 		this.source = string;
 		this.currentPosition = 0;
 		
@@ -60,7 +58,7 @@ public class PhoneLexer implements TokenSource {
 	 * 
 	 * @param handler
 	 */
-	public void addErrorHandler(PhoneParserErrorHandler handler) {
+	public void addErrorHandler(IPAParserErrorHandler handler) {
 		if(!errorHandlers.contains(handler)) {
 			errorHandlers.add(handler);
 		}
@@ -71,7 +69,7 @@ public class PhoneLexer implements TokenSource {
 	 * 
 	 * @param handler
 	 */
-	public void removeErrorHandler(PhoneParserErrorHandler handler) {
+	public void removeErrorHandler(IPAParserErrorHandler handler) {
 		errorHandlers.remove(handler);
 	}
 	
@@ -80,8 +78,8 @@ public class PhoneLexer implements TokenSource {
 	 * 
 	 * @param ex
 	 */
-	private void reportError(PhoneParserException ex) {
-		for(PhoneParserErrorHandler handler:errorHandlers) {
+	private void reportError(IPAParserException ex) {
+		for(IPAParserErrorHandler handler:errorHandlers) {
 			handler.handleError(ex);
 		}
 	}
@@ -95,7 +93,7 @@ public class PhoneLexer implements TokenSource {
 			
 			IPATokenType tokenType = tokenMapper.getTokenType(currentChar);
 			if(tokenType == null) {
-				PhoneParserException ex = new PhoneParserException("Invalid token '" + currentChar + "'");
+				IPAParserException ex = new IPAParserException("Invalid token '" + currentChar + "'");
 				ex.setPositionInLine(currentPosition);
 				reportError(ex);
 			} else {

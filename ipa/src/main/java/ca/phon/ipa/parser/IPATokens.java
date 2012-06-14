@@ -1,4 +1,4 @@
-package ca.phon.ipa;
+package ca.phon.ipa.parser;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,7 +36,7 @@ public final class IPATokens {
 	/**
 	 * Locaiton of antlr token type file
 	 */
-	private final static String ANTLR_TOKENS = "Phone.tokens";
+	private final static String ANTLR_TOKENS = "IPA.tokens";
 	
 	/**
 	 * Location of xml file

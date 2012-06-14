@@ -1,13 +1,14 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa.elements;
 
-import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Represents a boundary between words (i.e., a 'space'.)
  * 
  */
-public final class WordBoundary extends Phone {
+public final class WordBoundary extends IPAElement {
 	
 	public WordBoundary() {
 		super();

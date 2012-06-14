@@ -3,9 +3,9 @@ package ca.phon.phonex.plugins;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.ipa.phone.BasicPhone;
-import ca.phon.ipa.phone.CompoundPhone;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.elements.CompoundPhone;
+import ca.phon.ipa.elements.Phone;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -13,7 +13,7 @@ import ca.phon.visitor.annotation.Visits;
 /**
  * Matches combining diacritic portion of the phone.
  * Matches if <em>any</em> of the specified diacritics
- * appear in the {@link Phone}s combining diacritics.
+ * appear in the {@link IPAElement}s combining diacritics.
  * 
  */
 public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
@@ -30,7 +30,7 @@ public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 	}
 	
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		final CombiningDiacriticVisitor visitor = new CombiningDiacriticVisitor();
 		p.accept(visitor);
 		return visitor.matches;
@@ -44,17 +44,17 @@ public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 	/**
 	 * Visitor for match
 	 */
-	public class CombiningDiacriticVisitor extends VisitorAdapter<Phone> {
+	public class CombiningDiacriticVisitor extends VisitorAdapter<IPAElement> {
 		
 		public boolean matches = false;
 
 		@Override
-		public void fallbackVisit(Phone obj) {
+		public void fallbackVisit(IPAElement obj) {
 			
 		}
 		
 		@Visits
-		public void visitBasicPhone(BasicPhone bp) {
+		public void visitBasicPhone(Phone bp) {
 			boolean hasAllowed = false;
 			for(Character c:bp.getCombiningDiacritics()) {
 				hasAllowed |= getAllowedDiacritics().contains(c);

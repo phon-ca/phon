@@ -23,18 +23,18 @@
   * This class is meant to be used with a custom PhoneLexer which acts
   * as a TokenSource for this parser.
   */
-grammar Phone;
+grammar IPA;
 
 // package and imports for generated parser
 @header {
-package ca.phon.ipa.phone.parser;
+package ca.phon.ipa.parser;
 
 import java.util.Collections;
 import java.util.ArrayList;
 
 import ca.phon.ipa.*;
-import ca.phon.ipa.featureset.*;
-import ca.phon.ipa.phone.*;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.elements.*;
 }
 
 // custom methods for generated parser
@@ -43,20 +43,20 @@ import ca.phon.ipa.phone.*;
 /**
  * Phone factory
  */
-private final PhoneFactory factory = new PhoneFactory();
+private final IPAElementFactory factory = new IPAElementFactory();
 
 /**
  * List of custom error handlers
  */
-private final List<PhoneParserErrorHandler> errorHandlers = 
-	Collections.synchronizedList(new ArrayList<PhoneParserErrorHandler>());
+private final List<IPAParserErrorHandler> errorHandlers = 
+	Collections.synchronizedList(new ArrayList<IPAParserErrorHandler>());
 	
 /**
  * Add an error handler to the lexer
  * 
  * @param handler
  */
-public void addErrorHandler(PhoneParserErrorHandler handler) {
+public void addErrorHandler(IPAParserErrorHandler handler) {
 	if(!errorHandlers.contains(handler)) {
 		errorHandlers.add(handler);
 	}
@@ -67,7 +67,7 @@ public void addErrorHandler(PhoneParserErrorHandler handler) {
  * 
  * @param handler
  */
-public void removeErrorHandler(PhoneParserErrorHandler handler) {
+public void removeErrorHandler(IPAParserErrorHandler handler) {
 	errorHandlers.remove(handler);
 }
 
@@ -76,15 +76,15 @@ public void removeErrorHandler(PhoneParserErrorHandler handler) {
  * 
  * @param ex
  */
-private void reportError(PhoneParserException ex) {
-	for(PhoneParserErrorHandler handler:errorHandlers) {
+private void reportError(IPAParserException ex) {
+	for(IPAParserErrorHandler handler:errorHandlers) {
 		handler.handleError(ex);
 	}
 }
 
 @Override
 public void reportError(RecognitionException e) {
-	PhoneParserException ex = new PhoneParserException(e);
+	IPAParserException ex = new IPAParserException(e);
 	ex.setPositionInLine(e.charPositionInLine);
 	reportError(ex);
 }
@@ -113,14 +113,14 @@ word returns [IPATranscript word]
 	:	(we=word_element {$word.add($we.p);})+
 	;
 	
-word_element returns [Phone p]
+word_element returns [IPAElement p]
 	:	stress
 	{
 		$p = $stress.stressMarker;
 	}
 	|	phone
 	{
-		$p = $phone.phone;
+		$p = $phone.ele;
 	}
 	|	pause
 	{
@@ -146,7 +146,7 @@ stress returns [StressMarker stressMarker]
 	}
 	;
 	
-syllable_boundary returns [Phone syllableBoundary]
+syllable_boundary returns [IPAElement syllableBoundary]
 	:	PERIOD
 	{
 		$syllableBoundary = factory.createSyllableBoundary();
@@ -207,21 +207,21 @@ pause_length returns [PauseLength length]
 /**
  *
  */
-phone returns [Phone phone]
+phone returns [IPAElement ele]
 	:	single_phone
 	{	
-		$phone = $single_phone.phone;
+		$ele = $single_phone.phone;
 	}
 	|	compound_phone
 	{	
-		$phone = $compound_phone.phone;
+		$ele = $compound_phone.phone;
 	}
 	;
 	
 /**
  * A single (non-compound) phone.
  */
-single_phone returns [BasicPhone phone]
+single_phone returns [Phone phone]
 	:	base_phone
 	{	
 		$phone = $base_phone.phone;	
@@ -235,7 +235,7 @@ single_phone returns [BasicPhone phone]
 /**
  * Phone + optional COMBINING diacritics
  */
-base_phone returns [BasicPhone phone]
+base_phone returns [Phone phone]
 scope {
 	List<Character> cmbDias;
 }
@@ -254,7 +254,7 @@ scope {
  * Phone + optional COMBINING diacritics and
  * a prefix and/or suffix superscript diacritic.
  */
-complex_phone returns [BasicPhone phone]
+complex_phone returns [Phone phone]
 	:	PREFIX_DIACRITIC base_phone
 	{	
 		$phone = $base_phone.phone;

@@ -3,7 +3,7 @@ package ca.phon.phonex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Match phone string against a regular expression.
@@ -27,7 +27,7 @@ public class RegexMatcher implements PhoneMatcher {
 	}
 
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		Matcher m = pattern.matcher(p.getText());
 		return m.matches();
 	}

@@ -3,7 +3,7 @@ package ca.phon.phonex;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Combine multiple phone matchers.
@@ -46,7 +46,7 @@ public class PhoneClassMatcher implements PhoneMatcher {
 	}
 	
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		boolean retVal = not;
 		
 		for(PhoneMatcher matcher:matchers) {

@@ -1,10 +1,10 @@
 package ca.phon.phonex;
 
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Interface for providing 'matching' capabilites
- * for {@link Phone} objects.
+ * for {@link IPAElement} objects.
  */
 public interface PhoneMatcher {
 
@@ -15,7 +15,7 @@ public interface PhoneMatcher {
 	 * @returns <code>true</code> if <code>phone</code>
 	 *  matches, <code>false</code> otherwise
 	 */
-	public boolean matches(Phone p);
+	public boolean matches(IPAElement p);
 	
 	/**
 	 * Does this matcher match anything? 

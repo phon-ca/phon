@@ -10,11 +10,10 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
 
-import ca.phon.ipa.phone.BasicPhone;
-import ca.phon.ipa.phone.CompoundPhone;
-import ca.phon.ipa.phone.Phone;
-import ca.phon.ipa.phone.parser.PhoneLexer;
-import ca.phon.ipa.phone.parser.PhoneParser;
+import ca.phon.ipa.elements.CompoundPhone;
+import ca.phon.ipa.elements.Phone;
+import ca.phon.ipa.parser.IPALexer;
+import ca.phon.ipa.parser.IPAParser;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
@@ -27,7 +26,7 @@ import ca.phon.visitor.annotation.Visits;
 /**
  * 
  */
-public final class IPATranscript extends ArrayList<Phone> implements Visitable<Phone> {
+public final class IPATranscript extends ArrayList<IPAElement> implements Visitable<IPAElement> {
 	
 	/** Static logger */
 	private final static Logger LOGGER = Logger.getLogger(IPATranscript.class
@@ -45,9 +44,9 @@ public final class IPATranscript extends ArrayList<Phone> implements Visitable<P
 		IPATranscript retVal = new IPATranscript();
 		
 		try {
-			PhoneLexer lexer = new PhoneLexer(transcript);
+			IPALexer lexer = new IPALexer(transcript);
 			TokenStream tokenStream = new CommonTokenStream(lexer);
-			PhoneParser parser = new PhoneParser(tokenStream);
+			IPAParser parser = new IPAParser(tokenStream);
 			retVal = parser.transcription();
 		} catch (RecognitionException re) {
 			re.printStackTrace();
@@ -67,7 +66,7 @@ public final class IPATranscript extends ArrayList<Phone> implements Visitable<P
 	/**
 	 * Create a new transcript for a list of phones.
 	 */
-	public IPATranscript(List<Phone> phones) {
+	public IPATranscript(List<IPAElement> phones) {
 		super(phones);
 	}
 	
@@ -117,9 +116,9 @@ public final class IPATranscript extends ArrayList<Phone> implements Visitable<P
 	}
 
 	@Override
-	public void accept(Visitor<Phone> visitor) {
+	public void accept(Visitor<IPAElement> visitor) {
 		// visit each phone in sequence
-		for(Phone p:this) {
+		for(IPAElement p:this) {
 			visitor.visit(p);
 		}
 	}
@@ -127,7 +126,7 @@ public final class IPATranscript extends ArrayList<Phone> implements Visitable<P
 	/**
 	 * Phone visitor for filtering punctuation in transcriptions.
 	 */
-	public class PunctuationFilter extends VisitorAdapter<Phone> {
+	public class PunctuationFilter extends VisitorAdapter<IPAElement> {
 		
 		/**
 		 * filtered transcript
@@ -139,11 +138,11 @@ public final class IPATranscript extends ArrayList<Phone> implements Visitable<P
 		}
 
 		@Override
-		public void fallbackVisit(Phone obj) {
+		public void fallbackVisit(IPAElement obj) {
 		}
 		
 		@Visits
-		public void visitBasicPhone(BasicPhone phone) {
+		public void visitBasicPhone(Phone phone) {
 			transcript.add(phone);
 		}
 		

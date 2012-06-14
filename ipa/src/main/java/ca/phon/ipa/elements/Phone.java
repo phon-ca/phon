@@ -1,11 +1,12 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa.elements;
 
 import java.util.Set;
 
-import ca.phon.ipa.IPATokenType;
-import ca.phon.ipa.IPATokens;
-import ca.phon.ipa.featureset.FeatureMatrix;
-import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 
 /**
  * <p>A basic phone consists of the following parts:
@@ -18,7 +19,7 @@ import ca.phon.ipa.featureset.FeatureSet;
  * <li>A (optional) suffix diacritic</li>
  * </ul>
  */
-public final class BasicPhone extends Phone {
+public final class Phone extends IPAElement {
 	/**
 	 * Prefix diacritic
 	 */
@@ -49,7 +50,7 @@ public final class BasicPhone extends Phone {
 	 * 
 	 * @param basePhone
 	 */
-	BasicPhone(Character basePhone) {
+	Phone(Character basePhone) {
 		super();
 		setBasePhone(basePhone);
 	}
@@ -63,7 +64,7 @@ public final class BasicPhone extends Phone {
 	 * @param length
 	 * @param suffixDiacritic
 	 */
-	BasicPhone(Character prefixDiacritic, Character basePhone,
+	Phone(Character prefixDiacritic, Character basePhone,
 			Character[] combiningDiacritics, float length,
 			Character suffixDiacritic) {
 		super();

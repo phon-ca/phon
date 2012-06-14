@@ -7,7 +7,7 @@ import java.util.Map;
 import ca.phon.fsa.FSATransition;
 import ca.phon.fsa.SimpleFSA;
 import ca.phon.fsa.TransitionType;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Implementation of a phonex state machine.
@@ -15,7 +15,7 @@ import ca.phon.ipa.phone.Phone;
  * design.
  * 
  */
-public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
+public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 	
 	/**
 	 * State index
@@ -277,7 +277,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		
 		// apply transition type to final states
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> fTrans:getTransitionsForState(finalState)) {
+			for(FSATransition<IPAElement> fTrans:getTransitionsForState(finalState)) {
 				fTrans.setType(quantifier.getTransitionType());
 			}
 		}
@@ -310,7 +310,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		
 		// apply transition type to final states
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> fTrans:getTransitionsForState(finalState)) {
+			for(FSATransition<IPAElement> fTrans:getTransitionsForState(finalState)) {
 				fTrans.setType(quantifier.getTransitionType());
 			}
 		}
@@ -328,7 +328,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		// for each final state, find the transitions to it and
 		// make the first state final as well
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> trans:getTransitionsToState(finalState)) {
+			for(FSATransition<IPAElement> trans:getTransitionsToState(finalState)) {
 				addFinalState(trans.getFirstState());
 			}
 			
@@ -348,7 +348,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		// for each final state, find the transitions to it and
 		// make the first state final as well
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> trans:getTransitionsToState(finalState)) {
+			for(FSATransition<IPAElement> trans:getTransitionsToState(finalState)) {
 				addFinalState(trans.getFirstState());
 			}
 			
@@ -374,7 +374,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		// for each final state, find the transitions to it and
 		// make the first state final as well
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> trans:getTransitionsToState(finalState)) {
+			for(FSATransition<IPAElement> trans:getTransitionsToState(finalState)) {
 				addFinalState(trans.getFirstState());
 			}
 		}
@@ -386,7 +386,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		// for each final state, find the transitions to it and
 		// make the first state final as well
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> trans:getTransitionsToState(finalState)) {
+			for(FSATransition<IPAElement> trans:getTransitionsToState(finalState)) {
 				addFinalState(trans.getFirstState());
 			}
 		}
@@ -527,7 +527,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		}
 		
 		for(String finalState:oldFinalStates) {
-			for(FSATransition<Phone> initialTransition:fsa.getTransitionsForState(fsa.getInitialState())) {
+			for(FSATransition<IPAElement> initialTransition:fsa.getTransitionsForState(fsa.getInitialState())) {
 				PhonexTransition pTrans = 
 						PhonexTransition.class.cast(initialTransition);
 				PhonexTransition cpyTrans = 
@@ -544,7 +544,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		// states in the given fsa
 		for(String state:fsa.getStates()) {
 			if(!state.equals(fsa.getInitialState())) {
-				for(FSATransition<Phone> transition:fsa.getTransitionsForState(state)) {
+				for(FSATransition<IPAElement> transition:fsa.getTransitionsForState(state)) {
 					PhonexTransition pTrans = 
 							PhonexTransition.class.cast(transition);
 					PhonexTransition cpyTrans = 
@@ -588,7 +588,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		
 		// apply transition type to final states
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> fTrans:getTransitionsForState(finalState)) {
+			for(FSATransition<IPAElement> fTrans:getTransitionsForState(finalState)) {
 				fTrans.setType(quantifier.getTransitionType());
 			}
 		}
@@ -604,7 +604,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		// copy all transitions from the initial state
 		// to the final states
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> iniTrans:getTransitionsForState(getInitialState())) {
+			for(FSATransition<IPAElement> iniTrans:getTransitionsForState(getInitialState())) {
 				PhonexTransition pTrans = 
 						PhonexTransition.class.cast(iniTrans);
 				PhonexTransition cpyTrans = 
@@ -629,7 +629,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 		// copy all transitions from the initial state
 		// to the final states
 		for(String finalState:getFinalStates()) {
-			for(FSATransition<Phone> iniTrans:getTransitionsForState(getInitialState())) {
+			for(FSATransition<IPAElement> iniTrans:getTransitionsForState(getInitialState())) {
 				PhonexTransition pTrans = 
 						PhonexTransition.class.cast(iniTrans);
 				PhonexTransition cpyTrans = 
@@ -715,12 +715,12 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 	 * @param groupIndex
 	 */
 	public void setGroupIndex(int groupIndex) {
-		for(FSATransition<Phone> trans:getTransitionsForState(getInitialState())) {
+		for(FSATransition<IPAElement> trans:getTransitionsForState(getInitialState())) {
 			trans.getInitGroups().add(groupIndex);
 		}
 		for(String state:getStates()) {
 			if(!getInitialState().equals(state)) {
-				for(FSATransition<Phone> trans:getTransitionsForState(state)) {
+				for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
 					trans.getMatcherGroups().add(groupIndex);
 				}
 			}
@@ -732,7 +732,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 	 */
 	public void decrementGroups() {
 		for(String state:getStates()) {
-			for(FSATransition<Phone> trans:getTransitionsForState(state)) {
+			for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
 				Integer[] initGroups = trans.getInitGroups().toArray(new Integer[0]);
 				Integer[] matcherGroups = trans.getInitGroups().toArray(new Integer[0]);
 				
@@ -760,7 +760,7 @@ public class PhonexFSA extends SimpleFSA<Phone> implements Cloneable {
 				retVal.addFinalState(state);
 			}
 			
-			for(FSATransition<Phone> trans:getTransitionsForState(state)) {
+			for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
 				PhonexTransition pTrans = 
 						PhonexTransition.class.cast(trans);
 				PhonexTransition cpyTrans = PhonexTransition.class.cast(pTrans.clone());

@@ -203,7 +203,7 @@ public class SyllabifierEditor extends JFrame {
 				new View("Console", null, cp);
 		viewMap.addView(CONSOLE_VIEW_ID, consoleView);
 		
-		rootWindow = DockingUtil.createHeavyweightSupportedRootWindow(viewMap, true);
+		rootWindow = DockingUtil.createRootWindow(viewMap, true);
 		
 		final TabWindow inspectorTab = 
 				new TabWindow(new DockingWindow[]{inspectorView, consoleView});
@@ -216,7 +216,7 @@ public class SyllabifierEditor extends JFrame {
 		rootWindow.setWindow(mainSplit);
 		
 		final DockingWindowsTheme theme = 
-				new net.infonode.docking.theme.LookAndFeelDockingTheme();
+				new net.infonode.docking.theme.ClassicDockingTheme();
 		rootWindow.getRootWindowProperties().addSuperObject(theme.getRootWindowProperties());
 		
 		final RootWindowProperties titleBarStyleProperties =

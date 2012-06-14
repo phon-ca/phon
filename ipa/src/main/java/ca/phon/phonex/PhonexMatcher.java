@@ -4,14 +4,14 @@ import java.util.List;
 
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSAState.RunningState;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 public class PhonexMatcher {
 	
 	/**
 	 * Input
 	 */
-	private List<Phone> input;
+	private List<IPAElement> input;
 	
 	/**
 	 * phonex Pattern
@@ -21,7 +21,7 @@ public class PhonexMatcher {
 	/**
 	 * Last fsa state
 	 */
-	private FSAState<Phone> lastMatchState = new FSAState<Phone>();
+	private FSAState<IPAElement> lastMatchState = new FSAState<IPAElement>();
 	
 	/**
 	 * Last match start index
@@ -31,7 +31,7 @@ public class PhonexMatcher {
 	/**
 	 * Constructor
 	 */
-	PhonexMatcher(PhonexPattern pattern, List<Phone> input) {
+	PhonexMatcher(PhonexPattern pattern, List<IPAElement> input) {
 		this.pattern = pattern;
 		this.input = input;
 	}
@@ -49,8 +49,8 @@ public class PhonexMatcher {
 	 * Reset the matcher
 	 */
 	public void reset() {
-		lastMatchState = new FSAState<Phone>();
-		lastMatchState.setTape(input.toArray(new Phone[0]));
+		lastMatchState = new FSAState<IPAElement>();
+		lastMatchState.setTape(input.toArray(new IPAElement[0]));
 		lastMatchState.setTapeIndex(0);
 		lastMatchStart = 0;
 	}
@@ -60,7 +60,7 @@ public class PhonexMatcher {
 	 * 
 	 * @param input
 	 */
-	public void reset(List<Phone> input) {
+	public void reset(List<IPAElement> input) {
 		this.input = input;
 		reset();
 	}
@@ -74,7 +74,7 @@ public class PhonexMatcher {
 	public boolean matches() {
 		reset();
 		lastMatchState =
-				pattern.getFsa().runWithTape(input.toArray(new Phone[0]), lastMatchState, true);
+				pattern.getFsa().runWithTape(input.toArray(new IPAElement[0]), lastMatchState, true);
 		return pattern.getFsa().isFinalState(lastMatchState.getCurrentState())
 				&& lastMatchState.getRunningState() == RunningState.EndOfInput;
 	}
@@ -105,7 +105,7 @@ public class PhonexMatcher {
 			lastMatchState.setTapeIndex(currentIdx);
 			
 			lastMatchState =
-					pattern.getFsa().runWithTape(input.toArray(new Phone[0]), lastMatchState);
+					pattern.getFsa().runWithTape(input.toArray(new IPAElement[0]), lastMatchState);
 			retVal = 
 					pattern.getFsa().isFinalState(lastMatchState.getCurrentState());
 			if(retVal)
@@ -233,7 +233,7 @@ public class PhonexMatcher {
 	 * 
 	 * @return group value for group zero
 	 */
-	public List<Phone> group() {
+	public List<IPAElement> group() {
 		return input.subList(start(), end());
 	}
 	
@@ -244,7 +244,7 @@ public class PhonexMatcher {
 	 * @param gIdx
 	 * @return group value for the specified group
 	 */
-	public List<Phone> group(int gIdx) {
+	public List<IPAElement> group(int gIdx) {
 		return input.subList(start(gIdx), end(gIdx));
 	}
 

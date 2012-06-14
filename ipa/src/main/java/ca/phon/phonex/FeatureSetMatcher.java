@@ -1,8 +1,8 @@
 package ca.phon.phonex;
 
-import ca.phon.ipa.featureset.FeatureMatrix;
-import ca.phon.ipa.featureset.FeatureSet;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
 
 /**
  * Class to match phones based on 
@@ -69,7 +69,7 @@ public final class FeatureSetMatcher implements PhoneMatcher {
 	}
 
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		boolean retVal = false;
 		
 		FeatureSet phoneFs = p.getFeatureSet();

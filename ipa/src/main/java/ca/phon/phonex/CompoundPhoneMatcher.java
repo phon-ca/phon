@@ -1,7 +1,7 @@
 package ca.phon.phonex;
 
-import ca.phon.ipa.phone.CompoundPhone;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.elements.CompoundPhone;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -21,7 +21,7 @@ public class CompoundPhoneMatcher implements PhoneMatcher {
 	}
 
 	@Override
-	public boolean matches(Phone p) {
+	public boolean matches(IPAElement p) {
 		CompoundPhoneVisitor visitor = new CompoundPhoneVisitor();
 		p.accept(visitor);
 		return visitor.matches();
@@ -35,7 +35,7 @@ public class CompoundPhoneMatcher implements PhoneMatcher {
 	/**
 	 * Visitor for compound phones
 	 */
-	public class CompoundPhoneVisitor extends VisitorAdapter<Phone> {
+	public class CompoundPhoneVisitor extends VisitorAdapter<IPAElement> {
 		
 		private boolean matches = false;
 		
@@ -44,7 +44,7 @@ public class CompoundPhoneMatcher implements PhoneMatcher {
 		}
 
 		@Override
-		public void fallbackVisit(Phone obj) {
+		public void fallbackVisit(IPAElement obj) {
 		}
 		
 		@Visits

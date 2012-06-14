@@ -1,13 +1,13 @@
 package ca.phon.syllabifier.phonex;
 
 import ca.phon.extensions.Extension;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Sonority information used during syllabification.
  *
  */
-@Extension(Phone.class)
+@Extension(IPAElement.class)
 public class SonorityInfo {
 	
 	/**

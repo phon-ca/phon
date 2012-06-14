@@ -1,13 +1,14 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa.elements;
 
-import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Represents a pause in an IPA transcription.
  * 
  */
-public final class Pause extends Phone {
+public final class Pause extends IPAElement {
 	
 	/**
 	 * Pause length

@@ -1,4 +1,4 @@
-package ca.phon.ipa.phone;
+package ca.phon.ipa;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -7,36 +7,37 @@ import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.featureset.FeatureSet;
+import ca.phon.ipa.elements.IPAElementFactory;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 
 /**
- * <p>{@link Phone}s represent the atomic unit of IPA transcriptions.
- * {@link Phone}s are constructed using the create methods of
- * {@link PhoneFactory}.</p>
+ * <p>{@link IPAElement}s represent the atomic unit of IPA transcriptions.
+ * {@link IPAElement}s are constructed using the create methods of
+ * {@link IPAElementFactory}.</p>
  * 
- * <p>{@link Phone} objects accept are extendable via capabilities.
+ * <p>{@link IPAElement} objects are extendable via capabilities.
  * Classes provided to {@link ExtensionSupport#putExtension(Class, Object)}
  * must have the {@link Extension} annotation declaring
  * <code>Phone.class</code> as the accepted type.<br/>
  * 
  * E.g.,
  * <pre>
- * &#64;Extension(Phone.class)
+ * &#64;Extension(IPAElement.class)
  * public class MyNewPhoneExtension {...}
  * </pre>
  * 
- * Common uses for {@link Phone} extensions are annotations such as syllabification
+ * Common uses for {@link IPAElement} extensions are annotations such as syllabification
  * information (see {@link SyllabificationInfo}.)</p>
  * 
- * <p>{@link Phone} objects also implement the visitor pattern.  Visitors
+ * <p>{@link IPAElement} objects also implement the visitor pattern.  Visitors
  * must implement the {@link PhoneVisitor} or extend {@link PhoneVisitorAdapter}
  * and can be applied using the {@link #accept(PhoneVisitor)} method.</p>
  */
-public abstract class Phone implements Visitable<Phone>, IExtendable {
+public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 	
 	/**
 	 * Property name for changes on phone text
@@ -52,20 +53,20 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	/**
 	 * Extension support
 	 */
-	private final ExtensionSupport extensionSupport = new ExtensionSupport(Phone.class, this);
+	private final ExtensionSupport extensionSupport = new ExtensionSupport(IPAElement.class, this);
 	
 	/**
 	 * Property change support
 	 */
 	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 	
-	public Phone() {
+	public IPAElement() {
 		super();
 		extensionSupport.initExtensions();
 	}
 	
 	/**
-	 * Set the custom features for this {@link Phone}
+	 * Set the custom features for this {@link IPAElement}
 	 * 
 	 * @param featureSet.  Use <code>null</code> to have
 	 *  the default features returned
@@ -76,7 +77,7 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	
 	/**
 	 * Private method to return the feature set for the
-	 * {@link Phone}.  This return value for this method
+	 * {@link IPAElement}.  This return value for this method
 	 * can be changed by using the {@link #setFeatureSet(FeatureSet)}
 	 * method.
 	 * 
@@ -92,7 +93,7 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	public abstract String getText();
 	
 	/**
-	 * Return the feature set for this {@link Phone}.
+	 * Return the feature set for this {@link IPAElement}.
 	 * 
 	 * @return the default feature set - derived by the
 	 *  implementing type or custom features if defined.
@@ -124,7 +125,7 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	}
 	
 	/**
-	 * Direct access to {@link Phone}s {@link SyllabificationInfo#setConstituentType(SyllableConstituentType)}.
+	 * Direct access to {@link IPAElement}s {@link SyllabificationInfo#setConstituentType(SyllableConstituentType)}.
 	 * 
 	 * @param scType the constituent type for the phon
 	 */
@@ -216,7 +217,7 @@ public abstract class Phone implements Visitable<Phone>, IExtendable {
 	}
 	
 	@Override
-	public void accept(Visitor<Phone> phoneVisitor) {
+	public void accept(Visitor<IPAElement> phoneVisitor) {
 		phoneVisitor.visit(this);
 	}
 	

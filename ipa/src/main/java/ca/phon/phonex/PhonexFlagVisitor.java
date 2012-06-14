@@ -3,13 +3,13 @@ package ca.phon.phonex;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.ipa.phone.BasicPhone;
-import ca.phon.ipa.phone.CompoundPhone;
-import ca.phon.ipa.phone.Pause;
-import ca.phon.ipa.phone.Phone;
-import ca.phon.ipa.phone.StressMarker;
-import ca.phon.ipa.phone.SyllableBoundary;
-import ca.phon.ipa.phone.WordBoundary;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.elements.CompoundPhone;
+import ca.phon.ipa.elements.Pause;
+import ca.phon.ipa.elements.Phone;
+import ca.phon.ipa.elements.StressMarker;
+import ca.phon.ipa.elements.SyllableBoundary;
+import ca.phon.ipa.elements.WordBoundary;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -17,13 +17,13 @@ import ca.phon.visitor.annotation.Visits;
  * Filter a iterable list of phones based on phonex
  * flags.
  */
-public class PhonexFlagVisitor extends VisitorAdapter<Phone> {
+public class PhonexFlagVisitor extends VisitorAdapter<IPAElement> {
 	
 	/**
 	 * Return value
 	 */
-	private final List<Phone> filteredList = 
-			new ArrayList<Phone>();
+	private final List<IPAElement> filteredList = 
+			new ArrayList<IPAElement>();
 	
 	/**
 	 * phonex flags
@@ -31,12 +31,12 @@ public class PhonexFlagVisitor extends VisitorAdapter<Phone> {
 	
 
 	@Override
-	public void fallbackVisit(Phone obj) {
+	public void fallbackVisit(IPAElement obj) {
 		
 	}
 	
 	@Visits
-	public void basicPhone(BasicPhone phone) {
+	public void basicPhone(Phone phone) {
 		
 	}
 	

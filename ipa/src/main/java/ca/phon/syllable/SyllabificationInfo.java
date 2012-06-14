@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference;
 import ca.phon.extensions.Extension;
 import ca.phon.extensions.ExtensionProvider;
 import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.phone.Phone;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Adds syllabification information to Phones.
@@ -19,7 +19,7 @@ import ca.phon.ipa.phone.Phone;
  *   <li>constituent type</li>
  * </ul>
  */
-@Extension(Phone.class)
+@Extension(IPAElement.class)
 public class SyllabificationInfo {
 	
 	/**
@@ -57,25 +57,25 @@ public class SyllabificationInfo {
 	/**
 	 * weak reference to parent
 	 */
-	private final WeakReference<Phone> phoneRef;
+	private final WeakReference<IPAElement> phoneRef;
 	
-	public SyllabificationInfo(Phone phone) {
+	public SyllabificationInfo(IPAElement phone) {
 		this(phone, SyllableConstituentType.UNKNOWN);
 	}
 	
-	public SyllabificationInfo(Phone phone, SyllableConstituentType scType) {
-		phoneRef = new WeakReference<Phone>(phone);
+	public SyllabificationInfo(IPAElement phone, SyllableConstituentType scType) {
+		phoneRef = new WeakReference<IPAElement>(phone);
 		this.scType = scType;
 	}
 	
 	/**
-	 * Get parent {@link Phone}
+	 * Get parent {@link IPAElement}
 	 * 
 	 * @return parent phone, may be <code>null</code>
 	 *  if the {@link WeakRefernce} to the parent is no 
 	 *  longer valid.
 	 */
-	public Phone getPhone() {
+	public IPAElement getPhone() {
 		return phoneRef.get();
 	}
 
@@ -125,8 +125,8 @@ public class SyllabificationInfo {
 	 * Is this phone part of a diphthong?
 	 * 
 	 * @return <code>true</code> if the constituent type of the
-	 *  {@link Phone} is {@link SyllableConstituentType#NUCLEUS} and
-	 *  the {@link Phone} is part of a diphthong, <code>false</code>
+	 *  {@link IPAElement} is {@link SyllableConstituentType#NUCLEUS} and
+	 *  the {@link IPAElement} is part of a diphthong, <code>false</code>
 	 *  otherwise
 	 */
 	public boolean isDiphthongMember() {
@@ -134,7 +134,7 @@ public class SyllabificationInfo {
 	}
 	
 	/**
-	 * Set this {@link Phone} as part of a diphthong member.
+	 * Set this {@link IPAElement} as part of a diphthong member.
 	 * Only valid if {@link #getConstituentType()} is
 	 * {@link SyllableConstituentType#NUCLEUS}.
 	 * 
