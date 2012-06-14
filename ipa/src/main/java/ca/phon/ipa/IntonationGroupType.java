@@ -1,4 +1,4 @@
-package ca.phon.ipa.elements;
+package ca.phon.ipa;
 
 /**
  * Intonation group type

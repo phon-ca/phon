@@ -1,6 +1,5 @@
-package ca.phon.ipa.elements;
+package ca.phon.ipa;
 
-import ca.phon.ipa.IPAElement;
 
 /**
  * A factory for creating various types of {@link IPAElement}
