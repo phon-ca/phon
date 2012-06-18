@@ -276,66 +276,66 @@
                      <entry>consonant subapical click ingressive coronal lingual anterior stop voiceless </entry>
                   </row>
                   <row>
-                     <entry>◌¹</entry>
+                     <entry>¹</entry>
                      <entry>Ub9</entry>
                      <entry>Superscript One (Number 1)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone1 </entry>
                   </row>
                   <row>
-                     <entry>◌²</entry>
+                     <entry>²</entry>
                      <entry>Ub2</entry>
                      <entry>Superscript Two (Number 2)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone2 </entry>
                   </row>
                   <row>
-                     <entry>◌³</entry>
+                     <entry>³</entry>
                      <entry>Ub3</entry>
                      <entry>Superscript Three (Number 3)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone3 </entry>
                   </row>
                   <row>
-                     <entry>◌⁴</entry>
+                     <entry>⁴</entry>
                      <entry>U2074</entry>
                      <entry>Superscript Four (Number 4)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone4 </entry>
                   </row>
                   <row>
-                     <entry>◌⁵</entry>
+                     <entry>⁵</entry>
                      <entry>U2075</entry>
                      <entry>Superscript Five (Number 5)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone5 </entry>
                   </row>
                   <row>
-                     <entry>◌⁶</entry>
+                     <entry>⁶</entry>
                      <entry>U2076</entry>
                      <entry>Superscript Six (Number 6)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone6 </entry>
                   </row>
                   <row>
-                     <entry>◌⁷</entry>
+                     <entry>⁷</entry>
                      <entry>U2077</entry>
                      <entry>Superscript Seven (Number 7)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone7 </entry>
                   </row>
                   <row>
-                     <entry>◌⁸</entry>
+                     <entry>⁸</entry>
                      <entry>U2078</entry>
                      <entry>Superscript Eight (Number 8)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone8 </entry>
                   </row>
                   <row>
-                     <entry>◌⁹</entry>
+                     <entry>⁹</entry>
                      <entry>U2079</entry>
                      <entry>Superscript Nine (Number 9)</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic tone9 </entry>
                   </row>
                   <row>
@@ -1886,18 +1886,32 @@
                      <entry>diacritic ingressive </entry>
                   </row>
                   <row>
-                     <entry>◌↗</entry>
+                     <entry>↗</entry>
                      <entry>U2197</entry>
                      <entry>Northeast Arrow</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic toneglobalrise </entry>
                   </row>
                   <row>
-                     <entry>◌↘</entry>
+                     <entry>↘</entry>
                      <entry>U2198</entry>
                      <entry>Southeast Arrow</entry>
-                     <entry>suffix diacritic</entry>
+                     <entry>tone</entry>
                      <entry>diacritic toneglobalfall </entry>
+                  </row>
+                  <row>
+                     <entry>ꜛ</entry>
+                     <entry>Ua71b</entry>
+                     <entry>Up Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneupstep </entry>
+                  </row>
+                  <row>
+                     <entry>ꜜ</entry>
+                     <entry>Ua71c</entry>
+                     <entry>Down Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonedownstep </entry>
                   </row>
                   <row>
                      <entry>◌</entry>
