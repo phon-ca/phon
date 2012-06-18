@@ -39,6 +39,43 @@
 			<artifactId>opencsv</artifactId>
 			<version>2.3</version>
 		</dependency>
+		
+		<dependency>
+      <groupId>net.sourceforge.saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <version>9.1.0.8</version>
+      <optional>true</optional>
+    </dependency>
+    
+    <dependency>
+      <groupId>net.sourceforge.saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <classifier>dom</classifier>
+      <version>9.1.0.8</version>
+      <optional>true</optional>
+    </dependency>
+  
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>3.4.4</version>
+      <optional>true</optional>
+    </dependency>
+    
+    <!-- only need this to generate PDF -->
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>fop</artifactId>
+      <version>1.0</version>
+      <optional>true</optional>
+    </dependency>
+    
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.9.1</version>
+      <optional>true</optional>
+    </dependency>
 	</dependencies>
 
 	<build>
@@ -109,6 +146,27 @@
 					</additionalClasspathElements>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>dita-maven-plugin</artifactId>
+        <version>1.0-beta-3</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <antProperties>
+                <output.dir>${project.build.directory}/dita/pdf</output.dir>
+                <args.input>src/main/dita/phon-ipa-support.ditamap</args.input>
+                <transtype>pdf</transtype>
+              </antProperties>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 		</plugins>
 	</build>
 </project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_1wx_dhn_gg">
+ <title>Introduction</title>
+ <shortdesc></shortdesc>
+ <conbody>
+  <p>Phonex is a regular, pattern matching language for IPA transcriptions.  It was developed for
+      the <i>Phon</i> application as a method of searching for sequences of phones using termonology
+      familiar with liguists; specifically though the use of phonetic features and syllable
+      constituent types.</p>
+  <p>This document is a reference to version 2.0 of the phonex language.  The following sections
+   outline the various constructs and plug-ins provided with the language.  The final sections
+   detail how phonex can be used with the <i>Java<sup>TM</sup></i> programming language and how to
+   extend phonex using custom plug-ins.</p>
+ </conbody>
+</concept>

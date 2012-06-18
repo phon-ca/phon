@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+    <title>Phon IPA Support</title>
+    <topichead navtitle="IPA Transcription">
+        <topicref href="ipa/dita/phone.dita"/>
+        <topicref href="ipa/dita/compound_phone.dita"/>
+        <topicref href="ipa/dita/stress_marker.dita"/>
+        <topicref href="ipa/dita/syllable_boundary.dita"/>
+        <topicref href="ipa/dita/word_boundary.dita"/>
+        <topicref href="ipa/dita/intonation_group.dita"/>
+        <topicref href="ipa/dita/compound_word.dita"/>
+        <topicref href="ipa/dita/contraction_marker.dita"/>
+        <topicref href="ipa/dita/features.dita"/>
+        <topicref href="ipa/dita/characters.dita"/>
+    </topichead>
+    <topichead navtitle="Phonex">
+        <topicref href="phonex/dita/intro.dita"/>
+        <topichead navtitle="Language Reference">
+            <topicref href="phonex/dita/constructs.dita"/>
+            <topicref href="phonex/dita/phone-matchers.dita"/>
+            <topicref href="phonex/dita/groups.dita"/>
+            <topicref href="phonex/dita/boundaries.dita"/>
+            <topicref href="phonex/dita/quantifiers.dita"/>
+            <topicref href="phonex/dita/plug-ins.dita">
+                <topicref href="phonex/dita/len.dita"/>
+                <topicref href="phonex/dita/sctype.dita"/>
+                <topicref href="phonex/dita/stress.dita"/>
+                <topicref href="phonex/dita/prefix.dita"/>
+                <topicref href="phonex/dita/suffix.dita"/>
+                <topicref href="phonex/dita/comb.dita"/>
+            </topicref>
+        </topichead>
+        <topichead navtitle="Programming">
+            <topicref href="phonex/dita/java-examples.dita"/>
+            <topicref href="phonex/dita/custom-plugin.dita"/>
+        </topichead>
+    </topichead>
+</map>

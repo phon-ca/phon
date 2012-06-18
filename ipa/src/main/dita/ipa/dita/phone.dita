@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_51v_4vv_4g">
+ <title>Phone</title>
+ <shortdesc>&lt;prefix diacritic>? &lt;base_phone> &lt;length>? &lt;suffix_diacritic>?</shortdesc>
+ <conbody>
+  <p>Phone's are the main unit of an IPA transcription.  They are composed of a vowel or consonant
+   along with optional length, prefix, suffix, tone, and combining diacritics.  The following
+   sections outline each part of a single Phone.</p>
+  <section>
+   <title>Base Phone</title>
+   <p>The base phone may be any IPA vowel or consonant.</p>
+  </section>
+  <section>
+   <title>Prefix Diacritic</title>
+   <p>Prefix diacritics appear before the Base Phone.</p>
+  </section>
+  <section>
+   <title>Combining Diacritic</title>
+   <p>Combining diacritics must appear directly after the base phone.</p>
+  </section>
+  <section>
+   <title>Length</title>
+   <p>Phone length is indicated using character 0x02D0 (long) and 0x02D1 (half-long.)  Up to three
+    long diacritics may be appended to a   </p>
+  </section>
+  <section>
+   <title>Suffix Diacritic</title>
+   <p>Suffix diacritics appear after the base phone and length if applicable.</p>
+  </section>
+ </conbody>
+</concept>

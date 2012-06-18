@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>phon</artifactId>
+    <groupId>ca.phon</groupId>
+    <version>${build.version}</version>
+    <relativePath>..</relativePath>
+  </parent>
+ 
+  <artifactId>phon-xml</artifactId>
+  <name>Phon XML Utilities</name>
+  <description>A collection of XML utility classes..</description>
+
+  <dependencies>
+  <dependency>
+  	<groupId>ca.phon</groupId>
+  	<artifactId>phon-design-patterns</artifactId>
+  	<version>${build.version}</version>
+  	</dependency>
+  </dependencies>
+  
+</project>

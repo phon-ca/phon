@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_pjp_4nm_gg">
+ <title>Phone Matchers</title>
+ <shortdesc>Various methods of maching phones using phonex 2.0.</shortdesc>
+ <conbody>
+  <p>As outlined in the Phonex Constructs section, there are several methods for matching phones in
+   phonex.  This section describes these methods in more detail.</p>
+  <section>
+   <title>Character matchers</title>
+   <p>Character matchers are defined by simply typing the character for the desired phone. Character
+    matchers will match any phone with the specified <i>base-character</i> - regardless of attached
+    diacritics. Characters can be also be written using their unicode values.</p>
+  </section>
+  <example>
+   <p>
+    <table frame="all" id="table_1m5_55m_gg">
+     <title>Character matcher examples</title>
+     <tgroup cols="2">
+      <colspec colname="c1" colnum="1" colwidth="1*"/>
+      <colspec colname="c2" colnum="2" colwidth="3.44*"/>
+      <thead>
+       <row>
+        <entry>Expression</entry>
+        <entry>Matches</entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry>a</entry>
+        <entry>The vowel a</entry>
+       </row>
+       <row>
+        <entry>ba</entry>
+        <entry>The consonant b followed by the vowel a</entry>
+       </row>
+       <row>
+        <entry>\u0068</entry>
+        <entry>The consonant h</entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </table>
+   </p>
+  </example>
+  <section>
+   <title>Feature set matchers</title>
+   <p>Every IPA character can be described using a set of phonetic features.  Feature set matchers
+    are denoted by enclosing a list of feature names inside braces.  Features contained within a
+    phonex feature set matcher can be required (default) or unwanted (prefixed by <codeph>-</codeph>
+    (minus)).  Feature names are case-insensitive and can be written using the full feature name or
+    shorthand equivalent (e.g., <codeph>{consonant}</codeph> is the same as
+    <codeph>{c}</codeph>.)</p>
+  </section>
+  <example>
+   <table frame="all" id="table_k1l_g5n_gg">
+    <title>Feature set matcher examples</title>
+    <tgroup cols="2">
+     <colspec colname="c1" colnum="1" colwidth="1*"/>
+     <colspec colname="c2" colnum="2" colwidth="3.41*"/>
+     <thead>
+      <row>
+       <entry>Expression</entry>
+       <entry>Matches</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>{consonant, coronal}</entry>
+       <entry>All coronal consonants</entry>
+      </row>
+      <row>
+       <entry>{c, -coronal}</entry>
+       <entry>All non-coronal consonants</entry>
+      </row>
+      <row>
+       <entry>{}</entry>
+       <entry>Anything</entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </example>
+  <section>
+   <title>Regex matchers</title>
+   <p>Since IPA transcriptions are composed of unicode strings, regular expressions can also be used
+    to match phones. To use a regex matcher, place the desired regular expression inside single
+    quote characters.</p>
+  </section>
+  <example>
+   <table frame="all" id="table_ts2_fvn_gg">
+    <title>Regex matcher examples</title>
+    <tgroup cols="2">
+     <colspec colname="c1" colnum="1" colwidth="1*"/>
+     <colspec colname="c2" colnum="2" colwidth="3.46*"/>
+     <thead>
+      <row>
+       <entry>Expression</entry>
+       <entry>Matches</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>'a'</entry>
+       <entry>The vowel a. Unlike the un-quoted version, 'a' will not match cases that have attached
+        diacritics.</entry>
+      </row>
+      <row>
+       <entry>'[e-i]'</entry>
+       <entry>Characters in the range 'e' to 'i'.</entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </example>
+  <section>
+   <title>Phone class matchers</title>
+   <p>Phone class matchers combine several phone matchers into a 'class.'   Phone classes are
+    denoted by enclosing a set of phone matchers inside brackets. The phone class will match if any
+    of the inner-matchers match.  If the phone class starts with a <codeph>-</codeph> (minus)
+    symbol, then the class will match any phone <i>not</i> matched by the inner-matchers.</p>
+  </section>
+  <example>
+   <table frame="all" id="table_qs5_fwn_gg">
+    <title>Phone class examples</title>
+    <tgroup cols="2">
+     <colspec colname="c1" colnum="1" colwidth="1*"/>
+     <colspec colname="c2" colnum="2" colwidth="3.44*"/>
+     <thead>
+      <row>
+       <entry>Expression</entry>
+       <entry>Matches</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>[{glide}\v]</entry>
+       <entry>Any glide or vowel.</entry>
+      </row>
+      <row>
+       <entry>[-{c,coronal}\v]</entry>
+       <entry>Anything not a coronal consonant or a vowel.</entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </example>
+  <section>
+   <title>Compound phone matchers</title>
+   <p>Compound phones are composed of two single-phones bi-sected by a ligature.  To match compound
+    phones in phonex, connect two phone matchers using a <codeph>_</codeph> (underscore)
+    character.</p>
+  </section>
+  <example>
+   <table frame="all" id="table_b2s_nxn_gg">
+    <title>Compound phone matcher examples</title>
+    <tgroup cols="2">
+     <colspec colname="c1" colnum="1" colwidth="1*"/>
+     <colspec colname="c2" colnum="2" colwidth="3.44*"/>
+     <thead>
+      <row>
+       <entry>Expression</entry>
+       <entry>Matches</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>t_{fricative}</entry>
+       <entry>Any compound phone starting with the consonant 't' and ending with a
+        fricative.</entry>
+      </row>
+      <row>
+       <entry>._.</entry>
+       <entry>Any compound phone.</entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </example>
+ </conbody>
+</concept>

@@ -91,7 +91,8 @@
   </pluginRepositories>
 
   <modules>
-    <module>util</module>
+	  <module>util</module>
+	  <module>xml</module>
     <module>design-patterns</module>
     <module>ipa</module>
     <module>components</module>

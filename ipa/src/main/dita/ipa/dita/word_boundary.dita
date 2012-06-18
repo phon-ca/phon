@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_4zr_zxv_4g">
+ <title>Word Boundary</title>
+ <shortdesc></shortdesc>
+ <conbody>
+  <p>Word boundaries are indicated via a space.</p>
+ </conbody>
+</concept>

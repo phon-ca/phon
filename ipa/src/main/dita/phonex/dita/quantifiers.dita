@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_ddz_ttt_gg">
+ <title>Quantifiers</title>
+ <shortdesc>Description of phonex quantifiers.</shortdesc>
+ <conbody>
+  <p>Quantifiers modify the number of times a phone matcher or group can be repeated. Quantifiers
+   are always applied to the preceeding matcher or group. There are three types of quantifiers in
+   phonex: <i>greedy</i>, <i>reluctant</i>, and <i>possessive</i>.</p>
+  <p><i>Greedy</i> quantifiers are such called because they attempt to match the entire input on
+   first match.  If the match fails, the matcher backs off one phone at a time until a match is
+   obtained or until the number of choices has been exhausted.  </p>
+  <p><i>Reluctant</i> quantifiers do the opposite; they will reluctantly process phones, only
+   attempting a full input match as a last resort.</p>
+  <p><i>Possessive</i> quantifiers never back off; they will always process as many phones as
+   possible, never attempting to backtrack - even if doing so would allow the match to succeed.</p>
+  <example>
+   <p>To illustrate the difference between different quantifiers, considier the following examples
+    using the input string: hello.</p>
+   <p>
+    <table frame="all" id="table_c31_fzt_gg">
+     <title>Greedy vs. Reluctant Quantifiers</title>
+     <tgroup cols="2">
+      <colspec colname="c1" colnum="1" colwidth="1*"/>
+      <colspec colname="c2" colnum="2" colwidth="3.43*"/>
+      <thead>
+       <row>
+        <entry>Expression</entry>
+        <entry>Finds</entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry>.*\v  <i>(greedy)</i></entry>
+        <entry>1 occurrences - hello</entry>
+       </row>
+       <row>
+        <entry>.*?\v  <i>(reluctant)</i></entry>
+        <entry>2 occurrences - he, llo</entry>
+       </row>
+       <row>
+        <entry>.*+\v  <i>(possessive)</i></entry>
+        <entry>0 occurrences since '.*+' initially matches the final 'o' in the input and will not
+         backtrack</entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </table>
+   </p>
+  </example>
+ </conbody>
+</concept>

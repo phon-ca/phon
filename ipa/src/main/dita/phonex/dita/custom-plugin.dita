@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="task_s33_45t_gg">
+    <title>Creating a Custom Plug-in</title>
+    <shortdesc>Outline of steps to perform for creating a phonex 2.0 plug-in  matcher.</shortdesc>
+    <taskbody>
+        <context>
+            <p>Context for the current task</p>
+        </context>
+        <steps>
+            <step>
+                <cmd>Task step.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>
