@@ -173,7 +173,7 @@
                 <artifactItem>
                   <groupId>org.apache.ant</groupId>
                   <artifactId>apache-ant</artifactId>
-                  <type>zip</type>
+                  <type>tar.gz</type>
                   <classifier>bin</classifier>
                   <version>${ant.version}</version>
                 </artifactItem>
