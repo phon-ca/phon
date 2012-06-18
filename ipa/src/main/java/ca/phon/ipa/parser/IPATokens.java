@@ -110,10 +110,10 @@ public final class IPATokens {
 			
 			try {
 				// read in xml token file
-				JAXBContext context = JAXBContext.newInstance("ca.phon.ipa.xml");
-				Unmarshaller unmarshaller = context.createUnmarshaller();
+				final JAXBContext context = JAXBContext.newInstance("ca.phon.ipa.xml");
+				final Unmarshaller unmarshaller = context.createUnmarshaller();
 				
-				JAXBElement<?> ipaEle = 
+				final JAXBElement<?> ipaEle = 
 					JAXBElement.class.cast(unmarshaller.unmarshal(
 							getClass().getResourceAsStream(ipaTokensPath)));
 				// make sure we have the right type of element
@@ -126,8 +126,10 @@ public final class IPATokens {
 						try {
 							intVal = Integer.decode(gt.getValue());
 							
-							Character c = Character.valueOf((char)intVal.intValue());
-							IPATokenType tt = IPATokenType.fromXMLType(gt.getToken());
+							final Character c = Character.valueOf((char)intVal.intValue());
+							if(gt.getToken() == null)
+								System.out.println(c);
+							final IPATokenType tt = IPATokenType.fromXMLType(gt.getToken());
 							
 							tokenMap.put(c, tt);
 							

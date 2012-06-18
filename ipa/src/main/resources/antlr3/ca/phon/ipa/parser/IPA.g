@@ -221,13 +221,21 @@ phone returns [IPAElement ele]
  * A single (non-compound) phone.
  */
 single_phone returns [Phone phone]
-	:	base_phone
+scope {	
+	List<Character> toneDias;
+}
+@init {
+	$single_phone::toneDias = new ArrayList<Character>();
+}
+	:	base_phone (tc=TONE {$single_phone::toneDias.add($tc.text.charAt(0));})*
 	{	
-		$phone = $base_phone.phone;	
+		$phone = $base_phone.phone;
+		$phone.setToneDiacritics($single_phone::toneDias.toArray(new Character[0]));
 	}
-	|	complex_phone
+	|	complex_phone (tc=TONE {$single_phone::toneDias.add($tc.text.charAt(0));})*
 	{	
 		$phone = $complex_phone.phone;
+		$phone.setToneDiacritics($single_phone::toneDias.toArray(new Character[0]));
 	}
 	;
 	
@@ -243,9 +251,11 @@ scope {
 }
 	:	initialToken=(CONSONANT|VOWEL|COVER_SYMBOL|GLIDE) (cd=COMBINING_DIACRITIC {$base_phone::cmbDias.add($cd.text.charAt(0));})* len=phone_length?
 	{
-		Character basePhone = $initialToken.text.charAt(0);
+		final Character basePhone = $initialToken.text.charAt(0);
 		
-		$phone = factory.createPhone(basePhone, $base_phone::cmbDias.toArray(new Character[0]), 0.0f);
+		final float length = (len != null ? $len.length : 0.0f);
+		
+		$phone = factory.createPhone(basePhone, $base_phone::cmbDias.toArray(new Character[0]), length);
 	}
 	;
 	

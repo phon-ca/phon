@@ -26,7 +26,7 @@ public class IPAElementFactory {
 	 * @param basePhone
 	 */
 	public Phone createPhone(Character prefix, Character basePhone) {
-		return new Phone(prefix, basePhone, new Character[0], 0, null);
+		return new Phone(prefix, basePhone, new Character[0], 0, null, new Character[0]);
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class IPAElementFactory {
 	 * @param suffix
 	 */
 	public Phone createPhone(Character prefix, Character basePhone, Character suffix) {
-		return new Phone(prefix, basePhone, new Character[0], 0, suffix);
+		return new Phone(prefix, basePhone, new Character[0], 0, suffix, new Character[0]);
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class IPAElementFactory {
 	 * @param suffix
 	 */
 	public Phone createPhone(Character prefix, Character basePhone, Character[] combining, Character suffix) {
-		return new Phone(prefix, basePhone, combining, 0, suffix);
+		return new Phone(prefix, basePhone, combining, 0, suffix, new Character[0]);
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class IPAElementFactory {
 	 * @param suffix
 	 */
 	public Phone createPhone(Character prefix, Character basePhone, Character[] combining, float length, Character suffix) {
-		return new Phone(prefix, basePhone, combining, length, suffix);
+		return new Phone(prefix, basePhone, combining, length, suffix, new Character[0]);
 	}
 	
 	/**

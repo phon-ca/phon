@@ -35,6 +35,11 @@ public final class Phone extends IPAElement {
 	private Character[] combiningDiacritics = new Character[0];
 	
 	/**
+	 * Tone diacritics
+	 */
+	private Character[] toneDiacritics = new Character[0];
+	
+	/**
 	 * Length
 	 */
 	private float length = 0;
@@ -65,7 +70,7 @@ public final class Phone extends IPAElement {
 	 */
 	Phone(Character prefixDiacritic, Character basePhone,
 			Character[] combiningDiacritics, float length,
-			Character suffixDiacritic) {
+			Character suffixDiacritic, Character[] toneDiacritics) {
 		super();
 		if(prefixDiacritic != null)
 			setPrefixDiacritic(prefixDiacritic);
@@ -76,6 +81,8 @@ public final class Phone extends IPAElement {
 			setLength(length);
 		if(suffixDiacritic != null)
 			setSuffixDiacritic(suffixDiacritic);
+		if(toneDiacritics != null)
+			setToneDiacritics(toneDiacritics);
 	}
 
 	/* Get/Set methods */
@@ -221,6 +228,48 @@ public final class Phone extends IPAElement {
 	}
 	
 	/**
+	 * <p>Set the tone diacritics for ths phone.  Each character
+	 * must have the {@link IPATokenType#TONE} token type.</p>
+	 * 
+	 * @param toneDiacritics
+	 * @throws IllegalArgumentException if one of the given diacritics
+	 *  is not a tone diacritic
+	 */
+	public void setToneDiacritics(Character[] toneDiacritics) {
+		for(Character tc:toneDiacritics) {
+			final IPATokenType tt = IPATokens.getSharedInstance().getTokenType(tc);
+			if(tt != IPATokenType.TONE) {
+				throw new IllegalArgumentException();
+			}
+		}
+		this.toneDiacritics = toneDiacritics;
+	}
+	
+	/**
+	 * Get the tone diacritics for this phone.
+	 * 
+	 * @return tone diacritics
+	 */
+	public Character[] getToneDiacritics() {
+		return this.toneDiacritics;
+	}
+	
+	/**
+	 * Get the string representing the tone section of this {@link Phone}.
+	 * 
+	 * @return tone string
+	 */
+	public String getTone() {
+		String retVal = "";
+		
+		for(Character c:getToneDiacritics()) {
+			retVal += c;
+		}
+		
+		return retVal;
+	}
+	
+	/**
 	 * Get the string for the combining diacritic portion of the 
 	 * phone.
 	 * 
@@ -272,7 +321,7 @@ public final class Phone extends IPAElement {
 	 *  is not between 0 and 3 and/or not a multiple of 0.5.
 	 */
 	public void setLength(float length) {
-		if(length < 0 || length > 3 || ((length * 2.0) % 2 != 0)) {
+		if(length < 0 || length > 3) {
 			throw new IllegalArgumentException("Phone length must be one of: 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0");
 		}
 		this.length = length;
@@ -384,7 +433,8 @@ public final class Phone extends IPAElement {
 				getBase() +
 				getCombining() +
 				getLengthString() +
-				getSuffix();
+				getSuffix() +
+				getTone();
 		return retVal;
 	}
 }

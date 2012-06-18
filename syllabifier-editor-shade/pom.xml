@@ -9,8 +9,7 @@
     <relativePath>..</relativePath>
   </parent>
 
-  <groupId>ca.phon</groupId>
-  <artifactId>phon-shade</artifactId>
+  <artifactId>phon-syllabifier-editor-shade</artifactId>
   <name>Phon Uber Jar</name>
   <description>Create an uber-jar for all Phon modules.</description>
 
@@ -27,10 +26,18 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <transformers>
+				<transformers>
+					<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+						<mainClass>ca.phon.syllabifier.editor.SyllabifierEditor</mainClass>
+				</transformer>
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"
                 />
+				  <transformer
+					  implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+					  <resource>IPA.tokens</resource>
+					  <file>IPA.tokens</file>
+				  </transformer>
               </transformers>
             </configuration>
           </execution>
@@ -40,36 +47,6 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-components</artifactId>
-      <version>${build.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-design-patterns</artifactId>
-      <version>${build.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-ipa</artifactId>
-      <version>${build.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-opgraph</artifactId>
-      <version>${build.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-util</artifactId>
-      <version>${build.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-syllabifier</artifactId>
-      <version>${build.version}</version>
-    </dependency>
     <dependency>
       <groupId>ca.phon</groupId>
       <artifactId>phon-syllabifier-editor</artifactId>

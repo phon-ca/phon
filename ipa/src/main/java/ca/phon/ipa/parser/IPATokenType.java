@@ -29,6 +29,7 @@ public enum IPATokenType {
     SECONDARY_STRESS("Secondary Stress"),
     SPACE("Space"),
     SUFFIX_DIACRITIC("Suffix Diacritic"),
+    TONE("Tone"),
     VOWEL("Vowel");
 	
 	String tokenName = "Unknown";

@@ -47,6 +47,7 @@
             <xs:enumeration value="ROLE_REVERSAL"/>
             <xs:enumeration value="LIGATURE"/>
             <xs:enumeration value="GLIDE"/>
+            <xs:enumeration value="TONE"/>
         </xs:restriction>
     </xs:simpleType>
     

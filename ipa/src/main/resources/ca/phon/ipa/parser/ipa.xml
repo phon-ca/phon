@@ -146,39 +146,39 @@
     </glyph>
     <glyph value="0x00b9">
         <name>Superscript One (Number 1)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x00b2">
         <name>Superscript Two (Number 2)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x00b3">
         <name>Superscript Three (Number 3)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x2074">
         <name>Superscript Four (Number 4)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x2075">
         <name>Superscript Five (Number 5)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x2076">
         <name>Superscript Six (Number 6)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x2077">
         <name>Superscript Seven (Number 7)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x2078">
         <name>Superscript Eight (Number 8)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x2079">
         <name>Superscript Nine (Number 9)</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x00fe">
         <name>Latin Small Letter Thorn</name>
@@ -1066,11 +1066,19 @@
     </glyph>
     <glyph value="0x2197">
         <name>Northeast Arrow</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </glyph>
     <glyph value="0x2198">
         <name>Southeast Arrow</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
+    </glyph>
+    <glyph value="0xa71b">
+    	<name>Up Arrow</name>
+    	<token>TONE</token>
+    </glyph>
+    <glyph value="0xa71c">
+    	<name>Down Arrow</name>
+    	<token>TONE</token>
     </glyph>
     <glyph value="0xf171">
         <name>High Rising Tone</name>

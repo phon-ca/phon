@@ -42,7 +42,24 @@
 	</dependencies>
 
 	<build>
+		
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>target/generated-sources/antlr3</directory>
+				<includes>
+					<include>*.tokens</include>
+				</includes>
+			</resource>
+		</resources>
+	
 		<plugins>
+      
 			<!-- Generate source for xml schema -->
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -92,7 +109,6 @@
 					</additionalClasspathElements>
 				</configuration>
 			</plugin>
-		
 		</plugins>
 	</build>
 </project>
