@@ -1,32 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_51v_4vv_4g">
- <title>Phone</title>
- <shortdesc>&lt;prefix diacritic>? &lt;base_phone> &lt;length>? &lt;suffix_diacritic>?</shortdesc>
- <conbody>
-  <p>Phone's are the main unit of an IPA transcription.  They are composed of a vowel or consonant
-   along with optional length, prefix, suffix, tone, and combining diacritics.  The following
+ <title>Phone</title> <conbody>
+  <p>Phones are the main unit of an IPA transcription.  They are composed of a vowel or consonant
+   along with optional prefix, combining, length, suffix, and tone diacritics.  The following
    sections outline each part of a single Phone.</p>
   <section>
-   <title>Base Phone</title>
-   <p>The base phone may be any IPA vowel or consonant.</p>
-  </section>
-  <section>
    <title>Prefix Diacritic</title>
-   <p>Prefix diacritics appear before the Base Phone.</p>
+   <p>A prefix diacritic must appear before the base glyph.</p>
   </section>
   <section>
-   <title>Combining Diacritic</title>
-   <p>Combining diacritics must appear directly after the base phone.</p>
+   <title>Base Glyph</title>
+   <p>The base glyph can be any IPA vowel or consonant.</p>
+  </section>
+  <section>
+   <title>Combining Diacritic(s)</title>
+   <p>Combining diacritics must appear directly after the base glyph; any number of combining 
+    diacritics may be used.</p>
   </section>
   <section>
    <title>Length</title>
    <p>Phone length is indicated using character 0x02D0 (long) and 0x02D1 (half-long.)  Up to three
-    long diacritics may be appended to a   </p>
+    long diacritics may be included within a phone.</p>
   </section>
   <section>
    <title>Suffix Diacritic</title>
-   <p>Suffix diacritics appear after the base phone and length if applicable.</p>
+   <p>A suffix diacritic must appear after the base glyph, combining diacritics and length if applicable.</p>
   </section>
+  <section>
+   <title>Tone</title>
+   <p>Tone diacritics (such as upstep or tone numbers) must appear as the last element in a phone.</p>
+  </section>
+  <section>
+   <note>Please consult <xref href="characters.dita"/> for a list of possible IPA
+   elements and their character types.</note>
+   <table id="table_dyv_gxz_pg">
+    <tgroup cols="2">
+     <thead>
+      <row>
+       <entry>Some Possible Phones</entry>
+       <entry>Description</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>t̪ʰ</entry>
+       <entry>Aspirated dental [t]</entry>
+      </row>
+      <row>
+       <entry>aːːː¹</entry>
+       <entry>Triple-long [a], Tone 1</entry>
+      </row>
+      <row>
+       <entry>ⁿd</entry>
+       <entry>Prenasalised [d]</entry>
+      </row>
+      <row>
+       <entry>ᵐṳ̀</entry>
+       <entry>Prenasalised, breathy voiced [u], with combining diacritic low tone</entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </section>
+  
  </conbody>
 </concept>

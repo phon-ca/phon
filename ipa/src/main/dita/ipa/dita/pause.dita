@@ -2,8 +2,35 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_fw1_tvv_4g">
  <title>Pause</title>
- <shortdesc></shortdesc>
  <conbody>
-  <p>Concept definition.</p>
+  <p>Pauses in speech may be transcribed in one of three ways, depending on their length.</p>
+  <table frame="none" id="table_d99e21ed-6c02-42dc-b7ff-f42365536be">
+   <title>Pauses</title>
+   <tgroup cols="3">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="1*"/>
+    <colspec colname="c3" colnum="3" colwidth="1*"/>
+    <thead>
+     <row>
+      <entry>Code</entry>
+      <entry>Meaning</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>(.)</entry>
+      <entry>Short pause</entry>
+     </row>
+     <row>
+      <entry>(..)</entry>
+      <entry>Medium-length pause</entry>
+     </row>
+     <row>
+      <entry>(...)</entry>
+      <entry>Long pause</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </conbody>
 </concept>

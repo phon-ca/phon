@@ -2,8 +2,33 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_12c_5vv_4g">
  <title>Intonation Group</title>
- <shortdesc></shortdesc>
  <conbody>
-  <p>Concept definition.</p>
+  <p>Intonation groups are prosodic domains or units which include complete intonational contours.
+   Intonation groups can be minor (e.g. corresponding to noun, verb, or prepositional phrases) or
+   major (e.g. corresponding to entire sentences). Minor groups are separated by a single pipe
+   symbol (0x1C0), and major groups are separated by a double pipe symbol (0x1C1).</p>
+  <table id="table_dyv_poi_pg">
+   <title>Some Example Intonation Groups</title>
+   <tgroup cols="2">
+    <colspec colnum="1" colname="c1" colwidth="1*"/>
+    <colspec colnum="2" colname="c2" colwidth="1*"/>
+    <thead>
+     <row>
+      <entry>Minor</entry>
+      <entry>Major</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>the dog ǀ jumped ǀ over the fence</entry>
+      <entry>It's twelve o'clock ǁ It's time for lunch</entry>
+     </row>
+     <row>
+      <entry>the cold wind ǀ gusted strongly</entry>
+      <entry>I'm tired ǁ Let's go inside</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </conbody>
 </concept>

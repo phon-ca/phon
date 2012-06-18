@@ -2,8 +2,29 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_4zr_zxv_4g">
  <title>Word Boundary</title>
- <shortdesc></shortdesc>
  <conbody>
-  <p>Word boundaries are indicated via a space.</p>
+  <p>Boundaries between words are indicated via a space.</p>
+  
+  <table id="table_asd_gio_pg">
+   <title>Some Examples</title>
+   <tgroup cols="2">
+    <thead>
+     <row>
+      <entry>Orthography</entry>
+      <entry>Transcription</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>ten cats</entry>
+      <entry>ˈtʰɛn ˈkæts</entry>
+     </row>
+     <row>
+      <entry>on the roof</entry>
+      <entry>ˈan ðə ˈɹuːf</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </conbody>
 </concept>

@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_wgb_xxv_4g">
- <title>Concept title</title>
- <shortdesc></shortdesc>
+ <title>Stress Marker</title>
  <conbody>
-  <p>Concept definition.</p>
+  <p>Prosodically prominant syllables may be encoded for primary or secondary stress. Primary stress
+   is transcribed using a superior vertical stroke (0x2C8) preceding the syllable. Secondary stress
+   is transcribed using an inferior vertical stroke (0x2CC) preceding the syllable.</p>
+    <table id="table_dyv_gio_pg">
+     <title>Some Examples</title>
+     <tgroup cols="2">
+      <thead>
+       <row>
+        <entry>Orthography</entry>
+        <entry>Transcription</entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry>cake</entry>
+        <entry>ˈkeɪk</entry>
+       </row>
+       <row>
+        <entry>revoke</entry>
+        <entry>ɹəˈvoʊk</entry>
+       </row>
+       <row>
+        <entry>epiglottis</entry>
+        <entry>ˈɛpɪˌɡlaɾɪs</entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </table>
  </conbody>
 </concept>

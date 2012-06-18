@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_2fy_yxv_4g">
- <title>Concept title</title>
- <shortdesc></shortdesc>
+ <title>Syllable Boundary</title>
  <conbody>
-  <p>Concept definition.</p>
+  <p>In cases where syllable boundaries may not be obvious, they can be transcribed 
+   with a period between syllables.</p>
+  <table id="table_ert_gio_pg">
+   <title>Some Examples</title>
+   <tgroup cols="2">
+    <thead>
+     <row>
+      <entry>Orthography</entry>
+      <entry>Transcription</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>re-enter</entry>
+      <entry>ˈɹiː.ˌɛntəɹ</entry>
+     </row>
+     <row>
+      <entry>sighing</entry>
+      <entry>ˈsaɪ.ɪŋ</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </conbody>
 </concept>

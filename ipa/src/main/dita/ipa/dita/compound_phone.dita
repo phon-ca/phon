@@ -2,8 +2,29 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_mpb_svv_4g">
  <title>Compound Phone</title>
- <shortdesc></shortdesc>
  <conbody>
-  <p>Concept definition.</p>
+  <p>Compound phones are the combination of two phones using a ligature symbol. They may consist of
+   two phones (each of which may include prefix, combining, suffix, length, or tone diacritics) with
+   either character 0x0361 or 0x035c between them.</p>
+  <table id="table_dyv_ytu_pg">
+   <tgroup cols="2">
+    <thead>
+     <row>
+      <entry>Some Possible Compound Phones</entry>
+      <entry>Description</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>b͜ð</entry>
+      <entry>Combined production of [b] and [ð]</entry>
+     </row>
+     <row>
+      <entry>aː͡ʊː</entry>
+      <entry>Diphthong [a͡ʊ] with both component sounds lengthened</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </conbody>
 </concept>

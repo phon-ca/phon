@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_hls_syv_4g">
- <title>Concept title</title>
- <shortdesc></shortdesc>
+ <title>Compound Word</title>
  <conbody>
-  <p>Concept definition.</p>
+  <p>A compound word is the production of a multiple word phrase within a single prosodic domain
+   corresponding to one word. Compound words are transcribed using a plus sign between each
+   word.</p>
+  <table id="table_dyv_poi_pg">
+   <title>Some Possible Compound Words</title>
+   <tgroup cols="2">
+    <colspec colnum="1" colname="c1" colwidth="1*"/>
+    <colspec colnum="2" colname="c2" colwidth="1*"/>
+    <thead>
+     <row>
+      <entry>Orthography</entry>
+      <entry>Transcription</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>dog+house</entry>
+      <entry>ˈdag+haʊs</entry>
+     </row>
+     <row>
+      <entry>picture+frame</entry>
+      <entry>ˈpɪkʧɚ+fɹeːm</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </conbody>
 </concept>
