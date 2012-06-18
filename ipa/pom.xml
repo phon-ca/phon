@@ -12,6 +12,16 @@
 	<artifactId>phon-ipa</artifactId>
 	<name>Phon IPA</name>
 	<description>Library for working with IPA transcriptions.</description>
+	
+	<properties>
+    <customization.dir>${basedir}/src/main/fo/cfg</customization.dir>
+    <clean.temp>yes</clean.temp>
+    <external.resource.dir>${basedir}/external-resources</external.resource.dir>
+    <ant.version>1.8.4</ant.version>
+    <ant.dir>${external.resource.dir}/apache-ant-${ant.version}</ant.dir>
+    <ditaot.version>1.5.4</ditaot.version>
+    <dita.dir>${external.resource.dir}/DITA-OT${ditaot.version}</dita.dir>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -148,6 +158,53 @@
 			</plugin>
 			
 			<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-ant-ifneeded</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${external.resource.dir}</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.ant</groupId>
+                  <artifactId>apache-ant</artifactId>
+                  <type>tar.gz</type>
+                  <classifier>bin</classifier>
+                  <version>${ant.version}</version>
+                </artifactItem>
+              </artifactItems>
+              <markersDirectory>${ant.dir}</markersDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-ditaot-ifneeded</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${external.resource.dir}</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>net.sourceforge.dita-ot</groupId>
+                  <artifactId>dita-ot</artifactId>
+                  <type>tar.gz</type>
+                  <classifier>bin</classifier>
+                  <version>${ditaot.version}</version>
+                </artifactItem>
+              </artifactItems>
+              <markersDirectory>${dita.dir}</markersDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+			<plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>dita-maven-plugin</artifactId>
         <version>1.0-beta-3</version>
@@ -158,11 +215,17 @@
               <goal>run</goal>
             </goals>
             <configuration>
+              <useDitaAnt>false</useDitaAnt>
+              <antArguments></antArguments>
               <antProperties>
-                <output.dir>${project.build.directory}/dita/pdf</output.dir>
-                <args.input>src/main/dita/phon-ipa-support.ditamap</args.input>
-                <transtype>pdf</transtype>
+                <args.input>${basedir}/src/main/dita/phon-ipa.ditamap</args.input>
+                <transtype>pdf2</transtype>
+                <dita.extname>dita</dita.extname>
+                <clean.temp>${clean.temp}</clean.temp>
+                <dita.dir>${dita.dir}</dita.dir>
               </antProperties>
+                <antHome>${ant.dir}</antHome>
+              <antOpts>-Xmx500m</antOpts>
             </configuration>
           </execution>
         </executions>

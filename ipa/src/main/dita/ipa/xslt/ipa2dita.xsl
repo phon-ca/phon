@@ -91,7 +91,7 @@
                         <xsl:value-of select="regex-group(1)"/>
                     </xsl:variable>
                     <xsl:value-of
-                        select="document('http://phon.ling.mun.ca/hg/phon/raw-file/tip/phon-api-ipa/src/main/resources/ca/phon/ipa/featureset/features.xml')//fs:feature_set[@unicode=$value]"
+                        select="document('http://phon.ling.mun.ca/hg/phon-2.0/raw-file/tip/ipa/src/main/resources/ca/phon/ipa/features/features.xml')//fs:feature_set[@unicode=$value]"
                     />
                 </xsl:matching-substring>
             </xsl:analyze-string></entry>
