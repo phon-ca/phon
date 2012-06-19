@@ -2,9 +2,10 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_51v_4vv_4g">
  <title>Phone</title> <conbody>
-  <p>Phones are the main unit of an IPA transcription.  They are composed of a vowel or consonant
-   along with optional prefix, combining, length, suffix, and tone diacritics.  The following
-   sections outline each part of a single Phone.</p>
+  <p>Phones are the main unit of an IPA transcription. They are composed of a vowel or consonant
+   along with optional diacritics.  Diacritics are of the following types: prefix (e.g.,
+   pre-nasalization), combining (e.g., devoicing), length, suffix (e.g., aspiration), and tone
+   diacritics. The following sections outline each part of a single Phone.</p>
   <section>
    <title>Prefix Diacritic</title>
    <p>A prefix diacritic must appear before the base glyph.</p>
@@ -14,7 +15,7 @@
    <p>The base glyph can be any IPA vowel or consonant.</p>
   </section>
   <section>
-   <title>Combining Diacritic(s)</title>
+   <title>Combining Diacritic</title>
    <p>Combining diacritics must appear directly after the base glyph; any number of combining 
     diacritics may be used.</p>
   </section>

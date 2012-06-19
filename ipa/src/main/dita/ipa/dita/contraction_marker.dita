@@ -3,9 +3,8 @@
 <concept id="concept_bv2_tyv_4g">
  <title>Contraction Marker</title>
  <conbody>
-  <p>A contraction is a combination of two words within a phrase, involving the reduction or
-   cliticization of one of the words. Contractions are transcribed using the undertie
-   character, 0x203F.</p>
+  <p>A contraction is a combination of two words within a phrase, involving the reduction of one of
+   the words. Contractions are transcribed using the undertie character, 0x203F.</p>
   <table id="table_dyv_poi_pg">
    <title>Some Possible Contractions</title>
    <tgroup cols="2">
@@ -24,7 +23,7 @@
      </row>
      <row>
       <entry>le ami, l'ami</entry>
-      <entry>l‿æˈmi</entry>
+      <entry>l‿aˈmi</entry>
      </row>
     </tbody>
    </tgroup>

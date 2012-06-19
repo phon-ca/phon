@@ -95,6 +95,7 @@
 	  <module>xml</module>
     <module>design-patterns</module>
     <module>ipa</module>
+	<module>ipa-xml</module>
     <module>components</module>
     <module>opgraph</module>
     <module>syllabifier</module>
