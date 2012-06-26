@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.ParseException;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
@@ -182,8 +183,13 @@ public class SyllabifierEditor extends JFrame {
 			public void focusLost(FocusEvent arg0) {
 				// parse and set ipa
 				if(ipaField.getText().length() > 0 ) {
-					final IPATranscript t = IPATranscript.parseTranscript(ipaField.getText());
-					display.setPhonesForGroup(0, t);
+					IPATranscript t;
+					try {
+						t = IPATranscript.parseTranscript(ipaField.getText());
+						display.setPhonesForGroup(0, t);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			

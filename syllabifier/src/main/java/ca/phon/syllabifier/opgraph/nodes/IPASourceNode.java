@@ -2,6 +2,7 @@ package ca.phon.syllabifier.opgraph.nodes;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.text.ParseException;
 import java.util.Properties;
 
 import javax.swing.JLabel;
@@ -46,8 +47,13 @@ public class IPASourceNode extends OperableVertex implements NodeSettings {
 	public void operate(OperableContext context) throws ProcessingException {
 		// map context value to output
 		if(getIpa() != null) {
-			IPATranscript ipa = IPATranscript.parseTranscript(getIpa());
-			context.put(ipaOut, ipa);
+			IPATranscript ipa;
+			try {
+				ipa = IPATranscript.parseTranscript(getIpa());
+				context.put(ipaOut, ipa);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		} else if (context.containsKey(IPA_KEY)) {
 			context.put(ipaOut, (IPATranscript)context.get(IPA_KEY));
 		}

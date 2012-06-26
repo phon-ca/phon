@@ -1,5 +1,6 @@
 package ca.phon.ipa;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Formattable;
 import java.util.List;
@@ -38,7 +39,8 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 * @param transcription the text of the IPA transcription
 	 * 
 	 */
-	public static IPATranscript parseTranscript(String transcript) {
+	public static IPATranscript parseTranscript(String transcript) 
+		throws ParseException {
 		IPATranscript retVal = new IPATranscript();
 		
 		try {
@@ -47,8 +49,7 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 			IPAParser parser = new IPAParser(tokenStream);
 			retVal = parser.transcription();
 		} catch (RecognitionException re) {
-			re.printStackTrace();
-			LOGGER.warning(re.getMessage());
+			throw new ParseException(transcript, re.charPositionInLine);
 		}
 		
 		return retVal;
@@ -87,6 +88,38 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		retVal = matcher.matches();
 		
 		return retVal;
+	}
+	
+	/**
+	 * Split transcript using the given phonex pattern
+	 * as a delimiter.
+	 * 
+	 * @param phonex
+	 */
+	public IPATranscript[] split(String phonex) {
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher matcher = pattern.matcher(this);
+		
+		final List<IPATranscript> splitVals = new ArrayList<IPATranscript>();
+		int currentStart = 0;
+		while(matcher.find()) {
+			final int matchStart = matcher.start();
+			
+			if(currentStart == 0 && matchStart == 0)
+				continue;
+			
+			final IPATranscript splitValue = 
+					new IPATranscript(this.subList(currentStart, matchStart));
+			splitVals.add(splitValue);
+			
+			currentStart = matcher.end();
+		}
+		if(currentStart < this.size()) {
+			final IPATranscript finalValue = 
+					new IPATranscript(this.subList(currentStart, this.size()));
+			splitVals.add(finalValue);
+		}
+		return splitVals.toArray(new IPATranscript[0]);
 	}
 	
 	/**
