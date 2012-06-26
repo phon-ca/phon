@@ -11,4 +11,4 @@ re: .*\.log
 \.classpath
 \.project
 \.factorypath
-ipa/external-resources
+doc/external-resources
