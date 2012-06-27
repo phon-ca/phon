@@ -588,6 +588,9 @@
                 <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="579" oga:y="258"/>
             </og:extensions>
         </ogcn:macro>
+        <og:extensions>
+            <ops:settings xmlns:ops="http://phon.ling.mun.ca/ns/syllabifier" ops:name="English" ops:lang="eng"/>
+        </og:extensions>
         <og:edge og:dest="1818f1c0" og:destField="ipa" og:source="151c3e97" og:sourceField="ipa out"/>
         <og:edge og:dest="646d6546" og:destField="ipa" og:source="418662d" og:sourceField="ipa"/>
         <og:edge og:dest="5380c16e" og:destField="ipa" og:source="646d6546" og:sourceField="ipa"/>

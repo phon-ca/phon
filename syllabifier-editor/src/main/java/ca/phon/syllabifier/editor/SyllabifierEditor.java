@@ -1,6 +1,7 @@
 package ca.phon.syllabifier.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -15,6 +16,7 @@ import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
@@ -59,6 +61,7 @@ import ca.gedge.opgraph.app.components.ConsolePanel;
 import ca.gedge.opgraph.app.components.PathAddressableMenu;
 import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
 import ca.gedge.opgraph.app.extensions.NodeMetadata;
+import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.editor.commands.syllabifier.SyllabifierMenuProvider;
 import ca.phon.ui.action.PhonActionEvent;
@@ -103,7 +106,7 @@ public class SyllabifierEditor extends JFrame {
 	public SyllabifierEditor() {
 		super("Syllabifier Editor");
 		setupDockingWindow();
-
+		
 		graphEditor.getModel().getConsolePanel().addMouseListener(new ContextPanelContextListener());
 		
 		graphEditor.getDocument().addPropertyChangeListener(GraphDocument.UNDO_STATE, new PropertyChangeListener() {

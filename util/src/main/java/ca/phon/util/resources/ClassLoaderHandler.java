@@ -1,12 +1,16 @@
 package ca.phon.util.resources;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
+
+import ca.phon.util.StringUtils;
 
 /**
  * Loads resources from a specified class loader (or the
@@ -52,6 +56,34 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 	 */
 	public void addResource(String res) {
 		this.resourcePaths.add(res);
+	}
+	
+	/**
+	 * Load resource list from the give resource file.
+	 * 
+	 * @param file
+	 */
+	public void loadResourceFile(String resFile) {
+		try {
+			final Enumeration<URL> resURLS = getClassLoader().getResources(resFile);
+			while(resURLS.hasMoreElements()) {
+				final URL resURL = resURLS.nextElement();
+				
+				// open file and read in one url at a time
+				final BufferedReader in =
+						new BufferedReader(new InputStreamReader(resURL.openStream()));
+				String line = null;
+				while((line = in.readLine()) != null) {
+					final String resVal = StringUtils.strip(line);
+					if(resVal.length() > 0) {
+						addResource(resVal);
+					}
+				}
+				in.close();
+			}
+		} catch (IOException e) {
+			LOGGER.severe(e.getMessage());
+		}
 	}
 	
 	/**

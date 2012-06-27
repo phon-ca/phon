@@ -41,7 +41,7 @@ public class LanguageParser implements Iterable<LanguageEntry> {
 	private final static String _dataFile = "ISO-639-3_utf-8.txt";
 	
 	private LanguageParser() {
-		InputStream is = getClass().getResourceAsStream(_dataFile);
+		InputStream is = getClass().getClassLoader().getResourceAsStream(_dataFile);
 		parseLanguageFile(is);
 	}
 	
