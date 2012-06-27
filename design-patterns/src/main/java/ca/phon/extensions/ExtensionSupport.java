@@ -120,14 +120,14 @@ public final class ExtensionSupport implements IExtendable {
 
 	@Override
 	public <T> T getExtension(Class<T> cap) {
-		Object inst = extensions.get(cap);
-		T retVal = cap.cast(inst);
+		final Object inst = extensions.get(cap);
+		final T retVal = cap.cast(inst);
 		return retVal;
 	}
 
 	@Override
 	public <T> T putExtension(Class<T> cap, T impl) {
-		Extension capAnnotation = 
+		final Extension capAnnotation = 
 				cap.getAnnotation(Extension.class);
 		if(capAnnotation == null || !capAnnotation.value().isAssignableFrom(declaredType)) {
 			throw new IllegalArgumentException("Class " + cap.getName() + 
