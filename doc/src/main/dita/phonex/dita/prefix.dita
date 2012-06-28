@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_qy2_wgn_gg">
- <title>Plug-in: prefix</title>
- <shortdesc>Description of the <codeph>prefix</codeph> plug-in.</shortdesc>
- <conbody>
-  <p>The <codeph>prefix</codeph> plug-in matches the prefix diacritic (if any) for a phone.</p>
- </conbody>
-</concept>
