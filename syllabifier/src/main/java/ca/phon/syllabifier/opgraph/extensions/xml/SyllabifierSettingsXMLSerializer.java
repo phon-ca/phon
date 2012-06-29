@@ -2,6 +2,7 @@ package ca.phon.syllabifier.opgraph.extensions.xml;
 
 import java.io.IOException;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -28,18 +29,16 @@ public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 		if(!(obj instanceof SyllabifierSettings))
 			throw new IOException(SyllabifierSettingsXMLSerializer.class.getName() + " cannot write objects of type " + obj.getClass().getName());
 		
+		// setup namespace for document
+		final Element rootEle = doc.getDocumentElement();
+		rootEle.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, 
+				XMLConstants.XMLNS_ATTRIBUTE + ":" + PREFIX, NAMESPACE);
+		
 		// Create metadata element
 		final SyllabifierSettings meta = (SyllabifierSettings)obj;
 		final Element metaElem = doc.createElementNS(NAMESPACE, PREFIX + ":settings");
-		metaElem.setAttributeNS(NAMESPACE, PREFIX + ":name", meta.getName());
-//		final Element nameElem = doc.createElementNS(NAMESPACE, PREFIX + ":name");
-//		nameElem.setTextContent(meta.getName());
-//		metaElem.appendChild(nameElem);
-		
-//		final Element langElem = doc.createElementNS(NAMESPACE, PREFIX + ":lang");
-//		langElem.setTextContent(meta.getLanguage());
-//		metaElem.appendChild(langElem);
-		metaElem.setAttributeNS(NAMESPACE, PREFIX + ":lang", meta.getLanguage());
+		metaElem.setAttribute("name", meta.getName());
+		metaElem.setAttribute("lang", meta.getLanguage());
 		
 		parentElem.appendChild(metaElem);
 	}
@@ -54,10 +53,10 @@ public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 		if(SETTINGS_QNAME.equals(XMLSerializerFactory.getQName(elem))) {
 			final SyllabifierSettings settings = new SyllabifierSettings();
 
-			final String name = elem.getAttributeNS(NAMESPACE, "name");
+			final String name = elem.getAttribute("name");
 			settings.setName(name);
 			
-			final String lang = elem.getAttributeNS(NAMESPACE, "lang");
+			final String lang = elem.getAttribute("lang");
 			settings.setLanguage(lang);
 			
 			graph.putExtension(SyllabifierSettings.class, settings);

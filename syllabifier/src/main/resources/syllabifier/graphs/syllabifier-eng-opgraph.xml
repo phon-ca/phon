@@ -1,136 +1,164 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<og:opgraph xmlns:og="http://www.gedge.ca/ns/opgraph">
-    <og:graph id="root">
-        <og:vertex id="418662d" og:type="class:ca.phon.syllabifier.opgraph.nodes.IPASourceNode">
-            <og:extensions>
-                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app"/>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="71" oga:y="43"/>
-            </og:extensions>
-        </og:vertex>
-        <og:vertex id="646d6546" og:type="class:ca.phon.syllabifier.opgraph.nodes.SonorityNode">
-            <og:extensions>
-                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.SonorityNode.scale"><![CDATA[0=[{affricate}{stop,-nasal}{fricative}]
-1={nasal}
-2={liquid}
-3={glide}
-4={vowel}
-0=[{affricate}{stop,-nasal}{fricative}]
+<opgraph xmlns="http://www.gedge.ca/ns/opgraph" xmlns:oga="http://www.gedge.ca/ns/opgraph-app"
+    xmlns:ogcn="http://www.gedge.ca/ns/common-nodes"
+    xmlns:ops="http://phon.ling.mun.ca/ns/syllabifier">
+    <graph id="root">
+        <vertex id="418662d" type="class:ca.phon.syllabifier.opgraph.nodes.IPASourceNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="71" y="43"/>
+            </extensions>
+        </vertex>
+        <vertex id="646d6546" type="class:ca.phon.syllabifier.opgraph.nodes.SonorityNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.syllabifier.opgraph.nodes.SonorityNode.scale"><![CDATA[0=[{affricate}{stop,-nasal}{fricative}]
 1={nasal}
 2={liquid}
 3={glide}
 4={vowel}
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="247" oga:y="50"/>
-            </og:extensions>
-        </og:vertex>
-        <ogcn:macro id="5380c16e" xmlns:ogcn="http://www.gedge.ca/ns/common-nodes" ogcn:name="N" ogcn:type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <og:graph id="4806de4b">
-                <ogcn:macro id="3f9e7493" ogcn:name="\v" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="69365360">
-                        <og:vertex id="10cf1fcf" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <oga:meta x="247" y="50"/>
+            </extensions>
+        </vertex>
+        <ogcn:macro id="5380c16e" name="N" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="4806de4b">
+                <ogcn:macro id="3f9e7493" name="\v"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="69365360">
+                        <vertex id="10cf1fcf" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="1957de74" og:name="Make Nucleus" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[N]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="1957de74" name="Make Nucleus"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[N]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="269" oga:y="78"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="1957de74" og:destField="ipa" og:source="10cf1fcf" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[\v]]></oga:property>
+                                <oga:meta x="269" y="78"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="1957de74" destField="ipa" source="10cf1fcf" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[\v]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="130" oga:y="203"/>
-                    </og:extensions>
+                        <oga:meta x="130" y="203"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="3422237e" ogcn:name="\c:comb('\\u0329')" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="6c5bdfae">
-                        <og:vertex id="45426fb2" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <ogcn:macro id="3422237e" name="\c:comb('\\u0329')"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="6c5bdfae">
+                        <vertex id="45426fb2" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="29bf34bb" og:name="Make Nucleus" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[N]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="29bf34bb" name="Make Nucleus"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[N]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="269" oga:y="78"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="29bf34bb" og:destField="ipa" og:source="45426fb2" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[\c:comb('\\u0329')]]></oga:property>
+                                <oga:meta x="269" y="78"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="29bf34bb" destField="ipa" source="45426fb2" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[\c:comb('\\u0329')]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="122" oga:y="379"/>
-                    </og:extensions>
+                        <oga:meta x="122" y="379"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="b9b6d97" ogcn:name="j\v" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="6f3f903b">
-                        <og:vertex id="1fd07c27" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <ogcn:macro id="b9b6d97" name="j\v"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="6f3f903b">
+                        <vertex id="1fd07c27" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="520a0a4a" og:name="Make Nucleus" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[N]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="520a0a4a" name="Make Nucleus"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[N]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="269" oga:y="78"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="520a0a4a" og:destField="ipa" og:source="1fd07c27" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[j\v]]></oga:property>
+                                <oga:meta x="269" y="78"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="520a0a4a" destField="ipa" source="1fd07c27" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[j\v]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="390" oga:y="206"/>
-                    </og:extensions>
+                        <oga:meta x="390" y="206"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="4f27bc58" ogcn:name="{v,-long}[...]" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="7838c8c5">
-                        <og:vertex id="50fcf2c1" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <ogcn:macro id="4f27bc58" name="{v,-long}[...]"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="7838c8c5">
+                        <vertex id="50fcf2c1" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="2a471d03" og:name="Make Nucleus" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[N]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="2a471d03" name="Make Nucleus"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[N]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="269" oga:y="78"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="2a471d03" og:destField="ipa" og:source="50fcf2c1" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[{v,-long}
+                                <oga:meta x="269" y="78"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="2a471d03" destField="ipa" source="50fcf2c1" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[{v,-long}
 
 [
 
@@ -142,461 +170,588 @@
 
 ]]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="405" oga:y="397"/>
-                    </og:extensions>
+                        <oga:meta x="405" y="397"/>
+                    </extensions>
                 </ogcn:macro>
-                <og:edge og:dest="3422237e" og:destField="ipa" og:source="3f9e7493" og:sourceField="ipa out"/>
-                <og:edge og:dest="b9b6d97" og:destField="ipa" og:source="3422237e" og:sourceField="ipa out"/>
-                <og:edge og:dest="4f27bc58" og:destField="ipa" og:source="b9b6d97" og:sourceField="ipa out"/>
-                <og:extensions>
-                    <oga:notes xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                        <oga:note oga:color="0xffff96" oga:height="0" oga:title="Single Vowels" oga:width="0" oga:x="14" oga:y="111"/>
-                        <oga:note oga:color="0xffff96" oga:height="0" oga:title="Syllabic Consonants" oga:width="0" oga:x="15" oga:y="296"/>
-                        <oga:note oga:color="0xffff96" oga:height="0" oga:title="Diphthongs" oga:width="0" oga:x="293" oga:y="83">* This rule may mark false positives, this will be fixed in the next stage *</oga:note>
-                        <oga:note oga:color="0xffff96" oga:height="0" oga:title="Diphthongs" oga:width="0" oga:x="291" oga:y="312">Other</oga:note>
+                <edge dest="3422237e" destField="ipa" source="3f9e7493" sourceField="ipa out"/>
+                <edge dest="b9b6d97" destField="ipa" source="3422237e" sourceField="ipa out"/>
+                <edge dest="4f27bc58" destField="ipa" source="b9b6d97" sourceField="ipa out"/>
+                <extensions>
+                    <oga:notes>
+                        <oga:note color="0xffff96" height="0" title="Single Vowels" width="0" x="14"
+                            y="111"/>
+                        <oga:note color="0xffff96" height="0" title="Syllabic Consonants" width="0"
+                            x="15" y="296"/>
+                        <oga:note color="0xffff96" height="0" title="Diphthongs" width="0" x="293"
+                            y="83">* This rule may mark false positives, this will be fixed in the
+                            next stage *</oga:note>
+                        <oga:note color="0xffff96" height="0" title="Diphthongs" width="0" x="291"
+                            y="312">Other</oga:note>
                     </oga:notes>
-                </og:extensions>
-            </og:graph>
-            <ogcn:published_input ogcn:dest="3f9e7493" ogcn:destField="ipa" ogcn:key="ipa"/>
-            <ogcn:published_output ogcn:key="ipa out" ogcn:source="4f27bc58" ogcn:sourceField="ipa out"/>
-            <og:extensions>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="114" oga:y="150"/>
-            </og:extensions>
+                </extensions>
+            </graph>
+            <ogcn:published_input dest="3f9e7493" destField="ipa" key="ipa"/>
+            <ogcn:published_output key="ipa out" source="4f27bc58" sourceField="ipa out"/>
+            <extensions>
+                <oga:meta x="114" y="150"/>
+            </extensions>
         </ogcn:macro>
-        <ogcn:macro id="7e35c4af" xmlns:ogcn="http://www.gedge.ca/ns/common-nodes" ogcn:name="O" ogcn:type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <og:graph id="de81d48">
-                <ogcn:macro id="ebeb918" ogcn:name="(\c).:n" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="1da691a">
-                        <og:vertex id="57352cf2" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+        <ogcn:macro id="7e35c4af"  name="O"
+            type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="de81d48">
+                <ogcn:macro id="ebeb918" name="(\c).:n"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="1da691a">
+                        <vertex id="57352cf2" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="40ae67cc" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="40ae67cc" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="1586dfe8" og:name="Make Onset" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[O]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="1586dfe8" name="Make Onset"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[O]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="273" oga:y="172"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="1586dfe8" og:destField="ipa" og:source="57352cf2" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(\c).:n]]></oga:property>
+                                <oga:meta x="273" y="172"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="1586dfe8" destField="ipa" source="57352cf2" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[(\c).:n]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="154" oga:y="240"/>
-                    </og:extensions>
+                        <oga:meta x="154" y="240"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="6dd089de" ogcn:name=".:-o? {glide}:n .:n" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="45ea414e">
-                        <og:vertex id="4300d837" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <ogcn:macro id="6dd089de" name=".:-o? {glide}:n .:n"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="45ea414e">
+                        <vertex id="4300d837" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="6bac124" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="6bac124" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="7b924111" og:name="Make Onset" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[O]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="7b924111" name="Make Onset"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[O]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="273" oga:y="172"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="7b924111" og:destField="ipa" og:source="6bac124" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[.:-o? ({glide}:n) .:n]]></oga:property>
+                                <oga:meta x="273" y="172"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="7b924111" destField="ipa" source="6bac124" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[.:-o? ({glide}:n) .:n]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="383" oga:y="243"/>
-                    </og:extensions>
+                        <oga:meta x="383" y="243"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="556c08de" ogcn:name="(\c:uk).:o:mdc('2')" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="2ed4a1d3">
-                        <og:vertex id="4c47a353" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <ogcn:macro id="556c08de" name="(\c:uk).:o:mdc('2')"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="2ed4a1d3">
+                        <vertex id="4c47a353" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="7333c544" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="7333c544" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="4bdc2e72" og:name="Make Onset" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[O]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="4bdc2e72" name="Make Onset"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[O]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="273" oga:y="172"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="4bdc2e72" og:destField="ipa" og:source="7333c544" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(\c:uk).:o:mdc('2')]]></oga:property>
+                                <oga:meta x="273" y="172"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="4bdc2e72" destField="ipa" source="7333c544" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[(\c:uk).:o:mdc('2')]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="155" oga:y="349"/>
-                    </og:extensions>
+                        <oga:meta x="155" y="349"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="419f3ad2" ogcn:name="\bj:n" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="111f2041">
-                        <og:vertex id="3747681" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <ogcn:macro id="419f3ad2" name="\bj:n"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="111f2041">
+                        <vertex id="3747681" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="43c7208e" og:name="Make Onset" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[O]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="43c7208e" name="Make Onset"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[O]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="253" oga:y="71"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="43c7208e" og:destField="ipa" og:source="3747681" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[\bj:n]]></oga:property>
+                                <oga:meta x="253" y="71"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="43c7208e" destField="ipa" source="3747681" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[\bj:n]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="385" oga:y="347"/>
-                    </og:extensions>
+                        <oga:meta x="385" y="347"/>
+                    </extensions>
                 </ogcn:macro>
-                <og:edge og:dest="556c08de" og:destField="ipa" og:source="6dd089de" og:sourceField="ipa out"/>
-                <og:edge og:dest="6dd089de" og:destField="ipa" og:source="ebeb918" og:sourceField="ipa out"/>
-                <og:edge og:dest="419f3ad2" og:destField="ipa" og:source="556c08de" og:sourceField="ipa out"/>
-                <og:extensions>
-                    <oga:notes xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                        <oga:note oga:color="0xffc864" oga:height="0" oga:title="Fix Glides" oga:width="0" oga:x="283" oga:y="132"/>
-                        <oga:note oga:color="0xffff96" oga:height="0" oga:title="Mark &amp; Max Onset" oga:width="0" oga:x="51" oga:y="132"/>
+                <edge dest="556c08de" destField="ipa" source="6dd089de" sourceField="ipa out"/>
+                <edge dest="6dd089de" destField="ipa" source="ebeb918" sourceField="ipa out"/>
+                <edge dest="419f3ad2" destField="ipa" source="556c08de" sourceField="ipa out"/>
+                <extensions>
+                    <oga:notes>
+                        <oga:note color="0xffc864" height="0" title="Fix Glides" width="0" x="283"
+                            y="132"/>
+                        <oga:note color="0xffff96" height="0" title="Mark &amp; Max Onset" width="0"
+                            x="51" y="132"/>
                     </oga:notes>
-                </og:extensions>
-            </og:graph>
-            <ogcn:published_input ogcn:dest="ebeb918" ogcn:destField="ipa" ogcn:key="ipa"/>
-            <ogcn:published_output ogcn:key="ipa out" ogcn:source="419f3ad2" ogcn:sourceField="ipa out"/>
-            <og:extensions>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="314" oga:y="146"/>
-            </og:extensions>
+                </extensions>
+            </graph>
+            <ogcn:published_input dest="ebeb918" destField="ipa" key="ipa"/>
+            <ogcn:published_output key="ipa out" source="419f3ad2" sourceField="ipa out"/>
+            <extensions>
+                <oga:meta x="314" y="146"/>
+            </extensions>
         </ogcn:macro>
-        <ogcn:macro id="151c3e97" xmlns:ogcn="http://www.gedge.ca/ns/common-nodes" ogcn:name="C" ogcn:type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <og:graph id="4faea727">
-                <ogcn:macro id="39b39c39" ogcn:name=".:n(\c:uk)" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="53601a4f">
-                        <og:vertex id="3f5d3444" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+        <ogcn:macro id="151c3e97"  name="C"
+            type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="4faea727">
+                <ogcn:macro id="39b39c39" name=".:n(\c:uk)"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="53601a4f">
+                        <vertex id="3f5d3444" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="127cdc" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="127cdc" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="60ea2e4d" og:name="Make Coda" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[C]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="60ea2e4d" name="Make Coda"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[C]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="291" oga:y="165"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="60ea2e4d" og:destField="ipa" og:source="127cdc" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[.:n(\c:uk)]]></oga:property>
+                                <oga:meta x="291" y="165"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="60ea2e4d" destField="ipa" source="127cdc" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[.:n(\c:uk)]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="112" oga:y="121"/>
-                    </og:extensions>
+                        <oga:meta x="112" y="121"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="4a7c6e3a" ogcn:name=".:c (\c:uk:mdc('1'))" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="3b26456a">
-                        <og:vertex id="6ec4786e" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                <ogcn:macro id="4a7c6e3a" name=".:c (\c:uk:mdc('1'))"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="3b26456a">
+                        <vertex id="6ec4786e" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="42c08a7e" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="42c08a7e" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="24beb692" og:name="Make Coda" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[C]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="24beb692" name="Make Coda"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[C]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="291" oga:y="165"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="24beb692" og:destField="ipa" og:source="6ec4786e" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[.:c (\c:uk:mdc('1'))]]></oga:property>
+                                <oga:meta x="291" y="165"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="24beb692" destField="ipa" source="6ec4786e" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[.:c (\c:uk:mdc('1'))]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="285" oga:y="123"/>
-                    </og:extensions>
+                        <oga:meta x="285" y="123"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="64114e1a" ogcn:name=".:c ({obstruent,-coronal}:uk)" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="75db5427">
-                        <og:vertex id="4c769a3" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                <ogcn:macro id="64114e1a" name=".:c ({obstruent,-coronal}:uk)"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="75db5427">
+                        <vertex id="4c769a3" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="3fe84ec8" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="3fe84ec8" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="2c8c4d3f" og:name="Make Coda" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[C]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="2c8c4d3f" name="Make Coda"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[C]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="290" oga:y="165"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="2c8c4d3f" og:destField="ipa" og:source="3fe84ec8" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[.:c ({obstruent,-coronal}:uk)]]></oga:property>
+                                <oga:meta x="290" y="165"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="2c8c4d3f" destField="ipa" source="3fe84ec8" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[.:c ({obstruent,-coronal}:uk)]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="286" oga:y="262"/>
-                    </og:extensions>
+                        <oga:meta x="286" y="262"/>
+                    </extensions>
                 </ogcn:macro>
-                <og:edge og:dest="4a7c6e3a" og:destField="ipa" og:source="39b39c39" og:sourceField="ipa out"/>
-                <og:edge og:dest="64114e1a" og:destField="ipa" og:source="4a7c6e3a" og:sourceField="ipa out"/>
-            </og:graph>
-            <ogcn:published_input ogcn:dest="39b39c39" ogcn:destField="ipa" ogcn:key="ipa"/>
-            <ogcn:published_output ogcn:key="ipa out" ogcn:source="64114e1a" ogcn:sourceField="ipa out"/>
-            <og:extensions>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="514" oga:y="141"/>
-            </og:extensions>
+                <edge dest="4a7c6e3a" destField="ipa" source="39b39c39" sourceField="ipa out"/>
+                <edge dest="64114e1a" destField="ipa" source="4a7c6e3a" sourceField="ipa out"/>
+            </graph>
+            <ogcn:published_input dest="39b39c39" destField="ipa" key="ipa"/>
+            <ogcn:published_output key="ipa out" source="64114e1a" sourceField="ipa out"/>
+            <extensions>
+                <oga:meta x="514" y="141"/>
+            </extensions>
         </ogcn:macro>
-        <ogcn:macro id="1818f1c0" xmlns:ogcn="http://www.gedge.ca/ns/common-nodes" ogcn:name="LA" ogcn:type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <og:graph id="586dd8f1">
-                <ogcn:macro id="43b4e10b" ogcn:name="\b .:ss? ({strident,voiceless}) .:o" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="13bde392">
-                        <og:vertex id="31e89e8c" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+        <ogcn:macro id="1818f1c0"  name="LA"
+            type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="586dd8f1">
+                <ogcn:macro id="43b4e10b" name="\b .:ss? ({strident,voiceless}) .:o"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="13bde392">
+                        <vertex id="31e89e8c" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="3512048c" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="3512048c" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="704adcff" og:name="Make LA" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[LA]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="704adcff" name="Make LA"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[LA]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="295" oga:y="169"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="704adcff" og:destField="ipa" og:source="31e89e8c" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[\b .:ss? ({strident,voiceless}) .:o]]></oga:property>
+                                <oga:meta x="295" y="169"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="704adcff" destField="ipa" source="31e89e8c" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[\b .:ss? ({strident,voiceless}) .:o]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="149" oga:y="209"/>
-                    </og:extensions>
+                        <oga:meta x="149" y="209"/>
+                    </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="2e80f606" ogcn:name=".:c .:ss? ({strident,voiceless}) .:o" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="25917a08">
-                        <og:vertex id="1c940409" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                <ogcn:macro id="2e80f606" name=".:c .:ss? ({strident,voiceless}) .:o"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="25917a08">
+                        <vertex id="1c940409" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="3994f987" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="3994f987" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="638a2b99" og:name="Make LA" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[LA]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="638a2b99" name="Make LA"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[LA]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="295" oga:y="169"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="638a2b99" og:destField="ipa" og:source="1c940409" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[.:c .:ss? ({strident,voiceless}) .:o]]></oga:property>
+                                <oga:meta x="295" y="169"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="638a2b99" destField="ipa" source="1c940409" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[.:c .:ss? ({strident,voiceless}) .:o]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="400" oga:y="207"/>
-                    </og:extensions>
+                        <oga:meta x="400" y="207"/>
+                    </extensions>
                 </ogcn:macro>
-                <og:edge og:dest="2e80f606" og:destField="ipa" og:source="43b4e10b" og:sourceField="ipa out"/>
-            </og:graph>
-            <ogcn:published_input ogcn:dest="43b4e10b" ogcn:destField="ipa" ogcn:key="ipa"/>
-            <ogcn:published_output ogcn:key="ipa out" ogcn:source="2e80f606" ogcn:sourceField="ipa out"/>
-            <og:extensions>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="207" oga:y="259"/>
-            </og:extensions>
+                <edge dest="2e80f606" destField="ipa" source="43b4e10b" sourceField="ipa out"/>
+            </graph>
+            <ogcn:published_input dest="43b4e10b" destField="ipa" key="ipa"/>
+            <ogcn:published_output key="ipa out" source="2e80f606" sourceField="ipa out"/>
+            <extensions>
+                <oga:meta x="207" y="259"/>
+            </extensions>
         </ogcn:macro>
-        <ogcn:macro id="67413d91" xmlns:ogcn="http://www.gedge.ca/ns/common-nodes" ogcn:name="RA" ogcn:type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <og:graph id="7ffbfbf9">
-                <ogcn:macro id="7605c89f" ogcn:name=".:c ({coronal}:uk+)" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="785bda13">
-                        <og:vertex id="61c3707c" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+        <ogcn:macro id="67413d91"  name="RA"
+            type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="7ffbfbf9">
+                <ogcn:macro id="7605c89f" name=".:c ({coronal}:uk+)"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="785bda13">
+                        <vertex id="61c3707c" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="660e0f08" og:name="g1" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="660e0f08" name="g1"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[1]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="170"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="16997a1e" og:name="Make RA" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[RA]]></oga:property>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="16997a1e" name="Make RA"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[RA]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="324" oga:y="169"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="16997a1e" og:destField="ipa" og:source="660e0f08" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[.:c ({coronal}:uk+)]]></oga:property>
+                                <oga:meta x="324" y="169"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="16997a1e" destField="ipa" source="660e0f08" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[.:c ({coronal}:uk+)]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="292" oga:y="403"/>
-                    </og:extensions>
+                        <oga:meta x="292" y="403"/>
+                    </extensions>
                 </ogcn:macro>
-            </og:graph>
-            <ogcn:published_input ogcn:dest="7605c89f" ogcn:destField="ipa" ogcn:key="ipa"/>
-            <ogcn:published_output ogcn:key="ipa out" ogcn:source="7605c89f" ogcn:sourceField="ipa out"/>
-            <og:extensions>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="413" oga:y="259"/>
-            </og:extensions>
+            </graph>
+            <ogcn:published_input dest="7605c89f" destField="ipa" key="ipa"/>
+            <ogcn:published_output key="ipa out" source="7605c89f" sourceField="ipa out"/>
+            <extensions>
+                <oga:meta x="413" y="259"/>
+            </extensions>
         </ogcn:macro>
-        <ogcn:macro id="12212c9d" xmlns:ogcn="http://www.gedge.ca/ns/common-nodes" ogcn:name="OEHS" ogcn:type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <og:graph id="a431693">
-                <ogcn:macro id="78114ff0" ogcn:name="\c:uk" ogcn:type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <og:graph id="3a7f1228">
-                        <og:vertex id="473f1a39" og:name="g0" og:type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+        <ogcn:macro id="12212c9d"  name="OEHS"
+            type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="a431693">
+                <ogcn:macro id="78114ff0" name="\c:uk"
+                    type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                    <graph id="3a7f1228">
+                        <vertex id="473f1a39" name="g0"
+                            type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"
+                                        ><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="100" oga:y="70"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:vertex id="3ba32921" og:name="Make OEHS" og:type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
-                            <og:extensions>
-                                <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                                    <oga:property oga:key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"><![CDATA[OEHS]]></oga:property>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </vertex>
+                        <vertex id="3ba32921" name="Make OEHS"
+                            type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property
+                                        key="ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode.sctype"
+                                        ><![CDATA[OEHS]]></oga:property>
                                 </oga:settings>
-                                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="306" oga:y="66"/>
-                            </og:extensions>
-                        </og:vertex>
-                        <og:edge og:dest="3ba32921" og:destField="ipa" og:source="473f1a39" og:sourceField="ipa"/>
-                    </og:graph>
-                    <og:extensions>
-                        <oga:settings xmlns:oga="http://www.gedge.ca/ns/opgraph-app">
-                            <oga:property oga:key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[\c:uk]]></oga:property>
+                                <oga:meta x="306" y="66"/>
+                            </extensions>
+                        </vertex>
+                        <edge dest="3ba32921" destField="ipa" source="473f1a39" sourceField="ipa"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"
+                                ><![CDATA[\c:uk]]></oga:property>
                         </oga:settings>
-                        <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="189" oga:y="95"/>
-                    </og:extensions>
+                        <oga:meta x="189" y="95"/>
+                    </extensions>
                 </ogcn:macro>
-            </og:graph>
-            <ogcn:published_input ogcn:dest="78114ff0" ogcn:destField="ipa" ogcn:key="ipa"/>
-            <og:extensions>
-                <oga:meta xmlns:oga="http://www.gedge.ca/ns/opgraph-app" oga:x="579" oga:y="258"/>
-            </og:extensions>
+            </graph>
+            <ogcn:published_input dest="78114ff0" destField="ipa" key="ipa"/>
+            <extensions>
+                <oga:meta x="579" y="258"/>
+            </extensions>
         </ogcn:macro>
-        <og:extensions>
-            <ops:settings xmlns:ops="http://phon.ling.mun.ca/ns/syllabifier" ops:name="English" ops:lang="eng"/>
-        </og:extensions>
-        <og:edge og:dest="1818f1c0" og:destField="ipa" og:source="151c3e97" og:sourceField="ipa out"/>
-        <og:edge og:dest="646d6546" og:destField="ipa" og:source="418662d" og:sourceField="ipa"/>
-        <og:edge og:dest="5380c16e" og:destField="ipa" og:source="646d6546" og:sourceField="ipa"/>
-        <og:edge og:dest="151c3e97" og:destField="ipa" og:source="7e35c4af" og:sourceField="ipa out"/>
-        <og:edge og:dest="12212c9d" og:destField="ipa" og:source="67413d91" og:sourceField="ipa out"/>
-        <og:edge og:dest="67413d91" og:destField="ipa" og:source="1818f1c0" og:sourceField="ipa out"/>
-        <og:edge og:dest="7e35c4af" og:destField="ipa" og:source="5380c16e" og:sourceField="ipa out"/>
-    </og:graph>
-</og:opgraph>
+        <extensions>
+            <ops:settings name="English" lang="eng"/>
+        </extensions>
+        <edge dest="1818f1c0" destField="ipa" source="151c3e97" sourceField="ipa out"/>
+        <edge dest="646d6546" destField="ipa" source="418662d" sourceField="ipa"/>
+        <edge dest="5380c16e" destField="ipa" source="646d6546" sourceField="ipa"/>
+        <edge dest="151c3e97" destField="ipa" source="7e35c4af" sourceField="ipa out"/>
+        <edge dest="12212c9d" destField="ipa" source="67413d91" sourceField="ipa out"/>
+        <edge dest="67413d91" destField="ipa" source="1818f1c0" sourceField="ipa out"/>
+        <edge dest="7e35c4af" destField="ipa" source="5380c16e" sourceField="ipa out"/>
+    </graph>
+</opgraph>
