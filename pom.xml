@@ -101,6 +101,7 @@
     <module>syllabifier</module>
     <module>syllabifier-editor</module>
     <module>syllabifier-editor-shade</module>
+    <module>session</module>
   </modules>
 
   <build>
