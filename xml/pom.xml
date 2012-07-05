@@ -17,6 +17,22 @@
   	<artifactId>phon-design-patterns</artifactId>
   	<version>${build.version}</version>
   	</dependency>
+    <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-util</artifactId>
+      <version>${build.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>3.4</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   
 </project>

@@ -59,7 +59,8 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 			if(visits != null) {
 				// check type
 				Class<?>[] paramTypes = m.getParameterTypes();
-				if(paramTypes.length == 1 && paramTypes[0] == type) {
+				
+				if(paramTypes.length == 1 && paramTypes[0].isAssignableFrom(type)) {
 					retVal = m;
 					break;
 				}
