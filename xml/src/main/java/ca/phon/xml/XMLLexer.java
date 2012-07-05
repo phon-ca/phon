@@ -88,6 +88,8 @@ public class XMLLexer implements TokenSource {
 	public static XMLLexer fromStream(InputStream source, String encoding, Properties tokenMap) 
 		throws IOException {
 		final XMLInputFactory factory = XMLUtil.newInputFactory();
+		if(factory.isPropertySupported(XMLInputFactory.IS_NAMESPACE_AWARE))
+			factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
 		try {
 			final String charset = (encoding == null ? Charset.defaultCharset().name() : encoding);
 			final XMLEventReader xmlReader = factory.createXMLEventReader(source, charset);
@@ -208,7 +210,7 @@ public class XMLLexer implements TokenSource {
 
 	@Override
 	public String getSourceName() {
-		return "XML-source";
+		return "XML";
 	}
 	
 	/**
@@ -257,6 +259,7 @@ public class XMLLexer implements TokenSource {
 				final Attribute attr = attributes.next();
 				final String attrTokenName = tokenizeString(startEle.getName().getLocalPart()) + "_" + tokenName(attr.getName()) + "_ATTR";
 				final CommonToken attrToken = createToken(attrTokenName, attr.getLocation());
+				attrToken.setText(attr.getValue());
 				tokenQueue.queue(attrToken);
 			}
 		}
@@ -318,6 +321,7 @@ public class XMLLexer implements TokenSource {
 		public void visitCharacters(Characters chars) {
 			final String tokenName = "TEXT";
 			final CommonToken txtToken = createToken(tokenName, chars.getLocation());
+			txtToken.setText(chars.getData());
 			tokenQueue.queue(txtToken);
 		}
 	}
