@@ -95,6 +95,7 @@
     <module>xml</module>
     <module>design-patterns</module>
     <module>ipa</module>
+    <module>ipa-xml</module>
     <module>ipadictionary</module>
     <module>components</module>
     <module>opgraph</module>
@@ -102,6 +103,7 @@
     <module>syllabifier-editor</module>
     <module>syllabifier-editor-shade</module>
     <module>session</module>
+    <module>project</module>
   </modules>
 
   <build>
