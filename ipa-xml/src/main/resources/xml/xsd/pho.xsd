@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://phon.ling.mun.ca/ns/pho" xmlns="http://phon.ling.mun.ca/ns/pho"
+    elementFormDefault="qualified">
+
+    <xs:element name="ph" type="phoneType"/>
+    <xs:complexType name="phoneType" mixed="true">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:attribute name="length" type="phoneTypeLength" use="optional"/>
+        <xs:attribute name="prefix" type="charValue" use="optional"/>
+        <xs:attribute name="suffix" type="charValue" use="optional"/>
+        <xs:attribute name="combining" type="listOfChars" use="optional"/>
+        <xs:attribute name="tone" type="listOfChars" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="cp" type="compoundPhoneType"/>
+    <xs:complexType name="compoundPhoneType" mixed="false">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="ph" minOccurs="2" maxOccurs="2"/>
+        </xs:sequence>
+        <xs:attribute name="lig" type="charValue" use="optional" default="&#x035c;"/>
+    </xs:complexType>
+
+    <xs:element name="pause" type="pauseType"/>
+    <xs:complexType name="pauseType" mixed="false">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:attribute name="length" type="pauseTypeLength" use="optional" default="short"/>
+    </xs:complexType>
+
+    <xs:element name="sb" type="syllableBoundaryType"/>
+    <xs:complexType name="syllableBoundaryType" mixed="false"/>
+
+    <xs:element name="ss" type="syllableStressType"/>
+    <xs:complexType name="syllableStressType" mixed="false">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:attribute name="type" type="stressType" use="optional" default="1"/>
+    </xs:complexType>
+    
+    <xs:element name="pw" type="phoneticWordType"/>
+    <xs:complexType name="phoneticWordType" mixed="false">
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element ref="ph"/>
+            <xs:element ref="cp"/>
+            <xs:element ref="pause"/>
+            <xs:element ref="ss"/>
+            <xs:element ref="sb"/>
+        </xs:choice>
+    </xs:complexType>
+    
+    <xs:element name="pho" type="phoType"/>
+    <xs:complexType name="phoType">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="pw" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="phoneTypeLength">
+        <xs:restriction base="xs:float">
+            <xs:enumeration value="0.5"/>
+            <xs:enumeration value="1.0"/>
+            <xs:enumeration value="1.5"/>
+            <xs:enumeration value="2.0"/>
+            <xs:enumeration value="2.5"/>
+            <xs:enumeration value="3.0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="charValue">
+        <xs:restriction base="xs:string">
+            <xs:length value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="listOfChars">
+        <xs:list itemType="charValue"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="pauseTypeLength">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="short">
+                <xs:annotation>
+                    <xs:documentation>(.)</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="medium">
+                <xs:annotation>
+                    <xs:documentation>(..)</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="long">
+                <xs:annotation>
+                    <xs:documentation>(...)</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="stressType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="1">
+                <xs:annotation>
+                    <xs:documentation>Primary Stress</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="2">
+                <xs:annotation>
+                    <xs:documentation>Secondary Stress</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

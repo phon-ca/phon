@@ -26,6 +26,11 @@ public final class CompoundPhone extends IPAElement {
 	 */
 	private Character ligature;
 	
+	
+	public CompoundPhone() {
+		
+	}
+	
 	/**
 	 * Constructor
 	 * 

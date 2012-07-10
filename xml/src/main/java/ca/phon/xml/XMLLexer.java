@@ -94,7 +94,9 @@ public class XMLLexer implements TokenSource {
 			final String charset = (encoding == null ? Charset.defaultCharset().name() : encoding);
 			final XMLEventReader xmlReader = factory.createXMLEventReader(source, charset);
 			
-			return new XMLLexer(xmlReader);
+			final XMLLexer lexer = new XMLLexer(xmlReader);
+			lexer.tokenMap.putAll(tokenMap);
+			return lexer;
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}
@@ -249,15 +251,16 @@ public class XMLLexer implements TokenSource {
 		@SuppressWarnings("unchecked")
 		public void visitStartElement(StartElement startEle) {
 			// queue element start token
-			final String tokenName = tokenName(startEle.getName()) + "_START";
+			final String tokenName = tokenName(startEle.getName());
 			final CommonToken startToken = createToken(tokenName, startEle.getLocation());
+			startToken.setText(tokenName);
 			tokenQueue.queue(startToken);
 			
 			// add tokens for attributes
 			final Iterator<Attribute> attributes = startEle.getAttributes();
 			while(attributes.hasNext()) {
 				final Attribute attr = attributes.next();
-				final String attrTokenName = tokenizeString(startEle.getName().getLocalPart()) + "_" + tokenName(attr.getName()) + "_ATTR";
+				final String attrTokenName = tokenizeString(startEle.getName().getLocalPart()) + "_" + tokenName(attr.getName());
 				final CommonToken attrToken = createToken(attrTokenName, attr.getLocation());
 				attrToken.setText(attr.getValue());
 				tokenQueue.queue(attrToken);
@@ -273,6 +276,7 @@ public class XMLLexer implements TokenSource {
 			// queue element start token
 			final String tokenName = tokenName(endEle.getName()) + "_END";
 			final CommonToken endToken = createToken(tokenName, endEle.getLocation());
+			endToken.setText(tokenName);
 			tokenQueue.queue(endToken);
 		}
 		
@@ -321,8 +325,11 @@ public class XMLLexer implements TokenSource {
 		public void visitCharacters(Characters chars) {
 			final String tokenName = "TEXT";
 			final CommonToken txtToken = createToken(tokenName, chars.getLocation());
-			txtToken.setText(chars.getData());
-			tokenQueue.queue(txtToken);
+			final String charData = chars.getData();
+			if(charData.trim().length() > 0) {
+				txtToken.setText(chars.getData());
+				tokenQueue.queue(txtToken);
+			}
 		}
 	}
 }

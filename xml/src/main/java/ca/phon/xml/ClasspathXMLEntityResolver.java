@@ -20,10 +20,10 @@ import org.xml.sax.InputSource;
  * files must be in the location "xml/catalog.cat".
  * </p>
  */
-public class ClassloaderXMLResolver implements XMLResolver {
+public class ClasspathXMLEntityResolver implements XMLResolver {
 	
 	/** Logger */
-	private final static Logger LOGGER = Logger.getLogger(ClassloaderXMLResolver.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(ClasspathXMLEntityResolver.class.getName());
 	
 	private ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 	
@@ -33,11 +33,11 @@ public class ClassloaderXMLResolver implements XMLResolver {
 	 * Create a new xml resolver
 	 * 
 	 */
-	public ClassloaderXMLResolver() {
+	public ClasspathXMLEntityResolver() {
 		super();
 	}
 	
-	public ClassloaderXMLResolver(ClassLoader loader) {
+	public ClasspathXMLEntityResolver(ClassLoader loader) {
 		this.classLoader = loader;
 	}
 	
@@ -49,7 +49,7 @@ public class ClassloaderXMLResolver implements XMLResolver {
 	 * @return location of entity, or <code>null</code> if not
 	 *  found
 	 */
-	private URL locateEntity(String systemID)
+	protected URL locateEntity(String systemID)
 		throws IOException {
 		final Enumeration<URL> catalogURLs = classLoader.getResources(CATALOG_FILE);
 		while(catalogURLs.hasMoreElements()) {

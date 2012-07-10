@@ -1,5 +1,7 @@
 package ca.phon.ipa;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 
 /**
  * A factory for creating various types of {@link IPAElement}
@@ -9,6 +11,13 @@ package ca.phon.ipa;
 public class IPAElementFactory {
 
 	/* Basic phones */
+	/**
+	 * New basic phone
+	 */
+	public Phone createPhone() {
+		return new Phone();
+	}
+	
 	/**
 	 * Create a new basic phone 
 	 * 
@@ -77,6 +86,13 @@ public class IPAElementFactory {
 		retVal.setCombiningDiacritics(combining);
 		retVal.setLength(length);
 		return retVal;
+	}
+	
+	/**
+	 * Create an empty compound phone
+	 */
+	public CompoundPhone createCompoundPhone() {
+		return new CompoundPhone();
 	}
 	
 	/**

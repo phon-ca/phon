@@ -17,11 +17,11 @@ public class XMLUtil {
 	 * 
 	 */
 	public static XMLResolver getXMLResolver() {
-		return new ClassloaderXMLResolver();
+		return new ClasspathXMLEntityResolver();
 	}
 	
 	public static XMLResolver getXMLResolver(ClassLoader classLoader) {
-		return new ClassloaderXMLResolver(classLoader);
+		return new ClasspathXMLEntityResolver(classLoader);
 	}
 	
 	/**

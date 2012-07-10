@@ -50,6 +50,14 @@ public final class Phone extends IPAElement {
 	private Character suffixDiacritic;
 	
 	/**
+	 * Create a new empty phone object.
+	 * 
+	 */
+	Phone() {
+		this('x');
+	}
+	
+	/**
 	 * Create a new Phone for the given base
 	 * 
 	 * @param basePhone
