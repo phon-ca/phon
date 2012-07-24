@@ -3,65 +3,48 @@ package ca.phon.syllabifier.editor;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.ParseException;
-import java.util.Properties;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
-
-import net.infonode.docking.DockingWindow;
-import net.infonode.docking.FloatingWindow;
-import net.infonode.docking.RootWindow;
-import net.infonode.docking.SplitWindow;
-import net.infonode.docking.TabWindow;
-import net.infonode.docking.View;
-import net.infonode.docking.properties.RootWindowProperties;
-import net.infonode.docking.theme.DockingWindowsTheme;
-import net.infonode.docking.util.DockingUtil;
-import net.infonode.docking.util.PropertiesUtil;
-import net.infonode.docking.util.ViewMap;
-
-import ca.gedge.opgraph.ProcessingContext;
+import bibliothek.gui.dock.common.CControl;
+import bibliothek.gui.dock.common.CGridArea;
+import bibliothek.gui.dock.common.CWorkingArea;
+import bibliothek.gui.dock.common.DefaultSingleCDockable;
+import bibliothek.gui.dock.common.SingleCDockable;
+import bibliothek.gui.dock.common.SingleCDockableFactory;
+import bibliothek.gui.dock.common.action.CAction;
+import bibliothek.gui.dock.common.intern.station.CSplitDockStation;
+import bibliothek.gui.dock.common.perspective.CControlPerspective;
+import bibliothek.gui.dock.common.perspective.CGridPerspective;
+import bibliothek.gui.dock.common.perspective.CMinimizePerspective;
+import bibliothek.gui.dock.common.perspective.CPerspective;
+import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
+import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
+import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditor;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.MenuProvider;
-import ca.gedge.opgraph.app.commands.core.SaveCommand;
 import ca.gedge.opgraph.app.components.ConsolePanel;
 import ca.gedge.opgraph.app.components.PathAddressableMenu;
 import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
-import ca.gedge.opgraph.app.extensions.NodeMetadata;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.editor.commands.syllabifier.SyllabifierMenuProvider;
 import ca.phon.ui.action.PhonActionEvent;
@@ -73,6 +56,8 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
  */
 public class SyllabifierEditor extends JFrame {
 	
+	private static final long serialVersionUID = -5325257904174579337L;
+
 	private final Logger LOGGER = 
 			Logger.getLogger(SyllabifierEditor.class.getName());
 	
@@ -92,19 +77,42 @@ public class SyllabifierEditor extends JFrame {
 	private final JTextField ipaField = new JTextField();
 	
 	/**
-	 * Root docking window
+	 * Docking view controls
 	 */
-	private RootWindow rootWindow;
+	private final CControl dockControl;
 	
-	// internal view ids
-	private final int ID_START = 100;
-	private final int CANVAS_VIEW_ID = ID_START + 1;
-	private final int LIBRARY_VIEW_ID = ID_START + 2;
-	private final int INSPECTOR_VIEW_ID = ID_START + 3;
-	private final int CONSOLE_VIEW_ID = ID_START + 4;
+	/**
+	 * Dockable views
+	 */
+	private enum DockableView {
+		CANVAS("Canvas"),
+		CONSOLE("Console"),
+		DEBUG("Debug View"),
+		INSPECTOR("Inspector"),
+		LIBRARY("Library");
+		
+		String title;
+		
+		private DockableView(String title) {
+			this.title = title;
+		}
+		
+		public static DockableView fromString(String title) {
+			DockableView retVal = null;
+			for(DockableView dv:DockableView.values()) {
+				if(dv.title.equalsIgnoreCase(title)) {
+					retVal = dv;
+					break;
+				}
+			}
+			return retVal;
+		}
+	}
 	
 	public SyllabifierEditor() {
 		super("Syllabifier Editor");
+		dockControl = new CControl(this);
+		setupLayout();
 		setupDockingWindow();
 		
 		graphEditor.getModel().getConsolePanel().addMouseListener(new ContextPanelContextListener());
@@ -125,6 +133,7 @@ public class SyllabifierEditor extends JFrame {
 					canClose = graphEditor.getDocument().checkForReset();
 				}
 				if(canClose) {
+					dockControl.destroy();
 					dispose();
 					System.exit(0);
 				}
@@ -137,102 +146,8 @@ public class SyllabifierEditor extends JFrame {
 		});
 	}
 	
-	/**
-	 * Setup views
-	 */
-	private void setupDockingWindow() {
-		final ViewMap viewMap = new ViewMap();
-		
-		final JPanel canvasPanel = 
-				new JPanel(new BorderLayout());
-		canvasPanel.add(graphEditor.getModel().getBreadcrumb(), BorderLayout.NORTH);
-		canvasPanel.add(new JScrollPane(graphEditor.getModel().getCanvas()), BorderLayout.CENTER);
-		final View canvasView = 
-				new View("Syllabifier", null, canvasPanel);
-		viewMap.addView(CANVAS_VIEW_ID, canvasView);
-		
-		final View libraryView = 
-				new View("Library", null, graphEditor.getModel().getNodeLibrary());
-		viewMap.addView(LIBRARY_VIEW_ID, libraryView);
-		
-		final View inspectorView = 
-				new View("Inspector", null, graphEditor.getModel().getNodeSettings());
-		viewMap.addView(INSPECTOR_VIEW_ID, inspectorView);
-		
-		final ConsolePanel consolePanel = graphEditor.getModel().getConsolePanel();
-		consolePanel.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				consolePanel.setCaretPosition(consolePanel.getDocument().getLength());
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-			}
-		});
-		consolePanel.addLogger(Logger.getLogger(""));
-		consolePanel.setAutoscrolls(true);
-		
-		final Font ipaFont = new Font("Charis SIL Compact", Font.PLAIN, 12);
-		ipaField.setFont(ipaFont);
-		ipaField.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				// parse and set ipa
-				if(ipaField.getText().length() > 0 ) {
-					IPATranscript t;
-					try {
-						t = IPATranscript.parseTranscript(ipaField.getText());
-						display.setPhonesForGroup(0, t);
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			
-			@Override
-			public void focusGained(FocusEvent arg0) {
-			}
-		});
-		JPanel topPanel = new JPanel(new VerticalLayout());
-		topPanel.add(new JLabel("Enter IPA:"));
-		topPanel.add(ipaField);
-		topPanel.add(display);
-		JPanel cp = new JPanel(new BorderLayout());
-		cp.add(topPanel, BorderLayout.NORTH);
-		cp.add(new JScrollPane(graphEditor.getModel().getConsolePanel()), BorderLayout.CENTER);
-		
-		final View consoleView = 
-				new View("Console", null, cp);
-		viewMap.addView(CONSOLE_VIEW_ID, consoleView);
-		
-		rootWindow = DockingUtil.createRootWindow(viewMap, true);
-		
-		final TabWindow inspectorTab = 
-				new TabWindow(new DockingWindow[]{inspectorView, consoleView});
-		
-		final SplitWindow leftSide = 
-				new SplitWindow(false, 0.6f, libraryView, inspectorTab);
-		final SplitWindow mainSplit =
-				new SplitWindow(true, 0.35f, leftSide, canvasView);
-	
-		rootWindow.setWindow(mainSplit);
-		
-		final DockingWindowsTheme theme = 
-				new net.infonode.docking.theme.ClassicDockingTheme();
-		rootWindow.getRootWindowProperties().addSuperObject(theme.getRootWindowProperties());
-		
-		final RootWindowProperties titleBarStyleProperties =
-				PropertiesUtil.createTitleBarStyleRootWindowProperties();
-		// Enable title bar style
-		rootWindow.getRootWindowProperties().addSuperObject(
-			titleBarStyleProperties);
+	private void setupLayout() {
+		setLayout(new BorderLayout());
 		
 		GraphEditorModel.setActiveEditorModel(graphEditor.getModel());
 		// setup menu
@@ -245,7 +160,76 @@ public class SyllabifierEditor extends JFrame {
 		
 		setJMenuBar(menuBar);
 		
-		add(rootWindow);
+		add(dockControl.getContentArea(), BorderLayout.CENTER);
+	}
+	
+	/**
+	 * Setup views
+	 */
+	private void setupDockingWindow() {
+		// add view factory
+		dockControl.addSingleDockableFactory(new DockableViewFilter(), new DockableViewFactory());
+		
+		dockControl.createWorkingArea("work");
+		
+		setupDockingPerspectives();
+	}
+	
+	private void setupDockingPerspectives() {
+		final CControlPerspective perspectives = dockControl.getPerspectives();
+		final CPerspective defaultPerspective = perspectives.createEmptyPerspective();
+		
+		final Map<DockableView, DockingViewPerspective> dockables = collectDockingViewPerspectives();
+		
+		// setup default minimized layout
+		final CMinimizePerspective defMinWest = defaultPerspective.getContentArea().getWest();
+		defMinWest.add( dockables.get(DockableView.LIBRARY) );
+		defMinWest.add( dockables.get(DockableView.CONSOLE) );
+		
+		final CMinimizePerspective defMinEast = defaultPerspective.getContentArea().getEast();
+		defMinEast.add( dockables.get(DockableView.INSPECTOR) );
+		defMinEast.add( dockables.get(DockableView.DEBUG) );
+		
+		defaultPerspective.storeLocations();
+		
+		// setup default normalized layout
+		final CGridPerspective defCenter = defaultPerspective.getContentArea().getCenter();
+		final CWorkingArea canvasArea = (CWorkingArea)dockControl.getStation("work");
+		final CWorkingPerspective canvas = canvasArea.createPerspective();
+		
+		defCenter.gridAdd(  0,   0,  30,  50, dockables.get(DockableView.LIBRARY) );
+		defCenter.gridAdd(  0,  50,  30,  50, dockables.get(DockableView.CONSOLE) );
+		defCenter.gridAdd( 30,   0,  70, 100, canvas );
+		
+		canvas.gridAdd( 0, 0, 100, 100, dockables.get(DockableView.CANVAS));
+		defaultPerspective.storeLocations();
+		
+		// setup initial configuration
+		final CMinimizePerspective iniWest = defaultPerspective.getContentArea().getWest();
+		iniWest.add(dockables.get(DockableView.LIBRARY));
+		iniWest.add(dockables.get(DockableView.CONSOLE));
+		
+		defaultPerspective.shrink();
+		perspectives.setPerspective(defaultPerspective, true);
+		
+		// TODO debug perspective
+		// setup debug normalized layout
+		
+		// setup debug minimized layout
+		
+		// setup debug initial configuration
+	}
+	
+	private Map<DockableView, DockingViewPerspective> collectDockingViewPerspectives() {
+		final Map<DockableView, DockingViewPerspective> retVal =
+				new TreeMap<DockableView, SyllabifierEditor.DockingViewPerspective>();
+		
+		for(DockableView dv:DockableView.values()) {
+			final DockingViewPerspective dvp = new DockingViewPerspective(dv);
+			retVal.put(dv, dvp);
+		}
+		
+		return retVal;
 	}
 	
 	public IPATranscript getIPA() {
@@ -292,6 +276,66 @@ public class SyllabifierEditor extends JFrame {
 	 */
 	public void onClearConsole(PhonActionEvent pae) {
 		graphEditor.getModel().getConsolePanel().setText("");
+	}
+	
+	private class DockableViewFilter implements Filter<String> {
+
+		@Override
+		public boolean includes(String arg0) {
+			return (DockableView.fromString(arg0) != null);
+		}
+		
+	}
+	
+	private class DockableViewFactory implements SingleCDockableFactory {
+
+		@Override
+		public SingleCDockable createBackup(String arg0) {
+			final DockableView dv = DockableView.fromString(arg0);
+			if(dv != null) {
+				Component comp = null;
+				switch(dv) {
+				case CANVAS:
+					final JPanel cPanel = new JPanel(new BorderLayout());
+					final JScrollPane canvasScroller = new JScrollPane(graphEditor.getModel().getCanvas());
+					cPanel.add(graphEditor.getModel().getBreadcrumb(), BorderLayout.NORTH);
+					cPanel.add(canvasScroller, BorderLayout.CENTER);
+					comp = cPanel;
+					break;
+					
+				case CONSOLE:
+					comp = graphEditor.getModel().getConsolePanel();
+					break;
+					
+				case DEBUG:
+					comp = graphEditor.getModel().getDebugInfoPanel();
+					break;
+					
+				case INSPECTOR:
+					comp = graphEditor.getModel().getNodeSettings();
+					break;
+					
+				case LIBRARY:
+					comp = graphEditor.getModel().getNodeLibrary();
+					break;
+				}
+				final DefaultSingleCDockable retVal = new DefaultSingleCDockable( dv.title , comp , new CAction[0] );
+				retVal.setTitleText(dv.title);
+//				retVal.setCloseable(false);
+				return retVal;
+			} else {
+				return null;
+			}
+		}
+		
+	}
+	
+	private class DockingViewPerspective extends SingleCDockablePerspective {
+		
+		public DockingViewPerspective(DockableView view) {
+			super(view.title);
+		}
+		
 	}
 	
 	public static void main(String[] args) throws Exception {
