@@ -97,6 +97,7 @@
     <module>ipa</module>
     <module>ipa-xml</module>
     <module>ipadictionary</module>
+    <module>ipamap</module>
     <module>components</module>
     <module>opgraph</module>
     <module>syllabifier</module>

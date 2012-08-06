@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://phon.ling.mun.ca/ns/ipamap"
+    targetNamespace="http://phon.ling.mun.ca/ns/ipamap"
+    elementFormDefault="unqualified">
+    
+    <xs:element name="ipaGrids">
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:element name="grid" type="grid" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="grid" mixed="false">
+        <xs:annotation>
+            <xs:documentation>
+                A grid of IPA 'buttons'
+            </xs:documentation>
+        </xs:annotation>
+        
+        <xs:sequence>
+            <xs:element ref="cell" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="rows" use="required" type="xs:int"/>
+        <xs:attribute name="cols" use="required" type="xs:int"/>
+        <xs:attribute name="cellwidth" default="10" type="posInt"/>
+        <xs:attribute name="cellheight" default="10" type="posInt"/>
+    </xs:complexType>
+    
+    <xs:element name="cell" type="cell"/>
+    <xs:complexType name="cell" mixed="false">
+        <xs:annotation>
+            <xs:documentation>
+                An ipa button
+            </xs:documentation>
+        </xs:annotation>
+        
+        <xs:sequence>
+            <xs:element name="text" type="nonEmptyString" minOccurs="1" maxOccurs="1"/>
+            
+            <xs:element name="property" type="cellProp" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        
+        <xs:attribute name="w" type="posInt" default="1"/>
+        <xs:attribute name="h" type="posInt" default="1"/>
+        <xs:attribute name="x" type="posInt" use="required"/>
+        <xs:attribute name="y" type="posInt" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="cellProp" mixed="true">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:simpleType name="posInt">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="unicodeValue">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="0x[0-9A-Fa-f]{1,4}"/>
+            <xs:maxLength value="6"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="nonEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
