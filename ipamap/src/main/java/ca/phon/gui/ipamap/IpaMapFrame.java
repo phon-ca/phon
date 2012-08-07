@@ -214,18 +214,18 @@ public class IpaMapFrame extends JFrame {
 
 		@Override
 		public void eventDispatched(AWTEvent event) {
-			if(!IpaMapFrame.this.isVisible() || !mapContents.isFadeWindow()) return;
-			// only process mouse events for this window
-			if(SwingUtilities.isDescendingFrom((Component)event.getSource(),
-					IpaMapFrame.this) && event instanceof MouseEvent) {
-//				if(AWTUtilities.getWindowOpacity(IpaMapFrame.this) < 1.0f) {
-//					AWTUtilities.setWindowOpacity(IpaMapFrame.this, 1.0f);
-//				}
-			} else {
-//				if(AWTUtilities.getWindowOpacity(IpaMapFrame.this) >= 1.0f) {
-//					AWTUtilities.setWindowOpacity(IpaMapFrame.this, mapContents.getFadeOpacity());
-//				}
-			}
+//			if(!IpaMapFrame.this.isVisible() || !mapContents.isFadeWindow()) return;
+//			// only process mouse events for this window
+//			if(SwingUtilities.isDescendingFrom((Component)event.getSource(),
+//					IpaMapFrame.this) && event instanceof MouseEvent) {
+////				if(AWTUtilities.getWindowOpacity(IpaMapFrame.this) < 1.0f) {
+////					AWTUtilities.setWindowOpacity(IpaMapFrame.this, 1.0f);
+////				}
+//			} else {
+////				if(AWTUtilities.getWindowOpacity(IpaMapFrame.this) >= 1.0f) {
+////					AWTUtilities.setWindowOpacity(IpaMapFrame.this, mapContents.getFadeOpacity());
+////				}
+//			}
 		}
 		
 	}

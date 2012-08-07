@@ -3,7 +3,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns="http://phon.ling.mun.ca/ns/ipamap"
     targetNamespace="http://phon.ling.mun.ca/ns/ipamap"
-    elementFormDefault="unqualified">
+    elementFormDefault="qualified">
     
     <xs:element name="ipaGrids">
         <xs:complexType mixed="false">

@@ -1,5 +1,8 @@
 package ca.phon.gui.ipamap;
 
+import java.awt.AWTEvent;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -26,37 +29,6 @@ public class IpaTest extends JPanel {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception {
 		
-		// setup L&F on Windows
-    	if(OSInfo.isWindows()) {
-    		// use windows L&F on windows
-    		try {
-    			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-    			//(new com.sun.java.swing.plaf.windows.WindowsLookAndFeel());
-    		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-    			ex.printStackTrace();
-    		} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-    		
-    	} else if(OSInfo.isNix()) {
-    		// use GTK L&F on linux (assuming desktop Ubuntu running Gnome)
-    		try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-						//new com.sun.java.swing.plaf.gtk.GTKLookAndFeel());
-			} catch (UnsupportedLookAndFeelException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-    	}
 
     	JAXBContext ctx = JAXBContext.newInstance(ObjectFactory.class);
 		Unmarshaller unmarshaller = ctx.createUnmarshaller();
@@ -85,6 +57,7 @@ public class IpaTest extends JPanel {
 	//		gp.setPainter(painter);
 			
 			IpaMapFrame testFrame = new IpaMapFrame();
+			testFrame.getMapContents().addListener(new IpaMapRobot());
 			testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	//		testFrame.setFocusable(false);
 	//		testFrame.setFocusableWindowState(false);
@@ -97,8 +70,7 @@ public class IpaTest extends JPanel {
 			
 	//		testFrame.setBounds(0, 0, w, h);
 			
-			testFrame.pack();
-			testFrame.setVisible(true);
+			testFrame.showWindow();
 	    	}};
 	    	SwingUtilities.invokeLater(r);
 		}

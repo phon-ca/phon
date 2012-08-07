@@ -1188,7 +1188,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Create the context menu based on source component
 	 */
-	private void setupContextMenu(JPopupMenu menu, JComponent comp) {
+	public void setupContextMenu(JPopupMenu menu, JComponent comp) {
 		// button options first
 		if(comp instanceof CellButton) {
 			CellButton btn = (CellButton)comp;
