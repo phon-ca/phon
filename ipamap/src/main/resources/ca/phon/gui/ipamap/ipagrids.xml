@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ipaGrids xmlns="http://phon.ling.mun.ca/ns/ipamap">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ipaGrids>
     
     <grid cols="44" rows="16" name="Consonants">
         <!-- Row 1 -->
@@ -551,7 +551,7 @@
             <property name="Unicode">0x260</property>
         </cell>
         <cell y="0" x="20" h="2" w="2">
-            <text>Ɠ</text>
+            <text>ʛ</text>
             <property name="Name">Hooktop small capital G</property>
             <property name="Description">Voiced uvular implosive</property>
             <property name="Unicode">0x29b</property>
