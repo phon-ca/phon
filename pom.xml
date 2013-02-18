@@ -103,6 +103,7 @@
     <module>syllabifier</module>
     <module>syllabifier-editor</module>
     <module>syllabifier-editor-shade</module>
+    <module>alignment</module>
     <module>session</module>
     <module>project</module>
   </modules>
