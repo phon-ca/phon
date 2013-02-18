@@ -43,7 +43,7 @@ public class FilteredTranscript implements ISession {
 	private List<IParticipant> participants;
 	
 	/** The list of filtered records */
-	private List<IUtterance> filteredUtts;
+	private List<IRecord> filteredUtts;
 	
 	/** 
 	 * Constructor
@@ -60,8 +60,8 @@ public class FilteredTranscript implements ISession {
 	}
 	
 	private void filterUtterances() {
-		filteredUtts = new ArrayList<IUtterance>();
-		for(IUtterance utt:this.originalTranscript.getUtterances()) {
+		filteredUtts = new ArrayList<IRecord>();
+		for(IRecord utt:this.originalTranscript.getUtterances()) {
 			IParticipant uttPart = utt.getSpeaker();
 			if(uttPart != null) {
 				if(participants.contains(uttPart))
@@ -131,10 +131,10 @@ public class FilteredTranscript implements ISession {
 	}
 
 	@Override
-	public int getUtteranceIndex(IUtterance utt) {
+	public int getUtteranceIndex(IRecord utt) {
 		int retVal = -1;
 		for(int i = 0; i < filteredUtts.size(); i++) {
-			IUtterance u = filteredUtts.get(i);
+			IRecord u = filteredUtts.get(i);
 			if(u.getID().equals(utt.getID())) {
 				retVal = i;
 				break;
@@ -144,7 +144,7 @@ public class FilteredTranscript implements ISession {
 	}
 
 	@Override
-	public List<IUtterance> getUtterances() {
+	public List<IRecord> getUtterances() {
 		return filteredUtts;
 	}
 
@@ -179,12 +179,12 @@ public class FilteredTranscript implements ISession {
 	}
 
 	@Override
-	public IUtterance newUtterance() {
+	public IRecord newUtterance() {
 		return this.originalTranscript.newUtterance();
 	}
 
 	@Override
-	public IUtterance newUtterance(int pos) {
+	public IRecord newUtterance(int pos) {
 		return this.originalTranscript.newUtterance(pos);
 	}
 
@@ -209,7 +209,7 @@ public class FilteredTranscript implements ISession {
 	}
 
 	@Override
-	public void removeUtterance(IUtterance utt) {
+	public void removeUtterance(IRecord utt) {
 		this.originalTranscript.removeUtterance(utt);
 		this.filteredUtts.remove(utt);
 	}
@@ -265,12 +265,12 @@ public class FilteredTranscript implements ISession {
 	}
 
 	@Override
-	public void sortRecords(Comparator<IUtterance> comp) {
+	public void sortRecords(Comparator<IRecord> comp) {
 		this.originalTranscript.sortRecords(comp);
 	}
 
 	@Override
-	public IUtterance getUtterance(int uttindex) {
+	public IRecord getUtterance(int uttindex) {
 		return getUtterances().get(uttindex);
 	}
 

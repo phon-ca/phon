@@ -102,7 +102,7 @@ public interface ISession {
 	 * @return <CODE>java.util.ArrayList&lt;TranscriptElement&lt;Object&gtl;&gt;</CODE>
 	 * @deprecated use getUtterance(int) instead
 	 */
-	public List<IUtterance> getUtterances();
+	public List<IRecord> getUtterances();
 	
 	/**
 	 * Return the utterance at the given index.
@@ -110,7 +110,7 @@ public interface ISession {
 	 * @param uttindex
 	 * @return the utterance
 	 */
-	public IUtterance getUtterance(int uttindex);
+	public IRecord getUtterance(int uttindex);
 	
 	/**
 	 * Return the number of utterances.
@@ -124,7 +124,7 @@ public interface ISession {
 	 * 
 	 * @return <CODE>IUtterance</CODE>
 	 */
-	public IUtterance newUtterance();
+	public IRecord newUtterance();
 	
 	/**
 	 * Add a new utterance to the list in the given position.
@@ -134,14 +134,14 @@ public interface ISession {
 	 * list.
 	 * @return IUtterance
 	 */
-	public IUtterance newUtterance(int pos);
+	public IRecord newUtterance(int pos);
 	
 	/**
 	 * Remove an utterance from the data.
 	 * 
 	 * @param utt
 	 */
-	public void removeUtterance(IUtterance utt);
+	public void removeUtterance(IRecord utt);
 	
 	/**
 	 * Get the utterance index
@@ -149,7 +149,7 @@ public interface ISession {
 	 * @return int the index of the given utterance or <CODE>-1</CODE> if not
 	 * found.
 	 */
-	public int getUtteranceIndex(IUtterance utt);
+	public int getUtteranceIndex(IRecord utt);
 	
 	/**
 	 * Get the participants.
@@ -210,7 +210,7 @@ public interface ISession {
 	 * @param comp
 	 * @since Phon 1.5.0
 	 */
-	public void sortRecords(Comparator<IUtterance> comp);
+	public void sortRecords(Comparator<IRecord> comp);
 	
 	/**
 	 * Add a new comment to the transcript.  The comment will be added
