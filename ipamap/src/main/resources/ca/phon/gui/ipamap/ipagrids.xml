@@ -833,30 +833,36 @@
             <property name="Unicode">0x2e1</property>
         </cell>
         <cell y="0" x="10" h="2" w="2">
+            <text>◌ʴ</text>
+            <property name="Name">Superscript small turned r</property>
+            <property name="Description"></property>
+            <property name="Unicode">0x2b4</property>
+        </cell>
+        <cell y="0" x="12" h="2" w="2">
             <text>◌ʲ</text>
             <property name="Name">Superscript J</property>
             <property name="Description">Palatalized</property>
             <property name="Unicode">0x2b2</property>
         </cell>
-        <cell y="0" x="12" h="2" w="2">
+        <cell y="0" x="14" h="2" w="2">
             <text>◌ˠ</text>
             <property name="Name">Superscript gamma</property>
             <property name="Description">Velarized</property>
             <property name="Unicode">0x2e0</property>
         </cell>
-        <cell y="0" x="14" h="2" w="2">
+        <cell y="0" x="16" h="2" w="2">
             <text>◌ˤ</text>
             <property name="Name">Superscript reversed glottal stop</property>
             <property name="Description">Pharyngealized</property>
             <property name="Unicode">0x2e4</property>
         </cell>
-        <cell y="0" x="16" h="2" w="2">
+        <cell y="0" x="18" h="2" w="2">
             <text>◌ˀ</text>
             <property name="Name">Superscript glottal stop</property>
             <property name="Description">Glottalized</property>
             <property name="Unicode">0x2c0</property>
         </cell>
-        <cell y="0" x="18" h="2" w="2">
+        <cell y="0" x="20" h="2" w="2">
             <text>◌ʼ</text>
             <property name="Name">Apostrophe</property>
             <property name="Description">Ejective</property>
@@ -911,6 +917,42 @@
             <property name="Unicode">0x1db0</property>
         </cell>
         <cell y="0" x="22" h="2" w="2">
+            <text>◌ˢ</text>
+            <property name="Name">Superscript small S</property>
+            <property name="Description">Modifier letter small S</property>
+            <property name="Unicode">0x2e2</property>
+        </cell>
+        <cell y="0" x="24" h="2" w="2">
+            <text>◌ᶻ</text>
+            <property name="Name">Superscript small Z</property>
+            <property name="Description">Modifier letter small Z</property>
+            <property name="Unicode">0x1dbb</property>
+        </cell>
+        <cell y="0" x="26" h="2" w="2">
+            <text>◌ᶴ</text>
+            <property name="Name">Superscript small Esh</property>
+            <property name="Description">Modifier letter small Esh</property>
+            <property name="Unicode">0x1db4</property>
+        </cell>
+        <cell y="0" x="28" h="2" w="2">
+            <text>◌ᶾ</text>
+            <property name="Name">Superscript small Ezh</property>
+            <property name="Description">Modifier letter small Ezh</property>
+            <property name="Unicode">0x1dbe</property>
+        </cell>
+        <cell y="0" x="30" h="2" w="2">
+            <text>◌ᵊ</text>
+            <property name="Name">Superscript small Schwa</property>
+            <property name="Description">Modifier letter small Schwa</property>
+            <property name="Unicode">0x1d4a</property>
+        </cell>
+        <cell y="0" x="32" h="2" w="2">
+            <text>◌ʳ</text>
+            <property name="Name">Superscript small R</property>
+            <property name="Description">Modifier letter small R</property>
+            <property name="Unicode">0x2b3</property>
+        </cell>
+        <cell y="0" x="34" h="2" w="2">
             <text>◌̵</text>
             <property name="Name">Short stroke overlay; Role-switcher</property>
             <property name="Description">Role-switcher</property>
