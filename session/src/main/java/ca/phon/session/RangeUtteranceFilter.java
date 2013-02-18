@@ -17,10 +17,10 @@
  */
 package ca.phon.session;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.exceptions.ParserException;
 import ca.phon.util.Range;
 import ca.phon.util.StringUtils;
 
@@ -50,7 +50,7 @@ public class RangeUtteranceFilter extends AbstractUtteranceFilter {
 	}
 	
 	public RangeUtteranceFilter(ISession t, String ranges) 
-		throws ParserException {
+		throws ParseException {
 		
 		this.transcript = t;
 		
@@ -67,7 +67,7 @@ public class RangeUtteranceFilter extends AbstractUtteranceFilter {
 	}
 	
 	public void addRange(String rStr) 
-		throws ParserException {
+		throws ParseException {
 		ranges.add(rangeFromString(rStr));
 	}
 	
@@ -80,7 +80,7 @@ public class RangeUtteranceFilter extends AbstractUtteranceFilter {
 	}
 	
 	private Range rangeFromString(String rStr) 
-		throws ParserException {
+		throws ParseException {
 		Range retVal = new Range(0, 0, false);
 		
 		if(rStr.matches(pointRangeEx)) {
@@ -104,7 +104,7 @@ public class RangeUtteranceFilter extends AbstractUtteranceFilter {
 			
 			retVal = new Range(v1, v2, true);
 		} else {
-			throw new ParserException("Invalid range string '" + rStr + "'", 0, "");
+			throw new ParseException(rStr, 0);
 		}
 		
 		return retVal;

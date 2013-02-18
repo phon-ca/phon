@@ -18,9 +18,8 @@
 
 package ca.phon.session;
 
+import java.text.ParseException;
 import java.util.List;
-
-import ca.phon.exceptions.ParserException;
 
 
 /**
@@ -56,7 +55,7 @@ public interface IUtterance {
 	 * pass the parsing process.
 	 */
 	public void setTierString(String tierName, String data)
-		throws ParserException;
+		throws ParseException;
 	
 	/**
 	 * The participant (speaker)
