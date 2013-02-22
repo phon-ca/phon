@@ -43,13 +43,13 @@ public class RangeRecordFilter extends AbstractRecordFilter {
 	
 	private List<Range> ranges = new ArrayList<Range>();
 	
-	private ISession transcript;
+	private Session transcript;
 	
-	public RangeRecordFilter(ISession t) {
+	public RangeRecordFilter(Session t) {
 		this.transcript = t;
 	}
 	
-	public RangeRecordFilter(ISession t, String ranges) 
+	public RangeRecordFilter(Session t, String ranges) 
 		throws ParseException {
 		
 		this.transcript = t;
@@ -111,8 +111,8 @@ public class RangeRecordFilter extends AbstractRecordFilter {
 	}
 	
 	@Override
-	public boolean checkUtterance(IRecord utt) {
-		int uttIdx = transcript.getUtteranceIndex(utt)+1;
+	public boolean checkUtterance(Record utt) {
+		int uttIdx = transcript.getRecordPosition(utt);
 		
 		boolean retVal = false;
 		

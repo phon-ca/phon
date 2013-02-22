@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 import ca.phon.util.PhonDuration;
 
-public interface IParticipant {
+public interface Participant {
 
 	/**
 	 * @return Returns the age.

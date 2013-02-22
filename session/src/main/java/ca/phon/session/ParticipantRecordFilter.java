@@ -29,39 +29,39 @@ public class ParticipantRecordFilter extends AbstractRecordFilter {
 	/**
 	 * participant 
 	 */
-	private List<IParticipant> participants
-		= new ArrayList<IParticipant>();
+	private List<Participant> participants
+		= new ArrayList<Participant>();
 	
 	public ParticipantRecordFilter() {
 		
 	}
 	
-	public ParticipantRecordFilter(IParticipant p) {
+	public ParticipantRecordFilter(Participant p) {
 		addParticipant(p);
 	}
 	
-	public ParticipantRecordFilter(List<IParticipant> parts) {
+	public ParticipantRecordFilter(List<Participant> parts) {
 		participants.addAll(parts);
 	}
 	
-	public void addParticipant(IParticipant p) {
+	public void addParticipant(Participant p) {
 		if(!participants.contains(p) && p != null) {
 			participants.add(p);
 		}
 	}
 	
-	public List<IParticipant> getParticipants() {
+	public List<Participant> getParticipants() {
 		return this.participants;
 	}
 
 	@Override
-	public boolean checkUtterance(IRecord utt) {
+	public boolean checkUtterance(Record utt) {
 		boolean retVal = false;
 		
 		if(utt.getSpeaker() == null && this.participants.size() == 0) {
 			retVal = true;
 		} else if(utt.getSpeaker() != null) {
-			for(IParticipant p:participants) {
+			for(Participant p:participants) {
 				if(p.getId().equals(utt.getSpeaker().getId())) {
 					retVal = true;
 					break;

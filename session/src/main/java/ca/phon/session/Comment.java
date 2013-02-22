@@ -15,40 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ca.phon.session;
 
 /**
- * A transcriber.
+ * Entity class for comments.
+ * 
  *
  */
-public interface ITranscriber {
+public interface Comment extends SessionElement {
+	
+	/** 
+	 * Get the comment string.
+	 * @return String
+	 */
+	public String getValue();
 	
 	/**
-	 * The transcriber username
+	 * Set the comment string.
+	 * @param comment
 	 */
-	public String getUsername();
-	
-	public void setUsername(String username);
+	public void setValue(String comment);
 	
 	/**
-	 * The real name
+	 * Get the type.
+	 * @return CommentEnum
 	 */
-	public String getRealName();
-	
-	public void setRealName(String name);
+	public CommentEnum getType();
 	
 	/**
-	 * Using password?
+	 * Set the type.
+	 * @param type
 	 */
-	public boolean usePassword();
-	
-	public void setUsePassword(boolean v);
-	
-	/**
-	 * The hashed-password
-	 */
-	public String getPassword();
+	public void setType(CommentEnum type);
 
-	public void setPassword(String password);
-	
 }

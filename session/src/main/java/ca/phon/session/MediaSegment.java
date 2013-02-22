@@ -18,35 +18,44 @@
 
 package ca.phon.session;
 
-public enum Form {
-	Target,
-	Actual,
-	Undefined;
+/**
+ * Media info.
+ *
+ */ 
+public interface MediaSegment {
+	/**
+	 * Get the start value
+	 * @return float
+	 */
+	public float getStartValue();
 	
-//	public static final Form getTempForm(Form form) {
-//		if(form == Form.Target)
-//			return Form.TargetTemporary;
-//		else if(form == Form.Actual)
-//			return ActualTemporary;
-//		else
-//			return Form.Undefined;
-//	}
+	/**
+	 * Set the start value
+	 * @param start
+	 */
+	public void setStartValue(float start);
 	
-	public static SystemTierType getSystemTier(Form form) {
-		if(form == Form.Target)
-			return SystemTierType.IPATarget;
-		else if(form == Form.Actual)
-			return SystemTierType.IPAActual;
-		else
-			return SystemTierType.Notes;
-	}
+	/**
+	 * Get the end value
+	 * @return float
+	 */
+	public float getEndValue();
 	
-	public static final Form getOppositeForm(Form form) {
-		if(form == Form.Target)
-			return Form.Actual;
-		else if(form == Form.Actual)
-			return Form.Target;
-		else
-			return Form.Undefined;
-	}
+	/**
+	 * Set the end value
+	 * @param end
+	 */
+	public void setEndValue(float end);
+	
+	/**
+	 * Get the unit type.
+	 * @return MediaUnitType
+	 */
+	public MediaUnit getUnitType();
+	
+	/**
+	 * Set the unit type
+	 * @param type
+	 */
+	public void setUnitType(MediaUnit type);
 }

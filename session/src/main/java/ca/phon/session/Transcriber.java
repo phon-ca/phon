@@ -18,38 +18,37 @@
 package ca.phon.session;
 
 /**
- * Description of dependent tier.
+ * A transcriber.
  *
  */
-public interface IDepTierDesc {
+public interface Transcriber {
+	
+	/**
+	 * The transcriber username
+	 */
+	public String getUsername();
+	
+	public void setUsername(String username);
+	
+	/**
+	 * The real name
+	 */
+	public String getRealName();
+	
+	public void setRealName(String name);
+	
+	/**
+	 * Using password?
+	 */
+	public boolean usePassword();
+	
+	public void setUsePassword(boolean v);
+	
+	/**
+	 * The hashed-password
+	 */
+	public String getPassword();
 
-	/**
-	 * Get the name
-	 */
-	public String getTierName();
-	
-	public void setTierName(String tierName);
-	
-	/**
-	 * Get the font.  The string should be parsable
-	 * by the standard awt.Font class.
-	 * @deprecated use ITierOrderItem for font info
- 	 */
-	@Deprecated
-	public String getTierFont();
-	
-	/**
-	 * @deprecated
-	 * @param font
-	 */
-	@Deprecated
-	public void setTierFont(String font);
-	
-	/**
-	 * Is grouped?
-	 */
-	public boolean isGrouped();
-	
-	public void setIsGrouped(boolean v);
+	public void setPassword(String password);
 	
 }

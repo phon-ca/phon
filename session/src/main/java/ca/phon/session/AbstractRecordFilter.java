@@ -35,10 +35,10 @@ public abstract class AbstractRecordFilter implements RecordFilter {
 	 * @param utts
 	 * @return a new list containing the filtered utterances
 	 */
-	public List<IRecord> filterUtterances(List<IRecord> utts) {
-		List<IRecord> retVal = new ArrayList<IRecord>();
+	public List<Record> filterUtterances(List<Record> utts) {
+		List<Record> retVal = new ArrayList<Record>();
 		
-		for(IRecord utt:utts) {
+		for(Record utt:utts) {
 			if(checkUtterance(utt)) {
 				retVal.add(utt);
 			}

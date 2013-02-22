@@ -15,17 +15,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ca.phon.session;
 
-import java.util.List;
+/**
+ * An entry for tier ordering, vibility and locking.
+ *
+ */
+public interface TierOrderItem {
 
-public interface IGroup extends IWord {
+	/**
+	 * Tier name
+	 * 
+	 */
+	public String getTierName();
 	
-	/** Get the words */
-	public List<String> getWords();
+	public void setTierName(String tierName);
 	
-	/** Set the words */
-	public void setWords(List<String> words);
-
+	/**
+	 * Tier visibility
+	 */
+	public boolean isVisible();
+	
+	public void setVisible(boolean v);
+	
+	/**
+	 * Get the font.  The string should be parsable
+	 * by the standard awt.Font class.
+ 	 */
+	public String getTierFont();
+	
+	/**
+	 * @param font
+	 */
+	public void setTierFont(String font);
+	
+	/**
+	 * Set locked
+	 */
+	public void setTierLocked(boolean locked);
+	
+	/**
+	 * Get is locked
+	 */
+	public boolean isTierLocked();
 }

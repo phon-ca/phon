@@ -21,6 +21,11 @@
     </dependency>
     <dependency>
       <groupId>ca.phon</groupId>
+      <artifactId>phon-orthography</artifactId>
+      <version>${build.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.phon</groupId>
       <artifactId>phon-alignment</artifactId>
       <version>${build.version}</version>
     </dependency>

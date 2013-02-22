@@ -23,7 +23,7 @@ package ca.phon.session;
  * 
  *
  */
-public interface IMetadata {
+public interface SessionMetadata {
 	/**
 	 * Title
 	 * @return String
