@@ -99,7 +99,8 @@
     <module>ipadictionary</module>
     <module>ipamap</module>
     <module>components</module>
-    <module>opgraph</module>
+	<module>opgraph</module>
+	<module>orthography</module>
     <module>syllabifier</module>
     <module>syllabifier-editor</module>
     <module>syllabifier-editor-shade</module>
