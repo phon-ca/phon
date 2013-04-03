@@ -19,61 +19,41 @@
 
 package ca.phon.session;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 
-import ca.phon.util.PhonDuration;
+import ca.phon.extensions.IExtendable;
 
-public interface Participant {
+/**
+ * Immutable participant object.
+ *
+ */
+public interface Participant extends IExtendable {
 
 	/**
 	 * @return Returns the age.
 	 */
-	public abstract PhonDuration getAge(Calendar fromDate);
-
-	/**
-	 * @param age The age to set.
-	 */
-	public abstract void setAge(PhonDuration age);
+	public abstract Period getAge(DateTime fromDate);
 
 	/**
 	 * @return Returns the ageTo.
 	 */
-	public abstract PhonDuration getAgeTo();
-
-	/**
-	 * @param ageTo The ageTo to set.
-	 */
-	public abstract void setAgeTo(PhonDuration ageTo);
+	public abstract Period getAgeTo();
 
 	/**
 	 * @return Returns the birthDate.
 	 */
-	public abstract Calendar getBirthDate();
-
-	/**
-	 * @param birthDate The birthDate to set.
-	 */
-	public abstract void setBirthDate(Calendar birthDate);
+	public abstract DateTime getBirthDate();
 
 	/**
 	 * @return Returns the education.
 	 */
 	public abstract String getEducation();
-
-	/**
-	 * @param education The education to set.
-	 */
-	public abstract void setEducation(String education);
-
+	
 	/**
 	 * @return Returns the group.
 	 */
 	public abstract String getGroup();
-
-	/**
-	 * @param group The group to set.
-	 */
-	public abstract void setGroup(String group);
 
 	/**
 	 * @return Returns the id.
@@ -81,19 +61,9 @@ public interface Participant {
 	public abstract String getId();
 
 	/**
-	 * @param id The id to set.
-	 */
-	public abstract void setId(String id);
-
-	/**
 	 * @return Returns the language.
 	 */
 	public abstract String getLanguage();
-
-	/**
-	 * @param language The language to set.
-	 */
-	public abstract void setLanguage(String language);
 
 	/**
 	 * @return Returns the name.
@@ -101,60 +71,73 @@ public interface Participant {
 	public abstract String getName();
 
 	/**
-	 * @param name The name to set.
-	 */
-	public abstract void setName(String name);
-
-	/**
 	 * @return Returns the role.
 	 */
-	public abstract String getRole();
-
-	/**
-	 * @param role The role to set.
-	 */
-	public abstract void setRole(String role);
-
+	public abstract ParticipantRole getRole();
+	
 	/**
 	 * @return Returns the sES.
 	 */
 	public abstract String getSES();
 
 	/**
-	 * @param ses The sES to set.
-	 */
-	public abstract void setSES(String ses);
-
-	/**
 	 * @return Returns the sex.
 	 */
 	public abstract Sex getSex();
-
+	
+	/**
+	 * @param age The age to set.
+	 */
+	public abstract void setAge(Period age);
+	
+	/**
+	 * @param ageTo The ageTo to set.
+	 */
+	public abstract void setAgeTo(Period ageTo);
+	
+	/**
+	 * @param birthDate The birthDate to set.
+	 */
+	public abstract void setBirthDate(DateTime birthDate);
+	
+	/**
+	 * @param education The education to set.
+	 */
+	public abstract void setEducation(String education);
+	
+	/**
+	 * @param group The group to set.
+	 */
+	public abstract void setGroup(String group);
+	
+	/**
+	 * @param id The id to set.
+	 */
+	public abstract void setId(String id);
+	
+	/**
+	 * @param language The language to set.
+	 */
+	public abstract void setLanguage(String language);
+	
+	/**
+	 * @param name The name to set.
+	 */
+	public abstract void setName(String name);
+	
+	/**
+	 * @param role The role to set.
+	 */
+	public abstract void setRole(ParticipantRole role);
+	
+	/**
+	 * @param ses The sES to set.
+	 */
+	public abstract void setSES(String ses);
+	
 	/**
 	 * @param sex The sex to set.
 	 */
 	public abstract void setSex(Sex sex);
-	
-	/**
-	 * @return The syllabifier to use for this participant.
-	 * Returns 'default' if not specified
-	 */
-	public abstract String getSyllabifier();
-	
-	/**
-	 * @param the syllabifier to use
-	 */
-	public abstract void setSyllabifier(String syllabifier);
-	
-	/**
-	 * @return The dictionary to use for this participant.
-	 * Returns 'default' if not specified.
-	 */
-	public abstract String getDictionary();
-	
-	/**
-	 * @param the dictionary to use for this participant.
-	 */
-	public abstract void setDictionary(String dict);
 
 }

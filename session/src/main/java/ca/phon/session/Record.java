@@ -18,19 +18,16 @@
 
 package ca.phon.session;
 
-import java.util.List;
-
+import ca.phon.alignment.PhoneMap;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 
 
 /**
- * An utterance.
  * 
- *
  */
-public interface Record extends IExtendable, SessionElement {
+public interface Record extends IExtendable {
 	
 	/**
 	 * The participant (speaker)
@@ -161,6 +158,20 @@ public interface Record extends IExtendable, SessionElement {
 	public void setIPAActual(Tier<IPATranscript> ipa);
 	
 	/**
+	 * Get the phone alignment between IPA Target and IPA Actual
+	 * 
+	 * @return phone alignment
+	 */
+	public Tier<PhoneMap> getPhoneAlignment();
+	
+	/**
+	 * Set the phone alignment
+	 * 
+	 * @param phoneAlignment
+	 */
+	public void setPhoneAlignment(Tier<PhoneMap> phoneAlignment);
+	
+	/**
 	 * Get the value of the notes tier
 	 * 
 	 * @return the notes tier
@@ -186,19 +197,42 @@ public interface Record extends IExtendable, SessionElement {
 	public <T> Tier<T> getTier(String name, Class<T> type);
 	
 	/**
-	 * Get the given tier as a text tier.
-	 * Every tier can be represented in this way.
-	 * 
-	 * @param name
-	 * @return the tier data represented as a string
-	 */
-	public Tier<String> getTier(String name);
-	
-	/**
 	 * Remove the dependent tier with the given name.
 	 * 
 	 * @param name
 	 */
 	public void removeTier(String name);
+	
+	/**
+	 * number of comments
+	 * 
+	 * @return number of comments
+	 */
+	public int getNumberOfComments();
+	
+	/**
+	 * get comment at given index
+	 * 
+	 * @param idx
+	 * @return comment
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public Comment getComment(int idx);
+	
+	/**
+	 * Add comment
+	 * 
+	 * @param comment
+	 */
+	public void addComment(Comment comment);
+	
+	/**
+	 * Remove comment
+	 * 
+	 * @param comment
+	 */
+	public void removeComment(Comment comment);
+	public void removeComment(int idx);
 	
 }

@@ -1,0 +1,87 @@
+package ca.phon.session.impl;
+
+import ca.phon.alignment.PhoneMap;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.Orthography;
+import ca.phon.session.Group;
+import ca.phon.session.Record;
+
+public class GroupImpl implements Group {
+	
+	/**
+	 * Weak reference to parent record
+	 */
+	private final Record record;
+
+	/**
+	 * Group index
+	 */
+	private final int groupIndex;
+	
+	GroupImpl(Record record, int idx) {
+		super();
+		this.record = record;
+		this.groupIndex = idx;
+	}
+	
+	@Override
+	public Orthography getOrthography() {
+		return record.getOrthography().getGroup(groupIndex);
+	}
+
+	@Override
+	public void setOrthography(Orthography ortho) {
+		record.getOrthography().setGroup(groupIndex, ortho);
+	}
+
+	@Override
+	public IPATranscript getIPATarget() {
+		return record.getIPATarget().getGroup(groupIndex);
+	}
+
+	@Override
+	public IPATranscript getIPAActual() {
+		return record.getIPAActual().getGroup(groupIndex);
+	}
+
+	@Override
+	public <T> T getTier(String name, Class<T> type) {
+		return record.getTier(name, type).getGroup(groupIndex);
+	}
+
+	@Override
+	public void setIPATarget(IPATranscript ipa) {
+		record.getIPATarget().setGroup(groupIndex, ipa);
+	}
+
+	@Override
+	public void setIPAActual(IPATranscript ipa) {
+		record.getIPAActual().setGroup(groupIndex, ipa);
+	}
+
+	@Override
+	public PhoneMap getPhoneAlignment() {
+		return record.getPhoneAlignment().getGroup(groupIndex);
+	}
+
+	@Override
+	public void setPhoneAlignment(PhoneMap alignment) {
+		record.getPhoneAlignment().setGroup(groupIndex, alignment);
+	}
+
+	@Override
+	public String getNotes() {
+		return record.getNotes().getGroup(0);
+	}
+
+	@Override
+	public void setNotes(String notes) {
+		record.getNotes().setGroup(groupIndex, notes);
+	}
+
+	@Override
+	public <T> void setTier(String name, Class<T> type, T val) {
+		
+	}
+
+}

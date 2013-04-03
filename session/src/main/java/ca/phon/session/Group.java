@@ -1,10 +1,11 @@
 package ca.phon.session;
 
+import ca.phon.alignment.PhoneMap;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 
 /**
- * A Group is a vertial view of tier information
+ * A Group is a vertical view of tier information
  * in a record.
  * 
  */
@@ -27,13 +28,31 @@ public interface Group {
 	 */
 	public IPATranscript getIPATarget();
 	
+	public void setIPATarget(IPATranscript ipa);
+	
 	/**
 	 * IPA actual
 	 */
 	public IPATranscript getIPAActual();
 	
+	public void setIPAActual(IPATranscript ipa);
+	
 	/**
-	 * Get the value for the specfieid tier
+	 * Alignment
+	 */
+	public PhoneMap getPhoneAlignment();
+	
+	public void setPhoneAlignment(PhoneMap alignment);
+	
+	/**
+	 * Notes - this will be the same for every group!
+	 */
+	public String getNotes();
+	
+	public void setNotes(String notes);
+	
+	/**
+	 * Get the value for the specified tier
 	 * and type.
 	 * 
 	 * @param name
@@ -45,14 +64,6 @@ public interface Group {
 	 */
 	public <T> T getTier(String name, Class<T> type);
 	
-	/**
-	 * Get the value for the specified tier
-	 * as a String
-	 * 
-	 * @param name
-	 * 
-	 * @return value for the tier as text or
-	 *  <code>null</code> if not found
-	 */
-	public String getTier(String name);
+	public <T> void setTier(String name, Class<T> type, T val);
+	
 }

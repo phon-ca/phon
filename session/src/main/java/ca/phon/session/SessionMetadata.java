@@ -152,4 +152,35 @@ public interface SessionMetadata {
 	
 	public void setRights(String rights);
 	
+	/**
+	 * number of comments
+	 * @return int
+	 */
+	public int getNumberOfComments();
+	
+	/**
+	 * get comment at given index
+	 * 
+	 * @param idx
+	 * @return comment
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public Comment getComment(int idx);
+	
+	/**
+	 * Add comment
+	 * 
+	 * @param comment
+	 */
+	public void addComment(Comment comment);
+	
+	/**
+	 * Remove comment
+	 * 
+	 * @param comment
+	 */
+	public void removeComment(Comment comment);
+	public void removeComment(int idx);
+	
 }

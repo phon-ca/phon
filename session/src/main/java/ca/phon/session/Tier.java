@@ -5,7 +5,7 @@ package ca.phon.session;
  * of groups.
  * 
  */
-public interface Tier<T> {
+public interface Tier<T> extends TierDescription {
 	
 	/**
 	 * Get the number of groups in the tier
@@ -25,21 +25,40 @@ public interface Tier<T> {
 	public T getGroup(int idx);
 	
 	/**
-	 * Get tier description.  Tier description includes
-	 * name and if the tier is 'grouped'.
+	 * Set the value of the specified group 
+	 * idx.  idx must be between 0 and numberOfGroups()
 	 * 
-	 * @return tier description
+	 * @param idx
+	 * @param val
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException if idx is
+	 *  out of bounds
+	 * @throws NullPointerException if val is <code>null</code>
 	 */
-	public TierDescription getDescription();
+	public void setGroup(int idx, T val);
 	
 	/**
-	 * Get type.
+	 * Adds a new group to the end of this tier and increments
+	 * the number of groups.
 	 * 
-	 * Gets the declared type for the tier.
-	 * 
-	 * @return class type
+	 * @param val
 	 */
-	public Class<T> getDeclaredType();
+	public void addGroup(T val);
 	
+	/**
+	 * Remove the specified group
+	 * 
+	 * @param idx
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public void removeGroup(int idx);
+	
+	/**
+	 * Removes all group data from this tier and sets
+	 * the number of groups to 0
+	 * 
+	 */
+	public void removeAll();
 	
 }

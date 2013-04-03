@@ -18,13 +18,10 @@
 
 package ca.phon.session;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 import ca.phon.extensions.IExtendable;
 import ca.phon.visitor.Visitable;
@@ -33,54 +30,30 @@ import ca.phon.visitor.Visitable;
  * A session in a project.
  *
  */
-public interface Session extends IExtendable, Visitable<SessionElement> {
+public interface Session extends IExtendable {
 
 	/** Get the corpus */
 	public String getCorpus();
 	
-	/** Set the corpus */
-	public void setCorpus(String corpus);
-	
 	/** Get the transcript name */
 	public String getName();
-	
-	/** Set the transcript name */
-	public void setName(String name);
-	
+
 	/** Get the transcript date */
-	public Calendar getDate();
-	
-	/** Get the transcript date */
-	public void setDate(Calendar date);
+	public DateTime getDate();
 	
 	/** Get the language */
 	public String getLanguage();
 	
-	/** Set the language */
-	public void setLanguage(String language);
 	
 	/** Get/Set the media file location */
 	public String getMediaLocation();
-	public void setMediaLocation(String mediaLocation);
+	
 	
 	/** Get/Set the tier view */
 	public List<TierOrderItem> getTierView();
 	
-	public void setTierView(List<TierOrderItem> view);
 	
 	/** Get the list of transcribers */
-	public List<Transcriber> getTranscribers();
-	
-	/**
-	 * Add a new transcriber
-	 */
-	public Transcriber newTranscriber();
-	
-	/**
-	 * Remove a transcriber
-	 */
-	public void removeTranscriber(Transcriber t);
-	public void removeTranscriber(String username);
 	
 	public Transcriber getTranscriber(String username);
 	
@@ -89,7 +62,7 @@ public interface Session extends IExtendable, Visitable<SessionElement> {
 	 * 
 	 * @return Metadata
 	 */
-	public SessionMetadata getMetainfo();
+	public SessionMetadata getMetadata();
 	
 	/**
 	 * Return the record at the given index.
@@ -105,6 +78,64 @@ public interface Session extends IExtendable, Visitable<SessionElement> {
 	 * @return the number of records
 	 */
 	public int getNumberOfRecords();
+	
+	/**
+	 * Get the position of the given record.
+	 * 
+	 * @param record
+	 */
+	public int getRecordPosition(Record record);
+	
+	/**
+	 * Get the number of participants
+	 * 
+	 * @return the number of participants
+	 */
+	public int getNumberOfParticipants();
+
+	/**
+	 * Add a new participant
+	 * 
+	 * @param participant
+	 */
+	public void addParticipant(Participant participant);
+	
+	/**
+	 * Get the participant at the given index
+	 * 
+	 * @param idx
+	 * @return the specified participant
+	 */
+	public Participant getParticipant(int idx);
+	
+	/** Set the corpus */
+	public void setCorpus(String corpus);
+	
+	/** Set the transcript name */
+	public void setName(String name);
+	
+	/** Get the transcript date */
+	public void setDate(DateTime date);
+	
+	/** Set the language */
+	public void setLanguage(String language);
+	
+	/** Media location */
+	public void setMediaLocation(String mediaLocation);
+	
+	/** Tier view */
+	public void setTierView(List<TierOrderItem> view);
+	
+	/**
+	 * Add a new transcriber
+	 */
+	public void addTranscriber(Transcriber t);
+	
+	/**
+	 * Remove a transcriber
+	 */
+	public void removeTranscriber(Transcriber t);
+	public void removeTranscriber(String username);
 	
 	/**
 	 * Add a new record to the session
@@ -136,27 +167,6 @@ public interface Session extends IExtendable, Visitable<SessionElement> {
 	public void removeRecord(int pos);
 	
 	/**
-	 * Get the position of the given record.
-	 * 
-	 * @param record
-	 */
-	public int getRecordPosition(Record record);
-	
-	/**
-	 * Get the number of participants
-	 * 
-	 * @return the number of participants
-	 */
-	public int getNumberOfParticipants();
-
-	/**
-	 * Add a new participant
-	 * 
-	 * @param participant
-	 */
-	public void addParticipant(Participant participant);
-	
-	/**
 	 * Remove a participant.
 	 * 
 	 * @param participant
@@ -169,14 +179,6 @@ public interface Session extends IExtendable, Visitable<SessionElement> {
 	 * @param idx
 	 */
 	public void removeParticipant(int idx);
-	
-	/**
-	 * Get the participant at the given index
-	 * 
-	 * @param idx
-	 * @return the specified participant
-	 */
-	public Participant getParticipant(int idx);
 	
 	/**
 	 * Sort records using the given comparator.

@@ -21,5 +21,12 @@ public interface TierDescription {
 	 * @return name of the tier
 	 */
 	public String getName();
+	
+	/**
+	 * Get declared type of the tier
+	 * 
+	 * 
+	 */
+	public Class<?> getDeclaredType();
 
 }

@@ -17,48 +17,60 @@
  */
 package ca.phon.session;
 
-public enum SystemTierType {
-	Orthography("Orthography"),
-	IPATarget("IPA Target"),
-	TargetSyllables("Target Syllables"),
-	IPAActual("IPA Actual"),
-	ActualSyllables("Actual Syllables"),
-	SyllableAlignment("Alignment"),
-	Segment("Segment"),
-	Notes("Notes");
+import ca.phon.alignment.PhoneMap;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.Orthography;
+
+/**
+ * Tier descriptions for default tiers.
+ */
+public enum SystemTierType implements TierDescription {
+	Orthography("Orthography", true, Orthography.class),
+	IPATarget("IPA Target", true, IPATranscript.class),
+	TargetSyllables("Target Syllables", true, IPATranscript.class),
+	IPAActual("IPA Actual", true, IPATranscript.class),
+	ActualSyllables("Actual Syllables", true, IPATranscript.class),
+	SyllableAlignment("Alignment", true, PhoneMap.class),
+	Segment("Segment", false, MediaSegment.class),
+	Notes("Notes", false, String.class);
 	
 	private String tierName;
 	
-	private SystemTierType(String tierName) {
-		this.tierName = tierName;
-	}
+	private boolean grouped = false;
 	
-	public String getTierName() {
-		return tierName;
+	private Class<?> type;
+	
+	private SystemTierType(String tierName, boolean grouped, Class<?> type) {
+		this.tierName = tierName;
+		this.grouped = grouped;
+		this.type = type;
 	}
 	
 	public static boolean isSystemTier(String tierName) {
 		return tierFromString(tierName) != null;
 	}
 	
-	public boolean isGroupedTier() {
-		if(this == Orthography ||
-				this == IPATarget ||
-				this == IPAActual ||
-				this == TargetSyllables ||
-				this == ActualSyllables ||
-				this == SyllableAlignment)
-			return true;
-		else
-			return false;
-	}
-	
 	public static SystemTierType tierFromString(String tierName) {
 		for(SystemTierType t:values()) {
-			if(t.getTierName().equals(tierName))
+			if(t.getName().equals(tierName))
 				return t;
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public boolean isGrouped() {
+		return this.grouped;
+	}
+
+	@Override
+	public String getName() {
+		return this.tierName;
+	}
+
+	@Override
+	public Class<?> getDeclaredType() {
+		return this.type;
 	}
 }

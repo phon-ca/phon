@@ -1,11 +1,32 @@
 package ca.phon.session;
 
+import java.util.Iterator;
+import java.util.ServiceLoader;
+
 /**
- * A factory for session objects.
+ * A factory for creating mutable session objects.
  * 
  * 
  */
 public abstract class SessionFactory {
+	
+	/**
+	 * Create a new session factory.
+	 * 
+	 * @return factory using first available
+	 *  implementation. <code>null</code> if no
+	 *  implementation found.
+	 */
+	public static SessionFactory newFactory() {
+		final ServiceLoader<SessionFactory> sessionFactory = 
+				ServiceLoader.load(SessionFactory.class);
+		final Iterator<SessionFactory> itr = sessionFactory.iterator();
+		if(itr.hasNext()) {
+			return itr.next();
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * Create a new empty session.

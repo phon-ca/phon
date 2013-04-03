@@ -18,12 +18,15 @@
 
 package ca.phon.session;
 
+import ca.gedge.opgraph.extensions.Extendable;
+import ca.phon.extensions.IExtendable;
+
 /**
  * Entity class for comments.
  * 
  *
  */
-public interface Comment extends SessionElement {
+public interface Comment extends IExtendable {
 	
 	/** 
 	 * Get the comment string.
