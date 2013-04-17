@@ -43,7 +43,7 @@ public class OrthoTokens {
 	
 	public OrthoTokens() {
 		super();
-		initTokenMap(getClass().getResource(tokenFile));
+		initTokenMap(getClass().getClassLoader().getResource(tokenFile));
 	}
 	
 	private void initTokenMap(URL url) {

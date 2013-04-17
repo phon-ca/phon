@@ -56,7 +56,7 @@ public class OrthoTokenSource implements TokenSource {
 	int tokenIndex = 0;
 	@Override
 	public Token nextToken() {
-		CommonToken retVal = null;
+		Token retVal = null;
 		
 		if(tokenQueue.peek() != null) {
 			retVal = tokenQueue.poll();
@@ -114,6 +114,8 @@ public class OrthoTokenSource implements TokenSource {
 		
 		if(retVal != null) 
 			retVal.setTokenIndex(tokenIndex++);
+		else
+			retVal = CommonToken.EOF_TOKEN;
 		
 		return retVal;
 	}

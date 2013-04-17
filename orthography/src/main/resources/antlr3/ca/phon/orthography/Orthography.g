@@ -23,13 +23,16 @@ import java.util.ArrayList;
 
 @members {
 
-private Orthography orthography = new Orthography();
+private Orthography orthography;
 
 public void setOrthography(Orthography orthography) {
 	this.orthography = orthography;
 }
 
 public Orthography getOrthography() {
+	if(this.orthography == null) {
+		this.orthography = new Orthography();
+	}
 	return this.orthography;
 }
 

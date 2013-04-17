@@ -3,6 +3,10 @@ package ca.phon.orthography;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenStream;
+
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.visitor.Visitable;
@@ -23,7 +27,17 @@ public class Orthography extends ArrayList<OrthoElement> implements IExtendable,
 	
 	public Orthography(String ortho) {
 		super();
-		// TODO parse orthography
+		
+		final OrthoTokenSource tokenSource = new OrthoTokenSource(ortho);
+		final TokenStream tokenStream = new CommonTokenStream(tokenSource);
+		final OrthographyParser parser = new OrthographyParser(tokenStream);
+		parser.setOrthography(this);
+		try {
+			parser.orthography();
+		} catch (RecognitionException e) {
+			throw new IllegalArgumentException(ortho, e);
+		}
+		
 		extSupport.initExtensions();
 	}
 	
@@ -55,5 +69,16 @@ public class Orthography extends ArrayList<OrthoElement> implements IExtendable,
 		}
 	}
 	
+	@Override
+	public String toString() {
+		final StringBuffer buffer = new StringBuffer();
+		
+		for(OrthoElement ele:this) {
+			buffer.append(
+					(buffer.length() > 0 ? " " : "") + ele.text());
+		}
+		
+		return buffer.toString();
+	}
 
 }
