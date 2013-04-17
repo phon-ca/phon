@@ -22,46 +22,41 @@ package ca.phon.orthography;
  * Codes for word prefix.
  */
 public enum WordPrefix {
-	OMISSION,
-	ELLIPSIS,
-	FRAGMENT,
-	UNINTELLIGIBLE_WORD,
-	UNINTELLIGIBLE,
-	UNINTELLIGIBLE_WORD_WITH_PHO,
-	UNTRANSCRIBED;
-
-	/**
-	 * Codes
-	 */
-	private String[] prefixCodes = {
-		"0",
-		"00",
-		"&",
-		"xx",
-		"xxx",
-		"yy",
-		"www"
-	};
+	OMISSION("0", "omission"),
+	ELLIPSIS("00", "ellipsis"),
+	FRAGMENT("&", "fragment"),
+	UNINTELLIGIBLE_WORD("xx", "unintelligible-word"),
+	UNINTELLIGIBLE("xxx", "unintelligible"),
+	UNINTELLIGIBLE_WORD_WITH_PHO("yyy", "unintelligible-word-with-pho"),
+	UNTRANSCRIBED("www", "untranscribed");
+	
+	private String code;
+	
+	private String displayName;
+	
+	private WordPrefix(String code, String displayName) {
+		this.code = code;
+		this.displayName = displayName;
+	}
 
 	public String getCode() {
-		return prefixCodes[ordinal()];
+		return this.code;
 	}
-
-	/**
-	 * Display names
-	 */
-	private String[] displayNames = {
-		"omission",
-		"ellipsis",
-		"fragment",
-		"unintelligible-word",
-		"unintelligible",
-		"unintelligible-word-with-pho",
-		"untranscribed"
-	};
-
+	
 	public String getDisplayName() {
-		return displayNames[ordinal()];
+		return this.displayName;
 	}
 
+	public static WordPrefix fromCode(String code) {
+		WordPrefix retVal = null;
+		
+		for(WordPrefix v:values()) {
+			if(v.getCode().equals(code)) {
+				retVal = v;
+				break;
+			}
+		}
+		
+		return retVal;
+	}
 }

@@ -7,7 +7,21 @@ package ca.phon.orthography;
  * 'data'.
  * 
  */
-public interface OrthoEvent {
+public class OrthoEvent implements OrthoElement {
+	
+	private final String type;
+	
+	private final String data;
+	
+	public OrthoEvent(String data) {
+		this(null, data);
+	}
+	
+	public OrthoEvent(String type, String data) {
+		super();
+		this.type = type;
+		this.data = data;
+	}
 	
 	/**
 	 * Get the type of the event.  This is the text before
@@ -16,13 +30,22 @@ public interface OrthoEvent {
 	 * @return the type of the event.  Default is 'action' if
 	 *  not defined
 	 */
-	public String getType();
+	public String getType() {
+		return this.type;
+	}
 	
 	/**
 	 * Event data
 	 * 
 	 * @return the data for the event
 	 */
-	public String getData();
+	public String getData() {
+		return this.data;
+	}
+
+	@Override
+	public String text() {
+		return ( (this.type == null ? "" : this.type + ":") + this.data );
+	}
 
 }

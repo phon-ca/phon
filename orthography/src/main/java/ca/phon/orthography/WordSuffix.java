@@ -23,88 +23,56 @@ package ca.phon.orthography;
  * after a '@' character.
  */
 public enum WordSuffix {
-	BABBLING,
-	CHILD_INVENTED,
-	DIALECT,
-	FAMILY_SPECIFIC,
-	FILLED_PAUSE,
-	FILLER_SYLLABLE,
-	GENERIC,
-	INTERJECTION,
-	KANA,
-	LETTER,
-	NEOLOGISM,
-	NO_VOICE,
-	ONOMATOPOEIA,
-	PHONOLOGY_CONSISTENT,
-	PROTO_MORPHEME,
-	QUOTED_METAREFERENCE,
-	SIGN_SPEECH,
-	SIGNING,
-	TEST,
-	UNIBET,
-	WORDS_TO_BE_EXCLUDED,
-	WORD_PLAY;
-
-	/** Codes */
-	private String[] codes = {
-		"b",
-		"c",
-		"d",
-		"f",
-		"fp",
-		"fs",
-		"g",
-		"i",
-		"k",
-		"l",
-		"n",
-		"nv",
-		"o",
-		"p",
-		"pm",
-		"q",
-		"sas",
-		"si",
-		"t",
-		"u",
-		"x",
-		"wp"
-	};
-
-	public String getCode() {
-		return codes[ordinal()];
+	BABBLING("b", "babbling"),
+	CHILD_INVENTED("c", "child-invented"),
+	DIALECT("d", "dialect"),
+	FAMILY_SPECIFIC("f", "family-specific"),
+	FILLED_PAUSE("fp", "filled-pause"),
+	FILLER_SYLLABLE("fs", "filler syllable"),
+	GENERIC("g", "generic"),
+	INTERJECTION("i", "interjection"),
+	KANA("k", "kana"),
+	LETTER("l", "letter"),
+	NEOLOGISM("n", "neologism"),
+	NO_VOICE("nv", "no voice"),
+	ONOMATOPOEIA("o", "onomatopoeia"),
+	PHONOLOGY_CONSISTENT("p", "phonology consistent"),
+	PROTO_MORPHEME("pm", "proto-morpheme"),
+	QUOTED_METAREFERENCE("q", "quoted metareference"),
+	SIGN_SPEECH("sas", "sign speech"),
+	SIGNING("si", "signing"),
+	TEST("t", "test"),
+	UNIBET("u", "UNIBET"),
+	WORDS_TO_BE_EXCLUDED("x", "words to be excluded"),
+	WORD_PLAY("wp", "word play");
+	
+	private String code;
+	
+	private String displayName;
+	
+	private WordSuffix(String code, String displayName) {
+		this.code = code;
+		this.displayName = displayName;
 	}
 
-	/**
-	 * Display names
-	 */
-	private String[] displayNames = {
-		"babbling",
-		"child-invented",
-		"dialect",
-		"family-specific",
-		"filled-pause",
-		"filler syllable",
-		"generic",
-		"interjection",
-		"kana",
-		"letter",
-		"neologism",
-		"no voice",
-		"onomatopoeia",
-		"phonology consistent",
-		"proto-morpheme",
-		"quoted metareference",
-		"sign speech",
-		"signing",
-		"test",
-		"UNIBET",
-		"words to be excluded",
-		"word play"
-	};
+	public String getCode() {
+		return this.code;
+	}
 
 	public String getDisplayName() {
-		return displayNames[ordinal()];
+		return this.displayName;
+	}
+	
+	public static WordSuffix fromCode(String code) {
+		WordSuffix retVal = null;
+		
+		for(WordSuffix v:values()) {
+			if(v.getCode().equals(code)) {
+				retVal = v;
+				break;
+			}
+		}
+		
+		return retVal;
 	}
 }

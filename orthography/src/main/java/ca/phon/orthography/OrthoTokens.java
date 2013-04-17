@@ -35,7 +35,7 @@ public class OrthoTokens {
 	
 	private final static Logger LOGGER = Logger.getLogger(OrthoTokens.class.getName());
 	
-	private String tokenFile = "PhonTranscription.tokens";
+	private String tokenFile = "Orthography.tokens";
 	
 	/** Token map */
 	private Map<String, Integer> tokenMap =

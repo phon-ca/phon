@@ -17,6 +17,9 @@
  */
 package ca.phon.orthography;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
@@ -37,6 +40,8 @@ public class OrthoTokenSource implements TokenSource {
 	/** Token mapper */
 	private OrthoTokens tokens;
 	
+	private Queue<CommonToken> tokenQueue = new LinkedList<CommonToken>();
+	
 	public OrthoTokenSource(String str) {
 		this.data = str.toCharArray();
 		this.cIndex = 0;
@@ -47,58 +52,64 @@ public class OrthoTokenSource implements TokenSource {
 	public String getSourceName() {
 		return "";
 	}
-
+	
 	int tokenIndex = 0;
 	@Override
 	public Token nextToken() {
 		CommonToken retVal = null;
 		
-		if(cIndex < data.length) {
-			char currentChar = data[cIndex];
-			
-			if(currentChar == '{') {
-				retVal = new CommonToken(tokens.getTokenType("IG_START"));
-				retVal.setText(currentChar+"");
-				retVal.setCharPositionInLine(cIndex);
-				cIndex++;
-			} else if(currentChar == '}') {	
-				retVal = new CommonToken(tokens.getTokenType("IG_END"));
-				retVal.setText(currentChar+"");
-				retVal.setCharPositionInLine(cIndex);
-				cIndex++;
-			} else if(currentChar == '[') {
-				retVal = new CommonToken(tokens.getTokenType("G_START"));
-				retVal.setText(currentChar+"");
-				retVal.setCharPositionInLine(cIndex);
-				cIndex++;
-			} else if(currentChar == ']') {
-				retVal = new CommonToken(tokens.getTokenType("G_END"));
-				retVal.setText(currentChar+"");
-				retVal.setCharPositionInLine(cIndex);
-				cIndex++;
-			} else if(currentChar == '(') {
-				int startIndex = cIndex++;
-				retVal = readComment();
-				retVal.setCharPositionInLine(startIndex);
-			} else if(currentChar == '*') {
-				int startIndex = cIndex++;
-				retVal = readEvent();
-				retVal.setCharPositionInLine(startIndex);
-			} else if(currentChar == '+') {
-				//make sure wordnets are their own word in Phon
-				retVal = new CommonToken(tokens.getTokenType("WORD"));
-				retVal.setText(currentChar+"");
-				retVal.setCharPositionInLine(cIndex);
-				cIndex++;
-			} else if(Character.isWhitespace(currentChar)) { 
-				cIndex++;
-				return nextToken();
-			} else {
-				int startIndex = cIndex;
-				retVal = readWord();
-				retVal.setCharPositionInLine(startIndex);
+		if(tokenQueue.peek() != null) {
+			retVal = tokenQueue.poll();
+		} else {
+			if(cIndex < data.length) {
+				// this method is always called on a new token boundary
+				char currentChar = data[cIndex];
+				// assume word-boundary at end
+				char nextChar = ( (cIndex+1) < data.length ? data[cIndex+1] : ' ' );
+				
+				// punctuation must be separated by a space
+				// check punctuation first
+				if(Character.isWhitespace(nextChar) &&
+					!Character.isWhitespace(currentChar) ) {
+					for(OrthoPunctType pt:OrthoPunctType.values()) {
+						if(pt.getChar() == currentChar) {
+							// setup PUNCT token
+							retVal = new CommonToken(tokens.getTokenType("PUNCT"));
+							retVal.setText(currentChar + "");
+							retVal.setCharPositionInLine(cIndex);
+							cIndex++;
+						}
+					}
+				}
+				
+				if(retVal == null) {
+					// start of comment
+					if(currentChar == '(') {
+						readComment();
+						return nextToken();
+					// start of event
+					} else if(currentChar == '*') {
+						readEvent();
+						return nextToken();
+					// wordnet
+					} else if(currentChar == '+' || currentChar == '~') {
+						//make sure wordnets are their own word in Phon
+						retVal = new CommonToken(tokens.getTokenType("WORDNET_MARKER"));
+						retVal.setText(currentChar+"");
+						retVal.setCharPositionInLine(cIndex);
+						cIndex++;
+					// word boundary - move ahead and return next token
+					} else if(Character.isWhitespace(currentChar)) { 
+						cIndex++;
+						return nextToken();
+					// everything else is a word
+					} else {
+						readWord();
+						return nextToken();
+					}
+				}
+				
 			}
-			
 		}
 		
 		if(retVal != null) 
@@ -107,9 +118,10 @@ public class OrthoTokenSource implements TokenSource {
 		return retVal;
 	}
 
-	private CommonToken readComment() {
+	private void readComment() {
 		final StringBuffer buffer = new StringBuffer();
 		
+		String type = null;
 		boolean hadSlash = false;
 		boolean finished = false;
 		for( ; cIndex < data.length; cIndex++) {
@@ -137,6 +149,11 @@ public class OrthoTokenSource implements TokenSource {
 					break;
 				}
 				
+			case ':':
+				type = buffer.toString();
+				buffer.setLength(0);
+				break;
+				
 			default:
 				if(hadSlash) {
 					// invalid escape sequence
@@ -152,39 +169,59 @@ public class OrthoTokenSource implements TokenSource {
 		final String commentText = buffer.toString();
 		if(cIndex < data.length && data[cIndex] == ')') cIndex++;
 		
-		CommonToken retVal = new CommonToken(tokens.getTokenType("COMMENT"));
-		retVal.setText(commentText);
-		return retVal;
+		if(type == null) {
+			CommonToken typeToken = new CommonToken(tokens.getTokenType("COMMENT_TYPE"));
+			typeToken.setText(type);
+			
+			tokenQueue.add(typeToken);
+		}
+		
+		CommonToken commentToken = new CommonToken(tokens.getTokenType("COMMENT"));
+		commentToken.setText(commentText);
+		tokenQueue.add(commentToken);
 	}
 	
-	private CommonToken readEvent() {
-		String evtText = "";
+	private void readEvent() {
+		final StringBuffer evtBuffer = new StringBuffer();
+		String type = null;
 		
 		while(cIndex < data.length && data[cIndex] != '*'
 			&& data[cIndex] != ']') {
-			evtText += data[cIndex++];
+			if(data[cIndex] == ':') {
+				type = evtBuffer.toString();
+				evtBuffer.setLength(0);
+			} else {
+				evtBuffer.append(data[cIndex]);
+			}
 		}
 		
 		if(cIndex < data.length && data[cIndex] == '*') cIndex++;
 		
-		CommonToken retVal = new CommonToken(tokens.getTokenType("EVENT"));
-		retVal.setText(evtText);
-		return retVal;
+		if(type != null) {
+			CommonToken typeToken = new CommonToken(tokens.getTokenType("EVENT_TYPE"));
+			typeToken.setText(type);
+			tokenQueue.add(typeToken);
+		}
+		
+		CommonToken evtToken = new CommonToken(tokens.getTokenType("EVENT"));
+		evtToken.setText(evtBuffer.toString());
+		tokenQueue.add(evtToken);
 	}
 	
-	private CommonToken readWord() {
+	private void readWord() {
 		String wText = "";
 		
 		while(cIndex < data.length && !Character.isWhitespace(data[cIndex])
 				&& data[cIndex] != '('
 				&& data[cIndex] != '*'
 				&& data[cIndex] != ']'
-				&& data[cIndex] != '+') {
+				&& data[cIndex] != '+'
+				&& data[cIndex] != '~') {
 			wText += data[cIndex++];
 		}
 		
-		CommonToken retVal = new CommonToken(tokens.getTokenType("WORD"));
-		retVal.setText(wText);
-		return retVal;
+		CommonToken wordToken = new CommonToken(tokens.getTokenType("WORD"));
+		wordToken.setText(wText);
+		tokenQueue.add(wordToken);
 	}
 }
