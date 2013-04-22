@@ -22,11 +22,11 @@ package ca.phon.orthography;
  * Codes for word prefix.
  */
 public enum WordPrefix {
-	OMISSION("0", "omission"),
 	ELLIPSIS("00", "ellipsis"),
+	OMISSION("0", "omission"),
 	FRAGMENT("&", "fragment"),
-	UNINTELLIGIBLE_WORD("xx", "unintelligible-word"),
 	UNINTELLIGIBLE("xxx", "unintelligible"),
+	UNINTELLIGIBLE_WORD("xx", "unintelligible-word"),
 	UNINTELLIGIBLE_WORD_WITH_PHO("yyy", "unintelligible-word-with-pho"),
 	UNTRANSCRIBED("www", "untranscribed");
 	

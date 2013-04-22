@@ -85,10 +85,12 @@ public class OrthoTokenSource implements TokenSource {
 				if(retVal == null) {
 					// start of comment
 					if(currentChar == '(') {
+						cIndex++;
 						readComment();
 						return nextToken();
 					// start of event
 					} else if(currentChar == '*') {
+						cIndex++;
 						readEvent();
 						return nextToken();
 					// wordnet
@@ -189,11 +191,12 @@ public class OrthoTokenSource implements TokenSource {
 		
 		while(cIndex < data.length && data[cIndex] != '*'
 			&& data[cIndex] != ']') {
-			if(data[cIndex] == ':') {
+			final char c = data[cIndex++];
+			if(c == ':') {
 				type = evtBuffer.toString();
 				evtBuffer.setLength(0);
 			} else {
-				evtBuffer.append(data[cIndex]);
+				evtBuffer.append(c);
 			}
 		}
 		
@@ -211,7 +214,7 @@ public class OrthoTokenSource implements TokenSource {
 	}
 	
 	private void readWord() {
-		String wText = "";
+		final StringBuffer buffer = new StringBuffer();
 		
 		while(cIndex < data.length && !Character.isWhitespace(data[cIndex])
 				&& data[cIndex] != '('
@@ -219,11 +222,47 @@ public class OrthoTokenSource implements TokenSource {
 				&& data[cIndex] != ']'
 				&& data[cIndex] != '+'
 				&& data[cIndex] != '~') {
-			wText += data[cIndex++];
+			buffer.append(data[cIndex++]);
+		}
+		
+		// check for word prefix codes
+		WordPrefix wp = null;
+		for(WordPrefix prefix:WordPrefix.values()) {
+			if(buffer.toString().startsWith(prefix.getCode())) {
+				wp = prefix;
+				buffer.delete(0, wp.getCode().length());
+				break;
+			}
+		}
+		
+		// check for word suffix
+		WordSuffix ws = null;
+		final int wsIdx = buffer.lastIndexOf("@");
+		if(buffer.indexOf("@") > 0) {
+			final String suffixVal = buffer.substring(wsIdx+1);
+			ws = WordSuffix.fromCode(suffixVal);
+			if(ws != null) {
+				buffer.delete(wsIdx, buffer.length());
+			}
+		}
+		
+		final String word = buffer.toString();
+		
+		// setup tokens
+		if(wp != null) {
+			CommonToken wpToken = new CommonToken(tokens.getTokenType("WORD_PREFIX"));
+			wpToken.setText(wp.getCode());
+			tokenQueue.add(wpToken);
 		}
 		
 		CommonToken wordToken = new CommonToken(tokens.getTokenType("WORD"));
-		wordToken.setText(wText);
+		wordToken.setText(word);
 		tokenQueue.add(wordToken);
+		
+		if(ws != null) {
+			CommonToken wsToken = new CommonToken(tokens.getTokenType("WORD_SUFFIX"));
+			wsToken.setText(ws.getCode());
+			tokenQueue.add(wsToken);
+		}
 	}
 }
