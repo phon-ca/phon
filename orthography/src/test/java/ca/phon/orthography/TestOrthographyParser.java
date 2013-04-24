@@ -80,7 +80,7 @@ public class TestOrthographyParser {
 		Assert.assertEquals(OrthoComment.class, commentEle.getClass());
 		
 		final OrthoComment c = (OrthoComment)commentEle;
-		Assert.assertEquals(c.getData(), comment);
+		Assert.assertEquals(comment, c.getData());
 	}
 	
 	@Test
@@ -96,7 +96,7 @@ public class TestOrthographyParser {
 		Assert.assertEquals(OrthoComment.class, commentEle.getClass());
 		
 		final OrthoComment c = (OrthoComment)commentEle;
-		Assert.assertEquals(c.getData(), comment);
+		Assert.assertEquals(comment, c.getData());
 	}
 	
 	@Test
@@ -111,7 +111,7 @@ public class TestOrthographyParser {
 		Assert.assertEquals(OrthoEvent.class, eventEle.getClass());
 		
 		final OrthoEvent e = (OrthoEvent)eventEle;
-		Assert.assertEquals(e.getData(), event);
+		Assert.assertEquals(event, e.getData());
 	}
 	
 	@Test
@@ -127,9 +127,25 @@ public class TestOrthographyParser {
 		Assert.assertEquals(OrthoEvent.class, eventEle.getClass());
 		
 		final OrthoEvent e = (OrthoEvent)eventEle;
-		Assert.assertEquals(e.getData(), event);
+		Assert.assertEquals(event, e.getData());
 	}
 	
-	
+	@Test
+	public void testPunct() {
+		final String word = "word";
+		
+		for(OrthoPunctType opt:OrthoPunctType.values()) {
+			final String testString = word + " " + opt.getChar();
+			
+			final Orthography ortho = new Orthography(testString);
+			Assert.assertEquals(2, ortho.size());
+			
+			final OrthoElement punctEle = ortho.get(1);
+			Assert.assertEquals(OrthoPunct.class, punctEle.getClass());
+			
+			final OrthoPunct punct = (OrthoPunct)punctEle;
+			Assert.assertEquals(opt.getChar()+"", punct.text());
+		}
+	}
 	
 }
