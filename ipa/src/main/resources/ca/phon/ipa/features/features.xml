@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feature_matrix xmlns="http://phon.ling.mun.ca/ns/features"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<feature_matrix xmlns="https://www.phon.ca/ns/features"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="https://www.phon.ca/ns/features ../../../../xml/xsd/features.xsd">
    <feature name="diacritic"/>
    <feature name="unintelligible"/>
    <feature name="unreleased">
@@ -8,13 +9,13 @@
    </feature>
    <feature name="consonant">
       <synonym>c</synonym>
-      </feature>
+   </feature>
    <feature name="vowel">
       <synonym>v</synonym>
    </feature>
    <feature name="glide">
       <synonym>g</synonym>
-      </feature>
+   </feature>
    <feature name="schwa">
       <synonym>sch</synonym>
    </feature>
@@ -196,6 +197,7 @@
    </feature>
    <feature name="affricate">
       <synonym>aff</synonym>
+      <synonym>delayedrelease</synonym>
       <primary_family>manner</primary_family>
       <secondary_family>continuancy</secondary_family>
    </feature>
@@ -447,7 +449,11 @@
       <primary_family>diacritic</primary_family>
       <secondary_family>manner</secondary_family>
    </feature>
-    
+   <feature name="lenis">
+      <primary_family>diacritic</primary_family>
+      <secondary_family>manner</secondary_family>
+   </feature>
+
    <!--Consonants-->
    <!--C-->
    <feature_set unicode="U43">consonant </feature_set>
@@ -464,11 +470,13 @@
    <!--h-->
    <feature_set unicode="U68">consonant guttural laryngeal voiceless continuant obstruent fricative </feature_set>
    <!--j-->
-   <feature_set unicode="U6a">consonant glide posterior palatal lingual coronal voiced approximant continuant sonorant </feature_set>
+   <feature_set unicode="U6a">consonant glide posterior palatal lingual coronal voiced approximant
+      continuant sonorant </feature_set>
    <!--k-->
    <feature_set unicode="U6b">consonant dorsal lingual velar voiceless stop obstruent </feature_set>
    <!--l-->
-   <feature_set unicode="U6c">consonant lingual coronal anterior alveolar voiced approximant liquid lateral continuant sonorant </feature_set>
+   <feature_set unicode="U6c">consonant lingual coronal anterior alveolar voiced approximant liquid
+      lateral continuant sonorant </feature_set>
    <!--m-->
    <feature_set unicode="U6d">consonant labial bilabial voiced stop sonorant nasal </feature_set>
    <!--n-->
@@ -478,70 +486,109 @@
    <!--q-->
    <feature_set unicode="U71">consonant uvular lingual dorsal voiceless stop obstruent </feature_set>
    <!--r-->
-   <feature_set unicode="U72">consonant lingual coronal anterior alveolar voiced approximant liquid rhotic continuant sonorant trill </feature_set>
+   <feature_set unicode="U72">consonant lingual coronal anterior alveolar voiced approximant liquid
+      rhotic continuant sonorant trill </feature_set>
    <!--s-->
-   <feature_set unicode="U73">consonant lingual coronal anterior alveolar voiceless continuant obstruent fricative strident </feature_set>
+   <feature_set unicode="U73">consonant lingual coronal anterior alveolar voiceless continuant
+      obstruent fricative strident </feature_set>
    <!--t-->
    <feature_set unicode="U74">consonant lingual coronal anterior alveolar voiceless stop obstruent </feature_set>
    <!--v-->
    <feature_set unicode="U76">consonant labial dental voiced continuant obstruent fricative </feature_set>
    <!--w-->
-   <feature_set unicode="U77">consonant glide labial bilabial dorsal lingual velar voiced approximant continuant sonorant </feature_set>
+   <feature_set unicode="U77">consonant glide labial bilabial dorsal lingual velar voiced
+      approximant continuant sonorant </feature_set>
    <!--x-->
-   <feature_set unicode="U78">consonant dorsal lingual velar voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="U78">consonant dorsal lingual velar voiceless continuant obstruent
+      fricative </feature_set>
    <!--z-->
-   <feature_set unicode="U7a">consonant lingual coronal anterior alveolar voiced continuant obstruent fricative strident </feature_set>
+   <feature_set unicode="U7a">consonant lingual coronal anterior alveolar voiced continuant
+      obstruent fricative strident </feature_set>
    <!--ç-->
-   <feature_set unicode="Ue7">consonant posterior palatal lingual coronal voiceless continuant obstruent fricative strident </feature_set>
+   <feature_set unicode="Ue7">consonant posterior palatal lingual coronal voiceless continuant
+      obstruent fricative strident </feature_set>
    <!--ð-->
-   <feature_set unicode="Uf0">consonant lingual coronal anterior dental distributed voiced continuant obstruent fricative </feature_set>
-   <feature_set unicode="Ufe">consonant lingual coronal anterior dental distributed voiceless continuant obstruent fricative </feature_set> <!--þ-->
+   <feature_set unicode="Uf0">consonant lingual coronal anterior dental distributed voiced
+      continuant obstruent fricative </feature_set>
+   <feature_set unicode="Ufe">consonant lingual coronal anterior dental distributed voiceless
+      continuant obstruent fricative </feature_set>
+   <!--þ-->
    <!--ħ-->
-   <feature_set unicode="U127">consonant guttural pharyngeal voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="U127">consonant guttural pharyngeal voiceless continuant obstruent
+      fricative </feature_set>
    <!--ŋ-->
    <feature_set unicode="U14b">consonant dorsal lingual velar voiced stop sonorant nasal </feature_set>
-   <feature_set unicode="U180">consonant labial bilabial voiced continuant obstruent fricative </feature_set> <!--ƀ-->
+   <feature_set unicode="U180">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
+   <!--ƀ-->
    <!--ƈ-->
-   <feature_set unicode="U188">consonant posterior palatal lingual coronal voiceless stop obstruent implosive </feature_set>
-   <feature_set unicode="U192">consonant labial bilabial voiceless continuant obstruent fricative </feature_set> <!--ƒ-->
-   <feature_set unicode="U195">consonant glide labial bilabial round voiceless approximant continuant </feature_set> <!--ƕ-->
+   <feature_set unicode="U188">consonant posterior palatal lingual coronal voiceless stop obstruent
+      implosive </feature_set>
+   <feature_set unicode="U192">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
+   <!--ƒ-->
+   <feature_set unicode="U195">consonant glide labial bilabial round voiceless approximant
+      continuant </feature_set>
+   <!--ƕ-->
    <!--ƙ (obsolete)-->
-   <feature_set unicode="U199">consonant dorsal implosive ingressive obstruent lingual velar voiceless </feature_set>
+   <feature_set unicode="U199">consonant dorsal implosive ingressive obstruent lingual velar
+      voiceless </feature_set>
    <!--ƛ-->
-   <feature_set unicode="U19b">consonant lingual coronal anterior alveolar voiceless lateral obstruent affricate </feature_set>
-   <feature_set unicode="U19e">consonant lingual coronal anterior alveolar voiced stop sonorant nasal </feature_set> <!--ƞ-->
-   <feature_set unicode="U1a5">consonant labial bilabial voiceless stop obstruent implosive </feature_set> <!--ƥ-->
-   <feature_set unicode="U1aa">consonant round lingual coronal posterior alveopalatal distributed voiceless continuant obstruent fricative </feature_set> <!--ƪ-->
-   <feature_set unicode="U1ab">consonant posterior palatal lingual coronal anterior alveolar voiceless stop obstruent </feature_set> <!--ƫ-->
+   <feature_set unicode="U19b">consonant lingual coronal anterior alveolar voiceless lateral
+      obstruent affricate </feature_set>
+   <feature_set unicode="U19e">consonant lingual coronal anterior alveolar voiced stop sonorant
+      nasal </feature_set>
+   <!--ƞ-->
+   <feature_set unicode="U1a5">consonant labial bilabial voiceless stop obstruent implosive </feature_set>
+   <!--ƥ-->
+   <feature_set unicode="U1aa">consonant round lingual coronal posterior alveopalatal distributed
+      voiceless continuant obstruent fricative </feature_set>
+   <!--ƪ-->
+   <feature_set unicode="U1ab">consonant posterior palatal lingual coronal anterior alveolar
+      voiceless stop obstruent </feature_set>
+   <!--ƫ-->
    <!--ƭ (obsolete)-->
-   <feature_set unicode="U1ad">consonant lingual coronal anterior alveolar voiceless stop obstruent implosive ingressive </feature_set>
-   <feature_set unicode="U1b9">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set> <!--ƹ should match ʕ-->
-   <feature_set unicode="U1ba">consonant labial round lingual coronal posterior alveopalatal distributed voiced continuant obstruent fricative </feature_set> <!--ƺ-->
+   <feature_set unicode="U1ad">consonant lingual coronal anterior alveolar voiceless stop obstruent
+      implosive ingressive </feature_set>
+   <feature_set unicode="U1b9">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
+   <!--ƹ should match ʕ-->
+   <feature_set unicode="U1ba">consonant labial round lingual coronal posterior alveopalatal
+      distributed voiced continuant obstruent fricative </feature_set>
+   <!--ƺ-->
    <!--ǀ-->
-   <feature_set unicode="U1c0">consonant lingual coronal anterior dental voiceless stop obstruent click ingressive </feature_set>
+   <feature_set unicode="U1c0">consonant lingual coronal anterior dental voiceless stop obstruent
+      click ingressive </feature_set>
    <!--ǁ-->
-   <feature_set unicode="U1c1">consonant lingual coronal anterior alveolar voiceless lateral stop obstruent click ingressive </feature_set>
+   <feature_set unicode="U1c1">consonant lingual coronal anterior alveolar voiceless lateral stop
+      obstruent click ingressive </feature_set>
    <!--ǂ-->
-   <feature_set unicode="U1c2">consonant lingual coronal posterior alveopalatal voiceless stop obstruent click ingressive </feature_set>
+   <feature_set unicode="U1c2">consonant lingual coronal posterior alveopalatal voiceless stop
+      obstruent click ingressive </feature_set>
    <!--ǃ-->
-   <feature_set unicode="U1c3">consonant lingual coronal alveolar voiceless stop obstruent click ingressive </feature_set>
-   <feature_set unicode="U234">consonant continuant lingual coronal lateral liquid palatal posterior alveopalatal sonorant voiced </feature_set> <!--ȴ-->
+   <feature_set unicode="U1c3">consonant lingual coronal alveolar voiceless stop obstruent click
+      ingressive </feature_set>
+   <feature_set unicode="U234">consonant continuant lingual coronal lateral liquid palatal posterior
+      alveopalatal sonorant voiced </feature_set>
+   <!--ȴ-->
    <!--ȵ-->
-   <feature_set unicode="U235">consonant lingual coronal nasal posterior alveopalatal sonorant voiced </feature_set>
+   <feature_set unicode="U235">consonant lingual coronal nasal posterior alveopalatal sonorant
+      voiced </feature_set>
    <!--ȶ-->
-   <feature_set unicode="U236">consonant lingual coronal obstruent posterior alveopalatal stop voiceless </feature_set>
+   <feature_set unicode="U236">consonant lingual coronal obstruent posterior alveopalatal stop
+      voiceless </feature_set>
    <!--ɓ-->
    <feature_set unicode="U253">consonant labial bilabial voiced stop obstruent implosive ingressive </feature_set>
    <!--ɕ-->
-   <feature_set unicode="U255">consonant laminal lingual coronal posterior palatal voiceless continuant obstruent fricative strident distributed </feature_set>
+   <feature_set unicode="U255">consonant laminal lingual coronal posterior palatal voiceless
+      continuant obstruent fricative strident distributed </feature_set>
    <!--ɖ-->
    <feature_set unicode="U256">consonant posterior retroflex lingual coronal voiced stop obstruent </feature_set>
    <!--ɗ-->
-   <feature_set unicode="U257">consonant lingual coronal anterior alveolar voiced stop obstruent implosive ingressive </feature_set>
+   <feature_set unicode="U257">consonant lingual coronal anterior alveolar voiced stop obstruent
+      implosive ingressive </feature_set>
    <!--ɟ-->
    <feature_set unicode="U25f">consonant posterior palatal lingual coronal voiced stop obstruent </feature_set>
    <!--ɠ-->
-   <feature_set unicode="U260">consonant dorsal lingual velar voiced stop obstruent implosive ingressive </feature_set>
+   <feature_set unicode="U260">consonant dorsal lingual velar voiced stop obstruent implosive
+      ingressive </feature_set>
    <!--ɡ-->
    <feature_set unicode="U261">consonant dorsal lingual velar voiced stop obstruent </feature_set>
    <!--ɢ-->
@@ -549,125 +596,191 @@
    <!--ɣ-->
    <feature_set unicode="U263">consonant dorsal lingual velar voiced continuant obstruent fricative </feature_set>
    <!--ɥ-->
-   <feature_set unicode="U265">consonant glide labial bilabial palatal lingual coronal voiced approximant continuant sonorant </feature_set>
+   <feature_set unicode="U265">consonant glide labial bilabial palatal lingual coronal voiced
+      approximant continuant sonorant </feature_set>
    <!--ɦ-->
    <feature_set unicode="U266">consonant guttural laryngeal voiced continuant obstruent fricative </feature_set>
    <!--ɧ-->
-   <feature_set unicode="U267">consonant dorsal velar lingual coronal posterior alveopalatal voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="U267">consonant dorsal velar lingual coronal posterior alveopalatal
+      voiceless continuant obstruent fricative </feature_set>
    <!--ɫ-->
-   <feature_set unicode="U26b">consonant velar lingual coronal anterior alveolar voiced approximant liquid lateral continuant sonorant </feature_set>
+   <feature_set unicode="U26b">consonant velar lingual coronal anterior alveolar voiced approximant
+      liquid lateral continuant sonorant </feature_set>
    <!--ɬ-->
-   <feature_set unicode="U26c">consonant lingual coronal anterior alveolar voiceless lateral continuant sonorant fricative </feature_set>
+   <feature_set unicode="U26c">consonant lingual coronal anterior alveolar voiceless lateral
+      continuant sonorant fricative </feature_set>
    <!--ɭ-->
-   <feature_set unicode="U26d">consonant posterior retroflex lingual coronal voiced approximant liquid lateral continuant sonorant </feature_set>
+   <feature_set unicode="U26d">consonant posterior retroflex lingual coronal voiced approximant
+      liquid lateral continuant sonorant </feature_set>
    <!--ɮ-->
-   <feature_set unicode="U26e">consonant lingual coronal anterior alveolar voiced lateral continuant sonorant fricative </feature_set>
+   <feature_set unicode="U26e">consonant lingual coronal anterior alveolar voiced lateral continuant
+      sonorant fricative </feature_set>
    <!--ɰ-->
-   <feature_set unicode="U270">consonant glide dorsal lingual velar voiced approximant continuant sonorant </feature_set>
+   <feature_set unicode="U270">consonant glide dorsal lingual velar voiced approximant continuant
+      sonorant </feature_set>
    <!--ɱ-->
    <feature_set unicode="U271">consonant labial dental voiced stop sonorant nasal </feature_set>
    <!--ɲ-->
-   <feature_set unicode="U272">consonant palatal voiced stop sonorant nasal lingual coronal posterior </feature_set>
+   <feature_set unicode="U272">consonant palatal voiced stop sonorant nasal lingual coronal
+      posterior </feature_set>
    <!--ɳ-->
-   <feature_set unicode="U273">consonant retroflex voiced stop sonorant nasal lingual coronal posterior </feature_set>
+   <feature_set unicode="U273">consonant retroflex voiced stop sonorant nasal lingual coronal
+      posterior </feature_set>
    <!--ɴ-->
    <feature_set unicode="U274">consonant uvular lingual dorsal voiced stop sonorant nasal </feature_set>
    <!--ɸ-->
    <feature_set unicode="U278">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
    <!--ɹ-->
-   <feature_set unicode="U279">consonant lingual coronal anterior alveolar voiced approximant liquid rhotic continuant sonorant </feature_set>
+   <feature_set unicode="U279">consonant lingual coronal anterior alveolar voiced approximant liquid
+      rhotic continuant sonorant </feature_set>
    <!--ɺ-->
-   <feature_set unicode="U27a">consonant lingual coronal anterior alveolar voiced approximant liquid lateral continuant sonorant flap </feature_set>
+   <feature_set unicode="U27a">consonant lingual coronal anterior alveolar voiced approximant liquid
+      lateral continuant sonorant flap </feature_set>
    <!--ɻ-->
-   <feature_set unicode="U27b">consonant posterior retroflex lingual coronal voiced approximant liquid rhotic continuant sonorant </feature_set>
-   <feature_set unicode="U27c">alveolar consonant lingual coronal fricative obstruent trill voiced </feature_set> <!--ɼ ??-->
+   <feature_set unicode="U27b">consonant posterior retroflex lingual coronal voiced approximant
+      liquid rhotic continuant sonorant </feature_set>
+   <feature_set unicode="U27c">alveolar consonant lingual coronal fricative obstruent trill voiced </feature_set>
+   <!--ɼ ??-->
    <!--ɽ-->
-   <feature_set unicode="U27d">consonant posterior retroflex lingual coronal voiced approximant liquid rhotic continuant sonorant flap </feature_set>
+   <feature_set unicode="U27d">consonant posterior retroflex lingual coronal voiced approximant
+      liquid rhotic continuant sonorant flap </feature_set>
    <!--ɾ-->
-   <feature_set unicode="U27e">consonant lingual coronal anterior alveolar voiced approximant liquid rhotic continuant sonorant flap </feature_set>
+   <feature_set unicode="U27e">consonant lingual coronal anterior alveolar voiced approximant liquid
+      rhotic continuant sonorant flap </feature_set>
    <!--ʀ-->
-   <feature_set unicode="U280">consonant uvular lingual dorsal voiced approximant liquid rhotic continuant sonorant trill </feature_set>
+   <feature_set unicode="U280">consonant uvular lingual dorsal voiced approximant liquid rhotic
+      continuant sonorant trill </feature_set>
    <!--ʁ-->
-   <feature_set unicode="U281">consonant uvular lingual dorsal voiced rhotic continuant fricative obstruent </feature_set>
+   <feature_set unicode="U281">consonant uvular lingual dorsal voiced rhotic continuant fricative
+      obstruent </feature_set>
    <!--ʂ-->
-   <feature_set unicode="U282">consonant posterior retroflex lingual coronal voiceless continuant obstruent fricative strident </feature_set>
+   <feature_set unicode="U282">consonant posterior retroflex lingual coronal voiceless continuant
+      obstruent fricative strident </feature_set>
    <!--ʃ-->
-   <feature_set unicode="U283">consonant laminal lingual coronal posterior alveopalatal distributed voiceless continuant obstruent fricative strident </feature_set>
+   <feature_set unicode="U283">consonant laminal lingual coronal posterior alveopalatal distributed
+      voiceless continuant obstruent fricative strident </feature_set>
    <!--ʄ-->
-   <feature_set unicode="U284">consonant posterior palatal lingual coronal voiced stop obstruent implosive ingressive </feature_set>
-   <feature_set unicode="U286">consonant palatal lingual coronal posterior alveopalatal distributed voiceless continuant obstruent fricative </feature_set> <!--ʆ-->
-   <feature_set unicode="U287">consonant lingual coronal anterior voiceless stop obstruent click ingressive </feature_set> <!--ʇ same as single pipe-->
+   <feature_set unicode="U284">consonant posterior palatal lingual coronal voiced stop obstruent
+      implosive ingressive </feature_set>
+   <feature_set unicode="U286">consonant palatal lingual coronal posterior alveopalatal distributed
+      voiceless continuant obstruent fricative </feature_set>
+   <!--ʆ-->
+   <feature_set unicode="U287">consonant lingual coronal anterior voiceless stop obstruent click
+      ingressive </feature_set>
+   <!--ʇ same as single pipe-->
    <!--ʈ-->
-   <feature_set unicode="U288">consonant posterior retroflex lingual coronal voiceless stop obstruent </feature_set>
+   <feature_set unicode="U288">consonant posterior retroflex lingual coronal voiceless stop
+      obstruent </feature_set>
    <!--ʋ-->
-   <feature_set unicode="U28b">consonant labial bilabial voiced approximant continuant sonorant glide </feature_set>
+   <feature_set unicode="U28b">consonant labial dental voiced approximant continuant sonorant glide </feature_set>
    <!--ʍ-->
-   <feature_set unicode="U28d">consonant labial bilabial velar dorsal lingual voiceless obstruent continuant fricative </feature_set>
+   <feature_set unicode="U28d">consonant labial bilabial velar dorsal lingual voiceless obstruent
+      continuant fricative </feature_set>
    <!--ʎ-->
-   <feature_set unicode="U28e">consonant posterior palatal lingual coronal voiced approximant liquid lateral continuant sonorant </feature_set>
+   <feature_set unicode="U28e">consonant posterior palatal lingual coronal voiced approximant liquid
+      lateral continuant sonorant </feature_set>
    <!--ʐ-->
-   <feature_set unicode="U290">consonant posterior retroflex lingual coronal voiced continuant obstruent fricative strident </feature_set>
+   <feature_set unicode="U290">consonant posterior retroflex lingual coronal voiced continuant
+      obstruent fricative strident </feature_set>
    <!--ʑ-->
-   <feature_set unicode="U291">consonant laminal lingual coronal posterior palatal voiced continuant obstruent fricative strident distributed </feature_set>
+   <feature_set unicode="U291">consonant laminal lingual coronal posterior palatal voiced continuant
+      obstruent fricative strident distributed </feature_set>
    <!--ʒ-->
-   <feature_set unicode="U292">consonant laminal lingual coronal posterior alveopalatal distributed voiced obstruent fricative strident continuant </feature_set>
-   <feature_set unicode="U293">consonant palatal lingual coronal posterior alveopalatal distributed voiced continuant obstruent fricative strident </feature_set> <!--ʓ-->
+   <feature_set unicode="U292">consonant laminal lingual coronal posterior alveopalatal distributed
+      voiced obstruent fricative strident continuant </feature_set>
+   <feature_set unicode="U293">consonant palatal lingual coronal posterior alveopalatal distributed
+      voiced continuant obstruent fricative strident </feature_set>
+   <!--ʓ-->
    <!--ʔ-->
    <feature_set unicode="U294">consonant guttural laryngeal voiceless stop obstruent </feature_set>
    <!--ʕ-->
    <feature_set unicode="U295">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
-   <feature_set unicode="U296">consonant lingual coronal anterior alveolar voiceless lateral stop obstruent click ingressive </feature_set> <!--ʖ same as double pipe-->
-   <feature_set unicode="U297">consonant lingual coronal alveolar anterior voiceless stop obstruent click ingressive </feature_set> <!--ʗ same as !-->
+   <feature_set unicode="U296">consonant lingual coronal anterior alveolar voiceless lateral stop
+      obstruent click ingressive </feature_set>
+   <!--ʖ same as double pipe-->
+   <feature_set unicode="U297">consonant lingual coronal alveolar anterior voiceless stop obstruent
+      click ingressive </feature_set>
+   <!--ʗ same as !-->
    <!--ʘ-->
    <feature_set unicode="U298">consonant labial bilabial voiceless stop obstruent click ingressive </feature_set>
    <!--ʙ-->
-   <feature_set unicode="U299">consonant labial bilabial voiced approximant continuant sonorant trill </feature_set>
+   <feature_set unicode="U299">consonant labial bilabial voiced approximant continuant sonorant
+      trill </feature_set>
    <!--ʛ-->
-   <feature_set unicode="U29b">consonant lingual uvular dorsal voiced stop obstruent implosive ingressive </feature_set>
+   <feature_set unicode="U29b">consonant lingual uvular dorsal voiced stop obstruent implosive
+      ingressive </feature_set>
    <!--ʜ-->
-   <feature_set unicode="U29c">consonant guttural epiglottal voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="U29c">consonant guttural epiglottal voiceless continuant obstruent
+      fricative </feature_set>
    <!--ʝ-->
-   <feature_set unicode="U29d">consonant posterior palatal lingual coronal voiced continuant obstruent fricative strident </feature_set>
-   <feature_set unicode="U29e">consonant dorsal lingual velar voiceless stop obstruent click ingressive </feature_set> <!--ʞ velar click, anatomically impossible?-->
+   <feature_set unicode="U29d">consonant posterior palatal lingual coronal voiced continuant
+      obstruent fricative strident </feature_set>
+   <feature_set unicode="U29e">consonant dorsal lingual velar voiceless stop obstruent click
+      ingressive </feature_set>
+   <!--ʞ velar click, anatomically impossible?-->
    <!--ʟ-->
-   <feature_set unicode="U29f">consonant dorsal lingual velar voiced approximant liquid lateral continuant sonorant </feature_set>
-   <feature_set unicode="U2a0">consonant dorsal implosive obstruent stop lingual uvular voiceless </feature_set> <!--ʠ-->
+   <feature_set unicode="U29f">consonant dorsal lingual velar voiced approximant liquid lateral
+      continuant sonorant </feature_set>
+   <feature_set unicode="U2a0">consonant dorsal implosive obstruent stop lingual uvular voiceless </feature_set>
+   <!--ʠ-->
    <!--ʡ-->
    <feature_set unicode="U2a1">consonant guttural epiglottal voiceless stop obstruent </feature_set>
    <!--ʢ-->
    <feature_set unicode="U2a2">consonant guttural epiglottal voiced continuant obstruent fricative </feature_set>
    <!--ʣ-->
-   <feature_set unicode="U2a3">consonant lingual coronal anterior alveolar voiced obstruent affricate strident </feature_set>
+   <feature_set unicode="U2a3">consonant lingual coronal anterior alveolar voiced obstruent
+      affricate strident </feature_set>
    <!--ʤ-->
-   <feature_set unicode="U2a4">consonant lingual coronal posterior alveopalatal laminal distributed voiced obstruent affricate strident </feature_set>
+   <feature_set unicode="U2a4">consonant lingual coronal posterior alveopalatal laminal distributed
+      voiced obstruent affricate strident </feature_set>
    <!--ʥ-->
-   <feature_set unicode="U2a5">consonant lingual coronal posterior palatal laminal distributed voiced obstruent affricate strident </feature_set>
+   <feature_set unicode="U2a5">consonant lingual coronal posterior palatal laminal distributed
+      voiced obstruent affricate strident </feature_set>
    <!--ʦ-->
-   <feature_set unicode="U2a6">consonant lingual coronal anterior alveolar voiceless obstruent affricate strident </feature_set>
+   <feature_set unicode="U2a6">consonant lingual coronal anterior alveolar voiceless obstruent
+      affricate strident </feature_set>
    <!--ʧ-->
-   <feature_set unicode="U2a7">consonant lingual coronal posterior alveopalatal laminal distributed voiceless obstruent affricate strident </feature_set>
+   <feature_set unicode="U2a7">consonant lingual coronal posterior alveopalatal laminal distributed
+      voiceless obstruent affricate strident </feature_set>
    <!--ʨ-->
-   <feature_set unicode="U2a8">consonant lingual coronal posterior palatal laminal distributed voiceless obstruent affricate strident </feature_set>
+   <feature_set unicode="U2a8">consonant lingual coronal posterior palatal laminal distributed
+      voiceless obstruent affricate strident </feature_set>
    <!--β-->
    <feature_set unicode="U3b2">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
-   <feature_set unicode="U3b4">consonant lingual coronal anterior dental distributed voiced continuant obstruent fricative </feature_set> <!--δ-->
+   <feature_set unicode="U3b4">consonant lingual coronal anterior dental distributed voiced
+      continuant obstruent fricative </feature_set>
+   <!--δ-->
    <!--θ-->
-   <feature_set unicode="U3b8">consonant dental lingual coronal anterior distributed voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="U3b8">consonant dental lingual coronal anterior distributed voiceless
+      continuant obstruent fricative </feature_set>
    <!--λ-->
-   <feature_set unicode="U3bb">consonant lingual coronal anterior alveolar voiced lateral obstruent affricate </feature_set>
-   <feature_set unicode="U3c0">consonant labial dental voiced stop obstruent </feature_set> <!--π-->
-   <feature_set unicode="U3c3">consonant labial round lingual coronal anterior alveolar voiceless continuant obstruent fricative </feature_set> <!--σ-->
+   <feature_set unicode="U3bb">consonant lingual coronal anterior alveolar voiced lateral obstruent
+      affricate </feature_set>
+   <feature_set unicode="U3c0">consonant labial dental voiced stop obstruent </feature_set>
+   <!--π-->
+   <feature_set unicode="U3c3">consonant labial round lingual coronal anterior alveolar voiceless
+      continuant obstruent fricative </feature_set>
+   <!--σ-->
    <!--χ-->
-   <feature_set unicode="U3c7">consonant uvular lingual dorsal voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="U3c7">consonant uvular lingual dorsal voiceless continuant obstruent
+      fricative </feature_set>
    <!--Hooked V-->
    <feature_set unicode="U2c71">consonant continuant approximant flap labial dental sonorant voiced </feature_set>
-   <feature_set unicode="Uf20b">consonant dental lingual coronal anterior alveolar voiceless obstruent affricate strident </feature_set> <!--c with vertical line-->
-   <feature_set unicode="Uf20c">consonant posterior retroflex lingual coronal voiced stop obstruent implosive </feature_set> <!--hooktop+right tail q? d?-->
-   <feature_set unicode="Uf210">consonant labial bilabial voiceless continuant obstruent fricative </feature_set> <!--p with horizontal line-->
-   <feature_set unicode="Uf240">consonant labial dental voiced stop obstruent </feature_set> <!--d+b-->
-   <feature_set unicode="Uf241">consonant labial dental voiceless stop obstruent </feature_set> <!--q+p-->
-   <feature_set unicode="Uf246">consonant voiceless stop obstruent </feature_set> <!--left-tail 4-->
-   
+   <feature_set unicode="Uf20b">consonant dental lingual coronal anterior alveolar voiceless
+      obstruent affricate strident </feature_set>
+   <!--c with vertical line-->
+   <feature_set unicode="Uf20c">consonant posterior retroflex lingual coronal voiced stop obstruent
+      implosive </feature_set>
+   <!--hooktop+right tail q? d?-->
+   <feature_set unicode="Uf210">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
+   <!--p with horizontal line-->
+   <feature_set unicode="Uf240">consonant labial dental voiced stop obstruent </feature_set>
+   <!--d+b-->
+   <feature_set unicode="Uf241">consonant labial dental voiceless stop obstruent </feature_set>
+   <!--q+p-->
+   <feature_set unicode="Uf246">consonant voiceless stop obstruent </feature_set>
+   <!--left-tail 4-->
+
    <!--Vowels-->
    <!--V-->
    <feature_set unicode="U56">vowel </feature_set>
@@ -716,7 +829,8 @@
    <feature_set unicode="U264">vowel mid tense atr back </feature_set>
    <!--ɨ-->
    <feature_set unicode="U268">vowel high tense atr central </feature_set>
-   <feature_set unicode="U269">vowel high rtr lax front </feature_set> <!--ɩ-->
+   <feature_set unicode="U269">vowel high rtr lax front </feature_set>
+   <!--ɩ-->
    <!--ɪ-->
    <feature_set unicode="U26a">vowel high rtr lax front </feature_set>
    <!--ɯ-->
@@ -725,7 +839,8 @@
    <feature_set unicode="U275">vowel round mid tense atr central </feature_set>
    <!--ɶ-->
    <feature_set unicode="U276">vowel round low lax front </feature_set>
-   <feature_set unicode="U277">vowel high rtr lax back </feature_set> <!--ɷ-->
+   <feature_set unicode="U277">vowel high rtr lax back </feature_set>
+   <!--ɷ-->
    <!--ʉ-->
    <feature_set unicode="U289">vowel round high tense atr central </feature_set>
    <!--ʊ-->
@@ -734,11 +849,15 @@
    <feature_set unicode="U28c">vowel mid rtr lax back </feature_set>
    <!--ʏ-->
    <feature_set unicode="U28f">vowel round high rtr lax front </feature_set>
-   <feature_set unicode="U29a">vowel round mid rtr lax central </feature_set> <!--ʚ-->
-   <feature_set unicode="U2ae">vowel round high rtr lax central back </feature_set> <!--ʮ-->
-   <feature_set unicode="U3b1">vowel low lax central </feature_set> <!--α-->
-   <feature_set unicode="Uf23f">vowel round high tense atr front </feature_set> <!--barred small capital U-->
-   
+   <feature_set unicode="U29a">vowel round mid rtr lax central </feature_set>
+   <!--ʚ-->
+   <feature_set unicode="U2ae">vowel round high rtr lax central back </feature_set>
+   <!--ʮ-->
+   <feature_set unicode="U3b1">vowel low lax central </feature_set>
+   <!--α-->
+   <feature_set unicode="Uf23f">vowel round high tense atr front </feature_set>
+   <!--barred small capital U-->
+
    <!--Diacritics and Misc-->
    <feature_set unicode="U28">diacritic </feature_set>
    <feature_set unicode="U29">diacritic </feature_set>
@@ -772,6 +891,12 @@
    <feature_set unicode="U2bb">diacritic aspirated </feature_set>
    <!--ʼ-->
    <feature_set unicode="U2bc">diacritic ejective </feature_set>
+   <!-- role-switcher -->
+   <feature_set unicode="U335">diacritic </feature_set>
+   <feature_set unicode="U2e2">diacritic affricate</feature_set>
+   <feature_set unicode="U1dbb">diacritic affricate</feature_set>
+   <feature_set unicode="U1db4">diacritic affricate</feature_set>
+   <feature_set unicode="U1dbe">diacritic affricate</feature_set>
    <feature_set unicode="U2bd">diacritic weaklyaspirated </feature_set>
    <feature_set unicode="U2be">diacritic </feature_set>
    <feature_set unicode="U2bf">diacritic </feature_set>
@@ -807,7 +932,6 @@
    <feature_set unicode="U2e0">diacritic velar </feature_set>
    <!--ˡ-->
    <feature_set unicode="U2e1">diacritic lateral </feature_set>
-   <feature_set unicode="U2e2">diacritic </feature_set>
    <feature_set unicode="U2e3">diacritic </feature_set>
    <!--ˤ-->
    <feature_set unicode="U2e4">diacritic pharyngeal </feature_set>
@@ -846,7 +970,6 @@
    <feature_set unicode="U304">diacritic tonemid </feature_set>
    <!--◌̆ breve-->
    <feature_set unicode="U306">diacritic extrashort </feature_set>
-   <feature_set unicode="U307">diacritic palatal lingual coronal </feature_set>
    <!--◌̈ umlaut-->
    <feature_set unicode="U308">diacritic central </feature_set>
    <feature_set unicode="U309">diacritic </feature_set>
@@ -861,7 +984,6 @@
    <feature_set unicode="U311">diacritic fronted </feature_set>
    <feature_set unicode="U312">diacritic aspirated </feature_set>
    <feature_set unicode="U314">diacritic weaklyaspirated </feature_set>
-   <feature_set unicode="U316">diacritic tonefalling tonelow </feature_set>
    <feature_set unicode="U316">diacritic tonerising </feature_set>
    <!--◌̘-->
    <feature_set unicode="U318">diacritic atr </feature_set>
@@ -878,11 +1000,14 @@
    <!--◌̟ combining plus below-->
    <feature_set unicode="U31f">diacritic advanced </feature_set>
    <!--◌̠ combining minus below-->
-   <feature_set unicode="U320">diacritic retracted </feature_set><!--◌̠-->
+   <feature_set unicode="U320">diacritic retracted </feature_set>
+   <!--◌̠-->
    <feature_set unicode="U321">diacritic palatal </feature_set>
    <feature_set unicode="U322">diacritic palatal </feature_set>
    <!--◌̣ under-dot-->
-   <feature_set unicode="U323">diacritic halflong </feature_set>
+   <feature_set unicode="U323">diacritic lenis </feature_set>
+   <!--  over-dot -->
+   <feature_set unicode="U307">diacritic lenis </feature_set>
    <!--◌̤ subscript umlaut-->
    <feature_set unicode="U324">diacritic breathyvoiced </feature_set>
    <!--◌̥ under-ring-->
@@ -933,7 +1058,8 @@
    <!--◌͍-->
    <feature_set unicode="U34d">diacritic labialspread </feature_set>
    <feature_set unicode="U34f">diacritic </feature_set>
-   <feature_set unicode="U350">diacritic backed </feature_set> <!--◌͐-->
+   <feature_set unicode="U350">diacritic backed </feature_set>
+   <!--◌͐-->
    <feature_set unicode="U351">diacritic </feature_set>
    <feature_set unicode="U352">diacritic </feature_set>
    <feature_set unicode="U353">diacritic </feature_set>
@@ -949,7 +1075,6 @@
    <feature_set unicode="U360">diacritic </feature_set>
    <!--◌͡ phone building-->
    <feature_set unicode="U361">diacritic </feature_set>
-   <feature_set unicode="U362">diacritic </feature_set>
    <feature_set unicode="U363">diacritic </feature_set>
    <feature_set unicode="U364">diacritic </feature_set>
    <feature_set unicode="U365">diacritic </feature_set>
@@ -964,19 +1089,21 @@
    <feature_set unicode="U36e">diacritic </feature_set>
    <feature_set unicode="U36f">diacritic </feature_set>
    <feature_set unicode="U387">diacritic palatal lingual coronal halflong </feature_set>
-   <feature_set unicode="U1d4a">central diacritic lax mid rtr schwa sonorant voiced </feature_set>
+   <feature_set unicode="U1d4a">diacritic schwa </feature_set>
    <!--ᵐ-->
    <feature_set unicode="U1d50">diacritic nasal bilabial </feature_set>
    <!--ᵑ-->
    <feature_set unicode="U1d51">diacritic nasal velar </feature_set>
    <!--superscript left-tail M-->
    <feature_set unicode="U1dac">diacritic nasal labial dental </feature_set>
-   <feature_set unicode="U1daf">diacritic nasal retroflex </feature_set> <!--Superscript retroflex nasal-->
+   <feature_set unicode="U1daf">diacritic nasal retroflex </feature_set>
+   <!--Superscript retroflex nasal-->
    <!--superscript left-tail N-->
    <feature_set unicode="U1dae">diacritic nasal palatal </feature_set>
    <!--superscript small capital N-->
    <feature_set unicode="U1db0">diacritic nasal uvular </feature_set>
-   <feature_set unicode="U1dbf">anterior continuant lingual coronal dental diacritic distributed  dental obstruent voiceless </feature_set>
+   <feature_set unicode="U1dbf">anterior continuant lingual coronal dental diacritic distributed
+      dental obstruent voiceless </feature_set>
    <feature_set unicode="U1dc4">diacritic tonehigh tonerising </feature_set>
    <feature_set unicode="U1dc5">diacritic tonelowrising </feature_set>
    <feature_set unicode="U1dc8">diacritic tonerisingfalling </feature_set>
@@ -1032,9 +1159,12 @@
    <!--. syllable boundary-->
    <feature_set unicode="U2e">halflong </feature_set>
    <feature_set unicode="U47">glide </feature_set>
-   <feature_set unicode="U1d91">alveolar lingual coronal implosive posterior retroflex voiced </feature_set> <!--Small d with hook and tail-->
+   <feature_set unicode="U1d91">alveolar lingual coronal implosive posterior retroflex voiced </feature_set>
+   <!--Small d with hook and tail-->
    <!--¡-->
-   <feature_set unicode="Ua1">consonant subapical click ingressive coronal lingual anterior stop voiceless </feature_set> <!--¡-->
+   <feature_set unicode="Ua1">consonant subapical click ingressive coronal lingual anterior stop
+      voiceless </feature_set>
+   <!--¡-->
    <!--⁼-->
    <feature_set unicode="U207c">diacritic unaspirated </feature_set>
    <!--ʩ-->
@@ -1044,8 +1174,10 @@
    <feature_set unicode="U34e">diacritic whistled </feature_set>
    <!--◌͢ subscript combining right arrow; phone building-->
    <feature_set unicode="U362">diacritic sliding </feature_set>
-   <feature_set unicode="U2aa">consonant alveolar anterior continuant lingual coronal fricative lateral obstruent voiceless </feature_set>
-   <feature_set unicode="U2ab">consonant alveolar anterior continuant lingual coronal fricative lateral obstruent voiced </feature_set>
+   <feature_set unicode="U2aa">consonant alveolar anterior continuant lingual coronal fricative
+      lateral obstruent voiceless </feature_set>
+   <feature_set unicode="U2ab">consonant alveolar anterior continuant lingual coronal fricative
+      lateral obstruent voiced </feature_set>
    <!--ˬ-->
    <feature_set unicode="U2ec">diacritic voiced </feature_set>
 </feature_matrix>

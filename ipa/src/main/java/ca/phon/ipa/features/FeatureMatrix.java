@@ -441,6 +441,15 @@ public class FeatureMatrix {
 
 		return retVal;
 	}
+	
+	/**
+	 * Returns the character set supported by this feature matrix
+	 * 
+	 * @return set of characters
+	 */
+	public Set<Character> getCharacterSet() {
+		return this.featureSets.keySet();
+	}
 
 	/**
 	 * Returns the name of the primary family for the given feature. null if the

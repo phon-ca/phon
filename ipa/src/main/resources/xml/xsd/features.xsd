@@ -28,8 +28,8 @@
     2012-01-11 (gjh): created file
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://phon.ling.mun.ca/ns/features"
-    targetNamespace="http://phon.ling.mun.ca/ns/features">
+    xmlns="https://www.phon.ca/ns/features"
+    targetNamespace="https://www.phon.ca/ns/features">
     
     <!--
         Our root element
