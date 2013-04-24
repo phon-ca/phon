@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Formattable;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
 
@@ -11,6 +12,8 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
 
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.phonex.PhonexMatcher;
@@ -25,13 +28,15 @@ import ca.phon.visitor.annotation.Visits;
 /**
  * 
  */
-public final class IPATranscript extends ArrayList<IPAElement> implements Visitable<IPAElement> {
+public final class IPATranscript extends ArrayList<IPAElement> implements Visitable<IPAElement>, IExtendable {
 	
 	/** Static logger */
 	private final static Logger LOGGER = Logger.getLogger(IPATranscript.class
 			.getName());
 
 	private static final long serialVersionUID = 8942864962427274326L;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(IPATranscript.class, this);
 	
 	/**
 	 * Convert a string into an {@link IPATranscript}
@@ -59,7 +64,7 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 * Create an empty transcript
 	 */
 	public IPATranscript() {
-		super();
+		this(new ArrayList<IPAElement>());
 	}
 	
 	/**
@@ -67,6 +72,7 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 */
 	public IPATranscript(List<IPAElement> phones) {
 		super(phones);
+		extSupport.initExtensions();
 	}
 	
 	/**
@@ -181,5 +187,25 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		public void visitCompoundPhone(CompoundPhone phone) {
 			transcript.add(phone);
 		}
+	}
+
+	@Override
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	@Override
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	@Override
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	@Override
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
 	}
 }
