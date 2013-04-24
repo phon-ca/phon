@@ -52,6 +52,28 @@ public abstract class SessionFactory {
 	}
 	
 	/**
+	 * Create comment
+	 * 
+	 * 
+	 */
+	public abstract Comment createComment();
+	
+	/**
+	 * Create comment
+	 * 
+	 * @param type
+	 * @param value
+	 * 
+	 * @return new comment
+	 */
+	public Comment createComment(CommentEnum type, String value) {
+		final Comment retVal = createComment();
+		retVal.setType(type);
+		retVal.setValue(value);
+		return retVal;
+	}
+	
+	/**
 	 * Create a new record.
 	 * 
 	 * @return a new empty record
@@ -76,6 +98,13 @@ public abstract class SessionFactory {
 	 * @return new participant object
 	 */
 	public abstract Participant createParticipant();
+	
+	/**
+	 * Create a new transcriber object.
+	 * 
+	 * @return new transcriber
+	 */
+	public abstract Transcriber createTranscriber();
 	
 	/**
 	 * Create a new media segment
@@ -104,7 +133,7 @@ public abstract class SessionFactory {
 	 * 
 	 * @return new tier order item
 	 */
-	public abstract TierOrderItem createTierOrderItem();
+	public abstract TierViewItem createTierOrderItem();
 	
 	/**
 	 * Create a new string tier description.
@@ -126,4 +155,47 @@ public abstract class SessionFactory {
 	 * @return new tier description
 	 */
 	public abstract TierDescription createTierDescription(String name, boolean grouped, Class<?> type);
+	
+	/**
+	 * Create a tier display and ordering object
+	 * @param name
+	 * @return
+	 */
+	public abstract TierViewItem createTierViewItem(String name);
+	
+	/**
+	 * Create a tier display and ordering object
+	 * @param name
+	 * @param visible
+	 * @return
+	 */
+	public abstract TierViewItem createTierViewItem(String name, boolean visible);
+	
+	/**
+	 * Create a tier display and ordering object
+	 * @param name
+	 * @param visible
+	 * @param font
+	 * @return
+	 */
+	public abstract TierViewItem createTierViewItem(String name, boolean visible, String font);
+	
+	/**
+	 * Create a tier display and ordering object
+	 * @param name
+	 * @param visible
+	 * @param locked
+	 * @return
+	 */
+	public abstract TierViewItem createTierViewItem(String name, boolean visible, boolean locked);
+	
+	/**
+	 * Create a tier display and ordering object
+	 * @param name
+	 * @param visible
+	 * @param font
+	 * @param locked
+	 * @return
+	 */
+	public abstract TierViewItem createTierViewItem(String name, boolean visible, String font, boolean locked);
 }

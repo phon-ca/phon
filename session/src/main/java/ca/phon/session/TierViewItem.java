@@ -21,7 +21,7 @@ package ca.phon.session;
  * An entry for tier ordering, vibility and locking.
  *
  */
-public interface TierOrderItem {
+public interface TierViewItem {
 
 	/**
 	 * Tier name
@@ -29,14 +29,10 @@ public interface TierOrderItem {
 	 */
 	public String getTierName();
 	
-	public void setTierName(String tierName);
-	
 	/**
 	 * Tier visibility
 	 */
 	public boolean isVisible();
-	
-	public void setVisible(boolean v);
 	
 	/**
 	 * Get the font.  The string should be parsable
@@ -45,17 +41,8 @@ public interface TierOrderItem {
 	public String getTierFont();
 	
 	/**
-	 * @param font
-	 */
-	public void setTierFont(String font);
-	
-	/**
-	 * Set locked
-	 */
-	public void setTierLocked(boolean locked);
-	
-	/**
 	 * Get is locked
 	 */
 	public boolean isTierLocked();
+	
 }

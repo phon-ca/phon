@@ -50,11 +50,50 @@ public interface Session extends IExtendable {
 	
 	
 	/** Get/Set the tier view */
-	public List<TierOrderItem> getTierView();
+	public List<TierViewItem> getTierView();
 	
+	/*
+	 * Custom tiers defined for the session
+	 */
+	/**
+	 * Number of user-defined tiers for this session
+	 */
+	public int getUserTierCount();
 	
-	/** Get the list of transcribers */
+	/**
+	 * Get user tier for the specified index.
+	 * 
+	 * @param idx
+	 * 
+	 * @return tier description 
+	 */
+	public TierDescription getUserTier(int idx);
 	
+	/**
+	 * Remove user tier 
+	 * 
+	 * @param idx
+	 */
+	public TierDescription removeUserTier(int idx);
+	
+	public TierDescription removeUserTier(TierDescription tierDescription);
+	
+	/**
+	 * Add a user tier
+	 */
+	public void addUserTier(TierDescription tierDescription);
+	public void addUserTier(int idx, TierDescription tierDescription);
+	
+	/**
+	 * Get the number of transcribers
+	 */
+	public int getTranscriberCount();
+	
+	/**
+	 * Get transcriber for the specified username
+	 * @param username
+	 * @return
+	 */
 	public Transcriber getTranscriber(String username);
 	
 	/**
@@ -77,7 +116,7 @@ public interface Session extends IExtendable {
 	 * 
 	 * @return the number of records
 	 */
-	public int getNumberOfRecords();
+	public int getRecordCount();
 	
 	/**
 	 * Get the position of the given record.
@@ -91,7 +130,7 @@ public interface Session extends IExtendable {
 	 * 
 	 * @return the number of participants
 	 */
-	public int getNumberOfParticipants();
+	public int getParticipantCount();
 
 	/**
 	 * Add a new participant
@@ -124,7 +163,7 @@ public interface Session extends IExtendable {
 	public void setMediaLocation(String mediaLocation);
 	
 	/** Tier view */
-	public void setTierView(List<TierOrderItem> view);
+	public void setTierView(List<TierViewItem> view);
 	
 	/**
 	 * Add a new transcriber

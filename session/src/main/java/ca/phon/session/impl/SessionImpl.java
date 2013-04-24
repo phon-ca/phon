@@ -15,7 +15,7 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionMetadata;
 import ca.phon.session.TierDescription;
-import ca.phon.session.TierOrderItem;
+import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
 
 public class SessionImpl implements Session {
@@ -41,8 +41,8 @@ public class SessionImpl implements Session {
 	private final List<Transcriber> transcribers =
 			Collections.synchronizedList(new ArrayList<Transcriber>());
 	
-	private final List<TierOrderItem> tierOrder =
-			Collections.synchronizedList(new ArrayList<TierOrderItem>());
+	private final List<TierViewItem> tierOrder =
+			Collections.synchronizedList(new ArrayList<TierViewItem>());
 	
 	private final List<TierDescription> userTiers =
 			Collections.synchronizedList(new ArrayList<TierDescription>());
@@ -87,7 +87,7 @@ public class SessionImpl implements Session {
 	}
 
 	@Override
-	public List<TierOrderItem> getTierView() {
+	public List<TierViewItem> getTierView() {
 		return Collections.unmodifiableList(this.tierOrder);
 	}
 
@@ -117,7 +117,7 @@ public class SessionImpl implements Session {
 	}
 
 	@Override
-	public int getNumberOfRecords() {
+	public int getRecordCount() {
 		return records.size();
 	}
 
@@ -127,7 +127,7 @@ public class SessionImpl implements Session {
 	}
 
 	@Override
-	public int getNumberOfParticipants() {
+	public int getParticipantCount() {
 		return participants.size();
 	}
 
@@ -167,7 +167,7 @@ public class SessionImpl implements Session {
 	}
 
 	@Override
-	public void setTierView(List<TierOrderItem> view) {
+	public void setTierView(List<TierViewItem> view) {
 		tierOrder.clear();
 		tierOrder.addAll(view);
 	}
@@ -243,5 +243,47 @@ public class SessionImpl implements Session {
 	@Override
 	public <T> T removeExtension(Class<T> cap) {
 		return extSupport.removeExtension(cap);
+	}
+
+	@Override
+	public int getUserTierCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public TierDescription getUserTier(int idx) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TierDescription removeUserTier(int idx) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TierDescription removeUserTier(TierDescription tierDescription) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addUserTier(TierDescription tierDescription) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addUserTier(int idx, TierDescription tierDescription) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getTranscriberCount() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

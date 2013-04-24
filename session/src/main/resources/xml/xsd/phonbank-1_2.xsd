@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Schema for Phon sessions.
+
+2010-01-20:
+ * Added namespace declaration 'http://phon.ling.mun.ca/ns/phonbank'
+ * Created elements for each type.  Types now ref the appropriate element.
+ 
+
+ -->
+<xs:schema xmlns="http://phon.ling.mun.ca/ns/phonbank"
+    targetNamespace="http://phon.ling.mun.ca/ns/phonbank"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" id="PhonBank" version="1.2">
+
+    <!-- root element -->
+    <xs:element name="session" type="SessionType">
+        <!-- constraints -->
+        <xs:key name="uIDKey">
+            <xs:selector xpath="transcript/u"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        
+        <xs:key name="partIDKey">
+            <xs:selector xpath="participants/participant"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        
+        <xs:keyref refer="partIDKey" name="partIDKeyRef">
+            <xs:selector xpath="transcript/u"/>
+            <xs:field xpath="@speaker"/>
+        </xs:keyref>
+        
+        <xs:key name="transcriberKey">
+            <xs:selector xpath="transcribers/transcriber"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        
+        <xs:keyref refer="transcriberKey" name="transcriberKeyRef">
+            <xs:selector xpath="transcript/u/blindTranscription"/>
+            <xs:field xpath="@user"/>
+        </xs:keyref>
+        
+        <xs:key name="userTierKey">
+            <xs:selector xpath="userTiers/userTier"/>
+            <xs:field xpath="@tierName"/>
+        </xs:key>
+        
+        <xs:keyref refer="userTierKey" name="groupTierKeyRef">
+            <xs:selector xpath="transcript/u/flatTier"/>
+            <xs:field xpath="@tierName"/>
+        </xs:keyref>
+        
+        <xs:keyref refer="userTierKey" name="recTierKeyRef">
+            <xs:selector xpath="transcript/u/groupTier"/>
+            <xs:field xpath="@tierName"/>
+        </xs:keyref>
+    </xs:element>
+    
+    <xs:complexType name="SessionType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>The main session element.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="header"/>
+            <xs:element ref="participants"/>
+            <xs:element ref="transcribers"/>
+            <xs:element ref="userTiers"/>
+            <xs:element ref="tierOrder"/>
+            <xs:element ref="transcript"/>
+        </xs:sequence>
+
+        <!-- ID = session name in Phon -->
+        <xs:attribute name="id" type="xs:ID"/>
+        <xs:attribute name="corpus" type="xs:string"/>
+        <xs:attribute name="version" type="xs:string" default="PB1.2"/>
+    </xs:complexType>
+
+    <xs:element name="participants" type="participantsType"/>
+    <xs:complexType name="participantsType" mixed="false">
+        <xs:annotation>
+            <xs:documentation> @Participants; a structure enumerating the beings
+                participating</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="participant" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="transcribers" type="transcribersType"/>
+    <xs:complexType name="transcribersType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>@Transcribers; a structure enumerating the beings participating in
+                blind-transcription.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="transcriber" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="userTiers" type="userTiersType"/>
+    <xs:complexType name="userTiersType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>@UserTiers; a structure enumerating the user defined
+                tiers.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="userTier" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="tierOrder" type="tierOrderType"/>
+    <xs:complexType name="tierOrderType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>@TierOrder; defining the tier ordering and visibility for the
+                session.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="tier" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="transcript" type="transcriptType"/>
+    <xs:complexType name="transcriptType" mixed="false">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="u"/>
+            <xs:element ref="comment"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="u" type="recordType"/>
+    <xs:complexType name="recordType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>A record.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+
+            <xs:element ref="orthography" minOccurs="1" maxOccurs="1"/>
+
+            <xs:element ref="ipaTier" minOccurs="0" maxOccurs="unbounded"/>
+
+            <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
+
+            <xs:element ref="alignment" minOccurs="0" maxOccurs="unbounded"/>
+
+            <xs:element ref="segment" maxOccurs="1" minOccurs="0"/>
+
+            <xs:element ref="notes" minOccurs="0" maxOccurs="1"/>
+
+            <xs:element ref="flatTier" maxOccurs="unbounded" minOccurs="0"/>
+
+            <xs:element ref="groupTier" minOccurs="0" maxOccurs="unbounded"/>
+
+        </xs:sequence>
+        <xs:attribute name="speaker" type="xs:IDREF"/>
+        <xs:attribute name="id" type="xs:ID"/>
+        <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="orthography" type="orthographyType"/>
+    <xs:complexType name="orthographyType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>The main line transcription.</xs:documentation>
+        </xs:annotation>
+        <xs:choice maxOccurs="unbounded">
+            <xs:element ref="w" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element ref="g" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element ref="p" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element ref="com" maxOccurs="0" minOccurs="0"/>
+            <xs:element ref="chat" maxOccurs="0" minOccurs="0"/>
+            <xs:element ref="e"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="flatTier" type="flatTierType"/>
+    <xs:element name="notes" type="flatTierType"/>
+    <xs:complexType name="flatTierType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Basic storage class for flat (non-group) tiers.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="tierName" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="groupTier" type="groupTierType"/>
+    <xs:element name="tg" type="tgType"/>
+    <xs:complexType name="tgType" mixed="false">
+        <xs:sequence>
+            <xs:element ref="w" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="groupTierType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Basic storage class for grouped tiers.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="tg" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="tierName" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="ipaTier" type="ipaTierType"/>
+    <xs:element name="pg" type="phoType"/>
+    <xs:complexType name="ipaTierType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>For IPA Target/Actual tiers.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="pg" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="form" type="phoTypeType"/>
+    </xs:complexType>
+
+    <xs:element name="alignment" type="alignmentTierType"/>
+    <xs:element name="ag" type="alignmentType"/>
+    <xs:complexType name="alignmentTierType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>For IPA Target/Actual alignment.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="ag" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="type" type="alignmentTypeType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="blindTranscription" type="blindTierType"/>
+    <xs:element name="bg" type="bgType"/>
+    <xs:complexType name="bgType" mixed="false">
+        <xs:sequence>
+            <xs:element ref="w" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="blindTierType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>For storing blind transcriptions of users.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="bg" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="user" type="xs:IDREF"/>
+        <xs:attribute name="form" type="phoTypeType"/>
+    </xs:complexType>
+
+    <xs:element name="g" type="groupType"/>
+    <xs:complexType name="groupType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>A group.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="w"/>
+                <xs:element ref="com"/>
+                <xs:element ref="e"/>
+                <xs:element ref="chat"/>
+                <xs:element ref="p"/>
+                <xs:element ref="ig"/>
+            </xs:choice>
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- inner-group markers -->
+    <xs:element name="ig" type="innerGroupMarker"/>
+    <xs:complexType name="innerGroupMarker" mixed="false">
+        <xs:attribute type="innerGroupMarkerType" use="required" name="type"/>
+    </xs:complexType>
+
+    <xs:simpleType name="innerGroupMarkerType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="s">
+                <xs:annotation>
+                    <xs:documentation>Start group '{'</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="e">
+                <xs:annotation>
+                    <xs:documentation>End group '}'</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="e" type="eventType"/>
+    <xs:complexType name="eventType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>An event.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <xs:element name="w" type="wordType"/>
+    <xs:complexType name="wordType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>A single word.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <xs:element name="chat" type="chatCodeType"/>
+    <xs:complexType name="chatCodeType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>A holder element for chat information.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="p" type="punctuationType"/>
+    <xs:complexType name="punctuationType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Punctuation like '.',',',etc.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="segment" type="segmentType"/>
+    <xs:complexType name="segmentType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>A slice of media time.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="startTime" type="xs:float"/>
+        <xs:attribute name="duration" type="xs:float"/>
+        <xs:attribute name="unitType" type="segmentUnitType"/>
+    </xs:complexType>
+
+    <xs:simpleType name="segmentUnitType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="s"/>
+            <xs:enumeration value="ms"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="com" type="commentType"/>
+    <xs:element name="comment" type="commentType"/>
+    <xs:complexType name="commentType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>A storage class for comments.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="userTier" type="userTierType"/>
+    <xs:complexType name="userTierType">
+        <xs:annotation>
+            <xs:documentation>User defined tiers. Can either be group-alinged or
+                flat.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="tierName" type="xs:ID"/>
+        <xs:attribute name="grouped" type="xs:boolean"/>
+        <!-- deprecated - use tier view items for font info -->
+        <xs:attribute name="tierFont" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="transcriber" type="transcriberType"/>
+    <xs:element name="password" type="passwordType"/>
+    <xs:complexType name="passwordType" mixed="true">
+        <xs:attribute name="use" type="xs:boolean" default="false"/>
+    </xs:complexType>
+    <xs:complexType name="transcriberType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Blind transcribers. Passwords are optional as they don't really secure
+                any data - just prevents others from possibly overwriting data (or
+                cheating.)</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="name"/>
+            <xs:element ref="password"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="header" type="headerType"/>
+    <xs:element name="date" type="xs:date"/>
+    <xs:element name="language" type="listOfLanguages"/>
+    <xs:element name="media" type="xs:string"/>
+    <xs:complexType name="headerType" mixed="false">
+        <xs:annotation/>
+        <xs:sequence>
+            <xs:element ref="date"/>
+            <xs:element ref="language"/>
+            <xs:element ref="media"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="participant" type="participantType"/>
+    <xs:element name="role" type="xs:string"/>
+    <xs:element name="name" type="xs:string"/>
+    <xs:element name="group" type="xs:string"/>
+    <xs:element name="sex" type="sexType"/>
+    <xs:element name="SES" type="xs:string"/>
+    <xs:element name="education" type="xs:string"/>
+    <xs:element name="birthday" type="xs:date"/>
+    <xs:element name="syllabifier" type="xs:string"/>
+    <xs:element name="dictionary" type="xs:string"/>
+    <xs:complexType name="participantType" mixed="false">
+        <xs:sequence>
+            <xs:element ref="role" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="name" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="group" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="sex" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="SES" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="education" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="birthday" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="language" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="syllabifier" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="dictionary" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+
+        <!-- Changed id to xs:ID for constraints -->
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+
+    </xs:complexType>
+
+    <xs:simpleType name="sexType">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="male"/>
+            <xs:enumeration value="female"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="pho" type="phoType"/>
+    <xs:element name="sb" type="syllabificationType"/>
+    <xs:complexType name="phoType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Phonetic transcriptions of orthographic forms.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="w" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="sb" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="phoTypeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="model"/>
+            <xs:enumeration value="actual"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="ph" type="constituentType"/>
+    <xs:complexType name="syllabificationType">
+        <xs:annotation>
+            <xs:documentation>Collection of syllable constituents.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="ph" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="lang" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="constituentType">
+        <xs:annotation>
+            <xs:documentation>Specifies a syllable constituent. The type is one of
+                constituentTypeType. Each constituent can constist of one or more phones identified
+                by zero-based index of the parent phonetic rep.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="indexes" type="listOfIntegers" use="required"/>
+        <xs:attribute name="scType" type="constituentTypeType" use="optional"/>
+        <xs:attribute name="hiatus" type="xs:boolean" use="optional">
+            <xs:annotation>
+                <xs:documentation>If two adjacent nuclei exist, diphthongMember controls the parsing
+                    of a hiatus.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:simpleType name="constituentTypeType">
+        <xs:annotation>
+            <xs:documentation>Valid syllable constituent labels.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SB">
+                <xs:annotation>
+                    <xs:documentation>Syllable boundary marker (e.g., space, '.')</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="SS">
+                <xs:annotation>
+                    <xs:documentation>Syllable stress (i.e., primary or
+                        secondary)</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LA">
+                <xs:annotation>
+                    <xs:documentation>Left appendix</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="O">
+                <xs:annotation>
+                    <xs:documentation>Onset</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="N">
+                <xs:annotation>
+                    <xs:documentation>Nucleus</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="C">
+                <xs:annotation>
+                    <xs:documentation>Coda</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="RA">
+                <xs:annotation>
+                    <xs:documentation>Right appendix</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="OEHS">
+                <xs:annotation>
+                    <xs:documentation>Onset of an empty headed syllable</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="AS">
+                <xs:annotation>
+                    <xs:documentation>Ambisyllabic</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="WB">
+                <xs:annotation>
+                    <xs:documentation>Word Boundary</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UK">
+                <xs:annotation>
+                    <xs:documentation>Unknown</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="phomap" type="mappingType"/>
+    <xs:complexType name="alignmentType">
+        <xs:annotation>
+            <xs:documentation> This type represents the alignment of two phonetic representations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="phomap" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+
+        <xs:attribute name="length" type="xs:int" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="mappingType">
+        <xs:annotation>
+            <xs:documentation> The number -1 represents an indel (insertion-deletion point). Any
+                number >= 0 is the index of a phone identified by the referenced syllabifcation
+                element.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="form" type="phoTypeType"/>
+        <xs:attribute name="value" type="listOfIntegers"/>
+    </xs:complexType>
+
+    <xs:element name="tier" type="tvType"/>
+    <xs:complexType name="tvType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Tier visibility</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="tierName" type="xs:string"/>
+        <xs:attribute name="visible" type="xs:boolean"/>
+        <xs:attribute name="locked" type="xs:boolean" default="false" use="optional"/>
+        <xs:attribute name="font" type="xs:string" use="optional" default="default"/>
+    </xs:complexType>
+
+    <xs:simpleType name="alignmentTypeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="segmental"/>
+            <xs:enumeration value="syllable"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="listOfIntegers">
+        <xs:list itemType="xs:int"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="listOfLanguages">
+        <xs:list itemType="xs:string"/>
+    </xs:simpleType>
+</xs:schema>
