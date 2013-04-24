@@ -2,13 +2,14 @@ package ca.phon.xml;
 
 import java.io.IOException;
 
-import javax.xml.stream.XMLEventReader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * A class that reads objects from a given XML stream.
  * 
  */
-public interface XMLObjectReader {
+public interface XMLObjectReader<T> {
 
 	/**
 	 * Read from the given xml input stream.
@@ -21,7 +22,7 @@ public interface XMLObjectReader {
 	 *  
 	 * @throws IOException if something goes wrong
 	 */
-	public <T> T read(XMLEventReader eventReader, Class<T> type)
+	public T read(Document doc, Element ele)
 		throws IOException;
 	
 }
