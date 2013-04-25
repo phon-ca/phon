@@ -41,7 +41,7 @@ public class SessionFactoryImpl extends SessionFactory {
 	}
 
 	@Override
-	public <T> Tier<T> createTier(Class<T> type) {
+	public <T> Tier<T> createTier(String name, Class<T> type, boolean grouped) {
 		// TODO Auto-generated method stub
 		return null;
 	}

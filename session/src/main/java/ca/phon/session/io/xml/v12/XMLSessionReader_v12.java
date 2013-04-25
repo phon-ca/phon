@@ -15,6 +15,8 @@ import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import ca.phon.alignment.PhoneMap;
+import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
@@ -22,12 +24,15 @@ import ca.phon.ipa.Phone;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Comment;
 import ca.phon.session.CommentEnum;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaUnit;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Sex;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
@@ -246,18 +251,83 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 		}
 		
 		// blind transcriptions
+		for(BlindTierType btt:rt.getBlindTranscription()) {
+			// get the correct ipa object from our new record
+			final Tier<IPATranscript> ipaTier = 
+					(btt.getForm() == PhoTypeType.MODEL ? retVal.getIPATarget() : retVal.getIPAActual());
+			int gidx = 0;
+			for(BgType bgt:btt.getBg()) {
+				final StringBuffer buffer = new StringBuffer();
+				for(WordType wt:bgt.getW()) {
+					if(buffer.length() > 0) 
+						buffer.append(" ");
+					buffer.append(wt.getContent());
+				}
+				
+				final IPATranscript ipa = (gidx < ipaTier.numberOfGroups() ? ipaTier.getGroup(gidx) : null);
+				
+				if(ipa != null) {
+					try {
+						final IPATranscript blindTranscript = 
+								IPATranscript.parseTranscript(buffer.toString());
+						final String name = btt.getUser().toString();
+						
+						AlternativeTranscript at = ipa.getExtension(AlternativeTranscript.class);
+						if(at == null) {
+							at = new AlternativeTranscript();
+							ipa.putExtension(AlternativeTranscript.class, at);
+						}
+						at.put(name, blindTranscript);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				gidx++;
+			}
+		}
 		
 		// notes
 		if(rt.getNotes() != null)
 			retVal.getNotes().setGroup(0, rt.getNotes().getContent());
 		
 		// segment
-		
+		if(rt.getSegment() != null) {
+			final MediaSegment segment = factory.createMediaSegment();
+			segment.setStartValue(rt.getSegment().getStartTime());
+			segment.setEndValue(rt.getSegment().getStartTime() + rt.getSegment().getDuration());
+			segment.setUnitType(MediaUnit.Millisecond);
+			
+			retVal.setSegment(segment);
+		}
 		
 		// alignment
+		for(AlignmentTierType att:rt.getAlignment()) {
+			final Tier<PhoneMap> alignment = copyAlignment(factory, retVal, att);
+			retVal.setPhoneAlignment(alignment);
+			break; // only processing the first alignment element (which should be the only one)
+		}
 		
 		// user tiers
+		for(FlatTierType ftt:rt.getFlatTier()) {
+			final Tier<String> flatTier = factory.createTier(ftt.getTierName(), String.class, false);
+			flatTier.setGroup(0, ftt.getContent());
+			retVal.putTier(flatTier);
+		}
 		
+		for(GroupTierType gtt:rt.getGroupTier()) {
+			final Tier<String> groupTier = factory.createTier(gtt.getTierName(), String.class, true);
+			int gidx = 0;
+			for(TgType tgt:gtt.getTg()) {
+				final StringBuffer buffer = new StringBuffer();
+				for(WordType wt:tgt.getW()) {
+					if(buffer.length() > 0)
+						buffer.append(" ");
+					buffer.append(wt.getContent());
+				}
+				groupTier.setGroup(gidx++, buffer.toString());
+			}
+			retVal.putTier(groupTier);
+		}
 		
 		return retVal;
 	}
@@ -273,7 +343,7 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 		// first create a string from the orthography type,
 		// then parse the string into the new orthography container
 		
-		final Tier<Orthography> retVal = factory.createTier(Orthography.class);
+		final Tier<Orthography> retVal = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
 		
 		for(Object otEle:ot.getWOrGOrP()) {
 			if(!(otEle instanceof GroupType)) continue;
@@ -346,7 +416,9 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 	 * @param ipaType
 	 */
 	private Tier<IPATranscript> copyTranscript(SessionFactory factory, IpaTierType itt) {
-		final Tier<IPATranscript> retVal = factory.createTier(IPATranscript.class);
+		final SystemTierType tierType = 
+				(itt.getForm() == PhoTypeType.MODEL ? SystemTierType.IPATarget : SystemTierType.IPAActual);
+		final Tier<IPATranscript> retVal = factory.createTier(tierType.getName(), IPATranscript.class, tierType.isGrouped());
 		
 		// attempt an exact copy first
 		for(PhoType pt:itt.getPg()) {
@@ -421,4 +493,40 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 		
 	}
 	
+	/**
+	 * Copy alignment data
+	 */
+	private Tier<PhoneMap> copyAlignment(SessionFactory factory, Record record, AlignmentTierType att) {
+		final Tier<PhoneMap> retVal = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, true);
+		
+		// create 'sound-only' lists from the ipa transcripts.  These are used for alignment
+		// indicies
+		final Tier<IPATranscript> ipaT = record.getIPATarget();
+		final Tier<IPATranscript> ipaA = record.getIPAActual();
+		
+		int gidx = 0;
+		for(AlignmentType at:att.getAg()) {
+			final PhoneMap pm = new PhoneMap(ipaT.getGroup(gidx), ipaA.getGroup(gidx));
+			// ensure length is the same
+			if(pm.getAlignmentLength() == at.getLength()) {
+				final Integer[][] alignmentData = new Integer[2][];
+				alignmentData[0] = new Integer[pm.getAlignmentLength()];
+				alignmentData[1] = new Integer[pm.getAlignmentLength()];
+				
+				for(int i = 0; i < at.getPhomap().size(); i++) {
+					final MappingType mt = at.getPhomap().get(i);
+					alignmentData[0][i] = mt.getValue().get(0);
+					alignmentData[1][i] = mt.getValue().get(1);
+				}
+				pm.setTopAlignment(alignmentData[0]);
+				pm.setBottomAlignment(alignmentData[1]);
+			} else {
+				// TODO alignment
+			}
+			
+			retVal.addGroup(pm);
+		}
+		
+		return retVal;
+	}
 }

@@ -114,18 +114,31 @@ public abstract class SessionFactory {
 	/**
 	 * Create a new tier object with the specified type.
 	 * 
+	 * @param name
 	 * @param type
+	 * @param grouped
 	 * @return the new tier
 	 */
-	public abstract <T> Tier<T> createTier(Class<T> type);
+	public abstract <T> Tier<T> createTier(String name, Class<T> type, boolean grouped);
+	
+//	/**
+//	 * Create a new tier object with the given description.
+//	 * 
+//	 * @param tierDescription
+//	 * @return the new tier
+//	 */
+//	public <T> Tier<T> createTier(TierDescription tierDescription) {
+//		return createTier(tierDescription.getName(), tierDescription.getDeclaredType(), tierDescription.isGrouped());
+//	}
 	
 	/**
 	 * Create a new text tier.
 	 * 
+	 * @param name
 	 * @return the new tier
 	 */
-	public Tier<String> createTier() {
-		return createTier(String.class);
+	public Tier<String> createTier(String name) {
+		return createTier(name, String.class, true);
 	}
 	
 	/**

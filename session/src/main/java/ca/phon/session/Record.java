@@ -197,6 +197,14 @@ public interface Record extends IExtendable {
 	public <T> Tier<T> getTier(String name, Class<T> type);
 	
 	/**
+	 * Add/set the given tier to the list of user defined
+	 * tiers.
+	 * 
+	 * @param tier
+	 */
+	public void putTier(Tier<?> tier);
+	
+	/**
 	 * Remove the dependent tier with the given name.
 	 * 
 	 * @param name

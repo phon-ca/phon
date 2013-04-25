@@ -16,6 +16,7 @@ import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 
 /**
@@ -49,12 +50,12 @@ public class RecordImpl implements Record {
 		super();
 		
 		final SessionFactory factory = SessionFactory.newFactory();
-		orthography = factory.createTier(Orthography.class);
-		ipaTarget = factory.createTier(IPATranscript.class);
-		ipaActual = factory.createTier(IPATranscript.class);
-		segment = factory.createTier(MediaSegment.class);
-		notes = factory.createTier();
-		alignment = factory.createTier(PhoneMap.class);
+		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
+		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class, SystemTierType.IPATarget.isGrouped());
+		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class, SystemTierType.IPAActual.isGrouped());
+		segment = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class, SystemTierType.Segment.isGrouped());
+		notes = factory.createTier(SystemTierType.Notes.getName(), String.class, SystemTierType.Notes.isGrouped());
+		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, SystemTierType.SyllableAlignment.isGrouped());
 		
 		userDefined = 
 				Collections.synchronizedList(new ArrayList<Tier<?>>());
@@ -274,5 +275,10 @@ public class RecordImpl implements Record {
 	@Override
 	public <T> T removeExtension(Class<T> cap) {
 		return extSupport.removeExtension(cap);
+	}
+
+	@Override
+	public void putTier(Tier<?> tier) {
+		// TODO add tier to user defined tiers list
 	}
 }
