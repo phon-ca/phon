@@ -9,13 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditorModel;
-import ca.gedge.opgraph.app.edits.other.NodeSettingsEdit;
-import ca.phon.phonex.PhonexPatternException;
+import ca.gedge.opgraph.app.edits.node.NodeSettingsEdit;
 
 /**
  * Phonex node settings panel.

@@ -25,7 +25,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
-import ca.gedge.opgraph.ProcessingContext;
+import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.IconLibrary;
@@ -57,9 +57,9 @@ public class StepIntoCommand extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		final GraphDocument document = GraphEditorModel.getActiveDocument();
 		if(document != null) {
-			ProcessingContext context = document.getProcessingContext();
+			Processor context = document.getProcessingContext();
 			if(context == null) {
-				context = new ProcessingContext(document.getGraph());
+				context = new Processor(document.getGraph());
 				document.setProcessingContext(context);
 			}
 			

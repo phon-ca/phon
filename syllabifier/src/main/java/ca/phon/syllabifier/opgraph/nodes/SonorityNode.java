@@ -6,7 +6,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -21,9 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableVertex;
-import ca.gedge.opgraph.OperableVertexInfo;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
@@ -49,11 +48,11 @@ import ca.phon.visitor.annotation.Visits;
  * </p>
  * 
  */
-@OperableVertexInfo(
+@OpNodeInfo(
 		name="Mark Sonority",
 		description="Add sonority annotation to phones.",
 		category="Syllabifier")
-public class SonorityNode extends OperableVertex implements NodeSettings {
+public class SonorityNode extends OpNode implements NodeSettings {
 	// ipa input
 	private final InputField ipaIn = 
 			new InputField("ipa", "ipa input", IPATranscript.class);
@@ -81,7 +80,7 @@ public class SonorityNode extends OperableVertex implements NodeSettings {
 	}
 	
 	@Override
-	public void operate(OperableContext context) throws ProcessingException {
+	public void operate(OpContext context) throws ProcessingException {
 		// get ipa from context
 		final IPATranscript ipa = 
 				IPATranscript.class.cast(context.get(ipaIn));

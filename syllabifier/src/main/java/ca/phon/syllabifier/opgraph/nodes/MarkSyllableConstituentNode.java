@@ -11,9 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableVertex;
-import ca.gedge.opgraph.OperableVertexInfo;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
@@ -28,12 +28,12 @@ import ca.phon.ui.syllable.SyllableConstituentComboBox;
  * given ipa data.
  * 
  */
-@OperableVertexInfo(
+@OpNodeInfo(
 		name="Constituent Type",
 		description="Mark the given IPA using the specified syllable constituent type.",
 		category="Syllabifier"
 )
-public class MarkSyllableConstituentNode extends OperableVertex implements NodeSettings {
+public class MarkSyllableConstituentNode extends OpNode implements NodeSettings {
 	// single ipa input
 	private final InputField ipaIn = 
 			new InputField("ipa", "ipa to mark", IPATranscript.class);
@@ -98,7 +98,7 @@ public class MarkSyllableConstituentNode extends OperableVertex implements NodeS
 	}
 
 	@Override
-	public void operate(OperableContext context) throws ProcessingException {
+	public void operate(OpContext context) throws ProcessingException {
 		// get input and set syllabification information
 		if(context.containsKey(ipaIn)) {
 			final IPATranscript ipa = (IPATranscript)context.get(ipaIn);

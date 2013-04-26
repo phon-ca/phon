@@ -39,7 +39,6 @@ import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.GraphEditor;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.MenuProvider;
 import ca.gedge.opgraph.app.components.ConsolePanel;
@@ -64,7 +63,7 @@ public class SyllabifierEditor extends JFrame {
 	/**
 	 * Graph editor
 	 */
-	private final GraphEditor graphEditor = new GraphEditor();
+	private final GraphEditorModel graphEditor = new GraphEditorModel();
 	
 	/**
 	 * Menu
@@ -115,7 +114,7 @@ public class SyllabifierEditor extends JFrame {
 		setupLayout();
 		setupDockingWindow();
 		
-		graphEditor.getModel().getConsolePanel().addMouseListener(new ContextPanelContextListener());
+		graphEditor.getConsolePanel().addMouseListener(new ContextPanelContextListener());
 		
 		graphEditor.getDocument().addPropertyChangeListener(GraphDocument.UNDO_STATE, new PropertyChangeListener() {
 			
@@ -149,14 +148,14 @@ public class SyllabifierEditor extends JFrame {
 	private void setupLayout() {
 		setLayout(new BorderLayout());
 		
-		GraphEditorModel.setActiveEditorModel(graphEditor.getModel());
+		GraphEditorModel.setActiveEditorModel(graphEditor);
 		// setup menu
-		for(MenuProvider menuProvider:graphEditor.getModel().getMenuProviders()) {
+		for(MenuProvider menuProvider:graphEditor.getMenuProviders()) {
 			if(!(menuProvider instanceof ca.gedge.opgraph.app.commands.debug.DebugMenuProvider))
-				menuProvider.installItems(graphEditor.getModel(), menu);
+				menuProvider.installItems(graphEditor, menu);
 		}
 		SyllabifierMenuProvider provider = new SyllabifierMenuProvider(this);
-		provider.installItems(graphEditor.getModel(), menu);
+		provider.installItems(graphEditor, menu);
 		
 		setJMenuBar(menuBar);
 		
@@ -275,7 +274,7 @@ public class SyllabifierEditor extends JFrame {
 	 * UI Actions
 	 */
 	public void onClearConsole(PhonActionEvent pae) {
-		graphEditor.getModel().getConsolePanel().setText("");
+		graphEditor.getConsolePanel().setText("");
 	}
 	
 	private class DockableViewFilter implements Filter<String> {
@@ -297,26 +296,26 @@ public class SyllabifierEditor extends JFrame {
 				switch(dv) {
 				case CANVAS:
 					final JPanel cPanel = new JPanel(new BorderLayout());
-					final JScrollPane canvasScroller = new JScrollPane(graphEditor.getModel().getCanvas());
-					cPanel.add(graphEditor.getModel().getBreadcrumb(), BorderLayout.NORTH);
+					final JScrollPane canvasScroller = new JScrollPane(graphEditor.getCanvas());
+					cPanel.add(graphEditor.getBreadcrumb(), BorderLayout.NORTH);
 					cPanel.add(canvasScroller, BorderLayout.CENTER);
 					comp = cPanel;
 					break;
 					
 				case CONSOLE:
-					comp = graphEditor.getModel().getConsolePanel();
+					comp = graphEditor.getConsolePanel();
 					break;
 					
 				case DEBUG:
-					comp = graphEditor.getModel().getDebugInfoPanel();
+					comp = graphEditor.getDebugInfoPanel();
 					break;
 					
 				case INSPECTOR:
-					comp = graphEditor.getModel().getNodeSettings();
+					comp = graphEditor.getNodeSettings();
 					break;
 					
 				case LIBRARY:
-					comp = graphEditor.getModel().getNodeLibrary();
+					comp = graphEditor.getNodeLibrary();
 					break;
 				}
 				final DefaultSingleCDockable retVal = new DefaultSingleCDockable( dv.title , comp , new CAction[0] );

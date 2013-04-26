@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableVertex;
-import ca.gedge.opgraph.OperableVertexInfo;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
@@ -29,12 +29,12 @@ import ca.phon.phonex.PhonexMatcher;
  * the current context provide the matcher as a value
  * under key {@link #MATCHER_KEY}.
  */
-@OperableVertexInfo(
+@OpNodeInfo(
 		name="Phonex Match Data",
 		description="Data from a phonex match",
 		category="Phonex"
 )
-public class PhonexGroupNode extends OperableVertex implements NodeSettings {
+public class PhonexGroupNode extends OpNode implements NodeSettings {
 	// setup outputs for the group
 	private final OutputField ipaOut = 
 			new OutputField("ipa", "group data", true, IPATranscript.class);
@@ -71,7 +71,7 @@ public class PhonexGroupNode extends OperableVertex implements NodeSettings {
 	}
 
 	@Override
-	public void operate(OperableContext context) throws ProcessingException {
+	public void operate(OpContext context) throws ProcessingException {
 		if(context.get(MATCHER_KEY) == null) return;
 		
 		PhonexMatcher matcher = 

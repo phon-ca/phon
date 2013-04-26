@@ -8,14 +8,14 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import ca.gedge.opgraph.OperableGraph;
+import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.io.xml.XMLSerializer;
 import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 
 public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 	
-	static final String NAMESPACE = "http://phon.ling.mun.ca/ns/syllabifier";
+	static final String NAMESPACE = "https://www.phon.ca/ns/syllabifier";
 	static final String PREFIX = "ops";
 	
 	static final QName SETTINGS_QNAME = new QName(NAMESPACE, "settings", PREFIX);
@@ -45,7 +45,7 @@ public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 
 	@Override
 	public Object read(XMLSerializerFactory serializerFactory,
-			OperableGraph graph, Object parent, Document doc, Element elem)
+			OpGraph graph, Object parent, Document doc, Element elem)
 			throws IOException {
 		if(graph != parent) {
 			throw new IOException("SyllabifierSettings can only exist once per graph.");

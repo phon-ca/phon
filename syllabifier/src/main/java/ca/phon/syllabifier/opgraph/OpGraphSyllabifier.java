@@ -3,14 +3,12 @@ package ca.phon.syllabifier.opgraph;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableGraph;
-import ca.gedge.opgraph.ProcessingContext;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.io.OpgraphSerializer;
-import ca.gedge.opgraph.io.OpgraphSerializerFactory;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.Processor;
+import ca.gedge.opgraph.io.OpGraphSerializer;
+import ca.gedge.opgraph.io.OpGraphSerializerFactory;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
@@ -25,7 +23,7 @@ public final class OpGraphSyllabifier implements Syllabifier {
 	/**
 	 * graph
 	 */
-	private final OperableGraph graph;
+	private final OpGraph graph;
 	
 	/**
 	 * Create a new syllabifier from the given stream.
@@ -35,18 +33,18 @@ public final class OpGraphSyllabifier implements Syllabifier {
 	public static OpGraphSyllabifier createSyllabifier(InputStream is)
 		throws IOException {
 		// Get the serializer
-		final OpgraphSerializer serializer = OpgraphSerializerFactory.getDefaultSerializer();
+		final OpGraphSerializer serializer = OpGraphSerializerFactory.getDefaultSerializer();
 		if(serializer == null) {
 			throw new IOException("No default serializer available");
 		}
-		final OperableGraph graph = serializer.read(is);
+		final OpGraph graph = serializer.read(is);
 		return new OpGraphSyllabifier(graph);
 	}
 	
 	/**
 	 * Constructor
 	 */
-	public OpGraphSyllabifier(OperableGraph graph) {
+	public OpGraphSyllabifier(OpGraph graph) {
 		this.graph = graph;
 	}
 
@@ -79,8 +77,8 @@ public final class OpGraphSyllabifier implements Syllabifier {
 
 	@Override
 	public void syllabify(List<IPAElement> phones) {
-		final ProcessingContext processor = new ProcessingContext(graph);
-		final OperableContext ctx = processor.getContext();
+		final Processor processor = new Processor(graph);
+		final OpContext ctx = processor.getContext();
 		final IPATranscript transcript = new IPATranscript(phones);
 		ctx.put("__ipa__", transcript);
 		

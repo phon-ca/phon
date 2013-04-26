@@ -10,9 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableVertex;
-import ca.gedge.opgraph.OperableVertexInfo;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
@@ -23,11 +23,11 @@ import ca.phon.ipa.IPATranscript;
  * IPA source node for the syllabifier.
  *
  */
-@OperableVertexInfo(
+@OpNodeInfo(
 		name="IPA Source",
 		description="IPA source node for syllabifier and stages.",
 		category="Syllabifier")
-public class IPASourceNode extends OperableVertex implements NodeSettings {
+public class IPASourceNode extends OpNode implements NodeSettings {
 	
 	// context value
 	private final static String IPA_KEY = "__ipa__";
@@ -44,7 +44,7 @@ public class IPASourceNode extends OperableVertex implements NodeSettings {
 	}
 	
 	@Override
-	public void operate(OperableContext context) throws ProcessingException {
+	public void operate(OpContext context) throws ProcessingException {
 		// map context value to output
 		if(getIpa() != null) {
 			IPATranscript ipa;

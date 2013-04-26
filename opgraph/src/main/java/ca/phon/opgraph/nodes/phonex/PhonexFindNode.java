@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Properties;
 
 import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableGraph;
-import ca.gedge.opgraph.OperableVertex;
-import ca.gedge.opgraph.OperableVertexInfo;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
-import ca.gedge.opgraph.ProcessingContext;
+import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeMetadata;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
@@ -25,7 +25,7 @@ import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
 
-@OperableVertexInfo(
+@OpNodeInfo(
 		name="Phonex Find",
 		description="Find occurrences of a phonex pattern.",
 		category="Phonex"
@@ -52,10 +52,10 @@ public class PhonexFindNode extends MacroNode implements PhonexNode {
 	private PhonexMatcher matcher;
 	
 	public PhonexFindNode() {
-		this(new OperableGraph());
+		this(new OpGraph());
 	}
 	
-	public PhonexFindNode(OperableGraph graph) {
+	public PhonexFindNode(OpGraph graph) {
 		super(graph);
 		
 		super.putField(ipaInput);
@@ -65,10 +65,10 @@ public class PhonexFindNode extends MacroNode implements PhonexNode {
 	}
 
 	@Override
-	public void operate(OperableContext context) throws ProcessingException {
+	public void operate(OpContext context) throws ProcessingException {
 		// Process
 		if(graph != null) {
-			final ProcessingContext processor = new ProcessingContext(graph);
+			final Processor processor = new Processor(graph);
 			
 			final IPATranscript ipa = 
 					(IPATranscript)context.get(ipaInput);
@@ -100,12 +100,12 @@ public class PhonexFindNode extends MacroNode implements PhonexNode {
 	 * @param contextsMap  the context mapping to map outputs from
 	 * @param context  the context to map outputs to
 	 */
-	private void mapOutputs(OperableContext context, int iteration) {
+	private void mapOutputs(OpContext context, int iteration) {
 		// Grab mapped outputs and put them in our context
 		for(PublishedOutput publishedOutput : publishedOutputs) {
-			final OperableContext sourceContext = context.findChildContext(publishedOutput.sourceVertex);
+			final OpContext sourceContext = context.findChildContext(publishedOutput.sourceNode);
 			if(sourceContext != null) {
-				final Object result = sourceContext.get(publishedOutput.vertexOutputField);
+				final Object result = sourceContext.get(publishedOutput.nodeOutputField);
 				if(context.containsKey(publishedOutput)) {
 					final ArrayList<Object> objects = new ArrayList<Object>((ArrayList<?>)context.get(publishedOutput));
 					objects.add(result);
@@ -120,7 +120,7 @@ public class PhonexFindNode extends MacroNode implements PhonexNode {
 	}
 	
 	@Override
-	public OutputField publish(String key, OperableVertex source, OutputField field) {
+	public OutputField publish(String key, OpNode source, OutputField field) {
 		final OutputField published = super.publish(key, source, field);
 	    published.setOutputType(Collection.class);
 	    return published;
@@ -134,7 +134,7 @@ public class PhonexFindNode extends MacroNode implements PhonexNode {
 		// find current group nodes
 		final List<PhonexGroupNode> groupNodes = 
 				new ArrayList<PhonexGroupNode>();
-		for(OperableVertex vertex:getGraph().getVertices()) {
+		for(OpNode vertex:getGraph().getVertices()) {
 			if(vertex instanceof PhonexGroupNode) {
 				groupNodes.add((PhonexGroupNode)vertex);
 			}

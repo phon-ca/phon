@@ -3,11 +3,10 @@ package ca.phon.opgraph.nodes.phonex;
 import java.awt.Component;
 import java.util.Properties;
 
-
 import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableVertex;
-import ca.gedge.opgraph.OperableVertexInfo;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
@@ -17,14 +16,14 @@ import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
 
-@OperableVertexInfo(
+@OpNodeInfo(
 		name="Phonex Matcher",
 		description="Accepts a phonex string as a setting and an ipa transcript " +
 				"as an input.  Ouputs are dynamic based on the number of groups in the phonex.  " +
 				"A boolean output called 'matches' and group 0 are always available.",
 		category="Phonex"
 )
-public class PhonexMatchNode extends OperableVertex implements PhonexNode {
+public class PhonexMatchNode extends OpNode implements PhonexNode {
 	// input field
 	private final static InputField ipaInput = 
 			new InputField("ipa", "ipa input", IPATranscript.class);
@@ -51,7 +50,7 @@ public class PhonexMatchNode extends OperableVertex implements PhonexNode {
 	}
 
 	@Override
-	public void operate(OperableContext arg0) throws ProcessingException {
+	public void operate(OpContext arg0) throws ProcessingException {
 		// get input 
 		IPATranscript transcript = 
 				IPATranscript.class.cast(arg0.get(ipaInput));

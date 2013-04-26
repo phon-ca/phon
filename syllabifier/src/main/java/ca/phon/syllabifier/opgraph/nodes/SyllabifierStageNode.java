@@ -1,11 +1,11 @@
 package ca.phon.syllabifier.opgraph.nodes;
 
 import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OperableContext;
-import ca.gedge.opgraph.OperableGraph;
-import ca.gedge.opgraph.OperableVertexInfo;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
-import ca.gedge.opgraph.ProcessingContext;
+import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.ipa.IPATranscript;
@@ -16,7 +16,7 @@ import ca.phon.ipa.IPATranscript;
  * node.
  *
  */
-@OperableVertexInfo(
+@OpNodeInfo(
 		name="Syllabifier Stage",
 		description="Syllabifier macro with ipa pass-through.",
 		category="Syllabifier")
@@ -35,7 +35,7 @@ public class SyllabifierStageNode extends MacroNode {
 		init();
 	}
 	
-	public SyllabifierStageNode(OperableGraph graph) {
+	public SyllabifierStageNode(OpGraph graph) {
 		super(graph);
 		init();
 	}
@@ -48,10 +48,10 @@ public class SyllabifierStageNode extends MacroNode {
 	}
 
 	@Override
-	public void operate(OperableContext context) throws ProcessingException {
+	public void operate(OpContext context) throws ProcessingException {
 		if(graph != null) {
 			// First set up processor
-			final ProcessingContext processor = new ProcessingContext(graph);
+			final Processor processor = new Processor(graph);
 			processor.reset(context);
 			
 			context.put("__ipa__", context.get(ipaIn));

@@ -21,10 +21,12 @@
  */
 package ca.phon.syllabifier.editor.commands.syllabifier;
 
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
 
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditorModel;
@@ -68,7 +70,7 @@ public class SyllabifierMenuProvider implements MenuProvider {
 	}
 
 	@Override
-	public void installPopupItems(Object context, GraphEditorModel model, PathAddressableMenu menu) {
+	public void installPopupItems(Object context, MouseEvent me, GraphEditorModel model, PathAddressableMenu menu) {
 		//
 	}
 }
