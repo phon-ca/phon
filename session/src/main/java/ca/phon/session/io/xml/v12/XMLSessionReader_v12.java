@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.stream.XMLInputFactory;
 
 import org.joda.time.DateTime;
 import org.w3c.dom.Document;
@@ -67,7 +68,7 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 			final JAXBContext context = JAXBContext.newInstance(xmlFactory.getClass());
 			final Unmarshaller unmarshaller = context.createUnmarshaller();
 			final JAXBElement<SessionType> sessionTypeEle =
-					unmarshaller.unmarshal(doc, SessionType.class);
+					unmarshaller.unmarshal(doc.getDocumentElement(), SessionType.class);
 			
 			if(sessionTypeEle != null && sessionTypeEle.getValue() != null) {
 				final SessionType sessionType = sessionTypeEle.getValue();
@@ -96,20 +97,25 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 		retVal.setCorpus(sessionType.getCorpus());
 		
 		final HeaderType headerData = sessionType.getHeader();
-		if(headerData.getMedia() != null && headerData.getMedia().length() > 0) {
-			retVal.setMediaLocation(headerData.getMedia());
-		}
-		if(headerData.getDate() != null) {
-			final XMLGregorianCalendar xmlDate = headerData.getDate();
-			final DateTime dateTime = new DateTime(xmlDate);
-			retVal.setDate(dateTime);
-		}
-		if(headerData.getLanguage().size() > 0) {
-			String langs = "";
-			for(String lang:headerData.getLanguage()) {
-				langs += (langs.length() > 0 ? ", " : "") + lang;
+		if(headerData != null) {
+			if(headerData.getMedia() != null && headerData.getMedia().length() > 0) {
+				retVal.setMediaLocation(headerData.getMedia());
 			}
-			retVal.setLanguage(langs);
+			if(headerData.getDate() != null) {
+				final XMLGregorianCalendar xmlDate = headerData.getDate();
+				final DateTime dateTime = new DateTime(
+						xmlDate.getYear(),
+						xmlDate.getMonth(),
+						xmlDate.getDay(), 12, 0);
+				retVal.setDate(dateTime);
+			}
+			if(headerData.getLanguage().size() > 0) {
+				String langs = "";
+				for(String lang:headerData.getLanguage()) {
+					langs += (langs.length() > 0 ? ", " : "") + lang;
+				}
+				retVal.setLanguage(langs);
+			}
 		}
 		
 		// copy participant information
@@ -150,6 +156,18 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 			} else {
 				final RecordType rt = (RecordType)uOrComment;
 				final Record record = copyRecord(factory, rt);
+				
+				if(rt.getSpeaker() != null) {
+					final ParticipantType pt = (ParticipantType)rt.getSpeaker();
+					for(int pIdx = 0; pIdx < retVal.getParticipantCount(); pIdx++) {
+						final Participant participant = retVal.getParticipant(pIdx);
+						if(participant.getName().equals(pt.getName())) {
+							record.setSpeaker(participant);
+							break;
+						}
+					}
+				}
+				
 				retVal.addRecord(record);
 				
 				for(Comment comment:recordComments) {
@@ -171,7 +189,7 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 		
 		final XMLGregorianCalendar bday = pt.getBirthday();
 		if(bday != null) {
-			final DateTime bdt = new DateTime(bday);
+			final DateTime bdt = new DateTime(bday.getYear(), bday.getMonth(), bday.getDay(), 12, 0);
 			retVal.setBirthDate(bdt);
 		}
 		
@@ -449,7 +467,7 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 		return retVal;
 	}
 
-	private class CopyTranscriptVisitor extends VisitorAdapter<IPAElement> {
+	public class CopyTranscriptVisitor extends VisitorAdapter<IPAElement> {
 		
 		int eleIdx = 0;
 		

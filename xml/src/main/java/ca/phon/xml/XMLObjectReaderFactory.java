@@ -54,7 +54,8 @@ public class XMLObjectReaderFactory {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> XMLObjectReader<T> createReader(QName qname, Class<T> type) {
-		final ServiceLoader<XMLObjectReader> loader = ServiceLoader.load(XMLObjectReader.class, this.cl);		
+		final ServiceLoader<XMLObjectReader> loader = 
+				(this.cl != null ? ServiceLoader.load(XMLObjectReader.class, this.cl) : ServiceLoader.load(XMLObjectReader.class));		
 		final Iterator<XMLObjectReader> itr = loader.iterator();
 		
 		while(itr.hasNext()) {

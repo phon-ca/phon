@@ -142,13 +142,6 @@ public abstract class SessionFactory {
 	}
 	
 	/**
-	 * Create tier order item
-	 * 
-	 * @return new tier order item
-	 */
-	public abstract TierViewItem createTierOrderItem();
-	
-	/**
 	 * Create a new string tier description.
 	 * 
 	 * @param name

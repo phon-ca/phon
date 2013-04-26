@@ -5,6 +5,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
+import ca.phon.session.Tier;
 
 public class GroupImpl implements Group {
 	
@@ -81,7 +82,10 @@ public class GroupImpl implements Group {
 
 	@Override
 	public <T> void setTier(String name, Class<T> type, T val) {
-		
+		final Tier<T> tier = record.getTier(name, type);
+		if(tier != null) {
+			tier.setGroup(groupIndex, val);
+		}
 	}
 
 }

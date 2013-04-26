@@ -106,7 +106,7 @@ public class RecordImpl implements Record {
 	public void setOrthography(Tier<Orthography> ortho) {
 		this.orthography.removeAll();
 		for(int i = 0; i < ortho.numberOfGroups(); i++) {
-			this.orthography.setGroup(i, ortho.getGroup(i));
+			this.orthography.addGroup(ortho.getGroup(i));
 		}
 	}
 
@@ -152,7 +152,7 @@ public class RecordImpl implements Record {
 	public void setIPATarget(Tier<IPATranscript> ipa) {
 		this.ipaTarget.removeAll();
 		for(int i = 0; i < ipa.numberOfGroups(); i++) {
-			this.ipaTarget.setGroup(i, ipa.getGroup(i));
+			this.ipaTarget.addGroup(ipa.getGroup(i));
 		}
 	}
 
@@ -165,7 +165,7 @@ public class RecordImpl implements Record {
 	public void setIPAActual(Tier<IPATranscript> ipa) {
 		this.ipaActual.removeAll();
 		for(int i = 0; i < ipa.numberOfGroups(); i++) {
-			this.ipaActual.setGroup(i, ipa.getGroup(i));
+			this.ipaActual.addGroup(ipa.getGroup(i));
 		}
 	}
 	
@@ -178,7 +178,7 @@ public class RecordImpl implements Record {
 	public void setPhoneAlignment(Tier<PhoneMap> phoneAlignment) {
 		this.alignment.removeAll();
 		for(int i = 0; i < phoneAlignment.numberOfGroups(); i++) {
-			this.alignment.setGroup(i, phoneAlignment.getGroup(i));
+			this.alignment.addGroup(phoneAlignment.getGroup(i));
 		}
 	}
 

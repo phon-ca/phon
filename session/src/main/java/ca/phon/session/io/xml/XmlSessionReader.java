@@ -2,6 +2,7 @@ package ca.phon.session.io.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,11 +29,11 @@ import ca.phon.xml.XMLObjectReaderFactory;
 public class XmlSessionReader implements SessionReader {
 
 	@Override
-	public Session readSession(InputStream in) throws IOException {
+	public Session readSession(URI uri) throws IOException {
 		Session retVal = null;
 		
-		final XMLObjectReader<Session> reader = readerFromStream(in);
-		final Document doc = documentFromStream(in);
+		final XMLObjectReader<Session> reader = readerFromUri(uri);
+		final Document doc = documentFromUri(uri);
 		final Element ele = doc.getDocumentElement();
 		if(reader != null) {
 			retVal = reader.read(doc, ele);
@@ -42,10 +43,10 @@ public class XmlSessionReader implements SessionReader {
 	}
 
 	@Override
-	public boolean canRead(InputStream in) throws IOException {
+	public boolean canRead(URI uri) throws IOException {
 		boolean retVal = false;
 		
-		final XMLObjectReader<Session> reader = readerFromStream(in);
+		final XMLObjectReader<Session> reader = readerFromUri(uri);
 		retVal = (reader != null);
 		
 		return retVal;
@@ -57,12 +58,14 @@ public class XmlSessionReader implements SessionReader {
 	 * @param in
 	 * @return dom document
 	 */
-	public Document documentFromStream(InputStream in) 
+	public Document documentFromUri(URI uri) 
 		throws IOException {
 		Document retVal = null; 
 		
 		try {
+			final InputStream in = uri.toURL().openStream();
 			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
 			final DocumentBuilder builder = factory.newDocumentBuilder();
 			retVal = builder.parse(in);
 		} catch (ParserConfigurationException e) {
@@ -82,11 +85,12 @@ public class XmlSessionReader implements SessionReader {
 	 * 
 	 * @throws IOException
 	 */
-	private XMLObjectReader<Session> readerFromStream(InputStream in)
+	private XMLObjectReader<Session> readerFromUri(URI uri)
 		throws IOException {
 		XMLObjectReader<Session> retVal = null;
 		
 		try {
+			final InputStream in = uri.toURL().openStream();
 			final XMLEventReader reader = createXmlReader(in);
 			
 			StartElement startEle = null;

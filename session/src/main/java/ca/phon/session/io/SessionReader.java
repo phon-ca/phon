@@ -23,7 +23,7 @@ public interface SessionReader {
 	 * 
 	 * @throws IOException if an error occurs
 	 */
-	public Session readSession(InputStream in) throws IOException;
+	public Session readSession(URI uri) throws IOException;
 	
 	/**
 	 * Determine if this reader can accept input
@@ -37,6 +37,6 @@ public interface SessionReader {
 	 * @throws IOException if there was a problem
 	 *  with the given uri
 	 */
-	public boolean canRead(InputStream in) throws IOException;
+	public boolean canRead(URI uri) throws IOException;
 	
 }

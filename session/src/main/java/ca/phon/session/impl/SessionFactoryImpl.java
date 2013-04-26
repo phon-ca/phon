@@ -18,38 +18,27 @@ public class SessionFactoryImpl extends SessionFactory {
 
 	@Override
 	public Session createSession() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SessionImpl();
 	}
 
 	@Override
 	public Record createRecord() {
-		// TODO Auto-generated method stub
-		return null;
+		return new RecordImpl();
 	}
 
 	@Override
 	public Participant createParticipant() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ParticipantImpl();
 	}
 
 	@Override
 	public MediaSegment createMediaSegment() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MediaSegmentImpl();
 	}
 
 	@Override
 	public <T> Tier<T> createTier(String name, Class<T> type, boolean grouped) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TierViewItem createTierOrderItem() {
-		// TODO Auto-generated method stub
-		return null;
+		return new TierImpl<T>(name, type, grouped);
 	}
 
 	@Override
@@ -65,8 +54,7 @@ public class SessionFactoryImpl extends SessionFactory {
 
 	@Override
 	public Transcriber createTranscriber() {
-		// TODO Auto-generated method stub
-		return null;
+		return new TranscriberImpl();
 	}
 
 	@Override

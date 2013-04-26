@@ -41,7 +41,7 @@ public class TierImpl<T> implements Tier<T> {
 	public int numberOfGroups() {
 		int retVal = 0;
 		synchronized(tierData) {
-			tierData.size();
+			retVal = tierData.size();
 		}
 		if(retVal > 0 && !grouped)
 			retVal = 1;
@@ -66,7 +66,10 @@ public class TierImpl<T> implements Tier<T> {
 			if(!grouped && idx > 0) {
 				throw new ArrayIndexOutOfBoundsException(idx);
 			}
-			tierData.set(idx, val);
+			if(tierData.size() <= idx)
+				tierData.add(idx, val);
+			else
+				tierData.set(idx, val);
 		}
 	}
 

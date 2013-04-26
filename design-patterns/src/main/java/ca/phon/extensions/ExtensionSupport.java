@@ -106,9 +106,6 @@ public final class ExtensionSupport implements IExtendable {
 			final Extension extensionClass = providerClass.getAnnotation(Extension.class);
 			if(extensionClass != null && extensionClass.value().isAssignableFrom(declaredType)) {
 				provider.installExtension(parent.get());
-			} else {
-				LOGGER.warning(providerClass.getName() + 
-						" missing @Extension annotation.  Not loaded into object " + toString());
 			}
 		}
 	}

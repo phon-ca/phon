@@ -37,14 +37,14 @@ public class SessionInputFactory {
 	 * @return a new {@link SessionReader} or <code>null</code>
 	 *  if a compatible reader could not be found
 	 */
-	public SessionReader createReader(InputStream in) {
+	public SessionReader createReader(URI uri) {
 		SessionReader retVal = null;
 		
 		final Iterator<SessionReader> readerItr = readerLoader.iterator();
 		while(readerItr.hasNext()) {
 			final SessionReader reader = readerItr.next();
 			try {
-				if(reader.canRead(in)) {
+				if(reader.canRead(uri)) {
 					retVal = reader;
 					break;
 				}
