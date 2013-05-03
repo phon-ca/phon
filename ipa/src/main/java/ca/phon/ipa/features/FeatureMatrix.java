@@ -215,7 +215,7 @@ public class FeatureMatrix {
 			for (FeatureSetType set : sets) {
 				BitSet bs = new BitSet(numberOfFeatures);
 				// FeatureSet fs = new FeatureSet(new BitSet(numberOfFeatures));
-				Integer charValue = Integer.decode("0x" + set.getUnicode().substring(1));
+				Integer charValue = Integer.decode(set.getUnicode());
 
 				if (charValue == null) {
 					Logger.getLogger(getClass().getName()).warning("Could not decode: "

@@ -115,8 +115,8 @@
     </xs:simpleType>
     
     <xs:simpleType name="hexValue">
-        <xs:restriction base="xs:NCName">
-            <xs:pattern value="U[a-fA-F0-9]+"/>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="0x[0-9a-fA-F]{1,4}"/>
         </xs:restriction>
     </xs:simpleType>
     

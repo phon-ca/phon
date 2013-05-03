@@ -456,728 +456,728 @@
 
    <!--Consonants-->
    <!--C-->
-   <feature_set unicode="U43">consonant </feature_set>
+   <feature_set unicode="0x43">consonant </feature_set>
    <!--b-->
-   <feature_set unicode="U62">consonant labial bilabial voiced stop obstruent </feature_set>
+   <feature_set unicode="0x62">consonant labial bilabial voiced stop obstruent </feature_set>
    <!--c-->
-   <feature_set unicode="U63">consonant posterior palatal lingual coronal voiceless stop obstruent </feature_set>
+   <feature_set unicode="0x63">consonant posterior palatal lingual coronal voiceless stop obstruent </feature_set>
    <!--d-->
-   <feature_set unicode="U64">consonant lingual coronal anterior alveolar voiced stop obstruent </feature_set>
+   <feature_set unicode="0x64">consonant lingual coronal anterior alveolar voiced stop obstruent </feature_set>
    <!--f-->
-   <feature_set unicode="U66">consonant labial dental voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x66">consonant labial dental voiceless continuant obstruent fricative </feature_set>
    <!--g-->
-   <feature_set unicode="U67">consonant dorsal lingual velar voiced stop obstruent </feature_set>
+   <feature_set unicode="0x67">consonant dorsal lingual velar voiced stop obstruent </feature_set>
    <!--h-->
-   <feature_set unicode="U68">consonant guttural laryngeal voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x68">consonant guttural laryngeal voiceless continuant obstruent fricative </feature_set>
    <!--j-->
-   <feature_set unicode="U6a">consonant glide posterior palatal lingual coronal voiced approximant
+   <feature_set unicode="0x6a">consonant glide posterior palatal lingual coronal voiced approximant
       continuant sonorant </feature_set>
    <!--k-->
-   <feature_set unicode="U6b">consonant dorsal lingual velar voiceless stop obstruent </feature_set>
+   <feature_set unicode="0x6b">consonant dorsal lingual velar voiceless stop obstruent </feature_set>
    <!--l-->
-   <feature_set unicode="U6c">consonant lingual coronal anterior alveolar voiced approximant liquid
+   <feature_set unicode="0x6c">consonant lingual coronal anterior alveolar voiced approximant liquid
       lateral continuant sonorant </feature_set>
    <!--m-->
-   <feature_set unicode="U6d">consonant labial bilabial voiced stop sonorant nasal </feature_set>
+   <feature_set unicode="0x6d">consonant labial bilabial voiced stop sonorant nasal </feature_set>
    <!--n-->
-   <feature_set unicode="U6e">consonant lingual coronal anterior alveolar voiced stop sonorant nasal </feature_set>
+   <feature_set unicode="0x6e">consonant lingual coronal anterior alveolar voiced stop sonorant nasal </feature_set>
    <!--p-->
-   <feature_set unicode="U70">consonant labial bilabial voiceless stop obstruent </feature_set>
+   <feature_set unicode="0x70">consonant labial bilabial voiceless stop obstruent </feature_set>
    <!--q-->
-   <feature_set unicode="U71">consonant uvular lingual dorsal voiceless stop obstruent </feature_set>
+   <feature_set unicode="0x71">consonant uvular lingual dorsal voiceless stop obstruent </feature_set>
    <!--r-->
-   <feature_set unicode="U72">consonant lingual coronal anterior alveolar voiced approximant liquid
+   <feature_set unicode="0x72">consonant lingual coronal anterior alveolar voiced approximant liquid
       rhotic continuant sonorant trill </feature_set>
    <!--s-->
-   <feature_set unicode="U73">consonant lingual coronal anterior alveolar voiceless continuant
+   <feature_set unicode="0x73">consonant lingual coronal anterior alveolar voiceless continuant
       obstruent fricative strident </feature_set>
    <!--t-->
-   <feature_set unicode="U74">consonant lingual coronal anterior alveolar voiceless stop obstruent </feature_set>
+   <feature_set unicode="0x74">consonant lingual coronal anterior alveolar voiceless stop obstruent </feature_set>
    <!--v-->
-   <feature_set unicode="U76">consonant labial dental voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x76">consonant labial dental voiced continuant obstruent fricative </feature_set>
    <!--w-->
-   <feature_set unicode="U77">consonant glide labial bilabial dorsal lingual velar voiced
+   <feature_set unicode="0x77">consonant glide labial bilabial dorsal lingual velar voiced
       approximant continuant sonorant </feature_set>
    <!--x-->
-   <feature_set unicode="U78">consonant dorsal lingual velar voiceless continuant obstruent
+   <feature_set unicode="0x78">consonant dorsal lingual velar voiceless continuant obstruent
       fricative </feature_set>
    <!--z-->
-   <feature_set unicode="U7a">consonant lingual coronal anterior alveolar voiced continuant
+   <feature_set unicode="0x7a">consonant lingual coronal anterior alveolar voiced continuant
       obstruent fricative strident </feature_set>
    <!--ç-->
-   <feature_set unicode="Ue7">consonant posterior palatal lingual coronal voiceless continuant
+   <feature_set unicode="0xe7">consonant posterior palatal lingual coronal voiceless continuant
       obstruent fricative strident </feature_set>
    <!--ð-->
-   <feature_set unicode="Uf0">consonant lingual coronal anterior dental distributed voiced
+   <feature_set unicode="0xf0">consonant lingual coronal anterior dental distributed voiced
       continuant obstruent fricative </feature_set>
-   <feature_set unicode="Ufe">consonant lingual coronal anterior dental distributed voiceless
+   <feature_set unicode="0xfe">consonant lingual coronal anterior dental distributed voiceless
       continuant obstruent fricative </feature_set>
    <!--þ-->
    <!--ħ-->
-   <feature_set unicode="U127">consonant guttural pharyngeal voiceless continuant obstruent
+   <feature_set unicode="0x127">consonant guttural pharyngeal voiceless continuant obstruent
       fricative </feature_set>
    <!--ŋ-->
-   <feature_set unicode="U14b">consonant dorsal lingual velar voiced stop sonorant nasal </feature_set>
-   <feature_set unicode="U180">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x14b">consonant dorsal lingual velar voiced stop sonorant nasal </feature_set>
+   <feature_set unicode="0x180">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
    <!--ƀ-->
    <!--ƈ-->
-   <feature_set unicode="U188">consonant posterior palatal lingual coronal voiceless stop obstruent
+   <feature_set unicode="0x188">consonant posterior palatal lingual coronal voiceless stop obstruent
       implosive </feature_set>
-   <feature_set unicode="U192">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x192">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
    <!--ƒ-->
-   <feature_set unicode="U195">consonant glide labial bilabial round voiceless approximant
+   <feature_set unicode="0x195">consonant glide labial bilabial round voiceless approximant
       continuant </feature_set>
    <!--ƕ-->
    <!--ƙ (obsolete)-->
-   <feature_set unicode="U199">consonant dorsal implosive ingressive obstruent lingual velar
+   <feature_set unicode="0x199">consonant dorsal implosive ingressive obstruent lingual velar
       voiceless </feature_set>
    <!--ƛ-->
-   <feature_set unicode="U19b">consonant lingual coronal anterior alveolar voiceless lateral
+   <feature_set unicode="0x19b">consonant lingual coronal anterior alveolar voiceless lateral
       obstruent affricate </feature_set>
-   <feature_set unicode="U19e">consonant lingual coronal anterior alveolar voiced stop sonorant
+   <feature_set unicode="0x19e">consonant lingual coronal anterior alveolar voiced stop sonorant
       nasal </feature_set>
    <!--ƞ-->
-   <feature_set unicode="U1a5">consonant labial bilabial voiceless stop obstruent implosive </feature_set>
+   <feature_set unicode="0x1a5">consonant labial bilabial voiceless stop obstruent implosive </feature_set>
    <!--ƥ-->
-   <feature_set unicode="U1aa">consonant round lingual coronal posterior alveopalatal distributed
+   <feature_set unicode="0x1aa">consonant round lingual coronal posterior alveopalatal distributed
       voiceless continuant obstruent fricative </feature_set>
    <!--ƪ-->
-   <feature_set unicode="U1ab">consonant posterior palatal lingual coronal anterior alveolar
+   <feature_set unicode="0x1ab">consonant posterior palatal lingual coronal anterior alveolar
       voiceless stop obstruent </feature_set>
    <!--ƫ-->
    <!--ƭ (obsolete)-->
-   <feature_set unicode="U1ad">consonant lingual coronal anterior alveolar voiceless stop obstruent
+   <feature_set unicode="0x1ad">consonant lingual coronal anterior alveolar voiceless stop obstruent
       implosive ingressive </feature_set>
-   <feature_set unicode="U1b9">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x1b9">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
    <!--ƹ should match ʕ-->
-   <feature_set unicode="U1ba">consonant labial round lingual coronal posterior alveopalatal
+   <feature_set unicode="0x1ba">consonant labial round lingual coronal posterior alveopalatal
       distributed voiced continuant obstruent fricative </feature_set>
    <!--ƺ-->
    <!--ǀ-->
-   <feature_set unicode="U1c0">consonant lingual coronal anterior dental voiceless stop obstruent
+   <feature_set unicode="0x1c0">consonant lingual coronal anterior dental voiceless stop obstruent
       click ingressive </feature_set>
    <!--ǁ-->
-   <feature_set unicode="U1c1">consonant lingual coronal anterior alveolar voiceless lateral stop
+   <feature_set unicode="0x1c1">consonant lingual coronal anterior alveolar voiceless lateral stop
       obstruent click ingressive </feature_set>
    <!--ǂ-->
-   <feature_set unicode="U1c2">consonant lingual coronal posterior alveopalatal voiceless stop
+   <feature_set unicode="0x1c2">consonant lingual coronal posterior alveopalatal voiceless stop
       obstruent click ingressive </feature_set>
    <!--ǃ-->
-   <feature_set unicode="U1c3">consonant lingual coronal alveolar voiceless stop obstruent click
+   <feature_set unicode="0x1c3">consonant lingual coronal alveolar voiceless stop obstruent click
       ingressive </feature_set>
-   <feature_set unicode="U234">consonant continuant lingual coronal lateral liquid palatal posterior
+   <feature_set unicode="0x234">consonant continuant lingual coronal lateral liquid palatal posterior
       alveopalatal sonorant voiced </feature_set>
    <!--ȴ-->
    <!--ȵ-->
-   <feature_set unicode="U235">consonant lingual coronal nasal posterior alveopalatal sonorant
+   <feature_set unicode="0x235">consonant lingual coronal nasal posterior alveopalatal sonorant
       voiced </feature_set>
    <!--ȶ-->
-   <feature_set unicode="U236">consonant lingual coronal obstruent posterior alveopalatal stop
+   <feature_set unicode="0x236">consonant lingual coronal obstruent posterior alveopalatal stop
       voiceless </feature_set>
    <!--ɓ-->
-   <feature_set unicode="U253">consonant labial bilabial voiced stop obstruent implosive ingressive </feature_set>
+   <feature_set unicode="0x253">consonant labial bilabial voiced stop obstruent implosive ingressive </feature_set>
    <!--ɕ-->
-   <feature_set unicode="U255">consonant laminal lingual coronal posterior palatal voiceless
+   <feature_set unicode="0x255">consonant laminal lingual coronal posterior palatal voiceless
       continuant obstruent fricative strident distributed </feature_set>
    <!--ɖ-->
-   <feature_set unicode="U256">consonant posterior retroflex lingual coronal voiced stop obstruent </feature_set>
+   <feature_set unicode="0x256">consonant posterior retroflex lingual coronal voiced stop obstruent </feature_set>
    <!--ɗ-->
-   <feature_set unicode="U257">consonant lingual coronal anterior alveolar voiced stop obstruent
+   <feature_set unicode="0x257">consonant lingual coronal anterior alveolar voiced stop obstruent
       implosive ingressive </feature_set>
    <!--ɟ-->
-   <feature_set unicode="U25f">consonant posterior palatal lingual coronal voiced stop obstruent </feature_set>
+   <feature_set unicode="0x25f">consonant posterior palatal lingual coronal voiced stop obstruent </feature_set>
    <!--ɠ-->
-   <feature_set unicode="U260">consonant dorsal lingual velar voiced stop obstruent implosive
+   <feature_set unicode="0x260">consonant dorsal lingual velar voiced stop obstruent implosive
       ingressive </feature_set>
    <!--ɡ-->
-   <feature_set unicode="U261">consonant dorsal lingual velar voiced stop obstruent </feature_set>
+   <feature_set unicode="0x261">consonant dorsal lingual velar voiced stop obstruent </feature_set>
    <!--ɢ-->
-   <feature_set unicode="U262">consonant uvular lingual dorsal voiced stop obstruent </feature_set>
+   <feature_set unicode="0x262">consonant uvular lingual dorsal voiced stop obstruent </feature_set>
    <!--ɣ-->
-   <feature_set unicode="U263">consonant dorsal lingual velar voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x263">consonant dorsal lingual velar voiced continuant obstruent fricative </feature_set>
    <!--ɥ-->
-   <feature_set unicode="U265">consonant glide labial bilabial palatal lingual coronal voiced
+   <feature_set unicode="0x265">consonant glide labial bilabial palatal lingual coronal voiced
       approximant continuant sonorant </feature_set>
    <!--ɦ-->
-   <feature_set unicode="U266">consonant guttural laryngeal voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x266">consonant guttural laryngeal voiced continuant obstruent fricative </feature_set>
    <!--ɧ-->
-   <feature_set unicode="U267">consonant dorsal velar lingual coronal posterior alveopalatal
+   <feature_set unicode="0x267">consonant dorsal velar lingual coronal posterior alveopalatal
       voiceless continuant obstruent fricative </feature_set>
    <!--ɫ-->
-   <feature_set unicode="U26b">consonant velar lingual coronal anterior alveolar voiced approximant
+   <feature_set unicode="0x26b">consonant velar lingual coronal anterior alveolar voiced approximant
       liquid lateral continuant sonorant </feature_set>
    <!--ɬ-->
-   <feature_set unicode="U26c">consonant lingual coronal anterior alveolar voiceless lateral
+   <feature_set unicode="0x26c">consonant lingual coronal anterior alveolar voiceless lateral
       continuant sonorant fricative </feature_set>
    <!--ɭ-->
-   <feature_set unicode="U26d">consonant posterior retroflex lingual coronal voiced approximant
+   <feature_set unicode="0x26d">consonant posterior retroflex lingual coronal voiced approximant
       liquid lateral continuant sonorant </feature_set>
    <!--ɮ-->
-   <feature_set unicode="U26e">consonant lingual coronal anterior alveolar voiced lateral continuant
+   <feature_set unicode="0x26e">consonant lingual coronal anterior alveolar voiced lateral continuant
       sonorant fricative </feature_set>
    <!--ɰ-->
-   <feature_set unicode="U270">consonant glide dorsal lingual velar voiced approximant continuant
+   <feature_set unicode="0x270">consonant glide dorsal lingual velar voiced approximant continuant
       sonorant </feature_set>
    <!--ɱ-->
-   <feature_set unicode="U271">consonant labial dental voiced stop sonorant nasal </feature_set>
+   <feature_set unicode="0x271">consonant labial dental voiced stop sonorant nasal </feature_set>
    <!--ɲ-->
-   <feature_set unicode="U272">consonant palatal voiced stop sonorant nasal lingual coronal
+   <feature_set unicode="0x272">consonant palatal voiced stop sonorant nasal lingual coronal
       posterior </feature_set>
    <!--ɳ-->
-   <feature_set unicode="U273">consonant retroflex voiced stop sonorant nasal lingual coronal
+   <feature_set unicode="0x273">consonant retroflex voiced stop sonorant nasal lingual coronal
       posterior </feature_set>
    <!--ɴ-->
-   <feature_set unicode="U274">consonant uvular lingual dorsal voiced stop sonorant nasal </feature_set>
+   <feature_set unicode="0x274">consonant uvular lingual dorsal voiced stop sonorant nasal </feature_set>
    <!--ɸ-->
-   <feature_set unicode="U278">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x278">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
    <!--ɹ-->
-   <feature_set unicode="U279">consonant lingual coronal anterior alveolar voiced approximant liquid
+   <feature_set unicode="0x279">consonant lingual coronal anterior alveolar voiced approximant liquid
       rhotic continuant sonorant </feature_set>
    <!--ɺ-->
-   <feature_set unicode="U27a">consonant lingual coronal anterior alveolar voiced approximant liquid
+   <feature_set unicode="0x27a">consonant lingual coronal anterior alveolar voiced approximant liquid
       lateral continuant sonorant flap </feature_set>
    <!--ɻ-->
-   <feature_set unicode="U27b">consonant posterior retroflex lingual coronal voiced approximant
+   <feature_set unicode="0x27b">consonant posterior retroflex lingual coronal voiced approximant
       liquid rhotic continuant sonorant </feature_set>
-   <feature_set unicode="U27c">alveolar consonant lingual coronal fricative obstruent trill voiced </feature_set>
+   <feature_set unicode="0x27c">alveolar consonant lingual coronal fricative obstruent trill voiced </feature_set>
    <!--ɼ ??-->
    <!--ɽ-->
-   <feature_set unicode="U27d">consonant posterior retroflex lingual coronal voiced approximant
+   <feature_set unicode="0x27d">consonant posterior retroflex lingual coronal voiced approximant
       liquid rhotic continuant sonorant flap </feature_set>
    <!--ɾ-->
-   <feature_set unicode="U27e">consonant lingual coronal anterior alveolar voiced approximant liquid
+   <feature_set unicode="0x27e">consonant lingual coronal anterior alveolar voiced approximant liquid
       rhotic continuant sonorant flap </feature_set>
    <!--ʀ-->
-   <feature_set unicode="U280">consonant uvular lingual dorsal voiced approximant liquid rhotic
+   <feature_set unicode="0x280">consonant uvular lingual dorsal voiced approximant liquid rhotic
       continuant sonorant trill </feature_set>
    <!--ʁ-->
-   <feature_set unicode="U281">consonant uvular lingual dorsal voiced rhotic continuant fricative
+   <feature_set unicode="0x281">consonant uvular lingual dorsal voiced rhotic continuant fricative
       obstruent </feature_set>
    <!--ʂ-->
-   <feature_set unicode="U282">consonant posterior retroflex lingual coronal voiceless continuant
+   <feature_set unicode="0x282">consonant posterior retroflex lingual coronal voiceless continuant
       obstruent fricative strident </feature_set>
    <!--ʃ-->
-   <feature_set unicode="U283">consonant laminal lingual coronal posterior alveopalatal distributed
+   <feature_set unicode="0x283">consonant laminal lingual coronal posterior alveopalatal distributed
       voiceless continuant obstruent fricative strident </feature_set>
    <!--ʄ-->
-   <feature_set unicode="U284">consonant posterior palatal lingual coronal voiced stop obstruent
+   <feature_set unicode="0x284">consonant posterior palatal lingual coronal voiced stop obstruent
       implosive ingressive </feature_set>
-   <feature_set unicode="U286">consonant palatal lingual coronal posterior alveopalatal distributed
+   <feature_set unicode="0x286">consonant palatal lingual coronal posterior alveopalatal distributed
       voiceless continuant obstruent fricative </feature_set>
    <!--ʆ-->
-   <feature_set unicode="U287">consonant lingual coronal anterior voiceless stop obstruent click
+   <feature_set unicode="0x287">consonant lingual coronal anterior voiceless stop obstruent click
       ingressive </feature_set>
    <!--ʇ same as single pipe-->
    <!--ʈ-->
-   <feature_set unicode="U288">consonant posterior retroflex lingual coronal voiceless stop
+   <feature_set unicode="0x288">consonant posterior retroflex lingual coronal voiceless stop
       obstruent </feature_set>
    <!--ʋ-->
-   <feature_set unicode="U28b">consonant labial dental voiced approximant continuant sonorant glide </feature_set>
+   <feature_set unicode="0x28b">consonant labial dental voiced approximant continuant sonorant glide </feature_set>
    <!--ʍ-->
-   <feature_set unicode="U28d">consonant labial bilabial velar dorsal lingual voiceless obstruent
+   <feature_set unicode="0x28d">consonant labial bilabial velar dorsal lingual voiceless obstruent
       continuant fricative </feature_set>
    <!--ʎ-->
-   <feature_set unicode="U28e">consonant posterior palatal lingual coronal voiced approximant liquid
+   <feature_set unicode="0x28e">consonant posterior palatal lingual coronal voiced approximant liquid
       lateral continuant sonorant </feature_set>
    <!--ʐ-->
-   <feature_set unicode="U290">consonant posterior retroflex lingual coronal voiced continuant
+   <feature_set unicode="0x290">consonant posterior retroflex lingual coronal voiced continuant
       obstruent fricative strident </feature_set>
    <!--ʑ-->
-   <feature_set unicode="U291">consonant laminal lingual coronal posterior palatal voiced continuant
+   <feature_set unicode="0x291">consonant laminal lingual coronal posterior palatal voiced continuant
       obstruent fricative strident distributed </feature_set>
    <!--ʒ-->
-   <feature_set unicode="U292">consonant laminal lingual coronal posterior alveopalatal distributed
+   <feature_set unicode="0x292">consonant laminal lingual coronal posterior alveopalatal distributed
       voiced obstruent fricative strident continuant </feature_set>
-   <feature_set unicode="U293">consonant palatal lingual coronal posterior alveopalatal distributed
+   <feature_set unicode="0x293">consonant palatal lingual coronal posterior alveopalatal distributed
       voiced continuant obstruent fricative strident </feature_set>
    <!--ʓ-->
    <!--ʔ-->
-   <feature_set unicode="U294">consonant guttural laryngeal voiceless stop obstruent </feature_set>
+   <feature_set unicode="0x294">consonant guttural laryngeal voiceless stop obstruent </feature_set>
    <!--ʕ-->
-   <feature_set unicode="U295">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
-   <feature_set unicode="U296">consonant lingual coronal anterior alveolar voiceless lateral stop
+   <feature_set unicode="0x295">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x296">consonant lingual coronal anterior alveolar voiceless lateral stop
       obstruent click ingressive </feature_set>
    <!--ʖ same as double pipe-->
-   <feature_set unicode="U297">consonant lingual coronal alveolar anterior voiceless stop obstruent
+   <feature_set unicode="0x297">consonant lingual coronal alveolar anterior voiceless stop obstruent
       click ingressive </feature_set>
    <!--ʗ same as !-->
    <!--ʘ-->
-   <feature_set unicode="U298">consonant labial bilabial voiceless stop obstruent click ingressive </feature_set>
+   <feature_set unicode="0x298">consonant labial bilabial voiceless stop obstruent click ingressive </feature_set>
    <!--ʙ-->
-   <feature_set unicode="U299">consonant labial bilabial voiced approximant continuant sonorant
+   <feature_set unicode="0x299">consonant labial bilabial voiced approximant continuant sonorant
       trill </feature_set>
    <!--ʛ-->
-   <feature_set unicode="U29b">consonant lingual uvular dorsal voiced stop obstruent implosive
+   <feature_set unicode="0x29b">consonant lingual uvular dorsal voiced stop obstruent implosive
       ingressive </feature_set>
    <!--ʜ-->
-   <feature_set unicode="U29c">consonant guttural epiglottal voiceless continuant obstruent
+   <feature_set unicode="0x29c">consonant guttural epiglottal voiceless continuant obstruent
       fricative </feature_set>
    <!--ʝ-->
-   <feature_set unicode="U29d">consonant posterior palatal lingual coronal voiced continuant
+   <feature_set unicode="0x29d">consonant posterior palatal lingual coronal voiced continuant
       obstruent fricative strident </feature_set>
-   <feature_set unicode="U29e">consonant dorsal lingual velar voiceless stop obstruent click
+   <feature_set unicode="0x29e">consonant dorsal lingual velar voiceless stop obstruent click
       ingressive </feature_set>
    <!--ʞ velar click, anatomically impossible?-->
    <!--ʟ-->
-   <feature_set unicode="U29f">consonant dorsal lingual velar voiced approximant liquid lateral
+   <feature_set unicode="0x29f">consonant dorsal lingual velar voiced approximant liquid lateral
       continuant sonorant </feature_set>
-   <feature_set unicode="U2a0">consonant dorsal implosive obstruent stop lingual uvular voiceless </feature_set>
+   <feature_set unicode="0x2a0">consonant dorsal implosive obstruent stop lingual uvular voiceless </feature_set>
    <!--ʠ-->
    <!--ʡ-->
-   <feature_set unicode="U2a1">consonant guttural epiglottal voiceless stop obstruent </feature_set>
+   <feature_set unicode="0x2a1">consonant guttural epiglottal voiceless stop obstruent </feature_set>
    <!--ʢ-->
-   <feature_set unicode="U2a2">consonant guttural epiglottal voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x2a2">consonant guttural epiglottal voiced continuant obstruent fricative </feature_set>
    <!--ʣ-->
-   <feature_set unicode="U2a3">consonant lingual coronal anterior alveolar voiced obstruent
+   <feature_set unicode="0x2a3">consonant lingual coronal anterior alveolar voiced obstruent
       affricate strident </feature_set>
    <!--ʤ-->
-   <feature_set unicode="U2a4">consonant lingual coronal posterior alveopalatal laminal distributed
+   <feature_set unicode="0x2a4">consonant lingual coronal posterior alveopalatal laminal distributed
       voiced obstruent affricate strident </feature_set>
    <!--ʥ-->
-   <feature_set unicode="U2a5">consonant lingual coronal posterior palatal laminal distributed
+   <feature_set unicode="0x2a5">consonant lingual coronal posterior palatal laminal distributed
       voiced obstruent affricate strident </feature_set>
    <!--ʦ-->
-   <feature_set unicode="U2a6">consonant lingual coronal anterior alveolar voiceless obstruent
+   <feature_set unicode="0x2a6">consonant lingual coronal anterior alveolar voiceless obstruent
       affricate strident </feature_set>
    <!--ʧ-->
-   <feature_set unicode="U2a7">consonant lingual coronal posterior alveopalatal laminal distributed
+   <feature_set unicode="0x2a7">consonant lingual coronal posterior alveopalatal laminal distributed
       voiceless obstruent affricate strident </feature_set>
    <!--ʨ-->
-   <feature_set unicode="U2a8">consonant lingual coronal posterior palatal laminal distributed
+   <feature_set unicode="0x2a8">consonant lingual coronal posterior palatal laminal distributed
       voiceless obstruent affricate strident </feature_set>
    <!--β-->
-   <feature_set unicode="U3b2">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
-   <feature_set unicode="U3b4">consonant lingual coronal anterior dental distributed voiced
+   <feature_set unicode="0x3b2">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
+   <feature_set unicode="0x3b4">consonant lingual coronal anterior dental distributed voiced
       continuant obstruent fricative </feature_set>
    <!--δ-->
    <!--θ-->
-   <feature_set unicode="U3b8">consonant dental lingual coronal anterior distributed voiceless
+   <feature_set unicode="0x3b8">consonant dental lingual coronal anterior distributed voiceless
       continuant obstruent fricative </feature_set>
    <!--λ-->
-   <feature_set unicode="U3bb">consonant lingual coronal anterior alveolar voiced lateral obstruent
+   <feature_set unicode="0x3bb">consonant lingual coronal anterior alveolar voiced lateral obstruent
       affricate </feature_set>
-   <feature_set unicode="U3c0">consonant labial dental voiced stop obstruent </feature_set>
+   <feature_set unicode="0x3c0">consonant labial dental voiced stop obstruent </feature_set>
    <!--π-->
-   <feature_set unicode="U3c3">consonant labial round lingual coronal anterior alveolar voiceless
+   <feature_set unicode="0x3c3">consonant labial round lingual coronal anterior alveolar voiceless
       continuant obstruent fricative </feature_set>
    <!--σ-->
    <!--χ-->
-   <feature_set unicode="U3c7">consonant uvular lingual dorsal voiceless continuant obstruent
+   <feature_set unicode="0x3c7">consonant uvular lingual dorsal voiceless continuant obstruent
       fricative </feature_set>
    <!--Hooked V-->
-   <feature_set unicode="U2c71">consonant continuant approximant flap labial dental sonorant voiced </feature_set>
-   <feature_set unicode="Uf20b">consonant dental lingual coronal anterior alveolar voiceless
+   <feature_set unicode="0x2c71">consonant continuant approximant flap labial dental sonorant voiced </feature_set>
+   <feature_set unicode="0xf20b">consonant dental lingual coronal anterior alveolar voiceless
       obstruent affricate strident </feature_set>
    <!--c with vertical line-->
-   <feature_set unicode="Uf20c">consonant posterior retroflex lingual coronal voiced stop obstruent
+   <feature_set unicode="0xf20c">consonant posterior retroflex lingual coronal voiced stop obstruent
       implosive </feature_set>
    <!--hooktop+right tail q? d?-->
-   <feature_set unicode="Uf210">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
+   <feature_set unicode="0xf210">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
    <!--p with horizontal line-->
-   <feature_set unicode="Uf240">consonant labial dental voiced stop obstruent </feature_set>
+   <feature_set unicode="0xf240">consonant labial dental voiced stop obstruent </feature_set>
    <!--d+b-->
-   <feature_set unicode="Uf241">consonant labial dental voiceless stop obstruent </feature_set>
+   <feature_set unicode="0xf241">consonant labial dental voiceless stop obstruent </feature_set>
    <!--q+p-->
-   <feature_set unicode="Uf246">consonant voiceless stop obstruent </feature_set>
+   <feature_set unicode="0xf246">consonant voiceless stop obstruent </feature_set>
    <!--left-tail 4-->
 
    <!--Vowels-->
    <!--V-->
-   <feature_set unicode="U56">vowel </feature_set>
+   <feature_set unicode="0x56">vowel </feature_set>
    <!--a; regular A-->
-   <feature_set unicode="U61">vowel low lax central </feature_set>
+   <feature_set unicode="0x61">vowel low lax central </feature_set>
    <!--e-->
-   <feature_set unicode="U65">vowel mid tense atr front </feature_set>
+   <feature_set unicode="0x65">vowel mid tense atr front </feature_set>
    <!--i-->
-   <feature_set unicode="U69">vowel high tense atr front </feature_set>
+   <feature_set unicode="0x69">vowel high tense atr front </feature_set>
    <!--o-->
-   <feature_set unicode="U6f">vowel round mid tense atr back </feature_set>
+   <feature_set unicode="0x6f">vowel round mid tense atr back </feature_set>
    <!--u-->
-   <feature_set unicode="U75">vowel round high tense atr back </feature_set>
+   <feature_set unicode="0x75">vowel round high tense atr back </feature_set>
    <!--y-->
-   <feature_set unicode="U79">vowel round high tense atr front </feature_set>
+   <feature_set unicode="0x79">vowel round high tense atr front </feature_set>
    <!--æ; Ash-->
-   <feature_set unicode="Ue6">vowel low lax front </feature_set>
+   <feature_set unicode="0xe6">vowel low lax front </feature_set>
    <!--ø-->
-   <feature_set unicode="Uf8">vowel round mid tense atr front </feature_set>
-   <feature_set unicode="U131">vowel high tense atr back </feature_set>
+   <feature_set unicode="0xf8">vowel round mid tense atr front </feature_set>
+   <feature_set unicode="0x131">vowel high tense atr back </feature_set>
    <!--œ; o-e-->
-   <feature_set unicode="U153">vowel round mid rtr lax front </feature_set>
+   <feature_set unicode="0x153">vowel round mid rtr lax front </feature_set>
    <!--ɐ-->
-   <feature_set unicode="U250">vowel low mid lax central </feature_set>
+   <feature_set unicode="0x250">vowel low mid lax central </feature_set>
    <!--ɑ; script A-->
-   <feature_set unicode="U251">vowel low lax back </feature_set>
+   <feature_set unicode="0x251">vowel low lax back </feature_set>
    <!--ɒ-->
-   <feature_set unicode="U252">vowel round low lax back </feature_set>
+   <feature_set unicode="0x252">vowel round low lax back </feature_set>
    <!--ɔ-->
-   <feature_set unicode="U254">vowel round mid rtr lax back </feature_set>
+   <feature_set unicode="0x254">vowel round mid rtr lax back </feature_set>
    <!--ɘ-->
-   <feature_set unicode="U258">vowel mid tense atr central </feature_set>
+   <feature_set unicode="0x258">vowel mid tense atr central </feature_set>
    <!--ə-->
-   <feature_set unicode="U259">vowel schwa mid rtr lax central </feature_set>
+   <feature_set unicode="0x259">vowel schwa mid rtr lax central </feature_set>
    <!--ɚ-->
-   <feature_set unicode="U25a">vowel schwa rhotic mid rtr lax central </feature_set>
+   <feature_set unicode="0x25a">vowel schwa rhotic mid rtr lax central </feature_set>
    <!--ɛ-->
-   <feature_set unicode="U25b">vowel mid rtr lax front </feature_set>
+   <feature_set unicode="0x25b">vowel mid rtr lax front </feature_set>
    <!--ɜ-->
-   <feature_set unicode="U25c">vowel mid rtr lax central </feature_set>
+   <feature_set unicode="0x25c">vowel mid rtr lax central </feature_set>
    <!--ɝ-->
-   <feature_set unicode="U25d">vowel rhotic mid rtr lax central </feature_set>
+   <feature_set unicode="0x25d">vowel rhotic mid rtr lax central </feature_set>
    <!--ɞ-->
-   <feature_set unicode="U25e">vowel round mid rtr lax central </feature_set>
+   <feature_set unicode="0x25e">vowel round mid rtr lax central </feature_set>
    <!--ɤ-->
-   <feature_set unicode="U264">vowel mid tense atr back </feature_set>
+   <feature_set unicode="0x264">vowel mid tense atr back </feature_set>
    <!--ɨ-->
-   <feature_set unicode="U268">vowel high tense atr central </feature_set>
-   <feature_set unicode="U269">vowel high rtr lax front </feature_set>
+   <feature_set unicode="0x268">vowel high tense atr central </feature_set>
+   <feature_set unicode="0x269">vowel high rtr lax front </feature_set>
    <!--ɩ-->
    <!--ɪ-->
-   <feature_set unicode="U26a">vowel high rtr lax front </feature_set>
+   <feature_set unicode="0x26a">vowel high rtr lax front </feature_set>
    <!--ɯ-->
-   <feature_set unicode="U26f">vowel high tense atr back </feature_set>
+   <feature_set unicode="0x26f">vowel high tense atr back </feature_set>
    <!--ɵ-->
-   <feature_set unicode="U275">vowel round mid tense atr central </feature_set>
+   <feature_set unicode="0x275">vowel round mid tense atr central </feature_set>
    <!--ɶ-->
-   <feature_set unicode="U276">vowel round low lax front </feature_set>
-   <feature_set unicode="U277">vowel high rtr lax back </feature_set>
+   <feature_set unicode="0x276">vowel round low lax front </feature_set>
+   <feature_set unicode="0x277">vowel high rtr lax back </feature_set>
    <!--ɷ-->
    <!--ʉ-->
-   <feature_set unicode="U289">vowel round high tense atr central </feature_set>
+   <feature_set unicode="0x289">vowel round high tense atr central </feature_set>
    <!--ʊ-->
-   <feature_set unicode="U28a">vowel round high rtr lax back </feature_set>
+   <feature_set unicode="0x28a">vowel round high rtr lax back </feature_set>
    <!--ʌ-->
-   <feature_set unicode="U28c">vowel mid rtr lax back </feature_set>
+   <feature_set unicode="0x28c">vowel mid rtr lax back </feature_set>
    <!--ʏ-->
-   <feature_set unicode="U28f">vowel round high rtr lax front </feature_set>
-   <feature_set unicode="U29a">vowel round mid rtr lax central </feature_set>
+   <feature_set unicode="0x28f">vowel round high rtr lax front </feature_set>
+   <feature_set unicode="0x29a">vowel round mid rtr lax central </feature_set>
    <!--ʚ-->
-   <feature_set unicode="U2ae">vowel round high rtr lax central back </feature_set>
+   <feature_set unicode="0x2ae">vowel round high rtr lax central back </feature_set>
    <!--ʮ-->
-   <feature_set unicode="U3b1">vowel low lax central </feature_set>
+   <feature_set unicode="0x3b1">vowel low lax central </feature_set>
    <!--α-->
-   <feature_set unicode="Uf23f">vowel round high tense atr front </feature_set>
+   <feature_set unicode="0xf23f">vowel round high tense atr front </feature_set>
    <!--barred small capital U-->
 
    <!--Diacritics and Misc-->
-   <feature_set unicode="U28">diacritic </feature_set>
-   <feature_set unicode="U29">diacritic </feature_set>
-   <feature_set unicode="U2c">diacritic </feature_set>
-   <feature_set unicode="U7b">diacritic </feature_set>
+   <feature_set unicode="0x28">diacritic </feature_set>
+   <feature_set unicode="0x29">diacritic </feature_set>
+   <feature_set unicode="0x2c">diacritic </feature_set>
+   <feature_set unicode="0x7b">diacritic </feature_set>
    <!--| minor group; syllable boundary-->
-   <feature_set unicode="U7c">diacritic </feature_set>
-   <feature_set unicode="U7d">diacritic </feature_set>
+   <feature_set unicode="0x7c">diacritic </feature_set>
+   <feature_set unicode="0x7d">diacritic </feature_set>
    <!--²-->
-   <feature_set unicode="Ub2">diacritic tone2 </feature_set>
+   <feature_set unicode="0xb2">diacritic tone2 </feature_set>
    <!--³-->
-   <feature_set unicode="Ub3">diacritic tone3 </feature_set>
+   <feature_set unicode="0xb3">diacritic tone3 </feature_set>
    <!--¹-->
-   <feature_set unicode="Ub9">diacritic tone1 </feature_set>
+   <feature_set unicode="0xb9">diacritic tone1 </feature_set>
    <!--ʬ-->
-   <feature_set unicode="U2ac">consonant bilabial labial percussive </feature_set>
+   <feature_set unicode="0x2ac">consonant bilabial labial percussive </feature_set>
    <!--ʭ-->
-   <feature_set unicode="U2ad">consonant dental lowerdental percussive </feature_set>
+   <feature_set unicode="0x2ad">consonant dental lowerdental percussive </feature_set>
    <!--ʰ-->
-   <feature_set unicode="U2b0">diacritic aspirated </feature_set>
-   <feature_set unicode="U2b1">diacritic breathyvoiced </feature_set>
+   <feature_set unicode="0x2b0">diacritic aspirated </feature_set>
+   <feature_set unicode="0x2b1">diacritic breathyvoiced </feature_set>
    <!--ʲ-->
-   <feature_set unicode="U2b2">diacritic palatal </feature_set>
-   <feature_set unicode="U2b3">diacritic rhotic </feature_set>
-   <feature_set unicode="U2b4">diacritic rhotic </feature_set>
-   <feature_set unicode="U2b5">diacritic rhotic </feature_set>
-   <feature_set unicode="U2b6">diacritic rhotic </feature_set>
+   <feature_set unicode="0x2b2">diacritic palatal </feature_set>
+   <feature_set unicode="0x2b3">diacritic rhotic </feature_set>
+   <feature_set unicode="0x2b4">diacritic rhotic </feature_set>
+   <feature_set unicode="0x2b5">diacritic rhotic </feature_set>
+   <feature_set unicode="0x2b6">diacritic rhotic </feature_set>
    <!--ʷ-->
-   <feature_set unicode="U2b7">diacritic labial </feature_set>
-   <feature_set unicode="U2b8">diacritic </feature_set>
-   <feature_set unicode="U2bb">diacritic aspirated </feature_set>
+   <feature_set unicode="0x2b7">diacritic labial </feature_set>
+   <feature_set unicode="0x2b8">diacritic </feature_set>
+   <feature_set unicode="0x2bb">diacritic aspirated </feature_set>
    <!--ʼ-->
-   <feature_set unicode="U2bc">diacritic ejective </feature_set>
+   <feature_set unicode="0x2bc">diacritic ejective </feature_set>
    <!-- role-switcher -->
-   <feature_set unicode="U335">diacritic </feature_set>
-   <feature_set unicode="U2e2">diacritic affricate</feature_set>
-   <feature_set unicode="U1dbb">diacritic affricate</feature_set>
-   <feature_set unicode="U1db4">diacritic affricate</feature_set>
-   <feature_set unicode="U1dbe">diacritic affricate</feature_set>
-   <feature_set unicode="U2bd">diacritic weaklyaspirated </feature_set>
-   <feature_set unicode="U2be">diacritic </feature_set>
-   <feature_set unicode="U2bf">diacritic </feature_set>
+   <feature_set unicode="0x335">diacritic </feature_set>
+   <feature_set unicode="0x2e2">diacritic affricate</feature_set>
+   <feature_set unicode="0x1dbb">diacritic affricate</feature_set>
+   <feature_set unicode="0x1db4">diacritic affricate</feature_set>
+   <feature_set unicode="0x1dbe">diacritic affricate</feature_set>
+   <feature_set unicode="0x2bd">diacritic weaklyaspirated </feature_set>
+   <feature_set unicode="0x2be">diacritic </feature_set>
+   <feature_set unicode="0x2bf">diacritic </feature_set>
    <!--ˀ-->
-   <feature_set unicode="U2c0">diacritic laryngeal </feature_set>
-   <feature_set unicode="U2c2">diacritic fronted </feature_set>
-   <feature_set unicode="U2c3">diacritic backed </feature_set>
-   <feature_set unicode="U2c4">diacritic raised </feature_set>
-   <feature_set unicode="U2c5">diacritic lowered </feature_set>
-   <feature_set unicode="U2c6">diacritic tonefalling </feature_set>
-   <feature_set unicode="U2c7">diacritic tonerising </feature_set>
+   <feature_set unicode="0x2c0">diacritic laryngeal </feature_set>
+   <feature_set unicode="0x2c2">diacritic fronted </feature_set>
+   <feature_set unicode="0x2c3">diacritic backed </feature_set>
+   <feature_set unicode="0x2c4">diacritic raised </feature_set>
+   <feature_set unicode="0x2c5">diacritic lowered </feature_set>
+   <feature_set unicode="0x2c6">diacritic tonefalling </feature_set>
+   <feature_set unicode="0x2c7">diacritic tonerising </feature_set>
    <!--ˈ-->
-   <feature_set unicode="U2c8">diacritic prstress </feature_set>
-   <feature_set unicode="U2c9">diacritic tonemid </feature_set>
-   <feature_set unicode="U2ca">diacritic tonehigh </feature_set>
-   <feature_set unicode="U2cb">diacritic toneextrahigh </feature_set>
+   <feature_set unicode="0x2c8">diacritic prstress </feature_set>
+   <feature_set unicode="0x2c9">diacritic tonemid </feature_set>
+   <feature_set unicode="0x2ca">diacritic tonehigh </feature_set>
+   <feature_set unicode="0x2cb">diacritic toneextrahigh </feature_set>
    <!--ˌ-->
-   <feature_set unicode="U2cc">diacritic secstress </feature_set>
-   <feature_set unicode="U2ce">diacritic </feature_set>
-   <feature_set unicode="U2cf">diacritic </feature_set>
+   <feature_set unicode="0x2cc">diacritic secstress </feature_set>
+   <feature_set unicode="0x2ce">diacritic </feature_set>
+   <feature_set unicode="0x2cf">diacritic </feature_set>
    <!--ː-->
-   <feature_set unicode="U2d0">diacritic long </feature_set>
+   <feature_set unicode="0x2d0">diacritic long </feature_set>
    <!--ˑ-->
-   <feature_set unicode="U2d1">diacritic halflong </feature_set>
-   <feature_set unicode="U2d4">affricate diacritic strident </feature_set>
-   <feature_set unicode="U2d5">affricate diacritic stop </feature_set>
-   <feature_set unicode="U2d6">affricate diacritic syllabic </feature_set>
-   <feature_set unicode="U2d7">affricate diacritic sonorant </feature_set>
-   <feature_set unicode="U2dc">diacritic nasal </feature_set>
+   <feature_set unicode="0x2d1">diacritic halflong </feature_set>
+   <feature_set unicode="0x2d4">affricate diacritic strident </feature_set>
+   <feature_set unicode="0x2d5">affricate diacritic stop </feature_set>
+   <feature_set unicode="0x2d6">affricate diacritic syllabic </feature_set>
+   <feature_set unicode="0x2d7">affricate diacritic sonorant </feature_set>
+   <feature_set unicode="0x2dc">diacritic nasal </feature_set>
    <!--◌˞ right hook-->
-   <feature_set unicode="U2de">diacritic rhotic </feature_set>
+   <feature_set unicode="0x2de">diacritic rhotic </feature_set>
    <!--ˠ-->
-   <feature_set unicode="U2e0">diacritic velar </feature_set>
+   <feature_set unicode="0x2e0">diacritic velar </feature_set>
    <!--ˡ-->
-   <feature_set unicode="U2e1">diacritic lateral </feature_set>
-   <feature_set unicode="U2e3">diacritic </feature_set>
+   <feature_set unicode="0x2e1">diacritic lateral </feature_set>
+   <feature_set unicode="0x2e3">diacritic </feature_set>
    <!--ˤ-->
-   <feature_set unicode="U2e4">diacritic pharyngeal </feature_set>
-   <feature_set unicode="U2e5">diacritic toneextrahigh </feature_set>
-   <feature_set unicode="U2e6">diacritic tonehigh </feature_set>
-   <feature_set unicode="U2e7">diacritic tonemid </feature_set>
-   <feature_set unicode="U2e8">diacritic tonelow </feature_set>
-   <feature_set unicode="U2e9">diacritic toneextralow </feature_set>
-   <feature_set unicode="U2ea">diacritic </feature_set>
-   <feature_set unicode="U2ed">diacritic unaspirated </feature_set>
-   <feature_set unicode="U2ee">diacritic </feature_set>
-   <feature_set unicode="U2ef">diacritic voiced </feature_set>
-   <feature_set unicode="U2f0">diacritic </feature_set>
-   <feature_set unicode="U2f1">diacritic </feature_set>
-   <feature_set unicode="U2f2">diacritic </feature_set>
-   <feature_set unicode="U2f5">diacritic toneextralow </feature_set>
-   <feature_set unicode="U2f6">diacritic toneextrahigh </feature_set>
-   <feature_set unicode="U2f8">diacritic long </feature_set>
-   <feature_set unicode="U2f9">diacritic </feature_set>
-   <feature_set unicode="U2fa">diacritic unreleased </feature_set>
-   <feature_set unicode="U02fa">diacritic </feature_set>
-   <feature_set unicode="U2fb">diacritic </feature_set>
-   <feature_set unicode="U2fc">diacritic </feature_set>
-   <feature_set unicode="U2fd">diacritic </feature_set>
-   <feature_set unicode="U2fe">diacritic </feature_set>
-   <feature_set unicode="U2ff">diacritic </feature_set>
+   <feature_set unicode="0x2e4">diacritic pharyngeal </feature_set>
+   <feature_set unicode="0x2e5">diacritic toneextrahigh </feature_set>
+   <feature_set unicode="0x2e6">diacritic tonehigh </feature_set>
+   <feature_set unicode="0x2e7">diacritic tonemid </feature_set>
+   <feature_set unicode="0x2e8">diacritic tonelow </feature_set>
+   <feature_set unicode="0x2e9">diacritic toneextralow </feature_set>
+   <feature_set unicode="0x2ea">diacritic </feature_set>
+   <feature_set unicode="0x2ed">diacritic unaspirated </feature_set>
+   <feature_set unicode="0x2ee">diacritic </feature_set>
+   <feature_set unicode="0x2ef">diacritic voiced </feature_set>
+   <feature_set unicode="0x2f0">diacritic </feature_set>
+   <feature_set unicode="0x2f1">diacritic </feature_set>
+   <feature_set unicode="0x2f2">diacritic </feature_set>
+   <feature_set unicode="0x2f5">diacritic toneextralow </feature_set>
+   <feature_set unicode="0x2f6">diacritic toneextrahigh </feature_set>
+   <feature_set unicode="0x2f8">diacritic long </feature_set>
+   <feature_set unicode="0x2f9">diacritic </feature_set>
+   <feature_set unicode="0x2fa">diacritic unreleased </feature_set>
+   <feature_set unicode="0x02fa">diacritic </feature_set>
+   <feature_set unicode="0x2fb">diacritic </feature_set>
+   <feature_set unicode="0x2fc">diacritic </feature_set>
+   <feature_set unicode="0x2fd">diacritic </feature_set>
+   <feature_set unicode="0x2fe">diacritic </feature_set>
+   <feature_set unicode="0x2ff">diacritic </feature_set>
    <!--◌̀ grave-->
-   <feature_set unicode="U300">diacritic tonelow </feature_set>
+   <feature_set unicode="0x300">diacritic tonelow </feature_set>
    <!--◌́ acute-->
-   <feature_set unicode="U301">diacritic tonehigh </feature_set>
+   <feature_set unicode="0x301">diacritic tonehigh </feature_set>
    <!--circumflex-->
-   <feature_set unicode="U302">diacritic tonefalling </feature_set>
+   <feature_set unicode="0x302">diacritic tonefalling </feature_set>
    <!--◌̃ superscript tilde-->
-   <feature_set unicode="U303">diacritic nasal </feature_set>
+   <feature_set unicode="0x303">diacritic nasal </feature_set>
    <!--◌̄ macron-->
-   <feature_set unicode="U304">diacritic tonemid </feature_set>
+   <feature_set unicode="0x304">diacritic tonemid </feature_set>
    <!--◌̆ breve-->
-   <feature_set unicode="U306">diacritic extrashort </feature_set>
+   <feature_set unicode="0x306">diacritic extrashort </feature_set>
    <!--◌̈ umlaut-->
-   <feature_set unicode="U308">diacritic central </feature_set>
-   <feature_set unicode="U309">diacritic </feature_set>
-   <feature_set unicode="U30a">diacritic voiceless </feature_set>
+   <feature_set unicode="0x308">diacritic central </feature_set>
+   <feature_set unicode="0x309">diacritic </feature_set>
+   <feature_set unicode="0x30a">diacritic voiceless </feature_set>
    <!--◌̋ double acute-->
-   <feature_set unicode="U30b">diacritic toneextrahigh </feature_set>
+   <feature_set unicode="0x30b">diacritic toneextrahigh </feature_set>
    <!--Wedge; haček-->
-   <feature_set unicode="U30c">diacritic tonerising </feature_set>
+   <feature_set unicode="0x30c">diacritic tonerising </feature_set>
    <!--◌̏ double grave-->
-   <feature_set unicode="U30f">diacritic toneextralow </feature_set>
-   <feature_set unicode="U310">diacritic </feature_set>
-   <feature_set unicode="U311">diacritic fronted </feature_set>
-   <feature_set unicode="U312">diacritic aspirated </feature_set>
-   <feature_set unicode="U314">diacritic weaklyaspirated </feature_set>
-   <feature_set unicode="U316">diacritic tonerising </feature_set>
+   <feature_set unicode="0x30f">diacritic toneextralow </feature_set>
+   <feature_set unicode="0x310">diacritic </feature_set>
+   <feature_set unicode="0x311">diacritic fronted </feature_set>
+   <feature_set unicode="0x312">diacritic aspirated </feature_set>
+   <feature_set unicode="0x314">diacritic weaklyaspirated </feature_set>
+   <feature_set unicode="0x316">diacritic tonerising </feature_set>
    <!--◌̘-->
-   <feature_set unicode="U318">diacritic atr </feature_set>
+   <feature_set unicode="0x318">diacritic atr </feature_set>
    <!--◌̙-->
-   <feature_set unicode="U319">diacritic rtr </feature_set>
+   <feature_set unicode="0x319">diacritic rtr </feature_set>
    <!--◌̚ corner-->
-   <feature_set unicode="U31a">diacritic unreleased </feature_set>
+   <feature_set unicode="0x31a">diacritic unreleased </feature_set>
    <!--◌̜ subscript left half-ring-->
-   <feature_set unicode="U31c">diacritic lessrounded </feature_set>
+   <feature_set unicode="0x31c">diacritic lessrounded </feature_set>
    <!--◌̝ raising sign-->
-   <feature_set unicode="U31d">diacritic raised </feature_set>
+   <feature_set unicode="0x31d">diacritic raised </feature_set>
    <!--◌̞ lowering sign-->
-   <feature_set unicode="U31e">diacritic lowered </feature_set>
+   <feature_set unicode="0x31e">diacritic lowered </feature_set>
    <!--◌̟ combining plus below-->
-   <feature_set unicode="U31f">diacritic advanced </feature_set>
+   <feature_set unicode="0x31f">diacritic advanced </feature_set>
    <!--◌̠ combining minus below-->
-   <feature_set unicode="U320">diacritic retracted </feature_set>
+   <feature_set unicode="0x320">diacritic retracted </feature_set>
    <!--◌̠-->
-   <feature_set unicode="U321">diacritic palatal </feature_set>
-   <feature_set unicode="U322">diacritic palatal </feature_set>
+   <feature_set unicode="0x321">diacritic palatal </feature_set>
+   <feature_set unicode="0x322">diacritic palatal </feature_set>
    <!--◌̣ under-dot-->
-   <feature_set unicode="U323">diacritic lenis </feature_set>
+   <feature_set unicode="0x323">diacritic lenis </feature_set>
    <!--  over-dot -->
-   <feature_set unicode="U307">diacritic lenis </feature_set>
+   <feature_set unicode="0x307">diacritic lenis </feature_set>
    <!--◌̤ subscript umlaut-->
-   <feature_set unicode="U324">diacritic breathyvoiced </feature_set>
+   <feature_set unicode="0x324">diacritic breathyvoiced </feature_set>
    <!--◌̥ under-ring-->
-   <feature_set unicode="U325">diacritic voiceless </feature_set>
+   <feature_set unicode="0x325">diacritic voiceless </feature_set>
    <!--◌̩-->
-   <feature_set unicode="U329">diacritic syllabic </feature_set>
+   <feature_set unicode="0x329">diacritic syllabic </feature_set>
    <!--◌̪ subscript bridge-->
-   <feature_set unicode="U32a">diacritic dental </feature_set>
-   <feature_set unicode="U32b">diacritic </feature_set>
+   <feature_set unicode="0x32a">diacritic dental </feature_set>
+   <feature_set unicode="0x32b">diacritic </feature_set>
    <!--◌̬ subscript wedge-->
-   <feature_set unicode="U32c">diacritic voiced </feature_set>
-   <feature_set unicode="U32e">diacritic </feature_set>
+   <feature_set unicode="0x32c">diacritic voiced </feature_set>
+   <feature_set unicode="0x32e">diacritic </feature_set>
    <!--◌̯ subscript arch-->
-   <feature_set unicode="U32f">diacritic nonsyllabic </feature_set>
+   <feature_set unicode="0x32f">diacritic nonsyllabic </feature_set>
    <!--◌̰ subscript tilde-->
-   <feature_set unicode="U330">diacritic creakyvoiced </feature_set>
-   <feature_set unicode="U332">diacritic alveolar </feature_set>
-   <feature_set unicode="U333">diacritic </feature_set>
-   <feature_set unicode="U334">diacritic pharyngeal velar </feature_set>
+   <feature_set unicode="0x330">diacritic creakyvoiced </feature_set>
+   <feature_set unicode="0x332">diacritic alveolar </feature_set>
+   <feature_set unicode="0x333">diacritic </feature_set>
+   <feature_set unicode="0x334">diacritic pharyngeal velar </feature_set>
    <!--◌̹ subscript right half-ring-->
-   <feature_set unicode="U339">diacritic morerounded </feature_set>
+   <feature_set unicode="0x339">diacritic morerounded </feature_set>
    <!--◌̺ inverted subscript bridge-->
-   <feature_set unicode="U33a">diacritic apical </feature_set>
+   <feature_set unicode="0x33a">diacritic apical </feature_set>
    <!--◌̻ subscript square-->
-   <feature_set unicode="U33b">diacritic laminal </feature_set>
+   <feature_set unicode="0x33b">diacritic laminal </feature_set>
    <!--◌̼ subscript seagull-->
-   <feature_set unicode="U33c">diacritic labial </feature_set>
+   <feature_set unicode="0x33c">diacritic labial </feature_set>
    <!--◌̽ over-cross-->
-   <feature_set unicode="U33d">diacritic mid central </feature_set>
-   <feature_set unicode="U33e">diacritic </feature_set>
-   <feature_set unicode="U33f">diacritic unaspirated </feature_set>
-   <feature_set unicode="U342">diacritic </feature_set>
-   <feature_set unicode="U345">diacritic </feature_set>
+   <feature_set unicode="0x33d">diacritic mid central </feature_set>
+   <feature_set unicode="0x33e">diacritic </feature_set>
+   <feature_set unicode="0x33f">diacritic unaspirated </feature_set>
+   <feature_set unicode="0x342">diacritic </feature_set>
+   <feature_set unicode="0x345">diacritic </feature_set>
    <!--◌͆ superscript bridge-->
-   <feature_set unicode="U346">diacritic lowerdental </feature_set>
+   <feature_set unicode="0x346">diacritic lowerdental </feature_set>
    <!--◌͇ subscript equals-->
-   <feature_set unicode="U347">diacritic alveolar </feature_set>
+   <feature_set unicode="0x347">diacritic alveolar </feature_set>
    <!--◌͈ subscript double syllabicity mark-->
-   <feature_set unicode="U348">diacritic strongarticulation </feature_set>
+   <feature_set unicode="0x348">diacritic strongarticulation </feature_set>
    <!--◌͉-->
-   <feature_set unicode="U349">diacritic weakarticulation </feature_set>
+   <feature_set unicode="0x349">diacritic weakarticulation </feature_set>
    <!--◌͊ superscript not tilde-->
-   <feature_set unicode="U34a">diacritic denasalized </feature_set>
+   <feature_set unicode="0x34a">diacritic denasalized </feature_set>
    <!--◌͋ superscript dotted tilde-->
-   <feature_set unicode="U34b">diacritic nasal narealfricative </feature_set>
+   <feature_set unicode="0x34b">diacritic nasal narealfricative </feature_set>
    <!--◌͌ superscript almost-equal-->
-   <feature_set unicode="U34c">diacritic velopharyngeal velopharyngealfricative </feature_set>
+   <feature_set unicode="0x34c">diacritic velopharyngeal velopharyngealfricative </feature_set>
    <!--◌͍-->
-   <feature_set unicode="U34d">diacritic labialspread </feature_set>
-   <feature_set unicode="U34f">diacritic </feature_set>
-   <feature_set unicode="U350">diacritic backed </feature_set>
+   <feature_set unicode="0x34d">diacritic labialspread </feature_set>
+   <feature_set unicode="0x34f">diacritic </feature_set>
+   <feature_set unicode="0x350">diacritic backed </feature_set>
    <!--◌͐-->
-   <feature_set unicode="U351">diacritic </feature_set>
-   <feature_set unicode="U352">diacritic </feature_set>
-   <feature_set unicode="U353">diacritic </feature_set>
-   <feature_set unicode="U354">diacritic fronted </feature_set>
-   <feature_set unicode="U355">diacritic backed </feature_set>
-   <feature_set unicode="U356">diacritic </feature_set>
-   <feature_set unicode="U357">diacritic </feature_set>
+   <feature_set unicode="0x351">diacritic </feature_set>
+   <feature_set unicode="0x352">diacritic </feature_set>
+   <feature_set unicode="0x353">diacritic </feature_set>
+   <feature_set unicode="0x354">diacritic fronted </feature_set>
+   <feature_set unicode="0x355">diacritic backed </feature_set>
+   <feature_set unicode="0x356">diacritic </feature_set>
+   <feature_set unicode="0x357">diacritic </feature_set>
    <!--◌͜ phone building-->
-   <feature_set unicode="U35c">diacritic </feature_set>
-   <feature_set unicode="U35d">diacritic </feature_set>
-   <feature_set unicode="U35e">diacritic </feature_set>
-   <feature_set unicode="U35f">diacritic </feature_set>
-   <feature_set unicode="U360">diacritic </feature_set>
+   <feature_set unicode="0x35c">diacritic </feature_set>
+   <feature_set unicode="0x35d">diacritic </feature_set>
+   <feature_set unicode="0x35e">diacritic </feature_set>
+   <feature_set unicode="0x35f">diacritic </feature_set>
+   <feature_set unicode="0x360">diacritic </feature_set>
    <!--◌͡ phone building-->
-   <feature_set unicode="U361">diacritic </feature_set>
-   <feature_set unicode="U363">diacritic </feature_set>
-   <feature_set unicode="U364">diacritic </feature_set>
-   <feature_set unicode="U365">diacritic </feature_set>
-   <feature_set unicode="U366">diacritic </feature_set>
-   <feature_set unicode="U367">diacritic </feature_set>
-   <feature_set unicode="U368">diacritic </feature_set>
-   <feature_set unicode="U369">diacritic </feature_set>
-   <feature_set unicode="U36a">diacritic aspirated </feature_set>
-   <feature_set unicode="U36b">diacritic nasal </feature_set>
-   <feature_set unicode="U36c">diacritic rhotic </feature_set>
-   <feature_set unicode="U36d">diacritic </feature_set>
-   <feature_set unicode="U36e">diacritic </feature_set>
-   <feature_set unicode="U36f">diacritic </feature_set>
-   <feature_set unicode="U387">diacritic palatal lingual coronal halflong </feature_set>
-   <feature_set unicode="U1d4a">diacritic schwa </feature_set>
+   <feature_set unicode="0x361">diacritic </feature_set>
+   <feature_set unicode="0x363">diacritic </feature_set>
+   <feature_set unicode="0x364">diacritic </feature_set>
+   <feature_set unicode="0x365">diacritic </feature_set>
+   <feature_set unicode="0x366">diacritic </feature_set>
+   <feature_set unicode="0x367">diacritic </feature_set>
+   <feature_set unicode="0x368">diacritic </feature_set>
+   <feature_set unicode="0x369">diacritic </feature_set>
+   <feature_set unicode="0x36a">diacritic aspirated </feature_set>
+   <feature_set unicode="0x36b">diacritic nasal </feature_set>
+   <feature_set unicode="0x36c">diacritic rhotic </feature_set>
+   <feature_set unicode="0x36d">diacritic </feature_set>
+   <feature_set unicode="0x36e">diacritic </feature_set>
+   <feature_set unicode="0x36f">diacritic </feature_set>
+   <feature_set unicode="0x387">diacritic palatal lingual coronal halflong </feature_set>
+   <feature_set unicode="0x1d4a">diacritic schwa </feature_set>
    <!--ᵐ-->
-   <feature_set unicode="U1d50">diacritic nasal bilabial </feature_set>
+   <feature_set unicode="0x1d50">diacritic nasal bilabial </feature_set>
    <!--ᵑ-->
-   <feature_set unicode="U1d51">diacritic nasal velar </feature_set>
+   <feature_set unicode="0x1d51">diacritic nasal velar </feature_set>
    <!--superscript left-tail M-->
-   <feature_set unicode="U1dac">diacritic nasal labial dental </feature_set>
-   <feature_set unicode="U1daf">diacritic nasal retroflex </feature_set>
+   <feature_set unicode="0x1dac">diacritic nasal labial dental </feature_set>
+   <feature_set unicode="0x1daf">diacritic nasal retroflex </feature_set>
    <!--Superscript retroflex nasal-->
    <!--superscript left-tail N-->
-   <feature_set unicode="U1dae">diacritic nasal palatal </feature_set>
+   <feature_set unicode="0x1dae">diacritic nasal palatal </feature_set>
    <!--superscript small capital N-->
-   <feature_set unicode="U1db0">diacritic nasal uvular </feature_set>
-   <feature_set unicode="U1dbf">anterior continuant lingual coronal dental diacritic distributed
+   <feature_set unicode="0x1db0">diacritic nasal uvular </feature_set>
+   <feature_set unicode="0x1dbf">anterior continuant lingual coronal dental diacritic distributed
       dental obstruent voiceless </feature_set>
-   <feature_set unicode="U1dc4">diacritic tonehigh tonerising </feature_set>
-   <feature_set unicode="U1dc5">diacritic tonelowrising </feature_set>
-   <feature_set unicode="U1dc8">diacritic tonerisingfalling </feature_set>
-   <feature_set unicode="U2026">diacritic </feature_set>
-   <feature_set unicode="U203f">diacritic </feature_set>
+   <feature_set unicode="0x1dc4">diacritic tonehigh tonerising </feature_set>
+   <feature_set unicode="0x1dc5">diacritic tonelowrising </feature_set>
+   <feature_set unicode="0x1dc8">diacritic tonerisingfalling </feature_set>
+   <feature_set unicode="0x2026">diacritic </feature_set>
+   <feature_set unicode="0x203f">diacritic </feature_set>
    <!--‖ major group; syllable boundary-->
-   <feature_set unicode="U2016">diacritic </feature_set>
+   <feature_set unicode="0x2016">diacritic </feature_set>
    <!--⁴-->
-   <feature_set unicode="U2074">diacritic tone4 </feature_set>
+   <feature_set unicode="0x2074">diacritic tone4 </feature_set>
    <!--⁵-->
-   <feature_set unicode="U2075">diacritic tone5 </feature_set>
+   <feature_set unicode="0x2075">diacritic tone5 </feature_set>
    <!--⁶-->
-   <feature_set unicode="U2076">diacritic tone6 </feature_set>
+   <feature_set unicode="0x2076">diacritic tone6 </feature_set>
    <!--⁷-->
-   <feature_set unicode="U2077">diacritic tone7 </feature_set>
+   <feature_set unicode="0x2077">diacritic tone7 </feature_set>
    <!--⁸-->
-   <feature_set unicode="U2078">diacritic tone8 </feature_set>
+   <feature_set unicode="0x2078">diacritic tone8 </feature_set>
    <!--⁹-->
-   <feature_set unicode="U2079">diacritic tone9 </feature_set>
+   <feature_set unicode="0x2079">diacritic tone9 </feature_set>
    <!--ⁿ-->
-   <feature_set unicode="U207f">diacritic nasal alveolar </feature_set>
+   <feature_set unicode="0x207f">diacritic nasal alveolar </feature_set>
    <!--↑-->
-   <feature_set unicode="U2191">diacritic egressive </feature_set>
+   <feature_set unicode="0x2191">diacritic egressive </feature_set>
    <!--↓-->
-   <feature_set unicode="U2193">diacritic ingressive </feature_set>
+   <feature_set unicode="0x2193">diacritic ingressive </feature_set>
    <!--↗-->
-   <feature_set unicode="U2197">diacritic toneglobalrise </feature_set>
+   <feature_set unicode="0x2197">diacritic toneglobalrise </feature_set>
    <!--↘-->
-   <feature_set unicode="U2198">diacritic toneglobalfall </feature_set>
-   <feature_set unicode="U2e28">diacritic </feature_set>
-   <feature_set unicode="U2e29">diacritic </feature_set>
+   <feature_set unicode="0x2198">diacritic toneglobalfall </feature_set>
+   <feature_set unicode="0x2e28">diacritic </feature_set>
+   <feature_set unicode="0x2e29">diacritic </feature_set>
    <!--small up arrow-->
-   <feature_set unicode="Ua71b">diacritic toneupstep </feature_set>
+   <feature_set unicode="0xa71b">diacritic toneupstep </feature_set>
    <!--small down arrow-->
-   <feature_set unicode="Ua71c">diacritic tonedownstep </feature_set>
+   <feature_set unicode="0xa71c">diacritic tonedownstep </feature_set>
    <!--high rising-->
-   <feature_set unicode="Uf171">diacritic tonehighrising </feature_set>
+   <feature_set unicode="0xf171">diacritic tonehighrising </feature_set>
    <!--low rising-->
-   <feature_set unicode="Uf172">diacritic tonelowrising </feature_set>
+   <feature_set unicode="0xf172">diacritic tonelowrising </feature_set>
    <!--rising falling-->
-   <feature_set unicode="Uf175">diacritic tonerisingfalling </feature_set>
-   <feature_set unicode="Uf176">diacritic tonefallingrising </feature_set>
+   <feature_set unicode="0xf175">diacritic tonerisingfalling </feature_set>
+   <feature_set unicode="0xf176">diacritic tonefallingrising </feature_set>
    <!--falling rising-->
-   <feature_set unicode="Uf179">diacritic tonefallingrising </feature_set>
-   <feature_set unicode="Uf181">diacritic nasal prenasalized </feature_set>
-   <feature_set unicode="Uf1a8">diacritic </feature_set>
-   <feature_set unicode="Uf1b1">diacritic </feature_set>
-   <feature_set unicode="Uf1c0">diacritic nasal prenasalized </feature_set>
-   <feature_set unicode="Uf1c1">diacritic nasal prenasalized </feature_set>
-   <feature_set unicode="Uf1c2">diacritic nasal prenasalized </feature_set>
-   <feature_set unicode="U23">pause </feature_set>
-   <feature_set unicode="U2a">unintelligible </feature_set>
+   <feature_set unicode="0xf179">diacritic tonefallingrising </feature_set>
+   <feature_set unicode="0xf181">diacritic nasal prenasalized </feature_set>
+   <feature_set unicode="0xf1a8">diacritic </feature_set>
+   <feature_set unicode="0xf1b1">diacritic </feature_set>
+   <feature_set unicode="0xf1c0">diacritic nasal prenasalized </feature_set>
+   <feature_set unicode="0xf1c1">diacritic nasal prenasalized </feature_set>
+   <feature_set unicode="0xf1c2">diacritic nasal prenasalized </feature_set>
+   <feature_set unicode="0x23">pause </feature_set>
+   <feature_set unicode="0x2a">unintelligible </feature_set>
    <!--. syllable boundary-->
-   <feature_set unicode="U2e">halflong </feature_set>
-   <feature_set unicode="U47">glide </feature_set>
-   <feature_set unicode="U1d91">alveolar lingual coronal implosive posterior retroflex voiced </feature_set>
+   <feature_set unicode="0x2e">halflong </feature_set>
+   <feature_set unicode="0x47">glide </feature_set>
+   <feature_set unicode="0x1d91">alveolar lingual coronal implosive posterior retroflex voiced </feature_set>
    <!--Small d with hook and tail-->
    <!--¡-->
-   <feature_set unicode="Ua1">consonant subapical click ingressive coronal lingual anterior stop
+   <feature_set unicode="0xa1">consonant subapical click ingressive coronal lingual anterior stop
       voiceless </feature_set>
    <!--¡-->
    <!--⁼-->
-   <feature_set unicode="U207c">diacritic unaspirated </feature_set>
+   <feature_set unicode="0x207c">diacritic unaspirated </feature_set>
    <!--ʩ-->
-   <feature_set unicode="U2a9">consonant fricative nasal velopharyngeal velopharyngealfricative </feature_set>
-   <feature_set unicode="U5c">diacritic </feature_set>
+   <feature_set unicode="0x2a9">consonant fricative nasal velopharyngeal velopharyngealfricative </feature_set>
+   <feature_set unicode="0x5c">diacritic </feature_set>
    <!--◌͎-->
-   <feature_set unicode="U34e">diacritic whistled </feature_set>
+   <feature_set unicode="0x34e">diacritic whistled </feature_set>
    <!--◌͢ subscript combining right arrow; phone building-->
-   <feature_set unicode="U362">diacritic sliding </feature_set>
-   <feature_set unicode="U2aa">consonant alveolar anterior continuant lingual coronal fricative
+   <feature_set unicode="0x362">diacritic sliding </feature_set>
+   <feature_set unicode="0x2aa">consonant alveolar anterior continuant lingual coronal fricative
       lateral obstruent voiceless </feature_set>
-   <feature_set unicode="U2ab">consonant alveolar anterior continuant lingual coronal fricative
+   <feature_set unicode="0x2ab">consonant alveolar anterior continuant lingual coronal fricative
       lateral obstruent voiced </feature_set>
    <!--ˬ-->
-   <feature_set unicode="U2ec">diacritic voiced </feature_set>
+   <feature_set unicode="0x2ec">diacritic voiced </feature_set>
 </feature_matrix>
