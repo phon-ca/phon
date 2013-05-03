@@ -16,7 +16,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import ca.phon.ipa.xml.GlyphType;
+import ca.phon.ipa.xml.CharType;
 import ca.phon.ipa.xml.IpaType;
 
 /**
@@ -120,13 +120,13 @@ public final class IPATokens {
 				if(ipaEle.getDeclaredType() == IpaType.class) {
 					IpaType ipaDoc = 
 						IpaType.class.cast(ipaEle.getValue());
-					for(GlyphType gt:ipaDoc.getGlyph()) {
+					for(CharType gt:ipaDoc.getChar()) {
 						// parse unicode value
 						Integer intVal = null;
 						try {
-							intVal = Integer.decode(gt.getValue());
+//							intVal = Integer.decode(gt.getValue());
 							
-							final Character c = Character.valueOf((char)intVal.intValue());
+							final Character c = gt.getValue().charAt(0);
 							if(gt.getToken() == null)
 								System.out.println(c);
 							final IPATokenType tt = IPATokenType.fromXMLType(gt.getToken());

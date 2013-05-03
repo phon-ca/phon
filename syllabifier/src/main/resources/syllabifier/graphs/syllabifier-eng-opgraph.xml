@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<opgraph xmlns="http://www.gedge.ca/ns/opgraph" xmlns:oga="http://www.gedge.ca/ns/opgraph-app"
-    xmlns:ogcn="http://www.gedge.ca/ns/common-nodes"
-    xmlns:ops="http://phon.ling.mun.ca/ns/syllabifier">
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:oga="http://gedge.ca/ns/opgraph-app"
+    xmlns:ogcn="http://gedge.ca/ns/common-nodes"
+    xmlns:ops="http://phon.ca/ns/syllabifier">
     <graph id="root">
-        <vertex id="418662d" type="class:ca.phon.syllabifier.opgraph.nodes.IPASourceNode">
+        <node id="418662d" type="class:ca.phon.syllabifier.opgraph.nodes.IPASourceNode">
             <extensions>
                 <oga:settings/>
                 <oga:meta x="71" y="43"/>
             </extensions>
-        </vertex>
-        <vertex id="646d6546" type="class:ca.phon.syllabifier.opgraph.nodes.SonorityNode">
+        </node>
+        <node id="646d6546" type="class:ca.phon.syllabifier.opgraph.nodes.SonorityNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.phon.syllabifier.opgraph.nodes.SonorityNode.scale"><![CDATA[0=[{affricate}{stop,-nasal}{fricative}]
@@ -21,13 +21,13 @@
                 </oga:settings>
                 <oga:meta x="247" y="50"/>
             </extensions>
-        </vertex>
+        </node>
         <ogcn:macro id="5380c16e" name="N" type="ca.gedge.opgraph.nodes.general.MacroNode">
             <graph id="4806de4b">
                 <ogcn:macro id="3f9e7493" name="\v"
                     type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="69365360">
-                        <vertex id="10cf1fcf" name="g0"
+                        <node id="10cf1fcf" name="g0"
                             type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -37,8 +37,8 @@
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
                             </extensions>
-                        </vertex>
-                        <vertex id="1957de74" name="Make Nucleus"
+                        </node>
+                        <node id="1957de74" name="Make Nucleus"
                             type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
                             <extensions>
                                 <oga:settings>
@@ -48,7 +48,7 @@
                                 </oga:settings>
                                 <oga:meta x="269" y="78"/>
                             </extensions>
-                        </vertex>
+                        </node>
                         <edge dest="1957de74" destField="ipa" source="10cf1fcf" sourceField="ipa"/>
                     </graph>
                     <extensions>
@@ -62,7 +62,7 @@
                 <ogcn:macro id="3422237e" name="\c:comb('\\u0329')"
                     type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="6c5bdfae">
-                        <vertex id="45426fb2" name="g0"
+                        <node id="45426fb2" name="g0"
                             type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -72,8 +72,8 @@
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
                             </extensions>
-                        </vertex>
-                        <vertex id="29bf34bb" name="Make Nucleus"
+                        </node>
+                        <node id="29bf34bb" name="Make Nucleus"
                             type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
                             <extensions>
                                 <oga:settings>
@@ -83,7 +83,7 @@
                                 </oga:settings>
                                 <oga:meta x="269" y="78"/>
                             </extensions>
-                        </vertex>
+                        </node>
                         <edge dest="29bf34bb" destField="ipa" source="45426fb2" sourceField="ipa"/>
                     </graph>
                     <extensions>
@@ -97,7 +97,7 @@
                 <ogcn:macro id="b9b6d97" name="j\v"
                     type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="6f3f903b">
-                        <vertex id="1fd07c27" name="g0"
+                        <node id="1fd07c27" name="g0"
                             type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -107,8 +107,8 @@
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
                             </extensions>
-                        </vertex>
-                        <vertex id="520a0a4a" name="Make Nucleus"
+                        </node>
+                        <node id="520a0a4a" name="Make Nucleus"
                             type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
                             <extensions>
                                 <oga:settings>
@@ -118,7 +118,7 @@
                                 </oga:settings>
                                 <oga:meta x="269" y="78"/>
                             </extensions>
-                        </vertex>
+                        </node>
                         <edge dest="520a0a4a" destField="ipa" source="1fd07c27" sourceField="ipa"/>
                     </graph>
                     <extensions>
@@ -132,7 +132,7 @@
                 <ogcn:macro id="4f27bc58" name="{v,-long}[...]"
                     type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="7838c8c5">
-                        <vertex id="50fcf2c1" name="g0"
+                        <node id="50fcf2c1" name="g0"
                             type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -142,8 +142,8 @@
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
                             </extensions>
-                        </vertex>
-                        <vertex id="2a471d03" name="Make Nucleus"
+                        </node>
+                        <node id="2a471d03" name="Make Nucleus"
                             type="class:ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode">
                             <extensions>
                                 <oga:settings>
@@ -153,7 +153,7 @@
                                 </oga:settings>
                                 <oga:meta x="269" y="78"/>
                             </extensions>
-                        </vertex>
+                        </node>
                         <edge dest="2a471d03" destField="ipa" source="50fcf2c1" sourceField="ipa"/>
                     </graph>
                     <extensions>

@@ -28,8 +28,8 @@
     2012-01-11 (gjh): created file
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="https://www.phon.ca/ns/features"
-    targetNamespace="https://www.phon.ca/ns/features">
+    xmlns="https://phon.ca/ns/features"
+    targetNamespace="https://phon.ca/ns/features">
     
     <!--
         Our root element
@@ -80,7 +80,7 @@
     <xs:complexType name="featureSetType" mixed="false">
         <xs:simpleContent>
             <xs:extension base="xs:IDREFS">
-                <xs:attribute name="unicode" type="hexValue" use="required"/>
+                <xs:attribute name="char" type="singleChar" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -114,9 +114,9 @@
         </xs:restriction>
     </xs:simpleType>
     
-    <xs:simpleType name="hexValue">
+    <xs:simpleType name="singleChar">
         <xs:restriction base="xs:string">
-            <xs:pattern value="0x[0-9a-fA-F]{1,4}"/>
+            <xs:length value="1"/>
         </xs:restriction>
     </xs:simpleType>
     

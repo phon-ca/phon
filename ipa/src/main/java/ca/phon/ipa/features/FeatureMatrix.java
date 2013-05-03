@@ -214,15 +214,7 @@ public class FeatureMatrix {
 			List<FeatureSetType> sets = matrix.getFeatureSet();
 			for (FeatureSetType set : sets) {
 				BitSet bs = new BitSet(numberOfFeatures);
-				// FeatureSet fs = new FeatureSet(new BitSet(numberOfFeatures));
-				Integer charValue = Integer.decode(set.getUnicode());
-
-				if (charValue == null) {
-					Logger.getLogger(getClass().getName()).warning("Could not decode: "
-							+ set.getUnicode());
-					continue;
-				}
-				Character theChar = (char) charValue.intValue();
+				Character theChar = set.getChar().charAt(0);
 				
 				for(Object fsObj:set.getValue()) {
 					if(!(fsObj instanceof FeatureType)) {

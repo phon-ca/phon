@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    xmlns="http://phon.ling.mun.ca/ns/ipa"
-    targetNamespace="http://phon.ling.mun.ca/ns/ipa">
+    xmlns="https://phon.ca/ns/ipa"
+    targetNamespace="https://phon.ca/ns/ipa">
     
     <xs:element name="ipa" type="ipaType"/>
     
     <xs:complexType name="ipaType" mixed="false">
         <xs:sequence>
-            <xs:element name="glyph" type="glyphType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="char" type="charType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
     <!--
         IPA glyph entry
     -->
-    <xs:complexType name="glyphType" mixed="false">
+    <xs:complexType name="charType" mixed="false">
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="token" type="tokenType"/>
         </xs:sequence>
-        <xs:attribute name="value" type="hexValue"/>
+        <xs:attribute name="value" type="singleChar"/>
     </xs:complexType>
     
     <!--
@@ -51,9 +51,9 @@
         </xs:restriction>
     </xs:simpleType>
     
-    <xs:simpleType name="hexValue">
+    <xs:simpleType name="singleChar">
         <xs:restriction base="xs:string">
-            <xs:pattern value="0x[0-9a-fA-F]{1,4}"/>
+            <xs:length value="1"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
