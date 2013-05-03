@@ -1,0 +1,3498 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<session version="PB1.2" corpus="Anne" id="TestSession" xmlns="http://phon.ling.mun.ca/ns/phonbank">
+    <header>
+        <date>2003-02-27+01:00</date>
+        <language></language>
+        <media>DemoVideo.mov</media>
+    </header>
+    <participants>
+        <participant id="p0">
+            <role></role>
+            <name>Anne</name>
+            <group></group>
+            <sex>female</sex>
+            <education></education>
+            <birthday>2001-01-10+01:00</birthday>
+            <language>English-French</language>
+        </participant>
+        <participant id="p1">
+            <role>Interviewer</role>
+            <name>Christine</name>
+            <group></group>
+            <sex>female</sex>
+            <education>MA</education>
+            <birthday>1982-10-06+01:00</birthday>
+            <language></language>
+        </participant>
+    </participants>
+    <transcribers/>
+    <userTiers/>
+    <tierOrder>
+        <tier font="default" locked="false" visible="true" tierName="Orthography"/>
+        <tier font="default" locked="false" visible="true" tierName="IPA Target"/>
+        <tier font="default" locked="false" visible="true" tierName="IPA Actual"/>
+        <tier font="default" locked="false" visible="true" tierName="Notes"/>
+        <tier font="default" locked="false" visible="true" tierName="Segment"/>
+    </tierOrder>
+    <transcript>
+        <u id="u0" speaker="p1">
+            <orthography>
+                <g>
+                    <w>What</w>
+                    <w>do</w>
+                    <w>you</w>
+                    <w>sing</w>
+                </g>
+                <g>
+                    <w>at</w>
+                    <w>birthday</w>
+                    <w>parties</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈwʌt</w>
+                    <w>ˈduː</w>
+                    <w>ˈjuː</w>
+                    <w>ˈsɪŋ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7 8"/>
+                        <ph scType="WB" indexes="9"/>
+                        <ph scType="SS" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="false" scType="N" indexes="12 13"/>
+                        <ph scType="WB" indexes="14"/>
+                        <ph scType="SS" indexes="15"/>
+                        <ph scType="O" indexes="16"/>
+                        <ph hiatus="true" scType="N" indexes="17"/>
+                        <ph scType="C" indexes="18"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈæt</w>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <w>ˈpɑɹtiːz</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                        <ph scType="C" indexes="8"/>
+                        <ph scType="SS" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11"/>
+                        <ph hiatus="false" scType="N" indexes="12"/>
+                        <ph scType="WB" indexes="13"/>
+                        <ph scType="SS" indexes="14"/>
+                        <ph scType="O" indexes="15"/>
+                        <ph hiatus="true" scType="N" indexes="16"/>
+                        <ph scType="C" indexes="17"/>
+                        <ph scType="O" indexes="18"/>
+                        <ph hiatus="true" scType="N" indexes="19 20"/>
+                        <ph scType="C" indexes="21"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="10">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                </ag>
+                <ag length="15">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                    <phomap value="11 -1"/>
+                    <phomap value="12 -1"/>
+                    <phomap value="13 -1"/>
+                    <phomap value="14 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="2322.0" startTime="508.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u1" speaker="p0">
+            <orthography>
+                <g>
+                    <w>I</w>
+                    <w>sing</w>
+                </g>
+                <g>
+                    <w>happy</w>
+                    <w>birthday</w>
+                </g>
+                <g>
+                    <w>to</w>
+                    <w>you</w>
+                </g>
+                <g>
+                    <w>horsie</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈaɪ</w>
+                    <w>ˈsɪŋ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈhæpiː</w>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4 5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                        <ph scType="C" indexes="11"/>
+                        <ph scType="SS" indexes="12"/>
+                        <ph scType="O" indexes="13"/>
+                        <ph hiatus="true" scType="N" indexes="14"/>
+                        <ph hiatus="false" scType="N" indexes="15"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈtuː</w>
+                    <w>ˈjuː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="false" scType="N" indexes="7 8"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>hɔɹsiː</w>
+                    <sb>
+                        <ph scType="O" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4 5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈsɪː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈhæpiː</w>
+                    <w>ˈbʌːˌteɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4 5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9 10"/>
+                        <ph scType="SS" indexes="11"/>
+                        <ph scType="O" indexes="12"/>
+                        <ph hiatus="true" scType="N" indexes="13"/>
+                        <ph hiatus="false" scType="N" indexes="14"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈtuː</w>
+                    <w>ˈjuː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="false" scType="N" indexes="7 8"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈhɔːsiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5 6"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="5">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 0"/>
+                    <phomap value="3 1"/>
+                    <phomap value="4 -1"/>
+                </ag>
+                <ag length="11">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                    <phomap value="3 3"/>
+                    <phomap value="4 4"/>
+                    <phomap value="5 5"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 6"/>
+                    <phomap value="9 7"/>
+                    <phomap value="10 8"/>
+                </ag>
+                <ag length="4">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                    <phomap value="3 3"/>
+                </ag>
+                <ag length="5">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 2"/>
+                    <phomap value="4 3"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="4346.0" startTime="3997.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u2" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Happy</w>
+                    <w>birthday</w>
+                </g>
+                <g>
+                    <w>to</w>
+                    <w>you</w>
+                </g>
+                <g>
+                    <w>horsie</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈhæpiː</w>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4 5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                        <ph scType="C" indexes="11"/>
+                        <ph scType="SS" indexes="12"/>
+                        <ph scType="O" indexes="13"/>
+                        <ph hiatus="true" scType="N" indexes="14"/>
+                        <ph hiatus="false" scType="N" indexes="15"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈtuː</w>
+                    <w>ˈjuː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="false" scType="N" indexes="7 8"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈhɔɹsiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5 6"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="11">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                </ag>
+                <ag length="4">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                </ag>
+                <ag length="5">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1741.0" startTime="8237.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u3" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjɛ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="454.0" startTime="9963.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u4" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                    <w>!</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="735.0" startTime="10520.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u5" speaker="p1">
+            <orthography>
+                <g>
+                    <w>How</w>
+                    <w>old</w>
+                </g>
+                <g>
+                    <w>is</w>
+                    <w>she</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈhaʊ</w>
+                    <w>ˈoʊld</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph hiatus="false" scType="N" indexes="7"/>
+                        <ph scType="C" indexes="8"/>
+                        <ph scType="C" indexes="9"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈɪz</w>
+                    <w>ˈʃiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6 7"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="7">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                </ag>
+                <ag length="4">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1025.0" startTime="11257.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u6" speaker="p0">
+            <orthography>
+                <g>
+                    <w>two</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈtʰuː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1 2"/>
+                        <ph hiatus="true" scType="N" indexes="3 4"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈtʰuː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1 2"/>
+                        <ph hiatus="true" scType="N" indexes="3 4"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="706.0" startTime="12607.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u7" speaker="p1">
+            <orthography>
+                <g>
+                    <w>She</w>
+                    <w>'</w>
+                    <w>s</w>
+                    <w>two</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈʃiːz</w>
+                    <w>ˈtuː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="WB" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8 9"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="5">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1103.0" startTime="13257.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u8" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                    <w>only</w>
+                </g>
+                <g>
+                    <w>she</w>
+                    <w>'s</w>
+                    <w>big</w>
+                    <w>girl</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <w>ˈoʊnliː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph hiatus="false" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9 10"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈʃiːz</w>
+                    <w>ˈbɪɡ</w>
+                    <w>ˈɡʌɹl</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="WB" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="C" indexes="9"/>
+                        <ph scType="WB" indexes="10"/>
+                        <ph scType="SS" indexes="11"/>
+                        <ph scType="O" indexes="12"/>
+                        <ph hiatus="true" scType="N" indexes="13"/>
+                        <ph scType="C" indexes="14"/>
+                        <ph scType="OEHS" indexes="15"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjɛ</w>
+                    <w>ˈʊːniː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5 6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8 9"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ɪ</w>
+                    <w>ˈpiː</w>
+                    <w>ˈɡʌː</w>
+                    <sb>
+                        <ph hiatus="true" scType="N" indexes="0"/>
+                        <ph scType="WB" indexes="1"/>
+                        <ph scType="SS" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4 5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9 10"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="7">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 2"/>
+                    <phomap value="4 3"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 4"/>
+                </ag>
+                <ag length="10">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 0"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 1"/>
+                    <phomap value="4 2"/>
+                    <phomap value="5 3"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 4"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="3461.0" startTime="14346.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u9" speaker="p1">
+            <orthography>
+                <g>
+                    <w>she's</w>
+                    <w>a</w>
+                    <w>baby</w>
+                    <w>girl</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈʃɪz</w>
+                    <w>ə</w>
+                    <w>ˈbeɪbiː</w>
+                    <w>ˈɡʌɹl</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph hiatus="false" scType="N" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12 13"/>
+                        <ph scType="WB" indexes="14"/>
+                        <ph scType="SS" indexes="15"/>
+                        <ph scType="O" indexes="16"/>
+                        <ph hiatus="true" scType="N" indexes="17"/>
+                        <ph scType="C" indexes="18"/>
+                        <ph scType="OEHS" indexes="19"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="13">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                    <phomap value="11 -1"/>
+                    <phomap value="12 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1447.0" startTime="17815.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u10" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="569.0" startTime="19547.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u11" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Oh</w>
+                    <w>!</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="934.0" startTime="20101.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u12" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Is</w>
+                    <w>she</w>
+                    <w>having</w>
+                </g>
+                <g>
+                    <w>a</w>
+                    <w>big</w>
+                    <w>party</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈɪz</w>
+                    <w>ˈʃiː</w>
+                    <w>ˈhævɪŋ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6 7"/>
+                        <ph scType="WB" indexes="8"/>
+                        <ph scType="SS" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11"/>
+                        <ph scType="O" indexes="12"/>
+                        <ph hiatus="true" scType="N" indexes="13"/>
+                        <ph scType="C" indexes="14"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ə</w>
+                    <w>ˈbɪɡ</w>
+                    <w>ˈpɑɹtiː</w>
+                    <sb>
+                        <ph hiatus="true" scType="N" indexes="0"/>
+                        <ph scType="WB" indexes="1"/>
+                        <ph scType="SS" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4"/>
+                        <ph scType="C" indexes="5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12 13"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="9">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                </ag>
+                <ag length="9">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1594.0" startTime="21851.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u13" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="773.0" startTime="23394.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u14" speaker="p1">
+            <orthography>
+                <g>
+                    <w>What</w>
+                    <w>are</w>
+                    <w>they</w>
+                </g>
+                <g>
+                    <w>going</w>
+                    <w>to</w>
+                    <w>eat</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈwʌt</w>
+                    <w>ˈɑɹ</w>
+                    <w>ˈðeɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                        <ph scType="WB" indexes="8"/>
+                        <ph scType="SS" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11"/>
+                        <ph hiatus="false" scType="N" indexes="12"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈɡoʊɪŋ</w>
+                    <w>ə</w>
+                    <w>ˈiːt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4"/>
+                        <ph scType="C" indexes="5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="WB" indexes="8"/>
+                        <ph scType="SS" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10 11"/>
+                        <ph scType="OEHS" indexes="12"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1570.0" startTime="24225.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u15" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Birthday</w>
+                    <w>cake</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <w>ˈkeɪk</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph hiatus="false" scType="N" indexes="8"/>
+                        <ph scType="WB" indexes="9"/>
+                        <ph scType="SS" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12"/>
+                        <ph hiatus="false" scType="N" indexes="13"/>
+                        <ph scType="C" indexes="14"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="11">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1163.0" startTime="27275.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u16" speaker="p0">
+            <orthography>
+                <g>
+                    <w>The</w>
+                    <w>birthday</w>
+                    <w>cake</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ðə</w>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <w>ˈkeɪk</w>
+                    <sb>
+                        <ph scType="O" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="WB" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="C" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                        <ph scType="SS" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10"/>
+                        <ph hiatus="false" scType="N" indexes="11"/>
+                        <ph scType="WB" indexes="12"/>
+                        <ph scType="SS" indexes="13"/>
+                        <ph scType="O" indexes="14"/>
+                        <ph hiatus="true" scType="N" indexes="15"/>
+                        <ph hiatus="false" scType="N" indexes="16"/>
+                        <ph scType="C" indexes="17"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>tə</w>
+                    <w>ˈbʌˌte</w>
+                    <w>ˈkeɪk˺</w>
+                    <sb>
+                        <ph scType="O" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="WB" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="WB" indexes="9"/>
+                        <ph scType="SS" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12"/>
+                        <ph hiatus="false" scType="N" indexes="13"/>
+                        <ph scType="C" indexes="14 15"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="13">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                    <phomap value="3 3"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 4"/>
+                    <phomap value="7 5"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 6"/>
+                    <phomap value="10 7"/>
+                    <phomap value="11 8"/>
+                    <phomap value="12 9"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1517.0" startTime="28475.0"/>
+            <notes tierName="notes">Pointing at stomach; probably mimicking the 'eating' action.</notes>
+        </u>
+        <u id="u17" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Some</w>
+                    <w>grass</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈsʌm</w>
+                    <w>ˈɡɹæs</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="C" indexes="9"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="7">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="918.0" startTime="30034.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u18" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+                <g>
+                    <w>some</w>
+                    <w>grass</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈsʌm</w>
+                    <w>ˈɡɹæs</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="C" indexes="9"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈsɵm</w>
+                    <w>ˈdɜs</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="C" indexes="8"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+                <ag length="7">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 3"/>
+                    <phomap value="5 4"/>
+                    <phomap value="6 5"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1625.0" startTime="31080.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u19" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="462.0" startTime="32858.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u20" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈj̰æ̰</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1 2"/>
+                        <ph hiatus="false" scType="N" indexes="3 4"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="773.0" startTime="35022.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u21" speaker="p1">
+            <orthography>
+                <g>
+                    <w>What</w>
+                    <w>about</w>
+                </g>
+                <g>
+                    <w>some</w>
+                    <w>chicken</w>
+                    <w>nuggets</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈwʌt</w>
+                    <w>əˈbaʊt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph hiatus="false" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈsʌm</w>
+                    <w>ˈʧɪkən</w>
+                    <w>ˈnʌɡəts</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                        <ph scType="WB" indexes="11"/>
+                        <ph scType="SS" indexes="12"/>
+                        <ph scType="O" indexes="13"/>
+                        <ph hiatus="true" scType="N" indexes="14"/>
+                        <ph scType="O" indexes="15"/>
+                        <ph hiatus="true" scType="N" indexes="16"/>
+                        <ph scType="C" indexes="17"/>
+                        <ph scType="C" indexes="18"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+                <ag length="14">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                    <phomap value="11 -1"/>
+                    <phomap value="12 -1"/>
+                    <phomap value="13 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="3263.0" startTime="35029.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u22" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Do</w>
+                    <w>horsies</w>
+                    <w>eat</w>
+                </g>
+                <g>
+                    <w>chicken</w>
+                    <w>nuggets</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈduː</w>
+                    <w>ˈhɔɹsiːz</w>
+                    <w>ˈiːt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="C" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10 11"/>
+                        <ph scType="C" indexes="12"/>
+                        <ph scType="WB" indexes="13"/>
+                        <ph scType="SS" indexes="14"/>
+                        <ph hiatus="true" scType="N" indexes="15 16"/>
+                        <ph scType="C" indexes="17"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈʧɪkən</w>
+                    <w>ˈnʌɡəts</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4"/>
+                        <ph scType="C" indexes="5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11"/>
+                        <ph scType="C" indexes="12"/>
+                        <ph scType="C" indexes="13"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="10">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                </ag>
+                <ag length="11">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1851.0" startTime="39368.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u23" speaker="p0">
+            <orthography>
+                <g>
+                    <w>no</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="603.0" startTime="41361.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u24" speaker="p1">
+            <orthography>
+                <g>
+                    <w>No</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="685.0" startTime="41902.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u25" speaker="p0">
+            <orthography>
+                <g>
+                    <w>No</w>
+                </g>
+                <g>
+                    <w>No</w>
+                    <w>chicken</w>
+                    <w>nuggets</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <w>ˈʧɪkən</w>
+                    <w>ˈnʌɡəts</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                        <ph scType="WB" indexes="11"/>
+                        <ph scType="SS" indexes="12"/>
+                        <ph scType="O" indexes="13"/>
+                        <ph hiatus="true" scType="N" indexes="14"/>
+                        <ph scType="O" indexes="15"/>
+                        <ph hiatus="true" scType="N" indexes="16"/>
+                        <ph scType="C" indexes="17"/>
+                        <ph scType="C" indexes="18"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈnɔ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <w>ˈʧɪkə</w>
+                    <w>ˈnʌdətʰ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="WB" indexes="10"/>
+                        <ph scType="SS" indexes="11"/>
+                        <ph scType="O" indexes="12"/>
+                        <ph hiatus="true" scType="N" indexes="13"/>
+                        <ph scType="O" indexes="14"/>
+                        <ph hiatus="true" scType="N" indexes="15"/>
+                        <ph scType="C" indexes="16 17"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                </ag>
+                <ag length="14">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                    <phomap value="3 3"/>
+                    <phomap value="4 4"/>
+                    <phomap value="5 5"/>
+                    <phomap value="6 6"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 7"/>
+                    <phomap value="9 8"/>
+                    <phomap value="10 9"/>
+                    <phomap value="11 10"/>
+                    <phomap value="12 11"/>
+                    <phomap value="13 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="2329.0" startTime="42705.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u26" speaker="p1">
+            <orthography>
+                <g>
+                    <w>What</w>
+                    <w>about</w>
+                </g>
+                <g>
+                    <w>apples</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈwʌt</w>
+                    <w>əˈbaʊt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph hiatus="false" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈæpəlz</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="O" indexes="2"/>
+                        <ph hiatus="true" scType="N" indexes="3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="C" indexes="5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+                <ag length="5">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1408.0" startTime="45113.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u27" speaker="p0">
+            <orthography>
+                <g>
+                    <w>No</w>
+                </g>
+                <g>
+                    <w>not</w>
+                    <w>apple</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈnɑt</w>
+                    <w>ˈæpəl</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="C" indexes="9"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈnɑ</w>
+                    <w>ˈʔæpɔ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                </ag>
+                <ag length="7">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                    <phomap value="3 3"/>
+                    <phomap value="4 4"/>
+                    <phomap value="5 5"/>
+                    <phomap value="6 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1182.0" startTime="46659.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u28" speaker="p1">
+            <orthography>
+                <g>
+                    <w>No</w>
+                    <w>apples</w>
+                </g>
+                <g>
+                    <w>What</w>
+                    <w>about</w>
+                </g>
+                <g>
+                    <w>carrots</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <w>ˈæpəlz</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="C" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈwʌt</w>
+                    <w>əˈbaʊt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph hiatus="false" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈkæɹəts</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4"/>
+                        <ph scType="C" indexes="5"/>
+                        <ph scType="C" indexes="6"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+                <ag length="6">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1919.0" startTime="47836.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u29" speaker="p0">
+            <orthography>
+                <g>
+                    <w>No</w>
+                </g>
+                <g>
+                    <w>Not</w>
+                    <w>carrots</w>
+                </g>
+            </orthography>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈnæː</w>
+                    <w>ˈkəː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2 3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7 8"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈnɑt</w>
+                    <w>ˈkæɹəts</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                        <ph scType="C" indexes="11"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                </ag>
+                <ag length="9">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 2"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 3"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1172.0" startTime="49712.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u30" speaker="p1">
+            <orthography>
+                <g>
+                    <w>No</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈnoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="640.0" startTime="51009.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u31" speaker="p0">
+            <orthography>
+                <g>
+                    <w>birthday</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph hiatus="false" scType="N" indexes="8"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈbʌˌde</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="7">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 2"/>
+                    <phomap value="5 3"/>
+                    <phomap value="6 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="577.0" startTime="51643.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u32" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Birthday</w>
+                    <w>cake</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <w>ˈkeɪk</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph hiatus="false" scType="N" indexes="8"/>
+                        <ph scType="WB" indexes="9"/>
+                        <ph scType="SS" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12"/>
+                        <ph hiatus="false" scType="N" indexes="13"/>
+                        <ph scType="C" indexes="14"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="11">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1203.0" startTime="52279.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u33" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+                <g>
+                    <w>birthday</w>
+                    <w>cake</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <w>ˈkeɪk</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph hiatus="false" scType="N" indexes="8"/>
+                        <ph scType="WB" indexes="9"/>
+                        <ph scType="SS" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12"/>
+                        <ph hiatus="false" scType="N" indexes="13"/>
+                        <ph scType="C" indexes="14"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjɛ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈbʌˌdeɪ</w>
+                    <w>ˈkeɪkʰ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph hiatus="false" scType="N" indexes="6"/>
+                        <ph scType="WB" indexes="7"/>
+                        <ph scType="SS" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10"/>
+                        <ph hiatus="false" scType="N" indexes="11"/>
+                        <ph scType="C" indexes="12 13"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+                <ag length="11">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 2"/>
+                    <phomap value="5 3"/>
+                    <phomap value="6 4"/>
+                    <phomap value="7 5"/>
+                    <phomap value="8 6"/>
+                    <phomap value="9 7"/>
+                    <phomap value="10 8"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1162.0" startTime="53477.0"/>
+            <notes tierName="notes">Overlapping speech</notes>
+        </u>
+        <u id="u34" speaker="p1">
+            <orthography>
+                <g>
+                    <w>with</w>
+                    <w>what</w>
+                    <w>?</w>
+                </g>
+                <g>
+                    <w>chocolate</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈwɪθ</w>
+                    <w>ˈwʌt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph scType="C" indexes="8"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈʧɒklət</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="C" indexes="6"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="6">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                </ag>
+                <ag length="6">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1590.0" startTime="53869.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u35" speaker="p0">
+            <orthography>
+                <g>
+                    <w>uh</w>
+                    <w>yeah</w>
+                    <w>!</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈʌ</w>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="WB" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="false" scType="N" indexes="5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ə</w>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph hiatus="true" scType="N" indexes="0"/>
+                        <ph scType="WB" indexes="1"/>
+                        <ph scType="SS" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="false" scType="N" indexes="4"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="822.0" startTime="55438.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u36" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Wow</w>
+                    <w>!</w>
+                </g>
+                <g>
+                    <w>Is</w>
+                    <w>she</w>
+                </g>
+                <g>
+                    <w>all</w>
+                    <w>ready</w>
+                </g>
+                <g>
+                    <w>for</w>
+                    <w>her</w>
+                    <w>party</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈwaʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈɪz</w>
+                    <w>ˈʃiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6 7"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈɒl</w>
+                    <w>ˈɹɛdiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8 9"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈfɒɹ</w>
+                    <w>həɹ</w>
+                    <w>ˈpɑɹtiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                        <ph scType="WB" indexes="8"/>
+                        <ph scType="SS" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11"/>
+                        <ph scType="C" indexes="12"/>
+                        <ph scType="O" indexes="13"/>
+                        <ph hiatus="true" scType="N" indexes="14 15"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                </ag>
+                <ag length="4">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                </ag>
+                <ag length="6">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                </ag>
+                <ag length="11">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="2304.0" startTime="56694.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u37" speaker="p0">
+            <orthography>
+                <g>
+                    <w>uh</w>
+                    <w>yeah</w>
+                    <w>!</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈʌ</w>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="WB" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="false" scType="N" indexes="5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈʌ</w>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="WB" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="false" scType="N" indexes="5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="815.0" startTime="58941.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u38" speaker="p1">
+            <orthography>
+                <g>
+                    <w>What</w>
+                    <w>are</w>
+                    <w>they</w>
+                </g>
+                <g>
+                    <w>gonna</w>
+                    <w>do</w>
+                </g>
+                <g>
+                    <w>at</w>
+                    <w>the</w>
+                    <w>party</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈwʌt</w>
+                    <w>ˈɑɹ</w>
+                    <w>ˈðeɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                        <ph scType="WB" indexes="8"/>
+                        <ph scType="SS" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11"/>
+                        <ph hiatus="false" scType="N" indexes="12"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈɡɑnə</w>
+                    <w>ˈduː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4"/>
+                        <ph scType="WB" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8 9"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈæt</w>
+                    <w>ðə</w>
+                    <w>ˈpɑɹtiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph hiatus="true" scType="N" indexes="9"/>
+                        <ph scType="C" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12 13"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+                <ag length="6">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                </ag>
+                <ag length="9">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1834.0" startTime="59728.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u39" speaker="p0">
+            <orthography>
+                <g>
+                    <w>uh</w>
+                </g>
+                <g>
+                    <w>birthday</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈʌ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈbʌɹθˌdeɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="true" scType="N" indexes="7"/>
+                        <ph hiatus="false" scType="N" indexes="8"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈʔʌ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>pəˈteɪ</w>
+                    <sb>
+                        <ph scType="O" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="SS" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4"/>
+                        <ph hiatus="false" scType="N" indexes="5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="-1 0"/>
+                    <phomap value="0 1"/>
+                </ag>
+                <ag length="7">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 2"/>
+                    <phomap value="5 3"/>
+                    <phomap value="6 4"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="2625.0" startTime="63488.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u40" speaker="p1">
+            <orthography>
+                <g>
+                    <w>They</w>
+                    <w>'</w>
+                    <w>re</w>
+                    <w>gonna</w>
+                </g>
+                <g>
+                    <w>what</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈðeɪɹ</w>
+                    <w>ˈɡɑnə</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="WB" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈwʌt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="8">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                </ag>
+                <ag length="3">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1031.0" startTime="66311.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u41" speaker="p0">
+            <orthography>
+                <g>
+                    <w>uh</w>
+                    <w>brush</w>
+                </g>
+                <g>
+                    <w>her</w>
+                    <w>hair</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈʌ</w>
+                    <w>ˈbɹʌʃ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="WB" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>həɹ</w>
+                    <w>ˈhɛɹ</w>
+                    <sb>
+                        <ph scType="O" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph scType="O" indexes="5"/>
+                        <ph hiatus="true" scType="N" indexes="6"/>
+                        <ph scType="C" indexes="7"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈʌ</w>
+                    <w>ˈpʌs</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="WB" indexes="2"/>
+                        <ph scType="SS" indexes="3"/>
+                        <ph scType="O" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="C" indexes="6"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>əˈhɛː</w>
+                    <sb>
+                        <ph hiatus="true" scType="N" indexes="0"/>
+                        <ph scType="SS" indexes="1"/>
+                        <ph scType="O" indexes="2"/>
+                        <ph hiatus="true" scType="N" indexes="3 4"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="5">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 2"/>
+                    <phomap value="4 3"/>
+                </ag>
+                <ag length="6">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 0"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 1"/>
+                    <phomap value="4 2"/>
+                    <phomap value="5 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1282.0" startTime="67366.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u42" speaker="p1">
+            <orthography>
+                <g>
+                    <w>You</w>
+                    <w>'</w>
+                    <w>re</w>
+                    <w>gonna</w>
+                    <w>brush</w>
+                    <w>her</w>
+                    <w>hair</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjuːɹ</w>
+                    <w>ˈɡɑnə</w>
+                    <w>ˈbɹʌʃ</w>
+                    <w>həɹ</w>
+                    <w>ˈhɛɹ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2 3"/>
+                        <ph scType="C" indexes="4"/>
+                        <ph scType="WB" indexes="5"/>
+                        <ph scType="SS" indexes="6"/>
+                        <ph scType="O" indexes="7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10"/>
+                        <ph scType="WB" indexes="11"/>
+                        <ph scType="SS" indexes="12"/>
+                        <ph scType="O" indexes="13"/>
+                        <ph scType="O" indexes="14"/>
+                        <ph hiatus="true" scType="N" indexes="15"/>
+                        <ph scType="C" indexes="16"/>
+                        <ph scType="WB" indexes="17"/>
+                        <ph scType="O" indexes="18"/>
+                        <ph hiatus="true" scType="N" indexes="19"/>
+                        <ph scType="C" indexes="20"/>
+                        <ph scType="WB" indexes="21"/>
+                        <ph scType="SS" indexes="22"/>
+                        <ph scType="O" indexes="23"/>
+                        <ph hiatus="true" scType="N" indexes="24"/>
+                        <ph scType="C" indexes="25"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="17">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                    <phomap value="10 -1"/>
+                    <phomap value="11 -1"/>
+                    <phomap value="12 -1"/>
+                    <phomap value="13 -1"/>
+                    <phomap value="14 -1"/>
+                    <phomap value="15 -1"/>
+                    <phomap value="16 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1311.0" startTime="68696.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u43" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="316.0" startTime="69944.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u44" speaker="p1">
+            <orthography>
+                <g>
+                    <w>OK</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈoʊkeɪ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4"/>
+                        <ph hiatus="false" scType="N" indexes="5"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="5">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="580.0" startTime="70251.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u45" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Can</w>
+                    <w>you</w>
+                    <w>hold</w>
+                    <w>that</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈkæn</w>
+                    <w>ˈjuː</w>
+                    <w>ˈhoʊld</w>
+                    <w>ˈðæt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                        <ph scType="WB" indexes="4"/>
+                        <ph scType="SS" indexes="5"/>
+                        <ph scType="O" indexes="6"/>
+                        <ph hiatus="false" scType="N" indexes="7 8"/>
+                        <ph scType="WB" indexes="9"/>
+                        <ph scType="SS" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12"/>
+                        <ph hiatus="false" scType="N" indexes="13"/>
+                        <ph scType="C" indexes="14"/>
+                        <ph scType="C" indexes="15"/>
+                        <ph scType="WB" indexes="16"/>
+                        <ph scType="SS" indexes="17"/>
+                        <ph scType="O" indexes="18"/>
+                        <ph hiatus="true" scType="N" indexes="19"/>
+                        <ph scType="C" indexes="20"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈke</w>
+                    <w>ˈɔp</w>
+                    <w>ˈdæt</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="C" indexes="6"/>
+                        <ph scType="WB" indexes="7"/>
+                        <ph scType="SS" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10"/>
+                        <ph scType="C" indexes="11"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="13">
+                    <phomap value="0 0"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 2"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 3"/>
+                    <phomap value="10 4"/>
+                    <phomap value="11 5"/>
+                    <phomap value="12 6"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1431.0" startTime="72523.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u46" speaker="p1">
+            <orthography>
+                <g>
+                    <w>here</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈhɪɹ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="C" indexes="3"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1197.0" startTime="74231.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u47" speaker="p0">
+            <orthography>
+                <g>
+                    <w>oh</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1609.0" startTime="82052.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u48" speaker="p1">
+            <orthography>
+                <g>
+                    <w>oh</w>
+                </g>
+                <g>
+                    <w>is</w>
+                    <w>it</w>
+                    <w>pretty</w>
+                    <w>?</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈoʊ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈɪz</w>
+                    <w>ˈɪt</w>
+                    <w>ˈpɹɪtiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph hiatus="true" scType="N" indexes="1"/>
+                        <ph scType="C" indexes="2"/>
+                        <ph scType="WB" indexes="3"/>
+                        <ph scType="SS" indexes="4"/>
+                        <ph hiatus="true" scType="N" indexes="5"/>
+                        <ph scType="C" indexes="6"/>
+                        <ph scType="WB" indexes="7"/>
+                        <ph scType="SS" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11"/>
+                        <ph scType="O" indexes="12"/>
+                        <ph hiatus="true" scType="N" indexes="13 14"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                </ag>
+                <ag length="9">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1708.0" startTime="84175.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u49" speaker="p0">
+            <orthography>
+                <g>
+                    <w>Yeah</w>
+                </g>
+                <g>
+                    <w>very</w>
+                    <w>pretty</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈjæ</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈvɛɹiː</w>
+                    <w>ˈpɹɪtiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4 5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12 13"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˈjæː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="false" scType="N" indexes="2 3"/>
+                    </sb>
+                </pg>
+                <pg>
+                    <w>ˈweɪː</w>
+                    <w>pʰɜˈliː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph hiatus="false" scType="N" indexes="3 4"/>
+                        <ph scType="WB" indexes="5"/>
+                        <ph scType="O" indexes="6 7"/>
+                        <ph hiatus="true" scType="N" indexes="8"/>
+                        <ph scType="SS" indexes="9"/>
+                        <ph scType="O" indexes="10"/>
+                        <ph hiatus="true" scType="N" indexes="11 12"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="2">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                </ag>
+                <ag length="10">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="-1 2"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 3"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 4"/>
+                    <phomap value="7 5"/>
+                    <phomap value="8 6"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1789.0" startTime="85927.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+        <u id="u50" speaker="p1">
+            <orthography>
+                <g>
+                    <w>Very</w>
+                    <w>pretty</w>
+                </g>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>ˈvɛɹiː</w>
+                    <w>ˈpɹɪtiː</w>
+                    <sb>
+                        <ph scType="SS" indexes="0"/>
+                        <ph scType="O" indexes="1"/>
+                        <ph hiatus="true" scType="N" indexes="2"/>
+                        <ph scType="O" indexes="3"/>
+                        <ph hiatus="true" scType="N" indexes="4 5"/>
+                        <ph scType="WB" indexes="6"/>
+                        <ph scType="SS" indexes="7"/>
+                        <ph scType="O" indexes="8"/>
+                        <ph scType="O" indexes="9"/>
+                        <ph hiatus="true" scType="N" indexes="10"/>
+                        <ph scType="O" indexes="11"/>
+                        <ph hiatus="true" scType="N" indexes="12 13"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <sb/>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="9">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 -1"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 -1"/>
+                </ag>
+            </alignment>
+            <segment unitType="ms" duration="1484.0" startTime="87687.0"/>
+            <notes tierName="notes"></notes>
+        </u>
+    </transcript>
+</session>

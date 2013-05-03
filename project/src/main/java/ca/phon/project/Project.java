@@ -136,8 +136,10 @@ public interface Project extends IExtendable {
 	 * 
 	 * @return the session write lock or < 0 if a write lock
 	 *  was not obtained
+	 * @throws IOException
 	 */
-	public UUID getSessionWriteLock(Session session);
+	public UUID getSessionWriteLock(Session session)
+		throws IOException;
 	
 	/**
 	 * Get a write lock for a session.  Before writing a write lock
@@ -147,24 +149,32 @@ public interface Project extends IExtendable {
 	 * @param session
 	 * 
 	 * @return the session write lock or <code>null</code>
+	 * @throws IOException
 	 */
-	public UUID getSessionWriteLock(String corpus, String session);
+	public UUID getSessionWriteLock(String corpus, String session)
+		throws IOException;
 	
 	/**
 	 * Release the write lock for a session.
 	 * 
 	 * @param session
 	 * @param writeLock
+	 * 
+	 * @throws IOException
 	 */
-	public void releaseSessionWriteLock(Session session, UUID writeLock);
+	public void releaseSessionWriteLock(Session session, UUID writeLock)
+		throws IOException;
 	
 	/**
 	 * Release the write lock for a session.
 	 * 
 	 * @param session
 	 * @param writeLock
+	 * 
+	 * @throws IOException
 	 */
-	public void releaseSessionWriteLock(String corpus, String session, UUID writeLock);
+	public void releaseSessionWriteLock(String corpus, String session, UUID writeLock)
+		throws IOException;
 	
 	/**
 	 * Save a session
@@ -215,34 +225,6 @@ public interface Project extends IExtendable {
 	 */
 	public void removeSession(String corpus, String sesion, UUID writeLock)
 		throws IOException;
-	
-	/**
-	 * Add a project listener.
-	 * 
-	 * @param listener
-	 */
-	public void addProjectListener(ProjectListener listener);
-	
-	/**
-	 * Remove a project listener.
-	 * 
-	 * @param listener
-	 */
-	public void removeProjectListener(ProjectListener listener);
-	
-	/**
-	 * Get the (immutable) list of project listeners.
-	 * 
-	 * @return project listeners
-	 */
-	public List<ProjectListener> getProjectListeners();
-	
-	/**
-	 * Fire a project event to all listeners
-	 * 
-	 * @param event
-	 */
-	public void fireProjectEvent(ProjectEvent event);
 	
 	/**
 	 * Get an input stream for the specified project resource.

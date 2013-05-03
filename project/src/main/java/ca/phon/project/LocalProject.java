@@ -3,12 +3,12 @@ package ca.phon.project;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,11 +27,16 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import ca.phon.extensions.ExtensionSupport;
+import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.project.io.CorpusType;
 import ca.phon.project.io.ObjectFactory;
 import ca.phon.project.io.ProjectType;
 import ca.phon.project.io.SessionType;
 import ca.phon.session.Session;
+import ca.phon.session.io.SessionInputFactory;
+import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.SessionWriter;
 
 /**
  * A local on-disk project
@@ -61,7 +66,8 @@ public class LocalProject implements Project {
 	 * 
 	 * @param url
 	 */
-	LocalProject(File projectFolder) {
+	LocalProject(File projectFolder) 
+			throws ProjectConfigurationException {
 		super();
 		this.projectFolder = projectFolder;
 		
@@ -78,7 +84,7 @@ public class LocalProject implements Project {
 	 * 
 	 * @return projectData
 	 */
-	private ProjectType loadProjectData() {
+	private ProjectType loadProjectData() throws ProjectConfigurationException {
 		final ObjectFactory factory = new ObjectFactory();
 		
 		final File dataFile = new File(getFolder(), projectDataFile);
@@ -96,11 +102,11 @@ public class LocalProject implements Project {
 						unmarshaller.unmarshal(eventReader, ProjectType.class);
 				return projectEle.getValue();
 			} catch (JAXBException jaxbEx) {
-				jaxbEx.printStackTrace();
+				throw new ProjectConfigurationException(jaxbEx);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				throw new ProjectConfigurationException(e);
 			} catch (XMLStreamException e) {
-				e.printStackTrace();
+				throw new ProjectConfigurationException(e);
 			}
 		}
 		
@@ -164,7 +170,7 @@ public class LocalProject implements Project {
 							&& !f.getName().startsWith("~")
 							&& !f.getName().startsWith("__")
 							&& !f.isHidden()) {
-						final String sessionName = f.getName().substring(0, f.getName().lastIndexOf('.'));
+						final String sessionName = xmlFile.getName().substring(0, xmlFile.getName().lastIndexOf('.'));
 						
 						SessionType sessionType = null;
 						for(SessionType st:ct.getSession()) {
@@ -244,8 +250,8 @@ public class LocalProject implements Project {
 		final String oldName = getName();
 		projectData.setName(name);
 		
-		final ProjectEvent event = ProjectEvent.newNameChangedEvent(oldName, name);
-		fireProjectEvent(event);
+//		final ProjectEvent event = ProjectEvent.newNameChangedEvent(oldName, name);
+//		fireProjectEvent(event);
 	}
 
 	@Override
@@ -259,8 +265,8 @@ public class LocalProject implements Project {
 		final UUID oldUUID = getUUID();
 		projectData.setUuid(uuid.toString());
 		
-		final ProjectEvent event = ProjectEvent.newUUIDChangedEvent(oldUUID.toString(), uuid.toString());
-		fireProjectEvent(event);
+//		final ProjectEvent event = ProjectEvent.newUUIDChangedEvent(oldUUID.toString(), uuid.toString());
+//		fireProjectEvent(event);
 	}
 
 	@Override
@@ -416,88 +422,111 @@ public class LocalProject implements Project {
 	@Override
 	public Session openSession(String corpus, String session)
 			throws IOException {
-		return null;
+		final File sessionFile = getSessionFile(corpus, session);
+		final URI uri = sessionFile.toURI();
+		
+		final SessionInputFactory inputFactory = new SessionInputFactory();
+		final SessionReader reader = inputFactory.createReader(uri);
+		if(reader == null) {
+			throw new IOException("No session reader available for " + uri.toASCIIString());
+		}
+		final Session retVal = reader.readSession(uri);
+		return retVal;
 	}
 
 	@Override
-	public UUID getSessionWriteLock(Session session) {
+	public UUID getSessionWriteLock(Session session)
+		throws IOException {
 		return getSessionWriteLock(session.getCorpus(), session.getName());
 	}
 
 	@Override
-	public UUID getSessionWriteLock(String corpus, String session) {
+	public UUID getSessionWriteLock(String corpus, String session) 
+		throws IOException {
 		final String key = sessionProjectPath(corpus, session);
 		UUID currentLock = sessionLocks.get(key);
 		
 		// already locks
 		if(currentLock != null) {
-			return null;
+			throw new IOException("Session '" + key + "' is already locked.");
 		}
 		
 		final UUID lock = UUID.randomUUID();
 		sessionLocks.put(key, lock);
 		return lock;
 	}
+	
+	/**
+	 * Checks given session write lock
+	 * 
+	 * @throws IOException if the write lock is not valid
+	 */
+	private void checkSessionWriteLock(String corpus, String session, UUID writeLock)
+		throws IOException {
+		final String sessionLoc = sessionProjectPath(corpus, session);
+		final UUID uuid = sessionLocks.get(sessionLoc);
+		if(uuid == null) {
+			throw new IOException("Session '" + sessionLoc + "' is not locked.");
+		}
+		if(!uuid.equals(writeLock)) {
+			throw new IOException("Given writeLock for '" + sessionLoc + "' does not match project lock.");
+		}
+	}
 
 	@Override
-	public void releaseSessionWriteLock(Session session, UUID writeLock) {
+	public void releaseSessionWriteLock(Session session, UUID writeLock)
+		throws IOException {
 		releaseSessionWriteLock(session.getCorpus(), session.getName(), writeLock);
 	}
 
 	@Override
 	public void releaseSessionWriteLock(String corpus, String session,
-			int writeLock) {
-		
+			UUID writeLock) throws IOException {
+		checkSessionWriteLock(corpus, session, writeLock);
+		sessionLocks.remove(writeLock);
 	}
 
 	@Override
-	public void saveSession(Session session, int writeLock) throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void saveSession(Session session, UUID writeLock) throws IOException {
+		saveSession(session.getCorpus(), session.getName(), session, writeLock);
 	}
 
 	@Override
 	public void saveSession(String corpus, String sessionName, Session session,
-			int writeLock) throws IOException {
-		// TODO Auto-generated method stub
+			UUID writeLock) throws IOException {
+		checkSessionWriteLock(corpus, sessionName, writeLock);
 		
+		final SessionOutputFactory outputFactory = new SessionOutputFactory();
+		final SessionWriter writer = outputFactory.createWriter();
+		
+		final File sessionFile = getSessionFile(corpus, sessionName);
+		final FileOutputStream fOut  = new FileOutputStream(sessionFile);
+		writer.writeSession(session, fOut);
 	}
 
 	@Override
-	public void removeSession(Session sesion, int writeLock) throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void removeSession(Session session, UUID writeLock) throws IOException {
+		removeSession(session.getCorpus(), session.getName(), writeLock);
 	}
 
 	@Override
-	public void removeSession(String corpus, String sesion, int writeLock)
+	public void removeSession(String corpus, String session, UUID writeLock)
 			throws IOException {
-		// TODO Auto-generated method stub
+		checkSessionWriteLock(corpus, session, writeLock);
 		
-	}
-
-	@Override
-	public void addProjectListener(ProjectListener listener) {
-		// TODO Auto-generated method stub
+		final File sessionFile = getSessionFile(corpus, session);
 		
-	}
-
-	@Override
-	public void removeProjectListener(ProjectListener listener) {
-		// TODO Auto-generated method stub
+		if(!sessionFile.exists()) {
+			throw new FileNotFoundException(sessionFile.getAbsolutePath());
+		}
 		
-	}
-
-	@Override
-	public List<ProjectListener> getProjectListeners() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void fireProjectEvent(ProjectEvent event) {
-		// TODO Auto-generated method stub
+		if(!sessionFile.canWrite()) {
+			throw new IOException("Unable to delete " + sessionFile.getAbsolutePath() + ", file is read-only.");
+		}
 		
+		if(!sessionFile.delete()) {
+			throw new IOException("Unable to delete " + sessionFile.getAbsolutePath() + ".");
+		}
 	}
 
 	@Override

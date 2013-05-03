@@ -16,94 +16,88 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<xs:schema
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  elementFormDefault="qualified"
-  attributeFormDefault="unqualified"
-  version="1.5">
-  
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1/"
+  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.5">
+
   <xs:annotation>
-    <xs:documentation>
-        This file describes the current project file structure of a Phon project.
-    </xs:documentation>
-    <xs:documentation>
-      Developted by Greg J. Hedlund &lt;ghedlund@cs.mun.ca&gt;, from Phon specifications,
-      releaed under the GNU Public License, 2005.
-      
-      Updated 16 Aug 2005 to include specification of user-defined tiers.
-      
-      Updated 10 Nov 2006.  Modified to comply with new specs.
+    <xs:documentation> This file describes the current project file structure of a Phon project. </xs:documentation>
+    <xs:documentation> Developted by Greg J. Hedlund &lt;ghedlund@cs.mun.ca&gt;, from Phon
+      specifications, releaed under the GNU Public License, 2005. Updated 16 Aug 2005 to include
+      specification of user-defined tiers. Updated 10 Nov 2006. Modified to comply with new specs.
     </xs:documentation>
   </xs:annotation>
-  
+
   <!-- Elements -->
   <xs:element name="project" type="ProjectType"/>
   <xs:element name="corpus" type="CorpusType"/>
   <xs:element name="session" type="SessionType"/>
-  
+
   <!-- Types -->
   <xs:complexType name="ProjectType" mixed="false">
     <xs:sequence>
       <xs:element ref="corpus" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="version" type="xs:string" use="required"/>
+    <xs:attribute name="version" type="xs:string" use="optional" default="1.5"/>
     <xs:attribute name="name" type="validName" use="required"/>
-    <xs:attribute name="appid" type="xs:string" use="optional"/>
-    <xs:attribute name="uuid" type="xs:string" use="optional"/>
-    <xs:attribute name="resources" type="xs:anyURI" use="optional">
+    <xs:attribute name="appid" type="xs:string" use="optional">
       <xs:annotation>
-        <xs:documentation>Root folder for resources.  For local projects, this
-        is '__res' by default.</xs:documentation>
+        <xs:documentation> appid is deprecated and not used in version 2.0+. It is left here for
+          backwards compatibility. </xs:documentation>
       </xs:annotation>
     </xs:attribute>
+    <xs:attribute name="resources" type="xs:anyURI" use="optional">
+      <xs:annotation>
+        <xs:documentation> resources points to the base location for all project resources. If not
+          specified, the default location for the specific implementation is used. For LocalProjects
+          this is the __res folder. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="uuid" type="xs:string" use="optional"/>
   </xs:complexType>
- 
+
   <xs:complexType name="CorpusType" mixed="false">
     <xs:annotation>
       <xs:documentation>The description of a corpus.</xs:documentation>
-    </xs:annotation>    
-    
+    </xs:annotation>
+
     <xs:sequence>
-        <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
-        <xs:element ref="session" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="session" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    
+
     <xs:attribute name="name" type="validName" use="required"/>
     <xs:attribute name="loc" type="xs:anyURI" use="optional">
       <xs:annotation>
-        <xs:documentation>
-          Location of corpus container.  May be relative or absolute.
-          If not specified is the default corpus location for the project implementation.
+        <xs:documentation> Location of corpus container. May be relative or absolute. If not
+          specified is the default corpus location for the project implementation.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
-  
+
   <xs:complexType name="SessionType" mixed="false">
     <xs:annotation>
       <xs:documentation>Entry for a session file.</xs:documentation>
     </xs:annotation>
-    
+
     <xs:attribute name="name" type="validName" use="required"/>
     <xs:attribute name="loc" type="xs:anyURI" use="optional">
       <xs:annotation>
-        <xs:documentation>
-          Location of session file.  May be relative or absolute.
-          If not specified is the default corpus location for the project implementation.
-        </xs:documentation>
+        <xs:documentation> Location of session file. May be relative or absolute. If not specified
+          is the default corpus location for the project implementation. </xs:documentation>
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
-  
+
   <xs:simpleType name="validName">
     <xs:annotation>
-      <xs:documentation>A non-empty string which doesn't contain illegal filename characters or '.'.</xs:documentation>
+      <xs:documentation>A non-empty string which doesn't contain illegal filename characters or
+        '.'.</xs:documentation>
     </xs:annotation>
-    
+
     <xs:restriction base="xs:string">
       <xs:pattern value="[ \w\d\-]{1,}"/>
     </xs:restriction>
   </xs:simpleType>
-  
-</xs:schema> 
+
+</xs:schema>
