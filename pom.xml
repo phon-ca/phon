@@ -13,7 +13,7 @@
   <packaging>pom</packaging>
 
   <name>Phon</name>
-  <url>http://phon.ling.mun.ca</url>
+  <url>https://www.phon.ca</url>
   <description>Phon is a software program that greatly facilitates a number of tasks related
     to the analysis of phonological data. Built to support research in phonological development
     (including babbling), second language acquisition, and phonological disorders, Phon can 
@@ -34,6 +34,9 @@
       <timezone>-3.5</timezone>
     </developer>
   </developers>
+  
+  <contributors>
+  </contributors>
 
   <licenses>
     <license>
@@ -137,6 +140,48 @@
       </dependency>
       
       <dependency>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time</artifactId>
+        <version>2.1</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>com.jgoodies</groupId>
+        <artifactId>forms</artifactId>
+        <version>1.2.1</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>com.jgoodies</groupId>
+        <artifactId>jgoodies-forms</artifactId>
+        <version>1.6.0</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.mozilla</groupId>
+        <artifactId>rhino</artifactId>
+        <version>1.7R4</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.dockingframes</groupId>
+        <artifactId>docking-frames-core</artifactId>
+        <version>1.1.0</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.dockingframes</groupId>
+        <artifactId>docking-frames-common</artifactId>
+        <version>1.1.0</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>de.susebox</groupId>
+        <artifactId>jtopas</artifactId>
+        <version>0.8</version>
+      </dependency>
+      
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.8.2</version>
@@ -153,6 +198,18 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>2.3.2</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.jvnet.jaxb2.maven2</groupId>
+          <artifactId>maven-jaxb2-plugin</artifactId>
+          <version>0.8.3</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.antlr</groupId>
+          <artifactId>antlr3-maven-plugin</artifactId>
+          <version>3.1.3-1</version>
         </plugin>
         
         <plugin>

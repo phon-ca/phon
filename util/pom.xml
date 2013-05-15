@@ -15,7 +15,6 @@
   	<dependency>
   		<groupId>de.susebox</groupId>
   		<artifactId>jtopas</artifactId>
-  		<version>0.8</version>
   	</dependency>
   </dependencies>
   
