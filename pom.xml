@@ -47,12 +47,12 @@
     <repository>
       <id>phon.ling.mun.ca-release</id>
       <name>Phon Release</name>
-      <url>http://phon.ling.mun.ca/artifactory/libs-release-local</url>
+      <url>https://www.phon.ca/artifacts/libs-release-local</url>
     </repository>
     <snapshotRepository>
       <id>phon.ling.mun.ca-snapshot</id>
       <name>Phon Snapshot</name>
-      <url>http://phon.ling.mun.ca/artifactory/libs-snapshot-local</url>
+      <url>https://www.phon.ca/artifacts/libs-snapshot-local</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -63,13 +63,13 @@
       </snapshots>
       <id>central</id>
       <name>libs-release</name>
-      <url>http://phon.ling.mun.ca/artifactory/libs-release</url>
+      <url>https://www.phon.ca/artifacts/libs-release</url>
     </repository>
     <repository>
       <snapshots/>
       <id>snapshots</id>
       <name>libs-snapshot</name>
-      <url>http://phon.ling.mun.ca/artifactory/libs-snapshot</url>
+      <url>https://www.phon.ca/artifacts/libs-snapshot</url>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -79,13 +79,13 @@
       </snapshots>
       <id>central</id>
       <name>plugins-release</name>
-      <url>http://phon.ling.mun.ca/artifactory/plugins-release</url>
+      <url>https://www.phon.ca/artifacts/plugins-release</url>
     </pluginRepository>
     <pluginRepository>
       <snapshots/>
       <id>snapshots</id>
       <name>plugins-snapshot</name>
-      <url>http://phon.ling.mun.ca/artifactory/plugins-snapshot</url>
+      <url>https://www.phon.ca/artifacts/plugins-snapshot</url>
     </pluginRepository>
   </pluginRepositories>
 
@@ -106,6 +106,7 @@
     <module>alignment</module>
     <module>session</module>
     <module>project</module>
+	<module>script</module>
   </modules>
 
   <build>

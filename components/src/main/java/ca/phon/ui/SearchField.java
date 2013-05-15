@@ -1,10 +1,26 @@
-package ca.phon.ui.searchfield;
+/*
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package ca.phon.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,31 +30,23 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.SystemColor;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
 
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -50,39 +58,10 @@ import ca.phon.ui.icons.IconSize;
  * text is empty.
  *
  */
-public class SearchField extends JTextField {
+public class SearchField extends PromptedTextField {
 	
-	/**
-	 * Text field state
-	 */
-	public static enum FieldState {
-		UNDEFINED,
-		PROMPT,
-		INPUT;
-		
-		private Color[] stateColors = {
-				Color.red,
-				Color.lightGray,
-				SystemColor.textText
-		};
-		
-		public Color getColor() {
-			return stateColors[ordinal()];
-		}
-	};
-	
-	private final static String STATE_PROPERTY = "_search_field_state_";
-	
-	/**
-	 * Current state
-	 */
-	private FieldState fieldState = FieldState.UNDEFINED;
+	private static final long serialVersionUID = 839864308294242792L;
 
-	/**
-	 * Search field prompt
-	 */
-	private String prompt = "Search";
-	
 	/**
 	 * Search context button
 	 */
@@ -101,10 +80,9 @@ public class SearchField extends JTextField {
 	}
 	
 	public SearchField(String prompt) {
+		super(prompt);
 		init();
-		this.prompt = prompt;
-		setState(FieldState.PROMPT);
-		addFocusListener(focusStateListener);
+		addPropertyChangeListener(STATE_PROPERTY, fieldStateListener);
 	}
 	
 	@Override
@@ -195,6 +173,7 @@ public class SearchField extends JTextField {
 		ctxButton = new SearchFieldButton(SwingConstants.LEFT, createSearchIcon());
 		ctxButton.setAction(ctxAction);
 		ctxButton.setCursor(Cursor.getDefaultCursor());
+		ctxButton.setFocusable(false);
 		super.addComponentListener(new ComponentListener() {
 			
 			@Override
@@ -249,103 +228,44 @@ public class SearchField extends JTextField {
 	public void onShowContextMenu(PhonActionEvent pae) {
 		JPopupMenu menu = new JPopupMenu();
 		
+		setupPopupMenu(menu);
+		
+		menu.show(ctxButton, 0, ctxButton.getHeight());
+	}
+	
+	/**
+	 * Setup popup menu.
+	 * 
+	 * @param menu
+	 */
+	protected void setupPopupMenu(JPopupMenu menu) {
 		PhonUIAction clearFieldAct = new PhonUIAction(this, "onClearText");
 		clearFieldAct.putValue(PhonUIAction.NAME, "Clear text");
 		JMenuItem clearTextItem = new JMenuItem(clearFieldAct);
 		
 		menu.add(clearTextItem);
-		
-		menu.show(ctxButton, 0, ctxButton.getHeight());
 	}
 	
 	public void onClearText(PhonActionEvent pae) {
 		setText("");
 	}
 	
-	@Override
-	public String getText() {
-		String retVal = super.getText();
-		if(this.fieldState == FieldState.PROMPT) {
-			retVal = "";
-		}
-		return retVal;
-	}
-	
-	@Override
-	public void setText(String s) {
-		if(s == null) s = "";
-
-
-		super.setText(s);
-		if(hasFocus() && s.length() > 0) {
-			setState(FieldState.INPUT);
-		} else if(s.length() == 0) {
-			setState(FieldState.PROMPT);
-		}
-	}
-	
-	public String getPrompt() {
-		return this.prompt;
-	}
-	
-	public void setPrompt(String prompt) {
-		this.prompt = prompt;
-		if(getState() == FieldState.PROMPT)
-			super.setText(prompt);
-	}
-	
 	/**
-	 * Set state of field
-	 * 
-	 * @param state
+	 * Listener for field state changes
 	 */
-	public void setState(FieldState state) {
-		if(this.fieldState == state) return;
-		FieldState oldState = this.fieldState;
-		this.fieldState = state;
+	private final PropertyChangeListener fieldStateListener = new PropertyChangeListener() {
 		
-		if(this.fieldState == FieldState.PROMPT) {
-			if(oldState == FieldState.INPUT && super.getText().length() > 0)
-				throw new IllegalStateException("Cannot set state to PROMPT when field has input.");
-			super.setForeground(this.fieldState.getColor());
-			super.setText(prompt);
-			
-			endButton.setIcn(null);
-			endButton.setEnabled(false);
-		} else if(this.fieldState == FieldState.INPUT) {
-			super.setForeground(this.fieldState.getColor());
-			super.setText("");
-			
-			endButton.setIcn(createClearIcon());
-			endButton.setEnabled(true);
-		}
-		
-		super.firePropertyChange(STATE_PROPERTY, oldState, this.fieldState);
-	}
-	
-	public FieldState getState() {
-		return this.fieldState;
-	}
-	
-	/**
-	 * State change on focus
-	 * 
-	 */
-	private static FocusListener focusStateListener = new FocusListener() {
-
 		@Override
-		public void focusGained(FocusEvent arg0) {
-			SearchField sf = (SearchField)arg0.getSource();
-			if(sf.fieldState == FieldState.PROMPT) {
-				sf.setState(FieldState.INPUT);
-			}
-		}
-
-		@Override
-		public void focusLost(FocusEvent arg0) {
-			SearchField sf = (SearchField)arg0.getSource();
-			if(sf.getText().length()==0) {
-				sf.setState(FieldState.PROMPT);
+		public void propertyChange(PropertyChangeEvent evt) {
+			if(evt.getPropertyName().equals(PromptedTextField.STATE_PROPERTY)) {
+				PromptedTextField.FieldState state = getState();
+				if(state == FieldState.PROMPT) {
+					endButton.setIcn(null);
+					endButton.setEnabled(false);
+				} else if(state == FieldState.INPUT) {
+					endButton.setIcn(createClearIcon());
+					endButton.setEnabled(true);
+				}
 			}
 		}
 	};
@@ -354,6 +274,11 @@ public class SearchField extends JTextField {
 	 * Shaped label to give button a rounded look on both sides
 	 */
 	private class EndLabel extends JLabel {
+		
+		public EndLabel() {
+			super();
+			this.setFocusable(false);
+		}
 		
 		@Override
 		public void paintComponent(Graphics g) {
