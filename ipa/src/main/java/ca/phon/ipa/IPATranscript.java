@@ -151,6 +151,17 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		accept(visitor);
 		return visitor.getSyllables();
 	}
+	
+	/**
+	 * Break the transcript into words
+	 * 
+	 * @return words
+	 */
+	public List<IPATranscript> words() {
+		final WordVisitor visitor = new WordVisitor();
+		accept(visitor);
+		return visitor.getWords();
+	}
 
 	@Override
 	public void accept(Visitor<IPAElement> visitor) {
@@ -158,6 +169,39 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		for(IPAElement p:this) {
 			visitor.visit(p);
 		}
+	}
+	
+	/**
+	 * Finds the index of the given ipa element in
+	 * the string representation of the transcript.
+	 * 
+	 * @param element
+	 * @return the string index of the specified element
+	 *  or < 0 if not found
+	 */
+	public int stringIndexOfElement(IPAElement ele) {
+		final int eleIdx = indexOf(ele);
+		if(eleIdx >= 0) {
+			return stringIndexOfElement(eleIdx);
+		} else {
+			return eleIdx;
+		}
+	}
+	
+	/**
+	 * Finds the index of the specified ipa element in
+	 * the string representation of the transcript.
+	 * 
+	 * @param index
+	 * @return the string index of the specified element
+	 *  or < 0 if not found
+	 */
+	public int stringIndexOfElement(int index) {
+		if(index < 0 || index >= size()) 
+			throw new ArrayIndexOutOfBoundsException(index);
+		final IPATranscript before =
+				new IPATranscript(super.subList(0, index));
+		return before.toString().length();
 	}
 	
 	/**
@@ -207,5 +251,18 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	@Override
 	public <T> T removeExtension(Class<T> cap) {
 		return extSupport.removeExtension(cap);
+	}
+	
+	@Override
+	public String toString() {
+		final StringBuffer buffer = new StringBuffer();
+		final Visitor<IPAElement> visitor = new Visitor<IPAElement>() {
+			@Override
+			public void visit(IPAElement obj) {
+				buffer.append(obj.toString());
+			}
+		};
+		accept(visitor);
+		return buffer.toString();
 	}
 }
