@@ -1,27 +1,15 @@
 package ca.phon.ipadictionary.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ca.phon.ipadictionary.exceptions.BackingStoreException;
 import ca.phon.ipadictionary.exceptions.DuplicateEntry;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
-import ca.phon.ipadictionary.spi.GenerateSuggestions;
-import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.RemoveEntry;
-import ca.phon.util.LanguageEntry;
-import ca.phon.util.StringUtils;
 import ca.phon.util.radixtree.RadixTree;
 
 /**

@@ -18,6 +18,8 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ca.phon.ipadictionary.ContractionRule;
 import ca.phon.ipadictionary.exceptions.BackingStoreException;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
@@ -32,7 +34,6 @@ import ca.phon.ipadictionary.spi.PrefixSearch;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
-import ca.phon.util.StringUtils;
 import ca.phon.util.radixtree.RadixTree;
 
 /**

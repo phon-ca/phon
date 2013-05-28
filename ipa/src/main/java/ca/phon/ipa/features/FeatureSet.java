@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import ca.phon.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Class to represent a charater's feature

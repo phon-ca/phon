@@ -45,7 +45,6 @@ import ca.phon.featureset.xml.FeatureMatrixType;
 import ca.phon.featureset.xml.FeatureSetType;
 import ca.phon.featureset.xml.FeatureType;
 import ca.phon.featureset.xml.ObjectFactory;
-import ca.phon.util.StringUtils;
 
 /**
  * Holds all defined feature set for IPA characters. This information is held in

@@ -21,8 +21,8 @@ import javax.swing.MenuElement;
 import javax.swing.UIManager;
 
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.icons.IconManager;
-import ca.phon.ui.icons.IconSize;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Setup IPA Map as a system tray application.
