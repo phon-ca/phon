@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://phon.ling.mun.ca/ns/scripttable"
+    targetNamespace="http://phon.ling.mun.ca/ns/scripttable">
+    
+    <!-- A table with scriptable columns -->
+    <xs:element name="table" type="scriptTable"/>
+    <xs:element name="column" type="scriptTableColumn"/>
+    
+    <xs:complexType name="scriptTable" mixed="false">
+        <xs:sequence>
+            <xs:element ref="column" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!--
+        Script container
+    -->
+    <xs:complexType name="scriptTableColumn">
+        <xs:sequence>
+            <xs:element name="param" type="scriptParam" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="script" type="xs:string" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="index" type="posInt" use="required"/>
+        <xs:attribute name="mimetype" type="xs:string" default="text/javascript"/>
+    </xs:complexType>
+    
+    <xs:complexType name="scriptParam" mixed="true">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:simpleType name="posInt">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

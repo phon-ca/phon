@@ -1,0 +1,410 @@
+/*
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package ca.phon.query.report.csv;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.JAXBElement;
+
+import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.application.project.IPhonProject;
+import ca.phon.application.transcript.IParticipant;
+import ca.phon.application.transcript.ITranscript;
+import ca.phon.application.transcript.Sex;
+import ca.phon.engines.search.db.Query;
+import ca.phon.engines.search.db.ResultSet;
+import ca.phon.engines.search.report.ReportBuilder;
+import ca.phon.engines.search.report.ReportBuilderException;
+import ca.phon.engines.search.report.datasource.InventoryDataSource;
+import ca.phon.engines.search.report.datasource.ParamDataSource;
+import ca.phon.engines.search.report.datasource.ResultListingDataSource;
+import ca.phon.engines.search.report.datasource.SummaryDataSource;
+import ca.phon.engines.search.report.design.AggregrateInventory;
+import ca.phon.engines.search.report.design.CommentSection;
+import ca.phon.engines.search.report.design.Group;
+import ca.phon.engines.search.report.design.InventorySection;
+import ca.phon.engines.search.report.design.ParamSection;
+import ca.phon.engines.search.report.design.ReportDesign;
+import ca.phon.engines.search.report.design.ResultListing;
+import ca.phon.engines.search.report.design.Section;
+import ca.phon.engines.search.report.design.SummarySection;
+import ca.phon.system.logger.PhonLogger;
+import ca.phon.util.PhonDateFormat;
+import ca.phon.util.PhonDurationFormat;
+import ca.phon.util.PhonUtilities;
+
+/**
+ * CSV report builder implementation.
+ *
+ */
+public class CSVReportBuilder extends ReportBuilder {
+	
+	/**
+	 * Property for indenting content at sections (default:false)
+	 * 
+	 */
+	public final static String INDENT_CONTENT = "indent_content";
+	
+	/**
+	 * Property for printing section names (default:true)
+	 */
+	public final static String PRINT_SECTION_NAMES = "print_section_names";
+
+	@Override
+	public String[] getPropertyNames() {
+		return new String[] { PRINT_SECTION_NAMES, INDENT_CONTENT };
+	}
+
+	@Override
+	public Class<?> getPropertyClass(String propName) {
+		if(INDENT_CONTENT.equals(propName) || PRINT_SECTION_NAMES.equals(propName)) {
+			return Boolean.class;
+		} else {
+			return super.getPropertyClass(propName);
+		}
+	}
+
+	@Override
+	public String getPropertyMessage(String propName) {
+		String retVal = null;
+		
+		if(propName.equals(PRINT_SECTION_NAMES)) {
+			retVal = "Print report element titles";
+		} else if(propName.equals(INDENT_CONTENT)) {
+			retVal = "Indent content";
+		}
+		
+		return (retVal == null ? super.getPropertyMessage(propName) : retVal);
+	}
+
+	@Override
+	public Object getPropertyDefault(String propName) {
+		Object retVal = null;
+		
+		if(propName.equals(PRINT_SECTION_NAMES)) {
+			retVal = new Boolean(true);
+		} else if(propName.equals(INDENT_CONTENT)) {
+			retVal = new Boolean(false);
+		}
+		
+		return (retVal == null ? super.getPropertyDefault(propName) : retVal);
+	}
+	
+	
+	/*
+	 * CSV report properties
+	 */
+	/**
+	 * CSV separator char
+	 */
+	public static final String CSV_SEP_CHAR = "_sep_char_";
+	
+	/**
+	 * CSV quote char
+	 */
+	public static final String CSV_QUOTE_CHAR = "_quote_char_";
+	
+	/**
+	 * CSV line term
+	 */
+	public static final String CSV_LINE_TERM = "_line_term_";
+	
+	/**
+	 * File Encoding
+	 */
+	public static final String FILE_ENCODING = "_file_encoding_";
+	
+	/**
+	 * CSV File writer
+	 */
+	private CSVWriter writer;
+
+	public CSVReportBuilder() {
+		// put default props
+		putProperty(CSV_SEP_CHAR, ',');
+		putProperty(CSV_QUOTE_CHAR, '\"');
+		putProperty(CSV_LINE_TERM,
+				(PhonUtilities.isWindows() ? "\r\n" : "\n"));
+		putProperty(FILE_ENCODING, "UTF-8");
+	}
+	
+	/**
+	 * TODO Datasources should be given as indirect dependencies since
+	 * we can re-use them for other report builders.  Perhaps a global
+	 * object can be created to keep track of created datasources so
+	 * they can still be lazilly generated.
+	 */
+	@Override
+	public void buildReport(ReportDesign design, IPhonProject project, 
+			Query query, ResultSet[] resultSets, OutputStream stream) throws ReportBuilderException {
+		
+		char sep = (Character)getProperty(CSV_SEP_CHAR);
+		char quote = (Character)getProperty(CSV_QUOTE_CHAR);
+		String lineTerm = (String)getProperty(CSV_LINE_TERM);
+		
+		try {
+			OutputStreamWriter fWriter = 
+				new OutputStreamWriter(stream, getProperty(FILE_ENCODING).toString());
+			
+			writer = new CSVWriter(fWriter, sep, quote, lineTerm);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new ReportBuilderException(e);
+		}
+		
+		for(JAXBElement<? extends Section> sectionEle:design.getReportSection()) {
+			// throw an exception if the build was cancelled
+			if(isBuildCanceled()) {
+				throw new ReportBuilderException("Canceled by user");
+			}
+			Section section = sectionEle.getValue();
+			
+//			if(isIndentContent())
+//				prevIndentLevel();
+			
+			if(isPrintSectionNames()) {
+				// output newline then a single line with the section name
+				writer.writeNext(new String[0]);
+				writer.writeNext(new String[]{ section.getName() });
+				
+//				if(isIndentContent())
+//					nextIndentLevel();
+			}
+			
+			CSVSectionWriter sectionWriter = null;
+			
+			if(section instanceof AggregrateInventory) {
+				AggregrateInventory invData = (AggregrateInventory)section;
+//				List<Search> searches = new ArrayList<Search>();
+//				for(long sid:invData.getSid()) {
+//					searches.add(new Search(sid));
+//				}
+				InventoryDataSource invDs = 
+					new InventoryDataSource(resultSets, (AggregrateInventory)section);
+				sectionWriter = new CSVTableDataSourceWriter(this, invDs);
+			} else if (section instanceof ParamSection) {
+				ParamSection pSec = (ParamSection)section;
+				sectionWriter = new CSVTableDataSourceWriter(this, new ParamDataSource(query, pSec));
+		    } else if (section instanceof SummarySection) {
+		    	SummarySection summarySection = (SummarySection)section;
+		    	sectionWriter = new CSVTableDataSourceWriter(this, new SummaryDataSource(resultSets, summarySection));
+			} else if (section instanceof CommentSection) {
+				CommentSection commentSection = (CommentSection)section;
+				sectionWriter = new CSVCommentWriter(commentSection);
+			} else if (section instanceof Group) {
+				Group group = (Group)section;
+				
+//				if(isIndentContent())
+//					nextIndentLevel();
+				
+				for(ResultSet resultSet:resultSets) {
+					if(isBuildCanceled()) {
+						throw new ReportBuilderException("Canceled by user");
+					}
+					// write session info header if requested
+					if(group.isPrintSessionHeader()) {
+						printSessionHeader(group, project, resultSet);
+					}
+					
+					for(JAXBElement<? extends Section> groupSectionEle:group.getGroupReportSection()) {
+						if(isBuildCanceled()) {
+							throw new ReportBuilderException("Canceled by user");
+						}
+						
+						Section groupSection = groupSectionEle.getValue();
+						
+						if(isPrintSectionNames()) {
+							// output newline then a single line with the section name
+							writer.writeNext(new String[0]);
+							List<String> groupTitleLine = new ArrayList<String>();
+							for(int i = 0; i < getIndentLevel(); i++) groupTitleLine.add("");
+							groupTitleLine.add(groupSection.getName());
+							writer.writeNext(groupTitleLine.toArray(new String[0]));
+	//						writer.writeNext(new String[0]);
+							
+							if(isIndentContent()) nextIndentLevel();
+						}
+						
+						if(groupSection instanceof ResultListing) {
+							ResultListing tblInv = (ResultListing)groupSection;
+							ResultListingDataSource tblInvDs = 
+								new ResultListingDataSource(project, resultSet, tblInv);
+							
+							CSVSectionWriter groupSectionWriter = new CSVTableDataSourceWriter(this, tblInvDs);
+							groupSectionWriter.writeSection(writer, getIndentLevel());
+							writer.writeNext(new String[0]);
+						} else if (groupSection instanceof CommentSection) {
+							CommentSection commentSection = (CommentSection)groupSection;
+							CSVCommentWriter commentWriter = new CSVCommentWriter(commentSection);
+							commentWriter.writeSection(writer, getIndentLevel());
+							writer.writeNext(new String[0]);
+						} else if(groupSection instanceof InventorySection) {
+							InventorySection invSection = (InventorySection)groupSection;
+							
+							InventoryDataSource invDs = new InventoryDataSource(new ResultSet[]{resultSet}, invSection);
+							CSVTableDataSourceWriter dsWriter = new CSVTableDataSourceWriter(this, invDs);
+							dsWriter.writeSection(writer, getIndentLevel());
+							writer.writeNext(new String[0]);
+						}
+						
+						if(isPrintSectionNames() && 
+								isIndentContent()) prevIndentLevel();
+					}
+				}
+				
+			}
+			
+			if(sectionWriter != null) {
+				sectionWriter.writeSection(writer, getIndentLevel());
+				writer.writeNext(new String[0]);
+			}
+ 
+//			if(isPrintSectionNames() && isIndentContent())
+//				prevIndentLevel();
+		}
+		
+		// flush and close writer
+		try {   
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ReportBuilderException(e);
+		}
+		
+	}
+	
+	private void printSessionHeader(Group group, IPhonProject project, ResultSet resultSet) {
+		
+		String sessionPath = resultSet.getSessionPath();
+		
+		List<String> sessionNameLine = new ArrayList<String>();
+		for(int i = 0; i < getIndentLevel(); i++) sessionNameLine.add("");
+		sessionNameLine.add("Session:");
+		sessionNameLine.add(resultSet.getSessionPath());
+//		String[] sessionNameLine = { "Session:", sessionPath };
+		writer.writeNext(sessionNameLine.toArray(new String[0]));
+//		writer.writeNext(new String[0]);
+		
+		if(group.isPrintParticipantInformation()) {
+			try {
+				ITranscript t = project.getTranscript(resultSet.getCorpus(), resultSet.getSession());
+				
+//				String participantTitleLine[] = { "Participants:" };
+				List<String> participantTitleLine = new ArrayList<String>();
+				for(int i = 0; i < getIndentLevel(); i++) participantTitleLine.add("");
+				participantTitleLine.add("Participants");
+				writer.writeNext(participantTitleLine.toArray(new String[0]));
+				
+				List<String> currentLine = new ArrayList<String>();
+				for(int i = 0; i < indentLevel; i++) currentLine.add(new String());
+				String participantTableHeader[] = {
+						"Name", "Age", "Sex", "Birthday", "Language", "Education", "Group", "Role" };
+				for(int i = 0; i < participantTableHeader.length; i++) currentLine.add(participantTableHeader[i]);
+				writer.writeNext(currentLine.toArray(new String[0]));
+				
+				for(IParticipant participant:t.getParticipants()) {
+					currentLine.clear();
+					for(int i = 0; i < indentLevel; i++) currentLine.add(new String());
+					
+					String name = 
+						(participant.getName() != null ? participant.getName() : "");
+					PhonDurationFormat pdf = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
+					String age = 
+						pdf.format(participant.getAge(t.getDate()));
+					String sex = 
+						(participant.getSex() == Sex.MALE ? "M" : "F");
+					PhonDateFormat pdtf =  new PhonDateFormat(PhonDateFormat.YEAR_LONG);
+					String birthday = 
+						pdtf.format(participant.getBirthDate());
+					
+					String participantLine[] = {
+							name, age, sex, birthday,
+							participant.getLanguage(), participant.getEducation(),
+							participant.getGroup(), participant.getRole()
+					};
+					for(int i = 0; i < participantLine.length; i++) currentLine.add(participantLine[i]);
+					
+					writer.writeNext(currentLine.toArray(new String[0]));
+				}
+				writer.writeNext(new String[0]);
+			} catch (IOException e) {
+				e.printStackTrace();
+				PhonLogger.warning(e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Should we indent content
+	 */
+	public boolean isIndentContent() {
+		Object v = super.getProperty(INDENT_CONTENT);
+		if(v == null) v = getPropertyDefault(INDENT_CONTENT);
+		boolean retVal = false;
+		if(v != null && (v instanceof Boolean)) {
+			retVal = (Boolean)v;
+		}
+		return retVal;
+	}
+	
+	public boolean isPrintSectionNames() {
+		Object v = super.getProperty(PRINT_SECTION_NAMES);
+		if(v == null) v = getPropertyDefault(PRINT_SECTION_NAMES);
+		boolean retVal = false;
+		if(v != null && (v instanceof Boolean)) {
+			retVal = (Boolean)v;
+		}
+		return retVal;
+	}
+	
+	private int indentLevel = 0;
+	private int getIndentLevel() {
+		return indentLevel;
+	}
+	
+	private int nextIndentLevel() {
+		return (++indentLevel);
+	}
+
+	private int prevIndentLevel() {
+		int retVal = (indentLevel > 0 ? --indentLevel : 0);
+		return retVal;
+	}
+
+	@Override
+	public String getMimetype() {
+		return "text/csv";
+	}
+
+	@Override
+	public String getFileExtension() {
+		return "csv";
+	}
+	
+	@Override
+	public String getDisplayName() {
+		return "CSV";
+	}
+
+}

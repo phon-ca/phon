@@ -1,0 +1,296 @@
+/*
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package ca.phon.query.db.xml;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
+import org.xml.sax.SAXException;
+
+import ca.phon.application.project.IPhonProject;
+import ca.phon.engines.search.db.Query;
+import ca.phon.engines.search.db.ResultSet;
+import ca.phon.engines.search.db.ResultSetManager;
+import ca.phon.engines.search.db.xml.io.query.QueryType;
+import ca.phon.engines.search.db.xml.io.resultset.ResultSetType;
+import ca.phon.system.logger.PhonLogger;
+
+/**
+ * An implementation of {@link ResultSetManager} that implements an XML-based
+ * system. XML data is stored on on disk.
+ */
+public class XMLResultSetManager implements ResultSetManager {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(XMLResultSetManager.class.getName());
+	
+	/**
+	 * Default constructor.
+	 */
+	public XMLResultSetManager() { }
+	
+	/**
+	 * Get the path for storing queries.
+	 * @param project
+	 * @return
+	 */
+	static File getQueriesPath(IPhonProject project) {
+		final File retVal = new File(project.getProjectLocation(), "__search");
+		return retVal;
+	}
+	
+	static File getQueryPath(IPhonProject project, Query query) {
+		final File queriesPath = getQueriesPath(project);
+		
+		final File retVal = new File(queriesPath, query.getUUID().toString());
+		return retVal;
+	}
+	
+	@Override
+	public List<Query> getQueries(IPhonProject project) {
+		List<Query> queries = new ArrayList<Query>();
+		
+		final File queriesPath = getQueriesPath(project);
+		if(queriesPath.exists() && queriesPath.isDirectory()) {
+			for(File queryDir : queriesPath.listFiles()) {
+				final File testFile = new File(queryDir, "query.xml");
+				if(queryDir.isDirectory() && testFile.exists()) {
+					try {
+						Query query = loadQuery(project, queryDir.getName());
+						queries.add(query);
+					} catch(IOException exc) {
+						PhonLogger.severe(XMLResultSetManager.class, "IOException: " + exc.getLocalizedMessage());
+					}
+				}
+			}
+		}
+		
+		return queries;
+	}
+
+	@Override
+	public List<ResultSet> getResultSetsForQuery(IPhonProject project, Query query) {
+		File queryPath = getQueryPath(project, query);
+		
+		List<ResultSet> resultSets = new ArrayList<ResultSet>();
+		if(!queryPath.exists() || !queryPath.isDirectory())
+			return resultSets;
+		for(File resultSetFile : queryPath.listFiles()) {
+			if(!resultSetFile.getName().equals("query.xml") && !resultSetFile.isHidden()) {
+				String fname = resultSetFile.getName();
+				try {
+					// XXX this substring computation is messy...
+					ResultSet resultSet = loadResultSet(project, query, fname.substring(0, fname.length() - 4));
+					resultSets.add(resultSet);
+				} catch(IOException exc) {
+					PhonLogger.severe(XMLResultSetManager.class, "IOException: " + exc.getLocalizedMessage());
+				}
+			}
+		}
+		
+		return resultSets;
+	}
+
+	@Override
+	public void saveQuery(IPhonProject project, Query query) throws IOException {
+		final File queryPath = getQueryPath(project, query);
+
+		// Create the directory, if necessary
+		if(!queryPath.exists() && !queryPath.mkdirs())
+			return;
+		
+		final File queryFile = new File(queryPath, "query.xml");
+		try {
+			// Use JAXBElement wrapper around object because they do not have
+			// the XMLRootElement annotation
+			final QueryType qt = ((XMLQuery)query).getXMLObject();
+			final JAXBElement<QueryType> jaxbElem = (new ca.phon.engines.search.db.xml.io.query.ObjectFactory()).createQuery(qt);
+						
+			// Initialize marshaller and write to disk
+			final JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.query");
+			final Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			marshaller.marshal(jaxbElem, queryFile);
+		} catch (JAXBException exc) {
+			//PhonLogger.severe(XMLResultSetManager.class, "Could not save query to disk.");
+			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
+			throw new IOException("Could not save query to disk", exc);
+		}
+	}
+
+	@Override
+	public Query loadQuery(IPhonProject project, String queryName) throws IOException {
+		File queriesPath = getQueriesPath(project);
+		File queryPath = new File(queriesPath, queryName);
+		File queryFile = new File(queryPath, "query.xml");
+		return new XMLLazyQuery(this, queryFile);
+	}
+	
+	QueryType loadQuery(File queryFile) throws IOException {
+		Schema schema = null;
+		try {
+			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			schema = sf.newSchema(new StreamSource(getClass().getResourceAsStream("io/query/query.xsd")) );
+		} catch(SAXException exc) {
+			PhonLogger.warning(XMLResultSetManager.class, "Could not load query schema file.");
+			PhonLogger.warning(XMLResultSetManager.class, "SAXException: " + exc.getLocalizedMessage());
+		}
+		
+		QueryType query = null;
+		try {
+			JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.query");
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			unmarshaller.setSchema(schema);
+			query = ((JAXBElement<QueryType>)unmarshaller.unmarshal(queryFile)).getValue();
+		} catch(JAXBException exc) {
+			//PhonLogger.severe(XMLResultSetManager.class, "Could not load query file.");
+			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
+			throw new IOException("Could not load query file", exc);
+		}
+		
+		return query;
+	}
+
+	@Override
+	public void saveResultSet(IPhonProject project, Query query, ResultSet resultSet) throws IOException {
+		File queryPath = getQueryPath(project, query);
+		File resultSetFile = new File(queryPath, resultSet.getSessionPath() + ".xml");
+		
+		// ensure the list of metadata keys is created for quick reference later
+		resultSet.getMetadataKeys();
+		
+		try {
+			
+			if(!queryPath.exists()) {
+				queryPath.mkdirs();
+			}
+			
+			// Use JAXBElement wrapper around object because they do not have
+			// the XMLRootElement annotation
+			ResultSetType rst = ((XMLResultSet)resultSet).getXMLObject();
+			JAXBElement<ResultSetType> jaxbElem = (new ca.phon.engines.search.db.xml.io.resultset.ObjectFactory()).createResultSet(rst);
+			
+			// Initialize marshaller and write to disk
+			JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.resultset");
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			marshaller.marshal(jaxbElem, resultSetFile);
+		} catch (JAXBException exc) {
+			//PhonLogger.severe(XMLResultSetManager.class, "Could not save result set to disk.");
+			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
+			throw new IOException("Could not save result set to disk", exc);
+		}
+	}
+
+	@Override
+	public ResultSet loadResultSet(IPhonProject project, Query query, String sessionName) throws IOException {
+		File queryPath = getQueryPath(project, query);
+		File resultSetFile = new File(queryPath, sessionName + ".xml");
+		return new XMLLazyResultSet(this, resultSetFile);
+	}
+
+	/**
+	 * Load XML data for a result set. 
+	 */
+	ResultSetType loadResultSet(File resultSetFile) throws IOException {
+		Schema schema = null;
+		try {
+			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			schema = sf.newSchema(new StreamSource(getClass().getResourceAsStream("io/resultset/resultset.xsd")));
+		} catch(SAXException exc) {
+			PhonLogger.warning(XMLResultSetManager.class, "Could not load result set schema file.");
+			PhonLogger.warning(XMLResultSetManager.class, "SAXException: " + exc.getLocalizedMessage());
+		}
+		
+		ResultSetType resultSet = null;
+		try {
+			JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.resultset");
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			unmarshaller.setSchema(schema);
+			resultSet = ((JAXBElement<ResultSetType>)unmarshaller.unmarshal(resultSetFile)).getValue();
+		} catch(JAXBException exc) {
+			//PhonLogger.severe(XMLResultSetManager.class, "Could not load result set file.");
+			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
+			throw new IOException("Could not load result set file", exc);
+		}
+		
+		return resultSet;
+	}
+
+	@Override
+	public void deleteQuery(IPhonProject project, Query query)
+			throws IOException {
+		final File queryFile = getQueryPath(project, query);
+		if(queryFile.exists() && queryFile.isDirectory()) {
+			for(File qFile:queryFile.listFiles()) {
+				if(!qFile.delete()) {
+					throw new IOException("File " + qFile.getAbsolutePath() + " could not be removed from storage device.");
+				}
+			
+			}
+			if(!queryFile.delete()) {
+				throw new IOException("Folder " + queryFile.getAbsolutePath() + " could not be removed from storage device.");
+			}
+		}
+	}
+
+	@Override
+	public void deleteResultSet(IPhonProject project, Query query,
+			ResultSet resultset) throws IOException {
+		final File queryFile = getQueryPath(project, query);
+		final File rsFile = new File(queryFile, resultset.getSessionPath() + ".xml");
+		if(rsFile.exists()) {
+			if(!rsFile.delete()) {
+				throw new IOException("Unable to delete '"  + rsFile.getAbsolutePath() + "'");
+			}
+		}
+	}
+
+	@Override
+	public void renameQuery(IPhonProject project, Query query, String newName)
+			throws IOException {
+		final File oldQueryFile = getQueryPath(project, query);
+		final String oldQueryName = query.getName();
+		if(oldQueryFile.exists() && oldQueryFile.isDirectory()) {
+			// attempt to rename folder
+			query.setName(newName);
+			final File newQueryFile = getQueryPath(project, query);
+			if(!oldQueryFile.renameTo(newQueryFile)) {
+				query.setName(oldQueryName);
+				throw new IOException("Unable not re-name query.");
+			}
+		}
+	}
+
+}

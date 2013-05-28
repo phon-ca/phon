@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Phon - An open source tool for research in phonology.
+    Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+    This file specifies the xml file format for a result set in Phon.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://phon.ling.mun.ca/ns/result"
+    targetNamespace="http://phon.ling.mun.ca/ns/result" elementFormDefault="unqualified"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0">
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:globalBindings generateIsSetMethod="true"/>
+        </xs:appinfo>
+    </xs:annotation>
+    
+    <!-- Root element -->
+
+    <xs:element name="result_set" type="ResultSetType">
+        <xs:annotation>
+            <xs:documentation>Default root element for a result set in a query.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="ResultSetType">
+        <xs:sequence>
+            <xs:element ref="meta-keys" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="result" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="session_path" type="nonEmptyString" use="required"/>
+    </xs:complexType>
+
+    <!-- Root level elements for JAXB fragmented processing -->
+
+    <xs:element name="result" type="ResultType"/>
+    <xs:element name="result_value" type="ResultValueType"/>
+    <xs:element name="meta" type="MetaType"/>
+
+    <!-- Definition for a result -->
+
+    <xs:complexType name="ResultType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Type definition for the result element.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="result_value" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="record_index" type="unsignedJavaInt" use="required"/>
+        <xs:attribute name="schema" type="nonEmptyString" use="required"/>
+        <xs:attribute name="excluded" type="xs:boolean" default="false">
+            <xs:annotation>
+                <xs:documentation>If excluded, the result will not appear in generated
+                    reports.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!-- Root level elements for JAXB fragmented processing -->
+
+    <xs:element name="range" type="RangeType"/>
+    <xs:element name="data" type="xs:string"/>
+
+    <!-- Definition for a result value (reference to data) -->
+
+    <xs:complexType name="ResultValueType">
+        <xs:annotation>
+            <xs:documentation>Type definition for the resultValue element.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="range" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="data" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="tier_name" type="nonEmptyString" use="required"/>
+        <xs:attribute name="group_index" type="groupIndex" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="RangeType">
+        <xs:annotation>
+            <xs:documentation>Type definition for the range element.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="start_index" type="unsignedJavaInt" use="required"/>
+        <xs:attribute name="end_index" type="unsignedJavaInt" use="required"/>
+        <xs:attribute name="excludes_end" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <!-- Definition for metadata -->
+
+    <xs:element name="meta-keys" type="MetaKeyList"/>
+    <xs:element name="meta-key" type="nonEmptyString"/>
+
+    <xs:complexType name="MetaKeyList" mixed="false">
+        <xs:sequence>
+            <xs:element ref="meta-key" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MetaType">
+        <xs:annotation>
+            <xs:documentation>Type definition for the meta[data] element.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="key" type="nonEmptyString"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- Simple type for a non-empty extension of string -->
+
+    <xs:simpleType name="nonEmptyString">
+        <xs:annotation>
+            <xs:documentation>An xs:string that has to have a length of at least
+                1.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <!-- Simple type for a non-empty extension of string -->
+
+    <xs:simpleType name="groupIndex">
+        <xs:annotation>
+            <xs:documentation>An xs:int for group indicies. Includes -1 as a possible
+                value.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="-1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="unsignedJavaInt">
+        <xs:annotation>
+            <xs:documentation>An xs:int that is non-negative and maps to a Java
+                int.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
