@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>phon</artifactId>
+		<groupId>ca.phon</groupId>
+		<version>2.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<artifactId>phon-app</artifactId>
+	<name>Phon Application</name>
+	<description>Phon application project.  This project includes all code related to the
+	UI and all application level logic.</description>
+	
+	
+	<dependencies>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-project</artifactId>
+			<version>2.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-workspace</artifactId>
+			<version>2.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-components</artifactId>
+			<version>2.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-util</artifactId>
+			<version>2.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+		</dependency>
+	</dependencies>
+	  
+</project>

@@ -1,0 +1,10 @@
+<html>
+
+<body>
+
+<p style="color: #666666;">Phon stores your projects in a folder called a workspace.  <br>
+Projects found in the workspace are displayed in the list below.</p>
+
+</body>
+
+</html>

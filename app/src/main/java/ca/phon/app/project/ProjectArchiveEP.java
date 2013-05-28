@@ -1,0 +1,80 @@
+/*
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package ca.phon.app.project;
+
+import java.io.File;
+import java.util.Calendar;
+import java.util.Map;
+
+import ca.phon.application.project.IPhonProject;
+import ca.phon.application.project.ProjectArchiveTask;
+import ca.phon.system.plugin.IPluginEntryPoint;
+import ca.phon.system.plugin.PhonPlugin;
+import ca.phon.util.PhonDateFormat;
+import ca.phon.util.PhonUtilities;
+
+@PhonPlugin(name="default")
+public class ProjectArchiveEP implements IPluginEntryPoint {
+	
+	/**
+	 * The project we are archiving
+	 */
+	private IPhonProject project;
+
+	private final static String EP_NAME = "ProjectArchive";
+	@Override
+	public String getName() {
+		return EP_NAME;
+	}
+	
+	@Override
+	public void pluginStart(Map<String, Object> initInfo) {
+		//make sure we have a project
+		if(initInfo.get("project") == null) {
+			throw new IllegalArgumentException("project cannot be null");
+		}
+		
+		Object v = initInfo.get("project");
+		if(!(v instanceof IPhonProject)) {
+			throw new IllegalArgumentException("project object does not implement IPhonProject interface");
+		}
+		project = (IPhonProject)v;
+		
+		// display options UI
+		
+		// default output file
+		PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
+		String today = pdf.format(Calendar.getInstance());
+		
+		String zipFileName = 
+			project.getProjectName() + "-" + today + ".zip";
+		File archiveDir = 
+			new File(PhonUtilities.getPhonWorkspace(), "archives");
+		if(!archiveDir.exists()) {
+			archiveDir.mkdirs();
+		}
+		
+		File zipFile =
+			new File(archiveDir, zipFileName);
+		
+		// create and execute task
+		ProjectArchiveTask task = new ProjectArchiveTask(project, zipFile);
+		task.performTask();
+		
+	}
+}

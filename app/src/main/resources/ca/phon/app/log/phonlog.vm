@@ -1,0 +1,19 @@
+## #if($log.level == "WARNING")*#end#if($log.level == "SEVERE")**#end
+($log.level.toString().charAt(0)) $log.message #if($log.level == "SEVERE" || $log.level == "WARNING")($log.sourceClassName#$log.sourceMethodName)#end
+
+#if($log.thrown)
+	$log.thrown.toString() 
+#foreach($ste in $log.thrown.stackTrace)
+#if($ste.className.startsWith("ca.phon"))
+		$ste.className#$ste.methodName ($ste.fileName:$ste.lineNumber)
+#end
+#end
+#if($log.thrown.cause)
+	Caused by $log.thrown.cause.toString()
+#foreach($ste in $log.thrown.cause.stackTrace)
+#if($ste.className.startsWith("ca.phon"))
+		$ste.className#$ste.methodName ($ste.fileName:$ste.lineNumber)
+#end
+#end
+#end
+#end
