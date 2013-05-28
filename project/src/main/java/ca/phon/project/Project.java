@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
 
+import org.joda.time.DateTime;
+
 import ca.phon.extensions.IExtendable;
 import ca.phon.session.Session;
 
@@ -17,6 +19,38 @@ import ca.phon.session.Session;
  * 
  */
 public interface Project extends IExtendable {
+	
+	/*
+	 * Listeners
+	 */
+	public List<ProjectListener> getProjectListeners();
+	
+	public void addProjectListener(ProjectListener listener);
+	
+	public void removeProjectListener(ProjectListener listener);
+	
+	/*
+	 * Events
+	 */
+	public void fireProjectStructureChanged(ProjectEvent pe);
+	
+	public void fireProjectDataChanged(ProjectEvent pe);
+	
+	public void fireProjectWriteLocksChanged(ProjectEvent pe);
+	
+	/**
+	 * Project version
+	 *
+	 * @return the project version or 'unk' if not known
+	 */
+	public String getVersion();
+	
+	/**
+	 * The location of the project.
+	 * 
+	 * @return the project location
+	 */
+	public String getLocation();
 
 	/**
 	 * The name of the project.
@@ -115,6 +149,18 @@ public interface Project extends IExtendable {
 	public List<String> getCorpusSessions(String corpus);
 	
 	/**
+	 * Returns the number of records in a session w/o opening
+	 * the session. This method is faster than using
+	 * openSession(corpus, session).numberOfRecords()
+	 * 
+	 * @param session
+	 * @return number of records in the session
+	 * @throws IOException
+	 */
+	public int numberOfRecordsInSession(String corpus, String session)
+		throws IOException;
+	
+	/**
 	 * Open the specified session.  This will create a new session
 	 * object with the data currently on the storage device.
 	 * 
@@ -177,6 +223,26 @@ public interface Project extends IExtendable {
 		throws IOException;
 	
 	/**
+	 * Tells whether the given session is locked
+	 * 
+	 * @param session
+	 * @return <code>true</code> if session is locked, <code>false</code>
+	 *  otherwise
+	 */
+	public boolean isSessionLocked(Session session);
+	
+	/**
+	 * Tells wheater the given session is locked
+	 * 
+	 * @param corpus
+	 * @param session
+	 * 
+	 * @return <code>true</code> if the session is locked, <code>false</code>
+	 *  otherwise
+	 */
+	public boolean isSessionLocked(String corpus, String session);
+	
+	/**
 	 * Save a session
 	 * 
 	 * @param session
@@ -225,6 +291,23 @@ public interface Project extends IExtendable {
 	 */
 	public void removeSession(String corpus, String sesion, UUID writeLock)
 		throws IOException;
+	
+	/**
+	 * Returns the modification date for the given session
+	 * 
+	 * @param session
+	 * 
+	 * @return session modifiation date
+	 */
+	public DateTime getSessionModificationTime(Session session);
+	
+	/**
+	 * Returns the modification date for the specified session.
+	 * 
+	 * @param corpus
+	 * @param session
+	 */
+	public DateTime getSessionModificationTime(String corpus, String session);
 	
 	/**
 	 * Get an input stream for the specified project resource.

@@ -22,9 +22,22 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.joda.time.DateTime;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -61,6 +74,9 @@ public class LocalProject implements Project {
 	 */
 	private final Map<String, UUID> sessionLocks = 
 			Collections.synchronizedMap(new HashMap<String, UUID>());
+	
+	private final List<ProjectListener> projectListeners = 
+			Collections.synchronizedList(new ArrayList<ProjectListener>());
 	
 	/**
 	 * 
@@ -566,5 +582,118 @@ public class LocalProject implements Project {
 	@Override
 	public <T> T removeExtension(Class<T> cap) {
 		return extSupport.removeExtension(cap);
+	}
+
+	@Override
+	public List<ProjectListener> getProjectListeners() {
+		return Collections.unmodifiableList(projectListeners);
+	}
+
+	@Override
+	public void addProjectListener(ProjectListener listener) {
+		if(!projectListeners.contains(listener)) {
+			projectListeners.add(listener);
+		}
+	}
+
+	@Override
+	public void removeProjectListener(ProjectListener listener) {
+		projectListeners.remove(listener);
+	}
+
+	@Override
+	public void fireProjectStructureChanged(ProjectEvent pe) {
+		final List<ProjectListener> listeners = getProjectListeners();
+		for(ProjectListener listener:listeners) {
+			listener.projectStructureChanged(pe);
+		}
+	}
+
+	@Override
+	public void fireProjectDataChanged(ProjectEvent pe) {
+		final List<ProjectListener> listeners = getProjectListeners();
+		for(ProjectListener listener:listeners) {
+			listener.projectDataChanged(pe);
+		}
+	}
+
+	@Override
+	public void fireProjectWriteLocksChanged(ProjectEvent pe) {
+		final List<ProjectListener> listeners = getProjectListeners();
+		for(ProjectListener listener:listeners) {
+			listener.projectWriteLocksChanged(pe);
+		}
+	}
+
+	@Override
+	public DateTime getSessionModificationTime(Session session) {
+		return getSessionModificationTime(session.getCorpus(), session.getName());
+	}
+
+	@Override
+	public DateTime getSessionModificationTime(String corpus, String session) {
+		final File sessionFile = getSessionFile(corpus, session);
+		long modTime = 0L;
+		if(sessionFile.exists()) {
+			modTime = sessionFile.lastModified();
+		}
+		return new DateTime(modTime);
+	}
+
+	@Override
+	public int numberOfRecordsInSession(String corpus, String session)
+			throws IOException {
+		final File sessionFile = getSessionFile(corpus, session);
+		int retVal = 0;
+		if(sessionFile.exists()) {
+			// it's faster to use an xpath expression
+			// to determine the number of records.
+			String xpathPattern = "//u";
+			// open as dom file first
+			DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+			domFactory.setNamespaceAware(false);
+			DocumentBuilder builder;
+			try {
+				builder = domFactory.newDocumentBuilder();
+				Document doc = builder.parse(sessionFile);
+				
+				XPathFactory xpathFactory = XPathFactory.newInstance();
+				XPath xpath = xpathFactory.newXPath();
+				XPathExpression expr = xpath.compile(xpathPattern);
+				
+				Object result = expr.evaluate(doc, XPathConstants.NODESET);
+				NodeList nodes = (NodeList) result;
+				retVal = nodes.getLength();
+			} catch (ParserConfigurationException e) {
+				throw new IOException(e);
+			} catch (SAXException e) {
+				throw new IOException(e);
+			} catch (XPathExpressionException e) {
+				throw new IOException(e);
+			}
+		}
+		
+		return retVal;
+	}
+
+	@Override
+	public boolean isSessionLocked(Session session) {
+		return isSessionLocked(session.getCorpus(), session.getName());
+	}
+
+	@Override
+	public boolean isSessionLocked(String corpus, String session) {
+		final String sessionLoc = sessionProjectPath(corpus, session);
+		return this.sessionLocks.containsKey(sessionLoc);
+	}
+
+	@Override
+	public String getVersion() {
+		return projectData.getVersion();
+	}
+
+	@Override
+	public String getLocation() {
+		return projectFolder.getAbsolutePath();
 	}
 }
