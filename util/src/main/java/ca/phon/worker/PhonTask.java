@@ -18,6 +18,8 @@
 package ca.phon.worker;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.event.EventListenerList;
 
@@ -25,6 +27,8 @@ import javax.swing.event.EventListenerList;
  *
  */
 public abstract class PhonTask implements Runnable {
+	
+	private final static Logger LOGGER = Logger.getLogger(PhonTask.class.getName());
 
 	/*
 	 * Common properties
@@ -116,7 +120,7 @@ public abstract class PhonTask implements Runnable {
 		try {
 			performTask();
 		} catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			err = e;
 			setStatus(TaskStatus.ERROR);
 		}

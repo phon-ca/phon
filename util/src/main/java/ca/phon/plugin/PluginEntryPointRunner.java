@@ -19,6 +19,7 @@ package ca.phon.plugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.worker.PhonTask;
@@ -117,8 +118,7 @@ public class PluginEntryPointRunner {
 			try {
 				ep.pluginStart(pluginArgs);
 			} catch (Exception e) {
-				LOGGER.severe(e.getMessage());
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 				throw new PluginException(e);
 			}
 		}
@@ -286,8 +286,7 @@ public class PluginEntryPointRunner {
 					
 					setStatus(TaskStatus.FINISHED);
 				} catch (Exception e) {
-					LOGGER.severe(e.getMessage());
-					e.printStackTrace();
+					LOGGER.log(Level.SEVERE, e.getMessage(), e);
 					super.err = new PluginException(e);
 					setStatus(TaskStatus.ERROR);
 				}
