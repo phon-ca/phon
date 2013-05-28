@@ -21,8 +21,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ca.phon.util.Range;
-import ca.phon.util.StringUtils;
 
 /**
  * Filters utterances based on their position in the list.

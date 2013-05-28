@@ -36,8 +36,7 @@ import org.antlr.runtime.tree.RewriteEarlyExitException;
 import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
 import org.antlr.runtime.tree.RewriteRuleTokenStream;
 import org.antlr.runtime.tree.TreeAdaptor;
-
-import ca.phon.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 
 @SuppressWarnings({"all", "warnings", "unchecked"})

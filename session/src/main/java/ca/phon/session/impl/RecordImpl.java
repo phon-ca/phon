@@ -205,6 +205,18 @@ public class RecordImpl implements Record {
 					&& userTier.getDeclaredType() == type) {
 				retVal = (Tier<T>)userTier;
 				break;
+			} else if(userTier.getName().equals(name) 
+					&& type == String.class) {
+				// create a new string tier to return
+				final SessionFactory factory = SessionFactory.newFactory();
+				retVal = factory.createTier(name, type, userTier.isGrouped());
+				// copy group data as string
+				for(int i = 0; i < userTier.numberOfGroups(); i++) {
+					final Object obj = userTier.getGroup(i);
+					final String val = obj.toString();
+					final T tierVal = (T)type.getClass().cast(val);
+					retVal.addGroup(tierVal);
+				}
 			}
 		}
 		
