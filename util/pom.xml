@@ -12,6 +12,12 @@
   <description>A collection of useful classes used withing the Phon libraries.</description>
 
   <dependencies>
+    
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    
   	<dependency>
   		<groupId>de.susebox</groupId>
   		<artifactId>jtopas</artifactId>

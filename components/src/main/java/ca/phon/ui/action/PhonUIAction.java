@@ -20,6 +20,7 @@ package ca.phon.ui.action;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
@@ -49,6 +50,8 @@ import ca.phon.worker.PhonWorker;
  * 
  */
 public class PhonUIAction extends AbstractAction {
+	
+	private static final long serialVersionUID = -3566788828631450043L;
 
 	private final static Logger LOGGER = Logger.getLogger(PhonUIAction.class
 			.getName());
@@ -202,16 +205,14 @@ public class PhonUIAction extends AbstractAction {
 				m.invoke(object, params);
 
 		} catch (InvocationTargetException e) {
-			LOGGER.severe(e.toString());
-			e.printStackTrace();
-
+			LOGGER.log(Level.SEVERE, e.toString(), e);
+			
 			if(evt.getActionEvent().getSource() instanceof JComponent) {
 				JComponent comp = (JComponent)evt.getActionEvent().getSource();
 //				PhonUtilities.showComponentMessage(comp, e.getCause().getMessage());
 			}
 		} catch (Exception e) {
-			LOGGER.severe(e.toString());
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.toString(), e);
 
 			if(evt.getActionEvent().getSource() instanceof JComponent) {
 				JComponent comp = (JComponent)evt.getActionEvent().getSource();

@@ -50,7 +50,7 @@ import javax.swing.border.Border;
 
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.icons.IconSize;
+import ca.phon.util.icons.IconSize;
 
 /**
  * A search field with optional context button.

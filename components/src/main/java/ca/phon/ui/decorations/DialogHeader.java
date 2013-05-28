@@ -36,8 +36,8 @@ import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.PinstripePainter;
 
 import ca.phon.ui.PhonGuiConstants;
-import ca.phon.ui.icons.IconManager;
-import ca.phon.ui.icons.IconSize;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * A header component meant to be placed at the top of a dialog.

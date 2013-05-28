@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.ui.icons;
+package ca.phon.util.icons;
 
 import java.awt.Image;
 import java.io.File;
@@ -30,9 +30,8 @@ import javax.swing.ImageIcon;
  *
  */
 public class IconManager {
-
-	private static final Logger LOGGER = Logger.getLogger(IconManager.class
-			.getName());
+	
+	private final static Logger LOGGER = Logger.getLogger(IconManager.class.getName());
 	
 	/** The static instance */
 	private static IconManager _instance;
