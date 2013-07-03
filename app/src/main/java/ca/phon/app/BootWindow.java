@@ -45,6 +45,10 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
+import ca.phon.app.hooks.PhonBootHook;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginException;
+import ca.phon.plugin.PluginManager;
 import ca.phon.ui.nativedialogs.OSInfo;
 
 public class BootWindow extends Window {
@@ -199,6 +203,18 @@ public class BootWindow extends Window {
 			pb.environment().put("PATH", path);
 		}
 		pb.redirectErrorStream(true);
+		
+		// plug-ins may want to modify some startup and environment params
+		final List<IPluginExtensionPoint<PhonBootHook>> bootHookPts =
+				PluginManager.getInstance().getExtensionPoints(PhonBootHook.class);
+		for(IPluginExtensionPoint<PhonBootHook> bootHookPt:bootHookPts) {
+			final PhonBootHook hook = bootHookPt.getFactory().createObject();
+			try {
+				hook.modifyBoot(pb, fullCmd);
+			} catch (PluginException pe) {
+				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
+			}
+		}
 		
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Executing command:\n");
