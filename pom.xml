@@ -105,7 +105,6 @@
 	<module>orthography</module>
     <module>syllabifier</module>
     <module>syllabifier-editor</module>
-    <module>syllabifier-editor-shade</module>
     <module>alignment</module>
     <module>session</module>
     <module>project</module>
@@ -214,6 +213,12 @@
         <groupId>ca.phon</groupId>
         <artifactId>native-dialogs</artifactId>
         <version>2-SNAPSHOT</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>it.cnr.imaa.essi</groupId>
+        <artifactId>lablib-checkboxtree</artifactId>
+        <version>3.0.2</version>
       </dependency>
       
     </dependencies>

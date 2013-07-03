@@ -68,7 +68,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		JMenu fileMenu = new JMenu("File");
 		
 		// start dialog item
-		PluginAction sdAct = new PluginAction("StartWindow");
+		PluginAction sdAct = new PluginAction("Workspace");
 		sdAct.putValue(Action.NAME, "Workspace...");
 		sdAct.putValue(Action.SHORT_DESCRIPTION, "Open the workspace dialog.");
 		sdAct.putValue(Action.ACCELERATOR_KEY, 
