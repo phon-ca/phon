@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -33,6 +34,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
@@ -67,7 +69,11 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -237,7 +243,8 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		retVal.setOpaque(false);
 		
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
-		ImageIcon cancelIcnL = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.MEDIUM);
+		ImageIcon cancelIcnL = 
+				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
 		
 		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreate", retVal);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_PROJECT");
@@ -442,8 +449,12 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		File projectFile = new File(Workspace.userWorkspaceFolder(), projectName);
 		if(projectFile.exists()) {
-			NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Could not create project", 
-					"Folder already exists: " + projectFile.getAbsolutePath());
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setHeader("Unable to create project");
+			props.setMessage("Folder already exsists " + projectFile.getAbsolutePath());
+			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			props.setRunAsync(false);
+			NativeDialogs.showDialog(props);
 			return;
 		}
 		
@@ -467,10 +478,14 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 			onSwapNewAndCreate(pae);
 			
 		} catch (IOException e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			
-			NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Could not create project", 
-					"Reason: " + e.getMessage());
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setHeader("Unable to create project");
+			props.setMessage(e.getMessage());
+			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			props.setRunAsync(false);
+			NativeDialogs.showDialog(props);
 			return;
 		}
 		
@@ -493,27 +508,40 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		}
 	}
 	
-	public void onBrowse(PhonActionEvent pae) {
-		String selectedDir = 
-			NativeDialogs.browseForDirectoryBlocking(CommonModuleFrame.getCurrentFrame(), null, "Browse for project folder");
-		if(selectedDir != null) {
-			File selectedFile = new File(selectedDir);
-			File projectFile = new File(selectedFile, "project.xml");
-			if(!projectFile.exists()) {
-				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null,
-						"Not a project", "'" + selectedDir + "' is not a phon project.");
-				LOGGER.severe("Failed to open project: '" + selectedDir + "'  Reason: project.xml not found.  Not a project.");
-				return;
+	private final NativeDialogListener browseListener = new NativeDialogListener() {
+		
+		@Override
+		public void nativeDialogEvent(NativeDialogEvent event) {
+			if(event.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+				final String selectedDir = event.getDialogData().toString();
+				File selectedFile = new File(selectedDir);
+				File projectFile = new File(selectedFile, "project.xml");
+				if(!projectFile.exists()) {
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+					props.setHeader("Unable to open project");
+					props.setMessage(selectedDir + File.separator + "project.xml not found");
+					NativeDialogs.showDialog(props);
+					
+					LOGGER.severe("Failed to open project: '" + selectedDir + "'  Reason: project.xml not found.  Not a project.");
+					return;
+				}
+				HashMap<String, Object> initInfo = new HashMap<String, Object>();
+				initInfo.put("ca.phon.modules.core.OpenProjectController.projectpath", selectedDir);
+				
+				PluginEntryPointRunner.executePluginInBackground("OpenProject", initInfo);
 			}
-			HashMap<String, Object> initInfo = new HashMap<String, Object>();
-			initInfo.put("ca.phon.modules.core.OpenProjectController.projectpath", selectedDir);
-			
-			PluginEntryPointRunner.executePluginInBackground("OpenProject", initInfo);
-			
-//			ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.core.OpenProjectController");
-//			LoadModule lm = new LoadModule(mi, initInfo);
-//			lm.start();
 		}
+	};
+	public void onBrowse(PhonActionEvent pae) {
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setListener(browseListener);
+		props.setTitle("Browse for Project");
+		props.setCanCreateDirectories(true);
+		props.setCanChooseDirectories(true);
+		props.setCanChooseFiles(false);
+		NativeDialogs.showDialog(props);
 	}
 	
 	public void onExtract(PhonActionEvent pae) {

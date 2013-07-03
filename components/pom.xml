@@ -24,7 +24,6 @@
     <dependency>
       <groupId>ca.phon</groupId>
       <artifactId>native-dialogs</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
     </dependency>
   	<dependency>
   		<groupId>ca.phon</groupId>

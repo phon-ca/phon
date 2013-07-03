@@ -210,6 +210,12 @@
         <scope>test</scope>
       </dependency>
       
+      <dependency>
+        <groupId>ca.phon</groupId>
+        <artifactId>native-dialogs</artifactId>
+        <version>2-SNAPSHOT</version>
+      </dependency>
+      
     </dependencies>
   </dependencyManagement>
 

@@ -26,26 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import ca.phon.alignment.PhoneMap;
-import ca.phon.application.PhonTask;
-import ca.phon.application.PhonWorker;
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.Form;
-import ca.phon.application.transcript.IPhoneticRep;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.IUtterance;
-import ca.phon.application.transcript.IWord;
-import ca.phon.application.transcript.SessionLocation;
-import ca.phon.engines.aligner.Aligner;
-import ca.phon.engines.syllabifier.Syllabifier;
-import ca.phon.exceptions.ParserException;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.components.PhonLoggerConsole;
-import ca.phon.gui.wizard.WizardFrame;
-import ca.phon.gui.wizard.WizardStep;
-import ca.phon.modules.project.ui.checkwizard.CheckWizardStep1.Operation;
-import ca.phon.phone.IPAUtils;
-import ca.phon.phone.Phone;
-import ca.phon.system.logger.PhonLogger;
 
 /**
  * A wizard for checking/repairing IPA transcriptions
