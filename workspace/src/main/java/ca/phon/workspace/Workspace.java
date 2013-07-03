@@ -43,7 +43,7 @@ public class Workspace {
 	 * @param workspaceFolder
 	 */
 	public static void setUserWorkspaceFolder(File workspaceFolder) {
-		if(workspaceFolder.isDirectory()) {
+		if(!workspaceFolder.isDirectory()) {
 			throw new IllegalArgumentException(workspaceFolder + " is not a folder");
 		}
 		PrefHelper.getUserPreferences().put(WORKSPACE_FOLDER, workspaceFolder.getAbsolutePath());
