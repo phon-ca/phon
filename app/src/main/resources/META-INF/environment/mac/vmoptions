@@ -1,0 +1,14 @@
+-Xdock:name=Phon
+-Xdock:icon=data/icons/Phon.icns
+-Xms250m
+-Xmx1024m
+-Dswing.aatext=true
+-Dcom.apple.mrj.application.apple.menu.about.name=Phon
+-Dcom.apple.macos.smallTabs=true 
+-Dapple.laf.useScreenMenuBar=true
+-Dcom.apple.mrj.application.live-resize=true
+-Dapple.awt.textantialiasing=on
+-Dapple.awt.graphics.UseQuartz=true
+-Dapple.awt.showGrowBox=true
+-Dfile.encoding=UTF-8
+-Dsun.jnu.encoding=UTF-8
