@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ca.phon.util.StackTraceInfo;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
 
@@ -111,16 +112,16 @@ public class PluginEntryPointRunner {
 	 */
 	public void executePlugin()
 		throws PluginException {
-		if(ep != null) {
-			Map<String, Object> pluginArgs = new HashMap<String, Object>();
-			if(args != null)
-				pluginArgs.putAll(args);
-			try {
-				ep.pluginStart(pluginArgs);
-			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
-				throw new PluginException(e);
-			}
+		if(ep == null)
+			throw new PluginException(new NullPointerException("entry point not found"));
+		Map<String, Object> pluginArgs = new HashMap<String, Object>();
+		if(args != null)
+			pluginArgs.putAll(args);
+		try {
+			ep.pluginStart(pluginArgs);
+		} catch (Exception e) {
+//			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			throw new PluginException(e);
 		}
 	}
 	
@@ -292,6 +293,7 @@ public class PluginEntryPointRunner {
 					setStatus(TaskStatus.ERROR);
 				}
 			} else {
+				LOGGER.log(Level.SEVERE, "Cannot find entry point", new StackTraceInfo());
 				super.err = new PluginException("No entry point");
 				super.setStatus(TaskStatus.ERROR);
 			}

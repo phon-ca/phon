@@ -20,6 +20,7 @@ package ca.phon.plugin;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
@@ -81,8 +82,7 @@ public class PluginAction extends AbstractAction {
 			try {
 				PluginEntryPointRunner.executePlugin(epId, args);
 			} catch (PluginException pe) {
-				LOGGER.warning(pe.toString());
-				pe.printStackTrace();
+				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
 			}
 		}
 	}
