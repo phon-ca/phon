@@ -286,8 +286,9 @@ public class PluginEntryPointRunner {
 					
 					setStatus(TaskStatus.FINISHED);
 				} catch (Exception e) {
-					LOGGER.log(Level.SEVERE, e.getMessage(), e);
-					super.err = new PluginException(e);
+					final PluginException pe = new PluginException(e);
+					LOGGER.log(Level.SEVERE, e.getMessage(), pe);
+					super.err = pe;
 					setStatus(TaskStatus.ERROR);
 				}
 			} else {
