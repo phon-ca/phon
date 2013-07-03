@@ -21,9 +21,12 @@ import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+
+import ca.phon.util.StackTraceInfo;
 
 /**
  * Class for obtaining icons.
@@ -227,7 +230,7 @@ public class IconManager {
 				
 				loadedIcons.put(tuple, iconImage);
 			} else {
-				LOGGER.warning("Cannot find icon: " + iconName);
+				LOGGER.log(Level.WARNING, "Icon not found: " + iconName, new StackTraceInfo());
 			}
 		}
 		
