@@ -696,4 +696,17 @@ public class LocalProject implements Project {
 	public String getLocation() {
 		return projectFolder.getAbsolutePath();
 	}
+
+	@Override
+	public boolean hasAutosaveFile(String corpus, String session) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void removeAutosaveFile(String corpus, String session)
+			throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 }

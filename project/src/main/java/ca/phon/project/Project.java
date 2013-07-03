@@ -243,6 +243,29 @@ public interface Project extends IExtendable {
 	public boolean isSessionLocked(String corpus, String session);
 	
 	/**
+	 * Check for an autosave file for the given corpus and session
+	 * 
+	 * @param corpus
+	 * @param session
+	 * 
+	 * @return <code>true</code> iff the session has an autosave file
+	 *  that is newer than the modified time of the given session
+	 * 
+	 */
+	public boolean hasAutosaveFile(String corpus, String session);
+	
+	/**
+	 * Force removal of the session autosave file.
+	 * 
+	 * @param corpus
+	 * @param session
+	 * 
+	 * @throws IOException
+	 */
+	public void removeAutosaveFile(String corpus, String session)
+		throws IOException;
+	
+	/**
 	 * Save a session
 	 * 
 	 * @param session
