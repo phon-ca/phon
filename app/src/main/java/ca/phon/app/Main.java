@@ -2,12 +2,14 @@ package ca.phon.app;
 
 import java.util.Locale;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.LogManager;
-import ca.phon.app.workspace.WorkspaceDialog;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.worker.PhonWorker;
 
 /**
@@ -36,10 +38,13 @@ public class Main {
 			
 			@Override
 			public void run() {
-				final WorkspaceDialog workspaceDialog = new WorkspaceDialog();
-				workspaceDialog.pack();
-				workspaceDialog.setLocationByPlatform(true);
-				workspaceDialog.setVisible(true);
+				final PluginEntryPointRunner entryPtRunner =
+						new PluginEntryPointRunner("Workspace");
+				try {
+					entryPtRunner.executePlugin();
+				} catch (PluginException e) {
+					LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				}
 			}
 		};
 		SwingUtilities.invokeLater(onEDT);
