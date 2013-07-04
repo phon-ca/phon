@@ -4,5 +4,13 @@ ca.phon.app.workspace.WorkspaceEP
 ca.phon.app.project.OpenProjectEP
 # Exit
 ca.phon.app.actions.ExitEP
+# Copy
+ca.phon.app.actions.CopyEP
+# Cut
+ca.phon.app.actions.CutEP
+# Paste
+ca.phon.app.actions.PasteEP
+# Properties/prefs
+ca.phon.app.actions.PropertiesEP
 
 
