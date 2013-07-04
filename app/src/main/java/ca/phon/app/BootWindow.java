@@ -125,6 +125,14 @@ public class BootWindow extends Window {
 			}
 		}
 		
+		// plug-ins may want to modify some startup and environment params
+		List<PhonBootHook> bootHooks = new ArrayList<PhonBootHook>();
+		try {
+			bootHooks = PluginManager.getInstance().getExtensions(PhonBootHook.class);
+		} catch (PluginException e1) {
+			LOGGER.log(Level.WARNING, e1.getMessage(), e1);
+		}
+		
 		final String javaHome = System.getProperty("java.home");
 		final String javaBin = javaHome + File.separator + "bin" + File.separator + "java" + 
 				(OSInfo.isWindows() ? ".exe" : "");
@@ -139,81 +147,19 @@ public class BootWindow extends Window {
 		};
 		fullCmd.addAll(Arrays.asList(cmd));
 
-		try {
-			final String vmFiles = "META-INF/environment/" + 
-				(OSInfo.isWindows() ? "windows" : (OSInfo.isMacOs() ? "mac" : "unix")) + File.separator + 
-				"vmoptions";
-			final Enumeration<URL> optURLs = 
-					ClassLoader.getSystemClassLoader().getResources(vmFiles);
-			
-			while(optURLs.hasMoreElements()) {
-				URL url = optURLs.nextElement();
-				LOGGER.info("Loading vmoptions from URL " + url.toString());
-				final InputStream is = url.openStream();
-				final BufferedReader isr = new BufferedReader(new InputStreamReader(is));
-				String vmopt = null;
-				while((vmopt = isr.readLine()) != null) {
-					fullCmd.add(vmopt);
-				}
-				isr.close();
-			}
-		} catch (IOException e1) {
-			LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+		// add vmoptions to command
+		for(PhonBootHook bootHook:bootHooks) {
+			bootHook.setupVMOptions(fullCmd);
 		}
 		
 		fullCmd.add(className);
 		fullCmd.addAll(Arrays.asList(args));
 		
 		final ProcessBuilder pb = new ProcessBuilder(fullCmd);
-		
-		// setup environment
-		try {
-			final String envFiles = "META-INF/environment/" + 
-				(OSInfo.isWindows() ? "windows" : (OSInfo.isMacOs() ? "mac" : "unix")) + File.separator + 
-				"env";
-			final Enumeration<URL> envURLs = 
-					ClassLoader.getSystemClassLoader().getResources(envFiles);
-			while(envURLs.hasMoreElements()) {
-				URL url = envURLs.nextElement();
-				LOGGER.info("Loading environment settings from URL " + url.toString());
-				final InputStream is = url.openStream();
-				final BufferedReader isr = new BufferedReader(new InputStreamReader(is));
-				String envOpt = null;
-				while((envOpt = isr.readLine()) != null) {
-					String[] opt = envOpt.split("=");
-					if(opt.length != 2) continue;
-					String key = opt[0];
-					String val = opt[1];
-					if(key.endsWith("+")) {
-						key = key.substring(0, key.length()-1);
-						val = pb.environment().get(key) + val;
-					}
-					pb.environment().put(key, val);
-				}
-				isr.close();
-			}
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-		}
-		
-		// important: windows requires the java.library.path to be in the system path
-		if(OSInfo.isWindows()) {
-			String path = pb.environment().get("PATH");
-			path += ";\"" + libPath + "\"";
-			pb.environment().put("PATH", path);
-		}
 		pb.redirectErrorStream(true);
 		
-		// plug-ins may want to modify some startup and environment params
-		final List<IPluginExtensionPoint<PhonBootHook>> bootHookPts =
-				PluginManager.getInstance().getExtensionPoints(PhonBootHook.class);
-		for(IPluginExtensionPoint<PhonBootHook> bootHookPt:bootHookPts) {
-			final PhonBootHook hook = bootHookPt.getFactory().createObject();
-			try {
-				hook.modifyBoot(pb, fullCmd);
-			} catch (PluginException pe) {
-				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
-			}
+		for(PhonBootHook bootHook:bootHooks) {
+			bootHook.setupEnvironment(pb.environment());
 		}
 		
 		final StringBuilder builder = new StringBuilder();

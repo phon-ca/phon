@@ -1,6 +1,7 @@
 package ca.phon.app.hooks;
 
 import java.util.List;
+import java.util.Map;
 
 import ca.phon.app.BootWindow;
 import ca.phon.plugin.PluginException;
@@ -17,16 +18,18 @@ import ca.phon.plugin.PluginException;
 public interface PhonBootHook {
 
 	/**
-	 * Make whatever changes are necessary to the command
-	 * or process builder.
+	 * Modify/add to a list of vmoptions for the application.
 	 * 
-	 * @param processBuilder
-	 * @param cmd
+	 * @param vmopts
 	 * 
-	 * @throws PluginException
 	 */
-	public void modifyBoot(ProcessBuilder pb, List<String> cmd)
-		throws PluginException;
+	public void setupVMOptions(List<String> vmopts);
 	
+	/**
+	 * Modify/add to environment for the application.
+	 * 
+	 * @param environment
+	 */
+	public void setupEnvironment(Map<String, String> environment);
 	
 }
