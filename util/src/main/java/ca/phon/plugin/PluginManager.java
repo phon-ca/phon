@@ -215,6 +215,35 @@ public class PluginManager extends URLClassLoader {
 //	}
 	
 	/**
+	 * Get initilized extension points for the given class.
+	 * This method should only be used when there is a default
+	 * constructor available for the given class.
+	 * 
+	 * @param clazz 
+	 * 
+	 * @throws PluginException if there is a problem with
+	 *  creating the list of objects.
+	 */
+	public <T> List<T> getExtensions(Class<T> clazz) 
+		throws PluginException {
+		final List<T> retVal = new ArrayList<T>();
+		
+		final List<IPluginExtensionPoint<T>> extPts = 
+				getExtensionPoints(clazz);
+		for(IPluginExtensionPoint<T> extPt:extPts) {
+			final IPluginExtensionFactory<T> factory = extPt.getFactory();
+			try {
+				final T obj = factory.createObject();
+				retVal.add(obj);
+			} catch (Exception e) {
+				throw new PluginException(e);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	/**
 	 * Get the extension points for the given class.
 	 * 
 	 * @param clazz the class for extensions
