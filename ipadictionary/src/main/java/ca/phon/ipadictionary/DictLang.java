@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.util.LanguageEntry;
+import ca.phon.util.LanguageParser;
 
 /**
  * Simple class representing the language of an IPADictionary.
@@ -34,7 +35,7 @@ public class DictLang implements LanguageInfo {
 		
 		final DictLang retVal = new DictLang();
 		if(matcher.matches()) {
-			final LanguageEntry entry  = LanguageEntry.fromString(matcher.group(1));
+			final LanguageEntry entry  = LanguageParser.getInstance().getEntryById(matcher.group(1));
 			
 			if(entry != null)
 				retVal.setLanguage(entry);
@@ -49,7 +50,7 @@ public class DictLang implements LanguageInfo {
 	}
 	
 	public DictLang() {
-		this("xxx");
+		this(new LanguageEntry());
 	}
 
 	public DictLang(String lang) {

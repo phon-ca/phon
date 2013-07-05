@@ -2,10 +2,14 @@ package ca.phon.ipadictionary.spi;
 
 import java.util.Iterator;
 
+import ca.phon.extensions.Extension;
+import ca.phon.ipadictionary.IPADictionary;
+
 /**
  * Metadata consists of a map of string to string
  * values.
  */
+@Extension(IPADictionary.class)
 public interface Metadata {
 	
 	/**

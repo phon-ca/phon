@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.ipadictionary.ContractionRule;
 import ca.phon.ipadictionary.DictLang;
+import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.BackingStoreException;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
@@ -99,7 +101,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * Location of the database on disk.  The dictionary will
 	 * attempt to keep this file up-to-date as entries are added/removed.
 	 */
-	private File dbFile;
+	private URL dbFile;
 	
 	/**
 	 * Dictionary name
@@ -134,7 +136,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * 
 	 * @param file
 	 */
-	public ImmutablePlainTextDictionary(File dbFile) {
+	public ImmutablePlainTextDictionary(URL dbFile) {
 		this.dbFile = dbFile;
 		loadMetadata();
 	}
@@ -144,7 +146,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 */
 	private void loadMetadata() {
 		try {
-			readMetadataFromStream(new FileInputStream(dbFile));
+			readMetadataFromStream(dbFile.openStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -171,9 +173,9 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * @throws IOException if an error occurs while
 	 *  attempting to read the file contents
 	 */
-	private RadixTree<List<String>> loadDictFromFile(File file)
+	private RadixTree<List<String>> loadDictFromFile(URL file)
 		throws IOException {
-		InputStream is = new FileInputStream(file);
+		InputStream is = file.openStream();
 		return readEntriesFromStream(is);
 	}
 	
@@ -182,7 +184,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * 
 	 * @return file
 	 */
-	public File getFile() {
+	public URL getFile() {
 		return this.dbFile;
 	}
 	
@@ -436,5 +438,15 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	@Override
 	public Iterator<String> metadataKeyIterator() {
 		return metadata.keySet().iterator();
+	}
+
+	@Override
+	public void install(IPADictionary dict) {
+		dict.putExtension(LanguageInfo.class, this);
+		dict.putExtension(NameInfo.class, this);
+		dict.putExtension(GenerateSuggestions.class, this);
+		dict.putExtension(OrthoKeyIterator.class, this);
+		dict.putExtension(PrefixSearch.class, this);
+		dict.putExtension(Metadata.class, this);
 	}
 }

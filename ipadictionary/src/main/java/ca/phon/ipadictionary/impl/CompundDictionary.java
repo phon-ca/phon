@@ -28,6 +28,8 @@ public class CompundDictionary implements IPADictionarySPI,
 	 * 
 	 */
 	private List<IPADictionary> dicts;
+	
+	
 
 	@Override
 	public String[] lookup(String orthography) throws IPADictionaryExecption {
@@ -88,6 +90,14 @@ public class CompundDictionary implements IPADictionarySPI,
 		}
 		
 		return keys.toArray(new String[0]);
+	}
+
+	@Override
+	public void install(IPADictionary dict) {
+		// setup extensions
+		dict.putExtension(NameInfo.class, this);
+		dict.putExtension(LanguageInfo.class, this);
+		dict.putExtension(PrefixSearch.class, this);
 	}
 	
 }

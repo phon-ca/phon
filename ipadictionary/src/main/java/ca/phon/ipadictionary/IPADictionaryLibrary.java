@@ -28,8 +28,10 @@ public class IPADictionaryLibrary implements IExtendable {
 	
 	private void setupLoader() {
 		// add the default dictionary handler
-		
+		getLoader().addHandler(new DefaultDictionaryProvider());
 	}
+	
+	
 	
 	/**
 	 * Get the loader used with the library.

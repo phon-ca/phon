@@ -55,6 +55,7 @@ public final class IPADictionary implements IExtendable {
 		if(impl == null)
 			throw new IllegalArgumentException("null implementation");
 		this.impl = impl;
+		this.impl.install(this);
 		extSupport.initExtensions();
 	}
 	

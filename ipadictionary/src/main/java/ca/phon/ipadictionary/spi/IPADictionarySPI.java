@@ -1,5 +1,6 @@
 package ca.phon.ipadictionary.spi;
 
+import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 
 /**
@@ -23,5 +24,8 @@ public interface IPADictionarySPI {
 	public String[] lookup(String orthography)
 		throws IPADictionaryExecption;
 
-	
+	/**
+	 * Install this SPI into the given IPADictionary
+	 */
+	public void install(IPADictionary dict);
 }
