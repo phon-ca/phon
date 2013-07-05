@@ -84,6 +84,23 @@ public class DictLang implements LanguageInfo {
 	}
 	
 	@Override
+	public boolean equals(Object b) {
+		if(!(b instanceof LanguageInfo)) return false;
+		
+		final LanguageInfo bInfo = (LanguageInfo)b;
+		
+		boolean primaryMatch = getLanguage().getId().equals(bInfo.getLanguage().getId());
+		boolean idMatch = getUserIds().length == bInfo.getUserIds().length;
+		if(idMatch) {
+			for(int i = 0; i < getUserIds().length; i++) {
+				idMatch &= getUserIds()[i].equals(bInfo.getUserIds()[i]);
+			}
+		}
+		
+		return primaryMatch && idMatch;
+	}
+	
+	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(getLanguage().getId());

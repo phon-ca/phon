@@ -53,7 +53,7 @@ public class CompundDictionary implements IPADictionarySPI,
 			detectedLang = dicts.get(0).getLanguage();
 			
 			for(int i = 1; i < dicts.size(); i++) {
-				if(dicts.get(i).getLanguage() != detectedLang) {
+				if(!dicts.get(i).getLanguage().equals(detectedLang)) {
 					detectedLang = new DictLang();
 					break;
 				}
