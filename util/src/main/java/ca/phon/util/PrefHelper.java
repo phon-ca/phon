@@ -57,15 +57,15 @@ public class PrefHelper {
 	 */
 	public final static String PREF_ROOT = "ca/phon";
 	
-	/**
-	 * UI prefs root node
-	 */
-	public final static String UI_PREF_ROOT = PREF_ROOT + "/ui/prefs";
-	
-	/**
-	 * Application prefs root node
-	 */
-	public final static String APPLICATION_PREF_ROOT = PREF_ROOT + "/app/prefs";
+//	/**
+//	 * UI prefs root node
+//	 */
+//	public final static String UI_PREF_ROOT = PREF_ROOT + "/ui/prefs";
+//	
+//	/**
+//	 * Application prefs root node
+//	 */
+//	public final static String APPLICATION_PREF_ROOT = PREF_ROOT + "/app/prefs";
 	
 	/**
 	 * Returns the root user preferences node.
@@ -89,49 +89,49 @@ public class PrefHelper {
 		return retVal;
 	}
 	
-	/**
-	 * Return the user UI preferences node.
-	 * 
-	 * @return Preferences
-	 */
-	public static Preferences getUserUIPreferences() {
-		Preferences retVal = 
-				Preferences.userRoot().node(UI_PREF_ROOT);
-		return retVal;
-	}
+//	/**
+//	 * Return the user UI preferences node.
+//	 * 
+//	 * @return Preferences
+//	 */
+//	public static Preferences getUserUIPreferences() {
+//		Preferences retVal = 
+//				Preferences.userRoot().node(UI_PREF_ROOT);
+//		return retVal;
+//	}
 	
-	/**
-	 * Return the system UI preferences node.
-	 * 
-	 * @return Preferences
-	 */
-	public static Preferences getSystemUIPreferences() {
-		Preferences retVal = 
-				Preferences.systemRoot().node(UI_PREF_ROOT);
-		return retVal;
-	}
+//	/**
+//	 * Return the system UI preferences node.
+//	 * 
+//	 * @return Preferences
+//	 */
+//	public static Preferences getSystemUIPreferences() {
+//		Preferences retVal = 
+//				Preferences.systemRoot().node(UI_PREF_ROOT);
+//		return retVal;
+//	}
 	
-	/**
-	 * Return the user application preferences node.
-	 * 
-	 * @return Preferences
-	 */
-	public static Preferences getUserAppPreferences() {
-		Preferences retVal = 
-				Preferences.userRoot().node(APPLICATION_PREF_ROOT);
-		return retVal;
-	}
+//	/**
+//	 * Return the user application preferences node.
+//	 * 
+//	 * @return Preferences
+//	 */
+//	public static Preferences getUserAppPreferences() {
+//		Preferences retVal = 
+//				Preferences.userRoot().node(APPLICATION_PREF_ROOT);
+//		return retVal;
+//	}
 	
-	/**
-	 * Return the system application preferences node.
-	 * 
-	 * @return Preferences
-	 */
-	public static Preferences getSystemAppPreferences() {
-		Preferences retVal = 
-				Preferences.userRoot().node(APPLICATION_PREF_ROOT);
-		return retVal;
-	}
+//	/**
+//	 * Return the system application preferences node.
+//	 * 
+//	 * @return Preferences
+//	 */
+//	public static Preferences getSystemAppPreferences() {
+//		Preferences retVal = 
+//				Preferences.userRoot().node(APPLICATION_PREF_ROOT);
+//		return retVal;
+//	}
 	
 	/**
 	 * Get the value of the specified {@link String} preference.
