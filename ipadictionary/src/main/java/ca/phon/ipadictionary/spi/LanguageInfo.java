@@ -20,4 +20,10 @@ public interface LanguageInfo {
 	 */
 	public LanguageEntry getLanguage();
 	
+	/**
+	 * Returns the userIds associated with the dictionary.
+	 * 
+	 */
+	public String[] getUserIds();
+	
 }

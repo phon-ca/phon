@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.ipadictionary.ContractionRule;
+import ca.phon.ipadictionary.DictLang;
 import ca.phon.ipadictionary.exceptions.BackingStoreException;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
@@ -117,7 +118,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * 
 	 * #lang eng
 	 */
-	private LanguageEntry language = new LanguageEntry();
+	private DictLang language = new DictLang();
 	
 	/**
 	 * Other metadata values.  Common values are
@@ -254,10 +255,8 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 			this.name = value;
 		} else if(token.equalsIgnoreCase(MetadataToken.LANGUAGE.toString())) {
 			// attempt to load language
-			LanguageEntry language = 
-				LanguageParser.getInstance().getEntryById(value);
-			if(language != null)
-				this.language = language;
+			final DictLang lang = DictLang.fromString(value);
+			this.language = lang;
 		} else if(token.equalsIgnoreCase(MetadataToken.CONTRACTION_RULE.toString())) {
 			// TODO load contraction rules
 		} else {
@@ -327,9 +326,14 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 
 	@Override
 	public LanguageEntry getLanguage() {
-		return language;
+		return language.getLanguage();
 	}
 
+	@Override
+	public String[] getUserIds() {
+		return language.getUserIds();
+	}
+	
 	@Override
 	public String getName() {
 		return name;

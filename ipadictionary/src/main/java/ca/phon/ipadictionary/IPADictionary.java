@@ -166,18 +166,17 @@ public final class IPADictionary implements IExtendable {
 	/**
 	 * Returns the language handled by this dictionary.
 	 * 
-	 * @return the {@link LanguageEntry} for this
+	 * @return the {@link DictLang} for this
 	 *  dictionary
 	 */
-	public LanguageEntry getLanguage() {
+	public LanguageInfo getLanguage() {
 		LanguageInfo langInfo = getExtension(LanguageInfo.class);
-		LanguageEntry retVal = new LanguageEntry();
 		
-		if(langInfo != null) {
-			retVal = langInfo.getLanguage();
+		if(langInfo == null) {
+			langInfo = new DictLang();
 		}
 		
-		return retVal;
+		return langInfo;
 	}
 	
 	

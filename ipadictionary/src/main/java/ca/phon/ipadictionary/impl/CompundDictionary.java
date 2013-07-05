@@ -1,5 +1,6 @@
 package ca.phon.ipadictionary.impl;
 
+import ca.phon.ipadictionary.DictLang;
 import ca.phon.ipadictionary.IPADictionary;
 
 import java.util.Iterator;
@@ -45,22 +46,31 @@ public class CompundDictionary implements IPADictionarySPI,
 	public String getName() {
 		return "Compound";
 	}
-
-	@Override
-	public LanguageEntry getLanguage() {
-		LanguageEntry detectedLang = new LanguageEntry();
+	
+	private LanguageInfo getLanguageInfo() {
+		LanguageInfo detectedLang = new DictLang();
 		if(dicts.size() > 0) {
 			detectedLang = dicts.get(0).getLanguage();
 			
 			for(int i = 1; i < dicts.size(); i++) {
 				if(dicts.get(i).getLanguage() != detectedLang) {
-					detectedLang = new LanguageEntry();
+					detectedLang = new DictLang();
 					break;
 				}
 			}
 		}
 		
 		return detectedLang;
+	}
+
+	@Override
+	public LanguageEntry getLanguage() {
+		return getLanguageInfo().getLanguage();
+	}
+	
+	@Override
+	public String[] getUserIds() {
+		return getLanguageInfo().getUserIds();
 	}
 
 	@Override
