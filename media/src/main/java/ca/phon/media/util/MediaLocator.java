@@ -21,15 +21,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.exceptions.EmptyQueueException;
-import ca.phon.system.prefs.UserPrefManager;
-import ca.phon.util.FileFilter;
+import org.apache.commons.lang3.StringUtils;
+
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.util.EmptyQueueException;
 import ca.phon.util.PathExpander;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.Queue;
-import ca.phon.util.StringUtils;
-import ca.phon.util.sysprops.SystemProperties;
 
 /**
  * Helper methods for locating and handling paths for media files.
@@ -46,18 +46,6 @@ public class MediaLocator {
 	 */
 	public static final String MEDIA_INCLUDE_PATH_PROP = "ca.phon.media.util.MediaLocator.includepath";
 	
-	
-	/**
-	 * Set the media include path in the default user preferences.
-	 * 
-	 * @param paths
-	 */
-	public static void setMediaIncludePaths(List<String> paths) {
-		SystemProperties props = UserPrefManager.getUserPreferences();
-		setMediaIncludePaths(paths, props);
-		UserPrefManager.saveUserPrefs(props);
-	}
-	
 	/**
 	 * Set media include path as a list of
 	 * paths.
@@ -65,20 +53,18 @@ public class MediaLocator {
 	 * @param paths
 	 * @param props
 	 */
-	public static void setMediaIncludePaths(List<String> paths, SystemProperties props) {
+	public static void setMediaIncludePaths(List<String> paths) {
 		String includePath = "";
 		
 		for(String path:paths) {
 			includePath += path + ";";
 		}
 		
-//		SystemProperties userPrefs = UserPrefManager.getUserPreferences();
-		props.addProperty(MEDIA_INCLUDE_PATH_PROP, includePath);
-//		UserPrefManager.saveUserPrefs(userPrefs);
+		PrefHelper.getUserPreferences().put(MEDIA_INCLUDE_PATH_PROP, includePath);
 	}
 	
 	public static List<String> getMediaIncludePaths() {
-		return getMediaIncludePaths(UserPrefManager.getUserPreferences());
+		return parseMediaIncludePaths();
 	}
 	
 	/**
@@ -88,14 +74,11 @@ public class MediaLocator {
 	 * @param props
 	 * @return media include paths
 	 */
-	public static List<String> getMediaIncludePaths(SystemProperties props) {
+	private static List<String> parseMediaIncludePaths() {
 		List<String> retVal = new ArrayList<String>();
 		
-//		SystemProperties userPrefs = UserPrefManager.getUserPreferences();
-		
-		if(props.getProperty(MEDIA_INCLUDE_PATH_PROP) != null) {
-			String includePath = props.getProperty(MEDIA_INCLUDE_PATH_PROP).toString();
-			
+		final String includePath = PrefHelper.get(MEDIA_INCLUDE_PATH_PROP, null);
+		if(includePath != null) {
 			String[] paths = includePath.split(";");
 			
 			for(String path:paths) {
@@ -111,7 +94,7 @@ public class MediaLocator {
 	/**
 	 * Find media given a project and session.
 	 */
-	public static File findMediaFile(IPhonProject project, ITranscript session) {
+	public static File findMediaFile(Project project, Session session) {
 		// build a list of possible media locations
 		Queue<String> mediaLocations = new Queue<String>();
 		final PathExpander pe = new PathExpander();
@@ -121,13 +104,13 @@ public class MediaLocator {
 			mediaLocations.queue(mediaRef);
 			// check for extension on media ref
 			if(mediaRef.indexOf('.') < 0) {
-				for(String ext:FileFilter.mediaFilter.exts()) {
+				for(String ext:FileFilter.mediaFilter.getAllExtensions()) {
 					mediaLocations.add(mediaRef + ext);
 				} 
 			}
 		} else {
-			String baseName = session.getID();
-			for(String ext:FileFilter.mediaFilter.exts()) {
+			String baseName = session.getName();
+			for(String ext:FileFilter.mediaFilter.getAllExtensions()) {
 				mediaLocations.add(baseName + ext);
 			}
 		}
@@ -166,7 +149,7 @@ public class MediaLocator {
 	 * @param corpus (may be <code>null</code>)
 	 * @return the file object for the file or null if not found
 	 */
-	 public static File findMediaFile(String filename, IPhonProject project, String corpus) {
+	 public static File findMediaFile(String filename, Project project, String corpus) {
 		 File retVal = null;
 		 
 		 // do we already have an absolute path
@@ -184,11 +167,11 @@ public class MediaLocator {
 			  */
 			 final List<String> checkList = new ArrayList<String>();
 			 if(project != null && corpus != null) {
-				 checkList.add(project.getProjectName() + 
+				 checkList.add(project.getName() + 
 						 File.separator + corpus + File.separator + filename);
 			 }
 			 if(project != null) {
-				 checkList.add(project.getProjectName() + 
+				 checkList.add(project.getName() + 
 						 File.separator + filename);
 			 }
 			 if(corpus != null) {
@@ -202,7 +185,7 @@ public class MediaLocator {
 			 
 			 if(project != null) {
 				 // check resources
-				 File resFile = new File(project.getProjectLocation(), "__res");
+				 File resFile = new File(project.getLocation(), "__res");
 				 File resMediaFile = new File(resFile, "media");
 				 mediaPaths.add(0, resMediaFile.getAbsolutePath());
 			 }
