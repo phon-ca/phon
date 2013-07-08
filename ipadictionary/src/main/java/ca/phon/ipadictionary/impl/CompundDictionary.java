@@ -28,8 +28,6 @@ public class CompundDictionary implements IPADictionarySPI,
 	 * 
 	 */
 	private List<IPADictionary> dicts;
-	
-	
 
 	@Override
 	public String[] lookup(String orthography) throws IPADictionaryExecption {

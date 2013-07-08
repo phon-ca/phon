@@ -1,9 +1,15 @@
 package ca.phon.ipadictionary;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.ipadictionary.spi.LanguageInfo;
+import ca.phon.util.LanguageEntry;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -22,7 +28,13 @@ public class IPADictionaryLibrary implements IExtendable {
 	private final ResourceLoader<IPADictionary> resLoader = 
 			new ResourceLoader<IPADictionary>();
 	
-	public IPADictionaryLibrary() {
+	private final static IPADictionaryLibrary _instance = new IPADictionaryLibrary();
+	
+	public static IPADictionaryLibrary getInstance() {
+		return _instance;
+	}
+	
+	private IPADictionaryLibrary() {
 		setupLoader();
 	}
 	
@@ -31,7 +43,37 @@ public class IPADictionaryLibrary implements IExtendable {
 		getLoader().addHandler(new DefaultDictionaryProvider());
 	}
 	
+	/**
+	 * Provides an iterator of all available dictionaries.
+	 * Dictionaries are in on particular sort order.
+	 * 
+	 * @return iterator of availble dictionaries
+	 */
+	public Iterator<IPADictionary> availableDictionaries() {
+		return getLoader().iterator();
+	}
 	
+	/**
+	 * Get all dictionaries for the specified primary language
+	 * 
+	 * @param lang
+	 * 
+	 * @return list of dictionaries for given lang
+	 */
+	public List<IPADictionary> dictionariesForLanguage(LanguageEntry lang) {
+		final List<IPADictionary> retVal = new ArrayList<IPADictionary>();
+		
+		final Iterator<IPADictionary> iterator = availableDictionaries();
+		while(iterator.hasNext()) {
+			final IPADictionary dict = iterator.next();
+			final LanguageInfo langInfo = dict.getLanguage();
+			if(langInfo.getLanguage() == lang) {
+				retVal.add(dict);
+			}
+		}
+		
+		return retVal;
+	}
 	
 	/**
 	 * Get the loader used with the library.
