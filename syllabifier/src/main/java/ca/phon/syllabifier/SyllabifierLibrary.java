@@ -8,6 +8,7 @@ import java.util.Set;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifierClassLoaderProvider;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
 import ca.phon.util.resources.ResourceLoader;
@@ -29,10 +30,15 @@ public final class SyllabifierLibrary implements IExtendable {
 	private final ResourceLoader<Syllabifier> resLoader = 
 			new ResourceLoader<Syllabifier>();
 	
+	private final static SyllabifierLibrary _instance = new SyllabifierLibrary();
+	public static SyllabifierLibrary getInstance() {
+		return _instance;
+	}
+	
 	/**
 	 * Constructor
 	 */
-	public SyllabifierLibrary() {
+	private SyllabifierLibrary() {
 		extSupport.initExtensions();
 		
 		resLoader.addHandler(new OpGraphSyllabifierClassLoaderProvider());
@@ -48,6 +54,37 @@ public final class SyllabifierLibrary implements IExtendable {
 	}
 	
 	/**
+	 * Return an Iterator for the available syllabifiers.
+	 * 
+	 * @return iterator for the available syllabifiers
+	 * 
+	 */
+	public Iterator<Syllabifier> availableSyllabifiers() {
+		return getLoader().iterator();
+	}
+	
+	/**
+	 * Get a list of available syllabifier names.
+	 * 
+	 * @return list of names
+	 */
+	public List<String> availableSyllabifierNames() {
+		final List<String> retVal = new ArrayList<String>();
+		
+		final Iterator<Syllabifier> iterator = availableSyllabifiers();
+		while(iterator.hasNext()) {
+			final Syllabifier syllabifier = iterator.next();
+			retVal.add(syllabifier.getName());
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Returns a list of syllabifier languages.
+	 */
+	
+	/**
 	 * Get the first available syllabifier for the given language.
 	 * 
 	 * @param lang - should be one of the ISO
@@ -56,18 +93,17 @@ public final class SyllabifierLibrary implements IExtendable {
 	 *  <code>null</code> otherwise
 	 */
 	public Syllabifier getSyllabifierForLanguage(String lang) {
-		final LanguageParser parser = LanguageParser.getInstance();
-		final LanguageEntry entry = parser.getEntryById(lang);
-		return getSyllabifierForLanguage(entry);
+		final Language language = Language.fromString(lang);
+		return getSyllabifierForLanguage(language);
 	}
 	
-	public Syllabifier getSyllabifierForLanguage(LanguageEntry entry) {
+	public Syllabifier getSyllabifierForLanguage(Language lang) {
 		Syllabifier retVal = null;
 		
 		final Iterator<Syllabifier> itr = resLoader.iterator();
 		while(itr.hasNext()) {
 			final Syllabifier syllabifier = itr.next();
-			if(syllabifier.getLanguage().equals(entry)) {
+			if(syllabifier.getLanguage().equals(lang)) {
 				retVal = syllabifier;
 				break;
 			}

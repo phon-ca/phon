@@ -13,6 +13,7 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
 
@@ -61,14 +62,14 @@ public final class OpGraphSyllabifier implements Syllabifier {
 	}
 
 	@Override
-	public LanguageEntry getLanguage() {
-		LanguageEntry retVal = new LanguageEntry();
+	public Language getLanguage() {
+		Language retVal = new Language();
 		
 		final SyllabifierSettings graphSettings = graph.getExtension(SyllabifierSettings.class);
 		if(graphSettings != null) {
 			final String langId = graphSettings.getLanguage();
 			if(langId != null) {
-				retVal = LanguageParser.getInstance().getEntryById(langId);
+				retVal = Language.fromString(langId);
 			}
 		}
 		

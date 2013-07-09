@@ -4,6 +4,7 @@ import java.util.List;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 
 /**
@@ -26,7 +27,7 @@ public interface Syllabifier {
 	 * 
 	 * @return language for the syllabifier
 	 */
-	public LanguageEntry getLanguage();
+	public Language getLanguage();
 	
 	/**
 	 * Apply consituent type annotations
