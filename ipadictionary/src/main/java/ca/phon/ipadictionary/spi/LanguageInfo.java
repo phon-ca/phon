@@ -2,6 +2,7 @@ package ca.phon.ipadictionary.spi;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 
 /**
@@ -15,15 +16,9 @@ public interface LanguageInfo {
 	/**
 	 * Returns the language handled by this dictionary.
 	 * 
-	 * @return the {@link LanguageEntry} for this
+	 * @return the {@link Language} for this
 	 *  dictionary
 	 */
-	public LanguageEntry getLanguage();
-	
-	/**
-	 * Returns the userIds associated with the dictionary.
-	 * 
-	 */
-	public String[] getUserIds();
+	public Language getLanguage();
 	
 }

@@ -1,6 +1,5 @@
 package ca.phon.ipadictionary.impl;
 
-import ca.phon.ipadictionary.DictLang;
 import ca.phon.ipadictionary.IPADictionary;
 
 import java.util.Iterator;
@@ -14,6 +13,7 @@ import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.NameInfo;
 import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.PrefixSearch;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 
 /**
@@ -46,33 +46,23 @@ public class CompundDictionary implements IPADictionarySPI,
 	public String getName() {
 		return "Compound";
 	}
-	
-	private LanguageInfo getLanguageInfo() {
-		LanguageInfo detectedLang = new DictLang();
+
+	@Override
+	public Language getLanguage() {
+		Language detectedLang = new Language();
 		if(dicts.size() > 0) {
 			detectedLang = dicts.get(0).getLanguage();
 			
 			for(int i = 1; i < dicts.size(); i++) {
 				if(!dicts.get(i).getLanguage().equals(detectedLang)) {
-					detectedLang = new DictLang();
-					break;
+					detectedLang.appendUserID(dicts.get(i).getLanguage().toString());
 				}
 			}
 		}
 		
 		return detectedLang;
 	}
-
-	@Override
-	public LanguageEntry getLanguage() {
-		return getLanguageInfo().getLanguage();
-	}
 	
-	@Override
-	public String[] getUserIds() {
-		return getLanguageInfo().getUserIds();
-	}
-
 	@Override
 	public String[] keysWithPrefix(String prefix) {
 		Set<String> keys = new TreeSet<String>();

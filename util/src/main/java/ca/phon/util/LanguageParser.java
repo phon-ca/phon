@@ -30,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -78,7 +80,7 @@ public class LanguageParser implements Iterable<LanguageEntry> {
 //			
 			String line = br.readLine();
 			while((line = br.readLine()) != null) {
-				LanguageEntry currentEntry = LanguageEntry.fromString(line);
+				LanguageEntry currentEntry = entryFromLine(line);
 				entries.add(currentEntry);
 				
 //				do {
@@ -97,6 +99,28 @@ public class LanguageParser implements Iterable<LanguageEntry> {
 			Logger.getLogger(getClass().getName()).severe(e.getMessage());
 			return;
 		}
+	}
+	
+	/**
+	 * Parse the language entry from the given line in the
+	 * ISO file.
+	 * 
+	 */
+	public static LanguageEntry entryFromLine(String line) {
+		if(line == null) return null;
+		
+		String[] fields = line.split("\t");
+		
+		LanguageEntry retVal = new LanguageEntry();
+		retVal.addProperty(LanguageEntry.ID_639_3, fields[0]);
+		retVal.addProperty(LanguageEntry.ID_639_2B, fields[1]);
+		retVal.addProperty(LanguageEntry.ID_639_2T, fields[2]);
+		retVal.addProperty(LanguageEntry.ID_639_1, fields[3]);
+		retVal.addProperty(LanguageEntry.SCOPE, fields[4]);
+		retVal.addProperty(LanguageEntry.TYPE, fields[5]);
+		retVal.addProperty(LanguageEntry.REF_NAME, fields[6]);
+		
+		return retVal;
 	}
 	
 	/**

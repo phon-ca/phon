@@ -20,7 +20,9 @@ import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.NameInfo;
 import ca.phon.ipadictionary.spi.PrefixSearch;
 import ca.phon.ipadictionary.spi.RemoveEntry;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
+import ca.phon.util.LanguageParser;
 
 /**
  * API for the IPA dictionary.  This class is final.
@@ -167,17 +169,15 @@ public final class IPADictionary implements IExtendable {
 	/**
 	 * Returns the language handled by this dictionary.
 	 * 
-	 * @return the {@link DictLang} for this
+	 * @return the {@link LanguageEntry} for this
 	 *  dictionary
 	 */
-	public LanguageInfo getLanguage() {
-		LanguageInfo langInfo = getExtension(LanguageInfo.class);
+	public Language getLanguage() {
+		final LanguageInfo langInfo = getExtension(LanguageInfo.class);
 		
-		if(langInfo == null) {
-			langInfo = new DictLang();
-		}
-		
-		return langInfo;
+		Language retVal = 
+				(langInfo == null ? new Language() : langInfo.getLanguage());
+		return retVal;
 	}
 	
 	

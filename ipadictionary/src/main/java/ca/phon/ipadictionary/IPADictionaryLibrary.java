@@ -2,6 +2,7 @@ package ca.phon.ipadictionary;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipadictionary.spi.LanguageInfo;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.resources.ResourceLoader;
 
@@ -54,20 +56,38 @@ public class IPADictionaryLibrary implements IExtendable {
 	}
 	
 	/**
+	 * Get a list of all distinct LanguageInfos available.
+	 * 
+	 * @return list of availble  languages
+	 */
+	public Set<Language> availableLangauges() {
+		final Set<Language> retVal = new HashSet<Language>();
+		
+		final Iterator<IPADictionary> iterator = availableDictionaries();
+		while(iterator.hasNext()) {
+			final IPADictionary dict = iterator.next();
+			final Language lang = dict.getLanguage();
+			retVal.add(lang);
+		}
+		
+		return retVal;
+	}
+	
+	/**
 	 * Get all dictionaries for the specified primary language
 	 * 
 	 * @param lang
 	 * 
 	 * @return list of dictionaries for given lang
 	 */
-	public List<IPADictionary> dictionariesForLanguage(LanguageEntry lang) {
+	public List<IPADictionary> dictionariesForLanguage(Language lang) {
 		final List<IPADictionary> retVal = new ArrayList<IPADictionary>();
 		
 		final Iterator<IPADictionary> iterator = availableDictionaries();
 		while(iterator.hasNext()) {
 			final IPADictionary dict = iterator.next();
-			final LanguageInfo langInfo = dict.getLanguage();
-			if(langInfo.getLanguage() == lang) {
+			final Language l = dict.getLanguage();
+			if(l.equals(lang)) {
 				retVal.add(dict);
 			}
 		}

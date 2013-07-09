@@ -20,7 +20,9 @@ package ca.phon.util;
 import java.util.Hashtable;
 
 /**
- * An entry in the ISO-639-3 code set.
+ * An entry in the ISO-639-3 code set.  May also
+ * include custom userIds.
+ * 
  */
 public class LanguageEntry {
 	
@@ -62,28 +64,9 @@ public class LanguageEntry {
 	public final static String COMMENT = "Comment";
 	
 	/**
-	 * Parse the language entry from the given string.
-	 * 
-	 * Fields should be separated by a '\t' in the order
-	 * given by the field tags above.
-	 * 
+	 * User ids
 	 */
-	public static LanguageEntry fromString(String line) {
-		if(line == null) return null;
-		
-		String[] fields = line.split("\t");
-		
-		LanguageEntry retVal = new LanguageEntry();
-		retVal.addProperty(ID_639_3, fields[0]);
-		retVal.addProperty(ID_639_2B, fields[1]);
-		retVal.addProperty(ID_639_2T, fields[2]);
-		retVal.addProperty(ID_639_1, fields[3]);
-		retVal.addProperty(SCOPE, fields[4]);
-		retVal.addProperty(TYPE, fields[5]);
-		retVal.addProperty(REF_NAME, fields[6]);
-		
-		return retVal;
-	}
+	public final static String USER_ID = "UserIDs";
 	
 	/**
 	 * Default constructor
@@ -99,6 +82,7 @@ public class LanguageEntry {
 		addProperty(SCOPE, fields[4]);
 		addProperty(TYPE, fields[5]);
 		addProperty(REF_NAME, fields[6]);
+		addProperty(USER_ID, "");
 	}
 	
 	private Hashtable<String, String> props = new Hashtable<String, String>();
@@ -108,7 +92,7 @@ public class LanguageEntry {
 	 * @param name   the name of the property
 	 * @param value  the value of the property
 	 */
-	public void addProperty(String name, String value) {
+	void addProperty(String name, String value) {
 		props.put(name, value);
 	}
 	
@@ -118,6 +102,15 @@ public class LanguageEntry {
 	 */
 	public String getId() {
 		return props.get(ID_639_3);
+	}
+	
+	/**
+	 * Returns the custom User ID added to this language
+	 * 
+	 * @return User ID or empty string
+	 */
+	public String getUserId() {
+		return props.get(USER_ID);
 	}
 	
 	/**
@@ -173,6 +166,6 @@ public class LanguageEntry {
 	
 	@Override
 	public String toString() {
-		return String.format("%s (%s)", getName(), getId());
+		return getId() + (getUserId().length() > 0 ? "-" + getUserId() : "");
 	}
 }
