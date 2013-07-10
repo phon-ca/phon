@@ -11,6 +11,6 @@ ca.phon.app.actions.CutEP
 # Paste
 ca.phon.app.actions.PasteEP
 # Properties/prefs
-ca.phon.app.actions.PropertiesEP
+ca.phon.app.prefs.PreferencesEP
 
 

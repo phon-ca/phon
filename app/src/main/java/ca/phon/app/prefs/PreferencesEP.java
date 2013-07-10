@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.actions;
+package ca.phon.app.prefs;
 
 import java.util.Map;
 
@@ -28,9 +28,9 @@ import ca.phon.ui.CommonModuleFrame;
  * 
  */
 @PhonPlugin(name="default")
-public class PropertiesEP implements IPluginEntryPoint {
+public class PreferencesEP implements IPluginEntryPoint {
 	
-	private final static String EP_NAME = "Properties";
+	private final static String EP_NAME = "Preferences";
 	@Override
 	public String getName() {
 		return EP_NAME;
@@ -38,7 +38,7 @@ public class PropertiesEP implements IPluginEntryPoint {
 	
 	@Override
 	public void pluginStart(Map<String, Object> mi) {
-		CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
+		final CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
 		
 		PrefsDialog dlg = null;
 		if(currentFrame != null)

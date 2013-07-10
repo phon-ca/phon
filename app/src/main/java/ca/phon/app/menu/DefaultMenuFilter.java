@@ -134,7 +134,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		editMenu.addSeparator();
 		
 		// prefs
-		PluginAction prefsAct = new PluginAction("Properties");
+		PluginAction prefsAct = new PluginAction("Preferences");
 		prefsAct.putValue(Action.NAME, "Preferences...");
 		prefsAct.putValue(Action.SHORT_DESCRIPTION, "Edit application preferences");
 //		prefsAct.putValue(PluginAction.ACCELERATOR_KEY, 

@@ -1,13 +1,17 @@
 package ca.phon.app.hooks;
 
+import ca.phon.app.BootWindow;
 import ca.phon.plugin.PluginException;
 
 /**
  * Interface used to perform operations before Phon is
- * opened.
+ * opened. This hook will always be called when Phon 
+ * starts, unlike {@link PhonBootHook} which is only 
+ * called when using the {@link BootWindow}.
  * 
- * Hooks are called just before the workspace dialog
- * is present.
+ * {@link PhonStartupHook}s are executed just before
+ * the first module is called.  A use case for this class
+ * is to change the execution flow of the application.
  */
 public interface PhonStartupHook {
 

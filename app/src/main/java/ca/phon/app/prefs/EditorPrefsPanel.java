@@ -40,10 +40,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+import org.jdesktop.swingx.auth.UserPermissions;
 
+import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.ipadictionary.spi.LanguageInfo;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.FontDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
+import ca.phon.util.PrefHelper;
+import ca.phon.worker.PhonWorker;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -67,8 +76,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 	private JLabel lblPreviewFont;
 	private JButton btnChooseFont;
 	
-	private final String fontProp = "pref_font_test_string";
-	
 	public EditorPrefsPanel() {
 		super("Session Editor");
 		init();
@@ -78,20 +85,29 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 		CellConstraints cc = new CellConstraints();
 		
-		cmbDictionaryLanguage = new JComboBox(IPADictionaries.getAvailableLanguages());
-		cmbDictionaryLanguage.setSelectedItem(IPADictionaries.getDefaultLanguage());
-		cmbDictionaryLanguage.setRenderer(new LanguageCellRenderer());
+		final IPADictionaryLibrary dictLibrary = IPADictionaryLibrary.getInstance();
+		
+		final String dictLangPref = PrefHelper.get(PhonProperties.IPADICTIONARY_LANGUAGE,
+				PhonProperties.DEFAULT_IPADICTIONARY_LANGUAGE);
+		final Language dictLang = Language.fromString(dictLangPref);
+		cmbDictionaryLanguage = new JComboBox(dictLibrary.availableLangauges().toArray(new Language[0]));
+		cmbDictionaryLanguage.setSelectedItem(dictLang);
 		cmbDictionaryLanguage.addItemListener(new DictionaryLanguageListener());
 		
 		JPanel jpanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		jpanel1.setBorder(new TitledBorder("Dictionary Language"));
 		jpanel1.add(cmbDictionaryLanguage);
 		
-		List<String> sortedSyllabifiers = Syllabifier.getAvailableSyllabifiers();
+		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
+		
+		final List<String> sortedSyllabifiers = syllabifierLibrary.availableSyllabifierNames();
 		Collections.sort(sortedSyllabifiers);
 		
+		final String syllLangPref = PrefHelper.get(PhonProperties.SYLLABIFIER_LANGUAGE, 
+				PhonProperties.DEFAULT_SYLLABIFIER_LANGUAGE);
+		final Language syllLang = Language.fromString(syllLangPref);
 		cmbSyllabifierLanguage = new JComboBox(sortedSyllabifiers.toArray(new String[0]));
-		cmbSyllabifierLanguage.setSelectedItem(Syllabifier.getDefaultLanguage());
+		cmbSyllabifierLanguage.setSelectedItem(syllLang.toString());
 		cmbSyllabifierLanguage.addItemListener(new SyllabifierLanguageListener());
 		
 		JPanel jpanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -99,18 +115,10 @@ public class EditorPrefsPanel extends PrefsPanel {
 		jpanel2.add(cmbSyllabifierLanguage);
 		
 		Charset cs = Charset.forName("UTF-8");
-		if(props.getProperty(fontProp) == null)
-			props = UserPrefManager.getDefaultUserPreferences();
-		
-		// Default editor font
-//		SystemProperties props = UserPrefManager.getUserPreferences();
-		if(props.getProperty(fontProp) == null)
-			props = UserPrefManager.getDefaultUserPreferences();
-		String lblText = props.getProperty(fontProp).toString();
-		
-		Font editorFont = Font.decode((String)props.getProperty("editor_font"));
+		Font editorFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
+				Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
 		lblFont = new JLabel(fontToString(editorFont));
-		lblPreviewFont = new JLabel(lblText);
+		lblPreviewFont = new JLabel();
 		lblPreviewFont.setVerticalAlignment(SwingConstants.TOP);
 		
 		btnChooseFont = new JButton("Select...");
@@ -133,11 +141,8 @@ public class EditorPrefsPanel extends PrefsPanel {
 			
 		autosaveBox = new JComboBox(autosaveTimes);
 		
-		if(props.getProperty(AutosaveManager.AUTOSAVE_INTERVAL_PROP) != null) {
-			Integer val = Integer.parseInt(
-					props.getProperty(AutosaveManager.AUTOSAVE_INTERVAL_PROP).toString());
-			autosaveBox.setSelectedItem((val/60));
-		}
+		final Integer autosavePref = PrefHelper.getInt(PhonProperties.AUTOSAVE_INTERVAL, PhonProperties.DEFAULT_AUTOSAVE_INTERVAL);
+		autosaveBox.setSelectedItem((autosavePref/60));
 		
 		autosaveBox.addItemListener(new AutosaveTimeListener());
 		autosaveBox.setRenderer(new AutosaveTimeRenderer());
@@ -166,8 +171,8 @@ public class EditorPrefsPanel extends PrefsPanel {
 	}
 	
 	private void updateDialogFonts() {
-		SystemProperties props = UserPrefManager.getUserPreferences();
-		Font font = Font.decode((String)props.getProperty("editor_font"));
+		Font font = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
+				Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
 		lblPreviewFont.setFont(font);
 	}
 	
@@ -216,24 +221,32 @@ public class EditorPrefsPanel extends PrefsPanel {
 //				
 //				updateDialogFonts();
 //			}
-			Runnable run = new Runnable() {
-				@Override
-				public void run() {
-					Font editorFont = Font.decode((String)props.getProperty("editor_font"));
-					Font newEditorFont = 
-						NativeDialogs.showFontSelectionDialogBlocking(CommonModuleFrame.getCurrentFrame(), 
-								editorFont.getName(), editorFont.getSize(), editorFont.getStyle());
+//			Runnable run = new Runnable() {
+//				@Override
+//				public void run() {
+					Font editorFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
+							Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
+					
+					final FontDialogProperties dialogProps = new FontDialogProperties();
+					dialogProps.setFontName(editorFont.getName());
+					dialogProps.setFontSize(editorFont.getSize());
+					dialogProps.setBold(editorFont.isBold());
+					dialogProps.setItalic(editorFont.isItalic());
+					dialogProps.setTitle("Select Font");
+					dialogProps.setParentWindow(CommonModuleFrame.getCurrentFrame());
+					dialogProps.setRunAsync(false);
+					
+					Font newEditorFont = NativeDialogs.showFontDialog(dialogProps);
 					
 					if(newEditorFont != null) {
 						lblFont.setText(fontToString(newEditorFont));
-						props.addProperty("editor_font", fontToString(newEditorFont));
-						UserPrefManager.saveUserPrefs(props);
+						PrefHelper.getUserPreferences().put(PhonProperties.IPA_TRANSCRIPT_FONT, fontToString(newEditorFont));
 						
 						updateDialogFonts();
 					}
-				}
-			};
-			PhonWorker.getInstance().invokeLater(run);
+//				}
+//			};
+//			PhonWorker.getInstance().invokeLater(run);
 			
 		}
 	}
@@ -262,16 +275,9 @@ public class EditorPrefsPanel extends PrefsPanel {
 		public void itemStateChanged(ItemEvent e) {
 			if(e.getStateChange() == ItemEvent.SELECTED) {
 				Integer val = (Integer)autosaveBox.getSelectedItem();
+				val = (val == null ? 0 : val);
 				
-				if(val != null) {
-					// save value in prefs
-					int saveVal = val * 60;
-					
-					props.addProperty(AutosaveManager.AUTOSAVE_INTERVAL_PROP, saveVal);
-					UserPrefManager.saveUserPrefs(props);
-					
-					AutosaveManager.getInstance().setInterval(saveVal);
-				}
+				PrefHelper.getUserPreferences().putInt(PhonProperties.AUTOSAVE_INTERVAL, val);
 			}
 		}
 		
@@ -282,33 +288,32 @@ public class EditorPrefsPanel extends PrefsPanel {
 		public void itemStateChanged(ItemEvent e) {
 			if(e.getStateChange() != ItemEvent.SELECTED) return;
 			
-			String dictLanguage = (String)e.getItem();
-			props.addProperty("default_dictionary_language", dictLanguage);
-			UserPrefManager.saveUserPrefs(props);
+			Language dictLanguage = (Language)e.getItem();
+			PrefHelper.getUserPreferences().put(PhonProperties.IPADICTIONARY_LANGUAGE, dictLanguage.toString());
 		}
 	}
 	
-	private class LanguageCellRenderer extends DefaultListCellRenderer {
-
-		@Override
-		public Component getListCellRendererComponent(JList arg0,
-				Object arg1, int arg2, boolean arg3, boolean arg4) {
-			JLabel retVal = 
-				(JLabel)super.getListCellRendererComponent(arg0, arg1, arg2, arg3, arg4);
-			
-			String langId = arg1.toString();
-			if(langId.indexOf('-') > 0) {
-				langId = langId.split("-")[0];
-			}
-			LanguageEntry le = LanguageParser.getInstance().getEntryById(langId);
-			if(le != null) {
-				retVal.setText(le.getName() + " (" + arg1.toString() + ")");
-			}
-			
-			return retVal;
-		}
-		
-	}
+//	private class LanguageCellRenderer extends DefaultListCellRenderer {
+//
+//		@Override
+//		public Component getListCellRendererComponent(JList arg0,
+//				Object arg1, int arg2, boolean arg3, boolean arg4) {
+//			JLabel retVal = 
+//				(JLabel)super.getListCellRendererComponent(arg0, arg1, arg2, arg3, arg4);
+//			
+//			String langId = arg1.toString();
+//			if(langId.indexOf('-') > 0) {
+//				langId = langId.split("-")[0];
+//			}
+//			Language le = LanguageParser.getInstance().getEntryById(langId);
+//			if(le != null) {
+//				retVal.setText(le.getName() + " (" + arg1.toString() + ")");
+//			}
+//			
+//			return retVal;
+//		}
+//		
+//	}
 	
 	private class SyllabifierLanguageListener implements ItemListener {
 		@Override
@@ -316,8 +321,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 			if(e.getStateChange() != ItemEvent.SELECTED) return;
 			
 			String sylLanguage = (String)e.getItem();
-			props.addProperty("default_syllabifier_language", sylLanguage);
-			UserPrefManager.saveUserPrefs(props);
+			PrefHelper.getUserPreferences().put(PhonProperties.SYLLABIFIER_LANGUAGE, sylLanguage);
 		}
 	}
 	

@@ -627,7 +627,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 			initInfo.put("prefpanel", pae.getData().toString());
 		}
 		
-		PluginEntryPointRunner.executePluginInBackground("Properties", initInfo);
+		PluginEntryPointRunner.executePluginInBackground("Preferences", initInfo);
 		
 //		ModuleInformation mi =
 //			ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.edit.PropertiesController");
