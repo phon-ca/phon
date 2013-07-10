@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:og="http://gedge.ca/ns/opgraph"
+    xmlns="https://www.phon.ca/ns/syllabifier" targetNamespace="https://www.phon.ca/ns/syllabifier"
+    version="1.0">
+    
+    <xs:import namespace="http://gedge.ca/ns/opgraph"></xs:import>
+    
+    <xs:complexType name="SettingsType">
+        <xs:annotation>
+            <xs:documentation>Type definition for syllabifier settings.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="og:AbstractExtensionType">
+                <xs:attribute name="name" type="xs:string" default=""/>
+                <xs:attribute name="lang" type="language" default="xxx"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:simpleType name="language">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([a-z]{3})(-[a-zA-Z0-9]{1,8})*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:element name="settings" type="SettingsType" substitutionGroup="og:extension"/>
+    
+</xs:schema>
