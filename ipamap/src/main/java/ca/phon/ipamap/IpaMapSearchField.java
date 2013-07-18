@@ -1,4 +1,4 @@
-package ca.phon.gui.ipamap;
+package ca.phon.ipamap;
 
 import java.awt.Window;
 import java.awt.event.FocusEvent;

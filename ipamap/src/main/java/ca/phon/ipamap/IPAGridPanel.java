@@ -1,4 +1,4 @@
-package ca.phon.gui.ipamap;
+package ca.phon.ipamap;
 
 import java.awt.Dimension;
 import java.awt.Font;

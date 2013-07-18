@@ -195,7 +195,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		JMenu toolsMenu = new JMenu("Tools");
 		
 		// ipa chart
-		PluginAction ipaAct = new PluginAction("CharmapView");
+		PluginAction ipaAct = new PluginAction("IPAMap");
 		ipaAct.putValue(Action.NAME, "IPA Map");
 		ipaAct.putValue(Action.SHORT_DESCRIPTION, "IPA Map");
 		ipaAct.putValue(Action.ACCELERATOR_KEY,

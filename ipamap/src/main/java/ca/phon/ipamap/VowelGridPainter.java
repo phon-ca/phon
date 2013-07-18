@@ -1,4 +1,4 @@
-package ca.phon.gui.ipamap;
+package ca.phon.ipamap;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

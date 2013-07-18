@@ -1,4 +1,4 @@
-package ca.phon.gui.ipamap;
+package ca.phon.ipamap;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -90,10 +90,10 @@ import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import ca.phon.gui.ipamap.IpaMapSearchField.SearchType;
 import ca.phon.ipa.features.Feature;
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipamap.IpaMapSearchField.SearchType;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.PromptedTextField.FieldState;
 import ca.phon.ui.action.PhonActionEvent;
