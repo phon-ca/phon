@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,11 +113,57 @@ public class BootWindow extends Window {
 	
 	/**
 	 * Invoke the main() method of our application.
+	 * This method will not modify the current JVM
+	 * options or environment.
 	 * 
 	 * @param className
 	 * @param args
 	 */
 	public static void invokeMain(String className, String[] args) {
+		while(!paintCalled) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			}
+		}
+	
+		try {
+			Class.forName(className)
+				.getMethod("main", new Class[] { String[].class })
+				.invoke(null, new Object[] { args } );
+		} catch (IllegalArgumentException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (SecurityException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (NoSuchMethodException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (ClassNotFoundException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
+		
+	}
+	
+	/**
+	 * Invoke the main() method of our application.
+	 * This method spawns a new JVM process.  The method
+	 * will use the files:
+	 * 
+	 *  META-INF/env/$(OS)/vmoptions
+	 *  META-INF/env/$(OS)/env
+	 *  
+	 * to setup the vmoptions and environment variables
+	 * for the new JVM process.  Use this method if
+	 * you need to modify the application environment.
+	 * 
+	 * @param className
+	 * @param args
+	 */
+	public static void invokeMainInNewProcess(String className, String[] args) {
 		while(!paintCalled) {
 			try {
 				Thread.sleep(500);

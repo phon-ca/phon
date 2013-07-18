@@ -21,6 +21,10 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import org.jdesktop.swingx.util.OS;
+
+import ca.phon.ui.nativedialogs.OSInfo;
+
 /**
  * Starts the Phon application along with a fast Phon splash screen.
  * 
@@ -30,12 +34,17 @@ public class PhonSplasher {
 	
 	public static void main(String[] args) throws Exception {
 		BootWindow.splash(ImageIO.read(new File("data/phonboot.png")));
-		BootWindow.invokeMain("ca.phon.application.main.Phon", args);
+		if(!OSInfo.isMacOs())
+			BootWindow.invokeMainInNewProcess("ca.phon.application.main.Phon", args);
+		else
+			BootWindow.invokeMain("ca.phon.application.main.Phon", args);
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {}
 		BootWindow.disposeSplash();
-		System.exit(0);
+		
+		if(!OSInfo.isMacOs())
+			System.exit(0);
 	}
 
 }
