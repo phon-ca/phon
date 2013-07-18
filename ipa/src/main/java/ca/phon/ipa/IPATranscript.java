@@ -2,6 +2,7 @@ package ca.phon.ipa;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Formattable;
 import java.util.List;
 import java.util.Set;
@@ -72,6 +73,14 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 */
 	public IPATranscript(List<IPAElement> phones) {
 		super(phones);
+		extSupport.initExtensions();
+	}
+	
+	/**
+	 * Create a new transcript from an array of phones.
+	 */
+	public IPATranscript(IPAElement ... phones) {
+		super(Arrays.asList(phones));
 		extSupport.initExtensions();
 	}
 	

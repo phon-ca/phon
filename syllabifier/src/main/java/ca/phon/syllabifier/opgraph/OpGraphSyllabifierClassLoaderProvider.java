@@ -13,12 +13,14 @@ import ca.phon.util.resources.ClassLoaderHandler;
  */
 public class OpGraphSyllabifierClassLoaderProvider extends ClassLoaderHandler<Syllabifier> {
 	
+	private final static String LIST = "syllabifier/opgraph.list";
+	
 	/**
 	 * Constructor
 	 */
 	public OpGraphSyllabifierClassLoaderProvider() {
 		super();
-		super.loadResourceFile("syllabifier/opgraph.list");
+		super.loadResourceFile(LIST);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.syllabifier.basic.BasicSyllabifierClassLoaderProvider;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifierClassLoaderProvider;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
@@ -41,7 +42,9 @@ public final class SyllabifierLibrary implements IExtendable {
 	private SyllabifierLibrary() {
 		extSupport.initExtensions();
 		
+		resLoader.addHandler(new BasicSyllabifierClassLoaderProvider());
 		resLoader.addHandler(new OpGraphSyllabifierClassLoaderProvider());
+		
 	}
 	
 	/**
