@@ -12,5 +12,5 @@ ca.phon.app.actions.CutEP
 ca.phon.app.actions.PasteEP
 # Properties/prefs
 ca.phon.app.prefs.PreferencesEP
-
-
+# Tools/Language Codes
+ca.phon.app.help.LanguageCodeEP
