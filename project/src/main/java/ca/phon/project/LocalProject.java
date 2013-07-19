@@ -318,7 +318,7 @@ public class LocalProject implements Project {
 	}
 
 	@Override
-	public void reameCorpus(String corpus, String newName) throws IOException {
+	public void renameCorpus(String corpus, String newName) throws IOException {
 		// add new corpus first
 		addCorpus(newName, getCorpusDescription(corpus));
 		

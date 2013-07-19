@@ -273,7 +273,7 @@ public class RenameCorpusEP implements IPluginEntryPoint {
 				// Create new corpus, transfer sessions over to it and delete
 				// the old corpus
 				try {
-					project.reameCorpus(fOldName, fNewName);
+					project.renameCorpus(fOldName, fNewName);
 				} catch(IOException e) {
 					showMessage("Rename Corpus", 
 							"Failed to rename corpus " + fOldName + ". Reason: " + e.getMessage());

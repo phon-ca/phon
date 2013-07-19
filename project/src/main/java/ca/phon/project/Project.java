@@ -110,7 +110,7 @@ public interface Project extends IExtendable {
 	 * @throws IOException if the corpus could not be
 	 *  renamed
 	 */
-	public void reameCorpus(String corpus, String newName) 
+	public void renameCorpus(String corpus, String newName) 
 		throws IOException;
 	
 	/**
