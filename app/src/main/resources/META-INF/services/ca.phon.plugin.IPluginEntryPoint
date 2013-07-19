@@ -14,3 +14,6 @@ ca.phon.app.actions.PasteEP
 ca.phon.app.prefs.PreferencesEP
 # Tools/Language Codes
 ca.phon.app.help.LanguageCodeEP
+## Project actions
+# New corpus
+ca.phon.app.project.NewCorpusEP
