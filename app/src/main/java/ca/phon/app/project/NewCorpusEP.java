@@ -71,6 +71,8 @@ public class NewCorpusEP implements IPluginEntryPoint {
 	}
 	
 	private class NewCorpusDialog extends JDialog {
+		private static final long serialVersionUID = -4292768829721671922L;
+		
 		private JComponent titleStep1;
 		private JComponent titleStep2;
 		private JTextField txtName = new JTextField();
@@ -196,7 +198,6 @@ public class NewCorpusEP implements IPluginEntryPoint {
 		
 		private void showMessage(String msg1, String msg2) {
 			final MessageDialogProperties props = new MessageDialogProperties();
-			props.setRunAsync(false);
 			props.setOptions(MessageDialogProperties.okOptions);
 			props.setHeader(msg1);
 			props.setMessage(msg2);
