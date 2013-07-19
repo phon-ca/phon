@@ -17,3 +17,5 @@ ca.phon.app.help.LanguageCodeEP
 ## Project actions
 # New corpus
 ca.phon.app.project.NewCorpusEP
+# Delete corpus
+ca.phon.app.project.DeleteCorpusEP
