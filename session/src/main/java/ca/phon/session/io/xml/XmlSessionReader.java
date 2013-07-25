@@ -19,6 +19,8 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import ca.phon.session.Session;
+import ca.phon.session.io.OriginalFormat;
+import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.XMLObjectReaderFactory;
@@ -37,6 +39,12 @@ public class XmlSessionReader implements SessionReader {
 		final Element ele = doc.getDocumentElement();
 		if(reader != null) {
 			retVal = reader.read(doc, ele);
+			if(retVal != null) {
+				final SessionIO format = reader.getClass().getAnnotation(SessionIO.class);
+				if(format != null) {
+					retVal.putExtension(OriginalFormat.class, new OriginalFormat(format));
+				}
+			}
 		}
 		
 		return retVal;

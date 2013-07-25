@@ -21,3 +21,5 @@ ca.phon.app.project.NewCorpusEP
 ca.phon.app.project.DeleteCorpusEP
 # Rename corpus
 ca.phon.app.project.RenameCorpusEP
+# New session
+ca.phon.app.project.NewSessionEP

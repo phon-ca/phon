@@ -88,6 +88,8 @@ public class IPASourceNode extends OpNode implements NodeSettings {
 	 */
 	private class Settings extends JPanel {
 		
+		private static final long serialVersionUID = -2070336588978115879L;
+		
 		private final JTextArea ipaArea = new JTextArea();
 		
 		public Settings() {

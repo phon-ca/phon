@@ -25,18 +25,4 @@ public interface SessionReader {
 	 */
 	public Session readSession(URI uri) throws IOException;
 	
-	/**
-	 * Determine if this reader can accept input
-	 * from the given URI
-	 * 
-	 * @param uri
-	 * 
-	 * @return <code>true</code> if the reader can read
-	 *  data at the given uri, <code>false</code> otherwise
-	 *  
-	 * @throws IOException if there was a problem
-	 *  with the given uri
-	 */
-	public boolean canRead(URI uri) throws IOException;
-	
 }
