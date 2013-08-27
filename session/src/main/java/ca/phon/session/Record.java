@@ -18,6 +18,9 @@
 
 package ca.phon.session;
 
+import java.util.List;
+import java.util.Set;
+
 import ca.phon.alignment.PhoneMap;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
@@ -195,6 +198,15 @@ public interface Record extends IExtendable {
 	 *  with the given name and type are not found.
 	 */
 	public <T> Tier<T> getTier(String name, Class<T> type);
+	
+	/**
+	 * Return a list of user-defined tiers that are present
+	 * in this record.
+	 * 
+	 * @return the list of tier user-defined tier names
+	 *  present in this record
+	 */
+	public Set<String> getTierNames();
 	
 	/**
 	 * Add/set the given tier to the list of user defined

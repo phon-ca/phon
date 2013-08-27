@@ -1,5 +1,6 @@
 package ca.phon.session;
 
+import java.io.InputStream;
 import java.net.URI;
 
 import junit.framework.Assert;
@@ -10,8 +11,10 @@ import org.junit.runners.JUnit4;
 
 import ca.phon.orthography.Orthography;
 import ca.phon.session.io.SessionInputFactory;
+import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
-import ca.phon.session.io.xml.XmlSessionReader;
+import ca.phon.session.io.SessionWriter;
+import ca.phon.util.Base64.OutputStream;
 
 /**
  * JUnit test for legacy session reader
@@ -22,14 +25,13 @@ public class LegacyReaderTest {
 
 	@Test
 	public void testReader() throws Exception {
-		final URI uri = getClass().getClassLoader().getResource("tests/TestWordGroupPreservation.xml").toURI();
+		final InputStream stream = getClass().getClassLoader().getResourceAsStream("tests/TestWordGroupPreservation.xml");
 		
 		final SessionInputFactory inputFactory = new SessionInputFactory();
-		final SessionReader reader = inputFactory.createReader(uri);
+		final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
 		Assert.assertNotNull(reader);
-		Assert.assertEquals(XmlSessionReader.class, reader.getClass());
 		
-		final Session session = reader.readSession(uri);
+		final Session session = reader.readSession(stream);
 		Assert.assertNotNull(session);
 		
 		// check header info
@@ -55,6 +57,10 @@ public class LegacyReaderTest {
 		Assert.assertEquals("a test .", ortho.getGroup(1).toString());
 		
 		// TODO test remainder of record data
+		
+		final SessionOutputFactory outputFactory = new SessionOutputFactory();
+		final SessionWriter writer = outputFactory.createWriter("1.2");
+		writer.writeSession(session, System.out);
 	}
 	
 }

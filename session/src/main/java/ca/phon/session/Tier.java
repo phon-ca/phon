@@ -5,7 +5,7 @@ package ca.phon.session;
  * of groups.
  * 
  */
-public interface Tier<T> extends TierDescription {
+public interface Tier<T> extends TierDescription, Iterable<T> {
 	
 	/**
 	 * Get the number of groups in the tier
@@ -60,5 +60,7 @@ public interface Tier<T> extends TierDescription {
 	 * 
 	 */
 	public void removeAll();
+	
+	
 	
 }

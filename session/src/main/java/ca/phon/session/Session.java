@@ -24,7 +24,6 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import ca.phon.extensions.IExtendable;
-import ca.phon.visitor.Visitable;
 
 /**
  * A session in a project.
@@ -95,6 +94,8 @@ public interface Session extends IExtendable {
 	 * @return
 	 */
 	public Transcriber getTranscriber(String username);
+	
+	public Transcriber getTranscriber(int i);
 	
 	/**
 	 * Get the metadata

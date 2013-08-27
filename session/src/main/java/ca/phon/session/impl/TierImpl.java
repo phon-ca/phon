@@ -2,12 +2,17 @@ package ca.phon.session.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 
 public class TierImpl<T> implements Tier<T> {
+	
+	private final static Logger LOGGER = Logger.getLogger(TierImpl.class.getName());
 	
 	/**
 	 * Declared type
@@ -54,6 +59,17 @@ public class TierImpl<T> implements Tier<T> {
 		synchronized(tierData) {
 			if(!grouped && idx > 0) {
 				throw new ArrayIndexOutOfBoundsException(idx);
+			}
+			if(!grouped && idx == 0 && tierData.size() == 0) {
+				// create a new object to return
+				try {
+					final T val = getDeclaredType().newInstance();
+					tierData.add(val);
+				} catch (InstantiationException e) {
+					LOGGER.log(Level.WARNING, e.getMessage(), e);
+				} catch (IllegalAccessException e) {
+					LOGGER.log(Level.WARNING, e.getMessage(), e);
+				}
 			}
 			retVal = tierData.get(idx);
 		}
@@ -114,5 +130,10 @@ public class TierImpl<T> implements Tier<T> {
 	public Class<T> getDeclaredType() {
 		return declaredType;
 	}
-
+	
+	@Override
+	public Iterator<T> iterator() {
+		return tierData.iterator();
+	}
+	
 }

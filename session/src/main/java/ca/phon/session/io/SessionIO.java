@@ -18,10 +18,16 @@ import java.lang.annotation.Target;
 public @interface SessionIO {
 	
 	/**
-	 * Human-readable name 
+	 * Group name (e.g., 'ca.phon')
 	 * @return
 	 */
-	public String name() default "";
+	public String group() default "";
+	
+	/**
+	 * id
+	 * @return 
+	 */
+	public String id();
 	
 	/**
 	 * Version
@@ -29,4 +35,19 @@ public @interface SessionIO {
 	 */
 	public String version();
 	
+	/**
+	 * name
+	 */
+	public String name() default "";
+	
+	/**
+	 * mimetype
+	 * 
+	 */
+	public String mimetype();
+	
+	/**
+	 * extension
+	 */
+	public String extension();
 }

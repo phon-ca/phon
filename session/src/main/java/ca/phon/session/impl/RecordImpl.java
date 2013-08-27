@@ -2,7 +2,9 @@ package ca.phon.session.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -44,7 +46,7 @@ public class RecordImpl implements Record {
 	private final Tier<PhoneMap> alignment;
 	
 	/* Additional tiers */
-	private final List<Tier<?>> userDefined;
+	private final Map<String, Tier<?>> userDefined;
 
 	RecordImpl() {
 		super();
@@ -58,7 +60,7 @@ public class RecordImpl implements Record {
 		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, SystemTierType.SyllableAlignment.isGrouped());
 		
 		userDefined = 
-				Collections.synchronizedList(new ArrayList<Tier<?>>());
+				Collections.synchronizedMap(new HashMap<String, Tier<?>>());
 		
 		extSupport.initExtensions();
 	}
@@ -200,13 +202,12 @@ public class RecordImpl implements Record {
 	public <T> Tier<T> getTier(String name, Class<T> type) {
 		Tier<T> retVal = null;
 		
-		for(Tier<?> userTier:userDefined) {
-			if(userTier.getName().equals(name)
-					&& userTier.getDeclaredType() == type) {
+		final Tier<?> userTier = userDefined.get(name);
+		
+		if(userTier != null) {
+			if(userTier.getDeclaredType() == type) {
 				retVal = (Tier<T>)userTier;
-				break;
-			} else if(userTier.getName().equals(name) 
-					&& type == String.class) {
+			} else if(type == String.class) {
 				// create a new string tier to return
 				final SessionFactory factory = SessionFactory.newFactory();
 				retVal = factory.createTier(name, type, userTier.isGrouped());
@@ -222,20 +223,15 @@ public class RecordImpl implements Record {
 		
 		return retVal;
 	}
+	
+	@Override
+	public Set<String> getTierNames() {
+		return userDefined.keySet();
+	}
 
 	@Override
 	public void removeTier(String name) {
-		Tier<?> toRemove = null;
-		
-		for(Tier<?> userTier:userDefined) {
-			if(userTier.getName().equals(name)) {
-				toRemove = userTier;
-			}
-		}
-		
-		if(toRemove != null) {
-			userDefined.remove(toRemove);
-		}
+		userDefined.remove(name);
 	}
 	
 	// COMMENTS
@@ -291,6 +287,6 @@ public class RecordImpl implements Record {
 
 	@Override
 	public void putTier(Tier<?> tier) {
-		// TODO add tier to user defined tiers list
+		userDefined.put(tier.getName(), tier);
 	}
 }

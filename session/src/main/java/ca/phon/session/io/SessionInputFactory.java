@@ -2,7 +2,9 @@ package ca.phon.session.io;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 
 /**
@@ -30,27 +32,22 @@ public class SessionInputFactory {
 	}
 	
 	/**
-	 * Create a new session reader for the given URI
+	 * Get the list of available session readers.
 	 * 
-	 * @param uri
-	 * @return a new {@link SessionReader} or <code>null</code>
-	 *  if a compatible reader could not be found
+	 * @return list of readers
 	 */
-	public SessionReader createReader(URI uri) {
-		SessionReader retVal = null;
+	public List<SessionIO> availableReaders() {
+		final List<SessionIO> retVal = new ArrayList<SessionIO>();
 		
 		final Iterator<SessionReader> readerItr = readerLoader.iterator();
 		while(readerItr.hasNext()) {
+			// look for the SessionIO annotation
 			final SessionReader reader = readerItr.next();
-			try {
-				if(reader.canRead(uri)) {
-					retVal = reader;
-					break;
-				}
-			} catch (IOException e) {
-				// ignore
-			}
-		}
+			final SessionIO sessionIO = reader.getClass().getAnnotation(SessionIO.class);
+			
+			if(sessionIO != null)
+				retVal.add(sessionIO);
+		}		
 		
 		return retVal;
 	}
@@ -58,10 +55,11 @@ public class SessionInputFactory {
 	/**
 	 * Create a new session reader given the SessionIO version.
 	 * 
+	 * @param id
 	 * @param version
 	 * @return the new SessionReader or <code>null</code> if not found
 	 */
-	public SessionReader createReader(String version) {
+	public SessionReader createReader(String id, String version) {
 		SessionReader retVal = null;
 		
 		final Iterator<SessionReader> readerItr = readerLoader.iterator();
@@ -69,7 +67,7 @@ public class SessionInputFactory {
 			// look for the SessionIO annotation
 			final SessionReader reader = readerItr.next();
 			final SessionIO sessionIO = reader.getClass().getAnnotation(SessionIO.class);
-			if(sessionIO != null && sessionIO.version().equals(version)) {
+			if(sessionIO != null && sessionIO.version().equals(version) && sessionIO.id().equals(id)) {
 				retVal = reader;
 				break;
 			}
@@ -77,19 +75,5 @@ public class SessionInputFactory {
 		
 		return retVal;
 	}
-	
-	/**
-	 * Determine if this reader can accept input
-	 * from the given URI
-	 * 
-	 * @param uri
-	 * 
-	 * @return <code>true</code> if the reader can read
-	 *  data at the given uri, <code>false</code> otherwise
-	 *  
-	 * @throws IOException if there was a problem
-	 *  with the given uri
-	 */
-	public boolean canRead(URI uri) throws IOException { return true; }
 	
 }

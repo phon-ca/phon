@@ -69,7 +69,7 @@
                     </sb>
                 </pg>
             </ipaTier>
-            <segment unitType="ms" duration="0.0" startTime="0.0"/>
+            <segment unitType="ms" duration="1345.0" startTime="2000.0"/>
         </u>
     </transcript>
 </session>

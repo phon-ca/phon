@@ -1,6 +1,7 @@
 package ca.phon.session.io.xml.v12;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,14 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import ca.phon.alignment.PhoneMap;
 import ca.phon.ipa.AlternativeTranscript;
@@ -38,6 +43,40 @@ import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
 import ca.phon.session.io.SessionIO;
+import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.xml.v12.AlignmentTierType;
+import ca.phon.session.io.xml.v12.AlignmentType;
+import ca.phon.session.io.xml.v12.BgType;
+import ca.phon.session.io.xml.v12.BlindTierType;
+import ca.phon.session.io.xml.v12.ChatCodeType;
+import ca.phon.session.io.xml.v12.CommentType;
+import ca.phon.session.io.xml.v12.ConstituentType;
+import ca.phon.session.io.xml.v12.ConstituentTypeType;
+import ca.phon.session.io.xml.v12.EventType;
+import ca.phon.session.io.xml.v12.FlatTierType;
+import ca.phon.session.io.xml.v12.GroupTierType;
+import ca.phon.session.io.xml.v12.GroupType;
+import ca.phon.session.io.xml.v12.HeaderType;
+import ca.phon.session.io.xml.v12.InnerGroupMarker;
+import ca.phon.session.io.xml.v12.InnerGroupMarkerType;
+import ca.phon.session.io.xml.v12.IpaTierType;
+import ca.phon.session.io.xml.v12.MappingType;
+import ca.phon.session.io.xml.v12.ObjectFactory;
+import ca.phon.session.io.xml.v12.OrthographyType;
+import ca.phon.session.io.xml.v12.ParticipantType;
+import ca.phon.session.io.xml.v12.ParticipantsType;
+import ca.phon.session.io.xml.v12.PhoType;
+import ca.phon.session.io.xml.v12.PhoTypeType;
+import ca.phon.session.io.xml.v12.RecordType;
+import ca.phon.session.io.xml.v12.SessionType;
+import ca.phon.session.io.xml.v12.SexType;
+import ca.phon.session.io.xml.v12.TgType;
+import ca.phon.session.io.xml.v12.TranscriberType;
+import ca.phon.session.io.xml.v12.TranscribersType;
+import ca.phon.session.io.xml.v12.TvType;
+import ca.phon.session.io.xml.v12.UserTierType;
+import ca.phon.session.io.xml.v12.UserTiersType;
+import ca.phon.session.io.xml.v12.WordType;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -54,7 +93,15 @@ import ca.phon.xml.annotation.XMLSerial;
 	elementName="session", 
 	bindType=Session.class 
 )
-public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
+@SessionIO(
+		group="ca.phon",
+		id="phonbank",
+		version="1.2",
+		mimetype="application/xml",
+		extension="xml",
+		name="Phon 1.4-1.6"
+)
+public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session> {
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -546,5 +593,35 @@ public class XMLSessionReader_v12 implements XMLObjectReader<Session> {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Get an dom version of the xml stream
+	 * 
+	 * @param in
+	 * @return dom document
+	 */
+	private Document documentFromStream(InputStream stream) 
+		throws IOException {
+		Document retVal = null; 
+		
+		try {
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			retVal = builder.parse(stream);
+		} catch (ParserConfigurationException e) {
+			throw new IOException(e);
+		} catch (SAXException e) {
+			throw new IOException(e);
+		}
+		
+		return retVal;
+	}
+
+	@Override
+	public Session readSession(InputStream stream) throws IOException {
+		final Document doc = documentFromStream(stream);
+		return read(doc, doc.getDocumentElement());
 	}
 }

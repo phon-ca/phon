@@ -83,7 +83,7 @@ public class SessionImpl implements Session {
 
 	@Override
 	public String getMediaLocation() {
-		return mediaRef.get();
+		return (mediaRef.get() != null ? mediaRef.get() : "");
 	}
 
 	@Override
@@ -104,6 +104,10 @@ public class SessionImpl implements Session {
 			}
 		}
 		return retVal;
+	}
+	
+	public Transcriber getTranscriber(int i) {
+		return transcribers.get(i);
 	}
 
 	@Override

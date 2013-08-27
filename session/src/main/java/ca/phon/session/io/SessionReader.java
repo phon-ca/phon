@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import ca.phon.session.Session;
 import java.io.InputStream;
-import java.net.URI;
 
 /**
  * Interface for a session reader.  The reader is responsible
@@ -23,6 +22,6 @@ public interface SessionReader {
 	 * 
 	 * @throws IOException if an error occurs
 	 */
-	public Session readSession(URI uri) throws IOException;
+	public Session readSession(InputStream stream) throws IOException;
 	
 }
