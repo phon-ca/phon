@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -204,6 +205,16 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 				final RecordType rt = (RecordType)uOrComment;
 				final Record record = copyRecord(factory, rt);
 				
+				try {
+					if(rt.getId() != null) {
+						UUID uuid = UUID.fromString(rt.getId());
+						record.setUuid(uuid);
+					}
+				} catch (IllegalArgumentException e) {
+				}
+				
+				record.setExcludeFromSearches(rt.isExcludeFromSearches());
+				
 				if(rt.getSpeaker() != null) {
 					final ParticipantType pt = (ParticipantType)rt.getSpeaker();
 					for(int pIdx = 0; pIdx < retVal.getParticipantCount(); pIdx++) {
@@ -266,8 +277,11 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		retVal.setUsername(tt.getId());
 		retVal.setRealName(tt.getName());
-		retVal.setPassword(tt.getPassword().getContent());
-		retVal.setUsePassword(tt.getPassword().isUse());
+		
+		if(tt.getPassword() != null) {
+			retVal.setPassword(tt.getPassword().getContent());
+			retVal.setUsePassword(tt.getPassword().isUse());
+		}
 		
 		return retVal;
 	}
@@ -335,7 +349,8 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					try {
 						final IPATranscript blindTranscript = 
 								IPATranscript.parseTranscript(buffer.toString());
-						final String name = btt.getUser().toString();
+						final TranscriberType tt = (TranscriberType)btt.getUser();
+						final String name = tt.getId();
 						
 						AlternativeTranscript at = ipa.getExtension(AlternativeTranscript.class);
 						if(at == null) {
@@ -572,23 +587,19 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		int gidx = 0;
 		for(AlignmentType at:att.getAg()) {
 			final PhoneMap pm = new PhoneMap(ipaT.getGroup(gidx), ipaA.getGroup(gidx));
-			// ensure length is the same
-			if(pm.getAlignmentLength() == at.getLength()) {
-				final Integer[][] alignmentData = new Integer[2][];
-				alignmentData[0] = new Integer[pm.getAlignmentLength()];
-				alignmentData[1] = new Integer[pm.getAlignmentLength()];
-				
-				for(int i = 0; i < at.getPhomap().size(); i++) {
-					final MappingType mt = at.getPhomap().get(i);
-					alignmentData[0][i] = mt.getValue().get(0);
-					alignmentData[1][i] = mt.getValue().get(1);
-				}
-				pm.setTopAlignment(alignmentData[0]);
-				pm.setBottomAlignment(alignmentData[1]);
-			} else {
-				// TODO alignment
-			}
 			
+			final Integer[][] alignmentData = new Integer[2][];
+			alignmentData[0] = new Integer[at.getLength()];
+			alignmentData[1] = new Integer[at.getLength()];
+			
+			for(int i = 0; i < at.getPhomap().size(); i++) {
+				final MappingType mt = at.getPhomap().get(i);
+				alignmentData[0][i] = mt.getValue().get(0);
+				alignmentData[1][i] = mt.getValue().get(1);
+			}
+			pm.setTopAlignment(alignmentData[0]);
+			pm.setBottomAlignment(alignmentData[1]);
+//			
 			retVal.addGroup(pm);
 		}
 		

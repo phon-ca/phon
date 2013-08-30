@@ -20,6 +20,7 @@ package ca.phon.session;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import ca.phon.alignment.PhoneMap;
 import ca.phon.extensions.IExtendable;
@@ -31,6 +32,18 @@ import ca.phon.orthography.Orthography;
  * 
  */
 public interface Record extends IExtendable {
+	
+	/**
+	 * Record id
+	 * 
+	 * @param unique id for this record
+	 */
+	public UUID getUuid();
+	
+	/**
+	 * Set id for the record
+	 */
+	public void setUuid(UUID id);
 	
 	/**
 	 * The participant (speaker)

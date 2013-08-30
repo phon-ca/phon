@@ -251,43 +251,37 @@ public class SessionImpl implements Session {
 
 	@Override
 	public int getUserTierCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return userTiers.size();
 	}
 
 	@Override
 	public TierDescription getUserTier(int idx) {
-		// TODO Auto-generated method stub
-		return null;
+		return userTiers.get(idx);
 	}
 
 	@Override
 	public TierDescription removeUserTier(int idx) {
-		// TODO Auto-generated method stub
-		return null;
+		return userTiers.remove(idx);
 	}
 
 	@Override
 	public TierDescription removeUserTier(TierDescription tierDescription) {
-		// TODO Auto-generated method stub
-		return null;
+		userTiers.remove(tierDescription);
+		return tierDescription;
 	}
 
 	@Override
 	public void addUserTier(TierDescription tierDescription) {
-		// TODO Auto-generated method stub
-		
+		userTiers.add(tierDescription);
 	}
 
 	@Override
 	public void addUserTier(int idx, TierDescription tierDescription) {
-		// TODO Auto-generated method stub
-		
+		userTiers.add(idx, tierDescription);
 	}
 
 	@Override
 	public int getTranscriberCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return transcribers.size();
 	}
 }

@@ -5,7 +5,9 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,7 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import ca.phon.alignment.PhoneMap;
@@ -73,6 +76,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		final SessionType retVal = factory.createSessionType();
 		
 		// header data
+		retVal.setVersion("PB1.2");
 		retVal.setId(session.getName());
 		retVal.setCorpus(session.getCorpus());
 		
@@ -90,9 +94,11 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			LOGGER.log(Level.WARNING, e.getMessage(), e);
 		}
 		final String lang = session.getLanguage();
-		final String langs[] = lang.split(",");
-		for(String l:langs) {
-			headerData.getLanguage().add(l);
+		if(lang != null && lang.length() > 0) {
+			final String langs[] = lang.split(",");
+			for(String l:langs) {
+				headerData.getLanguage().add(l);
+			}
 		}
 		retVal.setHeader(headerData);
 		
@@ -143,7 +149,23 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			}
 			
 			// copy record data
-			final RecordType rt = copyRecord(factory, record);
+			final RecordType rt = copyRecord(factory, retVal, record);
+			
+			rt.setId(record.getUuid().toString());
+			
+			if(record.isExcludeFromSearches())
+				rt.setExcludeFromSearches(record.isExcludeFromSearches());
+			
+			// setup participant
+			if(record.getSpeaker() != null) {
+				for(ParticipantType pt:parts.getParticipant()) {
+					if(pt.getId().equals(record.getSpeaker().getId())) {
+						rt.setSpeaker(pt);
+						break;
+					}
+				}
+			}
+			
 			transcript.getUOrComment().add(rt);
 		}
 		retVal.setTranscript(transcript);
@@ -178,7 +200,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		final String lang = part.getLanguage();
 		final String langs[] = lang.split(",");
 		for(String l:langs) {
-			retVal.getLanguage().add(l);
+			retVal.getLanguage().add(StringUtils.strip(l));
 		}
 
 		retVal.setSex(part.getSex() == Sex.MALE ? SexType.MALE : SexType.FEMALE);
@@ -246,7 +268,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 	}
 	
 	// record
-	private RecordType copyRecord(ObjectFactory factory, Record record) {
+	private RecordType copyRecord(ObjectFactory factory, SessionType session, Record record) {
 		final RecordType retVal = factory.createRecordType();
 		
 		retVal.setExcludeFromSearches(record.isExcludeFromSearches());
@@ -267,41 +289,81 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		actualType.setForm(PhoTypeType.ACTUAL);
 		retVal.getIpaTier().add(actualType);
 		
-		// TODO blind transcriptions
-//		for(BlindTierType btt:rt.getBlindTranscription()) {
-//			// get the correct ipa object from our new record
-//			final Tier<IPATranscript> ipaTier = 
-//					(btt.getForm() == PhoTypeType.MODEL ? retVal.getIPATarget() : retVal.getIPAActual());
-//			int gidx = 0;
-//			for(BgType bgt:btt.getBg()) {
-//				final StringBuffer buffer = new StringBuffer();
-//				for(WordType wt:bgt.getW()) {
-//					if(buffer.length() > 0) 
-//						buffer.append(" ");
-//					buffer.append(wt.getContent());
-//				}
-//				
-//				final IPATranscript ipa = (gidx < ipaTier.numberOfGroups() ? ipaTier.getGroup(gidx) : null);
-//				
-//				if(ipa != null) {
-//					try {
-//						final IPATranscript blindTranscript = 
-//								IPATranscript.parseTranscript(buffer.toString());
-//						final String name = btt.getUser().toString();
-//						
-//						AlternativeTranscript at = ipa.getExtension(AlternativeTranscript.class);
-//						if(at == null) {
-//							at = new AlternativeTranscript();
-//							ipa.putExtension(AlternativeTranscript.class, at);
-//						}
-//						at.put(name, blindTranscript);
-//					} catch (ParseException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//				gidx++;
-//			}
-//		}
+		// blind transcriptions
+		final Map<String, BlindTierType> actualBlindTiers = new HashMap<String, BlindTierType>();
+		final Map<String, BlindTierType> targetBlindTiers = new HashMap<String, BlindTierType>();
+		final Map<String, Boolean> hasActualData = new HashMap<String, Boolean>();
+		final Map<String, Boolean> hasTargetData = new HashMap<String, Boolean>();
+		
+		for(TranscriberType tr:session.getTranscribers().getTranscriber()) {
+			final BlindTierType targetBt = factory.createBlindTierType();
+			targetBt.setUser(tr);
+			targetBt.setForm(PhoTypeType.MODEL);
+			targetBlindTiers.put(tr.getId(), targetBt);
+			hasTargetData.put(tr.getId(), false);
+			
+			final BlindTierType actualBt = factory.createBlindTierType();
+			actualBt.setUser(tr);
+			actualBt.setForm(PhoTypeType.ACTUAL);
+			actualBlindTiers.put(tr.getId(), actualBt);
+			hasActualData.put(tr.getId(), false);
+		}
+		
+		for(IPATranscript ipa:ipaTarget) {
+			final AlternativeTranscript blindTranscripts = ipa.getExtension(AlternativeTranscript.class);
+			
+			for(TranscriberType tr:session.getTranscribers().getTranscriber()) {
+				final BlindTierType btt = targetBlindTiers.get(tr.getId());
+				final BgType bg = factory.createBgType();
+				
+				if(blindTranscripts != null && blindTranscripts.containsKey(tr.getId())) {
+					final IPATranscript blindTranscript = blindTranscripts.get(tr.getId());
+					final String[] words = blindTranscript.toString().split("\\p{Space}");
+					for(String w:words) {
+						final WordType wt = factory.createWordType();
+						wt.setContent(w);
+						bg.getW().add(wt);
+					}
+					hasTargetData.put(tr.getId(), true);
+				}
+				btt.getBg().add(bg);
+			}
+		}
+		
+		for(IPATranscript ipa:ipaActual) {
+			final AlternativeTranscript blindTranscripts = ipa.getExtension(AlternativeTranscript.class);
+			
+			for(TranscriberType tr:session.getTranscribers().getTranscriber()) {
+				final BlindTierType btt = actualBlindTiers.get(tr.getId());
+				final BgType bg = factory.createBgType();
+				
+				if(blindTranscripts != null && blindTranscripts.containsKey(tr.getId())) {
+					final IPATranscript blindTranscript = blindTranscripts.get(tr.getId());
+					final String[] words = blindTranscript.toString().split("\\p{Space}");
+					for(String w:words) {
+						final WordType wt = factory.createWordType();
+						wt.setContent(w);
+						bg.getW().add(wt);
+					}
+					hasActualData.put(tr.getId(), true);
+				}
+				btt.getBg().add(bg);
+			}
+		}
+		
+		for(String trId:hasActualData.keySet()) {
+			if(hasActualData.get(trId)) {
+				final BlindTierType btt = targetBlindTiers.get(trId);
+				retVal.getBlindTranscription().add(btt);
+			}
+		}
+		
+		for(String trId:hasTargetData.keySet()) {
+			if(hasTargetData.get(trId)) {
+				final BlindTierType btt = actualBlindTiers.get(trId);
+				retVal.getBlindTranscription().add(btt);
+			}
+		}
 		
 		// notes
 		final Tier<String> notesTier = record.getNotes();
@@ -353,6 +415,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				final FlatTierType ftt = factory.createFlatTierType();
 				ftt.setTierName(tierName);
 				ftt.setContent(userTier.getGroup(0));
+				retVal.getFlatTier().add(ftt);
 			}
 		}
 		

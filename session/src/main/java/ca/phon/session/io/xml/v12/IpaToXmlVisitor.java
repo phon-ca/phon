@@ -34,7 +34,7 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	@Override
 	public void fallbackVisit(IPAElement obj) {
 		final ConstituentType ct = factory.createConstituentType();
-		for(int i = currentIndex; i <= currentIndex + obj.getText().length(); i++) {
+		for(int i = currentIndex; i < currentIndex + obj.getText().length(); i++) {
 			ct.getIndexes().add(i);
 		}
 		currentIndex += obj.getText().length();
@@ -56,6 +56,10 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		this.currentWord = factory.createWordType();
 		this.currentWord.setContent("");
 		this.pho.getW().add(currentWord);
+		final ConstituentType ct = factory.createConstituentType();
+		ct.setScType(ConstituentTypeType.WB);
+		ct.getIndexes().add(currentIndex++);
+		this.pho.getSb().getPh().add(ct);
 	}
 	
 }

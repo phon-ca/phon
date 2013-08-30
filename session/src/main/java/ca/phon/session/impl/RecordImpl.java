@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.alignment.PhoneMap;
@@ -31,6 +32,8 @@ public class RecordImpl implements Record {
 	private final AtomicReference<Participant> participantRef = new AtomicReference<Participant>();
 	
 	private volatile boolean excludeFromSearches = false;
+	
+	private final AtomicReference<UUID> uuidRef = new AtomicReference<UUID>(UUID.randomUUID());
 	
 	/* default tiers */
 	private final Tier<Orthography> orthography;
@@ -63,6 +66,16 @@ public class RecordImpl implements Record {
 				Collections.synchronizedMap(new HashMap<String, Tier<?>>());
 		
 		extSupport.initExtensions();
+	}
+	
+	@Override
+	public UUID getUuid() {
+		return this.uuidRef.get();
+	}
+	
+	@Override
+	public void setUuid(UUID id) {
+		uuidRef.getAndSet(id);
 	}
 
 	@Override
