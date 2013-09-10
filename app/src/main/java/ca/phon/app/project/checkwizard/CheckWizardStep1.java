@@ -31,14 +31,18 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.SessionLocation;
-import ca.phon.engines.syllabifier.Syllabifier;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.SessionSelector;
-import ca.phon.gui.wizard.WizardStep;
-import ca.phon.system.prefs.UserPrefManager;
-import ca.phon.util.PhonUtilities;
+import ca.phon.app.prefs.PhonProperties;
+import ca.phon.app.session.SessionSelector;
+import ca.phon.media.player.PhonPlayerCanvas;
+import ca.phon.project.Project;
+import ca.phon.session.SessionLocation;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.PrefHelper;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -51,6 +55,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class CheckWizardStep1 extends WizardStep {
 	
+	private static final long serialVersionUID = -1527112442759878465L;
+
 	public static enum Operation {
 		CHECK_IPA,
 		RESET_SYLLABIFICATION,
@@ -71,9 +77,9 @@ public class CheckWizardStep1 extends WizardStep {
 	
 	private JComboBox syllabifierList;
 	
-	private IPhonProject project;
+	private Project project;
 	
-	public CheckWizardStep1(IPhonProject project) {
+	public CheckWizardStep1(Project project) {
 		super();
 		
 		this.project = project;
@@ -95,18 +101,17 @@ public class CheckWizardStep1 extends WizardStep {
 		CellConstraints cc = new CellConstraints();
 		topPanel.setLayout(topLayout);
 		
-		List<String> orderedSyllabifiers = Syllabifier.getAvailableSyllabifiers();
-//		   ArrayList<String> orderedSyllabifiers = new ArrayList<String>();
-//		   orderedSyllabifiers.addAll(ordere);
-	   Collections.sort(orderedSyllabifiers);
+		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
+		List<String> orderedSyllabifiers = syllabifierLibrary.
+	    Collections.sort(orderedSyllabifiers);
+	    
+	    syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new String[0]));
+	    syllabifierList.setEnabled(false);
 	   
-	   Object preferredSyllabifier = 
-		   UserPrefManager.getUserPreferences().getProperty("default_syllabifier_language");	   
-	   syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new String[0]));
-	   syllabifierList.setEnabled(false);
-	   
-	   if(preferredSyllabifier != null)
-		   syllabifierList.setSelectedItem(preferredSyllabifier);
+	    final String preferredSyllabifier = PrefHelper.get(
+	    		PhonProperties.SYLLABIFIER_LANGUAGE,
+	    		PhonProperties.DEFAULT_SYLLABIFIER_LANGUAGE);
+	    syllabifierList.setSelectedItem(preferredSyllabifier);
 		
 		checkIPAButton = new JRadioButton("Check IPA Tiers");
 		checkIPAButton.setToolTipText("Check IPA tiers for invalid transcriptions.");
@@ -187,7 +192,8 @@ public class CheckWizardStep1 extends WizardStep {
 		boolean retVal = true;
 		
 		if(getSelectedSessions().size() == 0) {
-			PhonUtilities.showComponentMessage(sessionSelector, "Please select at least one session.");
+			final Toast toast = ToastFactory.makeToast("Please select at least one session");
+			toast.start(sessionSelector);
 			retVal = false;
 		}
 		

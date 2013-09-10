@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -37,6 +38,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
@@ -170,22 +172,17 @@ public class OpenProjectWindow extends CommonModuleFrame {
 		filters[0] = FileFilter.phonFilter;
 
 		Window window = OpenProjectEP.getFrame();
-
-//		String projectPath = NativeDialogs.browseForFileBlocking(
-//				CommonModuleFrame.getCurrentFrame(), "", "*.phon", filters,
-//				"Open Phon Project");
-		String projectPath = NativeDialogs.browseForProjectBlocking(CommonModuleFrame.getCurrentFrame(), null, "Open Project");
-		if (projectPath != null && projectPath.length() > 0) {
-//			if (!(new File(projectPath)).exists()) {
-//				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame
-//						.getCurrentFrame(), "", "Project Not Found",
-//						"Could not find project at: "
-//								+ m_RemoteProjectField.getText());
-//				PhonLogger.severe(this.getClass(), "File not found: "
-//						+ projectPath);
-//				return;
-//			}
-			controller.setProjectPath(projectPath);
+		
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setParentWindow(window);
+		props.setRunAsync(false);
+		props.setCanChooseFiles(false);
+		props.setCanChooseDirectories(true);
+		props.setTitle("Open Project");
+		final List<String> selectedPaths = NativeDialogs.showOpenDialog(props);
+		
+		if (selectedPaths.size() > 0 && selectedPaths.get(0).length() > 0) {
+			controller.setProjectPath(selectedPaths.get(0));
 			controller.loadProject();
 		}
 	}

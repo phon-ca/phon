@@ -27,9 +27,9 @@ import javax.swing.JPanel;
 import ca.phon.application.PhonWorker;
 import ca.phon.gui.DialogHeader;
 import ca.phon.gui.components.PhonLoggerConsole;
-import ca.phon.gui.wizard.WizardFrame;
-import ca.phon.gui.wizard.WizardStep;
 import ca.phon.media.FFMpegMediaExporter;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.StringUtils;
 
 /**

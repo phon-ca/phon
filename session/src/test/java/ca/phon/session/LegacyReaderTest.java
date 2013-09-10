@@ -51,10 +51,7 @@ public class LegacyReaderTest {
 		final SessionOutputFactory outputFactory = new SessionOutputFactory();
 		final SessionWriter writer = outputFactory.createWriter("1.2");
 		writer.writeSession(session, byteStream);
-		
 		final byte[] rt = byteStream.toByteArray();
-		final String s = new String(rt, "UTF-8");
-		System.out.println(s);
 		
 		final MessageDigest origDigest = MessageDigest.getInstance("SHA-1");
 		origDigest.update(orig);

@@ -30,7 +30,7 @@ import ca.phon.application.project.IPhonProject;
 import ca.phon.application.transcript.SessionLocation;
 import ca.phon.gui.DialogHeader;
 import ca.phon.gui.SessionSelector;
-import ca.phon.gui.wizard.WizardStep;
+import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PhonUtilities;
 
 import com.jgoodies.forms.layout.CellConstraints;

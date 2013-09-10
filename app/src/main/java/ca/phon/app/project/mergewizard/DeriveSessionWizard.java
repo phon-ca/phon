@@ -34,10 +34,10 @@ import ca.phon.application.transcript.SessionLocation;
 import ca.phon.application.transcript.UtteranceFilter;
 import ca.phon.gui.DialogHeader;
 import ca.phon.gui.components.PhonLoggerConsole;
-import ca.phon.gui.wizard.WizardFrame;
-import ca.phon.gui.wizard.WizardStep;
 import ca.phon.modules.project.SessionMerger;
 import ca.phon.system.logger.PhonLogger;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PhonDateFormat;
 import ca.phon.util.StringUtils;
 

@@ -18,7 +18,6 @@
 
 package ca.phon.session;
 
-import ca.gedge.opgraph.extensions.Extendable;
 import ca.phon.extensions.IExtendable;
 
 /**

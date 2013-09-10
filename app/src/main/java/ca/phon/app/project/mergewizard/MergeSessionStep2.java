@@ -50,8 +50,8 @@ import ca.phon.application.transcript.SessionLocation;
 import ca.phon.application.transcript.UtteranceFilter;
 import ca.phon.gui.DialogHeader;
 import ca.phon.gui.components.UtteranceFilterPanel;
-import ca.phon.gui.wizard.WizardStep;
 import ca.phon.system.logger.PhonLogger;
+import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.CollatorFactory;
 
 /**

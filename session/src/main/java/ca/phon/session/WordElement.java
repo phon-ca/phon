@@ -28,8 +28,9 @@ public class WordElement<T> {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public Class<T> getValueType() {
-		return (Class<T>)value.getClass();
+		return (getValue() != null ? ((Class<T>)getValue().getClass()) : null);
 	}
 
 	/**

@@ -21,17 +21,27 @@ import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import ca.phon.alignment.PhoneMap;
+import ca.phon.app.project.ProjectFrameExtension;
+import ca.phon.project.Project;
+import ca.phon.ui.PhonLoggerConsole;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.worker.PhonTask;
 
 /**
  * A wizard for checking/repairing IPA transcriptions
  * in a set of selected sessions.
  */
 public class CheckWizard extends WizardFrame {
+	
+	private final static Logger LOGGER = Logger.getLogger(CheckWizard.class.getName());
 	
 	private PhonLoggerConsole console;
 	
@@ -42,11 +52,12 @@ public class CheckWizard extends WizardFrame {
 	/**
 	 * Constructor
 	 */
-	public CheckWizard(IPhonProject project) {
-		super("Phon : " + project.getProjectName() + " : Check Transcriptions");
+	public CheckWizard(Project project) {
+		super("Phon : " + project.getName() + " : Check Transcriptions");
 		
 		setWindowName("Check Transcriptions");
-		super.setProject(project);
+		final ProjectFrameExtension projectExt = new ProjectFrameExtension(project);
+		super.putExtension(ProjectFrameExtension.class, projectExt);
 		
 		init();
 	}
