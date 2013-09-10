@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>phon</artifactId>
 		<groupId>ca.phon</groupId>
-		<version>2.0-SNAPSHOT</version>
+		<version>1.7.0</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -25,12 +25,12 @@
 		<dependency>
 			<groupId>ca.phon</groupId>
 			<artifactId>phon-design-patterns</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<version>1.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>ca.phon</groupId>
 			<artifactId>phon-util</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<version>1.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
