@@ -1,4 +1,4 @@
-package ca.hedlund.tst;
+package ca.phon.util.ternarytree;
 
 
 public interface TernaryTreeNodeVisitor<V> {

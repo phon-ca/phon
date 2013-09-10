@@ -1,4 +1,4 @@
-package ca.hedlund.tst;
+package ca.phon.util.ternarytree;
 
 
 import java.util.ArrayList;
@@ -8,13 +8,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.jar.JarEntry;
 
-import javax.jws.Oneway;
-
-import ca.hedlund.tst.TernaryTreeNode.Position;
-
-
+import ca.phon.util.ternarytree.TernaryTreeNode.Position;
 
 /**
  * Ternary search tree implementation.
