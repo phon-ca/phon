@@ -123,18 +123,18 @@ public final class SyllabifierLibrary implements IExtendable {
 	 * @return the list of syllabifiers for the given language.
 	 */
 	public List<Syllabifier> getSyllabifiersForLanguage(String lang) {
-		final LanguageParser parser = LanguageParser.getInstance();
-		final LanguageEntry entry = parser.getEntryById(lang);
-		return getSyllabifiersForLanguage(entry);
+		final Language l = Language.fromString(lang);
+		
+		return getSyllabifiersForLanguage(l);
 	}
 	
-	public List<Syllabifier> getSyllabifiersForLanguage(LanguageEntry entry) {
+	public List<Syllabifier> getSyllabifiersForLanguage(Language lang) {
 		final List<Syllabifier> retVal = new ArrayList<Syllabifier>();
 		
 		final Iterator<Syllabifier> itr = resLoader.iterator();
 		while(itr.hasNext()) {
 			final Syllabifier syllabifier = itr.next();
-			if(syllabifier.getLanguage().equals(entry)) {
+			if(syllabifier.getLanguage().equals(lang)) {
 				retVal.add(syllabifier);
 			}
 		}
