@@ -1,4 +1,5 @@
-package ca.phon.util.ternarytree;
+package ca.hedlund.tst;
+
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
@@ -8,25 +9,38 @@ import java.util.concurrent.atomic.AtomicReference;
  * 
  * @param <V>
  */
-public class TernaryTreeNode<V> implements Comparable<TernaryTreeNode<V>> {
+public class TernaryTreeNode<V> {
+	
+	public static enum Position {
+		LOW,
+		EQUAL,
+		HIGH;
+	}
 	
 	/**
 	 * Node char
 	 */
-	private char ch;
+	private volatile char ch;
 	
 	/**
 	 * Node value, a node is 'terminated' if it's
 	 * value is non-<code>null</code>.
 	 */
-	private V value;
+	private final AtomicReference<V> valueRef = 
+			new AtomicReference<V>();
+	
+	/**
+	 * parent reference
+	 */
+	private final AtomicReference<TernaryTreeNode<V>> parentRef = 
+			new AtomicReference<TernaryTreeNode<V>>();
 	
 	/**
 	 * Atomic reference to left child
 	 */
 	private final AtomicReference<TernaryTreeNode<V>> leftRef = 
 			new AtomicReference<TernaryTreeNode<V>>();
-	
+
 	/**
 	 * Atomic reference to right child
 	 */
@@ -43,15 +57,23 @@ public class TernaryTreeNode<V> implements Comparable<TernaryTreeNode<V>> {
 	/**
 	 * Constructor
 	 */
-	public TernaryTreeNode(char ch) {
-		super();
-		setChar(ch);
+	public TernaryTreeNode(TernaryTreeNode<V> parent, char ch) {
+		this(parent, ch, null);
 	}
 	
-	public TernaryTreeNode(char ch, V value) {
+	public TernaryTreeNode(TernaryTreeNode<V> parent, char ch, V value) {
 		super();
+		setParent(parent);
 		setChar(ch);
 		setValue(value);
+	}
+	
+	public TernaryTreeNode<V> getParent() {
+		return parentRef.get();
+	}
+	
+	public void setParent(TernaryTreeNode<V> parent) {
+		this.parentRef.getAndSet(parent);
 	}
 	
 	public char getChar() {
@@ -69,19 +91,23 @@ public class TernaryTreeNode<V> implements Comparable<TernaryTreeNode<V>> {
 	public boolean isTerminated() {
 		return (getValue() != null);
 	}
+	
+	public boolean isRoot() {
+		return getParent() == null;
+	}
 
 	/**
 	 * Get the node's value
 	 */
 	public V getValue() {
-		return value;
+		return valueRef.get();
 	}
 	
 	/**
 	 * Set the node's value
 	 */
-	public void setValue(V value) {
-		this.value = value;
+	public V setValue(V value) {
+		return valueRef.getAndSet(value);
 	}
 
 	/**
@@ -114,17 +140,82 @@ public class TernaryTreeNode<V> implements Comparable<TernaryTreeNode<V>> {
 		this.centerRef.getAndSet(center);
 	}
 	
-	@Override
-	public int compareTo(TernaryTreeNode<V> o) {
-		return (new Character(ch)).compareTo(o.ch);
+	public TernaryTreeNode<V> getChild(Position pos) {
+		TernaryTreeNode<V> retVal = null;
+		switch(pos) {
+		case LOW:
+			retVal = getLeft();
+			break;
+			
+		case EQUAL:
+			retVal = getCenter();
+			break;
+			
+		case HIGH:
+			retVal = getRight();
+			break;
+		}
+		return retVal;
+	}
+	
+	public void setChild(TernaryTreeNode<V> child, Position pos) {
+		switch(pos) {
+		case LOW:
+			setLeft(child);
+			break;
+			
+		case EQUAL:
+			setCenter(child);
+			break;
+			
+		case HIGH:
+			setRight(child);
+			break;
+		}
+	}
+	
+	/**
+	 * Returns the full string key for this node
+	 * @return
+	 */
+	public String getPrefix() {
+		final StringBuffer buffer = new StringBuffer();
+		buffer.append(getChar());
+		TernaryTreeNode<V> child = this;
+		TernaryTreeNode<V> parent = getParent();
+		
+		while(parent != null) {
+			if(parent.getCenter() == child)
+				buffer.append(parent.getChar());
+			child = parent;
+			parent = parent.getParent();
+		}
+		
+		return buffer.reverse().toString();
 	}
 	
 	/**
 	 * Accept a tree node visitor.
 	 */
-	public void accept(TernaryTreeNodeVisitor<V> visitor) {
-		visitor.visit(getLeft());
-		visitor.visit(getCenter());
-		visitor.visit(getRight());
+	public void acceptVisitLast(TernaryTreeNodeVisitor<V> visitor) {
+		if(getLeft() != null)
+			getLeft().acceptVisitLast(visitor);
+		if(getCenter() != null)
+			getCenter().acceptVisitLast(visitor);
+		if(getRight() != null)
+			getRight().acceptVisitLast(visitor);
+		visitor.visit(this);
 	}
+	
+	public void acceptVisitFirst(TernaryTreeNodeVisitor<V> visitor) {
+		if(!visitor.visit(this)) {
+			if(getLeft() != null)
+				getLeft().acceptVisitFirst(visitor);
+			if(getCenter() != null)
+				getCenter().acceptVisitFirst(visitor);
+			if(getRight() != null)
+				getRight().acceptVisitFirst(visitor);
+		}
+	}
+	
 }

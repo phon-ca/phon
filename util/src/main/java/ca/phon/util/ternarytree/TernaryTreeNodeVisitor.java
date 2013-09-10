@@ -1,4 +1,5 @@
-package ca.phon.util.ternarytree;
+package ca.hedlund.tst;
+
 
 public interface TernaryTreeNodeVisitor<V> {
 
@@ -6,7 +7,9 @@ public interface TernaryTreeNodeVisitor<V> {
 	 * Accept the given tree node
 	 * 
 	 * @param node
+	 * @return <code>true</code> if this visit
+	 *  should stop when using {@link TernaryTreeNode#acceptVisitFirst(TernaryTreeNodeVisitor)}
 	 */
-	public void visit(TernaryTreeNode<V> node);
+	public boolean visit(TernaryTreeNode<V> node);
 	
 }
