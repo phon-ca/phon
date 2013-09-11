@@ -37,7 +37,7 @@ import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
-import ca.phon.util.radixtree.RadixTree;
+import ca.phon.util.ternarytree.TernaryTree;
 
 /**
  * Implements the basic dictionary format used by Phon.
@@ -88,7 +88,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	/**
 	 * Database
 	 */
-	private RadixTree<List<String>> _db;
+	private TernaryTree<List<String>> _db;
 	
 	/**
 	 * Contraction rules.  These rules are loaded from a file called 
@@ -155,7 +155,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	/**
 	 * Lazy-load the database.
 	 */
-	protected RadixTree<List<String>> lazyLoadDb()
+	protected TernaryTree<List<String>> lazyLoadDb()
 		throws IOException {
 		if(_db == null) {
 			_db = loadDictFromFile(dbFile);
@@ -173,7 +173,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * @throws IOException if an error occurs while
 	 *  attempting to read the file contents
 	 */
-	private RadixTree<List<String>> loadDictFromFile(URL file)
+	private TernaryTree<List<String>> loadDictFromFile(URL file)
 		throws IOException {
 		InputStream is = file.openStream();
 		return readEntriesFromStream(is);
@@ -276,7 +276,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * @throws IOException if an error occurs while
 	 *  attempting to read the stream contents
 	 */
-	private RadixTree<List<String>> readEntriesFromStream(InputStream is) 
+	private TernaryTree<List<String>> readEntriesFromStream(InputStream is) 
 		throws IOException {
 		InputStreamReader in = 
 			new InputStreamReader(is, "UTF-8");
@@ -284,7 +284,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		
 		Pattern dictPattern = getPattern();
 		
-		RadixTree<List<String>> retVal = new RadixTree<List<String>>();
+		TernaryTree<List<String>> retVal = new TernaryTree<List<String>>();
 		
 		String line = null;
 		while((line = reader.readLine()) != null) {
@@ -340,7 +340,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	public String[] lookup(String orthography) 
 		throws IPADictionaryExecption {
 		
-		RadixTree<List<String>> db;
+		TernaryTree<List<String>> db;
 		try {
 			db = lazyLoadDb();
 		} catch (IOException e) {
@@ -403,7 +403,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 
 	@Override
 	public Iterator<String> iterator() {
-		RadixTree<List<String>> db;
+		TernaryTree<List<String>> db;
 		try {
 			db = lazyLoadDb();
 		} catch (IOException e) {
@@ -415,14 +415,14 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 
 	@Override
 	public String[] keysWithPrefix(String prefix) {
-		RadixTree<List<String>> db;
+		TernaryTree<List<String>> db;
 		try {
 			db = lazyLoadDb();
 		} catch (IOException e) {
 			return new String[0];
 		}
 		
-		return db.getKeysWithPrefix(prefix).toArray(new String[0]);
+		return db.keysWithPrefix(prefix).toArray(new String[0]);
 	}
 
 	@Override
