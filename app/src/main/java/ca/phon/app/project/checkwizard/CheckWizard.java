@@ -19,8 +19,10 @@ package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -28,7 +30,13 @@ import javax.swing.SwingUtilities;
 
 import ca.phon.alignment.PhoneMap;
 import ca.phon.app.project.ProjectFrameExtension;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.parser.IPAParser;
 import ca.phon.project.Project;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.Tier;
+import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
@@ -90,73 +98,67 @@ public class CheckWizard extends WizardFrame {
 		return super.addWizardStep(checkPanel);
 	}
 	
+	private Project getProject() {
+		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
+		if(pfe != null) {
+			return pfe.getProject();
+		}
+		return null;
+	}
+	
 	/**
 	 * Check IPA action
 	 */
 	private class CheckIPA extends PhonTask {
-		private String corpus;
-		private String session;
+		private String corpusName;
+		private String sessionName;
 		
 		public CheckIPA(String c, String s) {
-			corpus = c;
-			session = s;
+			corpusName = c;
+			sessionName = s;
 		}
 		
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			PhonLogger.info(
-					"Check IPA: " + corpus + "." + session);
+			LOGGER.fine("Check IPA: " + corpusName + "." + sessionName);
 			
-			ITranscript transcript = null;
+			Session session = null;
 			try {
-				transcript = project.getTranscript(corpus, session);
+				session = getProject().openSession(corpusName, sessionName);
 			} catch (IOException e1) {
-				PhonLogger.warning(e1.getMessage());
+				LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
 				return;
 			}
 			
-//			glassPane.setProgressBarIntermediate(false);
-//			glassPane.setProgressBarRange(1, transcript.getUtterances().size());
-			
 			int progress = 0;
-			for(IUtterance utt:transcript.getUtterances()) {
+			for(int i = 0; i < session.getRecordCount(); i++) {
 				int numErrors = 0;
 				if(super.isShutdown()) {
 					super.setStatus(TaskStatus.TERMINATED);
 					return; // get out immediately
 				}
-//				glassPane.setProgressBarValue(++progress);
-				List<ParserException> errors = 
-					new ArrayList<ParserException>();
-				for(IWord w:utt.getWords()) {
-					for(Form f:Form.values()) {
-						IPhoneticRep pRef = w.getPhoneticRepresentation(f);
-						if(pRef != null) {
-							String groupIPA = pRef.getTranscription();
-							
-							try {
-								errors.clear();
-								IPAUtils.checkIPA(groupIPA, errors);
-							} catch (ParserException e) {
-								// print all errors for transcription
-								String msgPrefix = "[record #" + 
-									(transcript.getUtteranceIndex(utt)+1) + ":" + 
-									(f == Form.Target ? "IPA Target" : "IPA Actual") + "] ";
-								for(ParserException error:errors) {
-									String msg = msgPrefix + error.getMessage();
-									PhonLogger.severe(msg);
-								}
-								numErrors += errors.size();
-							}
-						}
-					}
-				}
 				
+				final Record record = session.getRecord(i);
 				
+				checkTier(record.getIPATarget());
+				checkTier(record.getIPAActual());
 			}
 			
 			super.setStatus(TaskStatus.FINISHED);
+		}
+		
+		private void checkTier(Tier<IPATranscript> tier) {
+			for(IPATranscript ipa:tier) {
+				final String text = ipa.toString();
+				
+				// run text through parser manually
+				try {
+					IPATranscript.parseTranscript(text);
+				} catch (ParseException pe) {
+					LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
+				}
+			}
 		}
 		
 	}
