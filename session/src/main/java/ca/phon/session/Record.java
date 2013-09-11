@@ -21,9 +21,9 @@ package ca.phon.session;
 import java.util.Set;
 import java.util.UUID;
 
-import ca.phon.alignment.PhoneMap;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 
 

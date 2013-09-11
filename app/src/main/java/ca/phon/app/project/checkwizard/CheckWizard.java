@@ -28,9 +28,9 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import ca.phon.alignment.PhoneMap;
 import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.project.Project;
 import ca.phon.session.Record;

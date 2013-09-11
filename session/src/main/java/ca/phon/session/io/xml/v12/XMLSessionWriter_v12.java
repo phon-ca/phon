@@ -23,9 +23,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
-import ca.phon.alignment.PhoneMap;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.xml.IpaType;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.Orthography;

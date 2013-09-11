@@ -1,6 +1,7 @@
 package ca.phon.ipa;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ca.phon.visitor.VisitorAdapter;
@@ -30,7 +31,11 @@ public class AudiblePhoneVisitor extends VisitorAdapter<IPAElement> {
 	}
 	
 	public List<IPAElement> getPhones() {
-		return this.phones;
+		return Collections.unmodifiableList(this.phones);
+	}
+	
+	public void reset() {
+		this.phones.clear();
 	}
 	
 }

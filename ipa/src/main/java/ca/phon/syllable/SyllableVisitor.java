@@ -137,4 +137,13 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		lastPhone = p;
 	}
 
+	/**
+	 * Rest syllable list
+	 */
+	public void reset() {
+		this.syllables.clear();
+		this.currentSyllable = new IPATranscript();
+		this.lastPhone = null;
+	}
 }
+

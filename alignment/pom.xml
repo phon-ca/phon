@@ -14,16 +14,6 @@
   <description/>
 
   <dependencies>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-ipa</artifactId>
-      <version>1.7.0</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-syllabifier</artifactId>
-      <version>1.7.0</version>
-    </dependency>
   </dependencies>
 
 </project>

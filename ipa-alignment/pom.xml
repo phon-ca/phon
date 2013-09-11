@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>phon</artifactId>
+		<groupId>ca.phon</groupId>
+		<version>1.7.0</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<artifactId>phon-ipa-alignment</artifactId>
+	<name>Phon IPA Aligner</name>
+	<description>Aliner for IPA transcriptions.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-ipa</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-alignment</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-syllabifier</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	  
+	<build>
+		
+	</build>
+</project>

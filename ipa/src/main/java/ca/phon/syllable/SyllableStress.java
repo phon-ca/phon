@@ -24,18 +24,24 @@ package ca.phon.syllable;
  *
  */
 public enum SyllableStress {
-	PrimaryStress("1"),
-	SecondaryStress("2"),
-	NoStress("U");
+	PrimaryStress("1", '\u02c8'),
+	SecondaryStress("2", '\u02cc'),
+	NoStress("U", (char)0);
 	
 	private String idString;
 	
-	private SyllableStress(String s) {
+	private char ipa;
+	
+	private SyllableStress(String s, char ipa) {
 		idString = s;
 	}
 	
 	public String getId() {
 		return this.idString;
+	}
+	
+	public char getIpa() {
+		return this.ipa;
 	}
 	
 	public static SyllableStress fromString(String text) {

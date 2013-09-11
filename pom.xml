@@ -97,6 +97,7 @@
     <module>xml</module>
     <module>design-patterns</module>
     <module>ipa</module>
+    <module>ipa-alignment</module>
     <module>ipa-xml</module>
     <module>ipadictionary</module>
     <module>ipamap</module>

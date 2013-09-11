@@ -15,14 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.alignment;
 
+package ca.phon.ipa.alignment;
+
+import java.util.List;
+
+import ca.phon.alignment.AlignmentMap;
+import ca.phon.ipa.AudiblePhoneVisitor;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.Phone;
 
 /**
- *
+ * 
  */
-public class SyllableMap extends AlignmentMap<IPATranscript> {
+public class PhoneMap extends AlignmentMap<Phone> {
 	/** The target phonetic rep */
 	private IPATranscript targetRep;
 	/** The actual phonetic rep */
@@ -31,7 +37,7 @@ public class SyllableMap extends AlignmentMap<IPATranscript> {
 	/**
 	 * Constructor
 	 */
-	public SyllableMap(IPATranscript targetRep, IPATranscript actualRep) {
+	public PhoneMap(IPATranscript targetRep, IPATranscript actualRep) {
 		super();
 		
 		setTargetRep(targetRep);
@@ -45,9 +51,11 @@ public class SyllableMap extends AlignmentMap<IPATranscript> {
 	public void setActualRep(IPATranscript actualRep) {
 		this.actualRep = actualRep;
 		
-		this.bottomElements = actualRep.syllables().toArray(new IPATranscript[0]);
-//			Syllabifier.getSyllabification(
-//					actualRep.getPhones()).toArray(new Syllable[0]);
+		final AudiblePhoneVisitor visitor = new AudiblePhoneVisitor();
+		actualRep.accept(visitor);
+		
+		this.bottomElements = 
+			visitor.getPhones().toArray(new Phone[0]);
 	}
 
 	public IPATranscript getTargetRep() {
@@ -57,9 +65,11 @@ public class SyllableMap extends AlignmentMap<IPATranscript> {
 	public void setTargetRep(IPATranscript targetRep) {
 		this.targetRep = targetRep;
 		
-		this.topElements = targetRep.syllables().toArray(new IPATranscript[0]);
-//			Syllabifier.getSyllabification(
-//					targetRep.getPhones()).toArray(new Syllable[0]);
+		final AudiblePhoneVisitor visitor = new AudiblePhoneVisitor();
+		targetRep.accept(visitor);
+		
+		this.topElements = 
+			visitor.getPhones().toArray(new Phone[0]);
 	}
 	
 }

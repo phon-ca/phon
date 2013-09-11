@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ca.phon.alignment.PhoneMap;
 import ca.phon.application.transcript.IUtterance;
 import ca.phon.engines.detectors.DetectorResult;
 import ca.phon.engines.detectors.DetectorResultType;
 import ca.phon.featureset.FeatureSet;
 import ca.phon.gui.recordeditor.SystemTierType;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.phone.Phone;
 import ca.phon.util.Range;
 

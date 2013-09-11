@@ -17,13 +17,13 @@
  */
 package ca.phon.query.script;
 
-import ca.phon.alignment.PhoneMap;
 import ca.phon.application.transcript.IDepTierDesc;
 import ca.phon.application.transcript.ITranscript;
 import ca.phon.application.transcript.IUtterance;
 import ca.phon.application.transcript.IWord;
 import ca.phon.application.transcript.TranscriptUtils;
 import ca.phon.gui.recordeditor.SystemTierType;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.phone.Phone;
 import ca.phon.util.Range;
 

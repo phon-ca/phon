@@ -9,9 +9,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import ca.phon.alignment.PhoneMap;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Comment;
 import ca.phon.session.Group;
