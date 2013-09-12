@@ -16,7 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Catalan (simple)" language="cat">
+<SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Catalan (simple)" language="cat-simple">
     <SonorityScale>
         
         <SonorityClass>

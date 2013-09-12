@@ -17,7 +17,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    name="English-Smith" language="eng">
+    name="English-Smith" language="eng-smith">
     <SonorityScale>
         <!-- Plosive,Fricative,Affricate - 0 -->
         <SonorityClass>

@@ -2,6 +2,7 @@ package ca.phon.syllabifier;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -78,6 +79,23 @@ public final class SyllabifierLibrary implements IExtendable {
 		while(iterator.hasNext()) {
 			final Syllabifier syllabifier = iterator.next();
 			retVal.add(syllabifier.getName());
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Get a set of available syllabifier Languages
+	 * 
+	 * @return set of language
+	 */
+	public Set<Language> availableSyllabifierLanguages() {
+		final Set<Language> retVal = new LinkedHashSet<Language>();
+		
+		final Iterator<Syllabifier> iterator = availableSyllabifiers();
+		while(iterator.hasNext()) {
+			final Syllabifier syllabifier = iterator.next();
+			retVal.add(syllabifier.getLanguage());
 		}
 		
 		return retVal;
