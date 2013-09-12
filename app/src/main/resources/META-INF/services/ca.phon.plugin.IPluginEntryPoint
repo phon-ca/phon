@@ -23,3 +23,6 @@ ca.phon.app.project.DeleteCorpusEP
 ca.phon.app.project.RenameCorpusEP
 # New session
 ca.phon.app.project.NewSessionEP
+# Check Session
+ca.phon.app.project.CheckIPAEP
+

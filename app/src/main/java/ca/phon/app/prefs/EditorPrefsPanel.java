@@ -40,19 +40,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-import org.jdesktop.swingx.auth.UserPermissions;
 
 import ca.phon.ipadictionary.IPADictionaryLibrary;
-import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FontDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
-import ca.phon.util.LanguageParser;
 import ca.phon.util.PrefHelper;
-import ca.phon.worker.PhonWorker;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;

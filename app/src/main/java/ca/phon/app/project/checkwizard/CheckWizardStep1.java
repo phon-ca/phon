@@ -18,6 +18,7 @@
 package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -75,7 +77,7 @@ public class CheckWizardStep1 extends WizardStep {
 	
 	private JRadioButton resetAlignmentButton;
 	
-	private JComboBox syllabifierList;
+	private JComboBox<Language> syllabifierList;
 	
 	private Project project;
 	
@@ -102,10 +104,10 @@ public class CheckWizardStep1 extends WizardStep {
 		topPanel.setLayout(topLayout);
 		
 		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
-		List<String> orderedSyllabifiers = syllabifierLibrary.
+		final List<Language> orderedSyllabifiers = new ArrayList<>(syllabifierLibrary.availableSyllabifierLanguages());
 	    Collections.sort(orderedSyllabifiers);
 	    
-	    syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new String[0]));
+	    syllabifierList = new JComboBox<>(orderedSyllabifiers.toArray(new Language[0]));
 	    syllabifierList.setEnabled(false);
 	   
 	    final String preferredSyllabifier = PrefHelper.get(
@@ -184,7 +186,8 @@ public class CheckWizardStep1 extends WizardStep {
 	}
 	
 	public Syllabifier getSyllabifier() {
-		return Syllabifier.getInstance(syllabifierList.getSelectedItem().toString());
+		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
+		return library.getSyllabifierForLanguage((Language)syllabifierList.getSelectedItem());
 	}
 	
 	@Override

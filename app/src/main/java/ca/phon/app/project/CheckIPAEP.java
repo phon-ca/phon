@@ -19,10 +19,10 @@ package ca.phon.app.project;
 
 import java.util.Map;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.modules.project.ui.checkwizard.CheckWizard;
-import ca.phon.system.plugin.IPluginEntryPoint;
-import ca.phon.system.plugin.PhonPlugin;
+import ca.phon.app.project.checkwizard.CheckWizard;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.project.Project;
 
 @PhonPlugin(name="default")
 public class CheckIPAEP implements IPluginEntryPoint {
@@ -35,9 +35,9 @@ public class CheckIPAEP implements IPluginEntryPoint {
 	@Override
 	public void pluginStart(Map<String, Object> args) {
 		if(args.get("project") != null) {
-			IPhonProject project = (IPhonProject)args.get("project");
+			final Project project = (Project)args.get("project");
 			
-			CheckWizard cw = new CheckWizard(project);
+			final CheckWizard cw = new CheckWizard(project);
 			cw.setSize(600, 500);
 			cw.setLocationByPlatform(true);
 			cw.setVisible(true);

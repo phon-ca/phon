@@ -9,7 +9,7 @@ import java.util.Arrays;
  * and a list of user ids for the language.  The syntax for the 
  * language descriptor is: ([a-z]{3})(-[a-zA-Z0-9]{1,8})*
  */
-public class Language {
+public class Language implements Comparable<Language> {
 
 	private final static String langRegex = "([a-z]{3})(-[a-zA-Z0-9]{1,8})*";
 	
@@ -105,6 +105,11 @@ public class Language {
 		boolean userIDsMatch = Arrays.equals(userIDs, bLang.userIDs);
 		
 		return primaryMatch && userIDsMatch;
+	}
+
+	@Override
+	public int compareTo(Language o) {
+		return toString().compareTo(o.toString());
 	}
 	
 }

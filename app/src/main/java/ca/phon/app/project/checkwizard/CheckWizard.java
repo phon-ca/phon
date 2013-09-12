@@ -22,19 +22,25 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import ca.phon.alignment.Aligner;
 import ca.phon.app.project.ProjectFrameExtension;
+import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionLocation;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.PhonLoggerConsole;
@@ -42,6 +48,7 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 
 /**
  * A wizard for checking/repairing IPA transcriptions
@@ -73,7 +80,7 @@ public class CheckWizard extends WizardFrame {
 	private void init() {
 		super.btnFinish.setVisible(false);
 		
-		step1 = new CheckWizardStep1(project);
+		step1 = new CheckWizardStep1(getProject());
 		addWizardStep(step1);
 		
 		opStep = createOpStep();
@@ -168,15 +175,15 @@ public class CheckWizard extends WizardFrame {
 	 */
 	private class ResetSyllabification extends PhonTask {
 
-		private String corpus;
-		private String session;
+		private String corpusName;
+		private String sessionName;
 		private Syllabifier syllabifier;
 		private boolean isResetAlignment = false;
 		
 		public ResetSyllabification(String c, String s, Syllabifier syllabifier,
 				boolean resetAlignment) {
-			corpus = c;
-			session = s;
+			corpusName = c;
+			sessionName = s;
 			this.syllabifier = syllabifier;
 			this.isResetAlignment = resetAlignment;
 		}
@@ -184,14 +191,14 @@ public class CheckWizard extends WizardFrame {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			PhonLogger.info(
-					"Reset Syllabification: " + corpus + "." + session);
+			LOGGER.info(
+					"Reset Syllabification: " + corpusName + "." + sessionName);
 			
-			ITranscript transcript = null;
+			Session session = null;
 			try {
-				transcript = project.getTranscript(corpus, session);
+				session = getProject().openSession(corpusName, sessionName);
 			} catch (IOException e1) {
-				PhonLogger.warning(e1.getMessage());
+				LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
 				return;
 			}
 			
@@ -199,75 +206,49 @@ public class CheckWizard extends WizardFrame {
 //			glassPane.setProgressBarRange(1, transcript.getUtterances().size());
 			
 			int progress = 0;
-			for(IUtterance utt:transcript.getUtterances()) {
+			for(int i = 0; i < session.getRecordCount(); i++) {
 				
 				if(super.isShutdown()) {
 					super.setStatus(TaskStatus.TERMINATED);
 					return; // get out immediately
 				}
-//				glassPane.setProgressBarValue(++progress);
-				for(IWord w:utt.getWords()) {
-					
-					List<IPhoneticRep> phoReps =
-						w.getPhoneticRepresentations();
-					
-					boolean resetAlignment = isResetAlignment;
-
-					for(int m = 0; m < phoReps.size(); m++) {
-						IPhoneticRep phoRep = phoReps.get(m);
-						// set id
-						phoRep.setID(utt.getID() + "-p" + m);
-
-						int currentPhoneLength =
-								phoRep.getPhones().size();
-						
-						// reset syllabification
-						List<Phone> phones = Phone.toPhoneList(phoRep.getTranscription());
-						syllabifier.syllabify(phones);
-
-						int newPhoneLength =
-								phones.size();
-
-						if(newPhoneLength != currentPhoneLength)
-							resetAlignment = true;
-
-						phoRep.setPhones(phones);
-					}
-					
-					// reset alignment
-					if(resetAlignment) {
-						PhoneMap alignment = Aligner.getPhoneAlignment(w);
-
-						if(alignment != null)
-							w.setPhoneAlignment(alignment);
-					}
-				}
+				
+				final Record record = session.getRecord(i);
+				
+				final Tier<IPATranscript> ipaTarget = record.getIPATarget();
+				resetSyllabification(ipaTarget);
+				final Tier<IPATranscript> ipaActual = record.getIPAActual();
+				resetSyllabification(ipaActual);
 			}
 			
+			final Project project = getProject();
 			// save xml to project
 			try {
-				int writeLock = project.getTranscriptWriteLock(corpus, session);
+				final UUID writeLock = project.getSessionWriteLock(session);
 				
-				if(writeLock < 0) {
-					PhonLogger.severe(CheckWizard.this.getClass(),
-							"Could not get write lock for: " + corpus + "." + session);
+				if(writeLock == null) {
+					LOGGER.warning(
+							"Could not get write lock for: " + corpusName + "." + sessionName);
 					return;
 				}
 				
-				project.saveTranscript(transcript, writeLock);
-				project.releaseTranscriptWriteLock(corpus, session, writeLock);
-				project.save();
+				project.saveSession(session, writeLock);
+				project.releaseSessionWriteLock(session, writeLock);
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
-				PhonLogger.severe(CheckWizard.this.getClass(),
-						"Could not get save data for: " + corpus + "." + session);
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 				
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);
 			}
 		}
 		
+		private void resetSyllabification(Tier<IPATranscript> tier) {
+			for(IPATranscript ipa:tier) {
+				syllabifier.syllabify(ipa);
+			}
+		}
 	}
 	
 	/**
@@ -275,79 +256,65 @@ public class CheckWizard extends WizardFrame {
 	 */
 	private class ResetAlignment extends PhonTask {
 
-		private String corpus;
-		private String session;
+		private String corpusName;
+		private String sessionName;
 		
 		public ResetAlignment(String c, String s) {
-			corpus = c;
-			session = s;
+			corpusName = c;
+			sessionName = s;
 		}
 		
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
 //			glassPane.setProgressLabelText(
-			PhonLogger.info(
-					"Reset Alignment: " + corpus + "." + session);
+			LOGGER.info(
+					"Reset Alignment: " + corpusName + "." + sessionName);
 			
-			ITranscript transcript = null;
+			final Project project = getProject();
+			Session session = null;
 			try {
-				transcript = project.getTranscript(corpus, session);
+				session = project.openSession(corpusName, sessionName);
 			} catch (IOException e) {
-				PhonLogger.warning(e.getMessage());
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 				return;
 			}
 			
-//			glassPane.setProgressBarIntermediate(false);
-//			glassPane.setProgressBarRange(1, transcript.getUtterances().size());
-			
 			int progress = 0;
-			for(IUtterance utt:transcript.getUtterances()) {
+			for(int i = 0; i < session.getRecordCount(); i++) {
 				
 				if(super.isShutdown()) {
 					super.setStatus(TaskStatus.TERMINATED);
 					return; // get out immediately
 				}
+				final Record record = session.getRecord(i);				
+				final Aligner<IPAElement> phoneAligner = new PhoneAligner();
 				
-//				glassPane.setProgressBarValue(++progress);
-				for(IWord w:utt.getWords()) {
-					
-					List<IPhoneticRep> phoReps =
-						w.getPhoneticRepresentations();
-					
-					for(int m = 0; m < phoReps.size(); m++) {
-						IPhoneticRep phoRep = phoReps.get(m);
-						// set id
-						phoRep.setID(utt.getID() + "-p" + m);
-					}
-					
-					// reset alignment
-					PhoneMap alignment = Aligner.getPhoneAlignment(w);
-					
-					if(alignment != null)
-						w.setPhoneAlignment(alignment);
+				final Tier<IPATranscript> ipaTarget = record.getIPATarget();
+				final Tier<IPATranscript> ipaActual = record.getIPAActual();
+				
+				if(ipaTarget.numberOfGroups() != ipaActual.numberOfGroups()) {
+					LOGGER.warning("Alignment error in record " + (i+1));
+					continue;
 				}
 			}
 			
 			// save xml to project
 			try {
-				int writeLock = project.getTranscriptWriteLock(corpus, session);
+				final UUID writeLock = project.getSessionWriteLock(session);
 				
-				if(writeLock < 0) {
-					PhonLogger.severe(CheckWizard.this.getClass(),
-							"Could not get write lock for: " + corpus + "." + session);
+				if(writeLock == null) {
+					LOGGER.warning(
+							"Could not get write lock for: " + corpusName + "." + sessionName);
 					return;
 				}
 				
-				project.saveTranscript(transcript, writeLock);
-				project.releaseTranscriptWriteLock(corpus, session, writeLock);
-				project.save();
-
+				project.saveSession(session, writeLock);
+				project.releaseSessionWriteLock(session, writeLock);
+				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
-				PhonLogger.severe(CheckWizard.this.getClass(),
-						"Could not get save data for: " + corpus + "." + session);
-				
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);
 			}
@@ -365,8 +332,7 @@ public class CheckWizard extends WizardFrame {
 			worker = PhonWorker.createWorker();
 			worker.setFinishWhenQueueEmpty(true);
 			worker.setName("Check transcriptions");
-			console.addReportThread(worker);
-			console.clearText();
+			console.addLogger(LOGGER);
 			showBusyLabel(console);
 			
 			Runnable toRun = new Runnable() {
@@ -375,7 +341,6 @@ public class CheckWizard extends WizardFrame {
 					Runnable turnOffBack = new Runnable() {
 						@Override
 						public void run() {
-							console.startLogging();
 							btnBack.setEnabled(false);
 //							btnCancel.setEnabled(false);
 							showBusyLabel(console);
@@ -398,8 +363,7 @@ public class CheckWizard extends WizardFrame {
 					Runnable turnOffBack = new Runnable() {
 						@Override
 						public void run() {
-							console.stopLogging();
-							console.removeReportThread(worker);
+							console.removeLogger(LOGGER);
 							btnBack.setEnabled(true);
 							btnCancel.setEnabled(true);
 							stopBusyLabel();
@@ -413,7 +377,6 @@ public class CheckWizard extends WizardFrame {
 			
 			worker.setFinalTask(atEnd);
 			
-			console.startLogging();
 			worker.start();
 		}
 	}

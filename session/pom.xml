@@ -34,7 +34,11 @@
       <artifactId>phon-xml</artifactId>
       <version>1.7.0</version>
     </dependency>
-    
+    <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-ipa-alignment</artifactId>
+      <version>1.7.0</version>
+    </dependency>
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
