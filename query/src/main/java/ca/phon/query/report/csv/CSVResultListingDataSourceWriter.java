@@ -19,11 +19,13 @@ package ca.phon.query.report.csv;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ca.phon.query.report.datasource.ResultListingDataSource;
+import ca.phon.query.report.io.ResultListingFormatType;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.engines.search.report.datasource.ResultListingDataSource;
-import ca.phon.engines.search.report.design.ResultListingFormatType;
-import ca.phon.util.StringUtils;
 
 public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 
@@ -55,10 +57,12 @@ public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 					
 					// if last column - expand groups
 					if(txt.startsWith("[") && txt.endsWith("]") && col == rsDs.getColumnCount()-1) {
-						ArrayList<String> grpVals = StringUtils.extractedBracketedStrings(txt);
-						if(grpVals.size() > 0) {
-							for(String grpVal:grpVals)
-								currentLine.add("[" + grpVal + "]");
+						final Pattern grpPattern = Pattern.compile("\\[([^\\[\\]])*)\\]");
+						final Matcher grpMatcher = grpPattern.matcher(txt);
+						int currentIdx = 0;
+						while(grpMatcher.find(currentIdx)) {
+								currentLine.add("[" + grpMatcher.group(1) + "]");
+								currentIdx = grpMatcher.end();
 						}
 					} else {
 						currentLine.add(txt);

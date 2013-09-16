@@ -23,6 +23,8 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -32,21 +34,22 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
 
-import ca.phon.application.PhonTask;
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.IUtterance;
-import ca.phon.engines.search.db.ResultSet;
+import ca.phon.project.Project;
+import ca.phon.query.db.ResultSet;
 import ca.phon.script.params.ScriptParam;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.worker.PhonTask;
 
 /**
  *
  */
 public class QueryTask extends PhonTask {
 	
+	private final static Logger LOGGER = Logger.getLogger(QueryTask.class.getName());
+	
 	/** The project */
-	private IPhonProject project;
+	private Project project;
 	
 	/** The corpus */
 	private String corpus;
@@ -55,7 +58,7 @@ public class QueryTask extends PhonTask {
 	private String session;
 	
 	/** The session */
-	private ITranscript transcript;
+	private Session transcript;
 	
 	/** The script text */
 	private QueryScript queryScript;
@@ -82,14 +85,14 @@ public class QueryTask extends PhonTask {
 	/** Search results property */
 	public final static String PROG_PROP = "SearchProgress";
 	
-	public QueryTask(IPhonProject p, QueryScript script) {
+	public QueryTask(Project p, QueryScript script) {
 		super();
 		
 		this.project = p;
 		this.queryScript = script;
 	}
 	
-	public QueryTask(IPhonProject p, String c, String s, String scriptText, ScriptParam[] scriptParams,
+	public QueryTask(Project p, String c, String s, String scriptText, ScriptParam[] scriptParams,
 			ResultSet s1) {
 		super();
 		
@@ -104,14 +107,14 @@ public class QueryTask extends PhonTask {
 		this.searchResults = s1;
 	}
 	
-	public QueryTask(IPhonProject p, ITranscript t, String scriptText, ScriptParam[] scriptParams,
+	public QueryTask(Project p, Session t, String scriptText, ScriptParam[] scriptParams,
 			ResultSet s1) {
 		super();
 		
 		this.project = p;
 		this.transcript = t;
 		this.corpus = t.getCorpus();
-		this.session = t.getID();
+		this.session = t.getName();
 		this.queryScript = new QueryScript(scriptText);
 //		this.params = scriptParams;
 		ScriptParam.copyParams(scriptParams, queryScript.getScriptParams());
@@ -132,9 +135,9 @@ public class QueryTask extends PhonTask {
 		if(transcript == null) {
 			// load transcript
 			try {
-				transcript = project.getTranscript(corpus, session);
+				transcript = project.openSession(corpus, session);
 			} catch (IOException e) {
-				PhonLogger.warning(e.toString());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				super.setStatus(TaskStatus.ERROR);
 				err = e;
 				return;
@@ -166,11 +169,11 @@ public class QueryTask extends PhonTask {
 		this.stderrWriter = stderrWriter;
 	}
 	
-	public ITranscript getTranscript() {
+	public Session getTranscript() {
 		return transcript;
 	}
 
-	public void setTranscript(ITranscript transcript) {
+	public void setTranscript(Session transcript) {
 		this.transcript = transcript;
 	}
 
@@ -178,7 +181,7 @@ public class QueryTask extends PhonTask {
 		this.searchResults = searchResults;
 	}
 
-	private void runSearch(ITranscript t) {
+	private void runSearch(Session t) {
 		errors.clear();
 		
 		Context scriptContext = 
@@ -188,7 +191,7 @@ public class QueryTask extends PhonTask {
 		Script script = queryScript.compileScript(scriptContext);
 		
 		if(script == null) {
-			PhonLogger.severe("Compilation error.");
+			LOGGER.severe("Compilation error.");
 			super.setStatus(TaskStatus.ERROR);
 			err = new Exception("Compilation error");
 			errors.add(err);
@@ -198,7 +201,7 @@ public class QueryTask extends PhonTask {
 		
 		// make sure script has a query_record method
 		if(!queryScript.hasQueryRecord()) {
-			PhonLogger.severe("Script must implement the function query_record(session, record)");
+			LOGGER.severe("Script must implement the function query_record(session, record)");
 			super.setStatus(TaskStatus.ERROR);
 			err = new Exception("function query_record not found");
 			errors.add(err);
@@ -212,20 +215,20 @@ public class QueryTask extends PhonTask {
 		} catch (Exception e) {
 			errors.add(e);
 			String prefix = "[" + getName() + "]\t";
-			PhonLogger.severe(prefix + 
+			LOGGER.severe(prefix + 
 					"Runtime error: " + e.toString());
 			if(e instanceof WrappedException) {
 				WrappedException we = (WrappedException)e;
 				
 				
-				PhonLogger.severe(prefix + we.details());
+				LOGGER.severe(prefix + we.details());
 			} else if(e instanceof EcmaError) {
 				EcmaError ecmaError = (EcmaError)e;
 				
-				PhonLogger.severe(prefix + ecmaError.details());
+				LOGGER.severe(prefix + ecmaError.details());
 			}
 			
-			PhonLogger.warning(e.toString());
+			LOGGER.warning(e.toString());
 			err = e;
 			
 			// stop processing transcript
@@ -259,7 +262,7 @@ public class QueryTask extends PhonTask {
 		Object wrappedErr = Context.javaToJS(errWriter, scope);
 		ScriptableObject.putProperty(scope, "err", wrappedErr);
 		
-		int numRecords = t.getNumberOfUtterances();
+		int numRecords = t.getRecordCount();
 		setProperty(PROG_PROP, 0);
 		
 		// run begin search if found
@@ -269,8 +272,7 @@ public class QueryTask extends PhonTask {
 			} catch (Exception e) {
 				errors.add(e);
 				String prefix = "[" + getName() + "]\t";
-				PhonLogger.severe(prefix + 
-						"Runtime error: " + e.toString());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				err = e;
 				
 				// stop processing transcript
@@ -284,7 +286,7 @@ public class QueryTask extends PhonTask {
 			// check shutdown hook
 			if(isShutdown())
 				break;
-			IUtterance utt = t.getUtterance(i);
+			Record utt = t.getRecord(i);
 			
 			// skip excluded records
 			if(!isIncludeExcludedRecords() && utt.isExcludeFromSearches())
@@ -301,9 +303,8 @@ public class QueryTask extends PhonTask {
 			} catch (Exception e) {
 				errors.add(e);
 				String prefix = "[" + getName() + "]\t";
-				PhonLogger.severe(prefix + 
-						"Runtime error: " + e.toString());
-				PhonLogger.severe(prefix + "Error at record #" + (i+1));
+				LOGGER.severe(prefix + "Error at record #" + (i+1));
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				
 				err = e;
 			}
@@ -321,8 +322,7 @@ public class QueryTask extends PhonTask {
 			} catch (Exception e) {
 				errors.add(e);
 				String prefix = "[" + getName() + "]\t";
-				PhonLogger.severe(prefix + 
-						"Runtime error: " + e.toString());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 	
 				super.setStatus(TaskStatus.ERROR);
 				err = e;
@@ -340,7 +340,7 @@ public class QueryTask extends PhonTask {
 		return searchResults;
 	}
 
-	public IPhonProject getProject() {
+	public Project getProject() {
 		return project;
 	}
 	

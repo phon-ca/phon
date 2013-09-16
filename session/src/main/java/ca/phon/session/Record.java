@@ -201,6 +201,14 @@ public interface Record extends IExtendable {
 	public void setNotes(Tier<String> notes);
 	
 	/**
+	 * Get the register type of the given tier.
+	 * 
+	 * @param tier name
+	 * @return the tier type
+	 */
+	public Class<?> getTierType(String name);
+	
+	/**
 	 * Get the given tier with the expected type.
 	 * 
 	 * @param name
@@ -212,6 +220,13 @@ public interface Record extends IExtendable {
 	public <T> Tier<T> getTier(String name, Class<T> type);
 	
 	/**
+	 * Get the given tier with unspecified typing.
+	 * 
+	 * @return name
+	 */
+	public Tier<?> getTier(String name);
+	
+	/**
 	 * Return a list of user-defined tiers that are present
 	 * in this record.
 	 * 
@@ -219,6 +234,13 @@ public interface Record extends IExtendable {
 	 *  present in this record
 	 */
 	public Set<String> getTierNames();
+	
+	/**
+	 * @param tier name
+	 * @return <code>true</code> if this record contains
+	 *  the specified tier
+	 */
+	public boolean hasTier(String name);
 	
 	/**
 	 * Add/set the given tier to the list of user defined

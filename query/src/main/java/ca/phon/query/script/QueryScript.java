@@ -20,6 +20,8 @@ package ca.phon.query.script;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,6 @@ import ca.phon.script.PhonScript;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.rewrite.ScriptRewriter;
-import ca.phon.system.logger.PhonLogger;
 
 /**
  * Holds the text for a query script.
@@ -36,6 +37,8 @@ import ca.phon.system.logger.PhonLogger;
  * 
  */
 public class QueryScript extends PhonScript {
+	
+	private final static Logger LOGGER = Logger.getLogger(QueryScript.class.getName());
 	
 	/**
 	 * Constructor
@@ -72,7 +75,7 @@ public class QueryScript extends PhonScript {
 				retVal = ScriptRewriter.rewriteScript(retVal);
 
 			} catch (Exception e) {
-				PhonLogger.warning(e.toString());
+				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 

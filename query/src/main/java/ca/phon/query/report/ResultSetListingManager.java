@@ -22,13 +22,13 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBElement;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.report.design.ObjectFactory;
-import ca.phon.engines.search.report.design.ReportDesign;
-import ca.phon.engines.search.report.design.ResultListing;
-import ca.phon.engines.search.report.design.Section;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.io.ObjectFactory;
+import ca.phon.query.report.io.ReportDesign;
+import ca.phon.query.report.io.ResultListing;
+import ca.phon.query.report.io.Section;
 
 /**
  * Handles storage of result listing formats
@@ -61,7 +61,7 @@ public class ResultSetListingManager {
 	 *  
 	 * @throws IOException
 	 */
-	public ResultListing getResultListing(IPhonProject project, Query query, ResultSet resultSet)
+	public ResultListing getResultListing(Project project, Query query, ResultSet resultSet)
 		throws IOException {
 		final String designPath = getPathForResultListing(project, query, resultSet);
 		ResultListing retVal = null;
@@ -90,7 +90,7 @@ public class ResultSetListingManager {
 	 * 
 	 * @throws IOException
 	 */
-	public void saveResultListing(IPhonProject project, Query query, ResultSet resultSet, ResultListing listing) 
+	public void saveResultListing(Project project, Query query, ResultSet resultSet, ResultListing listing) 
 		throws IOException {
 		final String designPath = getPathForResultListing(project, query, resultSet);
 		final ObjectFactory factory = new ObjectFactory();
@@ -119,9 +119,9 @@ public class ResultSetListingManager {
 	 * 
 	 * @return the path to the result listing
 	 */
-	public String getPathForResultListing(IPhonProject project, Query query, ResultSet resultSet) {
+	public String getPathForResultListing(Project project, Query query, ResultSet resultSet) {
 		final String projectLocation = 
-				project.getProjectLocation();
+				project.getLocation();
 		final String queryid = query.getUUID().toString();
 		final String rsName = resultSet.getSessionPath();
 		

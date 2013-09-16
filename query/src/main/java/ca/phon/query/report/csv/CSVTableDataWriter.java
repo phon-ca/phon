@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 
 import javax.swing.JTable;
 
-import ca.phon.util.PhonUtilities;
+import ca.phon.util.OSInfo;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -63,7 +63,7 @@ public class CSVTableDataWriter {
 		throws IOException {
 		final CSVWriter writer = 
 				new CSVWriter(new PrintWriter(file), ',', '\"', 
-						(PhonUtilities.isWindows() ? "\r\n" : "\n"));
+						(OSInfo.isWindows() ? "\r\n" : "\n"));
 		// output column names
 		final String[] colnames = new String[table.getColumnCount()];
 		for(int i = 0; i < table.getColumnCount(); i++) {

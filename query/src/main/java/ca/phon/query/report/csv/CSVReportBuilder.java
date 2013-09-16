@@ -23,41 +23,44 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBElement;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.IParticipant;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.Sex;
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.report.ReportBuilder;
-import ca.phon.engines.search.report.ReportBuilderException;
-import ca.phon.engines.search.report.datasource.InventoryDataSource;
-import ca.phon.engines.search.report.datasource.ParamDataSource;
-import ca.phon.engines.search.report.datasource.ResultListingDataSource;
-import ca.phon.engines.search.report.datasource.SummaryDataSource;
-import ca.phon.engines.search.report.design.AggregrateInventory;
-import ca.phon.engines.search.report.design.CommentSection;
-import ca.phon.engines.search.report.design.Group;
-import ca.phon.engines.search.report.design.InventorySection;
-import ca.phon.engines.search.report.design.ParamSection;
-import ca.phon.engines.search.report.design.ReportDesign;
-import ca.phon.engines.search.report.design.ResultListing;
-import ca.phon.engines.search.report.design.Section;
-import ca.phon.engines.search.report.design.SummarySection;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.ReportBuilder;
+import ca.phon.query.report.ReportBuilderException;
+import ca.phon.query.report.datasource.InventoryDataSource;
+import ca.phon.query.report.datasource.ParamDataSource;
+import ca.phon.query.report.datasource.ResultListingDataSource;
+import ca.phon.query.report.datasource.SummaryDataSource;
+import ca.phon.query.report.io.AggregrateInventory;
+import ca.phon.query.report.io.CommentSection;
+import ca.phon.query.report.io.Group;
+import ca.phon.query.report.io.InventorySection;
+import ca.phon.query.report.io.ParamSection;
+import ca.phon.query.report.io.ReportDesign;
+import ca.phon.query.report.io.ResultListing;
+import ca.phon.query.report.io.Section;
+import ca.phon.query.report.io.SummarySection;
+import ca.phon.session.Participant;
+import ca.phon.session.Session;
+import ca.phon.session.Sex;
+import ca.phon.util.OSInfo;
 import ca.phon.util.PhonDateFormat;
 import ca.phon.util.PhonDurationFormat;
-import ca.phon.util.PhonUtilities;
 
 /**
  * CSV report builder implementation.
  *
  */
 public class CSVReportBuilder extends ReportBuilder {
+	
+	private final static Logger LOGGER = Logger.getLogger(CSVReportBuilder.class.getName());
 	
 	/**
 	 * Property for indenting content at sections (default:false)
@@ -144,7 +147,7 @@ public class CSVReportBuilder extends ReportBuilder {
 		putProperty(CSV_SEP_CHAR, ',');
 		putProperty(CSV_QUOTE_CHAR, '\"');
 		putProperty(CSV_LINE_TERM,
-				(PhonUtilities.isWindows() ? "\r\n" : "\n"));
+				(OSInfo.isWindows() ? "\r\n" : "\n"));
 		putProperty(FILE_ENCODING, "UTF-8");
 	}
 	
@@ -155,7 +158,7 @@ public class CSVReportBuilder extends ReportBuilder {
 	 * they can still be lazilly generated.
 	 */
 	@Override
-	public void buildReport(ReportDesign design, IPhonProject project, 
+	public void buildReport(ReportDesign design, Project project, 
 			Query query, ResultSet[] resultSets, OutputStream stream) throws ReportBuilderException {
 		
 		char sep = (Character)getProperty(CSV_SEP_CHAR);
@@ -294,7 +297,7 @@ public class CSVReportBuilder extends ReportBuilder {
 		
 	}
 	
-	private void printSessionHeader(Group group, IPhonProject project, ResultSet resultSet) {
+	private void printSessionHeader(Group group, Project project, ResultSet resultSet) {
 		
 		String sessionPath = resultSet.getSessionPath();
 		
@@ -308,7 +311,7 @@ public class CSVReportBuilder extends ReportBuilder {
 		
 		if(group.isPrintParticipantInformation()) {
 			try {
-				ITranscript t = project.getTranscript(resultSet.getCorpus(), resultSet.getSession());
+				Session t = project.openSession(resultSet.getCorpus(), resultSet.getSession());
 				
 //				String participantTitleLine[] = { "Participants:" };
 				List<String> participantTitleLine = new ArrayList<String>();
@@ -323,9 +326,10 @@ public class CSVReportBuilder extends ReportBuilder {
 				for(int i = 0; i < participantTableHeader.length; i++) currentLine.add(participantTableHeader[i]);
 				writer.writeNext(currentLine.toArray(new String[0]));
 				
-				for(IParticipant participant:t.getParticipants()) {
+				for(int i = 0; i < t.getParticipantCount(); i++) {
+					final Participant participant = t.getParticipant(i);
 					currentLine.clear();
-					for(int i = 0; i < indentLevel; i++) currentLine.add(new String());
+					for(int j = 0; j < indentLevel; j++) currentLine.add(new String());
 					
 					String name = 
 						(participant.getName() != null ? participant.getName() : "");
@@ -341,16 +345,15 @@ public class CSVReportBuilder extends ReportBuilder {
 					String participantLine[] = {
 							name, age, sex, birthday,
 							participant.getLanguage(), participant.getEducation(),
-							participant.getGroup(), participant.getRole()
+							participant.getGroup(), participant.getRole().getTitle()
 					};
-					for(int i = 0; i < participantLine.length; i++) currentLine.add(participantLine[i]);
+					for(int j = 0; j < participantLine.length; j++) currentLine.add(participantLine[i]);
 					
 					writer.writeNext(currentLine.toArray(new String[0]));
 				}
 				writer.writeNext(new String[0]);
 			} catch (IOException e) {
-				e.printStackTrace();
-				PhonLogger.warning(e.getMessage());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 	}

@@ -210,6 +210,25 @@ public class RecordImpl implements Record {
 		}
 	}
 
+	@Override
+	public Class<?> getTierType(String name) {
+		if(SystemTierType.isSystemTier(name)) {
+			return SystemTierType.tierFromString(name).getDeclaredType();
+		} else {
+			for(Tier<?> t:userDefined.values()) {
+				if(t.getName().equals(name)) {
+					return t.getDeclaredType();
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public boolean hasTier(String name) {
+		return getTierNames().contains(name);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Tier<T> getTier(String name, Class<T> type) {
@@ -237,6 +256,11 @@ public class RecordImpl implements Record {
 		return retVal;
 	}
 	
+	@Override
+	public Tier<?> getTier(String name) {
+		return getTier(name, getTierType(name));
+	}
+
 	@Override
 	public Set<String> getTierNames() {
 		return userDefined.keySet();

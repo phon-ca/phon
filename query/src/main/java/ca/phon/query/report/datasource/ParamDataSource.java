@@ -22,9 +22,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.Script;
-import ca.phon.engines.search.report.design.ParamSection;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.Script;
+import ca.phon.query.report.io.ParamSection;
 import ca.phon.util.CollatorFactory;
 
 /**

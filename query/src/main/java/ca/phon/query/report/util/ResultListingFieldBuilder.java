@@ -15,15 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.query.report.design.util;
+package ca.phon.query.report.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.report.design.ObjectFactory;
-import ca.phon.engines.search.report.design.ResultListingField;
-import ca.phon.engines.search.report.design.ScriptParameter;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.io.ObjectFactory;
+import ca.phon.query.report.io.ResultListingField;
+import ca.phon.query.report.io.ScriptParameter;
+
 
 public class ResultListingFieldBuilder {
 

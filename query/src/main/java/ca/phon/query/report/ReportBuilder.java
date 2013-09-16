@@ -25,10 +25,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.report.design.ReportDesign;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.io.ReportDesign;
 
 /**
  * An interface for building reports based on a report design
@@ -83,7 +83,7 @@ public abstract class ReportBuilder {
 		Class<?> retVal = Object.class;
 		
 		if(TEMP_PROJECT.equals(propName)) {
-			retVal = IPhonProject.class;
+			retVal = Project.class;
 		} else if(CANCEL_BUILD.equals(propName)) {
 			retVal = Boolean.class;
 		}
@@ -181,7 +181,7 @@ public abstract class ReportBuilder {
 	 */
 	public void buildReport(
 			ReportDesign design,
-			IPhonProject project,
+			Project project,
 			Query q,
 			ResultSet[] resultSets,
 			File file) throws ReportBuilderException {
@@ -207,7 +207,7 @@ public abstract class ReportBuilder {
 	 */
 	public abstract void buildReport(
 			ReportDesign design,
-			IPhonProject project,
+			Project project,
 			Query q,
 			ResultSet[] resultSets,
 			OutputStream file) throws ReportBuilderException;

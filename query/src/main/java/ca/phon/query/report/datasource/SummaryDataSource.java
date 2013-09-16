@@ -17,8 +17,8 @@
  */
 package ca.phon.query.report.datasource;
 
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.report.design.SummarySection;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.io.SummarySection;
 
 /**
  * Displays a list of session  names along with

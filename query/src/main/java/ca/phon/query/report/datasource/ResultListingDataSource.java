@@ -20,6 +20,8 @@ package ca.phon.query.report.datasource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -27,25 +29,20 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.IUtterance;
-import ca.phon.engines.search.db.Result;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.report.design.ResultListing;
-import ca.phon.engines.search.report.design.ResultListingField;
-import ca.phon.engines.search.report.design.ResultListingFormatType;
-import ca.phon.engines.search.report.design.ScriptContainer;
-import ca.phon.engines.search.report.design.ScriptParameter;
-import ca.phon.engines.search.script.QueryScript;
-import ca.phon.engines.search.script.SRecord;
-import ca.phon.engines.search.script.SResults;
-import ca.phon.engines.search.script.SSession;
-import ca.phon.engines.search.scripttable.AbstractScriptTableModel;
+import ca.phon.project.Project;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.io.ResultListing;
+import ca.phon.query.report.io.ResultListingField;
+import ca.phon.query.report.io.ResultListingFormatType;
+import ca.phon.query.report.io.ScriptContainer;
+import ca.phon.query.report.io.ScriptParameter;
 import ca.phon.script.PhonScript;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.script.scripttable.AbstractScriptTableModel;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
 
 /**
  * A data source which lists each
@@ -54,6 +51,8 @@ import ca.phon.system.logger.PhonLogger;
  *
  */
 public class ResultListingDataSource extends AbstractScriptTableModel implements TableDataSource {
+	
+	private final static Logger LOGGER = Logger.getLogger(ResultListingDataSource.class.getName());
 
 	/**
 	 * Section information
@@ -63,7 +62,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	/**
 	 * Project
 	 */
-	private IPhonProject project;
+	private Project project;
 	
 	/**
 	 * Search 
@@ -94,25 +93,24 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	/**
 	 * Session
 	 */
-	private ITranscript session;
+	private Session session;
 	
 	
-	public ResultListingDataSource(IPhonProject project, ResultSet s, ResultListing section) {
+	public ResultListingDataSource(Project project, ResultSet s, ResultListing section) {
 		this.project = project;
 		this.resultSet = s;
 		this.invData = section;
 		this.includeExcluded = section.isIncludeExcluded();
 		
 		try {
-			session = project.getTranscript(s.getCorpus(), s.getSession());
+			session = project.openSession(s.getCorpus(), s.getSession());
 		} catch (IOException e) {
-			e.printStackTrace();
-			PhonLogger.warning(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		setupColumns();
 	}
 	
-	public ResultListingDataSource(ITranscript session, ResultSet rs, ResultListing section) {
+	public ResultListingDataSource(Session session, ResultSet rs, ResultListing section) {
 		this.resultSet = rs;
 		this.session = session;
 		this.invData = section;
@@ -179,8 +177,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 									paramVal = savedParam.getContent();
 								}
 							} catch (Exception e) {
-								e.printStackTrace();
-								PhonLogger.warning(getClass(), "Could not load parameter: " + paramId);
+								LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
 							}
 						} else {
 							paramVal = param.getDefaultValue(paramId);
@@ -310,13 +307,13 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		
 		if(result == null) return bindings;
 		
-		IUtterance record = session.getUtterance(result.getRecordIndex());
+		Record record = session.getRecord(result.getRecordIndex());
 		
 		bindings.put("project", project);
-		bindings.put("session", new SSession(session));
-		bindings.put("resultSet", new SResults(resultSet));
+		bindings.put("session", session);
+		bindings.put("resultSet", resultSet);
 		bindings.put("result", result);
-		bindings.put("record", new SRecord(result.getRecordIndex(), record, session));
+		bindings.put("record", record);
 		bindings.put("table", this);
 		
 		return bindings;

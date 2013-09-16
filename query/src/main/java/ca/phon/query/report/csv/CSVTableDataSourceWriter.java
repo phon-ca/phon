@@ -20,9 +20,9 @@ package ca.phon.query.report.csv;
 import java.util.ArrayList;
 import java.util.List;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.engines.search.report.datasource.TableDataSource;
+import ca.phon.query.report.datasource.TableDataSource;
 
+import au.com.bytecode.opencsv.CSVWriter;
 /**
  * Write the data for the tabular data sources
  * to the given csv writer.

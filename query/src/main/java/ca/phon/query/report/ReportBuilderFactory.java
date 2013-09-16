@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ca.phon.engines.search.report.csv.CSVReportBuilder;
-import ca.phon.system.plugin.IPluginExtensionFactory;
-import ca.phon.system.plugin.IPluginExtensionPoint;
-import ca.phon.system.plugin.PluginManager;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
+import ca.phon.query.report.csv.CSVReportBuilder;
 import ca.phon.util.CollatorFactory;
 
 /**

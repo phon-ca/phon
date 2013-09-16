@@ -33,8 +33,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import ca.phon.engines.search.report.design.ObjectFactory;
-import ca.phon.engines.search.report.design.ReportDesign;
+import ca.phon.query.report.io.ObjectFactory;
+import ca.phon.query.report.io.ReportDesign;
 
 /**
  * Methods for reading/writing report designs.

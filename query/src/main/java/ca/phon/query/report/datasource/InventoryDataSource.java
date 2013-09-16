@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ca.phon.engines.search.db.ReportHelper;
-import ca.phon.engines.search.db.Result;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.report.design.InventorySection;
-import ca.phon.featureset.FeatureMatrix;
-import ca.phon.featureset.FeatureSet;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.query.db.ReportHelper;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.io.InventorySection;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.Tuple;
 
