@@ -1,4 +1,4 @@
-package ca.phon.query.scripttable;
+package ca.phon.script.scripttable;
 
 import java.util.Map;
 

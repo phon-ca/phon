@@ -46,4 +46,31 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		
+		<plugins>
+			
+			<!-- Generate source for xml schema -->
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>src/main/resources/xml/xsd</schemaDirectory>
+							<bindingDirectory>src/main/resources/xml/xjb</bindingDirectory>
+							<specVersion>2.0</specVersion>
+							<extension>true</extension>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		
+	</build>
 </project>

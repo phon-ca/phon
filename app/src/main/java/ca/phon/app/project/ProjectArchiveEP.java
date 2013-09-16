@@ -21,12 +21,12 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Map;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.project.ProjectArchiveTask;
-import ca.phon.system.plugin.IPluginEntryPoint;
-import ca.phon.system.plugin.PhonPlugin;
+import ca.phon.app.workspace.ProjectArchiveTask;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.project.Project;
 import ca.phon.util.PhonDateFormat;
-import ca.phon.util.PhonUtilities;
+import ca.phon.workspace.Workspace;
 
 @PhonPlugin(name="default")
 public class ProjectArchiveEP implements IPluginEntryPoint {
@@ -34,7 +34,7 @@ public class ProjectArchiveEP implements IPluginEntryPoint {
 	/**
 	 * The project we are archiving
 	 */
-	private IPhonProject project;
+	private Project project;
 
 	private final static String EP_NAME = "ProjectArchive";
 	@Override
@@ -50,10 +50,10 @@ public class ProjectArchiveEP implements IPluginEntryPoint {
 		}
 		
 		Object v = initInfo.get("project");
-		if(!(v instanceof IPhonProject)) {
+		if(!(v instanceof Project)) {
 			throw new IllegalArgumentException("project object does not implement IPhonProject interface");
 		}
-		project = (IPhonProject)v;
+		project = (Project)v;
 		
 		// display options UI
 		
@@ -62,9 +62,9 @@ public class ProjectArchiveEP implements IPluginEntryPoint {
 		String today = pdf.format(Calendar.getInstance());
 		
 		String zipFileName = 
-			project.getProjectName() + "-" + today + ".zip";
+			project.getName() + "-" + today + ".zip";
 		File archiveDir = 
-			new File(PhonUtilities.getPhonWorkspace(), "archives");
+			new File(Workspace.userWorkspace().getWorkspaceFolder(), "archives");
 		if(!archiveDir.exists()) {
 			archiveDir.mkdirs();
 		}
@@ -73,7 +73,7 @@ public class ProjectArchiveEP implements IPluginEntryPoint {
 			new File(archiveDir, zipFileName);
 		
 		// create and execute task
-		ProjectArchiveTask task = new ProjectArchiveTask(project, zipFile);
+		final ProjectArchiveTask task = new ProjectArchiveTask(project, zipFile);
 		task.performTask();
 		
 	}

@@ -1,4 +1,4 @@
-package ca.phon.query.scripttable;
+package ca.phon.script.scripttable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,15 +26,12 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
-import ca.phon.engines.search.report.design.ScriptParameter;
-import ca.phon.engines.search.script.QueryScript;
-import ca.phon.engines.search.scripttable.io.ObjectFactory;
-import ca.phon.engines.search.scripttable.io.ScriptTable;
-import ca.phon.engines.search.scripttable.io.ScriptTableColumn;
 import ca.phon.script.PhonScript;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.script.scripttable.io.ObjectFactory;
+import ca.phon.script.scripttable.io.ScriptTable;
+import ca.phon.script.scripttable.io.ScriptTableColumn;
 
 public abstract class AbstractScriptTableModel extends AbstractTableModel implements ScriptTableModel {
 	

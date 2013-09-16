@@ -27,5 +27,7 @@ ca.phon.app.project.NewSessionEP
 ca.phon.app.project.CheckIPAEP
 # Derive Session
 ca.phon.app.project.DeriveSessionEP
+# Archive Project
+ca.phon.app.project.ProjectArchiveEP
 
 
