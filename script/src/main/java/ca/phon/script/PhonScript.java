@@ -5,9 +5,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,7 @@ import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.Require;
 import org.mozilla.javascript.commonjs.module.RequireBuilder;
 import org.mozilla.javascript.commonjs.module.provider.ModuleSourceProvider;
+import org.mozilla.javascript.commonjs.module.provider.MultiModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
 
@@ -54,15 +57,17 @@ public class PhonScript {
 	
 	/** Default imports for scripts */
 	private final String scriptPkgImports[] = {
-			"Packages.ca.phon.script.params",
-			"Packages.ca.phon.featureset",
-			"Packages.ca.phon.phone"
+			"Packages.ca.phon.ipa",
+			"Packages.ca.phon.orthography",
+			"Packages.ca.phon.phonex",
+			"Packages.ca.phon.syllable",
+			"Packages.ca.phon.project",
+			"Packages.ca.phon.session",
+			"Packages.ca.phon.ipa.features"
 	};
 	
 	private final String scriptClazzImports[] = {
-			"Packages.ca.phon.featureset.FeatureSet",
-			"Packages.ca.phon.util.Range",
-			"Packages.ca.phon.util.StringUtils"
+			"Packages.ca.phon.util.Range"
 	};
 	
 	/** The file we have loaded (if used) */
@@ -87,11 +92,20 @@ public class PhonScript {
 		
 	}
 	
-	public PhonScript(File file) {
+	public PhonScript(File file) 
+		throws IOException {
 		super();
 		scriptBuffer = new StringBuffer();
 		readFromFile(file);
 		scriptFile = file;
+		params = getScriptParams();
+	}
+	
+	public PhonScript(URL url)
+		throws IOException {
+		super();
+		scriptBuffer = new StringBuffer();
+		readFromURL(url);
 		params = getScriptParams();
 	}
 
@@ -290,24 +304,30 @@ public class PhonScript {
 	 * 
 	 * @param file
 	 */
-	public void readFromFile(File file) {
+	public void readFromFile(File file) 
+		throws IOException {
+		readFromURL(file.toURI().toURL());
+		setLocation(file.getAbsolutePath());
+	}
+	
+	public void readFromURL(URL url)
+		throws IOException {
+		readFromStream(url.openStream());
+		setLocation(url.toString());
+	}
+	
+	public void readFromStream(InputStream is)
+		throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				is, "UTF-8"));
 		
-		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					new FileInputStream(file), "UTF-8"));
-			
-			String line = null;
-			while((line = in.readLine()) != null) {
-				scriptBuffer.append(line + "\n");
-			}
-			in.close();
-			
-			updateScriptParams();
-			
-			setLocation(file.getAbsolutePath());
-		} catch (IOException e) {
-			LOGGER.warning(e.getMessage());
+		String line = null;
+		while((line = in.readLine()) != null) {
+			scriptBuffer.append(line + "\n");
 		}
+		in.close();
+		
+		updateScriptParams();
 	}
 	
 	public boolean hasFunction(String funcName, int numParams) {
@@ -410,6 +430,7 @@ public class PhonScript {
 		
 	    ModuleSourceProvider sourceProvider = new UrlModuleSourceProvider(paths, null);
 	    ModuleScriptProvider scriptProvider = new SoftCachingModuleScriptProvider(sourceProvider);
+	    
 	    RequireBuilder builder = new RequireBuilder();
 	    builder.setModuleScriptProvider(scriptProvider);
 	    builder.setPreExec(importScript);

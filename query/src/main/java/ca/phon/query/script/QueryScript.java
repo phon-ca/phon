@@ -18,6 +18,8 @@
 package ca.phon.query.script;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,10 +55,16 @@ public class QueryScript extends PhonScript {
 		
 	}
 	
-	public QueryScript(File file) {
+	public QueryScript(File file) 
+		throws IOException {
 		super(file);
 	}
 
+	public QueryScript(URL url) 
+		throws IOException {
+		super(url);
+	}
+	
 	/**
 	 * Get script text with form data replaced with
 	 * hard-coded vars.
@@ -183,21 +191,11 @@ public class QueryScript extends PhonScript {
 	}
 
 	@Override
-	protected List<String> defaultPackageImports() {
-		final ArrayList<String> retVal = new ArrayList<String>();
-		retVal.addAll(super.defaultPackageImports());
-		retVal.add("Packages.ca.phon.engines.search.script");
-		return retVal;
-	}
-
-	@Override
 	public List<String> scriptFolders() {
 		final List<String> retVal = new ArrayList<String>();
-		retVal.add(QueryScriptLibrary.SYSTEM_SCRIPT_FOLDER);
-		retVal.add(QueryScriptLibrary.USER_SCRIPT_FOLDER);
+//		retVal.add(QueryScriptLibrary.SYSTEM_SCRIPT_FOLDER);
+//		retVal.add(QueryScriptLibrary.USER_SCRIPT_FOLDER);
 		return retVal;
 	}
-
-	
 	
 }

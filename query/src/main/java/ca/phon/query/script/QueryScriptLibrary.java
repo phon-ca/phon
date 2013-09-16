@@ -9,19 +9,18 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.QueryFactory;
-import ca.phon.engines.search.db.QueryManager;
-import ca.phon.engines.search.db.Script;
-import ca.phon.gui.CommonModuleFrame;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.Script;
 import ca.phon.script.params.ScriptParam;
-import ca.phon.system.logger.PhonLogger;
-import ca.phon.system.prefs.UserPrefManager;
-import ca.phon.util.FileFilter;
-import ca.phon.util.NativeDialogs;
+
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -29,21 +28,27 @@ import ca.phon.util.resources.ResourceLoader;
  * 
  *
  */
-public class QueryScriptLibrary {
+public class QueryScriptLibrary implements IExtendable {
 
-	/**
-	 * Default script location
-	 */
-	public final static String SYSTEM_SCRIPT_FOLDER = "data/script";
+//	/**
+//	 * Default script location
+//	 */
+//	public final static String SYSTEM_SCRIPT_FOLDER = "data/script";
+//	
+//	/**
+//	 * User script folder
+//	 */
+//	public final static String USER_SCRIPT_FOLDER = 
+//			UserPrefManager.getUserPrefDir() + File.separator + "script";
 	
-	/**
-	 * User script folder
-	 */
-	public final static String USER_SCRIPT_FOLDER = 
-			UserPrefManager.getUserPrefDir() + File.separator + "script";
+	private final ExtensionSupport extSupport = new ExtensionSupport(QueryScriptLibrary.class, this);
 	
-	public static String projectScriptFolder(IPhonProject project) {
-		return project.getProjectLocation() + File.separator + "__res" + File.separator + "script";
+	private final ResourceLoader<QueryScript> systemScriptLoader = new ResourceLoader<>();
+	
+	private final ResourceLoader<QueryScript> userScriptLoader = new ResourceLoader<>();
+	
+	public static String projectScriptFolder(Project project) {
+		return project.getLocation() + File.separator + "__res" + File.separator + "script";
 	}
 	
 	/**
@@ -51,19 +56,28 @@ public class QueryScriptLibrary {
 	 */
 	public QueryScriptLibrary() {
 		super();
+		extSupport.initExtensions();
+		
+		initLoaders();
 	}
 	
-	public List<File> stockScriptFiles() {
-		return scanFolderForScripts(new File(SYSTEM_SCRIPT_FOLDER));
+	private void initLoaders() {
+		final SystemQueryScriptHandler systemScriptHandler = new SystemQueryScriptHandler();
+		systemScriptLoader.addHandler(systemScriptHandler);
 	}
 	
-	public List<File> userScriptFiles() {
-		return scanFolderForScripts(new File(USER_SCRIPT_FOLDER));
+	public ResourceLoader<QueryScript> stockScriptFiles() {
+		return systemScriptLoader;
 	}
 	
-	public List<File> projectScriptFiles(IPhonProject project) {
+	public ResourceLoader<QueryScript> userScriptFiles() {
+		return userScriptLoader;
+	}
+	
+	public ResourceLoader<QueryScript> projectScriptFiles(Project project) {
 		final String projectScriptLocation = projectScriptFolder(project);
-		return scanFolderForScripts(new File(projectScriptLocation));
+		
+		return new ResourceLoader<>();
 	}
 	
 	private List<File> scanFolderForScripts(File folder) {
@@ -123,6 +137,24 @@ public class QueryScriptLibrary {
 		}
 	}
 	
+	
+	
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
+
 	private final FilenameFilter scriptFilter = new FilenameFilter() {
 		@Override
 		public boolean accept(File dir, String name) {

@@ -35,6 +35,9 @@ import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
 
 import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.session.Record;
@@ -243,11 +246,14 @@ public class QueryTask extends PhonTask {
 		
 		/* setup scope variables */
 		// results
-		SResults results = new SResults(searchResults);
-		Object wrappedResults = Context.javaToJS(results, scope);
-		ScriptableObject.putProperty(scope, "results", wrappedResults);
+		final QueryFactory factory = QueryManager.getSharedInstance().createQueryFactory();
+		final ResultSet resultSet = factory.createResultSet();
 		
-		SSession session = new SSession(t);
+		Object wrappedFactory = Context.javaToJS(factory, scope);
+		ScriptableObject.putProperty(scope, "factory", wrappedFactory);
+		
+		Object wrappedResults = Context.javaToJS(resultSet, scope);
+		ScriptableObject.putProperty(scope, "results", wrappedResults);
 		
 		final PrintWriter outWriter = new PrintWriter(
 				new OutputStreamWriter(System.out) );
@@ -268,7 +274,7 @@ public class QueryTask extends PhonTask {
 		// run begin search if found
 		if(queryScript.hasBeginSearch()) {
 			try {
-				ScriptableObject.callMethod(scriptContext, scope, "begin_search", new Object[]{session});
+				ScriptableObject.callMethod(scriptContext, scope, "begin_search", new Object[]{t});
 			} catch (Exception e) {
 				errors.add(e);
 				String prefix = "[" + getName() + "]\t";
@@ -286,15 +292,11 @@ public class QueryTask extends PhonTask {
 			// check shutdown hook
 			if(isShutdown())
 				break;
-			Record utt = t.getRecord(i);
+			Record record = t.getRecord(i);
 			
 			// skip excluded records
-			if(!isIncludeExcludedRecords() && utt.isExcludeFromSearches())
+			if(!isIncludeExcludedRecords() && record.isExcludeFromSearches())
 				continue;
-			
-			SRecord record = new SRecord(i, utt, t);
-//			Object wrappedRecord = Context.javaToJS(record, scope);
-//			ScriptableObject.putProperty(scope, "record", wrappedRecord);
 			
 			// evaluate the script
 			try {
@@ -318,7 +320,7 @@ public class QueryTask extends PhonTask {
 		// run begin search if found
 		if(queryScript.hasEndSearch()) {
 			try {
-				ScriptableObject.callMethod(scriptContext, scope, "end_search", new Object[]{session});
+				ScriptableObject.callMethod(scriptContext, scope, "end_search", new Object[]{t});
 			} catch (Exception e) {
 				errors.add(e);
 				String prefix = "[" + getName() + "]\t";
