@@ -21,6 +21,8 @@ package ca.phon.query.db.xml;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.query.db.Result;
 import ca.phon.query.db.xml.io.resultset.ResultSetType;
@@ -30,6 +32,9 @@ import ca.phon.query.db.xml.io.resultset.ResultSetType;
  * (i.e., delayed as long as possible).
  */
 public class XMLLazyResultSet extends XMLResultSet {
+	
+	private final static Logger LOGGER = Logger.getLogger(XMLLazyResultSet.class.getName());
+	
 	/** The file where data is located */
 	private File resultSetFile;
 	
@@ -63,7 +68,7 @@ public class XMLLazyResultSet extends XMLResultSet {
 					isLoaded = true;
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 	}

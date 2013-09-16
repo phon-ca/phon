@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.query.db.Script;
 
@@ -31,6 +33,9 @@ import ca.phon.query.db.Script;
  * (i.e., delayed as long as possible).
  */
 public class XMLLazyQuery extends XMLQuery {
+	
+	private final static Logger LOGGER = Logger.getLogger(XMLLazyQuery.class.getName());
+	
 	/** The file where data is located */
 	private File queryFile;
 	
@@ -62,6 +67,7 @@ public class XMLLazyQuery extends XMLQuery {
 					isLoaded = true;
 				}
 			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 	}

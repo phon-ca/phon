@@ -136,7 +136,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			final JAXBElement<QueryType> jaxbElem = (new ca.phon.query.db.xml.io.query.ObjectFactory()).createQuery(qt);
 						
 			// Initialize marshaller and write to disk
-			final JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.query");
+			final JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.query");
 			final Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -161,14 +161,14 @@ public class XMLResultSetManager implements ResultSetManager {
 		Schema schema = null;
 		try {
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			schema = sf.newSchema(new StreamSource(getClass().getResourceAsStream("io/query/query.xsd")) );
+			schema = sf.newSchema(new StreamSource(getClass().getClassLoader().getResourceAsStream("xml/xsd/query.xsd")) );
 		} catch(SAXException exc) {
 			LOGGER.log(Level.WARNING,  exc.getLocalizedMessage(), exc);
 		}
 		
 		QueryType query = null;
 		try {
-			JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.query");
+			JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.query");
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshaller.setSchema(schema);
 			query = ((JAXBElement<QueryType>)unmarshaller.unmarshal(queryFile)).getValue();
@@ -201,7 +201,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			JAXBElement<ResultSetType> jaxbElem = (new ca.phon.query.db.xml.io.resultset.ObjectFactory()).createResultSet(rst);
 			
 			// Initialize marshaller and write to disk
-			JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.resultset");
+			JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.resultset");
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -228,14 +228,14 @@ public class XMLResultSetManager implements ResultSetManager {
 		Schema schema = null;
 		try {
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			schema = sf.newSchema(new StreamSource(getClass().getResourceAsStream("io/resultset/resultset.xsd")));
+			schema = sf.newSchema(new StreamSource(getClass().getClassLoader().getResourceAsStream("xml/xsd/resultset.xsd")));
 		} catch(SAXException exc) {
 			LOGGER.log(Level.WARNING, exc.getLocalizedMessage(), exc);
 		}
 		
 		ResultSetType resultSet = null;
 		try {
-			JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.resultset");
+			JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.resultset");
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshaller.setSchema(schema);
 			resultSet = ((JAXBElement<ResultSetType>)unmarshaller.unmarshal(resultSetFile)).getValue();
