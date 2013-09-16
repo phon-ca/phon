@@ -23,9 +23,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.phon.application.transcript.ITierOrderItem;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.IUtterance;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.Tier;
+import ca.phon.session.TierViewItem;
 import ca.phon.util.Range;
 
 /**
@@ -52,7 +53,7 @@ public class FindManager {
 	};
 
 	/** Session */
-	private ITranscript session;
+	private Session session;
 
 	/** Search type */
 	private SearchType searchType = SearchType.PLAIN;
@@ -80,12 +81,12 @@ public class FindManager {
 	/**
 	 * Constructor
 	 */
-	public FindManager(ITranscript session) {
+	public FindManager(Session session) {
 		this.session = session;
 
 		this.searchTiers = new ArrayList<String>();
 
-		for(ITierOrderItem toi:session.getTierView()) {
+		for(TierViewItem toi:session.getTierView()) {
 			if(toi.isVisible()) {
 				this.searchTiers.add(toi.getTierName());
 			}
@@ -256,13 +257,15 @@ public class FindManager {
 			tierIdx = 0;
 		int charIdx = pos.getRecordLocation().getLocation();
 
-		while(uttIdx < session.getNumberOfUtterances()) {
-			IUtterance currentUtt = session.getUtterances().get(uttIdx);
+		while(uttIdx < session.getRecordCount()) {
+			Record currentUtt = session.getRecord(uttIdx);
 
 			while(tierIdx < searchTiers.size()) {
 				String searchTier = searchTiers.get(tierIdx);
 
-				String tierData = currentUtt.getTierString(searchTier);
+				final Tier<String> tier = currentUtt.getTier(searchTier, String.class);
+//				String tierData = currentUtt.getTierString(searchTier);
+				String tierData = tier.toString();
 
 				// look for expression in tierData
 				if(searchType == SearchType.PLAIN) {
@@ -323,11 +326,12 @@ public class FindManager {
 		int charIdx = pos.getRecordLocation().getLocation();
 
 		while(uttIdx >= 0) {
-			IUtterance currentUtt = session.getUtterances().get(uttIdx);
+			Record currentUtt = session.getRecord(uttIdx);
 
 			while(tierIdx >= 0) {
-				String searchTier = searchTiers.get(tierIdx);
-				String tierData = currentUtt.getTierString(searchTier);
+				final String searchTier = searchTiers.get(tierIdx);
+				final Tier<String> tier = currentUtt.getTier(searchTier, String.class);
+				String tierData = tier.toString();
 
 				if(charIdx == -1)
 					charIdx = tierData.length();
