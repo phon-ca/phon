@@ -410,7 +410,7 @@ public class LocalProject implements Project {
 	}
 	
 	private File getSessionFile(String corpus, String session) {
-		File retVal = new File(getCorpusFolder(corpus), session);
+		File retVal = new File(getCorpusFolder(corpus), session + ".xml");
 		
 		// check to see if session file path has been defined in xml
 		final SessionType st = getSessionInfo(corpus,  session);
@@ -442,11 +442,12 @@ public class LocalProject implements Project {
 		final URI uri = sessionFile.toURI();
 		
 		final SessionInputFactory inputFactory = new SessionInputFactory();
-		final SessionReader reader = inputFactory.createReader(uri);
+		// TODO use method to find which reader will work for the file
+		final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
 		if(reader == null) {
 			throw new IOException("No session reader available for " + uri.toASCIIString());
 		}
-		final Session retVal = reader.readSession(uri);
+		final Session retVal = reader.readSession(uri.toURL().openStream());
 		return retVal;
 	}
 

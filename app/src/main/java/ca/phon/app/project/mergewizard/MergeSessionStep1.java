@@ -26,12 +26,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.SessionLocation;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.SessionSelector;
+import ca.phon.app.session.SessionSelector;
+import ca.phon.project.Project;
+import ca.phon.session.SessionLocation;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.PhonUtilities;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -59,9 +60,9 @@ public class MergeSessionStep1 extends WizardStep {
 	private SessionSelector sessionSelector;
 	
 	/** Project */
-	private IPhonProject project;
+	private Project project;
 	
-	public MergeSessionStep1(IPhonProject project) {
+	public MergeSessionStep1(Project project) {
 		super();
 		
 		this.project = project;
@@ -125,13 +126,16 @@ public class MergeSessionStep1 extends WizardStep {
 		boolean retVal = true;
 		
 		if(sessionNameField.getText().length() == 0) {
-			PhonUtilities.showComponentMessage(sessionNameField, "Session name required.");
+			final Toast toast = ToastFactory.makeToast("Session name required.");
+			toast.start(sessionNameField);
 			retVal = false;
 		} else if(corpusNameField.getText().length() == 0) {
-			PhonUtilities.showComponentMessage(corpusNameField, "Corpus name required.");
+			final Toast toast = ToastFactory.makeToast("Corpus name required.");
+			toast.start(corpusNameField);
 			retVal = false;
 		} else if(getSelectedSessions().size() == 0) {
-			PhonUtilities.showComponentMessage(sessionSelector, "Please select at least one session.");
+			final Toast toast = ToastFactory.makeToast("Please select at least one session.");
+			toast.start(sessionSelector);
 			retVal = false;
 		}
 		

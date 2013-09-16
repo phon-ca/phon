@@ -25,4 +25,7 @@ ca.phon.app.project.RenameCorpusEP
 ca.phon.app.project.NewSessionEP
 # Check Session
 ca.phon.app.project.CheckIPAEP
+# Derive Session
+ca.phon.app.project.DeriveSessionEP
+
 

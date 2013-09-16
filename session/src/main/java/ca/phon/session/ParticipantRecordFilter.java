@@ -55,7 +55,7 @@ public class ParticipantRecordFilter extends AbstractRecordFilter {
 	}
 
 	@Override
-	public boolean checkUtterance(Record utt) {
+	public boolean checkRecord(Record utt) {
 		boolean retVal = false;
 		
 		if(utt.getSpeaker() == null && this.participants.size() == 0) {

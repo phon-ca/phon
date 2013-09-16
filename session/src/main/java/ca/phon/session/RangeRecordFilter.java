@@ -112,7 +112,7 @@ public class RangeRecordFilter extends AbstractRecordFilter {
 	}
 	
 	@Override
-	public boolean checkUtterance(Record utt) {
+	public boolean checkRecord(Record utt) {
 		int uttIdx = transcript.getRecordPosition(utt);
 		
 		boolean retVal = false;

@@ -19,6 +19,13 @@ package ca.phon.app.project;
 
 import java.util.List;
 
+import ca.phon.session.Participant;
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.TierDescription;
+
 /**
  * Handle merging of sessions
  *
@@ -33,8 +40,8 @@ public class SessionMerger {
 	 * @param src
 	 * @param filter
 	 */
-	public static void mergeSession(ITranscript dest, ITranscript src,
-			UtteranceFilter filter) {
+	public static void mergeSession(Session dest, Session src,
+			RecordFilter filter) {
 		// add participants first
 		addParticipants(dest, src);
 		
@@ -48,14 +55,15 @@ public class SessionMerger {
 	 * Merge dependent tiers.
 	 * 
 	 */
-	public static void mergeDependentTiers(ITranscript dest, ITranscript src) {
-		
-		for(IDepTierDesc tierDesc:src.getDependentTiers()) {
-			
+	public static void mergeDependentTiers(Session dest, Session src) {
+		final SessionFactory factory = SessionFactory.newFactory();
+		for(int i = 0; i < src.getUserTierCount(); i++) {
+			final TierDescription tierDesc = src.getUserTier(i);
 			// try to find first
-			IDepTierDesc newDesc = null;
-			for(IDepTierDesc td:dest.getDependentTiers()) {
-				if(td.getTierName().equals(tierDesc.getTierName())) {
+			TierDescription newDesc = null;
+			for(int j = 0; j < dest.getUserTierCount(); j++) {
+				final TierDescription td = dest.getUserTier(j);
+				if(td.getName().equals(tierDesc.getName())) {
 					newDesc = td;
 					break;
 				}
@@ -63,33 +71,10 @@ public class SessionMerger {
 			
 			if(newDesc == null) {
 				// add new dep tier
-				newDesc = dest.newDependentTier();
-				newDesc.setTierName(tierDesc.getTierName());
-				newDesc.setIsGrouped(false);
+				newDesc = factory.createTierDescription(tierDesc.getName(), tierDesc.isGrouped());
+				dest.addUserTier(newDesc);
 			}
-			
 		}
-		
-		for(IDepTierDesc tierDesc:src.getWordAlignedTiers()) {
-			
-			// try to find first
-			IDepTierDesc newDesc = null;
-			for(IDepTierDesc td:dest.getWordAlignedTiers()) {
-				if(td.getTierName().equals(tierDesc.getTierName())) {
-					newDesc = td;
-					break;
-				}
-			}
-			
-			if(newDesc == null) {
-				// add new dep tier
-				newDesc = dest.newDependentTier();
-				newDesc.setTierName(tierDesc.getTierName());
-				newDesc.setIsGrouped(true);
-			}
-			
-		}
-		
 	}
 	
 	/**
@@ -99,49 +84,29 @@ public class SessionMerger {
 	 * @param src
 	 * @param filter
 	 */
-	private static void addRecordsFromSession(ITranscript dest, 
-			ITranscript src, UtteranceFilter filter) {
-		
-		List<IUtterance> utts = src.getUtterances();
-		utts = ((AbstractUtteranceFilter)filter).filterUtterances(utts);
-		
-		
-		for(IUtterance utt:utts) {
-			IUtterance newUtt = TranscriptUtils.addRecordToTranscript(dest, utt, null);
-			
-			// make sure the correct participant is assigned
-			if(utt.getSpeaker() != null) {
-				String speakerName = utt.getSpeaker().getName();
-				if(speakerName != null && speakerName.length() > 0) {
-					IParticipant p = null;
-					for(IParticipant part:dest.getParticipants()) {
-						if(part.getName().equalsIgnoreCase(speakerName)) {
-							p = part;
-							break;
-						}
-					}
-					
-					if(p != null) {
-						newUtt.setSpeaker(p);
-					}
-				}
+	private static void addRecordsFromSession(Session dest, 
+			Session src, RecordFilter filter) {
+		for(int i = 0; i < src.getRecordCount(); i++) {
+			final Record r = src.getRecord(i);
+			if(filter.checkRecord(r)) {
+				dest.addRecord(r);
 			}
 		}
-		
 	}
 	
 	private static int partIdx = 0;
-	private static void addParticipants(ITranscript dest, ITranscript src) {
-		
+	private static void addParticipants(Session dest, Session src) {
+		final SessionFactory factory = SessionFactory.newFactory();
 		// add each participant to the 
 		// new transcript.  Make sure not
 		// to duplicate names
-		for(IParticipant srcPart:src.getParticipants()) {
+		for(int i = 0; i < src.getParticipantCount(); i++) {
+			final Participant srcPart = src.getParticipant(i);
+			final String speakerName = srcPart.getName();
 			
-			String speakerName = srcPart.getName();
-			
-			IParticipant destPart = null;
-			for(IParticipant dp:dest.getParticipants()) {
+			Participant destPart = null;
+			for(int j = 0; j < dest.getParticipantCount(); j++) {
+				final Participant dp = dest.getParticipant(j);
 				if(dp.getName().equalsIgnoreCase(speakerName)) {
 					destPart = dp;
 					break;
@@ -149,11 +114,8 @@ public class SessionMerger {
 			}
 			
 			if(destPart == null) {
-				destPart = dest.newParticipant();
-				TranscriptUtils.copyParticipant(srcPart, destPart);
-				destPart.setId("p" + (++partIdx));
+				dest.addParticipant(srcPart);
 			}
-			
 		}
 		
 	}

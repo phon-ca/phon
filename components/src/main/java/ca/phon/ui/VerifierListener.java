@@ -15,36 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.session;
+package ca.phon.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.JComponent;
 
 /**
- * Abstract implementation of utterance filter.
- * Includes helper method for filtering a list
- * of utterances.
+ * Listen for verification events from a AbstractVerifier
  *
  */
-public abstract class AbstractRecordFilter implements RecordFilter {
+public interface VerifierListener {
 
 	/**
-	 * Filter the given list of utterances.  The given list
-	 * is not changed.
-	 * 
-	 * @param utts
-	 * @return a new list containing the filtered utterances
+	 * Verification passed
 	 */
-	public List<Record> filterUtterances(List<Record> utts) {
-		List<Record> retVal = new ArrayList<Record>();
-		
-		for(Record utt:utts) {
-			if(checkRecord(utt)) {
-				retVal.add(utt);
-			}
-		}
-		
-		return retVal;
-	}
+	public void verificationPassed(JComponent comp);
+	
+	/**
+	 * Verification failed
+	 */
+	public void verificationFailed(JComponent comp);
+	
+	/**
+	 * Reset verification (used as a 
+	 * prompt to hide status messages)
+	 */
+	public void verificationReset(JComponent comp);
 	
 }

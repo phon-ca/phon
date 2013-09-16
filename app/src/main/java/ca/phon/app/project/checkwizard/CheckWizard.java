@@ -43,6 +43,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionLocation;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.opgraph.nodes.IPASourceNode;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
@@ -288,7 +289,7 @@ public class CheckWizard extends WizardFrame {
 					return; // get out immediately
 				}
 				final Record record = session.getRecord(i);				
-				final Aligner<IPAElement> phoneAligner = new PhoneAligner();
+				final PhoneAligner phoneAligner = new PhoneAligner();
 				
 				final Tier<IPATranscript> ipaTarget = record.getIPATarget();
 				final Tier<IPATranscript> ipaActual = record.getIPAActual();
@@ -296,6 +297,15 @@ public class CheckWizard extends WizardFrame {
 				if(ipaTarget.numberOfGroups() != ipaActual.numberOfGroups()) {
 					LOGGER.warning("Alignment error in record " + (i+1));
 					continue;
+				}
+				
+				final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+				for(int j = 0; j < ipaTarget.numberOfGroups(); j++) {
+					final IPATranscript target = ipaTarget.getGroup(j);
+					final IPATranscript actual = ipaActual.getGroup(j);
+					
+					final PhoneMap pm = phoneAligner.calculatePhoneMap(target, actual);
+					alignmentTier.setGroup(j, pm);
 				}
 			}
 			

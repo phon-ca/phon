@@ -30,7 +30,7 @@ public interface RecordFilter {
 	 * @return boolean
 	 * 
 	 */
-	public boolean checkUtterance(Record utt);
+	public boolean checkRecord(Record utt);
 	
 
 }

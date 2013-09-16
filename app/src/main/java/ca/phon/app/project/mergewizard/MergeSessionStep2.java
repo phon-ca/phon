@@ -29,6 +29,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -42,15 +44,14 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jdesktop.swingx.JXList;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.AbstractUtteranceFilter;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.IUtterance;
-import ca.phon.application.transcript.SessionLocation;
-import ca.phon.application.transcript.UtteranceFilter;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.components.UtteranceFilterPanel;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.app.session.RecordFilterPanel;
+import ca.phon.project.Project;
+import ca.phon.session.AbstractRecordFilter;
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.session.SessionLocation;
+import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.CollatorFactory;
 
@@ -61,15 +62,17 @@ import ca.phon.util.CollatorFactory;
  */
 public class MergeSessionStep2 extends WizardStep {
 	
+	final private static Logger LOGGER = Logger.getLogger(MergeSessionStep2.class.getName());
+	
 	/**
 	 * Project
 	 */
-	private IPhonProject project;
+	private Project project;
 	
 	/**
 	 * Sessions+panels
 	 */
-	private Map<SessionLocation, UtteranceFilterPanel> panels;
+	private Map<SessionLocation, RecordFilterPanel> panels;
 	
 	/**
 	 * Card layout
@@ -90,7 +93,7 @@ public class MergeSessionStep2 extends WizardStep {
 	/**
 	 * Constructor
 	 */
-	public MergeSessionStep2(IPhonProject project, List<SessionLocation> sessions) {
+	public MergeSessionStep2(Project project, List<SessionLocation> sessions) {
 		super();
 		
 		this.project = project;
@@ -147,7 +150,7 @@ public class MergeSessionStep2 extends WizardStep {
 		// add filter panels
 		for(SessionLocation loc:locations) {
 //			SessionLocation loc = sessions.get(i);
-			UtteranceFilterPanel panel = panels.get(loc);
+			RecordFilterPanel panel = panels.get(loc);
 			cardPanel.add(panel, loc.toString());
 		}
 		
@@ -178,7 +181,7 @@ public class MergeSessionStep2 extends WizardStep {
 		for(SessionLocation loc:sortedSessions) {
 			newModel.addElement(loc);
 			
-			UtteranceFilterPanel panel = panels.get(loc);
+			RecordFilterPanel panel = panels.get(loc);
 			cardPanel.add(panel, loc.toString());
 		}
 		sessionList.setModel(newModel);
@@ -189,18 +192,18 @@ public class MergeSessionStep2 extends WizardStep {
 	
 	private void setupFilters(List<SessionLocation> sessions) {
 		if(panels == null) {
-			panels = new TreeMap<SessionLocation, UtteranceFilterPanel>();
+			panels = new TreeMap<SessionLocation, RecordFilterPanel>();
 		}
 		
 		for(SessionLocation loc:sessions) {
 			if(!panels.containsKey(loc)) {
 				try {
-					ITranscript t = project.getTranscript(loc.getCorpus(), loc.getSession());
+					final Session t = project.openSession(loc.getCorpus(), loc.getSession());
 	
-					UtteranceFilterPanel panel = new UtteranceFilterPanel(project, t);
+					RecordFilterPanel panel = new RecordFilterPanel(project, t);
 					panels.put(loc, panel);
 				} catch (IOException e) {
-					PhonLogger.warning(e.toString());
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -220,27 +223,27 @@ public class MergeSessionStep2 extends WizardStep {
 	}
 	
 	// we already have the transcripts loaded, avoid doing it again
-	public ITranscript getSessionAtLocation(SessionLocation loc) {
-		UtteranceFilterPanel panel = panels.get(loc);
+	public Session getSessionAtLocation(SessionLocation loc) {
+		RecordFilterPanel panel = panels.get(loc);
 		
-		ITranscript retVal = null;
+		Session retVal = null;
 		if(panel != null) {
 			retVal = panel.getSession();
 		}
 		return retVal;
 	}
 	
-	public UtteranceFilter getFilterForLocation(SessionLocation loc) {
-		UtteranceFilterPanel panel = panels.get(loc);
+	public RecordFilter getFilterForLocation(SessionLocation loc) {
+		RecordFilterPanel panel = panels.get(loc);
 		
-		UtteranceFilter retVal = null;
+		RecordFilter retVal = null;
 		if(panel != null) {
 			retVal = panel.getRecordFilter();
 		} else {
-			retVal = new AbstractUtteranceFilter() {
+			retVal = new AbstractRecordFilter() {
 
 				@Override
-				public boolean checkUtterance(IUtterance utt) {
+				public boolean checkRecord(Record utt) {
 					return true;
 				}
 				

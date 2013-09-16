@@ -19,11 +19,11 @@ package ca.phon.app.project;
 
 import java.util.Map;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.gui.CommonModuleFrame;
-import ca.phon.modules.project.ui.mergewizard.DeriveSessionWizard;
-import ca.phon.system.plugin.IPluginEntryPoint;
-import ca.phon.system.plugin.PhonPlugin;
+import ca.phon.app.project.mergewizard.DeriveSessionWizard;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
 
 /**
  * Creates a new session from the records found in
@@ -41,16 +41,14 @@ public class DeriveSessionEP implements IPluginEntryPoint {
 	@Override
 	public void pluginStart(Map<String, Object> initInfo) {
 		// get project
-		IPhonProject project = null;
+		Project project = null;
 		if(initInfo.get("project") != null)
-			project = (IPhonProject)initInfo.get("project");
+			project = (Project)initInfo.get("project");
 		
 		if(project != null) {
 			DeriveSessionWizard wizard = new DeriveSessionWizard(project);
-//			wizard.setProject(project);
 			wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
 			wizard.setSize(600, 500);
-//			wizard.centerWindow();
 			wizard.setLocationByPlatform(true);
 			wizard.setVisible(true);
 		}
