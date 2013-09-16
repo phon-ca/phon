@@ -1,0 +1,80 @@
+/********************************
+ * Define globals
+ *******************************/
+var session;
+
+/********************************
+ * query_record (required)
+ *
+ * Called for each record in a session.
+ * Perform search operations here.
+ *
+ * params:
+ *	record - current record
+ * returns:
+ *	void
+ *******************************/
+function query_record(record)
+{
+	// perform search
+}
+
+/********************************
+ * begin_search (optional)
+ *
+ * Called once at the beginning of each
+ * search.  Initialize globals and perform
+ * any other startup tasks.
+ *
+ * params:
+ *	s - the session being searched
+ * returns:
+ *	void
+ *******************************/
+ function begin_search(s)
+ {
+ 	// store session in a global variable
+ 	session = s;
+ 	
+ 	/*
+ 	 * Loading a Custom Feature set:
+ 	 *
+ 	 * To load a custom feature set for this
+ 	 * search un-comment the following lines
+ 	 * and replace <file> with a properly
+ 	 * formatted features file.
+ 	 * For more information see 
+ 	 * http://phon.ling.mun.ca/phontrac/wiki/search/customfeatures
+ 	 */
+	// var customFM = new FeatureMatrix("<file>");
+	// FeatureMatrix.makeCurrentInThread( customFM );
+ }
+ 
+ /********************************
+ * end_search (optional)
+ *
+ * 
+ * Perform any necessary cleanup operations.
+ * Use this function to report data to the
+ * console at the end of a search.
+ *
+ * params:
+ *	s - the session being searched
+ * returns:
+ *	void
+ *******************************/
+function end_search(s)
+{
+	// do cleanup
+	
+	/*
+	 * If a custom feature matrix has been
+	 * loaded un-comment the following line
+	 * to reset to default FeatureMatrix
+	 * for future searches.
+	 */
+	// FeatureMatrix.makeCurrentInThread( null );
+}
+
+
+

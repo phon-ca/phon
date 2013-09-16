@@ -21,8 +21,9 @@ package ca.phon.query.db;
 import java.io.IOException;
 import java.util.List;
 
-import ca.phon.system.plugin.IPluginExtensionPoint;
-import ca.phon.system.plugin.PluginManager;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
+
 
 /**
  * A factory class that returns {@link QueryFactory} and

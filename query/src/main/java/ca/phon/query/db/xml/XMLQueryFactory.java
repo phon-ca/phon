@@ -22,13 +22,13 @@ import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.QueryFactory;
-import ca.phon.engines.search.db.Result;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.db.ResultValue;
-import ca.phon.engines.search.db.Script;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultValue;
+import ca.phon.query.db.Script;
 
 /**
  * XML-based implementation of {@link QueryFactory}.
@@ -45,7 +45,7 @@ public class XMLQueryFactory implements QueryFactory {
 	}
 	
 	@Override
-	public Query createQuery(IPhonProject project) {
+	public Query createQuery(Project project) {
 		// Get the next available number
 		int max = 0;
 		File queryPath = XMLResultSetManager.getQueriesPath(project);

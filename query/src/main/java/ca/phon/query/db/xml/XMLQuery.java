@@ -25,10 +25,11 @@ import java.util.UUID;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.Script;
-import ca.phon.engines.search.db.xml.io.query.QueryType;
-import ca.phon.engines.search.db.xml.io.query.ScriptType;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.Script;
+import ca.phon.query.db.xml.io.query.QueryType;
+import ca.phon.query.db.xml.io.query.ScriptType;
+
 
 /**
  * XML-based implementation of {@link Query}.

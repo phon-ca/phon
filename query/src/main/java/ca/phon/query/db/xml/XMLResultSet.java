@@ -21,13 +21,13 @@ package ca.phon.query.db.xml;
 import java.util.List;
 import java.util.Map;
 
-import ca.phon.engines.search.db.Result;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.db.xml.JAXBArrayList.Mapper;
-import ca.phon.engines.search.db.xml.io.resultset.MetaKeyList;
-import ca.phon.engines.search.db.xml.io.resultset.ObjectFactory;
-import ca.phon.engines.search.db.xml.io.resultset.ResultSetType;
-import ca.phon.engines.search.db.xml.io.resultset.ResultType;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.xml.JAXBArrayList.Mapper;
+import ca.phon.query.db.xml.io.resultset.MetaKeyList;
+import ca.phon.query.db.xml.io.resultset.ObjectFactory;
+import ca.phon.query.db.xml.io.resultset.ResultSetType;
+import ca.phon.query.db.xml.io.resultset.ResultType;
 
 /**
  * XML-based implementation of {@link ResultSet}. 

@@ -36,6 +36,9 @@ import java.util.ListIterator;
  * this list, then <code>f(X)</code> is also at index <code>i</code> in the wrapped list.
  */
 public class JAXBArrayList<T, V> extends ArrayList<T> {
+	
+	private static final long serialVersionUID = -6009885201329519973L;
+
 	/** The wrapped list */
 	private List<V> list;
 	

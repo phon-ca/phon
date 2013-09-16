@@ -21,23 +21,24 @@ package ca.phon.query.db;
 import java.util.HashSet;
 import java.util.Set;
 
-import ca.phon.application.transcript.AbstractUtteranceFilter;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.IUtterance;
+import ca.phon.session.AbstractRecordFilter;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+
 
 /**
  * Filter a list of records using a search.
  */
-public class ResultSetUtteranceFilter extends AbstractUtteranceFilter {
+public class ResultSetRecordFilter extends AbstractRecordFilter {
 	/** The search */
 	private ResultSet resultSet;
 	
 	/** Transcript */
-	private ITranscript t;
+	private Session t;
 	
 	Set<Integer> resultRecords = new HashSet<Integer>();
 	
-	public ResultSetUtteranceFilter(ITranscript t, ResultSet s) {
+	public ResultSetRecordFilter(Session t, ResultSet s) {
 		this.resultSet = s;
 		this.t = t;
 		for(Result r : resultSet.getResults())
@@ -45,8 +46,8 @@ public class ResultSetUtteranceFilter extends AbstractUtteranceFilter {
 	}
 
 	@Override
-	public boolean checkUtterance(IUtterance utt) {
-		int uttIdx = t.getUtteranceIndex(utt);
+	public boolean checkUtterance(Record utt) {
+		int uttIdx = t.getRecordPosition(utt);
 		return (uttIdx >= 0 && resultRecords.contains(uttIdx));
 	}
 }

@@ -26,11 +26,11 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.QueryFactory;
-import ca.phon.engines.search.db.QueryManager;
-import ca.phon.engines.search.db.ResultSetManager;
-import ca.phon.engines.search.db.xml.io.query.QueryType;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.xml.io.query.QueryType;
 
 /**
  * XML-based implementation of {@link QueryManager}.
@@ -60,7 +60,7 @@ public class XMLQueryManager extends QueryManager {
 			// Use JAXBElement wrapper around object because they do not have
 			// the XMLRootElement annotation
 			final QueryType qt = ((XMLQuery)query).getXMLObject();
-			final JAXBElement<QueryType> jaxbElem = (new ca.phon.engines.search.db.xml.io.query.ObjectFactory()).createQuery(qt);
+			final JAXBElement<QueryType> jaxbElem = (new ca.phon.query.db.xml.io.query.ObjectFactory()).createQuery(qt);
 						
 			// Initialize marshaller and write to disk
 			final JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.query");

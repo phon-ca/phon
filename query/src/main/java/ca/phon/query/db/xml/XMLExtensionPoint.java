@@ -18,10 +18,11 @@
 
 package ca.phon.query.db.xml;
 
-import ca.phon.engines.search.db.QueryManager;
-import ca.phon.system.plugin.IPluginExtensionFactory;
-import ca.phon.system.plugin.IPluginExtensionPoint;
-import ca.phon.system.plugin.PhonPlugin;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.query.db.QueryManager;
+
 
 /**
  * Extension point for the XML-based implementation of the query interfaces.

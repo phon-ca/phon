@@ -21,9 +21,10 @@ package ca.phon.query.db.xml;
 import java.util.HashMap;
 import java.util.Map;
 
-import ca.phon.engines.search.db.Script;
-import ca.phon.engines.search.db.xml.io.query.ParamType;
-import ca.phon.engines.search.db.xml.io.query.ScriptType;
+import ca.phon.query.db.Script;
+import ca.phon.query.db.xml.io.query.ParamType;
+import ca.phon.query.db.xml.io.query.ScriptType;
+
 
 /**
  * An XML-based implementation of {@link Script}.

@@ -21,7 +21,7 @@ package ca.phon.query.db;
 import java.io.IOException;
 import java.util.List;
 
-import ca.phon.application.project.IPhonProject;
+import ca.phon.project.Project;
 
 /**
  * An interface used for anything that manages the retrieval and storage of
@@ -35,7 +35,7 @@ public interface ResultSetManager {
 	 * 
 	 * @return a list of queries for the given project 
 	 */
-	public abstract List<Query> getQueries(IPhonProject project);
+	public abstract List<Query> getQueries(Project project);
 	
 	/**
 	 * Gets a list of result sets for a specified query and project.
@@ -45,7 +45,7 @@ public interface ResultSetManager {
 	 * 
 	 * @return the list of result sets for a given query of the given project
 	 */
-	public abstract List<ResultSet> getResultSetsForQuery(IPhonProject project, Query query);
+	public abstract List<ResultSet> getResultSetsForQuery(Project project, Query query);
 	
 	/**
 	 * Saves a query in the specified project.
@@ -55,7 +55,7 @@ public interface ResultSetManager {
 	 * 
 	 * @throws IOException  if the query could not be saved
 	 */
-	public abstract void saveQuery(IPhonProject project, Query query)
+	public abstract void saveQuery(Project project, Query query)
 			throws IOException;
 	
 	/**
@@ -68,7 +68,7 @@ public interface ResultSetManager {
 	 * 
 	 * @throws IOException  if the query could not be loaded
 	 */
-	public abstract Query loadQuery(IPhonProject project, String queryName)
+	public abstract Query loadQuery(Project project, String queryName)
 			throws IOException;
 	
 	/**
@@ -80,7 +80,7 @@ public interface ResultSetManager {
 	 * 
 	 * @throws IOException  if the result set could not be saved
 	 */
-	public abstract void saveResultSet(IPhonProject project, Query query, ResultSet resultSet)
+	public abstract void saveResultSet(Project project, Query query, ResultSet resultSet)
 			throws IOException;
 	
 	/**
@@ -94,7 +94,7 @@ public interface ResultSetManager {
 	 * 
 	 * @throws IOException  if the result set could not be loaded
 	 */
-	public abstract ResultSet loadResultSet(IPhonProject project, Query query, String sessionName)
+	public abstract ResultSet loadResultSet(Project project, Query query, String sessionName)
 			throws IOException;
 	
 	/**
@@ -107,7 +107,7 @@ public interface ResultSetManager {
 	 * @throws IOException if the query is not found or could not be removed
 	 *  from the storage device.
 	 */
-	public abstract void deleteQuery(IPhonProject project, Query query)
+	public abstract void deleteQuery(Project project, Query query)
 		throws IOException;
 	
 	/**
@@ -120,7 +120,7 @@ public interface ResultSetManager {
 	 * @throws IOException if the resultset/query is not found or could not be
 	 *  removed from the storage device.
 	 */
-	public abstract void deleteResultSet(IPhonProject project, Query query, ResultSet resultset)
+	public abstract void deleteResultSet(Project project, Query query, ResultSet resultset)
 		throws IOException;
 	
 	/**
@@ -133,20 +133,8 @@ public interface ResultSetManager {
 	 * 
 	 * @throws IOException if the query folder could not be re-named.
 	 */
-	public abstract void renameQuery(IPhonProject project, Query query, String newName)
+	public abstract void renameQuery(Project project, Query query, String newName)
 		throws IOException;
 	
-//	/**
-//	 * Return the query for the given {@link ResultSet} and {@link IPhonProject}.
-//	 * 
-//	 * @param project the project
-//	 * @param resultset result set
-//	 * 
-//	 * @return the query containing the given resultset
-//	 * 
-//	 * @throws IOException if the query could not be loaded
-//	 */
-//	public abstract Query getQuery(IPhonProject project, ResultSet resultSet) 
-//			throws IOException;
 	
 }

@@ -18,20 +18,18 @@
 
 package ca.phon.query.db.xml;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-import ca.phon.engines.search.db.ReportHelper;
-import ca.phon.engines.search.db.Result;
-import ca.phon.engines.search.db.ResultValue;
-import ca.phon.engines.search.db.xml.JAXBArrayList.Mapper;
-import ca.phon.engines.search.db.xml.io.resultset.MetaType;
-import ca.phon.engines.search.db.xml.io.resultset.ResultType;
-import ca.phon.engines.search.db.xml.io.resultset.ResultValueType;
+import ca.phon.query.db.ReportHelper;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
+import ca.phon.query.db.xml.JAXBArrayList.Mapper;
+import ca.phon.query.db.xml.io.resultset.MetaType;
+import ca.phon.query.db.xml.io.resultset.ResultType;
+import ca.phon.query.db.xml.io.resultset.ResultValueType;
 
 /**
  * XML-based implementation of {@link Result}.
@@ -75,6 +73,7 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 	}
 
 	@Override
+	@SuppressWarnings("serial")
 	public Map<String, String> getMetadata() {
 		return new LinkedHashMap<String, String>() {
 			// Instance initializer

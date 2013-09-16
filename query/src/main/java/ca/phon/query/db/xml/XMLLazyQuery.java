@@ -24,7 +24,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
-import ca.phon.engines.search.db.Script;
+import ca.phon.query.db.Script;
 
 /**
  * Similar to {@link XMLQuery}, except loading of result set data is lazy

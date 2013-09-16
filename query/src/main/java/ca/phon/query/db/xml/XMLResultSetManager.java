@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.XMLConstants;
@@ -36,13 +37,12 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
-import ca.phon.application.project.IPhonProject;
-import ca.phon.engines.search.db.Query;
-import ca.phon.engines.search.db.ResultSet;
-import ca.phon.engines.search.db.ResultSetManager;
-import ca.phon.engines.search.db.xml.io.query.QueryType;
-import ca.phon.engines.search.db.xml.io.resultset.ResultSetType;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.xml.io.query.QueryType;
+import ca.phon.query.db.xml.io.resultset.ResultSetType;
 
 /**
  * An implementation of {@link ResultSetManager} that implements an XML-based
@@ -63,12 +63,12 @@ public class XMLResultSetManager implements ResultSetManager {
 	 * @param project
 	 * @return
 	 */
-	static File getQueriesPath(IPhonProject project) {
-		final File retVal = new File(project.getProjectLocation(), "__search");
+	static File getQueriesPath(Project project) {
+		final File retVal = new File(project.getLocation(), "__search");
 		return retVal;
 	}
 	
-	static File getQueryPath(IPhonProject project, Query query) {
+	static File getQueryPath(Project project, Query query) {
 		final File queriesPath = getQueriesPath(project);
 		
 		final File retVal = new File(queriesPath, query.getUUID().toString());
@@ -76,7 +76,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 	
 	@Override
-	public List<Query> getQueries(IPhonProject project) {
+	public List<Query> getQueries(Project project) {
 		List<Query> queries = new ArrayList<Query>();
 		
 		final File queriesPath = getQueriesPath(project);
@@ -88,7 +88,7 @@ public class XMLResultSetManager implements ResultSetManager {
 						Query query = loadQuery(project, queryDir.getName());
 						queries.add(query);
 					} catch(IOException exc) {
-						PhonLogger.severe(XMLResultSetManager.class, "IOException: " + exc.getLocalizedMessage());
+						LOGGER.log(Level.SEVERE, exc.getLocalizedMessage(), exc);
 					}
 				}
 			}
@@ -98,7 +98,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public List<ResultSet> getResultSetsForQuery(IPhonProject project, Query query) {
+	public List<ResultSet> getResultSetsForQuery(Project project, Query query) {
 		File queryPath = getQueryPath(project, query);
 		
 		List<ResultSet> resultSets = new ArrayList<ResultSet>();
@@ -112,7 +112,7 @@ public class XMLResultSetManager implements ResultSetManager {
 					ResultSet resultSet = loadResultSet(project, query, fname.substring(0, fname.length() - 4));
 					resultSets.add(resultSet);
 				} catch(IOException exc) {
-					PhonLogger.severe(XMLResultSetManager.class, "IOException: " + exc.getLocalizedMessage());
+					LOGGER.log(Level.SEVERE, exc.getLocalizedMessage(), exc);
 				}
 			}
 		}
@@ -121,7 +121,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public void saveQuery(IPhonProject project, Query query) throws IOException {
+	public void saveQuery(Project project, Query query) throws IOException {
 		final File queryPath = getQueryPath(project, query);
 
 		// Create the directory, if necessary
@@ -133,7 +133,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			// Use JAXBElement wrapper around object because they do not have
 			// the XMLRootElement annotation
 			final QueryType qt = ((XMLQuery)query).getXMLObject();
-			final JAXBElement<QueryType> jaxbElem = (new ca.phon.engines.search.db.xml.io.query.ObjectFactory()).createQuery(qt);
+			final JAXBElement<QueryType> jaxbElem = (new ca.phon.query.db.xml.io.query.ObjectFactory()).createQuery(qt);
 						
 			// Initialize marshaller and write to disk
 			final JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.query");
@@ -149,21 +149,21 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public Query loadQuery(IPhonProject project, String queryName) throws IOException {
+	public Query loadQuery(Project project, String queryName) throws IOException {
 		File queriesPath = getQueriesPath(project);
 		File queryPath = new File(queriesPath, queryName);
 		File queryFile = new File(queryPath, "query.xml");
 		return new XMLLazyQuery(this, queryFile);
 	}
 	
+	@SuppressWarnings("unchecked")
 	QueryType loadQuery(File queryFile) throws IOException {
 		Schema schema = null;
 		try {
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			schema = sf.newSchema(new StreamSource(getClass().getResourceAsStream("io/query/query.xsd")) );
 		} catch(SAXException exc) {
-			PhonLogger.warning(XMLResultSetManager.class, "Could not load query schema file.");
-			PhonLogger.warning(XMLResultSetManager.class, "SAXException: " + exc.getLocalizedMessage());
+			LOGGER.log(Level.WARNING,  exc.getLocalizedMessage(), exc);
 		}
 		
 		QueryType query = null;
@@ -182,7 +182,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public void saveResultSet(IPhonProject project, Query query, ResultSet resultSet) throws IOException {
+	public void saveResultSet(Project project, Query query, ResultSet resultSet) throws IOException {
 		File queryPath = getQueryPath(project, query);
 		File resultSetFile = new File(queryPath, resultSet.getSessionPath() + ".xml");
 		
@@ -198,7 +198,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			// Use JAXBElement wrapper around object because they do not have
 			// the XMLRootElement annotation
 			ResultSetType rst = ((XMLResultSet)resultSet).getXMLObject();
-			JAXBElement<ResultSetType> jaxbElem = (new ca.phon.engines.search.db.xml.io.resultset.ObjectFactory()).createResultSet(rst);
+			JAXBElement<ResultSetType> jaxbElem = (new ca.phon.query.db.xml.io.resultset.ObjectFactory()).createResultSet(rst);
 			
 			// Initialize marshaller and write to disk
 			JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.resultset");
@@ -214,7 +214,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public ResultSet loadResultSet(IPhonProject project, Query query, String sessionName) throws IOException {
+	public ResultSet loadResultSet(Project project, Query query, String sessionName) throws IOException {
 		File queryPath = getQueryPath(project, query);
 		File resultSetFile = new File(queryPath, sessionName + ".xml");
 		return new XMLLazyResultSet(this, resultSetFile);
@@ -223,14 +223,14 @@ public class XMLResultSetManager implements ResultSetManager {
 	/**
 	 * Load XML data for a result set. 
 	 */
+	@SuppressWarnings("unchecked")
 	ResultSetType loadResultSet(File resultSetFile) throws IOException {
 		Schema schema = null;
 		try {
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			schema = sf.newSchema(new StreamSource(getClass().getResourceAsStream("io/resultset/resultset.xsd")));
 		} catch(SAXException exc) {
-			PhonLogger.warning(XMLResultSetManager.class, "Could not load result set schema file.");
-			PhonLogger.warning(XMLResultSetManager.class, "SAXException: " + exc.getLocalizedMessage());
+			LOGGER.log(Level.WARNING, exc.getLocalizedMessage(), exc);
 		}
 		
 		ResultSetType resultSet = null;
@@ -249,7 +249,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public void deleteQuery(IPhonProject project, Query query)
+	public void deleteQuery(Project project, Query query)
 			throws IOException {
 		final File queryFile = getQueryPath(project, query);
 		if(queryFile.exists() && queryFile.isDirectory()) {
@@ -266,7 +266,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public void deleteResultSet(IPhonProject project, Query query,
+	public void deleteResultSet(Project project, Query query,
 			ResultSet resultset) throws IOException {
 		final File queryFile = getQueryPath(project, query);
 		final File rsFile = new File(queryFile, resultset.getSessionPath() + ".xml");
@@ -278,7 +278,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	@Override
-	public void renameQuery(IPhonProject project, Query query, String newName)
+	public void renameQuery(Project project, Query query, String newName)
 			throws IOException {
 		final File oldQueryFile = getQueryPath(project, query);
 		final String oldQueryName = query.getName();

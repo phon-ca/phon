@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import ca.phon.engines.search.db.Result;
-import ca.phon.engines.search.db.xml.io.resultset.ResultSetType;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.xml.io.resultset.ResultSetType;
 
 /**
  * Similar to {@link XMLResultSet}, except loading of result set data is lazy

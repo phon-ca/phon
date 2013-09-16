@@ -18,9 +18,9 @@
 
 package ca.phon.query.db.xml;
 
-import ca.phon.engines.search.db.ResultValue;
-import ca.phon.engines.search.db.xml.io.resultset.RangeType;
-import ca.phon.engines.search.db.xml.io.resultset.ResultValueType;
+import ca.phon.query.db.ResultValue;
+import ca.phon.query.db.xml.io.resultset.RangeType;
+import ca.phon.query.db.xml.io.resultset.ResultValueType;
 import ca.phon.util.Range;
 
 /**
