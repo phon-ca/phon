@@ -20,16 +20,24 @@ package ca.phon.query.db.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+
+import org.xml.sax.InputSource;
 
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.xml.io.query.ObjectFactory;
 import ca.phon.query.db.xml.io.query.QueryType;
 
 /**
@@ -57,13 +65,14 @@ public class XMLQueryManager extends QueryManager {
 			return;
 
 		try {
+			final ObjectFactory factory = new ObjectFactory();
 			// Use JAXBElement wrapper around object because they do not have
 			// the XMLRootElement annotation
 			final QueryType qt = ((XMLQuery)query).getXMLObject();
-			final JAXBElement<QueryType> jaxbElem = (new ca.phon.query.db.xml.io.query.ObjectFactory()).createQuery(qt);
+			final JAXBElement<QueryType> jaxbElem = factory.createQuery(qt);
 						
 			// Initialize marshaller and write to disk
-			final JAXBContext context = JAXBContext.newInstance("ca.phon.engines.search.db.xml.io.query");
+			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 			final Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -72,6 +81,22 @@ public class XMLQueryManager extends QueryManager {
 			//PhonLogger.severe(XMLResultSetManager.class, "Could not save query to disk.");
 			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
 			throw new IOException("Could not save query to disk", exc);
+		}
+	}
+	
+	@Override
+	public Query loadQuery(InputStream stream) throws IOException {
+		try {
+			final XMLInputFactory factory = XMLInputFactory.newFactory();
+			final XMLEventReader eventReader = factory.createXMLEventReader(stream);
+			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
+			final Unmarshaller unmarshaller = context.createUnmarshaller();
+			final JAXBElement<QueryType> queryTypeEle = 
+				unmarshaller.unmarshal(eventReader, QueryType.class);
+			
+			return new XMLQuery(queryTypeEle.getValue());
+		} catch (JAXBException | XMLStreamException e) {
+			throw new IOException(e);
 		}
 	}
 

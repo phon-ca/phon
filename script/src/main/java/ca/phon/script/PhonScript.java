@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,11 +71,11 @@ public class PhonScript {
 			"Packages.ca.phon.util.Range"
 	};
 	
-	/** The file we have loaded (if used) */
-	private File scriptFile = null;
+	/** The URL we have loaded (if used) */
+	private URL scriptFile = null;
 	
 	/** The script buffer */
-	private final StringBuffer scriptBuffer;
+	private final StringBuffer scriptBuffer = new StringBuffer();
 	
 	private ScriptParam[] params = null;
 	
@@ -88,25 +89,37 @@ public class PhonScript {
 	
 	public PhonScript(String script) {
 		super();
-		this.scriptBuffer = new StringBuffer(script);
-		
+		this.scriptBuffer.append(script);
 	}
 	
 	public PhonScript(File file) 
 		throws IOException {
 		super();
-		scriptBuffer = new StringBuffer();
-		readFromFile(file);
-		scriptFile = file;
-		params = getScriptParams();
+		setLocation(file.toURI().toURL());
+//		scriptBuffer = new StringBuffer();
+//		readFromFile(file);
+//		params = getScriptParams();
 	}
 	
 	public PhonScript(URL url)
 		throws IOException {
 		super();
-		scriptBuffer = new StringBuffer();
-		readFromURL(url);
-		params = getScriptParams();
+		setLocation(url);
+//		scriptBuffer = new StringBuffer();
+//		readFromURL(url);
+//		params = getScriptParams();
+	}
+	
+	// load data
+	private void loadData() {
+		if(scriptBuffer.length() == 0 && getLocation() != null) {
+			try {
+				readFromURL(getLocation());
+				updateScriptParams();
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
 	}
 
 	/**
@@ -117,6 +130,7 @@ public class PhonScript {
 	 * @return
 	 */
 	public String getScript(boolean rewrite) {
+		loadData();
 		String retVal = scriptBuffer.toString();
 		
 		if(rewrite) {
@@ -289,6 +303,7 @@ public class PhonScript {
 	 * Returns the script params for this script object.
 	 */
 	public ScriptParam[] getScriptParams() {
+		loadData();
 		if(params == null) {
 			params = _getScriptParams();
 		}
@@ -299,24 +314,12 @@ public class PhonScript {
 		this.params = params;
 	}
 	
-	/**
-	 * Read in script data from a file.
-	 * 
-	 * @param file
-	 */
-	public void readFromFile(File file) 
-		throws IOException {
-		readFromURL(file.toURI().toURL());
-		setLocation(file.getAbsolutePath());
-	}
-	
-	public void readFromURL(URL url)
+	protected void readFromURL(URL url)
 		throws IOException {
 		readFromStream(url.openStream());
-		setLocation(url.toString());
 	}
 	
-	public void readFromStream(InputStream is)
+	protected void readFromStream(InputStream is)
 		throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				is, "UTF-8"));
@@ -453,20 +456,14 @@ public class PhonScript {
 	
 	/** 
 	 * Get the script's file location.
+	 * May be <code>null</code>
 	 */
-	public String getLocation() {
-		String retVal = null;
-		if(scriptFile != null)
-			retVal = scriptFile.getAbsolutePath();
-		return retVal;
+	public URL getLocation() {
+		return this.scriptFile;
 	}
 	
-	public void setLocation(String location) {
-		if(location != null) {
-			scriptFile = new File(location); 
-		} else {
-			scriptFile = null;
-		}
+	public void setLocation(URL location) {
+		this.scriptFile = location;
 	}
 	
 	/**
@@ -476,7 +473,7 @@ public class PhonScript {
 		String retVal = "Untitled";
 		
 		if(scriptFile != null) {
-			retVal = scriptFile.getName();
+			retVal = scriptFile.getFile();
 			
 			final int extIdx = retVal.lastIndexOf('.');
 			if(extIdx > 0) {

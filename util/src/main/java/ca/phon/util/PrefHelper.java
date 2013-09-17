@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -28,6 +29,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+
 
 
 /**
@@ -51,6 +53,25 @@ public class PrefHelper {
 	
 	private final static Logger LOGGER = 
 			Logger.getLogger(PrefHelper.class.getName());
+	
+	public static String getUserPrefDir() {
+		String retVal = System.getProperty("user.home");
+		
+		if(OSInfo.isMacOs()) {
+			retVal += 
+				File.separator + "Library" + File.separator + "Application Support"
+				+ File.separator + "Phon";
+		} else if(OSInfo.isWindows()) {
+			retVal = System.getenv("APPDATA") + File.separator + "Phon";
+		} else if(OSInfo.isNix()) {
+			retVal += File.separator + ".phon";
+		} else {
+			// should not get here
+			LOGGER.info("Unsupported os: " + System.getProperty("os.name"));
+		}
+		
+		return retVal;
+	}
 	
 	/**
 	 * Application prefs root node

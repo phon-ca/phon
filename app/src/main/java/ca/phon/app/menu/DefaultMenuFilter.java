@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,11 +39,16 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import ca.phon.app.project.ProjectFrameExtension;
+import ca.phon.app.query.QueryEditorWindow;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Create the default menu for all Phon windows.
@@ -161,9 +167,9 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	private class SearchAction extends AbstractAction {
 		
 		private Project project;
-		private File script;
+		private QueryScript script;
 		
-		public SearchAction(Project project, File script) {
+		public SearchAction(Project project, QueryScript script) {
 			super();
 			this.project = project;
 			this.script = script;
@@ -173,17 +179,17 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 				scriptName = scriptName.substring(0, scriptName.lastIndexOf('.'));
 			
 			super.putValue(NAME, scriptName + "...");
-			super.putValue(SHORT_DESCRIPTION, script.getAbsolutePath());
+			super.putValue(SHORT_DESCRIPTION, script.getLocation().getPath());
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			final QueryEditorWindow scriptFrame = new QueryEditorWindow(script.getName(), project);
-//			scriptFrame.setWindowName(script.getName());
+			final QueryEditorWindow scriptFrame = new QueryEditorWindow(script.getName(), project, script);
+			scriptFrame.setWindowName(script.getName());
 //			scriptFrame.openFromFile(script.getAbsolutePath(), false);
-//			scriptFrame.pack();
-//			scriptFrame.setLocationByPlatform(true);
-//			scriptFrame.setVisible(true);
+			scriptFrame.pack();
+			scriptFrame.setLocationByPlatform(true);
+			scriptFrame.setVisible(true);
 		}
 		
 	}
@@ -451,18 +457,22 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 				final JMenu queryMenu = (JMenu)e.getSource();
 				queryMenu.removeAll();
 				
-//				final IPhonProject project = CommonModuleFrame.getCurrentFrame().getProject();
-//				if(project == null) return;
+				final ProjectFrameExtension pfe = CommonModuleFrame.getCurrentFrame().getExtension(ProjectFrameExtension.class);
+				final Project project = (pfe == null ? null : pfe.getProject());
+				if(project == null) return;
 //				
-//				final QueryScriptLibrary queryScriptLibrary = new QueryScriptLibrary();
-//				
-//				// add stock scripts
-//				for(File stockScriptFile:queryScriptLibrary.stockScriptFiles()) {
-//					final SearchAction act = new SearchAction(project, stockScriptFile);
-//					JMenuItem sItem = new JMenuItem(act);
-//					
-//					queryMenu.add(sItem);
-//				}
+				final QueryScriptLibrary queryScriptLibrary = new QueryScriptLibrary();
+				
+				// add stock scripts
+				final ResourceLoader<QueryScript> stockScriptLoader = queryScriptLibrary.stockScriptFiles();
+				final Iterator<QueryScript> stockScriptIterator = stockScriptLoader.iterator();
+				while(stockScriptIterator.hasNext()) {
+					final QueryScript qs = stockScriptIterator.next();
+					final SearchAction act = new SearchAction(project, qs);
+					JMenuItem sItem = new JMenuItem(act);
+					
+					queryMenu.add(sItem);
+				}
 //
 //				// add user library scripts
 //				List<JMenuItem> libItems = new ArrayList<JMenuItem>();

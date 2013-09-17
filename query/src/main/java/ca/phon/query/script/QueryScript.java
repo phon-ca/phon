@@ -27,6 +27,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.QueryManager;
 import ca.phon.script.PhonScript;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
@@ -52,7 +55,6 @@ public class QueryScript extends PhonScript {
 	
 	public QueryScript(String script) {
 		super(script);
-		
 	}
 	
 	public QueryScript(File file) 
@@ -196,6 +198,32 @@ public class QueryScript extends PhonScript {
 //		retVal.add(QueryScriptLibrary.SYSTEM_SCRIPT_FOLDER);
 //		retVal.add(QueryScriptLibrary.USER_SCRIPT_FOLDER);
 		return retVal;
+	}
+
+	@Override
+	protected void readFromURL(URL url) throws IOException {
+		final String name = url.getPath();
+		if(name.endsWith(".xml")) {
+			// format with query parameters defined
+			final QueryManager qm = QueryManager.getSharedInstance();
+			final Query q = qm.loadQuery(url.openStream());
+				
+			setScript(q.getScript().getSource());
+			setLocation(url);
+			
+			ScriptParam[] params = getScriptParams();
+			for(ScriptParam sp:params) {
+				for(String id:sp.getParamIds()) {
+					Object v = q.getScript().getParameters().get(id);
+					if(v != null) {
+						sp.setValue(id, v);
+					}
+				}
+			}
+		} else {
+			// fallback to super version
+			super.readFromURL(url);			
+		}
 	}
 	
 }

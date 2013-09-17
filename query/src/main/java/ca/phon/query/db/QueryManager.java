@@ -19,6 +19,7 @@
 package ca.phon.query.db;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -86,6 +87,16 @@ public abstract class QueryManager {
 	 * @throws IOException
 	 */
 	public abstract Query loadQuery(String path)
+		throws IOException;
+	
+	/**
+	 * Load query from given stream
+	 * 
+	 * @param stream
+	 * @return the loaded Query
+	 * @throws IOException
+	 */
+	public abstract Query loadQuery(InputStream stream)
 		throws IOException;
 	
 	/**
