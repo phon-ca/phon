@@ -64,7 +64,8 @@ public class PhonScript {
 			"Packages.ca.phon.syllable",
 			"Packages.ca.phon.project",
 			"Packages.ca.phon.session",
-			"Packages.ca.phon.ipa.features"
+			"Packages.ca.phon.ipa.features",
+			"Packages.ca.phon.script.params"
 	};
 	
 	private final String scriptClazzImports[] = {
@@ -273,6 +274,7 @@ public class PhonScript {
 				// to setup script parameters
 //				PhonLogger.severe( 
 //						"Compilation error: " + e.toString());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -348,6 +350,7 @@ public class PhonScript {
 			script = scriptContext.compileString(scriptText, "js", 1, null);
 			script.exec(scriptContext, scope);
 		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 //			PhonLogger.severe( 
 //					"Compilation error: " + e.toString());
 			return false;
