@@ -94,6 +94,37 @@ public class AlignmentMap<T> {
 		this.topElements = topElements;
 	}
 	
+	/**
+	 * Return the list of objects that are aligned
+	 * with the given list of objects.
+	 * 
+	 * This method does <b>not</b> return
+	 * <code>null</code> values for indel/spacers.
+	 * 
+	 * @param eles
+	 * @return aligned elements
+	 */
+	public List<T> getAligned(List<T> eles) {
+		if(eles.size() == 0) return new ArrayList<>();
+		final List<T> topElements = getTopAlignmentElements();
+		final List<T> btmElements = getBottomAlignmentElements();
+		
+		final boolean isTop = topElements.containsAll(eles);
+		
+		final int startIdx = (isTop ? topElements.indexOf(eles.get(0)) : btmElements.indexOf(eles.get(0)));
+		final int endIdx = (isTop ? topElements.indexOf(eles.get(eles.size()-1)) : btmElements.indexOf(eles.get(eles.size()-1)));
+		
+		if(startIdx < 0 || endIdx < 0) return new ArrayList<>();
+		
+		final List<T> retVal = new ArrayList<>();
+		for(int i = startIdx; i <= endIdx; i++) {
+			final T ele = (isTop ? btmElements.get(i) : topElements.get(i));
+			if(ele != null)
+				retVal.add(ele);
+		}
+		return retVal;
+	}
+	
 	/** Get the top alignment as an array of elements */
 	public List<T> getTopAlignmentElements() {
 //		if(this.topAlignment == null)

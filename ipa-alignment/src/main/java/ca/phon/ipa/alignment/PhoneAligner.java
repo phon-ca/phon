@@ -746,14 +746,17 @@ public class PhoneAligner implements Aligner<IPAElement> {
 	
 	@Override
 	public AlignmentMap<IPAElement> calculateAlignment(IPAElement[] top, IPAElement[] bottom) {
-		// TODO Auto-generated method stub
-		return null;
+		return calculatePhoneMap(new IPATranscript(top), new IPATranscript(bottom));
 	}
 	
 	public PhoneMap calculatePhoneMap(IPATranscript target, IPATranscript actual) {
-		final AlignmentMap<IPAElement> alignmentMap = 
-				calculateAlignment(target.toArray(new IPAElement[0]), actual.toArray(new IPAElement[0]));
-		return null;
+		final Integer[][] alignment = createPhoneMap(target, actual, true, true, true, true);
+				
+		final PhoneMap pm = new PhoneMap(target, actual);
+		pm.setTopAlignment(alignment[0]);
+		pm.setBottomAlignment(alignment[1]);
+		
+		return pm;
 	}
 
 	@Override

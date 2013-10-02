@@ -22,13 +22,14 @@ import java.util.List;
 
 import ca.phon.alignment.AlignmentMap;
 import ca.phon.ipa.AudiblePhoneVisitor;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 
 /**
  * 
  */
-public class PhoneMap extends AlignmentMap<Phone> {
+public class PhoneMap extends AlignmentMap<IPAElement> {
 	/** The target phonetic rep */
 	private IPATranscript targetRep;
 	/** The actual phonetic rep */
@@ -55,7 +56,7 @@ public class PhoneMap extends AlignmentMap<Phone> {
 		actualRep.accept(visitor);
 		
 		this.bottomElements = 
-			visitor.getPhones().toArray(new Phone[0]);
+			visitor.getPhones().toArray(new IPAElement[0]);
 	}
 
 	public IPATranscript getTargetRep() {
@@ -69,7 +70,7 @@ public class PhoneMap extends AlignmentMap<Phone> {
 		targetRep.accept(visitor);
 		
 		this.topElements = 
-			visitor.getPhones().toArray(new Phone[0]);
+			visitor.getPhones().toArray(new IPAElement[0]);
 	}
 	
 }
