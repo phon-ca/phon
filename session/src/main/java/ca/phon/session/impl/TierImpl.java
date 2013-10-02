@@ -136,4 +136,22 @@ public class TierImpl<T> implements Tier<T> {
 		return tierData.iterator();
 	}
 	
+	@Override
+	public String toString() {
+		final StringBuffer buffer = new StringBuffer();
+		
+		if(isGrouped()) {
+			buffer.append("[");
+			for(int i = 0; i < numberOfGroups(); i++) {
+				if(i > 0) buffer.append("] [");
+				buffer.append(getGroup(i).toString());
+			}
+			buffer.append("]");
+		} else {
+			buffer.append(getGroup(0).toString());
+		}
+		
+		return buffer.toString();
+	}
+	
 }

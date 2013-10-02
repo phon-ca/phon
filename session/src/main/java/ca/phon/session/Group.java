@@ -1,4 +1,4 @@
-package ca.phon.session;
+ package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -10,6 +10,16 @@ import ca.phon.orthography.Orthography;
  * 
  */
 public interface Group {
+	
+	/**
+	 * Record
+	 */
+	public Record getRecord();
+	
+	/**
+	 * Group index
+	 */
+	public int getGroupIndex();
 	
 	/**
 	 * Get orthography
@@ -63,6 +73,12 @@ public interface Group {
 	 *  
 	 */
 	public <T> T getTier(String name, Class<T> type);
+	
+	/**
+	 * Get the tier.
+	 * @param name
+	 */
+	public Object getTier(String name);
 	
 	public <T> void setTier(String name, Class<T> type, T val);
 	

@@ -375,9 +375,9 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		}
 		
 		// segment
-		if(record.getSegment() != null) {
+		if(record.getSegment().numberOfGroups() > 0) {
 			final SegmentType segType = factory.createSegmentType();
-			final MediaSegment segment = record.getSegment();
+			final MediaSegment segment = record.getSegment().getGroup(0);
 			
 			segType.setDuration(segment.getEndValue() - segment.getStartValue());
 			segType.setStartTime(segment.getStartValue());
@@ -393,7 +393,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			retVal.getAlignment().add(att);
 		}
 		
-		for(String tierName:record.getTierNames()) {
+		for(String tierName:record.getExtraTierNames()) {
 			final Tier<String> userTier = record.getTier(tierName, String.class);
 			if(userTier.isGrouped()) {
 				// grouped tiers

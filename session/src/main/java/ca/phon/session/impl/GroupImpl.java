@@ -25,6 +25,14 @@ public class GroupImpl implements Group {
 		this.groupIndex = idx;
 	}
 	
+	public Record getRecord() {
+		return this.record;
+	}
+	
+	public int getGroupIndex() {
+		return this.groupIndex;
+	}
+	
 	@Override
 	public Orthography getOrthography() {
 		return record.getOrthography().getGroup(groupIndex);
@@ -43,6 +51,11 @@ public class GroupImpl implements Group {
 	@Override
 	public IPATranscript getIPAActual() {
 		return record.getIPAActual().getGroup(groupIndex);
+	}
+	
+	@Override
+	public Object getTier(String name) {
+		return record.getTier(name).getGroup(groupIndex);
 	}
 
 	@Override

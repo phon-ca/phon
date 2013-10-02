@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -169,7 +170,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		// copy participant information
 		final ParticipantsType participants = sessionType.getParticipants();
 		for(ParticipantType pt:participants.getParticipant()) {
-			final Participant p = copyParticipant(factory, pt);
+			final Participant p = copyParticipant(factory, pt, retVal.getDate());
 			retVal.addParticipant(p);
 		}
 		
@@ -239,7 +240,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	}
 	
 	// participants
-	private Participant copyParticipant(SessionFactory factory, ParticipantType pt) {
+	private Participant copyParticipant(SessionFactory factory, ParticipantType pt, DateTime sessionDate) {
 		final Participant retVal = factory.createParticipant();
 		
 		retVal.setId(pt.getId());
@@ -249,6 +250,10 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		if(bday != null) {
 			final DateTime bdt = new DateTime(bday.getYear(), bday.getMonth(), bday.getDay(), 12, 0);
 			retVal.setBirthDate(bdt);
+			
+			// calculate age up to the session date
+			final Period period = new Period(bdt, sessionDate);
+			retVal.setAgeTo(period);
 		}
 		
 		retVal.setEducation(pt.getEducation());
@@ -377,7 +382,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			segment.setEndValue(rt.getSegment().getStartTime() + rt.getSegment().getDuration());
 			segment.setUnitType(MediaUnit.Millisecond);
 			
-			retVal.setSegment(segment);
+			retVal.getSegment().setGroup(0, segment);
 		}
 		
 		// alignment
@@ -601,6 +606,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			pm.setBottomAlignment(alignmentData[1]);
 //			
 			retVal.addGroup(pm);
+			gidx++;
 		}
 		
 		return retVal;

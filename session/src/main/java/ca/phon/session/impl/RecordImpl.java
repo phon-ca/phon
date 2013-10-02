@@ -89,17 +89,16 @@ public class RecordImpl implements Record {
 	}
 
 	@Override
-	public MediaSegment getSegment() {
-		if(segment.numberOfGroups() > 0) {
-			return segment.getGroup(0);
-		} else {
-			return null;
-		}
+	public Tier<MediaSegment> getSegment() {
+		return segment;
 	}
 
 	@Override
-	public void setSegment(MediaSegment media) {
-		segment.setGroup(0, media);
+	public void setSegment(Tier<MediaSegment> media) {
+		this.segment.removeAll();
+		for(int i = 0; i < media.numberOfGroups(); i++) {
+			this.segment.addGroup(media.getGroup(i));
+		}
 	}
 
 	@Override
@@ -226,7 +225,7 @@ public class RecordImpl implements Record {
 
 	@Override
 	public boolean hasTier(String name) {
-		return getTierNames().contains(name);
+		return getExtraTierNames().contains(name);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -234,21 +233,27 @@ public class RecordImpl implements Record {
 	public <T> Tier<T> getTier(String name, Class<T> type) {
 		Tier<T> retVal = null;
 		
-		final Tier<?> userTier = userDefined.get(name);
+		final SystemTierType systemTierType = SystemTierType.tierFromString(name);
+		final Tier<T> systemTier = getSystemTier(systemTierType, type);
 		
-		if(userTier != null) {
-			if(userTier.getDeclaredType() == type) {
-				retVal = (Tier<T>)userTier;
-			} else if(type == String.class) {
-				// create a new string tier to return
-				final SessionFactory factory = SessionFactory.newFactory();
-				retVal = factory.createTier(name, type, userTier.isGrouped());
-				// copy group data as string
-				for(int i = 0; i < userTier.numberOfGroups(); i++) {
-					final Object obj = userTier.getGroup(i);
-					final String val = obj.toString();
-					final T tierVal = (T)type.getClass().cast(val);
-					retVal.addGroup(tierVal);
+		if(systemTier != null) {
+			retVal = systemTier;
+		} else {
+			final Tier<?> userTier = userDefined.get(name);
+			if(userTier != null) {
+				if(userTier.getDeclaredType() == type) {
+					retVal = (Tier<T>)userTier;
+				} else if(type == String.class) {
+					// create a new string tier to return
+					final SessionFactory factory = SessionFactory.newFactory();
+					retVal = factory.createTier(name, type, userTier.isGrouped());
+					// copy group data as string
+					for(int i = 0; i < userTier.numberOfGroups(); i++) {
+						final Object obj = userTier.getGroup(i);
+						final String val = obj.toString();
+						final T tierVal = (T)type.getClass().cast(val);
+						retVal.addGroup(tierVal);
+					}
 				}
 			}
 		}
@@ -256,13 +261,69 @@ public class RecordImpl implements Record {
 		return retVal;
 	}
 	
+	@SuppressWarnings("unchecked")
+	private <T> Tier<T> getSystemTier(SystemTierType systemTierType, Class<T> type) {
+		Tier<T> retVal = null;
+		
+		Tier<?> systemTier = null;
+		if(systemTierType != null) {
+			switch(systemTierType) {
+			case Orthography:
+				systemTier = getOrthography();
+				break;
+				
+			case IPATarget:
+				systemTier = getIPATarget();
+				break;
+				
+			case IPAActual:
+				systemTier = getIPAActual();
+				break;
+				
+			case SyllableAlignment:
+				systemTier = getPhoneAlignment();
+				break;
+				
+			case Segment:
+				systemTier = getSegment();
+				break;
+				
+			case Notes:
+				systemTier = getNotes();
+				break;
+				
+			default:
+				break;	
+			}
+			if(systemTier != null) {
+				if(systemTier.getDeclaredType() == type) {
+					retVal = (Tier<T>)systemTier;
+				} else if(type == String.class) {
+					// create a new string tier to return
+					final SessionFactory factory = SessionFactory.newFactory();
+					retVal = factory.createTier(systemTier.getName(), type, systemTier.isGrouped());
+					// copy group data as string
+					for(int i = 0; i < systemTier.numberOfGroups(); i++) {
+						final Object obj = systemTier.getGroup(i);
+						final String val = obj.toString();
+						final T tierVal = (T)type.getClass().cast(val);
+						retVal.addGroup(tierVal);
+					}
+				}
+			}
+		}
+		
+		return retVal;
+	}
+	
+	
 	@Override
 	public Tier<?> getTier(String name) {
 		return getTier(name, getTierType(name));
 	}
 
 	@Override
-	public Set<String> getTierNames() {
+	public Set<String> getExtraTierNames() {
 		return userDefined.keySet();
 	}
 

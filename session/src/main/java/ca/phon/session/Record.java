@@ -63,14 +63,14 @@ public interface Record extends IExtendable {
 	 * 
 	 * @return IMedia
 	 */
-	public MediaSegment getSegment();
+	public Tier<MediaSegment> getSegment();
 	
 	/**
 	 * Set media segment
 	 * 
 	 * @param media
 	 */
-	public void setSegment(MediaSegment media);
+	public void setSegment(Tier<MediaSegment> media);
 	
 	/**
 	 * Should we exclude this record from searches?
@@ -233,7 +233,7 @@ public interface Record extends IExtendable {
 	 * @return the list of tier user-defined tier names
 	 *  present in this record
 	 */
-	public Set<String> getTierNames();
+	public Set<String> getExtraTierNames();
 	
 	/**
 	 * @param tier name
