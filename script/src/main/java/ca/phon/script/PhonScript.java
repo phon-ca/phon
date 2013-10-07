@@ -27,6 +27,7 @@ import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.WrapFactory;
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.Require;
 import org.mozilla.javascript.commonjs.module.RequireBuilder;
@@ -35,6 +36,7 @@ import org.mozilla.javascript.commonjs.module.provider.MultiModuleScriptProvider
 import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
 
+import ca.phon.script.js.ExtendableWrapFactory;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParamsLexer;
 import ca.phon.script.params.ScriptParamsParser;
@@ -69,7 +71,8 @@ public class PhonScript {
 	};
 	
 	private final String scriptClazzImports[] = {
-			"Packages.ca.phon.util.Range"
+			"Packages.ca.phon.util.Range",
+			"Packages.org.apache.commons.lang3.StringUtils"
 	};
 	
 	/** The URL we have loaded (if used) */
@@ -77,6 +80,12 @@ public class PhonScript {
 	
 	/** The script buffer */
 	private final StringBuffer scriptBuffer = new StringBuffer();
+	
+	/**
+	 * Compiled script
+	 */
+	private Script compiledScript;
+
 	
 	private ScriptParam[] params = null;
 	
@@ -91,37 +100,37 @@ public class PhonScript {
 	public PhonScript(String script) {
 		super();
 		this.scriptBuffer.append(script);
+		params = getScriptParams();
 	}
 	
 	public PhonScript(File file) 
 		throws IOException {
 		super();
 		setLocation(file.toURI().toURL());
-//		scriptBuffer = new StringBuffer();
-//		readFromFile(file);
-//		params = getScriptParams();
+		readFromURL(getLocation());
 	}
 	
 	public PhonScript(URL url)
 		throws IOException {
 		super();
 		setLocation(url);
-//		scriptBuffer = new StringBuffer();
-//		readFromURL(url);
-//		params = getScriptParams();
+		readFromURL(getLocation());
 	}
 	
 	// load data
-	private void loadData() {
-		if(scriptBuffer.length() == 0 && getLocation() != null) {
-			try {
-				readFromURL(getLocation());
-				updateScriptParams();
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
-		}
-	}
+//	private void loadData() {
+//		if(!loaded) {
+//			loaded = true;
+//			synchronized(scriptBuffer) {
+//				try {
+//					readFromURL(getLocation());
+//					updateScriptParams();
+//				} catch (IOException e) {
+//					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+//				}
+//			}
+//		}
+//	}
 
 	/**
 	 * Get the script text.
@@ -131,15 +140,17 @@ public class PhonScript {
 	 * @return
 	 */
 	public String getScript(boolean rewrite) {
-		loadData();
-		String retVal = scriptBuffer.toString();
-		
-		if(rewrite) {
-			try {
-				retVal = ScriptRewriter.rewriteScript(retVal);
-			} catch (Exception e) {
-				e.printStackTrace();
-				LOGGER.warning(e.toString());
+		String retVal = "";
+		synchronized (scriptBuffer) {			
+			retVal = scriptBuffer.toString();
+			
+			if(rewrite) {
+				try {
+					retVal = ScriptRewriter.rewriteScript(retVal);
+				} catch (Exception e) {
+					e.printStackTrace();
+					LOGGER.warning(e.toString());
+				}
 			}
 		}
 		
@@ -147,8 +158,11 @@ public class PhonScript {
 	}
 
 	public void setScript(String script) {
-		this.scriptBuffer.setLength(0);
-		this.scriptBuffer.append(script);
+		synchronized (scriptBuffer) {			
+			this.scriptBuffer.setLength(0);
+			this.scriptBuffer.append(script);
+			this.compiledScript = compileScript();
+		}
 		updateScriptParams();
 	}
 	
@@ -254,18 +268,14 @@ public class PhonScript {
 		final List<ScriptParam> params = new ArrayList<ScriptParam>(staticParams);
 		
 		// now call the scripts param_setup function (if available)
-		if(hasFunction("param_setup", 1)) {
+		if(compiledScript != null && hasFunction("param_setup", 1)) {
 			Context scriptContext = 
 					(new ContextFactory()).enterContext();
 				
 			Scriptable scope = setupScope(scriptContext);
 			
-			String scriptText = getScript(true);
-			// compile script
-			Script script;
 			try {
-				script = scriptContext.compileString(scriptText, "js", 1, null);
-				script.exec(scriptContext, scope);
+				compiledScript.exec(scriptContext, scope);
 				
 				ScriptableObject.callMethod(scriptContext, scope, "param_setup", new Object[]{ params });
 			} catch (Exception e) {
@@ -275,6 +285,8 @@ public class PhonScript {
 //				PhonLogger.severe( 
 //						"Compilation error: " + e.toString());
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} finally {
+				Context.exit();
 			}
 		}
 		
@@ -305,7 +317,7 @@ public class PhonScript {
 	 * Returns the script params for this script object.
 	 */
 	public ScriptParam[] getScriptParams() {
-		loadData();
+//		loadData();
 		if(params == null) {
 			params = _getScriptParams();
 		}
@@ -314,6 +326,14 @@ public class PhonScript {
 	
 	public void setScriptParams(ScriptParam[] params) {
 		this.params = params;
+	}
+	
+	public void setScriptParam(String paramId, Object value) {
+		for(ScriptParam sp:getScriptParams()) {
+			if(sp.getParamIds().contains(paramId)) {
+				sp.setValue(paramId, value);
+			}
+		}
 	}
 	
 	protected void readFromURL(URL url)
@@ -332,50 +352,46 @@ public class PhonScript {
 		}
 		in.close();
 		
+		this.compiledScript = compileScript();
 		updateScriptParams();
 	}
 	
 	public boolean hasFunction(String funcName, int numParams) {
 		boolean retVal = false;
 		
-		Context scriptContext = 
-			(new ContextFactory()).enterContext();
-		
-		Scriptable scope = setupScope(scriptContext);
-		
-		String scriptText = getScript(true);
-		// compile script
-		Script script;
-		try {
-			script = scriptContext.compileString(scriptText, "js", 1, null);
-			script.exec(scriptContext, scope);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//			PhonLogger.severe( 
-//					"Compilation error: " + e.toString());
-			return false;
-		}
-		
-		boolean hasQr =
-			ScriptableObject.hasProperty(scope, funcName);
-		
-		if(hasQr) {
-			Object qrObj = 
-				ScriptableObject.getProperty(scope, funcName);
+		if(compiledScript != null) {
+			Context scriptContext = 
+				(new ContextFactory()).enterContext();
+			Scriptable scope = setupScope(scriptContext);
 			
-			if(qrObj instanceof Scriptable) {
-				Scriptable qrFunc = (Scriptable)qrObj;
+			try {
+				compiledScript.exec(scriptContext, scope);
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				return false;
+			}
+			
+			boolean hasQr =
+				ScriptableObject.hasProperty(scope, funcName);
+			
+			if(hasQr) {
+				Object qrObj = 
+					ScriptableObject.getProperty(scope, funcName);
 				
-				// check arity of function
-				Integer arity = 
-					(Integer)ScriptableObject.getProperty(qrFunc, "arity");
-				if(arity != null && arity == numParams) {
-					retVal = true;
+				if(qrObj instanceof Scriptable) {
+					Scriptable qrFunc = (Scriptable)qrObj;
+					
+					// check arity of function
+					Integer arity = 
+						(Integer)ScriptableObject.getProperty(qrFunc, "arity");
+					if(arity != null && arity == numParams) {
+						retVal = true;
+					}
 				}
 			}
+			
+			Context.exit();
 		}
-		
-		Context.exit();
 		
 		return retVal;
 	}
@@ -447,6 +463,14 @@ public class PhonScript {
 		return scope;
 	}
 	
+	public Script compileScript() {
+		final Context ctx = Context.enter();
+		ctx.setWrapFactory(new ExtendableWrapFactory());
+		final Script retVal = compileScript(ctx);
+		Context.exit();
+		return retVal;
+	}
+	
 	public Script compileScript(Context scriptContext) {
 		Script retVal = null;
 		try {
@@ -455,6 +479,19 @@ public class PhonScript {
 			LOGGER.severe(e.toString());
 		}
 		return retVal;
+	}
+	
+	/**
+	 * Get the compiled form of this script
+	 * if available.
+	 * 
+	 * @return compiled script or <code>null</code>
+	 *  if current script buffer could not be
+	 *  compiled.
+	 *  
+	 */
+	public Script getCompiledScript() {
+		return this.compiledScript;
 	}
 	
 	/** 
@@ -467,6 +504,13 @@ public class PhonScript {
 	
 	public void setLocation(URL location) {
 		this.scriptFile = location;
+		if(this.scriptFile != null) {
+			try {
+				readFromURL(location);
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			}
+		}
 	}
 	
 	/**
