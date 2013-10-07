@@ -18,11 +18,15 @@
 
 package ca.phon.syllable;
 
+import ca.phon.extensions.Extension;
+import ca.phon.ipa.IPATranscript;
+
 /**
  * Represents syllable stress.
  * @author ghedlund
  *
  */
+@Extension(IPATranscript.class)
 public enum SyllableStress {
 	PrimaryStress("1", '\u02c8'),
 	SecondaryStress("2", '\u02cc'),

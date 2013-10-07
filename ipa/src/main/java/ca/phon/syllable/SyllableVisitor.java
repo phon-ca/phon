@@ -8,6 +8,9 @@ import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
+import ca.phon.ipa.StressMarker;
+import ca.phon.ipa.StressType;
+import ca.phon.visitor.Visitor;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -53,8 +56,23 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		appendSyllable(phone);
 	}
 	
+	@Visits
+	public void visitStressMarker(StressMarker stressMarker) {
+		breakSyllable();
+		appendSyllable(stressMarker);
+	}
+	
 	private void breakSyllable() {
 		if(currentSyllable.size() > 0) {
+			// check for stress marker
+			final IPAElement firstEle = currentSyllable.get(0);
+			SyllableStress stress = SyllableStress.NoStress;
+			if(firstEle.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
+				final StressType st = StressMarker.class.cast(firstEle).getType();
+				stress = (st == StressType.PRIMARY ? SyllableStress.PrimaryStress : SyllableStress.SecondaryStress);
+			}
+			currentSyllable.putExtension(SyllableStress.class, stress);
+			
 			syllables.add(currentSyllable);
 			currentSyllable = new IPATranscript();
 		}
@@ -66,9 +84,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	 * @return detected syllables
 	 */
 	public List<IPATranscript> getSyllables() {
-		if(currentSyllable.size() > 0) {
-			syllables.add(currentSyllable);
-		}
+		breakSyllable();
 		return Collections.unmodifiableList(syllables);
 	}
 	
@@ -94,7 +110,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 				
 			case NUCLEUS:
 				if(currentType == SyllableConstituentType.NUCLEUS) {
-					final SyllabificationInfo info = lastPhone.getExtension(SyllabificationInfo.class);
+					final SyllabificationInfo info = p.getExtension(SyllabificationInfo.class);
 					if(info != null) {
 						if(!info.isDiphthongMember()) {
 							breakSyllable();
@@ -145,5 +161,6 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		this.currentSyllable = new IPATranscript();
 		this.lastPhone = null;
 	}
+	
 }
 

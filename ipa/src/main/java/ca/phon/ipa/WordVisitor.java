@@ -44,6 +44,7 @@ public class WordVisitor extends VisitorAdapter<IPAElement> {
 	}
 	
 	public List<IPATranscript> getWords() {
+		breakWord();
 		return this.words;
 	}
 	
