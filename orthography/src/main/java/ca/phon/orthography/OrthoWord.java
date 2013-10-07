@@ -71,4 +71,9 @@ public class OrthoWord implements OrthoElement {
 		);
 	}
 	
+	@Override
+	public String toString() {
+		return text();
+	}
+	
 }
