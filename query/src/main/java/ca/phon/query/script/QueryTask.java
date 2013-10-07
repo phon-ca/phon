@@ -35,10 +35,10 @@ import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
+import ca.phon.script.js.ExtendableWrapFactory;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -176,7 +176,7 @@ public class QueryTask extends PhonTask {
 		return transcript;
 	}
 
-	public void setTranscript(Session transcript) {
+	public void setSession(Session transcript) {
 		this.transcript = transcript;
 	}
 
@@ -189,9 +189,10 @@ public class QueryTask extends PhonTask {
 		
 		Context scriptContext = 
 			(new ContextFactory()).enterContext();
+		scriptContext.setWrapFactory(new ExtendableWrapFactory());
 		
 		Scriptable scope = queryScript.setupScope(scriptContext);
-		Script script = queryScript.compileScript(scriptContext);
+		Script script = queryScript.getCompiledScript();
 		
 		if(script == null) {
 			LOGGER.severe("Compilation error.");
@@ -247,12 +248,13 @@ public class QueryTask extends PhonTask {
 		/* setup scope variables */
 		// results
 		final QueryFactory factory = QueryManager.getSharedInstance().createQueryFactory();
-		final ResultSet resultSet = factory.createResultSet();
+//		final ResultSet resultSet = factory.createResultSet();
+//		setResultSet(resultSet);
 		
 		Object wrappedFactory = Context.javaToJS(factory, scope);
 		ScriptableObject.putProperty(scope, "factory", wrappedFactory);
 		
-		Object wrappedResults = Context.javaToJS(resultSet, scope);
+		Object wrappedResults = Context.javaToJS(searchResults, scope);
 		ScriptableObject.putProperty(scope, "results", wrappedResults);
 		
 		final PrintWriter outWriter = new PrintWriter(
@@ -277,7 +279,6 @@ public class QueryTask extends PhonTask {
 				ScriptableObject.callMethod(scriptContext, scope, "begin_search", new Object[]{t});
 			} catch (Exception e) {
 				errors.add(e);
-				String prefix = "[" + getName() + "]\t";
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				err = e;
 				
@@ -300,7 +301,7 @@ public class QueryTask extends PhonTask {
 			
 			// evaluate the script
 			try {
-				ScriptableObject.callMethod(scriptContext, scope, "query_record", new Object[]{record});
+				ScriptableObject.callMethod(scriptContext, scope, "query_record", new Object[]{i, record});
 //				script.exec(scriptContext, scope);
 			} catch (Exception e) {
 				errors.add(e);
@@ -317,13 +318,11 @@ public class QueryTask extends PhonTask {
 		}
 		
 		// run end search if found
-		// run begin search if found
 		if(queryScript.hasEndSearch()) {
 			try {
 				ScriptableObject.callMethod(scriptContext, scope, "end_search", new Object[]{t});
 			} catch (Exception e) {
 				errors.add(e);
-				String prefix = "[" + getName() + "]\t";
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 	
 				super.setStatus(TaskStatus.ERROR);
@@ -331,6 +330,8 @@ public class QueryTask extends PhonTask {
 				return;
 			}
 		}
+		
+		Context.exit();
 	}
 	
 	@Override

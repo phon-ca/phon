@@ -50,6 +50,7 @@ import javax.swing.tree.TreePath;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.io.filefilter.FileFileFilter;
 import org.jdesktop.swingx.JXTree;
 
 import ca.phon.query.report.ReportIO;
@@ -85,6 +86,7 @@ import com.jgoodies.forms.layout.FormLayout;
 public class ReportEditor extends JPanel implements SectionListener {
 	
 	private final static Logger LOGGER = Logger.getLogger(ReportEditor.class.getName());
+	
 
 	private final QName _SECTION_QNAME = new QName("http://phon.ling.mun.ca/ns/report", "report-section");
 	
@@ -395,27 +397,25 @@ public class ReportEditor extends JPanel implements SectionListener {
 	}
 	
 	private void newReportFormat() {
-		String msg = 
+		final String msg = 
 			"Starting a new report will remove any current changes.  Save report design?";
-		
 		final MessageDialogProperties props = new MessageDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setRunAsync(false);
 		props.setOptions(MessageDialogProperties.yesNoCancelOptions);
-		props.setMessage(msg);
 		props.setTitle("Begin New Report");
+		props.setMessage(msg);
 		
 		int retVal = NativeDialogs.showMessageDialog(props);
 		if(retVal == 0) {
-			props.setMessage("Cancelled by user.");
-			props.setOptions(MessageDialogProperties.okOptions);
-			
 			// if not saved - return
 			if(!saveReportFormat()) {
+				props.setMessage("Cancelled by user.");
+				props.setOptions(MessageDialogProperties.okOptions);
 				NativeDialogs.showMessageDialog(props);
 				return;
 			}
-		} else if(retVal == 2) {
+		} else {
 			return;
 		}
 		
@@ -436,24 +436,9 @@ public class ReportEditor extends JPanel implements SectionListener {
 	private boolean saveReportFormat() {
 		boolean hasSaved = false;
 		
-//		File reportDir = 
-//			new File(PhonUtilities.getPhonWorkspace(), "reports");
-//		if(!reportDir.exists()) {
-//			reportDir.mkdirs();
-//		}
-		
 		String reportBaseName = getReportDesign().getName();
 		String reportName = reportBaseName;
 		String defExt = ".xml";
-		
-//		String reportFullName = reportBaseName + defExt;
-//		File reportFile = new File(reportDir, reportFullName);
-//		int fIdx = 0;
-//		while(reportFile.exists()) {
-//			reportName = reportBaseName + " (" + (++fIdx) + ")";
-//			reportFile = new File(reportDir, reportName + defExt);
-//		}
-		
 		
 		FileFilter[] filters = new FileFilter[1];
 		filters[0] = FileFilter.xmlFilter;
@@ -461,9 +446,10 @@ public class ReportEditor extends JPanel implements SectionListener {
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setRunAsync(false);
+		props.setCanCreateDirectories(true);
 		props.setFileFilter(FileFilter.xmlFilter);
 		props.setTitle("Save Report Format");
-		props.setCanCreateDirectories(true);
+		props.setInitialFile(reportName + defExt);
 		
 		final String saveFile = NativeDialogs.showSaveDialog(props);
 		if(saveFile != null) {
@@ -479,23 +465,19 @@ public class ReportEditor extends JPanel implements SectionListener {
 	}
 	
 	private void openReportFormat() {
-		FileFilter[] filters = { FileFilter.xmlFilter };
-		
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setRunAsync(false);
-		props.setFileFilter(FileFilter.xmlFilter);
-		props.setCanChooseFiles(true);
-		props.setCanCreateDirectories(false);
-		props.setCanChooseDirectories(false);
 		props.setAllowMultipleSelection(false);
+		props.setCanChooseDirectories(false);
+		props.setCanChooseFiles(true);
+		props.setFileFilter(FileFilter.xmlFilter);
 		props.setTitle("Open Report Format");
 		
-		final List<String> selectedFiles = NativeDialogs.showOpenDialog(props);
-		if(selectedFiles.size() > 0 ) {
-			final String reportFile = selectedFiles.get(0);
+		final List<String> selectedFile = NativeDialogs.showOpenDialog(props);
+		if(selectedFile.size() > 0) {
 			try {
-				ReportDesign design = ReportIO.readDesign(reportFile);
+				ReportDesign design = ReportIO.readDesign(selectedFile.get(0));
 				this.report = design;
 				
 				sectionPanels.clear();

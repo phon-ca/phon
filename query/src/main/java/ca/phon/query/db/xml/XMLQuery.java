@@ -52,9 +52,11 @@ public class XMLQuery implements Query, JAXBWrapper<QueryType> {
 	XMLQuery(QueryType query) {
 		this(query, "unnamed_query"); 
 		
-		// So that marshalled files have these required elements 
-		query.setScript(new ScriptType());
-		query.getScript().setSource("");
+		// So that marshalled files have these required elements
+		if(query.getScript() == null) {
+			query.setScript(new ScriptType());
+			query.getScript().setSource("");
+		}
 	}
 	
 	/**

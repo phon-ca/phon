@@ -451,7 +451,7 @@ public class QueryRunnerPanel extends JPanel {
 					final ResultSet resultSet = qfactory.createResultSet();
 					resultSet.setSessionPath(sessionLocation.getCorpus() + "." + sessionLocation.getSession());
 					
-					queryTask.setTranscript(session);
+					queryTask.setSession(session);
 					queryTask.setResultSet(resultSet);
 					
 					queryTask.run();
@@ -757,13 +757,13 @@ public class QueryRunnerPanel extends JPanel {
 			IconManager.getInstance().getIcon("actions/greenled", IconSize.SMALL);
 		
 		ImageIcon errorIcon =
-			IconManager.getInstance().getIcon("status/redled", IconSize.SMALL);
+			IconManager.getInstance().getIcon("status/dialog-error", IconSize.SMALL);
 		
 		ImageIcon finishedIcon =
 			IconManager.getInstance().getIcon("actions/ok", IconSize.SMALL);
 		
 		ImageIcon terminatedIcon =
-			IconManager.getInstance().getIcon("actions/yellowled", IconSize.SMALL);
+			IconManager.getInstance().getIcon("status/dialog-warning", IconSize.SMALL);
 
 		/* (non-Javadoc)
 		 * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)

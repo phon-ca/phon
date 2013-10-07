@@ -29,5 +29,8 @@ ca.phon.app.project.CheckIPAEP
 ca.phon.app.project.DeriveSessionEP
 # Archive Project
 ca.phon.app.project.ProjectArchiveEP
+# View Result Set
+ca.phon.app.query.ResultSetEP
+
 
 

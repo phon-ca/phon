@@ -44,23 +44,22 @@ public class ResultListingFieldBuilder {
 	public final static String SESSION_MEDIA_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output session media filename\", \"\"};\n" + "*/\n"
-			+ "\n" + "session.media\n" + "";
+			+ "\n" + "session.mediaLocation\n" + "";
 
 	public final static String RECORD_NUMBER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output record number\", \"\"};\n" + "*/\n" + "\n" 
-			+ "function getType() { return (new java.lang.Integer(0)).getClass(); }\n" 
-			+ "retVal = record.recordNumber+1;\n" + "";
+			+ "retVal = recordIndex+1;\n" + "";
 
 	public final static String SPEAKER_NAME_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) name\", \"\"};\n"
-			+ "*/\n" + "\n" + "record.speaker\n" + "";
+			+ "*/\n" + "\n" + "record.speaker.name\n" + "";
 
 	public final static String SPEAKER_AGE_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) age (YY;MM.DD)\", \"\"};\n"
-			+ "*/\n" + "\n" + "record.speaker.age\n" + "";
+			+ "*/\n" + "\n" + "record.speaker.getAge(session.date)\n" + "";
 
 	public final static String SPEAKER_GENDER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
@@ -74,7 +73,7 @@ public class ResultListingFieldBuilder {
 			+ "			{string, tierName, \"${TIER}\", \"Tier name:\"},\n"
 			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
 			+ "*/\n" + "\n" + "retVal = \"\";\n"
-			+ "retVal += record.getTierString(tierName);\n" + "\n"
+			+ "retVal += record.getTier(tierName).toString();\n" + "\n"
 			+ "if(removeGroupMarkers) {\n"
 			+ "	retVal = retVal.replace(/\\[/g, \"\").replace(/\\]/g, \"\");\n"
 			+ "}\n" + "";

@@ -181,7 +181,7 @@ public class QueryScript extends PhonScript {
 	}
 	
 	public boolean hasQueryRecord() {
-		return hasFunction("query_record", 1);
+		return hasFunction("query_record", 2);
 	}
 	
 	public boolean hasBeginSearch() {

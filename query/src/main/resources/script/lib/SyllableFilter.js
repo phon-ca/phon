@@ -2,11 +2,7 @@
  * Code for filtering based on syllable position and stress.
  */
  
-var PatternFilter = require("lib/PatternFilter").PatternFilter;
- 
 exports.SyllableFilter = function(id) {
-
-    this.patternFilter = new PatternFilter(id+".patternFilter");
 
     var sectionTitle = "Syllable Filter";
                            
@@ -138,16 +134,13 @@ exports.SyllableFilter = function(id) {
 		params.add(singletonGroupOpt);
 		params.add(posGroupOpt);
 		params.add(stressGroupOpt);
-		
-		this.patternFilter.param_setup(params);
-		this.patternFilter.setEnabled(!this.searchBySyllableEnabled);
 	};
 
 	this.checkStress = function(syll) {
 		var stressOk =
-			(this.sNone && syll.stress == 0) ||
-			(this.sPrimary && syll.stress == 1) ||
-			(this.sSecondary && syll.stress == 2);
+			(this.sNone && syll.syllableStress == "NoStress") ||
+			(this.sPrimary && syll.syllableStress == "PrimaryStress") ||
+			(this.sSecondary && syll.syllableStress == "SecondaryStress");
 		return stressOk;
 	};
 	
@@ -158,22 +151,25 @@ exports.SyllableFilter = function(id) {
 	 * @param obj
 	 * @return list of syllables
 	 */
-	this.getRequestedSyllables = function(record, ipaObj) {
+	this.getRequestedSyllables = function(ipaObj) {
 		var retVal = new java.util.ArrayList();
 		var retIdx = 0;
 		
-		for(var sIndex = 0; sIndex < ipaObj.numberOfSyllables; sIndex++)
+		if(ipaObj.syllables === undefined) return retIdx;
+		
+		var syllables = ipaObj.syllables();
+		for(var sIndex = 0; sIndex < syllables.size(); sIndex++)
 		{
-			var syll = ipaObj.getSyllable(sIndex);
+			var syll = syllables.get(sIndex);
 			var stressOk = this.checkStress(syll);
 
 			var posOk = false;
 			if(sIndex == 0 && this.sInitial) posOk = true;
-			if(sIndex > 0 && sIndex < ipaObj.numberOfSyllables-1 && this.sMedial) posOk = true;
-			if(sIndex == ipaObj.numberOfSyllables-1 && this.sFinal) posOk = true;
+			if(sIndex > 0 && sIndex < syllables.size()-1 && this.sMedial) posOk = true;
+			if(sIndex == syllables.size()-1 && this.sFinal) posOk = true;
 			
 			// take care of singleton cases
-			if(sIndex == 0 && ipaObj.numberOfSyllables == 1) posOk = this.sSingleton;
+			if(sIndex == 0 && syllables.size() == 1) posOk = this.sSingleton;
 			
 			var truncatedOk = true;
 			if(this.ignoreTruncated) {
@@ -185,17 +181,6 @@ exports.SyllableFilter = function(id) {
 			{
 				retVal.add(syll);
 			}
-		}
-	
-		if(this.patternFilter.isUseFilter()) {
-		    var toRemove = new java.util.ArrayList();
-		    for(var i = 0; i < retVal.size(); i++) {
-		        var obj = retVal.get(i);
-		        if(!this.patternFilter.check_filter(obj)) {
-		            toRemove.add(obj);
-		        }
-		    }
-		    retVal.removeAll(toRemove);
 		}
 	
 		return retVal.toArray();

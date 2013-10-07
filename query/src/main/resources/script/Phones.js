@@ -27,8 +27,10 @@ var filters = {
     "targetResultFilter": new PatternFilter("filters.targetResultFilter"),
     "actualResultFilter": new PatternFilter("filters.actualResultFilter"),
     "group": new GroupFilter("filters.group"),
+    "groupPattern": new PatternFilter("filters.groupPattern"),
     "alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
     "word": new WordFilter("filters.word"),
+    "wordPattern": new PatternFilter("filters.wordPattern"),
     "alignedWord": new AlignedWordFilter("filters.alignedWord"),
     "syllable": new SyllableFilter("filters.syllable"),
     "speaker": new ParticipantFilter("filters.speaker")
@@ -84,17 +86,21 @@ function param_setup(params) {
 	filters.actualResultFilter.param_setup(params);
 	
 	filters.group.param_setup(params);
+	filters.groupPattern.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
 	
 	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+    filters.wordPattern.setEnabled(false);
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
     params.add(wordsep);
     filters.alignedWord.param_setup(params);
     var alignedWordListener = new java.awt.event.ItemListener {
           itemStateChanged: function(e) {
               var enabled = e.getSource().isSelected();
+              filters.wordPattern.setEnabled(enabled);
               filters.alignedWord.setEnabled(enabled);
           }
     };
@@ -131,46 +137,111 @@ function param_setup(params) {
  * params:
  * 	record - the current record
  *******************************/
-function query_record(record) {
+function query_record(recordIndex, record) {
+    // check participant filter
     if(!filters.speaker.check_speaker(record.speaker)) return;
     
-	var searchObjects = filters.group.getRequestedGroups(record, searchTier);
+    // check group+groupPattern filters
+	var groups = filters.group.getRequestedGroups(record);
+    if(filters.groupPattern.isUseFilter()) {
+        groups = filters.groupPattern.filter_groups(groups, searchTier);
+    }
 	
 	// check aligned group for each group returned
 	if(filters.alignedGroup.isUseFilter()) {
-	    searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
-	}
-	
-	if(filters.word.isUseFilter()) {
-	    searchObjects = filters.word.filter(searchObjects);
-	    
-	    if(filters.alignedWord.isUseFilter()) {
-    	    var tempArray = new Array();
-    	    for(var i = 0; i < searchObjects.length; i++) {
-    	        var word = searchObjects[i];
-    	        var aWord = WordAligner.findAlignedWord(word, filters.alignedWord.tier);
-    	        
-    	        if(filters.alignedWord.patternFilter.check_filter(aWord)) {
-    	            tempArray.push(word);
-    	        }
-    	    }
-            searchObjects = tempArray;	    
-	    }
-	}
-	
-	if(filters.syllable.isUseFilter()) {
-	    searchObjects = filters.syllable.filter(record, searchObjects);
+	    groups = filters.alignedGroup.filter_groups(record, groups);
 	}
 
 	// perform searches
-	for(var i = 0; i < searchObjects.length; i++)
+	for(var i = 0; i < groups.length; i++)
 	{
-		var searchObj = searchObjects[i];
+		var group = groups[i];
+		var ipa = (searchTier == "IPA Target" ? group.IPATarget : group.IPAActual);
 		
-		if(includeAligned) {
-		    searchAlignedPhones(record, searchObj);
-		} else {
-		    searchPhones(record, searchObj);
+		var toSearch = new Array();
+		toSearch.push(ipa);
+		
+		// search by word?
+		if(filters.word.isUseFilter()) {
+		   toSearch.length = 0;
+		   var selectedWords = filters.word.getRequestedWords(group);
+		   for(j = 0; j < selectedWords.length; j++) {
+		       var word = selectedWords[j];
+		       var addWord = true;
+
+               var wordIpa = (searchTier == "IPA Target" ? word.IPATarget : word.IPAActual);
+               // check word pattern if necessary
+		       if(filters.wordPattern.isUseFilter()) {
+		           addWord = filters.wordPattern.check_filter(wordIpa);
+		       }
+		      
+		       // check aligned word pattern if necessary
+		       if(filters.alignedWord.isUseFilter()) {
+		           addWord = filters.alignedWord.check_word(word);
+		       }
+		       
+		       if(addWord) {
+		           toSearch.push(wordIpa);
+		       }
+		   }
+		}
+		
+		// search by syllable?
+		if(filters.syllable.isUseFilter()) {
+		    var syllList = new Array();
+		    for(j = 0; j < toSearch.length; j++) {
+		        var obj = toSearch[j];
+		        var sylls = filters.syllable.getRequestedSyllables(obj);
+		        
+		        for(k = 0; k < sylls.length; k++) {
+		            syllList.push(sylls[k]);
+		        }
+		    }
+		    toSearch = syllList;
+		}
+		
+		for(j = 0; j < toSearch.length; j++) {
+		    var obj = toSearch[j];
+		    var matches = filters.primary.find_pattern(obj);
+		    
+		    for(k = 0; k < matches.length; k++) {
+    	        var match = matches[k];
+    	        
+    			var result = factory.createResult();
+    			// calculate start/end positions of data in text
+    			var startIndex = ipa.stringIndexOf(match.value);
+    			var length = match.value.toString().length();
+    			
+    			result.recordIndex = recordIndex;
+    			result.schema = "LINEAR";
+    
+    			var rv = factory.createResultValue();
+    			rv.tierName = searchTier;
+    			rv.groupIndex = group.groupIndex;
+    			rv.range = new Range(match.start, match.end, false);
+    			rv.data = match.value;
+    			result.resultValues.add(rv);
+    			
+    			if(includeAligned) {
+    			    var phoneMap = group.phoneAlignment;
+    			    var aligned = phoneMap.getAligned(match.value);
+    			    
+    			    // get index of aligned in opposite tier
+    			    var alignedGroup = (searchTier == "IPA Target" ? group.IPAActual : group.IPATarget);
+    			    var alignedStart = 
+    			        (aligned.size() > 0 ? alignedGroup.indexOf(aligned.get(0)) : 0);
+    			    
+    			    var alignedRv = factory.createResultValue();
+    			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
+    			    alignedRv.groupIndex = group.groupIndex;
+    			    alignedRv.range = new Range(alignedStart, alignedStart + aligned.size(), true);
+    			    alignedRv.data = new IPATranscript(aligned);
+    			    result.resultValues.add(alignedRv);
+    			    result.schema = "ALIGNED";
+    			}
+    			
+    			results.addResult(result);
+    	    }
 		}
 	}
 }
@@ -227,46 +298,4 @@ function getMetadata(record, ipaTVal, ipaAVal) {
     }
     
     return retVal;
-}
-
-function searchPhones(record, ipaObj) {
-    var pFilter = filters.primary;
-    var res = pFilter.find_pattern(ipaObj);
-    for(i = 0; i < res.length; i++) {
-        var obj = res[i];
-        var result = [ obj ];
-        var meta = getMetadata(record, obj, null);
-        results.add(result, meta, ResultType.LINEAR);
-    }
-}
-
-function searchAlignedPhones(record, ipaObj) {
-	// get values from primary search filter
-	var pFilter = filters.primary;
-	var ipaTFilter = filters.targetResultFilter;
-	var ipaAFilter = filters.actualResultFilter;
-	
-	// check for instances of the given pattern
-	var res = pFilter.find_pattern(ipaObj);
-	for(i = 0; i < res.length; i++) {
-	    var obj = res[i];
-	    var aligned = record.getAlignedPhones(obj);
-	    
-	    var ipaTVal = (searchTier.index == 0 ? obj : aligned);
-	    var ipaAVal = (searchTier.index == 0 ? aligned : obj);
-	    
-	    var addResult = true;
-	    if(ipaTFilter.isUseFilter()) {
-	        addResult &= ipaTFilter.check_filter(ipaTVal);
-	    }
-	    if(ipaAFilter.isUseFilter()) {
-	        addResult &= ipaAFilter.check_filter(ipaAVal);
-	    }
-	    
-	    if(addResult) {
-	        var result = [ ipaTVal, ipaAVal ];
-	        var meta = getMetadata(record, ipaTVal, ipaAVal);
-	        results.add(result, meta, ResultType.ALIGNED);
-	    }
-	}
 }

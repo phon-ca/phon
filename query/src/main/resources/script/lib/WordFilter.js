@@ -6,8 +6,6 @@ var PatternFilter = require("lib/PatternFilter").PatternFilter;
 
 exports.WordFilter = function(id) {
 
-    this.patternFilter = new PatternFilter(id+".patternFilter");
-
 	var sectionTitle = "Word Filter";
 	
 	var singletonParamInfo = {
@@ -76,13 +74,11 @@ exports.WordFilter = function(id) {
 			params.add(searchByWordOpt);
 			
 			var searchByWordCheckbox = searchByWordOpt.getEditorComponent();
-			var pf = this.patternFilter;
 			var actionListener = new java.awt.event.ActionListener() {
 				actionPerformed: function(e) { 
 					var enabled = searchByWordCheckbox.isSelected();
 					singletonGroupOpt.getEditorComponent().setEnabled(enabled);
 					posGroupOpt.getEditorComponent().setEnabled(enabled);
-					pf.setEnabled(enabled);
 				}
 			};
 			searchByWordCheckbox.addActionListener(actionListener);
@@ -96,9 +92,6 @@ exports.WordFilter = function(id) {
 		
 		params.add(singletonGroupOpt);
 		params.add(posGroupOpt);
-		
-		this.patternFilter.param_setup(params);
-		this.patternFilter.setEnabled(!this.searchByWordEnabled);
 	};
 	
 	/**
@@ -107,22 +100,32 @@ exports.WordFilter = function(id) {
 	 *
 	 * @param group
 	 *
-	 * @return array of word objects
+	 * @return array of object conforming to the following
+	 *  protocol
+	 * 
+	 * {
+	 *   wordIndex: int,
+	 *   start: int,
+	 *   end: int,
+	 *   word: obj 
+	 * }
 	 */
 	this.getRequestedWords = function(group) {
 		var retVal = new java.util.ArrayList();
 		var retIdx = 0;
-	
-		for(var wIndex = 0; wIndex < group.numberOfWords; wIndex++)
+		
+		var words = new Array();
+		var wordCount = group.alignedWordCount;
+		for(var wIndex = 0; wIndex < wordCount; wIndex++)
 		{
-			var word = group.getWord(wIndex);
+			var word = group.getAlignedWord(wIndex);
 
 			var posOk = false;
 			if(wIndex == 0 && this.wInitial) posOk = true;
-			if(wIndex > 0 && wIndex < group.numberOfWords-1 && this.wMedial) posOk = true;
-			if(wIndex == group.numberOfWords-1 && this.wFinal) posOk = true;
+			if(wIndex > 0 && wIndex < wordCount-1 && this.wMedial) posOk = true;
+			if(wIndex == wordCount-1 && this.wFinal) posOk = true;
 
-            if(wIndex == 0 && group.numberOfWords == 1) posOk = this.wSingleton;
+            if(wIndex == 0 && wordCount == 1) posOk = this.wSingleton;
 
 			if(posOk)
 			{
@@ -130,31 +133,9 @@ exports.WordFilter = function(id) {
 			}
 		}
 	
-		if(this.patternFilter.isUseFilter()) {
-		    var toRemove = new java.util.ArrayList();
-		    for(var i = 0; i < retVal.size(); i++) {
-		        var obj = retVal.get(i);
-		        if(!this.patternFilter.check_filter(obj)) {
-		            toRemove.add(obj);
-		        }
-		    }
-		    retVal.removeAll(toRemove);
-		}
-	
 		return retVal.toArray();
 	};
 	
-	this.filter =  function(groups) {
-	    var retVal = new Array();
-	    for(var i = 0; i < groups.length; i++) {
-	        var group = groups[i];
-	        var words = this.getRequestedWords(group);
-	        
-	        for(var j = 0; j < words.length; j++) 
-	            retVal = retVal.concat(words[j]);
-	    }
-	    return retVal;
-	};
 	
 	this.isUseFilter = function() {
 	    if(this.searchByWordEnabled) {

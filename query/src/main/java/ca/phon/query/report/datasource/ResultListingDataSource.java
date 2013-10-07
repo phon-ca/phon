@@ -74,21 +74,21 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	 */
 	private boolean includeExcluded;
 	
-	/**
-	 * Default pkg and class imports
-	 */
-	private final String scriptPkgImports[] = {
-			"Packages.ca.phon.engines.search.script",
-			"Packages.ca.phon.engines.search.db",
-			"Packages.ca.phon.engines.search.script.params",
-			"Packages.ca.phon.featureset"
-	};
-	
-	private final String scriptClazzImports[] = {
-			"Packages.ca.phon.featureset.FeatureSet",
-			"Packages.ca.phon.util.Range",
-			"Packages.ca.phon.util.StringUtils"
-	};
+//	/**
+//	 * Default pkg and class imports
+//	 */
+//	private final String scriptPkgImports[] = {
+//			"Packages.ca.phon.engines.search.script",
+//			"Packages.ca.phon.engines.search.db",
+//			"Packages.ca.phon.engines.search.script.params",
+//			"Packages.ca.phon.featureset"
+//	};
+//	
+//	private final String scriptClazzImports[] = {
+//			"Packages.ca.phon.featureset.FeatureSet",
+//			"Packages.ca.phon.util.Range",
+//			"Packages.ca.phon.util.StringUtils"
+//	};
 	
 	/**
 	 * Session
@@ -273,13 +273,13 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		throws ScriptException {
 		// append default imports to script
 		final StringBuffer buffer = new StringBuffer();
-		for(String imp:scriptPkgImports) {
-			buffer.append(String.format("importPackage(%s)\n", imp));
-		}
-		
-		for(String imp:scriptClazzImports) {
-			buffer.append(String.format("importClass(%s)\n", imp));
-		}
+//		for(String imp:scriptPkgImports) {
+//			buffer.append(String.format("importPackage(%s)\n", imp));
+//		}
+//		
+//		for(String imp:scriptClazzImports) {
+//			buffer.append(String.format("importClass(%s)\n", imp));
+//		}
 		
 		buffer.append(script);
 		
@@ -314,6 +314,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		bindings.put("resultSet", resultSet);
 		bindings.put("result", result);
 		bindings.put("record", record);
+		bindings.put("recordIndex", result.getRecordIndex());
 		bindings.put("table", this);
 		
 		return bindings;

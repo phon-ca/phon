@@ -42,25 +42,34 @@ exports.TierFilter = function(id) {
 	};
 	
 	this.check_group = function(record, groupIdx) {
-	    var tierName = StringUtils.strip(this.tier);
-	    
-	    // data in 'flat' tiers is aligned with 
-	    // every tier
-	    var group = record.getGroup(tierName, groupIdx);
-	    
-	    return (group == null ? false : this.patternFilter.check_filter(group));
+	    var group = record.getGroup(groupIdx);
+	    var tier = group.getTier(this.tier);
+	    return this.patternFilter.check_filter(tier);
 	};
 	
 	this.filter_groups = function(record, groups) {
 	    var retVal = new Array();
 	    
 	    for(var i = 0; i < groups.length; i++) {
-	        if(this.check_group(record, groups[i].groupIndex)) {
-	            retVal = retVal.concat(groups[i]);
+	        var group = groups[i];
+	        var tier = group.getTier(this.tier);
+	        
+	        if(this.patternFilter.check_filter(tier)) {
+	            retVal.push(group);
 	        }
 	    }
 	    
 	    return retVal;
 	};
 	
+	this.check_word = function(word) {
+	    var retVal = false;
+	    
+	    var tierVal = word.getTier(this.tier);
+	    if(tierVal) {
+	        retVal = this.patternFilter.check_filter(tierVal);
+	    }
+	    
+	    return retVal;
+	};
 }

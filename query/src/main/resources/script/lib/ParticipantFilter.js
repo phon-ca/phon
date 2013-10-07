@@ -68,7 +68,7 @@ exports.ParticipantFilter = function(id) {
 	    index: 0
 	};
 	
-	var agePattern = /^[0-9]{2};[0-9]{2}\.[0-9]{2}$/;
+	var agePattern = /^([0-9]{2});([0-9]{2})\.([0-9]{2})$/;
 	
 	/**
 	 * Check age filter text.
@@ -197,31 +197,43 @@ exports.ParticipantFilter = function(id) {
 	};
 	
 	this.checkSpeakerAge = function(speaker) {
-    	if(speaker == null || speaker.age == null)
+    	if(speaker == null || speaker.ageTo == null)
     		return false;
     
     	var age1Result = false;
     	var age2Result = false;
-    
+    	
+    	var speakerPeriod = speaker.ageTo;
+    	var ageFormatter = new Packages.org.joda.time.format.PeriodFormatterBuilder()
+    	        .minimumPrintedDigits(2)
+                .appendYears()
+    	        .appendSuffix(";")
+    	        .minimumPrintedDigits(2)
+    	        .appendMonths()
+    	        .appendSuffix(".")
+    	        .minimumPrintedDigits(2)
+    	        .appendDays()
+    	        .toFormatter();
+    	var speakerAge = ageFormatter.print(speakerPeriod);
+    	
     	// perform first expression
     	if(this.age1Comparator.index == 0) {
-    		age1Result = speaker.age < this.age1String;
+    		age1Result = speakerAge < this.age1String;
     	} else if(this.age1Comparator.index == 1) {
-    		age1Result = speaker.age == this.age1String;
+    		age1Result = speakerAge == this.age1String;
     	} else if(this.age1Comparator.index == 2) {
-    	    java.lang.System.out.println(speaker.age + " " + (speaker.age > this.age1String));
-    		age1Result = speaker.age > this.age1String;
+    		age1Result = speakerAge > this.age1String;
     	}
     
     	var retVal = age1Result;
     
     	if(this.isUseAge2Filter()) {
     		if(this.age2Comparator.index == 0) {
-    			age2Result = speaker.age < this.age2String;
+    			age2Result = speakerAge < this.age2String;
     		} else if(this.age2Comparator.index == 1) {
-    			age2Result = speaker.age == this.age2String;
+    			age2Result = speakerAge == this.age2String;
     		} else if(this.age2Comparator.index == 2) {
-    			age2Result = speaker.age > this.age2String;
+    			age2Result = speakerAge > this.age2String;
     		}
     
     		if(this.ageOperator.index == 2) {

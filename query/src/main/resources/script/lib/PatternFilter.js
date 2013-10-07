@@ -140,7 +140,7 @@ exports.PatternFilter = function(id) {
             loc: 0
         };
         try {
-            Packages.ca.phon.phone.PhoneSequenceMatcher.compile(filter);
+            Packages.ca.phon.phonex.PhonexPattern.compile(filter);
             retVal.valid = true;
         } catch (e) {
             retVal.valid = false;
@@ -254,11 +254,11 @@ exports.PatternFilter = function(id) {
             },
             
             keyReleased: function(e) {
-                var textField = e.getSource();
-                validateTextField(textField);
             },
             
             keyTyped: function(e) {
+                var textField = e.getSource();
+                validateTextField(textField);
             }
        };
        filterParam.getEditorComponent().addKeyListener(filterListener);
@@ -307,7 +307,7 @@ exports.PatternFilter = function(id) {
     this.isUseFilter = function() {
         var txt = this.filter;
         
-        if(StringUtils.strip(txt).length() > 0) {
+        if(txt.length > 0) {
             var filterCheck = checkFilter(this.filter, this.filterType.index);
             return filterCheck.valid;
         } else {
@@ -317,64 +317,44 @@ exports.PatternFilter = function(id) {
     
     /* Check for occurances (or exact match) of entered filter */
     var checkPlain = function(obj, filter, caseSensitive, exactMatch) {
+        var strA = (caseSensitive ? obj.toString() : obj.toString().toLowerCase());
+        var strB = (caseSensitive ? filter : filter.toLowerCase());
+        
         if(exactMatch) {
-            return obj.matchesPlain(filter, caseSensitive);
+            return (strA == strB);
         } else {
-            return obj.containsPlain(filter, caseSensitive);
+            return (strA.indexOf(strB) >= 0);
         }
     };
     
     var checkRegex = function(obj, filter, caseSensitive, exactMatch) {
+        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0 : java.util.regex.Pattern.CASE_INSENSITIVE));
+        var regexMatcher = regexPattern.matcher(obj.toString());
         if(exactMatch) {
-            return obj.matchesRegex(filter, caseSensitive);
+            return matcher.matches();
         } else {
-            return obj.containsRegex(filter, caseSensitive);
+            return matcher.find();
         }
     };
     
     var checkPhonex = function(obj, filter, exactMatch) {
+        if(!(obj instanceof IPATranscript)) return false;
+        
         if(exactMatch) {
-            if(obj.matchesPhonex != undefined) {
-                return obj.matchesPhonex(filter);
-            } else
-                return false;
+            return obj.matches(filter);
         } else {
-            if(obj.containsPhonex != undefined) {
-                return obj.containsPhonex(filter);
-            } else {
-                return false;
-            }
+            return obj.contains(filter);
         }
     };
     
     var checkStressPattern = function(obj, filter, exactMatch) {
-        if(exactMatch) {
-            if(obj.matchesStressPattern != undefined) {
-                return obj.matchesStressPattern(filter);
-            } else
-                return false;
-        } else {
-            if(obj.containsStressPattern != undefined) {
-                return obj.containsStressPattern(filter);
-            } else {
-                return false;
-            }
-        }
+        // TODO 
+        return false;
     };
     
     var checkCVPattern = function(obj, filter, exactMatch) {
-        if(exactMatch) {
-            if(obj.matchesCVType != undefined) {
-                return obj.matchesCVType(filter);
-            } else
-                return false;
-        } else {
-            if(obj.containsCVType != undefined) {
-                return obj.containsCVType(filter);
-            } else {
-                return false;
-            }
-        }
+        // TODO 
+        return false;
     };
     
     /**
@@ -419,13 +399,25 @@ exports.PatternFilter = function(id) {
     };
     
     var findPlain = function(obj, filter, caseSensitive, exactMatch) {
+        var retVal = new Array();
+        
+        var strA = (caseSensitive ? obj.toString() : obj.toString().toLowerCase());
+        var strB = (caseSensitive ? filter : filter.toLowerCase());
         if(exactMatch) {
-           if(obj.matchesPlain(filter, caseSensitive)) {
-               return [ obj ];
+           if(strA == strB) {
+               var v = {start:0, end:strA.length(), value:obj};
+               retVal.append(v);
            }
         } else {
-            return obj.findPlain(filter, caseSensitive);
+            var i = 0;
+            while(strA.indexOf(strB, i) >= 0) {
+                var v = {start:i, end:i+strB.length(), value:obj.substring(i, i+strB.length())};
+                retVal.append(v);
+                i += strB.length();
+            }
         }
+        
+        return retVal;
     };
     
     var findRegex = function(obj, filter, caseSensitive, exactMatch) {
@@ -441,64 +433,34 @@ exports.PatternFilter = function(id) {
     };
     
     var findPhonex = function(obj, filter, exactMatch) {
+        var retVal = new Array();
+        
+        if(!(obj instanceof IPATranscript)) return retVal;
+        
         if(exactMatch) {
-            if(obj.matchesPhonex != undefined) {
-                if(obj.matchesPhonex(filter)) {
-                    return [ obj ];   
-                } else {
-                    return new Array();
-                }
-            } else {
-                return new Array();
+            if(obj.matches(filter)) {
+                v = {start:0, end:obj.size(), value:obj};
+                retVal.push(v);
             }
         } else {
-            
-            if(obj.findPhonex instanceof Function) {
-                return obj.findPhonex(filter);
-            } else {
-                return new Array();
+            var phonexPattern = PhonexPattern.compile(filter);
+            var phonexMatcher = phonexPattern.matcher(obj);
+
+            while(phonexMatcher.find()) {
+                v = {start:phonexMatcher.start(), end:phonexMatcher.end(), value:new IPATranscript(phonexMatcher.group())};
+                retVal.push(v);                
             }
         }
+        
+        return retVal;
     };
     
     var findCVPattern = function(obj, filter, exactMatch) {
-        if(exactMatch) {
-            if(obj.matchesCVType != undefined) {
-                if(obj.matchesCVType(filter)) {
-                    return [ obj ];   
-                } else {
-                    return new Array();
-                }
-            } else {
-                return new Array();
-            }
-        } else {
-            if(obj.findCVType != undefined) {
-                return obj.findCVType(filter);
-            } else {
-                return new Array();
-            }
-        }
+        return new Array();
     };
     
     var findStressPattern = function(obj, filter, exactMatch) {
-        if(exactMatch) {
-            if(obj.matchesStressPattern != undefined) {
-                if(obj.matchesStressPattern(filter)) {
-                    return [ obj ];   
-                } else {
-                    return new Array();
-                }
-            } else {
-                return new Array();
-            }
-        } else {
-            if(obj.findStressPattern != undefined) {
-                return obj.findStressPattern(filter);
-            } else {
-                return new Array();
-            }
-        }
+        return new Array();
     };
     
     /**
@@ -506,7 +468,14 @@ exports.PatternFilter = function(id) {
      * within the given object.
      *
      * @param obj
-     * @return occurances of the pattern
+     * @return occurances of the pattern.  The results will be a list
+     *  of items conforming to the following protocol:
+     * 
+     *  { 
+     *     start:int // the start index of the match
+     *     end:int   // the end index of the match
+     *     value:object // the value of the match
+     *  }
      */
     this.find_pattern = function(obj) {
         var retVal = new Array();
@@ -541,4 +510,23 @@ exports.PatternFilter = function(id) {
         return retVal;
     };
     
+    /**
+     * Filters a list of group objects given a tier name and list of groups.
+     * 
+     * @param groups
+     * @return a list of filtered groups based on the setup of this filter
+     */
+    this.filter_groups = function(groups, tierName) {
+        var retVal = new Array();
+        
+        for(var gIdx = 0; gIdx < groups.length; gIdx++) {
+            var group = groups[gIdx];
+            var groupVal = group.getTier(tierName);
+            if(this.check_filter(groupVal)) {
+                retVal.push(group);
+            }
+        }
+        
+        return retVal;
+    };
 }

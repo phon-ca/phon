@@ -546,7 +546,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
         
         final PhonWorkerGroup workerGroup = new PhonWorkerGroup(1);
         // create a copy of the search script
-        final QueryScript script = new QueryScript(scriptEditor.getScript().getScript(false));
+        final QueryScript script = scriptEditor.getScript();
         script.setLocation(scriptEditor.getScript().getLocation());
         ScriptParam.copyParams(scriptEditor.getScript().getScriptParams(), script.getScriptParams());
         
