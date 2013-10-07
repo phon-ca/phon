@@ -82,4 +82,21 @@ public interface Group {
 	
 	public <T> void setTier(String name, Class<T> type, T val);
 	
+	/**
+	 * Get the aligned word data for the given index
+	 * 
+	 * @param wordIndex
+	 * 
+	 * @return the aligned word data for the given index
+	 */
+	public Word getAlignedWord(int wordIndex);
+	
+	/**
+	 * Return the number of aligned words based on
+	 * the orthography tier.
+	 * 
+	 * @return the number of aligned words in orthography
+	 */
+	public int getAlignedWordCount();
+	
 }

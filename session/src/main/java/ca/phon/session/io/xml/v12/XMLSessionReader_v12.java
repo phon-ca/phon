@@ -79,6 +79,7 @@ import ca.phon.session.io.xml.v12.TvType;
 import ca.phon.session.io.xml.v12.UserTierType;
 import ca.phon.session.io.xml.v12.UserTiersType;
 import ca.phon.session.io.xml.v12.WordType;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -557,8 +558,13 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			if(ct != null) {
 				final ConstituentTypeType ctt = ct.getScType();
 				final SyllableConstituentType scType = SyllableConstituentType.fromString(ctt.toString());
+				final SyllabificationInfo info = phone.getExtension(SyllabificationInfo.class);
 				if(scType != null) {
-					phone.setScType(scType);
+					info.setConstituentType(scType);
+					if(scType == SyllableConstituentType.NUCLEUS) {
+						info.setDiphthongMember(!ct.isHiatus()); 
+					}
+					phone.putExtension(SyllabificationInfo.class, info);
 				}
 			}
 		}

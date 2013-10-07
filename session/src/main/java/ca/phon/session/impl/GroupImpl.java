@@ -2,10 +2,12 @@ package ca.phon.session.impl;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.OrthoWordExtractor;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
+import ca.phon.session.Word;
 
 public class GroupImpl implements Group {
 	
@@ -99,6 +101,19 @@ public class GroupImpl implements Group {
 		if(tier != null) {
 			tier.setGroup(groupIndex, val);
 		}
+	}
+	
+	@Override
+	public Word getAlignedWord(int wordIndex) {
+		return new WordImpl(getRecord(), groupIndex, wordIndex);
+	}
+	
+	@Override
+	public int getAlignedWordCount() {
+		final Orthography ortho = getOrthography();
+		final OrthoWordExtractor extractor = new OrthoWordExtractor();
+		ortho.accept(extractor);
+		return extractor.getWordList().size();
 	}
 
 }
