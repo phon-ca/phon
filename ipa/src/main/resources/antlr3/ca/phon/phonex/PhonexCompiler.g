@@ -413,6 +413,13 @@ predefined_phone_class returns [PhoneMatcher value]
 			break;
 			
 		case 's':
+			$value = new PhoneMatcher() {
+				public boolean matches(IPAElement p) {
+					return p.getScType().equals(SyllableConstituentType.SYLLABLESTRESSMARKER);
+				}
+				
+				public boolean matchesAnything() { return false; }
+			};
 			break;
 			
 		default:
