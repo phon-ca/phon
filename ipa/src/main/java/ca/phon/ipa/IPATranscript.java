@@ -106,6 +106,92 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	}
 	
 	/**
+	 * Returns <code>true</code> if this transcript contains
+	 * the given phonex pattern.
+	 * 
+	 * @param phonex
+	 * @return <code>true</code> if the transcript contains
+	 *  the given phonex pattern, <code>false</code> otherwise
+	 *  
+	 * @throws PhonexPatternException if the given phonex
+	 *  is not valid
+	 */
+	public boolean contains(String phonex) {
+		boolean retVal = false;
+		
+		PhonexPattern pattern = PhonexPattern.compile(phonex);
+		PhonexMatcher matcher = pattern.matcher(this);
+		retVal = matcher.find();
+		
+		return retVal;
+	}
+	
+	/**
+	 * Returns the index of the first phone of the given phonex pattern
+	 * in this transcript.
+	 * 
+	 * @param phonex
+	 * 
+	 * @return the index of the first phone in the given pattern or
+	 *  -1 if not found
+	 *  
+	 *  @throws PhonexPatternException if the given phonex
+	 *   is not valid
+	 */
+	public int indexOf(String phonex) {
+		int retVal = -1;
+		
+		PhonexPattern pattern = PhonexPattern.compile(phonex);
+		PhonexMatcher matcher = pattern.matcher(this);
+		
+		if(matcher.find()) {
+			retVal = matcher.start();
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Returns the index of the first phone of the given phonex pattern
+	 * in this transcript starting at the given phone index.
+	 * 
+	 * @param phonex
+	 * @param index of the phone to start searching from
+	 * 
+	 * @return the index of the first phone in the given pattern or
+	 *  -1 if not found
+	 *  
+	 *  @throws PhonexPatternException if the given phonex
+	 *   is not valid
+	 */
+	public int indexOf(String phonex, int index) {
+		int retVal = -1;
+		
+		PhonexPattern pattern = PhonexPattern.compile(phonex);
+		PhonexMatcher matcher = pattern.matcher(this);
+		
+		if(matcher.find(index)) {
+			retVal = matcher.start();
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Return the index of the first element in the given
+	 * transcript.
+	 * 
+	 * @param transcript
+	 * @return the index or -1 if not found
+	 */
+	public int indexOf(IPATranscript transcript) {
+		if(transcript.size() > 0) 
+			return super.indexOf(transcript.get(0));
+		else
+			return -1;
+	}
+	
+	/**
 	 * Split transcript using the given phonex pattern
 	 * as a delimiter.
 	 * 
@@ -195,6 +281,21 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		} else {
 			return eleIdx;
 		}
+	}
+	
+	/**
+	 * Find the index of the given ipa transcript in 
+	 * the string representation of this transcript.
+	 * 
+	 * @param transcript
+	 * @return the string index of the given transcript
+	 *  or < 0 if not found
+	 */
+	public int stringIndexOf(IPATranscript transcript) {
+		if(transcript.size() > 0)
+			return stringIndexOfElement(transcript.get(0));
+		else
+			return -1;
 	}
 	
 	/**
