@@ -7,6 +7,7 @@ public enum OrthoPunctType {
 	PERIOD('.'),
 	COMMA(','),
 	EXCLAMATION('!'),
+	QUESTION('?'),
 	AT('@'),
 	HASH('#'),
 	DOLLARSIGN('$'),
