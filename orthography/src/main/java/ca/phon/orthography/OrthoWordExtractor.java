@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.phon.visitor.Visitor;
+import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 /**
@@ -11,13 +12,9 @@ import ca.phon.visitor.annotation.Visits;
  * from Orthography
  *
  */
-public class OrthoWordExtractor implements Visitor<OrthoElement> {
+public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 
 	private final List<OrthoElement> wordList = new ArrayList<>();
-	
-	@Override
-	public void visit(OrthoElement obj) {
-	}
 	
 	@Visits
 	public void visitWord(OrthoWord word) {
@@ -31,5 +28,9 @@ public class OrthoWordExtractor implements Visitor<OrthoElement> {
 	
 	public List<OrthoElement> getWordList() {
 		return this.wordList;
+	}
+
+	@Override
+	public void fallbackVisit(OrthoElement obj) {
 	}
 }
