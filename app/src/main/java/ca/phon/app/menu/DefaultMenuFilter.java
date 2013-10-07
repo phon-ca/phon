@@ -511,24 +511,28 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 //					}
 //				}
 //				
-//				JMenuItem scriptItem = new JMenuItem("Script Editor...");
-//				scriptItem.addActionListener(new ActionListener() {
-//
-//					public void actionPerformed(ActionEvent e) {
-//						String projectName = "";
-//						projectName = project.getProjectName();
-//						
-//						QueryScript scriptTemplate = new QueryScript(new File("data/script/script.template"));
-//						scriptTemplate.setLocation(null);
-//						QueryEditorWindow sd = new QueryEditorWindow("Script Editor : " + projectName, project,
-//								scriptTemplate);
-////							sd.setParentFrame(CommonModuleFrame.getCurrentFrame());
-//						sd.pack();
-//						sd.setLocationByPlatform(true);
-//						sd.setVisible(true);
-//					}
-//					
-//				});
+				JMenuItem scriptItem = new JMenuItem("Script Editor...");
+				scriptItem.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						String projectName = "";
+						projectName = project.getName();
+						
+						try {
+							QueryScript scriptTemplate = new QueryScript(new File("data/script/script.template"));
+							scriptTemplate.setLocation(null);
+							QueryEditorWindow sd = new QueryEditorWindow("Script Editor : " + projectName, project,
+									scriptTemplate);
+	//							sd.setParentFrame(CommonModuleFrame.getCurrentFrame());
+							sd.pack();
+							sd.setLocationByPlatform(true);
+							sd.setVisible(true);
+						} catch (IOException ex) {
+							
+						}
+					}
+					
+				});
 //				
 //				JMenuItem historyItem = new JMenuItem("Query History...");
 //				historyItem.addActionListener(new ActionListener() {
@@ -548,8 +552,8 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 //					
 //				});
 //				
-//				queryMenu.addSeparator();
-//				queryMenu.add(scriptItem);
+				queryMenu.addSeparator();
+				queryMenu.add(scriptItem);
 //				queryMenu.add(historyItem);
 			}
 			
