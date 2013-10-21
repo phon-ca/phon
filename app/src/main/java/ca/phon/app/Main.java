@@ -54,21 +54,17 @@ public class Main {
 			}
 		}
 		
-		// display the workspace window
-		final Runnable onEDT = new Runnable() {
-			
-			@Override
-			public void run() {
-				final PluginEntryPointRunner entryPtRunner =
-						new PluginEntryPointRunner(initialEntryPoint);
-				try {
-					entryPtRunner.executePlugin();
-				} catch (PluginException e) {
-					LOGGER.log(Level.SEVERE, e.getMessage(), e);
-				}
-			}
-		};
-		SwingUtilities.invokeLater(onEDT);
+		// start initial entry point
+		LOGGER.info("Starting " + initialEntryPoint);
+		final PluginEntryPointRunner entryPtRunner =
+				new PluginEntryPointRunner(initialEntryPoint);
+		try {
+			// TODO process command line arguments and pass them
+			// to the entry point in a map
+			entryPtRunner.executePlugin();
+		} catch (PluginException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
 	}
 	
 	private static void printVMInfo() {
