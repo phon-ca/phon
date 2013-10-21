@@ -105,7 +105,7 @@ public class QueryScriptLibrary implements IExtendable {
 		if(file.endsWith(".js")) {
 			BufferedWriter out = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
-			out.write(script.getScript(false));
+			out.write(script.getScript());
 			out.flush();
 			out.close();
 		} else if(file.endsWith(".xml")) {
@@ -117,19 +117,20 @@ public class QueryScriptLibrary implements IExtendable {
 			
 			q.setName((new File(file)).getName());
 			final Script s = qf.createScript();
-			s.setSource(qs.getScript(false));
+			s.setSource(qs.getScript());
 
+			// TODO save params
 			final Map<String, String> paramMap = new TreeMap<String, String>();
-			for(ScriptParam scriptParam:qs.getScriptParams()) {
-				if(scriptParam.hasChanged()) {
-					for(String paramId:scriptParam.getParamIds()) {
-						final Object v = scriptParam.getValue(paramId);
-						if(v != null) {
-							paramMap.put(paramId, v.toString());
-						}
-					}
-				}
-			}
+//			for(ScriptParam scriptParam:qs.getScriptParameters()) {
+//				if(scriptParam.hasChanged()) {
+//					for(String paramId:scriptParam.getParamIds()) {
+//						final Object v = scriptParam.getValue(paramId);
+//						if(v != null) {
+//							paramMap.put(paramId, v.toString());
+//						}
+//					}
+//				}
+//			}
 			s.setParameters(paramMap);
 			q.setScript(s);
 			

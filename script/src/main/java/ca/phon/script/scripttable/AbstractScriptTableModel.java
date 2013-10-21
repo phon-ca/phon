@@ -8,14 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.script.Bindings;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.Invocable;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.swing.table.AbstractTableModel;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -26,7 +18,9 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptContext;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.scripttable.io.ObjectFactory;
@@ -40,8 +34,8 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	private Map<Integer, String> columnScripts =
 			Collections.synchronizedMap(new HashMap<Integer, String>());
 	
-	private Map<Integer, CompiledScript> columnCompiledScripts = 
-			Collections.synchronizedMap(new HashMap<Integer, CompiledScript>());
+	private Map<Integer, PhonScriptContext> columnCompiledScripts = 
+			Collections.synchronizedMap(new HashMap<Integer, PhonScriptContext>());
 	
 	private Map<Integer, Map<String, Object>> columnStaticMappings =
 			Collections.synchronizedMap(new HashMap<Integer, Map<String, Object>>());
@@ -50,7 +44,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	public Class<?> getColumnClass(int col) {
 		Class<?> retVal = super.getColumnClass(col);
 		
-		final CompiledScript cScript = columnCompiledScripts.get(col);
+		final PhonScriptContext cScript = columnCompiledScripts.get(col);
 		if(cScript != null) {
 			final Invocable invocable = (Invocable) cScript.getEngine();
 			final Map<String, Object> columnMappings = getMappingsAt(0, col);
@@ -152,8 +146,9 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 			
 			// setup static column mappings
 			final Map<String, Object> bindings = new HashMap<String, Object>();
-			final PhonScript ps = new PhonScript(script);
-			final ScriptParam[] params = ps.getScriptParams();
+			final PhonScript ps = new BasicScript(script);
+			final PhonScriptContext context = ps.getContext();
+			final ScriptParam[] params = context.getScriptParams();
 			
 			// setup script parameters
 			for(ScriptParam param:params) {

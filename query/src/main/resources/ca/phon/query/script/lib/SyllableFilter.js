@@ -107,25 +107,25 @@ exports.SyllableFilter = function(id) {
 				searchBySyllableParamInfo.def);
 			params.add(searchBySyllOpt);
 
-			var searchBySyllCheckbox = searchBySyllOpt.getEditorComponent();
-			var pf = this.patternFilter;
-			var actionListener = new java.awt.event.ActionListener() {
-				actionPerformed: function(e) { 
-					var enabled = searchBySyllCheckbox.isSelected();
-					ignoreTruncatedOpt.getEditorComponent().setEnabled(enabled);
-					singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-					posGroupOpt.getEditorComponent().setEnabled(enabled);
-					stressGroupOpt.getEditorComponent().setEnabled(enabled);
-					pf.setEnabled(enabled);
-				}
-			};
-			searchBySyllCheckbox.addActionListener(actionListener);
+//			var searchBySyllCheckbox = searchBySyllOpt.getEditorComponent();
+//			var pf = this.patternFilter;
+//			var actionListener = new java.awt.event.ActionListener() {
+//				actionPerformed: function(e) { 
+//					var enabled = searchBySyllCheckbox.isSelected();
+//					ignoreTruncatedOpt.getEditorComponent().setEnabled(enabled);
+//					singletonGroupOpt.getEditorComponent().setEnabled(enabled);
+//					posGroupOpt.getEditorComponent().setEnabled(enabled);
+//					stressGroupOpt.getEditorComponent().setEnabled(enabled);
+//					pf.setEnabled(enabled);
+//				}
+//			};
+//			searchBySyllCheckbox.addActionListener(actionListener);
 			
-			var enabled = searchBySyllCheckbox.isSelected();
-			ignoreTruncatedOpt.getEditorComponent().setEnabled(enabled);
-			singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-			posGroupOpt.getEditorComponent().setEnabled(enabled);
-			stressGroupOpt.getEditorComponent().setEnabled(enabled);
+//			var enabled = searchBySyllCheckbox.isSelected();
+//			ignoreTruncatedOpt.getEditorComponent().setEnabled(enabled);
+//			singletonGroupOpt.getEditorComponent().setEnabled(enabled);
+//			posGroupOpt.getEditorComponent().setEnabled(enabled);
+//			stressGroupOpt.getEditorComponent().setEnabled(enabled);
 		
 		    this.searchBySyllOpt = searchBySyllOpt;
 		}
@@ -172,10 +172,10 @@ exports.SyllableFilter = function(id) {
 			if(sIndex == 0 && syllables.size() == 1) posOk = this.sSingleton;
 			
 			var truncatedOk = true;
-			if(this.ignoreTruncated) {
-			    var aligned = record.getAlignedPhones(syll);
-			    if(aligned.numberOfPhones == 0) truncatedOk = false;
-			}
+//			if(this.ignoreTruncated) {
+//			    var aligned = record.getAlignedPhones(syll);
+//			    if(aligned.numberOfPhones == 0) truncatedOk = false;
+//			}
 			
 			if(posOk && stressOk && truncatedOk)
 			{

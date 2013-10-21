@@ -22,13 +22,13 @@ exports.FeatureFilter = function(id) {
             "Error at index " + loc  +": " + message :
             message);
        
-        textField.setToolTipText(msg);
-        textField.setState("UNDEFINED");
+       // textField.setToolTipText(msg);
+       // textField.setState("UNDEFINED");
     };
     
     var setFilterOk = function(textField) {
-        textField.setToolTipText("");
-        textField.setState("INPUT");
+        //textField.setToolTipText("");
+        //textField.setState("INPUT");
     };
     
     var checkFilter = function(filter) {
@@ -61,30 +61,30 @@ exports.FeatureFilter = function(id) {
     
     
     this.param_setup = function(params) {
-        var featureListParam = new StringScriptParam(
+        var featureListParam = new(
             featureListParamInfo.id,
             featureListParamInfo.title,
             featureListParamInfo.def);
-        featureListParam.getEditorComponent().setPrompt(featureListParamInfo.prompt);
+//        featureListParam.getEditorComponent().setPrompt(featureListParamInfo.prompt);
     
-        var featureListListener = new java.awt.event.KeyListener() {
-            keyPressed: function(e) {},
-            
-            keyReleased: function(e) {
-                var txt = StringUtils.strip(e.getSource().getText());
-                var check = checkFilter(txt);
-                java.lang.System.out.println(check.valid + ":" + txt);
-                if(check.valid) {
-                    setFilterOk(e.getSource());
-                } else {
-                    java.lang.System.err.println(check.message);
-                    setFilterInvalid(e.getSource(), check.message, check.loc);
-                }
-            },
-            
-            keyTyped: function(e) {}
-        };
-        featureListParam.getEditorComponent().addKeyListener(featureListListener);
+//        var featureListListener = new java.awt.event.KeyListener() {
+//            keyPressed: function(e) {},
+//            
+//            keyReleased: function(e) {
+//                var txt = StringUtils.strip(e.getSource().getText());
+//                var check = checkFilter(txt);
+//                java.lang.System.out.println(check.valid + ":" + txt);
+//                if(check.valid) {
+//                    setFilterOk(e.getSource());
+//                } else {
+//                    java.lang.System.err.println(check.message);
+//                    setFilterInvalid(e.getSource(), check.message, check.loc);
+//                }
+//            },
+//            
+//            keyTyped: function(e) {}
+//        };
+//        featureListParam.getEditorComponent().addKeyListener(featureListListener);
         
         params.add(featureListParam);
     };

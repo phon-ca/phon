@@ -100,13 +100,13 @@ exports.ParticipantFilter = function(id) {
             "Error at index " + loc  +": " + messgae :
             message);
        
-        textField.setToolTipText(message);
-        textField.setState("UNDEFINED");
+//        textField.setToolTipText(message);
+//        textField.setState("UNDEFINED");
 	};
 	
 	var setFieldOk = function(textField) {
-	    textField.setToolTipText("");
-	    textField.setState("INPUT");
+//	    textField.setToolTipText("");
+//	    textField.setState("INPUT");
 	};
 	
 	/** 
@@ -122,24 +122,24 @@ exports.ParticipantFilter = function(id) {
 		    participantNamesParamInfo.title,
 		    participantNamesParamInfo.def);
 	    // set tooltip for text field
-	    participantNamesParam.getEditorComponent().setPrompt(
-	        participantNamesParamInfo.prompt);
+//	    participantNamesParam.getEditorComponent().setPrompt(
+//	        participantNamesParamInfo.prompt);
 	    params.add(participantNamesParam);   
 	    
 	    age1Param = new StringScriptParam(
 	        age1ParamInfo.id,
 	        age1ParamInfo.title,
 	        age1ParamInfo.def);
-	    age1Param.getEditorComponent().setPrompt(
-	        age1ParamInfo.prompt);
+//	    age1Param.getEditorComponent().setPrompt(
+//	        age1ParamInfo.prompt);
 	    
 	    age2Param = new StringScriptParam(
 	        age2ParamInfo.id,
 	        age2ParamInfo.title,
 	        age2ParamInfo.def);
-	    age2Param.getEditorComponent().setPrompt(
-	        age2ParamInfo.prompt);
-	    age2Param.getEditorComponent().setEnabled(false);
+//	    age2Param.getEditorComponent().setPrompt(
+//	        age2ParamInfo.prompt);
+//	    age2Param.getEditorComponent().setEnabled(false);
 	    
 	    age1ComparatorParam = new EnumScriptParam(
 	        age1ComparatorParamInfo.id,
@@ -152,42 +152,42 @@ exports.ParticipantFilter = function(id) {
 	        age2ComparatorParamInfo.title,
 	        age2ComparatorParamInfo.def,
 	        age2ComparatorParamInfo.desc);
-	    age2ComparatorParam.getEditorComponent().setEnabled(false);
+//	    age2ComparatorParam.getEditorComponent().setEnabled(false);
 	    
 	    ageOperatorParam = new EnumScriptParam(
 	        ageOperatorParamInfo.id,
 	        ageOperatorParamInfo.title,
 	        ageOperatorParamInfo.def,
 	        ageOperatorParamInfo.desc);
-	    var ageOperatorListener = new java.awt.event.ItemListener() {
-	        itemStateChanged: function(e) {
-                var idx = e.getSource().getSelectedIndex();
-                var enabled = (idx > 0);
-                age2ComparatorParam.getEditorComponent().setEnabled(enabled);
-                age2Param.getEditorComponent().setEnabled(enabled);
-            }
-	    };
-	    ageOperatorParam.getEditorComponent().addItemListener(ageOperatorListener);
+//	    var ageOperatorListener = new java.awt.event.ItemListener() {
+//	        itemStateChanged: function(e) {
+//                var idx = e.getSource().getSelectedIndex();
+//                var enabled = (idx > 0);
+//                age2ComparatorParam.getEditorComponent().setEnabled(enabled);
+//                age2Param.getEditorComponent().setEnabled(enabled);
+//            }
+//	    };
+//	    ageOperatorParam.getEditorComponent().addItemListener(ageOperatorListener);
 	    
 	    
-	    var ageValidatorListener = new java.awt.event.KeyListener() {
-	        keyReleased: function(e) {
-	            var textField = e.getSource();
-	            var txt = textField.getText();
-                
-                if(!checkAgeFilter(txt)) {
-                    setFieldInvalid(textField, "", -1);
-                } else {
-                    setFieldOk(textField);
-                }
-	        },
-	        
-	        keyPressed: function(e) {},
-	        
-	        keyTyped: function(e) {}
-	    };
-	    age1Param.getEditorComponent().addKeyListener(ageValidatorListener);
-	    age2Param.getEditorComponent().addKeyListener(ageValidatorListener);
+//	    var ageValidatorListener = new java.awt.event.KeyListener() {
+//	        keyReleased: function(e) {
+//	            var textField = e.getSource();
+//	            var txt = textField.getText();
+//                
+//                if(!checkAgeFilter(txt)) {
+//                    setFieldInvalid(textField, "", -1);
+//                } else {
+//                    setFieldOk(textField);
+//                }
+//	        },
+//	        
+//	        keyPressed: function(e) {},
+//	        
+//	        keyTyped: function(e) {}
+//	    };
+//	    age1Param.getEditorComponent().addKeyListener(ageValidatorListener);
+//	    age2Param.getEditorComponent().addKeyListener(ageValidatorListener);
 	    
 	    params.add(age1ComparatorParam);
 	    params.add(age1Param);

@@ -73,19 +73,19 @@ exports.WordFilter = function(id) {
 				searchByWordParamInfo.def);
 			params.add(searchByWordOpt);
 			
-			var searchByWordCheckbox = searchByWordOpt.getEditorComponent();
-			var actionListener = new java.awt.event.ActionListener() {
-				actionPerformed: function(e) { 
-					var enabled = searchByWordCheckbox.isSelected();
-					singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-					posGroupOpt.getEditorComponent().setEnabled(enabled);
-				}
-			};
-			searchByWordCheckbox.addActionListener(actionListener);
-			
-			var enabled = searchByWordCheckbox.isSelected();
-			singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-			posGroupOpt.getEditorComponent().setEnabled(enabled);
+//			var searchByWordCheckbox = searchByWordOpt.getEditorComponent();
+//			var actionListener = new java.awt.event.ActionListener() {
+//				actionPerformed: function(e) { 
+//					var enabled = searchByWordCheckbox.isSelected();
+//					singletonGroupOpt.getEditorComponent().setEnabled(enabled);
+//					posGroupOpt.getEditorComponent().setEnabled(enabled);
+//				}
+//			};
+//			searchByWordCheckbox.addActionListener(actionListener);
+//			
+//			var enabled = searchByWordCheckbox.isSelected();
+//			singletonGroupOpt.getEditorComponent().setEnabled(enabled);
+//			posGroupOpt.getEditorComponent().setEnabled(enabled);
 			
 			this.searchByWordOpt = searchByWordOpt;
 		}

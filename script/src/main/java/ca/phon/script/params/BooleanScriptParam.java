@@ -17,45 +17,20 @@
  */
 package ca.phon.script.params;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 public class BooleanScriptParam extends ScriptParam {
 	
-	/** The editor comp */
-	private final JCheckBox editorComp = new JCheckBox();
-	
-	private String _id;
+	private final String labelText;
 	
 	public BooleanScriptParam(String id, String labelText, String desc, Boolean defaultValue) {
 		super();
 		
-		_id = id;
+		this.labelText = labelText;
 		setParamType("bool");
 		setParamDesc(desc);
 		setValue(id, defaultValue);
 		setDefaultValue(id, defaultValue);
-		
-		editorComp.setText(labelText);
-		editorComp.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				Boolean newValue = editorComp.isSelected();
-				setValue(_id, newValue);
-			}
-			
-		});
 	}
-
-	@Override
-	public JComponent getEditorComponent() {
-		editorComp.setSelected((Boolean)getValue(_id));
-		return editorComp;
-	}
-
+	
 	@Override
 	public String getStringRepresentation() {
 		String retVal = "{";
@@ -64,7 +39,7 @@ public class BooleanScriptParam extends ScriptParam {
 		retVal += "bool, ";
 		retVal += id + ", ";
 		retVal += super.getDefaultValue(id).toString() + ", ";
-		retVal += "\"" + editorComp.getText() + "\"";
+		retVal += "\"" + labelText + "\"";
 		retVal += ", \"" + super.getParamDesc() + "\"";
 
 		retVal += "}";

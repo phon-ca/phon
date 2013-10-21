@@ -52,7 +52,7 @@ var includeAlignedParamInfo = {
 var includeAlignedParam;
 var includeAligned = includeAlignedParamInfo.def;
 
-function param_setup(params) {
+function setup_params(params) {
 
 	filters.primary.setSelectedPatternType(PatternType.PHONEX);
 	filters.primary.param_setup(params);
@@ -67,14 +67,14 @@ function param_setup(params) {
 	    includeAlignedParamInfo.desc,
 	    includeAlignedParamInfo.title,
 	    includeAlignedParamInfo.def);
-    var includeAlignedListener = new java.awt.event.ItemListener() {
-        itemStateChanged: function(e) {
-	        var enabled = e.getSource().isSelected();
-	        filters.targetResultFilter.setEnabled(enabled);
-	        filters.actualResultFilter.setEnabled(enabled);
-	    }
-	};
-	includeAlignedParam.getEditorComponent().addItemListener(includeAlignedListener);
+//    var includeAlignedListener = new java.awt.event.ItemListener() {
+//        itemStateChanged: function(e) {
+//	        var enabled = e.getSource().isSelected();
+//	        filters.targetResultFilter.setEnabled(enabled);
+//	        filters.actualResultFilter.setEnabled(enabled);
+//	    }
+//	};
+//	includeAlignedParam.getEditorComponent().addItemListener(includeAlignedListener);
 	
 	params.add(resultFilterSection);
 	params.add(includeAlignedParam);
@@ -97,15 +97,15 @@ function param_setup(params) {
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
     params.add(wordsep);
     filters.alignedWord.param_setup(params);
-    var alignedWordListener = new java.awt.event.ItemListener {
-          itemStateChanged: function(e) {
-              var enabled = e.getSource().isSelected();
-              filters.wordPattern.setEnabled(enabled);
-              filters.alignedWord.setEnabled(enabled);
-          }
-    };
-    filters.alignedWord.setEnabled(false);
-    filters.word.searchByWordOpt.getEditorComponent().addItemListener(alignedWordListener);
+//    var alignedWordListener = new java.awt.event.ItemListener {
+//          itemStateChanged: function(e) {
+//              var enabled = e.getSource().isSelected();
+//              filters.wordPattern.setEnabled(enabled);
+//              filters.alignedWord.setEnabled(enabled);
+//          }
+//    };
+//    filters.alignedWord.setEnabled(false);
+//    filters.word.searchByWordOpt.getEditorComponent().addItemListener(alignedWordListener);
     
 	filters.syllable.param_setup(params);
 	filters.speaker.param_setup(params);
@@ -129,6 +129,15 @@ function param_setup(params) {
 	var pccAlignedLbl = new LabelScriptParam("", "<html><b>PCC/PVC (aligned)</b></html>");
 	params.add(pccAlignedLbl);
 	metadataOptions.pcc_aligned.param_setup(params);
+}
+
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
 }
 
 
@@ -204,8 +213,12 @@ function query_record(recordIndex, record) {
 		    var obj = toSearch[j];
 		    var matches = filters.primary.find_pattern(obj);
 		    
+		    java.lang.System.out.print(obj + ":");
+		    
+		    
 		    for(k = 0; k < matches.length; k++) {
     	        var match = matches[k];
+    	        java.lang.System.out.print((k > 0 ? ", " : "") + match.value);
     	        
     			var result = factory.createResult();
     			// calculate start/end positions of data in text
@@ -242,6 +255,7 @@ function query_record(recordIndex, record) {
     			
     			results.addResult(result);
     	    }
+    	    java.lang.System.out.println();
 		}
 	}
 }

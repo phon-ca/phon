@@ -17,48 +17,21 @@
  */
 package ca.phon.script.params;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-
 public class EnumScriptParam extends ScriptParam {
 
-	/** The editor comp */
-	private final JComboBox comboBox;
-	
 	private String[] choices;
-	
-	private String _id;
-	
-	private final ItemListener listener = new ItemListener() {
-
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			String value = comboBox.getSelectedItem().toString();
-			int index = comboBox.getSelectedIndex();
-			setValue(_id, new ReturnValue(value, index));
-		}
-		
-	};
 	
 	public EnumScriptParam(String id, String desc, int def, String[] choices) {
 		super();
 		
 		this.choices = choices;
-		_id = id;
 		setParamType("enum");
-//		setParamId(id);
 		setParamDesc(desc);
 		setValue(id, null);
 		setDefaultValue(id, new ReturnValue(choices[def], def));
-		
-		comboBox = new JComboBox(choices);
-		comboBox.setSelectedItem(getValue(id).toString());
-		comboBox.addItemListener(listener);
 	}
 	
 	public ReturnValue[] getChoices() {
@@ -70,33 +43,33 @@ public class EnumScriptParam extends ScriptParam {
 	}
 	
 	@Override
-	public JComponent getEditorComponent() {
-		comboBox.setSelectedItem(getValue(_id));
-		return comboBox;
-	}
-	
-	@Override
 	public String getStringRepresentation() {
-		String retVal = "{";
-
-		String id = super.getParamIds().iterator().next();
-		retVal += "enum, ";
-		retVal += id + ", ";
-		String choices = null;
-		for(int i = 0; i < comboBox.getItemCount(); i++) {
-			String choice = (String)comboBox.getItemAt(i);
-			if(choices == null)
-				choices = "\"" + choice + "\"";
-			else
-				choices += "|\"" + choice + "\"";
+		final StringBuilder builder = new StringBuilder();
+		builder.append("{");
+		
+		final String id = super.getParamIds().iterator().next();
+		builder.append("enum, ");
+		builder.append(id);
+		builder.append(", ");
+		
+		for(int i = 0; i < choices.length; i++) {
+			final String choice = choices[i];
+			if(i > 0) builder.append("|");
+			builder.append("\"");
+			builder.append(choice);
+			builder.append("\"");
 		}
-		retVal += choices + ", ";
-		retVal += ((ReturnValue)super.getDefaultValue(id)).getIndex() + ", ";
-		retVal += "\"" + super.getParamDesc() + "\"";
+		
+		final ReturnValue defValue = (ReturnValue)super.getDefaultValue(id);
+		builder.append(", ");
+		builder.append(defValue.getIndex());
+		builder.append("\"");
+		builder.append(super.getParamDesc());
+		builder.append("\"");
+		
+		builder.append("}");
 
-		retVal += "}";
-
-		return retVal;
+		return builder.toString();
 	}
 
 	@Override
@@ -123,15 +96,12 @@ public class EnumScriptParam extends ScriptParam {
 		}
 		
 		super.setValue(paramId, selectedValue);
-		
-		if(selectedValue != null) {
-			comboBox.removeItemListener(listener);
-			comboBox.setSelectedIndex(selectedValue.index);
-			comboBox.addItemListener(listener);
-		}
 	}
 
 	public static class ReturnValue implements Serializable {
+		
+		private static final long serialVersionUID = -6369233483886788366L;
+		
 		private String value;
 		private int index;
 		

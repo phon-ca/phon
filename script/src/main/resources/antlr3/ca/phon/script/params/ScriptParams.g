@@ -5,11 +5,12 @@ options {
 }
 
 @header {
-package ca.phon.engines.search.script.params;
+package ca.phon.script.params;
 
 import java.util.List;
 import java.util.ArrayList;
-import ca.phon.util.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 }
 
 @members {
@@ -22,7 +23,7 @@ public ScriptParam[] getScriptParams() {
 }
 
 @lexer::header {
-package ca.phon.engines.search.script.params;
+package ca.phon.script.params;
 }
 
 params

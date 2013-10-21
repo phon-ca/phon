@@ -17,30 +17,18 @@
  */
 package ca.phon.script.params;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-
 public class LabelScriptParam extends ScriptParam {
 	
 	private String lblText = "";
-
-	private final JLabel label = new JLabel();
 	
 	public LabelScriptParam(String labelText, String desc) {
 		super();
 		
 		setParamType("label");
 		lblText = labelText;
-//		setValue(labelText);
 		setParamDesc(desc);
 	}
 	
-	@Override
-	public JComponent getEditorComponent() {
-		label.setText(lblText);
-		return label;
-	}
-
 	@Override
 	public String getStringRepresentation() {
 		String retVal = "{";

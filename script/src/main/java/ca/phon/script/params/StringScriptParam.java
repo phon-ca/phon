@@ -17,62 +17,16 @@
  */
 package ca.phon.script.params;
 
-import java.awt.Font;
-
-import javax.swing.JComponent;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import ca.phon.ui.PhonGuiConstants;
-import ca.phon.ui.PromptedTextField;
-
 public class StringScriptParam extends ScriptParam {
-	
-	/** The editor comp */
-	private final PromptedTextField textField;
-	
-	private String _id;
 	
 	public StringScriptParam(String id, String desc, String defaultValue) {
 		super();
 		
-		_id = id;
 		setParamType("string");
 		
 		setParamDesc(desc);
 		setValue(id, null);
 		setDefaultValue(id, defaultValue);
-		
-		textField = new PromptedTextField();
-		textField.setText((String)getDefaultValue(id));
-		textField.setFont(Font.decode(PhonGuiConstants.DEFAULT_TRANSCRIPT_FONT));
-		textField.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateVal();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateVal();
-			}
-			
-			private void updateVal() {
-				setValue(_id, textField.getText());
-			}
-		});
-	}
-
-	@Override
-	public JComponent getEditorComponent() {
-		textField.setText(getValue(_id).toString());
-		return textField;
 	}
 
 	@Override

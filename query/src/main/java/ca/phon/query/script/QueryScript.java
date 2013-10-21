@@ -17,23 +17,16 @@
  */
 package ca.phon.query.script;
 
-import java.io.File;
-import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.script.PhonScript;
-import ca.phon.script.params.EnumScriptParam;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.rewrite.ScriptRewriter;
+import org.mozilla.javascript.Scriptable;
+
+import ca.phon.script.PhonScriptContext;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
 
 /**
  * Holds the text for a query script.
@@ -41,190 +34,90 @@ import ca.phon.script.rewrite.ScriptRewriter;
  * and default tags.
  * 
  */
-public class QueryScript extends PhonScript {
+public class QueryScript extends LazyQueryScript {
 	
-	private final static Logger LOGGER = Logger.getLogger(QueryScript.class.getName());
+	private QueryScriptContext context;
+	
+	/**
+	 * Query functions
+	 */
+	public static enum QueryFunction {
+		BEGIN_SEARCH("begin_search", 1),
+		QUERY_RECORD("query_record", 2),
+		END_SEARCH("end_search", 1);
+		
+		private String functionName;
+		
+		private int arity;
+		
+		private QueryFunction(String name, int arity) {
+			this.functionName = name;
+			this.arity = arity;
+		}
+		
+		public int getArity() {
+			return this.arity;
+		}
+		
+		public String getName() {
+			return this.functionName;
+		}
+	}
 	
 	/**
 	 * Constructor
 	 * 
 	 */
-	public QueryScript() {
-		super();
-	}
-	
 	public QueryScript(String script) {
 		super(script);
+		setupLibraryFolders();
 	}
 	
-	public QueryScript(File file) 
-		throws IOException {
-		super(file);
-	}
-
-	public QueryScript(URL url) 
-		throws IOException {
+	public QueryScript(URL url) {
 		super(url);
+		setupLibraryFolders();
 	}
 	
 	/**
-	 * Get script text with form data replaced with
-	 * hard-coded vars.
-	 * @return script
+	 * Setup library folders for 'require'
 	 */
-	public String getCannedQuery(String name, String comments, boolean rewrite) {
-		String retVal = getScript(false);
-
-		retVal = replaceScriptParams(retVal);
-
-		retVal = this.getCannedSearchForm(name, comments, getScriptParams())
-				+ "\n" + retVal;
+	private void setupLibraryFolders() {
+		final URL scriptFolder = getClass().getResource(".");
 		
-		if(rewrite) {
-			try {
-				retVal = ScriptRewriter.rewriteScript(retVal);
-
-			} catch (Exception e) {
-				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
-			}
-		}
-
-		return retVal;
+		try {
+			final URI uri = scriptFolder.toURI();
+			super.addRequirePath(uri);
+		} catch (URISyntaxException e) {}
+		
+		super.addPackageImport("Packages.ca.phon.ipa");
+		super.addPackageImport("Packages.ca.phon.phonex");
+		super.addPackageImport("Packages.ca.phon.syllable");
+		super.addPackageImport("Packages.ca.phon.util");
+		super.addPackageImport("Packages.ca.phon.project");
+		super.addPackageImport("Packages.ca.phon.session");
+		
+		super.addClassImport("Packages.org.apache.commons.lang3.StringUtils");
 	}
 	
-	/**
-	 * Generate a param form with the given comments and
-	 * param listing.
-	 *
-	 */
-	private String getCannedSearchForm(
-			String scriptName, String comments, ScriptParam[] params) {
-		StringBuffer buffer = new StringBuffer();
-
-		buffer.append("/*\n");
-		buffer.append("params = ");
-
-		// top info section
-		buffer.append("{separator, \"" + scriptName + "\"},\n");
-		buffer.append("{label, \"<html><body><p>" + comments + "</p></body></html>\", \"<html><i>Comments</i></html>\"},\n");
-
-		// params
-		buffer.append("{separator, \"Params\", true}");
-		for(ScriptParam param:params) {
-			for(String paramId:param.getParamIds()) {
-				buffer.append(",\n");
-				buffer.append("{label, \"" + param.getValue(paramId).toString() + "\", \"<html><i>" + paramId + "</i></html>\"}");
-			}
-		}
-		buffer.append(";\n");
-		buffer.append("*/\n");
-
-		return buffer.toString();
-	}
-
-	/**
-	 * Convert script params into a variable def
-	 * list.
-	 */
-	private String getParamDef(ScriptParam[] params) {
-//		ScriptParam[] params = getScriptParams();
-
-		StringBuffer buffer = new StringBuffer();
-
-		for(ScriptParam param:params) {
-
-			for(String paramId:param.getParamIds()) {
-
-				String varLine = "var " + paramId + " = ";
-
-				if(param.getParamType().equals("string")) {
-					varLine += "\"" + param.getValue(paramId).toString() + "\"";
-				} else if(param.getParamType().equals("enum")) {
-					EnumScriptParam.ReturnValue paramVal =
-							(EnumScriptParam.ReturnValue)param.getValue(paramId);
-					varLine += "new Object();\n";
-					varLine += paramId + ".index = " + paramVal.getIndex() + ";\n";
-					varLine += paramId + ".value = \"" + paramVal.toString() + "\"";
-				} else {
-					varLine += param.getValue(paramId).toString();
-				}
-
-				varLine += ";\n";
-				
-				buffer.append(varLine);
-			}
-
-		}
-
-		return buffer.toString();
-	}
-
-	/**
-	 * Replace script param form with hard-coded parameters.
-	 *
-	 * @return a new search script with the script params replaced
-	 */
-	public String replaceScriptParams(String s) {
-		String scriptParamsRegex = "/\\*" + //
-			"\\s*(params.*;)\\s*" +
-			"\\*/";
-		Pattern p = Pattern.compile(scriptParamsRegex, Pattern.MULTILINE|Pattern.DOTALL);
-		Matcher m = p.matcher(s);
-
-		String retVal = s;
-
-		if(m.find()) {
-			retVal = m.replaceFirst(getParamDef(getScriptParams()));
-		}
-
-		return retVal;
-	}
-	
-	public boolean hasQueryRecord() {
-		return hasFunction("query_record", 2);
-	}
-	
-	public boolean hasBeginSearch() {
-		return hasFunction("begin_search", 1);
-	}
-	
-	public boolean hasEndSearch() {
-		return hasFunction("end_search", 1);
-	}
-
 	@Override
-	public List<String> scriptFolders() {
-		final List<String> retVal = new ArrayList<String>();
-		retVal.add("/Users/ghedlund/Documents/Phon/gitprojects/phon/query/target/classes/script");
-//		retVal.add(QueryScriptLibrary.SYSTEM_SCRIPT_FOLDER);
-//		retVal.add(QueryScriptLibrary.USER_SCRIPT_FOLDER);
-		return retVal;
+	public PhonScriptContext getContext() {
+		return getQueryContext();
 	}
-
-	@Override
-	protected void readFromURL(URL url) throws IOException {
-		final String name = url.getPath();
-		if(name.endsWith(".xml")) {
-			// format with query parameters defined
-			final QueryManager qm = QueryManager.getSharedInstance();
-			final Query q = qm.loadQuery(url.openStream());
-				
-			setScript(q.getScript().getSource());
-			setLocation(url);
-			
-			ScriptParam[] params = getScriptParams();
-			for(ScriptParam sp:params) {
-				for(String id:sp.getParamIds()) {
-					Object v = q.getScript().getParameters().get(id);
-					if(v != null) {
-						sp.setValue(id, v);
-					}
-				}
-			}
-		} else {
-			// fallback to super version
-			super.readFromURL(url);			
+	
+	public QueryScriptContext getQueryContext() {
+		if(context == null) {
+			context = new QueryScriptContext(this);
 		}
+		return context;
 	}
+	
+//	@Override
+//	public List<String> scriptFolders() {
+//		final List<String> retVal = new ArrayList<String>();
+//		retVal.add("/Users/ghedlund/Documents/Phon/gitprojects/phon/query/target/classes/script");
+////		retVal.add(QueryScriptLibrary.SYSTEM_SCRIPT_FOLDER);
+////		retVal.add(QueryScriptLibrary.USER_SCRIPT_FOLDER);
+//		return retVal;
+//	}
 	
 }

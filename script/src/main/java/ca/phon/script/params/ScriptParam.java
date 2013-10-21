@@ -17,21 +17,37 @@
  */
 package ca.phon.script.params;
 
-import java.util.ArrayList;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import javax.swing.JComponent;
+import ca.phon.script.PhonScriptContext;
 
+/**
+ * A parameter for a script.  These parameters are setup by the {@link PhonScriptContext}
+ * when running the script.
+ * 
+ * Each {@link ScriptParam} can have more than one paramId which
+ * maps to the same property name in the script.
+ *
+ */
 public abstract class ScriptParam {
+	
+	public final static String ENABLED_PROP = ScriptParam.class.getName() + ".enabled";
+	
+	public final static String VISIBLE_PROP = ScriptParam.class.getName() + ".visible";
 	
 	/** The param type */
 	private String paramType;
 
 	/** The description */
 	private String paramDesc;
+	
+	private transient boolean visible = true;
+	
+	private transient boolean enabled = true;
 	
 	/** The paramid's avd values */
 	private HashMap<String, Object> values =
@@ -42,29 +58,31 @@ public abstract class ScriptParam {
 		new LinkedHashMap<String, Object>();
 	
 	/**
-	 * Listeners
+	 * Property change support
 	 */
-	private List<ParamListener> listeners = 
-			new ArrayList<ParamListener>();
+	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 	
-	public void addListener(ParamListener listener) {
-		if(!listeners.contains(listener))
-			listeners.add(listener);
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(listener);
 	}
-	
-	public void removeListener(ParamListener listener) {
-		listeners.remove(listener);
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(listener);
 	}
-	
-	public void fireParamValueChanged(String paramid, Object oldvalue, Object newvalue) {
-		if(oldvalue != null) {
-			if(oldvalue.equals(newvalue)) return;
-		}
-		ParamListener[] handlers = listeners.toArray(new ParamListener[0]);
-		for(ParamListener handler:handlers)
-			handler.onParamValueChanged(paramid, oldvalue, newvalue);
+
+	public void addPropertyChangeListener(String propertyName,
+			PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(propertyName, listener);
 	}
-	
+
+	public void removePropertyChangeListener(String propertyName,
+			PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(propertyName, listener);
+	}
+
+	/**
+	 * Constructor
+	 */
 	public ScriptParam() {
 		this(new String[0], new Object[0]);
 	}
@@ -107,7 +125,7 @@ public abstract class ScriptParam {
 	public void setValue(String paramId, Object val) {
 		Object oldval = getValue(paramId);
 		values.put(paramId, val);
-		fireParamValueChanged(paramId, oldval, val);
+		propSupport.firePropertyChange(paramId, oldval, val);
 	}
 
 	public Object getDefaultValue(String paramId) {
@@ -117,9 +135,13 @@ public abstract class ScriptParam {
 	public void setDefaultValue(String paramId, Object defaultValue) {
 		defValues.put(paramId, defaultValue);
 	}
-	
-	public abstract JComponent getEditorComponent();
 
+	/**
+	 * Has the value of any of the paramIds changed
+	 * from the default value.
+	 * 
+	 * @return
+	 */
 	public boolean hasChanged() {
 		boolean retVal = false;
 
@@ -145,68 +167,52 @@ public abstract class ScriptParam {
 	}
 	
 	/**
-	 * Copies any values from oldParams which have matching 
-	 * ids in newParams.
+	 * Is this param enabled.  If a script param is not enabled
+	 * it will not be added to the scriptable scope for the script
+	 * during execution.  As well, if a UI is visible, the component
+	 * controlling this param should also appear 'disabled'
 	 * 
-	 * @param oldParams
-	 * @param newParams
+	 * @return <code>true</code> if this param is enabled, <code>false</code>
+	 *  otherwise
 	 */
-	public static void copyParams(ScriptParam[] oldParams, ScriptParam[] newParams) {
-		for(ScriptParam sp:newParams) {
-			for(String pId:sp.getParamIds()) {
-				
-				// find the matching pId in oldParams (if exists)
-				ScriptParam oldParam = null;
-				for(ScriptParam oldSp:oldParams) {
-					if(oldSp.getParamIds().contains(pId)) {
-						oldParam = oldSp;
-					}
-				}
-				
-				// make sure the type of the param has not changed
-				if(oldParam != null && oldParam.getParamType().equals(sp.getParamType())) {
-					sp.setValue(pId, oldParam.getValue(pId));
-				}
-			}
-		}
-	}
-
-	/**
-	 * Convert the list of script params into groups.
-	 */
-	public static List<ScriptParamGroup> getParamGroups(ScriptParam[] params) {
-		List<ScriptParamGroup> retVal = new ArrayList<ScriptParamGroup>();
-
-		ScriptParam currentSep = null;
-		List<ScriptParam> currentGrp = null;
-		for(int i = 0; i < params.length; i++) {
-			ScriptParam current = params[i];
-			if(current.getParamType().equals("separator")) {
-				if(currentGrp != null) {
-					ScriptParamGroup grp = new ScriptParamGroup(currentSep, currentGrp);
-					retVal.add(grp);
-				}
-				currentSep = current;
-				currentGrp = new ArrayList<ScriptParam>();
-			} else {
-				currentGrp.add(current);
-			}
-		}
-
-		if(currentGrp != null && currentGrp.size() > 0) {
-			ScriptParamGroup grp = new ScriptParamGroup(currentSep, currentGrp);
-			retVal.add(grp);
-		}
-
-		return retVal;
+	public boolean isEnabled() {
+		return this.enabled;
 	}
 	
-//	public void setupParams(Scriptable scope) {
-//		Object wrappedObj = Context.javaToJS(getValue(), scope);
-//		ScriptableObject.putProperty(scope, getParamId(), wrappedObj);
-//	}
-//	
-//	public void saveParams(Query q) {
-//		q.setParam(getParamId(), getValue());
-//	}
+	/**
+	 * Set the enabled state of this ScriptParam
+	 * 
+	 * @param enabled
+	 */
+	public void setEnabled(boolean enabled) {
+		final boolean oldVal = this.enabled;
+		this.enabled = enabled;
+		propSupport.firePropertyChange(ENABLED_PROP, oldVal, enabled);
+	}
+	
+	/**
+	 * Get the visiblity status of this param.  This property
+	 * affects any UI component that is controlling this param.
+	 * 
+	 * An invisible param may still be enabled and setup during
+	 * script execution.
+	 * 
+	 * @return <code>true</code> if this param should be invisible,
+	 *  <code>false</code> otherwise
+	 */
+	public boolean getVisible() {
+		return this.visible;
+	}
+	
+	/**
+	 * Set visibility status of param
+	 * 
+	 * @param visible
+	 */
+	public void setVisible(boolean visible) {
+		final boolean oldVal = this.visible;
+		this.visible = visible;
+		propSupport.firePropertyChange(VISIBLE_PROP, oldVal, visible);
+	}
+	
 }

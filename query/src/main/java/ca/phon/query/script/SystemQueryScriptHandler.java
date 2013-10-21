@@ -8,10 +8,8 @@ import java.util.logging.Logger;
 import ca.phon.util.resources.ClassLoaderHandler;
 
 public class SystemQueryScriptHandler extends ClassLoaderHandler<QueryScript>{
-
-	private final static Logger LOGGER = Logger.getLogger(SystemQueryScriptHandler.class.getName());
 	
-	private final static String LIST = "script/query.list";
+	private final static String LIST = "ca/phon/query/script/query.list";
 	
 	public SystemQueryScriptHandler() {
 		super();

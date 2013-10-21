@@ -25,7 +25,7 @@ exports.TierFilter = function(id) {
 			tierParamInfo.id,
 			tierParamInfo.title,
 			tierParamInfo.def);
-		tierParam.getEditorComponent().setPrompt(tierParamInfo.prompt);
+//		tierParam.getEditorComponent().setPrompt(tierParamInfo.prompt);
 		
 		params.add(tierParam);
 		

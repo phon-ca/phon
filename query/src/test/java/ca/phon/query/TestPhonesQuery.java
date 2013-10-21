@@ -24,7 +24,6 @@ import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryTask;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.session.Session;
@@ -45,7 +44,7 @@ public class TestPhonesQuery extends TestQuery {
 	private final static String TEST_CORPUS = "corpus";
 	private final static String TEST_SESSION = "session";
 	
-	private final static String PHONES_SCRIPT = "src/main/resources/script/Phones.js";
+	private final static String PHONES_SCRIPT = "src/main/resources/ca/phon/query/script/Phones.js";
 	
 	@Parameters
 	public static Collection<Object[]> testData() {
@@ -58,41 +57,41 @@ public class TestPhonesQuery extends TestQuery {
 			
 			retVal.add(basicTestParams(project, session));
 			
-			retVal.add(participantNameParams(project, session));
-			retVal.add(participantAge1Params(project, session));
-			retVal.add(participantAge2Params(project, session));
-			
-			retVal.add(singletonGroupFilterParams(project, session));
-			retVal.add(nonSingletonGroupFilterParams(project, session));
-			retVal.add(initialGroupFilterParams(project, session));
-			retVal.add(medialGroupFilterParams(project, session));
-			retVal.add(finalGroupFilterParams(project, session));
-			retVal.add(groupFilterParams(project, session));
-			retVal.add(alignedGroupFilterParams(project, session));
-		
-			retVal.add(allWordFilterParams(project, session));
-			retVal.add(singletonWordFilterParams(project, session));
-			retVal.add(nonSingletonWordFilterParams(project, session));
-			retVal.add(initialWordFilterParams(project, session));
-			retVal.add(medialWordFilterParams(project, session));
-			retVal.add(finalWordFilterParams(project, session));
-			retVal.add(wordFilterParams(project, session));
-			retVal.add(alignedWordFilterParams(project, session));
-			
-			retVal.add(allSyllablesByGroupParams(project, session));
-			retVal.add(singletonSyllableByGroupParams(project, session));
-			retVal.add(initialSyllableByGroupParams(project, session));
-			retVal.add(medialSyllableByGroupParams(project, session));
-			retVal.add(finalSyllableByGroupParams(project, session));
-			
-			retVal.add(singletonSyllableByWordParams(project, session));
-			retVal.add(initialSyllableByWordParams(project, session));
-			retVal.add(medialSyllableByWordParams(project, session));
-			retVal.add(finalSyllableByWordParams(project, session));
-			
-			retVal.add(primaryStressedSyllableByGroupParams(project, session));
-			retVal.add(secondaryStressedSyllableByGroupParams(project, session));
-			retVal.add(unStressedSyllableByGroupParams(project, session));
+//			retVal.add(participantNameParams(project, session));
+//			retVal.add(participantAge1Params(project, session));
+//			retVal.add(participantAge2Params(project, session));
+//			
+//			retVal.add(singletonGroupFilterParams(project, session));
+//			retVal.add(nonSingletonGroupFilterParams(project, session));
+//			retVal.add(initialGroupFilterParams(project, session));
+//			retVal.add(medialGroupFilterParams(project, session));
+//			retVal.add(finalGroupFilterParams(project, session));
+//			retVal.add(groupFilterParams(project, session));
+//			retVal.add(alignedGroupFilterParams(project, session));
+//		
+//			retVal.add(allWordFilterParams(project, session));
+//			retVal.add(singletonWordFilterParams(project, session));
+//			retVal.add(nonSingletonWordFilterParams(project, session));
+//			retVal.add(initialWordFilterParams(project, session));
+//			retVal.add(medialWordFilterParams(project, session));
+//			retVal.add(finalWordFilterParams(project, session));
+//			retVal.add(wordFilterParams(project, session));
+//			retVal.add(alignedWordFilterParams(project, session));
+//			
+//			retVal.add(allSyllablesByGroupParams(project, session));
+//			retVal.add(singletonSyllableByGroupParams(project, session));
+//			retVal.add(initialSyllableByGroupParams(project, session));
+//			retVal.add(medialSyllableByGroupParams(project, session));
+//			retVal.add(finalSyllableByGroupParams(project, session));
+//			
+//			retVal.add(singletonSyllableByWordParams(project, session));
+//			retVal.add(initialSyllableByWordParams(project, session));
+//			retVal.add(medialSyllableByWordParams(project, session));
+//			retVal.add(finalSyllableByWordParams(project, session));
+//			
+//			retVal.add(primaryStressedSyllableByGroupParams(project, session));
+//			retVal.add(secondaryStressedSyllableByGroupParams(project, session));
+//			retVal.add(unStressedSyllableByGroupParams(project, session));
 			
 			// TODO metadata tests?
 		} catch (IOException | ProjectConfigurationException e) {
@@ -108,6 +107,7 @@ public class TestPhonesQuery extends TestQuery {
 	private static Object[] basicTestParams(Project project, Session session) {
 		final Map<String, Object> params = new HashMap<>();
 		params.put("filters.primary.filter", "\\c+");
+		params.put("filters.primary.filterType", new EnumScriptParam.ReturnValue("Phonex", 2));
 		
 		return new Object[]{ project, session, PHONES_SCRIPT, params, 253 };
 	}

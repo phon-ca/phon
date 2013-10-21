@@ -51,7 +51,7 @@ exports.PatternFilter = function(id) {
     };
     var matchGroupParam;
     this.caseSensitive = false;
-    this.exactMatch = false;
+    this.exactMatch = true;
     
     var helpLabelParamInfo = {
         "title": "",
@@ -76,13 +76,13 @@ exports.PatternFilter = function(id) {
     ];
     
     this.setEnabled = function(enabled) {
-        filterParam.getEditorComponent().setEnabled(enabled);
-        filterTypeParam.getEditorComponent().setEnabled(enabled);
-        matchGroupParam.getEditorComponent().setEnabled(enabled);
+//        filterParam.getEditorComponent().setEnabled(enabled);
+//        filterTypeParam.getEditorComponent().setEnabled(enabled);
+//        matchGroupParam.getEditorComponent().setEnabled(enabled);
         
-        var idx = filterTypeParam.getEditorComponent().selectedIndex;
-        var csEnabled = enabled && ( idx <= exports.PatternType.REGEX );
-        matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]).setEnabled(csEnabled);
+//        var idx = filterTypeParam.getEditorComponent().selectedIndex;
+//        var csEnabled = enabled && ( idx <= exports.PatternType.REGEX );
+//        matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]).setEnabled(csEnabled);
     };
     
     var setPatternFilterInvalid = function(textField, message, loc) {
@@ -90,13 +90,13 @@ exports.PatternFilter = function(id) {
             "Error at index " + loc  +": " + message :
             message);
        
-        textField.setToolTipText(msg);
-        textField.setState("UNDEFINED");
+//        textField.setToolTipText(msg);
+//        textField.setState("UNDEFINED");
     };
     
     var setPatternFilterOk = function(textField) {
-        textField.setToolTipText("");
-        textField.setState("INPUT");
+//        textField.setToolTipText("");
+//        textField.setState("INPUT");
     };
     
     /**
@@ -246,52 +246,52 @@ exports.PatternFilter = function(id) {
             filterParamInfo.id,
             filterParamInfo.title,
             filterParamInfo.def);
-        var textField = filterParam.getEditorComponent();
-        textField.setPrompt(filterParamInfo.prompt);
+//        var textField = filterParam.getEditorComponent();
+//        textField.setPrompt(filterParamInfo.prompt);
        
-        var filterListener = new java.awt.event.KeyListener() {
-            keyPressed: function(e) {
-            },
-            
-            keyReleased: function(e) {
-            },
-            
-            keyTyped: function(e) {
-                var textField = e.getSource();
-                validateTextField(textField);
-            }
-       };
-       filterParam.getEditorComponent().addKeyListener(filterListener);
+//        var filterListener = new java.awt.event.KeyListener() {
+//            keyPressed: function(e) {
+//            },
+//            
+//            keyReleased: function(e) {
+//            },
+//            
+//            keyTyped: function(e) {
+//                var textField = e.getSource();
+//                validateTextField(textField);
+//            }
+//       };
+//       filterParam.getEditorComponent().addKeyListener(filterListener);
         
         filterTypeParam = new EnumScriptParam(
             filterTypeParamInfo.id,
             filterTypeParamInfo.title,
             filterTypeParamInfo.def,
             filterTypeParamInfo.desc);
-        var filterTypeListener = new java.awt.event.ItemListener() {
-            itemStateChanged: function(e) {
-                var idx = e.getSource().getSelectedIndex();
-                
-                var filterPrompt = filterTypePromptText[idx];
-                var filterHelp = filterTypeHelpText[idx];
-                
-                filterParam.getEditorComponent().setPrompt(filterPrompt);
-                helpLabelParam.getEditorComponent().setText(filterHelp);
-                
-                var caseSensitiveCb = matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]);
-                var enabled = ( idx  <= exports.PatternType.REGEX );
-                caseSensitiveCb.setEnabled(enabled);
-                
-                validateTextField(filterParam.getEditorComponent());
-            }
-        };
-        filterTypeParam.getEditorComponent().addItemListener(filterTypeListener);
+//        var filterTypeListener = new java.awt.event.ItemListener() {
+//            itemStateChanged: function(e) {
+//                var idx = e.getSource().getSelectedIndex();
+//                
+//                var filterPrompt = filterTypePromptText[idx];
+//                var filterHelp = filterTypeHelpText[idx];
+//                
+//                filterParam.getEditorComponent().setPrompt(filterPrompt);
+//                helpLabelParam.getEditorComponent().setText(filterHelp);
+//                
+//                var caseSensitiveCb = matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]);
+//                var enabled = ( idx  <= exports.PatternType.REGEX );
+//                caseSensitiveCb.setEnabled(enabled);
+//                
+//                validateTextField(filterParam.getEditorComponent());
+//            }
+//        };
+//        filterTypeParam.getEditorComponent().addItemListener(filterTypeListener);
         
         var helpLabelDesc = filterTypeHelpText[filterTypeParamInfo.def];
         helpLabelParam = new LabelScriptParam(
             helpLabelDesc,
             helpLabelParamInfo.title);
-        helpLabelParam.getEditorComponent().setForeground(java.awt.Color.gray.darker());
+//        helpLabelParam.getEditorComponent().setForeground(java.awt.Color.gray.darker());
         
         params.add(filterTypeParam);
         params.add(filterParam);
@@ -405,15 +405,15 @@ exports.PatternFilter = function(id) {
         var strB = (caseSensitive ? filter : filter.toLowerCase());
         if(exactMatch) {
            if(strA == strB) {
-               var v = {start:0, end:strA.length(), value:obj};
+               var v = {start:0, end:strA.length, value:obj};
                retVal.append(v);
            }
         } else {
             var i = 0;
             while(strA.indexOf(strB, i) >= 0) {
-                var v = {start:i, end:i+strB.length(), value:obj.substring(i, i+strB.length())};
-                retVal.append(v);
-                i += strB.length();
+                var v = {start:i, end:i+strB.length, value:strA.substring(i, i+strB.length)};
+                retVal.push(v);
+                i += strB.length;
             }
         }
         
@@ -435,9 +435,11 @@ exports.PatternFilter = function(id) {
     var findPhonex = function(obj, filter, exactMatch) {
         var retVal = new Array();
         
+        java.lang.System.out.println(typeof exactMatch);
+        
         if(!(obj instanceof IPATranscript)) return retVal;
         
-        if(exactMatch) {
+        if(exactMatch == true) {
             if(obj.matches(filter)) {
                 v = {start:0, end:obj.size(), value:obj};
                 retVal.push(v);

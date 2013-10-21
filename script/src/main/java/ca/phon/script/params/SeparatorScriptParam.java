@@ -17,8 +17,6 @@
  */
 package ca.phon.script.params;
 
-import javax.swing.JComponent;
-
 public class SeparatorScriptParam extends ScriptParam {
 
 	private boolean collapsed = false;
@@ -34,17 +32,14 @@ public class SeparatorScriptParam extends ScriptParam {
 		setCollapsed(collapsed);
 	}
 	
-	@Override
-	public JComponent getEditorComponent() {
-		return null;
-	}
-
 	public boolean isCollapsed() {
 		return collapsed;
 	}
 
 	public void setCollapsed(boolean collapsed) {
+		final boolean wasCollapsed = this.collapsed;
 		this.collapsed = collapsed;
+		
 	}
 
 	@Override
