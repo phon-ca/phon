@@ -126,11 +126,12 @@ public final class ExtensionSupport implements IExtendable {
 	public <T> T putExtension(Class<T> cap, T impl) {
 		final Extension capAnnotation = 
 				cap.getAnnotation(Extension.class);
-		if(capAnnotation == null || !capAnnotation.value().isAssignableFrom(declaredType)) {
-			throw new IllegalArgumentException("Class " + cap.getName() + 
-					" must have the anntotation '@" + Extension.class.getName() + 
-					"(" + declaredType.getName() + ")");
-		}
+		// TODO decided if this really needs to have this restriction
+//		if(capAnnotation == null || !capAnnotation.value().isAssignableFrom(declaredType)) {
+//			throw new IllegalArgumentException("Class " + cap.getName() + 
+//					" must have the anntotation '@" + Extension.class.getName() + 
+//					"(" + declaredType.getName() + ")");
+//		}
 		
 		extensions.put(cap, impl);
 		return impl;
