@@ -1,0 +1,493 @@
+/*
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package ca.phon.app.session.editor.info;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.ComponentInputMap;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.JXTable;
+import org.joda.time.DateTime;
+
+import ca.phon.app.project.ProjectFrameExtension;
+import ca.phon.app.session.editor.DelegateEditorAction;
+import ca.phon.app.session.editor.DividedEditorView;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.RunOnEDT;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.participant.ParticipantEditor;
+import ca.phon.app.session.participant.ParticipantsTableModel;
+import ca.phon.media.util.MediaLocator;
+import ca.phon.project.Project;
+import ca.phon.session.Participant;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.ui.DateTimeDocument;
+import ca.phon.ui.FileSelectionField;
+import ca.phon.ui.PromptedTextField.FieldState;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.PathExpander;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+/**
+ * 
+ */
+public class SessionInfoPanel extends DividedEditorView {
+
+	private final String VIEW_TITLE = "Session Information";
+
+	/**
+	 * Date editor
+	 */
+	private JTextField dateField;
+	
+	/**
+	 * Media field
+	 */
+	private MediaSelectionField mediaLocationField;
+	
+	/**
+	 * Language
+	 */
+	private JTextField languageField;
+
+	private final DocumentListener languageFieldListener = new DocumentListener() {
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			updateLang();
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updateLang();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updateLang();
+		}
+		
+		private void updateLang() {
+//			String oldVal = getModel().getSession().getLanguage();
+//			String newVal = languageField.getText();
+//			if(!oldVal.equals(newVal)) {
+//				getModel().getSession().setLanguage(languageField.getText());
+//				getModel().fireRecordEditorEvent(SESSION_LANG_CHANGED, SessionInfoPanel.this, languageField.getText());
+//			}
+		}
+		
+	};
+	
+	/**
+	 * Participant Table
+	 * 
+	 */
+	private JXTable participantTable;
+	private JButton editParticipantButton;
+	private JButton addParticipantButton;
+	
+	/**
+	 * Constructor
+	 */
+	public SessionInfoPanel(SessionEditor editor) {
+		super(editor);
+		
+		init();
+	}
+
+	private void setupEditorActions() {
+		DelegateEditorAction sessionMediaChangedAct = new
+				DelegateEditorAction(this, "onSessionMediaChanged");
+//		sessionMediaChangedAct.setRunOnEDT(true);
+//		getModel().registerActionForEvent(SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
+	}
+	
+	private void init() {
+		setLayout(new BorderLayout());
+		
+		final JPanel contentPanel = new JPanel();
+		contentPanel.setBackground(Color.white);
+		
+		FormLayout layout = new FormLayout(
+				"right:150px, 5px, fill:pref:grow",
+				"pref, 3dlu, pref, 3dlu, pref, 3dlu, pref");
+		CellConstraints cc = new CellConstraints();
+		contentPanel.setLayout(layout);
+		
+		dateField = createDateField();
+		dateField.setBackground(Color.white);
+		
+		mediaLocationField = new MediaSelectionField();
+		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
+		
+//		ParticipantsTableModel tableModel = new ParticipantsTableModel(
+//				IPhonFactory.getDefaultFactory().createTranscript());
+		participantTable = new JXTable();
+		participantTable.setVisibleRowCount(3);
+		
+		ComponentInputMap participantTableInputMap = new ComponentInputMap(participantTable);
+		ActionMap participantTableActionMap = new ActionMap();
+		
+//		final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+		Action deleteAction = new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				deleteParticipant();
+			}
+			
+		};
+		participantTableActionMap.put("DELETE_PARTICIPANT", deleteAction);
+		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE_PARTICIPANT");
+		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "DELETE_PARTICIPANT");
+		
+		participantTable.setInputMap(WHEN_FOCUSED, participantTableInputMap);
+		participantTable.setActionMap(participantTableActionMap);
+		
+		ImageIcon addIcon = 
+			IconManager.getInstance().getIcon("actions/add_user", IconSize.XSMALL);
+		addParticipantButton = new JButton(addIcon);
+		addParticipantButton.setFocusable(false);
+		addParticipantButton.setToolTipText("Add participant");
+		addParticipantButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				newParticipant();
+			}
+			
+		});
+		
+		ImageIcon editIcon = 
+			IconManager.getInstance().getIcon("actions/edit_user", IconSize.XSMALL);
+		editParticipantButton = new JButton(editIcon);
+		editParticipantButton.setFocusable(false);
+		editParticipantButton.setToolTipText("Edit participant");
+		editParticipantButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editParticipant();
+			}
+			
+		});
+		
+		FormLayout participantLayout = new FormLayout(
+				"fill:pref:grow, pref",
+				"pref, pref, pref:grow");
+		JPanel participantPanel = new JPanel(participantLayout);
+		participantPanel.setBackground(Color.white);
+		participantPanel.add(new JScrollPane(participantTable), cc.xywh(1, 1, 1, 3));
+		participantPanel.add(addParticipantButton, cc.xy(2,1));
+		participantPanel.add(editParticipantButton, cc.xy(2,2));
+		
+		languageField = new JTextField();
+//		languageField.setText(model.getSession().getLanguage());
+//		languageField.setBorder(null);
+		languageField.getDocument().addDocumentListener(languageFieldListener);
+		
+		
+		contentPanel.add(new JLabel("Session Date"), cc.xy(1,1));
+		contentPanel.add(dateField, cc.xy(3,1));
+		
+		contentPanel.add(new JLabel("Media"), cc.xy(1, 3));
+		contentPanel.add(mediaLocationField, cc.xy(3, 3));
+		
+		contentPanel.add(new JLabel("Participants"), cc.xy(1, 5));
+		contentPanel.add(participantPanel, cc.xy(3, 5));
+		
+		contentPanel.add(new JLabel("Language"), cc.xy(1, 7));
+		contentPanel.add(languageField, cc.xy(3, 7));
+		
+		add(new JScrollPane(contentPanel), BorderLayout.CENTER);
+		
+		update();
+	}
+
+	public JTextField createDateField() {
+		final JTextField retVal = new JTextField();
+		
+		retVal.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+//				// make sure the format is correct!
+//				// ppl can put in crazy dates, allow them, but fix it
+//				Calendar calendar = 
+//					((CalendarDocument)retVal.getDocument()).getCalendar();
+//				SimpleDateFormat dateFormat = 
+//					new SimpleDateFormat("yyyy-MM-dd");
+//				retVal.setText(dateFormat.format(calendar.getTime()));
+			}
+			
+		});
+		
+		final DateTime sessionDate = DateTime.now();
+		
+		retVal.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				updateSessionDate();
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		
+		final DateTimeDocument doc = new DateTimeDocument(sessionDate);
+		retVal.setDocument(doc);
+		
+		
+		
+		return retVal;
+	}
+	
+//	@Override
+//	public void setModel(RecordEditorModel model) {
+//		super.setModel(model);
+//		
+//		if(getModel() != null) {
+//			setupEditorActions();
+//			mediaLocationField.setProject(getModel().getProject());
+//			update();
+//		} else {
+//			// remove table model reference to session
+//			participantTable.setModel(new DefaultTableModel());
+//		}
+//	}
+
+	@Override
+	public String getName() {
+		return VIEW_TITLE;
+	}
+
+	private void update() {
+		final SessionEditor editor = getEditor();
+		final Session session = editor.getDataModel().getSession();
+		
+		final ProjectFrameExtension pfe = editor.getExtension(ProjectFrameExtension.class);
+		Project project = null;
+		if(pfe != null) {
+			project = pfe.getProject();
+		}
+		
+		final DateTimeDocument doc = (DateTimeDocument)dateField.getDocument();
+		doc.setDateTime(session.getDate());
+		
+		final File mediaFile = MediaLocator.findMediaFile(project,  session);
+		if(mediaFile != null) {
+			mediaLocationField.removePropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
+			mediaLocationField.setFile(mediaFile);
+			mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
+		} else {
+			if(session.getMediaLocation() != null &&
+					StringUtils.strip(session.getMediaLocation()).length() > 0) {
+				mediaLocationField.setState(FieldState.INPUT);
+				mediaLocationField.setText(session.getMediaLocation());
+			} else {
+				mediaLocationField.setState(FieldState.PROMPT);
+			}
+		}
+		
+		languageField.getDocument().removeDocumentListener(languageFieldListener);
+		languageField.setText(session.getLanguage());
+		languageField.getDocument().addDocumentListener(languageFieldListener);
+		
+		ParticipantsTableModel tableModel = new ParticipantsTableModel(session);
+		participantTable.setModel(tableModel);
+	}
+
+	private void updateSessionDate() {
+		final DateTimeDocument doc = (DateTimeDocument)dateField.getDocument();
+		
+		final SessionEditor editor = getEditor();
+		final Session session = editor.getDataModel().getSession();
+		
+		final DateTime currentDate = session.getDate();
+		final DateTime newDate = doc.getDateTime();
+		
+		if(!currentDate.isEqual(newDate)) {
+			session.setDate(newDate);
+			// TODO fire event
+		}
+		
+//		if(!currentDateString.equals(newDateString)) {
+//			getModel().getSession().setDate(newDate);
+//			((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
+//			getModel().fireRecordEditorEvent(SESSION_DATE_CHANGED, this, newDate);
+//		}
+	}
+	
+	private void newParticipant() {
+		final SessionFactory factory = SessionFactory.newFactory();
+		final Participant part = factory.createParticipant();
+//		boolean canceled = ParticipantEditor.editParticipant(CommonModuleFrame.getCurrentFrame(), part, getModel().getSession().getDate());
+		boolean canceled = true;
+		final SessionEditor editor = getEditor();
+		final Session session = editor.getDataModel().getSession();
+		
+		if(!canceled) {
+			final Participant newPart = factory.createParticipant();
+			session.addParticipant(newPart);
+			if(part.getName() != null)
+				newPart.setName(part.getName());
+			if(part.getBirthDate() != null)
+				newPart.setBirthDate(part.getBirthDate());
+			if(part.getEducation() != null)
+				newPart.setEducation(part.getEducation());
+			if(part.getGroup() != null)
+				newPart.setGroup(part.getGroup());
+			if(part.getLanguage() != null)
+				newPart.setLanguage(part.getLanguage());
+			if(part.getRole() != null)
+				newPart.setRole(part.getRole());
+			if(part.getSES() != null)
+				newPart.setSES(part.getSES());
+			if(part.getSex() != null)
+				newPart.setSex(part.getSex());
+			
+//			ParticipantListEdit edit = 
+//				new ParticipantListEdit(ParticipantListEdit.ParticipantEditType.Insertion,
+//						getModel().getSession(), part);
+//			getModel().getUndoSupport().postEdit(edit);
+//			
+//			((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
+//			getModel().fireRecordEditorEvent(PARTICIPANT_ADDED, this, part);
+		}
+	}
+	
+	private void editParticipant() {
+//		int selectedRow = participantTable.getSelectedRow();
+//		if(selectedRow < 0) return;
+//		selectedRow = participantTable.convertRowIndexToModel(selectedRow);
+//		if(selectedRow >= 0 && selectedRow < getModel().getSession().getParticipants().size()) {
+//			Participant part = getModel().getSession().getParticipants().get(selectedRow);
+//			
+//			ParticipantEditor.editParticipant(CommonModuleFrame.getCurrentFrame(), part, getModel().getSession().getDate());
+//		
+//			((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
+//			getModel().fireRecordEditorEvent(PARTICIPANT_CHANGED, this, part);
+//		}
+	}
+	
+	private void deleteParticipant() {
+//		int selectedRow = participantTable.getSelectedRow();
+//		if(selectedRow < 0) return;
+//		selectedRow = participantTable.convertRowIndexToModel(selectedRow);
+//		if(selectedRow >= 0 && selectedRow < getModel().getSession().getParticipants().size()) {
+//			Participant part = getModel().getSession().getParticipants().get(selectedRow);
+//			
+//			int retVal = NativeDialogs.showYesNoDialogBlocking(CommonModuleFrame.getCurrentFrame(), "", "Delete participant", 
+//					"Delete participant '" + part.getName() + "'?  This action cannot be undone.");
+//			if(retVal == 0) {
+//				for(IUtterance utt:getModel().getSession().getUtterances()) {
+//					if(utt.getSpeaker() != null &&
+//							utt.getSpeaker().getId().equals(part.getId())) {
+//						utt.setSpeaker(null);
+//					}
+//				}
+//				getModel().getSession().removeParticipant(part);
+//				
+//				((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
+//				getModel().fireRecordEditorEvent(PARTICIPANT_REMOVED, this, part);
+//			}
+//			
+//		}
+	}
+	
+	/** Editor actions */
+	@RunOnEDT
+	public void onSessionMediaChanged(EditorEvent ee) {
+//		IMediaPlaybackController playbackController =
+//				getModel().getPlaybackController(false);
+//		if(playbackController != null) {
+//			try {
+//				playbackController.loadMedia(ee.getEventData().toString());
+//			} catch (PhonMediaException e) {
+//				PhonLogger.warning(e.toString());
+//			}
+//		}
+	}
+	
+	private final PropertyChangeListener mediaLocationListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+//			final File mediaFile = mediaLocationField.getSelectedFile();
+//			final String mediaLoc = (mediaFile == null ? null : mediaFile.getPath());
+//			final PathExpander pe = new PathExpander();
+//			getModel().getSession().setMediaLocation(pe.compressPath(mediaLoc));
+//			getModel().fireRecordEditorEvent(SESSION_MEDIA_CHANGED, SessionInfoPanel.this, mediaLoc);
+		}
+	};
+
+	@Override
+	public ImageIcon getIcon() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JMenu getMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

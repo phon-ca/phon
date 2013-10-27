@@ -640,11 +640,10 @@ public class ProjectWindow extends CommonModuleFrame
 	private void openSession(String corpus, String session) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
-		initInfo.put("session", session);
+		initInfo.put("sessionName", corpus + "." + session);
 		initInfo.put("blindmode", blindModeBox.isSelected());
 		
-		PluginEntryPointRunner.executePluginInBackground("RecordEditor", initInfo);
+		PluginEntryPointRunner.executePluginInBackground("SessionEditor", initInfo);
 		
 //		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
 //				"ca.phon.modules.transcript.RecordEditorController");

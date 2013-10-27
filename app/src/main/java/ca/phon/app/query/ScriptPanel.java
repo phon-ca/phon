@@ -37,8 +37,8 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.params.ParamListener;
-import ca.phon.script.params.ParamPanelFactory;
 import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.form.ParamPanelFactory;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;

@@ -1,0 +1,75 @@
+package ca.phon.app.session.editor;
+
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+
+/**
+ * Data model for the session editor.
+ *
+ */
+public interface EditorDataModel {
+
+	/**
+	 * Get the session (if any) associated with the editor.
+	 * 
+	 * @return session
+	 */
+	public Session getSession();
+	
+	/**
+	 * Get the number of records.
+	 * 
+	 * @return number of records
+	 */
+	public int getRecordCount();
+	
+	/**
+	 * Get record at given index.
+	 * 
+	 * @param idx
+	 * @return record
+	 */
+	public Record getRecord(int idx);
+	
+	/**
+	 * Return the index of the next record from the
+	 * given index.  This method uses the record
+	 * filter if present to determine what the 'next'
+	 * record would be in a list.
+	 * 
+	 * @param idx
+	 * @return the index of the next record or < 0 if
+	 *  at the end of the list or idx is out of bounds
+	 */
+	public int getNextRecordIndex(int idx);
+	
+	/**
+	 * Return the index of the previous record from the
+	 * given index.  This method uses the record filter
+	 * if present to determine what the 'next' record
+	 * would be in a list.
+	 * 
+	 * @param idx
+	 * @return the index of the next record or < 0 if
+	 *  at the beginning of the list or idx is out of bounds
+	 */
+	public int getPrevRecordIndex(int idx);
+	
+	/**
+	 * Record filter associated with the model
+	 * 
+	 * @return the record filter, may be <code>null</code>
+	 */
+	public RecordFilter getRecordFilter();
+	
+	/**
+	 * Set the record filter associated with the model.
+	 * This may change the record count in the session.
+	 * Use <code>null</code> to turn off filtering.
+	 * 
+	 * @param filter
+	 */
+	public void setRecordFilter(RecordFilter filter);
+	
+}
