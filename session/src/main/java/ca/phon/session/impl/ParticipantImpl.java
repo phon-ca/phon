@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+import org.joda.time.PeriodType;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.session.Participant;
@@ -54,7 +55,7 @@ public class ParticipantImpl implements Participant {
 			final DateTime start = getBirthDate();
 			final DateTime end = fromDate;
 			
-			final Period period = new Period(start, end);
+			final Period period = new Period(start, end, PeriodType.yearMonthDay());
 			return period;
 		}
 	}

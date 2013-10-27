@@ -22,9 +22,11 @@ public class AgeFormatter {
 				new PeriodFormatterBuilder()
 					.printZeroAlways()
 					.minimumPrintedDigits(2).appendYears()
-					.appendLiteral(";")
+					.appendSeparator(";")
 					.minimumPrintedDigits(2).appendMonths()
-					.appendLiteral(".")
+					.appendSeparator(".")
+//					.minimumPrintedDigits(2).appendWeeks()
+//					.appendLiteral("w ")
 					.minimumPrintedDigits(2).appendDays()
 					.toFormatter();
 		return retVal;
