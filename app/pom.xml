@@ -83,6 +83,11 @@
 			<groupId>it.cnr.imaa.essi</groupId>
 			<artifactId>lablib-checkboxtree</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.dockingframes</groupId>
+			<artifactId>docking-frames-common</artifactId>
+			<version>1.1.2-P8c</version>
+		</dependency>
 	</dependencies>
 	  
 </project>
