@@ -91,6 +91,7 @@ public enum ParticipantRole {
 	
 	public static ParticipantRole fromString(String title) {
 		ParticipantRole retVal = null;
+		if(title == null) return retVal;
 		
 		for(ParticipantRole role:ParticipantRole.values()) {
 			if(title.equalsIgnoreCase(role.getTitle())
