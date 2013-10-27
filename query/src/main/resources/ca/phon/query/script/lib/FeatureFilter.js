@@ -11,7 +11,7 @@ exports.FeatureFilter = function(id) {
         "title": "Feature list:"
     };
     var featureListParam;
-    this.featureList = "";
+    this.featureList = featureListParamInfo.def;
     
     this.setFilterTitle = function(title) {
         featureListParamInfo.title = title;

@@ -11,12 +11,7 @@ public class PhonScriptException extends Exception {
 	public PhonScriptException() {
 		super();
 	}
-
-	public PhonScriptException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
+	
 	public PhonScriptException(String message, Throwable cause) {
 		super(message, cause);
 	}

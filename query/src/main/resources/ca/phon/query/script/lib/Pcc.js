@@ -70,7 +70,6 @@ exports.Pcc = {
     			if(alignedData != null) {
     				var targetData = alignedData[1];
     				var targetPhone = (targetData.length > 0 ? targetData[0] : null);
-    				java.lang.System.out.println(targetPhone + "");
     				if(targetPhone == null) {
     					numEpenthesized++;
     				}

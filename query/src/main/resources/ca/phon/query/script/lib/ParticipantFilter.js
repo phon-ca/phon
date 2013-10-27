@@ -15,7 +15,7 @@ exports.ParticipantFilter = function(id) {
         "def": ""
     };
 	var participantNamesParam;
-	this.participantNames = "";
+	this.participantNames = participantNamesParamInfo.def;
 	
 	var age1ParamInfo = {
 		"id": id+".age1String",
@@ -24,7 +24,7 @@ exports.ParticipantFilter = function(id) {
 		"def": ""
 	};
 	var age1Param;
-	this.age1String;
+	this.age1String = age1ParamInfo.def;
 	
 	var age2ParamInfo = {
 		"id": id+".age2String",
@@ -33,7 +33,7 @@ exports.ParticipantFilter = function(id) {
 		"def": ""
 	};
 	var age2Param;
-	this.age2String;
+	this.age2String = age2ParamInfo.def;
 	
 	var age1ComparatorParamInfo = {
 		"id": id+".age1Comparator",
@@ -43,7 +43,7 @@ exports.ParticipantFilter = function(id) {
 	};
 	var age1ComparatorParam;
 	this.age1Comparator = {
-	    index: 1
+	    index: age1ComparatorParamInfo.def
 	};
 	
 	var age2ComparatorParamInfo = {
@@ -54,7 +54,7 @@ exports.ParticipantFilter = function(id) {
 	};
 	var age2ComparatorParam;
 	this.age2Comparator = {
-	    index: 1
+	    index: age2ComparatorParamInfo.def
 	};
 	
 	var ageOperatorParamInfo = {
@@ -65,7 +65,7 @@ exports.ParticipantFilter = function(id) {
 	};
 	var ageOperatorParam;
 	this.ageOperator = {
-	    index: 0
+	    index: ageOperatorParamInfo.def
 	};
 	
 	var agePattern = /^([0-9]{2});([0-9]{2})\.([0-9]{2})$/;
@@ -78,16 +78,16 @@ exports.ParticipantFilter = function(id) {
 	 *  false otherwise
 	 */
     var checkAgeFilter = function(filter) {
-        if(filter == undefined || filter.length == 0) return true;
-        return filter.match(agePattern);
+        if(filter == undefined || filter.length() == 0) return true;
+        return AgeFormatter.stringToAge(filter) != null;
     };
 
 	this.isUseNameFilter = function() {
-		return (this.participantNames != undefined && this.participantNames.length > 0);
+		return (this.participantNames != undefined && this.participantNames.length() > 0);
 	};
 	
 	this.isUseAge1Filter = function() {
-	    return this.age1String && this.age1String.length > 0 && checkAgeFilter(this.age1String);
+	    return this.age1String != undefined && this.age1String.length() > 0 && checkAgeFilter(this.age1String);
 	};
 	
 	this.isUseAge2Filter = function() {
@@ -204,17 +204,7 @@ exports.ParticipantFilter = function(id) {
     	var age2Result = false;
     	
     	var speakerPeriod = speaker.ageTo;
-    	var ageFormatter = new Packages.org.joda.time.format.PeriodFormatterBuilder()
-    	        .minimumPrintedDigits(2)
-                .appendYears()
-    	        .appendSuffix(";")
-    	        .minimumPrintedDigits(2)
-    	        .appendMonths()
-    	        .appendSuffix(".")
-    	        .minimumPrintedDigits(2)
-    	        .appendDays()
-    	        .toFormatter();
-    	var speakerAge = ageFormatter.print(speakerPeriod);
+    	var speakerAge = AgeFormatter.ageToString(speakerPeriod);
     	
     	// perform first expression
     	if(this.age1Comparator.index == 0) {
@@ -277,11 +267,11 @@ exports.ParticipantFilter = function(id) {
 	this.check_speaker = function(speaker) {
 	    var speakerOk = true;
 	    
-	    if (this.isUseNameFilter()) {
+	    if (this.isUseNameFilter() == true) {
 	        speakerOk &= this.checkSpeakerName(speaker);
 	    }
 	    
-	    if(this.isUseAge1Filter()) {
+	    if(this.isUseAge1Filter() == true) {
 	        speakerOk &= this.checkSpeakerAge(speaker);
 	    }
 	    

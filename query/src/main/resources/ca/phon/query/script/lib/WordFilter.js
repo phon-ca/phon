@@ -13,6 +13,7 @@ exports.WordFilter = function(id) {
 		"def": true,
 		"title": "Singleton words:",
 		"desc": "(groups with only one word)" };
+	this.wSingleton = singletonParamInfo.def;
 		
 	var posParamInfo = {
 		"id" : [ id+".wInitial", id+".wMedial", id+".wFinal" ],
@@ -20,6 +21,9 @@ exports.WordFilter = function(id) {
 		"title": "Multiple words:",
 		"desc": [ "Initial", "Medial", "Final" ],
 		"numCols": 3 };
+	this.wInitial = posParamInfo.def[0];
+	this.wMedial = posParamInfo.def[1];
+	this.wFinal = posParamInfo.def[2];
 		
 	var searchByWordParamInfo = {
 		"id": id+".searchByWord",
@@ -27,13 +31,8 @@ exports.WordFilter = function(id) {
 		"title": "Search by word:",
 		"desc": ""
 	};
-	
-	this.wSingleton = true;
-	this.wInitial = true;
-	this.wMedial = true;
-	this.wFinal = true;
-	
-	this.searchByWord = true;
+	this.searchByWord = searchByWordParamInfo.def;
+		
 	this.searchByWordEnabled = true;
 	this.searchByWordOpt;
 	
@@ -65,7 +64,7 @@ exports.WordFilter = function(id) {
 			posParamInfo.title,
 			posParamInfo.numCols);
 		
-		if(this.searchByWordEnabled) {
+		if(this.searchByWordEnabled == true) {
 			var searchByWordOpt = new BooleanScriptParam(
 				searchByWordParamInfo.id,
 				searchByWordParamInfo.desc,
@@ -121,13 +120,13 @@ exports.WordFilter = function(id) {
 			var word = group.getAlignedWord(wIndex);
 
 			var posOk = false;
-			if(wIndex == 0 && this.wInitial) posOk = true;
-			if(wIndex > 0 && wIndex < wordCount-1 && this.wMedial) posOk = true;
-			if(wIndex == wordCount-1 && this.wFinal) posOk = true;
+			if(wIndex == 0 && this.wInitial == true) posOk = true;
+			if(wIndex > 0 && wIndex < wordCount-1 && this.wMedial == true) posOk = true;
+			if(wIndex == wordCount-1 && this.wFinal == true) posOk = true;
 
             if(wIndex == 0 && wordCount == 1) posOk = this.wSingleton;
 
-			if(posOk)
+			if(posOk == true)
 			{
 				retVal.add(word);
 			}
@@ -138,8 +137,8 @@ exports.WordFilter = function(id) {
 	
 	
 	this.isUseFilter = function() {
-	    if(this.searchByWordEnabled) {
-	        return this.searchByWord;
+	    if(this.searchByWordEnabled == true) {
+	        return this.searchByWord == true;
 	    } else {
 	        return true;
 	    }

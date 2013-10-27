@@ -31,7 +31,7 @@ exports.PatternFilter = function(id) {
         "def": ""
     };
     var filterParam;
-    this.filter = "";
+    this.filter = filterParamInfo.def;
     
     var filterTypeParamInfo = {
         "id": id+".filterType",
@@ -50,8 +50,8 @@ exports.PatternFilter = function(id) {
         "numCols": 2
     };
     var matchGroupParam;
-    this.caseSensitive = false;
-    this.exactMatch = true;
+    this.caseSensitive = matchGroupParamInfo.def[0];
+    this.exactMatch = matchGroupParamInfo.def[1];
     
     var helpLabelParamInfo = {
         "title": "",
@@ -307,7 +307,7 @@ exports.PatternFilter = function(id) {
     this.isUseFilter = function() {
         var txt = this.filter;
         
-        if(txt.length > 0) {
+        if(txt.length() > 0) {
             var filterCheck = checkFilter(this.filter, this.filterType.index);
             return filterCheck.valid;
         } else {
@@ -317,10 +317,10 @@ exports.PatternFilter = function(id) {
     
     /* Check for occurances (or exact match) of entered filter */
     var checkPlain = function(obj, filter, caseSensitive, exactMatch) {
-        var strA = (caseSensitive ? obj.toString() : obj.toString().toLowerCase());
-        var strB = (caseSensitive ? filter : filter.toLowerCase());
+        var strA = (caseSensitive == true ? obj.toString() : obj.toString().toLowerCase());
+        var strB = (caseSensitive == true ? filter : filter.toLowerCase());
         
-        if(exactMatch) {
+        if(exactMatch == true) {
             return (strA == strB);
         } else {
             return (strA.indexOf(strB) >= 0);
@@ -435,8 +435,6 @@ exports.PatternFilter = function(id) {
     var findPhonex = function(obj, filter, exactMatch) {
         var retVal = new Array();
         
-        java.lang.System.out.println(typeof exactMatch);
-        
         if(!(obj instanceof IPATranscript)) return retVal;
         
         if(exactMatch == true) {
@@ -450,6 +448,7 @@ exports.PatternFilter = function(id) {
 
             while(phonexMatcher.find()) {
                 v = {start:phonexMatcher.start(), end:phonexMatcher.end(), value:new IPATranscript(phonexMatcher.group())};
+             //   java.lang.System.out.println(phonexMatcher.group());
                 retVal.push(v);                
             }
         }
@@ -524,7 +523,7 @@ exports.PatternFilter = function(id) {
         for(var gIdx = 0; gIdx < groups.length; gIdx++) {
             var group = groups[gIdx];
             var groupVal = group.getTier(tierName);
-            if(this.check_filter(groupVal)) {
+            if(this.check_filter(groupVal) == true) {
                 retVal.push(group);
             }
         }

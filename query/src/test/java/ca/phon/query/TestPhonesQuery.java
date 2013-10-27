@@ -57,41 +57,41 @@ public class TestPhonesQuery extends TestQuery {
 			
 			retVal.add(basicTestParams(project, session));
 			
-//			retVal.add(participantNameParams(project, session));
-//			retVal.add(participantAge1Params(project, session));
-//			retVal.add(participantAge2Params(project, session));
-//			
-//			retVal.add(singletonGroupFilterParams(project, session));
-//			retVal.add(nonSingletonGroupFilterParams(project, session));
-//			retVal.add(initialGroupFilterParams(project, session));
-//			retVal.add(medialGroupFilterParams(project, session));
-//			retVal.add(finalGroupFilterParams(project, session));
-//			retVal.add(groupFilterParams(project, session));
-//			retVal.add(alignedGroupFilterParams(project, session));
-//		
-//			retVal.add(allWordFilterParams(project, session));
-//			retVal.add(singletonWordFilterParams(project, session));
-//			retVal.add(nonSingletonWordFilterParams(project, session));
-//			retVal.add(initialWordFilterParams(project, session));
-//			retVal.add(medialWordFilterParams(project, session));
-//			retVal.add(finalWordFilterParams(project, session));
-//			retVal.add(wordFilterParams(project, session));
-//			retVal.add(alignedWordFilterParams(project, session));
-//			
-//			retVal.add(allSyllablesByGroupParams(project, session));
-//			retVal.add(singletonSyllableByGroupParams(project, session));
-//			retVal.add(initialSyllableByGroupParams(project, session));
-//			retVal.add(medialSyllableByGroupParams(project, session));
-//			retVal.add(finalSyllableByGroupParams(project, session));
-//			
-//			retVal.add(singletonSyllableByWordParams(project, session));
-//			retVal.add(initialSyllableByWordParams(project, session));
-//			retVal.add(medialSyllableByWordParams(project, session));
-//			retVal.add(finalSyllableByWordParams(project, session));
-//			
-//			retVal.add(primaryStressedSyllableByGroupParams(project, session));
-//			retVal.add(secondaryStressedSyllableByGroupParams(project, session));
-//			retVal.add(unStressedSyllableByGroupParams(project, session));
+			retVal.add(participantNameParams(project, session));
+			retVal.add(participantAge1Params(project, session));
+			retVal.add(participantAge2Params(project, session));
+			
+			retVal.add(singletonGroupFilterParams(project, session));
+			retVal.add(nonSingletonGroupFilterParams(project, session));
+			retVal.add(initialGroupFilterParams(project, session));
+			retVal.add(medialGroupFilterParams(project, session));
+			retVal.add(finalGroupFilterParams(project, session));
+			retVal.add(groupFilterParams(project, session));
+			retVal.add(alignedGroupFilterParams(project, session));
+		
+			retVal.add(allWordFilterParams(project, session));
+			retVal.add(singletonWordFilterParams(project, session));
+			retVal.add(nonSingletonWordFilterParams(project, session));
+			retVal.add(initialWordFilterParams(project, session));
+			retVal.add(medialWordFilterParams(project, session));
+			retVal.add(finalWordFilterParams(project, session));
+			retVal.add(wordFilterParams(project, session));
+			retVal.add(alignedWordFilterParams(project, session));
+			
+			retVal.add(allSyllablesByGroupParams(project, session));
+			retVal.add(singletonSyllableByGroupParams(project, session));
+			retVal.add(initialSyllableByGroupParams(project, session));
+			retVal.add(medialSyllableByGroupParams(project, session));
+			retVal.add(finalSyllableByGroupParams(project, session));
+			
+			retVal.add(singletonSyllableByWordParams(project, session));
+			retVal.add(initialSyllableByWordParams(project, session));
+			retVal.add(medialSyllableByWordParams(project, session));
+			retVal.add(finalSyllableByWordParams(project, session));
+			
+			retVal.add(primaryStressedSyllableByGroupParams(project, session));
+			retVal.add(secondaryStressedSyllableByGroupParams(project, session));
+			retVal.add(unStressedSyllableByGroupParams(project, session));
 			
 			// TODO metadata tests?
 		} catch (IOException | ProjectConfigurationException e) {

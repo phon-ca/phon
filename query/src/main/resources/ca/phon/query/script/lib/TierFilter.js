@@ -15,7 +15,7 @@ exports.TierFilter = function(id) {
 		"def": ""
 	};
 	var tierParam;
-	this.tier = "";
+	this.tier = tierParamInfo.def;
 
 	/**
 	 * Param setup
@@ -33,7 +33,7 @@ exports.TierFilter = function(id) {
 	};
 	
 	this.isUseFilter =  function() {
-		return this.tier.length > 0 && this.patternFilter.isUseFilter();
+		return this.tier.length() > 0 && this.patternFilter.isUseFilter();
 	};
 	
 	this.setEnabled = function(enabled) {

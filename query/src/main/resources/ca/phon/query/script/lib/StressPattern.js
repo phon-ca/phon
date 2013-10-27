@@ -12,7 +12,7 @@ exports.StressPatternOptions = function(id) {
         "def": false
     };
     var includeParam;
-    this.include = false;
+    this.include = includeParamInfo.def;
     
     var separateParamInfo = {
         "id": id+".separate",
@@ -21,7 +21,7 @@ exports.StressPatternOptions = function(id) {
         "def": false
     };
     var separateParam;
-    this.separate = false;
+    this.separate = separateParamInfo.def;
     
     this.param_setup = function(params) {
         includeParam = new BooleanScriptParam(

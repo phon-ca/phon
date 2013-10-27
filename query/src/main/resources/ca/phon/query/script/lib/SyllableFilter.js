@@ -13,6 +13,7 @@ exports.SyllableFilter = function(id) {
 		"desc": "",
 		"enbled": true 
 	};
+	this.searchBySyllable = searchBySyllableParamInfo.def;
 	
 	var ignoreTruncatedParamInfo = {
 	    "id": id+".ignoreTruncated",
@@ -20,6 +21,7 @@ exports.SyllableFilter = function(id) {
 	    "title": "Truncated syllables:",
 	    "desc": "Ignore results from truncated syllables"
     };
+	this.ignoreTruncated = ignoreTruncatedParamInfo.def;
 		
 	var singletonParamInfo = {
 		"id" : id+".sSingleton",
@@ -27,6 +29,7 @@ exports.SyllableFilter = function(id) {
 		"title": "Singleton syllables:",
 		"desc": "(words with only one syllable)" 
 	};
+	this.sSingleton = singletonParamInfo.def;
 		
 	var posParamInfo = {
 		"id" : [ id+".sInitial", id+".sMedial", id+".sFinal" ],
@@ -35,6 +38,9 @@ exports.SyllableFilter = function(id) {
 		"desc": [ "Initial", "Medial", "Final" ],
 		"numCols": 3 
 	};
+	this.sInitial = posParamInfo.def[0];
+	this.sMedial = posParamInfo.def[1];
+	this.sFinal = posParamInfo.def[2];
 		
 	var stressParamInfo = {
 		"id": [ id+".sPrimary", id+".sSecondary", id+".sNone" ],
@@ -43,20 +49,12 @@ exports.SyllableFilter = function(id) {
 		"desc": [ "Primary", "Secondary", "Unstressed" ],
 		"numCols": 3 
 	};
+	this.sPrimary = stressParamInfo.def[0];
+	this.sSecondary = stressParamInfo.def[1];
+	this.sNone = stressParamInfo.def[2];
 	
-	this.searchBySyllable = true;
-	this.ignoreTruncated = false;
 	this.searchBySyllableEnabled = true;
 	this.searchBySyllOpt;
-	
-	this.sSingleton = true;
-	this.sInitial = true;
-	this.sMedial = true;
-	this.sFinal = true;
-	
-	this.sPrimary = true;
-	this.sSecondary = true;
-	this.sNone = true;
 
 	var singletonGroupOpt;
 	var posGroupOpt;
@@ -99,7 +97,7 @@ exports.SyllableFilter = function(id) {
 			stressParamInfo.title,
 			stressParamInfo.numCols);
 			
-		if(this.searchBySyllableEnabled) {
+		if(this.searchBySyllableEnabled == true) {
 			var searchBySyllOpt = new BooleanScriptParam(
 				searchBySyllableParamInfo.id,
 				searchBySyllableParamInfo.desc,
@@ -138,9 +136,9 @@ exports.SyllableFilter = function(id) {
 
 	this.checkStress = function(syll) {
 		var stressOk =
-			(this.sNone && syll.syllableStress == "NoStress") ||
-			(this.sPrimary && syll.syllableStress == "PrimaryStress") ||
-			(this.sSecondary && syll.syllableStress == "SecondaryStress");
+			(this.sNone == true && syll.syllableStress == "NoStress") ||
+			(this.sPrimary == true && syll.syllableStress == "PrimaryStress") ||
+			(this.sSecondary == true && syll.syllableStress == "SecondaryStress");
 		return stressOk;
 	};
 	
@@ -164,9 +162,9 @@ exports.SyllableFilter = function(id) {
 			var stressOk = this.checkStress(syll);
 
 			var posOk = false;
-			if(sIndex == 0 && this.sInitial) posOk = true;
-			if(sIndex > 0 && sIndex < syllables.size()-1 && this.sMedial) posOk = true;
-			if(sIndex == syllables.size()-1 && this.sFinal) posOk = true;
+			if(sIndex == 0 && this.sInitial == true) posOk = true;
+			if(sIndex > 0 && sIndex < syllables.size()-1 && this.sMedial == true) posOk = true;
+			if(sIndex == syllables.size()-1 && this.sFinal == true) posOk = true;
 			
 			// take care of singleton cases
 			if(sIndex == 0 && syllables.size() == 1) posOk = this.sSingleton;
@@ -177,7 +175,7 @@ exports.SyllableFilter = function(id) {
 //			    if(aligned.numberOfPhones == 0) truncatedOk = false;
 //			}
 			
-			if(posOk && stressOk && truncatedOk)
+			if(posOk == true && stressOk == true && truncatedOk == true)
 			{
 				retVal.add(syll);
 			}
@@ -199,8 +197,8 @@ exports.SyllableFilter = function(id) {
 	};
 	
 	this.isUseFilter = function() {
-	    if(this.searchBySyllableEnabled) {
-	        return this.searchBySyllable;
+	    if(this.searchBySyllableEnabled == true) {
+	        return this.searchBySyllable == true;
 	    } else {
 	        return true;
 	    }

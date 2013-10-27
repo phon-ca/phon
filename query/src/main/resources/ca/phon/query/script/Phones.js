@@ -213,12 +213,8 @@ function query_record(recordIndex, record) {
 		    var obj = toSearch[j];
 		    var matches = filters.primary.find_pattern(obj);
 		    
-		    java.lang.System.out.print(obj + ":");
-		    
-		    
 		    for(k = 0; k < matches.length; k++) {
     	        var match = matches[k];
-    	        java.lang.System.out.print((k > 0 ? ", " : "") + match.value);
     	        
     			var result = factory.createResult();
     			// calculate start/end positions of data in text
@@ -255,7 +251,6 @@ function query_record(recordIndex, record) {
     			
     			results.addResult(result);
     	    }
-    	    java.lang.System.out.println();
 		}
 	}
 }

@@ -13,6 +13,7 @@ exports.GroupFilter = function(id)  {
 		"def": true,
 		"title": "Singleton groups:",
 		"desc": "(records with only one word group)" };
+	this.gSingleton = singletonParamInfo.def;
 		
 	var posParamInfo = {
 		"id" : [ id + ".gInitial", id+".gMedial", id+".gFinal" ],
@@ -20,11 +21,9 @@ exports.GroupFilter = function(id)  {
 		"title": "Multiple groups:",
 		"desc": [ "Initial", "Medial", "Final" ],
 		"numCols": 3 };
-	
-	this.gSingleton = true;
-	this.gInitial = true;
-	this.gMedial = true;
-	this.gFinal = true;
+	this.gInitial = posParamInfo.def[0];
+	this.gMedial = posParamInfo.def[1];
+	this.gFinal = posParamInfo.def[2];
 		
 	/**
 	 * Add params for the group, called automatically when needed.
@@ -74,13 +73,13 @@ exports.GroupFilter = function(id)  {
 			var group = record.getGroup(gIndex);
 
 			var posOk = false;
-			if(gIndex == 0 && this.gInitial) posOk = true;
-			if(gIndex > 0 && gIndex < record.numberOfGroups()-1 && this.gMedial) posOk = true;
-			if(gIndex == record.numberOfGroups()-1 && this.gFinal) posOk = true;
+			if(gIndex == 0 && this.gInitial == true) posOk = true;
+			if(gIndex > 0 && gIndex < record.numberOfGroups()-1 && this.gMedial == true) posOk = true;
+			if(gIndex == record.numberOfGroups()-1 && this.gFinal == true) posOk = true;
 			
 			if(gIndex == 0 && record.numberOfGroups() == 1) posOk = this.gSingleton;
 
-			if(posOk)
+			if(posOk == true)
 			{
 			    retVal.add(group);
 			}
