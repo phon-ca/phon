@@ -25,6 +25,10 @@
       <groupId>ca.phon</groupId>
       <artifactId>native-dialogs</artifactId>
     </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
   	<dependency>
   		<groupId>ca.phon</groupId>
   		<artifactId>phon-ipa</artifactId>
