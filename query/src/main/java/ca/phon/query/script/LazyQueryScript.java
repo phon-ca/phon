@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,12 +33,12 @@ public class LazyQueryScript extends BasicScript {
 		this.scriptURL = url;
 		
 		// setup QueryName extension
-		try {
-			final Path path = Paths.get(url.toURI());
-			final Path fileName = path.getFileName();
-			putExtension(QueryName.class, new QueryName(fileName.toString()));
-		} catch (URISyntaxException e) {
-		} finally {}
+//		try {
+//			final Path path = Paths.get(url.toURI());
+//			final Path fileName = path.getFileName();
+			putExtension(QueryName.class, new QueryName(url.getFile()));
+//		} catch (URISyntaxException e) {
+//		} finally {}
 	}
 	
 	@Override
@@ -56,7 +54,8 @@ public class LazyQueryScript extends BasicScript {
 	private void readScript() {
 		if(scriptURL == null) return;
 		
-		try(InputStream in = getScriptURL().openStream()) {
+		try {
+			final InputStream in = getScriptURL().openStream();
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			final StringBuffer buffer = getBuffer();
 			String line = null;
@@ -64,6 +63,7 @@ public class LazyQueryScript extends BasicScript {
 				buffer.append(line);
 				buffer.append("\n");
 			}
+			in.close();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
