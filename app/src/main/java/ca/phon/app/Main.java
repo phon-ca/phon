@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -59,8 +60,9 @@ public class Main {
 		final PluginEntryPointRunner entryPtRunner =
 				new PluginEntryPointRunner(initialEntryPoint);
 		try {
-			// TODO process command line arguments and pass them
-			// to the entry point in a map
+			final EntryPointArgs entryPointArgs = new EntryPointArgs();
+			entryPointArgs.parseArgs(args);
+			entryPtRunner.setArgs(entryPointArgs);
 			entryPtRunner.executePlugin();
 		} catch (PluginException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
