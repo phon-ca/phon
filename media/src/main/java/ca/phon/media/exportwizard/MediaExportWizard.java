@@ -19,26 +19,31 @@
 package ca.phon.media.exportwizard;
 
 import java.awt.BorderLayout;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
-import ca.phon.application.PhonWorker;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.components.PhonLoggerConsole;
 import ca.phon.media.FFMpegMediaExporter;
+import ca.phon.media.MsFormatter;
+import ca.phon.ui.PhonLoggerConsole;
+import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.StringUtils;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Wizard for exporting a segment of media.
  */
 public class MediaExportWizard extends WizardFrame {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(MediaExportWizard.class.getName());
 
 	private Map<MediaExportWizardProp, Object> wizardProps;
-;
 	
 	/* Steps */
 	private ExportSetupStep setupStep;
@@ -101,13 +106,17 @@ public class MediaExportWizard extends WizardFrame {
 				String segment = setupStep.getSegmentField().getText();
 
 				String vals[] = segment.split("-");
-				long startTime = StringUtils.msFromDisplayString(vals[0]);
-				long endTime = StringUtils.msFromDisplayString(vals[1]);
-				long duration = (endTime-startTime);
-
-				if(duration > 0L) {
-					exporter.setStartTime(startTime);
-					exporter.setDuration(duration);
+				try {
+					long startTime = MsFormatter.displayStringToMs(vals[0]);
+					long endTime = MsFormatter.displayStringToMs(vals[1]);
+					long duration = (endTime-startTime);
+	
+					if(duration > 0L) {
+						exporter.setStartTime(startTime);
+						exporter.setDuration(duration);
+					}
+				} catch (ParseException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
 			
@@ -116,8 +125,9 @@ public class MediaExportWizard extends WizardFrame {
 			PhonWorker worker = PhonWorker.createWorker();
 			worker.setFinishWhenQueueEmpty(true);
 
-			exportConsole.addReportThread(worker);
-			exportConsole.startLogging();
+			exportConsole.addLogger(Logger.getLogger("ca.phon"));
+//			exportConsole.addReportThread(worker);
+//			exportConsole.startLogging();
 			
 			worker.invokeLater(exporter);
 			worker.start();

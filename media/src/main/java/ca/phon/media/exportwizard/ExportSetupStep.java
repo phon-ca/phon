@@ -21,7 +21,10 @@ package ca.phon.media.exportwizard;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -35,19 +38,20 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
-import ca.phon.gui.CommonModuleFrame;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.action.PhonActionEvent;
-import ca.phon.gui.action.PhonUIAction;
-import ca.phon.gui.components.JFileLabel;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.media.MsFormatter;
+import ca.phon.ui.JFileLabel;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.FileFilter;
-import ca.phon.util.NativeDialogs;
-import ca.phon.util.PhonUtilities;
-import ca.phon.util.StringUtils;
-import ca.phon.util.iconManager.IconManager;
-import ca.phon.util.iconManager.IconSize;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -57,6 +61,11 @@ import com.jgoodies.forms.layout.FormLayout;
  * and extraction times.
  */
 public class ExportSetupStep extends WizardStep {
+	
+	private static final long serialVersionUID = -4429583978372058763L;
+
+	private static final Logger LOGGER = Logger
+			.getLogger(ExportSetupStep.class.getName());
 
 	// wizard props
 	private Map< MediaExportWizardProp, Object> props;
@@ -260,9 +269,9 @@ public class ExportSetupStep extends WizardStep {
 				long duration =
 						(Long)props.get(MediaExportWizardProp.PARTIAL_EXTRACT_SEGMENT_DURATION);
 				String timeStr =
-						StringUtils.msToDisplayString(startTime) +
+						MsFormatter.msToDisplayString(startTime) +
 						"-" +
-						StringUtils.msToDisplayString(startTime+duration);
+						MsFormatter.msToDisplayString(startTime+duration);
 				getSegmentField().setText(timeStr);
 			}
 		}
@@ -441,27 +450,32 @@ public class ExportSetupStep extends WizardStep {
 	 * UI Actions
 	 */
 	public void onBrowseForInput(PhonActionEvent pae) {
-		FileFilter[] filters = new FileFilter[1];
-		filters[0] = FileFilter.allFilesFilter;
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setFileFilter(FileFilter.allFilesFilter);
+		props.setMessage("Open media");
+		props.setAllowMultipleSelection(false);
+		props.setCanChooseDirectories(false);
+		props.setCanChooseFiles(true);
 		
-		String selectedFile = 
-				NativeDialogs.browseForFileBlocking(CommonModuleFrame.getCurrentFrame(),
-				null, null, filters, "Select media file");
-		if(selectedFile != null) {
+		final List<String> selectedFiles = 
+				NativeDialogs.showOpenDialog(props);
+		if(selectedFiles.size() > 0) {
+			final String selectedFile = selectedFiles.get(0);
 			inputFileLabel.setFile(new File(selectedFile));
 		}
 	}
 
 	public void onShowSaveDialog(PhonActionEvent pae) {
-		FileFilter[] filters = new FileFilter[2];
-		filters[0] = FileFilter.allFilesFilter;
-		filters[1] = FileFilter.mediaFilter;
+		final SaveDialogProperties props = new SaveDialogProperties();
+		props.setFileFilter(FileFilter.allFilesFilter);
+		props.setMessage("Save as");
+		props.setCanCreateDirectories(true);
 		
-		String selectedFile = 
-				NativeDialogs.showSaveFileDialogBlocking(CommonModuleFrame.getCurrentFrame(), 
-				null, null, filters, "Select output location");
+		final String selectedFile = 
+				NativeDialogs.showSaveDialog(props);
 		if(selectedFile != null) {
-			outputFileLabel.setFile(new File(selectedFile));
+//			final String selectedFile = selectedFiles.get(0);
+			inputFileLabel.setFile(new File(selectedFile));
 		}
 	}
 	
@@ -507,24 +521,28 @@ public class ExportSetupStep extends WizardStep {
 		File inputFile = inputFileLabel.getFile();
 		if(inputFile == null) {
 			retVal = false;
-			PhonUtilities.showComponentMessage(inputFileLabel, "No input file selected");
+			final Toast toast = ToastFactory.makeToast("No input file selected");
+			toast.start(inputFileLabel);
 		} else {
 			if(!inputFile.exists()) {
 				retVal = false;
-				PhonUtilities.showComponentMessage(inputFileLabel, "Input file not found");
+				final Toast toast = ToastFactory.makeToast("Input file not found");
+				toast.start(inputFileLabel);
 			}
 		}
 		
 		File outputFile = outputFileLabel.getFile();
 		if(outputFile == null) {
 			retVal = false;
-			PhonUtilities.showComponentMessage(outputFileLabel, "No output path specified");
+			final Toast toast = ToastFactory.makeToast("No output path specified");
+			toast.start(outputFileLabel);
 		}
 		
 		// we need to encode something
 		if(!getEncodeVideoBox().isSelected() && !getEncodeAudioBox().isSelected()) {
 			retVal = false;
-			PhonUtilities.showComponentMessage(getEncodeVideoBox(), "Must select to encode video and/or audio");
+			final Toast toast = ToastFactory.makeToast("Must select to encode video and/or audio");
+			toast.start(getEncodeVideoBox());
 		}
 		
 		return retVal;
@@ -539,8 +557,8 @@ public class ExportSetupStep extends WizardStep {
 			try {
 				retVal = new MaskFormatter("###:##.###-###:##.###");
 				((MaskFormatter)retVal).setPlaceholderCharacter('0');
-			} catch (ParseException ex) {
-				PhonLogger.severe(ex.toString());
+			} catch (ParseException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 			return retVal;
 		}

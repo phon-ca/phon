@@ -21,12 +21,14 @@ package ca.phon.media;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import ca.phon.worker.PhonTask;
-
+import ca.phon.worker.PhonTaskListener;
 import vlc4j.VLCException;
 import vlc4j.VLCInstance;
 import vlc4j.VLCMedia;
@@ -39,6 +41,8 @@ import vlc4j.event.VLCMediaPlayerListener;
  * Media thumbnailer using vlc4j.
  */
 public class VLCThumbnailer extends PhonTask {
+	
+	private final static Logger LOGGER = Logger.getLogger(VLCThumbnailer.class.getName());
 
 	/** The output file */
 	private String outputFile;
@@ -68,7 +72,7 @@ public class VLCThumbnailer extends PhonTask {
 			try {
 				cleanup();
 			} catch (VLCException ex) {
-				PhonLogger.warning(ex.toString());
+				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			}
 		}
 
@@ -77,7 +81,7 @@ public class VLCThumbnailer extends PhonTask {
 			vlcInstance = VLCInstance.getInstance();
 			vlcInstance.init();
 		} catch (VLCException ex) {
-			PhonLogger.severe(ex.toString());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			return;
 		}
 
@@ -101,7 +105,7 @@ public class VLCThumbnailer extends PhonTask {
 			mediaPlayer.play();
 
 		} catch (VLCException ex) {
-			PhonLogger.severe(ex.toString());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 		}
 	}
 
@@ -117,7 +121,7 @@ public class VLCThumbnailer extends PhonTask {
 					// media has loaded, set position
 					mediaPlayer.setPosition(snapshotPos);
 				} catch (VLCException ex) {
-					PhonLogger.severe(ex.toString());
+					LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 					setStatus(TaskStatus.ERROR);
 				}
 			} else if(vlcmpe.getType() == VLCMediaPlayerEventType.POSITION_CHANGED) {
@@ -128,7 +132,7 @@ public class VLCThumbnailer extends PhonTask {
 						mediaPlayer.takeSnapshot(outputFile);
 					}
 				} catch (VLCException ex) {
-					PhonLogger.severe(ex.toString());
+					LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 				}
 			} else if(vlcmpe.getType() == VLCMediaPlayerEventType.SNAPSHOT_TAKEN) {
 //				try {
@@ -147,7 +151,7 @@ public class VLCThumbnailer extends PhonTask {
 					vlcInstance.free();
 					//				setStatus(TaskStatus.FINISHED);
 				} catch (VLCException ex) {
-					PhonLogger.severe(ex.toString());
+					LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 				}
 			}
 		}

@@ -30,19 +30,23 @@ import java.util.logging.Logger;
  */
 public class MsFormat extends Format {
 
+	private static final long serialVersionUID = 4432179935812692306L;
+
 	@Override
 	public StringBuffer format(Object obj, StringBuffer toAppendTo,
 			FieldPosition pos) {
-		if(!(obj instanceof Integer))
-			throw new IllegalArgumentException("Can only format Integers");
+		Long toParse = null;
+		
+		if(obj instanceof Integer) toParse = ((Integer)obj).longValue();
+		if(obj instanceof Long) toParse = (Long)obj;
 		
 		StringBuffer retVal = new StringBuffer();
-		retVal.append(this.msToDisplayString((Integer)obj));
+		retVal.append(this.msToDisplayString(toParse));
 		
 		return retVal;
 	}
 
-	protected String msToDisplayString(int ms) 
+	protected String msToDisplayString(long ms) 
 		throws IllegalArgumentException {
 		if(ms < 0)
 			throw new IllegalArgumentException("Time cannot be negative.");
@@ -80,7 +84,7 @@ public class MsFormat extends Format {
 	@Override
 	public Object parseObject(String source, ParsePosition pos) {
 		Logger.getLogger(getClass().getName()).warning("Method parseObject(String, ParsePosition) not implemented.");
-		return new Integer(0);
+		return new Long(0);
 	}
 
 }

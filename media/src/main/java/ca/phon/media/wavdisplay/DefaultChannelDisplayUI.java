@@ -28,13 +28,14 @@ import java.awt.event.ComponentListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import ca.phon.application.PhonTask;
-import ca.phon.application.PhonTask.TaskStatus;
-import ca.phon.application.PhonTaskListener;
-import ca.phon.application.PhonWorker;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonWorker;
 
 public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 	

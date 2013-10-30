@@ -25,17 +25,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ca.phon.application.PhonTask;
-import ca.phon.system.logger.PhonLogger;
-import ca.phon.util.PhonUtilities;
-import ca.phon.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import ca.phon.util.OSInfo;
+import ca.phon.worker.PhonTask;
 
 /**
  * Uses the redistributed copy of ffmpeg-static
  * to extract segments of a given media file.
  */
 public class FFMpegMediaExporter extends PhonTask {
+	
+	private final static Logger LOGGER = Logger.getLogger(FFMpegMediaExporter.class.getName());
 
 	/* ffmpeg options */
 	private String inputFile;
@@ -140,11 +144,11 @@ public class FFMpegMediaExporter extends PhonTask {
 	private String getFFMpegBinary() {
 		String retVal = null;
 		
-		if(PhonUtilities.isMacOs()) {
+		if(OSInfo.isMacOs()) {
 			retVal = "data/bin/macos/ffmpeg-static";
-		} else if(PhonUtilities.isWindows()) {
+		} else if(OSInfo.isWindows()) {
 			retVal = "data/bin/windows/ffmpeg-static.exe";
-		} else if(PhonUtilities.isLinux()) {
+		} else if(OSInfo.isNix()) {
 			// use default install location for ubuntu 10.10
 			retVal = "/usr/bin/ffmpeg";
 		}
@@ -209,7 +213,7 @@ public class FFMpegMediaExporter extends PhonTask {
 
 				argsReader.close();
 			} catch (IOException ex) {
-				PhonLogger.warning(ex.getMessage());
+				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			}
 		}
 
@@ -280,13 +284,13 @@ public class FFMpegMediaExporter extends PhonTask {
 					new InputStreamReader(process.getInputStream()));
 			String line = null;
 			while((line = reader.readLine()) != null) {
-				PhonLogger.info(line);
+				LOGGER.info(line);
 			}
 			reader.close();
 
 			super.setStatus(TaskStatus.FINISHED);
 		} catch (IOException ex) {
-			PhonLogger.severe(ex.getMessage());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			super.err = ex;
 			super.setStatus(TaskStatus.ERROR);
 		}

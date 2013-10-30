@@ -27,13 +27,17 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import ca.phon.system.logger.PhonLogger;
-import ca.phon.util.StringUtils;
+import ca.phon.media.MsFormatter;
+import ca.phon.util.MsFormat;
 
 public class TimeBar extends JComponent {
+	
+	private final static Logger LOGGER = Logger.getLogger(TimeBar.class.getName());
 	
 	private static int _defaultMinorTick = 5;
 	private static int _defaultMajorTick = 10;
@@ -64,10 +68,8 @@ public class TimeBar extends JComponent {
 		_parent = parent;
 		try {
 			_timeFont = Font.createFont(Font.PLAIN, new File("data/fonts/LiberationMono-Regular.ttf")).deriveFont(10.0f);
-		} catch (IOException e) {
-			PhonLogger.warning(e.toString());
-		} catch (FontFormatException e) {
-			PhonLogger.warning(e.toString());
+		} catch (IOException | FontFormatException ex) {
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 		}
 	}
 	
@@ -127,14 +129,14 @@ public class TimeBar extends JComponent {
 		
 		g2.setColor(Color.gray);
 		// draw time values
-		String startString = StringUtils.msToDisplayString(startMs);
+		String startString = MsFormatter.msToDisplayString(startMs);
 		Rectangle2D startStringBounds = 
 			g2.getFontMetrics(_timeFont).getStringBounds(startString, g);
 		float startX = 
 			WavDisplay._TIME_INSETS_ - (float)(startStringBounds.getWidth()/2);
 		g2.drawString(startString, startX, (float)startStringBounds.getHeight());
 		
-		String endString = StringUtils.msToDisplayString(endMs);
+		String endString = MsFormatter.msToDisplayString(endMs);
 		Rectangle2D endStringBounds = 
 			g2.getFontMetrics(_timeFont).getStringBounds(endString, g);
 		float endX = 
@@ -166,8 +168,8 @@ public class TimeBar extends JComponent {
 			g2.fill(segEndRect);
 			
 			// draw time values
-			String segStartString = StringUtils.msToDisplayString(segStart);
-			String segEndString = StringUtils.msToDisplayString(endTime);
+			String segStartString = MsFormatter.msToDisplayString(segStart);
+			String segEndString = MsFormatter.msToDisplayString(endTime);
 			
 			Color fadeColor = new Color(255, 255, 255, 180);
 			Rectangle2D segStartBounds = 
@@ -230,7 +232,7 @@ public class TimeBar extends JComponent {
 		
 		// draw currentms string
 		if(currentMs >= 0) {
-			String currentString = StringUtils.msToDisplayString(currentMs+startMs);
+			String currentString = MsFormatter.msToDisplayString(currentMs+startMs);
 			Rectangle2D currentStringBounds =
 				g2.getFontMetrics(_timeFont).getStringBounds(currentString, g);
 			

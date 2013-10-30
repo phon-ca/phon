@@ -23,9 +23,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.worker.PhonTask;
-
 import vlc4j.VLCException;
 import vlc4j.VLCInstance;
 import vlc4j.VLCMedia;
@@ -38,6 +39,8 @@ import vlc4j.event.VLCMediaPlayerEvent;
  * 
  */
 public class VLCWavExporter extends PhonTask {
+	
+	private final static Logger LOGGER = Logger.getLogger(VLCWavExporter.class.getName());
 
 	/** The output file */
 	private String outputFile;
@@ -86,7 +89,7 @@ public class VLCWavExporter extends PhonTask {
 		try {
 			doExport();
 		} catch (VLCException ex) {
-			PhonLogger.severe(ex.toString());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 		}
 
 //		super.setStatus(TaskStatus.FINISHED);
@@ -159,7 +162,7 @@ public class VLCWavExporter extends PhonTask {
 				VLCWavExporter.this.setProperty(PhonTask.PROGRESS_PROP, pos);
 
 			} catch (VLCException ex) {
-				PhonLogger.warning(ex.toString());
+				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			}
 		}
 		
@@ -171,7 +174,7 @@ public class VLCWavExporter extends PhonTask {
 				VLCWavExporter.this.setProperty(PhonTask.PROGRESS_PROP, 1.0f);
 				VLCWavExporter.this.setStatus(TaskStatus.FINISHED);
 			} catch (IOException ex) {
-				PhonLogger.warning(ex.toString());
+				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			}
 		}
 		
@@ -186,7 +189,7 @@ public class VLCWavExporter extends PhonTask {
 				vlcInstance.free();
 			}
 		} catch (VLCException ex) {
-			PhonLogger.warning(ex.toString());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 		}
 	}
 

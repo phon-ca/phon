@@ -25,6 +25,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
@@ -34,16 +36,18 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
-import ca.phon.application.PhonTask;
-import ca.phon.application.PhonWorker;
 import ca.phon.media.exceptions.PhonMediaException;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Displays a 16bit wave file.
  *
  */
 public class WavDisplay extends JComponent {
+	
+	private static final Logger LOGGER = Logger.getLogger(WavDisplay.class
+			.getName());
 	
 	// amount of space to leave on the left and right sides of the timebar and channel displays
 	public static final int _TIME_INSETS_ = 35;
@@ -327,7 +331,7 @@ public class WavDisplay extends JComponent {
 
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (Exception e) {
-				PhonLogger.severe(e.toString());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				super.setStatus(TaskStatus.ERROR);
 				super.err = e;
 			}

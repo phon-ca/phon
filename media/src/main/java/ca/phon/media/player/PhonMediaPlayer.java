@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -59,15 +61,14 @@ import vlc4j.VLCMediaPlayer;
 import vlc4j.event.VLCMediaPlayerAdapter;
 import vlc4j.event.VLCMediaPlayerEvent;
 import vlc4j.event.VLCMediaPlayerListener;
-import ca.phon.gui.CommonModuleFrame;
-import ca.phon.gui.action.PhonActionEvent;
-import ca.phon.gui.action.PhonUIAction;
-import ca.phon.gui.components.JRangeSlider;
-import ca.phon.gui.recordeditor.SegmentField;
-import ca.phon.system.logger.PhonLogger;
-import ca.phon.util.FileFilter;
-import ca.phon.util.NativeDialogs;
-import ca.phon.util.PhonUtilities;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.util.OSInfo;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -76,6 +77,9 @@ import com.jgoodies.forms.layout.FormLayout;
  * Media player using vlc4j (including media playback controls.)
  */
 public class PhonMediaPlayer extends JPanel {
+	
+	private static final Logger LOGGER = Logger.getLogger(PhonMediaPlayer.class
+			.getName());
 
 	private final static int SLIDER_MAX = 10000;
 
@@ -280,8 +284,8 @@ public class PhonMediaPlayer extends JPanel {
 //					if(slider.getValueIsAdjusting()) {
 						try {
 							getMediaPlayer().setVolume(slider.getValue());
-						} catch (VLCException ex) {
-							PhonLogger.severe(ex.toString());
+						} catch (VLCException e) {
+							LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 						}
 //					}
 				}
@@ -384,17 +388,17 @@ public class PhonMediaPlayer extends JPanel {
 				for(String defOpt:defaultOptions)
 					opts.add(defOpt);
 				
-				if(!PhonUtilities.isLinux()) {
+				if(!OSInfo.isNix()) {
 					
 					// see if the embedded version of VLC is installed
 					File embeddedVLCPlugins = 
-						( PhonUtilities.isMacOs() 
+						( OSInfo.isMacOs() 
 								? new File("lib/jni/vlclib/plugins")
 								: new File("lib/jni/plugins") );
 					if(embeddedVLCPlugins.exists() && embeddedVLCPlugins.isDirectory()) {
 						String pluginLoc = 
 							"--plugin-path=" +
-				        	( PhonUtilities.isMacOs() 
+				        	( OSInfo.isMacOs() 
 				        			? (new File("lib/jni/vlclib/plugins")).getAbsolutePath()
 				        			: (new File("lib/jni/plugins")).getAbsolutePath() );
 						opts.add(pluginLoc);
@@ -404,8 +408,8 @@ public class PhonMediaPlayer extends JPanel {
 				vlcInstance.init(opts.toArray(new String[0]));
 				
 			} catch (VLCException e) {
-				getCanvas().setMessage(e.getMessage());
-				PhonLogger.severe(e.toString());
+				getCanvas().setMessage(e.getLocalizedMessage());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				return;
 			}
 		}
@@ -432,18 +436,18 @@ public class PhonMediaPlayer extends JPanel {
 					m.free();
 				}
 				mediaPlayer.free();
-			} catch (VLCException ex) {
-				getCanvas().setMessage(ex.getMessage());
-				PhonLogger.severe(ex.toString());
+			} catch (VLCException e) {
+				getCanvas().setMessage(e.getLocalizedMessage());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 
 		try {
 			mediaPlayer = vlcInstance.newMediaPlayer();
 			mediaPlayer.addMediaPlayerListener(mediaListener);
-		} catch (VLCException ex) {
-			getCanvas().setMessage(ex.getMessage());
-			PhonLogger.severe(ex.toString());
+		} catch (VLCException e) {
+			getCanvas().setMessage(e.getLocalizedMessage());
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 //		if(playerCanvas != null) {
 //			super.remove(playerCanvas);
@@ -451,9 +455,9 @@ public class PhonMediaPlayer extends JPanel {
 //			super.add(playerCanvas, BorderLayout.CENTER);
 		try {
 			mediaPlayer.setVideoOut(playerCanvas);
-		} catch (VLCException ex) {
-			getCanvas().setMessage(ex.getMessage());
-			PhonLogger.severe(ex.toString());
+		} catch (VLCException e) {
+			getCanvas().setMessage(e.getLocalizedMessage());
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 //		}
 
@@ -480,7 +484,7 @@ public class PhonMediaPlayer extends JPanel {
 			mediaFile = loc;
 		} catch (VLCException e) {
 			getCanvas().setMessage(e.getMessage());
-			PhonLogger.severe(e.toString());
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} 
 		
 		for(VLCMediaPlayerListener listener:_mediaListeners) {
@@ -543,8 +547,8 @@ public class PhonMediaPlayer extends JPanel {
 					volumeSlider.setValue(mediaPlayer.getVolume());
 				else
 					volumeSlider.setEnabled(false);
-			} catch (VLCException ex) {
-				PhonLogger.severe(ex.toString());
+			} catch (VLCException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 			
 
@@ -626,14 +630,15 @@ public class PhonMediaPlayer extends JPanel {
 				if(isPlaying) {
 					player.pause();
 				}
-
-				FileFilter[] filters = new FileFilter[1];
-				filters[0] = new FileFilter("PNG files (*.png)", "*.png");
-				String saveTo =
-						NativeDialogs.showSaveFileDialogBlocking(
-							CommonModuleFrame.getCurrentFrame(),
-							System.getProperty("user.home") + File.separator + "Desktop",
-							"png", filters, "Save snapshot");
+				
+				final FileFilter filter = new FileFilter("PNG files (*.png)", "*.png");
+				final SaveDialogProperties props = new SaveDialogProperties();
+				props.setFileFilter(filter);
+				props.setCanCreateDirectories(true);
+				props.setMessage("Save snapshot");
+				
+				final String saveTo =
+						NativeDialogs.showSaveDialog(props);
 
 				if(isPlaying) {
 					// start player again
@@ -644,8 +649,8 @@ public class PhonMediaPlayer extends JPanel {
 					player.takeSnapshot(saveTo);
 				}
 
-			} catch (VLCException ex) {
-				PhonLogger.warning(ex.toString());
+			} catch (VLCException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 
 		}
@@ -692,8 +697,8 @@ public class PhonMediaPlayer extends JPanel {
 
 				if(!player.isPlaying())
 					player.play();
-			} catch (VLCException ex) {
-				PhonLogger.warning(ex.toString());
+			} catch (VLCException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -732,8 +737,8 @@ public class PhonMediaPlayer extends JPanel {
 						VLCMediaPlayer mediaPlayer = getMediaPlayer();
 						if(mediaPlayer != null)
 							mediaPlayer.setPosition(pos);
-					} catch (VLCException ex) {
-						PhonLogger.warning(ex.toString());
+					} catch (VLCException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					}
 				}
 			}
@@ -835,8 +840,8 @@ public class PhonMediaPlayer extends JPanel {
 				if(stopTime >= 0 && time >= stopTime) {
 					player.pause();
 				}
-			} catch (VLCException ex) {
-				PhonLogger.warning(ex.toString());
+			} catch (VLCException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			} finally {
 				stopTimeMutex.unlock();
 			}
@@ -882,8 +887,8 @@ public class PhonMediaPlayer extends JPanel {
 				int sliderLoc = Math.round(SLIDER_MAX * pos);
 				if(!getPositionSlider().getValueIsAdjusting())
 					getPositionSlider().setValue(sliderLoc);
-			} catch (VLCException ex) {
-				PhonLogger.warning(ex.toString());
+			} catch (VLCException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 

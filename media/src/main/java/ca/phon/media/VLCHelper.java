@@ -18,9 +18,9 @@
 
 package ca.phon.media;
 
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import vlc4j.VLCInstance;
-import ca.phon.gui.CommonModuleFrame;
-import ca.phon.util.NativeDialogs;
 
 /**
  * Helper methods for using vlc4j
@@ -41,18 +41,19 @@ public class VLCHelper {
 	public static boolean checkNativeLibrary(boolean showError) {
 		boolean retVal = false;
 
-//		try {
 		retVal = VLCInstance.isLibraryLoaded();
-//		} catch (VLCException e) {
-//			PhonLogger.warning(e.getMessage());
-//		}
+
 		if(!retVal && showError) {
-			String msg1 = "Could not load VLC";
+			final String msg1 = "Could not load VLC";
 			String msg2 = "Native library for VLC failed to load. Reason given: ";
 			msg2 += VLCInstance.getLibraryLoadError();
 
-			NativeDialogs.showMessageDialogBlocking(
-					null, null, msg1, msg2);
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setTitle(msg1);
+			props.setMessage(msg2);
+			props.setOptions(MessageDialogProperties.okOptions);
+			
+			NativeDialogs.showMessageDialog(props);
 		}
 
 		return retVal;

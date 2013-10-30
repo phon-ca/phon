@@ -24,18 +24,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
 import vlc4j.VLCException;
 import vlc4j.VLCInstance;
 import vlc4j.VLCMediaPlayer;
 import vlc4j.event.VLCMediaPlayerAdapter;
 import vlc4j.event.VLCMediaPlayerEvent;
-import ca.phon.application.PhonTask;
-import ca.phon.application.PhonTaskListener;
-import ca.phon.system.logger.PhonLogger;
 
 /**
  * Export video and/or audio with the option
@@ -44,6 +45,8 @@ import ca.phon.system.logger.PhonLogger;
  *
  */
 public class VLCMediaExporter extends PhonTask {
+	
+	private final static Logger LOGGER = Logger.getLogger(VLCMediaExporter.class.getName());
 
 	private boolean transcode = false;
 
@@ -129,27 +132,12 @@ public class VLCMediaExporter extends PhonTask {
 		try {
 			doExport();
 		} catch (VLCException ex) {
-			PhonLogger.severe(ex.toString());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			super.err = ex;
 			super.setStatus(TaskStatus.ERROR);
 		}
 		
 	}
-
-//	private void doExport() throws VLCException {
-//		vlcInstance = new VLCInstance();
-//		vlcInstance.init(vlcOpts);
-//
-//		VLCMediaPlayer player = vlcInstance.newMediaPlayer();
-//		player.addMediaPlayerListener(new MediaExportListener());
-//
-//		VLCMedia media = vlcInstance.newFromPath(inputFile.getAbsolutePath());
-//		for(String mediaOpt:getMediaOptions())
-//			media.addOption(mediaOpt);
-//
-//		player.setMedia(media);
-//		player.play();
-//	}
 	
 	private void doExport() throws VLCException {
 		try {
@@ -165,13 +153,13 @@ public class VLCMediaExporter extends PhonTask {
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line = null;
 			while((line = in.readLine()) != null) {
-				PhonLogger.info("[vlc] " + line);
+				LOGGER.info("[vlc] " + line);
 			}
 			in.close();
 
 			System.exit(0);
 		} catch (IOException ex) {
-			PhonLogger.severe(ex.toString());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			throw new VLCException(ex.toString());
 		}
 
@@ -360,7 +348,7 @@ public class VLCMediaExporter extends PhonTask {
 				vlcInstance.free();
 			}
 		} catch (VLCException ex) {
-			PhonLogger.warning(ex.toString());
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 		}
 	}
 
@@ -385,7 +373,7 @@ public class VLCMediaExporter extends PhonTask {
 				// use position as percentage done
 				setProperty(PhonTask.PROGRESS_PROP, pos);
 			} catch (VLCException ex) {
-				PhonLogger.warning(ex.toString());
+				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 			}
 		}
 

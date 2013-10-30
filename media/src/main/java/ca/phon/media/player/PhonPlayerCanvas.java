@@ -27,6 +27,8 @@ import java.awt.Panel;
  */
 public class PhonPlayerCanvas extends Panel {
 	
+	private static final long serialVersionUID = 3113428360412298334L;
+	
 	/**
 	 * Current message string
 	 */

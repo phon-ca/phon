@@ -20,6 +20,8 @@ package ca.phon.media.wavdisplay;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFileFormat.Type;
 import javax.sound.sampled.AudioFormat;
@@ -32,7 +34,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import ca.phon.media.exceptions.PhonMediaException;
-import ca.phon.system.logger.PhonLogger;
 
 /**
  * Helper methods for working with (16-bit)
@@ -40,6 +41,10 @@ import ca.phon.system.logger.PhonLogger;
  *
  */
 public class WavHelper {
+	
+	private static final Logger LOGGER = Logger.getLogger(WavHelper.class
+			.getName());
+	
 	// using 8-bit bytes
 	private final static int BITS_PER_BYTE = 8;
 	
@@ -93,11 +98,9 @@ public class WavHelper {
     			retVal = 
     				AudioSystem.getAudioInputStream(wavFile);
     			format = retVal.getFormat();
-    		} catch (IOException e) {
-    			PhonLogger.severe(e.toString());
-    		} catch (UnsupportedAudioFileException e) {
-    			PhonLogger.severe(e.toString());
-			}
+    		} catch (IOException | UnsupportedAudioFileException e) {
+    			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    		} 
     	} else {
     		ByteArrayInputStream bin = new ByteArrayInputStream(wavData);
     		// used cached data
@@ -148,7 +151,7 @@ public class WavHelper {
 //		    	// reset stream
 //		    	audioInputStream.reset();
 	    	} catch (IOException e) {
-	    		PhonLogger.warning(e.toString());
+	    		LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 	    	}
 //    	}
     }
@@ -171,10 +174,10 @@ public class WavHelper {
 	    	} else if(format.getSampleSizeInBits() == 32) {
 	    		retVal = frameTo32bitSampleArray(frameContainer);
 	    	} else {
-	    		PhonLogger.warning("Unsupported wav format: " + format.toString());
+	    		LOGGER.warning("Unsupported wav format: " + format.toString());
 	    	}
     	} else {
-    		PhonLogger.warning("Unsupported wav format: " + format.toString());
+    		LOGGER.warning("Unsupported wav format: " + format.toString());
     	}
     	
     	return retVal;
@@ -328,7 +331,7 @@ public class WavHelper {
 				int bytesRead = audioInputStream.read(bc, 0, (int)segLen);
 				
 				if(bytesRead != segLen) {
-					PhonLogger.warning("Failed to read bytes\n  Requested: " + segLen + ", Got: " + bytesRead);
+					LOGGER.warning("Failed to read bytes\n  Requested: " + segLen + ", Got: " + bytesRead);
 				}
 				
 //				ByteArrayInputStream bin = new
@@ -337,8 +340,7 @@ public class WavHelper {
 				retVal = new WavHelper(bc, audioInputStream.getFormat(), segLen / audioInputStream.getFormat().getFrameSize());
 //				retVal = new WavHelper(ais);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 //    	}
     	return retVal;
@@ -361,13 +363,13 @@ public class WavHelper {
 			audioClip = AudioSystem.getClip();
 			
 		} catch (LineUnavailableException e) {
-			PhonLogger.severe(e.toString());
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			throw new PhonMediaException(e.toString());
 		}
     	try {
 			audioClip.open(format, wavData, 0, wavData.length);
 		} catch (LineUnavailableException e) {
-			PhonLogger.severe(e.toString());
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			throw new PhonMediaException(e.toString());
 		}
     	
@@ -574,8 +576,8 @@ public class WavHelper {
     	try {
 	    	AudioInputStream stream = getAudioInputStream();
 	    	AudioSystem.write(stream, Type.WAVE, f);
-    	} catch (IllegalArgumentException ex) {
-    		PhonLogger.warning(ex.toString());
+    	} catch (IllegalArgumentException e) {
+    		LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
     	}
     }
 
