@@ -213,11 +213,11 @@ public class ParticipantEditor extends JDialog {
 		if(ageLabel == null) {
 			ageLabel = new JLabel();
 			
-			PhonDurationFormat ageFormat = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
+//			PhonDurationFormat ageFormat = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
 			if(participant.getAge(sessionDate) != null)
-				ageLabel.setText(ageFormat.format(participant.getAge(sessionDate)));
+				ageLabel.setText(AgeFormatter.ageToString(participant.getAge(sessionDate)));
 			else
-				ageLabel.setText(ageFormat.format(new PhonDuration()));
+				ageLabel.setText(AgeFormatter.ageToString(new Period()));
 		}
 		return ageLabel;
 	}

@@ -186,4 +186,23 @@ public class ParticipantImpl implements Participant {
 	public <T> T removeExtension(Class<T> cap) {
 		return extSupport.removeExtension(cap);
 	}
+	
+//	@Override
+//	public Object clone() {
+//		final ParticipantImpl retVal = new ParticipantImpl();
+//		
+//		// copy fields
+//		retVal.setId(getId());
+//		retVal.setName(getName());
+//		retVal.setBirthDate(getBirthDate());
+//		retVal.setEducation(getEducation());
+//		retVal.setGroup(getGroup());
+//		retVal.setLanguage(getLanguage());
+//		retVal.setRole(getRole());
+//		retVal.setSES(getSES());
+//		retVal.setSex(getSex());
+//		retVal.setAgeTo(getAgeTo());
+//		
+//		return retVal;
+//	}
 }

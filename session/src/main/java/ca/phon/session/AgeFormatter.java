@@ -3,8 +3,6 @@ package ca.phon.session;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
-import org.joda.time.format.PeriodParser;
-import org.joda.time.format.PeriodPrinter;
 
 /**
  * Create formatters for ages stored in {@link Period} objects.

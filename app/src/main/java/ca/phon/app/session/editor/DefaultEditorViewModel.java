@@ -130,6 +130,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 	@Override
 	public EditorView getView(String viewName) {
+
 		EditorView retVal = registeredViews.get(viewName);
 		if(retVal == null) {
 			// attempt to load editor view

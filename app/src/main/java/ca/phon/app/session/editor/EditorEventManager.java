@@ -120,7 +120,7 @@ public class EditorEventManager {
 	 */
 	public List<EditorAction> getActionsForEvent(String eventName) {
 		List<EditorAction> retVal = actionMap.get(eventName);
-		if(retVal != null) 
+		if(retVal == null) 
 			retVal = new ArrayList<>();
 		else 
 			retVal = Collections.unmodifiableList(retVal);
@@ -146,7 +146,7 @@ public class EditorEventManager {
 				
 				if(event != null) {
 					for(EditorAction action:getActionsForEvent(event.getEventName())) {
-						
+						action.eventOccured(event);
 					}
 				}
 			}

@@ -18,4 +18,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface RunOnEDT {
 
+	/**
+	 * Run on swing EDT but wait for return
+	 * 
+	 * @return boolean
+	 */
+	public boolean invokeAndWait() default false;
+	
 }

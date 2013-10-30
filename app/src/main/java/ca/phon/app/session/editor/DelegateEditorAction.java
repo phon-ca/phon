@@ -20,8 +20,12 @@ package ca.phon.app.session.editor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
+
+import ca.phon.worker.PhonWorker;
 
 /**
  * Action class for editor events.  This class will call
@@ -33,6 +37,8 @@ import javax.swing.SwingUtilities;
  * setRunOnEDT(true)
  */
 public class DelegateEditorAction implements EditorAction {
+	
+	private final static Logger LOGGER = Logger.getLogger(DelegateEditorAction.class.getName());
 
 	/** The delegate class (static method) */
 	private Class<?> clazz;
@@ -76,15 +82,34 @@ public class DelegateEditorAction implements EditorAction {
 	@Override
 	public void eventOccured(EditorEvent ee) {
 		try {
-			Method m = getMethod();
-
-			if(isStaticAction())
-				m.invoke(null, ee);
-			else
-				m.invoke(object, ee);
-		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+			final Method m = getMethod();
 			
+			final DelegateRunner runner = new DelegateRunner(ee, m);
+			
+			// choose where/who to run the action
+			final RunOnEDT runOnEDT = m.getAnnotation(RunOnEDT.class);
+			if(runOnEDT != null) {
+				boolean waitForFinish = runOnEDT.invokeAndWait();
+				if(waitForFinish) {
+					SwingUtilities.invokeAndWait(runner);
+				} else {
+					SwingUtilities.invokeLater(runner);
+				}
+			} else {
+				final RunInBackground runInBackground = m.getAnnotation(RunInBackground.class);
+				if(runInBackground != null && runInBackground.newThread()) {
+					final PhonWorker tempWorker = PhonWorker.createWorker();
+					tempWorker.setFinishWhenQueueEmpty(true);
+					tempWorker.invokeLater(runner);
+					tempWorker.start();
+				} else {
+					runner.run();
+				}
+			}
+		} catch (NoSuchMethodException | InvocationTargetException | InterruptedException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
+			
 	}
 
 	/*
@@ -106,37 +131,35 @@ public class DelegateEditorAction implements EditorAction {
 				clazz.getMethod(methodId, EditorEvent.class);
 		return retVal;
 	}
-
-//	private class DelegateRunner implements Runnable {
-//
-//		// the event to dispatch
-//		private EditorEvent ee;
-//		
-//		public DelegateRunner(EditorEvent ee) {
-//			this.ee = ee;
-//		}
-//
-//		@Override
-//		public void run() {
-//			try {
-//				Method m = getMethod();
-//
-//				if(isStaticAction())
-//					m.invoke(null, ee);
-//				else
-//					m.invoke(object, ee);
-//
-//			} catch (InvocationTargetException e) {
-//				PhonLogger.severe(DelegateEditorAction.class, e.toString());
-//				if(e.getCause() != null)
-//					PhonLogger.severe(DelegateEditorAction.class, "Caused by:\n\t" + e.getCause().toString());
-//				
-//				e.printStackTrace();
-//			} catch (Exception e) {
-//				PhonLogger.severe(DelegateEditorAction.class, e.toString());
-//			}
-//		}
-//
-//	}
+	
+	/**
+	 * Runnable for event action
+	 */
+	private class DelegateRunner implements Runnable {
+		
+		private EditorEvent ee;
+		
+		private Method method;
+		
+		public DelegateRunner(EditorEvent ee, Method method) {
+			super();
+			this.ee = ee;
+			this.method = method;
+		}
+		
+		@Override
+		public void run() {
+			try {
+				if(isStaticAction()) {
+					method.invoke(null, ee);
+				} else {
+					method.invoke(object, ee);
+				}
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
+	}
 
 }

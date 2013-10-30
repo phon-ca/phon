@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.util.concurrent.atomic.AtomicReference;
 
+import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
@@ -31,15 +32,20 @@ public class SessionEditor extends CommonModuleFrame {
 	private final transient AtomicReference<EditorDataModel> dataModelRef;
 	
 	/**
-	 * Event model
+	 * Event manager
 	 */
-	private final transient AtomicReference<EditorEventManager> eventModelRef;
+	private final transient AtomicReference<EditorEventManager> eventManagerRef;
 	
 	/**
 	 * Index of the current record
 	 * 
 	 */
 	private volatile transient int currentRecord = 0;
+	
+	/**
+	 * Undo support for the editor
+	 */
+	private final SessionEditorUndoSupport undoSupport = new SessionEditorUndoSupport();
 	
 	/**
 	 * Constructor
@@ -51,7 +57,7 @@ public class SessionEditor extends CommonModuleFrame {
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));
 		this.viewModelRef = 
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
-		this.eventModelRef = 
+		this.eventManagerRef = 
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
 		init();
 	}
@@ -94,12 +100,22 @@ public class SessionEditor extends CommonModuleFrame {
 	}
 	
 	/**
-	 * Get the event model
+	 * Get the event manager
 	 * 
 	 * @return the editor event model
 	 */
-	public EditorEventManager getEventModel() {
-		return eventModelRef.get();
+	public EditorEventManager getEventManager() {
+		return eventManagerRef.get();
+	}
+	
+	/**
+	 * Get session
+	 * 
+	 * @return session
+	 */
+	public Session getSession() {
+		final EditorDataModel dataModel = getDataModel();
+		return dataModel.getSession();
 	}
 	
 	/*
@@ -122,6 +138,15 @@ public class SessionEditor extends CommonModuleFrame {
 	public Record currentRecord() {
 		final EditorDataModel dataModel = getDataModel();
 		return dataModel.getRecord(getCurrentRecordIndex());
+	}
+	
+	/**
+	 * Get undo support for the editor
+	 * 
+	 * @return undo support
+	 */
+	public SessionEditorUndoSupport getUndoSupport() {
+		return this.undoSupport;
 	}
 	
 }

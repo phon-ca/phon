@@ -28,6 +28,7 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -55,18 +56,25 @@ import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DividedEditorView;
 import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.AddParticipantEdit;
+import ca.phon.app.session.editor.undo.RemoveParticipantEdit;
+import ca.phon.app.session.editor.undo.SessionDateEdit;
 import ca.phon.app.session.participant.ParticipantEditor;
 import ca.phon.app.session.participant.ParticipantsTableModel;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
+import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.FileSelectionField;
 import ca.phon.ui.PromptedTextField.FieldState;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PathExpander;
@@ -141,13 +149,24 @@ public class SessionInfoPanel extends DividedEditorView {
 		super(editor);
 		
 		init();
+		setupEditorActions();
 	}
 
 	private void setupEditorActions() {
-		DelegateEditorAction sessionMediaChangedAct = new
+		final DelegateEditorAction sessionMediaChangedAct = new
 				DelegateEditorAction(this, "onSessionMediaChanged");
-//		sessionMediaChangedAct.setRunOnEDT(true);
-//		getModel().registerActionForEvent(SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
+		
+		final DelegateEditorAction participantsChangedAct = 
+				new DelegateEditorAction(this, "onParticipantListChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, participantsChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, participantsChangedAct);
+	
+		final DelegateEditorAction dateChangedAct = 
+				new DelegateEditorAction(this, "onDateChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_DATE_CHANGED, dateChangedAct);
+		
+		
 	}
 	
 	private void init() {
@@ -255,25 +274,6 @@ public class SessionInfoPanel extends DividedEditorView {
 	public JTextField createDateField() {
 		final JTextField retVal = new JTextField();
 		
-		retVal.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-//				// make sure the format is correct!
-//				// ppl can put in crazy dates, allow them, but fix it
-//				Calendar calendar = 
-//					((CalendarDocument)retVal.getDocument()).getCalendar();
-//				SimpleDateFormat dateFormat = 
-//					new SimpleDateFormat("yyyy-MM-dd");
-//				retVal.setText(dateFormat.format(calendar.getTime()));
-			}
-			
-		});
-		
 		final DateTime sessionDate = DateTime.now();
 		
 		retVal.addKeyListener(new KeyListener() {
@@ -295,25 +295,9 @@ public class SessionInfoPanel extends DividedEditorView {
 		final DateTimeDocument doc = new DateTimeDocument(sessionDate);
 		retVal.setDocument(doc);
 		
-		
-		
 		return retVal;
 	}
 	
-//	@Override
-//	public void setModel(RecordEditorModel model) {
-//		super.setModel(model);
-//		
-//		if(getModel() != null) {
-//			setupEditorActions();
-//			mediaLocationField.setProject(getModel().getProject());
-//			update();
-//		} else {
-//			// remove table model reference to session
-//			participantTable.setModel(new DefaultTableModel());
-//		}
-//	}
-
 	@Override
 	public String getName() {
 		return VIEW_TITLE;
@@ -365,52 +349,22 @@ public class SessionInfoPanel extends DividedEditorView {
 		final DateTime newDate = doc.getDateTime();
 		
 		if(!currentDate.isEqual(newDate)) {
-			session.setDate(newDate);
-			// TODO fire event
+			final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, currentDate);
+			edit.setSource(dateField);
+			editor.getUndoSupport().postEdit(edit);
 		}
 		
-//		if(!currentDateString.equals(newDateString)) {
-//			getModel().getSession().setDate(newDate);
-//			((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
-//			getModel().fireRecordEditorEvent(SESSION_DATE_CHANGED, this, newDate);
-//		}
 	}
 	
 	private void newParticipant() {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
-//		boolean canceled = ParticipantEditor.editParticipant(CommonModuleFrame.getCurrentFrame(), part, getModel().getSession().getDate());
-		boolean canceled = true;
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getDataModel().getSession();
+		boolean canceled = ParticipantEditor.editParticipant(getEditor(), part, getEditor().getDataModel().getSession().getDate());
 		
 		if(!canceled) {
-			final Participant newPart = factory.createParticipant();
-			session.addParticipant(newPart);
-			if(part.getName() != null)
-				newPart.setName(part.getName());
-			if(part.getBirthDate() != null)
-				newPart.setBirthDate(part.getBirthDate());
-			if(part.getEducation() != null)
-				newPart.setEducation(part.getEducation());
-			if(part.getGroup() != null)
-				newPart.setGroup(part.getGroup());
-			if(part.getLanguage() != null)
-				newPart.setLanguage(part.getLanguage());
-			if(part.getRole() != null)
-				newPart.setRole(part.getRole());
-			if(part.getSES() != null)
-				newPart.setSES(part.getSES());
-			if(part.getSex() != null)
-				newPart.setSex(part.getSex());
-			
-//			ParticipantListEdit edit = 
-//				new ParticipantListEdit(ParticipantListEdit.ParticipantEditType.Insertion,
-//						getModel().getSession(), part);
-//			getModel().getUndoSupport().postEdit(edit);
-//			
-//			((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
-//			getModel().fireRecordEditorEvent(PARTICIPANT_ADDED, this, part);
+			final AddParticipantEdit edit = new AddParticipantEdit(getEditor(), part);
+			edit.setSource(participantTable);
+			getEditor().getUndoSupport().postEdit(edit);
 		}
 	}
 	
@@ -429,28 +383,31 @@ public class SessionInfoPanel extends DividedEditorView {
 	}
 	
 	private void deleteParticipant() {
-//		int selectedRow = participantTable.getSelectedRow();
-//		if(selectedRow < 0) return;
-//		selectedRow = participantTable.convertRowIndexToModel(selectedRow);
-//		if(selectedRow >= 0 && selectedRow < getModel().getSession().getParticipants().size()) {
-//			Participant part = getModel().getSession().getParticipants().get(selectedRow);
-//			
-//			int retVal = NativeDialogs.showYesNoDialogBlocking(CommonModuleFrame.getCurrentFrame(), "", "Delete participant", 
-//					"Delete participant '" + part.getName() + "'?  This action cannot be undone.");
-//			if(retVal == 0) {
-//				for(IUtterance utt:getModel().getSession().getUtterances()) {
-//					if(utt.getSpeaker() != null &&
-//							utt.getSpeaker().getId().equals(part.getId())) {
-//						utt.setSpeaker(null);
-//					}
-//				}
-//				getModel().getSession().removeParticipant(part);
-//				
-//				((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
-//				getModel().fireRecordEditorEvent(PARTICIPANT_REMOVED, this, part);
-//			}
-//			
-//		}
+		int selectedRow = participantTable.getSelectedRow();
+		if(selectedRow < 0) return;
+		selectedRow = participantTable.convertRowIndexToModel(selectedRow);
+		
+		final SessionEditor editor = getEditor();
+		final Session session = editor.getSession();
+		if(selectedRow >= 0 && selectedRow < session.getParticipantCount()) {
+			final Participant participant = session.getParticipant(selectedRow);
+			
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setParentWindow(null);
+			props.setOptions(MessageDialogProperties.yesNoOptions);
+			props.setRunAsync(false);
+			props.setMessage("Delete participant '" + participant.getName() + ";? This action cannot be undone.");
+			props.setHeader("Delete participant");
+			props.setTitle("Delete participant");
+			
+			final int ret = NativeDialogs.showMessageDialog(props);
+			if(ret == 0) {
+				final RemoveParticipantEdit edit = new RemoveParticipantEdit(editor, participant);
+				edit.setSource(participantTable);
+				editor.getUndoSupport().postEdit(edit);
+			}
+			
+		}
 	}
 	
 	/** Editor actions */
@@ -465,6 +422,20 @@ public class SessionInfoPanel extends DividedEditorView {
 //				PhonLogger.warning(e.toString());
 //			}
 //		}
+	}
+	
+	@RunOnEDT
+	public void onParticipantListChanged(EditorEvent ee) {
+		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
+	}
+	
+	@RunOnEDT
+	public void onDateChanged(EditorEvent ee) {
+		if(ee.getSource() != dateField) {
+			final DateTime newDate = (DateTime)ee.getEventData();
+			dateField.setText(DateFormatter.dateTimeToString(newDate));
+		}
+		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
 	}
 	
 	private final PropertyChangeListener mediaLocationListener = new PropertyChangeListener() {
