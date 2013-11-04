@@ -18,12 +18,8 @@
       <version>1.7.0</version>
     </dependency>
     <dependency>
-      <groupId>org.dockingframes</groupId>
-      <artifactId>docking-frames-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.dockingframes</groupId>
-      <artifactId>docking-frames-common</artifactId>
-    </dependency>
+		<groupId>org.dockingframes</groupId>
+		<artifactId>docking-frames-common</artifactId>
+	</dependency>
   </dependencies>
 </project>

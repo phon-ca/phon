@@ -22,9 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -40,10 +37,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.joda.time.DateTime;
-import org.joda.time.JodaTimePermission;
 import org.joda.time.Period;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
 
 import ca.phon.session.AgeFormatter;
 import ca.phon.session.Participant;
@@ -51,8 +45,6 @@ import ca.phon.session.ParticipantRole;
 import ca.phon.session.Sex;
 import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.util.PhonDuration;
-import ca.phon.util.PhonDurationFormat;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.CellConstraints;

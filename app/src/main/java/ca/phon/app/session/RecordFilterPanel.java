@@ -48,6 +48,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
+import org.joda.time.DateTime;
 
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -56,6 +57,7 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
 import ca.phon.query.db.ResultSetRecordFilter;
 import ca.phon.session.AbstractRecordFilter;
+import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRecordFilter;
 import ca.phon.session.RangeRecordFilter;
@@ -67,7 +69,6 @@ import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.VerifierListener;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PhonDateFormat;
 import ca.phon.util.Tuple;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -220,8 +221,8 @@ public class RecordFilterPanel extends JPanel {
 				retVal = p.getName();
 			} else if(columnIndex == 2) {
 				if(p.getBirthDate() != null) {
-					PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-					retVal = pdf.format(p.getBirthDate().toCalendar(getDefaultLocale()));
+					final DateTime bDay = p.getBirthDate();
+					retVal = DateFormatter.dateTimeToString(bDay);
 				}
 			} 
 			return retVal;

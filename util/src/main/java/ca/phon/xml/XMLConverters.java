@@ -22,10 +22,7 @@ import java.util.Calendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import ca.phon.util.PhonDuration;
 
 /**
  * Methods for converting from XML returned types to
@@ -34,48 +31,48 @@ import ca.phon.util.PhonDuration;
  *
  */
 public class XMLConverters {
-	/** 
-	 * Convert a javax.xml.datatype.Duration object to a PhonDuration
-	 * object.
-	 * 
-	 * @param xmlDuration
-	 * @return PhonDuration
-	 */
-	public static PhonDuration toPhonDuration(Duration xmlDuration) {
-		PhonDuration phonDuration = new PhonDuration();
-			phonDuration.setSeconds(xmlDuration.getSeconds());
-			phonDuration.setMinutes(xmlDuration.getMinutes());
-			phonDuration.setHours(xmlDuration.getHours());
-			phonDuration.setDays(xmlDuration.getDays());
-			phonDuration.setMonths(xmlDuration.getMonths());
-			phonDuration.setYears(xmlDuration.getYears());
-		return phonDuration;
-	}
+//	/** 
+//	 * Convert a javax.xml.datatype.Duration object to a PhonDuration
+//	 * object.
+//	 * 
+//	 * @param xmlDuration
+//	 * @return PhonDuration
+//	 */
+//	public static PhonDuration toPhonDuration(Duration xmlDuration) {
+//		PhonDuration phonDuration = new PhonDuration();
+//			phonDuration.setSeconds(xmlDuration.getSeconds());
+//			phonDuration.setMinutes(xmlDuration.getMinutes());
+//			phonDuration.setHours(xmlDuration.getHours());
+//			phonDuration.setDays(xmlDuration.getDays());
+//			phonDuration.setMonths(xmlDuration.getMonths());
+//			phonDuration.setYears(xmlDuration.getYears());
+//		return phonDuration;
+//	}
 	
-	/** 
-	 * Convert a PhonDuration from a given
-	 * javax.xml.datatype.Duration object;
-	 * 
-	 * @param phonDuration
-	 * @return Duration
-	 */
-	public static Duration toXMLDuration(PhonDuration phonDuration) {
-		int years = phonDuration.getYears();
-		int months = phonDuration.getMonths();
-		int days = phonDuration.getDays();
-		int hours = phonDuration.getHours();
-		int minutes = phonDuration.getMinutes();
-		int seconds = phonDuration.getSeconds();
-		
-		DatatypeFactory factory;
-		try {
-			factory = DatatypeFactory.newInstance();
-			return factory.newDuration(true, years, months, days, hours, minutes, seconds);
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	/** 
+//	 * Convert a PhonDuration from a given
+//	 * javax.xml.datatype.Duration object;
+//	 * 
+//	 * @param phonDuration
+//	 * @return Duration
+//	 */
+//	public static Duration toXMLDuration(PhonDuration phonDuration) {
+//		int years = phonDuration.getYears();
+//		int months = phonDuration.getMonths();
+//		int days = phonDuration.getDays();
+//		int hours = phonDuration.getHours();
+//		int minutes = phonDuration.getMinutes();
+//		int seconds = phonDuration.getSeconds();
+//		
+//		DatatypeFactory factory;
+//		try {
+//			factory = DatatypeFactory.newInstance();
+//			return factory.newDuration(true, years, months, days, hours, minutes, seconds);
+//		} catch (DatatypeConfigurationException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 	
 	/**
 	 * Convert a Calendar object on XMLGregorianCalendar object

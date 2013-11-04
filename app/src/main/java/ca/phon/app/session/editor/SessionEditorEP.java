@@ -44,9 +44,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	}
 
 	public void showEditor(Project project, Session session) {
-		final SessionEditor editor = new SessionEditor(session);
-		final ProjectFrameExtension pfe = new ProjectFrameExtension(project);
-		editor.putExtension(ProjectFrameExtension.class, pfe);
+		final SessionEditor editor = new SessionEditor(project, session);
 		
 		editor.pack();
 		editor.setLocationByPlatform(true);

@@ -24,12 +24,12 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import ca.phon.session.AgeFormatter;
 import ca.phon.session.Sex;
-import ca.phon.util.PhonDuration;
-import ca.phon.util.PhonDurationFormat;
 
 public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 
@@ -56,10 +56,12 @@ public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 				final DateTime bday = (DateTime)value;
 				retVal.setText(dateFormatter.print(bday));
 			} else if (row == ParticipantTableField.Age.ordinal()) {
-				PhonDuration age = (PhonDuration)value;
-				PhonDurationFormat ageFormat = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
-				
-				retVal.setText(ageFormat.format(age));
+//				PhonDuration age = (PhonDuration)value;
+//				PhonDurationFormat ageFormat = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
+//				
+//				retVal.setText(ageFormat.format(age));
+				final Period age = (Period)value;
+				retVal.setText(AgeFormatter.ageToString(age));
 			}
 		}
 		

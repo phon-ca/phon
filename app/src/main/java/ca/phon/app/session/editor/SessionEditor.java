@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.util.concurrent.atomic.AtomicReference;
 
+import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
+import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
@@ -15,7 +17,7 @@ import ca.phon.ui.CommonModuleFrame;
  * 
  * <p>This window supports plug-ins.  Plug-ins can provide custom EditorViews.</p>
  */
-public class SessionEditor extends CommonModuleFrame {
+public class SessionEditor extends ProjectFrame {
 
 	private final static long serialVersionUID = 2831713307191769522L;
 	
@@ -50,8 +52,8 @@ public class SessionEditor extends CommonModuleFrame {
 	/**
 	 * Constructor
 	 */
-	public SessionEditor(Session session) {
-		super(WINDOW_NAME);
+	public SessionEditor(Project project, Session session) {
+		super(project);
 		
 		this.dataModelRef = 
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));
@@ -78,16 +80,8 @@ public class SessionEditor extends CommonModuleFrame {
 		contentPane.add(dock, BorderLayout.CENTER);
 		
 		viewModel.showView("Session Info");
+		viewModel.showView("Media Player");
 		// TODO statusbar
-	}
-	
-	/**
-	 * Retrieve the view model
-	 * 
-	 * @return the editor view model
-	 */
-	public EditorViewModel getViewModel() {
-		return viewModelRef.get();
 	}
 	
 	/**
@@ -97,6 +91,15 @@ public class SessionEditor extends CommonModuleFrame {
 	 */
 	public EditorDataModel getDataModel() {
 		return dataModelRef.get();
+	}
+
+	/**
+	 * Retrieve the view model
+	 * 
+	 * @return the editor view model
+	 */
+	public EditorViewModel getViewModel() {
+		return viewModelRef.get();
 	}
 	
 	/**

@@ -21,11 +21,13 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 import ca.phon.app.workspace.ProjectArchiveTask;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
-import ca.phon.util.PhonDateFormat;
+import ca.phon.session.DateFormatter;
 import ca.phon.workspace.Workspace;
 
 @PhonPlugin(name="default")
@@ -58,8 +60,9 @@ public class ProjectArchiveEP implements IPluginEntryPoint {
 		// display options UI
 		
 		// default output file
-		PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-		String today = pdf.format(Calendar.getInstance());
+//		PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
+//		String today = pdf.format(Calendar.getInstance());
+		final String today = DateFormatter.dateTimeToString(DateTime.now());
 		
 		String zipFileName = 
 			project.getName() + "-" + today + ".zip";

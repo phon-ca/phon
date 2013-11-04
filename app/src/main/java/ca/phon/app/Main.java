@@ -33,16 +33,37 @@ public class Main {
 			PrefHelper.get(INITIAL_EP_PROP, "Workspace");
 	
 	public static void main(String[] args) {
+		startLogging();
+		startWorker();
+		runStartupHooks();
+		startApp(args);
+	}
+	
+	private static void startLogging() {
 		LogManager.getInstance().setupLogging();
 		
 		// output some debug info in the log
 		LOGGER.info("Phon " + VersionInfo.getInstance().getLongVersion());
 		printVMInfo();
-		
+	}
+	
+	private static void printVMInfo() {
+		final Properties props = System.getProperties();
+		for(Object key:props.keySet()) {
+			Object val = props.get(key);
+			
+			LOGGER.info("[VM Property] " + key + " = " + val);
+		}
+		LOGGER.info("[Other] Locale = " + Locale.getDefault().toString());
+	}
+
+	private static void startWorker() {
 		// start the shared application worker thread
 		final PhonWorker appWorker = PhonWorker.getInstance();
 		appWorker.start();
-		
+	}
+	
+	private static void runStartupHooks() {
 		// run startup hooks
 		final List<IPluginExtensionPoint<PhonStartupHook>> startupHookPts =
 				PluginManager.getInstance().getExtensionPoints(PhonStartupHook.class);
@@ -54,7 +75,9 @@ public class Main {
 				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
 			}
 		}
-		
+	}
+	
+	private static void startApp(String[] args) {
 		// start initial entry point
 		LOGGER.info("Starting " + initialEntryPoint);
 		final PluginEntryPointRunner entryPtRunner =
@@ -68,16 +91,5 @@ public class Main {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
-	
-	private static void printVMInfo() {
-    	
-    	Properties props = System.getProperties();
-    	for(Object key:props.keySet()) {
-    		Object val = props.get(key);
-    		
-    		LOGGER.info("[VM Property] " + key + " = " + val);
-    	}
-    	LOGGER.info("[Other] Locale = " + Locale.getDefault().toString());
-    }
 
 }

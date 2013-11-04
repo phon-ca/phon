@@ -52,11 +52,14 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXRadioGroup;
+import org.joda.time.DateTime;
 
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.session.AgeFormatter;
+import ca.phon.session.DateFormatter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.PhonGuiConstants;
@@ -67,7 +70,6 @@ import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OpenFileLauncher;
-import ca.phon.util.PhonDateFormat;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -406,9 +408,7 @@ public class FolderProjectList extends JPanel {
 		final ProjectFactory factory = new ProjectFactory();
 		try {
 			final Project project = factory.openProject(btn.getProjectFile());
-			
-			PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-			String today = pdf.format(Calendar.getInstance());
+			final String today = DateFormatter.dateTimeToString(DateTime.now());
 			
 			File backupsDir = new File(Workspace.userWorkspaceFolder(), "backups");
 			if(!backupsDir.exists()) {
