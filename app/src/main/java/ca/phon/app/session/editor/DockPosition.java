@@ -6,19 +6,19 @@ package ca.phon.app.session.editor;
 public enum DockPosition {
 	// byte positions correspond to
 	// t, l, b, r
-	NORTH(100),
-	EAST(200),
-	SOUTH(100),
-	WEST(200),
-	CENTER(0);
+	NORTH(0.33f),
+	EAST(0.33f),
+	SOUTH(0.33f),
+	WEST(0.33f),
+	CENTER(0.66f);
 	
-	final int size;
+	final float size;
 	
-	private DockPosition(int size) {
+	private DockPosition(float size) {
 		this.size = size;
 	}
 	
-	public int getSize() {
+	public float getSize() {
 		return size;
 	}
 }

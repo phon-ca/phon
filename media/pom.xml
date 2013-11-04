@@ -39,9 +39,9 @@
     </dependency>
     
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>ca.hedlund</groupId>
       <artifactId>vlc4j</artifactId>
-      <version>2.0</version>
+      <version>2.1</version>
     </dependency>
     
     <dependency>

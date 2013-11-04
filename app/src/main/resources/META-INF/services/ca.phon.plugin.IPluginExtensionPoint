@@ -6,4 +6,4 @@ ca.phon.app.menu.DefaultMenuFilterExtensionPt
 ## Editor Views
 # Session Info
 ca.phon.app.session.editor.info.SessionInfoExtension
-
+ca.phon.app.session.editor.player.MediaPlayerExtension

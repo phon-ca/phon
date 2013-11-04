@@ -135,10 +135,14 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		if(retVal == null) {
 			// attempt to load editor view
 			for(IPluginExtensionPoint<EditorView> extPt:extPts) {
-				final IPluginExtensionFactory<EditorView> viewFactory = extPt.getFactory();
-				try {
-					retVal = viewFactory.createObject(getEditor());
-				} catch (Exception e) {}
+				final PhonPlugin pluginAnnotation = extPt.getClass().getAnnotation(PhonPlugin.class);
+				if(pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
+					final IPluginExtensionFactory<EditorView> viewFactory = extPt.getFactory();
+					try {
+						retVal = viewFactory.createObject(getEditor());
+					} catch (Exception e) {}
+					break;
+				}
 			}
 		}
 		return retVal;
