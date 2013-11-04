@@ -7,3 +7,4 @@ ca.phon.app.menu.DefaultMenuFilterExtensionPt
 # Session Info
 ca.phon.app.session.editor.info.SessionInfoExtension
 ca.phon.app.session.editor.player.MediaPlayerExtension
+ca.phon.app.session.editor.waveform.WaveformExtension

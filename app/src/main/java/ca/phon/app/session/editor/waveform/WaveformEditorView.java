@@ -47,6 +47,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -58,6 +59,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.session.editor.DelegateEditorAction;
+import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
@@ -147,23 +149,21 @@ public class WaveformEditorView extends EditorView {
 		super(editor);
 		
 		init();
+		update();
 	}
 
 	private void setupEditorActions() {
-		DelegateEditorAction sessionChangedAct =
+		final DelegateEditorAction sessionChangedAct =
 			new DelegateEditorAction(this, "onSessionChanged");
-		sessionChangedAct.setRunOnEDT(true);
-		getModel().registerActionForEvent(EditorEventType.EDITOR_FINISHED_LOADING, sessionChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_FINISHED_LOADING, sessionChangedAct);
 		
-		DelegateEditorAction recordChangedAct =
+		final DelegateEditorAction recordChangedAct =
 				new DelegateEditorAction(this, "onRecordChanged");
-		recordChangedAct.setRunOnEDT(true);
-		getModel().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
 
-		DelegateEditorAction sessionMediaChangedAct =
+		final DelegateEditorAction sessionMediaChangedAct =
 				new DelegateEditorAction(this, "onSessionMediaChanged");
-		sessionMediaChangedAct.setRunOnEDT(true);
-		getModel().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
 	}
 	
 	private void init() {
@@ -218,10 +218,6 @@ public class WaveformEditorView extends EditorView {
 		});
 		
 		final GridBagLayout layout = new GridBagLayout();
-//		contentPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-//		contentPane.setDividerLocation(1.0);
-//		contentPane.setOneTouchExpandable(true);
-//		contentPane.setContinuousLayout(true);
 		contentPane = new JPanel(layout);
 		
 		final GridBagConstraints gbc = new GridBagConstraints();
@@ -265,6 +261,8 @@ public class WaveformEditorView extends EditorView {
 		contentPane.add(sizer, gbc);
 		
 		add(new JScrollPane(contentPane), BorderLayout.CENTER);
+		
+		setupEditorActions();
 	}
 
 //	@Override
@@ -423,7 +421,7 @@ public class WaveformEditorView extends EditorView {
 		if(audioInfo == null) return;
 		
 		// setup __res/media/segments if it does not exist
-		final File projFile = new File(getModel().getProject().getProjectLocation());
+		final File projFile = new File(getEditor().getProject().getLocation());
 		final File resFile = new File(projFile, "__res");
 		final File mediaResFile = new File(resFile, "media");
 		final File segmentFile = new File(mediaResFile, "segments");
@@ -432,10 +430,9 @@ public class WaveformEditorView extends EditorView {
 		}
 		
 		// setup segment path
-		if(getModel().getRecord() == null
-				|| getModel().getRecord().getMedia() == null) return;
+		if(getEditor().currentRecord() == null) return;
 		
-		File selectedFile = new File(segmentFile, getModel().getSession().getID() + "_" + getModel().getSession().getCorpus() + "_" + (getModel().getCurrentIndex()+1) + ".wav");
+		File selectedFile = new File(segmentFile, getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ".wav");
 		final String segPath = selectedFile.getName();
 		
 		// show save as.. dialog
@@ -542,10 +539,8 @@ public class WaveformEditorView extends EditorView {
 	 * 
 	 */
 	public File getAudioFile() {
-		if(getModel() == null) return null;
-		
 		File selectedMedia = 
-				MediaLocator.findMediaFile(getModel().getProject(), getModel().getSession());
+				MediaLocator.findMediaFile(getEditor().getProject(), getEditor().getSession());
 		if(selectedMedia == null) return null;
 		File audioFile = null;
 		
@@ -555,7 +550,7 @@ public class WaveformEditorView extends EditorView {
 			mediaName = mediaName.substring(0, lastDot);
 		}
 		if(!selectedMedia.isAbsolute()) selectedMedia = 
-			MediaLocator.findMediaFile(getModel().getSession().getMediaLocation(), getModel().getProject(), getModel().getSession().getCorpus());
+			MediaLocator.findMediaFile(getEditor().getSession().getMediaLocation(), getEditor().getProject(), getEditor().getSession().getCorpus());
 		
 		if(selectedMedia != null) {
 			File parentFile = selectedMedia.getParentFile();
@@ -569,8 +564,8 @@ public class WaveformEditorView extends EditorView {
 	}
 	
 	public void update() {
-		IUtterance utt = getModel().getRecord();
-		if(utt != null && utt.getMedia() != null) {
+		Record utt = getEditor().currentRecord();
+		if(utt != null) {
 
 			File audioFile = getAudioFile();
 			
@@ -578,9 +573,11 @@ public class WaveformEditorView extends EditorView {
 				if(!audioFile.equals(wavDisplay.getFile())) {
 					wavDisplay.loadFile(audioFile);
 				}
+				
+				final MediaSegment segment = utt.getSegment().getGroup(0);
 //			File f = new File(getModel().getSession().getMediaLocation());
 //			if(f.exists()) {
-				long clipStart = Math.round(utt.getMedia().getStartValue() - 500);
+				long clipStart = Math.round(segment.getStartValue() - 500);
 				
 				long displayStart = 
 					Math.max(0,
@@ -588,12 +585,12 @@ public class WaveformEditorView extends EditorView {
 				long segStart = 
 					(clipStart < 0 ? 500 + clipStart : 500);
 				long segLength = 
-					Math.round(utt.getMedia().getEndValue() - utt.getMedia().getStartValue());
+					Math.round(segment.getEndValue() - segment.getStartValue());
 				long displayLength = 
 					segLength + 1000;
 				
 				wavDisplay.load(displayStart, displayLength);
-				wavDisplay.get_timeBar().setSegStart((int)utt.getMedia().getStartValue());
+				wavDisplay.get_timeBar().setSegStart((int)segment.getStartValue());
 				wavDisplay.get_timeBar().setSegLength(segLength);
 				
 				if(msgLabel.isVisible()) {
@@ -619,13 +616,13 @@ public class WaveformEditorView extends EditorView {
 
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
-		if(lastRecord != getModel().getCurrentIndex()) {
+		if(lastRecord != getEditor().getCurrentRecordIndex()) {
 			update();
 			
 			wavDisplay.set_selectionStart(-1);
 			wavDisplay.set_selectionEnd(-1);
 		}
-		lastRecord = getModel().getCurrentIndex();
+		lastRecord = getEditor().getCurrentRecordIndex();
 	}
 
 	@RunOnEDT
@@ -648,10 +645,9 @@ public class WaveformEditorView extends EditorView {
 			final CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
 			currentFrame.showStatusMessage("Saving audio segment...");
 			
-			if(getModel().getRecord() == null
-					|| getModel().getRecord().getMedia() == null) return;
+			if(getEditor().currentRecord() == null) return;
 			
-			File projFile = new File(getModel().getProject().getProjectLocation());
+			File projFile = new File(getEditor().getProject().getLocation());
 			File resFile = new File(projFile, "__res");
 			File mediaResFile = new File(resFile, "media");
 			File segmentFile = new File(mediaResFile, "segments");
@@ -661,14 +657,14 @@ public class WaveformEditorView extends EditorView {
 			String segmentPath = segmentFile.getAbsolutePath();
 			
 			final PathExpander pe = new PathExpander();
-			final String mediaLocation = pe.expandPath(getModel().getSession().getMediaLocation());
+			final String mediaLocation = pe.expandPath(getEditor().getSession().getMediaLocation());
 			
 			File mediaFile = 
-				MediaLocator.findMediaFile(mediaLocation, getModel().getProject(), getModel().getSession().getCorpus());
+				MediaLocator.findMediaFile(mediaLocation, getEditor().getProject(), getEditor().getSession().getCorpus());
 			if(mediaFile == null)
-				mediaFile = new File(getModel().getSession().getMediaLocation());
+				mediaFile = new File(getEditor().getSession().getMediaLocation());
 			if(mediaFile != null && mediaFile.exists()) {
-				IMedia m = getModel().getRecord().getMedia();
+				final MediaSegment m = getEditor().currentRecord().getSegment().getGroup(0);
 				long segStart = Math.round(m.getStartValue());
 				long segLen = Math.round(m.getEndValue() - m.getStartValue());
 				
@@ -681,11 +677,12 @@ public class WaveformEditorView extends EditorView {
 					if(selectedFile != null) {
 						try {
 							audioInfo.saveToFile(selectedFile);
-							currentFrame.showStatusMessage("Saved segment as '" + 
-									selectedFile + "'");
-							getModel().queueBackgroundTask(new HideStatusComponentTask(currentFrame));
+							
+//							currentFrame.showStatusMessage("Saved segment as '" + 
+//									selectedFile + "'");
+//							getModel().queueBackgroundTask(new HideStatusComponentTask(currentFrame));
 						} catch (IOException e) {
-							currentFrame.showErrorMessage("Could not export audio segment.");
+//							currentFrame.showErrorMessage("Could not export audio segment.");
 						}
 					}  else {
 						currentFrame.hideStatusComponent(); 
@@ -710,7 +707,7 @@ public class WaveformEditorView extends EditorView {
 //			String projPath = projFile.getParent();
 //			String segmentPath = projPath + File.separator + "media" + File.separator + "segments";
 			
-			File projFile = new File(getModel().getProject().getProjectLocation());
+			File projFile = new File(getEditor().getProject().getLocation());
 			File resFile = new File(projFile, "__res");
 			File mediaResFile = new File(resFile, "media");
 			File segmentFile = new File(mediaResFile, "segments");
@@ -719,18 +716,17 @@ public class WaveformEditorView extends EditorView {
 			}
 			String segmentPath = segmentFile.getAbsolutePath();
 			
-			if(getModel().getRecord() == null
-					|| getModel().getRecord().getMedia() == null) return;
+			if(getEditor().currentRecord() == null) return;
 			
 			final PathExpander pe = new PathExpander();
-			final String mediaLocation = pe.expandPath(getModel().getSession().getMediaLocation());
+			final String mediaLocation = pe.expandPath(getEditor().getSession().getMediaLocation());
 			
 			File mediaFile = 
-				MediaLocator.findMediaFile(mediaLocation, getModel().getProject(), getModel().getSession().getCorpus());
+				MediaLocator.findMediaFile(mediaLocation, getEditor().getProject(), getEditor().getSession().getCorpus());
 			if(mediaFile == null)
-				mediaFile = new File(getModel().getSession().getMediaLocation());
+				mediaFile = new File(getEditor().getSession().getMediaLocation());
 			if(mediaFile != null && mediaFile.exists()) {
-				IMedia m = getModel().getRecord().getMedia();
+				final MediaSegment m = getEditor().currentRecord().getSegment().getGroup(0);
 				long segStart = Math.round(m.getStartValue());
 				long segLen = Math.round((long)m.getEndValue() - segStart);
 				
@@ -744,12 +740,12 @@ public class WaveformEditorView extends EditorView {
 //						getModel().getSession().getID() + "_" + getModel().getSession().getCorpus() + "_" + (getModel().getCurrentIndex()+1) + ".wav";
 //					File selectedFile = new File(segPath);
 //					File parentPath = selectedFile.getParentFile();
-					File selectedFile = new File(segmentFile, getModel().getSession().getID() + "_" + getModel().getSession().getCorpus() + "_" + (getModel().getCurrentIndex()+1) + ".wav");
+					File selectedFile = new File(segmentFile, getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ".wav");
 				
 					int fIdx = 0;
 					while(selectedFile.exists()) {
 						selectedFile = new File(segmentFile,
-								getModel().getSession().getID() + "_" + getModel().getSession().getCorpus() + "_" + (getModel().getCurrentIndex()+1) + 
+								getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + 
 								"(" + (++fIdx) + ").wav");
 					}
 					String segPath = selectedFile.getAbsolutePath();
@@ -758,11 +754,11 @@ public class WaveformEditorView extends EditorView {
 //					}
 					try {
 						audioInfo.saveToFile(selectedFile);
-						currentFrame.showStatusMessage("Saved segment as '" + 
-								segPath + "'");
-						getModel().queueBackgroundTask(new HideStatusComponentTask(currentFrame));
+//						currentFrame.showStatusMessage("Saved segment as '" + 
+//								segPath + "'");
+//						getModel().queueBackgroundTask(new HideStatusComponentTask(currentFrame));
 					} catch (IOException e) {
-						currentFrame.showErrorMessage("Could not export audio segment.");
+//						currentFrame.showErrorMessage("Could not export audio segment.");
 					}
 //					if(PhonMediaUtilities.create16bitAudioSample(mediaFile.getAbsolutePath(), segStart, (int)segLen, selectedFile.getAbsolutePath())) {
 //						currentFrame.showStatusMessage("Saved segment as '" + 
@@ -775,4 +771,23 @@ public class WaveformEditorView extends EditorView {
 			} // if mediafile
 		}
 	}
+
+	@Override
+	public ImageIcon getIcon() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JMenu getMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DockPosition getPreferredDockPosition() {
+		return DockPosition.CENTER;
+	}
+	
+	
 }

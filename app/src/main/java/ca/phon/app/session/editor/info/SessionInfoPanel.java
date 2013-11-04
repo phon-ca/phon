@@ -55,6 +55,7 @@ import org.joda.time.DateTime;
 import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DividedEditorView;
+import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
@@ -461,4 +462,11 @@ public class SessionInfoPanel extends DividedEditorView {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public DockPosition getPreferredDockPosition() {
+		return DockPosition.CENTER;
+	}
+	
+	
 }

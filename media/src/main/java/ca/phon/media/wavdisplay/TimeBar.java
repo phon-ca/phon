@@ -67,8 +67,9 @@ public class TimeBar extends JComponent {
 		_majorTick = majorTick;
 		_parent = parent;
 		try {
-			_timeFont = Font.createFont(Font.PLAIN, new File("data/fonts/LiberationMono-Regular.ttf")).deriveFont(10.0f);
-		} catch (IOException | FontFormatException ex) {
+//			_timeFont = Font.createFont(Font.PLAIN, new File("data/fonts/LiberationMono-Regular.ttf")).deriveFont(10.0f);
+			_timeFont = Font.decode("monospace-12-PLAIN");
+		} catch (Exception ex) {
 			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 		}
 	}
