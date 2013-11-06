@@ -29,6 +29,8 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.mozilla.javascript.Scriptable;
+
 import ca.phon.project.Project;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
@@ -37,9 +39,13 @@ import ca.phon.query.report.io.ResultListingField;
 import ca.phon.query.report.io.ResultListingFormatType;
 import ca.phon.query.report.io.ScriptContainer;
 import ca.phon.query.report.io.ScriptParameter;
+import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.scripttable.AbstractScriptTableModel;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -135,13 +141,17 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		int colIdx = 0;
 		for(ResultListingField field:invData.getField()) {
 			ScriptContainer sc = field.getFieldValue();
-			final PhonScript ps = new PhonScript(sc.getScript());
+			final PhonScript ps = new BasicScript(sc.getScript());
 			try {
-				setColumnScript(colIdx, sc.getScript());
+				setColumnScript(colIdx, ps);
 				
 				// setup static column mappings
 				final Map<String, Object> bindings = new HashMap<String, Object>();
-				final ScriptParam[] params = ps.getScriptParams();
+				
+				final PhonScriptContext ctx = ps.getContext();
+				final Scriptable scope = ctx.getEvaluatedScope();
+				final ScriptParameters params = ctx.getScriptParameters(scope);
+//				final ScriptParam[] params = ps.getScriptParams();
 				
 				// setup script parameters
 				for(ScriptParam param:params) {
@@ -189,8 +199,8 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 				if(bindings.size() > 0)
 					setColumnMappings(colIdx, bindings);
 				colIdx++;
-			} catch (ScriptException e) {
-				e.printStackTrace();
+			} catch (PhonScriptException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -268,23 +278,23 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		this.includeExcluded = includeExcluded;
 	}
 	
-	@Override
-	public void setColumnScript(int col, String script, String mimetype)
-		throws ScriptException {
-		// append default imports to script
-		final StringBuffer buffer = new StringBuffer();
-//		for(String imp:scriptPkgImports) {
-//			buffer.append(String.format("importPackage(%s)\n", imp));
-//		}
+//	@Override
+//	public void setColumnScript(int col, PhonScript script)
+//		throws PhonScriptException {
+//		// append default imports to script
+//		final StringBuffer buffer = new StringBuffer();
+////		for(String imp:scriptPkgImports) {
+////			buffer.append(String.format("importPackage(%s)\n", imp));
+////		}
+////		
+////		for(String imp:scriptClazzImports) {
+////			buffer.append(String.format("importClass(%s)\n", imp));
+////		}
 //		
-//		for(String imp:scriptClazzImports) {
-//			buffer.append(String.format("importClass(%s)\n", imp));
-//		}
-		
-		buffer.append(script);
-		
-		super.setColumnScript(col, buffer.toString(), mimetype);
-	}
+//		buffer.append(script);
+//		
+//		super.setColumnScript(col, buffer.toString(), mimetype);
+//	}
 
 	@Override
 	public Map<String, Object> getMappingsAt(int row, int col) {

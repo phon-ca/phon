@@ -47,12 +47,12 @@ import ca.phon.query.report.io.ReportDesign;
 import ca.phon.query.report.io.ResultListing;
 import ca.phon.query.report.io.Section;
 import ca.phon.query.report.io.SummarySection;
+import ca.phon.session.AgeFormatter;
+import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
 import ca.phon.session.Sex;
 import ca.phon.util.OSInfo;
-import ca.phon.util.PhonDateFormat;
-import ca.phon.util.PhonDurationFormat;
 
 /**
  * CSV report builder implementation.
@@ -333,14 +333,14 @@ public class CSVReportBuilder extends ReportBuilder {
 					
 					String name = 
 						(participant.getName() != null ? participant.getName() : "");
-					PhonDurationFormat pdf = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
+//					PhonDurationFormat pdf = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
 					String age = 
-						pdf.format(participant.getAge(t.getDate()));
+						AgeFormatter.ageToString(participant.getAge(t.getDate()));
 					String sex = 
 						(participant.getSex() == Sex.MALE ? "M" : "F");
-					PhonDateFormat pdtf =  new PhonDateFormat(PhonDateFormat.YEAR_LONG);
+//					PhonDateFormat pdtf =  new PhonDateFormat(PhonDateFormat.YEAR_LONG);
 					String birthday = 
-						pdtf.format(participant.getBirthDate());
+						DateFormatter.dateTimeToString(participant.getBirthDate());
 					
 					String participantLine[] = {
 							name, age, sex, birthday,
