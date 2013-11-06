@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.swing.table.TableModel;
 
+import ca.phon.script.PhonScript;
+
 /**
  * Model for a scripted table.  The values for each
  * column are controlled by a script.
@@ -49,16 +51,16 @@ public interface ScriptTableModel extends TableModel {
 	 * 
 	 * @return script for the specified column index
 	 */
-	public String getColumnScript(int col);
+	public PhonScript getColumnScript(int col);
 	
-	/**
-	 * Get the script mimetype for the given colum.
-	 * 
-	 * @param col
-	 * @return mimetype for script, 'text/javascript' by
-	 *  default.
-	 */
-	public String getColumnScriptMimetype(int col);
+//	/**
+//	 * Get the script mimetype for the given colum.
+//	 * 
+//	 * @param col
+//	 * @return mimetype for script, 'text/javascript' by
+//	 *  default.
+//	 */
+//	public String getColumnScriptMimetype(int col);
 	
 	/**
 	 * Get value at given row,col

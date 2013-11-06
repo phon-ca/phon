@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.table.AbstractTableModel;
 import javax.xml.bind.JAXBContext;
@@ -18,24 +21,35 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.WrapFactory;
+
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.scripttable.io.ObjectFactory;
 import ca.phon.script.scripttable.io.ScriptTable;
 import ca.phon.script.scripttable.io.ScriptTableColumn;
 
+/**
+ * <p>Abstract implementation of {@link ScriptTableModel}.  The class include
+ * method for reading and writing the table model to xml files.</p>
+ * 
+ */
 public abstract class AbstractScriptTableModel extends AbstractTableModel implements ScriptTableModel {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(AbstractScriptTableModel.class.getName());
 	
 	private static final long serialVersionUID = -4117009557145424149L;
 	
-	private Map<Integer, String> columnScripts =
-			Collections.synchronizedMap(new HashMap<Integer, String>());
-	
-	private Map<Integer, PhonScriptContext> columnCompiledScripts = 
-			Collections.synchronizedMap(new HashMap<Integer, PhonScriptContext>());
+	private Map<Integer, PhonScript> columnScripts =
+			Collections.synchronizedMap(new HashMap<Integer, PhonScript>());
 	
 	private Map<Integer, Map<String, Object>> columnStaticMappings =
 			Collections.synchronizedMap(new HashMap<Integer, Map<String, Object>>());
@@ -44,26 +58,33 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	public Class<?> getColumnClass(int col) {
 		Class<?> retVal = super.getColumnClass(col);
 		
-		final PhonScriptContext cScript = columnCompiledScripts.get(col);
+		final PhonScript script = getColumnScript(col);
+		final PhonScriptContext cScript = script.getContext();
 		if(cScript != null) {
-			final Invocable invocable = (Invocable) cScript.getEngine();
-			final Map<String, Object> columnMappings = getMappingsAt(0, col);
-			final Bindings bindings = cScript.getEngine().getBindings(ScriptContext.ENGINE_SCOPE);
-			if(columnMappings != null)
-				bindings.putAll(columnMappings);
-			
+			final Context ctx = PhonScriptContext.enter();
 			try {
-				cScript.eval(bindings);
+				final Scriptable scope = cScript.getEvaluatedScope();
+				final WrapFactory wf = ctx.getWrapFactory();
 				
-				final Object val = invocable.invokeFunction("getType", new Object[0]);
-				if(val instanceof Class) {
-					retVal = (Class<?>)val;
+				// setup column mappings
+				final Map<String, Object> columnMappings = getMappingsAt(0, col);
+				for(String key:columnMappings.keySet()) {
+					final Object val = columnMappings.get(key);
+					final Object wrappedVal = wf.wrap(ctx, scope, val, null);
+					scope.put(key, scope, wrappedVal);
 				}
-			} catch (NoSuchMethodException nsme) {
-			} catch (ScriptException e) {
-				e.printStackTrace();
+				
+				if(cScript.hasFunction(scope, "getType", 0)) {
+					final Object getTypeVal = cScript.callFunction(scope, "getType", new Object[0]);
+					if(getTypeVal instanceof Class) {
+						retVal = (Class<?>)getTypeVal;
+					}
+				}
+			} catch (PhonScriptException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} finally {
+				PhonScriptContext.exit();
 			}
-			
 		}
 		
 		return retVal;
@@ -80,42 +101,56 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	public String getColumnName(int col) {
 		String retVal = super.getColumnName(col);
 		
-		final CompiledScript cScript = columnCompiledScripts.get(col);
+		final PhonScript script = getColumnScript(col);
+		final PhonScriptContext cScript = script.getContext();
 		if(cScript != null) {
-			final Invocable invocable = (Invocable) cScript.getEngine();
-			final Map<String, Object> columnMappings = getMappingsAt(0, col);
-			final Bindings bindings = cScript.getEngine().getBindings(ScriptContext.ENGINE_SCOPE);
-			if(columnMappings != null)
-				bindings.putAll(columnMappings);
-			
+			final Context ctx = PhonScriptContext.enter();
 			try {
-				cScript.eval(bindings);
+				final Scriptable scope = cScript.getEvaluatedScope();
+				final WrapFactory wf = ctx.getWrapFactory();
 				
-				final Object val = invocable.invokeFunction("getName", new Object[0]);
-				if(val != null) {
-					retVal = val.toString();
+				// setup column mappings
+				final Map<String, Object> columnMappings = getMappingsAt(0, col);
+				for(String key:columnMappings.keySet()) {
+					final Object val = columnMappings.get(key);
+					final Object wrappedVal = wf.wrap(ctx, scope, val, null);
+					scope.put(key, scope, wrappedVal);
 				}
-			} catch (NoSuchMethodException nsme) {
-			} catch (ScriptException e) {
+				
+				if(cScript.hasFunction(scope, "getName", 0)) {
+					Object getNameVal = cScript.callFunction(scope, "getName", new Object[0]);
+					if(getNameVal != null) {
+						if(getNameVal instanceof NativeJavaObject) {
+							retVal = ((NativeJavaObject)getNameVal).unwrap().toString();
+						} else {
+							retVal = getNameVal.toString();
+						}
+					}
+				}
+			} catch (PhonScriptException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} finally {
+				PhonScriptContext.exit();
 			}
-			
 		}
 		
 		return retVal;
 	}
 
 	@Override
-	public String getColumnScript(int col) {
-		String retVal = "";
+	public PhonScript getColumnScript(int col) {
+		PhonScript retVal = new BasicScript("");
 		
-		retVal = columnScripts.get(col);
+		if(columnScripts.containsKey(col)) {
+			retVal = columnScripts.get(col);
+		}
 		
 		return retVal;
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return columnCompiledScripts.keySet().size();
+		return columnScripts.keySet().size();
 	}
 	
 	/**
@@ -127,53 +162,54 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	 * 
 	 * @throws ScriptException 
 	 */
-	public void setColumnScript(int col, String script) 
-		throws ScriptException {
-		setColumnScript(col, script, "text/javascript");
+	public void setColumnScript(int col, PhonScript script) 
+		throws PhonScriptException {
+		columnScripts.put(col, script);
 	}
 	
-	public void setColumnScript(int col, String script, String mimetype) 
-		throws ScriptException {
-		final ScriptEngineManager manager = new ScriptEngineManager();
-		final ScriptEngine engine = manager.getEngineByMimeType(mimetype);
-		
-		if(engine instanceof Compilable) {
-			final Compilable cEngine = (Compilable)engine;
-			final CompiledScript cScript = cEngine.compile(script);
-			
-			columnCompiledScripts.put(col, cScript);
-			columnScripts.put(col, script);
-			
-			// setup static column mappings
-			final Map<String, Object> bindings = new HashMap<String, Object>();
-			final PhonScript ps = new BasicScript(script);
-			final PhonScriptContext context = ps.getContext();
-			final ScriptParam[] params = context.getScriptParams();
-			
-			// setup script parameters
-			for(ScriptParam param:params) {
-				for(String paramId:param.getParamIds()) {
-					final Object paramVal = param.getDefaultValue(paramId);
-					bindings.put(paramId, paramVal);
-				}
-			}
-			if(bindings.size() > 0)
-				setColumnMappings(col, bindings);
-		}
-	}
+//	// in case we eventually support other languages...
+//	private void setColumnScript(int col, String script, String mimetype) 
+//		throws PhonScriptException {
+//		final ScriptEngineManager manager = new ScriptEngineManager();
+//		final ScriptEngine engine = manager.getEngineByMimeType(mimetype);
+//		
+//		if(engine instanceof Compilable) {
+//			final Compilable cEngine = (Compilable)engine;
+//			final CompiledScript cScript = cEngine.compile(script);
+//			
+//			columnCompiledScripts.put(col, cScript);
+//			columnScripts.put(col, script);
+//			
+//			// setup static column mappings
+//			final Map<String, Object> bindings = new HashMap<String, Object>();
+//			final PhonScript ps = new BasicScript(script);
+//			final PhonScriptContext context = ps.getContext();
+//			final ScriptParam[] params = context.getScriptParams();
+//			
+//			// setup script parameters
+//			for(ScriptParam param:params) {
+//				for(String paramId:param.getParamIds()) {
+//					final Object paramVal = param.getDefaultValue(paramId);
+//					bindings.put(paramId, paramVal);
+//				}
+//			}
+//			if(bindings.size() > 0)
+//				setColumnMappings(col, bindings);
+//		}
+//	}
 
-	@Override
-	public String getColumnScriptMimetype(int col) {
+//	@Override
+	private String getColumnScriptMimetype(int col) {
 		String retVal = "text/javascript";
 		
-		final CompiledScript cScript = columnCompiledScripts.get(col);
-		if(cScript != null) {
-			final ScriptEngine se = cScript.getEngine();
-			final List<String> mimetypes = se.getFactory().getMimeTypes();
-			if(mimetypes.size() > 0) {
-				retVal = mimetypes.get(0);
-			}
-		}
+//		final CompiledScript cScript = columnCompiledScripts.get(col);
+//		if(cScript != null) {
+//			final ScriptEngine se = cScript.getEngine();
+//			final List<String> mimetypes = se.getFactory().getMimeTypes();
+//			if(mimetypes.size() > 0) {
+//				retVal = mimetypes.get(0);
+//			}
+//		}
 		
 		return retVal;
 	}
@@ -182,29 +218,39 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	public Object getValueAt(int row, int col) {
 		Object retVal = null;
 		
-		final CompiledScript cScript = columnCompiledScripts.get(col);
+		final PhonScript script = getColumnScript(col);
+		final PhonScriptContext cScript = script.getContext();
 		if(cScript != null) {
-			final Map<String, Object> mappings = getMappingsAt(row, col);
-			final Bindings bindings = cScript.getEngine().getBindings(ScriptContext.ENGINE_SCOPE);
-			bindings.putAll(mappings);
-			
-			final Invocable invocable = (Invocable)cScript.getEngine();
+			final Context ctx = PhonScriptContext.enter();
 			try {
-				retVal = cScript.eval(bindings);
-				if(bindings.containsKey("retVal")) {
-					retVal = bindings.get("retVal");
+				final Scriptable scope = cScript.getEvaluatedScope();
+				final WrapFactory wf = ctx.getWrapFactory();
+				
+				// setup column mappings
+				final Map<String, Object> columnMappings = getMappingsAt(0, col);
+				for(String key:columnMappings.keySet()) {
+					final Object val = columnMappings.get(key);
+					final Object wrappedVal = wf.wrap(ctx, scope, val, null);
+					scope.put(key, scope, wrappedVal);
 				}
-			} catch (ScriptException se) {
-				se.printStackTrace();
-			}
-			
-			try {
-				Object fVal = invocable.invokeFunction("getValue", new Object[0]);
-				if(fVal != null) {
-					retVal = fVal;
+				
+				if(cScript.hasFunction(scope, "getValue", 0)) {
+					retVal = cScript.callFunction(scope, "getValue", new Object[0]);
+				} else if(scope.has("retVal", scope)) {
+					retVal = scope.get("retVal", scope);
+				} else {
+					retVal = cScript.exec(scope);
 				}
-			} catch (ScriptException e) {
-			} catch (NoSuchMethodException e) {
+				
+				if(retVal != null) {
+					if(retVal instanceof NativeJavaObject) {
+						retVal = ((NativeJavaObject)retVal).unwrap();
+					}
+				}
+			} catch (PhonScriptException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} finally {
+				PhonScriptContext.exit();
 			}
 		}
 		
@@ -237,7 +283,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	 * 
 	 */
 	public void removeAllColumns() {
-		this.columnCompiledScripts.clear();
+		this.columnScripts.clear();
 		super.fireTableStructureChanged();
 	}
 	
@@ -258,11 +304,11 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 			
 			final ObjectFactory factory = new ObjectFactory();
 			final ScriptTable schema = factory.createScriptTable();
-			for(Integer colIdx:columnCompiledScripts.keySet()) {
+			for(Integer colIdx:columnScripts.keySet()) {
 				final ScriptTableColumn sCol = factory.createScriptTableColumn();
 				sCol.setIndex(colIdx);
 				sCol.setMimetype(getColumnScriptMimetype(colIdx));
-				sCol.setScript(getColumnScript(colIdx));
+				sCol.setScript(getColumnScript(colIdx).getScript());
 				schema.getColumn().add(sCol);
 				
 				
@@ -295,9 +341,9 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 			
 			for(ScriptTableColumn column:schema.getColumn()) {
 				try {
-					setColumnScript(column.getIndex(), column.getScript(), column.getMimetype());
-				} catch (ScriptException se) {
-					se.printStackTrace();
+					setColumnScript(column.getIndex(), new BasicScript(column.getScript()));
+				} catch (PhonScriptException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
 		} catch (JAXBException e) {
