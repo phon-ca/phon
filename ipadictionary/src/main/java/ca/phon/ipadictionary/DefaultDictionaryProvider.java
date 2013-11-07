@@ -6,7 +6,8 @@ import java.net.URL;
 import ca.phon.ipadictionary.impl.ImmutablePlainTextDictionary;
 import ca.phon.util.resources.ClassLoaderHandler;
 
-public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary> {
+public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary> 
+	implements DictionaryProvider {
 
 	private final static String DICT_LIST = "META-INF/dict/dicts.list";
 	

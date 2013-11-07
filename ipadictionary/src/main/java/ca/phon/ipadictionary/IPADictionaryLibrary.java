@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
@@ -32,17 +33,27 @@ public class IPADictionaryLibrary implements IExtendable {
 	
 	private final static IPADictionaryLibrary _instance = new IPADictionaryLibrary();
 	
+	/**
+	 * Get the shared library instance.
+	 * 
+	 * @return the shared static instance
+	 */
 	public static IPADictionaryLibrary getInstance() {
 		return _instance;
 	}
 	
 	private IPADictionaryLibrary() {
-		setupLoader();
+		setupLoaders();
 	}
 	
-	private void setupLoader() {
+	private void setupLoaders() {
 		// add the default dictionary handler
-		getLoader().addHandler(new DefaultDictionaryProvider());
+//		getLoader().addHandler(new DefaultDictionaryProvider());
+		final ServiceLoader<DictionaryProvider> providers = 
+				ServiceLoader.load(DictionaryProvider.class);
+		for(DictionaryProvider provider:providers) {
+			resLoader.addHandler(provider);
+		}
 	}
 	
 	/**
@@ -60,7 +71,7 @@ public class IPADictionaryLibrary implements IExtendable {
 	 * 
 	 * @return list of availble  languages
 	 */
-	public Set<Language> availableLangauges() {
+	public Set<Language> availableLanguages() {
 		final Set<Language> retVal = new HashSet<Language>();
 		
 		final Iterator<IPADictionary> iterator = availableDictionaries();
@@ -71,6 +82,18 @@ public class IPADictionaryLibrary implements IExtendable {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Get all dictionaries for the specified primary language
+	 * 
+	 * @param lang
+	 * 
+	 * @return list of dictionaries for given lang
+	 */
+	public List<IPADictionary> dictionariesForLanguage(String lang) {
+		final Language l = Language.fromString(lang);
+		return dictionariesForLanguage(l);
 	}
 	
 	/**
