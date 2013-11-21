@@ -82,6 +82,7 @@ public class SessionEditor extends ProjectFrame {
 		viewModel.showView("Session Info");
 		viewModel.showView("Media Player");
 		viewModel.showView("Waveform");
+		viewModel.showView("Tier Ordering");
 		// TODO statusbar
 	}
 	

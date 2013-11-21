@@ -85,7 +85,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		final String dictLangPref = PrefHelper.get(PhonProperties.IPADICTIONARY_LANGUAGE,
 				PhonProperties.DEFAULT_IPADICTIONARY_LANGUAGE);
 		final Language dictLang = Language.fromString(dictLangPref);
-		cmbDictionaryLanguage = new JComboBox(dictLibrary.availableLangauges().toArray(new Language[0]));
+		cmbDictionaryLanguage = new JComboBox(dictLibrary.availableLanguages().toArray(new Language[0]));
 		cmbDictionaryLanguage.setSelectedItem(dictLang);
 		cmbDictionaryLanguage.addItemListener(new DictionaryLanguageListener());
 		

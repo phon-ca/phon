@@ -95,5 +95,20 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit {
 	 * 
 	 */
 	public abstract void doIt();
+
+	@Override
+	public boolean canRedo() {
+		return true;
+	}
+
+	@Override
+	public boolean canUndo() {
+		return true;
+	}
+
+	@Override
+	public boolean isSignificant() {
+		return true;
+	}
 	
 }

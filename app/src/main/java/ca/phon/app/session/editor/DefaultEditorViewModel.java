@@ -18,6 +18,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;
 import ca.phon.util.OSInfo;
+import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
 import bibliothek.gui.dock.common.CLocation;
@@ -186,7 +187,32 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			final DockPosition position = (editorView == null ? DockPosition.CENTER : editorView.getPreferredDockPosition());
 			final CLocation location = locationFromPosition(position);
 			dockControl.addDockable(dockable);
-			dockControl.getLocationManager().setLocation(dockable.intern(), location);
+			
+			switch(position) {
+			case NORTH:
+				dockControl.getContentArea().getNorth().add(dockable.intern());
+				break;
+				
+			case SOUTH:
+				dockControl.getContentArea().getSouth().add(dockable.intern());
+				break;
+				
+			case CENTER:
+				dockControl.getContentArea().getCenter().addDockable(dockable.intern());
+				break;
+				
+			case WEST:
+				dockControl.getContentArea().getWest().add(dockable.intern());
+				break;
+				
+			case EAST:
+				dockControl.getContentArea().getEast().add(dockable.intern());
+				break;
+				
+			default:
+				break;
+			}
+//			dockControl.getLocationManager().setLocation(dockable.intern(), location);
 		}
 	}
 
