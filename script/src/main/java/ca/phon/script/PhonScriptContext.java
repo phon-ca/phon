@@ -140,6 +140,7 @@ public class PhonScriptContext {
 			importScript = ctx.compileString(importScriptText, "<preloader>", 1, null);
 			importScript.exec(ctx, scope);
 		} catch (Exception e) {
+			exit();
 			throw new PhonScriptException(e);
 		}
 		
