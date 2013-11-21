@@ -131,6 +131,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	public String[] lookup(String orthography) throws IPADictionaryExecption {
 		final StringBuilder builder = new StringBuilder();
 		final Tokenizer tokenizer = createTokenizer();
+		
 		try {
 			final TokenizerSource source = new StringSource(orthography);
 			tokenizer.setSource(source);
@@ -192,8 +193,8 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			
 			final Matcher m = dictPattern.matcher(line);
 			if(m.matches()) {
-				final String key = StringUtils.strip(m.group(1)).toLowerCase();
-				final String ipa = StringUtils.strip(m.group(3)).toLowerCase();
+				final String key = StringUtils.strip(m.group(1));
+				final String ipa = StringUtils.strip(m.group(3));
 				
 				if(key.length() > 0 && ipa.length() > 0) {
 					tokenMap.put(key, ipa);
@@ -209,13 +210,12 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	private Tokenizer createTokenizer() {
 		final TokenizerProperties props = new StandardTokenizerProperties();
 		props.setSeparators(null);
-		props.setParseFlags(Flags.F_NO_CASE | Flags.F_KEEP_DATA | Flags.F_SINGLE_LINE_STRING);
+		props.setParseFlags(Flags.F_KEEP_DATA | Flags.F_SINGLE_LINE_STRING);
 		
 		final Map<String, String> map = getTokenMap();
 		
 		for(String key:map.keySet()) {
-			final String val = map.get(key);
-			props.addSpecialSequence(key, val);
+			props.addSpecialSequence(key, map.get(key));
 		}
 		
 		final Tokenizer tokenizer = new StandardTokenizer(props);
