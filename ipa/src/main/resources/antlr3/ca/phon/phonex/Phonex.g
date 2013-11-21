@@ -296,7 +296,7 @@ WS  :   ( ' '
     ;
 	
 STRING
-    :  '\'' ( ESC_SEQ | ~(BACKSLASH|'\'') )* '\''
+    :  '\'' ( ESC_SEQ | HEX_CHAR | ~(BACKSLASH|'\'') )* '\''
     ;
     
 HEX_CHAR

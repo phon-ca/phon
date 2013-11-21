@@ -15,7 +15,7 @@ public class TestPhonex {
 		final String ipa = "ˈbʌɹθˌd";
 		final String phonex = "\\c*\\v+";
 		
-		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexPattern pattern = PhonexPattern.compile("{}:Nucleus");
 		final PhonexMatcher matcher = pattern.matcher(IPATranscript.parseTranscript(ipa));
 		int cIdx = 0;
 		while(matcher.find()) {
