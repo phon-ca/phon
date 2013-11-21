@@ -19,21 +19,31 @@ package ca.phon.syllabifier.basic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 import ca.phon.util.Range;
 
 public class PhoneSequenceRule implements SyllabificationRule {
 
-	private final PhonexPattern pattern;
+	private static final Logger LOGGER = Logger
+			.getLogger(PhoneSequenceRule.class.getName());
+	
+	private PhonexPattern pattern;
 	
 	PhoneSequenceRule(String phonex) {
 		super();
 		
-		this.pattern = PhonexPattern.compile(phonex);
+		try {
+			this.pattern = PhonexPattern.compile(phonex);
+		} catch (PhonexPatternException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 	}
 	
 	@Override
@@ -54,13 +64,11 @@ public class PhoneSequenceRule implements SyllabificationRule {
 		final IPATranscript t = new IPATranscript(tape);
 		final PhonexMatcher matcher = pattern.matcher(t);
 		
-		int currentIdx = 0;
-		while(matcher.find(currentIdx)) {
+		while(matcher.find()) {
 			final int start = matcher.start();
 			final int end = matcher.end();
 			
-			retVal.add(new Range(start, end));
-			currentIdx = end;
+			retVal.add(new Range(start, end, true));
 		}
 		
 		return retVal;

@@ -101,11 +101,13 @@ public class Constraint {
 				else
 					andValues = true;
 			} else {
-				// we have a constraint, all of our constraints implement SyllabificationRule
-				// only allow objects that are of this type
-				if(!(obj instanceof SyllabificationRule))
-					continue;
-				SyllabificationRule rule  = (SyllabificationRule)obj;
+//				// we have a constraint, all of our constraints implement SyllabificationRule
+//				// only allow objects that are of this type
+//				if(!(obj instanceof SyllabificationRule))
+//					continue;
+//				SyllabificationRule rule  = (SyllabificationRule)obj;
+				final String phonex = obj.toString();
+				final PhoneSequenceRule rule = new PhoneSequenceRule(phonex);
 				List<Range> currentList = rule.findRangesInList(tape);
 				
 				if(notResult) {

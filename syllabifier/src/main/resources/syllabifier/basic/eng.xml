@@ -160,7 +160,7 @@
     <Stage name="Glide Initial [j]" useMDC="false">
     	<PhoneOfInterest>
     		<Constraint>
-    			<PhoneSequence>#j:Nucleus</PhoneSequence>
+    			<PhoneSequence>$j:Nucleus</PhoneSequence>
     		</Constraint>
     		<MarkAs>Onset</MarkAs>
     	</PhoneOfInterest>
@@ -215,7 +215,7 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>#{Strident,Voiceless}</PhoneSequence>
+                <PhoneSequence>${Strident,Voiceless}</PhoneSequence>
             </Constraint>
             <MarkAs>Left Appendix</MarkAs>
         </PhoneOfInterest>
