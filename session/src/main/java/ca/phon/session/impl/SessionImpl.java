@@ -2,7 +2,6 @@ package ca.phon.session.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -11,12 +10,16 @@ import org.joda.time.DateTime;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.session.Participant;
+import ca.phon.session.Participants;
 import ca.phon.session.Record;
+import ca.phon.session.Records;
 import ca.phon.session.Session;
 import ca.phon.session.SessionMetadata;
 import ca.phon.session.TierDescription;
+import ca.phon.session.TierDescriptions;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
+import ca.phon.session.Transcribers;
 
 public class SessionImpl implements Session {
 	
@@ -53,7 +56,7 @@ public class SessionImpl implements Session {
 	/*
 	 * Extension support
 	 */
-	private final ExtensionSupport extSupport = new ExtensionSupport(SessionImpl.class, this);
+	private final ExtensionSupport extSupport = new ExtensionSupport(Session.class, this);
 	
 	SessionImpl() {
 		super();
@@ -106,10 +109,21 @@ public class SessionImpl implements Session {
 		return retVal;
 	}
 	
+	@Override
 	public Transcriber getTranscriber(int i) {
 		return transcribers.get(i);
 	}
-
+	
+	@Override
+	public Transcribers getTranscribers() {
+		return new TranscribersImpl(this);
+	}
+	
+	@Override
+	public void removeTranscriber(int i) {
+		transcribers.remove(i);
+	}
+	
 	@Override
 	public SessionMetadata getMetadata() {
 		return metadata;
@@ -125,6 +139,11 @@ public class SessionImpl implements Session {
 		return records.size();
 	}
 
+	@Override
+	public Records getRecords() {
+		return new RecordsImpl(this);
+	}
+	
 	@Override
 	public int getRecordPosition(Record record) {
 		return records.indexOf(record);
@@ -143,6 +162,11 @@ public class SessionImpl implements Session {
 	@Override
 	public Participant getParticipant(int idx) {
 		return participants.get(idx);
+	}
+	
+	@Override
+	public Participants getParticipants() {
+		return new ParticipantsImpl(this);
 	}
 
 	@Override
@@ -223,11 +247,6 @@ public class SessionImpl implements Session {
 	public void removeParticipant(int idx) {
 		participants.remove(idx);
 	}
-
-	@Override
-	public void sortRecords(Comparator<Record> comp) {
-		Collections.sort(records, comp);
-	}
 	
 	@Override
 	public Set<Class<?>> getExtensions() {
@@ -278,6 +297,11 @@ public class SessionImpl implements Session {
 	@Override
 	public void addUserTier(int idx, TierDescription tierDescription) {
 		userTiers.add(idx, tierDescription);
+	}
+	
+	@Override
+	public TierDescriptions getUserTiers() {
+		return new TierDescriptionsImpl(this);
 	}
 
 	@Override

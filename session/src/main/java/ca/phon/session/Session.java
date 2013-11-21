@@ -83,6 +83,8 @@ public interface Session extends IExtendable {
 	public void addUserTier(TierDescription tierDescription);
 	public void addUserTier(int idx, TierDescription tierDescription);
 	
+	public TierDescriptions getUserTiers();
+	
 	/**
 	 * Get the number of transcribers
 	 */
@@ -95,7 +97,21 @@ public interface Session extends IExtendable {
 	 */
 	public Transcriber getTranscriber(String username);
 	
+	/**
+	 * Get the <code>i</code>th transcriber.
+	 * @param i
+	 * @return
+	 */
 	public Transcriber getTranscriber(int i);
+	
+	/**
+	 * Remove the <code>i</code>th transcriber
+	 * 
+	 * @param i
+	 */
+	public void removeTranscriber(int i);
+	
+	public Transcribers getTranscribers();
 	
 	/**
 	 * Get the metadata
@@ -118,6 +134,8 @@ public interface Session extends IExtendable {
 	 * @return the number of records
 	 */
 	public int getRecordCount();
+	
+	public Records getRecords();
 	
 	/**
 	 * Get the position of the given record.
@@ -147,6 +165,13 @@ public interface Session extends IExtendable {
 	 * @return the specified participant
 	 */
 	public Participant getParticipant(int idx);
+	
+	/**
+	 * Iterable/visitable participant informamtion.
+	 * 
+	 * @return Participants
+	 */
+	public Participants getParticipants();
 	
 	/** Set the corpus */
 	public void setCorpus(String corpus);
@@ -219,13 +244,5 @@ public interface Session extends IExtendable {
 	 * @param idx
 	 */
 	public void removeParticipant(int idx);
-	
-	/**
-	 * Sort records using the given comparator.
-	 * 
-	 * @param comp 
-	 * @since Phon 1.5.0
-	 */
-	public void sortRecords(Comparator<Record> comp);
 	
 }
