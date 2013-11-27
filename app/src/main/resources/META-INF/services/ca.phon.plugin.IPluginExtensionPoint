@@ -9,3 +9,4 @@ ca.phon.app.session.editor.info.SessionInfoExtension
 ca.phon.app.session.editor.player.MediaPlayerExtension
 ca.phon.app.session.editor.waveform.WaveformExtension
 ca.phon.app.session.editor.tier.TierOrderingExtensionPoint
+ca.phon.app.session.editor.tier.TierDataPanelExtension
