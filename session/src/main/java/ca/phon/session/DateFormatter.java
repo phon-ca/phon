@@ -1,10 +1,16 @@
 package ca.phon.session;
 
+import java.text.ParseException;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 
-public class DateFormatter {
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
+
+@FormatterType(DateTime.class)
+public class DateFormatter implements Formatter<DateTime> {
 	
 	/**
 	 * Create a date formatter for {@link DateTime} objects.
@@ -47,5 +53,17 @@ public class DateFormatter {
 	public static DateTime stringToDateTime(String text) {
 		final DateTimeFormatter formatter = createFormatter();
 		return formatter.parseDateTime(text);
+	}
+
+	@Override
+	public String format(DateTime obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DateTime parse(String text) throws ParseException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

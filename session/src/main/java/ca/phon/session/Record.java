@@ -124,25 +124,43 @@ public interface Record extends IExtendable {
 	 */
 	public void removeGroup(int idx);
 	
-	/**
-	 * Merge groups from the given start index
-	 * to the given end index. This will affect
-	 * all grouped tiers.
-	 * 
-	 * @param startIdx
-	 * @param endIdx
-	 */
-	public void mergeGroups(int startIdx, int endIdx);
+//	/**
+//	 * Merge groups from the given start index
+//	 * to the given end index. This will affect
+//	 * all grouped tiers.
+//	 * 
+//	 * @param startIdx
+//	 * @param endIdx
+//	 */
+//	public void mergeGroups(int startIdx, int endIdx);
+//	
+//	/**
+//	 * Split the specified group at the given orthography word index.
+//	 * To split the group at the beginning use index 0,
+//	 * to split the group at the end use (number of elements in orthography)+1.
+//	 * 
+//	 * @param groupIdx
+//	 * @param wordIdx
+//	 */
+//	public void splitGroup(int groupIdx, int wordIdx);
 	
 	/**
-	 * Split the specified group at the given orthography word index.
-	 * To split the group at the beginning use index 0,
-	 * to split the group at the end use (number of elements in orthography)+1.
+	 * Add a new group to the end of the record data
 	 * 
-	 * @param groupIdx
-	 * @param wordIdx
+	 * @return the new group
 	 */
-	public void splitGroup(int groupIdx, int wordIdx);
+	public Group addGroup();
+	
+	/**
+	 * Add a new group at the specified index.  This method
+	 * will add a new group value to each grouped tier.
+	 * 
+	 * @param idx
+	 * @return the new group
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException if idx is out of bounds
+	 */
+	public Group addGroup(int idx);
 	
 	/**
 	 * Get the IPA Target tier

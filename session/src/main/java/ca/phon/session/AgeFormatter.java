@@ -1,14 +1,20 @@
 package ca.phon.session;
 
+import java.text.ParseException;
+
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
+
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
 
 /**
  * Create formatters for ages stored in {@link Period} objects.
  *
  */
-public class AgeFormatter {
+@FormatterType(Period.class)
+public class AgeFormatter implements Formatter<Period> {
 	
 	/** 
 	 * Create a new {@link PeriodFormatter}
@@ -23,8 +29,6 @@ public class AgeFormatter {
 					.appendSeparator(";")
 					.minimumPrintedDigits(2).appendMonths()
 					.appendSeparator(".")
-//					.minimumPrintedDigits(2).appendWeeks()
-//					.appendLiteral("w ")
 					.minimumPrintedDigits(2).appendDays()
 					.toFormatter();
 		return retVal;
@@ -54,5 +58,15 @@ public class AgeFormatter {
 	public static Period stringToAge(String text) {
 		final PeriodFormatter formatter = createFormatter();
 		return formatter.parsePeriod(text);
+	}
+
+	@Override
+	public String format(Period obj) {
+		return ageToString(obj);
+	}
+
+	@Override
+	public Period parse(String text) throws ParseException {
+		return stringToAge(text);
 	}
 }

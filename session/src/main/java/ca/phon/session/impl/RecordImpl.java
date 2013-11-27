@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.ipa.IPATranscript;
@@ -27,6 +29,9 @@ import ca.phon.session.Tier;
  *
  */
 public class RecordImpl implements Record {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(RecordImpl.class.getName());
 	
 	/* Attributes */
 	private final AtomicReference<Participant> participantRef = new AtomicReference<Participant>();
@@ -141,20 +146,62 @@ public class RecordImpl implements Record {
 	@Override
 	public void removeGroup(int idx) {
 		if(idx >= 0 && idx < numberOfGroups()) {
-			// TODO remove the specified group from all tiers
+			orthography.removeGroup(idx);
+			ipaActual.removeGroup(idx);
+			ipaTarget.removeGroup(idx);
+			alignment.removeGroup(idx);
+			
+			for(String tierName:getExtraTierNames()) {
+				final Tier<?> tier = getTier(tierName);
+				if(tier.isGrouped()) {
+					tier.removeGroup(idx);
+				}
+			}
 		} else {
 			throw new IndexOutOfBoundsException("Invalid group index " + idx);
 		}
 	}
 
+//	@Override
+//	public void mergeGroups(int startIdx, int endIdx) {
+//		// TODO Auto-generated method stub
+//	}
+//
+//	@Override
+//	public void splitGroup(int groupIdx, int wordIdx) {
+//		// TODO Auto-generated method stub
+//	}
+
 	@Override
-	public void mergeGroups(int startIdx, int endIdx) {
-		// TODO Auto-generated method stub
+	public Group addGroup() {
+		int gidx = orthography.numberOfGroups();
+		
+		orthography.addGroup(new Orthography());
+		ipaTarget.addGroup(new IPATranscript());
+		ipaActual.addGroup(new IPATranscript());
+		alignment.addGroup(new PhoneMap(ipaTarget.getGroup(gidx), ipaActual.getGroup(gidx)));
+		
+		for(String tierName:getExtraTierNames()) {
+			final Tier<String> tier = getTier(tierName, String.class);
+			tier.addGroup("");
+		}
+		
+		return new GroupImpl(this, gidx);
 	}
 
 	@Override
-	public void splitGroup(int groupIdx, int wordIdx) {
-		// TODO Auto-generated method stub
+	public Group addGroup(int idx) {
+		orthography.addGroup(idx, new Orthography());
+		ipaTarget.addGroup(idx, new IPATranscript());
+		ipaActual.addGroup(idx, new IPATranscript());
+		alignment.addGroup(idx, new PhoneMap(ipaTarget.getGroup(idx), ipaActual.getGroup(idx)));
+		
+		for(String tierName:getExtraTierNames()) {
+			final Tier<String> tier = getTier(tierName, String.class);
+			tier.addGroup(idx, "");
+		}
+		
+		return new GroupImpl(this, idx);
 	}
 
 	@Override

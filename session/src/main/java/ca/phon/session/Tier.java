@@ -46,6 +46,18 @@ public interface Tier<T> extends TierDescription, Iterable<T> {
 	public void addGroup(T val);
 	
 	/**
+	 * Adds a new group at the specified index
+	 * 
+	 * @param idx
+	 * @param val
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException if idx is
+	 *  out of bounds
+	 * @throws NullPointerException if val is <code>null</code>
+	 */
+	public void addGroup(int idx, T val);
+	
+	/**
 	 * Remove the specified group
 	 * 
 	 * @param idx
@@ -60,7 +72,5 @@ public interface Tier<T> extends TierDescription, Iterable<T> {
 	 * 
 	 */
 	public void removeAll();
-	
-	
 	
 }

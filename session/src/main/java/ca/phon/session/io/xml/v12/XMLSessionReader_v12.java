@@ -170,23 +170,29 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		// copy participant information
 		final ParticipantsType participants = sessionType.getParticipants();
-		for(ParticipantType pt:participants.getParticipant()) {
-			final Participant p = copyParticipant(factory, pt, retVal.getDate());
-			retVal.addParticipant(p);
+		if(participants != null) {
+			for(ParticipantType pt:participants.getParticipant()) {
+				final Participant p = copyParticipant(factory, pt, retVal.getDate());
+				retVal.addParticipant(p);
+			}
 		}
 		
 		// copy transcriber information
 		final TranscribersType transcribers = sessionType.getTranscribers();
-		for(TranscriberType tt:transcribers.getTranscriber()) {
-			final Transcriber t = copyTranscriber(factory, tt);
-			retVal.addTranscriber(t);
+		if(transcribers != null) {
+			for(TranscriberType tt:transcribers.getTranscriber()) {
+				final Transcriber t = copyTranscriber(factory, tt);
+				retVal.addTranscriber(t);
+			}
 		}
 		
 		// copy tier information
 		final UserTiersType userTiers = sessionType.getUserTiers();
-		for(UserTierType utt:userTiers.getUserTier()) {
-			final TierDescription td = copyTierDescription(factory, utt);
-			retVal.addUserTier(td);
+		if(userTiers != null) {
+			for(UserTierType utt:userTiers.getUserTier()) {
+				final TierDescription td = copyTierDescription(factory, utt);
+				retVal.addUserTier(td);
+			}
 		}
 		
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();

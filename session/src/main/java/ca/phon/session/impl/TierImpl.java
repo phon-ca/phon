@@ -98,6 +98,22 @@ public class TierImpl<T> implements Tier<T> {
 			tierData.add(val);
 		}
 	}
+	
+	@Override
+	public void addGroup(int idx, T val) {
+		synchronized (tierData) {
+			if(!grouped && tierData.size() > 0) {
+				throw new ArrayIndexOutOfBoundsException("Un-grouped tiers may only have one group.");
+			}
+			if(idx < 0 || idx >= tierData.size()) { 
+				throw new ArrayIndexOutOfBoundsException(idx);
+			}
+			if(val == null) {
+				throw new NullPointerException();
+			}
+			tierData.add(idx, val);
+		}
+	}
 
 	@Override
 	public void removeGroup(int idx) {
