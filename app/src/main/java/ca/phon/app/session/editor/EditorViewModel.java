@@ -1,7 +1,6 @@
 package ca.phon.app.session.editor;
 
 import java.awt.Container;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -63,4 +62,27 @@ public interface EditorViewModel {
 	 * @param viewName
 	 */
 	public void hideView(String viewName);
+	
+	/**
+	 * Setup views based on the given perspective 
+	 * 
+	 * @param editorPerspective
+	 */
+	public void applyPerspective(RecordEditorPerspective editorPerspective);
+	
+	/**
+	 * Save the current view perspective as the specified editor 
+	 * perspective
+	 * 
+	 * @param editorPerspective
+	 */
+	public void savePerspective(RecordEditorPerspective editorPerspective);
+	
+	/**
+	 * Remove prespective from dock control
+	 * 
+	 * @param editorPerspective
+	 */
+	public void removePrespective(RecordEditorPerspective editorPerspective);
+
 }

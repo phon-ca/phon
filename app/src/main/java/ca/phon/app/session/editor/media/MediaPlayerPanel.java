@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.phon.app.session.editor.player;
+package ca.phon.app.session.editor.media;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.waveform;
+package ca.phon.app.session.editor.media;
 
 import java.awt.geom.Rectangle2D;
 import java.lang.ref.WeakReference;

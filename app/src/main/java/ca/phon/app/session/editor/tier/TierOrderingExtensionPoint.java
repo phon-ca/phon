@@ -6,7 +6,7 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
-@PhonPlugin(name="Tier Ordering")
+@PhonPlugin(name="Tier Management")
 public class TierOrderingExtensionPoint implements IPluginExtensionPoint<EditorView> {
 	
 	@Override

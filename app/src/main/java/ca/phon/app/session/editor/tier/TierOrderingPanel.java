@@ -95,7 +95,7 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class TierOrderingPanel extends EditorView {
 
-	private final String VIEW_TITLE = "Tier Order & Visibility";
+	private final String VIEW_TITLE = "Tier Management";
 
 	/**
 	 * Tier ordering table

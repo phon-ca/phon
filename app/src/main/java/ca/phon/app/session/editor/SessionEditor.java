@@ -91,11 +91,9 @@ public class SessionEditor extends ProjectFrame {
 		final Container dock = viewModel.getRoot();
 		contentPane.add(dock, BorderLayout.CENTER);
 		
-		viewModel.showView("Session Info");
-		viewModel.showView("Media Player");
-		viewModel.showView("Waveform");
-		viewModel.showView("Tier Ordering");
-		viewModel.showView("Record Data");
+		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
+		viewModel.applyPerspective(perspective);
+		
 		// TODO statusbar
 	}
 	

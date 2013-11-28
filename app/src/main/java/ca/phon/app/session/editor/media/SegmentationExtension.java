@@ -6,12 +6,8 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
-/**
- * Waveform view extension point for the {@link SessionEditor}
- *
- */
-@PhonPlugin(name="Waveform")
-public class WaveformExtension implements IPluginExtensionPoint<EditorView> {
+@PhonPlugin(name="Segmentation")
+public class SegmentationExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -27,9 +23,9 @@ public class WaveformExtension implements IPluginExtensionPoint<EditorView> {
 		
 		@Override
 		public EditorView createObject(Object... args) {
-			final SessionEditor editor = (SessionEditor)args[0];
-			return new WaveformEditorView(editor);
+			final SessionEditor editor = SessionEditor.class.cast(args[0]);
+			return new SegmentationEditorView(editor);
 		}
-		
 	};
+	
 }

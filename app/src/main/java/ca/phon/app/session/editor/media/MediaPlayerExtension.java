@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.player;
+package ca.phon.app.session.editor.media;
 
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;

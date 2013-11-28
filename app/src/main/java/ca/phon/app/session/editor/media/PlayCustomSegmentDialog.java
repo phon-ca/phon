@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.player;
+package ca.phon.app.session.editor.media;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;

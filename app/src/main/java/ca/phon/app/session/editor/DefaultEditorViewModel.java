@@ -3,7 +3,12 @@ package ca.phon.app.session.editor;
 import java.awt.Container;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -14,11 +19,6 @@ import java.util.TreeMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.PluginManager;
-import ca.phon.util.OSInfo;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
 import bibliothek.gui.dock.common.CLocation;
@@ -30,9 +30,17 @@ import bibliothek.gui.dock.common.event.CDockableStateListener;
 import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.perspective.CDockablePerspective;
+import bibliothek.gui.dock.common.perspective.CPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.gui.dock.common.theme.ThemeMap;
 import bibliothek.util.Filter;
+import bibliothek.util.xml.XElement;
+import bibliothek.util.xml.XIO;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.PluginManager;
+import ca.phon.util.OSInfo;
 
 public class DefaultEditorViewModel implements EditorViewModel {
 
@@ -263,12 +271,56 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		return retVal;
 	}
+	
+	@Override
+	public void applyPerspective(RecordEditorPerspective editorPerspective) {
+		if(dockControl.getPerspectives().getPerspective(editorPerspective.getName()) == null) {
+			try {
+				final InputStream is = editorPerspective.getLocation().openStream();
+				
+				if(is != null) {
+					final XElement xele = XIO.readUTF(is);
+					final CPerspective perspective = dockControl.getPerspectives().readXML( xele );
+					
+					dockControl.getPerspectives().setPerspective( editorPerspective.getName(), perspective);
+					perspective.storeLocations();
+				}
+			} catch (IOException e) {
+				
+			}
+		}
+		dockControl.load(editorPerspective.getName());
+	}
+	
+	@Override
+	public void savePerspective(RecordEditorPerspective editorPerspective) {
+		final CPerspective perspective = dockControl.getPerspectives().getPerspective(true);
+		if(perspective != null) {
+			try {
+				final XElement root = new XElement("root");
+				dockControl.getPerspectives().writeXML(root, perspective);
+				
+				final File f = new File(editorPerspective.getLocation().toURI());
+				XIO.writeUTF(root, new FileOutputStream(f));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	public void removePrespective(RecordEditorPerspective editorPerspective) {
+		dockControl.getPerspectives().removePerspective(editorPerspective.getName());
+	}
 
 	// filter for dockable factory
 	private final Filter<String> dockableFilter = new Filter<String>() {
 		
 		@Override
 		public boolean includes(String item) {
+			System.out.println(item);
 			return getDockables().containsKey(item);
 		}
 		
