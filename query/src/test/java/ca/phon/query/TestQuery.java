@@ -59,7 +59,8 @@ public class TestQuery {
 		final PhonScriptContext ctx = queryScript.getContext();
 		Scriptable scope;
 		try {
-			scope = ctx.getEvaluatedScope();
+			final Scriptable parentScope = ctx.createImporterScope();
+			scope = ctx.getEvaluatedScope(parentScope);
 			final ScriptParameters scriptParams = ctx.getScriptParameters(scope);
 			for(String key:params.keySet()) {
 				scriptParams.setParamValue(key, params.get(key));

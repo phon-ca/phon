@@ -24,7 +24,7 @@ public class TestBasicScript {
 		
 		final BasicScript bs = new BasicScript(script);
 		final PhonScriptContext ctx = bs.getContext();
-		final Scriptable scope = ctx.createScope();
+		final Scriptable scope = ctx.createImporterScope();
 		final Object val = ctx.exec(scope);
 		
 		Assert.assertEquals(Integer.class, val.getClass());
@@ -44,7 +44,7 @@ public class TestBasicScript {
 		bs.addRequirePath(testURL.toURI());
 		
 		final PhonScriptContext ctx = bs.getContext();
-		final Scriptable scope = ctx.createScope();
+		final Scriptable scope = ctx.createImporterScope();
 		final Object val = ctx.exec(scope);
 		
 		Assert.assertEquals(Integer.class, val.getClass());

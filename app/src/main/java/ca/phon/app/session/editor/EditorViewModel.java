@@ -4,6 +4,8 @@ import java.awt.Container;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JComponent;
+
 /**
  * <p>View model for the {@link SessionEditor}.  This class
  * is responsible for creating and placing any {@link EditorView}s.</p>
@@ -41,6 +43,19 @@ public interface EditorViewModel {
 	 * @param viewName
 	 */
 	public void showView(String viewName);
+	
+	/**
+	 * Show the specified view as a new dynamic floating
+	 * view.  These views are <b>not</b> saved in layouts.
+	 *
+	 * @param title
+	 * @param comp
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 */
+	public void showDynamicFloatingDockable(String title, JComponent comp, int x, int y, int w, int h);
 	
 	/**
 	 * Hide the specified view

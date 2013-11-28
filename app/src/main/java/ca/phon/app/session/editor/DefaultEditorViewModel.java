@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -18,7 +19,6 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;
 import ca.phon.util.OSInfo;
-import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
 import bibliothek.gui.dock.common.CLocation;
@@ -26,7 +26,9 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
+import bibliothek.gui.dock.common.event.CDockableStateListener;
 import bibliothek.gui.dock.common.intern.CDockable;
+import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.perspective.CDockablePerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.gui.dock.common.theme.ThemeMap;
@@ -222,6 +224,16 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 	}
 	
+	@Override
+	public void showDynamicFloatingDockable(String title, JComponent comp,
+			int x, int y, int w, int h) {
+		final DynamicViewFactory factory = new DynamicViewFactory(comp);
+		final SingleCDockable dockable = factory.createBackup(title);
+		
+		dockControl.addDockable(dockable);
+		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
+	}
+	
 	private CLocation locationFromPosition(DockPosition position) {
 		CLocation retVal = CLocation.base().normal();
 		
@@ -276,6 +288,40 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 		
 	};
+	
+	/**
+	 * View factory for dynamically added dockables.
+	 */
+	private class DynamicViewFactory implements SingleCDockableFactory {
+		
+		private JComponent content;
+		
+		public DynamicViewFactory(JComponent content) {
+			this.content = content;
+		}
+
+		@Override
+		public SingleCDockable createBackup(String arg0) {
+			final String title = arg0;
+			final DefaultSingleCDockable retVal = new DefaultSingleCDockable(title, null, title, content, new CAction[0]);
+			retVal.setCloseable(true);
+			retVal.addCDockableStateListener(new CDockableStateListener() {
+				
+				@Override
+				public void visibilityChanged(CDockable arg0) {
+					if(!arg0.isVisible()) {
+						dockControl.removeDockable(retVal);
+					}
+				}
+				
+				@Override
+				public void extendedModeChanged(CDockable arg0, ExtendedMode arg1) {
+				}
+			});
+			return retVal;
+		}
+		
+	}
 	
 	// dockable wrapper for editor views
 	private class EditorViewDockable extends DefaultSingleCDockable {

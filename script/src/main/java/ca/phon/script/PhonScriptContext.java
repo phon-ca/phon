@@ -74,7 +74,7 @@ public class PhonScriptContext {
 		final PhonScriptContext ctx = script.getContext();
 		
 		try {
-			retVal = ctx.exec(ctx.createScope());
+			retVal = ctx.exec(ctx.createImporterScope());
 		} catch (Exception e) {
 			throw new PhonScriptException(e);
 		}
@@ -110,11 +110,24 @@ public class PhonScriptContext {
 	}
 	
 	/**
-	 * Setup scope for script
+	 * Create a basic Scriptable object 
+	 * 
+	 * @return basic Scriptable
+	 */
+	public Scriptable createBasicScope() {
+		final Context ctx = enter();
+		final Scriptable retVal = ctx.initStandardObjects();
+		exit();
+		return retVal;
+	}
+	
+	/**
+	 * Setup scope for script with default imports included
+	 * and the <code>require</code> function installed.
 	 * 
 	 * @return the top-level scope for the script
 	 */
-	public Scriptable createScope() 
+	public Scriptable createImporterScope() 
 		throws PhonScriptException {
 		final Context ctx = enter();
 		final ScriptableObject scope = new ImporterTopLevel(ctx);
@@ -202,12 +215,13 @@ public class PhonScriptContext {
 	 * 
 	 * @return the evaluated scope
 	 */
-	public Scriptable getEvaluatedScope() 
+	public Scriptable getEvaluatedScope(Scriptable parentScope) 
 		throws PhonScriptException {
 		if(evaluatedScope == null) {
 			final Context ctx = enter();
 			
-			evaluatedScope = createScope();
+			evaluatedScope = createImporterScope();
+			evaluatedScope.setParentScope(parentScope);
 			final Script compiledScript = getCompiledScript();
 			
 			try {

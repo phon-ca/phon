@@ -45,9 +45,19 @@ public class SessionEditor extends ProjectFrame {
 	private volatile transient int currentRecord = 0;
 	
 	/**
+	 * Has data been modified
+	 */
+	private volatile transient boolean modified = false;
+	
+	/**
 	 * Undo support for the editor
 	 */
 	private final SessionEditorUndoSupport undoSupport = new SessionEditorUndoSupport();
+	
+	/**
+	 * Toolbar
+	 */
+	private SessionEditorToolbar toolbar;
 	
 	/**
 	 * Constructor
@@ -73,7 +83,9 @@ public class SessionEditor extends ProjectFrame {
 		// each element is retrieved using the view model
 		final EditorViewModel viewModel = getViewModel();
 		
-		// TODO toolbar
+		// toolbar
+		final SessionEditorToolbar tb = getToolbar();
+		add(tb, BorderLayout.NORTH);
 		
 		// setup content/dock area
 		final Container dock = viewModel.getRoot();
@@ -85,6 +97,18 @@ public class SessionEditor extends ProjectFrame {
 		viewModel.showView("Tier Ordering");
 		viewModel.showView("Record Data");
 		// TODO statusbar
+	}
+	
+	/**
+	 * Get the editor toolbar.
+	 * 
+	 * @return toolbar
+	 */
+	public SessionEditorToolbar getToolbar() {
+		if(this.toolbar == null) {
+			this.toolbar = new SessionEditorToolbar(this);
+		}
+		return this.toolbar;
 	}
 	
 	/**
@@ -137,6 +161,21 @@ public class SessionEditor extends ProjectFrame {
 	}
 	
 	/**
+	 * Set the index of the current record.
+	 * 
+	 * @return index
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public void setCurrentRecordIndex(int index) {
+		if(index < 0 || index >= getDataModel().getRecordCount()) {
+			throw new ArrayIndexOutOfBoundsException(index);
+		}
+		this.currentRecord = index;
+		final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_CHANGED_EVT, this, currentRecord());
+		getEventManager().queueEvent(ee);
+	}
+	
+	/**
 	 * Return the current record
 	 * 
 	 * @return current record
@@ -153,6 +192,31 @@ public class SessionEditor extends ProjectFrame {
 	 */
 	public SessionEditorUndoSupport getUndoSupport() {
 		return this.undoSupport;
+	}
+	
+	/**
+	 * Has session data been modified
+	 * 
+	 * @return <code>true</code> if modified flag is set, 
+	 *  <code>false</code> otherwise
+	 */
+	public boolean isModified() {
+		return this.modified;
+	}
+	
+	/**
+	 * Set the modified flag
+	 * 
+	 * @param modified
+	 */
+	public void setModified(boolean modified) {
+		final boolean lastVal = this.modified;
+		this.modified = modified;
+		
+		if(lastVal != modified) {
+			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFIED_FLAG_CHANGED, this);
+			getEventManager().queueEvent(ee);
+		}
 	}
 	
 }

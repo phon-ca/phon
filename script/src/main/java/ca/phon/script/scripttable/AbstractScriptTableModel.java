@@ -24,6 +24,7 @@ import javax.xml.stream.XMLStreamException;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrapFactory;
 
 import ca.phon.script.BasicScript;
@@ -63,16 +64,16 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		if(cScript != null) {
 			final Context ctx = PhonScriptContext.enter();
 			try {
-				final Scriptable scope = cScript.getEvaluatedScope();
 				final WrapFactory wf = ctx.getWrapFactory();
-				
+				final Scriptable parentScope = cScript.createImporterScope();
 				// setup column mappings
 				final Map<String, Object> columnMappings = getMappingsAt(0, col);
 				for(String key:columnMappings.keySet()) {
 					final Object val = columnMappings.get(key);
-					final Object wrappedVal = wf.wrap(ctx, scope, val, null);
-					scope.put(key, scope, wrappedVal);
+					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
+					parentScope.put(key, parentScope, wrappedVal);
 				}
+				final Scriptable scope = cScript.getEvaluatedScope(parentScope);
 				
 				if(cScript.hasFunction(scope, "getType", 0)) {
 					final Object getTypeVal = cScript.callFunction(scope, "getType", new Object[0]);
@@ -106,16 +107,17 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		if(cScript != null) {
 			final Context ctx = PhonScriptContext.enter();
 			try {
-				final Scriptable scope = cScript.getEvaluatedScope();
 				final WrapFactory wf = ctx.getWrapFactory();
-				
+				final Scriptable parentScope = cScript.createImporterScope();
+				cScript.installParams(parentScope);
 				// setup column mappings
 				final Map<String, Object> columnMappings = getMappingsAt(0, col);
 				for(String key:columnMappings.keySet()) {
 					final Object val = columnMappings.get(key);
-					final Object wrappedVal = wf.wrap(ctx, scope, val, null);
-					scope.put(key, scope, wrappedVal);
+					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
+					parentScope.put(key, parentScope, wrappedVal);
 				}
+				final Scriptable scope = cScript.getEvaluatedScope(parentScope);
 				
 				if(cScript.hasFunction(scope, "getName", 0)) {
 					Object getNameVal = cScript.callFunction(scope, "getName", new Object[0]);
@@ -154,7 +156,20 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	}
 	
 	/**
-	 * Script script for specified column.  Script is
+	 * Setup script for specified column
+	 * 
+	 * @param col
+	 * @param script
+	 * 
+	 * @throws ScriptException
+	 */
+	public void setColumnScript(int col, String script) 
+		throws PhonScriptException {
+		setColumnScript(col, new BasicScript(script));
+	}
+	
+	/**
+	 * Setup script for specified column.  Script is
 	 * assumed to have mimetype 'text/javascript'
 	 * 
 	 * @param col
@@ -223,16 +238,16 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		if(cScript != null) {
 			final Context ctx = PhonScriptContext.enter();
 			try {
-				final Scriptable scope = cScript.getEvaluatedScope();
 				final WrapFactory wf = ctx.getWrapFactory();
-				
+				final Scriptable parentScope = cScript.createBasicScope();
 				// setup column mappings
 				final Map<String, Object> columnMappings = getMappingsAt(0, col);
 				for(String key:columnMappings.keySet()) {
 					final Object val = columnMappings.get(key);
-					final Object wrappedVal = wf.wrap(ctx, scope, val, null);
-					scope.put(key, scope, wrappedVal);
+					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
+					parentScope.put(key, parentScope, wrappedVal);
 				}
+				final Scriptable scope = cScript.getEvaluatedScope(parentScope);
 				
 				if(cScript.hasFunction(scope, "getValue", 0)) {
 					retVal = cScript.callFunction(scope, "getValue", new Object[0]);
