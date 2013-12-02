@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.undo;
 
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Tier;
 
@@ -67,8 +68,18 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	}
 
 	@Override
-	public void doIt() {
+	public void undo() {
+		tier.setGroup(groupIndex, getOldValue());
 		
+		queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());
+	}
+	
+	@Override
+	public void doIt() {
+		setOldValue(tier.getGroup(groupIndex));
+		tier.setGroup(groupIndex, newValue);
+		
+		queueEvent(EditorEventType.TIER_CHANGE_EVT, getSource(), tier.getName());
 	}
 
 }
