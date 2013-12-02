@@ -802,8 +802,7 @@ public class TierOrderingPanel extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+		return IconManager.getInstance().getIcon("misc/record-settings", IconSize.SMALL);
 	}
 
 	@Override

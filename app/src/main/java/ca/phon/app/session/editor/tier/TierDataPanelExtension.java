@@ -9,7 +9,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Record Data")
-@EditorViewInfo(name="Record Data", category=EditorViewCategory.RECORD)
+@EditorViewInfo(name="Record Data", category=EditorViewCategory.RECORD, icon="misc/record")
 public class TierDataPanelExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

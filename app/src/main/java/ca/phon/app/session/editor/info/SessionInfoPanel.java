@@ -453,8 +453,7 @@ public class SessionInfoPanel extends DividedEditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+		return IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL);
 	}
 
 	@Override

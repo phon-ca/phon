@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.MenuElement;
@@ -31,6 +32,16 @@ public interface EditorViewModel {
 	 * @param viewName
 	 */
 	public EditorView getView(String viewName);
+	
+	/**
+	 * Get the icon associated with the view.  This information
+	 * comes from the view itself if the view is loaded, otherwise
+	 * information is obtained from the EditorViewInfo annotation
+	 * on the extension point.
+	 * 
+	 * @return view icon
+	 */
+	public ImageIcon getViewIcon(String viewName);
 
 	/**
 	 * Get the list of view names handeled by this

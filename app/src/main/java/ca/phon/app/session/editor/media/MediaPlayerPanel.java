@@ -75,6 +75,8 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PathExpander;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Panel for embedded media player for editor.
@@ -639,8 +641,7 @@ public class MediaPlayerPanel extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+		return IconManager.getInstance().getIcon("apps/vlc", IconSize.SMALL);
 	}
 
 	@Override

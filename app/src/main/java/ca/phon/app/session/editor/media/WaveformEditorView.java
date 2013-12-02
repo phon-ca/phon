@@ -774,8 +774,7 @@ public class WaveformEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+		return IconManager.getInstance().getIcon("misc/oscilloscope", IconSize.SMALL);
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -236,11 +235,9 @@ public class SessionEditor extends ProjectFrame {
 			}
 			
 			for(String view:viewsByCategory.get(category)) {
-				final PhonUIAction toggleViewAct = new PhonUIAction(view, this, "onToggleView", view);
-				final EditorView ev = getViewModel().getView(view);
-				if(ev != null) {
-					toggleViewAct.putValue(PhonUIAction.SMALL_ICON, ev.getIcon());
-				}
+				final PhonUIAction toggleViewAct = new PhonUIAction(view, getViewModel(), "showView", view);
+				toggleViewAct.putValue(PhonUIAction.SMALL_ICON, getViewModel().getViewIcon(view));
+				
 				final JCheckBoxMenuItem viewItem = new JCheckBoxMenuItem(toggleViewAct);
 				
 				if(getViewModel().isShowing(view)) {

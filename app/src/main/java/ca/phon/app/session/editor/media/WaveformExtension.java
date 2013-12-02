@@ -13,7 +13,7 @@ import ca.phon.plugin.PhonPlugin;
  *
  */
 @PhonPlugin(name="Waveform")
-@EditorViewInfo(name="Waveform", category=EditorViewCategory.MEDIA)
+@EditorViewInfo(name="Waveform", category=EditorViewCategory.MEDIA, icon="misc/oscilloscope")
 public class WaveformExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

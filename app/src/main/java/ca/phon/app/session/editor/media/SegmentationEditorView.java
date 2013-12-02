@@ -59,6 +59,8 @@ import ca.phon.session.SessionFactory;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.OSInfo;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class SegmentationEditorView extends EditorView {
 
@@ -480,7 +482,7 @@ public class SegmentationEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return null;
+		return IconManager.getInstance().getIcon("actions/film-link", IconSize.SMALL);
 	}
 
 	@Override

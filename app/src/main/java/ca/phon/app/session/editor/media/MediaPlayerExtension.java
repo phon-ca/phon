@@ -9,7 +9,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Media Player")
-@EditorViewInfo(name="Media Player", category=EditorViewCategory.MEDIA)
+@EditorViewInfo(name="Media Player", category=EditorViewCategory.MEDIA, icon="apps/vlc")
 public class MediaPlayerExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

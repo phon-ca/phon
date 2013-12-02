@@ -9,7 +9,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Tier Management")
-@EditorViewInfo(name="Tier Management", category=EditorViewCategory.SESSION)
+@EditorViewInfo(name="Tier Management", category=EditorViewCategory.SESSION, icon="misc/record-settings")
 public class TierOrderingExtensionPoint implements IPluginExtensionPoint<EditorView> {
 	
 	@Override

@@ -9,7 +9,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Session Information")
-@EditorViewInfo(name="Session Information", category=EditorViewCategory.SESSION)
+@EditorViewInfo(name="Session Information", category=EditorViewCategory.SESSION, icon="apps/system-users")
 public class SessionInfoExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

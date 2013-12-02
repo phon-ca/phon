@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -50,6 +51,8 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class DefaultEditorViewModel implements EditorViewModel {
 
@@ -165,7 +168,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		if(retVal == null) {
 			// attempt to load editor view
 			for(IPluginExtensionPoint<EditorView> extPt:extPts) {
-				final PhonPlugin pluginAnnotation = extPt.getClass().getAnnotation(PhonPlugin.class);
+				final EditorViewInfo pluginAnnotation = extPt.getClass().getAnnotation(EditorViewInfo.class);
 				if(pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
 					final IPluginExtensionFactory<EditorView> viewFactory = extPt.getFactory();
 					try {
@@ -177,6 +180,24 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			}
 		}
 		return retVal;
+	}
+	
+	@Override
+	public ImageIcon getViewIcon(String viewName) {
+		final EditorView registeredView = registeredViews.get(viewName);
+		if(registeredView != null) {
+			return registeredView.getIcon();
+		} else {
+			for(IPluginExtensionPoint<EditorView> extPt:extPts) {
+				final EditorViewInfo pluginAnnotation = extPt.getClass().getAnnotation(EditorViewInfo.class);
+				if(pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
+					final String iconName = pluginAnnotation.icon();
+					final ImageIcon icon = IconManager.getInstance().getIcon(iconName, IconSize.SMALL);
+					return icon;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override

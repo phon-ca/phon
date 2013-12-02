@@ -10,7 +10,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Segmentation")
-@EditorViewInfo(name="Segmentation", category=EditorViewCategory.MEDIA)
+@EditorViewInfo(name="Segmentation", category=EditorViewCategory.MEDIA, icon="actions/film-link")
 public class SegmentationExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

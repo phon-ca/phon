@@ -28,4 +28,9 @@ public @interface EditorViewInfo {
 	 */
 	public EditorViewCategory category() default EditorViewCategory.PLUGINS;
 	
+	/**
+	 * View icon
+	 */
+	public String icon() default "blank";
+	
 }

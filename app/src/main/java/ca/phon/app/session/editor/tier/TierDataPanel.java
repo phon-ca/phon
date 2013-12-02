@@ -46,6 +46,8 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Editor view for tier data.
@@ -285,7 +287,7 @@ public class TierDataPanel extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return null;
+		return IconManager.getInstance().getIcon("misc/record", IconSize.SMALL);
 	}
 
 	@Override
