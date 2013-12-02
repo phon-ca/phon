@@ -104,6 +104,10 @@ public class TierDataPanel extends EditorView {
 		final EditorAction onTierViewChangeAct = 
 				new DelegateEditorAction(this, "onTierViewChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, onTierViewChangeAct);
+	
+		final EditorAction onRecordChangeAct =
+				new DelegateEditorAction(this, "onRecordChange");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 	}
 	
 	/**
@@ -264,6 +268,12 @@ public class TierDataPanel extends EditorView {
 	 */
 	@RunOnEDT
 	public void onTierViewChange(EditorEvent event) {
+		update();
+		repaint();
+	}
+	
+	@RunOnEDT
+	public void onRecordChange(EditorEvent event) {
 		update();
 		repaint();
 	}

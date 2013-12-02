@@ -1,12 +1,16 @@
 package ca.phon.app.session.editor.media;
 
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.EditorViewCategory;
+import ca.phon.app.session.editor.EditorViewInfo;
+import ca.phon.app.session.editor.EditorViewModel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Segmentation")
+@EditorViewInfo(name="Segmentation", category=EditorViewCategory.MEDIA)
 public class SegmentationExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
@@ -24,7 +28,12 @@ public class SegmentationExtension implements IPluginExtensionPoint<EditorView> 
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = SessionEditor.class.cast(args[0]);
-			return new SegmentationEditorView(editor);
+			final EditorViewModel viewModel = editor.getViewModel();
+			final EditorView editorView = viewModel.getView(MediaPlayerPanel.VIEW_TITLE);
+			if(editorView != null && editorView instanceof MediaPlayerPanel) 
+				return new SegmentationEditorView(editor, MediaPlayerPanel.class.cast(editorView));
+			else
+				return null;
 		}
 	};
 	

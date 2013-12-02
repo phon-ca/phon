@@ -1,12 +1,15 @@
 package ca.phon.app.session.editor.media;
 
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.EditorViewCategory;
+import ca.phon.app.session.editor.EditorViewInfo;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Media Player")
+@EditorViewInfo(name="Media Player", category=EditorViewCategory.MEDIA)
 public class MediaPlayerExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

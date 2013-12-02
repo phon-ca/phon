@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +17,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
 
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
@@ -40,6 +46,9 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
 
 public class DefaultEditorViewModel implements EditorViewModel {
@@ -59,6 +68,12 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	 */
 	private final Map<String, EditorView> registeredViews =
 			Collections.synchronizedMap(new HashMap<String, EditorView>());
+	
+	/**
+	 * View names by category
+	 */
+	private final Map<EditorViewCategory, List<String>> viewsByCategory = 
+			Collections.synchronizedMap(new TreeMap<EditorViewCategory, List<String>>());
 	
 	/**
 	 * Weak reference to editor
@@ -123,11 +138,15 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	private void setupDockables() {
 		for(IPluginExtensionPoint<EditorView> extPt:getExtensionPoints()) {
-			// TODO do something better here
-			// use the @PhonPlugin annotation to get the dockable name
-			final PhonPlugin pluginInfo = extPt.getClass().getAnnotation(PhonPlugin.class);
-			if(pluginInfo == null) continue; // should never happen
-			final String dockableName = pluginInfo.name();
+			final EditorViewInfo viewInfo = extPt.getClass().getAnnotation(EditorViewInfo.class);
+			if(viewInfo == null) continue; // should never happen
+			final String dockableName = viewInfo.name();
+			List<String> categoryDockables = viewsByCategory.get(viewInfo.category());
+			if(categoryDockables == null) {
+				categoryDockables = new ArrayList<>();
+				viewsByCategory.put(viewInfo.category(), categoryDockables);
+			}
+			categoryDockables.add(dockableName);
 			final SingleCDockablePerspective dockable =
 					new SingleCDockablePerspective(dockableName);
 			dockables.put(dockableName, dockable);
@@ -151,6 +170,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 					final IPluginExtensionFactory<EditorView> viewFactory = extPt.getFactory();
 					try {
 						retVal = viewFactory.createObject(getEditor());
+						registeredViews.put(viewName, retVal);
 					} catch (Exception e) {}
 					break;
 				}
@@ -164,12 +184,12 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		return getDockables().keySet();
 	}
 	
-	/**
-	 * Is the specified view currenly showing, 
-	 * either minimized or otherwise, in the current perspective.
-	 * 
-	 * @param viewName
-	 */
+	@Override
+	public Map<EditorViewCategory, List<String>> getViewsByCategory() {
+		return this.viewsByCategory;
+	}
+	
+	@Override
 	public boolean isShowing(String viewName) {
 		boolean retVal = false;
 		final CControlRegister register = dockControl.getRegister();
@@ -272,6 +292,29 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		return retVal;
 	}
 	
+	
+	
+	/**
+	 * Delete given perspective.
+	 * 
+	 * @param perspective
+	 */
+	public void onDeletePerspective(RecordEditorPerspective perspective) {
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setParentWindow(getEditor());
+		props.setTitle("Delete Layout");
+		props.setHeader("Delete Layout");
+		props.setMessage("Delete layout '" + perspective.getName() + "'?");
+		props.setOptions(MessageDialogProperties.okCancelOptions);
+		props.setRunAsync(false);
+		
+		final int retVal = NativeDialogs.showMessageDialog(props);
+		if(retVal == 0) {
+			removePrespective(perspective);
+			RecordEditorPerspective.deletePerspective(perspective);
+		}
+	}
+	
 	@Override
 	public void applyPerspective(RecordEditorPerspective editorPerspective) {
 		if(dockControl.getPerspectives().getPerspective(editorPerspective.getName()) == null) {
@@ -320,7 +363,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		@Override
 		public boolean includes(String item) {
-			System.out.println(item);
 			return getDockables().containsKey(item);
 		}
 		
@@ -382,6 +424,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		public EditorViewDockable(String id, EditorView editorView, CAction[] actions) {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
+			super.setCloseable(true);
 			viewRef = new WeakReference<EditorView>(editorView);
 		}
 		
@@ -390,4 +433,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 		
 	}
+	
+	
 }

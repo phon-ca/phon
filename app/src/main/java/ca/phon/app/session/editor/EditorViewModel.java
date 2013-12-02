@@ -1,9 +1,13 @@
 package ca.phon.app.session.editor;
 
 import java.awt.Container;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.MenuElement;
 
 /**
  * <p>View model for the {@link SessionEditor}.  This class
@@ -37,11 +41,27 @@ public interface EditorViewModel {
 	public Set<String> getViewNames();
 	
 	/**
+	 * Get the set of available views organized by
+	 * category.
+	 * 
+	 * @return editor views by category
+	 */
+	public Map<EditorViewCategory, List<String>> getViewsByCategory();
+	
+	/**
 	 * Show the specified view.
 	 * 
 	 * @param viewName
 	 */
 	public void showView(String viewName);
+	
+	/**
+	 * Is the specified view showing
+	 * 
+	 * @return <code>true</code> if the given view is part
+	 *  of the current dock control, <code>false</code> otherwise
+	 */
+	public boolean isShowing(String viewName);
 	
 	/**
 	 * Show the specified view as a new dynamic floating

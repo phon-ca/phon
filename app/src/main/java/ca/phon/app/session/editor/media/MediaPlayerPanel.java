@@ -82,7 +82,7 @@ import ca.phon.util.Tuple;
  */
 public class MediaPlayerPanel extends EditorView {
 
-	private static final String VIEW_TITLE = "Media Player";
+	static final String VIEW_TITLE = "Media Player";
 
 	private PhonMediaPlayer mediaPlayer;
 	

@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.media;
 
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.EditorViewCategory;
+import ca.phon.app.session.editor.EditorViewInfo;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -11,6 +13,7 @@ import ca.phon.plugin.PhonPlugin;
  *
  */
 @PhonPlugin(name="Waveform")
+@EditorViewInfo(name="Waveform", category=EditorViewCategory.MEDIA)
 public class WaveformExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

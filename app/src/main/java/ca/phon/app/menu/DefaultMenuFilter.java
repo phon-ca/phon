@@ -45,6 +45,7 @@ import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.CommonModuleFrame;
@@ -174,18 +175,21 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 			this.project = project;
 			this.script = script;
 			
-			String scriptName = script.getName();
-			if(scriptName.indexOf('.') > 0) 
-				scriptName = scriptName.substring(0, scriptName.lastIndexOf('.'));
-			
-			super.putValue(NAME, scriptName + "...");
-			super.putValue(SHORT_DESCRIPTION, script.getLocation().getPath());
+			final QueryName queryName = script.getExtension(QueryName.class);
+			if(queryName != null) {
+				String scriptName = queryName.getName();
+				if(scriptName.indexOf('.') > 0) 
+					scriptName = scriptName.substring(0, scriptName.lastIndexOf('.'));
+				
+				super.putValue(NAME, scriptName + "...");
+			}
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			final QueryEditorWindow scriptFrame = new QueryEditorWindow(script.getName(), project, script);
-			scriptFrame.setWindowName(script.getName());
+			final QueryName queryName = script.getExtension(QueryName.class);
+			final QueryEditorWindow scriptFrame = new QueryEditorWindow(queryName.getName(), project, script);
+			scriptFrame.setWindowName(queryName.getName());
 //			scriptFrame.openFromFile(script.getAbsolutePath(), false);
 			scriptFrame.pack();
 			scriptFrame.setLocationByPlatform(true);
@@ -518,18 +522,18 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 						String projectName = "";
 						projectName = project.getName();
 						
-						try {
-							QueryScript scriptTemplate = new QueryScript(new File("data/script/script.template"));
-							scriptTemplate.setLocation(null);
+//						try {
+							QueryScript scriptTemplate = new QueryScript("");
+//							scriptTemplate.setLocation(null);
 							QueryEditorWindow sd = new QueryEditorWindow("Script Editor : " + projectName, project,
 									scriptTemplate);
 	//							sd.setParentFrame(CommonModuleFrame.getCurrentFrame());
 							sd.pack();
 							sd.setLocationByPlatform(true);
 							sd.setVisible(true);
-						} catch (IOException ex) {
-							
-						}
+//						} catch (IOException ex) {
+//							
+//						}
 					}
 					
 				});
