@@ -12,17 +12,11 @@
   <description></description>
 
   <dependencies>
-    <dependency>
+	<dependency>
       <groupId>ca.phon</groupId>
-      <artifactId>phon-opgraph</artifactId>
-      <version>1.7.0</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.phon</groupId>
-      <artifactId>phon-components</artifactId>
-      <version>1.7.0</version>
-    </dependency>
-    
+	  <artifactId>phon-ipa</artifactId>
+	  <version>1.7.0</version>
+	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

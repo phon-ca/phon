@@ -53,7 +53,7 @@ import ca.phon.util.icons.IconSize;
  * Editor view for tier data.
  *
  */
-public class TierDataPanel extends EditorView {
+public class TierDataEditorView extends EditorView {
 
 	private static final long serialVersionUID = 2961561720211049250L;
 	
@@ -80,7 +80,7 @@ public class TierDataPanel extends EditorView {
 	 */
 	private JPanel contentPane;
 	
-	public TierDataPanel(SessionEditor editor) {
+	public TierDataEditorView(SessionEditor editor) {
 		super(editor);
 		init();
 	}

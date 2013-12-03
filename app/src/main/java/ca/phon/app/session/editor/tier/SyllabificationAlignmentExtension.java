@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.info;
+package ca.phon.app.session.editor.tier;
 
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.EditorViewCategory;
@@ -8,9 +8,9 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
-@PhonPlugin(name="Session Information")
-@EditorViewInfo(name="Session Information", category=EditorViewCategory.SESSION, icon="apps/system-users")
-public class SessionInfoExtension implements IPluginExtensionPoint<EditorView> {
+@PhonPlugin(name="Syllabification & Alignment")
+@EditorViewInfo(name="Syllabificaiton & Alignment", category=EditorViewCategory.RECORD, icon="blank")
+public class SyllabificationAlignmentExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -26,13 +26,9 @@ public class SessionInfoExtension implements IPluginExtensionPoint<EditorView> {
 		
 		@Override
 		public EditorView createObject(Object... args) {
-			if(args.length != 1 || !(args[0] instanceof SessionEditor)) {
-				throw new IllegalArgumentException("Arguments must include SessionEditor reference.");
-			}
-			final SessionEditor editor = (SessionEditor)args[0];
-			return new SessionInfoEditorView(editor);
+			final SessionEditor editor = SessionEditor.class.cast(args[0]);
+			return new SyllabificationAlignmentEditorView(editor);
 		}
 		
 	};
-	
 }

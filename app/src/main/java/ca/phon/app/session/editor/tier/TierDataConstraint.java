@@ -24,6 +24,11 @@ public class TierDataConstraint implements Comparable<TierDataConstraint> {
 	public final static int FLAT_TIER_COLUMN = -1;
 	
 	/**
+	 * Column index for components that extend across the panel
+	 */
+	public final static int FULL_TIER_COLUMN = -3;
+	
+	/**
 	 * column index
 	 */
 	private int columnIndex = -1;

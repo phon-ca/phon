@@ -4,21 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.syllabifier.basic.BasicSyllabifierClassLoaderProvider;
-import ca.phon.syllabifier.opgraph.OpGraphSyllabifierClassLoaderProvider;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
-import ca.phon.util.LanguageParser;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Class to help with loading syllabifiers.
  */
 public final class SyllabifierLibrary implements IExtendable {
+	
+	private final static String SYLLABIFIER_LIBRARY_LIST = "META-INF/syllabifier.list";
 	
 	/**
 	 * Extension support
@@ -43,9 +42,12 @@ public final class SyllabifierLibrary implements IExtendable {
 	private SyllabifierLibrary() {
 		extSupport.initExtensions();
 		
-		resLoader.addHandler(new BasicSyllabifierClassLoaderProvider());
-		resLoader.addHandler(new OpGraphSyllabifierClassLoaderProvider());
-		
+		final ServiceLoader<SyllabifierProvider> loader = ServiceLoader.load(SyllabifierProvider.class);
+		final Iterator<SyllabifierProvider> itr = loader.iterator();
+		while(itr.hasNext()) {
+			final SyllabifierProvider provider = itr.next();
+			getLoader().addHandler(provider);
+		}
 	}
 	
 	/**

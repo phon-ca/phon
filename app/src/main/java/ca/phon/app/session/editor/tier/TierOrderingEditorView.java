@@ -93,7 +93,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * Panel for changing tier ordering, visibility and fonts.
  *
  */
-public class TierOrderingPanel extends EditorView {
+public class TierOrderingEditorView extends EditorView {
 
 	private final String VIEW_TITLE = "Tier Management";
 
@@ -146,7 +146,7 @@ public class TierOrderingPanel extends EditorView {
 	/**
 	 * Constructor
 	 */
-	public TierOrderingPanel(SessionEditor editor) {
+	public TierOrderingEditorView(SessionEditor editor) {
 		super(editor);
 		init();
 		setupEditorActions();
@@ -300,11 +300,11 @@ public class TierOrderingPanel extends EditorView {
 //					if(e.getType() == TableModelEvent.UPDATE
 //							&& e.getColumn() == TierOrderingTableModel.TierOrderingTableColumn.SHOW_TIER.ordinal()) {
 //						getModel().getSession().setTierView(tierOrder);
-//						getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, TierOrderingPanel.this);
+//						getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, TierOrderingEditorView.this);
 //					} else if(e.getType() == TableModelEvent.UPDATE
 //							&& e.getColumn() == TierOrderingTableModel.TierOrderingTableColumn.LOCK_TIER.ordinal()) {
 //						getModel().getSession().setTierView(tierOrder);
-//						getModel().fireRecordEditorEvent(TIER_LOCK_CHANGED_EVT, TierOrderingPanel.this,
+//						getModel().fireRecordEditorEvent(TIER_LOCK_CHANGED_EVT, TierOrderingEditorView.this,
 //								tierOrder.get(e.getFirstRow()).getTierName());
 //					}
 //				}
@@ -367,7 +367,7 @@ public class TierOrderingPanel extends EditorView {
 //		final TierOrderingTableModel tableModel = (TierOrderingTableModel)tierOrderingTable.getModel();
 //		for(int i = 0; i < tierOrder.size(); i++) {
 //			final ITierOrderItem toi = tierOrder.get(i);
-//			getModel().fireRecordEditorEvent(TIER_LOCK_CHANGED_EVT, TierOrderingPanel.this,
+//			getModel().fireRecordEditorEvent(TIER_LOCK_CHANGED_EVT, TierOrderingEditorView.this,
 //					toi.getTierName());
 //			tableModel.fireTableCellUpdated(i, TierOrderingTableModel.TierOrderingTableColumn.LOCK_TIER.ordinal());
 //		}
@@ -396,7 +396,7 @@ public class TierOrderingPanel extends EditorView {
 //		for(int i = 0; i < tierOrder.size(); i++) {
 //			tableModel.fireTableCellUpdated(i, TierOrderingTableModel.TierOrderingTableColumn.SHOW_TIER.ordinal());
 //		}
-//		getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, TierOrderingPanel.this);
+//		getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, TierOrderingEditorView.this);
 		
 		hideAllBox.setText(hide ? "Show all" : "Hide all");
 	}
@@ -658,21 +658,21 @@ public class TierOrderingPanel extends EditorView {
 				JPopupMenu popupMenu = new JPopupMenu();
 				
 				PhonUIAction resetFontAction = 
-					new PhonUIAction(TierOrderingPanel.this, "onResetTierFont", row);
+					new PhonUIAction(TierOrderingEditorView.this, "onResetTierFont", row);
 				resetFontAction.putValue(Action.NAME, "Reset tier font");
 				resetFontAction.putValue(Action.SHORT_DESCRIPTION, "Reset tier font to default");
 				JMenuItem resetItem = new JMenuItem(resetFontAction);
 				popupMenu.add(resetItem);
 				
 				PhonUIAction editTierAction = 
-					new PhonUIAction(TierOrderingPanel.this, "onEditTier", row);
+					new PhonUIAction(TierOrderingEditorView.this, "onEditTier", row);
 				editTierAction.putValue(Action.NAME, "Edit tier...");
 				editTierAction.putValue(Action.SHORT_DESCRIPTION, "Edit tier properties");
 				JMenuItem editTierItem = new JMenuItem(editTierAction);
 				popupMenu.add(editTierItem);
 				
 				PhonUIAction deleteTierAction =
-					new PhonUIAction(TierOrderingPanel.this, "onDeleteTier", row);
+					new PhonUIAction(TierOrderingEditorView.this, "onDeleteTier", row);
 				deleteTierAction.putValue(Action.NAME, "Delete tier");
 				deleteTierAction.putValue(Action.SHORT_DESCRIPTION, "Delete tier from session");
 				deleteTierAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));

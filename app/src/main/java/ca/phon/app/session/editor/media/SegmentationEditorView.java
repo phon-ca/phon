@@ -106,12 +106,12 @@ public class SegmentationEditorView extends EditorView {
 	/**
 	 * Media player panel
 	 */
-	private MediaPlayerPanel mediaPlayerView;
+	private MediaPlayerEditorView mediaPlayerView;
 	
 	/**
 	 * Constructor
 	 */
-	public SegmentationEditorView(SessionEditor editor, MediaPlayerPanel playerView) {
+	public SegmentationEditorView(SessionEditor editor, MediaPlayerEditorView playerView) {
 		super(editor);
 		
 		this.mediaPlayerView = playerView;

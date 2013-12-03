@@ -13,6 +13,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
 import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierProvider;
 import ca.phon.syllabifier.basic.io.ObjectFactory;
 import ca.phon.syllabifier.basic.io.SyllabifierDef;
 import ca.phon.util.resources.ClassLoaderHandler;
@@ -20,7 +21,7 @@ import ca.phon.util.resources.ClassLoaderHandler;
 /**
  * Loader for Phon 1.6 syllabifier files.
  */
-public class BasicSyllabifierClassLoaderProvider extends ClassLoaderHandler<Syllabifier> {
+public class BasicSyllabifierClassLoaderProvider extends ClassLoaderHandler<Syllabifier> implements SyllabifierProvider {
 	
 	private final static Logger LOGGER = Logger.getLogger(BasicSyllabifierClassLoaderProvider.class.getName());
 

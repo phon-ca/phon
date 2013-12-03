@@ -88,7 +88,7 @@ import com.jgoodies.forms.layout.FormLayout;
 /**
  * 
  */
-public class SessionInfoPanel extends DividedEditorView {
+public class SessionInfoEditorView extends DividedEditorView {
 
 	private final String VIEW_TITLE = "Session Information";
 
@@ -129,7 +129,7 @@ public class SessionInfoPanel extends DividedEditorView {
 //			String newVal = languageField.getText();
 //			if(!oldVal.equals(newVal)) {
 //				getModel().getSession().setLanguage(languageField.getText());
-//				getModel().fireRecordEditorEvent(SESSION_LANG_CHANGED, SessionInfoPanel.this, languageField.getText());
+//				getModel().fireRecordEditorEvent(SESSION_LANG_CHANGED, SessionInfoEditorView.this, languageField.getText());
 //			}
 		}
 		
@@ -146,7 +146,7 @@ public class SessionInfoPanel extends DividedEditorView {
 	/**
 	 * Constructor
 	 */
-	public SessionInfoPanel(SessionEditor editor) {
+	public SessionInfoEditorView(SessionEditor editor) {
 		super(editor);
 		
 		init();
@@ -447,7 +447,7 @@ public class SessionInfoPanel extends DividedEditorView {
 //			final String mediaLoc = (mediaFile == null ? null : mediaFile.getPath());
 //			final PathExpander pe = new PathExpander();
 //			getModel().getSession().setMediaLocation(pe.compressPath(mediaLoc));
-//			getModel().fireRecordEditorEvent(SESSION_MEDIA_CHANGED, SessionInfoPanel.this, mediaLoc);
+//			getModel().fireRecordEditorEvent(SESSION_MEDIA_CHANGED, SessionInfoEditorView.this, mediaLoc);
 		}
 	};
 

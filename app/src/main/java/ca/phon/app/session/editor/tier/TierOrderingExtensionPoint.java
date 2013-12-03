@@ -27,7 +27,7 @@ public class TierOrderingExtensionPoint implements IPluginExtensionPoint<EditorV
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = SessionEditor.class.cast(args[0]);
-			return new TierOrderingPanel(editor);
+			return new TierOrderingEditorView(editor);
 		}
 		
 	};

@@ -11,3 +11,4 @@ ca.phon.app.session.editor.media.WaveformExtension
 ca.phon.app.session.editor.media.SegmentationExtension
 ca.phon.app.session.editor.tier.TierOrderingExtensionPoint
 ca.phon.app.session.editor.tier.TierDataPanelExtension
+ca.phon.app.session.editor.tier.SyllabificationAlignmentExtension

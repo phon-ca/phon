@@ -82,13 +82,13 @@ import ca.phon.util.icons.IconSize;
  * Panel for embedded media player for editor.
  *
  */
-public class MediaPlayerPanel extends EditorView {
+public class MediaPlayerEditorView extends EditorView {
 
 	static final String VIEW_TITLE = "Media Player";
 
 	private PhonMediaPlayer mediaPlayer;
 	
-	public MediaPlayerPanel(SessionEditor editor) {
+	public MediaPlayerEditorView(SessionEditor editor) {
 		super(editor);
 
 		init();
@@ -522,7 +522,7 @@ public class MediaPlayerPanel extends EditorView {
 			mediaPlayer.playSegment((long)segment.getStartValue(), len);
 	}
 	
-	private final static String ADJUST_VIDEO = MediaPlayerPanel.class.getName() + ".adjustVideo";
+	private final static String ADJUST_VIDEO = MediaPlayerEditorView.class.getName() + ".adjustVideo";
 	/**
 	 * Toggle the option to trun on/off moving
 	 * video with the current record (while
@@ -566,7 +566,7 @@ public class MediaPlayerPanel extends EditorView {
 
 		private JMenuItem getMediaExportItem() {
 			PhonUIAction mediaExportAct =
-					new PhonUIAction(MediaPlayerPanel.this, "onExportMedia");
+					new PhonUIAction(MediaPlayerEditorView.this, "onExportMedia");
 			mediaExportAct.putValue(Action.NAME, "Export media...");
 			mediaExportAct.putValue(Action.SHORT_DESCRIPTION, "Export media");
 
@@ -575,24 +575,24 @@ public class MediaPlayerPanel extends EditorView {
 		}
 		
 		private void setupPlaytoItems(JPopupMenu menu) {
-			PhonUIAction playCustomAct = new PhonUIAction(MediaPlayerPanel.this, "onPlayCustomSegment");
+			PhonUIAction playCustomAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlayCustomSegment");
 			playCustomAct.putValue(PhonUIAction.NAME, "Play custom segment");
 			JMenuItem playCustomItem = new JMenuItem(playCustomAct);
 			menu.add(playCustomItem);
 			
-			PhonUIAction playSegmentAct = new PhonUIAction(MediaPlayerPanel.this, "onPlaySpeakerSegment", false);
+			PhonUIAction playSegmentAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlaySpeakerSegment", false);
 			playSegmentAct.putValue(PhonUIAction.NAME, "Play current segment");
 			playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment for current record");
 			JMenuItem playSegmentItem = new JMenuItem(playSegmentAct);
 			menu.add(playSegmentItem);
 			
-			PhonUIAction playContiguousAct = new PhonUIAction(MediaPlayerPanel.this, "onPlaySpeakerSegment", true);
+			PhonUIAction playContiguousAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlaySpeakerSegment", true);
 			playContiguousAct.putValue(PhonUIAction.NAME, "Play current speech turn");
 			playContiguousAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play contiguous segments for current speaker");
 			JMenuItem playContiguousItem = new JMenuItem(playContiguousAct);
 			menu.add(playContiguousItem);
 			
-			PhonUIAction playConvPeriodAct = new PhonUIAction(MediaPlayerPanel.this, "onPlayConvPeriod");
+			PhonUIAction playConvPeriodAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlayConvPeriod");
 			playConvPeriodAct.putValue(PhonUIAction.NAME, "Play adjacency sequence");
 			playConvPeriodAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play a sequence of speaker turns");
 			JMenuItem playConvPeriodItem = new JMenuItem(playConvPeriodAct);
@@ -601,7 +601,7 @@ public class MediaPlayerPanel extends EditorView {
 
 		private void setupGotoItems(JPopupMenu menu) {
 			PhonUIAction adjustVideoAct = 
-					new PhonUIAction(MediaPlayerPanel.this, "onToggleAdjustVideo");
+					new PhonUIAction(MediaPlayerEditorView.this, "onToggleAdjustVideo");
 			adjustVideoAct.putValue(PhonUIAction.NAME, "Move media position with record");
 			adjustVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move media to beginning of each record's segment");
 			adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
@@ -609,7 +609,7 @@ public class MediaPlayerPanel extends EditorView {
 			menu.add(adjustVideoItem); 
 			
 			PhonUIAction gotoSelectAct =
-					new PhonUIAction(MediaPlayerPanel.this, "onMenuSelectGoto");
+					new PhonUIAction(MediaPlayerEditorView.this, "onMenuSelectGoto");
 			gotoSelectAct.putValue(Action.NAME, "Go to...");
 			gotoSelectAct.putValue(Action.SHORT_DESCRIPTION, "Go to a specific time");
 
@@ -617,7 +617,7 @@ public class MediaPlayerPanel extends EditorView {
 			menu.add(gotoSelectItem);
 
 			PhonUIAction gotoLastSegmentAct =
-					new PhonUIAction(MediaPlayerPanel.this, "onMenuGoto");
+					new PhonUIAction(MediaPlayerEditorView.this, "onMenuGoto");
 			gotoLastSegmentAct.putValue(Action.NAME, "Go to end of segmented media");
 			menu.add(gotoLastSegmentAct);
 			
@@ -631,7 +631,7 @@ public class MediaPlayerPanel extends EditorView {
 						"Go to end of last segment for " +
 							(p.getName() == null ? p.getId() : p.getName());
 				PhonUIAction gotoPartSegmentAct =
-						new PhonUIAction(MediaPlayerPanel.this, "onMenuGoto", p);
+						new PhonUIAction(MediaPlayerEditorView.this, "onMenuGoto", p);
 				gotoPartSegmentAct.putValue(Action.NAME, msg);
 				menu.add(gotoPartSegmentAct);
 			}

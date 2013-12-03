@@ -27,7 +27,7 @@ public class MediaPlayerExtension implements IPluginExtensionPoint<EditorView> {
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = (SessionEditor)args[0];
-			return new MediaPlayerPanel(editor);
+			return new MediaPlayerEditorView(editor);
 		}
 		
 	};

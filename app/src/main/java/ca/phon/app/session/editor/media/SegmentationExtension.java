@@ -29,9 +29,9 @@ public class SegmentationExtension implements IPluginExtensionPoint<EditorView> 
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = SessionEditor.class.cast(args[0]);
 			final EditorViewModel viewModel = editor.getViewModel();
-			final EditorView editorView = viewModel.getView(MediaPlayerPanel.VIEW_TITLE);
-			if(editorView != null && editorView instanceof MediaPlayerPanel) 
-				return new SegmentationEditorView(editor, MediaPlayerPanel.class.cast(editorView));
+			final EditorView editorView = viewModel.getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(editorView != null && editorView instanceof MediaPlayerEditorView) 
+				return new SegmentationEditorView(editor, MediaPlayerEditorView.class.cast(editorView));
 			else
 				return null;
 		}

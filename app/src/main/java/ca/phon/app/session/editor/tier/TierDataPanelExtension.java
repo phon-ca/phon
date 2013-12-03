@@ -27,7 +27,7 @@ public class TierDataPanelExtension implements IPluginExtensionPoint<EditorView>
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = (SessionEditor)args[0];
-			return new TierDataPanel(editor);
+			return new TierDataEditorView(editor);
 		}
 		
 	};
