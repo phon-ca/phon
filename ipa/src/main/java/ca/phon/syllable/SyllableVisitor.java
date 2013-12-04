@@ -85,7 +85,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	 */
 	public List<IPATranscript> getSyllables() {
 		breakSyllable();
-		return Collections.unmodifiableList(syllables);
+		return new ArrayList<>(syllables);
 	}
 	
 	private void appendSyllable(IPAElement p) {

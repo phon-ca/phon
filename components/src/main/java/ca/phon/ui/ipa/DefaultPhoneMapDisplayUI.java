@@ -53,6 +53,14 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
+import ca.phon.ipa.AudiblePhoneVisitor;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.syllable.SyllableVisitor;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
 /**
@@ -79,7 +87,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 	private static final int groupSpace = 5;
 
 	private boolean drawPhoneLock = false;
-	private Form lockSide = Form.Actual;
+	private boolean lockTop = false; // bottom locked
 
 	// variable for controlling mouse drags
 	private boolean isDragging = false;
@@ -164,7 +172,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		inputMap.put(toggleColourKs, TOGGLE_PHONE_COLOUR);
 
 		PhonUIAction selectTargetAct =
-				new PhonUIAction(this, "setLockSide", Form.Target);
+				new PhonUIAction(this, "setLockTop", true);
 		actionMap.put(SELECT_TARGET_SIDE, selectTargetAct);
 		KeyStroke selectTargetKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_UP,
@@ -172,7 +180,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		inputMap.put(selectTargetKs, SELECT_TARGET_SIDE);
 
 		PhonUIAction selectActualAct =
-				new PhonUIAction(this, "setLockSide", Form.Actual);
+				new PhonUIAction(this, "setLockTop", false);
 		actionMap.put(SELECT_ACTUAL_SIDE, selectActualAct);
 		KeyStroke selectActualKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,
@@ -215,29 +223,27 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 	public void movePhoneRight(PhonActionEvent pae) {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
-		display.movePhoneRight(alignmentPos, lockSide);
+		display.movePhoneRight(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
 	}
 
 	public void movePhoneLeft(PhonActionEvent pae) {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
-		display.movePhoneLeft(alignmentPos, lockSide);
+		display.movePhoneLeft(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
 	}
 
 	public void togglePhoneColour(PhonActionEvent pae) {
 		display.togglePaintPhoneBackground();
 	}
 
-	public void setLockSide(PhonActionEvent pae) {
-		lockSide = (Form)pae.getData();
+	public void setLockTop(PhonActionEvent pae) {
+		lockTop = (Boolean)pae.getData();
 		display.repaint();
 	}
 
-	private void paintPhone(Graphics2D g2d, Phone p,
+	private void paintPhone(Graphics2D g2d, IPAElement p,
 			Area pArea, Rectangle pRect) {
 		Font displayFont = display.getFont();
-		if(displayFont == null)
-			displayFont = UserPrefManager.getUITranscriptFont();
 		
 		if(display.isPaintPhoneBackground()) {
 			Color grad_top = p.getScType().getColor().brighter();
@@ -262,13 +268,13 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		Font f = displayFont;
 		FontMetrics fm = g2d.getFontMetrics(f);
 		Rectangle2D stringBounds =
-				fm.getStringBounds(p.getPhoneString(), g2d);
+				fm.getStringBounds(p.getText(), g2d);
 		while(
 				(stringBounds.getWidth() > pBox.width)
 				|| (stringBounds.getHeight() > pBox.height)) {
 			f = f.deriveFont(f.getSize2D()-0.2f);
 			fm = g2d.getFontMetrics(f);
-			stringBounds = fm.getStringBounds(p.getPhoneString(), g2d);
+			stringBounds = fm.getStringBounds(p.getText(), g2d);
 		}
 
 		float phoneX =
@@ -278,7 +284,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 		g2d.setFont(f);
 		g2d.setColor(display.getForeground());
-		g2d.drawString(p.getPhoneString(), phoneX, phoneY);
+		g2d.drawString(p.getText(), phoneX, phoneY);
 	}
 
 	@Override
@@ -320,6 +326,9 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		for(int gIdx = 0; gIdx < display.getNumberOfGroups(); gIdx++) {
 			PhoneMap pm = display.getPhoneMapForGroup(gIdx);
 			if(pm == null) continue;
+			
+			final IPATranscript ipaTarget = pm.getTargetRep();
+			final IPATranscript ipaActual = pm.getActualRep();
 
 			// holders for syllable and phone rects/areas
 			List<Rectangle> targetSyllRects = new ArrayList<Rectangle>();
@@ -331,54 +340,31 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 			Area[] actualPhoneAreas = new Area[pm.getAlignmentLength()];
 
 			// first create a list of target and actual syllables
-			List<List<Phone>> targetSyllables = new ArrayList<List<Phone>>();
-			List<List<Phone>> actualSyllables = new ArrayList<List<Phone>>();
-
-			int lastIdx = -1;
-			List<Phone> currentSyllable = null;
-			for(Phone tp:pm.getTopElements()) {
-				if(tp.getSyllableIndex() != lastIdx) {
-					if(currentSyllable != null
-							&& currentSyllable.size() > 0) {
-						targetSyllables.add(currentSyllable);
-					}
-					currentSyllable = new ArrayList<Phone>();
-					lastIdx = tp.getSyllableIndex();
-				}
-				currentSyllable.add(tp);
-			}
-			if(currentSyllable != null && currentSyllable.size() > 0)
-				targetSyllables.add(currentSyllable);
-
-			lastIdx = -1;
-			currentSyllable = null;
-			for(Phone ap:pm.getBottomElements()) {
-				if(ap.getSyllableIndex() != lastIdx) {
-					if(currentSyllable != null &&
-							currentSyllable.size() > 0) {
-						actualSyllables.add(currentSyllable);
-					}
-					currentSyllable = new ArrayList<Phone>();
-					lastIdx = ap.getSyllableIndex();
-				}
-				currentSyllable.add(ap);
-			}
-			if(currentSyllable != null && currentSyllable.size() > 0) 
-				actualSyllables.add(currentSyllable);
+			final SyllableVisitor syllVisitor = new SyllableVisitor();
+			ipaTarget.accept(syllVisitor);
+			final List<IPATranscript> targetSyllables = syllVisitor.getSyllables();
+			
+			syllVisitor.reset();
+			ipaActual.accept(syllVisitor);
+			final List<IPATranscript> actualSyllables = syllVisitor.getSyllables();
 
 			// iterate through syllables, create syllable rects and
 			// phone areas as needed
+			final AudiblePhoneVisitor audiblePhoneVisitor = new AudiblePhoneVisitor();
 			Rectangle refRect = new Rectangle(phoneRect);
-			for(List<Phone> targetSyll:targetSyllables) {
+			for(IPATranscript targetSyll:targetSyllables) {
+				audiblePhoneVisitor.reset();
+				targetSyll.accept(audiblePhoneVisitor);
+				final List<IPAElement> targetPhones  = audiblePhoneVisitor.getPhones();
 
 				Rectangle syllRect = null;
 
-				for(int pIdx = 0; pIdx < targetSyll.size(); pIdx++) {
-					Phone p = targetSyll.get(pIdx);
+				for(int pIdx = 0; pIdx < targetPhones.size(); pIdx++) {
+					IPAElement p = targetPhones.get(pIdx);
 					int alignIdx = -1;
 
 					for(int aIdx = 0; aIdx < pm.getAlignmentLength(); aIdx++) {
-						Phone ap = pm.getTopAlignmentElements().get(aIdx);
+						IPAElement ap = pm.getTopAlignmentElements().get(aIdx);
 						
 						if(ap != null && ap == p) {
 							alignIdx = aIdx;
@@ -417,20 +403,22 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 				if(syllRect != null)
 					targetSyllRects.add(syllRect);
-
 			}
 
 			refRect.translate(0, refRect.height);
-			for(List<Phone> actualSyll:actualSyllables) {
-
+			for(IPATranscript actualSyll:actualSyllables) {
+				audiblePhoneVisitor.reset();
+				actualSyll.accept(audiblePhoneVisitor);
+				final List<IPAElement> actualPhones = audiblePhoneVisitor.getPhones();
+				
 				Rectangle syllRect = null;
 
-				for(int pIdx = 0; pIdx < actualSyll.size(); pIdx++) {
-					Phone p = actualSyll.get(pIdx);
+				for(int pIdx = 0; pIdx < actualPhones.size(); pIdx++) {
+					IPAElement p = actualPhones.get(pIdx);
 					int alignIdx = -1;
 
 					for(int aIdx = 0; aIdx < pm.getAlignmentLength(); aIdx++) {
-						Phone ap = pm.getBottomAlignmentElements().get(aIdx);
+						IPAElement ap = pm.getBottomAlignmentElements().get(aIdx);
 
 						if(ap != null && ap == p) {
 							alignIdx = aIdx;
@@ -528,7 +516,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 					gpe.setRenderInsideShape(true);
 					
 					if(tArea != null) {
-						if(drawPhoneLock && lockSide == Form.Target)
+						if(drawPhoneLock && lockTop)
 							gpe.setBrushColor(Color.cyan);
 						else
 							gpe.setBrushColor(Color.YELLOW);
@@ -537,7 +525,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 						gpe.apply(g2d, tArea, 0, 0);
 					}
 					if(aArea != null) {
-						if(drawPhoneLock && lockSide == Form.Actual)
+						if(drawPhoneLock && !lockTop)
 							gpe.setBrushColor(Color.CYAN);
 						else
 							gpe.setBrushColor(Color.YELLOW);
@@ -843,9 +831,9 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 				drawPhoneLock = true;
 				if(me.getPoint().getY() > (phoneBoxSize.height
 						+ (2 * insetSize)) ) {
-					lockSide = Form.Actual;
+					lockTop = false;
 				} else {
-					lockSide = Form.Target;
+					lockTop = true;
 				}
 				isDragging = true;
 				Rectangle phoneRect = phoneRectForPosition(pIdx);
@@ -892,22 +880,18 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		public void mouseDragged(MouseEvent me) {
 			if(isDragging) {
 				if(me.getPoint().getX() > dragRightEdge) {
-//							System.out.println("Hit right edge");
-					// calculate new right edge
-//							int pIdx = locationToAlignmentPosition(me.getPoint());
-//							if(pIdx > 0) {
-//								int mutateIdx = pIdx-1;
-						display.movePhoneRight(
-								display.positionToGroupPos(display.getFocusedPosition()), lockSide);
-						Rectangle newPRect = phoneRectForPosition(
-								display.getFocusedPosition());
-						dragLeftEdge = newPRect.x;
-						dragRightEdge = newPRect.x + newPRect.width;
-//							}
+					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
+					display.movePhoneRight(
+							groupPos.getObj1(), groupPos.getObj2(), lockTop);
+					Rectangle newPRect = phoneRectForPosition(
+							display.getFocusedPosition());
+					dragLeftEdge = newPRect.x;
+					dragRightEdge = newPRect.x + newPRect.width;
 				}
 				if(me.getPoint().getX() < dragLeftEdge) {
+					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
 					display.movePhoneLeft(
-							display.positionToGroupPos(display.getFocusedPosition()), lockSide);
+							groupPos.getObj1(), groupPos.getObj2(), lockTop);
 					Rectangle newPRect = phoneRectForPosition(
 							display.getFocusedPosition());
 					dragLeftEdge = newPRect.x;

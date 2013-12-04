@@ -26,8 +26,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.plaf.ComponentUI;
 
+import ca.phon.alignment.Aligner;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.Phone;
+import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.Tuple;
 
 /**
@@ -176,8 +181,8 @@ public class PhoneMapDisplay extends JComponent {
 	 * @param idx
 	 * @return the aligned phones at the given position
 	 */
-	public Tuple<Phone, Phone> getAlignedPhones(int idx) {
-		Tuple<Phone, Phone> retVal = new Tuple<Phone, Phone>();
+	public Tuple<IPAElement, IPAElement> getAlignedPhones(int idx) {
+		Tuple<IPAElement, IPAElement> retVal = new Tuple<>();
 
 		int gIdx = 0;
 		int pIdx = 0;
@@ -196,7 +201,7 @@ public class PhoneMapDisplay extends JComponent {
 				currentGrp = null;
 			} else if(currentIdx == idx) {
 
-				List<Phone> ps = 
+				List<IPAElement> ps = 
 						currentGrp.getAlignedElements(pIdx);
 				retVal.setObj1(ps.get(0));
 				retVal.setObj2(ps.get(1));
@@ -305,16 +310,16 @@ public class PhoneMapDisplay extends JComponent {
 
 	/**
 	 * Move specified phone one position right
-	 * @param group and alignment index
-	 * @param form (top or bottom)
+	 * @param groupIndex
+	 * @param alignmentIndex
+	 * @param top <code>true</code> if top side of alignment, <code>false</code> if bottom
 	 */
-	public void movePhoneRight(Tuple<Integer, Integer> alignmentPos,
-			Form form) {
-		PhoneMap pm = groups.get(alignmentPos.getObj1());
-		int pos = alignmentPos.getObj2();
+	public void movePhoneRight(int groupIndex, int alignmentIndex, boolean top) {
+		PhoneMap pm = groups.get(groupIndex);
+		int pos = alignmentIndex;
 
-		Phone phoneToMove =
-				(form == Form.Actual ? pm.getBottomAlignmentElements().get(pos)
+		IPAElement phoneToMove =
+				(!top ? pm.getBottomAlignmentElements().get(pos)
 						: pm.getTopAlignmentElements().get(pos));
 
 		// can't move indels
@@ -322,21 +327,21 @@ public class PhoneMapDisplay extends JComponent {
 
 		Integer[][] oldAlignment = new Integer[2][];
 		oldAlignment[0] =
-				(form == Form.Actual ? pm.getBottomAlignment() : pm.getTopAlignment());
+				(!top ? pm.getBottomAlignment() : pm.getTopAlignment());
 		oldAlignment[1] =
-				(form == Form.Actual ? pm.getTopAlignment() : pm.getBottomAlignment());
+				(!top ? pm.getTopAlignment() : pm.getBottomAlignment());
 
 		Integer[][] newAlignment =
 				mutateAlignment(oldAlignment, pos);
 
 		pm.setTopAlignment(
-				(form == Form.Actual ? newAlignment[1] : newAlignment[0]));
+				(!top ? newAlignment[1] : newAlignment[0]));
 		pm.setBottomAlignment(
-				(form == Form.Actual ? newAlignment[0] : newAlignment[1]));
+				(!top ? newAlignment[0] : newAlignment[1]));
 
 		// check to see if we need to move our focus
-		Phone phoneAfterMove = 
-				(form == Form.Actual ? pm.getBottomAlignmentElements().get(pos)
+		IPAElement phoneAfterMove = 
+				(!top ? pm.getBottomAlignmentElements().get(pos)
 					: pm.getTopAlignmentElements().get(pos));
 		
 		if(phoneAfterMove == null || phoneAfterMove != phoneToMove) {
@@ -345,20 +350,19 @@ public class PhoneMapDisplay extends JComponent {
 			repaint();
 		}
 		AlignmentChangeData oldData =
-				new AlignmentChangeData(alignmentPos.getObj1(), oldAlignment);
+				new AlignmentChangeData(groupIndex, oldAlignment);
 		AlignmentChangeData newData =
-				new AlignmentChangeData(alignmentPos.getObj1(), newAlignment);
+				new AlignmentChangeData(groupIndex, newAlignment);
 
 //		super.firePropertyChange(ALIGNMENT_CHANGE_PROP, oldData, newData);
 	}
 
-	public void movePhoneLeft(Tuple<Integer, Integer> alignmentPos,
-			Form form) {
-		PhoneMap pm = groups.get(alignmentPos.getObj1());
-		int pos = alignmentPos.getObj2();
+	public void movePhoneLeft(int groupIndex, int alignmentIndex, boolean top) {
+		PhoneMap pm = groups.get(groupIndex);
+		int pos = alignmentIndex;
 
-		Phone phoneToMove =
-				(form == Form.Actual ? pm.getBottomAlignmentElements().get(pos)
+		IPAElement phoneToMove =
+				(!top ? pm.getBottomAlignmentElements().get(pos)
 						: pm.getTopAlignmentElements().get(pos));
 
 		// can't move indels
@@ -379,9 +383,9 @@ public class PhoneMapDisplay extends JComponent {
 		Collections.reverse(oldBottomAlignment);
 
 		Integer[][] reversedAlignment = new Integer[2][];
-		reversedAlignment[0] = (form == Form.Actual ? oldBottomAlignment.toArray(new Integer[0]) :
+		reversedAlignment[0] = (!top ? oldBottomAlignment.toArray(new Integer[0]) :
 			oldTopAlignment.toArray(new Integer[0]));
-		reversedAlignment[1] = (form == Form.Actual ? oldTopAlignment.toArray(new Integer[0]) :
+		reversedAlignment[1] = (!top ? oldTopAlignment.toArray(new Integer[0]) :
 			oldBottomAlignment.toArray(new Integer[0]));
 
 		int reversePos = (pm.getAlignmentLength()-1) - pos;
@@ -392,13 +396,13 @@ public class PhoneMapDisplay extends JComponent {
 		ArrayList<Integer> newTopAlignment = new ArrayList<Integer>();
 		for(int i = reversedNewAlignment[0].length-1; i >= 0; i--)
 			newTopAlignment.add(
-					(form == Form.Actual ? reversedNewAlignment[1][i] : reversedNewAlignment[0][i])
+					(!top ? reversedNewAlignment[1][i] : reversedNewAlignment[0][i])
 					);
 
 		ArrayList<Integer> newBottomAlignment = new ArrayList<Integer>();
 		for(int i = reversedNewAlignment[1].length-1; i >= 0; i--)
 			newBottomAlignment.add(
-					(form == Form.Actual ? reversedNewAlignment[0][i] : reversedNewAlignment[1][i])
+					(!top ? reversedNewAlignment[0][i] : reversedNewAlignment[1][i])
 					);
 
 		pm.setTopAlignment(newTopAlignment.toArray(new Integer[0]));
@@ -416,8 +420,8 @@ public class PhoneMapDisplay extends JComponent {
 		if(pos >= pm.getAlignmentLength()) {
 			setFocusedPosition(getFocusedPosition()-1);
 		} else {
-			Phone phoneAfterMove =
-					(form == Form.Actual ? pm.getBottomAlignmentElements().get(pos)
+			IPAElement phoneAfterMove =
+					(!top ? pm.getBottomAlignmentElements().get(pos)
 						: pm.getTopAlignmentElements().get(pos));
 
 			if(phoneAfterMove == null || phoneAfterMove != phoneToMove) {
@@ -428,9 +432,9 @@ public class PhoneMapDisplay extends JComponent {
 		}
 
 		AlignmentChangeData oldData =
-				new AlignmentChangeData(alignmentPos.getObj1(), oldAlignment);
+				new AlignmentChangeData(groupIndex, oldAlignment);
 		AlignmentChangeData newData =
-				new AlignmentChangeData(alignmentPos.getObj1(), newAlignment);
+				new AlignmentChangeData(groupIndex, newAlignment);
 
 //		super.firePropertyChange(ALIGNMENT_CHANGE_PROP, oldData, newData);
 	}
@@ -462,47 +466,5 @@ public class PhoneMapDisplay extends JComponent {
 			super.setObj2(alignment);
 		}
 		
-	}
-	
-	public static void main(String[] args) {
-		String tStr[] = {"kʌɹˈtuːæn", "of", "nomaragan"};
-		String aStr[] = {"ʌrˈtuːn", "o", "omaga" };
-
-		Syllabifier syllabifier = Syllabifier.getInstance();
-		Aligner aligner = new Aligner();
-
-		PhoneMapDisplay display = new PhoneMapDisplay();
-
-		for(int i = 0; i < tStr.length; i++) {
-			String tst = tStr[i];
-			String ast = aStr[i];
-
-			List<Phone> tPhones = Phone.toPhoneList(tst);
-			syllabifier.syllabify(tPhones);
-
-			List<Phone> aPhones = Phone.toPhoneList(ast);
-			syllabifier.syllabify(aPhones);
-
-
-			PhoneMap pm = aligner.getPhoneAlignment(tPhones, aPhones);
-			display.groups.add(pm);
-		}
-
-//		List<Phone> tPhones = Phone.toPhoneList(tStr);
-//		syllabifier.syllabify(tPhones);
-//		List<Phone> aPhones = Phone.toPhoneList(aStr);
-//		syllabifier.syllabify(aPhones);
-
-//		Aligner aligner = new Aligner();
-
-//		System.out.println((new Phone("#")).getFeatureSet());
-
-		JFrame f = new JFrame("Test");
-//		PhoneMapDisplay display = new PhoneMapDisplay();
-//		display.groups.add(pm);
-		display.setFont(UserPrefManager.getUITranscriptFont());
-		f.add(display);
-		f.pack();
-		f.setVisible(true);
 	}
 }
