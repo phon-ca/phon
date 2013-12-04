@@ -25,6 +25,7 @@ import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
+import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
@@ -110,9 +111,13 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 					new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIndex, 1);
 			contentPane.add(ipaActualDisplay, ipaActualConstraint);
 			
-			// TODO alignment
-			final PhoneMap alignment = group.getPhoneAlignment();
-			
+			// alignment
+			final PhoneMap pm = group.getPhoneAlignment();
+			final PhoneMapDisplay pmDisplay = new PhoneMapDisplay();
+			pmDisplay.setPhoneMapForGroup(0, pm);
+			final TierDataConstraint pmConstraint = 
+					new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIndex, 3);
+			contentPane.add(pmDisplay, pmConstraint);
 		}
 		revalidate();
 //		scroller.repaint();
