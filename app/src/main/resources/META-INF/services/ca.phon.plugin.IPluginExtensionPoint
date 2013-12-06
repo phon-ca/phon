@@ -12,3 +12,8 @@ ca.phon.app.session.editor.media.SegmentationExtension
 ca.phon.app.session.editor.tier.TierOrderingExtensionPoint
 ca.phon.app.session.editor.tier.TierDataPanelExtension
 ca.phon.app.session.editor.tier.SyllabificationAlignmentExtension
+
+## Tier Editors
+ca.phon.app.session.editor.tier.DefaultTierEditorExtension
+ca.phon.app.session.editor.tier.OrthographyTierEditorExtension
+ca.phon.app.session.editor.tier.IPATierEditorExtension

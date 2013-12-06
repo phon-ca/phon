@@ -476,7 +476,7 @@ public class TierOrderingEditorView extends EditorView {
 									Font.decode(tierItem.getTierFont()));
 
 				TierEditorDialog tierDialog = new TierEditorDialog(true);
-				TierEditor tierEditor = tierDialog.getTierEditor();
+				TierInfoEditor tierEditor = tierDialog.getTierEditor();
 				tierEditor.setGrouped(depTierDesc.isGrouped());
 				tierEditor.setTierName(tierItem.getTierName());
 				tierEditor.setTierFont(transcriptFont);
@@ -518,9 +518,9 @@ public class TierOrderingEditorView extends EditorView {
 	 * Show the new tier dialog
 	 */
 	public void newTier() {
-//		TierEditor tierEditor = new TierEditor();
+//		TierInfoEditor tierEditor = new TierInfoEditor();
 		TierEditorDialog newTierDialog = new TierEditorDialog(false);
-		TierEditor tierEditor = newTierDialog.getTierEditor();
+		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
 		newTierDialog.add(tierEditor);
 		newTierDialog.setTitle("New Tier");
 		newTierDialog.setModal(true);
@@ -695,7 +695,7 @@ public class TierOrderingEditorView extends EditorView {
 
 		private DialogHeader header;
 		
-		private TierEditor tierEditor;
+		private TierInfoEditor tierEditor;
 		
 		private JButton okButton;
 		
@@ -713,7 +713,7 @@ public class TierOrderingEditorView extends EditorView {
 			
 			super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-			tierEditor = new TierEditor(editMode);
+			tierEditor = new TierInfoEditor(editMode);
 			
 			init();
 		}
@@ -756,7 +756,7 @@ public class TierOrderingEditorView extends EditorView {
 			getRootPane().setDefaultButton(okButton);
 		}
 		
-		public TierEditor getTierEditor() {
+		public TierInfoEditor getTierEditor() {
 			return tierEditor;
 		}
 		

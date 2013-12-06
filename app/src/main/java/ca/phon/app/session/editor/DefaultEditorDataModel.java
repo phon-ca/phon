@@ -3,8 +3,10 @@ package ca.phon.app.session.editor;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.velocity.runtime.parser.node.GetExecutor;
 
@@ -18,6 +20,11 @@ public class DefaultEditorDataModel implements EditorDataModel {
 	 * Reference to session
 	 */
 	private final WeakReference<Session> sessionRef;
+	
+	/**
+	 * Transcriber
+	 */
+	private AtomicReference<Transcriber> transcriberRef = new AtomicReference<>();
 	
 	/**
 	 * Constructor
@@ -74,6 +81,16 @@ public class DefaultEditorDataModel implements EditorDataModel {
 	public void setRecordFilter(RecordFilter filter) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Transcriber getTranscriber() {
+		return transcriberRef.get();
+	}
+
+	@Override
+	public void setTranscriber(Transcriber transcriber) {
+		transcriberRef.getAndSet(transcriber);
 	}
 	
 }

@@ -46,7 +46,7 @@ public class SessionScriptTableModel extends AbstractScriptTableModel {
 			+ "		{label, \"Output record number\", \"\"};\n" + "*/\n" + "\n" 
 			+ "function getType() { return (new java.lang.Integer(0)).getClass(); }\n" 
 			+ "function getName() { return \"Record #\"; }\n" 
-			+ "retVal = 1+1;\n" + "";
+			+ "function getValue() { return 1+session.getRecordPosition(record);}\n" + "";
 	
 	public final static String SPEAKER_NAME_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"

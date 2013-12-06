@@ -43,7 +43,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * if in 'EDIT' mode.
  * 
  */
-public class TierEditor extends JPanel {
+public class TierInfoEditor extends JPanel {
 
 	private static final long serialVersionUID = 733398380982206648L;
 
@@ -58,11 +58,11 @@ public class TierEditor extends JPanel {
 	
 	private boolean editMode = false;
 	
-	public TierEditor() {
+	public TierInfoEditor() {
 		this(false);
 	}
 	
-	public TierEditor(boolean editMode) {
+	public TierInfoEditor(boolean editMode) {
 		super();
 		
 		this.editMode = editMode;

@@ -130,6 +130,8 @@ public class TierDataEditorView extends EditorView {
 		final JPanel speakerTier = getSpeakerTier(record);
 		contentPane.add(speakerTier, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, 0));
 		
+		final TierEditorFactory tierEditorFactory = new TierEditorFactory();
+		
 		final List<TierViewItem> tierView = session.getTierView();
 		int row = 1;
 		for(TierViewItem tierItem:tierView) {
@@ -161,59 +163,42 @@ public class TierDataEditorView extends EditorView {
 			
 			boolean isGrouped = tierDesc.isGrouped();
 			
+			Tier<?> tier = record.getTier(tierName);
+			if(tier == null) {
+				tier = factory.createTier(tierDesc.getName(), tierDesc.getDeclaredType(), isGrouped);
+				record.putTier(tier);
+			}
 			if(isGrouped) {
-				final Tier<?> tier = record.getTier(tierName);
 				for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
 					
-					final GroupField<?> textField = new GroupField<>(getEditor(), tier, gIdx);
-					textField.getDocument().addDocumentListener(new DocumentListener() {
-						
-						@Override
-						public void removeUpdate(DocumentEvent arg0) {
-//							revalidate();
-//							contentPane.invalidate();
-							contentPane.getLayout().layoutContainer(contentPane);
-						}
-						
-						@Override
-						public void insertUpdate(DocumentEvent arg0) {
-//							revalidate();
-//							contentPane.invalidate();
-							contentPane.getLayout().layoutContainer(contentPane);
-						}
-						
-						@Override
-						public void changedUpdate(DocumentEvent arg0) {
-							// TODO Auto-generated method stub
-							
-						}
-					});
-					textField.setBorder(new GroupFieldBorder());
-					contentPane.add(textField, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
+					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, gIdx);
+					contentPane.add(tierEditor.getEditorComponent(), new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
 				}
 			} else {
-				String tv = "";
-				if(systemTier != null) {
-					switch(systemTier) {
-					case Notes:
-						tv = record.getNotes().toString();
-						break;
-						
-					case Segment:
-						tv = record.getSegment().toString();
-						break;
-						
-					default:
-						break;
-					}
-				} else {
-					tv = record.getTier(tierName, String.class).toString();
-				}
-				final JTextArea textArea = new JTextArea(tv);
-				textArea.setWrapStyleWord(true);
-				textArea.setLineWrap(true);
+//				String tv = "";
+//				if(systemTier != null) {
+//					switch(systemTier) {
+//					case Notes:
+//						tv = record.getNotes().toString();
+//						break;
+//						
+//					case Segment:
+//						tv = record.getSegment().toString();
+//						break;
+//						
+//					default:
+//						break;
+//					}
+//				} else {
+//					tv = record.getTier(tierName, String.class).toString();
+//				}
+//				final JTextArea textArea = new JTextArea(tv);
+//				textArea.setWrapStyleWord(true);
+//				textArea.setLineWrap(true);
 //				textArea.setRows(3);
-				contentPane.add(textArea, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
+				
+				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, 0);
+				contentPane.add(tierEditor.getEditorComponent(), new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 			}
 			row++;
 		}

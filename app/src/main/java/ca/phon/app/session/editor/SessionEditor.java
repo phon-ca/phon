@@ -23,6 +23,7 @@ import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -78,11 +79,12 @@ public class SessionEditor extends ProjectFrame {
 	/**
 	 * Constructor
 	 */
-	public SessionEditor(Project project, Session session) {
+	public SessionEditor(Project project, Session session, Transcriber transcriber) {
 		super(project);
 		
 		this.dataModelRef = 
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));
+		getDataModel().setTranscriber(transcriber);
 		this.viewModelRef = 
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
 		this.eventManagerRef = 
@@ -269,7 +271,7 @@ public class SessionEditor extends ProjectFrame {
 		
 		for(RecordEditorPerspective editorPerspective:RecordEditorPerspective.availablePerspectives()) {
 			
-			final PhonUIAction showPerspectiveAct = new PhonUIAction(this, "applyPerspective", editorPerspective);
+			final PhonUIAction showPerspectiveAct = new PhonUIAction(getViewModel(), "applyPerspective", editorPerspective);
 			showPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
 			showPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Load perspective: " + editorPerspective.getName());
 			final JMenuItem showPerspectiveItem = new JMenuItem(showPerspectiveAct);

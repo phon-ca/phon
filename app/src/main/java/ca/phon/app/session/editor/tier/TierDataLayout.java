@@ -124,6 +124,10 @@ public class TierDataLayout implements LayoutManager2 {
 		componentMap.remove(comp);
 	}
 
+	public boolean hasLayoutComponent(Component comp) {
+		return componentMap.containsKey(comp);
+	}
+	
 	@Override
 	public void addLayoutComponent(Component comp, Object constraints) {
 		if(!(constraints instanceof TierDataConstraint)) 

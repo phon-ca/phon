@@ -2,6 +2,8 @@ package ca.phon.app.session.editor.tier;
 
 import java.text.ParseException;
 
+import javax.swing.JComponent;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -15,7 +17,7 @@ import ca.phon.session.Tier;
 /**
  * Text field for editing tier data for a group.
  */
-public class GroupField<T> extends JTextField {
+public class GroupField<T> extends JTextArea implements TierEditor {
 	
 	private static final long serialVersionUID = -5541784214656593497L;
 
@@ -34,6 +36,18 @@ public class GroupField<T> extends JTextField {
 		init();
 	}
 	
+	public SessionEditor getEditor() {
+		return this.editor;
+	}
+	
+	public Tier<T> getTier() {
+		return this.tier;
+	}
+	
+	public int getGroupIndex() {
+		return this.groupIndex;
+	}
+	
 	private void init() {
 		final GroupFieldBorder border = new GroupFieldBorder();
 		setBorder(border);
@@ -44,6 +58,8 @@ public class GroupField<T> extends JTextField {
 				(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
 		if(formatter != null) {
 			setText(formatter.format(val));
+		} else {
+			setText(val.toString());
 		}
 		
 		getDocument().addDocumentListener(docListener);
@@ -122,4 +138,9 @@ public class GroupField<T> extends JTextField {
 			
 		}
 	};
+
+	@Override
+	public JComponent getEditorComponent() {
+		return this;
+	}
 }

@@ -3,6 +3,7 @@ package ca.phon.app.session.editor;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 /**
  * Data model for the session editor.
@@ -71,5 +72,22 @@ public interface EditorDataModel {
 	 * @param filter
 	 */
 	public void setRecordFilter(RecordFilter filter);
+	
+	/**
+	 * If the session is in 'blind' mode then this
+	 * method will return the transcriber that is currently
+	 * making edits.
+	 * 
+	 * @return transcriber or <code>null</code> if not in
+	 *  blind mode
+	 */
+	public Transcriber getTranscriber();
+	
+	/**
+	 * Set the blind mode transcriber
+	 * 
+	 * @param transcriber
+	 */
+	public void setTranscriber(Transcriber transcriber);
 	
 }
