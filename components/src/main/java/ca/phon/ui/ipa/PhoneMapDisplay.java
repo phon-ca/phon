@@ -45,6 +45,9 @@ public class PhoneMapDisplay extends JComponent {
 
 	/** Alignment change property */
 	public static final String ALIGNMENT_CHANGE_PROP = "_aligned_changed_";
+	
+	/** Temporary change in alignment (editing) */
+	public static final String TEMP_ALIGNMENT_CHANGE_PROP = "_temp_aligned_changed_";
 
 	/** Property for drawing colours */
 	public static final String PAINT_PHONE_BACKGROUND_PROP = "_paint_phone_background_";

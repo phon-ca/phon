@@ -224,12 +224,16 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
 		display.movePhoneRight(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
+
+		display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 	}
 
 	public void movePhoneLeft(PhonActionEvent pae) {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
 		display.movePhoneLeft(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
+
+		display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 	}
 
 	public void togglePhoneColour(PhonActionEvent pae) {
@@ -883,6 +887,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
 					display.movePhoneRight(
 							groupPos.getObj1(), groupPos.getObj2(), lockTop);
+					display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 					Rectangle newPRect = phoneRectForPosition(
 							display.getFocusedPosition());
 					dragLeftEdge = newPRect.x;
@@ -892,6 +897,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
 					display.movePhoneLeft(
 							groupPos.getObj1(), groupPos.getObj2(), lockTop);
+					display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 					Rectangle newPRect = phoneRectForPosition(
 							display.getFocusedPosition());
 					dragLeftEdge = newPRect.x;
