@@ -9,7 +9,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Syllabification & Alignment")
-@EditorViewInfo(name="Syllabificaiton & Alignment", category=EditorViewCategory.RECORD, icon="blank")
+@EditorViewInfo(name="Syllabification & Alignment", category=EditorViewCategory.RECORD, icon="misc/syllabification")
 public class SyllabificationAlignmentExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

@@ -37,7 +37,7 @@ public class TierEditorFactory {
 		}
 		
 		// create a generic tier editor
-		return new GroupField(editor, tier, group);
+		return new GroupField(tier, group);
 	}
 
 }

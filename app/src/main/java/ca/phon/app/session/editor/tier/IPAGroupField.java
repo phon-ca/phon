@@ -1,5 +1,7 @@
 package ca.phon.app.session.editor.tier;
 
+import java.lang.ref.WeakReference;
+
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
@@ -9,16 +11,35 @@ import ca.phon.session.Transcriber;
 public class IPAGroupField extends GroupField<IPATranscript> {
 
 	private static final long serialVersionUID = 3938081453789426396L;
+	
+	private final WeakReference<Transcriber> transcriberRef;
 
-	public IPAGroupField(SessionEditor editor, Tier<IPATranscript> tier,
+	public IPAGroupField(Tier<IPATranscript> tier,
 			int groupIndex) {
-		super(editor, tier, groupIndex);
+		this(tier, groupIndex, null);
+	}
+	
+	public IPAGroupField(Tier<IPATranscript> tier, int groupIndex, Transcriber transcriber) {
+		super(tier, groupIndex);
+		this.transcriberRef = new WeakReference<>(transcriber);
+		// init after transcriber is set
+		init();
 	}
 
+	public Transcriber getTranscriber() {
+		return transcriberRef.get();
+	}
+	
+	@Override
+	protected void init() {
+		if(transcriberRef == null) return;
+		super.init();
+	}
+	
 	@Override
 	public IPATranscript getGroupValue() {
 		IPATranscript retVal = super.getGroupValue();
-		final Transcriber transcriber = getEditor().getDataModel().getTranscriber();
+		final Transcriber transcriber = getTranscriber();
 		if(transcriber != null) {
 			final AlternativeTranscript alts = retVal.getExtension(AlternativeTranscript.class);
 			if(alts != null) {
@@ -32,18 +53,22 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	}
 
 	@Override
-	public void setGroupValue(IPATranscript val) {
-		final Transcriber transcriber = getEditor().getDataModel().getTranscriber();
+	protected void setValidatedObject(IPATranscript object) {
+		final Transcriber transcriber = getTranscriber();
+		final IPATranscript groupVal = getGroupValue();
 		if(transcriber != null) {
-			final IPATranscript groupVal = super.getGroupValue();
 			AlternativeTranscript alts = groupVal.getExtension(AlternativeTranscript.class);
 			if(alts == null) {
 				alts = new AlternativeTranscript();
 				groupVal.putExtension(AlternativeTranscript.class, alts);
 			}
-			alts.put(transcriber.getUsername(), val);
+			alts.put(transcriber.getUsername(), object);
+			super.setValidatedObject(groupVal);
 		} else {
-			super.setGroupValue(val);
+			// HACK make sure to copy alternative transcriptions
+			final AlternativeTranscript alts = groupVal.getExtension(AlternativeTranscript.class);
+			if(alts != null) object.putExtension(AlternativeTranscript.class, alts);
+			super.setValidatedObject(object);
 		}
 	}
 	

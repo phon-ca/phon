@@ -1,6 +1,10 @@
 package ca.phon.app.session.editor.tier;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
@@ -20,24 +24,17 @@ import ca.phon.session.Tier;
 public class GroupField<T> extends JTextArea implements TierEditor {
 	
 	private static final long serialVersionUID = -5541784214656593497L;
-
-	private final SessionEditor editor;
 	
 	private final Tier<T> tier;
 	
 	private final int groupIndex;
 	
-	public GroupField(SessionEditor editor, Tier<T> tier, int groupIndex) {
+	public GroupField(Tier<T> tier, int groupIndex) {
 		super();
-		this.editor = editor;
 		this.tier = tier;
 		this.groupIndex = groupIndex;
 		
 		init();
-	}
-	
-	public SessionEditor getEditor() {
-		return this.editor;
 	}
 	
 	public Tier<T> getTier() {
@@ -48,19 +45,26 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		return this.groupIndex;
 	}
 	
-	private void init() {
+	/**
+	 * Setup border, listeners and initial text value.
+	 */
+	protected void init() {
 		final GroupFieldBorder border = new GroupFieldBorder();
 		setBorder(border);
 		
 		final T val = getGroupValue();
-		@SuppressWarnings("unchecked")
-		final Formatter<T> formatter = 
-				(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
-		if(formatter != null) {
-			setText(formatter.format(val));
-		} else {
-			setText(val.toString());
+		String text = new String();
+		if(val != null) {
+			@SuppressWarnings("unchecked")
+			final Formatter<T> formatter = 
+					(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
+			if(formatter != null) {
+				text = formatter.format(val);
+			} else {
+				text = val.toString();
+			}
 		}
+		setText(text);
 		
 		getDocument().addDocumentListener(docListener);
 	}
@@ -71,17 +75,11 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 * @return current group value
 	 */
 	public T getGroupValue() {
-		return tier.getGroup(groupIndex);
-	}
-	
-	/**
-	 * Set group value.
-	 * 
-	 * @param val
-	 */
-	public void setGroupValue(T val) {
-		final TierEdit<T> tierEdit = new TierEdit<T>(editor, tier, groupIndex, val);
-		editor.getUndoSupport().postEdit(tierEdit);
+		T retVal = null;
+		if(groupIndex < tier.numberOfGroups()) {
+			retVal = tier.getGroup(groupIndex);
+		}
+		return retVal;
 	}
 	
 	/**
@@ -90,7 +88,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 * @return <code>true</code> if the contents of the field
 	 *  are valid, <code>false</code> otherwise.
 	 */
-	private T validatedObj;
+	private final AtomicReference<T> validatedObjRef = new AtomicReference<>();
 	protected boolean validateText() {
 		boolean retVal = true;
 
@@ -102,7 +100,8 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 				(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
 		if(formatter != null) {
 			try {
-				validatedObj = formatter.parse(text);
+				final T validatedObj = formatter.parse(text);
+				setValidatedObject(validatedObj);
 			} catch (ParseException e) {
 				retVal = false;
 			}
@@ -112,9 +111,21 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	}
 	
 	protected void update() {
+		final T validatedObj = getValidatedObject();
 		if(validatedObj != null) {
-			setGroupValue(validatedObj);
+			final T oldVal = getGroupValue();
+			for(TierEditorListener listener:getTierEditorListeners()) {
+				listener.tierValueChanged(getTier(), getGroupIndex(), validatedObj, oldVal);
+			}
 		}
+	}
+	
+	protected T getValidatedObject() {
+		return this.validatedObjRef.get();
+	}
+	
+	protected void setValidatedObject(T object) {
+		this.validatedObjRef.getAndSet(object);
 	}
 	
 	private final DocumentListener docListener = new DocumentListener() {
@@ -142,5 +153,24 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	@Override
 	public JComponent getEditorComponent() {
 		return this;
+	}
+
+	private final List<TierEditorListener> listeners = 
+			Collections.synchronizedList(new ArrayList<TierEditorListener>());
+	
+	@Override
+	public void addTierEditorListener(TierEditorListener listener) {
+		if(!listeners.contains(listener))
+			listeners.add(listener);
+	}
+
+	@Override
+	public void removeTierEditorListener(TierEditorListener listener) {
+		listeners.remove(listener);
+	}
+
+	@Override
+	public List<TierEditorListener> getTierEditorListeners() {
+		return listeners;
 	}
 }

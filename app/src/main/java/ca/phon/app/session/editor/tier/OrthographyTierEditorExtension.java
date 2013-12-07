@@ -33,7 +33,7 @@ public class OrthographyTierEditorExtension implements IPluginExtensionPoint<Tie
 			
 			@SuppressWarnings("unchecked")
 			final Tier<Orthography> orthoTier = (Tier<Orthography>)tier;
-			return new OrthoGroupField(editor, orthoTier, group);
+			return new OrthoGroupField(orthoTier, group);
 		}
 		
 	};

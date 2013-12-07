@@ -1,5 +1,7 @@
 package ca.phon.app.session.editor.tier;
 
+import java.util.List;
+
 import javax.swing.JComponent;
 
 /**
@@ -13,5 +15,20 @@ public interface TierEditor {
 	 * @return component
 	 */
 	public JComponent getEditorComponent();
+	
+	/**
+	 * Add tier editor listener
+	 */
+	public void addTierEditorListener(TierEditorListener listener);
+	
+	/**
+	 * remove tier editor listener
+	 */
+	public void removeTierEditorListener(TierEditorListener listener);
+	
+	/**
+	 * Get tier editor listeners
+	 */
+	public List<TierEditorListener> getTierEditorListeners();
 	
 }

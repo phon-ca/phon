@@ -37,6 +37,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.Group;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -170,34 +171,13 @@ public class TierDataEditorView extends EditorView {
 			}
 			if(isGrouped) {
 				for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
-					
 					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, gIdx);
+					tierEditor.addTierEditorListener(tierEditorListener);
 					contentPane.add(tierEditor.getEditorComponent(), new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
 				}
 			} else {
-//				String tv = "";
-//				if(systemTier != null) {
-//					switch(systemTier) {
-//					case Notes:
-//						tv = record.getNotes().toString();
-//						break;
-//						
-//					case Segment:
-//						tv = record.getSegment().toString();
-//						break;
-//						
-//					default:
-//						break;
-//					}
-//				} else {
-//					tv = record.getTier(tierName, String.class).toString();
-//				}
-//				final JTextArea textArea = new JTextArea(tv);
-//				textArea.setWrapStyleWord(true);
-//				textArea.setLineWrap(true);
-//				textArea.setRows(3);
-				
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, 0);
+				tierEditor.addTierEditorListener(tierEditorListener);
 				contentPane.add(tierEditor.getEditorComponent(), new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 			}
 			row++;
@@ -235,6 +215,17 @@ public class TierDataEditorView extends EditorView {
 		
 		return speakerTier;
 	}
+	
+	private final TierEditorListener tierEditorListener = new TierEditorListener() {
+		
+		@Override
+		public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
+				T oldValue) {
+			final TierEdit<T> tierEdit = new TierEdit<>(getEditor(), tier, groupIndex, newValue);
+			getEditor().getUndoSupport().postEdit(tierEdit);
+		}
+		
+	};
 	
 	private final DefaultListCellRenderer speakerRenderer = new DefaultListCellRenderer() {
 

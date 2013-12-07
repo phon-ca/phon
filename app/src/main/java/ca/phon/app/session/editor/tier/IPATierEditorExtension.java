@@ -36,7 +36,7 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 			
 			@SuppressWarnings("unchecked")
 			final Tier<IPATranscript> orthoTier = (Tier<IPATranscript>)tier;
-			return new IPAGroupField(editor, orthoTier, group);
+			return new IPAGroupField(orthoTier, group, editor.getDataModel().getTranscriber());
 		}
 		
 	};

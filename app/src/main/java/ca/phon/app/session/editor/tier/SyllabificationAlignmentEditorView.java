@@ -31,6 +31,8 @@ import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
 
@@ -222,7 +224,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return null;
+		return IconManager.getInstance().getIcon("misc/syllabification", IconSize.SMALL);
 	}
 
 	@Override

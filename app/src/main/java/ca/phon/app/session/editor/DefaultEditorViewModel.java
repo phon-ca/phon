@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -56,6 +58,9 @@ import ca.phon.util.icons.IconSize;
 
 public class DefaultEditorViewModel implements EditorViewModel {
 
+	private static final Logger LOGGER = Logger
+			.getLogger(DefaultEditorViewModel.class.getName());
+	
 	/**
 	 * Dock control
 	 */
@@ -174,7 +179,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 					try {
 						retVal = viewFactory.createObject(getEditor());
 						registeredViews.put(viewName, retVal);
-					} catch (Exception e) {}
+					} catch (Exception e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(),
+								e);
+					}
 					break;
 				}
 			}
