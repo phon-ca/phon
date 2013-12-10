@@ -36,6 +36,15 @@ import ca.phon.script.params.ScriptParameters;
 public class PhonScriptContext {
 	
 	/*
+	 * Script prefix - this is added to all scripts in the background
+	 * in order to ensure that everything is contained in a compilable
+	 * function
+	 */
+	public final static String SCRIPT_EXPORTS = "exports";
+	private final static String SCRIPT_PREFIX = "exports = function() {\n";
+	private final static String SCRIPT_SUFFIX = "\n}\n";
+	
+	/*
 	 * This wrap factory exposes extensions in IExtendable objects
 	 * as properties in the wrapped object. 
 	 */
@@ -175,6 +184,24 @@ public class PhonScriptContext {
 	}
 	
 	/**
+	 * Get the script exports object from the given scope
+	 * 
+	 * @param scope
+	 * 
+	 * @return exports object for script or <code>null</code> if
+	 *  not found
+	 */
+	public Scriptable getExports(Scriptable scope) {
+		Scriptable retVal = null;
+		if(ScriptableObject.hasProperty(scope, SCRIPT_EXPORTS)) {
+			final Object retObj = ScriptableObject.getProperty(scope, SCRIPT_EXPORTS);
+			if(retObj instanceof Scriptable)
+				retVal = Scriptable.class.cast(retObj);
+		}
+		return retVal;
+	}
+	
+	/**
 	 * Does the script have a function with the given
 	 * name and arity.
 	 * 
@@ -186,18 +213,19 @@ public class PhonScriptContext {
 	 */
 	public boolean hasFunction(Scriptable scope, String name, int arity) {
 		boolean retVal = false;
-		
-//		final Scriptable scope = getEvaluatedScope();
 		enter();
 		if(ScriptableObject.hasProperty(scope, name)) {
 			// check arity
-			final Object funcObj = ScriptableObject.getProperty(scope, name);
-			if(funcObj instanceof Scriptable) {
-				final Scriptable func = Scriptable.class.cast(funcObj);
-				if(ScriptableObject.hasProperty(func, "arity")) {
-					final Integer funcArity = 
-							(Integer)ScriptableObject.getProperty(func, "arity");
-					retVal = (funcArity == arity);
+			final Scriptable exports = getExports(scope);
+			if(exports != null) {
+				final Object funcObj = ScriptableObject.getProperty(exports, name);
+				if(funcObj instanceof Scriptable) {
+					final Scriptable func = Scriptable.class.cast(funcObj);
+					if(ScriptableObject.hasProperty(func, "arity")) {
+						final Integer funcArity = 
+								(Integer)ScriptableObject.getProperty(func, "arity");
+						retVal = (funcArity == arity);
+					}
 				}
 			}
 		}
@@ -215,13 +243,13 @@ public class PhonScriptContext {
 	 * 
 	 * @return the evaluated scope
 	 */
-	public Scriptable getEvaluatedScope(Scriptable parentScope) 
+	public Scriptable getEvaluatedScope() 
 		throws PhonScriptException {
 		if(evaluatedScope == null) {
 			final Context ctx = enter();
 			
 			evaluatedScope = createImporterScope();
-			evaluatedScope.setParentScope(parentScope);
+//			evaluatedScope.setParentScope(parentScope);
 			final Script compiledScript = getCompiledScript();
 			
 			try {
@@ -245,7 +273,7 @@ public class PhonScriptContext {
 		throws PhonScriptException {
 		final Context ctx = enter();
 		if(compiledScript == null) {
-			final String scriptText = script.getScript();
+			final String scriptText = SCRIPT_PREFIX + script.getScript() + SCRIPT_SUFFIX;
 			compiledScript = ctx.compileString(scriptText, "", 1, null);
 		}
 		exit();
@@ -320,9 +348,10 @@ public class PhonScriptContext {
 		throws PhonScriptException {
 		Object retVal = null;
 		
+		final Scriptable exports = getExports(scope);
 		enter();
 		try {
-			retVal = ScriptableObject.callMethod(scope, name, args);
+			retVal = ScriptableObject.callMethod(exports, name, args);
 		} catch(Exception e) {
 			throw new PhonScriptException(e);
 		}
@@ -341,13 +370,14 @@ public class PhonScriptContext {
 		throws PhonScriptException {
 		final Context ctx = enter();
 		final WrapFactory wrapFactory = ctx.getWrapFactory();
+		final Scriptable exports = getExports(scope);
 		for(ScriptParam param:getScriptParameters(scope)) {
 			for(String paramId:param.getParamIds()) {
 				final Object paramObj = param.getValue(paramId);
-				final Object wrappedObj = wrapFactory.wrap(ctx, scope, paramObj, null);
+				final Object wrappedObj = wrapFactory.wrap(ctx, exports, paramObj, null);
 				
 				// check for dot syntax
-				Scriptable parentObj = scope;
+				Scriptable parentObj = exports;
 				
 				final StringBuffer paramBuffer = new StringBuffer(paramId);
 				int dotIdx = -1;

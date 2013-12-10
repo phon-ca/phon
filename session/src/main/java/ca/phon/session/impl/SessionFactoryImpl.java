@@ -1,5 +1,8 @@
 package ca.phon.session.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import ca.phon.session.Comment;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
@@ -15,6 +18,9 @@ import ca.phon.session.Transcriber;
  * Default implementation of a session factory.
  */
 public class SessionFactoryImpl extends SessionFactory {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(SessionFactoryImpl.class.getName());
 
 	@Override
 	public Session createSession() {
@@ -38,7 +44,8 @@ public class SessionFactoryImpl extends SessionFactory {
 
 	@Override
 	public <T> Tier<T> createTier(String name, Class<T> type, boolean grouped) {
-		return new TierImpl<T>(name, type, grouped);
+		final TierImpl<T> retVal = new TierImpl<>(name, type, grouped);
+		return retVal;
 	}
 
 	@Override

@@ -62,18 +62,17 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		final PhonScript script = getColumnScript(col);
 		final PhonScriptContext cScript = script.getContext();
 		if(cScript != null) {
-			final Context ctx = PhonScriptContext.enter();
 			try {
-				final WrapFactory wf = ctx.getWrapFactory();
-				final Scriptable parentScope = cScript.createImporterScope();
-				// setup column mappings
-				final Map<String, Object> columnMappings = getMappingsAt(0, col);
-				for(String key:columnMappings.keySet()) {
-					final Object val = columnMappings.get(key);
-					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
-					parentScope.put(key, parentScope, wrappedVal);
-				}
-				final Scriptable scope = cScript.getEvaluatedScope(parentScope);
+//				final WrapFactory wf = ctx.getWrapFactory();
+//				final Scriptable parentScope = cScript.createImporterScope();
+//				// setup column mappings
+//				final Map<String, Object> columnMappings = getMappingsAt(0, col);
+//				for(String key:columnMappings.keySet()) {
+//					final Object val = columnMappings.get(key);
+//					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
+//					parentScope.put(key, parentScope, wrappedVal);
+//				}
+				final Scriptable scope = cScript.getEvaluatedScope();
 				
 				if(cScript.hasFunction(scope, "getType", 0)) {
 					final Object getTypeVal = cScript.callFunction(scope, "getType", new Object[0]);
@@ -83,8 +82,6 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 				}
 			} catch (PhonScriptException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			} finally {
-				PhonScriptContext.exit();
 			}
 		}
 		
@@ -105,19 +102,8 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		final PhonScript script = getColumnScript(col);
 		final PhonScriptContext cScript = script.getContext();
 		if(cScript != null) {
-			final Context ctx = PhonScriptContext.enter();
 			try {
-				final WrapFactory wf = ctx.getWrapFactory();
-				final Scriptable parentScope = cScript.createImporterScope();
-				cScript.installParams(parentScope);
-				// setup column mappings
-				final Map<String, Object> columnMappings = getMappingsAt(0, col);
-				for(String key:columnMappings.keySet()) {
-					final Object val = columnMappings.get(key);
-					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
-					parentScope.put(key, parentScope, wrappedVal);
-				}
-				final Scriptable scope = cScript.getEvaluatedScope(parentScope);
+				final Scriptable scope = cScript.getEvaluatedScope();
 				
 				if(cScript.hasFunction(scope, "getName", 0)) {
 					Object getNameVal = cScript.callFunction(scope, "getName", new Object[0]);
@@ -131,8 +117,6 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 				}
 			} catch (PhonScriptException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			} finally {
-				PhonScriptContext.exit();
 			}
 		}
 		
@@ -241,18 +225,20 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 				final WrapFactory wf = ctx.getWrapFactory();
 				final Scriptable parentScope = cScript.createBasicScope();
 				// setup column mappings
-				final Map<String, Object> columnMappings = getMappingsAt(0, col);
+				final Map<String, Object> columnMappings = getMappingsAt(row, col);
 				for(String key:columnMappings.keySet()) {
 					final Object val = columnMappings.get(key);
 					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
 					parentScope.put(key, parentScope, wrappedVal);
 				}
-				final Scriptable scope = cScript.getEvaluatedScope(parentScope);
+				final Scriptable scope = cScript.getEvaluatedScope();
+				scope.setParentScope(parentScope);
+				final Scriptable exports = cScript.getExports(scope);
 				
 				if(cScript.hasFunction(scope, "getValue", 0)) {
 					retVal = cScript.callFunction(scope, "getValue", new Object[0]);
-				} else if(scope.has("retVal", scope)) {
-					retVal = scope.get("retVal", scope);
+				} else if(exports.has("retVal", scope)) {
+					retVal = exports.get("retVal", scope);
 				} else {
 					retVal = cScript.exec(scope);
 				}
