@@ -15,6 +15,7 @@ import ca.phon.session.Record;
 import ca.phon.session.Records;
 import ca.phon.session.Session;
 import ca.phon.session.SessionMetadata;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierDescriptions;
 import ca.phon.session.TierViewItem;
@@ -198,6 +199,12 @@ public class SessionImpl implements Session {
 	public void setTierView(List<TierViewItem> view) {
 		tierOrder.clear();
 		tierOrder.addAll(view);
+//		for(TierViewItem item:view) {
+//			// Segment tier has been deprecated, make sure it never gets into our view ordering
+//			if(!SystemTierType.Segment.getName().equals(item.getTierName())) {
+//				tierOrder.add(item);
+//			}
+//		}
 	}
 
 	@Override

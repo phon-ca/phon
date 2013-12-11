@@ -28,11 +28,11 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 import ca.phon.media.FFMpegMediaExporter;
-import ca.phon.media.MsFormatter;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.MsFormatter;
 import ca.phon.worker.PhonWorker;
 
 /**

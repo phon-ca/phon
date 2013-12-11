@@ -69,7 +69,7 @@ public class TierDataConstraint implements Comparable<TierDataConstraint> {
 	public int compareTo(TierDataConstraint o) {
 		final int rowCmp = ((Integer)getRowIndex()).compareTo(o.getRowIndex());
 		if(rowCmp == 0) {
-			return ((Integer)getColumnIndex()).compareTo(o.getColumnIndex());
+			return ((Integer)Math.abs(getColumnIndex())).compareTo(Math.abs(o.getColumnIndex()));
 		} else {
 			return rowCmp;
 		}

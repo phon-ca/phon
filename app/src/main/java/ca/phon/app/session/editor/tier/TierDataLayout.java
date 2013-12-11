@@ -73,6 +73,7 @@ public class TierDataLayout implements LayoutManager2 {
 		WRAPPED;
 	}
 	
+	
 	/**
 	 * default width of the tier label section
 	 */
@@ -97,7 +98,7 @@ public class TierDataLayout implements LayoutManager2 {
 	
 	private final AtomicReference<Dimension> prefSizeRef = new AtomicReference<>();
 	
-	private volatile GroupMode groupMode = GroupMode.ALIGNED;
+	private volatile GroupMode groupMode = GroupMode.WRAPPED;
 	
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
@@ -109,14 +110,21 @@ public class TierDataLayout implements LayoutManager2 {
 	public void layoutContainer(Container parent) {
 		for(Component comp:constraintMap.keySet()) {
 			final TierDataConstraint constraint = constraintMap.get(comp);
-			final Rectangle rect = rectForConstaint(constraint, parent);
+			Rectangle rect = new Rectangle();
+			if(getGroupMode() == GroupMode.ALIGNED) {
+				rect = alignedRectForConstaint(constraint, parent);
+			} else if(getGroupMode() == GroupMode.WRAPPED) {
+				rect = wrappedRectForConstraint(constraint, parent);
+			}
 			comp.setBounds(rect);
 		}
 	}
 
 	@Override
 	public Dimension minimumLayoutSize(Container parent) {
-		return calcLayoutSize(parent, false);
+		Dimension prefSize = preferredLayoutSize(parent);
+		prefSize.width = DEFAULT_TIER_LABEL_WIDTH + DEFAULT_H_GAP;
+		return prefSize;
 	}
 
 	@Override
@@ -131,7 +139,7 @@ public class TierDataLayout implements LayoutManager2 {
 
 	private Dimension calcLayoutSize(Container parent, boolean fill) {
 		Dimension retVal = new Dimension();
-		if(groupMode == GroupMode.ALIGNED) {
+		if(getGroupMode() == GroupMode.ALIGNED) {
 			int width = DEFAULT_TIER_LABEL_WIDTH;
 			
 			for(int i = 1; i <= getColumnCount(); i++) {
@@ -148,6 +156,21 @@ public class TierDataLayout implements LayoutManager2 {
 				retVal = new Dimension(Math.max(width, parent.getSize().width), Math.max(height, parent.getSize().height));
 			else
 				retVal = new Dimension(width, height);
+		} else if(getGroupMode() == GroupMode.WRAPPED) {
+			if(cachedRects.size() == 0)
+				calcLayout(parent);
+			int width = DEFAULT_TIER_LABEL_WIDTH + DEFAULT_H_GAP;
+			int maxGroupWidth = 0;
+			int height = 0;
+			
+			for(TierDataConstraint tdc:cachedRects.keySet()) {
+				final Rectangle rect = cachedRects.get(tdc);
+				if(tdc.getColumnIndex() != TierDataConstraint.TIER_LABEL_COLUMN) {
+					maxGroupWidth = Math.max(maxGroupWidth, rect.width);
+				}
+				height = Math.max(height, rect.y + rect.height);
+			}
+			retVal = new Dimension(width + maxGroupWidth, height);
 		}
 		return retVal;
 	}
@@ -220,6 +243,19 @@ public class TierDataLayout implements LayoutManager2 {
 	}
 	
 	/**
+	 * Return the group mode
+	 * 
+	 * @return group mode
+	 */
+	public GroupMode getGroupMode() {
+		return this.groupMode;
+	}
+	
+	public void setGroupMode(GroupMode mode) {
+		this.groupMode = mode;
+	}
+	
+	/**
 	 * Is the given row grouped?
 	 * 
 	 * @param row
@@ -251,7 +287,7 @@ public class TierDataLayout implements LayoutManager2 {
 	 * @param x
 	 * @param y
 	 */
-	private Rectangle rectForConstaint(TierDataConstraint tdc, Container parent) {
+	private Rectangle alignedRectForConstaint(TierDataConstraint tdc, Container parent) {
 		Rectangle retVal = cachedRects.get(tdc);
 		if(retVal == null) {			
 			final int row = tdc.getRowIndex();
@@ -259,12 +295,11 @@ public class TierDataLayout implements LayoutManager2 {
 			
 			int x = 0, y = 0;
 			int width = 0, height = 0;
-			if(groupMode == GroupMode.ALIGNED) {
-				x = calcAlignedColumnX(col, parent);
-				y = calcAlignedRowY(row);
-				width = calcAlignedColumnWidth(col, parent);
-				height = calcAlignedRowHeight(row);
-			}
+			
+			x = calcAlignedColumnX(col, parent);
+			y = calcAlignedRowY(row);
+			width = calcAlignedColumnWidth(col, parent);
+			height = calcAlignedRowHeight(row);
 			
 			retVal = new Rectangle(x, y, width, height);
 			cachedRects.put(tdc, retVal);
@@ -272,8 +307,18 @@ public class TierDataLayout implements LayoutManager2 {
 		return retVal;
 	}
 	
+	private Rectangle wrappedRectForConstraint(TierDataConstraint tdc, Container parent) {
+		Rectangle retVal = cachedRects.get(tdc);
+		if(retVal == null) {
+			// layout has not been calculated
+			calcLayout(parent);
+			retVal = cachedRects.get(tdc);
+		}
+		return retVal;
+	}
+	
 	/*
-	 * Calculation methods
+	 * Calculation method for WRAPPED group mode
 	 */
 	private void calcLayout(Container parent) {
 		// get an ordered list of constraints
@@ -288,19 +333,42 @@ public class TierDataLayout implements LayoutManager2 {
 		int currentRow = 0;
 		rowRects.add(rowRect);
 		
+		int currentX = 0;
+		int currentY = 0;
+		
+		final Dimension size = parent.getSize();
+		
 		for(TierDataConstraint constraint:orderedConstraints) {
 			// check for a row change
 			if(currentRow != constraint.getRowIndex()) {
-				final int x = 0;
-				final int y = rowRect.y + rowRect.height + DEFAULT_V_GAP;
+				currentX = 0;
+				currentY = rowRect.y + rowRect.height + DEFAULT_V_GAP;
 				rowRect = new Rectangle();
-				rowRect.x = x;
-				rowRect.y = y;
+				rowRect.x = currentX;
+				rowRect.y = currentY;
 				rowRects.add(rowRect);
+				currentRow = constraint.getRowIndex();
 			}
 			
-			final Rectangle r = rectForConstaint(constraint, parent);
-			rowRect.add(r);
+			final Component comp = componentMap.get(constraint);
+			final Dimension prefSize = comp.getPreferredSize();
+			
+			int compX = currentX;
+			int compY = currentY;
+			int compWidth = constraint.getColumnIndex() == TierDataConstraint.TIER_LABEL_COLUMN ? DEFAULT_TIER_LABEL_WIDTH : prefSize.width + 2;
+			int compHeight = prefSize.height;
+			
+			if(compX + compWidth > size.width) {
+				compX = DEFAULT_TIER_LABEL_WIDTH + DEFAULT_H_GAP;
+				compY = rowRect.y + rowRect.height + DEFAULT_V_GAP;
+			}
+			
+			final Rectangle compRect = new Rectangle(compX, compY, compWidth, compHeight);
+			rowRect.add(compRect);
+			cachedRects.put(constraint, compRect);
+			
+			currentX = compRect.x + compRect.width + DEFAULT_H_GAP;
+			currentY = compRect.y;
 		}
 	}
 	
@@ -381,6 +449,6 @@ public class TierDataLayout implements LayoutManager2 {
 		
 		return y;
 	}
-
+	
 }
 

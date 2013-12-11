@@ -38,7 +38,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
-import ca.phon.media.MsFormatter;
 import ca.phon.ui.JFileLabel;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -50,6 +49,7 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.MsFormatter;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

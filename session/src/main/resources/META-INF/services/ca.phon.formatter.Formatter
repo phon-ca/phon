@@ -1,2 +1,3 @@
 ca.phon.session.AgeFormatter
 ca.phon.session.DateFormatter
+ca.phon.session.MediaSegmentFormatter

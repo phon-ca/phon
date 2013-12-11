@@ -1,9 +1,7 @@
-package ca.phon.media;
+package ca.phon.util;
 
 import java.text.Format;
 import java.text.ParseException;
-
-import ca.phon.util.MsFormat;
 
 
 /**

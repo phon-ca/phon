@@ -25,7 +25,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.media.MsFormatter;
 import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
@@ -36,6 +35,7 @@ import ca.phon.ui.JRangeSlider;
 import ca.phon.ui.MediaSegmentField;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.util.MsFormatter;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

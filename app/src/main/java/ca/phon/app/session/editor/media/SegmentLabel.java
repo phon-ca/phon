@@ -28,7 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
-import ca.phon.media.MsFormatter;
+import ca.phon.util.MsFormatter;
 
 /**
  * Simple component which displays two labels for

@@ -8,6 +8,9 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 
+/**
+ * Editor for IPA Transcriptions (validated and blind.)
+ */
 public class IPAGroupField extends GroupField<IPATranscript> {
 
 	private static final long serialVersionUID = 3938081453789426396L;

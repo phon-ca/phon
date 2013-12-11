@@ -63,8 +63,7 @@ public class MsFormat extends Format {
 		NumberFormat msNf = NumberFormat.getIntegerInstance();
 		msNf.setMinimumIntegerDigits(3);
 		
-		String minuteString = 
-			(numMinutes < 100 ? nf.format(numMinutes) : msNf.format(numMinutes)) + ":";
+		String minuteString = msNf.format(numMinutes) + ":";
 		
 		String secondString =
 			(numMinutes == 0 

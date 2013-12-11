@@ -32,8 +32,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import ca.phon.media.MsFormatter;
 import ca.phon.util.MsFormat;
+import ca.phon.util.MsFormatter;
 
 public class TimeBar extends JComponent {
 	

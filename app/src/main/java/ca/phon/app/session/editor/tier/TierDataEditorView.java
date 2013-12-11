@@ -3,6 +3,10 @@ package ca.phon.app.session.editor.tier;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
@@ -14,6 +18,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -21,6 +26,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -30,6 +36,7 @@ import javax.swing.event.DocumentListener;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -47,6 +54,8 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -60,21 +69,21 @@ public class TierDataEditorView extends EditorView {
 	
 	private final static String VIEW_NAME = "Record Data";
 	
+	/*
+	 * Common data for all records
+	 */
+	private JPanel topPanel;
+
 	/**
 	 * speaker selection
 	 */
 	private JComboBox speakerBox;
-	
+
 	/**
 	 * query exclusion
 	 */
 	private JCheckBox excludeFromSearchesBox;
 	private final static String excludeFromSearchesText = "Exclude from searches";
-	
-	/**
-	 * speaker tier
-	 */
-	private JPanel speakerTier;
 	
 	/** 
 	 * content pane
@@ -99,6 +108,9 @@ public class TierDataEditorView extends EditorView {
 		scroller.setBackground(Color.white);
 		add(scroller, BorderLayout.CENTER);
 		
+		final JPanel panel = getTopPanel();
+		add(panel, BorderLayout.NORTH);
+		
 		update();
 		setupEditorActions();
 	}
@@ -122,19 +134,15 @@ public class TierDataEditorView extends EditorView {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		final Record record = editor.getDataModel().getRecord(editor.getCurrentRecordIndex());
-		
-		final JLabel speakerLbl = new JLabel("Speaker");
-		speakerLbl.setHorizontalTextPosition(SwingConstants.RIGHT);
-		speakerLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(speakerLbl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, 0));
-		
-		final JPanel speakerTier = getSpeakerTier(record);
-		contentPane.add(speakerTier, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, 0));
+
+		// update speaker and query exclusion
+		speakerBox.setSelectedItem(record.getSpeaker());
+		excludeFromSearchesBox.setSelected(record.isExcludeFromSearches());
 		
 		final TierEditorFactory tierEditorFactory = new TierEditorFactory();
 		
 		final List<TierViewItem> tierView = session.getTierView();
-		int row = 1;
+		int row = 0;
 		for(TierViewItem tierItem:tierView) {
 			if(!tierItem.isVisible()) continue;
 			
@@ -164,6 +172,14 @@ public class TierDataEditorView extends EditorView {
 			
 			boolean isGrouped = tierDesc.isGrouped();
 			
+			// load tier font
+			final String fontString = tierItem.getTierFont();
+			Font tierFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
+					Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
+			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
+				tierFont = Font.decode(fontString);
+			}
+			
 			Tier<?> tier = record.getTier(tierName);
 			if(tier == null) {
 				tier = factory.createTier(tierDesc.getName(), tierDesc.getDeclaredType(), isGrouped);
@@ -173,26 +189,35 @@ public class TierDataEditorView extends EditorView {
 				for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
 					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, gIdx);
 					tierEditor.addTierEditorListener(tierEditorListener);
-					contentPane.add(tierEditor.getEditorComponent(), new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
+					final Component tierComp = tierEditor.getEditorComponent();
+					tierComp.setFont(tierFont);
+					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
 				}
 			} else {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, 0);
+				
 				tierEditor.addTierEditorListener(tierEditorListener);
-				contentPane.add(tierEditor.getEditorComponent(), new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
+				final Component tierComp = tierEditor.getEditorComponent();
+				tierComp.setFont(tierFont);
+				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 			}
 			row++;
 		}
 		revalidate();
 	}
 	
-	private JPanel getSpeakerTier(Record record) {
-		if(speakerTier == null) {
+	private JPanel getTopPanel() {
+		if(topPanel == null) {
+			final TierDataLayout tdl = (TierDataLayout)contentPane.getLayout();
+			final TierDataLayoutButtons layoutButtons = new TierDataLayoutButtons(contentPane, tdl);
+			
 			final SessionEditor editor = getEditor();
 			final Session session = editor.getSession();
 			
-			final FormLayout layout = new FormLayout("fill:pref:grow, pref", "pref");
-			speakerTier = new JPanel(layout);
-			speakerTier.setBackground(Color.white);
+			final FormLayout layout = new FormLayout(
+					"pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, right:pref",
+					"pref");
+			topPanel = new JPanel(layout);
 			
 			final DefaultComboBoxModel speakerBoxModel = new DefaultComboBoxModel();
 			for(Participant participant:session.getParticipants()) {
@@ -204,16 +229,15 @@ public class TierDataEditorView extends EditorView {
 			excludeFromSearchesBox = new JCheckBox(excludeFromSearchesText);
 			
 			final CellConstraints cc = new CellConstraints();
-			speakerTier.add(speakerBox, cc.xy(1,1));
-			speakerTier.add(excludeFromSearchesBox, cc.xy(2,1));
+			topPanel.add(new JLabel("Speaker"), cc.xy(1,1));
+			topPanel.add(speakerBox, cc.xy(2,1));
+			
+			topPanel.add(excludeFromSearchesBox, cc.xy(4, 1));
+			
+			topPanel.add(layoutButtons, cc.xy(7, 1));
 		}
 		
-		if(record.getSpeaker() != null) {
-			speakerBox.setSelectedItem(record.getSpeaker());
-			excludeFromSearchesBox.setSelected(record.isExcludeFromSearches());
-		}
-		
-		return speakerTier;
+		return topPanel;
 	}
 	
 	private final TierEditorListener tierEditorListener = new TierEditorListener() {
@@ -237,6 +261,15 @@ public class TierDataEditorView extends EditorView {
 			final Participant participant = (Participant)value;
 			retVal.setText(participant.getName());
 			return retVal;
+		}
+		
+	};
+	
+	private final ActionListener layoutChangeListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
 		}
 		
 	};
