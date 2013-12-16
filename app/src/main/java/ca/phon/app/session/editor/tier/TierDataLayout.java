@@ -90,6 +90,8 @@ public class TierDataLayout implements LayoutManager2 {
 
 	private final Map<TierDataConstraint, Component> componentMap = new HashMap<>();
 	
+	private final ArrayList<Rectangle> rowRects = new ArrayList<>();
+	
 	/**
 	 * cached size calculations
 	 */
@@ -98,7 +100,7 @@ public class TierDataLayout implements LayoutManager2 {
 	
 	private final AtomicReference<Dimension> prefSizeRef = new AtomicReference<>();
 	
-	private volatile GroupMode groupMode = GroupMode.WRAPPED;
+	private volatile GroupMode groupMode = GroupMode.ALIGNED;
 	
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
@@ -208,10 +210,12 @@ public class TierDataLayout implements LayoutManager2 {
 	public void invalidateLayout(Container target) {
 		cachedRects.clear();
 		prefSizeRef.getAndSet(null);
+		rowRects.clear();
 	}
 
 	@Override
 	public Dimension maximumLayoutSize(Container target) {
+		Dimension retVal = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 	}
 	
@@ -314,6 +318,11 @@ public class TierDataLayout implements LayoutManager2 {
 			calcLayout(parent);
 			retVal = cachedRects.get(tdc);
 		}
+		if(tdc.getColumnIndex() == TierDataConstraint.TIER_LABEL_COLUMN) {
+			// adjust row height
+			retVal.height = 
+					(tdc.getRowIndex() < rowRects.size() ? rowRects.get(tdc.getRowIndex()).height : 0);
+		}
 		return retVal;
 	}
 	
@@ -327,7 +336,7 @@ public class TierDataLayout implements LayoutManager2 {
 		Collections.sort(orderedConstraints);
 		
 		// keep a reference to each row's bounding rectangle
-		final List<Rectangle> rowRects = new ArrayList<>();
+		rowRects.clear();
 		Rectangle rowRect = new Rectangle();
 		rowRect.x = 0; rowRect.y = 0;
 		int currentRow = 0;
@@ -346,6 +355,7 @@ public class TierDataLayout implements LayoutManager2 {
 				rowRect = new Rectangle();
 				rowRect.x = currentX;
 				rowRect.y = currentY;
+				
 				rowRects.add(rowRect);
 				currentRow = constraint.getRowIndex();
 			}
@@ -358,7 +368,8 @@ public class TierDataLayout implements LayoutManager2 {
 			int compWidth = constraint.getColumnIndex() == TierDataConstraint.TIER_LABEL_COLUMN ? DEFAULT_TIER_LABEL_WIDTH : prefSize.width + 2;
 			int compHeight = prefSize.height;
 			
-			if(compX + compWidth > size.width) {
+			// wrap components
+			if(compX + compWidth > size.width && constraint.getColumnIndex() > TierDataConstraint.GROUP_START_COLUMN) {
 				compX = DEFAULT_TIER_LABEL_WIDTH + DEFAULT_H_GAP;
 				compY = rowRect.y + rowRect.height + DEFAULT_V_GAP;
 			}
@@ -404,9 +415,9 @@ public class TierDataLayout implements LayoutManager2 {
 		if(col == TierDataConstraint.TIER_LABEL_COLUMN) {
 			width = DEFAULT_TIER_LABEL_WIDTH;
 		} else if(col == TierDataConstraint.FLAT_TIER_COLUMN) {
-			width = Math.max(size.width, prefSize.width) - DEFAULT_TIER_LABEL_WIDTH - DEFAULT_H_GAP;
+			width = size.width - DEFAULT_TIER_LABEL_WIDTH - DEFAULT_H_GAP;
 		} else if(col == TierDataConstraint.FULL_TIER_COLUMN) {
-			width = Math.max(size.width, prefSize.width);			
+			width = Math.max(size.width, prefSize.width);		
 		} else {
 			width = calcAlignedGroupColumnWidth(col);
 		}

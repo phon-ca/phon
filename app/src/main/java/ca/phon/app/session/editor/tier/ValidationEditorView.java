@@ -4,12 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
@@ -19,6 +23,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -29,6 +34,10 @@ public class ValidationEditorView extends EditorView {
 	private final static String VIEW_NAME = "Transcript Validation";
 	
 	private JPanel contentPane = null;
+	
+	private JPanel topPanel;
+	
+	private JButton autoValidateButton;
 
 	public ValidationEditorView(SessionEditor editor) {
 		super(editor);
@@ -43,6 +52,22 @@ public class ValidationEditorView extends EditorView {
 		final TierDataLayout layout = new TierDataLayout();
 		contentPane.setLayout(layout);
 		
+		final FormLayout topLayout = new FormLayout("pref, fill:pref:grow, right:pref", "pref");
+		topPanel = new JPanel(topLayout);
+		
+		final PhonUIAction autoValidateAct = new PhonUIAction(this, "onAutoValidate");
+		autoValidateAct.putValue(PhonUIAction.NAME, "Auto Validate");
+		autoValidateAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Perform automatic validation");
+		autoValidateButton = new JButton(autoValidateAct);
+		
+		final TierDataLayoutButtons tdlb = new TierDataLayoutButtons(contentPane, layout);
+		
+		final CellConstraints cc = new CellConstraints();
+		topPanel.add(autoValidateButton, cc.xy(1,1));
+		topPanel.add(tdlb, cc.xy(3,1));
+		
+		add(topPanel, BorderLayout.NORTH);
+
 		final JScrollPane scroller = new JScrollPane(contentPane);
 		add(scroller, BorderLayout.CENTER);
 		

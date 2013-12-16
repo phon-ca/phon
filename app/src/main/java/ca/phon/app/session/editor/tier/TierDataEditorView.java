@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
@@ -30,6 +32,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -44,6 +48,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
+import ca.phon.app.session.editor.undo.RecordExcludeEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.Group;
 import ca.phon.session.Participant;
@@ -225,8 +231,11 @@ public class TierDataEditorView extends EditorView {
 			}
 			speakerBox = new JComboBox(speakerBoxModel);
 			speakerBox.setRenderer(speakerRenderer);
+			speakerBox.addItemListener(speakerListener);
 			
-			excludeFromSearchesBox = new JCheckBox(excludeFromSearchesText);
+			final PhonUIAction excludeAct = new PhonUIAction(this, "onExclude");
+			excludeAct.putValue(PhonUIAction.NAME, excludeFromSearchesText);
+			excludeFromSearchesBox = new JCheckBox(excludeAct);
 			
 			final CellConstraints cc = new CellConstraints();
 			topPanel.add(new JLabel("Speaker"), cc.xy(1,1));
@@ -265,14 +274,28 @@ public class TierDataEditorView extends EditorView {
 		
 	};
 	
-	private final ActionListener layoutChangeListener = new ActionListener() {
-		
+	private final ItemListener speakerListener = new ItemListener() {
+
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			
+		public void itemStateChanged(ItemEvent e) {
+			final Object selectedObj = speakerBox.getSelectedItem();
+			final SessionEditor editor = getEditor();
+			final Record record = editor.currentRecord();
+			if(selectedObj != null) {
+				final Participant selectedSpeaker = Participant.class.cast(selectedObj);
+				final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(editor, record, selectedSpeaker);
+				editor.getUndoSupport().postEdit(edit);
+			}
 		}
 		
 	};
+	
+	public void onExclude() {
+		final boolean exclude = excludeFromSearchesBox.isSelected();
+		final RecordExcludeEdit edit = new RecordExcludeEdit(getEditor(), getEditor().currentRecord(), exclude);
+		getEditor().getUndoSupport().postEdit(edit);
+	}
+	
 	
 	/*
 	 * Editor Actions

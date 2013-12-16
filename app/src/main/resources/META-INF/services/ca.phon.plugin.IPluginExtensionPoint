@@ -19,3 +19,4 @@ ca.phon.app.session.editor.tier.DefaultTierEditorExtension
 ca.phon.app.session.editor.tier.OrthographyTierEditorExtension
 ca.phon.app.session.editor.tier.IPATierEditorExtension
 ca.phon.app.session.editor.tier.SegmentTierEditorExtension
+ca.phon.app.session.editor.tier.NotesFieldExtension

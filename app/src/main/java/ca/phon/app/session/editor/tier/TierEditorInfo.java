@@ -20,6 +20,16 @@ import ca.phon.plugin.IPluginExtensionPoint;
 @Target(ElementType.TYPE)
 public @interface TierEditorInfo {
 
+	/**
+	 * Tier type
+	 */
 	public Class<?> type() default String.class;
+	
+	/**
+	 * Tier name (optional)
+	 * If specified, the editor will only be used
+	 * for the specified tier name.
+	 */
+	public String tierName() default "";
 	
 }

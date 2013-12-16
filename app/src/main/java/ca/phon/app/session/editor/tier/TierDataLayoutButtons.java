@@ -101,6 +101,9 @@ public class TierDataLayoutButtons extends JComponent {
 		
 		getContainer().invalidate();
 		getLayout().layoutContainer(getContainer());
+		if(getContainer().getParent() != null) {
+			getContainer().getParent().validate();
+		}
 	}
 	
 	public void wrapGroups() {
@@ -110,6 +113,9 @@ public class TierDataLayoutButtons extends JComponent {
 		
 		getContainer().invalidate();
 		getLayout().layoutContainer(getContainer());
+		if(getContainer().getParent() != null) {
+			getContainer().getParent().validate();
+		}
 	}
 	
 	

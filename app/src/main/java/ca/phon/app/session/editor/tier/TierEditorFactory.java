@@ -23,6 +23,8 @@ public class TierEditorFactory {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TierEditor createTierEditor(SessionEditor editor, Tier<?> tier, int group) {
+		TierEditor retVal = null;
+		
 		final Class<?> tierType = tier.getDeclaredType();
 		
 		final List<IPluginExtensionPoint<TierEditor>> extPts = 
@@ -31,13 +33,20 @@ public class TierEditorFactory {
 			final TierEditorInfo info = extPt.getClass().getAnnotation(TierEditorInfo.class);
 			if(info != null) {
 				if(info.type() == tierType) {
-					return extPt.getFactory().createObject(editor, tier, group);
+					retVal = extPt.getFactory().createObject(editor, tier, group);
+					// don't continue to look use this editor
+					if(info.tierName().equalsIgnoreCase(tier.getName())) {
+						break;
+					}
 				}
 			}
 		}
 		
 		// create a generic tier editor
-		return new GroupField(tier, group);
+		if(retVal == null)
+			retVal = new GroupField(tier, group);
+		
+		return retVal;
 	}
-
+	
 }
