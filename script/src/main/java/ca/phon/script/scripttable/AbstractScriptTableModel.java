@@ -33,6 +33,7 @@ import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.scripttable.io.ObjectFactory;
 import ca.phon.script.scripttable.io.ScriptTable;
 import ca.phon.script.scripttable.io.ScriptTableColumn;
@@ -104,6 +105,8 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		if(cScript != null) {
 			try {
 				final Scriptable scope = cScript.getEvaluatedScope();
+				final Scriptable parentScope = createCellScope(cScript, 0, col);
+				scope.setParentScope(parentScope);
 				
 				if(cScript.hasFunction(scope, "getName", 0)) {
 					Object getNameVal = cScript.callFunction(scope, "getName", new Object[0]);
@@ -222,23 +225,14 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		if(cScript != null) {
 			final Context ctx = PhonScriptContext.enter();
 			try {
-				final WrapFactory wf = ctx.getWrapFactory();
-				final Scriptable parentScope = cScript.createBasicScope();
-				// setup column mappings
-				final Map<String, Object> columnMappings = getMappingsAt(row, col);
-				for(String key:columnMappings.keySet()) {
-					final Object val = columnMappings.get(key);
-					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
-					parentScope.put(key, parentScope, wrappedVal);
-				}
+				final Scriptable parentScope = createCellScope(cScript, row, col);
 				final Scriptable scope = cScript.getEvaluatedScope();
 				scope.setParentScope(parentScope);
-				final Scriptable exports = cScript.getExports(scope);
 				
 				if(cScript.hasFunction(scope, "getValue", 0)) {
 					retVal = cScript.callFunction(scope, "getValue", new Object[0]);
-				} else if(exports.has("retVal", scope)) {
-					retVal = exports.get("retVal", scope);
+				} else if(scope.has("retVal", scope)) {
+					retVal = scope.get("retVal", scope);
 				} else {
 					retVal = cScript.exec(scope);
 				}
@@ -276,6 +270,35 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		if(columnStaticMappings.containsKey(col)) {
 			retVal.putAll(columnStaticMappings.get(col));
 		}
+		return retVal;
+	}
+	
+	/**
+	 * Create a scope with all of the static mapping for a column setup.
+	 * 
+	 * @param row
+	 * @param col
+	 */
+	protected Scriptable createCellScope(PhonScriptContext ctx, int row, int col) {
+		final Context context = PhonScriptContext.enter();
+		final WrapFactory wf = context.getWrapFactory();
+		
+		final Scriptable retVal = ctx.createBasicScope();
+		final Map<String, Object> mappings = getMappingsAt(row, col);
+		for(String key:mappings.keySet()) {
+			final Object obj = mappings.get(key);
+			final Object wrappedObj = wf.wrap(context, retVal, obj, null);
+			ScriptableObject.putProperty(retVal, key, wrappedObj);
+		}
+		
+		try {
+			ctx.installParams(retVal);
+		} catch(PhonScriptException pse) {
+			LOGGER.log(Level.WARNING, pse.getLocalizedMessage(), pse);
+		}
+		
+		PhonScriptContext.exit();
+		
 		return retVal;
 	}
 	

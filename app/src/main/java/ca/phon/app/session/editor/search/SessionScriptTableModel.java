@@ -53,21 +53,21 @@ public class SessionScriptTableModel extends AbstractScriptTableModel {
 			+ "		{label, \"Output speaker (participant) name\", \"\"};\n"
 			+ "*/\n" 
 			+ "function getName() { return \"Speaker\"; }\n"
-			+ "\n" + "record.speaker.name\n" + "";
+			+ "function getValue() { return record.speaker.name; }\n" + "";
 
 	public final static String SPEAKER_AGE_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) age (YY;MM.DD)\", \"\"};\n"
 			+ "*/\n" 
 			+ "function getName() { return \"Record #\"; }\n"
-			+ "\n" + "record.speaker.age\n" + "";
+			+ "function getValue() { return record.speaker.age; }\n" + "";
 
 	public final static String SPEAKER_GENDER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) gender\", \"\"};\n"
 			+ "*/\n"
 			+ "function getName() { return \"Speaker Gender\"; }\n"
-			+ "\n" + "record.speaker.sex\n" + "";
+			+ "function getValue() { return record.speaker.sex; }\n" + "";
 	
 	private final static String RECORD_TIER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
@@ -77,65 +77,13 @@ public class SessionScriptTableModel extends AbstractScriptTableModel {
 			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
 			+ "*/\n" + "\n" + "retVal = \"\";\n"
 			+ "function getName() { return tierName; }\n" 
+			+ "function getValue() {\n "
+			+ "retVal = \"\";\n"
 			+ "retVal += record.getTier(tierName).toString();\n" + "\n"
 			+ "if(removeGroupMarkers) {\n"
 			+ "	retVal = retVal.replace(/\\[/g, \"\").replace(/\\]/g, \"\");\n"
-			+ "}\n" + "";
-	
-	public final static String SYLLABIFICATION_SCRIPT = "/*\n"
-			+ "params = {separator, \"Information\", false},\n"
-			+ "		{label, \"Output syllabification for specified tier\", \"\"},\n"
-			+ "		{separator, \"Options\", false},\n"
-			+ "			{enum, tierName, \"IPA Target\"|\"IPA Actual\", ${TIER}, \"Tier name:\"},\n"
-			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
-			+ "function getName() { return \"Syllabification\";}\n"
-			+ "*/\n" + "\n" + "var retVal = \"\";\n" + "\n"
-			+ "for(grpIdx = 0; grpIdx < record.numberOfGroups; grpIdx++)\n"
-			+ "{\n" + "	var ipaGrp = record.getGroup(tierName, grpIdx);\n"
-			+ "\n" + "	retVal += (grpIdx > 0 ? \" \" : \"\");\n"
-			+ "	if(!removeGroupMarkers) retVal += \"[\";\n"
-			+ "	for(wIdx = 0; wIdx < ipaGrp.numberOfWords; wIdx++) \n" + "	{\n"
-			+ "		var ipaWrd = ipaGrp.getWord(wIdx);\n" + "\n"
-			+ "		retVal += (wIdx > 0 ? \" \" : \"\");\n"
-			+ "		for(sIdx = 0; sIdx < ipaWrd.numberOfSyllables; sIdx++)\n"
-			+ "		{\n" + "			var ipaSyll = ipaWrd.getSyllable(sIdx);\n" + "\n"
-			+ "			retVal += (sIdx > 0 ? \".\" : \"\");\n"
-			+ "			for(pIdx = 0; pIdx < ipaSyll.numberOfPhones; pIdx++)\n"
-			+ "			{\n" + "				var phone = ipaSyll.getPhone(pIdx);\n" + "\n"
-			+ "				retVal += (pIdx > 0 ? \";\" : \"\");\n"
-			+ "				retVal += phone + \":\" + phone.scType.identifier;\n"
-			+ "			}\n" + "		}\n" + "	}\n" + "\n"
-			+ "	if(!removeGroupMarkers) retVal += \"]\";\n" + "}";
-
-	public final static String ALIGNMENT_SCRIPT = "/*\n"
-			+ "params = {separator, \"Information\", false},\n"
-			+ "		{label, \"Output phone alignment\", \"\"},\n"
-			+ "		{separator, \"Options\", false},\n"
-			+ "			{bool, includeConstituentType, false, \"Include syllable constituent\", \"Syllabification:\"},\n"
-			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
-			+ "function getName() { return \"Alignment\"; }\n"
-			+ "*/\n" + "\n" + "var retVal = \"\";\n" + "\n"
-			+ "for(grpIdx = 0; grpIdx < record.numberOfGroups; grpIdx++)\n"
-			+ "{\n" + "	alignmentChar = \"\\u2194\";\n"
-			+ "	ipaGrp = record.getGroup(\"IPA Target\", grpIdx);\n" + "\n"
-			+ "	retVal += (grpIdx > 0 ? \" \" : \"\");\n"
-			+ "	if(!removeGroupMarkers) retVal += \"[\";\n" + "\n"
-			+ "	// print alignment by groups\n"
-			+ "	alignment = record.getAlignmentData(ipaGrp);\n"
-			+ "	if(!alignment) continue;\n"
-			+ "	alignmentLength = alignment[0].length;\n" + "\n"
-			+ "	for(aIdx = 0; aIdx < alignmentLength; aIdx++)\n" + "	{\n"
-			+ "		topPhone = alignment[0][aIdx];\n"
-			+ "		btmPhone = alignment[1][aIdx];\n" + "\n"
-			+ "		retVal += (aIdx > 0 ? \";\" : \"\");\n"
-			+ "		retVal += (topPhone ? topPhone : \"_\");\n"
-			+ "		if(topPhone && includeConstituentType)\n"
-			+ "			retVal += \":\" + topPhone.scType.identifier;\n"
-			+ "		retVal += alignmentChar;\n"
-			+ "		retVal += (btmPhone ? btmPhone : \"_\");\n"
-			+ "		if(btmPhone && includeConstituentType)\n"
-			+ "			retVal += \":\" + btmPhone.scType.identifier;\n" + "	}\n"
-			+ "\n" + "	if(!removeGroupMarkers) retVal += \"]\";\n" + "}";
+			+ "}\n" 
+			+ "return retVal; }\n";
 	
 	public SessionScriptTableModel(Session session) {
 		super();

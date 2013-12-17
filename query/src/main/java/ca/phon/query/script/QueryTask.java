@@ -111,8 +111,7 @@ public class QueryTask extends PhonTask {
 		
 		// setup script
 		final QueryScriptContext ctx = getQueryScript().getQueryContext();
-		final Scriptable parentScope = ctx.createImporterScope();
-		final Scriptable scope = ctx.getEvaluatedScope(parentScope);
+		final Scriptable scope = ctx.getEvaluatedScope();
 		ctx.installParams(scope);
 		
 		// check for query_record - required
