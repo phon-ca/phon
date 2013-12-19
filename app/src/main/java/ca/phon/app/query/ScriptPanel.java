@@ -21,6 +21,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -36,9 +38,11 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import ca.phon.query.script.QueryScript;
-import ca.phon.script.params.ParamListener;
+import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.form.ParamPanelFactory;
+import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.ui.ParamPanelFactory;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
@@ -57,6 +61,11 @@ import ca.phon.util.icons.IconSize;
  */
 public class ScriptPanel extends JPanel {
 	
+	private static final long serialVersionUID = 3335240056447554685L;
+
+	private static final Logger LOGGER = Logger
+			.getLogger(ScriptPanel.class.getName());
+	
 	/**
 	 * Property for the script text
 	 */
@@ -70,7 +79,7 @@ public class ScriptPanel extends JPanel {
 	/**
 	 * Script object
 	 */
-	private QueryScript script;
+	private EditableQueryScript script;
 	
 	/**
 	 * Script editor
@@ -98,7 +107,7 @@ public class ScriptPanel extends JPanel {
 	/**
 	 */
 	public ScriptPanel() {
-		this(new QueryScript());
+		this(new QueryScript(""));
 	}
 	
 	/**
@@ -107,7 +116,7 @@ public class ScriptPanel extends JPanel {
 	 * @param script
 	 */
 	public ScriptPanel(QueryScript script) {
-		this.script = script;
+		this.script = new EditableQueryScript(script);
 	
 		init();
 	}
@@ -148,13 +157,13 @@ public class ScriptPanel extends JPanel {
 	
 	public void setScript(QueryScript script) {
 		QueryScript oldScript = this.script;
-		this.script = script;
-		for(ScriptParam param:oldScript.getScriptParams())
-			param.removeListener(paramListener);
+//		this.script = script;
+//		for(ScriptParam param:oldScript.getScriptParams())
+//			param.removeListener(paramListener);
 		updateParamPanel();
 //		scriptEditor.setDocument(new RSyntaxQueryDocument(this.script));
 		scriptEditor.getDocument().removeDocumentListener(scriptDocListener);
-		scriptEditor.setText(script.getScript(false));
+		scriptEditor.setText(script.getScript());
 		scriptEditor.setCaretPosition(0);
 		scriptEditor.getDocument().addDocumentListener(scriptDocListener);
 		super.firePropertyChange(SCRIPT_PROP, true, false);
@@ -166,10 +175,21 @@ public class ScriptPanel extends JPanel {
 	
 	private void updateParamPanel() {
 		paramPanel.removeAll();
-		ScriptParam[] params = script.getScriptParams();
-		for(ScriptParam p:params)
-			p.addListener(paramListener);
-		JComponent form = ParamPanelFactory.buildScriptParamPanel(params);
+//		ScriptParam[] params = script.getScriptParams();
+//		for(ScriptParam p:params)
+//			p.addListener(paramListener);
+		final PhonScriptContext ctx = script.getContext();
+		ScriptParameters scriptParams = new ScriptParameters();
+		try {
+			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		final ParamPanelFactory factory = new ParamPanelFactory();
+		scriptParams.accept(factory);
+		
+		final JPanel form = factory.getForm();
 		JScrollPane formScroller = new JScrollPane(form);
 		formScroller.getVerticalScrollBar().setUnitIncrement(10);
 		paramPanel.add(formScroller, BorderLayout.CENTER);
@@ -188,7 +208,7 @@ public class ScriptPanel extends JPanel {
 		// setup editor and save button
 		scriptPanel = new JPanel(new BorderLayout());
 		scriptEditor = new RSyntaxTextArea();
-		scriptEditor.setText(script.getScript(false));
+		scriptEditor.setText(script.getScript());
 		scriptEditor.setColumns(20);
 		scriptEditor.setCaretPosition(0);
 		RTextScrollPane scriptScroller = new RTextScrollPane(scriptEditor);
@@ -231,9 +251,9 @@ public class ScriptPanel extends JPanel {
 	 */
 	public void showForm() {
 		// update script params
-		for(ScriptParam param:script.getScriptParams()) 
-			param.removeListener(paramListener);
-		script.updateScriptParams();
+//		for(ScriptParam param:script.getScriptParams()) 
+//			param.removeListener(paramListener);
+//		script.updateScriptParams();
 		// swap editor with updated param panel
 		remove(scriptPanel);
 		add(paramPanel, BorderLayout.CENTER);
@@ -292,19 +312,19 @@ public class ScriptPanel extends JPanel {
 //		revalidate();
 //	}
 	
-	/**
-	 * Listener for all params
-	 */
-	private ParamListener paramListener = new ParamListener() {
-
-		@Override
-		public void onParamValueChanged(String paramid, Object oldvalue,
-				Object newvalue) {
-			String paramPropName = PARAM_PREFIX + "_" + paramid;
-			firePropertyChange(paramPropName, oldvalue, newvalue);
-		}
-		
-	};
+//	/**
+//	 * Listener for all params
+//	 */
+//	private ParamListener paramListener = new ParamListener() {
+//
+//		@Override
+//		public void onParamValueChanged(String paramid, Object oldvalue,
+//				Object newvalue) {
+//			String paramPropName = PARAM_PREFIX + "_" + paramid;
+//			firePropertyChange(paramPropName, oldvalue, newvalue);
+//		}
+//		
+//	};
 	
 	/**
 	 * Listener for script document changes

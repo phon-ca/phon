@@ -29,6 +29,10 @@ public class LabelScriptParam extends ScriptParam {
 		setParamDesc(desc);
 	}
 	
+	public String getLabelText() {
+		return lblText;
+	}
+
 	@Override
 	public String getStringRepresentation() {
 		String retVal = "{";

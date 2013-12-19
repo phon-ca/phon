@@ -33,5 +33,5 @@ ca.phon.app.project.ProjectArchiveEP
 #ca.phon.app.query.ResultSetEP
 # Session Editor
 ca.phon.app.session.editor.SessionEditorEP
-
-
+# Query Editor
+ca.phon.app.query.QueryEditorEP

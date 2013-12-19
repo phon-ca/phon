@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Script;
@@ -37,12 +38,17 @@ public class BasicScript implements PhonScript {
 	
 	private final List<URI> requirePaths = new ArrayList<>();
 	
+	/**
+	 * Used by sub-classes to allow direct access to buffer
+	 * 
+	 * @return script buffer
+	 */
 	protected StringBuffer getBuffer() {
 		return buffer;
 	}
 	
 	// maintain a single context
-	private PhonScriptContext context = null;
+	private AtomicReference<PhonScriptContext> contextRef = new AtomicReference<>();
 	
 	public BasicScript(String text) {
 		super();
@@ -63,10 +69,20 @@ public class BasicScript implements PhonScript {
 
 	@Override
 	public PhonScriptContext getContext() {
-		if(context == null) {
-			context = new PhonScriptContext(this);
+		if(contextRef.get() == null) {
+			final PhonScriptContext context = new PhonScriptContext(this);
+			contextRef.getAndSet(context);
 		}
-		return context;
+		return contextRef.get();
+	}
+	
+	/**
+	 * Resets query context.
+	 * 
+	 * @return the current context (before reset)
+	 */
+	public PhonScriptContext resetContext() {
+		return contextRef.getAndSet(null);
 	}
 
 	@Override

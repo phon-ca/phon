@@ -18,12 +18,15 @@
 
 package ca.phon.query.db.xml;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.joda.time.DateTime;
 
 import ca.phon.query.db.Query;
 import ca.phon.query.db.Script;
@@ -99,14 +102,17 @@ public class XMLQuery implements Query, JAXBWrapper<QueryType> {
 	}
 
 	@Override
-	public GregorianCalendar getDate() {
-		return query.getDate().toGregorianCalendar();
+	public DateTime getDate() {
+		final XMLGregorianCalendar xmlDate = query.getDate();
+		// ensure timezone neutral
+		xmlDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+		return new DateTime(xmlDate);
 	}
 
 	@Override
-	public void setDate(GregorianCalendar date) {
+	public void setDate(DateTime date) {
 		try {
-			query.setDate( DatatypeFactory.newInstance().newXMLGregorianCalendar(date) );
+			query.setDate( DatatypeFactory.newInstance().newXMLGregorianCalendar(date.toGregorianCalendar()) );
 		} catch(DatatypeConfigurationException e) {
 		}
 	}

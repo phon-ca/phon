@@ -68,8 +68,11 @@ import ca.phon.query.report.io.ResultListingField;
 import ca.phon.query.report.io.ResultListingFormatType;
 import ca.phon.query.report.io.ScriptParameter;
 import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptContext;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.SystemTierType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -450,8 +453,13 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		ScriptPanel scriptPanel = scriptPanels.get(field);
 		if(scriptPanel == null) {
 			QueryScript qs = new QueryScript(field.getFieldValue().getScript());
-			
-			ScriptParam[] params = qs.getScriptParams();
+			QueryScriptContext ctx = qs.getQueryContext();
+			ScriptParameters params = new ScriptParameters();
+			try {
+				params = ctx.getScriptParameters(ctx.getEvaluatedScope());
+			} catch (PhonScriptException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 			// setup script parameters
 			for(ScriptParam param:params) {
 				for(String paramId:param.getParamIds()) {
@@ -635,7 +643,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 //			String value = (evt.getNewValue() != null ? evt.getNewValue().toString() : "");
 			if(propName.equals(ScriptPanel.SCRIPT_PROP)) {
 				ScriptPanel panel = (ScriptPanel)evt.getSource();
-				field.getFieldValue().setScript(panel.getScript().getScript(false));
+				field.getFieldValue().setScript(panel.getScript().getScript());
 			} else if(propName.startsWith(ScriptPanel.PARAM_PREFIX)) {
 				String paramid = propName.substring(ScriptPanel.PARAM_PREFIX.length()+1);
 				String value = (evt.getNewValue() != null ? evt.getNewValue().toString() : "");

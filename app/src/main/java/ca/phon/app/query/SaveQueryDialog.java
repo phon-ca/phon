@@ -58,6 +58,7 @@ import org.jdesktop.swingx.JXTable;
 
 import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.params.EnumScriptParam;
@@ -302,7 +303,8 @@ public class SaveQueryDialog extends JDialog {
 			try {
 				QueryScriptLibrary.saveScriptToFile(queryScript, saveFile.getAbsolutePath());
 				
-				queryScript.setLocation(saveFile.toURI().toURL());
+				final QueryName queryName = new QueryName(saveFile.toURI().toURL());
+				queryScript.putExtension(QueryName.class, queryName);
 			} catch (IOException ex) {
 				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 				

@@ -75,6 +75,10 @@ public class QueryScript extends LazyQueryScript {
 	
 	public QueryScript(URL url) {
 		super(url);
+		
+		final QueryName queryName = new QueryName(url);
+		putExtension(QueryName.class, queryName);
+		
 		setupLibraryFolders();
 	}
 	

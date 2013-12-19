@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.InitInfo;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -122,13 +122,13 @@ public class ResultSetEP implements IPluginEntryPoint {
 	}
 	
 	private void openSession(Project project, ResultSet rs) {
-		final InitInfo initInfo = new InitInfo();
-		initInfo.put("project", project);
-		initInfo.put("corpus", rs.getCorpus());
-		initInfo.put("session", rs.getSession());
+		final EntryPointArgs epArgs = new EntryPointArgs();
+		epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
+		epArgs.put(EntryPointArgs.CORPUS_NAME, rs.getCorpus());
+		epArgs.put(EntryPointArgs.SESSION_NAME, rs.getSession());
 		
 		try {
-			PluginEntryPointRunner.executePlugin("RecordEditor", initInfo);
+			PluginEntryPointRunner.executePlugin("RecordEditor", epArgs);
 		} catch (PluginException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}

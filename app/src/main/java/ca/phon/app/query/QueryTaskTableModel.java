@@ -112,9 +112,9 @@ public class QueryTaskTableModel extends AbstractTableModel {
 		else if(columnIndex == 1)
 			return task.getStatus();
 		else if(columnIndex == 2)
-			return task.getProperty(QueryTask.PROG_PROP);
+			return task.getProperty(QueryTask.PROGRESS_PROP);
 		else if(columnIndex == 3) {
-			ResultSet s = task.getSearchResults();
+			ResultSet s = task.getResultSet();
 			if(s != null)
 				return "" + s.size();
 			else 

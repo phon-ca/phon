@@ -22,6 +22,8 @@ import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
+import org.joda.time.DateTime;
+
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
@@ -40,7 +42,7 @@ public class XMLQueryFactory implements QueryFactory {
 		// Ensure certain attributes exist with default values 
 		XMLQuery query = new XMLQuery();
 		query.setUUID(UUID.randomUUID());
-		query.setDate(new GregorianCalendar());
+		query.setDate(DateTime.now());
 		return query;
 	}
 	
@@ -66,7 +68,7 @@ public class XMLQueryFactory implements QueryFactory {
 		XMLQuery query = new XMLQuery();
 		query.setName(String.format("query%03d", max));
 		query.setUUID(UUID.randomUUID());
-		query.setDate(new GregorianCalendar());
+		query.setDate(DateTime.now());
 		return query;
 	}
 

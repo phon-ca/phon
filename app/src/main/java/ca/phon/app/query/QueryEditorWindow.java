@@ -71,6 +71,7 @@ import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.params.ScriptParam;
@@ -156,10 +157,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		
 		undoManager = new UndoManager();
 		scriptEditor = new ScriptPanel(script);
-//		if(script.getScriptParams().length > 0) {
-//			// show form
-//			scriptEditor.showForm();
-//		}
 		
 		init();
 	}
@@ -269,7 +266,10 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		editorPanel.add(bottomPanel, BorderLayout.SOUTH);
 
 		editorTabs = new JTabbedPane();
-		editorTabs.add("Script : " + scriptEditor.getScript().getName(), editorPanel);
+		final QueryScript script = scriptEditor.getScript();
+		final QueryName queryName = script.getExtension(QueryName.class);
+		final String name = (queryName != null ? queryName.getName() : "untitled");
+		editorTabs.add("Script : " + name, editorPanel);
 		
 		retVal.add(editorTabs, BorderLayout.CENTER);
 		return retVal;
@@ -320,17 +320,20 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	private void updateComponents() {
-		final URL location = scriptEditor.getScript().getLocation();
+		final QueryScript script = scriptEditor.getScript();
+		final QueryName queryName = script.getExtension(QueryName.class);
+		
+		final URL location = (queryName != null ? queryName.getLocation() : null);
 		String title = "";
 		if(location == null) {
-			title = "Untitled";
+			title = "untitled";
 		} else {
 			title = (new PathExpander()).compressPath(location.getFile());
 		}
-		setWindowName(location + (hasUnsavedChanges() ? " *" : ""));
+		setWindowName(title + (hasUnsavedChanges() ? " *" : ""));
 		
-		final QueryScript qs = scriptEditor.getScript();
-		final String scriptTitle = "Query : " + qs.getName() + (hasUnsavedChanges() ? " *" : "");
+		final String name = (queryName != null ? queryName.getName() : "untitled");
+		final String scriptTitle = "Query : " + name + (hasUnsavedChanges() ? " *" : "");
 		
 		editorTabs.setTitleAt(0, scriptTitle);
 		saveButton.setEnabled(isModified());
@@ -342,7 +345,12 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	 * 
 	 */
 	public String getCurrentFile() {
-		return scriptEditor.getScript().getLocation().toString();
+		final QueryScript script = scriptEditor.getScript();
+		final QueryName queryName = script.getExtension(QueryName.class);
+		
+		final URL url = (queryName != null ? queryName.getLocation() : null);
+		final String retVal = (url != null ? url.getPath() : null);
+		return retVal;
 	}
 	
 	/**
@@ -501,7 +509,11 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		
 		dialog.setVisible(true);
 		
-		if(scriptEditor.getScript().getLocation() != null) {
+		final QueryScript script = scriptEditor.getScript();
+		final QueryName queryName = script.getExtension(QueryName.class);
+		final URL location = (queryName != null ? queryName.getLocation() : null);
+		
+		if(location != null) {
 			setModified(false);
 			updateComponents();
 		}
@@ -545,22 +557,20 @@ public class QueryEditorWindow extends CommonModuleFrame {
         errDisplay.addLogger(LOGGER);
         
         final PhonWorkerGroup workerGroup = new PhonWorkerGroup(1);
-        // create a copy of the search script
         final QueryScript script = scriptEditor.getScript();
-        script.setLocation(scriptEditor.getScript().getLocation());
-        ScriptParam.copyParams(scriptEditor.getScript().getScriptParams(), script.getScriptParams());
-        
+
         final List<SessionLocation> selectedSessions = sessionSelector.getSelectedSessions();
         final QueryRunnerPanel queryRunnerPanel = new QueryRunnerPanel(getProject(), script, selectedSessions);
         
-        String queryName = scriptEditor.getScript().getName();
+        final QueryName queryName = script.getExtension(QueryName.class);
+        final String name = (queryName != null ? queryName.getName() : "untitled");
 //		if(queryName.endsWith(".js")) {
 //			queryName = queryName.substring(0, queryName.length()-3);
 //		} else if(queryName.endsWith(".xml")) {
 //			queryName = queryName.substring(0, queryName.length()-4);
 //		}
 		
-		String tabName = "Results : " + queryName;
+		String tabName = "Results : " + name;
 		editorTabs.addTab(tabName, queryRunnerPanel);
 		editorTabs.setSelectedIndex(editorTabs.getTabCount()-1);
 		
@@ -703,7 +713,8 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	public String getScript() {
-		return scriptEditor.getScript().getScript(false);
+		final QueryScript script = scriptEditor.getScript();
+		return script.getScript();
 	}
 	
 	@Override

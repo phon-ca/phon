@@ -16,10 +16,13 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
+
 /**
  * 
  */
-public class ScriptParameters extends ArrayList<ScriptParam> {
+public class ScriptParameters extends ArrayList<ScriptParam> implements Visitable<ScriptParam> {
 
 	private static final long serialVersionUID = -7240889391306198318L;
 
@@ -45,7 +48,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> {
 		if(matcher.find()) {
 			return matcher.group(1);
 		} else {
-			return null;
+			return "";
 		}
 	}
 	
@@ -196,6 +199,12 @@ public class ScriptParameters extends ArrayList<ScriptParam> {
 		}
 
 		return retVal;
+	}
+
+	@Override
+	public void accept(Visitor<ScriptParam> visitor) {
+		for(ScriptParam param:this)
+			visitor.visit(param);
 	}
 	
 }

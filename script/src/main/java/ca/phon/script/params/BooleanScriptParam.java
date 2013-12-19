@@ -47,6 +47,10 @@ public class BooleanScriptParam extends ScriptParam {
 		return retVal;
 	}
 
+	public String getLabelText() {
+		return labelText;
+	}
+
 	@Override
 	public void setValue(String paramId, Object val) {
 		if(val == null) {

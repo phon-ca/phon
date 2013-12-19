@@ -30,8 +30,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import ca.phon.query.db.Query;
+import ca.phon.session.DateFormatter;
 import ca.phon.ui.StarBox;
-import ca.phon.util.PhonDateFormat;
 import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -43,6 +43,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class EditQueryPanel extends JPanel {
 	
+	private static final long serialVersionUID = -6143337704518903828L;
+
 	/**
 	 * Query 
 	 */
@@ -183,14 +185,15 @@ public class EditQueryPanel extends JPanel {
 	}
 
 	private void updateForm() {
-		final PhonDateFormat dateFormat = 
-				new PhonDateFormat(PhonDateFormat.YEAR_LONG);
+//		final PhonDateFormat dateFormat = 
+//				new PhonDateFormat(PhonDateFormat.YEAR_LONG);
 		if(getQuery() != null) {
 			queryNameField.setText(getQuery().getName());
 			queryCommentsArea.setText(getQuery().getComments());
 			uuidLabel.setText(getQuery().getUUID().toString());
 			starBox.setSelected(getQuery().isStarred());
-			dateLabel.setText(dateFormat.format(getQuery().getDate()));
+			final String dateText = DateFormatter.dateTimeToString(getQuery().getDate());
+			dateLabel.setText(dateText);
 		}
 	}
 

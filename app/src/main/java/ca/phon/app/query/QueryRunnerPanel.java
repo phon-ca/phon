@@ -54,6 +54,7 @@ import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.joda.time.DateTime;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -71,9 +72,13 @@ import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
 import ca.phon.query.db.Script;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptContext;
 import ca.phon.query.script.QueryTask;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.Session;
 import ca.phon.session.SessionLocation;
 import ca.phon.ui.CommonModuleFrame;
@@ -406,10 +411,16 @@ public class QueryRunnerPanel extends JPanel {
 			
 			// setup query object
 			query = qfactory.createQuery(project);
-			final ScriptParam[] scriptParams = queryScript.getScriptParams();
+			final QueryScriptContext ctx = queryScript.getQueryContext();
+			ScriptParameters scriptParams = new ScriptParameters();
+			try {
+				scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
+			} catch (PhonScriptException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 			
 			final Script qScript = query.getScript();
-			qScript.setSource(queryScript.getScript(false));
+			qScript.setSource(queryScript.getScript());
 			final Map<String, String> sparams = new HashMap<String, String>();
 			for(ScriptParam sp:scriptParams) {
 				if(sp.hasChanged()) {
@@ -421,13 +432,14 @@ public class QueryRunnerPanel extends JPanel {
 			qScript.setParameters(sparams);
 			qScript.setMimeType("text/javascript");
 			
-			query.setDate(XMLConverters.toXMLCalendar(Calendar.getInstance()).toGregorianCalendar());
+			query.setDate(DateTime.now());
 			
-			String queryName = queryScript.getName();
+			final QueryName queryName = queryScript.getExtension(QueryName.class);
+			String name = (queryName != null ? queryName.getName() : "untitled");
 //			if(queryName.indexOf('.') > 0) {
 //				queryName = queryName.substring(0, queryName.lastIndexOf('.'));
 //			}
-			query.setName(queryName);
+			query.setName(name);
 			
 			try {
 				rsManager.saveQuery(tempProject, query);
@@ -438,8 +450,8 @@ public class QueryRunnerPanel extends JPanel {
 			
 			busyLabel.setBusy(true);
 			
-			final QueryTask queryTask = new QueryTask(project, queryScript);
-			queryTask.addTaskListener(queryTaskListener);
+//			final QueryTask queryTask = new QueryTask(project, queryScript);
+//			queryTask.addTaskListener(queryTaskListener);
 			for(SessionLocation sessionLocation:tableModel.sessions) {
 				if(isShutdown()) break;
 				// load session
@@ -447,17 +459,13 @@ public class QueryRunnerPanel extends JPanel {
 					final Session session = 
 							project.openSession(sessionLocation.getCorpus(), sessionLocation.getSession());
 					
-					// create a new result set
-					final ResultSet resultSet = qfactory.createResultSet();
-					resultSet.setSessionPath(sessionLocation.getCorpus() + "." + sessionLocation.getSession());
-					
-					queryTask.setSession(session);
-					queryTask.setResultSet(resultSet);
+					final QueryTask queryTask = new QueryTask(project, session, queryScript);
+					queryTask.addTaskListener(queryTaskListener);
 					
 					queryTask.run();
 					taskCompleted();
 					
-					rsManager.saveResultSet(tempProject, query, resultSet);
+					rsManager.saveResultSet(tempProject, query, queryTask.getResultSet());
 				} catch (IOException e) {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
@@ -529,9 +537,9 @@ public class QueryRunnerPanel extends JPanel {
 		public void statusChanged(PhonTask task, TaskStatus oldStatus,
 				TaskStatus newStatus) {
 			final QueryTask queryTask = (QueryTask)task;
-			final Session transcript = queryTask.getTranscript();
+			final Session session = queryTask.getSession();
 			
-			final SessionLocation location = new SessionLocation(transcript.getCorpus(), transcript.getName());
+			final SessionLocation location = new SessionLocation(session.getCorpus(), session.getName());
 			final int rowIdx = tableModel.sessions.indexOf(location);
 			tableModel.setValueAt(newStatus, rowIdx, 1);
 			
@@ -554,7 +562,7 @@ public class QueryRunnerPanel extends JPanel {
 			} else {
 				// update results row
 				tableModel.setValueAt(queryTask.getProperty(PhonTask.PROGRESS_PROP), rowIdx, 2);
-				tableModel.setValueAt(queryTask.getSearchResults().size(), rowIdx, 3);
+				tableModel.setValueAt(queryTask.getResultSet().size(), rowIdx, 3);
 			}
 		}
 
@@ -562,15 +570,16 @@ public class QueryRunnerPanel extends JPanel {
 		public void propertyChanged(PhonTask task, String property,
 				Object oldValue, Object newValue) {
 			final QueryTask queryTask = (QueryTask)task;
-			final Session transcript = queryTask.getTranscript();
+			final Session session = queryTask.getSession();
 			
-			final SessionLocation location = new SessionLocation(transcript.getCorpus(), transcript.getName());
+			final SessionLocation location = new SessionLocation(session.getCorpus(), session.getName());
 			final int rowIdx = tableModel.sessions.indexOf(location);
 			
-			if(property.equals(QueryTask.PROG_PROP)) {
-				tableModel.setValueAt((Integer)queryTask.getProperty(QueryTask.PROG_PROP), rowIdx, 2);
+			if(property.equals(QueryTask.PROGRESS_PROP)) {
+				tableModel.setValueAt((Integer)queryTask.getProperty(QueryTask.PROGRESS_PROP), rowIdx, 2);
 
-				tableModel.setValueAt((Integer)queryTask.getSearchResults().size(), rowIdx, 3);
+				int size = (queryTask.getResultSet() != null ? queryTask.getResultSet().size() : 0);
+				tableModel.setValueAt(size, rowIdx, 3);
 			}
 		}
 		

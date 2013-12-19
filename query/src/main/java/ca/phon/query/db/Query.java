@@ -18,9 +18,10 @@
 
 package ca.phon.query.db;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
+
+import org.joda.time.DateTime;
 
 /**
  * Interface for a Phon query. 
@@ -59,14 +60,14 @@ public interface Query {
 	 * 
 	 * @return the date
 	 */
-	public abstract GregorianCalendar getDate();
+	public abstract DateTime getDate();
 	
 	/**
 	 * Sets the date of creation of this query.
 	 * 
 	 * @param date  the date
 	 */
-	public abstract void setDate(GregorianCalendar date);
+	public abstract void setDate(DateTime date);
 
 	/**
 	 * Gets whether or not this query is starred.

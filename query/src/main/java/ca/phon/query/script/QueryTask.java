@@ -44,6 +44,7 @@ public class QueryTask extends PhonTask {
 		this.project = project;
 		this.session = session;
 		this.queryScript = queryScript;
+		
 	}
 	
 	public Project getProject() {

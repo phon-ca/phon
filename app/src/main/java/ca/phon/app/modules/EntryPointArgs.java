@@ -203,8 +203,7 @@ public class EntryPointArgs extends HashMap<String, Object> {
 		options.addOption(CORPUS_NAME_OPT, CORPUS_NAME, true, CORPUS_NAME_DESC);
 		options.addOption(SESSION_NAME_OPT, SESSION_NAME, true, SESSION_NAME_DESC);
 		
-		final CommandLineParser parser = new GnuParser();
-		
+		final CommandLineParser parser = new EntryPointArgParser();
 		
 		try {
 			final CommandLine cmdLine = parser.parse(options, args, false);

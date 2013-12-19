@@ -301,7 +301,7 @@ public class RecordFilterPanel extends JPanel {
 			if(columnIndex == 0) {
 				retVal = rowValue.getObj1().getName();
 			} else if (columnIndex == 1) {
-				retVal = rowValue.getQuery().getDate().getTime();
+				retVal = rowValue.getQuery().getDate();
 			} else if (columnIndex == 2) {
 				retVal = rowValue.getResultSet().size();
 			}
@@ -325,7 +325,7 @@ public class RecordFilterPanel extends JPanel {
 			Class<?> retVal = String.class;
 			
 			if(col == 0) retVal = String.class;
-			else if(col == 1) retVal = Date.class;
+			else if(col == 1) retVal = DateTime.class;
 			else if(col == 2) retVal = Integer.class;
 			
 			return retVal;
@@ -483,10 +483,9 @@ public class RecordFilterPanel extends JPanel {
 			JLabel retVal = (JLabel)super.getTableCellRendererComponent(table, value, 
 					isSelected, hasFocus, row, column);
 			
-			Date d = (java.util.Date)value;
+			DateTime d = (DateTime)value;
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd@hh:mm");
-			String dateStr = sdf.format(d);
+			String dateStr = DateFormatter.dateTimeToString(d);
 			retVal.setText(dateStr);
 			
 //			if(!table.isEnabled()) {

@@ -26,6 +26,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.joda.time.DateTime;
+
 import ca.phon.query.db.Script;
 
 /**
@@ -85,13 +87,13 @@ public class XMLLazyQuery extends XMLQuery {
 	}
 
 	@Override
-	public GregorianCalendar getDate() {
+	public DateTime getDate() {
 		loadData();
 		return super.getDate();
 	}
 
 	@Override
-	public void setDate(GregorianCalendar date) {
+	public void setDate(DateTime date) {
 		loadData();
 		super.setDate(date);
 	}

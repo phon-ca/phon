@@ -21,6 +21,9 @@ import java.util.Iterator;
 
 public class MultiboolScriptParam extends ScriptParam {
 	
+	/** ids */
+	private String[] ids;
+	
 	/** Descriptions */
 	private String[] descs;
 	
@@ -30,11 +33,28 @@ public class MultiboolScriptParam extends ScriptParam {
 	public MultiboolScriptParam(String[] ids, Boolean[] defaults, String[] descs, String desc, int numCols) {
 		super(ids, defaults);
 		
+		this.ids = ids;
+		
 		setParamType("multibool");
 		setParamDesc(desc);
 		
 		this.descs = descs;
 		this.numCols = numCols;
+	}
+	
+	public int getNumCols() {
+		return this.numCols;
+	}
+	
+	public String getLabelText(String paramId) {
+		String retVal = "";
+		for(int i = 0; i < ids.length; i++) {
+			if(ids[i].equals(paramId)) {
+				retVal = descs[i];
+				break;
+			}
+		}
+		return retVal;
 	}
 	
 	@Override

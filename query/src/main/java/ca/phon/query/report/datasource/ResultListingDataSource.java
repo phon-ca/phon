@@ -149,8 +149,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 				final Map<String, Object> bindings = new HashMap<String, Object>();
 				
 				final PhonScriptContext ctx = ps.getContext();
-				final Scriptable parentScope = ctx.createImporterScope();
-				final Scriptable scope = ctx.getEvaluatedScope(parentScope);
+				final Scriptable scope = ctx.getEvaluatedScope();
 				final ScriptParameters params = ctx.getScriptParameters(scope);
 //				final ScriptParam[] params = ps.getScriptParams();
 				

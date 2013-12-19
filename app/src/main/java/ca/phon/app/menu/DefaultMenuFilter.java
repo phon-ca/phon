@@ -39,7 +39,9 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.ProjectFrameExtension;
+import ca.phon.app.query.QueryEditorEP;
 import ca.phon.app.query.QueryEditorWindow;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.IPluginMenuFilter;
@@ -165,38 +167,38 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		}
 	}
 	
-	private class SearchAction extends AbstractAction {
-		
-		private Project project;
-		private QueryScript script;
-		
-		public SearchAction(Project project, QueryScript script) {
-			super();
-			this.project = project;
-			this.script = script;
-			
-			final QueryName queryName = script.getExtension(QueryName.class);
-			if(queryName != null) {
-				String scriptName = queryName.getName();
-				if(scriptName.indexOf('.') > 0) 
-					scriptName = scriptName.substring(0, scriptName.lastIndexOf('.'));
-				
-				super.putValue(NAME, scriptName + "...");
-			}
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			final QueryName queryName = script.getExtension(QueryName.class);
-			final QueryEditorWindow scriptFrame = new QueryEditorWindow(queryName.getName(), project, script);
-			scriptFrame.setWindowName(queryName.getName());
-//			scriptFrame.openFromFile(script.getAbsolutePath(), false);
-			scriptFrame.pack();
-			scriptFrame.setLocationByPlatform(true);
-			scriptFrame.setVisible(true);
-		}
-		
-	}
+//	private class SearchAction extends AbstractAction {
+//		
+//		private Project project;
+//		private QueryScript script;
+//		
+//		public SearchAction(Project project, QueryScript script) {
+//			super();
+//			this.project = project;
+//			this.script = script;
+//			
+//			final QueryName queryName = script.getExtension(QueryName.class);
+//			if(queryName != null) {
+//				String scriptName = queryName.getName();
+//				if(scriptName.indexOf('.') > 0) 
+//					scriptName = scriptName.substring(0, scriptName.lastIndexOf('.'));
+//				
+//				super.putValue(NAME, scriptName + "...");
+//			}
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			final QueryName queryName = script.getExtension(QueryName.class);
+//			final QueryEditorWindow scriptFrame = new QueryEditorWindow(queryName.getName(), project, script);
+//			scriptFrame.setWindowName(queryName.getName());
+////			scriptFrame.openFromFile(script.getAbsolutePath(), false);
+//			scriptFrame.pack();
+//			scriptFrame.setLocationByPlatform(true);
+//			scriptFrame.setVisible(true);
+//		}
+//		
+//	}
 	
 	/**
 	 * Add 'Tools' menu
@@ -472,9 +474,16 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 				final Iterator<QueryScript> stockScriptIterator = stockScriptLoader.iterator();
 				while(stockScriptIterator.hasNext()) {
 					final QueryScript qs = stockScriptIterator.next();
-					final SearchAction act = new SearchAction(project, qs);
-					JMenuItem sItem = new JMenuItem(act);
+					final QueryName queryName = qs.getExtension(QueryName.class);
 					
+					final PluginAction act = new PluginAction(QueryEditorEP.EP_NAME);
+					act.putValue(PluginAction.NAME, queryName.getName());
+					final EntryPointArgs epArgs = new EntryPointArgs();
+					epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
+					epArgs.put(QueryEditorEP.SCRIPT_OBJECT, qs);
+					act.putArgs(epArgs);
+					
+					JMenuItem sItem = new JMenuItem(act);
 					queryMenu.add(sItem);
 				}
 //
