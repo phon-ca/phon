@@ -35,6 +35,7 @@ import org.joda.time.DateTime;
 import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.project.SessionMerger;
 import ca.phon.project.Project;
+import ca.phon.session.DateFormatter;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
@@ -43,7 +44,6 @@ import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.PhonDateFormat;
 import ca.phon.worker.PhonWorker;
 
 /**
@@ -216,8 +216,8 @@ public class DeriveSessionWizard extends WizardFrame {
 		try {
 			final Session mergedSession = factory.createSession(corpus, session);
 			
-			final PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-			
+//			final PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
+			final DateFormatter pdf = new DateFormatter();
 			// merge sessions
 			// keep track of session/media to see if we can sucessfully copy the data over
 			String mergedDate = null;
@@ -230,13 +230,13 @@ public class DeriveSessionWizard extends WizardFrame {
 				
 				LOGGER.info("Merging data from session '" + loc.getCorpus() + "." + loc.getSession() + "'");
 				if(checkDate) {
-					String tDate = pdf.format(t.getDate().toCalendar(getLocale()));
+					String tDate = pdf.format(t.getDate());
 					if(mergedDate == null) {
 						mergedDate = tDate;
 					} else {
 						if(!mergedDate.equals(tDate)) {
 							LOGGER.warning("Session dates do not match, setting merged session date to today.");
-							mergedDate = pdf.format(Calendar.getInstance());
+							mergedDate = pdf.format(DateTime.now());
 							checkDate = false;
 						}
 					}

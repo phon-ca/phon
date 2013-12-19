@@ -77,7 +77,7 @@ public class CheckWizardStep1 extends WizardStep {
 	
 	private JRadioButton resetAlignmentButton;
 	
-	private JComboBox<Language> syllabifierList;
+	private JComboBox syllabifierList;
 	
 	private Project project;
 	
@@ -107,7 +107,7 @@ public class CheckWizardStep1 extends WizardStep {
 		final List<Language> orderedSyllabifiers = new ArrayList<>(syllabifierLibrary.availableSyllabifierLanguages());
 	    Collections.sort(orderedSyllabifiers);
 	    
-	    syllabifierList = new JComboBox<>(orderedSyllabifiers.toArray(new Language[0]));
+	    syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new Language[0]));
 	    syllabifierList.setEnabled(false);
 	   
 	    final String preferredSyllabifier = PrefHelper.get(

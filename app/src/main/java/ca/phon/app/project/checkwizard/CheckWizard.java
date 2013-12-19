@@ -43,7 +43,6 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionLocation;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.opgraph.nodes.IPASourceNode;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;

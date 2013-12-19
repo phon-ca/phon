@@ -22,7 +22,10 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,17 +35,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import ca.phon.application.IPhonFactory;
-import ca.phon.application.PhonTask;
-import ca.phon.application.PhonWorker;
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.application.transcript.TranscriptUtils;
-import ca.phon.gui.CommonModuleFrame;
-import ca.phon.system.logger.PhonLogger;
-import ca.phon.system.plugin.IPluginEntryPoint;
-import ca.phon.system.plugin.PhonPlugin;
-import ca.phon.util.NativeDialogs;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.session.io.SessionInputFactory;
+import ca.phon.session.io.SessionReader;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 
 /**
  * This module will import the contents of a directory
@@ -55,6 +58,9 @@ import ca.phon.util.NativeDialogs;
  */
 @PhonPlugin(name="default")
 public class ImportFolderEP implements IPluginEntryPoint {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(ImportFolderEP.class.getName());
 
 	private final static String EP_NAME = "ImportFolder";
 	@Override
@@ -70,7 +76,7 @@ public class ImportFolderEP implements IPluginEntryPoint {
 	 * that this method can be safely called from UI
 	 * action code.
 	 */
-	private void importFolder(String folder, IPhonProject project, 
+	private void importFolder(String folder, Project project, 
 			String corpus) {
 		File folderFile = new File(folder);
 		if(!folderFile.exists() || !folderFile.isDirectory()) {
@@ -109,9 +115,9 @@ public class ImportFolderEP implements IPluginEntryPoint {
 		
 		private String corpus;
 		private File transcriptFile;
-		private IPhonProject project;
+		private Project project;
 		
-		public ImportTask(File transcriptFile, IPhonProject project, String corpus) {
+		public ImportTask(File transcriptFile, Project project, String corpus) {
 			super();
 			super.setStatus(TaskStatus.WAITING);
 			
@@ -149,38 +155,28 @@ public class ImportFolderEP implements IPluginEntryPoint {
 				sessionName = sessionName.substring(0, sessionName.lastIndexOf("."));
 				
 				// get the appropriate factory
-				IPhonFactory oldFactory = IPhonFactory.getFactory(tbVersion);
+				final SessionInputFactory inputFactory = new SessionInputFactory();
+				final SessionReader reader = inputFactory.createReader("phonbank", tbVersion);
+				if(reader == null) 
+					throw new IOException("No reader found for session");
+				
 				fIn.close();
 				fIn = new FileInputStream(transcriptFile);
 				
-				ITranscript oldTranscript = oldFactory.createTranscript();
-				oldTranscript.loadTranscriptData(fIn);
-//				oldTranscript.setCorpus(corpus);
-//				oldTranscript.setID(sessionName);
+				final Session session = reader.readSession(fIn);
 				
-				ITranscript newTranscript = IPhonFactory.getDefaultFactory().createTranscript();
-				newTranscript.setCorpus(corpus);
-				newTranscript.setID(sessionName);
-				// convert transcript
-				TranscriptUtils.copyTranscript(oldTranscript, newTranscript);
+				// fix corpus and session names
+				session.setCorpus(corpus);
+				session.setName(sessionName);
 				
-				project.newTranscript(corpus, sessionName);
-				int writeLock = project.getTranscriptWriteLock(corpus, sessionName);
-				if(writeLock == -1)
+				final UUID writeLock = project.getSessionWriteLock(session);
+				if(writeLock == null)
 					throw new IOException("Could not lock session: " + corpus + "." + sessionName);
-				project.saveTranscript(newTranscript, writeLock);
-				project.releaseTranscriptWriteLock(corpus, sessionName, writeLock);
-				project.save();
-			} catch (IOException e) {
-				PhonLogger.warning(e.getMessage());
-				super.setStatus(TaskStatus.ERROR);
-				err = e;
-			} catch (ParserConfigurationException e) {
-				PhonLogger.warning(e.getMessage());
-				super.setStatus(TaskStatus.ERROR);
-				err = e;
-			} catch (SAXException e) {
-				PhonLogger.warning(e.getMessage());
+				project.saveSession(session, writeLock);
+				project.releaseSessionWriteLock(session, writeLock);
+				
+			} catch (IOException | ParserConfigurationException | SAXException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				super.setStatus(TaskStatus.ERROR);
 				err = e;
 			}
@@ -196,17 +192,17 @@ public class ImportFolderEP implements IPluginEntryPoint {
 	 */
 	@Override
 	public void pluginStart(Map<String, Object> initInfo) {
-		IPhonProject project = (IPhonProject)initInfo.get("project");
+		final EntryPointArgs epArgs = new EntryPointArgs(initInfo);
+		final Project project = epArgs.getProject();
 		
 		String directory = NativeDialogs.browseForDirectoryBlocking(
 				CommonModuleFrame.getCurrentFrame(), "Import Corpus", "");
 		if(directory != null) {
 			File dirFile = new File(directory);
 			try {
-				project.newCorpus(dirFile.getName(), "");
+				project.addCorpus(dirFile.getName(), "");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 			importFolder(directory, project, dirFile.getName());
 		}

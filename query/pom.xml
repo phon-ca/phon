@@ -55,17 +55,16 @@
 	</dependencies>
 	
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
 		
 		<plugins>
-			
-			<resources>
-				<resource>
-					<directory>src/main/resources</directory>
-					<includes>
-						<include>**/*</include>
-					</includes>
-				</resource>
-			</resources>
 			
 			<!-- Generate source for xml schema -->
 			<plugin>
@@ -87,7 +86,6 @@
 				</executions>
 			</plugin>
 		</plugins>
-		
 	</build>
 	
 </project>

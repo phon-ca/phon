@@ -25,7 +25,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -43,19 +47,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import ca.phon.application.IPhonFactory;
-import ca.phon.application.PhonWorker;
-import ca.phon.application.project.IPhonProject;
-import ca.phon.application.transcript.ITranscript;
-import ca.phon.gui.CommonModuleFrame;
-import ca.phon.gui.DialogHeader;
-import ca.phon.system.logger.PhonLogger;
-import ca.phon.system.plugin.IPluginEntryPoint;
-import ca.phon.system.plugin.PhonPlugin;
-import ca.phon.util.FileFilter;
-import ca.phon.util.NativeDialogs;
-import ca.phon.util.iconManager.IconManager;
-import ca.phon.util.iconManager.IconSize;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.io.SessionInputFactory;
+import ca.phon.session.io.SessionReader;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -68,8 +74,11 @@ import com.jgoodies.forms.layout.FormLayout;
 @PhonPlugin(name="default")
 public class ImportSessionEP implements IPluginEntryPoint {
 	
+	private static final Logger LOGGER = Logger
+			.getLogger(ImportSessionEP.class.getName());
+	
 	/** The project */
-	private IPhonProject _project;
+	private Project _project;
 	
 	/** The corpus */
 	private String corpus;
@@ -84,7 +93,7 @@ public class ImportSessionEP implements IPluginEntryPoint {
 //	private StringBuffer rawData;
 	
 	/** The transcript */
-	private ITranscript transcript;
+	private Session transcript;
 
 	public ImportSessionEP() {
 		super();
@@ -96,31 +105,39 @@ public class ImportSessionEP implements IPluginEntryPoint {
 		return EP_NAME;
 	}
 	
-	private void loadArguments(Map<String, Object> initInfo) {
-		// get the project
-		if(initInfo.get("project") != null)
-			_project = (IPhonProject)initInfo.get("project");
-		else
-			throw new IllegalArgumentException("'project' argument must be set.");
-		
-		if(initInfo.get("corpus") != null)
-			corpus = initInfo.get("corpus").toString();
-		
-		if(initInfo.get("session") != null)
-			session = initInfo.get("session").toString();
-		
-		if(initInfo.get("filename") != null)
-			filename = initInfo.get("filename").toString();
-		
-//		if(initInfo.get("rawdata") != null) {
-//			rawData = new StringBuffer();
-//			rawData.append(initInfo.get("rawdata").toString());
-//		}
-	}
+//	private void loadArguments(Map<String, Object> initInfo) {
+//		// get the project
+//		if(initInfo.get("project") != null)
+//			_project = (IPhonProject)initInfo.get("project");
+//		else
+//			throw new IllegalArgumentException("'project' argument must be set.");
+//		
+//		if(initInfo.get("corpus") != null)
+//			corpus = initInfo.get("corpus").toString();
+//		
+//		if(initInfo.get("session") != null)
+//			session = initInfo.get("session").toString();
+//		
+//		if(initInfo.get("filename") != null)
+//			filename = initInfo.get("filename").toString();
+//		
+////		if(initInfo.get("rawdata") != null) {
+////			rawData = new StringBuffer();
+////			rawData.append(initInfo.get("rawdata").toString());
+////		}
+//	}
 	
 	@Override
 	public void pluginStart(Map<String, Object> initInfo) {
-		loadArguments(initInfo);
+		final EntryPointArgs epArgs = new EntryPointArgs(initInfo);
+		_project = epArgs.getProject();
+		corpus = epArgs.getCorpus();
+		session = (epArgs.get(EntryPointArgs.SESSION_NAME) != null ?
+				epArgs.get(EntryPointArgs.SESSION_NAME).toString() : null);
+		filename = (epArgs.get("filename") != null ? 
+				epArgs.get("filename").toString() : null);
+		
+		if(_project == null) return;
 		
 		// if we have a filename, corpus and session load the file
 		if(filename != null
@@ -129,7 +146,10 @@ public class ImportSessionEP implements IPluginEntryPoint {
 			importFileAsSession(filename, corpus, session);
 		} else {
 			ImportSessionFrame f = new ImportSessionFrame();
-			f.setProject(_project);
+			
+			final ProjectFrameExtension pfe = new ProjectFrameExtension(_project);
+			f.putExtension(ProjectFrameExtension.class, pfe);
+			
 			f.pack();
 			f.setVisible(true);
 		}
@@ -176,34 +196,27 @@ public class ImportSessionEP implements IPluginEntryPoint {
 			
 			// get the appropriate factory
 			
-			IPhonFactory factory = IPhonFactory.getFactory(tbVersion);
-			if(factory != null) {
-				transcript = factory.createTranscript();
-				transcript.loadTranscriptData(new FileInputStream(sessionFile));
+			final SessionInputFactory inputFactory = new SessionInputFactory();
+			final SessionReader reader = inputFactory.createReader("phonbank", tbVersion);
+			if(reader != null) {
+				transcript = reader.readSession(new FileInputStream(sessionFile));
 			}
 			
 			// setup corpus and session
 			if(!_project.getCorpora().contains(corpus))
-				_project.newCorpus(corpus, "");
+				_project.addCorpus(corpus, "");
 			this.corpus = corpus;
 			
-			if(_project.getCorpusTranscripts(corpus).contains(sessionName))
+			if(_project.getCorpusSessions(corpus).contains(sessionName))
 				throw new IllegalArgumentException("A session with name '" + sessionName + "' already exists.");
 			this.session = sessionName;
 			
 			//			 ensure session variables are setup
 			transcript.setCorpus(corpus);
-			transcript.setID(session);
+			transcript.setName(session);
 			
-		} catch (IOException ioEx) {
-			PhonLogger.warning(this.getClass(), "IO Error: " + ioEx.toString());
-//			throw new ModuleException(this, "Could not import file: "  + ioEx.getMessage());
-		} catch (SAXException ex) {
-			PhonLogger.warning(this.getClass(), "SAX Error: " + ex.toString());
-//			throw new ModuleException(this, "Could not import file: " + ex.getMessage());
-		} catch (ParserConfigurationException ex) {
-			PhonLogger.warning(this.getClass(), "SAX Error: " + ex.toString());
-//			throw new ModuleException(this, "Could not import file: " + ex.getMessage());
+		} catch (IOException | SAXException | ParserConfigurationException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 
 		importSession();
@@ -219,31 +232,18 @@ public class ImportSessionEP implements IPluginEntryPoint {
 	private void importSession() {
 
 		try {
-			_project.newTranscript(corpus, session);
-			
-			int writeLock = _project.getTranscriptWriteLock(corpus, session);
-			_project.saveTranscript(transcript, writeLock);
-			_project.releaseTranscriptWriteLock(corpus, session, writeLock);
-			_project.save();
-			
-//			// check the MD5
-//			String writtenMD5 = _project.getSessionValidationData().
-//				getProperty(corpus + "." + session + ".md5").toString();
-//			
-//			MD5 md5 = new MD5();
-//			md5.Update(rawData.toString());
-//			String memoryMD5 = md5.asHex();
-//			
-//			if(!writtenMD5.equals(memoryMD5))
-//				throw new ModuleException(this, "Session Write Failed! On Disk: " + writtenMD5 + "\tIn Memory: " + memoryMD5);
-		} catch (IOException ex) {
-			PhonLogger.warning(this.getClass(), "IO Error: " + ex.getMessage());
-//			throw new ModuleException(this, "Session Import Failed: " + ex.getMessage());
+			final UUID writeLock = _project.getSessionWriteLock(transcript);
+			_project.saveSession(transcript, writeLock);
+			_project.releaseSessionWriteLock(corpus, session, writeLock);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
 	
 	/** The module window class */
 	private class ImportSessionFrame extends CommonModuleFrame {
+		
+		private static final long serialVersionUID = -4725921953928779747L;
 		
 		/** GUI components */
 		private JTextField filenameField;
@@ -351,10 +351,11 @@ public class ImportSessionEP implements IPluginEntryPoint {
 									filenameField.getText(),
 									corpusBox.getSelectedItem().toString(),
 									sessionNameField.getText());
-						} catch (Exception me) {
+						} catch (Exception e) {
 							NativeDialogs.showMessageDialogBlocking(ImportSessionFrame.this, 
-									null, "Session Import Failed", me.getMessage());
-							PhonLogger.severe(this.getClass(), me.getMessage());
+									null, "Session Import Failed", e.getMessage());
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
 							return;
 						}
 						
@@ -416,10 +417,8 @@ public class ImportSessionEP implements IPluginEntryPoint {
 		private boolean checkSessionName() {
 			String corpus = corpusBox.getSelectedItem().toString();
 			
-			ArrayList<String> currentSessions = new ArrayList<String>();
-				currentSessions = 
-					_project.getCorpusTranscripts(corpus);
-			
+			List<String> currentSessions = 
+					_project.getCorpusSessions(corpus);
 			
 			String sessionName = sessionNameField.getName();
 			if(sessionName.length() == 0 || 
