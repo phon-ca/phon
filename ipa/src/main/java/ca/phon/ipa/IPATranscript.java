@@ -3,11 +3,9 @@ package ca.phon.ipa;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Formattable;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.regex.PatternSyntaxException;
 
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;

@@ -4,9 +4,7 @@ import javax.swing.undo.CannotUndoException;
 
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.Group;
 import ca.phon.session.Record;
-import ca.phon.session.Tier;
 
 public class AddGroupEdit extends SessionEditorUndoableEdit {
 	

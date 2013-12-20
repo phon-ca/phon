@@ -30,13 +30,13 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTaskListener;
 import vlc4j.VLCException;
 import vlc4j.VLCInstance;
 import vlc4j.VLCMediaPlayer;
 import vlc4j.event.VLCMediaPlayerAdapter;
 import vlc4j.event.VLCMediaPlayerEvent;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
 
 /**
  * Export video and/or audio with the option

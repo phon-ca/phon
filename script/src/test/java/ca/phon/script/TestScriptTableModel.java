@@ -27,15 +27,15 @@ public class TestScriptTableModel {
 			"function getName() { return colNames[col]; }\nfunction getValue() {return rowData.getObj1();\n}";
 	
 	private final static String COL1_SCRIPT = 
-			"function getName() { return colNames[col]; }\nfunction getValue() {return !rowData.getObj2();\n}";
+			"function getName() { return colNames[col]; }\nfunction getValue() {return rowData.getObj2();\n}";
 	
 	private final static String[] COL_NAMES = new String[] { "Column 0", "Column 1" };
 	
 	@Test
 	public void testModel() throws PhonScriptException {
 		final List<Tuple<Integer, Boolean>> rowData = setupData();
-		final ListScriptTableModel<Tuple<Integer, Boolean>> model = new ListScriptTableModel<>(rowData);
-		final Map<String, Object> staticMappings = new HashMap<>();
+		final ListScriptTableModel<Tuple<Integer, Boolean>> model = new ListScriptTableModel<Tuple<Integer, Boolean>>(rowData);
+		final Map<String, Object> staticMappings = new HashMap<String, Object>();
 		staticMappings.put("colNames", COL_NAMES);
 		
 		model.setColumnScript(0, new BasicScript(COL0_SCRIPT));
@@ -49,7 +49,7 @@ public class TestScriptTableModel {
 	}
 	
 	private List<Tuple<Integer, Boolean>> setupData() {
-		final List<Tuple<Integer, Boolean>> retVal = new ArrayList<>();
+		final List<Tuple<Integer, Boolean>> retVal = new ArrayList<Tuple<Integer, Boolean>>();
 		
 		retVal.add(new Tuple<Integer, Boolean>(1, false));
 		retVal.add(new Tuple<Integer, Boolean>(2, true));
@@ -76,9 +76,9 @@ public class TestScriptTableModel {
 			for(int j = 0; j < model.getRowCount(); j++) {
 				final Object val = model.getValueAt(j, i);
 				if(i == 0) {
-					Assert.assertEquals(rowData.get(i).getObj1(), val);
+					Assert.assertEquals(rowData.get(j).getObj1(), val);
 				} else if(i == 1) {
-					Assert.assertEquals(!rowData.get(i).getObj2(), val);
+					Assert.assertEquals(rowData.get(j).getObj2(), val);
 				}
 			}
 		}

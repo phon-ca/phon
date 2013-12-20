@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.MenuElement;
 
 /**
  * <p>View model for the {@link SessionEditor}.  This class

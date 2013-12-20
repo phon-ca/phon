@@ -4,10 +4,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.WrapFactory;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;

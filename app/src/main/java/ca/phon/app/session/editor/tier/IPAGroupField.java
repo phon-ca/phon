@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.tier;
 
 import java.lang.ref.WeakReference;
 
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Tier;
@@ -24,7 +23,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	
 	public IPAGroupField(Tier<IPATranscript> tier, int groupIndex, Transcriber transcriber) {
 		super(tier, groupIndex);
-		this.transcriberRef = new WeakReference<>(transcriber);
+		this.transcriberRef = new WeakReference<Transcriber>(transcriber);
 		// init after transcriber is set
 		init();
 	}

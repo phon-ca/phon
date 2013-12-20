@@ -14,15 +14,14 @@ import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
 import ca.phon.ipadictionary.spi.GenerateSuggestions;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
-import ca.phon.ipadictionary.spi.Metadata;
-import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.LanguageInfo;
+import ca.phon.ipadictionary.spi.Metadata;
 import ca.phon.ipadictionary.spi.NameInfo;
+import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.PrefixSearch;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
-import ca.phon.util.LanguageParser;
 
 /**
  * API for the IPA dictionary.  This class is final.

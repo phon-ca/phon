@@ -1,6 +1,5 @@
 package ca.phon.ipa;
 
-import org.apache.commons.lang3.ArrayUtils;
 
 
 /**

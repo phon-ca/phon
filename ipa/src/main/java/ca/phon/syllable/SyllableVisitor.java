@@ -1,7 +1,6 @@
 package ca.phon.syllable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import ca.phon.ipa.CompoundPhone;
@@ -10,7 +9,6 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.StressMarker;
 import ca.phon.ipa.StressType;
-import ca.phon.visitor.Visitor;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -85,7 +83,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	 */
 	public List<IPATranscript> getSyllables() {
 		breakSyllable();
-		return new ArrayList<>(syllables);
+		return new ArrayList<IPATranscript>(syllables);
 	}
 	
 	private void appendSyllable(IPAElement p) {

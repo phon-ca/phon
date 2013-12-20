@@ -2,6 +2,8 @@ package ca.phon.query;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -9,11 +11,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.mozilla.javascript.Scriptable;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryTask;
@@ -28,6 +29,11 @@ import ca.phon.session.Session;
  */
 @RunWith(Parameterized.class)
 public class TestQuery {
+	
+	@Parameters
+	public static Collection<Object[]> testData() {
+		return new ArrayList<Object[]>();
+	}
 	
 	/**
 	 * The script

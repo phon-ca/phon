@@ -1,7 +1,6 @@
 package ca.phon.phonex;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import ca.phon.fsa.FSAState;

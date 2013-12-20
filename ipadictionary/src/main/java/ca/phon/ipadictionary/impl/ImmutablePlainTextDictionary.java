@@ -1,15 +1,11 @@
 package ca.phon.ipadictionary.impl;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -25,18 +21,14 @@ import ca.phon.ipadictionary.ContractionRule;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.BackingStoreException;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
-import ca.phon.ipadictionary.spi.AddEntry;
 import ca.phon.ipadictionary.spi.GenerateSuggestions;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
-import ca.phon.ipadictionary.spi.Metadata;
-import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.LanguageInfo;
+import ca.phon.ipadictionary.spi.Metadata;
 import ca.phon.ipadictionary.spi.NameInfo;
+import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.PrefixSearch;
-import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
-import ca.phon.util.LanguageParser;
 import ca.phon.util.ternarytree.TernaryTree;
 
 /**

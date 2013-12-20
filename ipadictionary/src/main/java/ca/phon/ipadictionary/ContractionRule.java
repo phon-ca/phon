@@ -9,8 +9,6 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
 
 /**
  * Rule for handling contractions.

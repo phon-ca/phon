@@ -106,7 +106,11 @@ public class DelegateEditorAction implements EditorAction {
 					runner.run();
 				}
 			}
-		} catch (NoSuchMethodException | InvocationTargetException | InterruptedException e) {
+		} catch (NoSuchMethodException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (InvocationTargetException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (InterruptedException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 			

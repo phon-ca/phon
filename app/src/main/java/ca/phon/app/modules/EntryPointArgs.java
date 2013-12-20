@@ -7,10 +7,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -133,7 +131,9 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			final ProjectFactory factory = new ProjectFactory();
 			try {
 				retVal = factory.openProject(projectFile);
-			} catch (IOException | ProjectConfigurationException e) {
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} catch (ProjectConfigurationException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}

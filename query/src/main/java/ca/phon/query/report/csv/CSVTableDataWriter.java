@@ -23,9 +23,8 @@ import java.io.PrintWriter;
 
 import javax.swing.JTable;
 
-import ca.phon.util.OSInfo;
-
 import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.util.OSInfo;
 
 /**
  * Writes a csv file based on the values displayed

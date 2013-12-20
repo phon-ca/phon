@@ -1,6 +1,5 @@
 package ca.phon.app.session.editor.undo;
 
-import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import ca.phon.app.session.editor.EditorEventType;

@@ -17,7 +17,6 @@
  */
 package ca.phon.app.session.editor.tier;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

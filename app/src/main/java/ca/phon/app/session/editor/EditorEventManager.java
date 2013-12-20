@@ -30,7 +30,7 @@ public class EditorEventManager {
 	 * Event queue.  Events are placed in the queue until they
 	 * can be processed.
 	 */
-	private final BlockingQueue<EditorEvent> eventQueue = new LinkedBlockingQueue<>();
+	private final BlockingQueue<EditorEvent> eventQueue = new LinkedBlockingQueue<EditorEvent>();
 	
 	/**
 	 * Event dispatch thread for the editor
@@ -54,7 +54,7 @@ public class EditorEventManager {
 	 */
 	public EditorEventManager(SessionEditor editor) {
 		super();
-		this.editorRef = new WeakReference<>(editor);
+		this.editorRef = new WeakReference<SessionEditor>(editor);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class EditorEventManager {
 	public void registerActionForEvent(String eventName, EditorAction action) {
 		List<EditorAction> handlers = actionMap.get(eventName);
 		if(handlers == null) {
-			handlers = new ArrayList<>();
+			handlers = new ArrayList<EditorAction>();
 			actionMap.put(eventName, handlers);
 		}
 		handlers.add(action);

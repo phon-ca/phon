@@ -1,23 +1,15 @@
 package ca.phon.ipamap;
 
 import java.awt.AWTException;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JPopupMenu.Separator;
-import javax.swing.KeyStroke;
-import javax.swing.MenuElement;
 import javax.swing.UIManager;
 
 import ca.phon.ui.action.PhonUIAction;

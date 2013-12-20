@@ -1,11 +1,9 @@
 package ca.phon.script;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.List;
 
 import ca.phon.extensions.IExtendable;
-import ca.phon.script.params.ScriptParameters;
 
 /**
  * <p>Interface for Phon runtime scripts.  Scripts are written in

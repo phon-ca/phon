@@ -14,8 +14,6 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
-import ca.phon.util.LanguageParser;
 
 /**
  * Syllabifier implementation using operable graphs.

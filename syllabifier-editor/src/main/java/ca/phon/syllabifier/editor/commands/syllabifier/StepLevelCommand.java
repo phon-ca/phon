@@ -18,7 +18,6 @@
  */
 package ca.phon.syllabifier.editor.commands.syllabifier;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;

@@ -19,8 +19,6 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Script;
-import ca.phon.script.params.ScriptParam;
-
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -43,9 +41,9 @@ public class QueryScriptLibrary implements IExtendable {
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(QueryScriptLibrary.class, this);
 	
-	private final ResourceLoader<QueryScript> systemScriptLoader = new ResourceLoader<>();
+	private final ResourceLoader<QueryScript> systemScriptLoader = new ResourceLoader<QueryScript>();
 	
-	private final ResourceLoader<QueryScript> userScriptLoader = new ResourceLoader<>();
+	private final ResourceLoader<QueryScript> userScriptLoader = new ResourceLoader<QueryScript>();
 	
 	public static String projectScriptFolder(Project project) {
 		return project.getLocation() + File.separator + "__res" + File.separator + "script";
@@ -77,7 +75,7 @@ public class QueryScriptLibrary implements IExtendable {
 	public ResourceLoader<QueryScript> projectScriptFiles(Project project) {
 		final String projectScriptLocation = projectScriptFolder(project);
 		
-		return new ResourceLoader<>();
+		return new ResourceLoader<QueryScript>();
 	}
 	
 	private List<File> scanFolderForScripts(File folder) {

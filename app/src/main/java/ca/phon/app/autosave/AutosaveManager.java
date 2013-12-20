@@ -19,7 +19,6 @@ package ca.phon.app.autosave;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Logger;
 

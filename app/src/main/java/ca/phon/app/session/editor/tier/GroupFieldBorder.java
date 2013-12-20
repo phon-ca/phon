@@ -7,9 +7,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Insets;
 
-import javax.swing.JTextField;
 import javax.swing.border.Border;
-import javax.swing.text.JTextComponent;
 
 /**
  * Border for group text fields

@@ -98,9 +98,11 @@ public class WavHelper {
     			retVal = 
     				AudioSystem.getAudioInputStream(wavFile);
     			format = retVal.getFormat();
-    		} catch (IOException | UnsupportedAudioFileException e) {
+    		} catch (IOException e) {
     			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-    		} 
+    		}  catch (UnsupportedAudioFileException e) {
+    			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    		}
     	} else {
     		ByteArrayInputStream bin = new ByteArrayInputStream(wavData);
     		// used cached data

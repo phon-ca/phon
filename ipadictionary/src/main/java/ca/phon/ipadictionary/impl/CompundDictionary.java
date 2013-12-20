@@ -1,20 +1,16 @@
 package ca.phon.ipadictionary.impl;
 
-import ca.phon.ipadictionary.IPADictionary;
-
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.NameInfo;
-import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.PrefixSearch;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
 
 /**
  * Perform lookups on multiple dictionaries at once.

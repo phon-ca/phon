@@ -1,7 +1,6 @@
 package ca.phon.ipadictionary;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -10,9 +9,7 @@ import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

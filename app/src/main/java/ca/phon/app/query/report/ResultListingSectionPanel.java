@@ -17,6 +17,23 @@
  */
 package ca.phon.app.query.report;
 
+import static ca.phon.query.report.util.ResultListingFieldBuilder.ALIGNMENT_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.METADATA_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RECORD_NUMBER_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RECORD_TIER_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RESULT_EXCLUDED_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RESULT_FORMAT_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RESULT_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SESSION_DATE_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SESSION_MEDIA_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SESSION_NAME_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SPEAKER_AGE_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SPEAKER_GENDER_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SPEAKER_NAME_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SYLLABIFICATION_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.createEmptyField;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.getDefaultFields;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -81,8 +98,6 @@ import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import static ca.phon.query.report.util.ResultListingFieldBuilder.*;
 
 /**
  * Section panel for customizable result listings.

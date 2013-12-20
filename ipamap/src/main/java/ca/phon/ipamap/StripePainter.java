@@ -3,8 +3,6 @@ package ca.phon.ipamap;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import javax.swing.JComponent;
-
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.layout.GridCellLayout;
 import ca.phon.ui.painter.Painter;

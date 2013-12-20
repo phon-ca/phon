@@ -17,8 +17,6 @@
  */
 package ca.phon.app.project;
 
-import java.util.List;
-
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;

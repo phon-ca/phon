@@ -17,7 +17,7 @@ public class ScriptParamComponentListener implements PropertyChangeListener {
 	
 	public ScriptParamComponentListener(JComponent comp) {
 		super();
-		this.compRef= new WeakReference<>(comp);
+		this.compRef= new WeakReference<JComponent>(comp);
 	}
 	
 	public JComponent getComponent() {

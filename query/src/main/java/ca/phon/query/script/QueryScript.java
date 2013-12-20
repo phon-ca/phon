@@ -20,13 +20,8 @@ package ca.phon.query.script;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.logging.Logger;
-
-import org.mozilla.javascript.Scriptable;
 
 import ca.phon.script.PhonScriptContext;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
 
 /**
  * Holds the text for a query script.

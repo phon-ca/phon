@@ -19,8 +19,8 @@ package ca.phon.query.report.csv;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ca.phon.query.report.io.CommentSection;
 import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.query.report.io.CommentSection;
 
 /**
  * Write out comments to the csv report.

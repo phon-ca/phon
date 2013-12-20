@@ -19,7 +19,6 @@
 package ca.phon.query.db.xml;
 
 import java.io.File;
-import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import org.joda.time.DateTime;

@@ -1,18 +1,13 @@
 package ca.phon.script;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.junit.runners.JUnit4;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.mozilla.javascript.Scriptable;
-
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
 
 
 @RunWith(JUnit4.class)
@@ -28,7 +23,7 @@ public class TestBasicScript {
 		final Object val = ctx.exec(scope);
 		
 		Assert.assertEquals(Integer.class, val.getClass());
-		Assert.assertEquals(2, (int)val);
+		Assert.assertEquals(2, (int)Integer.valueOf(val.toString()));
 		
 		Assert.assertEquals(val, scope.get("x", scope));
 	}
@@ -48,7 +43,7 @@ public class TestBasicScript {
 		final Object val = ctx.exec(scope);
 		
 		Assert.assertEquals(Integer.class, val.getClass());
-		Assert.assertEquals(2, (int)val);
+		Assert.assertEquals(2, (int)Integer.valueOf(val.toString()));
 		
 		Assert.assertEquals(val, scope.get("x", scope));
 	}

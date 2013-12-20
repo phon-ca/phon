@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import ca.phon.app.BootWindow;
-import ca.phon.plugin.PluginException;
 
 /**
  * Interface used to perform operations before Phon is

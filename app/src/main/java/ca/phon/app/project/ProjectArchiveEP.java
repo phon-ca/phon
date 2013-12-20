@@ -18,7 +18,6 @@
 package ca.phon.app.project;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.Map;
 
 import org.joda.time.DateTime;

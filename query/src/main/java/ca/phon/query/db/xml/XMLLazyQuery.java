@@ -20,7 +20,6 @@ package ca.phon.query.db.xml;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;

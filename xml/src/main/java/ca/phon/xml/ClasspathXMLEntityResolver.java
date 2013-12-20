@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
 import javax.xml.stream.XMLResolver;
 import javax.xml.stream.XMLStreamException;
 
-import org.xml.sax.InputSource;
-
 /**
  * <p>XML entity resolver that will look for catalog files
  * using the provided {@link ClassLoader}.  The catalog

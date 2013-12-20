@@ -72,7 +72,9 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 			parser.params();
 			final ScriptParam[] params = parser.getScriptParams();
 			retVal.addAll(Arrays.asList(params));
-		} catch (IOException | RecognitionException e) {
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (RecognitionException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		return retVal;
@@ -162,7 +164,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 	 * @return set of paramIds
 	 */
 	public Set<String> getParamIds() {
-		final Set<String> retVal = new LinkedHashSet<>();
+		final Set<String> retVal = new LinkedHashSet<String>();
 		for(ScriptParam param:this) {
 			retVal.addAll(param.getParamIds());
 		}

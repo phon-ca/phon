@@ -2,16 +2,13 @@ package ca.phon.app.session.editor.tier;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JToggleButton;
 
 import ca.phon.app.session.editor.tier.TierDataLayout.GroupMode;
 import ca.phon.ui.SegmentedButtonBuilder;

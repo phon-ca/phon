@@ -15,7 +15,6 @@ import ca.phon.session.Record;
 import ca.phon.session.Records;
 import ca.phon.session.Session;
 import ca.phon.session.SessionMetadata;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierDescriptions;
 import ca.phon.session.TierViewItem;

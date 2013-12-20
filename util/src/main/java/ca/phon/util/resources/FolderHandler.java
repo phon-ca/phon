@@ -2,7 +2,6 @@ package ca.phon.util.resources;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.net.URI;
 import java.util.Iterator;
 
 /**

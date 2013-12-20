@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -25,9 +23,7 @@ import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.Metadata;
 import ca.phon.ipadictionary.spi.NameInfo;
 import ca.phon.util.Language;
-import ca.phon.util.ternarytree.TernaryTree;
 import de.susebox.jtopas.Flags;
-import de.susebox.jtopas.ReaderSource;
 import de.susebox.jtopas.StandardTokenizer;
 import de.susebox.jtopas.StandardTokenizerProperties;
 import de.susebox.jtopas.StringSource;
@@ -176,7 +172,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	
 	private void readTokenMap(InputStream is) 
 		throws IOException {
-		tokenMap = new LinkedHashMap<>();
+		tokenMap = new LinkedHashMap<String, String>();
 		
 		final InputStreamReader in = 
 			new InputStreamReader(is, "UTF-8");

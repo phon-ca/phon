@@ -115,7 +115,7 @@ public class SessionEditorQuickSearch {
 	 */
 	public SessionEditorQuickSearch(SessionEditor editor) {
 		super();
-		editorRef = new WeakReference<>(editor);
+		editorRef = new WeakReference<SessionEditor>(editor);
 		initComponents();
 	}
 	

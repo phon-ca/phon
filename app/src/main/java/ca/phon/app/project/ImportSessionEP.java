@@ -24,7 +24,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -52,7 +51,6 @@ import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionReader;
 import ca.phon.ui.CommonModuleFrame;
@@ -215,7 +213,11 @@ public class ImportSessionEP implements IPluginEntryPoint {
 			transcript.setCorpus(corpus);
 			transcript.setName(session);
 			
-		} catch (IOException | SAXException | ParserConfigurationException e) {
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (SAXException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (ParserConfigurationException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 

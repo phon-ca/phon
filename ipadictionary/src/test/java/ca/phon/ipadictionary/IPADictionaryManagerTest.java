@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import ca.phon.util.Language;
 import ca.phon.util.resources.ResourceLoader;
 
 @RunWith(JUnit4.class)

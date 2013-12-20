@@ -18,7 +18,6 @@
 
 package ca.phon.session;
 
-import java.util.Comparator;
 import java.util.List;
 
 import org.joda.time.DateTime;

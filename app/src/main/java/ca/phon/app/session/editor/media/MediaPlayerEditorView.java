@@ -38,14 +38,9 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
-
-import org.jdesktop.swingx.VerticalLayout;
 
 import vlc4j.VLCError;
 import vlc4j.VLCException;

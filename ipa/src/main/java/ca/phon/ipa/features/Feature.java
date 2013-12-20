@@ -2,8 +2,6 @@ package ca.phon.ipa.features;
 
 import java.util.List;
 
-import ca.phon.util.Tuple;
-
 /**
  * A phonetic feature
  *

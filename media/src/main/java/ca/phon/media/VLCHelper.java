@@ -18,9 +18,9 @@
 
 package ca.phon.media;
 
+import vlc4j.VLCInstance;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import vlc4j.VLCInstance;
 
 /**
  * Helper methods for using vlc4j

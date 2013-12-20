@@ -31,8 +31,6 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
-import org.xml.sax.InputSource;
-
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
@@ -95,7 +93,9 @@ public class XMLQueryManager extends QueryManager {
 				unmarshaller.unmarshal(eventReader, QueryType.class);
 			
 			return new XMLQuery(queryTypeEle.getValue());
-		} catch (JAXBException | XMLStreamException e) {
+		} catch (JAXBException  e) {
+			throw new IOException(e);
+		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}
 	}

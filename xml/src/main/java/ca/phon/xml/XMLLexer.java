@@ -3,10 +3,8 @@ package ca.phon.xml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.text.ParseException;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.Stack;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -31,9 +29,6 @@ import org.antlr.runtime.TokenSource;
 
 import ca.phon.util.EmptyQueueException;
 import ca.phon.util.Queue;
-import ca.phon.visitor.Visitable;
-import ca.phon.visitor.Visitor;
-import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 /**

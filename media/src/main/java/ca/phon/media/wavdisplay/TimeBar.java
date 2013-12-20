@@ -20,19 +20,15 @@ package ca.phon.media.wavdisplay;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import ca.phon.util.MsFormat;
 import ca.phon.util.MsFormatter;
 
 public class TimeBar extends JComponent {

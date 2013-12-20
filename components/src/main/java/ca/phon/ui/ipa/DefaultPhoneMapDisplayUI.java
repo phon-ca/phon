@@ -60,7 +60,6 @@ import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.syllable.SyllableVisitor;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
 /**

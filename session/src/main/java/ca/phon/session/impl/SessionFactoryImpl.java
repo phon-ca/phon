@@ -1,6 +1,5 @@
 package ca.phon.session.impl;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.session.Comment;
@@ -44,7 +43,7 @@ public class SessionFactoryImpl extends SessionFactory {
 
 	@Override
 	public <T> Tier<T> createTier(String name, Class<T> type, boolean grouped) {
-		final TierImpl<T> retVal = new TierImpl<>(name, type, grouped);
+		final TierImpl<T> retVal = new TierImpl<T>(name, type, grouped);
 		return retVal;
 	}
 

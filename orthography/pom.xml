@@ -31,6 +31,19 @@
   </dependencies>
   
   <build>
+    
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>target/generated-sources/antlr3</directory>
+        <includes>
+          <include>Orthography.tokens</include>
+        </includes>
+      </resource>
+    </resources>
+    
     <plugins>
       <plugin>
         <groupId>org.antlr</groupId>

@@ -27,8 +27,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTaskListener;
 import vlc4j.VLCException;
 import vlc4j.VLCInstance;
 import vlc4j.VLCMedia;
@@ -36,6 +34,8 @@ import vlc4j.VLCMediaPlayer;
 import vlc4j.event.VLCMediaPlayerEvent;
 import vlc4j.event.VLCMediaPlayerEventType;
 import vlc4j.event.VLCMediaPlayerListener;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
 
 /**
  * Media thumbnailer using vlc4j.

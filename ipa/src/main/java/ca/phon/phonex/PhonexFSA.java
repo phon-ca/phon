@@ -6,7 +6,6 @@ import java.util.Map;
 
 import ca.phon.fsa.FSATransition;
 import ca.phon.fsa.SimpleFSA;
-import ca.phon.fsa.TransitionType;
 import ca.phon.ipa.IPAElement;
 
 /**

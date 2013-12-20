@@ -40,7 +40,6 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.ui.ParamPanelFactory;
 import ca.phon.ui.action.PhonActionEvent;

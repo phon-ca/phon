@@ -8,7 +8,6 @@ import javax.swing.undo.CannotUndoException;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 
@@ -47,7 +46,7 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		session.removeUserTier(tierDescription);
 		
 		final List<TierViewItem> tierView = session.getTierView();
-		final List<TierViewItem> newView = new ArrayList<>(tierView);
+		final List<TierViewItem> newView = new ArrayList<TierViewItem>(tierView);
 		newView.remove(this.tierViewItem);
 		session.setTierView(newView);
 		
@@ -64,7 +63,7 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		session.addUserTier(tierDescription);
 		
 		final List<TierViewItem> tierView = session.getTierView();
-		final List<TierViewItem> newView = new ArrayList<>(tierView);
+		final List<TierViewItem> newView = new ArrayList<TierViewItem>(tierView);
 		newView.add(this.tierViewItem);
 		session.setTierView(newView);
 		

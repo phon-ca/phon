@@ -26,13 +26,13 @@ import java.nio.channels.FileChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ca.phon.worker.PhonTask;
 import vlc4j.VLCException;
 import vlc4j.VLCInstance;
 import vlc4j.VLCMedia;
 import vlc4j.VLCMediaPlayer;
 import vlc4j.event.VLCMediaPlayerAdapter;
 import vlc4j.event.VLCMediaPlayerEvent;
+import ca.phon.worker.PhonTask;
 
 /**
  * Uses vlc4j to export a media file into a wav file.

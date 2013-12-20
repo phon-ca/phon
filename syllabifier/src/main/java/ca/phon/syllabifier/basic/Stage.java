@@ -53,7 +53,7 @@ public class Stage {
 			new Constraint(st.getPhoneOfInterest().getConstraint());
 		List<Range> phoneRanges = phoneOfInterestConstraint.findRangesInList(tape);
 		if(phoneRanges == null)
-			phoneRanges = new ArrayList<>();
+			phoneRanges = new ArrayList<Range>();
 //		if(this.getPhoneOfInterest().getSyllabificationStatus() != null) {
 //			tempList.clear();
 //			for(Range r:phoneRanges) {

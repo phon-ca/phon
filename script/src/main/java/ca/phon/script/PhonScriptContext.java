@@ -2,8 +2,6 @@ package ca.phon.script;
 
 import java.net.URI;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -18,11 +16,6 @@ import org.mozilla.javascript.commonjs.module.RequireBuilder;
 import org.mozilla.javascript.commonjs.module.provider.ModuleSourceProvider;
 import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
-import org.mozilla.javascript.debug.Debugger;
-import org.mozilla.javascript.tools.debugger.Dim;
-import org.mozilla.javascript.tools.debugger.GuiCallback;
-import org.mozilla.javascript.tools.debugger.Dim.SourceInfo;
-import org.mozilla.javascript.tools.debugger.Dim.StackFrame;
 
 import ca.phon.script.js.ExtendableWrapFactory;
 import ca.phon.script.params.ScriptParam;

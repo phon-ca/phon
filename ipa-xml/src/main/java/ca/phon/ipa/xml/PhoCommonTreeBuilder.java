@@ -18,11 +18,6 @@ import ca.phon.ipa.StressMarker;
 import ca.phon.ipa.StressType;
 import ca.phon.ipa.SyllableBoundary;
 import ca.phon.ipa.WordBoundary;
-import ca.phon.ipa.xml.jaxb.CompoundPhoneType;
-import ca.phon.ipa.xml.jaxb.PauseType;
-import ca.phon.ipa.xml.jaxb.PauseTypeLength;
-import ca.phon.ipa.xml.jaxb.PhoneType;
-import ca.phon.ipa.xml.jaxb.SyllableStressType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

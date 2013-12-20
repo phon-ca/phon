@@ -11,9 +11,6 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.phonex.PhonexCompiler;
-import ca.phon.phonex.PhonexLexer;
-import ca.phon.phonex.PhonexParser;
 
 /**
  * TODO Document this

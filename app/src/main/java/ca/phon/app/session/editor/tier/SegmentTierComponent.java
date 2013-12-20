@@ -24,11 +24,9 @@ import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.MediaSegment;
-import ca.phon.session.Record;
 import ca.phon.session.Tier;
 
 /**

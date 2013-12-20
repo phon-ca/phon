@@ -1,7 +1,6 @@
 package ca.phon.util.ternarytree;
 
 
-import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**

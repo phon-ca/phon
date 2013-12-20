@@ -1,7 +1,5 @@
 package ca.phon.app.session.editor.undo;
 
-import java.lang.ref.WeakReference;
-
 import javax.swing.undo.CannotUndoException;
 
 import ca.phon.app.session.editor.EditorEventType;

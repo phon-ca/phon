@@ -22,10 +22,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.query.report.datasource.ResultListingDataSource;
 import ca.phon.query.report.io.ResultListingFormatType;
-
-import au.com.bytecode.opencsv.CSVWriter;
 
 public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 

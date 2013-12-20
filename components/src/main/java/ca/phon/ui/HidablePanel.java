@@ -19,10 +19,6 @@ package ca.phon.ui;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;

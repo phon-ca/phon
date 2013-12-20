@@ -23,16 +23,11 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.plaf.ComponentUI;
 
-import ca.phon.alignment.Aligner;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.Phone;
-import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.Tuple;
 
 /**
@@ -185,7 +180,7 @@ public class PhoneMapDisplay extends JComponent {
 	 * @return the aligned phones at the given position
 	 */
 	public Tuple<IPAElement, IPAElement> getAlignedPhones(int idx) {
-		Tuple<IPAElement, IPAElement> retVal = new Tuple<>();
+		Tuple<IPAElement, IPAElement> retVal = new Tuple<IPAElement, IPAElement>();
 
 		int gIdx = 0;
 		int pIdx = 0;

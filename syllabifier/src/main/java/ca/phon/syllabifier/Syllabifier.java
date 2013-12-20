@@ -5,7 +5,6 @@ import java.util.List;
 import ca.phon.ipa.IPAElement;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
 
 /**
  * Provides methods for applying the {@link SyllableConstituentType}

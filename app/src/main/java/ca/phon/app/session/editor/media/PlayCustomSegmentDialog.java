@@ -12,17 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import org.apache.velocity.runtime.parser.node.GetExecutor;
-
-import vlc4j.VLCError;
-import vlc4j.VLCException;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.media.player.PhonMediaPlayer;
@@ -38,6 +29,9 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.util.MsFormatter;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Dialog to play custom segments.
@@ -78,7 +72,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 	public PlayCustomSegmentDialog(SessionEditor editor, PhonMediaPlayer player) {
 		super();
 		this.mediaPlayerRef = new WeakReference<PhonMediaPlayer>(player);
-		this.editorRef = new WeakReference<>(editor);
+		this.editorRef = new WeakReference<SessionEditor>(editor);
 		init();
 	}
 	

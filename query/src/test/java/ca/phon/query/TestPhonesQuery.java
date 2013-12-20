@@ -1,31 +1,22 @@
 package ca.phon.query;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.script.QueryScript;
 import ca.phon.script.params.EnumScriptParam;
-import ca.phon.script.params.ScriptParam;
 import ca.phon.session.Session;
 
 /**
@@ -34,6 +25,9 @@ import ca.phon.session.Session;
  */
 @RunWith(Parameterized.class)
 public class TestPhonesQuery extends TestQuery {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(TestPhonesQuery.class.getName());
 	
 	public TestPhonesQuery(Project project, Session session, String scriptPath,
 			Map<String, Object> params, int expectedResults) {
@@ -48,7 +42,7 @@ public class TestPhonesQuery extends TestQuery {
 	
 	@Parameters
 	public static Collection<Object[]> testData() {
-		final Collection<Object[]> retVal = new ArrayList<>();
+		final Collection<Object[]> retVal = new ArrayList<Object[]>();
 		
 		final ProjectFactory factory = new ProjectFactory();
 		try {
@@ -94,8 +88,10 @@ public class TestPhonesQuery extends TestQuery {
 			retVal.add(unStressedSyllableByGroupParams(project, session));
 			
 			// TODO metadata tests?
-		} catch (IOException | ProjectConfigurationException e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (ProjectConfigurationException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;
@@ -105,7 +101,7 @@ public class TestPhonesQuery extends TestQuery {
 	 * Basic Phones.js test
 	 */
 	private static Object[] basicTestParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.primary.filterType", new EnumScriptParam.ReturnValue("Phonex", 2));
 		
@@ -117,7 +113,7 @@ public class TestPhonesQuery extends TestQuery {
 	 * 
 	 */
 	private static Object[] participantNameParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.speaker.participantNames", "Anne");
 		
@@ -125,7 +121,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] participantAge1Params(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.speaker.age1Comparator", new EnumScriptParam.ReturnValue("less than", 0));
 		params.put("filters.speaker.age1String", "03;00.00");
@@ -134,7 +130,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] participantAge2Params(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.speaker.age1Comparator", new EnumScriptParam.ReturnValue("greater than", 2));
 		params.put("filters.speaker.age1String", "03;00.00");
@@ -146,7 +142,7 @@ public class TestPhonesQuery extends TestQuery {
 	 * Test group position filter
 	 */
 	private static Object[] singletonGroupFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.group.gSingleton", true);
 		params.put("filters.group.gInitial", false);
@@ -158,7 +154,7 @@ public class TestPhonesQuery extends TestQuery {
 	
 	
 	private static Object[] nonSingletonGroupFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.group.gSingleton", false);
 		params.put("filters.group.gInitial", true);
@@ -169,7 +165,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] initialGroupFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.group.gSingleton", false);
 		params.put("filters.group.gInitial", true);
@@ -180,7 +176,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] medialGroupFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.group.gSingleton", false);
 		params.put("filters.group.gInitial", false);
@@ -191,7 +187,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] finalGroupFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.group.gSingleton", false);
 		params.put("filters.group.gInitial", false);
@@ -205,7 +201,7 @@ public class TestPhonesQuery extends TestQuery {
 	 * Test group filter
 	 */
 	private static Object[] groupFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.groupPattern.filter", "d");
 		
@@ -216,7 +212,7 @@ public class TestPhonesQuery extends TestQuery {
 	 * Test aligned group filter
 	 */
 	private static Object[] alignedGroupFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.alignedGroup.tier", "Orthography");
 		params.put("filters.alignedGroup.patternFilter.filter", "happy");
@@ -231,7 +227,7 @@ public class TestPhonesQuery extends TestQuery {
 	 */
 
 	private static Object[] allWordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", true);
@@ -243,7 +239,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] singletonWordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", true);
@@ -255,7 +251,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] nonSingletonWordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", false);
@@ -267,7 +263,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] initialWordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", false);
@@ -279,7 +275,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] medialWordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", false);
@@ -291,7 +287,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] finalWordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", false);
@@ -303,7 +299,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] wordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", true);
@@ -316,7 +312,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] alignedWordFilterParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.word.wSingleton", true);
@@ -332,7 +328,7 @@ public class TestPhonesQuery extends TestQuery {
 	
 	// syllable filter tests
 	private static Object[] allSyllablesByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sSingleton", true);
@@ -345,7 +341,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] singletonSyllableByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sSingleton", true);
@@ -357,7 +353,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] singletonSyllableByWordParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.syllable.searchBySyllable", true);
@@ -370,7 +366,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] initialSyllableByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sSingleton", false);
@@ -382,7 +378,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] initialSyllableByWordParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.syllable.searchBySyllable", true);
@@ -395,7 +391,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] medialSyllableByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sSingleton", false);
@@ -407,7 +403,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] medialSyllableByWordParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.syllable.searchBySyllable", true);
@@ -420,7 +416,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] finalSyllableByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sSingleton", false);
@@ -432,7 +428,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] finalSyllableByWordParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.word.searchByWord", true);
 		params.put("filters.syllable.searchBySyllable", true);
@@ -445,7 +441,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] primaryStressedSyllableByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sPrimary", true);
@@ -456,7 +452,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] secondaryStressedSyllableByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sPrimary", false);
@@ -467,7 +463,7 @@ public class TestPhonesQuery extends TestQuery {
 	}
 	
 	private static Object[] unStressedSyllableByGroupParams(Project project, Session session) {
-		final Map<String, Object> params = new HashMap<>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("filters.primary.filter", "\\c+");
 		params.put("filters.syllable.searchBySyllable", true);
 		params.put("filters.syllable.sPrimary", false);

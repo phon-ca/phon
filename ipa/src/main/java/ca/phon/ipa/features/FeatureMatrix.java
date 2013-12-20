@@ -18,12 +18,9 @@
 
 package ca.phon.ipa.features;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
@@ -40,11 +37,9 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.featureset.xml.FeatureMatrixType;
 import ca.phon.featureset.xml.FeatureSetType;
 import ca.phon.featureset.xml.FeatureType;
-import ca.phon.featureset.xml.ObjectFactory;
 
 /**
  * Holds all defined feature set for IPA characters. This information is held in

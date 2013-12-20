@@ -175,7 +175,15 @@ public class ImportFolderEP implements IPluginEntryPoint {
 				project.saveSession(session, writeLock);
 				project.releaseSessionWriteLock(session, writeLock);
 				
-			} catch (IOException | ParserConfigurationException | SAXException e) {
+			} catch (IOException e) { 
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				super.setStatus(TaskStatus.ERROR);
+				err = e;
+			} catch (ParserConfigurationException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				super.setStatus(TaskStatus.ERROR);
+				err = e;
+			} catch (SAXException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				super.setStatus(TaskStatus.ERROR);
 				err = e;

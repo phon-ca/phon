@@ -8,12 +8,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.Tier;
@@ -88,7 +85,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 * @return <code>true</code> if the contents of the field
 	 *  are valid, <code>false</code> otherwise.
 	 */
-	private final AtomicReference<T> validatedObjRef = new AtomicReference<>();
+	private final AtomicReference<T> validatedObjRef = new AtomicReference<T>();
 	protected boolean validateText() {
 		boolean retVal = true;
 

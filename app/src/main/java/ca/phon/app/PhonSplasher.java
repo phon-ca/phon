@@ -21,8 +21,6 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import org.jdesktop.swingx.util.OS;
-
 import ca.phon.ui.nativedialogs.OSInfo;
 
 /**

@@ -17,19 +17,9 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipa.IPAElement;
@@ -39,8 +29,6 @@ import ca.phon.syllabifier.basic.io.StageType;
 import ca.phon.syllabifier.basic.io.SyllabifierDef;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 
 /**
  * 

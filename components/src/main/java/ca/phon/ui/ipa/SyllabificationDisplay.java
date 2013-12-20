@@ -6,20 +6,15 @@
 package ca.phon.ui.ipa;
 
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.plaf.ComponentUI;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
 /**

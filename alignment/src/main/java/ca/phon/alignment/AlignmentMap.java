@@ -105,7 +105,7 @@ public class AlignmentMap<T> {
 	 * @return aligned elements
 	 */
 	public List<T> getAligned(List<T> eles) {
-		if(eles.size() == 0) return new ArrayList<>();
+		if(eles.size() == 0) return new ArrayList<T>();
 		final List<T> topElements = getTopAlignmentElements();
 		final List<T> btmElements = getBottomAlignmentElements();
 		
@@ -114,9 +114,9 @@ public class AlignmentMap<T> {
 		final int startIdx = (isTop ? topElements.indexOf(eles.get(0)) : btmElements.indexOf(eles.get(0)));
 		final int endIdx = (isTop ? topElements.indexOf(eles.get(eles.size()-1)) : btmElements.indexOf(eles.get(eles.size()-1)));
 		
-		if(startIdx < 0 || endIdx < 0) return new ArrayList<>();
+		if(startIdx < 0 || endIdx < 0) return new ArrayList<T>();
 		
-		final List<T> retVal = new ArrayList<>();
+		final List<T> retVal = new ArrayList<T>();
 		for(int i = startIdx; i <= endIdx; i++) {
 			final T ele = (isTop ? btmElements.get(i) : topElements.get(i));
 			if(ele != null)

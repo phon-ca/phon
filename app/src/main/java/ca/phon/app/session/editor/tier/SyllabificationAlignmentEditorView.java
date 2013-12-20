@@ -2,10 +2,6 @@ package ca.phon.app.session.editor.tier;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -39,6 +32,9 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 public class SyllabificationAlignmentEditorView extends EditorView {
 
 	private static final long serialVersionUID = -1757697054252181347L;
@@ -55,9 +51,9 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private JScrollPane scroller;
 	
 	// components
-	private final List<SyllabificationDisplay> targetDisplays = new ArrayList<>();
-	private final List<SyllabificationDisplay> actualDisplays = new ArrayList<>();
-	private final List<PhoneMapDisplay> alignmentDisplayus = new ArrayList<>();
+	private final List<SyllabificationDisplay> targetDisplays = new ArrayList<SyllabificationDisplay>();
+	private final List<SyllabificationDisplay> actualDisplays = new ArrayList<SyllabificationDisplay>();
+	private final List<PhoneMapDisplay> alignmentDisplayus = new ArrayList<PhoneMapDisplay>();
 	
 	public SyllabificationAlignmentEditorView(SessionEditor editor) {
 		super(editor);

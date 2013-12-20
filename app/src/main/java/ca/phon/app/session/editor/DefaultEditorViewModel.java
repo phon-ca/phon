@@ -20,13 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
-import javax.swing.MenuElement;
 
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
@@ -47,9 +42,7 @@ import bibliothek.util.xml.XElement;
 import bibliothek.util.xml.XIO;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
@@ -96,7 +89,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	public DefaultEditorViewModel(SessionEditor editor) {
 		super();
 		
-		editorRef = new WeakReference<>(editor);
+		editorRef = new WeakReference<SessionEditor>(editor);
 	}
 	
 	private CControl getDockControl() {
@@ -151,7 +144,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			final String dockableName = viewInfo.name();
 			List<String> categoryDockables = viewsByCategory.get(viewInfo.category());
 			if(categoryDockables == null) {
-				categoryDockables = new ArrayList<>();
+				categoryDockables = new ArrayList<String>();
 				viewsByCategory.put(viewInfo.category(), categoryDockables);
 			}
 			categoryDockables.add(dockableName);

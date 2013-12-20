@@ -18,13 +18,10 @@
 
 package ca.phon.ipa.alignment;
 
-import java.util.List;
-
 import ca.phon.alignment.AlignmentMap;
 import ca.phon.ipa.AudiblePhoneVisitor;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.Phone;
 
 /**
  * 

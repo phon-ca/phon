@@ -1,6 +1,5 @@
 package ca.phon.session;
 
-import ca.phon.util.Tuple;
 
 /**
  * Used to calculate the start/end time values for

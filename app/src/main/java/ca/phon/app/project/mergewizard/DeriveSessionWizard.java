@@ -19,8 +19,6 @@ package ca.phon.app.project.mergewizard;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;

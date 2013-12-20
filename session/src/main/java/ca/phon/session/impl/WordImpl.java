@@ -2,7 +2,6 @@ package ca.phon.session.impl;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.OrthoElement;

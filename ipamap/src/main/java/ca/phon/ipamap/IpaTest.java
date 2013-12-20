@@ -1,27 +1,16 @@
 package ca.phon.ipamap;
 
-import java.awt.AWTEvent;
-import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.ipamap.io.IpaGrids;
 import ca.phon.ui.ipamap.io.ObjectFactory;
-import ca.phon.ui.painter.CmpPainter;
-import ca.phon.util.OSInfo;
 
 public class IpaTest extends JPanel {
 	

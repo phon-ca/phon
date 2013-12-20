@@ -2,7 +2,6 @@ package ca.phon.project;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 
 import junit.framework.Assert;

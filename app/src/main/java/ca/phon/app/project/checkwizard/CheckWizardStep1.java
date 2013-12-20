@@ -34,7 +34,6 @@ import javax.swing.event.ChangeListener;
 
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.SessionSelector;
-import ca.phon.media.player.PhonPlayerCanvas;
 import ca.phon.project.Project;
 import ca.phon.session.SessionLocation;
 import ca.phon.syllabifier.Syllabifier;
@@ -104,7 +103,7 @@ public class CheckWizardStep1 extends WizardStep {
 		topPanel.setLayout(topLayout);
 		
 		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
-		final List<Language> orderedSyllabifiers = new ArrayList<>(syllabifierLibrary.availableSyllabifierLanguages());
+		final List<Language> orderedSyllabifiers = new ArrayList<Language>(syllabifierLibrary.availableSyllabifierLanguages());
 	    Collections.sort(orderedSyllabifiers);
 	    
 	    syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new Language[0]));

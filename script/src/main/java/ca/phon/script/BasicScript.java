@@ -1,20 +1,13 @@
 package ca.phon.script;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Script;
-
 import ca.phon.extensions.ExtensionSupport;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
 
 /**
  * Basic phon script in memory.  This script stores the script
@@ -32,11 +25,11 @@ public class BasicScript implements PhonScript {
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(BasicScript.class, this);
 	
-	private final List<String> pkgImports = new ArrayList<>();
+	private final List<String> pkgImports = new ArrayList<String>();
 	
-	private final List<String> classImports = new ArrayList<>();
+	private final List<String> classImports = new ArrayList<String>();
 	
-	private final List<URI> requirePaths = new ArrayList<>();
+	private final List<URI> requirePaths = new ArrayList<URI>();
 	
 	/**
 	 * Used by sub-classes to allow direct access to buffer
@@ -48,7 +41,7 @@ public class BasicScript implements PhonScript {
 	}
 	
 	// maintain a single context
-	private AtomicReference<PhonScriptContext> contextRef = new AtomicReference<>();
+	private AtomicReference<PhonScriptContext> contextRef = new AtomicReference<PhonScriptContext>();
 	
 	public BasicScript(String text) {
 		super();

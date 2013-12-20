@@ -3,8 +3,6 @@ package ca.phon.syllable;
 import java.lang.ref.WeakReference;
 
 import ca.phon.extensions.Extension;
-import ca.phon.extensions.ExtensionProvider;
-import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPAElement;
 
 /**

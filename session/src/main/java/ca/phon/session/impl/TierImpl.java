@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.session.Tier;
-import ca.phon.session.TierDescription;
 
 public class TierImpl<T> implements Tier<T> {
 	
