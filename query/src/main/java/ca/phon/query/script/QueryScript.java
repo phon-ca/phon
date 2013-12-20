@@ -20,6 +20,7 @@ package ca.phon.query.script;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import ca.phon.script.PhonScriptContext;
 
@@ -76,13 +77,14 @@ public class QueryScript extends LazyQueryScript {
 		
 		setupLibraryFolders();
 	}
-	
+	private static final Logger LOGGER = Logger
+			.getLogger(QueryScript.class.getName());
 	/**
 	 * Setup library folders for 'require'
 	 */
 	private void setupLibraryFolders() {
-		final URL scriptFolder = getClass().getResource(".");
-		
+		final URL scriptFolder = ClassLoader.getSystemClassLoader().getResource("ca/phon/query/script/");
+		LOGGER.info(scriptFolder.toString());
 		try {
 			final URI uri = scriptFolder.toURI();
 			super.addRequirePath(uri);

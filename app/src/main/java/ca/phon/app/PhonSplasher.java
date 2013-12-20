@@ -17,11 +17,12 @@
  */
 package ca.phon.app;
 
-import java.io.File;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
 import ca.phon.ui.nativedialogs.OSInfo;
+import ca.phon.util.PrefHelper;
 
 /**
  * Starts the Phon application along with a fast Phon splash screen.
@@ -30,12 +31,39 @@ import ca.phon.ui.nativedialogs.OSInfo;
  */
 public class PhonSplasher {
 	
+	/**
+	 * Property used to load splash image
+	 */
+	public final static String SPLASH_IMAGE_PROPERTY = 
+			PhonSplasher.class.getName() + ".splashImage";
+	
+	/**
+	 * Default location of splash image
+	 */
+	private final static String DEFAULT_SPLASH_IMAGE = "data/phonboot.png";
+	
+	/**
+	 * Property for boot class
+	 */
+	public final static String BOOT_CLASS_PROPERTY =
+			PhonSplasher.class.getName() + ".bootClass";
+	
+	/**
+	 * Default boot class 
+	 */
+	public final static String DEFAULT_BOOT_CLASS = Main.class.getName();
+	
 	public static void main(String[] args) throws Exception {
-		BootWindow.splash(ImageIO.read(new File("data/phonboot.png")));
+		final String splashImage = PrefHelper.get(SPLASH_IMAGE_PROPERTY, DEFAULT_SPLASH_IMAGE);
+		final InputStream splashStream = PhonSplasher.class.getClassLoader().getResourceAsStream(splashImage);
+		
+		final String bootClass = PrefHelper.get(BOOT_CLASS_PROPERTY, DEFAULT_BOOT_CLASS);
+		
+		BootWindow.splash(ImageIO.read(splashStream));
 		if(!OSInfo.isMacOs())
-			BootWindow.invokeMainInNewProcess("ca.phon.application.main.Phon", args);
+			BootWindow.invokeMainInNewProcess(bootClass, args);
 		else
-			BootWindow.invokeMain("ca.phon.application.main.Phon", args);
+			BootWindow.invokeMain(bootClass, args);
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {}
