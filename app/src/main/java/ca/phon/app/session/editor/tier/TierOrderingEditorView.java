@@ -349,7 +349,7 @@ public class TierOrderingEditorView extends EditorView {
 		
 		final SessionFactory factory = SessionFactory.newFactory();
 		final List<TierViewItem> currentView = getCurrentOrder();
-		final List<TierViewItem> newTierView = new ArrayList<>();
+		final List<TierViewItem> newTierView = new ArrayList<TierViewItem>();
 		for(TierViewItem toi:currentView) {
 			final TierViewItem newItem = 
 					factory.createTierViewItem(toi.getTierName(), toi.isVisible(), toi.getTierFont(), lock);
@@ -377,7 +377,7 @@ public class TierOrderingEditorView extends EditorView {
 		
 		final SessionFactory factory = SessionFactory.newFactory();
 		final List<TierViewItem> currentView = getCurrentOrder();
-		final List<TierViewItem> newTierView = new ArrayList<>();
+		final List<TierViewItem> newTierView = new ArrayList<TierViewItem>();
 		for(TierViewItem toi:currentView) {
 			final TierViewItem newItem = 
 					factory.createTierViewItem(toi.getTierName(), !hide, toi.getTierFont(), toi.isTierLocked());
@@ -402,7 +402,7 @@ public class TierOrderingEditorView extends EditorView {
 		int selectedRow = tierOrderingTable.getSelectedRow();
 		
 		final List<TierViewItem> tierOrder = getCurrentOrder();
-		final List<TierViewItem> newOrder = new ArrayList<>(tierOrder);
+		final List<TierViewItem> newOrder = new ArrayList<TierViewItem>(tierOrder);
 		if(selectedRow > 0) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
 			
@@ -420,7 +420,7 @@ public class TierOrderingEditorView extends EditorView {
 		int selectedRow = tierOrderingTable.getSelectedRow();
 		
 		final List<TierViewItem> tierOrder = getCurrentOrder();
-		final List<TierViewItem> newOrder = new ArrayList<>(tierOrder);
+		final List<TierViewItem> newOrder = new ArrayList<TierViewItem>(tierOrder);
 		if(selectedRow >= 0 && selectedRow < tierOrder.size()-1) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
 			
@@ -614,7 +614,7 @@ public class TierOrderingEditorView extends EditorView {
 	@RunOnEDT
 	public void onTierViewChange(EditorEvent ee) {
 //		if(ee.getSource() != getEditor().get) {
-			final List<TierViewItem> tierOrder = new ArrayList<>(getEditor().getSession().getTierView());
+			final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>(getEditor().getSession().getTierView());
 			tierOrderRef.getAndSet(tierOrder);
 			
 			// check for a current selection

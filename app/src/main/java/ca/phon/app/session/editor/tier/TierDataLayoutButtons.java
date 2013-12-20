@@ -46,8 +46,8 @@ public class TierDataLayoutButtons extends JComponent {
 	public TierDataLayoutButtons(Container container, TierDataLayout layout) {
 		super();
 		
-		this.containerRef = new WeakReference<>(container);
-		this.layoutRef = new WeakReference<>(layout);
+		this.containerRef = new WeakReference<Container>(container);
+		this.layoutRef = new WeakReference<TierDataLayout>(layout);
 		init();
 	}
 	

@@ -121,7 +121,7 @@ public class EditorEventManager {
 	public List<EditorAction> getActionsForEvent(String eventName) {
 		List<EditorAction> retVal = actionMap.get(eventName);
 		if(retVal == null) 
-			retVal = new ArrayList<>();
+			retVal = new ArrayList<EditorAction>();
 		else 
 			retVal = Collections.unmodifiableList(retVal);
 		return retVal;

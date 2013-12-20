@@ -69,7 +69,7 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 		
 		// fix name in tier view
 		final List<TierViewItem> oldTierView = session.getTierView();
-		final List<TierViewItem> newTierView = new ArrayList<>();
+		final List<TierViewItem> newTierView = new ArrayList<TierViewItem>();
 		for(TierViewItem tv:oldTierView) {
 			if(tv.getTierName().equals(tierName)) {
 				final TierViewItem newItem = 

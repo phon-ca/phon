@@ -86,11 +86,11 @@ public class TierDataLayout implements LayoutManager2 {
 	/**
 	 * map of component <-> constraints
 	 */
-	private final Map<Component, TierDataConstraint> constraintMap = new WeakHashMap<>();
+	private final Map<Component, TierDataConstraint> constraintMap = new WeakHashMap<Component, TierDataConstraint>();
 
-	private final Map<TierDataConstraint, Component> componentMap = new HashMap<>();
+	private final Map<TierDataConstraint, Component> componentMap = new HashMap<TierDataConstraint, Component>();
 	
-	private final ArrayList<Rectangle> rowRects = new ArrayList<>();
+	private final ArrayList<Rectangle> rowRects = new ArrayList<Rectangle>();
 	
 	/**
 	 * cached size calculations
@@ -98,7 +98,7 @@ public class TierDataLayout implements LayoutManager2 {
 	private final Map<TierDataConstraint, Rectangle> cachedRects =
 			Collections.synchronizedMap(new HashMap<TierDataConstraint, Rectangle>());
 	
-	private final AtomicReference<Dimension> prefSizeRef = new AtomicReference<>();
+	private final AtomicReference<Dimension> prefSizeRef = new AtomicReference<Dimension>();
 	
 	private volatile GroupMode groupMode = GroupMode.ALIGNED;
 	
@@ -332,7 +332,7 @@ public class TierDataLayout implements LayoutManager2 {
 	private void calcLayout(Container parent) {
 		// get an ordered list of constraints
 		final List<TierDataConstraint> orderedConstraints = 
-				new ArrayList<>(constraintMap.values());
+				new ArrayList<TierDataConstraint>(constraintMap.values());
 		Collections.sort(orderedConstraints);
 		
 		// keep a reference to each row's bounding rectangle
