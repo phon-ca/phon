@@ -3,3 +3,4 @@
 .settings/
 target/
 ipadictionary/src/main/resources/META-INF/dict
+*\~
