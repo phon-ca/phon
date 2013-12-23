@@ -51,7 +51,6 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PathExpander;
 import ca.phon.util.PrefHelper;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
@@ -107,13 +106,13 @@ public class SaveQueryDialog extends JDialog {
 	}
 
 	private void updateLocationFields() {
-		final PathExpander pe = new PathExpander();
-		projSaveLocField.setText("<html><p>" + pe.compressPath(QueryScriptLibrary.projectScriptFolder(getProject())) + "</p></html>");
-		libSaveLocField.setText("<html><p>" + pe.compressPath(PrefHelper.getUserPrefDir() + File.separator + "script") + "</p></html>");
+//		final PathExpander pe = new PathExpander();
+		projSaveLocField.setText("<html><p>" + QueryScriptLibrary.projectScriptFolder(getProject()) + "</p></html>");
+		libSaveLocField.setText("<html><p>" + PrefHelper.getUserPrefDir() + File.separator + "script" + "</p></html>");
 	}
 
 	private void init() {
-		final PathExpander pe = new PathExpander();
+//		final PathExpander pe = new PathExpander();
 		
 		nameField = new JTextField();
 		nameField.getDocument().addDocumentListener(new DocumentListener() {

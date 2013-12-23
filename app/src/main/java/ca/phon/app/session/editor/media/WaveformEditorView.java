@@ -78,7 +78,6 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PathExpander;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -473,8 +472,9 @@ public class WaveformEditorView extends EditorView {
 		File movFile = MediaLocator.findMediaFile(
 				session.getMediaLocation(), editor.getProject(), session.getCorpus());
 		if(movFile == null) {
-			final PathExpander pe = new PathExpander();
-			final String expandedPath = pe.expandPath(session.getMediaLocation());
+//			final PathExpander pe = new PathExpander();
+			final String expandedPath = session.getMediaLocation();
+//					pe.expandPath(session.getMediaLocation());
 			movFile = new File(expandedPath);
 		}
 		if(movFile != null && movFile.exists()) {
@@ -649,8 +649,9 @@ public class WaveformEditorView extends EditorView {
 			}
 			String segmentPath = segmentFile.getAbsolutePath();
 			
-			final PathExpander pe = new PathExpander();
-			final String mediaLocation = pe.expandPath(getEditor().getSession().getMediaLocation());
+//			final PathExpander pe = new PathExpander();
+			final String mediaLocation = getEditor().getSession().getMediaLocation();
+//					pe.expandPath(getEditor().getSession().getMediaLocation());
 			
 			File mediaFile = 
 				MediaLocator.findMediaFile(mediaLocation, getEditor().getProject(), getEditor().getSession().getCorpus());
@@ -711,8 +712,9 @@ public class WaveformEditorView extends EditorView {
 			
 			if(getEditor().currentRecord() == null) return;
 			
-			final PathExpander pe = new PathExpander();
-			final String mediaLocation = pe.expandPath(getEditor().getSession().getMediaLocation());
+//			final PathExpander pe = new PathExpander();
+			final String mediaLocation = getEditor().getSession().getMediaLocation();
+//					pe.expandPath(getEditor().getSession().getMediaLocation());
 			
 			File mediaFile = 
 				MediaLocator.findMediaFile(mediaLocation, getEditor().getProject(), getEditor().getSession().getCorpus());

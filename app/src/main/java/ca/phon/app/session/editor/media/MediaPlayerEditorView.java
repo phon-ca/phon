@@ -67,7 +67,6 @@ import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.MsFormatter;
-import ca.phon.util.PathExpander;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
@@ -195,8 +194,9 @@ public class MediaPlayerEditorView extends EditorView {
 		if(mediaPlayer.getMediaFile() != null) {
 			mediaPlayer.stop();
 		}
-		final PathExpander pe = new PathExpander();
-		String mediaRef = pe.expandPath(getEditor().getSession().getMediaLocation());
+//		final PathExpander pe = new PathExpander();
+		String mediaRef = getEditor().getSession().getMediaLocation();
+//				pe.expandPath(getEditor().getSession().getMediaLocation());
 		File mediaFile =
 				MediaLocator.findMediaFile(mediaRef, getEditor().getProject(), getEditor().getSession().getCorpus());
 		if(mediaFile != null)

@@ -27,7 +27,6 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.EmptyQueueException;
-import ca.phon.util.PathExpander;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Queue;
 
@@ -97,10 +96,10 @@ public class MediaLocator {
 	public static File findMediaFile(Project project, Session session) {
 		// build a list of possible media locations
 		Queue<String> mediaLocations = new Queue<String>();
-		final PathExpander pe = new PathExpander();
+//		final PathExpander pe = new PathExpander();
 		String mediaRef = session.getMediaLocation();
 		if(mediaRef != null && mediaRef.length() > 0) {
-			mediaRef = pe.expandPath(mediaRef);
+//			mediaRef = pe.expandPath(mediaRef);
 			mediaLocations.queue(mediaRef);
 			// check for extension on media ref
 			if(mediaRef.indexOf('.') < 0) {
