@@ -40,7 +40,6 @@ import javax.swing.text.Document;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.PathExpander;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -139,7 +138,7 @@ public class FileSelectionField extends PromptedTextField {
 		
 		if(getState() != FieldState.PROMPT) {
 			String txt = getText();
-			txt = (new PathExpander()).expandPath(txt);
+//			txt = (new PathExpander()).expandPath(txt);
 			retVal = new File(txt);
 		}
 		
@@ -159,7 +158,8 @@ public class FileSelectionField extends PromptedTextField {
 			setState(FieldState.INPUT);
 			
 			String path = f.getAbsolutePath();
-			String collapsedPath = (new PathExpander()).compressPath(path);
+			String collapsedPath = path;
+//					(new PathExpander()).compressPath(path);
 			setText(collapsedPath);
 			
 			super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
@@ -323,8 +323,9 @@ public class FileSelectionField extends PromptedTextField {
 			final File f = FileSelectionField.this.getSelectedFile();
 			if(f != null) {
 				final String path = f.getPath();
-				final PathExpander pe = new PathExpander();
-				final String compressedPath = pe.compressPath(path);
+//				final PathExpander pe = new PathExpander();
+				final String compressedPath = path;
+//						pe.compressPath(path);
 				
 				FileSelectionField.this.setText(compressedPath);
 			} else {

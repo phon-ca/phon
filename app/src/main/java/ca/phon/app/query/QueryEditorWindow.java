@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PipedReader;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
@@ -71,7 +72,6 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PathExpander;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -311,7 +311,12 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		if(location == null) {
 			title = "untitled";
 		} else {
-			title = (new PathExpander()).compressPath(location.getFile());
+			try {
+				title = location.toURI().toASCIIString();
+//					(new PathExpander()).compressPath(location.getFile());
+			} catch (URISyntaxException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 		}
 		setWindowName(title + (hasUnsavedChanges() ? " *" : ""));
 		
