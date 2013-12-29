@@ -198,6 +198,7 @@ public class FolderProjectList extends JPanel {
 	
 	private void scanDirectory() {
 		projectButtons.clear();
+		if(projectFolder == null || projectFolder.listFiles() == null) return;
 		for(File f:projectFolder.listFiles()) {
 			if(f.isDirectory()) {
 				// check for a project.xml file
