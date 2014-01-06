@@ -3,7 +3,10 @@ package ca.phon.app.session.editor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -31,6 +34,9 @@ import com.jgoodies.forms.layout.FormLayout;
 @PhonPlugin(name="Session Info")
 public class SessionEditorEP implements IPluginEntryPoint {
 	
+	private static final Logger LOGGER = Logger
+			.getLogger(SessionEditorEP.class.getName());
+	
 	private final static String EP_NAME = "SessionEditor";
 
 	@Override
@@ -55,7 +61,13 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		if(SwingUtilities.isEventDispatchThread())
 			onEdt.run();
 		else
-			SwingUtilities.invokeLater(onEdt);
+			try {
+				SwingUtilities.invokeAndWait(onEdt);
+			} catch (InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} catch (InvocationTargetException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 	}
 
 	public void showEditor(Project project, Session session, boolean blindMode) {

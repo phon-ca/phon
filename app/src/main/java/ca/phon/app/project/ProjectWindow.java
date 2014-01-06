@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
@@ -56,6 +57,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectListener;
 import ca.phon.ui.CommonModuleFrame;
@@ -475,22 +477,13 @@ public class ProjectWindow extends CommonModuleFrame
 					Runnable th = new Runnable() {
 						public void run() {
 							openSession(corpus, session);
-							
+							msgPanel.setItermediate(false);
 							msgPanel.showPanel(false);
-//							msgPanel.reset();
-//							SwingUtilities.invokeLater(new Runnable() {
-//								public void run() {
-//									msgPanel.removeAll();
-//									msgPanel.revalidate();
-//								}
-//							});
+//							msgPanel.showPanel(false);
 						}
 					};
 					PhonWorker.getInstance().invokeLater(th);
 					
-					
-//					msgPanel.removeAll();
-//					msgPanel.revalidate();
 				} 
 			}
 			
@@ -640,7 +633,11 @@ public class ProjectWindow extends CommonModuleFrame
 		initInfo.put("sessionName", corpus + "." + session);
 		initInfo.put("blindmode", blindModeBox.isSelected());
 		
-		PluginEntryPointRunner.executePluginInBackground("SessionEditor", initInfo);
+		try {
+			PluginEntryPointRunner.executePlugin("SessionEditor", initInfo);
+		} catch (PluginException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 		
 //		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
 //				"ca.phon.modules.transcript.RecordEditorController");
