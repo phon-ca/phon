@@ -108,7 +108,7 @@ public class SaveQueryDialog extends JDialog {
 	private void updateLocationFields() {
 //		final PathExpander pe = new PathExpander();
 		projSaveLocField.setText("<html><p>" + QueryScriptLibrary.projectScriptFolder(getProject()) + "</p></html>");
-		libSaveLocField.setText("<html><p>" + PrefHelper.getUserPrefDir() + File.separator + "script" + "</p></html>");
+		libSaveLocField.setText("<html><p>" + PrefHelper.getUserDataFolder() + File.separator + "script" + "</p></html>");
 	}
 
 	private void init() {
@@ -221,7 +221,7 @@ public class SaveQueryDialog extends JDialog {
 		if (saveInProjectBtn.isSelected()) {
 			baseDir = new File(QueryScriptLibrary.projectScriptFolder(getProject()));
 		} else if (saveInUserDirBtn.isSelected()) {
-			baseDir = new File(PrefHelper.getUserPrefDir() + File.separator + "script");
+			baseDir = new File(PrefHelper.getUserDataFolder() + File.separator + "script");
 		} else {
 			final OpenDialogProperties props = new OpenDialogProperties();
 			props.setParentWindow(this);

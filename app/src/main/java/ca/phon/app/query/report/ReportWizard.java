@@ -238,7 +238,7 @@ public class ReportWizard extends WizardFrame {
 		ReportDesign retVal = factory.createReportDesign();
 		
 		File lastDesignFile = 
-			new File(PrefHelper.getUserPrefDir(), AUTOSAVE_FILENAME);
+			new File(PrefHelper.getUserDataFolder(), AUTOSAVE_FILENAME);
 		if(lastDesignFile.exists()) {
 			try {
 				retVal = ReportIO.readDesign(lastDesignFile);
@@ -251,7 +251,7 @@ public class ReportWizard extends WizardFrame {
 	}
 	
 	private void writeAutosaveReport() {
-		File designFile = new File(PrefHelper.getUserPrefDir(), AUTOSAVE_FILENAME);
+		File designFile = new File(PrefHelper.getUserDataFolder(), AUTOSAVE_FILENAME);
 		try {
 			ReportIO.writeDesign(reportEditor.getReportDesign(), designFile);
 		} catch (IOException e) {

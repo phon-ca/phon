@@ -50,7 +50,7 @@ public class RecordEditorPerspective {
 	
 	private final static String PERSPECTIVE_LIST = "META-INF/layouts/layouts.list";
 	
-	private final static File PERSPECTIVES_FOLDER = new File(PrefHelper.getUserPrefDir() + 
+	private final static File PERSPECTIVES_FOLDER = new File(PrefHelper.getUserDataFolder() + 
 			File.separator + "layouts");
 	
 	/**

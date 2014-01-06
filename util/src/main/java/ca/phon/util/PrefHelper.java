@@ -54,7 +54,13 @@ public class PrefHelper {
 	private final static Logger LOGGER = 
 			Logger.getLogger(PrefHelper.class.getName());
 	
-	public static String getUserPrefDir() {
+	/**
+	 * Returns the location of the application data folder for
+	 * the current platform.
+	 * 
+	 * @return application support folder location
+	 */
+	public static String getUserDataFolder() {
 		String retVal = System.getProperty("user.home");
 		
 		if(OSInfo.isMacOs()) {
@@ -76,7 +82,7 @@ public class PrefHelper {
 	/**
 	 * Application prefs root node
 	 */
-	public final static String PREF_ROOT = "ca/phon";
+	public final static String PREF_ROOT = "/ca/phon/util";
 	
 //	/**
 //	 * UI prefs root node
