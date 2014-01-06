@@ -99,16 +99,16 @@ public class PrefHelper {
 		return retVal;
 	}
 	
-	/**
-	 * Returns the root system preferences node.
-	 * 
-	 * @return Preferences
-	 */
-	public static Preferences getSystemPreferences() {
-		Preferences retVal = 
-				Preferences.systemRoot().node(PREF_ROOT);
-		return retVal;
-	}
+//	/**
+//	 * Returns the root system preferences node.
+//	 * 
+//	 * @return Preferences
+//	 */
+//	public static Preferences getSystemPreferences() {
+//		Preferences retVal = 
+//				Preferences.systemRoot().node(PREF_ROOT);
+//		return retVal;
+//	}
 	
 //	/**
 //	 * Return the user UI preferences node.
@@ -165,8 +165,7 @@ public class PrefHelper {
 	 */
 	public static String get(String key, String def) {
 		String propVal = System.getProperty(key,
-							getUserPreferences().get(key, 
-									getSystemPreferences().get(key, def)));
+							getUserPreferences().get(key, def));
 		return propVal;
 	}
 	
@@ -194,8 +193,7 @@ public class PrefHelper {
 		}
 		if(retVal == null) {
 			// continue to search in preferences chain
-			retVal = getUserPreferences().getInt(key, 
-						getSystemPreferences().getInt(key, def));
+			retVal = getUserPreferences().getInt(key, def);
 		}
 		return retVal;
 	}
@@ -219,8 +217,7 @@ public class PrefHelper {
 		}
 		if(retVal == null) {
 			// continue to search in preferences chain
-			retVal = getUserPreferences().getBoolean(key, 
-						getSystemPreferences().getBoolean(key, def));
+			retVal = getUserPreferences().getBoolean(key, def);
 		}
 		return retVal;
 	}
@@ -248,8 +245,7 @@ public class PrefHelper {
 		}
 		if(retVal == null) {
 			// continue to search in preferences chain
-			retVal = getUserPreferences().getFloat(key,
-						getSystemPreferences().getFloat(key, def));
+			retVal = getUserPreferences().getFloat(key, def);
 		}
 		return retVal;
 	}
@@ -278,8 +274,7 @@ public class PrefHelper {
 		if(retVal == null) {
 			
 			// continue to search in preferences chain
-			retVal = getUserPreferences().getDouble(key,
-						getSystemPreferences().getDouble(key, def));
+			retVal = getUserPreferences().getDouble(key, def);
 		}
 		return retVal;
 	}
@@ -308,8 +303,7 @@ public class PrefHelper {
 		if(retVal == null) {
 			
 			// continue to search in preferences chain
-			retVal = getUserPreferences().getLong(key,
-						getSystemPreferences().getLong(key, def));
+			retVal = getUserPreferences().getLong(key, def);
 		}
 		return retVal;
 	}
@@ -328,8 +322,7 @@ public class PrefHelper {
 	 */
 	public static byte[] getByteArray(String key, byte[] def) {
 		// continue to search in preferences chain
-		byte[] retVal = getUserPreferences().getByteArray(key,
-						getSystemPreferences().getByteArray(key, def));
+		byte[] retVal = getUserPreferences().getByteArray(key, def);
 		return retVal;
 	}
 	
