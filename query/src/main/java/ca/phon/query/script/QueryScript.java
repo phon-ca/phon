@@ -84,7 +84,7 @@ public class QueryScript extends LazyQueryScript {
 	 */
 	private void setupLibraryFolders() {
 		final URL scriptFolder = ClassLoader.getSystemClassLoader().getResource("ca/phon/query/script/");
-		LOGGER.info(scriptFolder.toString());
+//		LOGGER.info(scriptFolder.toString());
 		try {
 			final URI uri = scriptFolder.toURI();
 			super.addRequirePath(uri);
