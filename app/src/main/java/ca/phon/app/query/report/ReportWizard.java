@@ -399,7 +399,7 @@ public class ReportWizard extends WizardFrame {
 				if(openWhenDone) {
 					try {
 						LOGGER.info("Opening report in default editor...");
-						OpenFileLauncher.launchBrowser(new URL("file://" + output.getAbsolutePath()));
+						OpenFileLauncher.openURL(new URL("file://" + output.getAbsolutePath()));
 					} catch (MalformedURLException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 						

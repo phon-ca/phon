@@ -275,13 +275,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		
 		helpMenu.addSeparator();
 		
-		// user manual
-		PluginAction manAct = new PluginAction("UserManual");
-		manAct.putValue(Action.NAME, "User manual");
-		manAct.putValue(Action.SHORT_DESCRIPTION, "View user manual in your default pdf viewer");
-		JMenuItem manItem = new JMenuItem(manAct);
-		helpMenu.add(manItem);
-		
 		// about
 		PluginAction aboutAct = new PluginAction("HelpAbout");
 		aboutAct.putValue(Action.NAME, "About Phon");

@@ -29,9 +29,6 @@ import ca.phon.session.Tier;
  */
 public class RecordImpl implements Record {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(RecordImpl.class.getName());
-	
 	/* Attributes */
 	private final AtomicReference<Participant> participantRef = new AtomicReference<Participant>();
 	

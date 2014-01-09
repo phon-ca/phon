@@ -25,7 +25,7 @@ public class OpenFileLauncher {
 	
 	private final static Logger LOGGER = Logger.getLogger(OpenFileLauncher.class.getName());
 
-	public static boolean launchBrowser(URL url) {
+	public static boolean openURL(URL url) {
 		if(OSInfo.isMacOs()) {
 			try {
 				Runtime.getRuntime().exec( new String[] {

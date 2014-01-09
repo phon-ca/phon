@@ -556,7 +556,7 @@ public class FolderProjectList extends JPanel {
 	public void onShowProject(PhonActionEvent pae) {
 		LocalProjectButton btn = (LocalProjectButton)pae.getData();
 		try {
-			OpenFileLauncher.launchBrowser(
+			OpenFileLauncher.openURL(
 					btn.getProjectFile().toURI().toURL());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
