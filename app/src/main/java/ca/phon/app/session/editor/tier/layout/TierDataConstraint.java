@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.tier;
+package ca.phon.app.session.editor.tier.layout;
 
 /**
  * Contraint object used in TierDataLayouts.

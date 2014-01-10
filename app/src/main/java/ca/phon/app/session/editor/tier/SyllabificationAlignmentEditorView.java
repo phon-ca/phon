@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.tier;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,9 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.tier.layout.TierDataConstraint;
+import ca.phon.app.session.editor.tier.layout.TierDataLayout;
+import ca.phon.app.session.editor.tier.layout.TierDataLayoutButtons;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Group;
@@ -195,6 +199,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		
 		if(showAlignment) {
 			final JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+//			separator.setPreferredSize(new Dimension(0, 1));
 			separator.setForeground(Color.lightGray);
 			final TierDataConstraint sepConstraint = new TierDataConstraint(TierDataConstraint.FULL_TIER_COLUMN, 2);
 			contentPane.add(separator, sepConstraint);

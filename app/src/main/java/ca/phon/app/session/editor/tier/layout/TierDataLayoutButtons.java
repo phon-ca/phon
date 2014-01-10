@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.tier;
+package ca.phon.app.session.editor.tier.layout;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -10,7 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-import ca.phon.app.session.editor.tier.TierDataLayout.GroupMode;
 import ca.phon.ui.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
@@ -55,10 +54,9 @@ public class TierDataLayoutButtons extends JComponent {
 		return layoutRef.get();
 	}
 	
-	public Container getContainer() {
+	public Container getTierContainer() {
 		return containerRef.get();
 	}
-
 	
 	private void init() {
 		buttonGroup = new ButtonGroup();
@@ -78,7 +76,7 @@ public class TierDataLayoutButtons extends JComponent {
 		alignButton = buttons.get(1);
 		alignButton.setAction(alignAct);
 		
-		if(getLayout().getGroupMode() == GroupMode.ALIGNED)
+		if(getLayout().getLayoutType() == TierDataLayoutType.ALIGN_GROUPS)
 			alignButton.setSelected(true);
 		else
 			wrapButton.setSelected(true);
@@ -94,24 +92,24 @@ public class TierDataLayoutButtons extends JComponent {
 	public void alignGroups() {
 		alignButton.setSelected(true);
 		wrapButton.setSelected(false);
-		getLayout().setGroupMode(GroupMode.ALIGNED);
+		getLayout().setLayoutType(TierDataLayoutType.ALIGN_GROUPS);
 		
-		getContainer().invalidate();
-		getLayout().layoutContainer(getContainer());
-		if(getContainer().getParent() != null) {
-			getContainer().getParent().validate();
+		getTierContainer().invalidate();
+		getLayout().layoutContainer(getTierContainer());
+		if(getTierContainer().getParent() != null) {
+			getTierContainer().getParent().validate();
 		}
 	}
 	
 	public void wrapGroups() {
 		wrapButton.setSelected(true);
 		alignButton.setSelected(false);
-		getLayout().setGroupMode(GroupMode.WRAPPED);
+		getLayout().setLayoutType(TierDataLayoutType.WRAP_GROUPS);
 		
-		getContainer().invalidate();
-		getLayout().layoutContainer(getContainer());
-		if(getContainer().getParent() != null) {
-			getContainer().getParent().validate();
+		getTierContainer().invalidate();
+		getLayout().layoutContainer(getTierContainer());
+		if(getTierContainer().getParent() != null) {
+			getTierContainer().getParent().validate();
 		}
 	}
 	

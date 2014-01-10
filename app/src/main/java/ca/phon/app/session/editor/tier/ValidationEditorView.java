@@ -14,6 +14,9 @@ import javax.swing.SwingConstants;
 
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.tier.layout.TierDataConstraint;
+import ca.phon.app.session.editor.tier.layout.TierDataLayout;
+import ca.phon.app.session.editor.tier.layout.TierDataLayoutButtons;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
