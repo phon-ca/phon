@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public enum TierDataLayoutType {
 	ALIGN_GROUPS(AlignGroupsLayoutProvider.class),
-	WRAP_GROUPS(null);
+	WRAP_GROUPS(WrapGroupsLayoutProvider.class);
 	
 	private static final Logger LOGGER = Logger
 			.getLogger(TierDataLayoutType.class.getName());

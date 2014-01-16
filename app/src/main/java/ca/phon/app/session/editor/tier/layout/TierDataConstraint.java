@@ -17,11 +17,18 @@ public class TierDataConstraint implements Comparable<TierDataConstraint> {
 	 */
 	public final static int GROUP_START_COLUMN = 1;
 	
+	/*
+	 * Flat tiers
+	 */
 	/**
-	 * Column index for flat tier, flat tiers may extend beyond the current
-	 * parent bounds (like group tiers) in aligned mode
+	 * Flat tiers - width is max(prefSize, parentSize) 
 	 */
 	public final static int FLAT_TIER_COLUMN = -1;
+	
+	/**
+	 * Flat tiers - width is prefSize of component
+	 */
+	public final static int FLAT_TIER_PREF_COLUMN = -2;
 	
 	/**
 	 * Column index for components that extend across the panel

@@ -81,6 +81,7 @@ public class TierDataLayoutButtons extends JComponent {
 		else
 			wrapButton.setSelected(true);
 		
+		// TODO need to setup a method that works for all platforms
 		final JComponent comp = SegmentedButtonBuilder.createLayoutComponent(buttons);
 		setLayout(new BorderLayout());
 		add(comp, BorderLayout.CENTER);

@@ -77,6 +77,7 @@ public class TierDataLayout implements LayoutManager2 {
 
 	public void setLayoutType(TierDataLayoutType layoutType) {
 		this.layoutType = layoutType;
+		this.layoutProvider = layoutType.createLayoutProvider();
 	}
 	
 	public TierDataLayoutProvider getLayoutProvider() {
@@ -127,27 +128,6 @@ public class TierDataLayout implements LayoutManager2 {
 	public Dimension preferredLayoutSize(Container parent) {
 		return getLayoutProvider().preferredSize(parent, this);
 	}
-
-//	private Dimension calcLayoutSize(Container parent, boolean fill) {
-//		
-//		} else if(getGroupMode() == GroupMode.WRAPPED) {
-//			if(cachedRects.size() == 0)
-//				calcLayout(parent);
-//			int width = DEFAULT_TIER_LABEL_WIDTH + DEFAULT_H_GAP;
-//			int maxGroupWidth = 0;
-//			int height = 0;
-//			
-//			for(TierDataConstraint tdc:cachedRects.keySet()) {
-//				final Rectangle rect = cachedRects.get(tdc);
-//				if(tdc.getColumnIndex() != TierDataConstraint.TIER_LABEL_COLUMN) {
-//					maxGroupWidth = Math.max(maxGroupWidth, rect.width);
-//				}
-//				height = Math.max(height, rect.y + rect.height);
-//			}
-//			retVal = new Dimension(width + maxGroupWidth, height);
-//		}
-//		return retVal;
-//	}
 	
 	@Override
 	public void removeLayoutComponent(Component comp) {
@@ -280,87 +260,6 @@ public class TierDataLayout implements LayoutManager2 {
 	Component componentForConstraint(TierDataConstraint constraint) {
 		return componentMap.get(constraint);
 	}
-
-//	private Rectangle wrappedRectForConstraint(TierDataConstraint tdc, Container parent) {
-//		Rectangle retVal = cachedRects.get(tdc);
-//		if(retVal == null) {
-//			// layout has not been calculated
-//			calcLayout(parent);
-//			retVal = cachedRects.get(tdc);
-//		}
-//		if(tdc.getColumnIndex() == TierDataConstraint.TIER_LABEL_COLUMN) {
-//			// adjust row height
-//			retVal.height = 
-//					(tdc.getRowIndex() < rowRects.size() ? rowRects.get(tdc.getRowIndex()).height : 0);
-//		}
-//		return retVal;
-//	}
-//	
-//	/*
-//	 * Calculation method for WRAPPED group mode
-//	 */
-//	private void calcLayout(Container parent) {
-//		// get an ordered list of constraints
-//		final List<TierDataConstraint> orderedConstraints = 
-//				new ArrayList<TierDataConstraint>(constraintMap.values());
-//		Collections.sort(orderedConstraints);
-//		
-//		// keep a reference to each row's bounding rectangle
-//		rowRects.clear();
-//		Rectangle rowRect = new Rectangle();
-//		rowRect.x = 0; rowRect.y = 0;
-//		int currentRow = 0;
-//		rowRects.add(rowRect);
-//		
-//		int currentX = 0;
-//		int currentY = 0;
-//		
-//		final Dimension size = parent.getSize();
-//		
-//		for(TierDataConstraint constraint:orderedConstraints) {
-//			// check for a row change
-//			if(currentRow != constraint.getRowIndex()) {
-//				currentX = 0;
-//				currentY = rowRect.y + rowRect.height + DEFAULT_V_GAP;
-//				rowRect = new Rectangle();
-//				rowRect.x = currentX;
-//				rowRect.y = currentY;
-//				
-//				rowRects.add(rowRect);
-//				currentRow = constraint.getRowIndex();
-//			}
-//			
-//			final Component comp = componentMap.get(constraint);
-//			final Dimension prefSize = comp.getPreferredSize();
-//			
-//			int compX = currentX;
-//			int compY = currentY;
-//			int compWidth = constraint.getColumnIndex() == TierDataConstraint.TIER_LABEL_COLUMN ? DEFAULT_TIER_LABEL_WIDTH : prefSize.width + 2;
-//			int compHeight = prefSize.height;
-//
-//			// wrap components
-//			if(compX + compWidth > size.width && constraint.getColumnIndex() > TierDataConstraint.GROUP_START_COLUMN) {
-//				compX = DEFAULT_TIER_LABEL_WIDTH + DEFAULT_H_GAP;
-//				compY = rowRect.y + rowRect.height + DEFAULT_V_GAP;
-//			}
-//			
-//			// adjust size of full/flat tiers correctly
-//			if(constraint.getColumnIndex() == TierDataConstraint.FLAT_TIER_COLUMN) {
-//				compX = DEFAULT_TIER_LABEL_WIDTH + DEFAULT_H_GAP;
-//				compWidth = size.width - DEFAULT_TIER_LABEL_WIDTH - DEFAULT_H_GAP;
-//			} else if(constraint.getColumnIndex() == TierDataConstraint.FULL_TIER_COLUMN) {
-//				compX = 0;
-//				compWidth = size.width;
-//			}
-//			
-//			final Rectangle compRect = new Rectangle(compX, compY, compWidth, compHeight);
-//			rowRect.add(compRect);
-//			cachedRects.put(constraint, compRect);
-//			
-//			currentX = compRect.x + compRect.width + DEFAULT_H_GAP;
-//			currentY = compRect.y;
-//		}
-//	}
 	
 }
 
