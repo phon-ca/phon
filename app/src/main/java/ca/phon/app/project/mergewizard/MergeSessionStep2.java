@@ -50,7 +50,7 @@ import ca.phon.session.AbstractRecordFilter;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.CollatorFactory;
@@ -72,7 +72,7 @@ public class MergeSessionStep2 extends WizardStep {
 	/**
 	 * Sessions+panels
 	 */
-	private Map<SessionLocation, RecordFilterPanel> panels;
+	private Map<SessionPath, RecordFilterPanel> panels;
 	
 	/**
 	 * Card layout
@@ -93,7 +93,7 @@ public class MergeSessionStep2 extends WizardStep {
 	/**
 	 * Constructor
 	 */
-	public MergeSessionStep2(Project project, List<SessionLocation> sessions) {
+	public MergeSessionStep2(Project project, List<SessionPath> sessions) {
 		super();
 		
 		this.project = project;
@@ -111,7 +111,7 @@ public class MergeSessionStep2 extends WizardStep {
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		
 //		Collator collator = CollatorFactory.defaultCollator();
-		List<SessionLocation> locations = new ArrayList<SessionLocation>();
+		List<SessionPath> locations = new ArrayList<SessionPath>();
 		locations.addAll(panels.keySet());
 		Collections.sort(locations);
 		
@@ -119,7 +119,7 @@ public class MergeSessionStep2 extends WizardStep {
 		sessionListPanel.setPreferredSize(new Dimension(200, 0));
 		sessionListPanel.setBorder(BorderFactory.createTitledBorder("Session list"));
 			
-		sessionList = new JXList(locations.toArray(new SessionLocation[0]));
+		sessionList = new JXList(locations.toArray(new SessionPath[0]));
 		sessionList.setCellRenderer(new SessionLocationRenderer());
 //		sessionList.setPreferredSize(new Dimension(200, 0));
 
@@ -130,7 +130,7 @@ public class MergeSessionStep2 extends WizardStep {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				SessionLocation loc = (SessionLocation)sessionList.getSelectedValue();
+				SessionPath loc = (SessionPath)sessionList.getSelectedValue();
 				if(loc != null) {
 					filterLayout.show(cardPanel, loc.toString());
 				}
@@ -148,7 +148,7 @@ public class MergeSessionStep2 extends WizardStep {
 		cardPanel.setBorder(BorderFactory.createTitledBorder("Select Records"));
 		
 		// add filter panels
-		for(SessionLocation loc:locations) {
+		for(SessionPath loc:locations) {
 //			SessionLocation loc = sessions.get(i);
 			RecordFilterPanel panel = panels.get(loc);
 			cardPanel.add(panel, loc.toString());
@@ -158,17 +158,17 @@ public class MergeSessionStep2 extends WizardStep {
 		add(centerPanel, BorderLayout.CENTER);
 	}
 	
-	public void setSelectedSessions(List<SessionLocation> sessions) {
+	public void setSelectedSessions(List<SessionPath> sessions) {
 		setupFilters(sessions);
 	
 		// sort first
-		List<SessionLocation> sortedSessions = new ArrayList<SessionLocation>();
+		List<SessionPath> sortedSessions = new ArrayList<SessionPath>();
 		sortedSessions.addAll(sessions);
 		Collections.sort(sortedSessions, 
-				new Comparator<SessionLocation>() {
+				new Comparator<SessionPath>() {
 
 					@Override
-					public int compare(SessionLocation o1, SessionLocation o2) {
+					public int compare(SessionPath o1, SessionPath o2) {
 						Collator collator = CollatorFactory.defaultCollator();
 						return collator.compare(o1.toString(), o2.toString());
 					}
@@ -178,7 +178,7 @@ public class MergeSessionStep2 extends WizardStep {
 
 		cardPanel.removeAll();
 		DefaultListModel newModel = new DefaultListModel();
-		for(SessionLocation loc:sortedSessions) {
+		for(SessionPath loc:sortedSessions) {
 			newModel.addElement(loc);
 			
 			RecordFilterPanel panel = panels.get(loc);
@@ -190,12 +190,12 @@ public class MergeSessionStep2 extends WizardStep {
 		}
 	}
 	
-	private void setupFilters(List<SessionLocation> sessions) {
+	private void setupFilters(List<SessionPath> sessions) {
 		if(panels == null) {
-			panels = new TreeMap<SessionLocation, RecordFilterPanel>();
+			panels = new TreeMap<SessionPath, RecordFilterPanel>();
 		}
 		
-		for(SessionLocation loc:sessions) {
+		for(SessionPath loc:sessions) {
 			if(!panels.containsKey(loc)) {
 				try {
 					final Session t = project.openSession(loc.getCorpus(), loc.getSession());
@@ -209,7 +209,7 @@ public class MergeSessionStep2 extends WizardStep {
 		}
 		
 		// remove any old references
-		for(SessionLocation loc:panels.keySet().toArray(new SessionLocation[0])) {
+		for(SessionPath loc:panels.keySet().toArray(new SessionPath[0])) {
 			if(!sessions.contains(loc)) {
 //				UtteranceFilterPanel panel = panels.get(loc);
 //				
@@ -223,7 +223,7 @@ public class MergeSessionStep2 extends WizardStep {
 	}
 	
 	// we already have the transcripts loaded, avoid doing it again
-	public Session getSessionAtLocation(SessionLocation loc) {
+	public Session getSessionAtLocation(SessionPath loc) {
 		RecordFilterPanel panel = panels.get(loc);
 		
 		Session retVal = null;
@@ -233,7 +233,7 @@ public class MergeSessionStep2 extends WizardStep {
 		return retVal;
 	}
 	
-	public RecordFilter getFilterForLocation(SessionLocation loc) {
+	public RecordFilter getFilterForLocation(SessionPath loc) {
 		RecordFilterPanel panel = panels.get(loc);
 		
 		RecordFilter retVal = null;
@@ -261,7 +261,7 @@ public class MergeSessionStep2 extends WizardStep {
 			JLabel retVal = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected,
 					cellHasFocus);
 			
-			SessionLocation loc = (SessionLocation)value;
+			SessionPath loc = (SessionPath)value;
 			
 			String txt = loc.getCorpus() + "." + loc.getSession();
 			

@@ -76,7 +76,7 @@ import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.Session;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -147,7 +147,7 @@ public class QueryRunnerPanel extends JPanel {
 	 */
 	public final static String QUERY_SAVED_PROP = "_query_saved_";
 	
-	public QueryRunnerPanel(Project project, QueryScript script, List<SessionLocation> selectedSessions) {
+	public QueryRunnerPanel(Project project, QueryScript script, List<SessionPath> selectedSessions) {
 		super();
 		this.project = project;
 		this.queryScript = script;
@@ -373,7 +373,7 @@ public class QueryRunnerPanel extends JPanel {
 				rsManager.saveQuery(getProject(), getQuery());
 				
 				// load from temp project
-				for(SessionLocation sessionLocation:tableModel.sessions) {
+				for(SessionPath sessionLocation:tableModel.sessions) {
 					final String sessionName = sessionLocation.getCorpus() + "." + sessionLocation.getSession();
 					final ResultSet tempResults = rsManager.loadResultSet(tempProject, getQuery(), sessionName);
 					
@@ -450,7 +450,7 @@ public class QueryRunnerPanel extends JPanel {
 			
 //			final QueryTask queryTask = new QueryTask(project, queryScript);
 //			queryTask.addTaskListener(queryTaskListener);
-			for(SessionLocation sessionLocation:tableModel.sessions) {
+			for(SessionPath sessionLocation:tableModel.sessions) {
 				if(isShutdown()) break;
 				// load session
 				try {
@@ -495,7 +495,7 @@ public class QueryRunnerPanel extends JPanel {
 				int selectedIndex = resultsTable.getSelectedRow();
 				selectedIndex = resultsTable.convertRowIndexToModel(selectedIndex);
 				if(selectedIndex >= 0) {
-					final SessionLocation location = tableModel.sessions.get(selectedIndex);
+					final SessionPath location = tableModel.sessions.get(selectedIndex);
 //					if(sessionNameObj == null) return;
 					
 					final String sessionName = location.getCorpus() + "." + location.getSession();
@@ -537,7 +537,7 @@ public class QueryRunnerPanel extends JPanel {
 			final QueryTask queryTask = (QueryTask)task;
 			final Session session = queryTask.getSession();
 			
-			final SessionLocation location = new SessionLocation(session.getCorpus(), session.getName());
+			final SessionPath location = new SessionPath(session.getCorpus(), session.getName());
 			final int rowIdx = tableModel.sessions.indexOf(location);
 			tableModel.setValueAt(newStatus, rowIdx, 1);
 			
@@ -570,7 +570,7 @@ public class QueryRunnerPanel extends JPanel {
 			final QueryTask queryTask = (QueryTask)task;
 			final Session session = queryTask.getSession();
 			
-			final SessionLocation location = new SessionLocation(session.getCorpus(), session.getName());
+			final SessionPath location = new SessionPath(session.getCorpus(), session.getName());
 			final int rowIdx = tableModel.sessions.indexOf(location);
 			
 			if(property.equals(QueryTask.PROGRESS_PROP)) {
@@ -588,22 +588,22 @@ public class QueryRunnerPanel extends JPanel {
 	 */
 	private class RunnerTableModel extends AbstractTableModel {
 		
-		private final List<SessionLocation> sessions;
+		private final List<SessionPath> sessions;
 		
 		/*
 		 * cached values, set by using setValueAt
 		 */
-		private final Map<SessionLocation, PhonTask.TaskStatus> statusMap
-			= new HashMap<SessionLocation, PhonTask.TaskStatus>();
+		private final Map<SessionPath, PhonTask.TaskStatus> statusMap
+			= new HashMap<SessionPath, PhonTask.TaskStatus>();
 		
-		private final Map<SessionLocation, Integer> progressMap
-			= new HashMap<SessionLocation, Integer>();
+		private final Map<SessionPath, Integer> progressMap
+			= new HashMap<SessionPath, Integer>();
 		
-		private final Map<SessionLocation, Integer> resultsMap
-			= new HashMap<SessionLocation, Integer>();
+		private final Map<SessionPath, Integer> resultsMap
+			= new HashMap<SessionPath, Integer>();
 		
-		public RunnerTableModel(List<SessionLocation> selectedSessions) {
-			sessions = new ArrayList<SessionLocation>();
+		public RunnerTableModel(List<SessionPath> selectedSessions) {
+			sessions = new ArrayList<SessionPath>();
 			sessions.addAll(selectedSessions);
 			Collections.sort(sessions);
 		}
@@ -636,7 +636,7 @@ public class QueryRunnerPanel extends JPanel {
 			
 			switch(col) {
 			case 0:
-				retVal = SessionLocation.class;
+				retVal = SessionPath.class;
 				break;
 				
 			case 1:
@@ -658,7 +658,7 @@ public class QueryRunnerPanel extends JPanel {
 		@Override
 		public Object getValueAt(int row, int col) {
 			Object retVal = null;
-			final SessionLocation session = sessions.get(row);
+			final SessionPath session = sessions.get(row);
 			
 			switch(col) {
 			case 0:
@@ -699,7 +699,7 @@ public class QueryRunnerPanel extends JPanel {
 		
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-			final SessionLocation session = sessions.get(rowIndex);
+			final SessionPath session = sessions.get(rowIndex);
 			
 			switch(columnIndex) {
 			case 1:

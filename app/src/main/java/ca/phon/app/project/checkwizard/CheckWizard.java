@@ -35,7 +35,7 @@ import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.PhonLoggerConsole;
@@ -356,7 +356,7 @@ public class CheckWizard extends WizardFrame {
 			};
 			worker.invokeLater(toRun);
 			
-			for(SessionLocation sessionLocation:step1.getSelectedSessions()) {
+			for(SessionPath sessionLocation:step1.getSelectedSessions()) {
 				PhonTask t = createTask(sessionLocation);
 				worker.invokeLater(t);
 			}
@@ -385,7 +385,7 @@ public class CheckWizard extends WizardFrame {
 		}
 	}
 	
-	private PhonTask createTask(SessionLocation location) {
+	private PhonTask createTask(SessionPath location) {
 		PhonTask retVal = null;
 		
 		Operation op = step1.getOperation();

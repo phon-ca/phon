@@ -35,7 +35,7 @@ import javax.swing.event.ChangeListener;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.decorations.DialogHeader;
@@ -178,8 +178,8 @@ public class CheckWizardStep1 extends WizardStep {
 		return resetAlignmentBox.isSelected();
 	}
 	
-	public List<SessionLocation> getSelectedSessions() {
-		List<SessionLocation> locations = sessionSelector.getSelectedSessions();
+	public List<SessionPath> getSelectedSessions() {
+		List<SessionPath> locations = sessionSelector.getSelectedSessions();
 		Collections.sort(locations);
 		return locations;
 	}

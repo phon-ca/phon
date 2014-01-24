@@ -37,7 +37,7 @@ import ca.phon.session.DateFormatter;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
@@ -185,7 +185,7 @@ public class DeriveSessionWizard extends WizardFrame {
 		String session = step1.getMergedSessionName();
 		
 //		Collator collator = CollatorFactory.defaultCollator();
-		List<SessionLocation> sessions = step1.getSelectedSessions();
+		List<SessionPath> sessions = step1.getSelectedSessions();
 		Collections.sort(sessions);
 		
 		final Project project = getProject();
@@ -222,7 +222,7 @@ public class DeriveSessionWizard extends WizardFrame {
 			boolean checkDate = true;
 			String mergedMedia = null;
 			boolean checkMedia = true;
-			for(SessionLocation loc:sessions) {
+			for(SessionPath loc:sessions) {
 				final Session t = step2.getSessionAtLocation(loc);
 				final RecordFilter filter = step2.getFilterForLocation(loc);
 				

@@ -61,7 +61,7 @@ import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.action.PhonUIAction;
@@ -547,7 +547,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
         final PhonWorkerGroup workerGroup = new PhonWorkerGroup(1);
         final QueryScript script = scriptEditor.getScript();
 
-        final List<SessionLocation> selectedSessions = sessionSelector.getSelectedSessions();
+        final List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
         final QueryRunnerPanel queryRunnerPanel = new QueryRunnerPanel(getProject(), script, selectedSessions);
         
         final QueryName queryName = script.getExtension(QueryName.class);

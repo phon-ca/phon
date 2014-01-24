@@ -23,16 +23,16 @@ import ca.phon.util.Tuple;
  * Helper class for holding location for sessions
  * in a project.
  */
-public class SessionLocation extends Tuple<String, String> {
+public class SessionPath extends Tuple<String, String> {
 
 	/**
 	 * Constructor
 	 */
-	public SessionLocation() {
+	public SessionPath() {
 		this("", "");
 	}
 	
-	public SessionLocation(String corpus, String session) {
+	public SessionPath(String corpus, String session) {
 		super(corpus, session);
 	}
 	

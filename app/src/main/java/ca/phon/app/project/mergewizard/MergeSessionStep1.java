@@ -28,7 +28,7 @@ import javax.swing.JTextField;
 
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
@@ -117,7 +117,7 @@ public class MergeSessionStep1 extends WizardStep {
 		return corpusNameField.getText();
 	}
 	
-	public List<SessionLocation> getSelectedSessions() {
+	public List<SessionPath> getSelectedSessions() {
 		return sessionSelector.getSelectedSessions();
 	}
 	

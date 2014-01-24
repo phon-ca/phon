@@ -28,7 +28,7 @@ import javax.swing.ImageIcon;
 import javax.swing.tree.TreePath;
 
 import ca.phon.project.Project;
-import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.CheckedTreeNode;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.icons.IconManager;
@@ -97,9 +97,9 @@ public class SessionSelector extends CheckboxTree {
 		revalidate();
 	}
 	
-	public List<SessionLocation> getSelectedSessions() {
-		List<SessionLocation> retVal = 
-			new ArrayList<SessionLocation>();
+	public List<SessionPath> getSelectedSessions() {
+		List<SessionPath> retVal = 
+			new ArrayList<SessionPath>();
 		
 		TreePath[] checkPaths = getCheckingPaths();
 	
@@ -110,7 +110,7 @@ public class SessionSelector extends CheckboxTree {
 			String corpus = checkPath.getPath()[1].toString();
 			String session = checkPath.getPath()[2].toString();
 			
-			SessionLocation loc = new SessionLocation(corpus, session);
+			SessionPath loc = new SessionPath(corpus, session);
 			retVal.add(loc);
 		}
 		
