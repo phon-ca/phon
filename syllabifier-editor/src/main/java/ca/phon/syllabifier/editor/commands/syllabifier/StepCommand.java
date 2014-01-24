@@ -20,6 +20,7 @@ package ca.phon.syllabifier.editor.commands.syllabifier;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.text.ParseException;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
@@ -29,6 +30,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.IconLibrary;
 import ca.gedge.opgraph.app.IconLibrary.IconType;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.editor.SyllabifierEditor;
 
 /**
@@ -66,7 +68,7 @@ public class StepCommand extends AbstractAction {
 			if(context == null) {
 				context = new Processor(document.getGraph());
 				document.setProcessingContext(context);
-				context.getContext().put("__ipa__", editor.getIPA());
+//				context.getContext().put("__ipa__", editor.getIPA());
 			}
 			
 			if(context.hasNext()) {
@@ -74,7 +76,15 @@ public class StepCommand extends AbstractAction {
 				document.updateDebugState(context);
 			}
 			
-			editor.getIPADisplay().repaint();
+			IPATranscript transcript = (IPATranscript)context.getContext().get("__ipa__");
+			if(transcript == null)
+				try {
+					transcript = IPATranscript.parseTranscript("sdafdsafads");
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			editor.getIPADisplay().setPhonesForGroup(0, transcript);
 		}
 	}
 

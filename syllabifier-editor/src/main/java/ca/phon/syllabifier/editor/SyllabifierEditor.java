@@ -86,7 +86,8 @@ public class SyllabifierEditor extends JFrame {
 		CONSOLE("Console"),
 		DEBUG("Debug View"),
 		INSPECTOR("Inspector"),
-		LIBRARY("Library");
+		LIBRARY("Library"),
+		IPA_DISPLAY("IPA Transcript");
 		
 		String title;
 		
@@ -199,6 +200,7 @@ public class SyllabifierEditor extends JFrame {
 		defCenter.gridAdd( 30,   0,  70, 100, canvas );
 		
 		canvas.gridAdd( 0, 0, 100, 100, dockables.get(DockableView.CANVAS));
+		canvas.gridAdd( 0, 0, 30, 50, dockables.get(DockableView.IPA_DISPLAY));
 		defaultPerspective.storeLocations();
 		
 		// setup initial configuration
@@ -230,7 +232,12 @@ public class SyllabifierEditor extends JFrame {
 	}
 	
 	public IPATranscript getIPA() {
-		return display.getPhonesForGroup(0);
+		IPATranscript ipa = null;
+		if(display.getNumberOfGroups() == 0)
+			ipa = new IPATranscript();
+		else
+			ipa = display.getPhonesForGroup(0);
+		return ipa;
 	}
 	
 	public SyllabificationDisplay getIPADisplay() {
@@ -315,6 +322,11 @@ public class SyllabifierEditor extends JFrame {
 				case LIBRARY:
 					comp = graphEditor.getNodeLibrary();
 					break;
+					
+				case IPA_DISPLAY:
+					comp = display;
+					break;
+					
 				}
 				final DefaultSingleCDockable retVal = new DefaultSingleCDockable( dv.title , comp , new CAction[0] );
 				retVal.setTitleText(dv.title);

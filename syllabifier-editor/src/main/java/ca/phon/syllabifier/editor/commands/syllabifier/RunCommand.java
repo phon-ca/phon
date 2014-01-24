@@ -30,6 +30,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.IconLibrary;
 import ca.gedge.opgraph.app.IconLibrary.IconType;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.editor.SyllabifierEditor;
 
 /**
@@ -67,11 +68,10 @@ public class RunCommand extends AbstractAction {
 		if(document != null) {
 			Processor context = document.getProcessingContext();
 			
-			// inject ipa
 			if(context == null) {
 				context = new Processor(document.getGraph());
 				document.setProcessingContext(context);
-				context.getContext().put("__ipa__", editor.getIPA());
+//				context.getContext().put("__ipa__", editor.getIPA());
 			}
 			
 			if(context.hasNext()) {
@@ -79,7 +79,8 @@ public class RunCommand extends AbstractAction {
 				document.updateDebugState(context);
 			}
 			
-			editor.getIPADisplay().repaint();
+			final IPATranscript transcript = (IPATranscript)context.getContext().get("__ipa__");
+			editor.getIPADisplay().setPhonesForGroup(0, transcript);
 		}
 	}
 

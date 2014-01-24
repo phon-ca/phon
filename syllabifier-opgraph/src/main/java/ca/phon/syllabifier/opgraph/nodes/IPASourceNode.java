@@ -51,12 +51,14 @@ public class IPASourceNode extends OpNode implements NodeSettings {
 			try {
 				ipa = IPATranscript.parseTranscript(getIpa());
 				context.put(ipaOut, ipa);
+				context.getParent().put(IPA_KEY, ipa);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-		} else if (context.containsKey(IPA_KEY)) {
-			context.put(ipaOut, (IPATranscript)context.get(IPA_KEY));
-		}
+		} 
+//		else if (context.containsKey(IPA_KEY)) {
+//			context.put(ipaOut, (IPATranscript)context.get(IPA_KEY));
+//		}
 	}
 	
 	public String getIpa() {

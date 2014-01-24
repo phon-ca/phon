@@ -18,6 +18,16 @@
       <version>1.7.0</version>
     </dependency>
     <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-project</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.phon</groupId>
+      <artifactId>phon-workspace</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+    <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-core</artifactId>
       <version>0.1-SNAPSHOT</version>
