@@ -36,6 +36,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +52,8 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputAdapter;
 
+import org.jdesktop.swingx.VerticalLayout;
+
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
@@ -65,6 +68,8 @@ import ca.phon.media.exportwizard.MediaExportWizardProp;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.media.wavdisplay.WavDisplay;
 import ca.phon.media.wavdisplay.WavHelper;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;
 import ca.phon.session.Record;
@@ -252,6 +257,26 @@ public class WaveformEditorView extends EditorView {
 		gbc.weighty = 0.0;
 		contentPane.add(sizer, gbc);
 		
+		// add plug-in tiers
+		final JPanel tierPanel = new JPanel(new VerticalLayout(0));
+		final PluginManager pluginManager = PluginManager.getInstance();
+		final List<IPluginExtensionPoint<WaveformTier>> extraTiers = 
+				pluginManager.getExtensionPoints(WaveformTier.class);
+		for(IPluginExtensionPoint<WaveformTier> extraTier:extraTiers) {
+			final WaveformTier tier = extraTier.getFactory().createObject(this);
+			final JComponent comp = tier.getTierComponent();
+			tierPanel.add(comp);
+		}
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.0;
+		contentPane.add(tierPanel, gbc);
+		
 		add(new JScrollPane(contentPane), BorderLayout.CENTER);
 		
 		setupEditorActions();
@@ -299,6 +324,10 @@ public class WaveformEditorView extends EditorView {
 //			wavDisplay = null;
 //		}
 //	}
+	
+	public WaveformViewCalculator getCalculator() {
+		return new WaveformEditorViewCalculator(wavDisplay.get_timeBar());
+	}
 	
 	@Override
 	public String getName() {
