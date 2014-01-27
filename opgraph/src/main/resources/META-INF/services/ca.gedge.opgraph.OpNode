@@ -1,6 +1,2 @@
 ca.phon.opgraph.nodes.phonex.PhonexMatchNode
 ca.phon.opgraph.nodes.phonex.PhonexFindNode
-
-ca.phon.opgraph.nodes.objects.SessionNode
-ca.phon.opgraph.nodes.objects.ProjectNode
-ca.phon.opgraph.nodes.objects.WorkspaceNode
