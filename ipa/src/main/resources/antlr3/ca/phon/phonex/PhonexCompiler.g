@@ -11,6 +11,7 @@ package ca.phon.phonex;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.logging.*;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import ca.phon.fsa.*;
@@ -23,6 +24,9 @@ import ca.phon.fsa.*;
 }
 
 @members {
+
+private final static Logger LOGGER =
+	Logger.getLogger(PhonexCompiler.class.getName());
 
 private final Stack<PhonexFSA> fsaStack = new Stack<PhonexFSA>();
 
@@ -42,7 +46,6 @@ private PhonexFSA getFSA() {
 	}
 	return fsaStack.peek();
 }
-
 }
 
 /**
@@ -222,6 +225,9 @@ scope {
 		PluginProvider pluginProvider = PhonexPluginManager.getSharedInstance().getProvider(typeName);
 		if(pluginProvider != null) {
 			$value = pluginProvider.createMatcher(StringEscapeUtils.unescapeJava($STRING.text.substring(1, $STRING.text.length()-1)));
+		} else {
+			// issue a warning but don't stop compiling
+			LOGGER.log(Level.WARNING, "Unable to find phonex plug-in '" + typeName + "'");
 		}
 	}
 	|	^(PLUGIN (sc=negatable_identifier {$plugin_matcher::scTypes.add($sc.value);})+)
