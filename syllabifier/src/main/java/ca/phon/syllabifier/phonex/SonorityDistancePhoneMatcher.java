@@ -36,12 +36,15 @@ public class SonorityDistancePhoneMatcher implements PhoneMatcher {
 	public boolean matches(IPAElement p) {
 		boolean retVal = false;
 		
+		int distance = 0;
 		SonorityInfo info = p.getExtension(SonorityInfo.class);
 		if(info != null) {
-			final int distance = info.getDistance();
-			if(distance >= this.minDistance
-					|| (distance == 0 && allowFlat))
-				retVal = true;
+			distance = info.getDistance();
+		}
+		if(distance > 0) {
+			retVal = distance >= minDistance;
+		} else {
+			retVal = allowFlat;
 		}
 		
 		return retVal;
