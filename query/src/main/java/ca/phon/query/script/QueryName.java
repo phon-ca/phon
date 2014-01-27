@@ -1,7 +1,12 @@
 package ca.phon.query.script;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import ca.phon.extensions.Extension;
 
@@ -11,6 +16,9 @@ import ca.phon.extensions.Extension;
  */
 @Extension(QueryScript.class)
 public class QueryName {
+	
+	private static final Logger LOGGER = Logger.getLogger(QueryName.class
+			.getName());
 
 	private String name;
 	
@@ -18,9 +26,15 @@ public class QueryName {
 	
 	public QueryName(URL url) {
 		this.location = url;
-		final String path = url.getPath();
-		final int lastSlash = path.lastIndexOf(File.pathSeparatorChar);
-		this.name = (lastSlash > 0 ? path.substring(lastSlash) : path);
+		String path;
+		try {
+			path = url.toURI().getPath();
+			final int lastSlash = path.lastIndexOf(File.separatorChar);
+			this.name = (lastSlash > 0 ? path.substring(lastSlash + 1) : path);
+			this.name = StringEscapeUtils.unescapeXml(name);
+		} catch (URISyntaxException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 	}
 	
 	public QueryName(String name) {
