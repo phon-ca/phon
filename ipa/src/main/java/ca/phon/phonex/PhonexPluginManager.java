@@ -84,7 +84,7 @@ public class PhonexPluginManager {
 		
 		PhonexPlugin pluginAnnotation = matcherClass.getAnnotation(PhonexPlugin.class);
 		if(pluginAnnotation != null) {
-			String typeName = pluginAnnotation.value();
+			String typeName = pluginAnnotation.name();
 			if(_pluginProviders.get(typeName) == null) {
 				_pluginProviders.put(typeName, matcher);
 			}

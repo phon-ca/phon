@@ -7,17 +7,19 @@ options {
 }
 
 tokens {
+	ARG;
+	ARG_LIST;
+	BACK_REF;
+	BOUNDARY_MATCHER;
+	COMPOUND_MATCHER;
 	EXPR;
+	FEATURE_SET;
 	GROUP;
 	MATCHER;
-	COMPOUND_MATCHER;
-	PHONE_CLASS;
-	P_PHONE_CLASS;
-	BOUNDARY_MATCHER;
-	FEATURE_SET;
-	PLUGIN;
-	BACK_REF;
 	NAME;
+	PHONE_CLASS;
+	PLUGIN;
+	P_PHONE_CLASS;
 	QUANTIFIER;
 }
 
@@ -106,10 +108,20 @@ class_matcher
 	;
 
 plugin_matcher
-	:	COLON identifier OPEN_PAREN STRING CLOSE_PAREN
-	->	^(PLUGIN[$identifier.text] STRING)
+	:	COLON identifier OPEN_PAREN argument_list? CLOSE_PAREN
+	->	^(PLUGIN[$identifier.text] OPEN_PAREN argument_list? CLOSE_PAREN)
 	|	COLON negatable_identifier (PIPE negatable_identifier)*
 	->	^(PLUGIN["sctype"] negatable_identifier+)
+	;
+	
+argument
+	:	STRING
+	->	^(ARG STRING)
+	;
+	
+argument_list
+	:	argument ( COMMA argument )*
+	->	^(ARG_LIST argument+)
 	;
 	
 back_reference
@@ -199,6 +211,10 @@ PIPE
 	
 MINUS	
 	:	'-'
+	;
+	
+EQUALS
+	:	'='
 	;
 	
 OPEN_PAREN
@@ -296,7 +312,7 @@ WS  :   ( ' '
     ;
 	
 STRING
-    :  '\'' ( ESC_SEQ | HEX_CHAR | ~(BACKSLASH|'\'') )* '\''
+    :  '\"' ( ESC_SEQ | HEX_CHAR | ~(BACKSLASH|'\"') )* '\"'
     ;
     
 HEX_CHAR

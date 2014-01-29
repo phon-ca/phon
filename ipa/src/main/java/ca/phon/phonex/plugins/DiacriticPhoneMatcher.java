@@ -25,6 +25,16 @@ public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
 	
 	/**
 	 * Constructor
+	 * 
+	 * @param diacriticList
+	 */
+	protected DiacriticPhoneMatcher(String diacriticList) {
+		super();
+		parseDiacriticList(diacriticList, allowedDiacritics, forbiddenDiacritics);
+	}
+	
+	/**
+	 * Constructor
 	 */
 	protected DiacriticPhoneMatcher(List<Character> allowed, List<Character> forbidden) {
 		this.allowedDiacritics.addAll(allowed);
@@ -43,6 +53,22 @@ public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
 	 */
 	public List<Character> getForbiddenDiacritics() {
 		return Collections.unmodifiableList(forbiddenDiacritics);
+	}
+	
+	private void parseDiacriticList(String expr, List<Character> allowed, List<Character> forbidden) {
+		boolean isForbidden = false;
+		for(Character c:expr.toCharArray()) {
+			if(!Character.isWhitespace(c)) {
+				if(c == '-') {
+					isForbidden = true;
+				} else {
+					if(isForbidden)
+						forbidden.add(c);
+					else
+						allowed.add(c);
+				}
+			}
+		}
 	}
 
 }

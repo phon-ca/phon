@@ -11,7 +11,7 @@ import ca.phon.syllable.SyllableConstituentType;
 /**
  * Syllable constituent type matcher for phonex.
  */
-public final class SyllabificationInfoMatcher implements PhoneMatcher {
+public final class SyllableConstituentMatcher implements PhoneMatcher {
 	
 	/**
 	 * Allowed constituent types
@@ -28,7 +28,7 @@ public final class SyllabificationInfoMatcher implements PhoneMatcher {
 	/**
 	 * Constructor
 	 */
-	public SyllabificationInfoMatcher() {
+	public SyllableConstituentMatcher() {
 		
 	}
 	

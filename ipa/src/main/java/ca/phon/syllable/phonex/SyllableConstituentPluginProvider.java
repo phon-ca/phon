@@ -1,5 +1,7 @@
 package ca.phon.syllable.phonex;
 
+import java.util.List;
+
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.PhonexPatternException;
 import ca.phon.phonex.PhonexPlugin;
@@ -17,21 +19,27 @@ import ca.phon.syllable.SyllableConstituentType;
  * without the plug-in matcher identifier.  E.g., <code>{}:O|LA == {}:sctype("O|LA")</code>.
  * </p>
  */
-@PhonexPlugin("sctype")
-public class SyllableConstituentPhonexPlugin implements PluginProvider {
+@PhonexPlugin(name = "sctype", requiredArgs={String.class})
+public class SyllableConstituentPluginProvider implements PluginProvider {
 	
 	@Override
-	public PhoneMatcher createMatcher(String input)
-			throws PhonexPatternException {
-		SyllabificationInfoMatcher retVal = new SyllabificationInfoMatcher();
-		String[] scTypes = input.split(",");
+	public PhoneMatcher createMatcher(List<String> args)
+			throws IllegalArgumentException {
+		if(args == null)
+			throw new NullPointerException();
+		if(args.size() != 1) {
+			throw new IllegalArgumentException();
+		}
+		final String arg = args.get(0);
+		SyllableConstituentMatcher retVal = new SyllableConstituentMatcher();
+		String[] scTypes = arg.split("\\|");
 		for(String scTypeId:scTypes) {
 			boolean not = (scTypeId.startsWith("-") ? true : false);
 			if(not)
 				scTypeId = scTypeId.substring(1);
 			SyllableConstituentType scType = SyllableConstituentType.fromString(scTypeId);
 			if(scType == null) 
-				throw new PhonexPatternException("Invalid syllable constituent type '" + 
+				throw new IllegalArgumentException("Invalid syllable constituent type '" + 
 						scTypeId + "'");
 			else {
 				if(not)

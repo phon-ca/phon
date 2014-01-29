@@ -15,7 +15,7 @@ import ca.phon.phonex.PluginProvider;
  * and the optional boolean indicates if flat sonority is
  * allowed.
  */
-@PhonexPlugin("mdc")
+@PhonexPlugin(name = "mdc")
 public class SonorityMdcPlugin implements PluginProvider {
 
 	@Override

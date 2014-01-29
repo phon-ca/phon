@@ -1,27 +1,27 @@
 package ca.phon.phonex;
 
 /**
- * Unchecked exception thrown to indicate a syntax error 
- * in a regular-expression pattern. 
+ * Exception for phonex pattern errors.
+ *
  */
-public class PhonexPatternException extends IllegalArgumentException {
+public class PhonexPatternException extends RuntimeException {
 
-	private static final long serialVersionUID = 7034559683544852746L;
+	private static final long serialVersionUID = 5982555937562885148L;
 
 	public PhonexPatternException() {
 		super();
 	}
 
-	public PhonexPatternException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
+	public PhonexPatternException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
-	public PhonexPatternException(String arg0) {
-		super(arg0);
+	public PhonexPatternException(String message) {
+		super(message);
 	}
 
-	public PhonexPatternException(Throwable arg0) {
-		super(arg0);
+	public PhonexPatternException(Throwable cause) {
+		super(cause);
 	}
 
 }

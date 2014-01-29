@@ -1,5 +1,7 @@
 package ca.phon.phonex;
 
+import java.util.List;
+
 /**
  * <p>Extension point for the phonex language.  To add a new plug-in matcher
  * for the phonex langauge, perform the following steps:
@@ -15,29 +17,17 @@ package ca.phon.phonex;
  */
 public interface PluginProvider {
 	
-//	/**
-//	 * Check the given input string
-//	 * for errors.
-//	 * 
-//	 * @param input the input string for the plug-in matcher.
-//	 *  This is the data contained within parenthesis.
-//	 *  
-//	 * @throws PhonexPatternException if the given string
-//	 *  is not well formed
-//	 */
-//	public void checkInput(String input)
-//		throws PhonexPatternException;
-	
 	/**
 	 * Create a new matcher for the given input string.
 	 * 
-	 * @param input the input string for the plug-in matcher.
-	 *  This is the data contained within parenthesis.
+	 * @args arguments to the matcher
 	 * @return PhoneMatcher
-	 * @throws PhonexPatternException if the input string
-	 *  is not well formed.
+	 * @throws IllegalArgumentException if there was a problem
+	 *  creating the plug-in matcher
+	 * @throws NullPointerException if the provided argument list
+	 *  is <code>null</code>
 	 */
-	public PhoneMatcher createMatcher(String input)
-		throws PhonexPatternException;
+	public PhoneMatcher createMatcher(List<String> args)
+		throws IllegalArgumentException;
 
 }

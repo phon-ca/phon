@@ -23,7 +23,7 @@ public @interface PhonexPlugin {
 	 * 
 	 * <p>
 	 * For example, if the a class FooMatcher implements {@link PluginProvider} and
-	 * has the annotation @PhonexPlugin("foo") then FooMatcher will
+	 * has the annotation <code>@PhonexPlugin(name="foo")</code> then FooMatcher will
 	 * be used to parse phonex matchers identified with the "foo" string.
 	 * <pre>
 	 * {}:foo(&lt;expression&gt;)
@@ -33,6 +33,12 @@ public @interface PhonexPlugin {
 	 * and {@link PluginProvider#createMatcher(String)} methods.
 	 * </p>
 	 */
-	public String value();
+	public String name();
+	
+	/**
+	 * The list of argument types required by the {@link PluginProvider}
+	 * in order to create the matcher.
+	 */
+	public Class<?>[] requiredArgs() default {};
 	
 }

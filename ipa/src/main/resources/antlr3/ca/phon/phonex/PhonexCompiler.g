@@ -10,6 +10,7 @@ package ca.phon.phonex;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Stack;
 import java.util.logging.*;
 
@@ -219,20 +220,22 @@ scope {
 @init {
 	$plugin_matcher::scTypes = new ArrayList<String>();
 }
-	:	^(PLUGIN STRING)
+	:	^(PLUGIN OPEN_PAREN argument_list? CLOSE_PAREN)
 	{
 		String typeName = $PLUGIN.text;
 		PluginProvider pluginProvider = PhonexPluginManager.getSharedInstance().getProvider(typeName);
 		if(pluginProvider != null) {
-			$value = pluginProvider.createMatcher(StringEscapeUtils.unescapeJava($STRING.text.substring(1, $STRING.text.length()-1)));
+			List<String> argList = new ArrayList<String>();
+			if($argument_list.args != null) argList = $argument_list.args;
+			$value = pluginProvider.createMatcher(argList);
 		} else {
-			// issue a warning but don't stop compiling
-			LOGGER.log(Level.WARNING, "Unable to find phonex plug-in '" + typeName + "'");
+			final NoSuchPluginException ex = new NoSuchPluginException(typeName);
+			throw ex;
 		}
 	}
 	|	^(PLUGIN (sc=negatable_identifier {$plugin_matcher::scTypes.add($sc.value);})+)
 	{
-		SyllabificationInfoMatcher retVal = new SyllabificationInfoMatcher();
+		SyllableConstituentMatcher retVal = new SyllableConstituentMatcher();
 		
 		for(String scTypeString:$plugin_matcher::scTypes) {
 			boolean not = false;
@@ -252,6 +255,20 @@ scope {
 			}
 		}
 		$value = retVal;
+	}
+	;
+	
+argument_list returns [List<String> args]
+@init {
+	$args = new ArrayList<String>();
+}
+	:	^(ARG_LIST (arg=argument {$args.add($arg.value);})+)
+	;
+	
+argument returns [String value]
+	:	^(ARG STRING)
+	{	
+		$value = $STRING.text;
 	}
 	;
 

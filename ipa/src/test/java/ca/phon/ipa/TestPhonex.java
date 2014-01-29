@@ -4,23 +4,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import ca.phon.phonex.NoSuchPluginException;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 
 @RunWith(JUnit4.class)
 public class TestPhonex {
 
+	@Test(expected=NoSuchPluginException.class)
+	public void testMissingPlugin() throws Exception {
+		final String phonex = "\\v:noplugin()";
+		PhonexPattern.compile(phonex);
+	}
+	
 	@Test
-	public void testPhonex() throws Exception {
-		final String ipa = "ˈbʌɹθˌd";
-		final String phonex = "\\c*\\v+";
+	public void testDotText() throws Exception {
+		final String phonex = "(\\c*\\v+\\c*)*";
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final String ipa = "bbaab aba";
 		
-		final PhonexPattern pattern = PhonexPattern.compile("{}:Nucleus");
 		final PhonexMatcher matcher = pattern.matcher(IPATranscript.parseTranscript(ipa));
-		int cIdx = 0;
 		while(matcher.find()) {
 			System.out.println(matcher.group());
 		}
 	}
-	
 }

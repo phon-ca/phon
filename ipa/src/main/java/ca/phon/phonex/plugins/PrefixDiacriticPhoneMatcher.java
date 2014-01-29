@@ -1,8 +1,5 @@
 package ca.phon.phonex.plugins;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.Phone;
@@ -10,22 +7,22 @@ import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 /**
- * Matches combining diacritic portion of the phone.
+ * Matches prefix diacritic portion of the phone.
  * Matches if <em>any</em> of the specified diacritics
- * appear in the {@link IPAElement}s combining diacritics.
+ * appear in the {@link IPAElement}s prefix diacritics.
  */
-public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
+public class PrefixDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 
 	/**
 	 * Constructor
 	 */
-	public CombiningDiacriticPhoneMatcher(String input) {
+	public PrefixDiacriticPhoneMatcher(String input) {
 		super(input);
 	}
 	
 	@Override
 	public boolean matches(IPAElement p) {
-		final CombiningDiacriticVisitor visitor = new CombiningDiacriticVisitor();
+		final PrefixDiacriticVisitor visitor = new PrefixDiacriticVisitor();
 		p.accept(visitor);
 		return visitor.matches;
 	}
@@ -38,7 +35,7 @@ public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 	/**
 	 * Visitor for match
 	 */
-	private class CombiningDiacriticVisitor extends VisitorAdapter<IPAElement> {
+	private class PrefixDiacriticVisitor extends VisitorAdapter<IPAElement> {
 		
 		public boolean matches = false;
 
@@ -50,13 +47,9 @@ public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 		@Visits
 		public void visitBasicPhone(Phone bp) {
 			boolean hasAllowed = false;
-			for(Character c:bp.getCombiningDiacritics()) {
-				hasAllowed |= getAllowedDiacritics().contains(c);
-			}
+			hasAllowed |= getAllowedDiacritics().contains(bp.getPrefixDiacritic());
 			boolean hasForbidden = false;
-			for(Character c:bp.getCombiningDiacritics()) {
-				hasForbidden |= getForbiddenDiacritics().contains(c);
-			}
+			hasForbidden |= getForbiddenDiacritics().contains(bp.getPrefixDiacritic());
 			matches = hasAllowed && !hasForbidden;
 		}
 		
@@ -67,5 +60,5 @@ public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 		}
 		
 	}
-	
+
 }
