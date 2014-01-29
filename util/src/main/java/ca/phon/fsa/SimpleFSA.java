@@ -237,9 +237,10 @@ public class SimpleFSA<T> {
 							cachedState.setGroups(Arrays.copyOf(machineState.getGroupStarts(), machineState.numberOfGroups()), 
 									Arrays.copyOf(machineState.getGroupLengths(), machineState.numberOfGroups()));
 						}
+					} else {
+						// we do not have a match try to backtrack
+						toFollow = backtrack(machineState, decisions);
 					}
-					// we do not have a match try to backtrack
-					toFollow = backtrack(machineState, decisions);
 					
 					if(toFollow != null 
 							&& toFollow.getType() == TransitionType.RELUCTANT

@@ -107,7 +107,7 @@ public class PhonexMatcher {
 			lastMatchState =
 					pattern.getFsa().runWithTape(input.toArray(new IPAElement[0]), lastMatchState);
 			retVal = 
-					pattern.getFsa().isFinalState(lastMatchState.getCurrentState());
+					pattern.getFsa().isFinalState(lastMatchState.getCurrentState()) && (lastMatchState.getTapeIndex() != currentIdx);
 			if(retVal)
 				lastMatchStart = currentIdx;
 			currentIdx++;
@@ -206,7 +206,7 @@ public class PhonexMatcher {
 	 */
 	private void checkLastMatch() 
 		throws IllegalStateException {
-		if(lastMatchState.getCurrentState() == null
+		if(lastMatchState.getCurrentState() == null 
 				|| !pattern.getFsa().isFinalState(lastMatchState.getCurrentState())) {
 			throw new IllegalStateException("No previous match");
 		}
