@@ -77,8 +77,6 @@ public class SyllabifierEditor extends JFrame {
 	private final JMenuBar menuBar = new JMenuBar();
 	private final PathAddressableMenu menu = new PathAddressableMenuImpl(menuBar);
 	
-	private final SyllabificationDisplay display = new SyllabificationDisplay();
-	
 	/**
 	 * Docking view controls
 	 */
@@ -117,9 +115,6 @@ public class SyllabifierEditor extends JFrame {
 	public SyllabifierEditor() {
 		super("Syllabifier Editor");
 		
-		display.setBackground(Color.white);
-		display.setBorder(BorderFactory.createTitledBorder("IPA"));
-		
 		dockControl = new CControl(this);
 		setupLayout();
 		setupDockingWindow();
@@ -141,6 +136,7 @@ public class SyllabifierEditor extends JFrame {
 				// update ipa
 				final Processor processor = graphEditor.getDocument().getProcessingContext();
 				if(processor != null) {
+					final SyllabificationDisplay display = graphEditor.getSyllabificationDisplay();
 					display.setPhonesForGroup(0, new IPATranscript());
 					final Object obj = graphEditor.getDocument().getProcessingContext().getContext().get("__ipa__");
 					if(obj != null && obj instanceof IPATranscript) {
@@ -253,18 +249,18 @@ public class SyllabifierEditor extends JFrame {
 		return retVal;
 	}
 	
-	public IPATranscript getIPA() {
-		IPATranscript ipa = null;
-		if(display.getNumberOfGroups() == 0)
-			ipa = new IPATranscript();
-		else
-			ipa = display.getPhonesForGroup(0);
-		return ipa;
-	}
-	
-	public SyllabificationDisplay getIPADisplay() {
-		return this.display;
-	}
+//	public IPATranscript getIPA() {
+//		IPATranscript ipa = null;
+//		if(display.getNumberOfGroups() == 0)
+//			ipa = new IPATranscript();
+//		else
+//			ipa = display.getPhonesForGroup(0);
+//		return ipa;
+//	}
+//	
+//	public SyllabificationDisplay getIPADisplay() {
+//		return this.display;
+//	}
 	
 	/**
 	 * Console panel context listener
@@ -334,13 +330,7 @@ public class SyllabifierEditor extends JFrame {
 //					break;
 					
 				case DEBUG:
-					final JComponent debugComp = graphEditor.getDebugInfoPanel();
-					final JPanel debugPanel = new JPanel(new BorderLayout());
-					final JScrollPane debugScroller = new JScrollPane(debugComp);
-					debugScroller.setBorder(BorderFactory.createTitledBorder("Debug info:"));
-					debugPanel.add(display, BorderLayout.NORTH);
-					debugPanel.add(debugScroller, BorderLayout.CENTER);
-					comp = debugPanel;
+					comp = graphEditor.getDebugInfoPanel();
 					break;
 					
 				case INSPECTOR:
@@ -394,8 +384,8 @@ public class SyllabifierEditor extends JFrame {
 					e.printStackTrace();
 				}
 				SyllabifierEditor editor = new SyllabifierEditor();
-//				final NewCommand newCommand = new NewCommand();
-//				newCommand.actionPerformed(null);
+				final NewCommand newCommand = new NewCommand();
+				newCommand.actionPerformed(null);
 				editor.setDefaultCloseOperation(SyllabifierEditor.DO_NOTHING_ON_CLOSE);
 				editor.setSize(new Dimension(1024, 768));
 				editor.setVisible(true); 
