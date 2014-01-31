@@ -48,12 +48,12 @@
 
   <distributionManagement>
     <repository>
-      <id>phon.ling.mun.ca-release</id>
+      <id>phon.ca-release</id>
       <name>Phon Release</name>
       <url>https://www.phon.ca/artifacts/libs-release-local</url>
     </repository>
     <snapshotRepository>
-      <id>phon.ling.mun.ca-snapshot</id>
+      <id>phon.ca-snapshot</id>
       <name>Phon Snapshot</name>
       <url>https://www.phon.ca/artifacts/libs-snapshot-local</url>
     </snapshotRepository>
