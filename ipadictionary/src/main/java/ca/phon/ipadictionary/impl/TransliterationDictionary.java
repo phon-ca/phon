@@ -277,7 +277,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			this.name = value;
 		} else if(token.equalsIgnoreCase(MetadataToken.LANGUAGE.toString())) {
 			// attempt to load language
-			final Language lang = Language.fromString(value);
+			final Language lang = Language.parseLanguage(value);
 			this.language = lang;
 		} else {
 			metadata.put(token, value);

@@ -237,15 +237,13 @@ public class SimpleFSA<T> {
 							cachedState.setGroups(Arrays.copyOf(machineState.getGroupStarts(), machineState.numberOfGroups()), 
 									Arrays.copyOf(machineState.getGroupLengths(), machineState.numberOfGroups()));
 						}
-					} else {
-						// we do not have a match try to backtrack
-						toFollow = backtrack(machineState, decisions);
 					}
+					toFollow = backtrack(machineState, decisions);
 					
 					if(toFollow != null 
 							&& toFollow.getType() == TransitionType.RELUCTANT
 							&& !forceReluctant
-							&& isFinalState(machineState.getCurrentState())) {
+							&& isFinalState(cachedState.getCurrentState())) {
 						toFollow = null;
 					}
 					nextState = (toFollow != null ? toFollow.getToState() : null);
@@ -270,7 +268,7 @@ public class SimpleFSA<T> {
 			}
 		}
 		
-		if(cachedState.getTapeIndex() > machineState.getTapeIndex()) {
+		if(cachedState.getTapeIndex() >= machineState.getTapeIndex()) {
 			machineState.setCurrentState(cachedState.getCurrentState());
 			machineState.setTapeIndex(cachedState.getTapeIndex());
 			machineState.setGroups(Arrays.copyOf(cachedState.getGroupStarts(), cachedState.numberOfGroups()), 

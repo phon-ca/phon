@@ -30,7 +30,7 @@ import ca.phon.syllable.SyllableStress;
  * </pre>
  * </p>
  */
-@PhonexPlugin(name = "stress", requiredArgs={String.class})
+@PhonexPlugin(name = "stress")
 public class StressPluginProvider implements PluginProvider {
 
 	@Override

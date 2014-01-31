@@ -21,5 +21,6 @@
 		<groupId>org.dockingframes</groupId>
 		<artifactId>docking-frames-common</artifactId>
 	</dependency>
+	
   </dependencies>
 </project>

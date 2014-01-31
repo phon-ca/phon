@@ -21,7 +21,7 @@ public class TestMdcPlugin {
 	public void testMDCPlugin() throws Exception {
 		final String text = "ktki";
 		final String phonex = "(\\c)(\\c:mdc('0,true'))";
-		final IPATranscript ipa = IPATranscript.parseTranscript(text);
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final PhonexMatcher matcher = pattern.matcher(ipa);

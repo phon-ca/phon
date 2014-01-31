@@ -65,9 +65,9 @@ public final class OpGraphSyllabifier implements Syllabifier {
 		
 		final SyllabifierSettings graphSettings = graph.getExtension(SyllabifierSettings.class);
 		if(graphSettings != null) {
-			final String langId = graphSettings.getLanguage();
+			final String langId = graphSettings.getLanguage().toString();
 			if(langId != null) {
-				retVal = Language.fromString(langId);
+				retVal = Language.parseLanguage(langId);
 			}
 		}
 		

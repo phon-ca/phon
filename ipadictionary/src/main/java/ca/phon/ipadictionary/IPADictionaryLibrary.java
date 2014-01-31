@@ -89,7 +89,7 @@ public class IPADictionaryLibrary implements IExtendable {
 	 * @return list of dictionaries for given lang
 	 */
 	public List<IPADictionary> dictionariesForLanguage(String lang) {
-		final Language l = Language.fromString(lang);
+		final Language l = Language.parseLanguage(lang);
 		return dictionariesForLanguage(l);
 	}
 	

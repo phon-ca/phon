@@ -43,7 +43,7 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 * @param transcription the text of the IPA transcription
 	 * 
 	 */
-	public static IPATranscript parseTranscript(String transcript) 
+	public static IPATranscript parseIPATranscript(String transcript) 
 		throws ParseException {
 		IPATranscript retVal = new IPATranscript();
 		

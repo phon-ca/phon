@@ -3,6 +3,8 @@ package ca.phon.syllabifier.opgraph.extensions;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import ca.phon.util.Language;
+
 /**
  * Name and language settings for a syllabifier.
  */
@@ -24,7 +26,7 @@ public class SyllabifierSettings {
 	/**
 	 * Language
 	 */
-	private String language = "xxx";
+	private Language language = new Language();
 	
 	public SyllabifierSettings() {
 		
@@ -40,12 +42,12 @@ public class SyllabifierSettings {
 		propSupport.firePropertyChange(NAME_PROP, oldName, name);
 	}
 
-	public String getLanguage() {
+	public Language getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(String language) {
-		final String oldLang = this.language;
+	public void setLanguage(Language language) {
+		final Language oldLang = this.language;
 		this.language = language;
 		propSupport.firePropertyChange(LANG_PROP, oldLang, language);
 	}

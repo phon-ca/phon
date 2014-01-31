@@ -99,6 +99,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 	 * @param scale
 	 */
 	public void setSonorityScale(String scale) {
+		sonorityMap.clear();
 		final Pattern scannerPattern = Pattern.compile("([0-9]+)=(.*)");
 		final Scanner scanner = new Scanner(scale);
 		String line = null;

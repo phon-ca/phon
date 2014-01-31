@@ -60,7 +60,7 @@ public class BasicSyllabifier implements Syllabifier {
 
 	@Override
 	public Language getLanguage() {
-		return Language.fromString(def.getLanguage());
+		return Language.parseLanguage(def.getLanguage());
 	}
 
 	@Override

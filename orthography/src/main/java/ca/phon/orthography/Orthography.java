@@ -21,6 +21,15 @@ public class Orthography extends ArrayList<OrthoElement> implements IExtendable,
 	private final ExtensionSupport extSupport = 
 			new ExtensionSupport(Orthography.class, this);
 	
+	/**
+	 * Parse the given text into a new {@link Orthography} object.
+	 * 
+	 * @text
+	 */
+	public static Orthography parseOrthography(String text) {
+		return new Orthography(text);
+	}
+	
 	public Orthography() {
 		this("");
 	}

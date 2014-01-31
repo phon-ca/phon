@@ -34,7 +34,7 @@ public class TestIPAParser {
 		
 		for(Character c:testChars) {
 			final String testString = "" + c;
-			final IPATranscript transcript = IPATranscript.parseTranscript(testString);
+			final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 			if(transcript.size() < 1) {
 				System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
 			}
@@ -59,7 +59,7 @@ public class TestIPAParser {
 		for(Character c:testChars) {
 			for(Character prefixChar:prefixChars) {
 				final String testString = prefixChar + "" + c;
-				final IPATranscript transcript = IPATranscript.parseTranscript(testString);
+				final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 				if(transcript.size() < 1) {
 					System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
 				}
@@ -88,7 +88,7 @@ public class TestIPAParser {
 		for(Character c:testChars) {
 			for(Character suffixChar:suffixChars) {
 				final String testString = c + "" + suffixChar;
-				final IPATranscript transcript = IPATranscript.parseTranscript(testString);
+				final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 				if(transcript.size() < 1) {
 					System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
 				}
@@ -119,7 +119,7 @@ public class TestIPAParser {
 		for(Character c:testChars) {
 			for(Character prefixChar:prefixChars) {
 				final String testString = c + "" + prefixChar + "" + roleReverse;
-				final IPATranscript transcript = IPATranscript.parseTranscript(testString);
+				final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 				if(transcript.size() < 1) {
 					System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
 				}
@@ -139,7 +139,7 @@ public class TestIPAParser {
 		for(Character c:testChars) {
 			for(Character suffixChar:suffixChars) {
 				final String testString = suffixChar + "" + roleReverse + "" + c;
-				final IPATranscript transcript = IPATranscript.parseTranscript(testString);
+				final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 				if(transcript.size() < 1) {
 					System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
 				}

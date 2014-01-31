@@ -1,4 +1,2 @@
 ca.phon.syllabifier.opgraph.nodes.SonorityNode
 ca.phon.syllabifier.opgraph.nodes.IPASourceNode
-ca.phon.syllabifier.opgraph.nodes.SyllabifierStageNode
-ca.phon.syllabifier.opgraph.nodes.MarkSyllableConstituentNode

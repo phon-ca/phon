@@ -52,8 +52,6 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 			PhonexCompiler compiler = new PhonexCompiler(noes);
 			PhonexFSA fsa = compiler.expr();
 			
-			System.out.println(fsa.getDotText());
-			
 			PhonexPattern retVal = new PhonexPattern(fsa);
 			retVal.pattern = phonex;
 			return retVal;

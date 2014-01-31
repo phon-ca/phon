@@ -49,7 +49,7 @@ public class IPASourceNode extends OpNode implements NodeSettings {
 		if(getIpa() != null) {
 			IPATranscript ipa;
 			try {
-				ipa = IPATranscript.parseTranscript(getIpa());
+				ipa = IPATranscript.parseIPATranscript(getIpa());
 				context.put(ipaOut, ipa);
 				context.getParent().put(IPA_KEY, ipa);
 			} catch (ParseException e) {

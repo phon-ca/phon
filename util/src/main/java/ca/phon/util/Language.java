@@ -25,9 +25,9 @@ public class Language implements Comparable<Language> {
 	 * 
 	 * @throws IllegalArgumentException
 	 */
-	public static Language fromString(String lang) {
+	public static Language parseLanguage(String lang) {
 		final Language retVal = new Language();
-		retVal.parseLanguage(lang);
+		retVal.parse(lang);
 		return retVal;
 	}
 	
@@ -47,7 +47,7 @@ public class Language implements Comparable<Language> {
 		this.userIDs = userIDs;
 	}
 	
-	private void parseLanguage(String lang) {
+	private void parse(String lang) {
 		if(lang != null && lang.matches(langRegex)) {
 			final String[] split = lang.split("-");
 			

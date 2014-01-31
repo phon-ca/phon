@@ -30,27 +30,27 @@
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-core</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-library</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-xml-io</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-app</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-common-nodes</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
   

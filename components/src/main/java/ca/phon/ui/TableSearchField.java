@@ -363,7 +363,7 @@ public class TableSearchField extends SearchField {
 		public boolean checkColumn(String val) {
 			// attempt to convert the given string into a list of phones
 			try {
-				IPATranscript t = IPATranscript.parseTranscript(val);
+				IPATranscript t = IPATranscript.parseIPATranscript(val);
 				final PhonexMatcher matcher = getObj2().matcher(t);
 				return matcher.find();
 			} catch (ParseException e) {

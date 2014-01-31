@@ -22,7 +22,7 @@ import ca.phon.phonex.PluginProvider;
  * </p>
  *
  */
-@PhonexPlugin(name = "comb", requiredArgs={String.class})
+@PhonexPlugin(name = "comb")
 public class CombiningDiacriticPluginProvider implements PluginProvider {
 
 	@Override

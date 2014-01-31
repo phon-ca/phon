@@ -12,6 +12,7 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.io.xml.XMLSerializer;
 import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
+import ca.phon.util.Language;
 
 public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 	
@@ -38,7 +39,7 @@ public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 		final SyllabifierSettings meta = (SyllabifierSettings)obj;
 		final Element metaElem = doc.createElementNS(NAMESPACE, PREFIX + ":settings");
 		metaElem.setAttribute("name", meta.getName());
-		metaElem.setAttribute("lang", meta.getLanguage());
+		metaElem.setAttribute("lang", meta.getLanguage().toString());
 		
 		parentElem.appendChild(metaElem);
 	}
@@ -57,7 +58,7 @@ public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 			settings.setName(name);
 			
 			final String lang = elem.getAttribute("lang");
-			settings.setLanguage(lang);
+			settings.setLanguage(Language.parseLanguage(lang));
 			
 			graph.putExtension(SyllabifierSettings.class, settings);
 		}

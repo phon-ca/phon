@@ -18,7 +18,7 @@ public class IPATranscriptFormatter implements Formatter<IPATranscript> {
 
 	@Override
 	public IPATranscript parse(String text) throws ParseException {
-		return IPATranscript.parseTranscript(text);
+		return IPATranscript.parseIPATranscript(text);
 	}
 	
 }

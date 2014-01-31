@@ -35,10 +35,4 @@ public @interface PhonexPlugin {
 	 */
 	public String name();
 	
-	/**
-	 * The list of argument types required by the {@link PluginProvider}
-	 * in order to create the matcher.
-	 */
-	public Class<?>[] requiredArgs() default {};
-	
 }

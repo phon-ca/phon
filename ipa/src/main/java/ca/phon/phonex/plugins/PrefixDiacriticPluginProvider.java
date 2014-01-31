@@ -21,7 +21,7 @@ import ca.phon.phonex.PluginProvider;
  * </p>
  *
  */
-@PhonexPlugin(name="prefix", requiredArgs={String.class})
+@PhonexPlugin(name="prefix")
 public class PrefixDiacriticPluginProvider implements PluginProvider {
 
 	@Override

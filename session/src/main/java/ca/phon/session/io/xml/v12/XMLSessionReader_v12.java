@@ -327,7 +327,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 				if(ipa != null) {
 					try {
 						final IPATranscript blindTranscript = 
-								IPATranscript.parseTranscript(buffer.toString());
+								IPATranscript.parseIPATranscript(buffer.toString());
 						final TranscriberType tt = (TranscriberType)btt.getUser();
 						final String name = tt.getId();
 						
@@ -489,7 +489,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			}
 			
 			try {
-				final IPATranscript transcript = IPATranscript.parseTranscript(groupBuffer.toString());
+				final IPATranscript transcript = IPATranscript.parseIPATranscript(groupBuffer.toString());
 				
 				// copy syllabification if transcript is the same size as our provided syllabification
 				if(transcript.size() == pt.getSb().getPh().size()) {

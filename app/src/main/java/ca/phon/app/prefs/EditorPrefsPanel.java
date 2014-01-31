@@ -84,7 +84,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		
 		final String dictLangPref = PrefHelper.get(PhonProperties.IPADICTIONARY_LANGUAGE,
 				PhonProperties.DEFAULT_IPADICTIONARY_LANGUAGE);
-		final Language dictLang = Language.fromString(dictLangPref);
+		final Language dictLang = Language.parseLanguage(dictLangPref);
 		cmbDictionaryLanguage = new JComboBox(dictLibrary.availableLanguages().toArray(new Language[0]));
 		cmbDictionaryLanguage.setSelectedItem(dictLang);
 		cmbDictionaryLanguage.addItemListener(new DictionaryLanguageListener());
@@ -100,7 +100,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		
 		final String syllLangPref = PrefHelper.get(PhonProperties.SYLLABIFIER_LANGUAGE, 
 				PhonProperties.DEFAULT_SYLLABIFIER_LANGUAGE);
-		final Language syllLang = Language.fromString(syllLangPref);
+		final Language syllLang = Language.parseLanguage(syllLangPref);
 		cmbSyllabifierLanguage = new JComboBox(sortedSyllabifiers.toArray(new String[0]));
 		cmbSyllabifierLanguage.setSelectedItem(syllLang.toString());
 		cmbSyllabifierLanguage.addItemListener(new SyllabifierLanguageListener());

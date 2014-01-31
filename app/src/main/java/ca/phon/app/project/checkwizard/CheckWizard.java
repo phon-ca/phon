@@ -156,7 +156,7 @@ public class CheckWizard extends WizardFrame {
 				
 				// run text through parser manually
 				try {
-					IPATranscript.parseTranscript(text);
+					IPATranscript.parseIPATranscript(text);
 				} catch (ParseException pe) {
 					LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
 				}

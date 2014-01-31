@@ -252,7 +252,7 @@ public final class ContractionRule implements Serializable {
 		
 		if(type == ConditionType.PHONEX) {
 			try {
-				final IPATranscript transcript = IPATranscript.parseTranscript(value);
+				final IPATranscript transcript = IPATranscript.parseIPATranscript(value);
 				retVal = transcript.matches(expr);
 			} catch (ParseException e) {
 				e.printStackTrace();

@@ -116,7 +116,7 @@ public final class SyllabifierLibrary implements IExtendable {
 	 *  <code>null</code> otherwise
 	 */
 	public Syllabifier getSyllabifierForLanguage(String lang) {
-		final Language language = Language.fromString(lang);
+		final Language language = Language.parseLanguage(lang);
 		return getSyllabifierForLanguage(language);
 	}
 	
@@ -143,7 +143,7 @@ public final class SyllabifierLibrary implements IExtendable {
 	 * @return the list of syllabifiers for the given language.
 	 */
 	public List<Syllabifier> getSyllabifiersForLanguage(String lang) {
-		final Language l = Language.fromString(lang);
+		final Language l = Language.parseLanguage(lang);
 		
 		return getSyllabifiersForLanguage(l);
 	}

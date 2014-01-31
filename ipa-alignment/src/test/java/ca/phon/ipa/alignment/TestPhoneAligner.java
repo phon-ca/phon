@@ -19,8 +19,8 @@ public class TestPhoneAligner {
 	public void testAligner() throws Exception {
 		final PhoneAligner aligner = new PhoneAligner();
 		
-		final IPATranscript model = IPATranscript.parseTranscript("ˈhæpiː ˈbʌɹθˌdeɪ");
-		final IPATranscript actual = IPATranscript.parseTranscript("ˈæpiː ˈbʌːˌteɪ");
+		final IPATranscript model = IPATranscript.parseIPATranscript("ˈhæpiː ˈbʌɹθˌdeɪ");
+		final IPATranscript actual = IPATranscript.parseIPATranscript("ˈæpiː ˈbʌːˌteɪ");
 		
 		final PhoneMap pm = aligner.calculatePhoneMap(model, actual);
 		Assert.assertNotNull(pm);
