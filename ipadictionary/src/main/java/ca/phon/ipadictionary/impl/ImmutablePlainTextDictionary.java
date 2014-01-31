@@ -244,6 +244,8 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * @param value the value of the metadata
 	 */
 	private void processMetadata(String token, String value) {
+		token = token.trim();
+		value = value.trim();
 		if(token.equalsIgnoreCase(MetadataToken.NAME.toString())) {
 			// set name as value
 			this.name = value;

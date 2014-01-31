@@ -20,7 +20,7 @@ public class TestMdcPlugin {
 	@Test
 	public void testMDCPlugin() throws Exception {
 		final String text = "ktki";
-		final String phonex = "(\\c)(\\c:mdc('0,true'))";
+		final String phonex = "(\\c)(\\c:mdc(\"0\",\"true\"))";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);

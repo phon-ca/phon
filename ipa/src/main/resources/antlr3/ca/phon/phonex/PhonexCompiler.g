@@ -262,7 +262,7 @@ argument_list returns [List<String> args]
 @init {
 	$args = new ArrayList<String>();
 }
-	:	^(ARG_LIST (arg=argument {$args.add($arg.value);})+)
+	:	^(ARG_LIST (arg=argument {$args.add(StringEscapeUtils.unescapeJava($arg.value.substring(1, $arg.value.length()-1)));})+)
 	;
 	
 argument returns [String value]

@@ -1,5 +1,7 @@
 package ca.phon.phonex;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * Exception for phonex pattern errors.
  *
