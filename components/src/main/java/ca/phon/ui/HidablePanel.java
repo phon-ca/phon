@@ -53,7 +53,7 @@ public class HidablePanel extends MultiActionButton {
 	/**
 	 * Location of hidable panel properties
 	 */
-	private final static String PANEL_PROPS = "hidden_panels/";
+	private final static String PANEL_PROPS = "hidden_panels";
 	
 	private static Preferences getPanelPrefs() {
 		final Preferences userPrefs = PrefHelper.getUserPreferences();
