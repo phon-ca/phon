@@ -5,7 +5,7 @@
   <parent>
     <artifactId>phon</artifactId>
     <groupId>ca.phon</groupId>
-    <version>1.7.0</version>
+    <version>1.7.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -15,29 +15,29 @@
 
   <dependencies>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-ipa</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-orthography</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-alignment</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-xml</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-ipa-alignment</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>

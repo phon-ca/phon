@@ -4,7 +4,7 @@
   <parent>
     <artifactId>phon</artifactId>
     <groupId>ca.phon</groupId>
-  	<version>1.7.0</version>
+  	<version>1.7.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
  
@@ -19,22 +19,22 @@
   	</dependency>
   	<dependency>
   		<groupId>com.jgoodies</groupId>
-  		<artifactId>forms</artifactId>
+  		<artifactId>jgoodies-forms</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>ca.phon</groupId>
+  		<groupId>${project.groupId}</groupId>
   		<artifactId>phon-ipa</artifactId>
-  		<version>1.7.0</version>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
-  		<groupId>ca.phon</groupId>
+  		<groupId>${project.groupId}</groupId>
   		<artifactId>phon-util</artifactId>
-  		<version>1.7.0</version>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
-  		<groupId>ca.phon</groupId>
+  		<groupId>${project.groupId}</groupId>
   		<artifactId>phon-components</artifactId>
-  		<version>1.7.0</version>
+  		<version>${project.version}</version>
 	</dependency>
   </dependencies>
 	

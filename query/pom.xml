@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>phon</artifactId>
 		<groupId>ca.phon</groupId>
-		<version>1.7.0</version>
+		<version>1.7.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -23,29 +23,29 @@
 			<artifactId>joda-time</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-project</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-session</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-script</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-util</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-components</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

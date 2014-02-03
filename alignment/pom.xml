@@ -5,15 +5,12 @@
   <parent>
     <artifactId>phon</artifactId>
     <groupId>ca.phon</groupId>
-    <version>1.7.0</version>
+    <version>1.7.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
   <artifactId>phon-alignment</artifactId>
   <name>Phon Alignment</name>
   <description/>
-
-  <dependencies>
-  </dependencies>
 
 </project>

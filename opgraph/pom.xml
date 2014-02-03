@@ -3,7 +3,7 @@
   <parent>
     <artifactId>phon</artifactId>
     <groupId>ca.phon</groupId>
-    <version>1.7.0</version>
+    <version>1.7.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
  
@@ -13,44 +13,39 @@
 
   <dependencies>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-ipa</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-project</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>ca.phon</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-workspace</artifactId>
-      <version>1.7.0</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-core</artifactId>
-      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-library</artifactId>
-      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-xml-io</artifactId>
-      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-app</artifactId>
-      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-common-nodes</artifactId>
-      <version>0.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
   

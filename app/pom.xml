@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>phon</artifactId>
 		<groupId>ca.phon</groupId>
-		<version>1.7.0</version>
+		<version>1.7.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -14,67 +14,64 @@
 	<description>Phon application project.  This project includes all code related to the
 	UI and all application level logic.</description>
 	
-	
 	<dependencies>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-project</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-workspace</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-components</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-util</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-media</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-ipamap</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-ipadictionary</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-syllabifier</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-ipa-alignment</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.phon</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-query</artifactId>
-			<version>1.7.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fifesoft</groupId>
 			<artifactId>rsyntaxtextarea</artifactId>
-			<version>2.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
-			<version>2.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -103,7 +100,6 @@
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 	        <artifactId>maven-shade-plugin</artifactId>
-	        <version>2.2</version>
 	        <executions>
 	          <execution>
 	            <phase>package</phase>
