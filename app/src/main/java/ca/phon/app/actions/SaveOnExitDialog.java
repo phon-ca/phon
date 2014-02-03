@@ -39,14 +39,14 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import com.jgoodies.forms.builder.ButtonBarBuilder;
+
 import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.factories.ButtonBarFactory;
 
 /**
  * Save changes on exit dialog.
@@ -127,8 +127,10 @@ public class SaveOnExitDialog extends JDialog {
 			
 		});
 		
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
 		JComponent btnBar = 
-			ButtonBarFactory.buildCenteredBar(cancelButton, discardAllButton, saveSelectedButton);
+				barBuilder.addButton(cancelButton).addButton(discardAllButton).addButton(saveSelectedButton).build();
+//			ButtonBarFactory.buildCenteredBar(cancelButton, discardAllButton, saveSelectedButton);
 		
 		add(header, BorderLayout.NORTH);
 		add(new JScrollPane(checkboxTree), BorderLayout.CENTER);

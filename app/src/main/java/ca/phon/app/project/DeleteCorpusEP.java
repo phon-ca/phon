@@ -159,13 +159,10 @@ public class DeleteCorpusEP implements IPluginEntryPoint {
 			btnCancel.setText("Cancel");
 			btnCancel.addActionListener(new CancelListener());
 
-			ButtonBarBuilder builder = ButtonBarBuilder.createLeftToRightBuilder();
-			builder.appendColumn("right:pref:grow");
-			builder.appendColumn("right:pref");
-			builder.add(btnDeleteCorpus);
-			builder.nextColumn();
-			builder.add(btnCancel);
-			jpanel1.add(builder.getPanel(), cc.xyw(1, 5, 2));
+			final ButtonBarBuilder builder = new ButtonBarBuilder();
+			builder.addButton(btnDeleteCorpus);
+			builder.addButton(btnCancel);
+			jpanel1.add(builder.build(), cc.xyw(1, 5, 2));
 			
 			addFillComponents(jpanel1,new int[]{ 2 },new int[]{ 2,3,4 });
 			return jpanel1;

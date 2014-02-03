@@ -56,6 +56,8 @@ import javax.swing.event.ListSelectionListener;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.builder.ButtonBarBuilder;
+
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -74,8 +76,6 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.factories.ButtonBarFactory;
 
 /**
  */
@@ -283,7 +283,11 @@ public class SessionEditorQuickSearch {
 //		final JButton refreshButton = new JButton(refreshAct);
 		
 		final JPanel resultListPanel = new JPanel(new BorderLayout());
-		final JComponent buttonPanel = ButtonBarFactory.buildRightAlignedBar(saveButton);
+		
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+		final JComponent buttonPanel = 
+				barBuilder.addButton(saveButton).build();
+//				ButtonBarFactory.buildRightAlignedBar(saveButton);
 		resultListPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
 		final JScrollPane tableScroller = new JScrollPane(table);

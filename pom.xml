@@ -15,12 +15,17 @@
     (including babbling), second language acquisition, and phonological disorders, Phon can 
     also be used to investigate virtually all types of phonological investigations (e.g. 
     loanword phonology, fieldwork in phonology).</description>
+    
+  <organization>
+  	<name>Department of Linguistics, Memorial University of Newfoundland</name>
+  	<url>https://www.mun.ca</url>
+  </organization>
 
   <developers>
     <developer>
       <id>ghedlund</id>
       <name>Greg Hedlund</name>
-      <email>greg.hedlund@gmail.com</email>
+      <email>ghedlund@mun.ca</email>
       <timezone>-3.5</timezone>
     </developer>
     <developer>
@@ -32,16 +37,6 @@
   </developers>
   
   <contributors>
-    <contributor>
-      <name>Rodrique Byrne</name>
-      <email>rbyrne@mun.ca</email>
-      <timezone>-3.5</timezone>
-    </contributor>
-    <contributor>
-      <name>Todd Wareham</name>
-      <email>todd@mun.ca</email>
-      <timezone>-3.5</timezone>
-    </contributor>
   </contributors>
 
   <licenses>
@@ -110,7 +105,8 @@
     <ca.phon.native-dialogs.version>3-SNAPSHOT</ca.phon.native-dialogs.version>
     <commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
     <com.fifesoft.rsyntaxtextarea.version>2.0.2</com.fifesoft.rsyntaxtextarea.version>
-    <com.jgoodies.jgoodies-forms.version>1.6.0</com.jgoodies.jgoodies-forms.version>
+    <com.jgoodies.jgoodies-common.version>1.7.0</com.jgoodies.jgoodies-common.version>
+    <com.jgoodies.jgoodies-forms.version>1.7.2</com.jgoodies.jgoodies-forms.version>
     <de.susebox.jtopas.version>0.8</de.susebox.jtopas.version>
     <it.cnr.imaa.essi.lablib-checkboxtree.version>3.0.2</it.cnr.imaa.essi.lablib-checkboxtree.version>
     <joda-time.joda-time.version>2.1</joda-time.joda-time.version>
@@ -267,6 +263,12 @@
       
       <dependency>
         <groupId>com.jgoodies</groupId>
+        <artifactId>jgoodies-common</artifactId>
+        <version>${com.jgoodies.jgoodies-common.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>com.jgoodies</groupId>
         <artifactId>jgoodies-forms</artifactId>
         <version>${com.jgoodies.jgoodies-forms.version}</version>
       </dependency>
@@ -311,7 +313,7 @@
       <dependency>
         <groupId>org.dockingframes</groupId>
         <artifactId>docking-frames-core</artifactId>
-        <version>${org.dockingframes.docking-frames-corre.version}</version>
+        <version>${org.dockingframes.docking-frames-core.version}</version>
       </dependency>
       
       <dependency>
@@ -371,4 +373,5 @@
     </plugins>
 
   </build>
+  
 </project>

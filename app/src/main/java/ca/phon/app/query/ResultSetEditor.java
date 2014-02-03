@@ -94,7 +94,7 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -428,7 +428,8 @@ public class ResultSetEditor extends ProjectFrame {
 			}
 		});
 		
-		final JPanel buttonBar = ButtonBarFactory.buildOKCancelBar(okButton, cancelButton);
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+		final JPanel buttonBar = barBuilder.addButton(okButton).addButton(cancelButton).build();
 		
 		panel.add(buttonBar, BorderLayout.SOUTH);
 		

@@ -35,7 +35,7 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 
 
 /**
@@ -43,6 +43,8 @@ import com.jgoodies.forms.factories.ButtonBarFactory;
  *
  */
 public class PrefsDialog extends JDialog {
+	
+	private static final long serialVersionUID = 6513355180838862607L;
 	
 	/**
 	 * pref panels
@@ -109,8 +111,9 @@ public class PrefsDialog extends JDialog {
 		
 		super.getRootPane().setDefaultButton(okButton);
 		
-		JComponent buttonBar = 
-			ButtonBarFactory.buildOKBar(okButton);
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+		JComponent buttonBar = barBuilder.addButton(okButton).build();
+		
 		add(buttonBar, BorderLayout.SOUTH);
 	}
 	

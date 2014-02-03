@@ -48,7 +48,7 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PhonConstants;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -176,8 +176,10 @@ public class NewCorpusEP implements IPluginEntryPoint {
 			btnCancel.setText("Cancel");
 			btnCancel.addActionListener(new CancelListener());
 			
+			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
 			JComponent buttonBar = 
-				ButtonBarFactory.buildOKCancelBar(btnCreateCorpus, btnCancel);
+				barBuilder.addButton(btnCreateCorpus).addButton(btnCancel).build();
+			
 			jpanel1.add(buttonBar, cc.xyw(1, 9, 2));
 
 			addFillComponents(jpanel1, new int[] { 2 }, new int[] { 2,3,4,6,7,8 });

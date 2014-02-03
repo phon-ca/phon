@@ -25,6 +25,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import com.jgoodies.forms.builder.ButtonBarBuilder;
+
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.ui.action.PhonUIAction;
@@ -33,14 +35,14 @@ import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
-
 /**
  * Custom dialog for editing query information.
  *
  */
 public class EditQueryDialog extends JDialog {
 	
+	private static final long serialVersionUID = 7982672156818550768L;
+
 	public enum ReturnStatus {
 		OK,
 		CANCEL;
@@ -103,7 +105,8 @@ public class EditQueryDialog extends JDialog {
 		cancelAction.putValue(PhonUIAction.NAME, "Cancel");
 		cancelButton = new JButton(cancelAction);
 		
-		final JPanel buttonPanel = ButtonBarFactory.buildOKCancelBar(okButton, cancelButton);
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+		final JPanel buttonPanel = barBuilder.addButton(okButton).addButton(cancelButton).build();
 		
 		header = new DialogHeader("Query Details", "Enter query name and comments.");
 		

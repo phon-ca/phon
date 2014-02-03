@@ -43,6 +43,7 @@ import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.JCrypt;
 
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -210,9 +211,11 @@ public class TranscriberSelectionDialog extends JDialog {
 				}
 				
 			});
-			
+		
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+		final JPanel bar = barBuilder.addButton(okButton).addButton(cancelButton).build();
 		this.getContentPane().add(
-				com.jgoodies.forms.factories.ButtonBarFactory.buildOKCancelBar(okButton, cancelButton),
+				bar,
 				cc.xy(3,9));
 		
 		this.getContentPane().add(this.newTranscriptButton, cc.xy(2, 1));

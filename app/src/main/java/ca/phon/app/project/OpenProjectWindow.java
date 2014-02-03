@@ -40,7 +40,7 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -139,9 +139,10 @@ public class OpenProjectWindow extends CommonModuleFrame {
 			}
 			
 		});
-
-		JComponent buttonBar = ButtonBarFactory
-				.buildRightAlignedBar(clearRecentButton);
+		
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+		JComponent buttonBar = barBuilder.addButton(clearRecentButton).build();
+//				.buildRightAlignedBar(clearRecentButton);
 		rightPanel.add(buttonBar, BorderLayout.SOUTH);
 
 		header = new DialogHeader("Open Project",

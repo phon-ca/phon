@@ -61,6 +61,7 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -395,8 +396,9 @@ public class ImportSessionEP implements IPluginEntryPoint {
 			pane.add(new JLabel("Session: "), cc.xy(2, 8));
 			pane.add(sessionNameField, cc.xyw(4, 8, 3));
 			
+			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
 			JPanel buttonBar = 
-				com.jgoodies.forms.factories.ButtonBarFactory.buildOKCancelBar(importButton, cancelButton);
+					barBuilder.addButton(importButton).addButton(cancelButton).build();
 			pane.add(buttonBar, cc.xyw(4, 10, 3));
 			
 			this.getRootPane().setDefaultButton(importButton);

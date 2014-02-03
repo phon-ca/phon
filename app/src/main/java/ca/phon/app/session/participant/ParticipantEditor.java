@@ -46,7 +46,7 @@ import ca.phon.session.Sex;
 import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.decorations.DialogHeader;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -167,7 +167,10 @@ public class ParticipantEditor extends JDialog {
 		sexComp.add(maleButton);
 		sexComp.add(femaleButton);
 		
-		JComponent btnGroup = ButtonBarFactory.buildOKCancelBar(saveButton, cancelButton);
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+		JComponent btnGroup = 
+			barBuilder.addButton(saveButton).addButton(cancelButton).build();
+//				ButtonBarFactory.buildOKCancelBar(saveButton, cancelButton);
 		
 		// add components
 		CellConstraints cc = new CellConstraints();

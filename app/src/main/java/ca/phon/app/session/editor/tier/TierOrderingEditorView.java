@@ -79,7 +79,7 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -738,7 +738,10 @@ public class TierOrderingEditorView extends EditorView {
 				
 			});
 			
-			JPanel btnPanel = ButtonBarFactory.buildOKCancelBar(okButton, cancelButton);
+			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
+			JPanel btnPanel = 
+				barBuilder.addButton(okButton).addButton(cancelButton).build();
+//					ButtonBarFactory.buildOKCancelBar(okButton, cancelButton);
 			
 			BorderLayout layout = new BorderLayout();
 			setLayout(layout);

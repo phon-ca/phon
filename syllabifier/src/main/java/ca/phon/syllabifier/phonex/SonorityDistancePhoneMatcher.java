@@ -42,7 +42,7 @@ public class SonorityDistancePhoneMatcher implements PhoneMatcher {
 			distance = info.getDistance();
 		}
 		if(distance > 0) {
-			retVal = distance >= minDistance;
+			retVal = Math.abs(distance) >= Math.abs(minDistance);
 		} else {
 			retVal = allowFlat;
 		}

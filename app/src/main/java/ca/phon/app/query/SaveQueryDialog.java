@@ -53,7 +53,7 @@ import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 
-import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -174,8 +174,9 @@ public class SaveQueryDialog extends JDialog {
 
 		final DialogHeader header =
 				new DialogHeader("Save Query", "");
+		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
 		JComponent btnBar =
-				ButtonBarFactory.buildOKCancelBar(saveBtn, cancelBtn);
+				barBuilder.addButton(saveBtn).addButton(cancelBtn).build();
 
 		final FormLayout formLayout = new FormLayout(
 				"3dlu, 12dlu, fill:pref:grow, 3dlu",
