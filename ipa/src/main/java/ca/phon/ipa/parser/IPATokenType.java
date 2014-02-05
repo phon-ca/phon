@@ -30,7 +30,9 @@ public enum IPATokenType {
     SPACE("Space"),
     SUFFIX_DIACRITIC("Suffix Diacritic"),
     TONE("Tone"),
-    VOWEL("Vowel");
+    VOWEL("Vowel"),
+    COLON("Colon"),
+    SCTYPE("Syllable ConstituentType");
 	
 	String tokenName = "Unknown";
 	

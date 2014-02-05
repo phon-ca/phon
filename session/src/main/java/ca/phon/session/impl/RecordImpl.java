@@ -349,8 +349,8 @@ public class RecordImpl implements Record {
 					for(int i = 0; i < systemTier.numberOfGroups(); i++) {
 						final Object obj = systemTier.getGroup(i);
 						final String val = obj.toString();
-						final T tierVal = (T)type.getClass().cast(val);
-						retVal.addGroup(tierVal);
+//						final T tierVal = (T)type.getClass().cast(val);
+						retVal.addGroup((T)val);
 					}
 				}
 			}

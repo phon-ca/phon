@@ -8,6 +8,8 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 
+import ca.phon.syllable.SyllableConstituentType;
+
 
 /**
  * <p>Tokenize IPA strings for an ANTLR parser.  The 
@@ -34,6 +36,12 @@ public class IPALexer implements TokenSource {
 	 * Current position
 	 */
 	private int currentPosition = 0;
+	
+	/**
+	 * Set to true when the next token expected is a 
+	 * syllable constituent type identifier
+	 */
+	private boolean expectingScType = false;
 	
 	/**
 	 * Error handlers
@@ -91,16 +99,36 @@ public class IPALexer implements TokenSource {
 		while(retVal == null && currentPosition < source.length()) {
 			char currentChar = source.charAt(currentPosition);
 			
-			IPATokenType tokenType = tokenMapper.getTokenType(currentChar);
-			if(tokenType == null) {
-				IPAParserException ex = new IPAParserException("Invalid token '" + currentChar + "'");
-				ex.setPositionInLine(currentPosition);
-				reportError(ex);
+			if(expectingScType) {
+				final SyllableConstituentType scType = SyllableConstituentType.fromString(currentChar+"");
+				if(scType == null) {
+					IPAParserException ex = new IPAParserException("Invalid syllable constituent type '" +
+							currentChar + "'");
+					ex.setPositionInLine(currentPosition);
+					reportError(ex);
+				} else {
+					int antlrType = tokenMapper.getTypeValue(IPATokenType.SCTYPE);
+					retVal = new CommonToken(antlrType, currentChar+"");
+					retVal.setCharPositionInLine(currentPosition);
+				}
+				expectingScType = false;
 			} else {
-				int antlrType = tokenMapper.getTypeValue(tokenType);
+				IPATokenType tokenType = tokenMapper.getTokenType(currentChar);
+				if(tokenType == null) {
+					IPAParserException ex = new IPAParserException("Invalid token '" + currentChar + "'");
+					ex.setPositionInLine(currentPosition);
+					reportError(ex);
+				} else {
+					int antlrType = tokenMapper.getTypeValue(tokenType);
+					
+					retVal = new CommonToken(antlrType, currentChar+"");
+					retVal.setCharPositionInLine(currentPosition);
+					
+					if(tokenType == IPATokenType.COLON) {
+						expectingScType = true;
+					}
+				}
 				
-				retVal = new CommonToken(antlrType, currentChar+"");
-				retVal.setCharPositionInLine(currentPosition);
 			}
 			currentPosition++;
 		}

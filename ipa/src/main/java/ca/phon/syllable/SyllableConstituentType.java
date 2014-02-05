@@ -74,7 +74,8 @@ public enum SyllableConstituentType {
 		SyllableConstituentType retVal = SyllableConstituentType.UNKNOWN;
 		
 		for(SyllableConstituentType v:values()) {
-			if(v.toString().equalsIgnoreCase(identifier) || v.getIdentifier().equalsIgnoreCase(identifier)) {
+			if(v.toString().equalsIgnoreCase(identifier) || v.getIdentifier().equalsIgnoreCase(identifier)
+					|| v.mnemonic.equals(identifier)) {
 				retVal = v;
 				break;
 			}

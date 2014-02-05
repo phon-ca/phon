@@ -319,7 +319,7 @@
       <dependency>
         <groupId>org.swinglabs</groupId>
         <artifactId>swingx</artifactId>
-        <version>1.6.1</version>
+        <version>${org.swinglabs.swingx.version}</version>
       </dependency>
       
     </dependencies>

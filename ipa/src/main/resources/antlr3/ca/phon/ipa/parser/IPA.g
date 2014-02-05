@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import ca.phon.ipa.*;
 import ca.phon.ipa.features.*;
+import ca.phon.syllable.*;
 }
 
 // custom methods for generated parser
@@ -207,13 +208,19 @@ pause_length returns [PauseLength length]
  *
  */
 phone returns [IPAElement ele]
-	:	single_phone
+	:	single_phone ( COLON sc=sctype )?
 	{	
 		$ele = $single_phone.phone;
+		if(sc != null) {
+			$ele.setScType($sc.value);
+		}
 	}
-	|	compound_phone
+	|	compound_phone ( COLON sc=sctype )?
 	{	
 		$ele = $compound_phone.phone;
+		if(sc != null) {
+			$ele.setScType($sc.value);
+		}
 	}
 	;
 	
@@ -351,3 +358,9 @@ phone_length returns [Float length]
 	}
 	;
 	
+sctype returns [SyllableConstituentType value]
+	:	SCTYPE
+	{
+		$value = SyllableConstituentType.fromString($SCTYPE.text);
+	}
+	;

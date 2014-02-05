@@ -421,6 +421,12 @@ predefined_phone_class returns [PhoneMatcher value]
 			$value = vm;
 			break;
 			
+		case 'g':
+			FeatureSetMatcher gm = new FeatureSetMatcher();
+			gm.addRequiredFeature("glide");
+			$value = gm;
+			break;
+			
 		case 'w':
 			PhoneClassMatcher wm = new PhoneClassMatcher();
 			FeatureSetMatcher cfsm = new FeatureSetMatcher();

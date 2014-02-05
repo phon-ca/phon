@@ -1138,4 +1138,8 @@
         <name>Space</name>
         <token>SPACE</token>
     </char>
+    <char value=":">
+        <name>Colon</name>
+        <token>COLON</token>
+    </char>
 </ipa>

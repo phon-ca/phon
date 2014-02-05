@@ -187,7 +187,7 @@ boundary_matchers
 	;
 	
 ESCAPED_PHONE_CLASS
-	:	BACKSLASH ('c'|'v'|'w'|'W'|'s')
+	:	BACKSLASH ('c'|'v'|'g'|'w'|'W'|'s')
 	;
 	
 ESCAPED_PUNCT

@@ -18,9 +18,11 @@
 
 package ca.phon.query.db.xml;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -106,7 +108,7 @@ public class XMLQuery implements Query, JAXBWrapper<QueryType> {
 		final XMLGregorianCalendar xmlDate = query.getDate();
 		// ensure timezone neutral
 		xmlDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
-		return new DateTime(xmlDate);
+		return new DateTime(xmlDate.toGregorianCalendar());
 	}
 
 	@Override

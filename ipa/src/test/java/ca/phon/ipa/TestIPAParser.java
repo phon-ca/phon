@@ -13,6 +13,7 @@ import org.junit.runners.JUnit4;
 
 import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
+import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Test methods for the ipa parser.
@@ -160,6 +161,20 @@ public class TestIPAParser {
 	@Test
 	public void testCombinedDiacritics() {
 		
+	}
+	
+	@Test
+	public void testEmbeddedSyllabification() throws Exception {
+		final String testString = "s:Eh:Le:Ol:Nl:Co:R";
+		final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
+		
+		Assert.assertEquals(6, transcript.size());
+		Assert.assertEquals(SyllableConstituentType.OEHS, transcript.get(0).getScType());
+		Assert.assertEquals(SyllableConstituentType.LEFTAPPENDIX, transcript.get(1).getScType());
+		Assert.assertEquals(SyllableConstituentType.ONSET, transcript.get(2).getScType());
+		Assert.assertEquals(SyllableConstituentType.NUCLEUS, transcript.get(3).getScType());
+		Assert.assertEquals(SyllableConstituentType.CODA, transcript.get(4).getScType());
+		Assert.assertEquals(SyllableConstituentType.RIGHTAPPENDIX, transcript.get(5).getScType());
 	}
 
 }
