@@ -189,4 +189,14 @@ public class IPAElementFactory {
 	public Pause createPause(PauseLength length) {
 		return new Pause(length);
 	}
+	
+	/**
+	 * Create a new diacritic
+	 * 
+	 * @param diacritic
+	 */
+	public Diacritic createDiacritic(Character diacritic) {
+		return new Diacritic(diacritic);
+	}
+	
 }

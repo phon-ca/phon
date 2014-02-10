@@ -22,6 +22,8 @@ import ca.phon.syllable.*;
 import ca.phon.ipa.*;
 
 import ca.phon.fsa.*;
+
+import ca.phon.phonex.plugins.*;
 }
 
 @members {
@@ -255,6 +257,14 @@ scope {
 			}
 		}
 		$value = retVal;
+	}
+	|   ^(PLUGIN spm=single_phone_matcher)
+	{
+		$value = new AnyDiacriticPhoneMatcher($spm.value);
+	}
+	|	^(PLUGIN cm=class_matcher)
+	{
+		$value = new AnyDiacriticPhoneMatcher($cm.value);
 	}
 	;
 	
@@ -500,5 +510,19 @@ boundary_matchers returns [PhoneMatcher value]
 			};
 			break;
 		}
+	}
+	;
+	
+sctype returns [SyllableConstituentType value]
+	:	SCTYPE
+	{
+		$value = SyllableConstituentType.fromString($SCTYPE.text);
+	}
+	;
+	
+stress_type returns [SyllableStress value]
+	:	STRESS
+	{
+		$value = SyllableStress.fromString($STRESS.text);
 	}
 	;

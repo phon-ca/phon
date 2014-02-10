@@ -30,6 +30,7 @@ import ca.phon.ipa.IPATranscript;
 public enum SyllableStress {
 	PrimaryStress("1", '\u02c8'),
 	SecondaryStress("2", '\u02cc'),
+	AnyStrress("S", (char)0),
 	NoStress("U", (char)0);
 	
 	private String idString;

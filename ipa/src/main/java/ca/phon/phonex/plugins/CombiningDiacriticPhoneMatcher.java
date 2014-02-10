@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.phon.ipa.CompoundPhone;
+import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.Phone;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -32,7 +34,7 @@ public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 
 	@Override
 	public boolean matchesAnything() {
-		return false;
+		return getMatcher().matchesAnything();
 	}
 
 	/**
@@ -48,16 +50,14 @@ public class CombiningDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 		}
 		
 		@Visits
-		public void visitBasicPhone(Phone bp) {
-			boolean hasAllowed = false;
-			for(Character c:bp.getCombiningDiacritics()) {
-				hasAllowed |= getAllowedDiacritics().contains(c);
+		public void visitBasicPhone(Phone phone) {
+			final IPAElementFactory factory = new IPAElementFactory();
+			// combining
+			for(Character diacritic:phone.getCombiningDiacritics()) {
+				final Diacritic cmbDiacritic = factory.createDiacritic(diacritic);
+				matches |= getMatcher().matches(cmbDiacritic);
+				if(matches) return;
 			}
-			boolean hasForbidden = false;
-			for(Character c:bp.getCombiningDiacritics()) {
-				hasForbidden |= getForbiddenDiacritics().contains(c);
-			}
-			matches = hasAllowed && !hasForbidden;
 		}
 		
 		@Visits

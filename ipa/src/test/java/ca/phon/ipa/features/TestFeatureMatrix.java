@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
 
 @RunWith(JUnit4.class)

@@ -34,6 +34,7 @@ public class PhonexMatcher {
 	PhonexMatcher(PhonexPattern pattern, List<IPAElement> input) {
 		this.pattern = pattern;
 		this.input = input;
+		reset();
 	}
 	
 	/**
@@ -92,12 +93,12 @@ public class PhonexMatcher {
 	public boolean find() {
 		boolean retVal = false;
 		
-		// reset if no previous match
-		try {
-			checkLastMatch();
-		} catch (IllegalStateException ex) {
-			reset();
-		}
+//		// reset if no previous match
+//		try {
+//			checkLastMatch();
+//		} catch (IllegalStateException ex) {
+//			reset();
+//		}
 		
 		int currentIdx = lastMatchState.getTapeIndex();
 		while(!retVal && currentIdx < input.size()) {

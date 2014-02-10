@@ -21,6 +21,8 @@ tokens {
 	PLUGIN;
 	P_PHONE_CLASS;
 	QUANTIFIER;
+	SCTYPE;
+	STRESS;
 }
 
 @header {
@@ -110,8 +112,14 @@ class_matcher
 plugin_matcher
 	:	COLON identifier OPEN_PAREN argument_list? CLOSE_PAREN
 	->	^(PLUGIN[$identifier.text] OPEN_PAREN argument_list? CLOSE_PAREN)
-	|	COLON negatable_identifier (PIPE negatable_identifier)*
-	->	^(PLUGIN["sctype"] negatable_identifier+)
+	|	COLON sctype
+	->	^(PLUGIN["sctype"] sctype)
+	|	AMP single_phone_matcher
+	->  ^(PLUGIN["diacritic"] single_phone_matcher)
+	|	AMP class_matcher
+	->  ^(PLUGIN["diacritic"] class_matcher)
+	|	EXC stress_type
+	->	^(PLUGIN["stress"] stress_type)
 	;
 	
 argument
@@ -186,6 +194,34 @@ boundary_matchers
 	->	BOUNDARY_MATCHER[$ESCAPED_BOUNDARY]
 	;
 	
+stress_type
+	:	'1'
+	->	STRESS['1']
+	|	'2'
+	->	STRESS['2']
+	|	'U'
+	->	STRESS['U']
+	|	'S'
+	->	STRESS['S']
+	;
+	
+sctype
+	:	('la' | 'LA' | 'LEFTAPPENDIX' | 'leftappendix' | 'LeftAppendix' )
+	->	SCTYPE['LA']
+	|	('o' | 'O' | 'ONSET' | 'onset' | 'Onset' )
+	->	SCTYPE['O']
+	|	('n' | 'N' | 'NUCLEUS' | 'nucleus' | 'Nucleus' )
+	->	SCTYPE['N']
+	|	('c' | 'C' | 'CODA' | 'coda' | 'Coda' )
+	->	SCTYPE['C']
+	|	('ra' | 'RA' | 'RIGHTAPPENDIX' | 'rightappendix' | 'RightAppendix' )
+	->	SCTYPE['RA']
+	|	('oehs' | 'OEHS' )
+	->	SCTYPE['OEHS']
+	|	('u' | 'U' | 'UNKNOWN' | 'unknown' | 'Unknown' )
+	->	SCTYPE['U']
+	;
+	
 ESCAPED_PHONE_CLASS
 	:	BACKSLASH ('c'|'v'|'g'|'w'|'W'|'s')
 	;
@@ -215,6 +251,14 @@ MINUS
 	
 EQUALS
 	:	'='
+	;
+	
+AMP
+	:	'&'
+	;
+	
+EXC
+	:	'!'
 	;
 	
 OPEN_PAREN
@@ -293,7 +337,7 @@ BOUND_END
 LETTER
 	:	'a'..'z'
 	|	'A'..'Z'
-	|	'\u0250'..'\u02af'
+	|	'\u0250'..'\u036f'
 	;
 
 fragment

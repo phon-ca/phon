@@ -1,5 +1,6 @@
 package ca.phon.phonex;
 
+import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.SyllableBoundary;
@@ -58,10 +59,17 @@ public class BasePhoneMatcher implements PhoneMatcher {
 			matches = sb.toString().equals(
 					BasePhoneMatcher.this.toString());
 		}
+		
+		@Visits
+		public void visitDiacritic(Diacritic diacritic) {
+			matches = diacritic.toString().equals(
+					BasePhoneMatcher.this.toString());
+		}
 
 		@Override
 		public void fallbackVisit(IPAElement obj) {
 		}
+		
 	}
 	
 	@Override
