@@ -63,6 +63,10 @@ public enum SyllableConstituentType {
 		return uiColor;
 	}
 	
+	public String getMnemonic() {
+		return this.mnemonic;
+	}
+	
 	/**
 	 * Return the constituent type for the given identifier.
 	 * 

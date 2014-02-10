@@ -10,22 +10,22 @@ import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 /**
- * 
+ * Tests tone diacritics.
  */
-public class SuffixDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
+public class ToneDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 
-	public SuffixDiacriticPhoneMatcher(String phonex) {
-		super(phonex);
+	public ToneDiacriticPhoneMatcher(String input) {
+		super(input);
 	}
 	
-	public SuffixDiacriticPhoneMatcher(PhoneMatcher matcher) {
+	public ToneDiacriticPhoneMatcher(PhoneMatcher matcher) {
 		super(matcher);
 	}
 
 	@Override
 	public boolean matches(IPAElement p) {
-		final SuffixDiacriticVisitor visitor = new SuffixDiacriticVisitor();
-		p.accept(visitor);
+		final ToneDiacriticVisitor visitor = new ToneDiacriticVisitor();
+		visitor.visit(p);
 		return visitor.matches;
 	}
 
@@ -34,35 +34,29 @@ public class SuffixDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 		return getMatcher().matchesAnything();
 	}
 
-	/**
-	 * Visitor for match
-	 */
-	private class SuffixDiacriticVisitor extends VisitorAdapter<IPAElement> {
+	private class ToneDiacriticVisitor extends VisitorAdapter<IPAElement> {
 		
-		public boolean matches = false;
+		private boolean matches = false;
 
 		@Override
 		public void fallbackVisit(IPAElement obj) {
-			
 		}
-		
+
 		@Visits
-		public void visitBasicPhone(Phone phone) {
+		public void visitPhone(Phone p) {
 			final IPAElementFactory factory = new IPAElementFactory();
-			
-			// prefix
-			if(phone.getPrefixDiacritic() != null) {
-				final Diacritic suffixDiacritic = factory.createDiacritic(phone.getSuffixDiacritic());
-				matches |= getMatcher().matches(suffixDiacritic);
+			final PhoneMatcher pm = getMatcher();
+			for(Character c:p.getToneDiacritics()) {
+				final Diacritic diacritic = factory.createDiacritic(c);
+				matches |= pm.matches(diacritic);
 			}
 		}
 		
 		@Visits
 		public void visitCompoundPhone(CompoundPhone cp) {
 			visit(cp.getFirstPhone());
-			visit(cp.getSecondPhone()); 
+			visit(cp.getSecondPhone());
 		}
-		
 	}
-
+	
 }

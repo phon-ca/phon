@@ -235,27 +235,13 @@ scope {
 			throw ex;
 		}
 	}
-	|	^(PLUGIN (sc=negatable_identifier {$plugin_matcher::scTypes.add($sc.value);})+)
+	|	^(PLUGIN MINUS? sc=sctype)
 	{
 		SyllableConstituentMatcher retVal = new SyllableConstituentMatcher();
-		
-		for(String scTypeString:$plugin_matcher::scTypes) {
-			boolean not = false;
-			if(scTypeString.startsWith("-")) {
-				not = true;
-				scTypeString = scTypeString.substring(1);
-			}
-			
-			// try id chars first
-			SyllableConstituentType scType = 
-				SyllableConstituentType.fromString(scTypeString);
-			if(scType != null) {
-				if(not)
-					retVal.getDisallowedTypes().add(scType);
-				else
-					retVal.getAllowedTypes().add(scType);
-			}
-		}
+		if($MINUS == null)
+			retVal.getAllowedTypes().add($sc.value);
+		else
+			retVal.getDisallowedTypes().add($sc.value);
 		$value = retVal;
 	}
 	|   ^(PLUGIN spm=single_phone_matcher)
@@ -265,6 +251,35 @@ scope {
 	|	^(PLUGIN cm=class_matcher)
 	{
 		$value = new AnyDiacriticPhoneMatcher($cm.value);
+	}
+	|	^(PLUGIN st=stress_type)
+	{
+		final StressMatcher stressMatcher = new StressMatcher();
+		stressMatcher.addType($st.value);
+		$value = stressMatcher;
+	}
+	;
+	
+sctype returns [SyllableConstituentType value]
+	:	SCTYPE
+	{
+		SyllableConstituentType scType = null;
+		for(SyllableConstituentType type:SyllableConstituentType.values()){
+			if(type.getMnemonic().toLowerCase().equals($SCTYPE.text.toLowerCase())) {
+				scType = type;
+				break;
+			}
+		}
+		if(scType == null)
+			throw new PhonexPluginException("Invalid syllable constituent type '" + $SCTYPE.text + "'");
+		$value = scType;
+	}
+	;
+	
+stress_type returns [SyllableStress value]
+	:	STRESS
+	{
+		$value = SyllableStress.fromString($STRESS.text);
 	}
 	;
 	
@@ -512,17 +527,4 @@ boundary_matchers returns [PhoneMatcher value]
 		}
 	}
 	;
-	
-sctype returns [SyllableConstituentType value]
-	:	SCTYPE
-	{
-		$value = SyllableConstituentType.fromString($SCTYPE.text);
-	}
-	;
-	
-stress_type returns [SyllableStress value]
-	:	STRESS
-	{
-		$value = SyllableStress.fromString($STRESS.text);
-	}
-	;
+

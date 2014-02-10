@@ -112,14 +112,14 @@ class_matcher
 plugin_matcher
 	:	COLON identifier OPEN_PAREN argument_list? CLOSE_PAREN
 	->	^(PLUGIN[$identifier.text] OPEN_PAREN argument_list? CLOSE_PAREN)
-	|	COLON sctype
-	->	^(PLUGIN["sctype"] sctype)
+	|	COLON MINUS? sctype
+	->	^(PLUGIN["sctype"] MINUS? sctype)
 	|	AMP single_phone_matcher
 	->  ^(PLUGIN["diacritic"] single_phone_matcher)
-	|	AMP class_matcher
-	->  ^(PLUGIN["diacritic"] class_matcher)
-	|	EXC stress_type
-	->	^(PLUGIN["stress"] stress_type)
+	|	AMP MINUS? class_matcher
+	->  ^(PLUGIN["diacritic"] MINUS? class_matcher)
+	|	EXC MINUS? stress_type
+	->	^(PLUGIN["stress"] MINUS? stress_type)
 	;
 	
 argument
@@ -195,33 +195,17 @@ boundary_matchers
 	;
 	
 stress_type
-	:	'1'
-	->	STRESS['1']
-	|	'2'
-	->	STRESS['2']
-	|	'U'
-	->	STRESS['U']
-	|	'S'
-	->	STRESS['S']
+	:	NUMBER
+	->	^(STRESS[$NUMBER.text])
+	|	LETTER
+	->	^(STRESS[$LETTER.text])
 	;
-	
+
 sctype
-	:	('la' | 'LA' | 'LEFTAPPENDIX' | 'leftappendix' | 'LeftAppendix' )
-	->	SCTYPE['LA']
-	|	('o' | 'O' | 'ONSET' | 'onset' | 'Onset' )
-	->	SCTYPE['O']
-	|	('n' | 'N' | 'NUCLEUS' | 'nucleus' | 'Nucleus' )
-	->	SCTYPE['N']
-	|	('c' | 'C' | 'CODA' | 'coda' | 'Coda' )
-	->	SCTYPE['C']
-	|	('ra' | 'RA' | 'RIGHTAPPENDIX' | 'rightappendix' | 'RightAppendix' )
-	->	SCTYPE['RA']
-	|	('oehs' | 'OEHS' )
-	->	SCTYPE['OEHS']
-	|	('u' | 'U' | 'UNKNOWN' | 'unknown' | 'Unknown' )
-	->	SCTYPE['U']
+	:	LETTER
+	->	^(SCTYPE[$LETTER.text])
 	;
-	
+
 ESCAPED_PHONE_CLASS
 	:	BACKSLASH ('c'|'v'|'g'|'w'|'W'|'s')
 	;
@@ -291,6 +275,10 @@ CLOSE_BRACE
 	
 COLON
 	:	':'
+	;
+	
+SEMICOLON
+	:	';'
 	;
 	
 COMMA
