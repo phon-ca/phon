@@ -1,5 +1,7 @@
 # BootHook
 ca.phon.app.BootHook
+# StartupHook
+ca.phon.app.ThemeHook
 # Window menu
 ca.phon.app.menu.DefaultMenuFilterExtensionPt
 
