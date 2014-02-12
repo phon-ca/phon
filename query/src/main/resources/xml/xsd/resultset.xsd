@@ -75,6 +75,7 @@
 
     <xs:element name="range" type="RangeType"/>
     <xs:element name="data" type="xs:string"/>
+    <xs:element name="matcherGroup" type="xs:string"/>
 
     <!-- Definition for a result value (reference to data) -->
 
@@ -85,6 +86,7 @@
         <xs:sequence>
             <xs:element ref="range" minOccurs="1" maxOccurs="1"/>
             <xs:element ref="data" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="matcherGroup" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="tier_name" type="nonEmptyString" use="required"/>
         <xs:attribute name="group_index" type="groupIndex" use="required"/>

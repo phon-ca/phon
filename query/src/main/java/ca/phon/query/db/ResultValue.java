@@ -18,6 +18,9 @@
 
 package ca.phon.query.db;
 
+import java.util.regex.Matcher;
+
+import ca.phon.phonex.PhonexMatcher;
 import ca.phon.util.Range;
 
 /**
@@ -79,5 +82,23 @@ public interface ResultValue {
 	 * @param data  the data
 	 */
 	public abstract void setData(String data);
+	
+	/**
+	 * Returns the number of 'matcher' groups either that were produced
+	 * by either regex {@link Matcher}s or {@link PhonexMatcher}s.
+	 * 
+	 * @return number of matcher groups
+	 */
+	public abstract int getMatcherGroupCount();
+	
+	/**
+	 * Get the value of the specified matcher group.
+	 * 
+	 * @param index
+	 * 
+	 * @return value of the specified group
+	 * 
+	 */
+	public abstract String getMatcherGroup(int index);
 
 }

@@ -98,5 +98,15 @@ public class XMLResultValue implements ResultValue, JAXBWrapper<ResultValueType>
 	public void setData(String data) {
 		resultValue.setData(data);
 	}
+
+	@Override
+	public int getMatcherGroupCount() {
+		return resultValue.getMatcherGroup().size();
+	}
+
+	@Override
+	public String getMatcherGroup(int index) {
+		return resultValue.getMatcherGroup().get(index);
+	}
 	
 }
