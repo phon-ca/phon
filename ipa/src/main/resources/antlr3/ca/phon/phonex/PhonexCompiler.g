@@ -211,7 +211,11 @@ scope {
 			classMatchers[i] = (PhoneMatcher)$class_matcher::innerMatchers.get(i);
 		}
 		
-		$value = new PhoneClassMatcher(classMatchers);
+		PhoneClassMatcher pcm = new PhoneClassMatcher(classMatchers);
+		if($PHONE_CLASS.text.equals("^")) {
+			pcm.setNot(true);
+		}
+		$value = pcm;
 	}
 	;
 
@@ -464,6 +468,15 @@ predefined_phone_class returns [PhoneMatcher value]
 			break;
 			
 		case 'W':
+			PhoneClassMatcher notWm = new PhoneClassMatcher();
+			notWm.setNot(true);
+			FeatureSetMatcher notCfsm = new FeatureSetMatcher();
+			notCfsm.addRequiredFeature("consonant");
+			notWm.addMatcher(notCfsm);
+			FeatureSetMatcher notVfsm = new FeatureSetMatcher();
+			notVfsm.addRequiredFeature("vowel");
+			notWm.addMatcher(notVfsm);
+			$value = notWm;
 			break;
 			
 		case 's':
@@ -511,6 +524,7 @@ boundary_matchers returns [PhoneMatcher value]
 			break;
 			
 		case 'S':
+			getFSA().appendTransition(new SyllableBoundaryTransition());
 			break;
 			
 		default:

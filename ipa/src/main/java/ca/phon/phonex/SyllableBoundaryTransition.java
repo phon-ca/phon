@@ -32,20 +32,32 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 	public boolean follow(FSAState<IPAElement> currentState) {
 		boolean retVal = false;
 		
-		final IPATranscript input = new IPATranscript(Arrays.asList(currentState.getTape()));
-		final List<IPATranscript> sylls = input.syllables();
+		final IPATranscript transcript = new IPATranscript(currentState.getTape());
+		final List<IPATranscript> sylls = transcript.syllables();
 		
+		// edges
 		if(currentState.getTapeIndex() == 0 ||
 				currentState.getTapeIndex() == currentState.getTape().length) {
 			retVal = true;
 			matchLength = 0;
 		} else {
 			final IPAElement p = currentState.getTape()[currentState.getTapeIndex()];
+		// punctuation
 			final PunctuationTest test = new PunctuationTest();
 			p.accept(test);
 			retVal = test.isPunct;
 			if(retVal) {
 				matchLength = 1;
+			}
+			
+		// implicit syllable edges
+			if(!retVal) {
+				for(IPATranscript syll:sylls) {
+					if(p == syll.get(0) || p == syll.get(syll.size()-1)) {
+						retVal = true;
+						matchLength = 0;
+					}
+				}
 			}
 		}
 		

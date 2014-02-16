@@ -4,10 +4,11 @@
     targetNamespace="https://phon.ca/ns/ipa">
     
     <xs:element name="ipa" type="ipaType"/>
+    <xs:element name="char" type="charType"/>
     
     <xs:complexType name="ipaType" mixed="false">
         <xs:sequence>
-            <xs:element name="char" type="charType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="char" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     

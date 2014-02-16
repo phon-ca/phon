@@ -45,6 +45,14 @@ public class PhoneClassMatcher implements PhoneMatcher {
 		this.matchers.add(pm);
 	}
 	
+	public boolean isNot() {
+		return not;
+	}
+
+	public void setNot(boolean not) {
+		this.not = not;
+	}
+
 	@Override
 	public boolean matches(IPAElement p) {
 		boolean retVal = not;

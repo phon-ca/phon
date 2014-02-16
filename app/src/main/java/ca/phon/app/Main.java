@@ -1,11 +1,13 @@
 package ca.phon.app;
 
+import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;

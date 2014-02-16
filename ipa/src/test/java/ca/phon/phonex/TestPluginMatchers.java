@@ -104,6 +104,7 @@ public class TestPluginMatchers {
 	}
 	
 	
+	
 	@Test(expected=PhonexPluginException.class)
 	public void testInvalidScType() throws Exception {
 		final IPATranscript ipa = new IPATranscript();

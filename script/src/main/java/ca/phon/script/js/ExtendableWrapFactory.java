@@ -21,6 +21,5 @@ public class ExtendableWrapFactory extends WrapFactory {
 			return super.wrapAsJavaObject(cx, scope, javaObject, staticType);
 		}
 	}
-
 	
 }

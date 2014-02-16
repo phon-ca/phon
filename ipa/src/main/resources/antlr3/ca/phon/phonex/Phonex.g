@@ -45,9 +45,6 @@ expr
 	->	^(EXPR exprele+)
 	;
 
-/**
- * 
- */
 exprele	
 	:	matcher
 	|	group
@@ -105,8 +102,8 @@ escaped_char
 	;
 	
 class_matcher
-	:	OPEN_BRACKET MINUS? single_phone_matcher+ CLOSE_BRACKET
-	->	^(PHONE_CLASS[($MINUS == null ? "" : $MINUS.text)] single_phone_matcher+)
+	:	OPEN_BRACKET CARET? single_phone_matcher+ CLOSE_BRACKET
+	->	^(PHONE_CLASS[($CARET == null ? "" : $CARET.text)] single_phone_matcher+)
 	;
 
 plugin_matcher
