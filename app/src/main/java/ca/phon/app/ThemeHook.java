@@ -40,6 +40,7 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 						// keep mac's default look and feel, otherwise replace by 
 						// a substance look and feel
 						if(!OSInfo.isMacOs()) {
+							LOGGER.info("Setting look and feel: " + SubstanceBusinessLookAndFeel.class.getName());
 							UIManager.setLookAndFeel(
 //									UIManager.getCrossPlatformLookAndFeelClassName());
 									new SubstanceBusinessBlueSteelLookAndFeel());
