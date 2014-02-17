@@ -55,6 +55,7 @@ public class GeneralPrefsPanel extends PrefsPanel {
 	private void init() {
 		CellConstraints cc = new CellConstraints();
 		
+		// update checking
 		boolean doCheckUpdate = PrefHelper.getBoolean(checkForUpdateAtStartupProp, true);
 		
 		JCheckBox checkForUpdatesBox = new JCheckBox("Check for updates when application starts");
@@ -79,6 +80,7 @@ public class GeneralPrefsPanel extends PrefsPanel {
 		updatesPanel.setBorder(BorderFactory.createTitledBorder("Program Updates"));
 		innerPanel.add(updatesPanel, cc.xy(1,1));
 		
+		// info messages
 		PhonUIAction resetInfoMessagesAct = new PhonUIAction(this, "onResetInfoMessages");
 		resetInfoMessagesAct.putValue(Action.NAME, "Reset Information Messages");
 		JButton resetInfoMessagesBtn = new JButton(resetInfoMessagesAct);
@@ -88,12 +90,27 @@ public class GeneralPrefsPanel extends PrefsPanel {
 		resetPanel.setBorder(BorderFactory.createTitledBorder("Information Messages"));
 		innerPanel.add(resetPanel, cc.xy(1, 2));
 		
+		// UI theme
+		
+		
 		JScrollPane innerScroller = new JScrollPane(innerPanel);
 		setLayout(new BorderLayout());
 		add(innerScroller, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Reset hide-able messages.
+	 * @param pae
+	 */
 	public void onResetInfoMessages(PhonActionEvent pae) {
 		HidablePanel.clearSavePanelProps();
+	}
+	
+	/**
+	 * Set application UI theme.
+	 * @param themeClassName
+	 */
+	public void onSetTheme(String themeClassName) {
+		
 	}
 }

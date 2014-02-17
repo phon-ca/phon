@@ -69,4 +69,9 @@ public class PhonProperties {
 	 */
 	public final static String DEFAULT_IPA_UI_FONT = "Charis SIL Compact-12-PLAIN"; 
 	
+	/**
+	 * UI Theme
+	 */
+	public final static String UI_THEME = "ca.phon.app.ui.theme";
+	
 }

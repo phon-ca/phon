@@ -17,6 +17,7 @@
  */
 package ca.phon.app.project;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
@@ -31,6 +32,7 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import ca.phon.plugin.IPluginEntryPoint;
@@ -48,9 +50,6 @@ import ca.phon.util.PrefHelper;
 public class OpenProjectEP implements IPluginEntryPoint {
 	
 	private final static Logger LOGGER = Logger.getLogger(OpenProjectEP.class.getName());
-	
-	/** The controller's window */
-	private static OpenProjectWindow _window;
 	
 	/** The project path property */
 	public final static String PROJECTPATH_PROPERTY = 
@@ -72,30 +71,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		super();
 	}
 	
-	private void begin() {
-		if(projectpath == null 
-				|| projectpath.length() == 0) {
-			if(OpenProjectEP._window.isVisible())
-				return; // only one copy at a time
-			
-			_window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			_window.pack();
-			_window.setLocationByPlatform(true);
-			
-			_window.setResizable(false);
-			_window.setVisible(true);
-		
-			final boolean warningIssued = PrefHelper.getBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.FALSE);
-			if(!warningIssued) {
-				NativeDialogs.showMessageDialogBlocking(_window, null, "Projects will be upgraded", 
-						"Project changes made using this version of Phon may not be compatible with previous versions of Phon.");
-				PrefHelper.getUserPreferences().putBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.TRUE);
-			}
-		} else {
-			loadProject();
-		}
-	}
-	
 	public void setProjectPath(String projectPath) {
 		this.projectpath = projectPath;
 	}
@@ -107,30 +82,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	public void loadProject() {
 		if(projectpath == null || projectpath.length() == 0)
 			return;
-		
-		boolean projectLoaded = false;
-		// is the project remote or local?
-//		if(projectpath.startsWith("rmi://"))
-//			projectLoaded = loadRemoteProject();
-//		else
-			projectLoaded = loadLocalProject();
-		
-//		if(projectLoaded) {
-//			ca.phon.gui.CommonModuleFrame.updateWindowMenus();
-//		}
+		loadLocalProject();
 	}
 	
 	public void newProject() {
-		
 		PluginEntryPointRunner.executePluginInBackground("NewProject");
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.NewController");
-//		LoadModule lm = new LoadModule(mi, new HashMap<String, Object>());
-//		lm.start();
-		
-		_window.setVisible(false);
-		//_window.dispose();
-		//_window = null;
 	}
 	
 	//	 load the project
@@ -237,16 +193,12 @@ public class OpenProjectEP implements IPluginEntryPoint {
     		pwindow.setLocationByPlatform(true);
     		pwindow.setVisible(true);
     		
-    		_window.setVisible(false);
-    		_window.dispose();
-    		_window = null;
-    		
     		return true;
 		} catch (Exception e) {
 			// catch anything and report
 			LOGGER.severe(e.getMessage());
 			e.printStackTrace();
-			NativeDialogs.showMessageDialogBlocking(_window, "", "Could not open project", 
+			NativeDialogs.showMessageDialogBlocking(null, "", "Could not open project", 
 					e.getMessage());
 		}
 		
@@ -313,67 +265,33 @@ public class OpenProjectEP implements IPluginEntryPoint {
 
 	@Override
 	public void pluginStart(Map<String, Object> initInfo)  {
-		if(OpenProjectEP._window == null) {
-			OpenProjectEP._window = new OpenProjectWindow(this);
-			OpenProjectEP._window.addWindowListener(new WindowListener() {
-
-				@Override
-				public void windowActivated(WindowEvent arg0) {
-				}
-
-				@Override
-				public void windowClosed(WindowEvent arg0) {
-					// are there any other project windows open?
-					boolean otherProjectsOpen = false;
-					
-					// close all other project windows
-					for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
-						
-						if(f instanceof ProjectWindow)
-							otherProjectsOpen = true;
-					}
-					
-					if(!otherProjectsOpen && !OSInfo.isMacOs()) {
-//						ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.core.OpenProjectController");
-//						LoadModule lm = new LoadModule(mi, new HashMap<String, Object>());
-//						lm.start();
-						System.exit(0);
-					}
-				}
-
-				@Override
-				public void windowClosing(WindowEvent arg0) {
-				}
-
-				@Override
-				public void windowDeactivated(WindowEvent arg0) {
-				}
-
-				@Override
-				public void windowDeiconified(WindowEvent arg0) {
-				}
-
-				@Override
-				public void windowIconified(WindowEvent arg0) {
-				}
-
-				@Override
-				public void windowOpened(WindowEvent arg0) {
-				}
-				
-			});
-		}
+		if(GraphicsEnvironment.isHeadless()) return;
 		
-//		PhonLogger.warning("Hello : " + initInfo.get(PROJECTPATH_PROPERTY));
 		if(initInfo.get(PROJECTPATH_PROPERTY) != null)
 			projectpath = initInfo.get(PROJECTPATH_PROPERTY).toString();
 		
-		begin();
-	}
-
-	public static CommonModuleFrame getFrame() {
-		return _window;
+		if(SwingUtilities.isEventDispatchThread()) {
+			openProject.run();
+		} else {
+			SwingUtilities.invokeLater(openProject);
+		}
 	}
 	
+	/**
+	 * Runnable action
+	 */
+	private final Runnable openProject = new Runnable() {
+		
+		@Override
+		public void run() {
+			final boolean warningIssued = PrefHelper.getBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.FALSE);
+			if(!warningIssued) {
+				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Projects will be upgraded", 
+						"Project changes made using this version of Phon may not be compatible with previous versions of Phon.");
+				PrefHelper.getUserPreferences().putBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.TRUE);
+			}
+			loadProject();
+		}
+		
+	};
 }

@@ -175,7 +175,7 @@ public class ProjectWindow extends CommonModuleFrame
 		for(int i = 0; i < menu.getMenuCount(); i++) {
 			JMenu currentBar = menu.getMenu(i);
 			
-			if(currentBar.getText().equals("Edit")) {
+			if(currentBar != null && currentBar.getText() != null && currentBar.getText().equals("Edit")) {
 				projectMenuIndex = i+1;
 			}
 		}

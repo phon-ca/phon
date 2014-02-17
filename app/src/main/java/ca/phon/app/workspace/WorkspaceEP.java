@@ -26,15 +26,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel;
 
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
-import ca.phon.util.OSInfo;
 
 
 @PhonPlugin(name="default")
@@ -75,20 +69,6 @@ public class WorkspaceEP implements IPluginEntryPoint {
 	private final Runnable showWorkspace = new Runnable() {
 		@Override
 		public void run() {
-			
-			try {
-				// keep mac's default look and feel, otherwise replace by 
-				// a substance look and feel
-				if(!OSInfo.isMacOs()) {
-					LOGGER.info("Setting look and feel: " + SubstanceBusinessLookAndFeel.class.getName());
-					UIManager.setLookAndFeel(
-//							UIManager.getCrossPlatformLookAndFeelClassName());
-							new SubstanceBusinessBlueSteelLookAndFeel());
-				}
-			} catch (UnsupportedLookAndFeelException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
-			
 			WorkspaceDialog startDialog = __startDialog;
 			if(startDialog == null) {
 				startDialog = new WorkspaceDialog();
