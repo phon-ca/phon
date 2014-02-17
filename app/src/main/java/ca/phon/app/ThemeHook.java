@@ -1,11 +1,19 @@
 package ca.phon.app;
 
 import java.awt.GraphicsEnvironment;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel;
+import org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel;
+import org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel;
+import org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel;
+import org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -15,7 +23,6 @@ import ca.phon.util.OSInfo;
 
 /**
  * Sets UI theme
- * @author Greg
  *
  */
 public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
@@ -27,20 +34,27 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 		if(GraphicsEnvironment.isHeadless()) return;
 		
 		try {
-			if(OSInfo.isWindows()) {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} else if(OSInfo.isNix()) {
-				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-			}
-		} catch (ClassNotFoundException e) {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					try {
+						// keep mac's default look and feel, otherwise replace by 
+						// a substance look and feel
+						if(!OSInfo.isMacOs()) {
+							UIManager.setLookAndFeel(
+//									UIManager.getCrossPlatformLookAndFeelClassName());
+									new SubstanceBusinessBlueSteelLookAndFeel());
+						}
+					} catch (UnsupportedLookAndFeelException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+				}
+			});
+		} catch (InterruptedException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		} catch (InstantiationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		} catch (IllegalAccessException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (InvocationTargetException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
+		
 	}
 
 	@Override

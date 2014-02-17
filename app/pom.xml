@@ -93,6 +93,15 @@
 			<groupId>org.dockingframes</groupId>
 			<artifactId>docking-frames-common</artifactId>
 		</dependency>
+		<dependency>
+      	<groupId>com.github.insubstantial</groupId>
+    <artifactId>substance</artifactId>
+      </dependency>
+      
+      <dependency>
+      	<groupId>com.github.insubstantial</groupId>
+    <artifactId>substance-swingx</artifactId>
+      </dependency>
 	</dependencies>
 	
 	<build>

@@ -121,7 +121,8 @@
     <org.dockingframes.docking-frames-common.version>1.1.2-phon</org.dockingframes.docking-frames-common.version>
     <org.dockingframes.docking-frames-core.version>1.1.2-phon</org.dockingframes.docking-frames-core.version>
     <org.mozilla.rhino.version>1.7R4</org.mozilla.rhino.version>
-    <org.swinglabs.swingx.version>1.6.1</org.swinglabs.swingx.version>
+    <org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
+    <com.github.insubstantial.substance.version>7.2.1</com.github.insubstantial.substance.version>
     
     <!-- Plugin versions -->
     <org.antlr.antlr3-maven-plugin.version>3.1.3-1</org.antlr.antlr3-maven-plugin.version>
@@ -196,9 +197,9 @@
       </dependency>
       
       <dependency>
-        <groupId>org.swinglabs</groupId>
-        <artifactId>swingx</artifactId>
-        <version>${org.swinglabs.swingx.version}</version>
+        <groupId>org.swinglabs.swingx</groupId>
+        <artifactId>swingx-all</artifactId>
+        <version>${org.swinglabs.swingx.swingx-all.version}</version>
       </dependency>
       
       <dependency>
@@ -322,6 +323,17 @@
         <version>${org.swinglabs.swingx.version}</version>
       </dependency>
       
+      <dependency>
+      	<groupId>com.github.insubstantial</groupId>
+    <artifactId>substance</artifactId>
+      	<version>${com.github.insubstantial.substance.version}</version>
+      </dependency>
+      
+      <dependency>
+      	<groupId>com.github.insubstantial</groupId>
+    <artifactId>substance-swingx</artifactId>
+      	<version>${com.github.insubstantial.substance.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

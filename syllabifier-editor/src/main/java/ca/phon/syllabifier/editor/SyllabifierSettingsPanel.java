@@ -54,7 +54,7 @@ public class SyllabifierSettingsPanel extends JPanel {
 		add(languageField, cc.xy(2,3));
 	}
 	
-	public String getName() {
+	public String getSyllabifierName() {
 		return nameField.getText();
 	}
 	
@@ -69,7 +69,7 @@ public class SyllabifierSettingsPanel extends JPanel {
 	
 	public SyllabifierSettings getSyllabifierSettings() {
 		final SyllabifierSettings retVal = new SyllabifierSettings();
-		retVal.setName(getName());
+		retVal.setName(getSyllabifierName());
 		retVal.setLanguage(getLanguage());
 		return retVal;
 	}

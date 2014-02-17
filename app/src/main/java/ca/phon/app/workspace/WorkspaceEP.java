@@ -20,7 +20,12 @@ package ca.phon.app.workspace;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
 
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -29,6 +34,8 @@ import ca.phon.plugin.PhonPlugin;
 @PhonPlugin(name="default")
 public class WorkspaceEP implements IPluginEntryPoint {
 
+	private final static Logger LOGGER = Logger.getLogger(WorkspaceEP.class.getName());
+	
 	private static WorkspaceDialog __startDialog;
 //	
 //	private static WorkspaceDialog getDialog() {
@@ -46,34 +53,51 @@ public class WorkspaceEP implements IPluginEntryPoint {
 	
 	@Override
 	public void pluginStart(Map<String, Object> initInfo) {
-		WorkspaceDialog startDialog = __startDialog;
-		if(startDialog == null) {
-			startDialog = new WorkspaceDialog();
-			startDialog.addWindowListener(new WindowAdapter() {
-
-				@Override
-				public void windowClosed(WindowEvent e) {
-					__startDialog = null;
-				}
-				
-			});
-			__startDialog = startDialog;
-		}
-		
-		if(!startDialog.isShowing()) {
-			// display start dialog
-			startDialog.setSize(new Dimension(725, 600));
-//			startDialog.centerWindow();
-			startDialog.setLocationByPlatform(true);
-			
-			if(!startDialog.isVisible())
-				startDialog.setVisible(true);
-			else
-				startDialog.requestFocus();
+		if(SwingUtilities.isEventDispatchThread()) {
+			showWorkspace.run();
 		} else {
-			startDialog.toFront();
-			startDialog.requestFocus();
+			try {
+				SwingUtilities.invokeAndWait(showWorkspace);
+			} catch (InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} catch (InvocationTargetException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 		}
 	}
+	
+	private final Runnable showWorkspace = new Runnable() {
+		@Override
+		public void run() {
+			WorkspaceDialog startDialog = __startDialog;
+			if(startDialog == null) {
+				startDialog = new WorkspaceDialog();
+				startDialog.addWindowListener(new WindowAdapter() {
+
+					@Override
+					public void windowClosed(WindowEvent e) {
+						__startDialog = null;
+					}
+					
+				});
+				__startDialog = startDialog;
+			}
+			
+			if(!startDialog.isShowing()) {
+				// display start dialog
+				startDialog.setSize(new Dimension(725, 600));
+//				startDialog.centerWindow();
+				startDialog.setLocationByPlatform(true);
+				
+				if(!startDialog.isVisible())
+					startDialog.setVisible(true);
+				else
+					startDialog.requestFocus();
+			} else {
+				startDialog.toFront();
+				startDialog.requestFocus();
+			}
+		}
+	};
 
 }
