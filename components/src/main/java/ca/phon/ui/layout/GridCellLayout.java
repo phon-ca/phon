@@ -34,12 +34,12 @@ public class GridCellLayout implements LayoutManager2 {
 	/**
 	 * Width of cells
 	 */
-	private int cellWidth = 10;
+	private int cellWidth = 15;
 	
 	/**
 	 * Height of cells
 	 */
-	private int cellHeight = 10;
+	private int cellHeight = 15;
 	
 	public GridCellLayout(int numRows, int numCols) {
 		super();

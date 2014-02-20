@@ -40,6 +40,7 @@ public class GlyphPainter implements Painter<IPAGridPanel> {
 		renderer.setVerticalTextPosition(SwingConstants.CENTER);
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		renderer.setVerticalAlignment(SwingConstants.CENTER);
+		renderer.setBorder(null);
 	}
 
 	@Override

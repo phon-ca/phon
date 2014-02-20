@@ -93,6 +93,8 @@ import org.xml.sax.SAXException;
 import ca.phon.ipa.features.Feature;
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 import ca.phon.ipamap.IpaMapSearchField.SearchType;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.PromptedTextField.FieldState;
@@ -338,6 +340,9 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				JAXBContext ctx = JAXBContext.newInstance(factory.getClass());
 				Unmarshaller unmarshaller = ctx.createUnmarshaller();
 				grids = (IpaGrids)unmarshaller.unmarshal(getGridDoc());
+				
+				// add generated grids
+				generateMissingGrids(grids);
 			} catch (JAXBException e) {
 				e.printStackTrace();
 				LOGGER.severe(e.getMessage());
@@ -345,6 +350,246 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			}
 		}
 		return grids;
+	}
+	
+	private static void generateMissingGrids(IpaGrids grids) {
+		// create a set of characters defined in the xml file
+		final Set<Character> supportedChars = new HashSet<Character>();
+		for(Grid g:grids.getGrid()) {
+			for(Cell c:g.getCell()) {
+				supportedChars.add(c.getText().charAt(0));
+			}
+		}
+	
+		final ObjectFactory factory = new ObjectFactory();
+		final IPATokens tokens = IPATokens.getSharedInstance();
+		
+		// generate 'Other consonants' section
+		final Set<Character> cSet = tokens.getCharactersForType(IPATokenType.CONSONANT);
+		cSet.addAll(tokens.getCharactersForType(IPATokenType.GLIDE));
+		
+		cSet.removeAll(supportedChars);
+		
+		if(cSet.size() > 0) {
+			final Grid cGrid = factory.createGrid();
+			int x = 0;
+			int y = 0;
+			int w = 2;
+			int h = 2;
+			
+			int maxX = 44;
+			
+			for(Character missingC:cSet) {
+				final Cell cell = factory.createCell();
+				cell.setX(x);
+				cell.setY(y);
+				cell.setW(w);
+				cell.setH(h);
+				cell.setText(missingC + "");
+				
+				cGrid.getCell().add(cell);
+				
+				x += w;
+				if(x > maxX) {
+					x = 0;
+					y += h;
+				}
+			}
+			
+			cGrid.setName("Other consonants");
+			cGrid.setCols(44);
+			cGrid.setRows(y+h);
+			grids.getGrid().add(cGrid);
+		}
+		
+		// generate Other Vowels
+		final Set<Character> vSet = tokens.getCharactersForType(IPATokenType.VOWEL);
+		
+		vSet.removeAll(supportedChars);
+		
+		if(vSet.size() > 0) {
+			final Grid vGrid = factory.createGrid();
+			int x = 0;
+			int y = 0;
+			int w = 2;
+			int h = 2;
+			
+			int maxX = 44;
+			
+			for(Character missingV:vSet) {
+				final Cell cell = factory.createCell();
+				cell.setX(x);
+				cell.setY(y);
+				cell.setW(w);
+				cell.setH(h);
+				cell.setText(missingV + "");
+				
+				vGrid.getCell().add(cell);
+				
+				x += w;
+				if(x > maxX) {
+					x = 0;
+					y += h;
+				}
+			}
+			
+			vGrid.setName("Other vowels");
+			vGrid.setCols(44);
+			vGrid.setRows(y+h);
+			grids.getGrid().add(vGrid);
+		}
+		
+		// prefix diacritics
+		final Set<Character> pdSet = tokens.getCharactersForType(IPATokenType.PREFIX_DIACRITIC);
+		
+		pdSet.removeAll(supportedChars);
+		
+		if(pdSet.size() > 0) {
+			final Grid pdGrid = factory.createGrid();
+			int x = 0;
+			int y = 0;
+			int w = 2;
+			int h = 2;
+			
+			int maxX = 44;
+			
+			for(Character missingPD:pdSet) {
+				final Cell cell = factory.createCell();
+				cell.setX(x);
+				cell.setY(y);
+				cell.setW(w);
+				cell.setH(h);
+				cell.setText("◌̚" + missingPD);
+				
+				pdGrid.getCell().add(cell);
+				
+				x += w;
+				if(x > maxX) {
+					x = 0;
+					y += h;
+				}
+			}
+			
+			pdGrid.setName("Other prefix diacritics");
+			pdGrid.setCols(44);
+			pdGrid.setRows(y+h);
+			grids.getGrid().add(pdGrid);
+		}
+		
+		// suffix diacritics
+		final Set<Character> sdSet = tokens.getCharactersForType(IPATokenType.SUFFIX_DIACRITIC);
+		
+		sdSet.removeAll(supportedChars);
+		
+		if(sdSet.size() > 0) {
+			final Grid sdGrid = factory.createGrid();
+			int x = 0;
+			int y = 0;
+			int w = 2;
+			int h = 2;
+			
+			int maxX = 44;
+			
+			for(Character missingSD:sdSet) {
+				final Cell cell = factory.createCell();
+				cell.setX(x);
+				cell.setY(y);
+				cell.setW(w);
+				cell.setH(h);
+				cell.setText("◌̚" + missingSD);
+				
+				sdGrid.getCell().add(cell);
+				
+				x += w;
+				if(x > maxX) {
+					x = 0;
+					y += h;
+				}
+			}
+			
+			sdGrid.setName("Other suffix diacritics");
+			sdGrid.setCols(44);
+			sdGrid.setRows(y+h);
+			grids.getGrid().add(sdGrid);
+		}
+		
+		// combining diacritics
+		final Set<Character> cdSet = tokens.getCharactersForType(IPATokenType.COMBINING_DIACRITIC);
+		
+		cdSet.removeAll(supportedChars);
+		
+		if(cdSet.size() > 0) {
+			final Grid cdGrid = factory.createGrid();
+			int x = 0;
+			int y = 0;
+			int w = 2;
+			int h = 2;
+			
+			int maxX = 44;
+			
+			for(Character missingCD:cdSet) {
+				final Cell cell = factory.createCell();
+				cell.setX(x);
+				cell.setY(y);
+				cell.setW(w);
+				cell.setH(h);
+				cell.setText("◌̚" + missingCD);
+				
+				cdGrid.getCell().add(cell);
+				
+				x += w;
+				if(x > maxX) {
+					x = 0;
+					y += h;
+				}
+			}
+			
+			cdGrid.setName("Other combining diacritics");
+			cdGrid.setCols(44);
+			cdGrid.setRows(y+h);
+			grids.getGrid().add(cdGrid);
+		}
+		
+		// everything else...
+		final Set<Character> everything = tokens.getCharacterSet();
+		everything.removeAll(supportedChars);
+		everything.removeAll(cSet);
+		everything.removeAll(vSet);
+		everything.removeAll(pdSet);
+		everything.removeAll(sdSet);
+		everything.removeAll(cdSet);
+		
+		if(everything.size() > 0) {
+			final Grid eGrid = factory.createGrid();
+			int x = 0;
+			int y = 0;
+			int w = 2;
+			int h = 2;
+			
+			int maxX = 44;
+			
+			for(Character missing:everything) {
+				final Cell cell = factory.createCell();
+				cell.setX(x);
+				cell.setY(y);
+				cell.setW(w);
+				cell.setH(h);
+				cell.setText(missing + "");
+				
+				eGrid.getCell().add(cell);
+				
+				x += w;
+				if(x > maxX) {
+					x = 0;
+					y += h;
+				}
+			}
+			
+			eGrid.setName("Other symbols");
+			eGrid.setCols(44);
+			eGrid.setRows(y+h);
+			grids.getGrid().add(eGrid);
+		}
 	}
 	
 	/**
