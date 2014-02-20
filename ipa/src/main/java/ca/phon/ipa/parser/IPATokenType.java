@@ -32,7 +32,8 @@ public enum IPATokenType {
     TONE("Tone"),
     VOWEL("Vowel"),
     COLON("Colon"),
-    SCTYPE("Syllable ConstituentType");
+    SCTYPE("Syllable ConstituentType"),
+    SANDHI("Sandhi");
 	
 	String tokenName = "Unknown";
 	

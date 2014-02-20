@@ -49,6 +49,7 @@
             <xs:enumeration value="LIGATURE"/>
             <xs:enumeration value="GLIDE"/>
             <xs:enumeration value="TONE"/>
+            <xs:enumeration value="SANDHI"/>
             
             <!-- denotes syllable constituent type -->
             <xs:enumeration value="COLON"/>

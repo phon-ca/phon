@@ -453,6 +453,9 @@
       <primary_family>diacritic</primary_family>
       <secondary_family>manner</secondary_family>
    </feature>
+   <feature name="sandhi">
+      <primary_family>diacritic</primary_family>
+   </feature>
 
    <!--Consonants-->
    <!--C-->
@@ -861,11 +864,8 @@
    <!--Diacritics and Misc-->
    <feature_set char="&#x28;">diacritic </feature_set>
    <feature_set char="&#x29;">diacritic </feature_set>
-   <feature_set char="&#x2c;">diacritic </feature_set>
-   <feature_set char="&#x7b;">diacritic </feature_set>
    <!--| minor group; syllable boundary-->
    <feature_set char="&#x7c;">diacritic </feature_set>
-   <feature_set char="&#x7d;">diacritic </feature_set>
    <!--²-->
    <feature_set char="&#xb2;">diacritic tone2 </feature_set>
    <!--³-->
@@ -1107,8 +1107,7 @@
    <feature_set char="&#x1dc4;">diacritic tonehigh tonerising </feature_set>
    <feature_set char="&#x1dc5;">diacritic tonelowrising </feature_set>
    <feature_set char="&#x1dc8;">diacritic tonerisingfalling </feature_set>
-   <feature_set char="&#x2026;">diacritic </feature_set>
-   <feature_set char="&#x203f;">diacritic </feature_set>
+   <feature_set char="&#x203f;">diacritic sandhi </feature_set>
    <!--‖ major group; syllable boundary-->
    <feature_set char="&#x2016;">diacritic </feature_set>
    <!--⁴-->
@@ -1133,8 +1132,6 @@
    <feature_set char="&#x2197;">diacritic toneglobalrise </feature_set>
    <!--↘-->
    <feature_set char="&#x2198;">diacritic toneglobalfall </feature_set>
-   <feature_set char="&#x2e28;">diacritic </feature_set>
-   <feature_set char="&#x2e29;">diacritic </feature_set>
    <!--small up arrow-->
    <feature_set char="&#xa71b;">diacritic toneupstep </feature_set>
    <!--small down arrow-->
@@ -1154,7 +1151,6 @@
    <feature_set char="&#xf1c0;">diacritic nasal prenasalized </feature_set>
    <feature_set char="&#xf1c1;">diacritic nasal prenasalized </feature_set>
    <feature_set char="&#xf1c2;">diacritic nasal prenasalized </feature_set>
-   <feature_set char="&#x23;">pause </feature_set>
    <feature_set char="&#x2a;">unintelligible </feature_set>
    <!--. syllable boundary-->
    <feature_set char="&#x2e;">halflong </feature_set>
@@ -1169,7 +1165,6 @@
    <feature_set char="&#x207c;">diacritic unaspirated </feature_set>
    <!--ʩ-->
    <feature_set char="&#x2a9;">consonant fricative nasal velopharyngeal velopharyngealfricative </feature_set>
-   <feature_set char="&#x5c;">diacritic </feature_set>
    <!--◌͎-->
    <feature_set char="&#x34e;">diacritic whistled </feature_set>
    <!--◌͢ subscript combining right arrow; phone building-->
@@ -1180,4 +1175,37 @@
       lateral obstruent voiced </feature_set>
    <!--ˬ-->
    <feature_set char="&#x2ec;">diacritic voiced </feature_set>
+   
+   <!-- AUTO-GENERATED from ipa set -->
+   <feature_set char="&#x0020;">diacritic </feature_set>
+   <feature_set char="&#x002b;">diacritic </feature_set>
+   <feature_set char="&#x00c6;">vowel </feature_set>
+   <feature_set char="&#x0111;">consonant </feature_set>
+   <feature_set char="&#x0193;">consonant </feature_set>
+   <feature_set char="&#x01bb;">consonant </feature_set>
+   <feature_set char="&#x027f;">vowel </feature_set>
+   <feature_set char="&#x0285;">vowel </feature_set>
+   <feature_set char="&#x02af;">vowel </feature_set>
+   <feature_set char="&#x02c1;">diacritic </feature_set>
+   <feature_set char="&#x0313;">diacritic </feature_set>
+   <feature_set char="&#x0315;">diacritic </feature_set>
+   <feature_set char="&#x0331;">diacritic </feature_set>
+   <feature_set char="&#x0338;">diacritic </feature_set>
+   <feature_set char="&#x1d47;">diacritic </feature_set>
+   <feature_set char="&#x1d48;">diacritic </feature_set>
+   <feature_set char="&#x1d4d;">diacritic </feature_set>
+   <feature_set char="&#x1d4f;">diacritic </feature_set>
+   <feature_set char="&#x1d56;">diacritic </feature_set>
+   <feature_set char="&#x1d57;">diacritic </feature_set>
+   <feature_set char="&#x2040;">diacritic </feature_set>
+   <feature_set char="&#xf173;">diacritic </feature_set>
+   <feature_set char="&#xf174;">diacritic </feature_set>
+   <feature_set char="&#xf19c;">diacritic </feature_set>
+   <feature_set char="&#xf19d;">diacritic </feature_set>
+   <feature_set char="&#xf1e8;">diacritic </feature_set>
+   <feature_set char="&#xf236;">vowel </feature_set>
+   <feature_set char="&#xf238;">vowel </feature_set>
+   <feature_set char="&#xf239;">vowel </feature_set>
+   <feature_set char="&#xf23d;">vowel </feature_set>
+   
 </feature_matrix>
