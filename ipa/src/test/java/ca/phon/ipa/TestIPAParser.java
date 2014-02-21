@@ -101,7 +101,7 @@ public class TestIPAParser {
 				final Phone p = (Phone)ipaEle;
 				Assert.assertEquals(testString, p.getText());
 				
-				Assert.assertEquals(p.getSuffixDiacritic(), suffixChar);
+				Assert.assertEquals(suffixChar, p.getSuffixDiacritic());
 				Assert.assertEquals(p.getBasePhone(), c);
 			}
 		}

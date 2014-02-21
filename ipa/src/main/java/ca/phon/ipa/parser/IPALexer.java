@@ -113,7 +113,8 @@ public class IPALexer implements TokenSource {
 				}
 				expectingScType = false;
 			} else {
-				IPATokenType tokenType = tokenMapper.getTokenType(currentChar);
+				IPATokenType tokenType =
+						(currentChar == ':' ? IPATokenType.COLON : tokenMapper.getTokenType(currentChar));
 				if(tokenType == null) {
 					IPAParserException ex = new IPAParserException("Invalid token '" + currentChar + "'");
 					ex.setPositionInLine(currentPosition);

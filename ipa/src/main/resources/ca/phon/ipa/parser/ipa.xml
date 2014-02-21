@@ -1064,11 +1064,11 @@
     </char>
     <char value="&#x2191;">
         <name>Upwards Arrow</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </char>
     <char value="&#x2193;">
         <name>Downwards Arrow</name>
-        <token>SUFFIX_DIACRITIC</token>
+        <token>TONE</token>
     </char>
     <char value="&#x2197;">
         <name>Northeast Arrow</name>

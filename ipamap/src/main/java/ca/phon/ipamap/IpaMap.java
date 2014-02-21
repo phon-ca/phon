@@ -29,6 +29,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -1013,7 +1014,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		});
 		
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
+		btn.setBorderPainted(false);
 		btn.setFocusable(false);
 
 		btn.revalidate();
@@ -1260,8 +1261,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		        ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
 		    }
 		});
-		
-		retVal.setBorderPainted(false);
 		
 		return retVal;
 	}
@@ -1946,55 +1945,15 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		}
 		
 	}
-	
-	/**
-	 * Button class for cells
-	 */
-	private class CellButton extends JXButton implements Painter<JXButton>, MouseListener {
-		
-		private Cell cell;
-		
-		private boolean highlight = false;
-		
-		public CellButton(Cell cell) {
-			this.cell = cell;
-			setText(cell.getText());
-			setFocusable(false);
-			setToolTipText(" das");
-			setOpaque(false);
-			super.setBorderPainted(false);
-			super.setPaintBorderInsets(false);
-//			setBackgroundPainter(this);
-//			setForegroundPainter(this);
-			addMouseListener(this);
-		}
-		
-		@Override
-		public Insets getInsets() {
-			Insets retVal = super.getInsets();
-			
-			retVal.top = 0;
-			retVal.bottom = 0;
-			
-			retVal.left = 0;
-			retVal.right = 0;
-			
-			return retVal;
-		}
-		
-		@Override
-		public Font getFont() {
-			return IpaMap.this.getFont();
-		}
 
+	private class CellButtonBgPainter implements Painter<JXButton> {
+		
 		@Override
-		public JToolTip createToolTip() {
-			return new CellToolTip(cell);
-		}
-
-		@Override
-		public void paint(Graphics2D g, JXButton object, int width, int height) {
-//			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		public void paint(Graphics2D g, JXButton arg1, int width, int height) {
+			final CellButton cellButton = (CellButton)arg1;
+			final Cell cell = cellButton.cell;
+			final boolean highlight = cellButton.highlight;
+			
 			g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			
@@ -2021,6 +1980,15 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				g.fillRect(0, 0, width-1, height-1);
 			}
 			
+			// TEMP check for private use glyphs
+			for(Character c:cell.getText().toCharArray()) {
+				final Integer i = (int)c;
+				if(StringUtils.leftPad(Integer.toHexString(i), 4, '0').startsWith("f")) {
+					g.setColor(Color.red);
+					g.fillRect(0, 0, width-1, height-1);
+				}
+			}
+			
 			if(searchResults.contains(cell)) {
 				InnerGlowPathEffect gpe = new InnerGlowPathEffect();
 				gpe.setBrushColor(Color.blue);
@@ -2031,6 +1999,71 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				
 				gpe.apply(g, boundRect, width, height);
 			}
+		}
+		
+	}
+	
+	private class CellButtonFgPainter implements Painter<JXButton> {
+
+		@Override
+		public void paint(Graphics2D g, JXButton arg1, int width, int height) {
+			final FontMetrics fm = g.getFontMetrics();
+			final String txt = arg1.getText();
+			final Rectangle2D b = fm.getStringBounds(txt, g);
+			
+			float x = Math.round((width / 2.0f) - (b.getCenterX()));
+			float y = Math.round((height / 2.0f) + (b.getCenterY()));
+			
+			g.setColor(arg1.getForeground());
+			g.setFont(arg1.getFont());
+			g.drawString(txt, x, y);
+		}
+		
+	}
+
+	/**
+	 * Button class for cells
+	 */
+	private class CellButton extends JXButton implements MouseListener {
+		
+		private Cell cell;
+		
+		private boolean highlight = false;
+		
+		public CellButton(Cell cell) {
+			this.cell = cell;
+			setText(cell.getText());
+			setFocusable(false);
+			setToolTipText(" das");
+			setOpaque(false);
+			super.setBorderPainted(false);
+//			super.setPaintBorderInsets(false);
+			setBackgroundPainter(new CellButtonBgPainter());
+			setForegroundPainter(new CellButtonFgPainter());
+			addMouseListener(this);
+		}
+		
+		@Override
+		public Insets getInsets() {
+			Insets retVal = super.getInsets();
+			
+			retVal.top = 0;
+			retVal.bottom = 0;
+			
+			retVal.left = 0;
+			retVal.right = 0;
+			
+			return retVal;
+		}
+		
+		@Override
+		public Font getFont() {
+			return IpaMap.this.getFont();
+		}
+
+		@Override
+		public JToolTip createToolTip() {
+			return new CellToolTip(cell);
 		}
 
 		@Override
