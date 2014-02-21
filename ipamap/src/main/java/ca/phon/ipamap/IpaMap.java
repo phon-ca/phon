@@ -75,6 +75,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXCollapsiblePane;
@@ -357,7 +358,9 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		final Set<Character> supportedChars = new HashSet<Character>();
 		for(Grid g:grids.getGrid()) {
 			for(Cell c:g.getCell()) {
-				supportedChars.add(c.getText().charAt(0));
+					String cellData = c.getText();
+					cellData = cellData.replaceAll("\\u25cc", "");
+					supportedChars.add(cellData.charAt(0));
 			}
 		}
 	
@@ -367,187 +370,54 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		// generate 'Other consonants' section
 		final Set<Character> cSet = tokens.getCharactersForType(IPATokenType.CONSONANT);
 		cSet.addAll(tokens.getCharactersForType(IPATokenType.GLIDE));
+		final int w = 2;
+		final int h = 2;
+		final int maxX = 40;
 		
 		cSet.removeAll(supportedChars);
-		
 		if(cSet.size() > 0) {
-			final Grid cGrid = factory.createGrid();
-			int x = 0;
-			int y = 0;
-			int w = 2;
-			int h = 2;
-			
-			int maxX = 44;
-			
-			for(Character missingC:cSet) {
-				final Cell cell = factory.createCell();
-				cell.setX(x);
-				cell.setY(y);
-				cell.setW(w);
-				cell.setH(h);
-				cell.setText(missingC + "");
-				
-				cGrid.getCell().add(cell);
-				
-				x += w;
-				if(x > maxX) {
-					x = 0;
-					y += h;
-				}
-			}
-			
-			cGrid.setName("Other consonants");
-			cGrid.setCols(44);
-			cGrid.setRows(y+h);
+			final Grid cGrid = generateGrid(cSet, "Other Consonants", "", "", w, h, maxX);
 			grids.getGrid().add(cGrid);
 		}
 		
 		// generate Other Vowels
 		final Set<Character> vSet = tokens.getCharactersForType(IPATokenType.VOWEL);
-		
 		vSet.removeAll(supportedChars);
-		
 		if(vSet.size() > 0) {
-			final Grid vGrid = factory.createGrid();
-			int x = 0;
-			int y = 0;
-			int w = 2;
-			int h = 2;
-			
-			int maxX = 44;
-			
-			for(Character missingV:vSet) {
-				final Cell cell = factory.createCell();
-				cell.setX(x);
-				cell.setY(y);
-				cell.setW(w);
-				cell.setH(h);
-				cell.setText(missingV + "");
-				
-				vGrid.getCell().add(cell);
-				
-				x += w;
-				if(x > maxX) {
-					x = 0;
-					y += h;
-				}
-			}
-			
-			vGrid.setName("Other vowels");
-			vGrid.setCols(44);
-			vGrid.setRows(y+h);
+			final Grid vGrid = generateGrid(vSet, "Other Vowels", "", "", w, h, maxX);
 			grids.getGrid().add(vGrid);
 		}
 		
 		// prefix diacritics
 		final Set<Character> pdSet = tokens.getCharactersForType(IPATokenType.PREFIX_DIACRITIC);
-		
 		pdSet.removeAll(supportedChars);
-		
 		if(pdSet.size() > 0) {
-			final Grid pdGrid = factory.createGrid();
-			int x = 0;
-			int y = 0;
-			int w = 2;
-			int h = 2;
-			
-			int maxX = 44;
-			
-			for(Character missingPD:pdSet) {
-				final Cell cell = factory.createCell();
-				cell.setX(x);
-				cell.setY(y);
-				cell.setW(w);
-				cell.setH(h);
-				cell.setText("◌̚" + missingPD);
-				
-				pdGrid.getCell().add(cell);
-				
-				x += w;
-				if(x > maxX) {
-					x = 0;
-					y += h;
-				}
-			}
-			
-			pdGrid.setName("Other prefix diacritics");
-			pdGrid.setCols(44);
-			pdGrid.setRows(y+h);
+			final Grid pdGrid = generateGrid(pdSet, "Other Prefix Diacritics", "", "\u25cc", w, h, maxX);
 			grids.getGrid().add(pdGrid);
 		}
 		
 		// suffix diacritics
 		final Set<Character> sdSet = tokens.getCharactersForType(IPATokenType.SUFFIX_DIACRITIC);
-		
 		sdSet.removeAll(supportedChars);
-		
 		if(sdSet.size() > 0) {
-			final Grid sdGrid = factory.createGrid();
-			int x = 0;
-			int y = 0;
-			int w = 2;
-			int h = 2;
-			
-			int maxX = 44;
-			
-			for(Character missingSD:sdSet) {
-				final Cell cell = factory.createCell();
-				cell.setX(x);
-				cell.setY(y);
-				cell.setW(w);
-				cell.setH(h);
-				cell.setText("◌̚" + missingSD);
-				
-				sdGrid.getCell().add(cell);
-				
-				x += w;
-				if(x > maxX) {
-					x = 0;
-					y += h;
-				}
-			}
-			
-			sdGrid.setName("Other suffix diacritics");
-			sdGrid.setCols(44);
-			sdGrid.setRows(y+h);
+			final Grid sdGrid = generateGrid(sdSet, "Other Suffix Diacritics", "\u25cc", "", w, h, maxX);
 			grids.getGrid().add(sdGrid);
 		}
 		
 		// combining diacritics
 		final Set<Character> cdSet = tokens.getCharactersForType(IPATokenType.COMBINING_DIACRITIC);
-		
 		cdSet.removeAll(supportedChars);
-		
 		if(cdSet.size() > 0) {
-			final Grid cdGrid = factory.createGrid();
-			int x = 0;
-			int y = 0;
-			int w = 2;
-			int h = 2;
-			
-			int maxX = 44;
-			
-			for(Character missingCD:cdSet) {
-				final Cell cell = factory.createCell();
-				cell.setX(x);
-				cell.setY(y);
-				cell.setW(w);
-				cell.setH(h);
-				cell.setText("◌̚" + missingCD);
-				
-				cdGrid.getCell().add(cell);
-				
-				x += w;
-				if(x > maxX) {
-					x = 0;
-					y += h;
-				}
-			}
-			
-			cdGrid.setName("Other combining diacritics");
-			cdGrid.setCols(44);
-			cdGrid.setRows(y+h);
+			final Grid cdGrid = generateGrid(cdSet, "Other Combining Diacritics", "\u25cc", "", w, h, maxX);
 			grids.getGrid().add(cdGrid);
+		}
+		
+		// tone diacritics
+		final Set<Character> tSet = tokens.getCharactersForType(IPATokenType.TONE);
+		tSet.removeAll(supportedChars);
+		if(tSet.size() > 0) {
+			final Grid tGrid = generateGrid(tSet, "Other Tone Diacritics", "\u25cc", "", w, h, maxX);
+			grids.getGrid().add(tGrid);
 		}
 		
 		// everything else...
@@ -556,40 +426,44 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		everything.removeAll(cSet);
 		everything.removeAll(vSet);
 		everything.removeAll(pdSet);
+		everything.removeAll(tSet);
 		everything.removeAll(sdSet);
 		everything.removeAll(cdSet);
 		
 		if(everything.size() > 0) {
-			final Grid eGrid = factory.createGrid();
-			int x = 0;
-			int y = 0;
-			int w = 2;
-			int h = 2;
-			
-			int maxX = 44;
-			
-			for(Character missing:everything) {
-				final Cell cell = factory.createCell();
-				cell.setX(x);
-				cell.setY(y);
-				cell.setW(w);
-				cell.setH(h);
-				cell.setText(missing + "");
-				
-				eGrid.getCell().add(cell);
-				
-				x += w;
-				if(x > maxX) {
-					x = 0;
-					y += h;
-				}
-			}
-			
-			eGrid.setName("Other symbols");
-			eGrid.setCols(44);
-			eGrid.setRows(y+h);
+			final Grid eGrid = generateGrid(everything, "Other Symbols", "", "", w, h, maxX);
 			grids.getGrid().add(eGrid);
 		}
+	}
+	
+	private static Grid generateGrid(Collection<Character> chars, String title, String prefix, String suffix, int w, int h, int maxX) {
+		final ObjectFactory factory = new ObjectFactory();
+		final Grid retVal = factory.createGrid();
+		int x = 0;
+		int y = 0;
+		
+		for(Character c:chars) {
+			final Cell cell = factory.createCell();
+			cell.setX(x);
+			cell.setY(y);
+			cell.setW(w);
+			cell.setH(h);
+			cell.setText(prefix + c + suffix);
+			
+			retVal.getCell().add(cell);
+			
+			x += w;
+			if(x > maxX) {
+				x = 0;
+				y += h;
+			}
+		}
+		
+		retVal.setName(title);
+		retVal.setCols(maxX);
+		retVal.setRows((x == 0 ? y : y+h));
+		
+		return retVal;
 	}
 	
 	/**
@@ -1165,7 +1039,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				fmin + (scale) * (fmax - fmin);
 			if(baseFont == null)
 				baseFont = Font.decode(null);
-			_cFont = baseFont.deriveFont(Font.BOLD).deriveFont(fontSize);
+			_cFont = baseFont.deriveFont(fontSize);
 		}
 		return _cFont;
 	}
@@ -1301,7 +1175,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 //		contentPanel.setBackground(Color.white);
 		
 		for(Cell cell:grid.getCell()) {
-			JXButton mapButton = getMapButton(cell);
+			JButton mapButton = getMapButton(cell);
 			mapButton.setFont(tFont);
 			
 //			if(grid.getName().equalsIgnoreCase("consonants")) {
@@ -1334,12 +1208,12 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		return retVal;
 	}
 
-	private JXButton getMapButton(Cell cell) {
+	private JButton getMapButton(Cell cell) {
 		PhonUIAction action = new PhonUIAction(this, "onCellClicked", cell);
 		action.putValue(Action.NAME, cell.getText());
 		action.putValue(Action.SHORT_DESCRIPTION, cell.getText());
 		
-		JXButton retVal = new CellButton(cell);
+		JButton retVal = new CellButton(cell);
 		retVal.setAction(action);
 		
 		final Cell cellData = cell;
@@ -1348,17 +1222,17 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			@Override
 			public void mouseEntered(MouseEvent me) {
 				String txt = cellData.getText();
-				txt = txt.replaceAll(0x25cc+"", "");
+				txt = txt.replaceAll("\u25cc", "");
 				
-				String uniVal = null;
-				String desc = null;
-				String name = null;
-				for(CellProp cellProp:cellData.getProperty()) {
-					if(cellProp.getName().equals("Name")) {
-						name = cellProp.getContent();
-					} else if(cellProp.getName().equals("Unicode")) {
-						uniVal = cellProp.getContent();
-					}
+				final IPATokens tokens = IPATokens.getSharedInstance();
+				String uniVal = "";
+				String name = "";
+				for(Character c:txt.toCharArray()) {
+					String cText = "0x" + StringUtils.leftPad(Integer.toHexString((int)c), 4, '0');
+					uniVal += (uniVal.length() > 0 ? " + " : "") + cText;
+					
+					String cName = tokens.getCharacterName(c);
+					name += (name.length() > 0 ? " + " : "") + cName;
 				}
 				String infoTxt = "[" + uniVal + "] " + name;
 				infoLabel.setText(infoTxt);
@@ -1386,6 +1260,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		        ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
 		    }
 		});
+		
+		retVal.setBorderPainted(false);
 		
 		return retVal;
 	}
@@ -2086,7 +1962,10 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			setFocusable(false);
 			setToolTipText(" das");
 			setOpaque(false);
-			setBackgroundPainter(this);
+			super.setBorderPainted(false);
+			super.setPaintBorderInsets(false);
+//			setBackgroundPainter(this);
+//			setForegroundPainter(this);
 			addMouseListener(this);
 		}
 		
@@ -2223,20 +2102,24 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			CellConstraints cc = new CellConstraints();
 			innerPanel.setLayout(layout);
 			
+			final IPATokens tokens = IPATokens.getSharedInstance();
+			
 			JLabel previewLabel = new JLabel(cell.getText());
 			previewLabel.setFont(IpaMap.this.getFont().deriveFont(36.0f));
 			previewLabel.setOpaque(true);
 			previewLabel.setBackground(Color.white);
 			previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			
-			String uniVal = null;
-			String name = null;
-			for(CellProp cellProp:cell.getProperty()) {
-				if(cellProp.getName().equals("Name")) {
-					name = cellProp.getContent();
-				} else if(cellProp.getName().equals("Unicode")) {
-					uniVal = cellProp.getContent();
-				}
+			String uniVal = "";
+			String name = "";
+			
+			String cellText = cell.getText().replaceAll("\u25cc", "");
+			for(Character c:cellText.toCharArray()) {
+				String cText = "0x" + StringUtils.leftPad(Integer.toHexString((int)c), 4, '0');
+				uniVal += (uniVal.length() > 0 ? " + " : "") + cText;
+				
+				String cName = tokens.getCharacterName(c);
+				name += (name.length() > 0 ? " + " : "") + cName;
 			}
 			
 			// create feature set

@@ -64,6 +64,11 @@ public final class IPATokens {
 	private Map<IPATokenType, Integer> antlrTokenMap;
 	
 	/**
+	 * Token names
+	 */
+	private Map<Character, String> tokenNames;
+	
+	/**
 	 * Shared instance
 	 */
 	private static IPATokens _sharedInstance;
@@ -107,6 +112,7 @@ public final class IPATokens {
 		if(tokenMap == null) {
 			tokenMap = new TreeMap<Character, IPATokenType>();
 			reverseMap = new TreeMap<IPATokenType, Set<Character>>();
+			tokenNames = new TreeMap<Character, String>();
 			
 			try {
 				// read in xml token file
@@ -123,10 +129,11 @@ public final class IPATokens {
 					for(CharType gt:ipaDoc.getChar()) {
 						// parse unicode value
 						Integer intVal = null;
-						try {
-//							intVal = Integer.decode(gt.getValue());
-							
+						try {							
 							final Character c = gt.getValue().charAt(0);
+							
+							tokenNames.put(c, gt.getName());
+							
 							if(gt.getToken() == null)
 								System.out.println(c);
 							final IPATokenType tt = IPATokenType.fromXMLType(gt.getToken());
@@ -243,5 +250,14 @@ public final class IPATokens {
 	 */
 	public Set<Character> getCharacterSet() {
 		return tokenMap().keySet();
+	}
+	
+	/**
+	 * Get the name of the provided char
+	 * 
+	 * @param c
+	 */
+	public String getCharacterName(Character c) {
+		return tokenNames.get(c);
 	}
 }

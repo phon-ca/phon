@@ -153,7 +153,7 @@ syllable_boundary returns [IPAElement syllableBoundary]
 	}
 	|	PLUS
 	{
-		// TODO implement compount words at the IPA level
+		// TODO implement compound words at the IPA level
 	}
 	|	MINOR_GROUP
 	{

@@ -199,4 +199,30 @@ public class IPAElementFactory {
 		return new Diacritic(diacritic);
 	}
 	
+	/**
+	 * Create a compound word marker.
+	 * 
+	 * @return compound word marker
+	 */
+	public CompoundWordMarker createCompoundWordMarker() {
+		return new CompoundWordMarker();
+	}
+	
+	/**
+	 * Create a linker
+	 * 
+	 * @return linker (sandhi)
+	 */
+	public Linker createLinker() {
+		return new Linker();
+	}
+	
+	/**
+	 * Create a contraction
+	 * 
+	 * @return contraction (sandhi)
+	 */
+	public Contraction createContraction() {
+		return new Contraction();
+	}
 }
