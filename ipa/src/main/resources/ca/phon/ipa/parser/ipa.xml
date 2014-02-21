@@ -43,107 +43,107 @@
         <token>COVER_SYMBOL</token>
     </char>
     <char value="&#x0061;">
-        <name>Latin Small Letter A</name>
+        <name>Latin Letter Small A</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0062;">
-        <name>Latin Small Letter B</name>
+        <name>Latin Letter Small B</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0063;">
-        <name>Latin Small Letter C</name>
+        <name>Latin Letter Small C</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0064;">
-        <name>Latin Small Letter D</name>
+        <name>Latin Letter Small D</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0065;">
-        <name>Latin Small Letter E</name>
+        <name>Latin Letter Small E</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0066;">
-        <name>Latin Small Letter F</name>
+        <name>Latin Letter Small F</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0067;">
-        <name>Latin Small Letter G</name>
+        <name>Latin Letter Small G</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0068;">
-        <name>Latin Small Letter H</name>
+        <name>Latin Letter Small H</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0069;">
-        <name>Latin Small Letter I</name>
+        <name>Latin Letter Small I</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x006a;">
-        <name>Latin Small Letter J</name>
+        <name>Latin Letter Small J</name>
         <token>GLIDE</token>
     </char>
     <char value="&#x006b;">
-        <name>Latin Small Letter K</name>
+        <name>Latin Letter Small K</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x006c;">
-        <name>Latin Small Letter L</name>
+        <name>Latin Letter Small L</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x006d;">
-        <name>Latin Small Letter M</name>
+        <name>Latin Letter Small M</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x006e;">
-        <name>Latin Small Letter N</name>
+        <name>Latin Letter Small N</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x006f;">
-        <name>Latin Small Letter O</name>
+        <name>Latin Letter Small O</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0070;">
-        <name>Latin Small Letter P</name>
+        <name>Latin Letter Small P</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0071;">
-        <name>Latin Small Letter Q</name>
+        <name>Latin Letter Small Q</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0072;">
-        <name>Latin Small Letter R</name>
+        <name>Latin Letter Small R</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0073;">
-        <name>Latin Small Letter S</name>
+        <name>Latin Letter Small S</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0074;">
-        <name>Latin Small Letter T</name>
+        <name>Latin Letter Small T</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0075;">
-        <name>Latin Small Letter U</name>
+        <name>Latin Letter Small U</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0076;">
-        <name>Latin Small Letter V</name>
+        <name>Latin Letter Small V</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0077;">
-        <name>Latin Small Letter W</name>
+        <name>Latin Letter Small W</name>
         <token>GLIDE</token>
     </char>
     <char value="&#x0078;">
-        <name>Latin Small Letter X</name>
+        <name>Latin Letter Small X</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0079;">
-        <name>Latin Small Letter Y</name>
+        <name>Latin Letter Small Y</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x007a;">
-        <name>Latin Small Letter Z</name>
+        <name>Latin Letter Small Z</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x00a1;">
@@ -187,31 +187,31 @@
         <token>TONE</token>
     </char>
     <char value="&#x00fe;">
-        <name>Latin Small Letter Thorn</name>
+        <name>Latin Letter Small Thorn</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x00e6;">
-        <name>Latin Small Letter AE</name>
+        <name>Latin Letter Small AE</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x00e7;">
-        <name>Latin Small Letter C with cedilla</name>
+        <name>Latin Letter Small C with cedilla</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x00f0;">
-        <name>Latin Small Letter Eth</name>
+        <name>Latin Letter Small Eth</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x00f8;">
-        <name>Latin Small Letter O with Stroke</name>
+        <name>Latin Letter Small O with Stroke</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0127;">
-        <name>Latin Small Letter H with Stroke</name>
+        <name>Latin Letter Small H with Stroke</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x014b;">
-        <name>Latin Small Letter Eng</name>
+        <name>Latin Letter Small Eng</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0153;">
@@ -219,47 +219,47 @@
         <token>VOWEL</token>
     </char>
     <char value="&#x0180;">
-        <name>Latin Small Letter B with Stroke</name>
+        <name>Latin Letter Small B with Stroke</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0111;">
-        <name>Latin Small Letter D with Stroke</name>
+        <name>Latin Letter Small D with Stroke</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0188;">
-        <name>Latin Small Letter C with Hook</name>
+        <name>Latin Letter Small C with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0195;">
-        <name>Latin Small Letter HV</name>
+        <name>Latin Letter Small HV</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0199;">
-        <name>Latin Small Letter K with Hook</name>
+        <name>Latin Letter Small K with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x019b;">
-        <name>Latin Small Letter Lamda with Stroke</name>
+        <name>Latin Letter Small Lamda with Stroke</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x019e;">
-        <name>Latin Small Letter N with Long Right Leg</name>
+        <name>Latin Letter Small N with Long Right Leg</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x01a5;">
-        <name>Latin Small Letter P with Hook</name>
+        <name>Latin Letter Small P with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x01ab;">
-        <name>Latin Small Letter T with Palatal Hook</name>
+        <name>Latin Letter Small T with Palatal Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x01b9;">
-        <name>Latin Small Letter Ezh Reversed</name>
+        <name>Latin Letter Small Ezh Reversed</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x01ba;">
-        <name>Latin Small Letter Ezh with Tail</name>
+        <name>Latin Letter Small Ezh with Tail</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x01c0;">
@@ -275,87 +275,87 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x0234;">
-        <name>Latin Small Letter L with Curl</name>
+        <name>Latin Letter Small L with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0235;">
-        <name>Latin Small Letter N with Curl</name>
+        <name>Latin Letter Small N with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0236;">
-        <name>Latin Small Letter T with Curl</name>
+        <name>Latin Letter Small T with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0250;">
-        <name>Latin Small Letter Turned A</name>
+        <name>Latin Letter Small Turned A</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0251;">
-        <name>Latin Small Letter Alpha</name>
+        <name>Latin Letter Small Alpha</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0252;">
-        <name>Latin Small Letter Turned Alpha</name>
+        <name>Latin Letter Small Turned Alpha</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0253;">
-        <name>Latin Small Letter B with Hook</name>
+        <name>Latin Letter Small B with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0254;">
-        <name>Latin Small Letter Open O</name>
+        <name>Latin Letter Small Open O</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0255;">
-        <name>Latin Small Letter C with Curl</name>
+        <name>Latin Letter Small C with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0256;">
-        <name>Latin Small Letter D with Tail</name>
+        <name>Latin Letter Small D with Tail</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0257;">
-        <name>Latin Small Letter D with Hook</name>
+        <name>Latin Letter Small D with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0258;">
-        <name>Latin Small Letter Reversed E</name>
+        <name>Latin Letter Small Reversed E</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0259;">
-        <name>Latin Small Letter Schwa</name>
+        <name>Latin Letter Small Schwa</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x025a;">
-        <name>Latin Small Letter Schwa with Hook</name>
+        <name>Latin Letter Small Schwa with Hook</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x025b;">
-        <name>Latin Small Letter Open E</name>
+        <name>Latin Letter Small Open E</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x025c;">
-        <name>Latin Small Letter Reversed Open E</name>
+        <name>Latin Letter Small Reversed Open E</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x025d;">
-        <name>Latin Small Letter Reversed Open E with Hook</name>
+        <name>Latin Letter Small Reversed Open E with Hook</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x025e;">
-        <name>Latin Small Letter Closed Reversed Open E</name>
+        <name>Latin Letter Small Closed Reversed Open E</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x025f;">
-        <name>Latin Small Letter Dotless J with Stroke</name>
+        <name>Latin Letter Small Dotless J with Stroke</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0260;">
-        <name>Latin Small Letter G with Hook</name>
+        <name>Latin Letter Small G with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0261;">
-        <name>Latin Small Letter Script G</name>
+        <name>Latin Letter Small Script G</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0262;">
@@ -363,31 +363,31 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x0263;">
-        <name>Latin Small Letter Gamma</name>
+        <name>Latin Letter Small Gamma</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0264;">
-        <name>Latin Small Letter Ram’s Horns</name>
+        <name>Latin Letter Small Ram’s Horns</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0265;">
-        <name>Latin Small Letter Turned H</name>
+        <name>Latin Letter Small Turned H</name>
         <token>GLIDE</token>
     </char>
     <char value="&#x0266;">
-        <name>Latin Small Letter H with Hook</name>
+        <name>Latin Letter Small H with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0267;">
-        <name>Latin Small Letter Heng with Hook</name>
+        <name>Latin Letter Small Heng with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0268;">
-        <name>Latin Small Letter I with Stroke</name>
+        <name>Latin Letter Small I with Stroke</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0269;">
-        <name>Latin Small Letter Iota</name>
+        <name>Latin Letter Small Iota</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x026a;">
@@ -395,39 +395,39 @@
         <token>VOWEL</token>
     </char>
     <char value="&#x026b;">
-        <name>Latin Small Letter L with middle Tilde</name>
+        <name>Latin Letter Small L with middle Tilde</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x026c;">
-        <name>Latin Small Letter L with Belt</name>
+        <name>Latin Letter Small L with Belt</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x026d;">
-        <name>Latin Small Letter L with Retroflex Hook</name>
+        <name>Latin Letter Small L with Retroflex Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x026e;">
-        <name>Latin Small Letter LEzh</name>
+        <name>Latin Letter Small LEzh</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x026f;">
-        <name>Latin Small Letter Turned M</name>
+        <name>Latin Letter Small Turned M</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0270;">
-        <name>Latin Small Letter Turned M with Long Leg</name>
+        <name>Latin Letter Small Turned M with Long Leg</name>
         <token>GLIDE</token>
     </char>
     <char value="&#x0271;">
-        <name>Latin Small Letter M with Hook</name>
+        <name>Latin Letter Small M with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0272;">
-        <name>Latin Small Letter N with Left Hook</name>
+        <name>Latin Letter Small N with Left Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0273;">
-        <name>Latin Small Letter N with Retroflex Hook</name>
+        <name>Latin Letter Small N with Retroflex Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0274;">
@@ -435,7 +435,7 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x0275;">
-        <name>Latin Small Letter Barred O</name>
+        <name>Latin Letter Small Barred O</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0276;">
@@ -443,39 +443,39 @@
         <token>VOWEL</token>
     </char>
     <char value="&#x0277;">
-        <name>Latin Small Letter Closed Omega</name>
+        <name>Latin Letter Small Closed Omega</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0278;">
-        <name>Latin Small Letter Phi</name>
+        <name>Latin Letter Small Phi</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0279;">
-        <name>Latin Small Letter Turned R</name>
+        <name>Latin Letter Small Turned R</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x027a;">
-        <name>Latin Small Letter Turned R with Long Leg</name>
+        <name>Latin Letter Small Turned R with Long Leg</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x027b;">
-        <name>Latin Small Letter Turned R with Hook</name>
+        <name>Latin Letter Small Turned R with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x027c;">
-        <name>Latin Small Letter R with Long Leg</name>
+        <name>Latin Letter Small R with Long Leg</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x027d;">
-        <name>Latin Small Letter R with Tail</name>
+        <name>Latin Letter Small R with Tail</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x027e;">
-        <name>Latin Small Letter R with Fish Hook</name>
+        <name>Latin Letter Small R with Fish Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x027f;">
-        <name>Latin Small Letter Reversed R with Fish Hook</name>
+        <name>Latin Letter Small Reversed R with Fish Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0280;">
@@ -487,51 +487,51 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x0282;">
-        <name>Latin Small Letter S with Hook</name>
+        <name>Latin Letter Small S with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0283;">
-        <name>Latin Small Letter Esh</name>
+        <name>Latin Letter Small Esh</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0284;">
-        <name>Latin Small Letter Dotless J with Stroke and Hook</name>
+        <name>Latin Letter Small Dotless J with Stroke and Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0286;">
-        <name>Latin Small Letter Esh with Curl</name>
+        <name>Latin Letter Small Esh with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0287;">
-        <name>Latin Small Letter Turned T</name>
+        <name>Latin Letter Small Turned T</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0288;">
-        <name>Latin Small Letter T with Retroflex Hook</name>
+        <name>Latin Letter Small T with Retroflex Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0289;">
-        <name>Latin Small Letter U Bar</name>
+        <name>Latin Letter Small U Bar</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x028a;">
-        <name>Latin Small Letter Upsilon</name>
+        <name>Latin Letter Small Upsilon</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x028b;">
-        <name>Latin Small Letter V with Hook</name>
+        <name>Latin Letter Small V with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x028c;">
-        <name>Latin Small Letter Turned V</name>
+        <name>Latin Letter Small Turned V</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x028d;">
-        <name>Latin Small Letter Turned W</name>
+        <name>Latin Letter Small Turned W</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x028e;">
-        <name>Latin Small Letter Turned Y</name>
+        <name>Latin Letter Small Turned Y</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x028f;">
@@ -539,19 +539,19 @@
         <token>VOWEL</token>
     </char>
     <char value="&#x0290;">
-        <name>Latin Small Letter Z with Retroflex Hook</name>
+        <name>Latin Letter Small Z with Retroflex Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0291;">
-        <name>Latin Small Letter Z with Curl</name>
+        <name>Latin Letter Small Z with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0292;">
-        <name>Latin Small Letter Ezh</name>
+        <name>Latin Letter Small Ezh</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0293;">
-        <name>Latin Small Letter Ezh with Curl</name>
+        <name>Latin Letter Small Ezh with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0294;">
@@ -579,7 +579,7 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x029a;">
-        <name>Latin Small Letter Closed Open E</name>
+        <name>Latin Letter Small Closed Open E</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x029b;">
@@ -591,11 +591,11 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x029d;">
-        <name>Latin Small Letter J with Crossed-Tail</name>
+        <name>Latin Letter Small J with Crossed-Tail</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x029e;">
-        <name>Latin Small Letter Turned K</name>
+        <name>Latin Letter Small Turned K</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x029f;">
@@ -603,7 +603,7 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a0;">
-        <name>Latin Small Letter Q with Hook</name>
+        <name>Latin Letter Small Q with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a1;">
@@ -615,39 +615,39 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a3;">
-        <name>Latin Small Letter DZ Digraph</name>
+        <name>Latin Letter Small DZ Digraph</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a4;">
-        <name>Latin Small Letter DEzh Digraph</name>
+        <name>Latin Letter Small DEzh Digraph</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a5;">
-        <name>Latin Small Letter DZ Digraph with Curl</name>
+        <name>Latin Letter Small DZ Digraph with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a6;">
-        <name>Latin Small Letter TS Digraph</name>
+        <name>Latin Letter Small TS Digraph</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a7;">
-        <name>Latin Small Letter TEsh Digraph</name>
+        <name>Latin Letter Small TEsh Digraph</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a8;">
-        <name>Latin Small Letter TC Digraph with Curl</name>
+        <name>Latin Letter Small TC Digraph with Curl</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02a9;">
-        <name>Latin Small Letter FEng Digraph</name>
+        <name>Latin Letter Small FEng Digraph</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02aa;">
-        <name>Latin Small Letter LS Digraph</name>
+        <name>Latin Letter Small LS Digraph</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02ab;">
-        <name>Latin Small Letter LZ Digraph</name>
+        <name>Latin Letter Small LZ Digraph</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x02ac;">
@@ -659,127 +659,127 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x02ae;">
-        <name>Latin Small Letter Turned H with Fish Hook</name>
+        <name>Latin Letter Small Turned H with Fish Hook</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x02b0;">
-        <name>Modifying Letter Small H</name>
+        <name>Modifier Letter Small H</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b1;">
-        <name>Modifying Letter Small H with Hook</name>
+        <name>Modifier Letter Small H with Hook</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b2;">
-        <name>Modifying Letter Small J</name>
+        <name>Modifier Letter Small J</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b3;">
-        <name>Modifying Letter Small R</name>
+        <name>Modifier Letter Small R</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b4;">
-        <name>Modifying Letter Small Turned R</name>
+        <name>Modifier Letter Small Turned R</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b5;">
-        <name>Modifying Letter Small Turned R with Hook</name>
+        <name>Modifier Letter Small Turned R with Hook</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b6;">
-        <name>Modifying Letter Small Capital Inverted R</name>
+        <name>Modifier Letter Small Capital Inverted R</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b7;">
-        <name>Modifying Letter Small W</name>
+        <name>Modifier Letter Small W</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02b8;">
-        <name>Modifying Letter Small Y</name>
+        <name>Modifier Letter Small Y</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02bb;">
-        <name>Modifying Letter Turned Comma</name>
+        <name>Modifier Letter Turned Comma</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02bc;">
-        <name>Modifying Letter Apostrophe</name>
+        <name>Modifier Letter Apostrophe</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02bd;">
-        <name>Modifying Letter Reversed Comma</name>
+        <name>Modifier Letter Reversed Comma</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02be;">
-        <name>Modifying Letter Right Half Ring</name>
+        <name>Modifier Letter Right Half Ring</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02bf;">
-        <name>Modifying Letter Left Half Ring</name>
+        <name>Modifier Letter Left Half Ring</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02c0;">
-        <name>Modifying Letter Glottal Stop</name>
+        <name>Modifier Letter Glottal Stop</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02c1;">
-        <name>Modifying Letter Reversed Glottal Stop</name>
+        <name>Modifier Letter Reversed Glottal Stop</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02c8;">
-        <name>Modifying Letter Vertical Line</name>
+        <name>Modifier Letter Vertical Line</name>
         <token>PRIMARY_STRESS</token>
     </char>
     <char value="&#x02cc;">
-        <name>Modifying Letter Low Vertical Line</name>
+        <name>Modifier Letter Low Vertical Line</name>
         <token>SECONDARY_STRESS</token>
     </char>
     <char value="&#x02d0;">
-        <name>Modifying Letter Triangular Colon</name>
+        <name>Modifier Letter Triangular Colon</name>
         <token>LONG</token>
     </char>
     <char value="&#x02d1;">
-        <name>Modifying Letter Half Triangular Colon</name>
+        <name>Modifier Letter Half Triangular Colon</name>
         <token>HALF_LONG</token>
     </char>
     <char value="&#x02de;">
-        <name>Modifying Letter Rhotic Hook</name>
+        <name>Modifier Letter Rhotic Hook</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02e0;">
-        <name>Modifying Letter Small Gamma</name>
+        <name>Modifier Letter Small Gamma</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02e1;">
-        <name>Modifying Letter Small L</name>
+        <name>Modifier Letter Small L</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02e5;">
-        <name>Modifying Letter Extra-High Tone Bar</name>
+        <name>Modifier Letter Extra-High Tone Bar</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02e6;">
-        <name>Modifying Letter High Tone Bar</name>
+        <name>Modifier Letter High Tone Bar</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02e7;">
-        <name>Modifying Letter Mid Tone Bar</name>
+        <name>Modifier Letter Mid Tone Bar</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02e8;">
-        <name>Modifying Letter Low Tone Bar</name>
+        <name>Modifier Letter Low Tone Bar</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02e9;">
-        <name>Modifying Letter Extra-Low Tone Bar</name>
+        <name>Modifier Letter Extra-Low Tone Bar</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02ec;">
-        <name>Modifying Letter Voicing</name>
+        <name>Modifier Letter Voicing</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x02ed;">
-        <name>Modifying Letter Unaspirated</name>
+        <name>Modifier Letter Unaspirated</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x0300;">
@@ -1019,39 +1019,39 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x1d4a;">
-        <name>Modifying Letter Small Schwa</name>
+        <name>Modifier Letter Small Schwa</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x1d50;">
-        <name>Modifying Letter Small M</name>
+        <name>Modifier Letter Small M</name>
         <token>PREFIX_DIACRITIC</token>
     </char>
     <char value="&#x1d51;">
-        <name>Modifying Letter Small Eng</name>
+        <name>Modifier Letter Small Eng</name>
         <token>PREFIX_DIACRITIC</token>
     </char>
     <char value="&#x207f;">
-        <name>Modifying Letter Small N</name>
+        <name>Modifier Letter Small N</name>
         <token>PREFIX_DIACRITIC</token>
     </char>
     <char value="&#x1dac;">
-        <name>Modifying Letter Small M with Hook</name>
+        <name>Modifier Letter Small M with Hook</name>
         <token>PREFIX_DIACRITIC</token>
     </char>
     <char value="&#x1dae;">
-        <name>Modifying Letter Small N with Left Hook</name>
+        <name>Modifier Letter Small N with Left Hook</name>
         <token>PREFIX_DIACRITIC</token>
     </char>
     <char value="&#x1daf;">
-        <name>Modifying Letter Small N with Retroflex Hook</name>
+        <name>Modifier Letter Small N with Retroflex Hook</name>
         <token>PREFIX_DIACRITIC</token>
     </char>
     <char value="&#x1db0;">
-        <name>Modifying Letter Small Capital N</name>
+        <name>Modifier Letter Small Capital N</name>
         <token>PREFIX_DIACRITIC</token>
     </char>
     <char value="&#x1d91;">
-        <name>Latin Small Letter D with Hook and Tail</name>
+        <name>Latin Letter Small D with Hook and Tail</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x2016;">
@@ -1091,11 +1091,11 @@
         <token>ROLE_REVERSAL</token>
     </char>
     <char value="&#x0192;">
-        <name>Latin Small Letter F with Hook</name>
+        <name>Latin Letter Small F with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#xf20b;">
-        <name>Latin Small Letter C with Slash</name>
+        <name>Latin Letter Small C with Slash</name>
         <token>CONSONANT</token>
     </char>
     
@@ -1125,7 +1125,7 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x01ad;">
-        <name>Latin Small Letter T with Hook</name>
+        <name>Latin Letter Small T with Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x01bb;">
@@ -1133,11 +1133,11 @@
         <token>CONSONANT</token>
     </char>
     <char value="&#x0265;">
-        <name>Latin Small Letter Turned H</name>
+        <name>Latin Letter Small Turned H</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0270;">
-        <name>Latin Small Letter Turned M with Long Leg</name>
+        <name>Latin Letter Small Turned M with Long Leg</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x00c6;">
@@ -1145,19 +1145,19 @@
         <token>VOWEL</token>
     </char>
     <char value="&#x0131;">
-        <name>Latin Small Letter Dotless I</name>
+        <name>Latin Letter Small Dotless I</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x027f;">
-        <name>Latin Small Letter Reversed R with Fishhook</name>
+        <name>Latin Letter Small Reversed R with Fishhook</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x0285;">
-        <name>Latin Small Letter Squat Reversed Esh</name>
+        <name>Latin Letter Small Squat Reversed Esh</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x02af;">
-        <name>Latin Small Letter Turned H with Fishhook and Tail</name>
+        <name>Latin Letter Small Turned H with Fishhook and Tail</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x1dc4;">
@@ -1489,55 +1489,55 @@
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0363;">
-        <name>Combining Latin Small Letter A</name>
+        <name>Combining Latin Letter Small A</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0364;">
-        <name>Combining Latin Small Letter E</name>
+        <name>Combining Latin Letter Small E</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0365;">
-        <name>Combining Latin Small Letter I</name>
+        <name>Combining Latin Letter Small I</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0366;">
-        <name>Combining Latin Small Letter O</name>
+        <name>Combining Latin Letter Small O</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0367;">
-        <name>Combining Latin Small Letter U</name>
+        <name>Combining Latin Letter Small U</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0368;">
-        <name>Combining Latin Small Letter C</name>
+        <name>Combining Latin Letter Small C</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0369;">
-        <name>Combining Latin Small Letter D</name>
+        <name>Combining Latin Letter Small D</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x036a;">
-        <name>Combining Latin Small Letter H</name>
+        <name>Combining Latin Letter Small H</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x036b;">
-        <name>Combining Latin Small Letter M</name>
+        <name>Combining Latin Letter Small M</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x036c;">
-        <name>Combining Latin Small Letter R</name>
+        <name>Combining Latin Letter Small R</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x036d;">
-        <name>Combining Latin Small Letter T</name>
+        <name>Combining Latin Letter Small T</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x036e;">
-        <name>Combining Latin Small Letter V</name>
+        <name>Combining Latin Letter Small V</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x036f;">
-        <name>Combining Latin Small Letter X</name>
+        <name>Combining Latin Letter Small X</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0387;">
@@ -1598,11 +1598,11 @@
         <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x2c71;">
-        <name>Latin Small Letter V with Right Hook</name>
+        <name>Latin Letter Small V with Right Hook</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#xf241;">
-        <name>Latin Small Letter QP</name>
+        <name>Latin Letter Small QP</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#xf236;">
