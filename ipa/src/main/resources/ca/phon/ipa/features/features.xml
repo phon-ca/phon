@@ -1145,12 +1145,8 @@
    <feature_set char="&#xf176;">diacritic tonefallingrising </feature_set>
    <!--falling rising-->
    <feature_set char="&#xf179;">diacritic tonefallingrising </feature_set>
-   <feature_set char="&#xf181;">diacritic nasal prenasalized </feature_set>
    <feature_set char="&#xf1a8;">diacritic </feature_set>
    <feature_set char="&#xf1b1;">diacritic </feature_set>
-   <feature_set char="&#xf1c0;">diacritic nasal prenasalized </feature_set>
-   <feature_set char="&#xf1c1;">diacritic nasal prenasalized </feature_set>
-   <feature_set char="&#xf1c2;">diacritic nasal prenasalized </feature_set>
    <feature_set char="&#x2a;">unintelligible </feature_set>
    <!--. syllable boundary-->
    <feature_set char="&#x2e;">halflong </feature_set>

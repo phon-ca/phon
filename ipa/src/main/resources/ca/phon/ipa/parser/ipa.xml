@@ -476,7 +476,7 @@
     </char>
     <char value="&#x027f;">
         <name>Latin Letter Small Reversed R with Fish Hook</name>
-        <token>CONSONANT</token>
+        <token>VOWEL</token>
     </char>
     <char value="&#x0280;">
         <name>Latin Letter Small Capital R</name>
@@ -1641,27 +1641,11 @@
         <name>?</name>
         <token>VOWEL</token>
     </char>
-    <char value="&#xf181;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
     <char value="&#xf1a8;">
         <name>?</name>
         <token>VOWEL</token>
     </char>
     <char value="&#xf1b1;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf1c0;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf1c1;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf1c2;">
         <name>?</name>
         <token>VOWEL</token>
     </char>
