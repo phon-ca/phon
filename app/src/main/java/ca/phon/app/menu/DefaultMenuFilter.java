@@ -22,7 +22,11 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JMenu;
@@ -39,6 +43,8 @@ import ca.phon.app.query.QueryEditorWindow;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.plugin.PluginAction;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
@@ -52,6 +58,9 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class DefaultMenuFilter implements IPluginMenuFilter {
 
+	private final static Logger LOGGER = Logger
+			.getLogger(DefaultMenuFilter.class.getName());
+	
 	@Override
 	public void filterWindowMenu(Window owner, JMenuBar menu) {
 		addFileMenu(owner, menu);
@@ -532,28 +541,28 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 					}
 					
 				});
-//				
-//				JMenuItem historyItem = new JMenuItem("Query History...");
-//				historyItem.addActionListener(new ActionListener() {
-//
-//					public void actionPerformed(ActionEvent e) {
-//						final Map<String, Object> initInfo = 
-//								new HashMap<String, Object>();
-//						initInfo.put("project", project);
-//						
-//						try {
-//							PluginEntryPointRunner.executePlugin("QueryHistory", initInfo);
-//						} catch (PluginException e1) {
-//							e1.printStackTrace();
-//							PhonLogger.severe(e1.toString());
-//						}
-//					}
-//					
-//				});
-//				
+				
+				JMenuItem historyItem = new JMenuItem("Query History...");
+				historyItem.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						final Map<String, Object> initInfo = 
+								new HashMap<String, Object>();
+						initInfo.put("project", project);
+						
+						try {
+							PluginEntryPointRunner.executePlugin("QueryHistory", initInfo);
+						} catch (PluginException e1) {
+							LOGGER.log(Level.SEVERE,
+									e1.getLocalizedMessage(), e1);
+						}
+					}
+					
+				});
+				
 				queryMenu.addSeparator();
 				queryMenu.add(scriptItem);
-//				queryMenu.add(historyItem);
+				queryMenu.add(historyItem);
 			}
 			
 		};
