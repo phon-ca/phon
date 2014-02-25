@@ -4,6 +4,8 @@ import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
 import javax.swing.JCheckBox;
@@ -23,6 +25,7 @@ import org.jdesktop.swingx.painter.Painter;
 
 import ca.phon.script.params.BooleanScriptParam;
 import ca.phon.script.params.EnumScriptParam;
+import ca.phon.script.params.EnumScriptParam.ReturnValue;
 import ca.phon.script.params.LabelScriptParam;
 import ca.phon.script.params.MultiboolScriptParam;
 import ca.phon.script.params.ScriptParam;
@@ -58,7 +61,8 @@ public class ParamComponentFactory {
 		final BooleanScriptParamAction action = 
 				new BooleanScriptParamAction(boolScriptParam, paramId);
 		action.putValue(ScriptParamAction.NAME, boolScriptParam.getLabelText());
-		action.putValue(ScriptParamAction.SELECTED_KEY, boolScriptParam.getDefaultValue(paramId));
+		action.putValue(ScriptParamAction.SELECTED_KEY, 
+				(boolScriptParam.getValue(paramId) != null ? (Boolean)boolScriptParam.getValue(paramId) : boolScriptParam.getDefaultValue(paramId)));
 		
 		final JCheckBox retVal = new JCheckBox(action);
 		retVal.setEnabled(boolScriptParam.isEnabled());
@@ -76,13 +80,22 @@ public class ParamComponentFactory {
 	 * 
 	 * @return combo box
 	 */
-	public JComboBox createEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
+	public JComboBox<ReturnValue> createEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
 		final String paramId = enumScriptParam.getParamIds().iterator().next();
 		
 		final EnumScriptParamListener listener = 
 				new EnumScriptParamListener(enumScriptParam, paramId);
 		
-		final JComboBox retVal = new JComboBox(enumScriptParam.getChoices());
+		final ReturnValue[] choices = enumScriptParam.getChoices();
+		final JComboBox<ReturnValue> retVal = new JComboBox<ReturnValue>(choices);
+		
+		if(enumScriptParam.getValue(paramId) != null) {
+			final ReturnValue val = (ReturnValue)enumScriptParam.getValue(paramId);
+			retVal.setSelectedIndex(val.getIndex());
+		} else {
+			retVal.setSelectedIndex(enumScriptParam.getDefaultChoice());
+		}
+		
 		retVal.addItemListener(listener);
 		retVal.setEnabled(enumScriptParam.isEnabled());
 		retVal.setVisible(enumScriptParam.getVisible());
@@ -121,7 +134,8 @@ public class ParamComponentFactory {
 			final BooleanScriptParamAction action = 
 					new BooleanScriptParamAction(multiBoolScriptParam, paramId);
 			action.putValue(ScriptParamAction.NAME, multiBoolScriptParam.getLabelText(paramId));
-			action.putValue(ScriptParamAction.SELECTED_KEY, multiBoolScriptParam.getDefaultValue(paramId));
+			action.putValue(ScriptParamAction.SELECTED_KEY, 
+					(multiBoolScriptParam.getValue(paramId) != null ? (Boolean)multiBoolScriptParam.getValue(paramId) : multiBoolScriptParam.getDefaultValue(paramId)));
 			
 			final JCheckBox checkBox = new JCheckBox(action);
 			retVal.add(checkBox);
@@ -145,13 +159,15 @@ public class ParamComponentFactory {
 		final String paramId = stringScriptParam.getParamIds().iterator().next();
 		
 		final String initialText =
-				(stringScriptParam.getDefaultValue(paramId) != null ? stringScriptParam.getDefaultValue(paramId).toString() : null);
+				(stringScriptParam.getValue(paramId) != null  ? stringScriptParam.getValue(paramId).toString() : stringScriptParam.getDefaultValue(paramId).toString());
 		final PromptedTextField retVal = new PromptedTextField();
 		retVal.setText(initialText);
+		retVal.setPrompt(stringScriptParam.getPrompt());
 		final StringScriptParamListener listener = new StringScriptParamListener(stringScriptParam, paramId, retVal);
 		retVal.getDocument().addDocumentListener(listener);
 		
 		installParamListener(retVal, stringScriptParam);
+//		installStringParamListener(retVal, stringScriptParam);
 		
 		return retVal;
 	}
@@ -220,4 +236,17 @@ public class ParamComponentFactory {
 		param.addPropertyChangeListener(listener);
 	}
 	
+	private void installStringParamListener(final PromptedTextField textField, final StringScriptParam param) {
+		param.addPropertyChangeListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if(evt.getPropertyName().equalsIgnoreCase(param.getParamIds().iterator().next())) {
+					textField.setText(param.getValue(param.getParamIds().iterator().next()).toString());
+				} else if(evt.getPropertyName().equalsIgnoreCase(StringScriptParam.PROMPT_PROP)) {
+					textField.setPrompt(param.getPrompt());
+				}
+			}
+		});
+	}
 }
