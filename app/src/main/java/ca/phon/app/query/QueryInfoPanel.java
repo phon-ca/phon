@@ -65,6 +65,7 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
@@ -86,6 +87,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class QueryInfoPanel extends JPanel {
 	
+	private static final long serialVersionUID = 7694431501108852083L;
+
 	private final static Logger LOGGER = Logger
 			.getLogger(QueryInfoPanel.class.getName());
 	
@@ -343,6 +346,9 @@ public class QueryInfoPanel extends JPanel {
 				}
 			}
 		}
+		
+		final QueryName qn = new QueryName(query.getName());
+		script.putExtension(QueryName.class, qn);
 		
 		QueryEditorWindow sd = 
 			new QueryEditorWindow("Script Editor", project,
