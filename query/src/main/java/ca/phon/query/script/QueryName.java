@@ -1,6 +1,5 @@
 package ca.phon.query.script;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -29,9 +28,13 @@ public class QueryName {
 		String path;
 		try {
 			path = url.toURI().getPath();
-			final int lastSlash = path.lastIndexOf(File.separatorChar);
+			final int lastSlash = path.lastIndexOf("/");
 			this.name = (lastSlash > 0 ? path.substring(lastSlash + 1) : path);
 			this.name = StringEscapeUtils.unescapeXml(name);
+			final int lastDot = this.name.lastIndexOf('.');
+			if(lastDot > 0) {
+				this.name = this.name.substring(0, lastDot);
+			}
 		} catch (URISyntaxException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
