@@ -5,6 +5,8 @@ import java.util.List;
 
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParameters;
 
 /**
  * Query script implementation with exposed
@@ -28,6 +30,15 @@ public class EditableQueryScript extends QueryScript {
 			if(!currentRequiredPaths.contains(path))
 				addRequirePath(path);
 		}
+		
+		// copy params
+		try {
+			ScriptParameters origParams = queryScript.getContext().getScriptParameters(queryScript.getContext().getEvaluatedScope());
+			ScriptParameters myParams = getContext().getScriptParameters(getContext().getEvaluatedScope());
+			ScriptParameters.copyParams(origParams, myParams);
+		} catch (PhonScriptException e) {
+		}
+		
 		
 		buffer = super.getBuffer();
 	}
