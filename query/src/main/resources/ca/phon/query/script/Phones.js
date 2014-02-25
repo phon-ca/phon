@@ -67,15 +67,7 @@ function setup_params(params) {
 	    includeAlignedParamInfo.desc,
 	    includeAlignedParamInfo.title,
 	    includeAlignedParamInfo.def);
-//    var includeAlignedListener = new java.awt.event.ItemListener() {
-//        itemStateChanged: function(e) {
-//	        var enabled = e.getSource().isSelected();
-//	        filters.targetResultFilter.setEnabled(enabled);
-//	        filters.actualResultFilter.setEnabled(enabled);
-//	    }
-//	};
-//	includeAlignedParam.getEditorComponent().addItemListener(includeAlignedListener);
-	
+    
 	params.add(resultFilterSection);
 	params.add(includeAlignedParam);
 	params.add(targetLbl);
@@ -84,6 +76,18 @@ function setup_params(params) {
 	params.add(actualLbl);
 	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
 	filters.actualResultFilter.param_setup(params);
+	
+	var includeAlignedListener = new java.beans.PropertyChangeListener() {
+	    propertyChange: function(e) {
+	        var enabled = e.source.getValue(e.source.paramId);
+	        filters.targetResultFilter.setEnabled(enabled);
+	        filters.actualResultFilter.setEnabled(enabled);
+	    }  
+	};
+	includeAlignedParam.addPropertyChangeListener(includeAlignedParamInfo.id, includeAlignedListener);
+	var alignedEnabled = includeAlignedParamInfo.def;
+    filters.targetResultFilter.setEnabled(alignedEnabled);
+	filters.actualResultFilter.setEnabled(alignedEnabled);
 	
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
@@ -97,15 +101,17 @@ function setup_params(params) {
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
     params.add(wordsep);
     filters.alignedWord.param_setup(params);
-//    var alignedWordListener = new java.awt.event.ItemListener {
-//          itemStateChanged: function(e) {
-//              var enabled = e.getSource().isSelected();
-//              filters.wordPattern.setEnabled(enabled);
-//              filters.alignedWord.setEnabled(enabled);
-//          }
-//    };
-//    filters.alignedWord.setEnabled(false);
-//    filters.word.searchByWordOpt.getEditorComponent().addItemListener(alignedWordListener);
+    var searchByWordListener = new java.beans.PropertyChangeListener {
+        propertyChange: function(e) {
+            var enabled = e.source.getValue(e.source.paramId);
+            filters.wordPattern.setEnabled(enabled);
+            filters.alignedWord.setEnabled(enabled);
+        }    
+    };
+    filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
+    var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+    filters.wordPattern.setEnabled(enabled);
+    filters.alignedWord.setEnabled(enabled);
     
 	filters.syllable.param_setup(params);
 	filters.speaker.param_setup(params);

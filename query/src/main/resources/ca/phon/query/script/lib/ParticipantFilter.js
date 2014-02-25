@@ -121,25 +121,23 @@ exports.ParticipantFilter = function(id) {
 		    participantNamesParamInfo.id,
 		    participantNamesParamInfo.title,
 		    participantNamesParamInfo.def);
-	    // set tooltip for text field
-//	    participantNamesParam.getEditorComponent().setPrompt(
-//	        participantNamesParamInfo.prompt);
+	    participantNamesParam.setPrompt(
+	        participantNamesParamInfo.prompt);
 	    params.add(participantNamesParam);   
 	    
 	    age1Param = new StringScriptParam(
 	        age1ParamInfo.id,
 	        age1ParamInfo.title,
 	        age1ParamInfo.def);
-//	    age1Param.getEditorComponent().setPrompt(
-//	        age1ParamInfo.prompt);
+	    age1Param.setPrompt(
+	        age1ParamInfo.prompt);
 	    
 	    age2Param = new StringScriptParam(
 	        age2ParamInfo.id,
 	        age2ParamInfo.title,
 	        age2ParamInfo.def);
-//	    age2Param.getEditorComponent().setPrompt(
-//	        age2ParamInfo.prompt);
-//	    age2Param.getEditorComponent().setEnabled(false);
+	    age2Param.setPrompt(age2ParamInfo.prompt);
+	    age2Param.setEnabled(false);
 	    
 	    age1ComparatorParam = new EnumScriptParam(
 	        age1ComparatorParamInfo.id,
@@ -152,42 +150,22 @@ exports.ParticipantFilter = function(id) {
 	        age2ComparatorParamInfo.title,
 	        age2ComparatorParamInfo.def,
 	        age2ComparatorParamInfo.desc);
-//	    age2ComparatorParam.getEditorComponent().setEnabled(false);
+	    age2ComparatorParam.setEnabled(false);
 	    
 	    ageOperatorParam = new EnumScriptParam(
 	        ageOperatorParamInfo.id,
 	        ageOperatorParamInfo.title,
 	        ageOperatorParamInfo.def,
 	        ageOperatorParamInfo.desc);
-//	    var ageOperatorListener = new java.awt.event.ItemListener() {
-//	        itemStateChanged: function(e) {
-//                var idx = e.getSource().getSelectedIndex();
-//                var enabled = (idx > 0);
-//                age2ComparatorParam.getEditorComponent().setEnabled(enabled);
-//                age2Param.getEditorComponent().setEnabled(enabled);
-//            }
-//	    };
-//	    ageOperatorParam.getEditorComponent().addItemListener(ageOperatorListener);
-	    
-	    
-//	    var ageValidatorListener = new java.awt.event.KeyListener() {
-//	        keyReleased: function(e) {
-//	            var textField = e.getSource();
-//	            var txt = textField.getText();
-//                
-//                if(!checkAgeFilter(txt)) {
-//                    setFieldInvalid(textField, "", -1);
-//                } else {
-//                    setFieldOk(textField);
-//                }
-//	        },
-//	        
-//	        keyPressed: function(e) {},
-//	        
-//	        keyTyped: function(e) {}
-//	    };
-//	    age1Param.getEditorComponent().addKeyListener(ageValidatorListener);
-//	    age2Param.getEditorComponent().addKeyListener(ageValidatorListener);
+	    var ageOperatorListener = new java.beans.PropertyChangeListener {
+	        propertyChange: function(e) {
+	             var idx = e.source.getValue(e.source.paramId).index;
+	             var enabled = (idx > 0);
+	             age2ComparatorParam.setEnabled(enabled);
+	             age2Param.setEnabled(enabled);
+	        }
+	    };
+	    ageOperatorParam.addPropertyChangeListener(ageOperatorListener);
 	    
 	    params.add(age1ComparatorParam);
 	    params.add(age1Param);

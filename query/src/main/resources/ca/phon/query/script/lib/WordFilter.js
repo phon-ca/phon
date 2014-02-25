@@ -38,7 +38,6 @@ exports.WordFilter = function(id) {
 	
 	var singletonGroupOpt;
 	var posGroupOpt;
-	
 		
 	/**
 	 * Add params for the group, called automatically when needed.
@@ -72,20 +71,18 @@ exports.WordFilter = function(id) {
 				searchByWordParamInfo.def);
 			params.add(searchByWordOpt);
 			
-//			var searchByWordCheckbox = searchByWordOpt.getEditorComponent();
-//			var actionListener = new java.awt.event.ActionListener() {
-//				actionPerformed: function(e) { 
-//					var enabled = searchByWordCheckbox.isSelected();
-//					singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-//					posGroupOpt.getEditorComponent().setEnabled(enabled);
-//				}
-//			};
-//			searchByWordCheckbox.addActionListener(actionListener);
-//			
-//			var enabled = searchByWordCheckbox.isSelected();
-//			singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-//			posGroupOpt.getEditorComponent().setEnabled(enabled);
-			
+			var searchByWordListener = new java.beans.PropertyChangeListener {
+			    propertyChange: function(e) {
+			        var enabled = e.source.getValue(e.source.paramId) == true;
+			        singletonGroupOpt.setEnabled(enabled);
+			        posGroupOpt.setEnabled(enabled);
+			    }
+			};
+			searchByWordOpt.addPropertyChangeListener(searchByWordOpt.paramId, searchByWordListener);
+			var enabled = searchByWordOpt.getValue(searchByWordOpt.paramId) == true;
+	        singletonGroupOpt.setEnabled(enabled);
+	        posGroupOpt.setEnabled(enabled);
+	        
 			this.searchByWordOpt = searchByWordOpt;
 		}
 		

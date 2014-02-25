@@ -220,8 +220,8 @@ public abstract class ScriptParam {
 	 * 
 	 * @param visible
 	 */
-	public void setVisible(boolean visible) {
-		final boolean oldVal = this.visible;
+	public void setVisible(Boolean visible) {
+		final Boolean oldVal = this.visible;
 		this.visible = visible;
 		propSupport.firePropertyChange(VISIBLE_PROP, oldVal, visible);
 	}

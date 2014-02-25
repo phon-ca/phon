@@ -75,14 +75,18 @@ exports.PatternFilter = function (id) {
     HelpText.stressPatternHelpText,
     HelpText.cvPatternHelpText];
     
-    this.setEnabled = function (enabled) {
-        //        filterParam.getEditorComponent().setEnabled(enabled);
-        //        filterTypeParam.getEditorComponent().setEnabled(enabled);
-        //        matchGroupParam.getEditorComponent().setEnabled(enabled);
-        
-        //        var idx = filterTypeParam.getEditorComponent().selectedIndex;
-        //        var csEnabled = enabled && ( idx <= exports.PatternType.REGEX );
-        //        matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]).setEnabled(csEnabled);
+    this.setEnabled = function (e) {
+        var enabled = (e == true);
+        filterParam.setEnabled(enabled);
+        filterTypeParam.setEnabled(enabled);
+        matchGroupParam.setEnabled(enabled);
+    };
+    
+    this.setVisible = function (v) {
+        var visible = (v == true);
+        filterParam.setVisible(visible);
+        filterTypeParam.setVisible(visible);
+        matchGroupParam.setVisible(visible);
     };
     
     var setPatternFilterInvalid = function (textField, message, loc) {
@@ -293,30 +297,11 @@ exports.PatternFilter = function (id) {
             }  
         };
         filterTypeParam.addPropertyChangeListener(filterTypeParamInfo.id, filterTypeListener);
-        //        var filterTypeListener = new java.awt.event.ItemListener() {
-        //            itemStateChanged: function(e) {
-        //                var idx = e.getSource().getSelectedIndex();
-        //
-        //                var filterPrompt = filterTypePromptText[idx];
-        //                var filterHelp = filterTypeHelpText[idx];
-        //
-        //                filterParam.getEditorComponent().setPrompt(filterPrompt);
-        //                helpLabelParam.getEditorComponent().setText(filterHelp);
-        //
-        //                var caseSensitiveCb = matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]);
-        //                var enabled = ( idx  <= exports.PatternType.REGEX );
-        //                caseSensitiveCb.setEnabled(enabled);
-        //
-        //                validateTextField(filterParam.getEditorComponent());
-        //            }
-        //        };
-        //        filterTypeParam.getEditorComponent().addItemListener(filterTypeListener);
         
         var helpLabelDesc = filterTypeHelpText[filterTypeParamInfo.def];
         helpLabelParam = new LabelScriptParam(
         helpLabelDesc,
         helpLabelParamInfo.title);
-        //        helpLabelParam.getEditorComponent().setForeground(java.awt.Color.gray.darker());
         
         params.add(filterTypeParam);
         params.add(filterParam);

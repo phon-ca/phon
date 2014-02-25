@@ -105,26 +105,22 @@ exports.SyllableFilter = function(id) {
 				searchBySyllableParamInfo.def);
 			params.add(searchBySyllOpt);
 
-//			var searchBySyllCheckbox = searchBySyllOpt.getEditorComponent();
-//			var pf = this.patternFilter;
-//			var actionListener = new java.awt.event.ActionListener() {
-//				actionPerformed: function(e) { 
-//					var enabled = searchBySyllCheckbox.isSelected();
-//					ignoreTruncatedOpt.getEditorComponent().setEnabled(enabled);
-//					singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-//					posGroupOpt.getEditorComponent().setEnabled(enabled);
-//					stressGroupOpt.getEditorComponent().setEnabled(enabled);
-//					pf.setEnabled(enabled);
-//				}
-//			};
-//			searchBySyllCheckbox.addActionListener(actionListener);
-			
-//			var enabled = searchBySyllCheckbox.isSelected();
-//			ignoreTruncatedOpt.getEditorComponent().setEnabled(enabled);
-//			singletonGroupOpt.getEditorComponent().setEnabled(enabled);
-//			posGroupOpt.getEditorComponent().setEnabled(enabled);
-//			stressGroupOpt.getEditorComponent().setEnabled(enabled);
-		
+            var searchBySyllListener = new java.beans.PropertyChangeListener {
+                propertyChange: function(e) {
+                    var enabled = e.source.getValue(e.source.paramId) == true;
+                    ignoreTruncatedOpt.setEnabled(enabled);
+                    singletonGroupOpt.setEnabled(enabled);
+                    posGroupOpt.setEnabled(enabled);
+                    stressGroupOpt.setEnabled(enabled);
+                }    
+            };
+            var enabled = searchBySyllOpt.getValue(searchBySyllOpt.paramId) == true;
+            ignoreTruncatedOpt.setEnabled(enabled);
+            singletonGroupOpt.setEnabled(enabled);
+            posGroupOpt.setEnabled(enabled);
+            stressGroupOpt.setEnabled(enabled);
+            searchBySyllOpt.addPropertyChangeListener(searchBySyllOpt.paramId, searchBySyllListener);
+            
 		    this.searchBySyllOpt = searchBySyllOpt;
 		}
 		

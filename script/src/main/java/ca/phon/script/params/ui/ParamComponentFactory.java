@@ -155,6 +155,9 @@ public class ParamComponentFactory {
 		final StringScriptParamListener listener = new StringScriptParamListener(stringScriptParam, paramId, retVal);
 		retVal.getDocument().addDocumentListener(listener);
 		
+		retVal.setVisible(stringScriptParam.getVisible());
+		retVal.setEnabled(stringScriptParam.isEnabled());
+		
 		installParamListener(retVal, stringScriptParam);
 		installStringParamListener(retVal, stringScriptParam);
 		

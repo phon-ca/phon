@@ -25,7 +25,7 @@ exports.TierFilter = function(id) {
 			tierParamInfo.id,
 			tierParamInfo.title,
 			tierParamInfo.def);
-//		tierParam.getEditorComponent().setPrompt(tierParamInfo.prompt);
+	    tierParam.setPrompt(tierParamInfo.prompt);
 		
 		params.add(tierParam);
 		
@@ -36,9 +36,16 @@ exports.TierFilter = function(id) {
 		return this.tier.length() > 0 && this.patternFilter.isUseFilter();
 	};
 	
-	this.setEnabled = function(enabled) {
-	    tierParam.getEditorComponent().setEnabled(enabled);
+	this.setEnabled = function(e) {
+	    var enabled = (e == true);
+	    tierParam.setEnabled(enabled);
 	    this.patternFilter.setEnabled(enabled);
+	};
+	
+	this.setVisible = function(v) {
+	    var visible = (v == true);
+	    tierParam.setVisible(visible);
+	    this.patternFilter.setVisible(visible);
 	};
 	
 	this.check_group = function(record, groupIdx) {
