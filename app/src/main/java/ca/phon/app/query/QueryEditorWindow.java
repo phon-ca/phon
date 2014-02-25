@@ -136,7 +136,10 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	
 	public QueryEditorWindow(String title, Project project, 
 			QueryScript script) {
-		this(title, project);
+		super(title);
+		
+		final ProjectFrameExtension pfe = new ProjectFrameExtension(project);
+		putExtension(ProjectFrameExtension.class, pfe);
 		
 		undoManager = new UndoManager();
 		scriptEditor = new ScriptPanel(script);
