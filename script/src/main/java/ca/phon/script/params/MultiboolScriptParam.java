@@ -27,6 +27,12 @@ public class MultiboolScriptParam extends ScriptParam {
 	/** Descriptions */
 	private String[] descs;
 	
+	/** Enabled status */
+	private boolean enabled[];
+	
+	/** Visiblity status */
+	private boolean visible[];
+	
 	/** Number of columns */
 	private int numCols = 2;
 	
@@ -34,6 +40,12 @@ public class MultiboolScriptParam extends ScriptParam {
 		super(ids, defaults);
 		
 		this.ids = ids;
+		enabled = new boolean[ids.length];
+		visible = new boolean[ids.length];
+		for(int i = 0; i < ids.length; i++) {
+			enabled[i] = true;
+			visible[i] = true;
+		}
 		
 		setParamType("multibool");
 		setParamDesc(desc);
@@ -42,11 +54,121 @@ public class MultiboolScriptParam extends ScriptParam {
 		this.numCols = numCols;
 	}
 	
-	public int getNumCols() {
+	/**
+	 * The number of columns
+	 * @return
+	 */
+	public int getCols() {
 		return this.numCols;
 	}
 	
-	public String getLabelText(String paramId) {
+	/**
+	 * Number of options
+	 * @return
+	 */
+	public int getNumberOfOptions() {
+		return this.ids.length;
+	}
+	
+	/**
+	 * Set enabled status of specific options
+	 * 
+	 * @param option
+	 * @param enabled
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public void setEnabled(int option, boolean enabled) {
+		final boolean oldVal = this.enabled[option];
+		this.enabled[option] = enabled;
+		final String propName = ids[option] + ".enabled";
+		super.propSupport.firePropertyChange(propName, oldVal, enabled);
+	}
+	
+	/**
+	 * Get enabled status of option
+	 * 
+	 * @param option
+	 * @return enabled status
+	 */
+	public boolean isEnabled(int option) {
+		return this.enabled[option];
+	}
+	
+	/**
+	 * Set visible status of specific options
+	 * 
+	 * @param option
+	 * @param enabled
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public void setVisible(int option, boolean visible) {
+		final boolean oldVal = this.visible[option];
+		this.visible[option] = visible;
+		final String propName = ids[option] + ".visible";
+		super.propSupport.firePropertyChange(propName, oldVal, visible);
+	}
+	
+	/**
+	 * Get visible status of specific options
+	 * 
+	 * @param option
+	 * @return
+	 */
+	public boolean isVisible(int option) {
+		return this.visible[option];
+	}
+	
+	/**
+	 * Get text for specific option
+	 * 
+	 * @param option
+	 * @return option text
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public String getOptionText(int option) {
+		return descs[option];
+	}
+	
+	/**
+	 * Get the id for the specified option
+	 * 
+	 * @param option
+	 * @return option id
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public String getOptionId(int option) {
+		return ids[option];
+	}
+	
+	/**
+	 * Get the index of the given option id
+	 * 
+	 * @param id
+	 * 
+	 * @return index
+	 */
+	public int getOptionIndex(String id) {
+		int retVal = -1;
+		for(int i = 0; i < ids.length; i++) {
+			final String v = ids[i];
+			if(v.equals(id)) {
+				retVal = i;
+				break;
+			}
+		}
+		return retVal;
+	}
+	
+	/**
+	 * Get option text for specific param id
+	 * @param paramId
+	 * @return
+	 */
+	public String getOptionText(String paramId) {
 		String retVal = "";
 		for(int i = 0; i < ids.length; i++) {
 			if(ids[i].equals(paramId)) {

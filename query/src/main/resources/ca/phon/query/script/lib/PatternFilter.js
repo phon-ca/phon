@@ -7,8 +7,8 @@
  *  - phonex
  *  - cv pattern
  *  - stress pattern
- * 
- * phonex, cv, and stress pattern matchers are only 
+ *
+ * phonex, cv, and stress pattern matchers are only
  * applicable to ipa tier values
  */
 
@@ -21,11 +21,11 @@ exports.PatternType = {
     STRESS: 3,
     CV: 4
 };
-    
-exports.PatternFilter = function(id) {
 
+exports.PatternFilter = function (id) {
+    
     var filterParamInfo = {
-        "id": id+".filter",
+        "id": id + ".filter",
         "title": "Expression:",
         "prompt": "Enter expression",
         "def": ""
@@ -34,19 +34,21 @@ exports.PatternFilter = function(id) {
     this.filter = filterParamInfo.def;
     
     var filterTypeParamInfo = {
-        "id": id+".filterType",
+        "id": id + ".filterType",
         "title": "Expression type:",
-        "desc": [ "Plain text", "Regular expression", "Phonex", "Stress pattern", "CGV pattern" ],
+        "desc":[ "Plain text", "Regular expression", "Phonex", "Stress pattern", "CGV pattern"],
         "def": 2
     };
     var filterTypeParam;
-    this.filterType = { "index": 2, "toString": "Phonex" };
+    this.filterType = {
+        "index": 2, "toString": "Phonex"
+    };
     
     var matchGroupParamInfo = {
-        "id": [ id+".caseSensitive", id+".exactMatch" ],
+        "id":[id + ".caseSensitive", id + ".exactMatch"],
         "title": "",
-        "desc": [ "Case sensitive", "Exact match" ],
-        "def": [ false, false ],
+        "desc":[ "Case sensitive", "Exact match"],
+        "def":[ false, false],
         "numCols": 2
     };
     var matchGroupParam;
@@ -58,57 +60,55 @@ exports.PatternFilter = function(id) {
         "desc": ""
     };
     var helpLabelParam;
-   
-    var filterTypePromptText = [
-        "Enter plain text expression",
-        "Enter regular expression",
-        "Enter phonex",
-        "Enter stress pattern",
-        "Enter CGV pattern"
-    ];
     
-    var filterTypeHelpText = [
-        HelpText.plainTextHelpText,
-        HelpText.regexHelpText,
-        HelpText.phonexHelpText,
-        HelpText.stressPatternHelpText,
-        HelpText.cvPatternHelpText
-    ];
+    var filterTypePromptText =[
+    "Enter plain text expression",
+    "Enter regular expression",
+    "Enter phonex",
+    "Enter stress pattern",
+    "Enter CGV pattern"];
     
-    this.setEnabled = function(enabled) {
-//        filterParam.getEditorComponent().setEnabled(enabled);
-//        filterTypeParam.getEditorComponent().setEnabled(enabled);
-//        matchGroupParam.getEditorComponent().setEnabled(enabled);
+    var filterTypeHelpText =[
+    HelpText.plainTextHelpText,
+    HelpText.regexHelpText,
+    HelpText.phonexHelpText,
+    HelpText.stressPatternHelpText,
+    HelpText.cvPatternHelpText];
+    
+    this.setEnabled = function (enabled) {
+        //        filterParam.getEditorComponent().setEnabled(enabled);
+        //        filterTypeParam.getEditorComponent().setEnabled(enabled);
+        //        matchGroupParam.getEditorComponent().setEnabled(enabled);
         
-//        var idx = filterTypeParam.getEditorComponent().selectedIndex;
-//        var csEnabled = enabled && ( idx <= exports.PatternType.REGEX );
-//        matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]).setEnabled(csEnabled);
+        //        var idx = filterTypeParam.getEditorComponent().selectedIndex;
+        //        var csEnabled = enabled && ( idx <= exports.PatternType.REGEX );
+        //        matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]).setEnabled(csEnabled);
     };
     
-    var setPatternFilterInvalid = function(textField, message, loc) {
+    var setPatternFilterInvalid = function (textField, message, loc) {
         var msg = (loc >= 0 ?
-            "Error at index " + loc  +": " + message :
-            message);
-       
-//        textField.setToolTipText(msg);
-//        textField.setState("UNDEFINED");
+        "Error at index " + loc + ": " + message:
+        message);
+        
+        //        textField.setToolTipText(msg);
+        //        textField.setState("UNDEFINED");
     };
     
-    var setPatternFilterOk = function(textField) {
-//        textField.setToolTipText("");
-//        textField.setState("INPUT");
+    var setPatternFilterOk = function (textField) {
+        //        textField.setToolTipText("");
+        //        textField.setState("INPUT");
     };
     
     /**
      * Set selected pattern type
-     * 
+     *
      * type should be one of
      * PATTERN_TYPE_PLAIN, PATTERN_TYPE_REGEX, PATTERN_TYPE_PHONEX,
      * PATTERN_TYPE_STRESS, PATTERN_TYPE_CV
      *
      * @param type
      */
-    this.setSelectedPatternType = function(type) {
+    this.setSelectedPatternType = function (type) {
         filterTypeParamInfo.def = type;
     };
     
@@ -116,8 +116,8 @@ exports.PatternFilter = function(id) {
     var stressPatternRegex = /^([ ABUabu12][?+*]?)+$/;
     var cvPatternRegex = /^([ ABCVGcvg][?+*]?)+$/;
     
-    var checkRegexFilter = function(filter) {
-        var retVal = { 
+    var checkRegexFilter = function (filter) {
+        var retVal = {
             valid: false,
             message: "",
             loc: 0
@@ -125,7 +125,8 @@ exports.PatternFilter = function(id) {
         try {
             var testPattern = java.util.regex.Pattern.compile(filter);
             retVal.valid = true;
-        } catch (e) {
+        }
+        catch (e) {
             retVal.valid = false;
             retVal.message = e.message;
             retVal.loc = e.javaException.index;
@@ -133,8 +134,8 @@ exports.PatternFilter = function(id) {
         return retVal;
     };
     
-    var checkPhonexFilter = function(filter) {
-        var retVal = { 
+    var checkPhonexFilter = function (filter) {
+        var retVal = {
             valid: false,
             message: "",
             loc: 0
@@ -142,7 +143,8 @@ exports.PatternFilter = function(id) {
         try {
             Packages.ca.phon.phonex.PhonexPattern.compile(filter);
             retVal.valid = true;
-        } catch (e) {
+        }
+        catch (e) {
             retVal.valid = false;
             retVal.messge = e.message;
             retVal.loc = e.javaException.index;
@@ -150,28 +152,28 @@ exports.PatternFilter = function(id) {
         return retVal;
     };
     
-    var checkStressPatternFilter = function(filter) {
-        var retVal = { 
+    var checkStressPatternFilter = function (filter) {
+        var retVal = {
             valid: false,
             message: "",
             loc: 0
         };
         retVal.valid = stressPatternRegex.test(filter);
-        if(!retVal.valid) {
+        if (! retVal.valid) {
             retVal.messgae = "";
             retVal.loc = -1;
         }
         return retVal;
     };
     
-    var checkCVPatternFilter = function(filter) {
-        var retVal = { 
+    var checkCVPatternFilter = function (filter) {
+        var retVal = {
             valid: false,
             message: "",
             loc: 0
         };
         retVal.valid = cvPatternRegex.test(filter);
-        if(!retVal.valid) {
+        if (! retVal.valid) {
             retVal.message = "";
             retVal.loc = -1;
         }
@@ -181,36 +183,37 @@ exports.PatternFilter = function(id) {
     // check the filter for errors
     // return value will have three properties
     //   valid:boolean, message:string, loc:int
-    var checkFilter = function(filter, filterType) {
-        var retVal = { 
+    var checkFilter = function (filter, filterType) {
+        var retVal = {
             valid: false,
             message: "",
             loc: 0
         };
-            
         
-        switch(filterType) {
-        case 0:
+        
+        switch (filterType) {
+            case 0:
             retVal.valid = true;
-            break; // plain text is always ok
+            break;
+            // plain text is always ok
             
-        case 1:
+            case 1:
             retVal = checkRegexFilter(filter);
             break;
             
-        case 2:
+            case 2:
             retVal = checkPhonexFilter(filter);
             break;
             
-        case 3:
+            case 3:
             retVal = checkStressPatternFilter(filter);
             break;
             
-        case 4:
+            case 4:
             retVal = checkCVPatternFilter(filter);
             break;
             
-        default:
+            default:
             retVal.valid = false;
             retVal.loc = -1;
             break;
@@ -219,79 +222,101 @@ exports.PatternFilter = function(id) {
         return retVal;
     };
     
-    var validateTextField = function(textField) {
+    var validateTextField = function (textField) {
         var txt = textField.getText();
-        if(textField.getState() == Packages.ca.phon.gui.components.PromptedTextField.FieldState.PROMPT) 
-            return;
+        if (textField.getState() == Packages.ca.phon.gui.components.PromptedTextField.FieldState.PROMPT)
+        return;
         
         var filterType = filterTypeParam.getValue(filterTypeParamInfo.id);
         var filterCheck = checkFilter(txt, filterType.index);
-        if(!filterCheck.valid) {
+        if (! filterCheck.valid) {
             setPatternFilterInvalid(textField, filterCheck.message, filterCheck.loc);
         } else {
             setPatternFilterOk(textField);
         }
     };
     
-    this.param_setup = function(params) {
+    this.param_setup = function (params) {
         // don't add a separator as this filter may be used inside a parent filter
         matchGroupParam = new MultiboolScriptParam(
-            matchGroupParamInfo.id,
-            matchGroupParamInfo.def,
-            matchGroupParamInfo.desc,
-            matchGroupParamInfo.title,
-            matchGroupParamInfo.numCols);
-            
+        matchGroupParamInfo.id,
+        matchGroupParamInfo.def,
+        matchGroupParamInfo.desc,
+        matchGroupParamInfo.title,
+        matchGroupParamInfo.numCols);
+        matchGroupParam.setEnabled(0, false);
+        
         filterParam = new StringScriptParam(
-            filterParamInfo.id,
-            filterParamInfo.title,
-            filterParamInfo.def);
-//        var textField = filterParam.getEditorComponent();
-//        textField.setPrompt(filterParamInfo.prompt);
-       
-//        var filterListener = new java.awt.event.KeyListener() {
-//            keyPressed: function(e) {
-//            },
-//            
-//            keyReleased: function(e) {
-//            },
-//            
-//            keyTyped: function(e) {
-//                var textField = e.getSource();
-//                validateTextField(textField);
-//            }
-//       };
-//       filterParam.getEditorComponent().addKeyListener(filterListener);
+        filterParamInfo.id,
+        filterParamInfo.title,
+        filterParamInfo.def);
+        //        var textField = filterParam.getEditorComponent();
+        //        textField.setPrompt(filterParamInfo.prompt);
+        filterParam.setPrompt(filterParamInfo.prompt);
+        
+        //        var filterListener = new java.awt.event.KeyListener() {
+        //            keyPressed: function(e) {
+        //            },
+        //
+        //            keyReleased: function(e) {
+        //            },
+        //
+        //            keyTyped: function(e) {
+        //                var textField = e.getSource();
+        //                validateTextField(textField);
+        //            }
+        //       };
+        //       filterParam.getEditorComponent().addKeyListener(filterListener);
         
         filterTypeParam = new EnumScriptParam(
-            filterTypeParamInfo.id,
-            filterTypeParamInfo.title,
-            filterTypeParamInfo.def,
-            filterTypeParamInfo.desc);
-//        var filterTypeListener = new java.awt.event.ItemListener() {
-//            itemStateChanged: function(e) {
-//                var idx = e.getSource().getSelectedIndex();
-//                
-//                var filterPrompt = filterTypePromptText[idx];
-//                var filterHelp = filterTypeHelpText[idx];
-//                
-//                filterParam.getEditorComponent().setPrompt(filterPrompt);
-//                helpLabelParam.getEditorComponent().setText(filterHelp);
-//                
-//                var caseSensitiveCb = matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]);
-//                var enabled = ( idx  <= exports.PatternType.REGEX );
-//                caseSensitiveCb.setEnabled(enabled);
-//                
-//                validateTextField(filterParam.getEditorComponent());
-//            }
-//        };
-//        filterTypeParam.getEditorComponent().addItemListener(filterTypeListener);
+        filterTypeParamInfo.id,
+        filterTypeParamInfo.title,
+        filterTypeParamInfo.def,
+        filterTypeParamInfo.desc);
+        var filterTypeListener = new java.beans.PropertyChangeListener() {
+            propertyChange: function(e) {
+                // setup help label
+                var idx = e.source.getValue(e.source.paramId).index;
+                
+                // PHONEX
+                if(idx >= PatternType.PHONEX) {
+                    matchGroupParam.setEnabled(0, false); 
+                } else {
+                    matchGroupParam.setEnabled(0, true);
+                }
+                
+                var filterPrompt = filterTypePromptText[idx];
+                var filterHelp = filterTypeHelpText[idx];
+                
+                filterParam.setPrompt(filterPrompt);
+                helpLabelParam.setText(filterHelp);
+            }  
+        };
+        filterTypeParam.addPropertyChangeListener(filterTypeParamInfo.id, filterTypeListener);
+        //        var filterTypeListener = new java.awt.event.ItemListener() {
+        //            itemStateChanged: function(e) {
+        //                var idx = e.getSource().getSelectedIndex();
+        //
+        //                var filterPrompt = filterTypePromptText[idx];
+        //                var filterHelp = filterTypeHelpText[idx];
+        //
+        //                filterParam.getEditorComponent().setPrompt(filterPrompt);
+        //                helpLabelParam.getEditorComponent().setText(filterHelp);
+        //
+        //                var caseSensitiveCb = matchGroupParam.getCheckbox(matchGroupParamInfo.id[0]);
+        //                var enabled = ( idx  <= exports.PatternType.REGEX );
+        //                caseSensitiveCb.setEnabled(enabled);
+        //
+        //                validateTextField(filterParam.getEditorComponent());
+        //            }
+        //        };
+        //        filterTypeParam.getEditorComponent().addItemListener(filterTypeListener);
         
         var helpLabelDesc = filterTypeHelpText[filterTypeParamInfo.def];
         helpLabelParam = new LabelScriptParam(
-            helpLabelDesc,
-            helpLabelParamInfo.title);
-//        helpLabelParam.getEditorComponent().setForeground(java.awt.Color.gray.darker());
+        helpLabelDesc,
+        helpLabelParamInfo.title);
+        //        helpLabelParam.getEditorComponent().setForeground(java.awt.Color.gray.darker());
         
         params.add(filterTypeParam);
         params.add(filterParam);
@@ -299,15 +324,15 @@ exports.PatternFilter = function(id) {
         params.add(matchGroupParam);
         
         var sepLine = new LabelScriptParam("<html>&nbsp;</html>", "");
-     //   params.add(sepLine);
+        //   params.add(sepLine);
         
         params.add(helpLabelParam);
     };
     
-    this.isUseFilter = function() {
+    this.isUseFilter = function () {
         var txt = this.filter;
         
-        if(txt.length() > 0) {
+        if (txt.length() > 0) {
             var filterCheck = checkFilter(this.filter, this.filterType.index);
             return filterCheck.valid;
         } else {
@@ -316,44 +341,44 @@ exports.PatternFilter = function(id) {
     };
     
     /* Check for occurances (or exact match) of entered filter */
-    var checkPlain = function(obj, filter, caseSensitive, exactMatch) {
-        var strA = (caseSensitive == true ? obj.toString() : obj.toString().toLowerCase());
-        var strB = (caseSensitive == true ? filter : filter.toLowerCase());
+    var checkPlain = function (obj, filter, caseSensitive, exactMatch) {
+        var strA = (caseSensitive == true ? obj.toString(): obj.toString().toLowerCase());
+        var strB = (caseSensitive == true ? filter: filter.toLowerCase());
         
-        if(exactMatch == true) {
+        if (exactMatch == true) {
             return (strA == strB);
         } else {
             return (strA.indexOf(strB) >= 0);
         }
     };
     
-    var checkRegex = function(obj, filter, caseSensitive, exactMatch) {
-        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0 : java.util.regex.Pattern.CASE_INSENSITIVE));
+    var checkRegex = function (obj, filter, caseSensitive, exactMatch) {
+        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
-        if(exactMatch) {
+        if (exactMatch) {
             return matcher.matches();
         } else {
             return matcher.find();
         }
     };
     
-    var checkPhonex = function(obj, filter, exactMatch) {
-        if(!(obj instanceof IPATranscript)) return false;
+    var checkPhonex = function (obj, filter, exactMatch) {
+        if (!(obj instanceof IPATranscript)) return false;
         
-        if(exactMatch) {
+        if (exactMatch) {
             return obj.matches(filter);
         } else {
             return obj.contains(filter);
         }
     };
     
-    var checkStressPattern = function(obj, filter, exactMatch) {
-        // TODO 
+    var checkStressPattern = function (obj, filter, exactMatch) {
+        // TODO
         return false;
     };
     
-    var checkCVPattern = function(obj, filter, exactMatch) {
-        // TODO 
+    var checkCVPattern = function (obj, filter, exactMatch) {
+        // TODO
         return false;
     };
     
@@ -364,33 +389,33 @@ exports.PatternFilter = function(id) {
      * @param obj
      * @return true if filter matches, false otherwise
      */
-    this.check_filter = function(obj) {
+    this.check_filter = function (obj) {
         var retVal = true;
         
-        if(obj == null) return false;
+        if (obj == null) return false;
         
-        switch(this.filterType.index) {
-        case 0:
+        switch (this.filterType.index) {
+            case 0:
             retVal = checkPlain(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
             
-        case 1:
+            case 1:
             retVal = checkRegex(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
             
-        case 2:
+            case 2:
             retVal = checkPhonex(obj, this.filter, this.exactMatch);
             break;
             
-        case 3:
+            case 3:
             retVal = checkStressPattern(obj, this.filter, this.exactMatch);
             break;
             
-        case 4:
+            case 4:
             retVal = checkCVPattern(obj, this.filter, this.exactMatch);
             break;
             
-        default:
+            default:
             retVal = false;
             break;
         };
@@ -398,20 +423,24 @@ exports.PatternFilter = function(id) {
         return retVal;
     };
     
-    var findPlain = function(obj, filter, caseSensitive, exactMatch) {
+    var findPlain = function (obj, filter, caseSensitive, exactMatch) {
         var retVal = new Array();
         
-        var strA = (caseSensitive ? obj.toString() : obj.toString().toLowerCase());
-        var strB = (caseSensitive ? filter : filter.toLowerCase());
-        if(exactMatch) {
-           if(strA == strB) {
-               var v = {start:0, end:strA.length, value:obj};
-               retVal.append(v);
-           }
+        var strA = (caseSensitive ? obj.toString(): obj.toString().toLowerCase());
+        var strB = (caseSensitive ? filter: filter.toLowerCase());
+        if (exactMatch) {
+            if (strA == strB) {
+                var v = {
+                    start: 0, end: strA.length, value: obj
+                };
+                retVal.append(v);
+            }
         } else {
             var i = 0;
-            while(strA.indexOf(strB, i) >= 0) {
-                var v = {start:i, end:i+strB.length, value:strA.substring(i, i+strB.length)};
+            while (strA.indexOf(strB, i) >= 0) {
+                var v = {
+                    start: i, end: i + strB.length, value: strA.substring(i, i + strB.length)
+                };
                 retVal.push(v);
                 i += strB.length;
             }
@@ -420,47 +449,65 @@ exports.PatternFilter = function(id) {
         return retVal;
     };
     
-    var findRegex = function(obj, filter, caseSensitive, exactMatch) {
-        if(exactMatch) {
-            if(obj.matchesRegex(filter, caseSensitive)) {
-                return [ obj ];
-            } else {
-                return new Array(); 
-            }
-        } else {
-            return obj.findRegex(filter, caseSensitive);
-        }
-    };
-    
-    var findPhonex = function(obj, filter, exactMatch) {
+    var findRegex = function (obj, filter, caseSensitive, exactMatch) {
+        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
+        var regexMatcher = regexPattern.matcher(obj.toString());
         var retVal = new Array();
         
-        if(!(obj instanceof IPATranscript)) return retVal;
-        
-        if(exactMatch == true) {
-            if(obj.matches(filter)) {
-                v = {start:0, end:obj.size(), value:obj};
+        if (exactMatch) {
+            if (regexMatcher.matches()) {
+                v = {
+                    start: 0, end: obj.toString().length(), value: obj
+                };
                 retVal.push(v);
+            } else {
+                return new Array();
             }
         } else {
-            var phonexPattern = PhonexPattern.compile(filter);
-            var phonexMatcher = phonexPattern.matcher(obj);
-
-            while(phonexMatcher.find()) {
-                v = {start:phonexMatcher.start(), end:phonexMatcher.end(), value:new IPATranscript(phonexMatcher.group())};
-             //   java.lang.System.out.println(phonexMatcher.group());
-                retVal.push(v);                
+            while(regexMatcher.find()) {
+                v = {
+                    start: regexMatcher.start(), end: regexMatcher.end(), value: regexMatcher.group()
+                };
+                retVal.push(v);
             }
         }
         
         return retVal;
     };
     
-    var findCVPattern = function(obj, filter, exactMatch) {
+    var findPhonex = function (obj, filter, exactMatch) {
+        var retVal = new Array();
+        
+        if (!(obj instanceof IPATranscript)) return retVal;
+        
+        if (exactMatch == true) {
+            if (obj.matches(filter)) {
+                v = {
+                    start: 0, end: obj.size(), value: obj
+                };
+                retVal.push(v);
+            }
+        } else {
+            var phonexPattern = PhonexPattern.compile(filter);
+            var phonexMatcher = phonexPattern.matcher(obj);
+            
+            while (phonexMatcher.find()) {
+                v = {
+                    start: phonexMatcher.start(), end: phonexMatcher.end(), value: new IPATranscript(phonexMatcher.group())
+                };
+                //   java.lang.System.out.println(phonexMatcher.group());
+                retVal.push(v);
+            }
+        }
+        
+        return retVal;
+    };
+    
+    var findCVPattern = function (obj, filter, exactMatch) {
         return new Array();
     };
     
-    var findStressPattern = function(obj, filter, exactMatch) {
+    var findStressPattern = function (obj, filter, exactMatch) {
         return new Array();
     };
     
@@ -471,40 +518,40 @@ exports.PatternFilter = function(id) {
      * @param obj
      * @return occurances of the pattern.  The results will be a list
      *  of items conforming to the following protocol:
-     * 
-     *  { 
+     *
+     *  {
      *     start:int // the start index of the match
      *     end:int   // the end index of the match
      *     value:object // the value of the match
      *  }
      */
-    this.find_pattern = function(obj) {
+    this.find_pattern = function (obj) {
         var retVal = new Array();
         
-        if(obj == null) return retVal;
+        if (obj == null) return retVal;
         
-        switch(this.filterType.index) {
-        case 0:
+        switch (this.filterType.index) {
+            case 0:
             retVal = findPlain(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
             
-        case 1:
+            case 1:
             retVal = findRegex(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
             
-        case 2:
+            case 2:
             retVal = findPhonex(obj, this.filter, this.exactMatch);
             break;
             
-        case 3:
+            case 3:
             retVal = findStressPattern(obj, this.filter, this.exactMatch);
             break;
             
-        case 4:
+            case 4:
             retVal = findCVPattern(obj, this.filter, this.exactMatch);
             break;
             
-        default:
+            default:
             break;
         };
         
@@ -513,17 +560,17 @@ exports.PatternFilter = function(id) {
     
     /**
      * Filters a list of group objects given a tier name and list of groups.
-     * 
+     *
      * @param groups
      * @return a list of filtered groups based on the setup of this filter
      */
-    this.filter_groups = function(groups, tierName) {
+    this.filter_groups = function (groups, tierName) {
         var retVal = new Array();
         
-        for(var gIdx = 0; gIdx < groups.length; gIdx++) {
+        for (var gIdx = 0; gIdx < groups.length; gIdx++) {
             var group = groups[gIdx];
             var groupVal = group.getTier(tierName);
-            if(this.check_filter(groupVal) == true) {
+            if (this.check_filter(groupVal) == true) {
                 retVal.push(group);
             }
         }

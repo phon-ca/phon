@@ -113,7 +113,10 @@ public class ParamComponentFactory {
 	 */
 	public JLabel createLabelScriptParamComponent(LabelScriptParam labelScriptParam) {
 		final JLabel retVal = new JLabel();
-		retVal.setText(labelScriptParam.getLabelText());
+		retVal.setText(labelScriptParam.getText());
+		
+		installLabelParamListener(retVal, labelScriptParam);
+		
 		return retVal;
 	}
 	
@@ -124,22 +127,8 @@ public class ParamComponentFactory {
 	 * @param multiBoolScriptParam
 	 * @return panel contaning all checkboxes
 	 */
-	public JPanel createMultiBoolScriptParamComponent(MultiboolScriptParam multiBoolScriptParam) {
-		final JPanel retVal = new JPanel();
-		
-		final GridLayout gl = new GridLayout(0, multiBoolScriptParam.getNumCols());
-		retVal.setLayout(gl);
-		
-		for(String paramId:multiBoolScriptParam.getParamIds()) {
-			final BooleanScriptParamAction action = 
-					new BooleanScriptParamAction(multiBoolScriptParam, paramId);
-			action.putValue(ScriptParamAction.NAME, multiBoolScriptParam.getLabelText(paramId));
-			action.putValue(ScriptParamAction.SELECTED_KEY, 
-					(multiBoolScriptParam.getValue(paramId) != null ? (Boolean)multiBoolScriptParam.getValue(paramId) : multiBoolScriptParam.getDefaultValue(paramId)));
-			
-			final JCheckBox checkBox = new JCheckBox(action);
-			retVal.add(checkBox);
-		}
+	public MultiboolPanel createMultiBoolScriptParamComponent(MultiboolScriptParam multiBoolScriptParam) {
+		final MultiboolPanel retVal = new MultiboolPanel(multiBoolScriptParam);
 		
 		retVal.setEnabled(multiBoolScriptParam.isEnabled());
 		retVal.setVisible(multiBoolScriptParam.getVisible());
@@ -167,7 +156,7 @@ public class ParamComponentFactory {
 		retVal.getDocument().addDocumentListener(listener);
 		
 		installParamListener(retVal, stringScriptParam);
-//		installStringParamListener(retVal, stringScriptParam);
+		installStringParamListener(retVal, stringScriptParam);
 		
 		return retVal;
 	}
@@ -237,15 +226,19 @@ public class ParamComponentFactory {
 	}
 	
 	private void installStringParamListener(final PromptedTextField textField, final StringScriptParam param) {
-		param.addPropertyChangeListener(new PropertyChangeListener() {
-			
+		param.addPropertyChangeListener(StringScriptParam.PROMPT_PROP, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if(evt.getPropertyName().equalsIgnoreCase(param.getParamIds().iterator().next())) {
-					textField.setText(param.getValue(param.getParamIds().iterator().next()).toString());
-				} else if(evt.getPropertyName().equalsIgnoreCase(StringScriptParam.PROMPT_PROP)) {
-					textField.setPrompt(param.getPrompt());
-				}
+				textField.setPrompt(param.getPrompt());
+			}
+		});
+	}
+	
+	private void installLabelParamListener(final JLabel label, final LabelScriptParam param) {
+		param.addPropertyChangeListener(LabelScriptParam.LABEL_TEXT_PROP, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				label.setText(param.getText());
 			}
 		});
 	}

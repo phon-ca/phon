@@ -19,6 +19,8 @@ package ca.phon.script.params;
 
 public class LabelScriptParam extends ScriptParam {
 	
+	public final static String LABEL_TEXT_PROP = LabelScriptParam.class.getName() + ".text";
+	
 	private String lblText = "";
 	
 	public LabelScriptParam(String labelText, String desc) {
@@ -29,8 +31,14 @@ public class LabelScriptParam extends ScriptParam {
 		setParamDesc(desc);
 	}
 	
-	public String getLabelText() {
+	public String getText() {
 		return lblText;
+	}
+	
+	public void setText(String text) {
+		final String oldVal = lblText;
+		lblText = text;
+		super.propSupport.firePropertyChange(LABEL_TEXT_PROP, oldVal, text);
 	}
 
 	@Override
