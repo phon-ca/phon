@@ -60,7 +60,7 @@ public abstract class ScriptParam {
 	/**
 	 * Property change support
 	 */
-	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
+	protected final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propSupport.addPropertyChangeListener(listener);
@@ -94,6 +94,17 @@ public abstract class ScriptParam {
 			setValue(ids[i], null);
 			setDefaultValue(ids[i], defaultValues[i]);
 		}
+	}
+	
+	/**
+	 * Returns the first (and many times only) param id
+	 * for this ScriptParam
+	 * 
+	 * @return first param id
+	 */
+	public String getParamId() {
+		if(getParamIds().size() == 0) return null;
+		return getParamIds().iterator().next();
 	}
 	
 	public Collection<String> getParamIds() {

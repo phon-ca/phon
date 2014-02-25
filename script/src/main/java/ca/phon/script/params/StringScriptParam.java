@@ -17,8 +17,24 @@
  */
 package ca.phon.script.params;
 
+/**
+ * String entry for script parameters.
+ */
 public class StringScriptParam extends ScriptParam {
 	
+	/**
+	 * Property for prompt text
+	 */
+	public static final String PROMPT_PROP = StringScriptParam.class.getName() + ".promptText";
+	
+	private String promptText = new String();
+	
+	/**
+	 * Constructor
+	 * @param id
+	 * @param desc
+	 * @param defaultValue
+	 */
 	public StringScriptParam(String id, String desc, String defaultValue) {
 		super();
 		
@@ -43,4 +59,15 @@ public class StringScriptParam extends ScriptParam {
 
 		return retVal;
 	}
+	
+	public void setPrompt(String text) {
+		String oldText = promptText;
+		promptText = text;
+		super.propSupport.firePropertyChange(PROMPT_PROP, oldText, text);
+	}
+	
+	public String getPrompt() {
+		return this.promptText;
+	}
+	
 }

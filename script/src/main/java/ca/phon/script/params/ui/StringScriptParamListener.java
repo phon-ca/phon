@@ -12,6 +12,8 @@ import ca.phon.ui.PromptedTextField.FieldState;
 
 public class StringScriptParamListener extends ScriptParamAction implements DocumentListener {
 	
+	private static final long serialVersionUID = 781017500275958557L;
+	
 	private WeakReference<PromptedTextField> textFieldRef;
 	
 	public StringScriptParamListener(ScriptParam param, String id, PromptedTextField textField) {

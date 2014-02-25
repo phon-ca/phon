@@ -88,7 +88,7 @@ public class IpaMapFrame extends JFrame {
 	 */
 	public IpaMapFrame() {
 		super("IPA Chart");
-	
+		
 		super.setFocusableWindowState(false);
 		super.setUndecorated(true);
 //		super.setDefaultLookAndFeelDecorated(false);

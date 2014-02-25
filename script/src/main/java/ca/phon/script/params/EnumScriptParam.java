@@ -42,6 +42,16 @@ public class EnumScriptParam extends ScriptParam {
 		return retVal;
 	}
 	
+	public int getDefaultChoice() {
+		final String paramId = getParamId();
+		final ReturnValue defVal = (ReturnValue)getDefaultValue(paramId);
+		if(defVal != null) {
+			return defVal.index;
+		} else {
+			return 0;
+		}
+	}
+	
 	@Override
 	public String getStringRepresentation() {
 		final StringBuilder builder = new StringBuilder();

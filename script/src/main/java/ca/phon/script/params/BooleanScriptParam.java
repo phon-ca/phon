@@ -65,5 +65,4 @@ public class BooleanScriptParam extends ScriptParam {
 		}
 	}
 	
-	
 }
