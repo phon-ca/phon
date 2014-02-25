@@ -20,6 +20,7 @@ package ca.phon.query.script;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import ca.phon.script.PhonScriptContext;
@@ -32,7 +33,8 @@ import ca.phon.script.PhonScriptContext;
  */
 public class QueryScript extends LazyQueryScript {
 	
-	private QueryScriptContext context;
+	private final AtomicReference<QueryScriptContext> contextRef 
+		= new AtomicReference<QueryScriptContext>();
 	
 	/**
 	 * Query functions
@@ -101,15 +103,21 @@ public class QueryScript extends LazyQueryScript {
 	}
 	
 	@Override
+	public PhonScriptContext resetContext() {
+		return contextRef.getAndSet(null);
+	}
+	
+	@Override
 	public PhonScriptContext getContext() {
 		return getQueryContext();
 	}
 	
 	public QueryScriptContext getQueryContext() {
-		if(context == null) {
-			context = new QueryScriptContext(this);
+		if(contextRef.get() == null) {
+			final QueryScriptContext context = new QueryScriptContext(this);
+			contextRef.getAndSet(context);
 		}
-		return context;
+		return contextRef.get();
 	}
 	
 //	@Override
