@@ -13,7 +13,29 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 import ca.phon.ipa.IPAElement;
 
 /**
- * TODO Document this
+ * <p>A compiled representation of a phonex expression.</p>
+ * 
+ * <p>A phonex expression, specified as a string, must first be compiled
+ * into this class using the {@link #compile(String)} method.  The 
+ * resulting {@link PhonexPattern} object can then be used to create
+ * a {@link PhonexMatcher} that can match arbitrary IPA sequences
+ * against the phonex expression.  A single pattern can be used to
+ * create many matchers.</p>
+ * 
+ * <p>A typcial use case:
+ * 
+ * <pre>
+ * // an expression to find geminates
+ * final String phonex = "(\c)\S?\1";
+ * final PhonexPattern pattern = PhonexPattern.compile(phonex);
+ * 
+ * final IPATranscript ipa = IPATranscript.parseIPATranscript("ˈlæmp.poʊst");
+ * final PhonexMatcher matcher = pattern.matcher(ipa);
+ * boolean b = matcher.find();
+ * </pre></p>
+ * 
+ * <p>For more information about phonex expressions, please
+ * refer to the phonex manual.</p>
  *
  */
 public class PhonexPattern implements Comparable<PhonexPattern> {
@@ -36,7 +58,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 * @throws PhonexPatternException if the expression's syntax is invalid
 	 * 
 	 */
-	public static PhonexPattern compile(String phonex) {
+	public static PhonexPattern compile(String phonex) throws PhonexPatternException {
 		CharStream exprStream = new ANTLRStringStream(phonex); 
 		PhonexLexer lexer = new PhonexLexer(exprStream);
 		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
@@ -61,9 +83,11 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	}
 	
 	/**
-	 * Hidden constructor
+	 * constructor
+	 * 
+	 * @param fsa
 	 */
-	public PhonexPattern(PhonexFSA fsa) {
+	PhonexPattern(PhonexFSA fsa) {
 		this.fsa = fsa;
 	}
 	
