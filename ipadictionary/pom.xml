@@ -13,6 +13,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr</artifactId>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>phon-design-patterns</artifactId>
       <version>${project.version}</version>
@@ -35,4 +39,42 @@
     </dependency>
   </dependencies>
   
+  <build>
+    
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>target/generated-sources/antlr3</directory>
+        <includes>
+          <include>*.tokens</include>
+        </includes>
+      </resource>
+    </resources>
+    
+    <plugins>
+      
+      <!-- Generate source for ANTLR grammars -->
+      <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr3-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>antlr</id>
+            <goals>
+              <goal>antlr</goal>
+            </goals>
+            <configuration>
+              <sourceDirectory>src/main/resources/antlr3</sourceDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
+  </build>
 </project>

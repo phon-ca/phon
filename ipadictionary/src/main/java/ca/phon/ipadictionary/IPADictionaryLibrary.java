@@ -10,12 +10,15 @@ import java.util.Set;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Manages the library of available IPA dictionaries.
  */
 public class IPADictionaryLibrary implements IExtendable {
+	
+	public final static String DEFAULT_IPA_DICTIONARY_PROP = IPADictionaryLibrary.class.getName() + ".defaultDictionary";
 	
 	/**
 	 * Extension support
@@ -78,6 +81,43 @@ public class IPADictionaryLibrary implements IExtendable {
 			retVal.add(lang);
 		}
 		
+		return retVal;
+	}
+	
+	/**
+	 * Get default IPA dictionary language
+	 * 
+	 * @return default language
+	 */
+	public Language getDefaultLanguage() {
+		Language retVal = null;
+		
+		final String langPref = PrefHelper.get(DEFAULT_IPA_DICTIONARY_PROP, null);
+		if(langPref != null) {
+			retVal = Language.parseLanguage(langPref);
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Get default IPA dictionary, if no preference is set
+	 * this will return the first dictionary found.
+	 * 
+	 * @return default IPA dictionary
+	 */
+	public IPADictionary defaultDictionary() {
+		final Language defLang = getDefaultLanguage();
+		IPADictionary retVal = null;
+		if(defLang != null) {
+			final List<IPADictionary> dicts = dictionariesForLanguage(defLang);
+			if(dicts.size() > 0) {
+				retVal = dicts.get(0);
+			}
+		}
+		if(retVal == null) {
+			retVal = availableDictionaries().next();
+		}
 		return retVal;
 	}
 	

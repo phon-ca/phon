@@ -1,0 +1,259 @@
+/*
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package ca.phon.ipadictionary.ui;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.apache.commons.lang3.StringUtils;
+
+import ca.phon.ipadictionary.cmd.IPADictLexer;
+import ca.phon.ipadictionary.cmd.IPADictParser;
+import ca.phon.util.LanguageEntry;
+import ca.phon.util.LanguageParser;
+import ca.phon.util.MsFormat;
+import ca.phon.util.MsFormatter;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
+
+/**
+ * UI for IPA Lookups
+ *
+ */
+public class IPALookupPanel extends JPanel {
+
+	private static final long serialVersionUID = 2278689330995573469L;
+
+	private final static Logger LOGGER = Logger
+			.getLogger(IPALookupPanel.class.getName());
+
+	/** The output console */
+	private JTextPane console;
+	
+	/** Our lookup context */
+	private IPALookupContext context;
+	
+	/** The execution thread */
+	private PhonWorker worker;
+	
+	/** Input field */
+	private JTextField inputField;
+	
+	/** Query task */
+	private class QueryTask extends PhonTask {
+		
+		/** The query string */
+		private String query;
+		
+		public QueryTask(String qSt) {
+			this.query = qSt;
+		}
+
+		@Override
+		public void performTask() {
+			// output input line
+			LOGGER.info(">" + query);
+			
+			long st = System.currentTimeMillis();
+			// parse the line
+			ByteArrayInputStream bin = new ByteArrayInputStream(query.getBytes());
+			try {
+				ANTLRInputStream ain = new ANTLRInputStream(bin);
+				IPADictLexer lexer = new IPADictLexer(ain);
+				TokenStream tokens = new CommonTokenStream(lexer);
+				
+				IPADictParser parser = new IPADictParser(tokens);
+				IPADictParser.expr_return r = parser.expr();
+				
+				CommonTree t = (CommonTree)r.getTree();
+				CommonTreeNodeStream nodeStream = new CommonTreeNodeStream(t);
+				IPADictTree walker = new IPADictTree(nodeStream);
+				walker.setLookupContext(context);
+				walker.expr();
+				
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				err = e;
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			} catch (RecognitionException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				err = e;
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			}
+			long et = System.currentTimeMillis();
+
+			String msg =
+					"Query completed in " + MsFormatter.msToDisplayString(et-st);
+			LOGGER.info("Query completed in " + msg);
+		}
+		
+	}
+	
+	private class QueryActionListener implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String query = StringUtils.strip(inputField.getText());
+			inputField.setText("");
+			
+			if(query.startsWith("\"") && query.endsWith("\""))
+				query = "lookup " + query;
+			
+			if(
+					!query.startsWith("list") &&
+					!query.startsWith("lookup") &&
+					!query.startsWith("import") &&
+					!query.startsWith("export") &&
+					!query.startsWith("use") &&
+					!query.startsWith("add") &&
+					!query.startsWith("remove") &&
+					!query.startsWith("create") &&
+					!query.startsWith("drop")) {
+				query = "lookup \"" + query + "\"";
+			}
+			QueryTask task = new QueryTask(query);
+			worker.invokeLater(task);
+		}
+		
+	}
+	
+	private class ContextListener implements IPALookupContextListener {
+
+		@Override
+		public void dictionaryAdded(String newDictionary) {
+		}
+
+		@Override
+		public void dictionaryChanged(String newDictionary) {
+		}
+
+		@Override
+		public void handleMessage(String msg) {
+			final String message = msg + "\n";
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+					// insert string in document
+					IPALookupDocument doc =
+							(IPALookupDocument)console.getStyledDocument();
+					try {
+						doc.insertString(doc.getLength(), message , null);
+					} catch (BadLocationException e) {}
+				}
+			};
+			SwingUtilities.invokeLater(run);
+		}
+
+		@Override
+		public void errorOccured(String err) {
+			final String message = err + "\n";
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+					// insert string in document
+					IPALookupDocument doc =
+							(IPALookupDocument)console.getStyledDocument();
+					try {
+						doc.insertString(doc.getLength(), message, null);
+					} catch (BadLocationException e) {}
+				}
+			};
+			SwingUtilities.invokeLater(run);
+		}
+
+		@Override
+		public void dictionaryRemoved(String dictName) {
+			
+		}
+		
+	}
+	
+	private class LanguageCellRenderer extends DefaultListCellRenderer {
+
+		@Override
+		public Component getListCellRendererComponent(JList arg0,
+				Object arg1, int arg2, boolean arg3, boolean arg4) {
+			JLabel retVal = 
+				(JLabel)super.getListCellRendererComponent(arg0, arg1, arg2, arg3, arg4);
+			
+			String langId = arg1.toString();
+			if(langId.indexOf('-') > 0) {
+				langId = langId.split("-")[0];
+			}
+			LanguageEntry le = LanguageParser.getInstance().getEntryById(langId);
+			if(le != null) {
+				retVal.setText(le.getName() + " (" + arg1.toString() + ")");
+			}
+			
+			return retVal;
+		}
+		
+	}
+	
+	/** Constructor */
+	public IPALookupPanel() {
+		super();
+		
+		context = new IPALookupContext();
+		context.addLookupContextListener(new ContextListener());
+		
+		init();
+	}
+	
+	private void init() {
+		setLayout(new BorderLayout());
+		
+		// start our worker thread
+		worker = PhonWorker.createWorker();
+		worker.start();
+		
+		console = new JTextPane();
+		console.setStyledDocument(new IPALookupDocument());
+		
+		inputField = new JTextField();
+		inputField.addActionListener(new QueryActionListener());
+		
+		add(new JScrollPane(console), BorderLayout.CENTER);
+		add(inputField, BorderLayout.SOUTH);
+	}
+}
