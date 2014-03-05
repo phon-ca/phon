@@ -195,8 +195,14 @@ public class RecordLookupPanel extends JPanel {
 				final JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
 				groupPanel.add(sep, new TierDataConstraint(TierDataConstraint.FULL_TIER_COLUMN, row++));
 			}
-			final JLabel groupLabel = new JLabel("Group #" + (i+1));
-			groupPanel.add(groupLabel, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
+			final JLabel groupLabel = new JLabel("<html><b>Group #" + (i+1) + "</b></html>");
+			final JLabel tLbl = new JLabel("Transcription");
+			tLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+			final JPanel pnl = new JPanel(new BorderLayout());
+			pnl.setOpaque(false);
+			pnl.add(groupLabel, BorderLayout.WEST);
+			pnl.add(tLbl, BorderLayout.EAST);
+			groupPanel.add(pnl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
 			
 			final IPAGroupField grpField = new IPAGroupField(lookupTier, i);
 			grpField.addTierEditorListener(tierListener);
