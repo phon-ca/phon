@@ -159,14 +159,14 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			if(validateText()) {
+			if(hasFocus() && validateText()) {
 				update();
 			}
 		}
 		
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			if(validateText()) {
+			if(hasFocus() && validateText()) {
 				update();
 			}
 		}
@@ -200,4 +200,39 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	public List<TierEditorListener> getTierEditorListeners() {
 		return listeners;
 	}
+	
+	private final TierListener<T> tierListener = new TierListener<T>() {
+
+		@Override
+		public void groupAdded(Tier<T> tier, int index, T value) {
+		}
+
+		@Override
+		public void groupRemoved(Tier<T> tier, int index, T value) {
+		}
+
+		@Override
+		public void groupChanged(Tier<T> tier, int index, T oldValue, T value) {
+			if(!hasFocus() && getGroupIndex() == index) {
+				final T val = getGroupValue();
+				String text = new String();
+				if(val != null) {
+					@SuppressWarnings("unchecked")
+					final Formatter<T> formatter = 
+							(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
+					if(formatter != null) {
+						text = formatter.format(val);
+					} else {
+						text = val.toString();
+					}
+				}
+				setText(text);
+			}
+		}
+
+		@Override
+		public void groupsCleared(Tier<T> tier) {
+		}
+		
+	};
 }
