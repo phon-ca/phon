@@ -1,12 +1,16 @@
 package ca.phon.orthography;
 
+import java.util.Set;
+
+import ca.phon.extensions.ExtensionSupport;
+
 /**
  * Comment with syntax
  *  type:data
  *  
  * type is optional
  */
-public class OrthoComment implements OrthoElement {
+public class OrthoComment extends AbstractOrthoElement {
 	
 	private final String type;
 	
@@ -29,7 +33,7 @@ public class OrthoComment implements OrthoElement {
 	public String getData() {
 		return this.data;
 	}
-
+	
 	@Override
 	public String text() {
 		return ( (this.type == null ? "" : this.type + ":") + this.data );

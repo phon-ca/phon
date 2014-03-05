@@ -4,7 +4,7 @@ package ca.phon.orthography;
 /**
  * Represents punctuation and syntax elements.
  */
-public class OrthoPunct implements OrthoElement {
+public class OrthoPunct extends AbstractOrthoElement {
 	
 	private final OrthoPunctType type;
 

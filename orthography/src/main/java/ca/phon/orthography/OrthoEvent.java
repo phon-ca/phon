@@ -7,7 +7,7 @@ package ca.phon.orthography;
  * 'data'.
  * 
  */
-public class OrthoEvent implements OrthoElement {
+public class OrthoEvent extends AbstractOrthoElement {
 	
 	private final String type;
 	

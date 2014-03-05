@@ -3,7 +3,7 @@ package ca.phon.orthography;
 /**
  * Two words joined by a marker.
  */
-public class OrthoWordnet implements OrthoElement {
+public class OrthoWordnet extends AbstractOrthoElement {
 	
 	private final OrthoWord word1;
 	

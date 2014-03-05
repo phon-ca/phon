@@ -6,7 +6,7 @@ package ca.phon.orthography;
  * Words may have prefix and/or suffix
  * codes.
  */
-public class OrthoWord implements OrthoElement {
+public class OrthoWord extends AbstractOrthoElement {
 	
 	private final WordPrefix prefix;
 	
