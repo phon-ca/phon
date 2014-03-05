@@ -283,7 +283,7 @@ exports.PatternFilter = function (id) {
                 var idx = e.source.getValue(e.source.paramId).index;
                 
                 // PHONEX
-                if(idx >= PatternType.PHONEX) {
+                if(idx >= exports.PatternType.PHONEX) {
                     matchGroupParam.setEnabled(0, false); 
                 } else {
                     matchGroupParam.setEnabled(0, true);

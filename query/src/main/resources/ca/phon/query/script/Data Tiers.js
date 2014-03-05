@@ -23,7 +23,7 @@ var filters = {
     "speaker": new ParticipantFilter("filters.speaker")
 };
 
-function param_setup(params) {
+function setup_params(params) {
     filters.primary.param_setup(params);
     
     filters.group.param_setup(params);
@@ -35,19 +35,20 @@ function param_setup(params) {
     var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
     params.add(wordsep);
     filters.alignedWord.param_setup(params);
-    var alignedWordListener = new java.awt.event.ItemListener {
-          itemStateChanged: function(e) {
-              var enabled = e.getSource().isSelected();
-              filters.alignedWord.setEnabled(enabled);
-          }
-    };
-    filters.alignedWord.setEnabled(false);
-    filters.word.searchByWordOpt.getEditorComponent().addItemListener(alignedWordListener);
     
+    var alignedWordListener = new java.beans.PropertyChangeListener {
+        propertyChange: function(e) {
+            var enabled = e.source.getValue(e.source.paramId);
+            filters.alignedWord.setEnabled(enabled);
+        }  
+    };
+    filters.word.searchByWordOpt.addPropertyChangeListener(alignedWordListener);
+    filters.alignedWord.setEnabled(false);
+
     filters.speaker.param_setup(params);
 }
 
-function query_record(record) {
+function query_record(recordIndex, record) {
 	if(!filters.speaker.check_speaker(record.speaker)) return;
     
     var searchTier = filters.primary.tier;
@@ -82,8 +83,20 @@ function query_record(record) {
 	    var vals = filters.primary.patternFilter.find_pattern(searchObj);
 	    
 	    for(var j = 0; j < vals.length; j++) {
-	        var result = [ vals[j] ];
-	        results.add(result, new Metadata(), "LINEAR");
+	        var v = vals[j];
+	        
+	        var result = factory.createResult();
+	        result.recordIndex = recordIndex;
+	        result.schema = "LINEAR";
+	        
+	        var rv = factory.createResultValue();
+	        rv.tierName = searchTier;
+	        rv.groupIndex = searchObj.groupIndex;
+	        rv.range = new Range(v.start, v.end, false);
+	        rv.data = v.value;
+	        result.resultValues.add(rv);
+	        
+	        results.addResult(result);
 	    }
 	}
 }
