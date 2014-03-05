@@ -222,6 +222,19 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	}
 	
 	/**
+	 * Return a new IPATranscript that include the contents
+	 * of this transcript along with the contents of the given
+	 * transcript appended at the end.
+	 * 
+	 * @param ipa
+	 */
+	public IPATranscript append(IPATranscript ipa) {
+		final IPATranscript retVal = new IPATranscript(this);
+		retVal.addAll(ipa);
+		return retVal;
+	}
+	
+	/**
 	 * Create a new transcript with all punctuation
 	 * removed.
 	 * 
