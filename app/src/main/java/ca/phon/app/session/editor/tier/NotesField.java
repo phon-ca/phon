@@ -21,6 +21,7 @@ public class NotesField extends JTextArea implements TierEditor {
 		notesTier = tier;
 		update();
 		
+		super.setOpaque(false);
 		super.setLineWrap(true);
 		super.setWrapStyleWord(true);
 	}

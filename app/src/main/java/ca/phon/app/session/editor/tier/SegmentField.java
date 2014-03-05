@@ -37,6 +37,7 @@ public class SegmentField extends JFormattedTextField {
 	public SegmentField() {
 		super();
 		
+		setOpaque(false);
 		this.setFormatterFactory(new SegmentFormatterFactory());
 	}
 
