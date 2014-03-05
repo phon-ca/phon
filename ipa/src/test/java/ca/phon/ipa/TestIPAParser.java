@@ -164,6 +164,33 @@ public class TestIPAParser {
 	}
 	
 	@Test
+	public void testCompoundMarker() throws Exception {
+		final String testString = "yes+sir";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(testString);
+		
+		Assert.assertEquals(7, ipa.size());
+		Assert.assertEquals(CompoundWordMarker.class, ipa.get(3).getClass());
+	}
+	
+	@Test
+	public void testLinker() throws Exception {
+		final String testString = "yes\u2040sir";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(testString);
+		
+		Assert.assertEquals(7, ipa.size());
+		Assert.assertEquals(Linker.class, ipa.get(3).getClass());
+	}
+	
+	@Test
+	public void testContraction() throws Exception {
+		final String testString = "yes\u203fsir";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(testString);
+		
+		Assert.assertEquals(7, ipa.size());
+		Assert.assertEquals(Contraction.class, ipa.get(3).getClass());
+	}
+	
+	@Test
 	public void testEmbeddedSyllabification() throws Exception {
 		final String testString = "s:Eh:Le:Ol:Nl:Co:R";
 		final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);

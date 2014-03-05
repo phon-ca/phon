@@ -130,6 +130,10 @@ word_element returns [IPAElement p]
 	{
 		$p = $syllable_boundary.syllableBoundary;
 	}
+	|	word_net_marker
+	{
+		$p = $word_net_marker.wordnetMarker;
+	}
 	;
 
 /**
@@ -151,10 +155,6 @@ syllable_boundary returns [IPAElement syllableBoundary]
 	{
 		$syllableBoundary = factory.createSyllableBoundary();
 	}
-	|	PLUS
-	{
-		// TODO implement compound words at the IPA level
-	}
 	|	MINOR_GROUP
 	{
 		$syllableBoundary = factory.createIntonationGroup(IntonationGroupType.MINOR);
@@ -162,6 +162,17 @@ syllable_boundary returns [IPAElement syllableBoundary]
 	|	MAJOR_GROUP
 	{
 		$syllableBoundary = factory.createIntonationGroup(IntonationGroupType.MAJOR);
+	}
+	;
+	
+word_net_marker returns [IPAElement wordnetMarker]
+	:	PLUS
+	{
+		$wordnetMarker = factory.createCompoundWordMarker();
+	}
+	|	SANDHI
+	{
+		$wordnetMarker = factory.createSandhi($SANDHI.text);
 	}
 	;
 	

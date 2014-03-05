@@ -225,4 +225,19 @@ public class IPAElementFactory {
 	public Contraction createContraction() {
 		return new Contraction();
 	}
+
+	/**
+	 * Create a sandhi element based on given text
+	 * 
+	 * @return sandhi
+	 */
+	public Sandhi createSandhi(String text) {
+		if(text.equals("\u203f")) {
+			return createContraction();
+		} else if(text.equals("\u2040")) {
+			return createLinker();
+		} else {
+			return null;
+		}
+	}
 }
