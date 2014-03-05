@@ -10,12 +10,16 @@ import java.util.Set;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Class to help with loading syllabifiers.
  */
 public final class SyllabifierLibrary implements IExtendable {
+	
+	public final static String DEFAULT_SYLLABIFIER_LANG_PROP = 
+			SyllabifierLibrary.class.getName() + ".defaultSyllabifierLanguage";
 	
 	private final static String SYLLABIFIER_LIBRARY_LIST = "META-INF/syllabifier.list";
 	
@@ -180,6 +184,24 @@ public final class SyllabifierLibrary implements IExtendable {
 			}
 		}
 		
+		return retVal;
+	}
+	
+	/**
+	 * Default syllabifier language
+	 * 
+	 * @return default syllabifier language
+	 */
+	public Language defaultSyllabifierLanguage() {
+		String lang = PrefHelper.get(DEFAULT_SYLLABIFIER_LANG_PROP, null);
+		Language retVal = null;
+		if(lang != null) {
+			retVal = Language.parseLanguage(lang);
+		} else {
+			if(availableSyllabifierLanguages().size() > 0) {
+				retVal = availableSyllabifierLanguages().iterator().next();
+			}
+		}
 		return retVal;
 	}
 	
