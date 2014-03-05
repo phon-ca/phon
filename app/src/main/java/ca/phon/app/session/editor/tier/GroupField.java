@@ -1,5 +1,7 @@
 package ca.phon.app.session.editor.tier;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +36,32 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		this.tier = tier;
 		this.groupIndex = groupIndex;
 		
+		// XXX
+		// When added to a panel which is inside a scroll pane
+		// caret updates will cause the JScrollPane to auto-scroll
+		// even when setAutoscrolls is set to false.  The
+		// caret update policy needs to be changed on focus changes
+		// to avoid this bug
+		setAutoscrolls(false);
+		final DefaultCaret caret = (DefaultCaret)getCaret();
+		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+		addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				caret.setUpdatePolicy(DefaultCaret.UPDATE_WHEN_ON_EDT);
+			}
+			
+		});
+		
+		setOpaque(false);
 		init();
+		tier.addTierListener(tierListener);
 	}
 	
 	public Tier<T> getTier() {
