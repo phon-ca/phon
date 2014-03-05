@@ -80,14 +80,14 @@ public class ParamComponentFactory {
 	 * 
 	 * @return combo box
 	 */
-	public JComboBox<ReturnValue> createEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
+	public JComboBox createEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
 		final String paramId = enumScriptParam.getParamIds().iterator().next();
 		
 		final EnumScriptParamListener listener = 
 				new EnumScriptParamListener(enumScriptParam, paramId);
 		
 		final ReturnValue[] choices = enumScriptParam.getChoices();
-		final JComboBox<ReturnValue> retVal = new JComboBox<ReturnValue>(choices);
+		final JComboBox retVal = new JComboBox(choices);
 		
 		if(enumScriptParam.getValue(paramId) != null) {
 			final ReturnValue val = (ReturnValue)enumScriptParam.getValue(paramId);
