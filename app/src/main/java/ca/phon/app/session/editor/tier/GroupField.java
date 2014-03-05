@@ -10,10 +10,13 @@ import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Caret;
+import javax.swing.text.DefaultCaret;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.Tier;
+import ca.phon.session.TierListener;
 
 /**
  * Text field for editing tier data for a group.

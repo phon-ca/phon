@@ -10,17 +10,10 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel;
 import org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceGeminiLookAndFeel;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
-import ca.phon.media.player.PhonPlayerCanvas;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;

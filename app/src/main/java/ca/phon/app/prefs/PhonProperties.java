@@ -3,8 +3,10 @@ package ca.phon.app.prefs;
 import ca.phon.app.autosave.AutosaveManager;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.workspace.Workspace;
 
 /**
@@ -32,7 +34,7 @@ public class PhonProperties {
 	/**
 	 * Default syllabifier language
 	 */
-	public final static String SYLLABIFIER_LANGUAGE = Syllabifier.class.getName() + ".defaultLanguage";
+	public final static String SYLLABIFIER_LANGUAGE = SyllabifierLibrary.DEFAULT_SYLLABIFIER_LANG_PROP;
 	
 	/**
 	 * Default syllabifier language
@@ -42,7 +44,7 @@ public class PhonProperties {
 	/**
 	 * Default ipa dictionary language
 	 */
-	public final static String IPADICTIONARY_LANGUAGE = IPADictionary.class.getName() + ".defaultDictionaryLanguage";
+	public final static String IPADICTIONARY_LANGUAGE = IPADictionaryLibrary.DEFAULT_IPA_DICTIONARY_PROP;
 
 	/**
 	 * Default dictionary lang
