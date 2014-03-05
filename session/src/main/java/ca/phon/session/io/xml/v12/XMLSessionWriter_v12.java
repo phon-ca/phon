@@ -75,7 +75,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		if(session.getMediaLocation().length() > 0) {
 			headerData.setMedia(session.getMediaLocation());
 		}
-		final DateTime date = session.getDate();
+		final DateTime date = (session.getDate() == null ? DateTime.now() : session.getDate());
 		try {
 			final DatatypeFactory df = DatatypeFactory.newInstance();
 			final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(date.toGregorianCalendar());
