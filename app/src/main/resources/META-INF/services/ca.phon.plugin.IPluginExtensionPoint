@@ -15,6 +15,7 @@ ca.phon.app.session.editor.tier.TierOrderingExtensionPoint
 ca.phon.app.session.editor.tier.TierDataPanelExtension
 ca.phon.app.session.editor.tier.SyllabificationAlignmentExtension
 ca.phon.app.session.editor.tier.ValidationExtension
+ca.phon.app.session.editor.util.IPALookupViewExtension
 
 ## Tier Editors
 ca.phon.app.session.editor.tier.DefaultTierEditorExtension

@@ -240,6 +240,15 @@ public class IPALookupPanel extends JPanel {
 		init();
 	}
 	
+	public IPALookupPanel(IPALookupContext ctx) {
+		super();
+		
+		this.context = ctx;
+		ctx.addLookupContextListener(new ContextListener());
+		
+		init();
+	}
+	
 	private void init() {
 		setLayout(new BorderLayout());
 		
