@@ -2,12 +2,16 @@ package ca.phon.session.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.session.Tier;
+import ca.phon.session.TierListener;
 
 public class TierImpl<T> implements Tier<T> {
 	
@@ -33,12 +37,30 @@ public class TierImpl<T> implements Tier<T> {
 	 */
 	private final List<T> tierData =
 			Collections.synchronizedList(new ArrayList<T>());
+
+	/**
+	 * Tier listeners, using a {@link WeakHashMap} so that listeners
+	 * are removed when their references are no longer needed.  The second
+	 * {@link Boolean} parameter is unused
+	 */
+	private final Map<TierListener<T>, Boolean> tierListeners;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param type
+	 * @param grouped
+	 */
 	TierImpl(String name, Class<T> type, boolean grouped) {
 		super();
 		this.tierName = name;
 		this.declaredType = type;
 		this.grouped = grouped;
+		
+		final WeakHashMap<TierListener<T>, Boolean> weakHash = 
+				new WeakHashMap<TierListener<T>, Boolean>();
+		tierListeners = Collections.synchronizedMap(weakHash);
 	}
 
 	@Override
@@ -77,6 +99,7 @@ public class TierImpl<T> implements Tier<T> {
 
 	@Override
 	public void setGroup(int idx, T val) {
+		final T oldVal = (idx < numberOfGroups() ? getGroup(idx) : null);
 		synchronized(tierData) {
 			if(!grouped && idx > 0) {
 				throw new ArrayIndexOutOfBoundsException(idx);
@@ -86,6 +109,7 @@ public class TierImpl<T> implements Tier<T> {
 			else
 				tierData.set(idx, val);
 		}
+		fireTierGroupChanged(idx, oldVal, val);
 	}
 
 	@Override
@@ -96,6 +120,7 @@ public class TierImpl<T> implements Tier<T> {
 			}
 			tierData.add(val);
 		}
+		fireTierGroupAdded(numberOfGroups()-1, val);
 	}
 	
 	@Override
@@ -112,16 +137,19 @@ public class TierImpl<T> implements Tier<T> {
 			}
 			tierData.add(idx, val);
 		}
+		fireTierGroupAdded(idx, val);
 	}
 
 	@Override
 	public void removeGroup(int idx) {
+		final T val = getGroup(idx);
 		synchronized(tierData) {
 			if(!grouped && idx > 0) {
 				throw new ArrayIndexOutOfBoundsException(idx);
 			}
 			tierData.remove(idx);
 		}
+		fireTierGroupRemoved(idx, val);
 	}
 
 	@Override
@@ -129,6 +157,7 @@ public class TierImpl<T> implements Tier<T> {
 		synchronized(tierData) {
 			tierData.clear();
 		}
+		fireTierGroupsCleared();
 	}
 
 	@Override
@@ -168,5 +197,41 @@ public class TierImpl<T> implements Tier<T> {
 		
 		return buffer.toString();
 	}
+
+	/*
+	 * Tier Listeners
+	 */
+	@Override
+	public void addTierListener(TierListener<T> listener) {
+		tierListeners.put(listener, Boolean.TRUE);
+	}
+
+	@Override
+	public void removeTierListener(TierListener<T> listener) {
+		tierListeners.remove(listener);
+	}
 	
+	private void fireTierGroupAdded(int index, T value) {
+		for(TierListener<T> listener:tierListeners.keySet()) {
+			listener.groupAdded(this, index, value);
+		}
+	}
+	
+	private void fireTierGroupRemoved(int index, T value) {
+		for(TierListener<T> listener:tierListeners.keySet()) {
+			listener.groupRemoved(this, index, value);
+		}
+	}
+	
+	private void fireTierGroupChanged(int index, T oldValue, T value) {
+		for(TierListener<T> listener:tierListeners.keySet()) {
+			listener.groupChanged(this, index, oldValue, value);
+		}
+	}
+	
+	private void fireTierGroupsCleared() {
+		for(TierListener<T> listener:tierListeners.keySet()) {
+			listener.groupsCleared(this);
+		}
+	}
 }

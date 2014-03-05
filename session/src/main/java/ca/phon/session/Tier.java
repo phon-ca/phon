@@ -73,4 +73,18 @@ public interface Tier<T> extends TierDescription, Iterable<T> {
 	 */
 	public void removeAll();
 	
+	/**
+	 * Add a tier listener
+	 * 
+	 * @param listener
+	 */
+	public void addTierListener(TierListener<T> listener);
+	
+	/**
+	 * Remove the specified tier listener
+	 * 
+	 * @param listener
+	 */
+	public void removeTierListener(TierListener<T> listener);
+	
 }
