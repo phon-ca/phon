@@ -37,11 +37,11 @@ exports.PatternFilter = function (id) {
         "id": id + ".filterType",
         "title": "Expression type:",
         "desc":[ "Plain text", "Regular expression", "Phonex", "Stress pattern", "CGV pattern"],
-        "def": 2
+        "def": 0
     };
     var filterTypeParam;
     this.filterType = {
-        "index": 2, "toString": "Phonex"
+        "index": 0, "toString": "Plain text"
     };
     
     var matchGroupParamInfo = {
