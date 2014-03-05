@@ -1,6 +1,8 @@
 package ca.phon.orthography;
 
-public interface OrthoElement {
+import ca.phon.extensions.IExtendable;
+
+public interface OrthoElement extends IExtendable {
 
 	/**
 	 * Get string representation of the element.

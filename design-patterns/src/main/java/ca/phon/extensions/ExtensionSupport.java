@@ -86,7 +86,7 @@ public final class ExtensionSupport implements IExtendable {
 	 * @param declaredType
 	 * @param obj
 	 */
-	public <T extends IExtendable> ExtensionSupport(Class<T> declaredType, T obj) {
+	public <T extends IExtendable> ExtensionSupport(Class<? extends T> declaredType, T obj) {
 		this.declaredType = declaredType;
 		parent = new WeakReference<IExtendable>(obj);
 	}
