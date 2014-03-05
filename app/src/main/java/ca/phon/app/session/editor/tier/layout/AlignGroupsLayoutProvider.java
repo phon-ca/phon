@@ -131,7 +131,7 @@ public class AlignGroupsLayoutProvider implements TierDataLayoutProvider {
 	}
 		
 	private int calcAlignedRowY(Container parent, TierDataLayout layout, int row) {
-		int y = 0;
+		int y = layout.getVerticalGap()/2;
 		
 		for(int i = 0; i < row; i++) {
 			y += calcAlignedRowHeight(parent, layout, i) + layout.getVerticalGap();
@@ -195,4 +195,13 @@ public class AlignGroupsLayoutProvider implements TierDataLayoutProvider {
 		}
 		return retVal;
 	}
+
+	@Override
+	public Rectangle rowRect(Container parent, TierDataLayout layout, int row) {
+		final int rowY = calcAlignedRowY(parent, layout, row);
+		final int rowHeight = calcAlignedRowHeight(parent, layout, row);
+		final int rowWidth = parent.getWidth() - layout.getTierLabelWidth();
+		return new Rectangle(layout.getTierLabelWidth(), rowY, rowWidth, rowHeight);
+	}
+	
 }

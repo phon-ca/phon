@@ -30,7 +30,9 @@ import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.tier.layout.TierDataConstraint;
 import ca.phon.app.session.editor.tier.layout.TierDataLayout;
+import ca.phon.app.session.editor.tier.layout.TierDataLayoutBgPainter;
 import ca.phon.app.session.editor.tier.layout.TierDataLayoutButtons;
+import ca.phon.app.session.editor.tier.layout.TierDataLayoutPanel;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.RecordExcludeEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
@@ -79,7 +81,7 @@ public class TierDataEditorView extends EditorView {
 	/** 
 	 * content pane
 	 */
-	private JPanel contentPane;
+	private TierDataLayoutPanel contentPane;
 	
 	public TierDataEditorView(SessionEditor editor) {
 		super(editor);
@@ -91,8 +93,8 @@ public class TierDataEditorView extends EditorView {
 		
 		setBackground(Color.white);
 		
-		final TierDataLayout layout = new TierDataLayout();
-		contentPane = new JPanel(layout);
+//		final TierDataLayout layout = new TierDataLayout();
+		contentPane = new TierDataLayoutPanel();
 		contentPane.setBackground(Color.white);
 		
 		final JScrollPane scroller = new JScrollPane(contentPane);

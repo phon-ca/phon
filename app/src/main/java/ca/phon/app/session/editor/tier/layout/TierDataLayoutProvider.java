@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.tier.layout;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 
 /**
  * Interface implemented by layout provider implementations.
@@ -48,5 +49,12 @@ public interface TierDataLayoutProvider {
 	 * @param layout
 	 */
 	public void invalidate(Container parent, TierDataLayout layout);
+	
+	/**
+	 * Get rectangle for given row
+	 * 
+	 * @param row
+	 */
+	public Rectangle rowRect(Container parent, TierDataLayout layout, int row);
 	
 }

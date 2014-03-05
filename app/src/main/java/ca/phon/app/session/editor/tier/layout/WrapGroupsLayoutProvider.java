@@ -187,4 +187,9 @@ public class WrapGroupsLayoutProvider implements TierDataLayoutProvider {
 		}
 	}
 
+	@Override
+	public Rectangle rowRect(Container parent, TierDataLayout layout, int row) {
+		return new Rectangle();
+	}
+
 }

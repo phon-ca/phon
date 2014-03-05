@@ -192,7 +192,7 @@ public class TierDataLayout implements LayoutManager2 {
 		for(TierDataConstraint tdc:constraintMap.values()) {
 			maxRow = Math.max(maxRow, tdc.getRowIndex());
 		}
-		return maxRow;
+		return maxRow + 1;
 	}
 	
 	/**
