@@ -90,12 +90,14 @@ public class EditorEventManager {
 	 * @param action
 	 */
 	public void registerActionForEvent(String eventName, EditorAction action) {
-		List<EditorAction> handlers = actionMap.get(eventName);
-		if(handlers == null) {
-			handlers = new ArrayList<EditorAction>();
-			actionMap.put(eventName, handlers);
+		synchronized (actionMap) {			
+			List<EditorAction> handlers = actionMap.get(eventName);
+			if(handlers == null) {
+				handlers = new ArrayList<EditorAction>();
+				actionMap.put(eventName, handlers);
+			}
+			handlers.add(action);
 		}
-		handlers.add(action);
 	}
 	
 	/**
@@ -105,9 +107,11 @@ public class EditorEventManager {
 	 * @param action
 	 */
 	public void removeActionForEvent(String eventName, EditorAction action) {
-		List<EditorAction> handlers = actionMap.get(eventName);
-		if(handlers != null) {
-			handlers.remove(action);
+		synchronized (actionMap) {
+			List<EditorAction> handlers = actionMap.get(eventName);
+			if(handlers != null) {
+				handlers.remove(action);
+			}
 		}
 	}
 	
@@ -124,7 +128,7 @@ public class EditorEventManager {
 			retVal = new ArrayList<EditorAction>();
 		else 
 			retVal = Collections.unmodifiableList(retVal);
-		return retVal;
+		return retVal;			
 	}
 	
 	/**
@@ -145,8 +149,10 @@ public class EditorEventManager {
 				}
 				
 				if(event != null) {
-					for(EditorAction action:getActionsForEvent(event.getEventName())) {
-						action.eventOccured(event);
+					synchronized (actionMap) {
+						for(EditorAction action:getActionsForEvent(event.getEventName())) {
+							action.eventOccured(event);
+						}
 					}
 				}
 			}

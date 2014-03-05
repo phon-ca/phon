@@ -19,6 +19,9 @@ package ca.phon.app.project;
 
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.mergewizard.DeriveSessionWizard;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -41,16 +44,23 @@ public class DeriveSessionEP implements IPluginEntryPoint {
 	@Override
 	public void pluginStart(Map<String, Object> initInfo) {
 		// get project
-		Project project = null;
-		if(initInfo.get("project") != null)
-			project = (Project)initInfo.get("project");
+		final EntryPointArgs args = new EntryPointArgs(initInfo);
+		final Project project = args.getProject();
 		
 		if(project != null) {
-			DeriveSessionWizard wizard = new DeriveSessionWizard(project);
-			wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
-			wizard.setSize(600, 500);
-			wizard.setLocationByPlatform(true);
-			wizard.setVisible(true);
+			final Runnable onEdt = new Runnable() {
+				public void run() {
+					final DeriveSessionWizard wizard = new DeriveSessionWizard(project);
+					wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
+					wizard.setSize(600, 500);
+					wizard.setLocationByPlatform(true);
+					wizard.setVisible(true);
+				}
+			};
+			if(SwingUtilities.isEventDispatchThread())
+				onEdt.run();
+			else
+				SwingUtilities.invokeLater(onEdt);
 		}
 	}
 
