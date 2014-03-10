@@ -101,6 +101,7 @@
     
     <!-- Dependency versions -->
     <ca.hedlund.vlc4j.version>2.2</ca.hedlund.vlc4j.version>
+    <ca.hedlund.tst.version>0.0.2-SNAPSHOT</ca.hedlund.tst.version>
     <ca.gedge.opgraph.version>0.2-SNAPSHOT</ca.gedge.opgraph.version>
     <ca.phon.native-dialogs.version>3-SNAPSHOT</ca.phon.native-dialogs.version>
     <commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
@@ -165,6 +166,12 @@
         <groupId>ca.hedlund</groupId>
         <artifactId>vlc4j</artifactId>
         <version>${ca.hedlund.vlc4j.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>ca.hedlund</groupId>
+        <artifactId>tst</artifactId>
+        <version>0.0.2-SNAPSHOT</version>
       </dependency>
       
       <dependency>

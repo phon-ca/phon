@@ -17,6 +17,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
@@ -66,10 +69,33 @@ public class SessionEditor extends ProjectFrame {
 	 */
 	private volatile transient boolean modified = false;
 	
+	/*
+	 * Undo/Redo support
+	 */
 	/**
 	 * Undo support for the editor
 	 */
 	private final SessionEditorUndoSupport undoSupport = new SessionEditorUndoSupport();
+	
+	/**
+	 * Undo manager
+	 */
+	private final UndoManager undoManager = new UndoManager();
+	
+	private final UndoableEditListener undoListener = new UndoableEditListener(
+			) {
+		
+		@Override
+		public void undoableEditHappened(UndoableEditEvent e) {
+			undoManager.addEdit(e.getEdit());
+			setModified(true);
+		}
+		
+	};
+	
+	private JMenuItem redoItem;
+	
+	private JMenuItem undoItem;
 	
 	/**
 	 * Toolbar
@@ -89,6 +115,14 @@ public class SessionEditor extends ProjectFrame {
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
 		this.eventManagerRef = 
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
+	
+		// setup title
+		final String title = generateTitle();
+		setTitle(title);
+		
+		// add default undo listener
+		undoSupport.addUndoableEditListener(undoListener);
+		
 		init();
 	}
 	
@@ -158,6 +192,29 @@ public class SessionEditor extends ProjectFrame {
 		});
 		menuBar.add(viewMenu, 3);
 		
+		// find the edit menu and add undo/redo items
+		JMenu editMenu = null;
+		for(int i = 0; i < menuBar.getMenuCount(); i++) {
+			final JMenu menu = menuBar.getMenu(i);
+			if(menu.getText().equalsIgnoreCase("edit")) {
+				editMenu = menu;
+				break;
+			}
+		}
+		
+		if(editMenu != null) {
+			final PhonUIAction onUndoAct = new PhonUIAction(this, "onUndo");
+			onUndoAct.putValue(PhonUIAction.NAME, "Undo");
+			onUndoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Undo action");
+			undoItem = new JMenuItem(onUndoAct);
+			editMenu.add(undoItem, 0);
+			
+			final PhonUIAction onRedoAct = new PhonUIAction(this, "onRedo");
+			onRedoAct.putValue(PhonUIAction.NAME, "Redo");
+			onRedoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Redo action");
+			redoItem = new JMenuItem(onRedoAct);
+			editMenu.add(redoItem, 1);
+		}
 		
 		super.setJMenuBar(menuBar);
 	}
@@ -431,6 +488,41 @@ public class SessionEditor extends ProjectFrame {
 			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFIED_FLAG_CHANGED, this);
 			getEventManager().queueEvent(ee);
 		}
+	}
+	
+	/**
+	 * Generate the window title
+	 * 
+	 * @return window title
+	 */
+	private String generateTitle() {
+		final Session session = getSession();
+		String retVal = WINDOW_NAME;
+		if(session != null) {
+			retVal += " : " + session.getCorpus() + "." + session.getName();
+			if(isModified())
+				retVal += "*";
+		}
+		return retVal;
+	}
+	
+	/*
+	 * UI actions
+	 */
+	public void onUndo() {
+		undoManager.undo();
+	}
+	
+	public void onRedo() {
+		undoManager.redo();
+	}
+	
+	/*
+	 * Editor actions
+	 */
+	public void onModifiedChanged() {
+		final String title = generateTitle();
+		setTitle(title);
 	}
 	
 }

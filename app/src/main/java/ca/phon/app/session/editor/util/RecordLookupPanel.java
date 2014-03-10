@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.util;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
@@ -16,7 +15,6 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.tier.IPAGroupField;
@@ -27,9 +25,6 @@ import ca.phon.app.session.editor.tier.layout.TierDataLayoutPanel;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoWord;
-import ca.phon.orthography.OrthoWordnet;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
@@ -37,7 +32,6 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.visitor.Visitor;
 
 /**
  * Provides a UI for selecting IPA transcriptions from 
@@ -295,4 +289,5 @@ public class RecordLookupPanel extends JPanel {
 		}
 		
 	};
+	
 }

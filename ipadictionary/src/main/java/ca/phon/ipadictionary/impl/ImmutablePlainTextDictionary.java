@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import ca.hedlund.tst.TernaryTree;
 import ca.phon.ipadictionary.ContractionRule;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.BackingStoreException;
@@ -29,7 +30,6 @@ import ca.phon.ipadictionary.spi.NameInfo;
 import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.PrefixSearch;
 import ca.phon.util.Language;
-import ca.phon.util.ternarytree.TernaryTree;
 
 /**
  * Implements the basic dictionary format used by Phon.

@@ -31,7 +31,10 @@
       <artifactId>phon-ipa</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
+    <dependency>
+      <groupId>ca.hedlund</groupId>
+      <artifactId>tst</artifactId>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

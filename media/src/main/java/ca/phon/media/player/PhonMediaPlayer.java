@@ -166,7 +166,9 @@ public class PhonMediaPlayer extends JPanel {
 	public void addNotify() {
 		super.addNotify();
 		
-		initVlc();
+		return;
+		
+//		initVlc();
 	}
 	
 	private void initVlc() {
