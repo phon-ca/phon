@@ -35,7 +35,8 @@ public class IPAMapEP implements IPluginEntryPoint {
 	private static IpaMapFrame _window;
 //	private static int numCalls = 0;
 	
-	private final static String EP_NAME = "IPAMap";
+	public  final static String EP_NAME = "IPAMap";
+	
 	@Override
 	public String getName() {
 		return EP_NAME;

@@ -86,6 +86,10 @@
 			<artifactId>commons-cli</artifactId>
 		</dependency>
 		<dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+      </dependency>
+		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
 		</dependency>
@@ -106,6 +110,17 @@
 			<groupId>com.github.insubstantial</groupId>
 			<artifactId>substance-swingx</artifactId>
 		</dependency>
+		
+		<dependency>
+      <groupId>com.orientechnologies</groupId>
+      <artifactId>orient-commons</artifactId>
+      <version>1.7-rc1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.orientechnologies</groupId>
+      <artifactId>orientdb-core</artifactId>
+      <version>1.7-rc1</version>
+    </dependency>
 	</dependencies>
 
 	<build>

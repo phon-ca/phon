@@ -77,6 +77,11 @@ public class LocalProject implements Project {
 	
 	private final List<ProjectListener> projectListeners = 
 			Collections.synchronizedList(new ArrayList<ProjectListener>());
+
+	/**
+	 * Extension support
+	 */
+	private final ExtensionSupport extSupport = new ExtensionSupport(Project.class, this);
 	
 	/**
 	 * 
@@ -86,6 +91,8 @@ public class LocalProject implements Project {
 			throws ProjectConfigurationException {
 		super();
 		this.projectFolder = projectFolder;
+		
+		extSupport.initExtensions();
 		
 		// load project data
 		projectData = loadProjectData();
@@ -559,11 +566,6 @@ public class LocalProject implements Project {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	/**
-	 * Extension support
-	 */
-	private final ExtensionSupport extSupport = new ExtensionSupport(Project.class, this);
 	
 	@Override
 	public Set<Class<?>> getExtensions() {

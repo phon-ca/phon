@@ -36,6 +36,19 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import ca.phon.app.menu.edit.CopyCommand;
+import ca.phon.app.menu.edit.CutCommand;
+import ca.phon.app.menu.edit.PasteCommand;
+import ca.phon.app.menu.edit.PreferencesCommand;
+import ca.phon.app.menu.file.ExitCommand;
+import ca.phon.app.menu.file.RecentProjectsMenuListener;
+import ca.phon.app.menu.file.WorkspaceCommand;
+import ca.phon.app.menu.help.HelpCommand;
+import ca.phon.app.menu.help.LogCommand;
+import ca.phon.app.menu.query.QueryMenuListener;
+import ca.phon.app.menu.tools.IpaMapCommand;
+import ca.phon.app.menu.tools.LanguageCodesCommand;
+import ca.phon.app.menu.window.OpenWindowsMenuListener;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.query.QueryEditorEP;
@@ -79,12 +92,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		JMenu fileMenu = new JMenu("File");
 		
 		// start dialog item
-		PluginAction sdAct = new PluginAction("Workspace");
-		sdAct.putValue(Action.NAME, "Workspace...");
-		sdAct.putValue(Action.SHORT_DESCRIPTION, "Open the workspace dialog.");
-		sdAct.putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem workspaceItem = new JMenuItem(sdAct);
+		final JMenuItem workspaceItem = new JMenuItem(new WorkspaceCommand());
 		fileMenu.add(workspaceItem);
 		
 		fileMenu.addSeparator();
@@ -97,12 +105,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		// exit item
 		fileMenu.addSeparator();
 		
-		PluginAction exitAct = new PluginAction("Exit");
-		exitAct.putValue(Action.NAME, "Exit");
-		exitAct.putValue(Action.SHORT_DESCRIPTION, "Exit the application.");
-		exitAct.putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem exitItem = new JMenuItem(exitAct);
+		final JMenuItem exitItem = new JMenuItem(new ExitCommand());
 		fileMenu.add(exitItem);
 		
 		menu.add(fileMenu);
@@ -116,41 +119,21 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		JMenu editMenu = new JMenu("Edit");
 		
 		// cut 
-		PluginAction cutAct = new PluginAction("Cut");
-		cutAct.putValue(Action.NAME, "Cut");
-		cutAct.putValue(Action.SHORT_DESCRIPTION, "Edit: cut");
-		cutAct.putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem cutItem = new JMenuItem(cutAct);
+		final JMenuItem cutItem = new JMenuItem(new CutCommand());
 		editMenu.add(cutItem);
 		
 		// copy 
-		PluginAction copyAct = new PluginAction("Copy");
-		copyAct.putValue(Action.NAME, "Copy");
-		copyAct.putValue(Action.SHORT_DESCRIPTION, "Edit: copy");
-		copyAct.putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem copyItem = new JMenuItem(copyAct);
+		final JMenuItem copyItem = new JMenuItem(new CopyCommand());
 		editMenu.add(copyItem);
 		
 		// paste
-		PluginAction pasteAct = new PluginAction("Paste");
-		pasteAct.putValue(Action.NAME, "Paste");
-		pasteAct.putValue(Action.SHORT_DESCRIPTION, "Edit: paste");
-		pasteAct.putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem pasteItem = new JMenuItem(pasteAct);
+		final JMenuItem pasteItem = new JMenuItem(new PasteCommand());
 		editMenu.add(pasteItem);
 		
 		editMenu.addSeparator();
 		
 		// prefs
-		PluginAction prefsAct = new PluginAction("Preferences");
-		prefsAct.putValue(Action.NAME, "Preferences...");
-		prefsAct.putValue(Action.SHORT_DESCRIPTION, "Edit application preferences");
-//		prefsAct.putValue(PluginAction.ACCELERATOR_KEY, 
-//				KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem prefsItem = new JMenuItem(prefsAct);
+		final JMenuItem prefsItem = new JMenuItem(new PreferencesCommand());
 		editMenu.add(prefsItem);
 		
 		menu.add(editMenu);
@@ -209,21 +192,13 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		JMenu toolsMenu = new JMenu("Tools");
 		
 		// ipa chart
-		PluginAction ipaAct = new PluginAction("IPAMap");
-		ipaAct.putValue(Action.NAME, "IPA Map");
-		ipaAct.putValue(Action.SHORT_DESCRIPTION, "IPA Map");
-		ipaAct.putValue(Action.ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem ipaItem = new JMenuItem(ipaAct);
+		final JMenuItem ipaItem = new JMenuItem(new IpaMapCommand());
 		toolsMenu.add(ipaItem);
 		
 		toolsMenu.addSeparator();
 		
 		// language codes
-		PluginAction langAct = new PluginAction("LanguageCode");
-		langAct.putValue(Action.NAME, "ISO-639-3 Language Codes");
-		langAct.putValue(Action.SHORT_DESCRIPTION, "Standard 3 letter language codes");
-		JMenuItem langItem = new JMenuItem(langAct);
+		final JMenuItem langItem = new JMenuItem(new LanguageCodesCommand());
 		toolsMenu.add(langItem);
 		
 		menu.add(toolsMenu);
@@ -256,7 +231,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 */
 	protected void addPluginMenu(Window owner, JMenuBar menu) {
 		JMenu pluginMenu = new JMenu("Plugins");
-		
 		menu.add(pluginMenu);
 	}
 	
@@ -267,28 +241,13 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		JMenu helpMenu = new JMenu("Help");
 		
 		// log
-		PluginAction logAct = new PluginAction("Log");
-		logAct.putValue(Action.NAME, "Application log...");
-		logAct.putValue(Action.SHORT_DESCRIPTION, "View application error log");
-		JMenuItem logItem = new JMenuItem(logAct);
+		final JMenuItem logItem = new JMenuItem(new LogCommand());
 		helpMenu.add(logItem);
 		
 		helpMenu.addSeparator();
 		
-		// update
-		PluginAction updateAct = new PluginAction("Update");
-		updateAct.putValue(Action.NAME, "Check for updates...");
-		updateAct.putValue(Action.SHORT_DESCRIPTION, "Check for updates to the application");
-		JMenuItem updateItem = new JMenuItem(updateAct);
-		helpMenu.add(updateItem);
-		
-		helpMenu.addSeparator();
-		
 		// about
-		PluginAction aboutAct = new PluginAction("HelpAbout");
-		aboutAct.putValue(Action.NAME, "About Phon");
-		aboutAct.putValue(Action.SHORT_DESCRIPTION, "View about dialog and licence agreement");
-		JMenuItem aboutItem = new JMenuItem(aboutAct);
+		final JMenuItem aboutItem = new JMenuItem(new HelpCommand());
 		helpMenu.add(aboutItem);
 		
 		menu.add(helpMenu);
@@ -297,273 +256,16 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	/**
 	 * Recents menu generator
 	 */
-	private final MenuListener recentsMenuListener = new  MenuListener() {
-
-		@Override
-		public void menuCanceled(MenuEvent arg0) {
-			
-		}
-
-		@Override
-		public void menuDeselected(MenuEvent arg0) {
-			
-		}
-
-		@Override
-		public void menuSelected(MenuEvent arg0) {
-			JMenu menu = (JMenu)arg0.getSource();
-			menu.removeAll();
-			
-//			// add recent projects to menu
-//			SystemProperties recentProjects = 
-//				   UserPrefManager.getUserRecentProjects();
-//			   
-//			for(int i = 1; i <= 5; i++) {
-//				final String projectString =
-//					recentProjects.getProperty("ca.phon.project.recent."+i).toString();
-//				   
-//				if(projectString.length() > 0) {
-//					PluginAction projectAct = new PluginAction("OpenProject");
-//					projectAct.putArg("ca.phon.modules.core.OpenProjectController.projectpath", projectString);
-//					projectAct.putValue(Action.NAME, projectString);
-//					projectAct.putValue(Action.SHORT_DESCRIPTION, "Open project");
-//					
-//					JMenuItem projectItem = new JMenuItem(projectAct);
-//					menu.add(projectItem);
-//				}
-//				
-//			}
-		}
-		
-	};
+	private final MenuListener recentsMenuListener = new RecentProjectsMenuListener();
 	
 	/**
 	 * Open window menu generator
 	 */
-	private final MenuListener openWindowMenuListener = new MenuListener() {
-
-		@Override
-		public void menuCanceled(MenuEvent arg0) {
-		}
-
-		@Override
-		public void menuDeselected(MenuEvent arg0) {
-		}
-
-		@Override
-		public void menuSelected(MenuEvent arg0) {
-			JMenu menu = (JMenu)arg0.getSource();
-			menu.removeAll();
-			
-//			// add windows sorted by open project
-//			// get open projects
-//			IPhonProject openProjects[] = 
-//				PhonEnvironment.getInstance().getOpenProjects().toArray(new IPhonProject[0]);
-//			
-//			CommonModuleFrame openWindows[] = 
-//				CommonModuleFrame.getOpenWindows().toArray(new CommonModuleFrame[0]);
-//			for(IPhonProject proj:openProjects) {
-//				String projName = new String();
-//					projName = 
-//						proj.getProjectName();
-//				if(menu.getItemCount() > 0) 
-//					menu.addSeparator();
-////				JMenu projMenu = new JMenu(projName);
-////				JMenuItem projItem = new JMenuItem(projName);
-////				projItem.setEnabled(false);
-////				menu.add(projItem);
-//					
-//				for(CommonModuleFrame f:openWindows) {
-//					if(!f.isShowInWindowMenu() || !f.isShowing())
-//						continue;
-//					
-//					if(f.getProject() != null
-//							&& f.getProject() == proj) {
-//						JMenuItem windowItem = new JMenuItem(f.getTitle());
-//						
-//						windowItem.addActionListener(new ActionListener() {
-//
-//							@Override
-//							public void actionPerformed(ActionEvent arg0) {
-//								for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
-//									if(f.getTitle().equals( ((JMenuItem)arg0.getSource()).getText())) {
-//										
-//										f.toFront();
-////										CommonModuleFrame.currentFrame = f;
-//									}
-//								}
-//							}
-//							
-//						});
-//						menu.add(windowItem);
-//					}
-//				}
-////				menu.add(projMenu);
-//			}
-//			
-//			menu.addSeparator();
-//			
-//			for(CommonModuleFrame f:openWindows) {
-//				
-//				if(f.getProject() != null || f.getParentFrame() != null)
-//					continue;
-//				
-//				if(!f.isShowInWindowMenu() || !f.isShowing())
-//					continue;
-//				
-//				JMenuItem windowItem = new JMenuItem(f.getTitle());
-//				windowItem.addActionListener(new ActionListener() {
-//
-//					@Override
-//					public void actionPerformed(ActionEvent arg0) {
-//						for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
-//							if(f.getTitle().equals( ((JMenuItem)arg0.getSource()).getText())) {
-//								f.toFront();
-////								CommonModuleFrame.currentFrame = f;
-//							}
-//						}
-//					}
-//					
-//				});
-//				
-//				menu.add(windowItem);
-//			}
-//			
-//			menu.addSeparator();
-			
-			// generic close item
-			PluginAction closeAct = new PluginAction("CloseWindow");
-			closeAct.putArg("window", CommonModuleFrame.getCurrentFrame());
-			closeAct.putValue(Action.NAME, "Close");
-			closeAct.putValue(Action.SHORT_DESCRIPTION, "Close window");
-			closeAct.putValue(Action.ACCELERATOR_KEY,
-					KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-			JMenuItem closeItem = new JMenuItem(closeAct);
-			menu.add(closeItem);
-		}
-		
-	};
+	private final MenuListener openWindowMenuListener = new OpenWindowsMenuListener();
 	
-	private final MenuListener queryMenuListener = new MenuListener() {
-
-			public void menuCanceled(MenuEvent e) {
-			
-			}
-
-			public void menuDeselected(MenuEvent e) {
-			
-			}
-
-			public void menuSelected(MenuEvent e) {
-				final JMenu queryMenu = (JMenu)e.getSource();
-				queryMenu.removeAll();
-				
-				final ProjectFrameExtension pfe = CommonModuleFrame.getCurrentFrame().getExtension(ProjectFrameExtension.class);
-				final Project project = (pfe == null ? null : pfe.getProject());
-				if(project == null) return;
-//				
-				final QueryScriptLibrary queryScriptLibrary = new QueryScriptLibrary();
-				
-				// add stock scripts
-				final ResourceLoader<QueryScript> stockScriptLoader = queryScriptLibrary.stockScriptFiles();
-				final Iterator<QueryScript> stockScriptIterator = stockScriptLoader.iterator();
-				while(stockScriptIterator.hasNext()) {
-					final QueryScript qs = stockScriptIterator.next();
-					final QueryName queryName = qs.getExtension(QueryName.class);
-					
-					final PluginAction act = new PluginAction(QueryEditorEP.EP_NAME);
-					act.putValue(PluginAction.NAME, queryName.getName());
-					final EntryPointArgs epArgs = new EntryPointArgs();
-					epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
-					epArgs.put(QueryEditorEP.SCRIPT_OBJECT, qs);
-					act.putArgs(epArgs);
-					
-					JMenuItem sItem = new JMenuItem(act);
-					queryMenu.add(sItem);
-				}
-//
-//				// add user library scripts
-//				List<JMenuItem> libItems = new ArrayList<JMenuItem>();
-//				for(File libScriptFile:queryScriptLibrary.userScriptFiles()) {
-//					final SearchAction act = new  SearchAction(project, libScriptFile);
-//					JMenuItem sItem = new JMenuItem(act);
-//					
-//					libItems.add(sItem);
-//				}
-//				if(libItems.size() > 0) {
-//					JMenuItem libSepItem = new JMenuItem("User Library");
-//					libSepItem.setEnabled(false);
-//					
-//					queryMenu.add(libSepItem);
-//					for(JMenuItem itm:libItems)
-//						queryMenu.add(itm);
-//				}
-//
-//				if(project != null) {
-//					// add project scripts
-//					List<JMenuItem> projItems = new ArrayList<JMenuItem>();
-//					
-//					for(File projScriptFile:queryScriptLibrary.projectScriptFiles(project)) {
-//						final SearchAction act = new SearchAction(project, projScriptFile);
-//						JMenuItem sItem = new JMenuItem(act);
-//
-//						projItems.add(sItem);
-//					}
-//					if(projItems.size() > 0) {
-//						JMenuItem projSepItem = new JMenuItem("Project Scripts");
-//						projSepItem.setEnabled(false);
-//
-//						queryMenu.add(projSepItem);
-//						for(JMenuItem itm:projItems)
-//							queryMenu.add(itm);
-//					}
-//				}
-//				
-				JMenuItem scriptItem = new JMenuItem("Script Editor...");
-				scriptItem.addActionListener(new ActionListener() {
-
-					public void actionPerformed(ActionEvent e) {
-						String projectName = "";
-						projectName = project.getName();
-						
-//						try {
-							QueryScript scriptTemplate = new QueryScript("");
-//							scriptTemplate.setLocation(null);
-							QueryEditorWindow sd = new QueryEditorWindow("Script Editor : " + projectName, project,
-									scriptTemplate);
-	//							sd.setParentFrame(CommonModuleFrame.getCurrentFrame());
-							sd.pack();
-							sd.setLocationByPlatform(true);
-							sd.setVisible(true);
-//						} catch (IOException ex) {
-//							
-//						}
-					}
-					
-				});
-				
-				JMenuItem historyItem = new JMenuItem("Query History...");
-				historyItem.addActionListener(new ActionListener() {
-
-					public void actionPerformed(ActionEvent e) {
-						final Map<String, Object> initInfo = 
-								new HashMap<String, Object>();
-						initInfo.put("project", project);
-						
-						try {
-							PluginEntryPointRunner.executePlugin("QueryHistory", initInfo);
-						} catch (PluginException e1) {
-							LOGGER.log(Level.SEVERE,
-									e1.getLocalizedMessage(), e1);
-						}
-					}
-					
-				});
-				
-				queryMenu.addSeparator();
-				queryMenu.add(scriptItem);
-				queryMenu.add(historyItem);
-			}
-			
-		};
+	/**
+	 * Query menu generator
+	 */
+	private final MenuListener queryMenuListener = new QueryMenuListener();
+	
 }

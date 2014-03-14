@@ -31,5 +31,5 @@ public class LogManager {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

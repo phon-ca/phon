@@ -46,7 +46,8 @@ public class LanguageCodeEP implements IPluginEntryPoint{
 	 */
 	private static CommonModuleFrame _window;
 	
-	private final static String EP_NAME = "LanguageCode";
+	public final static String EP_NAME = "LanguageCode";
+	
 	@Override
 	public String getName() {
 		return EP_NAME;
