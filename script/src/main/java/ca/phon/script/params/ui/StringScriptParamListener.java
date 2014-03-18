@@ -7,8 +7,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import ca.phon.script.params.ScriptParam;
-import ca.phon.ui.PromptedTextField;
-import ca.phon.ui.PromptedTextField.FieldState;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 
 public class StringScriptParamListener extends ScriptParamAction implements DocumentListener {
 	

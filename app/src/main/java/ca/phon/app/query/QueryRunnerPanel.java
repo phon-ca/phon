@@ -55,7 +55,6 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.joda.time.DateTime;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -315,23 +314,18 @@ public class QueryRunnerPanel extends JPanel {
 	}
 	
 	private void generateReport() {
-		// get project from parent frame
-		final CommonModuleFrame parentFrame = 
-			(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, this);
-		final ProjectFrameExtension pfe = parentFrame.getExtension(ProjectFrameExtension.class);
+		final CommonModuleFrame parentFrame = CommonModuleFrame.getCurrentFrame();
 		
-		if(parentFrame != null && pfe != null && pfe.getProject() != null) {
-			ReportWizard wizard = null;
-			if(loadFromTemp) {
-				wizard = new ReportWizard(getProject(), tempProject, query);
-			} else {
-				wizard = new ReportWizard(getProject(), query);
-			}
-			wizard.setParentFrame(parentFrame);
-			wizard.pack();
-			wizard.setLocationByPlatform(true);
-			wizard.setVisible(true);
+		ReportWizard wizard = null;
+		if(loadFromTemp) {
+			wizard = new ReportWizard(getProject(), tempProject, query);
+		} else {
+			wizard = new ReportWizard(getProject(), query);
 		}
+		wizard.setParentFrame(parentFrame);
+		wizard.pack();
+		wizard.setLocationByPlatform(true);
+		wizard.setVisible(true);
 	}
 	
 	/**

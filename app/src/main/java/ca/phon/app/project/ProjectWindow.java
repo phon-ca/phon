@@ -121,8 +121,7 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		setWindowName("Project Manager");
 		
-		final ProjectFrameExtension pfe = new ProjectFrameExtension(project);
-		putExtension(ProjectFrameExtension.class, pfe);
+		putExtension(Project.class, project);
 		
 		myProjectListener = new ProjectWindowProjectListener(project);
 		
@@ -146,12 +145,7 @@ public class ProjectWindow extends CommonModuleFrame
 	 * @return project
 	 */
 	public Project getProject() {
-		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
-		if(pfe != null) {
-			return pfe.getProject();
-		} else {
-			return null;
-		}
+		return getExtension(Project.class);
 	}
 	
 	public boolean isRemoteProject() {
@@ -204,11 +198,11 @@ public class ProjectWindow extends CommonModuleFrame
 		newCorpusItem.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
+				final Project pfe = getExtension(Project.class);
 				if(pfe != null) {
 					HashMap<String, Object> initInfo = 
 							new HashMap<String, Object>();
-					initInfo.put("project", pfe.getProject());
+					initInfo.put("project", pfe);
 					PluginEntryPointRunner.executePluginInBackground("NewCorpus", initInfo);
 				}
 			}

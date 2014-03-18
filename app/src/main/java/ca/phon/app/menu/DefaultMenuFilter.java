@@ -19,13 +19,7 @@ package ca.phon.app.menu;
 
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
@@ -35,11 +29,16 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEditSupport;
 
 import ca.phon.app.menu.edit.CopyCommand;
 import ca.phon.app.menu.edit.CutCommand;
+import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.edit.PasteCommand;
 import ca.phon.app.menu.edit.PreferencesCommand;
+import ca.phon.app.menu.edit.RedoCommand;
+import ca.phon.app.menu.edit.UndoCommand;
 import ca.phon.app.menu.file.ExitCommand;
 import ca.phon.app.menu.file.RecentProjectsMenuListener;
 import ca.phon.app.menu.file.WorkspaceCommand;
@@ -49,21 +48,11 @@ import ca.phon.app.menu.query.QueryMenuListener;
 import ca.phon.app.menu.tools.IpaMapCommand;
 import ca.phon.app.menu.tools.LanguageCodesCommand;
 import ca.phon.app.menu.window.OpenWindowsMenuListener;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.project.ProjectFrameExtension;
-import ca.phon.app.query.QueryEditorEP;
-import ca.phon.app.query.QueryEditorWindow;
 import ca.phon.app.workspace.WorkspaceDialog;
+import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.plugin.PluginAction;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.project.Project;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Create the default menu for all Phon windows.
@@ -118,23 +107,11 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	protected void addEditMenu(Window owner, JMenuBar menu) {
 		JMenu editMenu = new JMenu("Edit");
 		
-		// cut 
-		final JMenuItem cutItem = new JMenuItem(new CutCommand());
-		editMenu.add(cutItem);
+		final MenuListener editListener = new EditMenuListener(owner);
+		editMenu.addMenuListener(editListener);
 		
-		// copy 
-		final JMenuItem copyItem = new JMenuItem(new CopyCommand());
-		editMenu.add(copyItem);
-		
-		// paste
-		final JMenuItem pasteItem = new JMenuItem(new PasteCommand());
-		editMenu.add(pasteItem);
-		
-		editMenu.addSeparator();
-		
-		// prefs
-		final JMenuItem prefsItem = new JMenuItem(new PreferencesCommand());
-		editMenu.add(prefsItem);
+		final MenuEvent me = new MenuEvent(editMenu);
+		editListener.menuSelected(me);
 		
 		menu.add(editMenu);
 	}
@@ -209,18 +186,11 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 */
 	protected void addWindowMenu(Window owner, JMenuBar menu) {
 		JMenu windowMenu = new JMenu("Window");
-		
+		final MenuListener openWindowMenuListener = new OpenWindowsMenuListener(owner);
 		windowMenu.addMenuListener(openWindowMenuListener);
 		
-		// generic close item
-		PluginAction closeAct = new PluginAction("CloseWindow");
-		closeAct.putArg("window", owner);
-		closeAct.putValue(Action.NAME, "Close");
-		closeAct.putValue(Action.SHORT_DESCRIPTION, "Close window");
-		closeAct.putValue(Action.ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		JMenuItem closeItem = new JMenuItem(closeAct);
-		windowMenu.add(closeItem);
+		final MenuEvent me = new MenuEvent(windowMenu);
+		openWindowMenuListener.menuSelected(me);
 		
 		// keep on tops
 		menu.add(windowMenu);
@@ -257,11 +227,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 * Recents menu generator
 	 */
 	private final MenuListener recentsMenuListener = new RecentProjectsMenuListener();
-	
-	/**
-	 * Open window menu generator
-	 */
-	private final MenuListener openWindowMenuListener = new OpenWindowsMenuListener();
 	
 	/**
 	 * Query menu generator

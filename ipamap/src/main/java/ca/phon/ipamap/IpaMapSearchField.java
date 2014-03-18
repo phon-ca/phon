@@ -10,9 +10,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
-import ca.phon.ui.SearchField;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.text.SearchField;
 
 /**
  * Custom search field for the ipa map

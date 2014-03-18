@@ -1,6 +1,7 @@
 package ca.phon.app.menu.window;
 
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 
 import javax.swing.Action;
@@ -17,6 +18,13 @@ import ca.phon.ui.CommonModuleFrame;
  * Populates a menu with open windows organized by project.
  */
 public class OpenWindowsMenuListener implements MenuListener {
+	
+	private final Window owner;
+	
+	public OpenWindowsMenuListener(Window window) {
+		super();
+		this.owner = window;
+	}
 
 	@Override
 	public void menuCanceled(MenuEvent arg0) {
@@ -108,7 +116,7 @@ public class OpenWindowsMenuListener implements MenuListener {
 //		menu.addSeparator();
 		
 		// generic close item
-		final JMenuItem closeItem = new JMenuItem(new CloseWindowCommand(CommonModuleFrame.getCurrentFrame()));
+		final JMenuItem closeItem = new JMenuItem(new CloseWindowCommand(owner));
 		menu.add(closeItem);
 	}
 

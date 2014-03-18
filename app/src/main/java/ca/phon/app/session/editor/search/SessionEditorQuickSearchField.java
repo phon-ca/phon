@@ -8,9 +8,9 @@ import javax.swing.table.TableModel;
 
 import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.ui.TableSearchField;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.text.TableSearchField;
 
 /**
  * Overrides the default table search field so that the row

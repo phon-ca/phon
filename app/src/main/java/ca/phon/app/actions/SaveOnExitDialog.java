@@ -41,7 +41,6 @@ import javax.swing.tree.TreePath;
 
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
@@ -272,9 +271,9 @@ public class SaveOnExitDialog extends JDialog {
 			List<Project> retVal = new ArrayList<Project>();
 			
 			for(CommonModuleFrame editor:editors) {
-				final ProjectFrameExtension pfe = editor.getExtension(ProjectFrameExtension.class);
-				if(pfe != null && !retVal.contains(pfe.getProject())) {
-					retVal.add(pfe.getProject());
+				final Project pfe = editor.getExtension(Project.class);
+				if(pfe != null && !retVal.contains(pfe)) {
+					retVal.add(pfe);
 				}
 			}
 			
@@ -285,8 +284,8 @@ public class SaveOnExitDialog extends JDialog {
 			List<CommonModuleFrame> retVal = new ArrayList<CommonModuleFrame>();
 			
 			for(CommonModuleFrame editor:editors) {
-				final ProjectFrameExtension pfe = editor.getExtension(ProjectFrameExtension.class);
-				if(pfe != null && pfe.getProject() == p) {
+				final Project pfe = editor.getExtension(Project.class);
+				if(pfe != null && pfe == p) {
 					retVal.add(editor);
 				}
 			}

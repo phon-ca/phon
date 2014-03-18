@@ -56,7 +56,6 @@ import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -318,8 +317,7 @@ public class QueryInfoPanel extends JPanel {
 		// get project from parent frame
 		final CommonModuleFrame parentFrame = 
 			(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, this);
-		final ProjectFrameExtension pfe = parentFrame.getExtension(ProjectFrameExtension.class);
-		final Project project = pfe.getProject();
+		final Project project = parentFrame.getExtension(Project.class);
 		
 		if(parentFrame != null && project != null) {
 			ReportWizard wizard = new ReportWizard(project, query);

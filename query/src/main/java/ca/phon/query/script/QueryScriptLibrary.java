@@ -19,6 +19,8 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Script;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.resources.FolderHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -33,11 +35,11 @@ public class QueryScriptLibrary implements IExtendable {
 //	 */
 //	public final static String SYSTEM_SCRIPT_FOLDER = "data/script";
 //	
-//	/**
-//	 * User script folder
-//	 */
-//	public final static String USER_SCRIPT_FOLDER = 
-//			UserPrefManager.getUserPrefDir() + File.separator + "script";
+	/**
+	 * User script folder
+	 */
+	public final static String USER_SCRIPT_FOLDER = 
+			PrefHelper.getUserDataFolder() + File.separator + "script";
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(QueryScriptLibrary.class, this);
 	
@@ -62,6 +64,9 @@ public class QueryScriptLibrary implements IExtendable {
 	private void initLoaders() {
 		final SystemQueryScriptHandler systemScriptHandler = new SystemQueryScriptHandler();
 		systemScriptLoader.addHandler(systemScriptHandler);
+		
+		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(USER_SCRIPT_FOLDER));
+		userScriptLoader.addHandler(userFolderScriptHandler);
 	}
 	
 	public ResourceLoader<QueryScript> stockScriptFiles() {
@@ -73,19 +78,10 @@ public class QueryScriptLibrary implements IExtendable {
 	}
 	
 	public ResourceLoader<QueryScript> projectScriptFiles(Project project) {
-		final String projectScriptLocation = projectScriptFolder(project);
+		final ResourceLoader<QueryScript> retVal = new ResourceLoader<QueryScript>();
 		
-		return new ResourceLoader<QueryScript>();
-	}
-	
-	private List<File> scanFolderForScripts(File folder) {
-		final List<File> retVal = new ArrayList<File>();
-		
-		if(folder.exists() && folder.isDirectory()) {
-			for(File scriptFile:folder.listFiles(scriptFilter)) {
-				retVal.add(scriptFile);
-			}
-		}
+		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(projectScriptFolder(project)));
+		retVal.addHandler(userFolderScriptHandler);
 		
 		return retVal;
 	}
@@ -154,14 +150,6 @@ public class QueryScriptLibrary implements IExtendable {
 		return extSupport.removeExtension(cap);
 	}
 
-	private final FilenameFilter scriptFilter = new FilenameFilter() {
-		@Override
-		public boolean accept(File dir, String name) {
-			boolean prefixOk = 
-					!(name.startsWith(".") || name.startsWith("~") || name.startsWith("__"));
-			boolean suffixOk = 
-					(name.endsWith(".js") || name.endsWith(".xml"));
-			return prefixOk && suffixOk;
-		}
-	};
+	
+	
 }

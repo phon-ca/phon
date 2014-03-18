@@ -146,8 +146,7 @@ public class ImportSessionEP implements IPluginEntryPoint {
 		} else {
 			ImportSessionFrame f = new ImportSessionFrame();
 			
-			final ProjectFrameExtension pfe = new ProjectFrameExtension(_project);
-			f.putExtension(ProjectFrameExtension.class, pfe);
+			f.putExtension(Project.class, _project);
 			
 			f.pack();
 			f.setVisible(true);

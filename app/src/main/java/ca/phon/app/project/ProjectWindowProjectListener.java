@@ -49,8 +49,8 @@ public class ProjectWindowProjectListener implements ProjectListener {
 	private void updateProjectWindow() {
 		for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
 			if(f instanceof ProjectWindow) {
-				final ProjectFrameExtension pfe = f.getExtension(ProjectFrameExtension.class);
-				if(pfe != null && pfe.getProject() == project) {
+				final Project pfe = f.getExtension(Project.class);
+				if(pfe != null && pfe == project) {
 					((ProjectWindow)f).updateLists();
 				}
 			}

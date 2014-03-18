@@ -46,7 +46,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 import org.joda.time.DateTime;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DividedEditorView;
 import ca.phon.app.session.editor.DockPosition;
@@ -66,10 +65,10 @@ import ca.phon.session.Participant;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.ui.DateTimeDocument;
-import ca.phon.ui.FileSelectionField;
-import ca.phon.ui.PromptedTextField.FieldState;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.text.FileSelectionField;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -299,11 +298,8 @@ public class SessionInfoEditorView extends DividedEditorView {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getDataModel().getSession();
 		
-		final ProjectFrameExtension pfe = editor.getExtension(ProjectFrameExtension.class);
-		Project project = null;
-		if(pfe != null) {
-			project = pfe.getProject();
-		}
+		final Project project = editor.getExtension(Project.class);
+		if(project == null) return;
 		
 		final DateTimeDocument doc = (DateTimeDocument)dateField.getDocument();
 		doc.setDateTime(session.getDate());

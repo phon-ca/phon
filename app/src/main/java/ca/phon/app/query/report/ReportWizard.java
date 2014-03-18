@@ -35,7 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -121,8 +120,7 @@ public class ReportWizard extends WizardFrame {
 		super("Phon : " + project.getName() + " : Report");
 		this.tempProject = tempProject;
 		
-		final ProjectFrameExtension pfe = new ProjectFrameExtension(project);
-		putExtension(ProjectFrameExtension.class, pfe);
+		putExtension(Project.class, project);
 
 		super.setWindowName("Report");
 //		super.setProject(project);
@@ -134,8 +132,7 @@ public class ReportWizard extends WizardFrame {
 	}
 	
 	private Project getProject() {
-		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
-		return (pfe != null ? pfe.getProject() : null);
+		return getExtension(Project.class);
 	}
 	
 	private void init() {

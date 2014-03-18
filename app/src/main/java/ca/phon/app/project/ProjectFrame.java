@@ -34,8 +34,7 @@ public class ProjectFrame extends CommonModuleFrame {
 	 * @return project
 	 */
 	public Project getProject() {
-		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
-		return (pfe == null ? null : pfe.getProject());
+		return getExtension(Project.class);
 	}
 	
 	/**
@@ -44,8 +43,7 @@ public class ProjectFrame extends CommonModuleFrame {
 	 * @param project
 	 */
 	public void setProject(Project project) {
-		ProjectFrameExtension pfe = new ProjectFrameExtension(project);
-		putExtension(ProjectFrameExtension.class, pfe);
+		putExtension(Project.class, project);
 	}
 	
 	

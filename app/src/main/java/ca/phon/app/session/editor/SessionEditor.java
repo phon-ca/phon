@@ -20,6 +20,7 @@ import javax.swing.event.MenuListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEditSupport;
 
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
@@ -82,8 +83,7 @@ public class SessionEditor extends ProjectFrame {
 	 */
 	private final UndoManager undoManager = new UndoManager();
 	
-	private final UndoableEditListener undoListener = new UndoableEditListener(
-			) {
+	private final UndoableEditListener undoListener = new UndoableEditListener() {
 		
 		@Override
 		public void undoableEditHappened(UndoableEditEvent e) {
@@ -92,10 +92,6 @@ public class SessionEditor extends ProjectFrame {
 		}
 		
 	};
-	
-	private JMenuItem redoItem;
-	
-	private JMenuItem undoItem;
 	
 	/**
 	 * Toolbar
@@ -122,6 +118,10 @@ public class SessionEditor extends ProjectFrame {
 		
 		// add default undo listener
 		undoSupport.addUndoableEditListener(undoListener);
+		
+		// setup undo support and manager extensions
+		putExtension(UndoManager.class, undoManager);
+		putExtension(UndoableEditSupport.class, undoSupport);
 		
 		init();
 	}
@@ -191,30 +191,6 @@ public class SessionEditor extends ProjectFrame {
 			}
 		});
 		menuBar.add(viewMenu, 3);
-		
-		// find the edit menu and add undo/redo items
-		JMenu editMenu = null;
-		for(int i = 0; i < menuBar.getMenuCount(); i++) {
-			final JMenu menu = menuBar.getMenu(i);
-			if(menu.getText().equalsIgnoreCase("edit")) {
-				editMenu = menu;
-				break;
-			}
-		}
-		
-		if(editMenu != null) {
-			final PhonUIAction onUndoAct = new PhonUIAction(this, "onUndo");
-			onUndoAct.putValue(PhonUIAction.NAME, "Undo");
-			onUndoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Undo action");
-			undoItem = new JMenuItem(onUndoAct);
-			editMenu.add(undoItem, 0);
-			
-			final PhonUIAction onRedoAct = new PhonUIAction(this, "onRedo");
-			onRedoAct.putValue(PhonUIAction.NAME, "Redo");
-			onRedoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Redo action");
-			redoItem = new JMenuItem(onRedoAct);
-			editMenu.add(redoItem, 1);
-		}
 		
 		super.setJMenuBar(menuBar);
 	}
@@ -504,17 +480,6 @@ public class SessionEditor extends ProjectFrame {
 				retVal += "*";
 		}
 		return retVal;
-	}
-	
-	/*
-	 * UI actions
-	 */
-	public void onUndo() {
-		undoManager.undo();
-	}
-	
-	public void onRedo() {
-		undoManager.redo();
 	}
 	
 	/*

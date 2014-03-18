@@ -30,7 +30,6 @@ import javax.swing.SwingUtilities;
 
 import org.joda.time.DateTime;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.project.SessionMerger;
 import ca.phon.project.Project;
 import ca.phon.session.DateFormatter;
@@ -69,18 +68,13 @@ public class DeriveSessionWizard extends WizardFrame {
 		super("Phon : " + project.getName() + " : Derive Session");
 		setWindowName("Derive Session");
 		
-		final ProjectFrameExtension projectExt = new ProjectFrameExtension(project);
-		super.putExtension(ProjectFrameExtension.class, projectExt);		
+		super.putExtension(Project.class, project);		
 		
 		init();
 	}
 	
 	private Project getProject() {
-		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
-		if(pfe != null) {
-			return pfe.getProject();
-		}
-		return null;
+		return getExtension(Project.class);
 	}
 	
 	private void init() {

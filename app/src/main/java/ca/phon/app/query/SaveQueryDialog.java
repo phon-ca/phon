@@ -39,7 +39,6 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
@@ -92,8 +91,7 @@ public class SaveQueryDialog extends JDialog {
 	}
 	
 	private Project getProject() {
-		final ProjectFrameExtension pfe = parentFrame.getExtension(ProjectFrameExtension.class);
-		return (pfe != null ? pfe.getProject() : null);
+		return parentFrame.getExtension(Project.class);
 	}
 
 	@Override

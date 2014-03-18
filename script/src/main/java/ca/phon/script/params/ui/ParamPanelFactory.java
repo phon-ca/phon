@@ -17,7 +17,7 @@ import ca.phon.script.params.MultiboolScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.SeparatorScriptParam;
 import ca.phon.script.params.StringScriptParam;
-import ca.phon.ui.PromptedTextField;
+import ca.phon.ui.text.PromptedTextField;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

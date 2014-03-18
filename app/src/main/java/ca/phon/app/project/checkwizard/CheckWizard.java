@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -66,8 +65,7 @@ public class CheckWizard extends WizardFrame {
 		super("Phon : " + project.getName() + " : Check Transcriptions");
 		
 		setWindowName("Check Transcriptions");
-		final ProjectFrameExtension projectExt = new ProjectFrameExtension(project);
-		super.putExtension(ProjectFrameExtension.class, projectExt);
+		super.putExtension(Project.class, project);
 		
 		init();
 	}
@@ -101,11 +99,7 @@ public class CheckWizard extends WizardFrame {
 	}
 	
 	private Project getProject() {
-		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
-		if(pfe != null) {
-			return pfe.getProject();
-		}
-		return null;
+		return getExtension(Project.class);
 	}
 	
 	/**

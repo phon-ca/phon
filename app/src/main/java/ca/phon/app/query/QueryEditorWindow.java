@@ -55,7 +55,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import javax.swing.undo.UndoManager;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
@@ -125,8 +124,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	public QueryEditorWindow(String title, Project project) {
 		super(title);
 		
-		final ProjectFrameExtension pfe = new ProjectFrameExtension(project);
-		putExtension(ProjectFrameExtension.class, pfe);
+		putExtension(Project.class, project);
 		
 		undoManager = new UndoManager();
 		scriptEditor = new ScriptPanel();
@@ -138,8 +136,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			QueryScript script) {
 		super(title);
 		
-		final ProjectFrameExtension pfe = new ProjectFrameExtension(project);
-		putExtension(ProjectFrameExtension.class, pfe);
+		putExtension(Project.class, project);
 		
 		undoManager = new UndoManager();
 		scriptEditor = new ScriptPanel(script);
@@ -148,8 +145,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	private Project getProject() {
-		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
-		return (pfe == null ? null : pfe.getProject());
+		return getExtension(Project.class);
 	}
 	
 	private JComponent createForm() {

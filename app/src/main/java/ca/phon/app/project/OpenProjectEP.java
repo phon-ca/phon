@@ -106,8 +106,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 			// check to see if the project is already open...
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 				if(!(cmf instanceof ProjectWindow)) continue;
-				final ProjectFrameExtension pfe = cmf.getExtension(ProjectFrameExtension.class);
-				if(pfe != null && pfe.getProject().getLocation().equals(projectpath)) {
+				final Project pfe = cmf.getExtension(Project.class);
+				if(pfe != null && pfe.getLocation().equals(projectpath)) {
 					cmf.toFront();
 					cmf.requestFocus();
 					return true;

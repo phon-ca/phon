@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 
 import ca.phon.app.actions.SaveOnExitDialog.QuitOption;
 import ca.phon.app.hooks.PhonShutdownHook;
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -87,9 +86,9 @@ public class ExitEP implements IPluginEntryPoint
 			= new ArrayList<CommonModuleFrame>();
 		Set<Project> projectSet = new HashSet<Project>();
 		for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
-			final ProjectFrameExtension pfe = f.getExtension(ProjectFrameExtension.class);
+			final Project pfe = f.getExtension(Project.class);
 			if(pfe != null) {
-				projectSet.add(pfe.getProject());
+				projectSet.add(pfe);
 			}
 			if(f.hasUnsavedChanges())
 				editorsWithChanges.add(f);

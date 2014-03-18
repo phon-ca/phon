@@ -4,7 +4,7 @@ import java.io.File;
 
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
-import ca.phon.ui.FileSelectionField;
+import ca.phon.ui.text.FileSelectionField;
 
 public class MediaSelectionField extends FileSelectionField {
 	

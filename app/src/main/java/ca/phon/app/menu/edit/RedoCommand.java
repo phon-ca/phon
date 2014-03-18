@@ -7,31 +7,31 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
 
 /**
- * Undo command template.  Requires a {@link UndoManager} be provided.
- *
+ * Handle the redo command for a given {@link UndoManager}
  */
-public class UndoCommand extends AbstractAction {
+public class RedoCommand extends AbstractAction {
 
 	private static final long serialVersionUID = 9100941568698565601L;
 
 	private UndoManager undoManager;
 	
-	private final static String PREFIX = "Undo";
+	private final static String PREFIX = "Redo";
 	
-	public UndoCommand(UndoManager manager) {
+	public RedoCommand(UndoManager manager) {
 		super();
 		this.undoManager = manager;
+		
 		putValue(NAME, PREFIX + manager.getPresentationName());
-		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Y,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(undoManager.canUndo())
-			undoManager.undo();
+		undoManager.redo();
 	}
 	
 }

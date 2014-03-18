@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.ui;
+package ca.phon.ui.text;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -214,8 +214,8 @@ public class SearchField extends PromptedTextField {
 		int topSpace = 0;
 		int btmSpace = 0;
 		Border emptyBorder = BorderFactory.createEmptyBorder(topSpace, leftSpace, btmSpace, rightSpace);
-		setBorder(BorderFactory.createCompoundBorder(emptyBorder, 
-				BorderFactory.createMatteBorder(1, 0, 1, 0, Color.gray)));
+		setBorder(BorderFactory.createCompoundBorder(super.getBorder(), 
+				emptyBorder));
 	}
 	
 	/**

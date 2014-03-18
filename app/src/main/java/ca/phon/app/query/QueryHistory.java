@@ -58,7 +58,6 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.joda.time.DateTime;
 
-import ca.phon.app.project.ProjectFrameExtension;
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -71,10 +70,10 @@ import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.DateFormatter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.StarBox;
-import ca.phon.ui.TableSearchField;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.text.TableSearchField;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -123,8 +122,7 @@ public class QueryHistory extends CommonModuleFrame {
 		super.setTitle(titleString);
 		super.setWindowName("Query History");
 		
-		final ProjectFrameExtension pfe = new ProjectFrameExtension(project);
-		super.putExtension(ProjectFrameExtension.class, pfe);
+		super.putExtension(Project.class, project);
 		
 		init();
 	}
@@ -134,11 +132,7 @@ public class QueryHistory extends CommonModuleFrame {
 	}
 	
 	public Project getProject() {
-		Project retVal = null;
-		final ProjectFrameExtension pfe = getExtension(ProjectFrameExtension.class);
-		if(pfe != null)
-			retVal = pfe.getProject();
-		return retVal;
+		return getExtension(Project.class);
 	}
 	
 	private void init() {
