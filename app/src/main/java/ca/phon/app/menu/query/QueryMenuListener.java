@@ -2,6 +2,7 @@ package ca.phon.app.menu.query;
 
 import java.util.Iterator;
 
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
@@ -50,6 +51,8 @@ public class QueryMenuListener implements MenuListener {
 		final Iterator<QueryScript> userScriptIterator = userScriptLoader.iterator();
 		if(userScriptIterator.hasNext()) {
 			queryMenu.addSeparator();
+			final JLabel lbl = new JLabel("<html><b>User Library</b></html>");
+			queryMenu.add(lbl);
 		}
 		while(userScriptIterator.hasNext()) {
 			final QueryScript qs = userScriptIterator.next();
@@ -63,6 +66,8 @@ public class QueryMenuListener implements MenuListener {
 		final Iterator<QueryScript> projectScriptIterator = projectScriptLoader.iterator();
 		if(projectScriptIterator.hasNext()) {
 			queryMenu.addSeparator();
+			final JLabel lbl = new JLabel("<html><b>Project Library</b></html>");
+			queryMenu.add(lbl);
 		}
 		while(projectScriptIterator.hasNext()) {
 			final QueryScript qs = projectScriptIterator.next();
