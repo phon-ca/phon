@@ -9,7 +9,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="Transcript Validation")
-@EditorViewInfo(category=EditorViewCategory.RECORD, name="Transcript Validation", icon="misc/validation")
+@EditorViewInfo(category=EditorViewCategory.RECORD, name=ValidationEditorView.VIEW_NAME, icon=ValidationEditorView.VIEW_ICON)
 public class ValidationExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
