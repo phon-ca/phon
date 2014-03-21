@@ -254,8 +254,10 @@ public class TierDataEditorView extends EditorView {
 				int index, boolean isSelected, boolean cellHasFocus) {
 			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
 					cellHasFocus);
-			final Participant participant = (Participant)value;
-			retVal.setText(participant.getName());
+			if(value != null) {
+				final Participant participant = (Participant)value;
+				retVal.setText(participant.getName());
+			}
 			return retVal;
 		}
 		
