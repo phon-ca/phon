@@ -1,4 +1,4 @@
 /**
- * Root package for phon application classes.
+ * Root package for phon application.
  */
 package ca.phon.app;
