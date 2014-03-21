@@ -492,7 +492,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 				final IPATranscript transcript = IPATranscript.parseIPATranscript(groupBuffer.toString());
 				
 				// copy syllabification if transcript is the same size as our provided syllabification
-				if(transcript.size() == pt.getSb().getPh().size()) {
+				if(pt.getSb() != null && transcript.size() == pt.getSb().getPh().size()) {
 					final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
 					transcript.accept(visitor);
 				}
