@@ -7,7 +7,7 @@ ca.phon.app.menu.DefaultMenuFilterExtensionPt
 
 ## Editor Views
 # Session Info
-ca.phon.app.session.editor.view.session_info.SessionInfoExtension
+ca.phon.app.session.editor.view.session_information.SessionInfoExtension
 ca.phon.app.session.editor.view.media_player.MediaPlayerExtension
 ca.phon.app.session.editor.view.waveform.WaveformExtension
 ca.phon.app.session.editor.view.segmentation.SegmentationExtension
