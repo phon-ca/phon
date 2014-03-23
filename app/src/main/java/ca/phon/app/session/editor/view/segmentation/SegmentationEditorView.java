@@ -31,11 +31,8 @@ import javax.swing.text.PlainDocument;
 
 import org.apache.commons.lang3.StringUtils;
 
-import vlc4j.VLCError;
-import vlc4j.VLCException;
-import vlc4j.VLCMediaPlayer;
-import vlc4j.event.VLCMediaPlayerAdapter;
-import vlc4j.event.VLCMediaPlayerEvent;
+import uk.co.caprica.vlcj.player.MediaPlayer;
+import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -115,7 +112,7 @@ public class SegmentationEditorView extends EditorView {
 		super(editor);
 		
 		this.mediaPlayerView = playerView;
-		this.mediaPlayerView.getPlayer().addMediaPlayerListener(_locationListener);
+//		this.mediaPlayerView.getPlayer().addMediaPlayerListener(_locationListener);
 		
 		init();
 	}
@@ -434,44 +431,36 @@ public class SegmentationEditorView extends EditorView {
 	
 	private final MediaLocationListener _locationListener = 
 		new MediaLocationListener();
-	private class MediaLocationListener extends VLCMediaPlayerAdapter {
+	private class MediaLocationListener extends MediaPlayerEventAdapter {
 		
 		private long lastBufferTime = -1L;
-
-		@Override
-		public void onTimeChanged(VLCMediaPlayerEvent vlcmpe) {
-			// update the segment label
-			// segment label class handles thread safety for updates
-			VLCMediaPlayer player = vlcmpe.getSource();
-			try {
-				long currentTime = player.getTime();
-
-				synchronized(segmentLabel) {
-					segmentLabel.setCurrentTime(currentTime);
-				}
-			} catch (VLCException ex) {
-				VLCError.logAndClear(ex);
-			}
-
-		}
 		
 		@Override
-		public void onBuffering(VLCMediaPlayerEvent vlcmpe) {
-			// segment label class handles thread safety for updates
-			VLCMediaPlayer player = vlcmpe.getSource();
-			try {
-				long currentTime = player.getTime();
-				
-				if(lastBufferTime != currentTime) {
-					synchronized (segmentLabel) {
-						segmentLabel.setCurrentTime(currentTime);
-					}
-					lastBufferTime = currentTime;
-				}
-			} catch (VLCException e) {
-				VLCError.logAndClear(e);
+		public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+			// TODO Auto-generated method stub
+			super.timeChanged(mediaPlayer, newTime);
+			synchronized(segmentLabel) {
+				segmentLabel.setCurrentTime(newTime);
 			}
 		}
+
+//		@Override
+//		public void onBuffering(VLCMediaPlayerEvent vlcmpe) {
+//			// segment label class handles thread safety for updates
+//			VLCMediaPlayer player = vlcmpe.getSource();
+//			try {
+//				long currentTime = player.getTime();
+//				
+//				if(lastBufferTime != currentTime) {
+//					synchronized (segmentLabel) {
+//						segmentLabel.setCurrentTime(currentTime);
+//					}
+//					lastBufferTime = currentTime;
+//				}
+//			} catch (VLCException e) {
+//				VLCError.logAndClear(e);
+//			}
+//		}
 		
 	}
 

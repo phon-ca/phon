@@ -39,8 +39,9 @@
     </dependency>
     
     <dependency>
-      <groupId>ca.hedlund</groupId>
-      <artifactId>vlc4j</artifactId>
+      <groupId>uk.co.caprica</groupId> 
+      <artifactId>vlcj</artifactId> 
+      <version>3.0.1</version> 
     </dependency>
     
     <dependency>

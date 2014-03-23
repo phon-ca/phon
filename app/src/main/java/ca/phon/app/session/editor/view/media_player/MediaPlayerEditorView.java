@@ -29,6 +29,8 @@ import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -42,8 +44,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 
-import vlc4j.VLCError;
-import vlc4j.VLCException;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorAction;
@@ -77,6 +77,9 @@ import ca.phon.util.icons.IconSize;
  *
  */
 public class MediaPlayerEditorView extends EditorView {
+	
+	private final static Logger LOGGER = Logger
+			.getLogger(MediaPlayerEditorView.class.getName());
 
 	public static final String VIEW_TITLE = "Media Player";
 
@@ -132,8 +135,7 @@ public class MediaPlayerEditorView extends EditorView {
 	 * @throws VLCException
 	 */
 
-	public void onLoadMedia(PhonActionEvent pae)
-		throws VLCException {
+	public void onLoadMedia(PhonActionEvent pae) {
 		loadMedia();
 	}
 	
@@ -144,8 +146,7 @@ public class MediaPlayerEditorView extends EditorView {
 		dialog.setVisible(true);
 	}
 
-	public void onLoadMedia(EditorEvent ee)
-		throws VLCException {
+	public void onLoadMedia(EditorEvent ee) {
 		loadMedia();
 	}
 
@@ -163,10 +164,11 @@ public class MediaPlayerEditorView extends EditorView {
 			if(!VLCHelper.checkNativeLibrary(true)) return;
 
 			mediaPlayer.loadMedia(mediaFile.getAbsolutePath());
-		} else {
-			mediaPlayer.getCanvas().setMessage("Media not found");
-			mediaPlayer.getCanvas().repaint();
-		}
+		} 
+//		else {
+//			mediaPlayer.getCanvas().setMessage("Media not found");
+//			mediaPlayer.getCanvas().repaint();
+//		}
 	}
 
 	private void setupEditorActions() {
@@ -189,8 +191,7 @@ public class MediaPlayerEditorView extends EditorView {
 	}
 
 	/** Editor actions */
-	public void onMediaChanged(EditorEvent ee)
-		throws VLCException {
+	public void onMediaChanged(EditorEvent ee) {
 		if(mediaPlayer.getMediaFile() != null) {
 			mediaPlayer.stop();
 		}
@@ -213,30 +214,15 @@ public class MediaPlayerEditorView extends EditorView {
 		
 		// check for necessary vars
 		if(media == null) return;
-		try {
-			if(!mediaPlayer.willPlay()) return;
-		} catch (VLCException e) {
-			VLCError.logAndClear(e);
-			return;
-		}
+		if(!mediaPlayer.willPlay()) return;
 		
 		// don't set position if player is playing
-		try {
-			if(mediaPlayer.isPlaying()) return;
-		} catch (VLCException e) {
-			VLCError.logAndClear(e);
-			return;
-		}
+		if(mediaPlayer.isPlaying()) return;
 		
-		try {
-			mediaPlayer.setTime((long)media.getStartValue());
-		} catch (VLCException e) {
-			VLCError.logAndClear(e);
-		}
+		mediaPlayer.setTime((long)media.getStartValue());
 	}
 
-	public void doSegmentPlayback(EditorEvent ee)
-		throws VLCException {
+	public void doSegmentPlayback(EditorEvent ee) {
 		Tuple<Integer, Integer> segment =
 				(Tuple<Integer,Integer>)ee.getEventData();
 
@@ -247,34 +233,20 @@ public class MediaPlayerEditorView extends EditorView {
 	}
 
 	public void doCleanup(EditorEvent ee) {
-		try {
-			mediaPlayer.stop();
-		} catch (VLCException e) {
-			VLCError.logAndClear(e);
-		}
+		mediaPlayer.stop();
 	}
 	
 	// called when the docking window containing this component is closed
 	public void onClose() {
-		try {
-			if(mediaPlayer.isPlaying()) {
-				mediaPlayer.pause();
-			}
-		} catch (VLCException ex) {
-			VLCError.logAndClear(ex);
+		if(mediaPlayer.isPlaying()) {
+			mediaPlayer.pause();
 		}
-		
 	}
 	
 	// called when the media player needs to pause and the media be reloaded
 	public void onWindowViewChanged() {
-		try {
-			if(mediaPlayer.isPlaying()) {
-				mediaPlayer.pause();
-			}
-//			mediaPlayer.setMediaNeedsReload(true);
-		} catch (VLCException ex) {
-			VLCError.logAndClear(ex);
+		if(mediaPlayer.isPlaying()) {
+			mediaPlayer.pause();
 		}
 	}
 
@@ -383,18 +355,17 @@ public class MediaPlayerEditorView extends EditorView {
 			public void actionPerformed(ActionEvent ae) {
 				String timeStr =
 						((JFormattedTextField)ae.getSource()).getText();
+				long msVal;
 				try {
-					long msVal = MsFormatter.displayStringToMs(timeStr);
+					msVal = MsFormatter.displayStringToMs(timeStr);
 					mediaPlayer.setTime(msVal);
-				} catch (VLCException ex) {
-					VLCError.logAndClear(ex);
+					if(timeSelectionPopup != null) {
+						timeSelectionPopup.dispose();
+						timeSelectionPopup = null;
+					}
 				} catch (ParseException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
-				if(timeSelectionPopup != null) {
-					timeSelectionPopup.dispose();
-					timeSelectionPopup = null;
-				}
-
 			}
 			
 		});
@@ -460,11 +431,7 @@ public class MediaPlayerEditorView extends EditorView {
 			}
 		}
 
-		try {
-			mediaPlayer.setTime((long) lastSegment.getEndValue());
-		} catch (VLCException ex) {
-			VLCError.logAndClear(ex);
-		}
+		mediaPlayer.setTime((long) lastSegment.getEndValue());
 	}
 	
 	public void onMenuPlayto(PhonActionEvent pae) {

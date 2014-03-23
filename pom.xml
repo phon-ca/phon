@@ -165,12 +165,6 @@
       
       <dependency>
         <groupId>ca.hedlund</groupId>
-        <artifactId>vlc4j</artifactId>
-        <version>${ca.hedlund.vlc4j.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>ca.hedlund</groupId>
         <artifactId>tst</artifactId>
         <version>0.0.2-SNAPSHOT</version>
       </dependency>

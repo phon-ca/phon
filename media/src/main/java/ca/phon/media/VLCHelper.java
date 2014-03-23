@@ -18,14 +18,37 @@
 
 package ca.phon.media;
 
-import vlc4j.VLCInstance;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OSInfo;
+import ca.phon.util.PrefHelper;
+
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 
 /**
  * Helper methods for using vlc4j
  */
 public class VLCHelper {
+	
+	/**
+	 * Property for the user-set location of VLC
+	 */
+	public final static String VLC_LOCATION = VLCHelper.class.getName() + ".vlcLocation";
+	
+	private final static String VLC_LOCATION_WIN = System.getenv("PROGRAMFILES") + "\\VideoLAN\\VLC";
+	
+	private final static String VLC_LOCATION_MAC = "/Applications/VLC.app/Contents/MacOS";
+	
+	private final static Logger LOGGER = Logger.getLogger(VLCHelper.class
+			.getName());
+	
+	private static volatile boolean isLoaded = false;
 
 	/**
 	 * Check loading of the native library.
@@ -39,25 +62,36 @@ public class VLCHelper {
 	 *
 	 */
 	public static boolean checkNativeLibrary(boolean showError) {
-		boolean retVal = false;
-
-		retVal = VLCInstance.isLibraryLoaded();
-
-		if(!retVal && showError) {
-			final String msg1 = "Could not load VLC";
-			String msg2 = "Native library for VLC failed to load. Reason given: ";
-			msg2 += VLCInstance.getLibraryLoadError();
-
-			final MessageDialogProperties props = new MessageDialogProperties();
-			props.setTitle(msg1);
-			props.setMessage(msg2);
-			props.setOptions(MessageDialogProperties.okOptions);
-			
-			NativeDialogs.showMessageDialog(props);
+		if(!isLoaded) {
+			try {
+				String vlcLocationDefault = new String();
+				// attempt to load native libraries
+				if(OSInfo.isMacOs()) {
+					vlcLocationDefault = VLC_LOCATION_MAC;
+				} else if (OSInfo.isWindows()) {
+					vlcLocationDefault = VLC_LOCATION_WIN;
+				} else if (OSInfo.isNix()) {
+					// TODO
+				}
+				final String vlcLocation = PrefHelper.get(VLC_LOCATION, vlcLocationDefault);
+				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
+				Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
+				isLoaded = true;
+			} catch (UnsatisfiedLinkError e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				if(showError) {
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setRunAsync(false);
+					props.setParentWindow(null);
+					props.setMessage("<html><p>" + e.getLocalizedMessage() + "</p></html>");
+					props.setTitle("Unable to load VLC");
+					props.setOptions(MessageDialogProperties.okOptions);
+					NativeDialogs.showMessageDialog(props);
+				}
+			}
 		}
 
-		return retVal;
+		return isLoaded;
 	}
-
-
+	
 }
