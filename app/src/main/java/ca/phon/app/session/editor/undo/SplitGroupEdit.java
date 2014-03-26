@@ -2,12 +2,16 @@ package ca.phon.app.session.editor.undo;
 
 import java.lang.ref.WeakReference;
 
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.Group;
 import ca.phon.session.Record;
-import ca.phon.session.Word;
 
+/**
+ * Undo-able edit for splitting groups.
+ */
 public class SplitGroupEdit extends SessionEditorUndoableEdit {
+
+	private static final long serialVersionUID = -7260735541114380839L;
 
 	private final WeakReference<Record> recordRef;
 	
@@ -31,16 +35,9 @@ public class SplitGroupEdit extends SessionEditorUndoableEdit {
 		final Record record = getRecord();
 		if(record == null) return;
 		
-		final Group group = (gIndex < record.numberOfGroups() ? record.getGroup(gIndex) : null);
-		if(group == null) return;
+		record.splitGroup(gIndex, wIndex);
 		
-		// split group data
-		record.addGroup(gIndex+1);
-		final Group newGroup = record.getGroup(gIndex+1);
-		
-		for(int widx = wIndex; widx < group.getAlignedWordCount(); widx++) {
-			final Word word = group.getAlignedWord(widx);
-		}
+		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.StressMarker;
 import ca.phon.ipa.StressType;
@@ -29,7 +30,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	 * current syllable
 	 * 
 	 */
-	private IPATranscript currentSyllable = new IPATranscript();
+	private IPATranscriptBuilder currentSyllableBuilder = new IPATranscriptBuilder();
 	
 	/**
 	 * last phone
@@ -61,9 +62,10 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	}
 	
 	private void breakSyllable() {
-		if(currentSyllable.size() > 0) {
+		final IPATranscript currentSyllable = currentSyllableBuilder.toIPATranscript();
+		if(currentSyllable.length() > 0) {
 			// check for stress marker
-			final IPAElement firstEle = currentSyllable.get(0);
+			final IPAElement firstEle = currentSyllable.elementAt(0);
 			SyllableStress stress = SyllableStress.NoStress;
 			if(firstEle.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
 				final StressType st = StressMarker.class.cast(firstEle).getType();
@@ -72,7 +74,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 			currentSyllable.putExtension(SyllableStress.class, stress);
 			
 			syllables.add(currentSyllable);
-			currentSyllable = new IPATranscript();
+			currentSyllableBuilder = new IPATranscriptBuilder();
 		}
 	}
 	
@@ -146,7 +148,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 				break;
 			}
 		}
-		currentSyllable.add(p);
+		currentSyllableBuilder.append(p);
 		
 		lastPhone = p;
 	}
@@ -156,7 +158,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	 */
 	public void reset() {
 		this.syllables.clear();
-		this.currentSyllable = new IPATranscript();
+		this.currentSyllableBuilder = new IPATranscriptBuilder();
 		this.lastPhone = null;
 	}
 	

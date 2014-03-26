@@ -33,7 +33,7 @@ public class TestPredefinedPhoneClasses {
 		// test all ipa characters
 		for(Character c:testChars) {
 			final IPATranscript transcript = IPATranscript.parseIPATranscript(c + "");
-			Assert.assertEquals(1, transcript.size());
+			Assert.assertEquals(1, transcript.length());
 			final PhonexMatcher matcher = pattern.matcher(transcript);
 		
 			Assert.assertEquals(true, matcher.matches());

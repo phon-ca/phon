@@ -53,7 +53,7 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 		// implicit syllable edges
 			if(!retVal) {
 				for(IPATranscript syll:sylls) {
-					if(p == syll.get(0) || p == syll.get(syll.size()-1)) {
+					if(p == syll.elementAt(0) || p == syll.elementAt(syll.length()-1)) {
 						retVal = true;
 						matchLength = 0;
 					}

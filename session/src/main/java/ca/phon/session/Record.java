@@ -163,6 +163,34 @@ public interface Record extends IExtendable {
 	public Group addGroup(int idx);
 	
 	/**
+	 * Merge the two specified gropus.
+	 * 
+	 * @param grp1
+	 * @param grp2
+	 * 
+	 * @return the word index of grp1 where the merge occured.
+	 * 
+	 * @throws IllegalArgumentException if <code>grp1</grp1>
+	 *  or <code>grp2</code> are not adjacent groups or <code>grp2 <= grp1</code>
+	 * @throws ArrayIndexOutOfBoundsException if either <code>grp1</code>
+	 *  or <code>grp2</code> is out of bounds
+	 */
+	public int mergeGroups(int grp1, int grp2);
+	
+	/**
+	 * Split groups based on group and aligned word index.
+	 * 
+	 * @param grp
+	 * @param wrd
+	 * 
+	 * @return the new group created by the split
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException if either <code>grp</code> or <code>wrd</code>
+	 *  are out of bounds
+	 */
+	public Group splitGroup(int grp, int wrd);
+	
+	/**
 	 * Get the IPA Target tier
 	 * 
 	 * @return the ipa target tier

@@ -53,7 +53,7 @@ public class TestBoundaries {
 		final PhonexMatcher matcher = pattern.matcher(ipa);
 		
 		Assert.assertEquals(true, matcher.find());
-		Assert.assertEquals(ipa.subList(0, 6), matcher.group());
+		Assert.assertEquals(ipa.subsection(0, 6).toString(), new IPATranscript(matcher.group()).toString());
 	}
 	
 	

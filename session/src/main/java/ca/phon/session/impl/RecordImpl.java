@@ -10,9 +10,13 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
+import antlr.ASdebug.IASDebugStream;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Comment;
 import ca.phon.session.Group;
@@ -22,6 +26,7 @@ import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.Word;
 
 /**
  * Basic record implementation
@@ -429,5 +434,116 @@ public class RecordImpl implements Record {
 	@Override
 	public void putTier(Tier<?> tier) {
 		userDefined.put(tier.getName(), tier);
+	}
+
+	@Override
+	public int mergeGroups(int grp1, int grp2) {
+		if(grp2 <= grp1) {
+			throw new IllegalArgumentException("grp2 must be greater than grp1");
+		}
+		if(grp2 - grp1 != 1) {
+			throw new IllegalArgumentException("groups must be adjacent to merge");
+		}
+		if(grp1 < 0 || grp1 >= numberOfGroups()) {
+			throw new ArrayIndexOutOfBoundsException(grp1);
+		}
+		if(grp2 < 0 || grp2 >= numberOfGroups()) {
+			throw new ArrayIndexOutOfBoundsException(grp2);
+		}
+		
+		final Group group1 = getGroup(grp1);
+		final Group group2 = getGroup(grp2);
+		int retVal = group1.getAlignedWordCount();
+		
+		// orthography
+		final Orthography ortho = new Orthography();
+		ortho.addAll(group1.getOrthography());
+		ortho.addAll(group2.getOrthography());
+		group1.setOrthography(ortho);
+		
+		// ipa target
+		final IPATranscript ipaTarget = (new IPATranscriptBuilder()).append(group1.getIPATarget())
+				.appendWordBoundary().append(group2.getIPATarget()).toIPATranscript();
+		group1.setIPATarget(ipaTarget);
+		final IPATranscript ipaActual = (new IPATranscriptBuilder()).append(group1.getIPAActual())
+				.appendWordBoundary().append(group2.getIPAActual()).toIPATranscript();
+		group1.setIPAActual(ipaActual);
+		
+		// TODO alignment
+		
+		// other tiers
+		for(String tierName:getExtraTierNames()) {
+			final String tierVal = group1.getTier(tierName, String.class);
+			if(tierVal != null) {
+				final String newVal = tierVal + " " + group2.getTier(tierName, String.class);
+				group1.setTier(tierName, String.class, newVal);
+			}
+		}
+		
+		removeGroup(grp2);
+		
+		return retVal;
+	}
+	
+	@Override
+	public Group splitGroup(int grp, int wrd) {
+		if(grp < 0 || grp >= numberOfGroups()) {
+			throw new ArrayIndexOutOfBoundsException(grp);
+		}
+		final Group group = getGroup(grp);
+		if(wrd < 0 || wrd >= group.getAlignedWordCount()) {
+			throw new ArrayIndexOutOfBoundsException(wrd);
+		}
+		final Word word = group.getAlignedWord(wrd);
+		
+		final Group newGroup = addGroup(grp+1);
+		
+		// orthography
+		final OrthoElement ele = word.getOrthography();
+		int wordIdx = group.getOrthography().indexOf(ele);
+		final Orthography ortho = new Orthography(group.getOrthography().subList(0, wordIdx));
+		final Orthography newOrtho = new Orthography(group.getOrthography().subList(wordIdx, group.getOrthography().size()));
+		group.setOrthography(ortho);
+		newGroup.setOrthography(newOrtho);
+		
+		// ipa target
+		final IPATranscript ipaT = word.getIPATarget();
+		int ipaTIdx = group.getIPATarget().indexOf(ipaT);
+		final IPATranscript ipaTarget = group.getIPATarget().subsection(0, ipaTIdx);
+		final IPATranscript newIpaTarget = group.getIPATarget().subsection(ipaTIdx, group.getIPATarget().length());
+		group.setIPATarget(ipaTarget);
+		newGroup.setIPATarget(newIpaTarget);
+		
+		// ipa actual
+		final IPATranscript ipaA = word.getIPAActual();
+		int ipaAIdx = group.getIPAActual().indexOf(ipaA);
+		final IPATranscript ipaActual = group.getIPAActual().subsection(0, ipaAIdx);
+		final IPATranscript newIpaActual = group.getIPAActual().subsection(ipaAIdx, group.getIPAActual().length());
+		group.setIPAActual(ipaActual);
+		newGroup.setIPAActual(newIpaActual);
+
+		// TODO alignment
+		
+		// other tiers
+		for(String tierName:getExtraTierNames()) {
+			final String tierVal = group.getTier(tierName, String.class);
+			if(tierVal != null) {
+				final String words[] = tierVal.split("\\p{Space}");
+				
+				String val = "";
+				String newVal = "";
+				for(int i = 0; i < words.length; i++) {
+					if(i < wrd) {
+						val += (val.length() > 0 ? " " : "") + words[i];
+					} else {
+						newVal += (newVal.length() > 0 ? " " : "") + words[i];
+					}
+				}
+				group.setTier(tierName, String.class, val);
+				newGroup.setTier(tierName, String.class, newVal);
+			}
+		}
+		
+		return newGroup;
 	}
 }

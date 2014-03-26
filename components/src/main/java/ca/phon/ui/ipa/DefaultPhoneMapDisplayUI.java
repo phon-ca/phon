@@ -388,11 +388,11 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 						Area pArea = null;
 						if(pIdx == 0) {
-							if(targetSyll.size() > 1)
+							if(targetSyll.length() > 1)
 								pArea = createAreaForLeftEdge(pRect);
 							else
 								pArea = createRoundRectArea(pRect);
-						} else if(pIdx == targetSyll.size() -1) {
+						} else if(pIdx == targetSyll.length() -1) {
 							pArea = createAreaForRightEdge(pRect);
 						} else {
 							pArea = createRectArea(pRect);
@@ -442,11 +442,11 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 						Area pArea = null;
 						if(pIdx == 0) {
-							if(actualSyll.size() > 1)
+							if(actualSyll.length() > 1)
 								pArea = createAreaForLeftEdge(pRect);
 							else
 								pArea = createRoundRectArea(pRect);
-						} else if(pIdx == actualSyll.size()-1) {
+						} else if(pIdx == actualSyll.length()-1) {
 							pArea = createAreaForRightEdge(pRect);
 						} else {
 							pArea = createRectArea(pRect);

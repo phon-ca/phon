@@ -47,6 +47,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.plaf.ComponentUI;
 
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -81,8 +82,29 @@ public class SearchField extends PromptedTextField {
 	
 	public SearchField(String prompt) {
 		super(prompt);
+		updateUI();
 		init();
 		addPropertyChangeListener(STATE_PROPERTY, fieldStateListener);
+	}
+	
+	@Override
+	public String getUIClassID() {
+		return "SearchFieldUI";
+	}
+	
+	@Override
+	public void updateUI() {
+		setUI(new SearchFieldUI());
+	}
+	
+	@Override
+	public void setUI(ComponentUI ui) {
+		super.setUI(ui);
+	}
+	
+	@Override
+	public SearchFieldUI getUI() {
+		return (SearchFieldUI)super.getUI();
 	}
 	
 	@Override
@@ -214,8 +236,7 @@ public class SearchField extends PromptedTextField {
 		int topSpace = 0;
 		int btmSpace = 0;
 		Border emptyBorder = BorderFactory.createEmptyBorder(topSpace, leftSpace, btmSpace, rightSpace);
-		setBorder(BorderFactory.createCompoundBorder(super.getBorder(), 
-				emptyBorder));
+		setBorder(BorderFactory.createCompoundBorder(super.getBorder(), emptyBorder));
 	}
 	
 	/**
@@ -293,8 +314,8 @@ public class SearchField extends PromptedTextField {
 			Shape circle = new Ellipse2D.Float(-w/2-2, 0, h-1, h-1);
 			Area lblShape = new Area(circle);
 			
-			g2d.setColor(super.getBackground());
-			g2d.fillRect(0, 0, w, h);
+//			g2d.setColor(super.getBackground());
+//			g2d.fillRect(0, 0, w, h);
 			
 			GradientPaint gp = new GradientPaint(new Point(0,0), new Color(215, 215, 215), 
 					new Point(0, h), new Color(200, 200, 200));
@@ -356,8 +377,8 @@ public class SearchField extends PromptedTextField {
 //				btnShape.add(new Area(square));
 			}
 			
-			g2d.setColor(super.getBackground());
-			g2d.fillRect(0, 0, w, h);
+//			g2d.setColor(super.getBackground());
+//			g2d.fillRect(0, 0, w, h);
 
 			GradientPaint gp = new GradientPaint(new Point(0,0), new Color(215, 215, 215), 
 					new Point(0, h), new Color(200, 200, 200));

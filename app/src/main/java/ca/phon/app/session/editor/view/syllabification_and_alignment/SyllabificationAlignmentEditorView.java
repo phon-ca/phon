@@ -217,7 +217,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				// target
 				final IPATranscript ipaTarget = group.getIPATarget();
 				final SyllabificationDisplay ipaTargetDisplay = getIPATargetDisplay(gIndex);
-				ipaTargetDisplay.setPhonesForGroup(0, ipaTarget);
+				ipaTargetDisplay.setPhonesForGroup(0, ipaTarget.toList());
 				
 				if(!layout.hasLayoutComponent(ipaTargetDisplay)) {
 					final TierDataConstraint ipaTargetConstraint = 
@@ -230,7 +230,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				// actual
 				final IPATranscript ipaActual = group.getIPAActual();
 				final SyllabificationDisplay ipaActualDisplay = getIPAActualDisplay(gIndex);
-				ipaActualDisplay.setPhonesForGroup(0, ipaActual);
+				ipaActualDisplay.setPhonesForGroup(0, ipaActual.toList());
 				
 				if(!layout.hasLayoutComponent(ipaActualDisplay)) {
 					final TierDataConstraint ipaActualConstraint = 

@@ -23,15 +23,11 @@ public class AddGroupEdit extends SessionEditorUndoableEdit {
 		this.record = record;
 		this.groupIndex = groupIndex;
 	}
-	
-	
 
 	@Override
 	public String getRedoPresentationName() {
 		return "Redo add group";
 	}
-
-
 
 	@Override
 	public String getUndoPresentationName() {

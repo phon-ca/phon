@@ -53,7 +53,7 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 			int grpIdx = recordLookupPanel.lookupTier.numberOfGroups()-1;
 			IPATranscript grp = recordLookupPanel.lookupTier.getGroup(grpIdx);
 			grp = grp.append(IPATranscript.parseIPATranscript(
-					(grp.size() > 0 ? " " : "") + txt));
+					(grp.length() > 0 ? " " : "") + txt));
 			recordLookupPanel.lookupTier.setGroup(grpIdx, grp);
 		} catch (ParseException e) {
 			RecordLookupPanel.LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);

@@ -97,7 +97,18 @@ public void reportError(RecognitionException e) {
  * Each word is expected to be separated by a space
  */
 transcription returns [IPATranscript transcript]
-	:	w1=word {$transcript = $w1.word;} (word_boundary {$transcript.add(factory.createWordBoundary());} w2=word {$transcript.addAll($w2.word);})*
+scope {
+	IPATranscriptBuilder builder;
+}
+@init {
+	$transcription::builder = new IPATranscriptBuilder();
+}
+	:	w1=word {if($w1.w != null) { $transcription::builder.append($w1.w);} } 
+		(word_boundary {$transcription::builder.appendWordBoundary();}
+		w2=word {if($w2.w != null) { $transcription::builder.append($w2.w);} } )*
+	{
+		$transcript = $transcription::builder.toIPATranscript();
+	}
 	;
 	
 /**
@@ -108,9 +119,17 @@ transcription returns [IPATranscript transcript]
  *
  * @returns a list of ca.phon.phone.Phone objects
  */
-word returns [IPATranscript word]
-@init { $word = new IPATranscript(); }
-	:	(we=word_element {$word.add($we.p);})+
+word returns [IPATranscript w]
+scope {
+	IPATranscriptBuilder builder;
+}
+@init { 
+	$word::builder = new IPATranscriptBuilder(); 
+}
+	:	(we=word_element {$word::builder.append($we.p);})+
+	{
+		$w = $word::builder.toIPATranscript();
+	}
 	;
 	
 word_element returns [IPAElement p]

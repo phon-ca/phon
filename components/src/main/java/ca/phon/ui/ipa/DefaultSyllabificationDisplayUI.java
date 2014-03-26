@@ -405,7 +405,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				
 				int sX = syllCurrentX;
 				int sY = phoneRect.y;
-				int sW = syllablePhones.size() * phoneRect.width;
+				int sW = syllablePhones.length() * phoneRect.width;
 				int sH = phoneRect.height;
 
 				syllCurrentX += sW;
@@ -437,8 +437,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				syllAreas.add(fillArea);
 
 				Rectangle savedPhoneRect = new Rectangle(phoneRect);
-				for(int pIdx = 0; pIdx < syllablePhones.size(); pIdx++) {
-					IPAElement p = syllablePhones.get(pIdx);
+				for(int pIdx = 0; pIdx < syllablePhones.length(); pIdx++) {
+					IPAElement p = syllablePhones.elementAt(pIdx);
 
 //					if(pIdx == 0 && p.getScType() == SyllableConstituentType.Ambisyllabic)
 //						continue;
@@ -463,10 +463,10 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 								dOffsetFill, phoneRect.height);
 						phoneArea = new Area(roundPhoneRect2d);
 
-						if(syllablePhones.size() > 1)
+						if(syllablePhones.length() > 1)
 							phoneArea.add(new Area(fillRect));
 
-					} else if(pIdx == syllablePhones.size() - 1) {
+					} else if(pIdx == syllablePhones.length() - 1) {
 						RoundRectangle2D.Double roundPhoneRect2d =
 								new RoundRectangle2D.Double(
 								phoneRect.x, phoneRect.y,
@@ -551,8 +551,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				g2d.setPaint(oldPaint);
 
 				phoneRect = new Rectangle(savedPhoneRect);
-				for(int pIdx = 0; pIdx < syllablePhones.size(); pIdx++) {
-					IPAElement p = syllablePhones.get(pIdx);
+				for(int pIdx = 0; pIdx < syllablePhones.length(); pIdx++) {
+					IPAElement p = syllablePhones.elementAt(pIdx);
 
 //					if(pIdx == 0 && p.getScType() == SyllableConstituentType.Ambisyllabic)
 //						continue;
@@ -802,14 +802,14 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		int pIdx = 0;
 
 		for(int gIdx = 0; gIdx < display.getNumberOfGroups(); gIdx++) {
-			List<IPAElement> grpPhones = display.getPhonesForGroup(gIdx);
+			IPATranscript grpPhones = display.getPhonesForGroup(gIdx);
 
-			int grpSize = widthPerPhone * grpPhones.size();
+			int grpSize = widthPerPhone * grpPhones.length();
 
 			if( (currentX + grpSize) >= p.x ) {
 				// the phone we are looking for is in this group
 
-				for(int grpPIdx = 0; grpPIdx < grpPhones.size(); grpPIdx++) {
+				for(int grpPIdx = 0; grpPIdx < grpPhones.length(); grpPIdx++) {
 					currentX += widthPerPhone;
 					if(currentX >= p.x) {
 						break;
@@ -818,7 +818,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				}
 
 			} else {
-				pIdx += grpPhones.size();
+				pIdx += grpPhones.length();
 				currentX += grpSize + groupSpace;
 			}
 		}

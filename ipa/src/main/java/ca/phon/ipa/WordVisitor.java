@@ -20,7 +20,7 @@ public class WordVisitor extends VisitorAdapter<IPAElement> {
 	 * current syllable
 	 * 
 	 */
-	private IPATranscript currentWord = new IPATranscript();
+	private IPATranscriptBuilder currentWordBuilder = new IPATranscriptBuilder();
 	
 	@Override
 	public void fallbackVisit(IPAElement obj) {
@@ -33,13 +33,13 @@ public class WordVisitor extends VisitorAdapter<IPAElement> {
 	}
 	
 	private void appendWord(IPAElement e) {
-		currentWord.add(e);
+		currentWordBuilder.append(e);
 	}
 	
 	private void breakWord() {
-		if(currentWord.size() > 0) {
-			words.add(currentWord);
-			currentWord = new IPATranscript();
+		if(currentWordBuilder.toIPATranscript().length() > 0) {
+			words.add(currentWordBuilder.toIPATranscript());
+			currentWordBuilder = new IPATranscriptBuilder();
 		}
 	}
 	

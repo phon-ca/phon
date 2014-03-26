@@ -634,7 +634,7 @@ public class PhoneAligner implements Aligner<IPAElement> {
 			return retVal;
 		for(int i = 0; i < syllList.size(); i++) {
 			IPATranscript syll = syllList.get(i);
-			if(syll.contains(p)) {
+			if(syll.indexOf(p) >= 0) {
 				retVal = syll.indexOf(p);
 				break;
 			}
@@ -656,12 +656,12 @@ public class PhoneAligner implements Aligner<IPAElement> {
 			return SyllableStress.NoStress;
 		
 		IPATranscript syll = syllList.get(syllIndex);
-		if(syll.size() == 0) return SyllableStress.NoStress;
+		if(syll.length() == 0) return SyllableStress.NoStress;
 		
-		if(syll.get(0).getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
-			if(syll.get(0).toString().equals(SyllableStress.PrimaryStress.getIpa()+""))
+		if(syll.elementAt(0).getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
+			if(syll.elementAt(0).toString().equals(SyllableStress.PrimaryStress.getIpa()+""))
 				return SyllableStress.PrimaryStress;
-			else if(syll.get(0).toString().equals(SyllableStress.SecondaryStress.getIpa() + ""))
+			else if(syll.elementAt(0).toString().equals(SyllableStress.SecondaryStress.getIpa() + ""))
 				return SyllableStress.SecondaryStress;
 		}
 		

@@ -235,7 +235,7 @@ public class CheckWizard extends WizardFrame {
 		
 		private void resetSyllabification(Tier<IPATranscript> tier) {
 			for(IPATranscript ipa:tier) {
-				syllabifier.syllabify(ipa);
+				syllabifier.syllabify(ipa.toList());
 			}
 		}
 	}

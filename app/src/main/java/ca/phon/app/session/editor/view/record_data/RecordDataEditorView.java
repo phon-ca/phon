@@ -4,13 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -19,6 +25,8 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+
+import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
@@ -39,6 +47,10 @@ import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditor;
 import ca.phon.app.session.editor.view.common.TierEditorFactory;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.view.record_data.actions.DeleteGroupCommand;
+import ca.phon.app.session.editor.view.record_data.actions.MergeGroupCommand;
+import ca.phon.app.session.editor.view.record_data.actions.NewGroupCommand;
+import ca.phon.app.session.editor.view.record_data.actions.SplitGroupCommand;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -59,11 +71,13 @@ import com.jgoodies.forms.layout.FormLayout;
  * Editor view for tier data.
  *
  */
-public class TierDataEditorView extends EditorView {
+public class RecordDataEditorView extends EditorView {
 
 	private static final long serialVersionUID = 2961561720211049250L;
 	
-	private final static String VIEW_NAME = "Record Data";
+	public final static String VIEW_NAME = "Record Data";
+	
+	public final static String VIEW_ICON = "misc/record";
 	
 	/*
 	 * Common data for all records
@@ -86,7 +100,15 @@ public class TierDataEditorView extends EditorView {
 	 */
 	private TierDataLayoutPanel contentPane;
 	
-	public TierDataEditorView(SessionEditor editor) {
+	/*
+	 * Keep track of 'current' group and tier.  This is done by tracking
+	 * focus of the various TierEditors.
+	 */
+	private final AtomicReference<Tier<?>> currentTierRef = new AtomicReference<Tier<?>>();
+	
+	private final AtomicInteger currentGroupIndex = new AtomicInteger(-1);
+	
+	public RecordDataEditorView(SessionEditor editor) {
 		super(editor);
 		init();
 	}
@@ -119,6 +141,10 @@ public class TierDataEditorView extends EditorView {
 		final EditorAction onRecordChangeAct =
 				new DelegateEditorAction(this, "onRecordChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
+		
+		final EditorAction onGroupListChangeAct =
+				new DelegateEditorAction(this, "onGroupsChange");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, onGroupListChangeAct);
 	}
 	
 	/**
@@ -187,14 +213,16 @@ public class TierDataEditorView extends EditorView {
 					tierEditor.addTierEditorListener(tierEditorListener);
 					final Component tierComp = tierEditor.getEditorComponent();
 					tierComp.setFont(tierFont);
+					tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, gIdx));
 					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
 				}
 			} else {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, 0);
-				
+
 				tierEditor.addTierEditorListener(tierEditorListener);
 				final Component tierComp = tierEditor.getEditorComponent();
 				tierComp.setFont(tierFont);
+				tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
 				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 			}
 			row++;
@@ -211,7 +239,7 @@ public class TierDataEditorView extends EditorView {
 			final Session session = editor.getSession();
 			
 			final FormLayout layout = new FormLayout(
-					"pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, right:pref",
+					"pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref",
 					"pref");
 			topPanel = new JPanel(layout);
 			
@@ -228,12 +256,45 @@ public class TierDataEditorView extends EditorView {
 			excludeFromSearchesBox = new JCheckBox(excludeAct);
 			
 			final CellConstraints cc = new CellConstraints();
-			topPanel.add(new JLabel("Speaker"), cc.xy(1,1));
+			topPanel.add(new JLabel("Speaker: "), cc.xy(1,1));
 			topPanel.add(speakerBox, cc.xy(2,1));
 			
 			topPanel.add(excludeFromSearchesBox, cc.xy(4, 1));
 			
-			topPanel.add(layoutButtons, cc.xy(7, 1));
+			// create group management buttons
+			final JPanel btnPanel = new JPanel(new HorizontalLayout());
+			
+			final NewGroupCommand newGroupAct = new NewGroupCommand(this);
+			newGroupAct.putValue(NewGroupCommand.SHORT_DESCRIPTION, newGroupAct.getValue(NewGroupCommand.NAME));
+			newGroupAct.putValue(NewGroupCommand.NAME, null);
+			final JButton newGroupBtn = new JButton(newGroupAct);
+			newGroupBtn.setFocusable(false);
+			btnPanel.add(newGroupBtn);
+			
+			final MergeGroupCommand mergeGroupAct = new MergeGroupCommand(this);
+			mergeGroupAct.putValue(MergeGroupCommand.SHORT_DESCRIPTION, mergeGroupAct.getValue(MergeGroupCommand.NAME));
+			mergeGroupAct.putValue(MergeGroupCommand.NAME, null);
+			final JButton mergeGroupBtn = new JButton(mergeGroupAct);
+			mergeGroupBtn.setFocusable(false);
+			btnPanel.add(mergeGroupBtn);
+			
+			final SplitGroupCommand splitGroupAct = new SplitGroupCommand(this);
+			splitGroupAct.putValue(SplitGroupCommand.SHORT_DESCRIPTION, splitGroupAct.getValue(SplitGroupCommand.NAME));
+			splitGroupAct.putValue(SplitGroupCommand.NAME, null);
+			final JButton splitGroupBtn = new JButton(splitGroupAct);
+			splitGroupBtn.setFocusable(false);
+			btnPanel.add(splitGroupBtn);
+			
+			final DeleteGroupCommand delGroupAct = new DeleteGroupCommand(this);
+			delGroupAct.putValue(DeleteGroupCommand.SHORT_DESCRIPTION, delGroupAct.getValue(DeleteGroupCommand.NAME));
+			delGroupAct.putValue(DeleteGroupCommand.NAME, null);
+			final JButton delGroupBtn = new JButton(delGroupAct);
+			delGroupBtn.setFocusable(false);
+			btnPanel.add(delGroupBtn);
+			
+			topPanel.add(btnPanel, cc.xy(6, 1));
+			
+			topPanel.add(layoutButtons, cc.xy(8, 1));
 		}
 		
 		return topPanel;
@@ -288,6 +349,25 @@ public class TierDataEditorView extends EditorView {
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 	
+	/**
+	 * Return the 'current' tier.  This is the last tier that
+	 * was focused within the editor.
+	 * 
+	 * @param current tier or <code>null</code> if not
+	 *  set
+	 */
+	public Tier<?> currentTier() {
+		return (currentTierRef != null ? currentTierRef.get() : null);
+	}
+	
+	/**
+	 * Return the current group index.
+	 * 
+	 * @param the current group index, < 0 if not set
+	 */
+	public int currentGroupIndex() {
+		return (currentGroupIndex != null ? currentGroupIndex.get() : -1);
+	}
 	
 	/*
 	 * Editor Actions
@@ -304,6 +384,12 @@ public class TierDataEditorView extends EditorView {
 		repaint();
 	}
 	
+	@RunOnEDT
+	public void onGroupsChange(EditorEvent event) {
+		update();
+		repaint();
+	}
+	
 	@Override
 	public String getName() {
 		return VIEW_NAME;
@@ -311,12 +397,36 @@ public class TierDataEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("misc/record", IconSize.SMALL);
+		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
 	}
 
 	@Override
 	public JMenu getMenu() {
-		return null;
+		return new RecordDataMenu(this);
 	}
 
+	private final class TierEditorComponentFocusListener implements FocusListener {
+		
+		private final Tier<?> tier;
+		
+		private final int group;
+		
+		public TierEditorComponentFocusListener(Tier<?> tier, int group) {
+			super();
+			this.tier = tier;
+			this.group = group;
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			currentTierRef.getAndSet(tier);
+			currentGroupIndex.getAndSet(group);
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+		}
+		
+	}
+	
 }

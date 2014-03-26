@@ -24,7 +24,7 @@ public class TestPhoneAligner {
 		
 		final PhoneMap pm = aligner.calculatePhoneMap(model, actual);
 		Assert.assertNotNull(pm);
-		Assert.assertEquals(pm.getAlignmentLength(), model.removePunctuation().size());
+		Assert.assertEquals(pm.getAlignmentLength(), model.removePunctuation().length());
 	
 		// test individual alignment
 		for(final IPAElement ele:model.removePunctuation()) {
@@ -37,17 +37,18 @@ public class TestPhoneAligner {
 		}
 		
 		{
-			final List<IPAElement> top = model.removePunctuation().subList(0, 3);
-			final List<IPAElement> expected = actual.removePunctuation().subList(0, 2);
-			final List<IPAElement> aligned = pm.getAligned(top);
-			Assert.assertEquals(expected, aligned);
-			final List<IPAElement> reverse = pm.getAligned(aligned);
-			final List<IPAElement> expectedReverse = top.subList(1, top.size());
+			final IPATranscript top = model.removePunctuation().subsection(0, 3);
+			final IPATranscript expected = actual.removePunctuation().subsection(0, 2);
+			final IPATranscript aligned = new IPATranscript(pm.getAligned(top.toList()));
+			Assert.assertEquals(expected.toString(), aligned.toString());
+			
+			final List<IPAElement> reverse = pm.getAligned(aligned.toList());
+			final List<IPAElement> expectedReverse = top.subsection(1, top.length()).toList();
 			Assert.assertEquals(expectedReverse, reverse);
 		}
 		
 		{
-			final List<IPAElement> top = model.removePunctuation().subList(6, 8);
+			final List<IPAElement> top = model.removePunctuation().subsection(6, 8).toList();
 			final List<IPAElement> expected = Collections.emptyList();
 			final List<IPAElement> aligned = pm.getAligned(top);
 			Assert.assertEquals(expected, aligned);

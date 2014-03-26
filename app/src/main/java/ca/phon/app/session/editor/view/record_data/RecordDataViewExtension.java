@@ -8,9 +8,13 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
-@PhonPlugin(name="Record Data")
-@EditorViewInfo(name="Record Data", category=EditorViewCategory.RECORD, icon="misc/record")
-public class TierDataPanelExtension implements IPluginExtensionPoint<EditorView> {
+/**
+ * Provides plug-in extension point for {@link RecordDataEditorView}
+ *
+ */
+@PhonPlugin(name=RecordDataEditorView.VIEW_NAME)
+@EditorViewInfo(name=RecordDataEditorView.VIEW_NAME, category=EditorViewCategory.RECORD, icon=RecordDataEditorView.VIEW_ICON)
+public class RecordDataViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -27,7 +31,7 @@ public class TierDataPanelExtension implements IPluginExtensionPoint<EditorView>
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = (SessionEditor)args[0];
-			return new TierDataEditorView(editor);
+			return new RecordDataEditorView(editor);
 		}
 		
 	};

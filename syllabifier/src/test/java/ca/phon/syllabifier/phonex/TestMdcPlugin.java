@@ -27,7 +27,7 @@ public class TestMdcPlugin {
 		final PhonexMatcher matcher = pattern.matcher(ipa);
 		
 		Assert.assertEquals(true, matcher.find());
-		Assert.assertEquals(ipa.subList(0, 2), matcher.group());
+		Assert.assertEquals(ipa.subsection(0, 2).toList(), matcher.group());
 	}
 	
 }

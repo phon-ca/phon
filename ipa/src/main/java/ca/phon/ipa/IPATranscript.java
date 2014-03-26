@@ -3,6 +3,8 @@ package ca.phon.ipa;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -25,9 +27,14 @@ import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 /**
+ * <p>A (somewhat) immutable representation of an IPA transcription.  While the number of elements
+ * in the transcription cannot be changed, runtime extensions provided by the {@link IExtendable}
+ * interface may be swapped.</p>
  * 
+ * <p>Objects of this type should be created using either the {@link IPATranscript#parseIPATranscript(String)}
+ * static method or {@link IPATranscriptBuilder}.</p>
  */
-public final class IPATranscript extends ArrayList<IPAElement> implements Visitable<IPAElement>, IExtendable {
+public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAElement>, IExtendable {
 	
 	/** Static logger */
 	private final static Logger LOGGER = Logger.getLogger(IPATranscript.class
@@ -36,6 +43,8 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	private static final long serialVersionUID = 8942864962427274326L;
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(IPATranscript.class, this);
+	
+	private final IPAElement[] transcription;
 	
 	/**
 	 * Convert a string into an {@link IPATranscript}
@@ -63,23 +72,42 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 * Create an empty transcript
 	 */
 	public IPATranscript() {
-		this(new ArrayList<IPAElement>());
+		this(new IPAElement[0]);
 	}
 	
 	/**
 	 * Create a new transcript for a list of phones.
 	 */
 	public IPATranscript(List<IPAElement> phones) {
-		super(phones);
-		extSupport.initExtensions();
+		this(phones.toArray(new IPAElement[0]));
+	}
+	
+	/**
+	 * Createa  new transcript with the phones from the
+	 * given transcript.
+	 * 
+	 * @param ipa
+	 */
+	public IPATranscript(IPATranscript ipa) {
+		this(Arrays.copyOf(ipa.transcription, ipa.length()));
 	}
 	
 	/**
 	 * Create a new transcript from an array of phones.
 	 */
 	public IPATranscript(IPAElement ... phones) {
-		super(Arrays.asList(phones));
+		super();
+		this.transcription = phones;
 		extSupport.initExtensions();
+	}
+	
+	/**
+	 * Length of transcription (in elements)
+	 * 
+	 * @return length
+	 */
+	public int length() {
+		return transcription.length;
 	}
 	
 	/**
@@ -121,6 +149,39 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		PhonexMatcher matcher = pattern.matcher(this);
 		retVal = matcher.find();
 		
+		return retVal;
+	}
+	
+	/**
+	 * Get the element at specified index
+	 * 
+	 * @param index
+	 * 
+	 * @return element
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public IPAElement elementAt(int index) {
+		return transcription[index];
+	}
+	
+	/**
+	 * Return the index of the given element
+	 * 
+	 * @param ele
+	 * 
+	 * @return index of element or < 0 if not found
+	 */
+	public int indexOf(IPAElement ele) {
+		int retVal = -1;
+		int idx = 0;
+		for(IPAElement e:this) {
+			if(ele == e) {
+				retVal = idx;
+				break;
+			}
+			++idx;
+		}
 		return retVal;
 	}
 	
@@ -183,10 +244,27 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 * @return the index or -1 if not found
 	 */
 	public int indexOf(IPATranscript transcript) {
-		if(transcript.size() > 0) 
-			return super.indexOf(transcript.get(0));
-		else
-			return -1;
+		if(transcript == null || transcript.length() == 0) return -1;
+		int retVal = -1;
+		int idx = 0;
+		for(IPAElement ele:this) {
+			if(ele == transcript.elementAt(0)) {
+				retVal = idx;
+				break;
+			}
+			++idx;
+		}
+		
+		if(retVal >= 0) {
+			// test rest of transcript
+			for(IPAElement ele:transcript) {
+				if(idx >= length() || !(ele == elementAt(idx++))) {
+					return -1;
+				}
+			}
+			return retVal;
+		}
+		return -1;
 	}
 	
 	/**
@@ -208,17 +286,32 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 				continue;
 			
 			final IPATranscript splitValue = 
-					new IPATranscript(this.subList(currentStart, matchStart));
+					new IPATranscript(Arrays.copyOfRange(transcription, currentStart, matchStart));
 			splitVals.add(splitValue);
 			
 			currentStart = matcher.end();
 		}
-		if(currentStart < this.size()) {
+		if(currentStart < this.length()) {
 			final IPATranscript finalValue = 
-					new IPATranscript(this.subList(currentStart, this.size()));
+					new IPATranscript(Arrays.copyOfRange(transcription, currentStart, transcription.length));
 			splitVals.add(finalValue);
 		}
 		return splitVals.toArray(new IPATranscript[0]);
+	}
+	
+	/**
+	 * Return a subsection of this transcription.
+	 * 
+	 * @param start
+	 * @param end
+	 * 
+	 * @return a new IPATranscript which is a sub-section of this transcription
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException if either <code>start</code> or <code>end</code>
+	 *  are out of bounds
+	 */
+	public IPATranscript subsection(int start, int end) {
+		return new IPATranscript(Arrays.copyOfRange(transcription, start, end));
 	}
 	
 	/**
@@ -229,9 +322,10 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 * @param ipa
 	 */
 	public IPATranscript append(IPATranscript ipa) {
-		final IPATranscript retVal = new IPATranscript(this);
-		retVal.addAll(ipa);
-		return retVal;
+		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		return builder.append(this)
+				.append(ipa)
+				.toIPATranscript();
 	}
 	
 	/**
@@ -241,10 +335,9 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 * @return the filtered transcript
 	 */
 	public IPATranscript removePunctuation() {
-		final IPATranscript retVal = new IPATranscript();
-		final PunctuationFilter filter = new PunctuationFilter(retVal);
+		final PunctuationFilter filter = new PunctuationFilter();
 		accept(filter);
-		return retVal;
+		return filter.getIPATranscript();
 	}
 	
 	/**
@@ -303,8 +396,8 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 *  or < 0 if not found
 	 */
 	public int stringIndexOf(IPATranscript transcript) {
-		if(transcript.size() > 0)
-			return stringIndexOfElement(transcript.get(0));
+		if(transcript.length() > 0)
+			return stringIndexOfElement(transcription[0]);
 		else
 			return -1;
 	}
@@ -318,10 +411,10 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 	 *  or < 0 if not found
 	 */
 	public int stringIndexOfElement(int index) {
-		if(index < 0 || index >= size()) 
+		if(index < 0 || index >= length()) 
 			throw new ArrayIndexOutOfBoundsException(index);
 		final IPATranscript before =
-				new IPATranscript(super.subList(0, index));
+				new IPATranscript(Arrays.copyOfRange(transcription, 0, index));
 		return before.toString().length();
 	}
 	
@@ -333,10 +426,10 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		/**
 		 * filtered transcript
 		 */
-		private final IPATranscript transcript;
+		private final IPATranscriptBuilder builder;
 		
-		public PunctuationFilter(IPATranscript t) {
-			this.transcript = t;
+		public PunctuationFilter() {
+			builder = new IPATranscriptBuilder();
 		}
 
 		@Override
@@ -345,12 +438,16 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		
 		@Visits
 		public void visitBasicPhone(Phone phone) {
-			transcript.add(phone);
+			builder.append(phone);
 		}
 		
 		@Visits
 		public void visitCompoundPhone(CompoundPhone phone) {
-			transcript.add(phone);
+			builder.append(phone);
+		}
+		
+		public IPATranscript getIPATranscript() {
+			return builder.toIPATranscript();
 		}
 	}
 
@@ -386,4 +483,20 @@ public final class IPATranscript extends ArrayList<IPAElement> implements Visita
 		accept(visitor);
 		return buffer.toString();
 	}
+	
+	/**
+	 * Get an immutable list representation of this
+	 * IPATranscript.
+	 * 
+	 * @return list
+	 */
+	public List<IPAElement> toList() {
+		return Collections.unmodifiableList(Arrays.asList(transcription));
+	}
+
+	@Override
+	public Iterator<IPAElement> iterator() {
+		return toList().iterator();
+	}
+	
 }

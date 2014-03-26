@@ -1,6 +1,7 @@
 package ca.phon.orthography;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -32,6 +33,10 @@ public class Orthography extends ArrayList<OrthoElement> implements IExtendable,
 	
 	public Orthography() {
 		this("");
+	}
+	
+	public Orthography(Collection<? extends OrthoElement> orthoEles) {
+		super(orthoEles);
 	}
 	
 	public Orthography(String ortho) {

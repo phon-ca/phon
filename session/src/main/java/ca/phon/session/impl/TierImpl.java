@@ -129,7 +129,7 @@ public class TierImpl<T> implements Tier<T> {
 			if(!grouped && tierData.size() > 0) {
 				throw new ArrayIndexOutOfBoundsException("Un-grouped tiers may only have one group.");
 			}
-			if(idx < 0 || idx >= tierData.size()) { 
+			if(idx < 0 || idx > tierData.size()) { 
 				throw new ArrayIndexOutOfBoundsException(idx);
 			}
 			if(val == null) {
