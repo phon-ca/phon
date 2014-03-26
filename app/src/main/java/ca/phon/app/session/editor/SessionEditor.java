@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -24,6 +26,7 @@ import javax.swing.undo.UndoableEditSupport;
 
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
+import ca.phon.app.session.editor.view.record_data.RecordDataMenu;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -273,10 +276,21 @@ public class SessionEditor extends ProjectFrame {
 				final PhonUIAction toggleViewAct = new PhonUIAction(view, getViewModel(), "showView", view);
 				toggleViewAct.putValue(PhonUIAction.SMALL_ICON, getViewModel().getViewIcon(view));
 				
-				final JCheckBoxMenuItem viewItem = new JCheckBoxMenuItem(toggleViewAct);
+				JComponent viewItem = new JMenuItem(toggleViewAct);
 				
 				if(getViewModel().isShowing(view)) {
-					viewItem.setSelected(true);
+					JMenu menu = getViewModel().getView(view).getMenu();
+					if(menu != null) {
+						menu.addSeparator();
+					} else {
+						menu = new JMenu();
+					}
+					menu.setText(toggleViewAct.getValue(PhonUIAction.NAME).toString());
+					menu.setIcon(getViewModel().getViewIcon(view));
+					final Action closeAct = getViewModel().getCloseAction(view);
+					menu.add(closeAct);
+					
+					viewItem = menu;
 				}
 				
 				if(ele.getComponent() instanceof JMenu) {
