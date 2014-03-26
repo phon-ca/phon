@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
@@ -63,6 +64,15 @@ public interface EditorViewModel {
 	 * @param viewName
 	 */
 	public void showView(String viewName);
+	
+	/**
+	 * Get the close action for a view
+	 * 
+	 * @param viewName
+	 * 
+	 * @return the close action for the view
+	 */
+	public Action getCloseAction(String viewView);
 	
 	/**
 	 * Is the specified view showing

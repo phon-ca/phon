@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -19,10 +20,13 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
+import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
 import bibliothek.gui.dock.common.CLocation;
@@ -30,8 +34,12 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
+import bibliothek.gui.dock.common.action.CloseActionFactory;
+import bibliothek.gui.dock.common.action.predefined.CCloseAction;
 import bibliothek.gui.dock.common.event.CDockableStateListener;
+import bibliothek.gui.dock.common.intern.CDockController;
 import bibliothek.gui.dock.common.intern.CDockable;
+import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.perspective.CDockablePerspective;
 import bibliothek.gui.dock.common.perspective.CPerspective;
@@ -154,6 +162,18 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 	}
 	
+	private CDockable getViewDockable(String viewName) {
+		CDockable retVal = null;
+		final CControlRegister register = dockControl.getRegister();
+		for(CDockable currentDockable:register.getDockables()) {
+			if(currentDockable.intern().getTitleText().equals(viewName)) {
+				retVal = currentDockable;
+				break;
+			}
+		}
+		return retVal;
+	}
+	
 	@Override
 	public Container getRoot() {
 		return getDockControl().getContentArea();
@@ -181,6 +201,20 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			}
 		}
 		return retVal;
+	}
+	
+	@Override
+	public Action getCloseAction(String viewName) {
+		final CDockable dockable = getViewDockable(viewName);
+		if(dockable != null) {
+			final CloseActionFactory factory = dockControl.getController().getProperties().get( CControl.CLOSE_ACTION_FACTORY );
+			final CAction closeAct = factory.create(dockControl, dockable);
+	
+			final CActionWrapper wrapper = new CActionWrapper(dockable, closeAct);
+			wrapper.putValue(CActionWrapper.NAME, "Close");
+			return wrapper;
+		}
+		return null;
 	}
 	
 	@Override
@@ -270,7 +304,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void hideView(String viewName) {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -456,5 +489,35 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 	}
 	
+	// wrapp class for CActions
+	private class CActionWrapper extends AbstractAction {
+		
+		private static final long serialVersionUID = -4913295698177388752L;
+
+		// dockable
+		private final CDockable dockable;
+		
+		// action
+		private final CAction action;
+		
+		public CActionWrapper(CDockable dockable, CAction action) {
+			super();
+			this.dockable = dockable;
+			this.action = action;
+			
+			if(action instanceof CDecorateableAction) {
+				final CDecorateableAction<?> decAct = (CDecorateableAction<?>)action;
+				putValue(NAME, decAct.getText());
+				putValue(SMALL_ICON, decAct.getIcon());
+				putValue(ACCELERATOR_KEY, decAct.getAccelerator());
+			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			action.intern().trigger(dockable.intern());
+		}
+		
+	}
 	
 }
