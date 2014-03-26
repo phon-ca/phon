@@ -68,6 +68,7 @@ public class TierDataLayoutButtons extends JComponent {
 		wrapAct.putValue(PhonUIAction.SHORT_DESCRIPTION, WRAP_DESC);
 		wrapButton = buttons.get(0);
 		wrapButton.setAction(wrapAct);
+		wrapButton.setFocusable(false);
 		
 		final ImageIcon alignIcon = IconManager.getInstance().getIcon(ALIGN_ICON, IconSize.SMALL);
 		final PhonUIAction alignAct = new PhonUIAction(this, "alignGroups");
@@ -75,6 +76,7 @@ public class TierDataLayoutButtons extends JComponent {
 		alignAct.putValue(PhonUIAction.SHORT_DESCRIPTION, ALIGN_DESC);
 		alignButton = buttons.get(1);
 		alignButton.setAction(alignAct);
+		alignButton.setFocusable(false);
 		
 		if(getLayout().getLayoutType() == TierDataLayoutType.ALIGN_GROUPS)
 			alignButton.setSelected(true);
