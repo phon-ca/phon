@@ -24,6 +24,9 @@ import ca.phon.app.session.editor.EditorViewCategory;
 import ca.phon.app.session.editor.EditorViewInfo;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.ipa_lookup.actions.AutoTranscribeCommand;
+import ca.phon.app.session.editor.view.ipa_lookup.actions.ExportIPACommand;
+import ca.phon.app.session.editor.view.ipa_lookup.actions.ImportIPACommand;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.ipadictionary.ui.IPALookupContext;
@@ -56,8 +59,6 @@ public class IPALookupView extends EditorView {
 	
 	private JToolBar toolbar;
 	
-	private JMenu menu;
-	
 	private JComboBox langBox;
 	
 	private JButton autoTranscribeBtn;
@@ -83,7 +84,6 @@ public class IPALookupView extends EditorView {
 	
 	private void init() {
 		setupToolbar();
-		setupMenu();
 		
 		setLayout(new BorderLayout());
 		add(toolbar, BorderLayout.NORTH);
@@ -120,37 +120,33 @@ public class IPALookupView extends EditorView {
 			
 		});
 
-		autoTranscribeBtn = new JButton();
-		PhonUIAction autoTranscribeAct =
-				new PhonUIAction(this, "onAutoTranscribe");
-		autoTranscribeAct.putValue(Action.NAME, "Auto Transcribe Session");
-		autoTranscribeBtn.setAction(autoTranscribeAct);
+		autoTranscribeBtn = new JButton(new AutoTranscribeCommand(this));
+//		PhonUIAction autoTranscribeAct =
+//				new PhonUIAction(this, "onAutoTranscribe");
+//		autoTranscribeAct.putValue(Action.NAME, "Auto Transcribe Session");
+//		autoTranscribeBtn.setAction(autoTranscribeAct);
 		
-		importIPABtn = new JButton();
-		PhonUIAction importIPAAct = 
-			new PhonUIAction(this, "onImportIPA");
-		importIPAAct.putValue(Action.NAME, "Import IPA");
-		importIPAAct.putValue(Action.SHORT_DESCRIPTION, "Import custom IPA transcriptions...");
-		importIPABtn.setAction(importIPAAct);
+		importIPABtn = new JButton(new ImportIPACommand(this));
+//		PhonUIAction importIPAAct = 
+//			new PhonUIAction(this, "onImportIPA");
+//		importIPAAct.putValue(Action.NAME, "Import IPA");
+//		importIPAAct.putValue(Action.SHORT_DESCRIPTION, "Import custom IPA transcriptions...");
+//		importIPABtn.setAction(importIPAAct);
 		
-		exportIPABtn = new JButton();
-		PhonUIAction exportIPAAct =
-			new PhonUIAction(this, "onExportIPA");
-		exportIPAAct.putValue(Action.NAME, "Export IPA");
-		exportIPAAct.putValue(Action.SHORT_DESCRIPTION, "Export custom IPA transcriptions...");
-		exportIPABtn.setAction(exportIPAAct);
+		exportIPABtn = new JButton(new ExportIPACommand(this));
+//		PhonUIAction exportIPAAct =
+//			new PhonUIAction(this, "onExportIPA");
+//		exportIPAAct.putValue(Action.NAME, "Export IPA");
+//		exportIPAAct.putValue(Action.SHORT_DESCRIPTION, "Export custom IPA transcriptions...");
+//		exportIPABtn.setAction(exportIPAAct);
 
 		toolbar.add(new JLabel("IPA Dictionary:"));
 		toolbar.add(langBox);
-		toolbar.add(importIPAAct);
-		toolbar.add(exportIPAAct);
+		toolbar.add(importIPABtn);
+		toolbar.add(exportIPABtn);
 		toolbar.addSeparator();
 		toolbar.add(autoTranscribeBtn);
 		toolbar.setFloatable(false);
-	}
-	
-	private void setupMenu() {
-		menu = new JMenu();
 	}
 	
 	private void setupTierTab() {
@@ -166,25 +162,14 @@ public class IPALookupView extends EditorView {
 		tabPane.addTab("Console", lookupPanel);
 	}
 	
-	/*
-	 * UI actions
-	 */
-	public void onImportIPA() {
-		
-	}
-	
-	public void onExportIPA() {
-		
-	}
-	
 	public void onLanguageSwitch() {
 		final Language lang = (Language)langBox.getSelectedItem();
 		lookupContext.switchDictionary(lang.toString());
 		recordLookupPanel.setDictionary(lookupContext.getDictionary());
 	}
 	
-	public void onAutoTranscribe() {
-		
+	public IPALookupContext getLookupContext() {
+		return this.lookupContext;
 	}
 	
 	/*
@@ -216,7 +201,7 @@ public class IPALookupView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		return menu;
+		return new IPALookupViewMenu(this);
 	}
 
 }

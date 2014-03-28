@@ -1,0 +1,87 @@
+package ca.phon.app.session.editor.view.ipa_lookup;
+
+import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
+import org.jdesktop.swingx.HorizontalLayout;
+
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+
+public class AutoTranscriptionDialog extends JDialog {
+	
+	private static final long serialVersionUID = -1911013892296544588L;
+
+	/*
+	 * UI Components
+	 */
+	private DialogHeader dialogHeader;
+	
+	private AutoTranscriptionForm form;
+	
+	private JButton okButton;
+	
+	private JButton cancelButton;
+	
+	private boolean canceled = true;
+	
+	public AutoTranscriptionDialog(Project project, Session session) {
+		super();
+		
+		form = new AutoTranscriptionForm(project, session);
+		
+		init();
+	}
+	
+	private void init() {
+		setLayout(new BorderLayout());
+		
+		dialogHeader = new DialogHeader("Automatic Transcription", "Automatically transcribe IPA Target/Actual tiers");
+		add(dialogHeader, BorderLayout.NORTH);
+		
+		add(form, BorderLayout.CENTER);
+		
+		final PhonUIAction okAct = new PhonUIAction(this, "onOk");
+		okAct.putValue(PhonUIAction.NAME, "Ok");
+		okButton = new JButton(okAct);
+		
+		final PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
+		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
+		cancelButton = new JButton(cancelAct);
+		
+		final JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		btnPanel.add(cancelButton);
+		btnPanel.add(okButton);
+		
+		add(btnPanel, BorderLayout.SOUTH);
+	}
+	
+	public AutoTranscriptionForm getForm() {
+		return this.form;
+	}
+	
+	/*
+	 * Button callbacks
+	 */
+	public void onOk() {
+		canceled = false;
+		setVisible(false);
+	}
+	
+	public void onCancel() {
+		canceled = true;
+		setVisible(false);
+	}
+	
+	public boolean wasCanceled() {
+		return this.canceled;
+	}
+	
+}

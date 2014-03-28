@@ -95,8 +95,8 @@ public class AutoTranscriptionForm extends JPanel {
 
 		Set<Language> syllabifiers = SyllabifierLibrary.getInstance().availableSyllabifierLanguages();
 //		Collections.sort(syllabifiers);
-		syllabifierBox = new JComboBox(syllabifiers.toArray(new String[0]));
-		syllabifierBox.setSelectedItem(SyllabifierLibrary.getInstance().defaultSyllabifierLanguage());
+		syllabifierBox = new JComboBox(syllabifiers.toArray(new Language[0]));
+//		syllabifierBox.setSelectedItem(SyllabifierLibrary.getInstance().defaultSyllabifierLanguage());
 //		syllabifierBox.setSelectedItem(SyllabifierLibrary.getInstance().
 //		PhonUIAction selectSyllabifierAct =
 //				new PhonUIAction(this, "selectSyllabifier");

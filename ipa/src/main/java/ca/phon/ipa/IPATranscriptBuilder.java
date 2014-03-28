@@ -160,4 +160,13 @@ public class IPATranscriptBuilder {
 		return new IPATranscript(buffer);
 	}
 	
+	/**
+	 * Return the length of the current {@link IPATranscript} in the
+	 * buffer.
+	 * 
+	 * @return size of buffer
+	 */
+	public int size() {
+		return buffer.size();
+	}
 }
