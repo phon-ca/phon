@@ -132,7 +132,7 @@ public class TableSearchField extends SearchField {
 	}
 	
 	public void updateTableFilter() {
-		setTableFilter(getText());
+		setTableFilter(getQuery());
 	}
 	
 	public RowFilter<TableModel, Integer> getRowFilter(String expr) {

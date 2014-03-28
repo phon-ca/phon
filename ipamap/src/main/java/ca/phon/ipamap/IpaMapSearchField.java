@@ -43,10 +43,10 @@ public class IpaMapSearchField extends SearchField {
 
 	public IpaMapSearchField() {
 		super();
-		super.setFocusable(false);
+//		super.setFocusable(false);
 		WindowFocusHandler wfh = new WindowFocusHandler();
-		addMouseListener(wfh);
-		addFocusListener(wfh);
+		super.queryField.addMouseListener(wfh);
+		super.queryField.addFocusListener(wfh);
 	}
 
 	public IpaMapSearchField(String prompt) {

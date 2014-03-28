@@ -40,17 +40,29 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.text.Document;
+
+import org.jdesktop.swingx.HorizontalLayout;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconSize;
 
 /**
@@ -59,16 +71,18 @@ import ca.phon.util.icons.IconSize;
  * text is empty.
  *
  */
-public class SearchField extends PromptedTextField {
+public class SearchField extends JPanel {
 	
 	private static final long serialVersionUID = 839864308294242792L;
 
 	/**
 	 * Search context button
 	 */
-	private SearchFieldButton ctxButton;
+	protected SearchFieldButton ctxButton;
 	
-	private SearchFieldButton endButton;
+	protected SearchFieldButton endButton;
+	
+	protected final PromptedTextField queryField;
 	
 	/**
 	 * Search icon
@@ -81,37 +95,19 @@ public class SearchField extends PromptedTextField {
 	}
 	
 	public SearchField(String prompt) {
-		super(prompt);
+		super();
+		
+		setBackground(Color.white);
+		setOpaque(true);
+		setFocusable(true);
+		
+		queryField = new PromptedTextField(prompt);
+		queryField.setBackground(Color.white);
+		queryField.setOpaque(true);
+		queryField.addPropertyChangeListener(PromptedTextField.STATE_PROPERTY, fieldStateListener);
+		
 		updateUI();
 		init();
-		addPropertyChangeListener(STATE_PROPERTY, fieldStateListener);
-	}
-	
-	@Override
-	public String getUIClassID() {
-		return "SearchFieldUI";
-	}
-	
-	@Override
-	public void updateUI() {
-		setUI(new SearchFieldUI());
-	}
-	
-	@Override
-	public void setUI(ComponentUI ui) {
-		super.setUI(ui);
-	}
-	
-	@Override
-	public SearchFieldUI getUI() {
-		return (SearchFieldUI)super.getUI();
-	}
-	
-	@Override
-	public Dimension getPreferredSize() {
-		Dimension retVal = super.getPreferredSize();
-		retVal.height = Math.max(retVal.height, 25);
-		return retVal;
 	}
 	
 	private BufferedImage clearIcn = null;
@@ -183,60 +179,56 @@ public class SearchField extends PromptedTextField {
 	}
 	
 	private void init() {
-		// load search icon
-		searchIcn = 
-			createSearchIcon();
-		PhonUIAction ctxAction = new PhonUIAction(this, "onShowContextMenu");
-//		ctxAction.putValue(PhonUIAction.SMALL_ICON, searchIcn);
-		ctxAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Click for options");
-	
-		final int borderInset = 10;
+		final FormLayout layout = new FormLayout(
+				"pref, 3dlu, fill:pref:grow, 3dlu, pref", "pref");
+		setLayout(layout);
+		final CellConstraints cc = new CellConstraints();
 		
-		ctxButton = new SearchFieldButton(SwingConstants.LEFT, createSearchIcon());
-		ctxButton.setAction(ctxAction);
+		// load search icon
+		final ImageIcon searchIcon = new ImageIcon(createSearchIcon());
+		final PhonUIAction ctxAction = new PhonUIAction(this, "onShowContextMenu");
+		ctxAction.putValue(PhonUIAction.SMALL_ICON, searchIcon);
+		ctxAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Click for options");
+		ctxButton = new SearchFieldButton(ctxAction);
 		ctxButton.setCursor(Cursor.getDefaultCursor());
 		ctxButton.setFocusable(false);
-		super.addComponentListener(new ComponentListener() {
-			
-			@Override
-			public void componentShown(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void componentResized(ComponentEvent arg0) {
-				ctxButton.setBounds(0, 0, searchIcn.getWidth()+borderInset, getHeight());
-				endButton.setBounds(getWidth()-(IconSize.SMALL.getWidth()+borderInset), 0,
-						IconSize.SMALL.getWidth()+borderInset, getHeight());
-			}
-			
-			@Override
-			public void componentMoved(ComponentEvent arg0) {
-				
-			}
-			
-			@Override
-			public void componentHidden(ComponentEvent arg0) {
-			}
-		});
-		add(ctxButton);
+		add(ctxButton, cc.xy(1,1));
 		
-		PhonUIAction clearTextAct = new PhonUIAction(this, "onClearText");
+		add(queryField, cc.xy(3,1));
+		
+		final ImageIcon clearIcon = new ImageIcon(createClearIcon());
+		final PhonUIAction clearTextAct = new PhonUIAction(this, "onClearText");
+		clearTextAct.putValue(PhonUIAction.SMALL_ICON, clearIcon);
 		clearTextAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear field");
-		endButton = new SearchFieldButton(SwingConstants.RIGHT, null);
-		endButton.setAction(clearTextAct);
+		endButton = new SearchFieldButton(clearTextAct);
 		endButton.setCursor(Cursor.getDefaultCursor());
-		add(endButton);
+		endButton.setDrawIcon(false);
+		add(endButton, cc.xy(5,1));
 		
-		// setup an empty border allowing for the
-		// extra space needed for drawing
-		int leftSpace = searchIcn.getWidth()+borderInset;
-		int rightSpace = IconSize.SMALL.getWidth()+borderInset;
-		int topSpace = 0;
-		int btmSpace = 0;
-		Border emptyBorder = BorderFactory.createEmptyBorder(topSpace, leftSpace, btmSpace, rightSpace);
-		setBorder(BorderFactory.createCompoundBorder(super.getBorder(), emptyBorder));
+		setBorder(queryField.getBorder());
+		queryField.setBorder(null);
+	}
+	
+	@Override
+	public void setFocusable(boolean b) {
+		super.setFocusable(true);
+	}
+	
+	/**
+	 * Get the query text
+	 * 
+	 * @return query text
+	 */
+	public String getQuery() {
+		return queryField.getText();
+	}
+	
+	public Action getAction() {
+		return queryField.getAction();
+	}
+	
+	public void setAction(Action action) {
+		queryField.setAction(action);
 	}
 	
 	/**
@@ -254,6 +246,26 @@ public class SearchField extends PromptedTextField {
 		menu.show(ctxButton, 0, ctxButton.getHeight());
 	}
 	
+	public String getPrompt() {
+		return queryField.getPrompt();
+	}
+
+	public void setPrompt(String prompt) {
+		queryField.setPrompt(prompt);
+	}
+
+	public int getColumns() {
+		return queryField.getColumns();
+	}
+
+	public void setColumns(int columns) {
+		queryField.setColumns(columns);
+	}
+	
+	public Document getDocument() {
+		return queryField.getDocument();
+	}
+
 	/**
 	 * Setup popup menu.
 	 * 
@@ -267,8 +279,24 @@ public class SearchField extends PromptedTextField {
 		menu.add(clearTextItem);
 	}
 	
+	public void setState(String state) {
+		queryField.setState(state);
+	}
+
+	public FieldState getState() {
+		return queryField.getState();
+	}
+
+	public String getText() {
+		return queryField.getText();
+	}
+
+	public void setText(String s) {
+		queryField.setText(s);
+	}
+
 	public void onClearText(PhonActionEvent pae) {
-		setText("");
+		queryField.setText("");
 	}
 	
 	/**
@@ -279,140 +307,51 @@ public class SearchField extends PromptedTextField {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(evt.getPropertyName().equals(PromptedTextField.STATE_PROPERTY)) {
-				PromptedTextField.FieldState state = getState();
+				PromptedTextField.FieldState state = queryField.getState();
 				if(state == FieldState.PROMPT) {
-					endButton.setIcn(null);
-					endButton.setEnabled(false);
+					endButton.setDrawIcon(false);
 				} else if(state == FieldState.INPUT) {
-					endButton.setIcn(createClearIcon());
-					endButton.setEnabled(true);
+					endButton.setDrawIcon(true);
 				}
+				endButton.repaint();
 			}
 		}
+		
 	};
 	
-	/**
-	 * Shaped label to give button a rounded look on both sides
-	 */
-	private class EndLabel extends JLabel {
+	private final class SearchFieldButton extends JButton {
 		
-		public EndLabel() {
-			super();
-			this.setFocusable(false);
+		private boolean drawIcon = true;
+		
+		public SearchFieldButton(Action a) {
+			super(a);	
+		}
+		
+		public boolean isDrawIcon() {
+			return drawIcon;
+		}
+		
+		public void setDrawIcon(boolean v) {
+			this.drawIcon = v;
 		}
 		
 		@Override
 		public void paintComponent(Graphics g) {
-			// setup graphics context
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setColor(Color.white);
 			
-			// create button shape
-			int w = super.getWidth();
-			int h = super.getHeight();
+			int width = getWidth();
+			int height = getHeight();
 			
-			Shape circle = new Ellipse2D.Float(-w/2-2, 0, h-1, h-1);
-			Area lblShape = new Area(circle);
+			g.fillRect(0, 0, width, height);
 			
-//			g2d.setColor(super.getBackground());
-//			g2d.fillRect(0, 0, w, h);
-			
-			GradientPaint gp = new GradientPaint(new Point(0,0), new Color(215, 215, 215), 
-					new Point(0, h), new Color(200, 200, 200));
-//			g2d.setColor(gp);
-//			g2d.setPaint(gp);
-			g2d.setColor(SearchField.this.getBackground());
-			g2d.fill(lblShape);
-			
-			g2d.setColor(Color.gray);
-			g2d.draw(lblShape);
+			if(isDrawIcon()) {
+				final Icon icon = getIcon();
+				int x = (width/2) - (icon.getIconWidth()/2);
+				int y = (height/2) - (icon.getIconHeight()/2);
+				icon.paintIcon(this, g, x, y);
+			}
 		}
 		
 	}
 	
-	/**
-	 * Custom shaped button for the search field
-	 */
-	private class SearchFieldButton extends JButton {
-		
-		private int side = SwingConstants.LEFT;
-		
-		private Image icn = null;
-		
-		public SearchFieldButton(int side, Image icn) {
-			this.side = side;
-			this.icn = icn;
-			super.setOpaque(false);
-		}
-
-		public void setIcn(Image icn) {
-			this.icn = icn;
-		}
-		
-		public Image getIcn() {
-			return this.icn;
-		}
-		
-		@Override
-		protected void paintComponent(Graphics arg0) {
-			// setup graphics context
-			Graphics2D g2d = (Graphics2D)arg0;
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			
-			// create button shape
-			int w = super.getWidth();
-			int h = super.getHeight();
-			
-			Area btnShape = new Area();
-			if(side == SwingConstants.LEFT) {
-//				Shape circle = new Ellipse2D.Float(1, 0, h-1.0f, h-1.0f);
-				Shape roundRect = new RoundRectangle2D.Float(1.0f, 0.0f, w*2, h-1, h, h);
-//				Shape square = new Rectangle2D.Float(h/2.0f+1.0f, 0.0f, w-(h/2.0f)+1, h-1.0f);
-				btnShape.add(new Area(roundRect));
-//				btnShape.add(new Area(square));
-			} else if(side == SwingConstants.RIGHT) {
-				Shape roundRect = new RoundRectangle2D.Float(-w, 0.0f, w*2-1, h-1, h, h);
-//				Shape square = new Rectangle2D.Float(0.0f, 0.0f, w/2, h-1.0f);
-				btnShape.add(new Area(roundRect));
-//				btnShape.add(new Area(square));
-			}
-			
-//			g2d.setColor(super.getBackground());
-//			g2d.fillRect(0, 0, w, h);
-
-			GradientPaint gp = new GradientPaint(new Point(0,0), new Color(215, 215, 215), 
-					new Point(0, h), new Color(200, 200, 200));
-//			g2d.setColor(gp);
-//			g2d.setPaint(gp);
-			g2d.setColor(SearchField.this.getBackground());
-			g2d.fill(btnShape);
-			
-			// there is sometimes a single pixel artifact left
-			// over from the shape intersection.  fix this
-			if(side == SwingConstants.LEFT) {
-				g2d.fillRect(h/2, 1, 2, h-1);
-			} else if(side == SwingConstants.RIGHT) {
-				g2d.fillRect(getWidth()-(h/2)-1, 1, 2, h-1);
-			}
-			
-			g2d.setColor(Color.gray);
-			g2d.draw(btnShape);
-			
-			if(icn != null ) {
-				int btnY = h/2 - icn.getHeight(this)/2;
-				int btnX = w/2 - icn.getWidth(this)/2;
-				g2d.drawImage(icn, btnX, btnY, null);
-			}
-			
-//			Rectangle2D rectToRemove = new Rectangle2D.Float(0, h/2, w, h/2);
-//			Area areaToRemove = new Area(rectToRemove);
-//			Area topArea = (Area)btnShape.clone();
-//			topArea.subtract(areaToRemove);
-//			 gp = new GradientPaint(new Point(0,0), new Color(255, 255, 255, 75), 
-//					new Point(0, h/2), new Color(255, 255, 255, 25));
-//			g2d.setPaint(gp);
-//			g2d.fill(topArea);
-		}
-		
-	}
 }
