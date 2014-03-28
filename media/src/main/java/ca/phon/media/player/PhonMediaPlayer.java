@@ -149,7 +149,6 @@ public class PhonMediaPlayer extends JPanel {
 		init();
 	}
 	
-	
 	@Override
 	public void removeNotify() {
 		// clean up player

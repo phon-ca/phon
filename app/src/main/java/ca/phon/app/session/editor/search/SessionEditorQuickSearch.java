@@ -70,6 +70,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.ui.text.SearchField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
@@ -401,7 +402,7 @@ public class SessionEditorQuickSearch {
 		return editorRef.get();
 	}
 	
-	public JTextField getSearchField() {
+	public SearchField getSearchField() {
 		return this.searchField;
 	}
 	

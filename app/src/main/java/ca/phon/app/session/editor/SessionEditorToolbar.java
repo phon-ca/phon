@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
@@ -56,24 +57,27 @@ public class SessionEditorToolbar extends JPanel {
 		BoxLayout buttonLayout = new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS);
 		buttonPanel.setLayout(buttonLayout);
 		
-		// load button icons
-		final ImageIcon saveIcon = 
-			IconManager.getInstance().getIcon("actions/filesave", IconSize.SMALL);
-		final ImageIcon reloadLayoutIcon = 
-			IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
-		final ImageIcon newRecordIcon = 
-			IconManager.getInstance().getIcon("misc/record-add", IconSize.SMALL);
-		final ImageIcon deleteRecordIcon = 
-			IconManager.getInstance().getIcon("misc/record-delete", IconSize.SMALL);
-		final ImageIcon duplicateRecordIcon = 
-			IconManager.getInstance().getIcon("misc/record-duplicate", IconSize.SMALL);
+//		// load button icons
+//		final ImageIcon saveIcon = 
+//			IconManager.getInstance().getIcon("actions/filesave", IconSize.SMALL);
+//		final ImageIcon reloadLayoutIcon = 
+//			IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
+//		final ImageIcon newRecordIcon = 
+//			IconManager.getInstance().getIcon("misc/record-add", IconSize.SMALL);
+//		final ImageIcon deleteRecordIcon = 
+//			IconManager.getInstance().getIcon("misc/record-delete", IconSize.SMALL);
+//		final ImageIcon duplicateRecordIcon = 
+//			IconManager.getInstance().getIcon("misc/record-duplicate", IconSize.SMALL);
 		
 		// save button
-		final PhonUIAction saveAction = new PhonUIAction(this, "saveSession");
-		saveAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save session");
-		saveAction.putValue(PhonUIAction.SMALL_ICON, saveIcon);
+		final SaveSessionAction saveAction = new SaveSessionAction(getEditor());
 		saveButton = new JButton(saveAction);
-		saveButton.setEnabled(getEditor().isModified());  // enable on modified flag change
+		saveButton.setText(null);
+//		final PhonUIAction saveAction = new PhonUIAction(this, "saveSession");
+//		saveAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save session");
+//		saveAction.putValue(PhonUIAction.SMALL_ICON, saveIcon);
+//		saveButton = new JButton(saveAction);
+//		saveButton.setEnabled(getEditor().isModified());  // enable on modified flag change
 		
 		buttonPanel.add(saveButton);
 		add(buttonPanel, cc.xy(1, 1));
@@ -85,8 +89,4 @@ public class SessionEditorToolbar extends JPanel {
 		add(quickSearch.getSearchField(), cc.xy(4, 1));
 	}
 	
-	/* Button actions */
-	public void saveSession() {
-		// TODO 
-	}
 }
