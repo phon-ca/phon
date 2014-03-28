@@ -71,7 +71,8 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	public void undo() {
 		tier.setGroup(groupIndex, getOldValue());
 		
-		queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());
+		if(getEditor() != null)
+			queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());
 	}
 	
 	@Override
@@ -79,7 +80,8 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 		setOldValue(tier.getGroup(groupIndex));
 		tier.setGroup(groupIndex, newValue);
 		
-		queueEvent(EditorEventType.TIER_CHANGE_EVT, getSource(), tier.getName());
+		if(getEditor() != null)
+			queueEvent(EditorEventType.TIER_CHANGE_EVT, getSource(), tier.getName());
 	}
 
 }
