@@ -513,8 +513,6 @@
    <!--ð-->
    <feature_set char="&#xf0;">consonant lingual coronal anterior dental distributed voiced
       continuant obstruent fricative </feature_set>
-   <feature_set char="&#xfe;">consonant lingual coronal anterior dental distributed voiceless
-      continuant obstruent fricative </feature_set>
    <!--þ-->
    <!--ħ-->
    <feature_set char="&#x127;">consonant guttural pharyngeal voiceless continuant obstruent
@@ -528,9 +526,6 @@
       implosive </feature_set>
    <feature_set char="&#x192;">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
    <!--ƒ-->
-   <feature_set char="&#x195;">consonant glide labial bilabial round voiceless approximant
-      continuant </feature_set>
-   <!--ƕ-->
    <!--ƙ (obsolete)-->
    <feature_set char="&#x199;">consonant dorsal implosive ingressive obstruent lingual velar
       voiceless </feature_set>
@@ -761,28 +756,12 @@
       affricate </feature_set>
    <feature_set char="&#x3c0;">consonant labial dental voiced stop obstruent </feature_set>
    <!--π-->
-   <feature_set char="&#x3c3;">consonant labial round lingual coronal anterior alveolar voiceless
-      continuant obstruent fricative </feature_set>
-   <!--σ-->
    <!--χ-->
    <feature_set char="&#x3c7;">consonant uvular lingual dorsal voiceless continuant obstruent
       fricative </feature_set>
    <!--Hooked V-->
    <feature_set char="&#x2c71;">consonant continuant approximant flap labial dental sonorant voiced </feature_set>
-   <feature_set char="&#xf20b;">consonant dental lingual coronal anterior alveolar voiceless
-      obstruent affricate strident </feature_set>
    <!--c with vertical line-->
-   <feature_set char="&#xf20c;">consonant posterior retroflex lingual coronal voiced stop obstruent
-      implosive </feature_set>
-   <!--hooktop+right tail q? d?-->
-   <feature_set char="&#xf210;">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
-   <!--p with horizontal line-->
-   <feature_set char="&#xf240;">consonant labial dental voiced stop obstruent </feature_set>
-   <!--d+b-->
-   <feature_set char="&#xf241;">consonant labial dental voiceless stop obstruent </feature_set>
-   <!--q+p-->
-   <feature_set char="&#xf246;">consonant voiceless stop obstruent </feature_set>
-   <!--left-tail 4-->
 
    <!--Vowels-->
    <!--V-->
@@ -858,8 +837,6 @@
    <!--ʮ-->
    <feature_set char="&#x3b1;">vowel low lax central </feature_set>
    <!--α-->
-   <feature_set char="&#xf23f;">vowel round high tense atr front </feature_set>
-   <!--barred small capital U-->
 
    <!--Diacritics and Misc-->
    <feature_set char="&#x28;">diacritic </feature_set>
@@ -915,8 +892,6 @@
    <feature_set char="&#x2cb;">diacritic toneextrahigh </feature_set>
    <!--ˌ-->
    <feature_set char="&#x2cc;">diacritic secstress </feature_set>
-   <feature_set char="&#x2ce;">diacritic </feature_set>
-   <feature_set char="&#x2cf;">diacritic </feature_set>
    <!--ː-->
    <feature_set char="&#x2d0;">diacritic long </feature_set>
    <!--ˑ-->
@@ -940,9 +915,7 @@
    <feature_set char="&#x2e7;">diacritic tonemid </feature_set>
    <feature_set char="&#x2e8;">diacritic tonelow </feature_set>
    <feature_set char="&#x2e9;">diacritic toneextralow </feature_set>
-   <feature_set char="&#x2ea;">diacritic </feature_set>
    <feature_set char="&#x2ed;">diacritic unaspirated </feature_set>
-   <feature_set char="&#x2ee;">diacritic </feature_set>
    <feature_set char="&#x2ef;">diacritic voiced </feature_set>
    <feature_set char="&#x2f0;">diacritic </feature_set>
    <feature_set char="&#x2f1;">diacritic </feature_set>
@@ -1003,7 +976,6 @@
    <feature_set char="&#x320;">diacritic retracted </feature_set>
    <!--◌̠-->
    <feature_set char="&#x321;">diacritic palatal </feature_set>
-   <feature_set char="&#x322;">diacritic palatal </feature_set>
    <!--◌̣ under-dot-->
    <feature_set char="&#x323;">diacritic lenis </feature_set>
    <!--  over-dot -->
@@ -1039,8 +1011,6 @@
    <feature_set char="&#x33d;">diacritic mid central </feature_set>
    <feature_set char="&#x33e;">diacritic </feature_set>
    <feature_set char="&#x33f;">diacritic unaspirated </feature_set>
-   <feature_set char="&#x342;">diacritic </feature_set>
-   <feature_set char="&#x345;">diacritic </feature_set>
    <!--◌͆ superscript bridge-->
    <feature_set char="&#x346;">diacritic lowerdental </feature_set>
    <!--◌͇ subscript equals-->
@@ -1057,7 +1027,6 @@
    <feature_set char="&#x34c;">diacritic velopharyngeal velopharyngealfricative </feature_set>
    <!--◌͍-->
    <feature_set char="&#x34d;">diacritic labialspread </feature_set>
-   <feature_set char="&#x34f;">diacritic </feature_set>
    <feature_set char="&#x350;">diacritic backed </feature_set>
    <!--◌͐-->
    <feature_set char="&#x351;">diacritic </feature_set>
@@ -1137,21 +1106,12 @@
    <!--small down arrow-->
    <feature_set char="&#xa71c;">diacritic tonedownstep </feature_set>
    <!--high rising-->
-   <feature_set char="&#xf171;">diacritic tonehighrising </feature_set>
-   <!--low rising-->
-   <feature_set char="&#xf172;">diacritic tonelowrising </feature_set>
-   <!--rising falling-->
-   <feature_set char="&#xf175;">diacritic tonerisingfalling </feature_set>
-   <feature_set char="&#xf176;">diacritic tonefallingrising </feature_set>
-   <!--falling rising-->
-   <feature_set char="&#xf179;">diacritic tonefallingrising </feature_set>
-   <feature_set char="&#xf1a8;">diacritic </feature_set>
-   <feature_set char="&#xf1b1;">diacritic </feature_set>
+   <feature_set char="&#x1dc9;">diacritic tonefallingrising </feature_set>
    <feature_set char="&#x2a;">unintelligible </feature_set>
    <!--. syllable boundary-->
    <feature_set char="&#x2e;">halflong </feature_set>
    <feature_set char="&#x47;">glide </feature_set>
-   <feature_set char="&#x1d91;">alveolar lingual coronal implosive posterior retroflex voiced </feature_set>
+   <feature_set char="&#x1d91;">consonant alveolar lingual coronal implosive posterior retroflex voiced </feature_set>
    <!--Small d with hook and tail-->
    <!--¡-->
    <feature_set char="&#xa1;">consonant subapical click ingressive coronal lingual anterior stop
@@ -1175,33 +1135,16 @@
    <!-- AUTO-GENERATED from ipa set -->
    <feature_set char="&#x0020;">diacritic </feature_set>
    <feature_set char="&#x002b;">diacritic </feature_set>
-   <feature_set char="&#x00c6;">vowel </feature_set>
-   <feature_set char="&#x0111;">consonant </feature_set>
-   <feature_set char="&#x0193;">consonant </feature_set>
-   <feature_set char="&#x01bb;">consonant </feature_set>
-   <feature_set char="&#x027f;">vowel </feature_set>
-   <feature_set char="&#x0285;">vowel </feature_set>
-   <feature_set char="&#x02af;">vowel </feature_set>
-   <feature_set char="&#x02c1;">diacritic </feature_set>
-   <feature_set char="&#x0313;">diacritic </feature_set>
-   <feature_set char="&#x0315;">diacritic </feature_set>
-   <feature_set char="&#x0331;">diacritic </feature_set>
-   <feature_set char="&#x0338;">diacritic </feature_set>
-   <feature_set char="&#x1d47;">diacritic </feature_set>
-   <feature_set char="&#x1d48;">diacritic </feature_set>
-   <feature_set char="&#x1d4d;">diacritic </feature_set>
-   <feature_set char="&#x1d4f;">diacritic </feature_set>
-   <feature_set char="&#x1d56;">diacritic </feature_set>
-   <feature_set char="&#x1d57;">diacritic </feature_set>
-   <feature_set char="&#x2040;">diacritic </feature_set>
-   <feature_set char="&#xf173;">diacritic </feature_set>
-   <feature_set char="&#xf174;">diacritic </feature_set>
-   <feature_set char="&#xf19c;">diacritic </feature_set>
-   <feature_set char="&#xf19d;">diacritic </feature_set>
-   <feature_set char="&#xf1e8;">diacritic </feature_set>
-   <feature_set char="&#xf236;">vowel </feature_set>
-   <feature_set char="&#xf238;">vowel </feature_set>
-   <feature_set char="&#xf239;">vowel </feature_set>
-   <feature_set char="&#xf23d;">vowel </feature_set>
+   <feature_set char="&#x02c1;">diacritic epiglottal </feature_set>
+   <feature_set char="&#x0331;">diacritic retracted </feature_set>
+   <!--◌ᵇ-->	<feature_set char="&#x1d47;">diacritic labial </feature_set>
+   <!--◌ᵈ-->	<feature_set char="&#x1d48;">diacritic coronal </feature_set>
+   <!--◌ᵍ-->	<feature_set char="&#x1d4d;">diacritic dorsal </feature_set>
+   <!--◌ᵏ-->	<feature_set char="&#x1d4f;">diacritic dorsal </feature_set>
+   <!--◌ᵖ-->	<feature_set char="&#x1d56;">diacritic labial </feature_set>
+   <!--◌ᵗ-->	<feature_set char="&#x1d57;">diacritic coronal </feature_set>
+   <!--◌⁀-->	<feature_set char="&#x2040;">diacritic </feature_set>
+   <feature_set char="&#x1dc6;">diacritic </feature_set>
+   <feature_set char="&#x1dc7;">diacritic </feature_set>
    
 </feature_matrix>

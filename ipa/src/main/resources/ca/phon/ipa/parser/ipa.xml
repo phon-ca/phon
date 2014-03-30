@@ -186,10 +186,6 @@
         <name>Superscript Nine (Number 9)</name>
         <token>TONE</token>
     </char>
-    <char value="&#x00fe;">
-        <name>Latin Letter Small Thorn</name>
-        <token>CONSONANT</token>
-    </char>
     <char value="&#x00e6;">
         <name>Latin Letter Small AE</name>
         <token>VOWEL</token>
@@ -222,16 +218,8 @@
         <name>Latin Letter Small B with Stroke</name>
         <token>CONSONANT</token>
     </char>
-    <char value="&#x0111;">
-        <name>Latin Letter Small D with Stroke</name>
-        <token>CONSONANT</token>
-    </char>
     <char value="&#x0188;">
         <name>Latin Letter Small C with Hook</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#x0195;">
-        <name>Latin Letter Small HV</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0199;">
@@ -473,10 +461,6 @@
     <char value="&#x027e;">
         <name>Latin Letter Small R with Fish Hook</name>
         <token>CONSONANT</token>
-    </char>
-    <char value="&#x027f;">
-        <name>Latin Letter Small Reversed R with Fish Hook</name>
-        <token>VOWEL</token>
     </char>
     <char value="&#x0280;">
         <name>Latin Letter Small Capital R</name>
@@ -870,10 +854,6 @@
         <name>Combining Palatal Hook</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
-    <char value="&#x0322;">
-        <name>Combining Reversed Palatal Hook</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
     <char value="&#x0323;">
         <name>Combining Dot Below</name>
         <token>COMBINING_DIACRITIC</token>
@@ -1010,10 +990,6 @@
         <name>Greek Small Letter Pi</name>
         <token>CONSONANT</token>
     </char>
-    <char value="&#x03c3;">
-        <name>Greek Small Letter Sigma</name>
-        <token>CONSONANT</token>
-    </char>
     <char value="&#x03c7;">
         <name>Greek Small Letter Chi</name>
         <token>CONSONANT</token>
@@ -1094,10 +1070,6 @@
         <name>Latin Letter Small F with Hook</name>
         <token>CONSONANT</token>
     </char>
-    <char value="&#xf20b;">
-        <name>Latin Letter Small C with Slash</name>
-        <token>CONSONANT</token>
-    </char>
     
     <!-- SANDHI -->
     <char value="&#x203f;">
@@ -1112,24 +1084,12 @@
     <!--
         CHECK: Added from 1.6.2, token type needs to be checked.
     -->
-    <char value="&#x0338;">
-        <name>Combining Long Solidus Overlay</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#x0193;">
-        <name>Latin Capital Letter G with Hook</name>
-        <token>CONSONANT</token>
-    </char>
     <char value="&#x01aa;">
         <name>Latin Letter Reversed Esh with Loop</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x01ad;">
         <name>Latin Letter Small T with Hook</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#x01bb;">
-        <name>Latin Extended-B</name>
         <token>CONSONANT</token>
     </char>
     <char value="&#x0265;">
@@ -1140,24 +1100,8 @@
         <name>Latin Letter Small Turned M with Long Leg</name>
         <token>CONSONANT</token>
     </char>
-    <char value="&#x00c6;">
-        <name>Latin Capital Ligature AE</name>
-        <token>VOWEL</token>
-    </char>
     <char value="&#x0131;">
         <name>Latin Letter Small Dotless I</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#x027f;">
-        <name>Latin Letter Small Reversed R with Fishhook</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#x0285;">
-        <name>Latin Letter Small Squat Reversed Esh</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#x02af;">
-        <name>Latin Letter Small Turned H with Fishhook and Tail</name>
         <token>VOWEL</token>
     </char>
     <char value="&#x1dc4;">
@@ -1165,7 +1109,15 @@
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x1dc5;">
+        <name>Combining Grave-Macron</name>
+        <token>COMBINING_DIACRITIC</token>
+    </char>
+    <char value="&#x1dc6;">
         <name>Combining Macron-Grave</name>
+        <token>COMBINING_DIACRITIC</token>
+    </char>
+    <char value="&#x1dc7;">
+        <name>Combining Acute-Macron</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x1dc8;">
@@ -1232,14 +1184,6 @@
         <name>Modifier Letter Grave Accent</name>
         <token>TONE</token>
     </char>
-    <char value="&#x02ce;">
-        <name>Modifier Letter Low Grave Accent</name>
-        <token>TONE</token>
-    </char>
-    <char value="&#x02cf;">
-        <name>Modifier Letter Low Acute Accent</name>
-        <token>TONE</token>
-    </char>
     <char value="&#x02d4;">
         <name>Modifier Letter Up Tack</name>
         <token>TONE</token>
@@ -1271,14 +1215,6 @@
     <char value="&#x02e4;">
         <name>Modifier Letter Small Reversed Glottal Stop</name>
         <token>SUFFIX_DIACRITIC</token>
-    </char>
-    <char value="&#x02ea;">
-        <name>Modifier Letter Yin Departing Tone Mark</name>
-        <token>TONE</token>
-    </char>
-    <char value="&#x02ee;">
-        <name>Modifier Letter Double Aphostrophe</name>
-        <token>TONE</token>
     </char>
     <char value="&#x02ef;">
         <name>Modifier Letter Low Down Arrowhead</name>
@@ -1392,16 +1328,8 @@
         <name>Combining Turned Comma Above</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
-    <char value="&#x0313;">
-        <name>Combining Comma Above</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
     <char value="&#x0314;">
         <name>Combining Reversed Comma Above</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#x0315;">
-        <name>Combining Comma Above Right</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0316;">
@@ -1434,18 +1362,6 @@
     </char>
     <char value="&#x033f;">
         <name>Combining Double Overline</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#x0342;">
-        <name>Combining Greek Perispomeni</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#x0345;">
-        <name>Combining Greek Ypogegrammeni</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#x034f;">
-        <name>Combining Grapheme Joiner</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0350;">
@@ -1544,114 +1460,14 @@
         <name>Greek Ano Teleia</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
-    
-    <!-- CHECK: Private use area characters, things in fXXX ranges 
-        shouldn't be used unless there is no alternative.  These
-        characters are font specific! Token types need to be checked
-        here as well as character names. -->
-    <char value="&#xf20c;">
-        <name>?</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#xf210;">
-        <name>?</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#xf240;">
-        <name>?</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#xf246;">
-        <name>?</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#xf171;">
-        <name>High Rising Tone</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#xf172;">
-        <name>Low Rising Tone</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#xf173;">
-        <name>Low Falling Tone</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#xf174;">
-        <name>High Falling Tone</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#xf175;">
-        <name>Rising Falling Tone</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#xf179;">
+    <char value="&#x1dc9;">
         <name>Falling Rising Tone</name>
         <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#xf19c;">
-        <name>Tone Upstep</name>
-        <token>SUFFIX_DIACRITIC</token>
-    </char>
-    <char value="&#xf19d;">
-        <name>Tone Downstep</name>
-        <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x2c71;">
         <name>Latin Letter Small V with Right Hook</name>
         <token>CONSONANT</token>
     </char>
-    <char value="&#xf241;">
-        <name>Latin Letter Small QP</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#xf236;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf238;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf239;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf23d;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf23f;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf171;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf172;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf175;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf176;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf1a8;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf1b1;">
-        <name>?</name>
-        <token>VOWEL</token>
-    </char>
-    <char value="&#xf1e8;">
-        <name>?</name>
-        <token>SUFFIX_DIACRITIC</token>
-    </char>
+    
 </ipa>
 

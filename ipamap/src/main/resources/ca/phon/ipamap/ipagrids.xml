@@ -1158,29 +1158,11 @@
             <property name="Description">Falling tone contour</property>
             <property name="Unicode">0x302</property>
         </cell>
-        <cell y="2" x="4" h="2" w="2">
-            <text>◌</text>
-            <property name="Name">Low rising</property>
-            <property name="Description">Low rising tone contour</property>
-            <property name="Unicode">0xf172</property>
-        </cell>
-        <cell y="2" x="6" h="2" w="2">
-            <text>◌</text>
-            <property name="Name">High rising</property>
-            <property name="Description">High rising tone contour</property>
-            <property name="Unicode">0xf171</property>
-        </cell>
-        <cell y="2" x="8" h="2" w="2">
-            <text>◌</text>
-            <property name="Name">Rising-falling</property>
-            <property name="Description">Rising-falling tone contour</property>
-            <property name="Unicode">0xf175</property>
-        </cell>
         <cell y="2" x="10" h="2" w="2">
             <text>◌</text>
             <property name="Name">Falling-rising</property>
             <property name="Description">Falling-rising tone contour</property>
-            <property name="Unicode">0xf179</property>
+            <property name="Unicode">0x1dc9</property>
         </cell>
         <cell y="0" x="14" h="2" w="2">
             <text>ꜛ</text>
