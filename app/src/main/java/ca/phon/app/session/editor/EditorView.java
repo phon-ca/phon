@@ -14,6 +14,8 @@ import javax.swing.JPanel;
  */
 public abstract class EditorView extends JPanel {
 	
+	private static final long serialVersionUID = 907723403385573953L;
+
 	/**
 	 * Preferred dock position
 	 */

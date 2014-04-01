@@ -32,6 +32,8 @@ import java.awt.LayoutManager;
  */
 public abstract class DividedEditorView extends EditorView {
 
+	private static final long serialVersionUID = 7652953184027508708L;
+
 	/** Divider location */
 	public static final int divLocation = 150;  // 150px
 	
