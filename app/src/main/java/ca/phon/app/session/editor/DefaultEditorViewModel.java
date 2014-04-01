@@ -26,7 +26,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
 import bibliothek.gui.dock.common.CLocation;
@@ -35,9 +34,7 @@ import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.action.CloseActionFactory;
-import bibliothek.gui.dock.common.action.predefined.CCloseAction;
 import bibliothek.gui.dock.common.event.CDockableStateListener;
-import bibliothek.gui.dock.common.intern.CDockController;
 import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
@@ -271,7 +268,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		if(dockable != null) {
 			final DockPosition position = (editorView == null ? DockPosition.CENTER : editorView.getPreferredDockPosition());
-			final CLocation location = locationFromPosition(position);
+//			final CLocation location = locationFromPosition(position);
 			dockControl.addDockable(dockable);
 			
 			switch(position) {
@@ -317,35 +314,35 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
 	}
 	
-	private CLocation locationFromPosition(DockPosition position) {
-		CLocation retVal = CLocation.base().normal();
-		
-		switch(position) {
-		case CENTER:
-			break;
-			
-		case EAST:
-			retVal = CLocation.base().normalEast(DockPosition.EAST.getSize());
-			break;
-			
-		case WEST:
-			retVal = CLocation.base().normalWest(DockPosition.WEST.getSize());
-			break;
-			
-		case NORTH:
-			retVal = CLocation.base().normalNorth(DockPosition.NORTH.getSize());
-			break;
-			
-		case SOUTH:
-			retVal = CLocation.base().normalSouth(DockPosition.SOUTH.getSize());
-			break;
-			
-		default:
-			break;
-		}
-		
-		return retVal;
-	}
+//	private CLocation locationFromPosition(DockPosition position) {
+//		CLocation retVal = CLocation.base().normal();
+//		
+//		switch(position) {
+//		case CENTER:
+//			break;
+//			
+//		case EAST:
+//			retVal = CLocation.base().normalEast(DockPosition.EAST.getSize());
+//			break;
+//			
+//		case WEST:
+//			retVal = CLocation.base().normalWest(DockPosition.WEST.getSize());
+//			break;
+//			
+//		case NORTH:
+//			retVal = CLocation.base().normalNorth(DockPosition.NORTH.getSize());
+//			break;
+//			
+//		case SOUTH:
+//			retVal = CLocation.base().normalSouth(DockPosition.SOUTH.getSize());
+//			break;
+//			
+//		default:
+//			break;
+//		}
+//		
+//		return retVal;
+//	}
 	
 	
 	
@@ -483,6 +480,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			viewRef = new WeakReference<EditorView>(editorView);
 		}
 		
+		@SuppressWarnings("unused")
 		public EditorView getView() {
 			return viewRef.get();
 		}
