@@ -2,20 +2,25 @@ package ca.phon.app.session.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 import javax.swing.MenuElement;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -25,8 +30,17 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEditSupport;
 
 import ca.phon.app.project.ProjectFrame;
+import ca.phon.app.session.editor.actions.CopyRecordAction;
+import ca.phon.app.session.editor.actions.CutRecordAction;
+import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.actions.FirstRecordAction;
+import ca.phon.app.session.editor.actions.LastRecordAction;
+import ca.phon.app.session.editor.actions.NewRecordAction;
+import ca.phon.app.session.editor.actions.NextRecordAction;
+import ca.phon.app.session.editor.actions.PasteRecordAction;
+import ca.phon.app.session.editor.actions.PreviousRecordAction;
+import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
-import ca.phon.app.session.editor.view.record_data.RecordDataMenu;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -41,7 +55,7 @@ import ca.phon.util.icons.IconSize;
  * 
  * <p>This window supports plug-ins.  Plug-ins can provide custom EditorViews.</p>
  */
-public class SessionEditor extends ProjectFrame {
+public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	private final static long serialVersionUID = 2831713307191769522L;
 	
@@ -150,6 +164,22 @@ public class SessionEditor extends ProjectFrame {
 		viewModel.applyPerspective(perspective);
 		
 		// TODO statusbar
+		
+		setupEditorActions();
+	}
+	
+	private void setupEditorActions() {
+		final EditorAction modifiedChangedAct = 
+				new DelegateEditorAction(this, "onModifiedChanged");
+		getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED, modifiedChangedAct);
+		
+		final EditorAction recordAddedAct =
+				new DelegateEditorAction(this, "onRecordAdded");
+		getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, recordAddedAct);
+		
+		final EditorAction recordDeletedAct = 
+				new DelegateEditorAction(this, "onRecordDeleted");
+		getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, recordDeletedAct);
 	}
 	
 	/**
@@ -172,6 +202,47 @@ public class SessionEditor extends ProjectFrame {
 	 */
 	@Override
 	public void setJMenuBar(JMenuBar menuBar) {
+		// get 'File' menu reference
+		final JMenu fileMenu = menuBar.getMenu(0);
+		final SaveSessionAction saveAct = new SaveSessionAction(this);
+		final JMenuItem saveItem = new JMenuItem(saveAct);
+		fileMenu.add(saveItem, 0);
+		fileMenu.add(new JSeparator(), 1);
+		fileMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				saveItem.setEnabled(isModified());
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+			
+		});
+		
+		
+		// setup 'Session' menu
+		final JMenu sessionMenu = new JMenu("Session");
+		sessionMenu.add(new NewRecordAction(this));
+		sessionMenu.add(new DeleteRecordAction(this));
+		sessionMenu.addSeparator();
+		
+		sessionMenu.add(new CutRecordAction(this));
+		sessionMenu.add(new CopyRecordAction(this));
+		sessionMenu.add(new PasteRecordAction(this));
+		sessionMenu.addSeparator();
+		
+		sessionMenu.add(new FirstRecordAction(this));
+		sessionMenu.add(new PreviousRecordAction(this));
+		sessionMenu.add(new NextRecordAction(this));
+		sessionMenu.add(new LastRecordAction(this));
+		menuBar.add(sessionMenu, 3);
+		
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is
 		// setup
@@ -192,6 +263,7 @@ public class SessionEditor extends ProjectFrame {
 			@Override
 			public void menuCanceled(MenuEvent e) {
 			}
+			
 		});
 		menuBar.add(viewMenu, 3);
 		
@@ -499,9 +571,51 @@ public class SessionEditor extends ProjectFrame {
 	/*
 	 * Editor actions
 	 */
-	public void onModifiedChanged() {
+	@RunOnEDT
+	public void onModifiedChanged(EditorEvent eee) {
 		final String title = generateTitle();
 		setTitle(title);
 	}
+	
+	@RunOnEDT
+	public void onRecordAdded(EditorEvent ee) {
+		if(ee.getEventData() != null && ee.getEventData() instanceof Record) {
+			final Record r = (Record)ee.getEventData();
+			final int recordIndex = getSession().getRecordPosition(r);
+			setCurrentRecordIndex(recordIndex);
+		}
+	}
+	
+	@RunOnEDT
+	public void onRecordDeleted(EditorEvent ee) {
+		if(getCurrentRecordIndex() >= getDataModel().getRecordCount()) {
+			setCurrentRecordIndex(getDataModel().getRecordCount()-1);
+		} else {
+			final EditorEvent refreshAct = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
+			getEventManager().queueEvent(refreshAct);
+		}
+	}
+	
+	@Override
+	public boolean saveData() 
+			throws IOException {
+		final Project project = getProject();
+		final Session session = getSession();
+		
+		final UUID writeLock = project.getSessionWriteLock(session);
+		if(writeLock != null) {
+			project.saveSession(session, writeLock);
+			project.releaseSessionWriteLock(session, writeLock);
+			
+			setModified(false);
+			
+			return true;
+		}
+				
+		return false;
+	}
+
+	@Override
+	public void lostOwnership(Clipboard clipboard, Transferable contents) {}
 	
 }
