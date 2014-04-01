@@ -19,7 +19,6 @@
 package ca.phon.media.player;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -28,7 +27,6 @@ import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -68,6 +66,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class PhonMediaPlayer extends JPanel {
 	
+	private static final long serialVersionUID = -5365398623998749265L;
+
 	static {
 		VLCHelper.checkNativeLibrary(true);
 	}
@@ -78,10 +78,6 @@ public class PhonMediaPlayer extends JPanel {
 	private final static int SLIDER_MAX = 10000;
 
 	private final static int VOL_MAX = 200;
-
-	private final static int PLAYER_WIDTH = 320;
-
-	private final static int PLAYER_HEIGHT = 240;
 
 	/** UI  components */
 	/* Play/pause button */
@@ -102,8 +98,6 @@ public class PhonMediaPlayer extends JPanel {
 	/* Container for media controls */
 	private JPanel mediaControlPanel;
 
-	/* Auto-hide controls (default:true) */
-	private boolean autoHideControls = true;
 	/* Media player */
 	private EmbeddedMediaPlayerComponent mediaPlayerComponent;
 
@@ -150,10 +144,41 @@ public class PhonMediaPlayer extends JPanel {
 	}
 	
 	@Override
+	public void addNotify() {
+		super.addNotify();
+		mediaPlayerComponent = new EmbeddedMediaPlayerComponent() {
+			private static final long serialVersionUID = 1L;
+
+			// allow media player to be shrunk
+			@Override
+			public Dimension getMinimumSize() {
+				return new Dimension(0, 0);
+			}
+		};
+		add(mediaPlayerComponent, BorderLayout.CENTER);
+		
+		loadMedia();
+				
+		if(wasPlaying) {
+			mediaPlayerComponent.getMediaPlayer().play();
+		}
+		if(lastLocation > 0) {
+			mediaPlayerComponent.getMediaPlayer().setTime(lastLocation);
+		}
+	}
+	
+	@Override
 	public void removeNotify() {
 		// clean up player
-//		if(mediaPlayerComponent != null)
-//			mediaPlayerComponent.release();
+		if(mediaPlayerComponent != null) {
+			wasPlaying = mediaPlayerComponent.getMediaPlayer().isPlaying();
+			lastLocation = mediaPlayerComponent.getMediaPlayer().getTime();
+			
+			mediaPlayerComponent.getMediaPlayer().stop();
+			
+			remove(mediaPlayerComponent);
+			mediaPlayerComponent.release();
+		}
 	}
 		
 	/*
@@ -174,18 +199,15 @@ public class PhonMediaPlayer extends JPanel {
 	 */
 	private void init() {
 		setLayout(new BorderLayout());
-
-		mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
 		
 		// create media panel
 		mediaControlPanel = getMediaControlPanel();
 		
-		add(mediaPlayerComponent, BorderLayout.CENTER);
 		add(mediaControlPanel, BorderLayout.SOUTH);
 
 		addMediaMenuFilter(new MediaMenuFilter());
 	}
-
+	
 	public void addMediaMenuFilter(IMediaMenuFilter filter) {
 		if(!menuFilters.contains(filter))
 			menuFilters.add(filter);
@@ -352,31 +374,10 @@ public class PhonMediaPlayer extends JPanel {
 	 */
 	public void setMediaFile(String mediaFile) {
 		this.mediaFile = mediaFile;
+		wasPlaying = false;
+		lastLocation = 0L;
 		loadMedia();
 	}
-
-//	public PhonPlayerCanvas getCanvas() {
-//		return this.playerCanvas;
-//	}
-	
-	/**
-	 * Load media from the given location
-	 *
-	 * @param location
-	 */
-	private static final String[] defaultOptions = 
-    {   
-        "-I", "dummy",  // Don't use an interface
-        "--ignore-config", // Don't use VLC's default config
-        "--no-osd", // No on screen display
-        "--no-media-library", // we don't need the media library
-        "--no-plugins-cache",
-        "--no-xlib"
-//        "--file-caching", "0" // don't cache for local files
-//        "--loop"
-//        "--play-and-pause" // pause, don't stop, at eof
-        			
-    }; 
 	
 	public void loadMedia(String loc) {
 		setMediaFile(loc);
@@ -388,29 +389,15 @@ public class PhonMediaPlayer extends JPanel {
 		if(mediaPlayer == null) return;
 		
 		if(mediaFile == null) {
-			// make sure to stop media player
-//			try {
-				mediaPlayer.stop();
-//				mediaPlayer.setMedia(null);
-//			} catch (VLCException e) {
-//				VLCError.logAndClear(e);
-//			}
+			mediaPlayer.stop();
 		} else {
-//			try {
-				final File f = new File(getMediaFile());
-				final URI uri = f.toURI();
-				final String asciiURI = uri.toASCIIString();
-				final String uriLoc = asciiURI.replaceFirst("file\\:", "file://");
-				
-				final String[] mediaOpts = new String[]{ uriLoc, ":play-and-pause" };
-				mediaPlayer.prepareMedia(uriLoc, ":play-and-pause");
-				mediaPlayer.addMediaPlayerEventListener(mediaListener);
+			final File f = new File(getMediaFile());
+			final URI uri = f.toURI();
+			final String asciiURI = uri.toASCIIString();
+			final String uriLoc = asciiURI.replaceFirst("file\\:", "file://");
 			
-				
-//			} catch (VLCException e) {
-//				getCanvas().setMessage(e.getMessage());
-//				VLCError.logAndClear(e);
-//			}
+			mediaPlayer.prepareMedia(uriLoc, ":play-and-pause");
+			mediaPlayer.addMediaPlayerEventListener(mediaListener);
 		}
 	}
 
@@ -418,21 +405,17 @@ public class PhonMediaPlayer extends JPanel {
 	public void toggleVolumeMute(PhonActionEvent pae) {
 		final EmbeddedMediaPlayer player = getMediaPlayer();
 		if(player != null) {
-//			try {
-				boolean isMuted = !player.isMute();
-				player.mute(isMuted);
+			boolean isMuted = !player.isMute();
+			player.mute(isMuted);
 
-				if(isMuted) {
-					getVolumeButton().getAction().putValue(Action.SMALL_ICON, volMuteIcn);
-				} else {
-					getVolumeButton().getAction().putValue(Action.SMALL_ICON, volIcn);
-				}
-				getVolumeButton().repaint();
+			if(isMuted) {
+				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volMuteIcn);
+			} else {
+				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volIcn);
+			}
+			getVolumeButton().repaint();
 
-				getVolumeSlider().setEnabled(!isMuted);
-//			} catch (VLCException e) {
-//				VLCError.logAndClear(e);
-//			}
+			getVolumeSlider().setEnabled(!isMuted);
 		}
 	}
 
@@ -502,15 +485,11 @@ public class PhonMediaPlayer extends JPanel {
 	public void onPlayPause(PhonActionEvent pae) {
 		final EmbeddedMediaPlayer player = getMediaPlayer();
 		if(player != null) {
-//			try {
-				if(player.isPlaying()) {
-					player.pause();
-				} else {
-					player.play();
-				}
-//			} catch (VLCException e) {
-//				VLCError.logAndClear(e);
-//			}
+			if(player.isPlaying()) {
+				player.pause();
+			} else {
+				player.play();
+			}
 		}
 	}
 
@@ -542,51 +521,34 @@ public class PhonMediaPlayer extends JPanel {
 		final EmbeddedMediaPlayer player = getMediaPlayer();
 		if(player != null
 				&& player.getMediaDetails() != null) {
-//			try{
-				boolean isPlaying = player.isPlaying();
+			boolean isPlaying = player.isPlaying();
 
-				// if we are playing, pause while we
-				// bring up the save dialog
-				if(isPlaying) {
-					player.pause();
-				}
+			// if we are playing, pause while we
+			// bring up the save dialog
+			if(isPlaying) {
+				player.pause();
+			}
 
-				FileFilter[] filters = new FileFilter[1];
-				filters[0] = new FileFilter("PNG files (*.png)", "*.png");
-				String saveTo =
-						NativeDialogs.showSaveFileDialogBlocking(
-							CommonModuleFrame.getCurrentFrame(),
-							System.getProperty("user.home") + File.separator + "Desktop",
-							"png", filters, "Save snapshot");
+			FileFilter[] filters = new FileFilter[1];
+			filters[0] = new FileFilter("PNG files (*.png)", "*.png");
+			String saveTo =
+					NativeDialogs.showSaveFileDialogBlocking(
+						CommonModuleFrame.getCurrentFrame(),
+						System.getProperty("user.home") + File.separator + "Desktop",
+						"png", filters, "Save snapshot");
 
-				if(isPlaying) {
-					// start player again
-					player.play();
-				}
+			if(isPlaying) {
+				// start player again
+				player.play();
+			}
 
-				if(saveTo != null) {
-					player.saveSnapshot(new File(saveTo));
-				}
-
-//			} catch (VLCException ex) {
-//				VLCError.logAndClear(ex);
-//			}
-
+			if(saveTo != null) {
+				player.saveSnapshot(new File(saveTo));
+			}
 		}
 		
 	}
-
-	public void onToggleVideo(PhonActionEvent pae) {
-//		boolean isCollapsed =
-//				playerPane.isCollapsed();
-//		System.out.println(isCollapsed);
-//		playerPane.setCollapsed(!isCollapsed);
-//		playerPane..
-//		boolean isCanvasVisible = playerCanvas.isVisible();
-//		playerCanvas.setVisible(!isCanvasVisible);
-//		revalidate();
-	}
-
+	
 	private SegmentListener segmentListener;
 	/**
 	 * Playback given segment
@@ -597,67 +559,23 @@ public class PhonMediaPlayer extends JPanel {
 	public void playSegment(long startTime, long length) {
 		final EmbeddedMediaPlayer player = getMediaPlayer();
 		
-		if(player != null
-				&& player.getMediaDetails() != null) {
+		if(player != null) {
 			long endTime = startTime + length;
-//			try {
-//				final File f = new File(getMediaFile());
-//				final URI uri = f.toURI();
-//				final String asciiURI = uri.toASCIIString();
-//				final String uriLoc = asciiURI.replaceFirst("file\\:", "file://");
-//				
-//				final long currentTime = player.getTime();
-//				final VLCMedia origMedia = player.getMedia();
-//				
-//				final VLCMedia segmentMedia = vlcInstance.newFromLocation(uriLoc);
-//				segmentMedia.addOption(":start-time=" + (startTime/1000.0f));
-//				segmentMedia.addOption(":stop-time=" + (endTime/1000.0f));
-//				
-//				player.stop();
-//				player.setMedia(segmentMedia);
-//				player.play();
-//			} catch (VLCException e) {
-//				VLCError.logAndClear(e);
-//			}
-
+			if(segmentListener != null)
+				player.removeMediaPlayerEventListener(segmentListener);
+			
+			if(!player.isPlaying())
+				player.play();
+			player.setTime(startTime);
+			
 			if(segmentListener == null) {
 				segmentListener = new SegmentListener(endTime);
-				player.addMediaPlayerEventListener(segmentListener);
-//				player.addMediaPlayerListener(segmentListener);
 			} else {
 				segmentListener.setStopTime(endTime);
 			}
-
-//			SegmentListener listener = new SegmentListener(endTime);
-//			try {
-				player.setTime(startTime);
-//				player.addMediaPlayerListener(listener);
-
-				if(!player.isPlaying())
-					player.play();
-//			} catch (VLCException ex) {
-//				VLCError.logAndClear(ex);
-//			}
+			player.addMediaPlayerEventListener(segmentListener);
 		}
 	}
-	
-//	public boolean isMediaNeedsReload() {
-//		return reloadMedia;
-//	}
-//
-//	public void setMediaNeedsReload(boolean b) {
-//		reloadMedia = b;
-//		if(this.mediaFile == null)
-//			playerCanvas.setMessage("Media not found");
-//		else
-//			playerCanvas.setMessage("Click play...");
-//		playerCanvas.repaint();
-//	}
-
-	/**
-	 *
-	 */
-
 
 	/**
 	 * Listener for user changes to the position slider
@@ -717,15 +635,6 @@ public class PhonMediaPlayer extends JPanel {
 			return retVal;
 		}
 
-		private JMenuItem getToggleVideoItem() {
-			PhonUIAction toggleVideoAct =
-					new PhonUIAction(PhonMediaPlayer.this, "onToggleVideo");
-			toggleVideoAct.putValue(Action.NAME, "Toggle video");
-			toggleVideoAct.putValue(Action.SHORT_DESCRIPTION, "Display/hide video panel");
-
-			JMenuItem retVal = new JMenuItem(toggleVideoAct);
-			return retVal;
-		}
 	}
 
 	/**
@@ -762,8 +671,6 @@ public class PhonMediaPlayer extends JPanel {
 			stopTimeMutex.unlock();
 		}
 		
-		
-		
 		@Override
 		public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
 			super.timeChanged(mediaPlayer, newTime);
@@ -784,7 +691,7 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void buffering(MediaPlayer mediaPlayer, float newCache) {
 			super.buffering(mediaPlayer, newCache);
-			final String logMsg = String.format("Buffering %s: %.2f complete", 
+			final String logMsg = String.format("Buffering %s: %.2f%% complete", 
 					mediaPlayer.mrl(), newCache);
 			LOGGER.info(logMsg);
 		}
