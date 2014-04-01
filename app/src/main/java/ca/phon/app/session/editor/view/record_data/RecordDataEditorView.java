@@ -88,6 +88,8 @@ public class RecordDataEditorView extends EditorView {
 	 * speaker selection
 	 */
 	private JComboBox speakerBox;
+	
+	private volatile boolean updating = false;
 
 	/**
 	 * query exclusion
@@ -141,6 +143,7 @@ public class RecordDataEditorView extends EditorView {
 		final EditorAction onRecordChangeAct =
 				new DelegateEditorAction(this, "onRecordChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, onRecordChangeAct);
 		
 		final EditorAction onGroupListChangeAct =
 				new DelegateEditorAction(this, "onGroupsChange");
@@ -152,6 +155,7 @@ public class RecordDataEditorView extends EditorView {
 	 * 
 	 */
 	private void update() {
+		updating = true;
 		contentPane.removeAll();
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
@@ -227,6 +231,8 @@ public class RecordDataEditorView extends EditorView {
 			}
 			row++;
 		}
+		
+		updating = false;
 		revalidate();
 	}
 	
@@ -331,13 +337,15 @@ public class RecordDataEditorView extends EditorView {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			final Object selectedObj = speakerBox.getSelectedItem();
-			final SessionEditor editor = getEditor();
-			final Record record = editor.currentRecord();
-			if(selectedObj != null) {
-				final Participant selectedSpeaker = Participant.class.cast(selectedObj);
-				final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(editor, record, selectedSpeaker);
-				editor.getUndoSupport().postEdit(edit);
+			if(!updating) {
+				final Object selectedObj = speakerBox.getSelectedItem();
+				final SessionEditor editor = getEditor();
+				final Record record = editor.currentRecord();
+				if(selectedObj != null) {
+					final Participant selectedSpeaker = Participant.class.cast(selectedObj);
+					final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(editor, record, selectedSpeaker);
+					editor.getUndoSupport().postEdit(edit);
+				}
 			}
 		}
 		
