@@ -1,7 +1,19 @@
 package ca.phon.session;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.ServiceLoader;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import ca.phon.session.io.SessionInputFactory;
+import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.SessionWriter;
 
 /**
  * A factory for creating mutable session objects.
@@ -9,6 +21,9 @@ import java.util.ServiceLoader;
  * 
  */
 public abstract class SessionFactory {
+	
+	private final static Logger LOGGER = Logger
+			.getLogger(SessionFactory.class.getName());
 	
 	/**
 	 * Create a new session factory.
@@ -90,6 +105,59 @@ public abstract class SessionFactory {
 		final Record retVal = createRecord();
 		retVal.setSpeaker(speaker);
 		return retVal;
+	}
+	
+	/**
+	 * Clone the given record.
+	 * 
+	 * @param record
+	 * 
+	 * @return a new record with the same contents and the given
+	 *  record
+	 *  
+	 */
+	public Record cloneRecord(Record record) {
+		// easiest wasy of ensure we have a clean clone of a record
+		// is to use the write it to an in-memory buffer and read
+		// it back in
+		
+		// setup temp session
+		final Session tempSession = createSession("temp", "temp");
+		if(record.getSpeaker() != null) {
+			tempSession.addParticipant(record.getSpeaker());
+			
+		}
+		
+		// add extra tiers
+		for(String tierName:record.getExtraTierNames()) {
+			final Tier<String> extraTier = record.getTier(tierName, String.class);
+			
+			final TierDescription td = createTierDescription(tierName, extraTier.isGrouped());
+			tempSession.addUserTier(td);
+		}
+		
+		// add record
+		tempSession.addRecord(record);
+		
+		final SessionOutputFactory outputFactory = new SessionOutputFactory();
+		final SessionWriter writer = outputFactory.createWriter();
+		
+		final SessionInputFactory inputFactory = new SessionInputFactory();
+		final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
+		
+		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			writer.writeSession(tempSession, out);
+			
+			final Session inSession = reader.readSession(new ByteArrayInputStream(out.toByteArray()));
+			final Record retVal = inSession.getRecord(0);
+			retVal.setUuid(UUID.randomUUID());
+			return retVal;
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return null;
 	}
 	
 	/**
