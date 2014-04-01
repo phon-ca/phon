@@ -48,7 +48,7 @@ public class SessionEditorToolbar extends JPanel {
 	}
 	
 	private void init() {
-		final FormLayout layout = new FormLayout("pref, fill:pref:grow, right:pref, right:pref",
+		final FormLayout layout = new FormLayout("pref, fill:pref:grow, right:pref, 5dlu, right:pref",
 				"pref");
 		setLayout(layout);
 		final CellConstraints cc = new CellConstraints();
@@ -86,7 +86,7 @@ public class SessionEditorToolbar extends JPanel {
 		add(navigationPanel, cc.xy(3, 1));
 		
 		quickSearch = new SessionEditorQuickSearch(getEditor());
-		add(quickSearch.getSearchField(), cc.xy(4, 1));
+		add(quickSearch.getSearchField(), cc.xy(5, 1));
 	}
 	
 }

@@ -24,12 +24,17 @@ import java.awt.event.KeyListener;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ca.phon.app.session.editor.actions.FirstRecordAction;
+import ca.phon.app.session.editor.actions.LastRecordAction;
+import ca.phon.app.session.editor.actions.NextRecordAction;
+import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.query.replace.SessionLocation;
 import ca.phon.ui.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
@@ -54,15 +59,11 @@ public class NavigationPanel extends JPanel {
 	
 	private RecordNumberField recordNumberField;
 	
-//	private JLabel currentRecordButton;
-	
 	private JLabel numRecordsLabel;
 
 	private JLabel currentTierLabel;
 
 	private JLabel currentCharPosLabel;
-	
-//	private JFrame recordFieldPopup;
 	
 	/** Editor */
 	private WeakReference<SessionEditor> editorRef;
@@ -102,33 +103,25 @@ public class NavigationPanel extends JPanel {
 		final ButtonGroup btnGroup = new ButtonGroup();
 		final List<JButton> buttons = SegmentedButtonBuilder.createSegmentedButtons(4, btnGroup);
 		
-		final PhonUIAction firstRecordAction =
-				new PhonUIAction(this, "firstRecord");
-		firstRecordAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Go to first record");
-		firstRecordAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-first", IconSize.SMALL));
+		final Action firstRecordAction = new FirstRecordAction(getEditor());
 		firstRecordButton = buttons.get(0);
 		firstRecordButton.setAction(firstRecordAction);
+		firstRecordButton.setText(null);
 		
-		final PhonUIAction lastRecordAction =
-				new PhonUIAction(this, "lastRecord");
-		lastRecordAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Go to last record");
-		lastRecordAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
+		final Action lastRecordAction = new LastRecordAction(getEditor());
 		lastRecordButton = buttons.get(3);
 		lastRecordButton.setAction(lastRecordAction);
+		lastRecordButton.setText(null);
 		
-		final PhonUIAction prevRecordAction =
-				new PhonUIAction(this, "prevRecord");
-		prevRecordAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Go to previous record");
-		prevRecordAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL));
+		final Action prevRecordAction = new PreviousRecordAction(getEditor());
 		prevRecordButton = buttons.get(1);
 		prevRecordButton.setAction(prevRecordAction);
+		prevRecordButton.setText(null);
 		
-		final PhonUIAction nextRecordAction = 
-				new PhonUIAction(this, "nextRecord");
-		nextRecordAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Go to next record");
-		nextRecordAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-next", IconSize.SMALL));
+		final Action nextRecordAction = new NextRecordAction(getEditor());
 		nextRecordButton = buttons.get(2);
 		nextRecordButton.setAction(nextRecordAction);
+		nextRecordButton.setText(null);
 		
 		recordNumberField = new RecordNumberField();
 		recordNumberField.setMinNumber(1);
@@ -183,7 +176,7 @@ public class NavigationPanel extends JPanel {
 		currentCharPosLabel.setOpaque(false);
 		
 		FormLayout layout = new FormLayout(
-				"pref, pref, pref, pref, pref",
+				"pref, pref, pref, pref, 5dlu, pref",
 				"pref");
 		setLayout(layout);
 		
@@ -197,28 +190,7 @@ public class NavigationPanel extends JPanel {
 		JLabel ol = new JLabel(" of ");
 		add(ol, cc.xy(3, 1));
 		add(numRecordsLabel, cc.xy(4,1));
-		add(btnComp, cc.xy(5, 1));
-	}
-	
-	public void firstRecord() {
-		getEditor().setCurrentRecordIndex(0);
-	}
-	
-	public void lastRecord() {
-		getEditor().setCurrentRecordIndex(getEditor().getDataModel().getRecordCount()-1);
-	}
-	
-	public void nextRecord() {
-		final int newIndex = 
-				(getEditor().getCurrentRecordIndex() == getEditor().getDataModel().getRecordCount()-1 ? 
-						getEditor().getCurrentRecordIndex() : getEditor().getCurrentRecordIndex()+1);
-		getEditor().setCurrentRecordIndex(newIndex);
-	}
-
-	public void prevRecord() {
-		final int newIndex = 
-				(getEditor().getCurrentRecordIndex() == 0 ? 0 : getEditor().getCurrentRecordIndex()-1);
-		getEditor().setCurrentRecordIndex(newIndex);
+		add(btnComp, cc.xy(6, 1));
 	}
 	
 	public void gotoRecord() {
