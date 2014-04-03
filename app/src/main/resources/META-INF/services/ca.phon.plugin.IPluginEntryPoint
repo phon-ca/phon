@@ -30,7 +30,7 @@ ca.phon.app.project.DeriveSessionEP
 # Archive Project
 ca.phon.app.project.ProjectArchiveEP
 # View Result Set
-#ca.phon.app.query.ResultSetEP
+ca.phon.app.query.ResultSetEP
 # Session Editor
 ca.phon.app.session.editor.SessionEditorEP
 # Query Editor
