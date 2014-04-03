@@ -1158,8 +1158,26 @@
             <property name="Description">Falling tone contour</property>
             <property name="Unicode">0x302</property>
         </cell>
+        <cell y="2" x="4" h="2" w="2">
+            <text>◌&#x1dc4;</text>
+            <property name="Name"></property>
+            <property name="Description"></property>
+            <property name="Unicode">0x1dc4</property>
+        </cell>
+        <cell y="2" x="6" h="2" w="2">
+            <text>◌&#x1dc5;</text>
+            <property name="Name"></property>
+            <property name="Description"></property>
+            <property name="Unicode">0x1dc5</property>
+        </cell>
+        <cell y="2" x="8" h="2" w="2">
+            <text>◌&#x1dc8;</text>
+            <property name="Name"></property>
+            <property name="Description"></property>
+            <property name="Unicode">0x1dc8</property>
+        </cell>
         <cell y="2" x="10" h="2" w="2">
-            <text>◌</text>
+            <text>◌&#x1dc9;</text>
             <property name="Name">Falling-rising</property>
             <property name="Description">Falling-rising tone contour</property>
             <property name="Unicode">0x1dc9</property>
