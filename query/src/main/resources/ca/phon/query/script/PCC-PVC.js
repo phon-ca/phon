@@ -24,7 +24,7 @@ var filters = {
 };
 
 
-function param_setup(params) {
+function setup_params(params) {
     var sep = new SeparatorScriptParam("PCC/PVC Options", false);
     params.add(sep);
     
@@ -55,12 +55,12 @@ function param_setup(params) {
  * returns:
  *	void
  *******************************/
-function query_record(record)
+function query_record(recordIndex, record)
 {
     var searchTier = "IPA Target";
     if(!filters.speaker.check_speaker(record.speaker)) return;
     
-	var searchObjects = filters.group.getRequestedGroups(record, searchTier);
+	var searchObjects = filters.group.getRequestedGroups(record);
 	
 	// check aligned group for each group returned
 	if(filters.alignedGroup.isUseFilter()) {
@@ -68,14 +68,32 @@ function query_record(record)
 	}
 	
 	for(var gIdx = 0; gIdx < searchObjects.length; gIdx++) {
-	    var ipaTGroup = searchObjects[gIdx];
-	    var ipaAGroup = record.getGroup("IPA Actual", ipaTGroup.groupIndex);
+	    var grp = searchObjects[gIdx];
+	    var ipaTGroup = grp.getIPATarget();
+	    var ipaAGroup = grp.getIPAActual();
 	    
-	    var metadata = new Metadata();
-	    pccOptions.standard.setup_pcc_standard_metadata(ipaTGroup, ipaAGroup, metadata);
-	    pccOptions.aligned.setup_pcc_aligned_metadata(record, ipaTGroup, ipaAGroup, metadata);
+	    var result = factory.createResult();
+	    result.schema = "ALIGNED";
+	    result.recordIndex = recordIndex;
 	    
-	    var result = [ ipaTGroup, ipaAGroup ];
-	    results.add(result, metadata, "ALIGNED");
+	    var rvt = factory.createResultValue();
+	    rvt.tierName = "IPA Target";
+    	rvt.groupIndex = grp.groupIndex;
+    	rvt.range = new Range(0, ipaTGroup.toString().length(), false);
+    	rvt.data = ipaTGroup;
+    	result.resultValues.add(rvt);
+    	
+    	var rva = factory.createResultValue();
+    	rva.tierName = "IPA Actual";
+    	rva.groupIndex = grp.groupIndex;
+    	rva.range = new Range(0, ipaAGroup.toString().length(), false);
+    	rva.data = ipaAGroup;
+        result.resultValues.add(rva);
+	    
+	    var metadata = result.metadata;
+	    //pccOptions.standard.setup_pcc_standard_metadata(ipaTGroup, ipaAGroup, metadata);
+	    pccOptions.aligned.setup_pcc_aligned_metadata(grp, metadata);
+	    
+	    results.addResult(result);
 	}
 }

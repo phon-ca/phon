@@ -2,7 +2,8 @@
 /*
  * Calculates PCC/PVC
  */
- 
+importPackage(Packages.ca.phon.ipa.features)
+
 exports.Pcc = {
 	
 	/**
@@ -18,32 +19,35 @@ exports.Pcc = {
      * @return percent correct as a string with format
      *  'numCorrect/numAttempted;numDeleted;numEpenthesized'
      */
-    calc_pc_aligned: function(record, targetGroup, actualGroup, features, ignoreDiacritics) {
+    calc_pc_aligned: function(group, features, ignoreDiacritics) {
     	var numTarget = 0;
     	var numDeleted = 0;
     	var numActual = 0;
     	var numEpenthesized = 0;
     	var numCorrect = 0;
+    	
+    	var targetGroup = group.getIPATarget();
+        var actualGroup = group.getIPAActual();
+        var alignment = group.getPhoneAlignment();
     
         var featureSet = FeatureSet.fromArray(features.split(","));
     
     	// check target side for numTarget, numDeleted and numCorrect
-    	for(pIdx = 0; pIdx < targetGroup.numberOfPhones; pIdx++) {
-    		var phone = targetGroup.getPhone(pIdx);
+    	for(pIdx = 0; pIdx < targetGroup.length(); pIdx++) {
+    		var phone = targetGroup.elementAt(pIdx);
     
     		if(phone.featureSet.intersects(featureSet)) {
     			numTarget++;
     
     			// check aligned phone
-    			var alignedData = record.getAlignmentData(phone);
+    			var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
     			if(alignedData != null) {
-    				var actualData = alignedData[1];
-    				var actualPhone = (actualData.length > 0 ? actualData[0] : null);
+    				var actualPhone = alignedData[0];
     				if(actualPhone != null) {
     					var targetPhoneString = 
-    						(ignoreDiacritics ? StringUtils.stripDiacritics(phone.toString()) : phone.toString());
+    						(ignoreDiacritics ? (new IPATranscript([phone])).removePunctuation().toString() : phone.toString());
     					var actualPhoneString =
-    						(ignoreDiacritics ? StringUtils.stripDiacritics(actualPhone.toString()) : actualPhone.toString());
+    						(ignoreDiacritics ? (new IPATranscript([actualPhone])).removePunctuation().toString() : actualPhone.toString());
     
     					if( targetPhoneString == actualPhoneString ) {
     						numCorrect++;
@@ -59,17 +63,16 @@ exports.Pcc = {
     
     	// check actual side for numActual, numEpenthesized
     	// check target side for numTarget, numDeleted and numCorrect
-    	for(pIdx = 0; pIdx < actualGroup.numberOfPhones; pIdx++) {
-    		var phone = actualGroup.getPhone(pIdx);
+    	for(pIdx = 0; pIdx < actualGroup.length(); pIdx++) {
+    		var phone = actualGroup.elementAt(pIdx);
     
     		if(phone.featureSet.intersects(featureSet)) {
     			numActual++;
     
     			// check aligned phone
-    			var alignedData = record.getAlignmentData(phone);
+    			var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
     			if(alignedData != null) {
-    				var targetData = alignedData[1];
-    				var targetPhone = (targetData.length > 0 ? targetData[0] : null);
+    				var targetPhone = alignedData[0];
     				if(targetPhone == null) {
     					numEpenthesized++;
     				}
@@ -104,12 +107,16 @@ exports.Pcc = {
     	var numCorrect = 0;
     	var numEpenthesized = 0;
     	var numProduced = 0;
+    	
+    	var targetGroup = group.getIPATarget();
+        var actualGroup = group.getIPAActual();
+        var alignment = group.getPhoneAlignment();
     
         var featureSet = FeatureSet.fromArray(features.split(","));
     
     	// check target side for numTarget, numDeleted and numCorrect
-    	for(pIdx = 0; pIdx < targetGroup.numberOfPhones; pIdx++) {
-    		var phone = targetGroup.getPhone(pIdx);
+    	for(pIdx = 0; pIdx < targetGroup.length(); pIdx++) {
+    		var phone = targetGroup.elementAt(pIdx);
     
     		if(phone.featureSet.intersects(featureSet)) {
     			numTarget++;
@@ -122,8 +129,8 @@ exports.Pcc = {
     
     	// check actual side for numActual, numEpenthesized
     	// check target side for numTarget, numDeleted and numCorrect
-    	for(pIdx = 0; pIdx < actualGroup.numberOfPhones; pIdx++) {
-    		var phone = actualGroup.getPhone(pIdx);
+    	for(pIdx = 0; pIdx < actualGroup.length(); pIdx++) {
+    		var phone = actualGroup.elementAt(pIdx);
    
     		if(phone.featureSet.intersects(featureSet)) {
     		    numActual++;
@@ -202,24 +209,24 @@ exports.PccOptions = function(id, aligned) {
         params.add(ignoreDiacriticsParam);
     };
     
-    this.setup_pcc_aligned_metadata = function(record, targetIpa, actualIpa, metadata) {
+    this.setup_pcc_aligned_metadata = function(group, metadata) {
         if(this.includePcc) {
-            var pccAligned = Pcc.calc_pc_aligned(record, targetIpa, actualIpa, "Consonant", this.ignoreDiacritics);
+            var pccAligned = Pcc.calc_pc_aligned(group, "Consonant", this.ignoreDiacritics);
             metadata.put("APCC", pccAligned);
         }
         if(this.includePvc) {
-            var pvcAligned = Pcc.calc_pc_aligned(record, targetIpa, actualIpa, "Vowel", this.ignoreDiacritics);
+            var pvcAligned = Pcc.calc_pc_aligned(group, "Vowel", this.ignoreDiacritics);
             metadata.put("APVC", pvcAligned);
         }
     };
     
-    this.setup_pcc_standard_metadata = function(targetIpa, actualIpa, metadata) {
+    this.setup_pcc_standard_metadata = function(group, metadata) {
         if(this.includePcc) {
-            var pccStandard = Pcc.calc_pc_standard(targetIpa, actualIpa, "Consonant", this.ignoreDiacritics);
+            var pccStandard = Pcc.calc_pc_standard(group, "Consonant", this.ignoreDiacritics);
             metadata.put("PCC", pccStandard);
         }
         if(this.includePvc) {
-            var pvcStandard = Pcc.calc_pc_standard(targetIpa, actualIpa, "Vowel", this.ignoreDiacritics);
+            var pvcStandard = Pcc.calc_pc_standard(group, "Vowel", this.ignoreDiacritics);
             metadata.put("PVC", pvcStandard);
         }
     };
