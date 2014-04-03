@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingConstants;
+
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -109,12 +111,12 @@ public class ResultSetEP implements IPluginEntryPoint {
 			if(tempProject != null)
 				window.setTempProject(tempProject);
 			window.pack();
-//			// setup location next to editor if attached
-//			if(window.getEditor() != null) {
-//				window.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, window.getEditor());
-//			} else {
-//				window.setLocationByPlatform(true);
-//			}
+			// setup location next to editor if attached
+			if(window.getEditor() != null) {
+				window.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, window.getEditor());
+			} else {
+				window.setLocationByPlatform(true);
+			}
 			window.setVisible(true);
 		}
 		
@@ -128,7 +130,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 		epArgs.put(EntryPointArgs.SESSION_NAME, rs.getSession());
 		
 		try {
-			PluginEntryPointRunner.executePlugin("RecordEditor", epArgs);
+			PluginEntryPointRunner.executePlugin("SessionEditor", epArgs);
 		} catch (PluginException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}

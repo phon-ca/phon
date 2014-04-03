@@ -68,6 +68,11 @@ import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.query.report.InventorySectionPanel;
 import ca.phon.app.query.report.ResultListingSectionPanel;
+import ca.phon.app.session.editor.DelegateEditorAction;
+import ca.phon.app.session.editor.EditorAction;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
@@ -82,6 +87,7 @@ import ca.phon.query.report.io.ResultListing;
 import ca.phon.query.report.io.ResultListingField;
 import ca.phon.query.report.util.ResultListingFieldBuilder;
 import ca.phon.session.Session;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -179,26 +185,23 @@ public class ResultSetEditor extends ProjectFrame {
 	 */
 	public boolean attachToEditor() {
 		if(getParentFrame() == null) {
-			// TODO 
 			// look for parent frames
-//			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-//				if(cmf instanceof RecordEditor) {
-//					final ITranscript transcript = ((RecordEditor)cmf).getModel().getSession();
-//					if(transcript.getCorpus().equals(resultSet.getCorpus())
-//							&& transcript.getID().equals(resultSet.getSession())) {
-//						super.setParentFrame(cmf);
-//						final RecordEditor editor = getEditor();
-//						
-//						final EditorAction recordChangeAct = 
-//								new DelegateEditorAction(this, "onRecordChange");
-//						editor.getModel().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
-//						
-//						PhonLogger.info("Attaching parent frame: " + cmf.getTitle());
-////						openSessionButton.setVisible(false);
-//						break;
-//					}
-//				}
-//			}
+			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+				if(cmf instanceof SessionEditor) {
+					final Session transcript = ((SessionEditor)cmf).getSession();
+					if(transcript.getCorpus().equals(resultSet.getCorpus())
+							&& transcript.getName().equals(resultSet.getSession())) {
+						super.setParentFrame(cmf);
+						final SessionEditor editor = getEditor();
+						
+						final EditorAction recordChangeAct = 
+								new DelegateEditorAction(this, "onRecordChange");
+						editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
+						
+						break;
+					}
+				}
+			}
 		}
 		return getParentFrame() != null;
 	}
@@ -206,13 +209,13 @@ public class ResultSetEditor extends ProjectFrame {
 	/*
 	 * Editor event for record changes
 	 */
-//	public void onRecordChange(EditorEvent ee) {
-//		resultTable.repaint();
-//	}
+	public void onRecordChange(EditorEvent ee) {
+		resultTable.repaint();
+	}
 	
-//	public RecordEditor getEditor() {
-//		return (attachToEditor() ? (RecordEditor)getParentFrame() : null);
-//	}
+	public SessionEditor getEditor() {
+		return (attachToEditor() ? (SessionEditor)getParentFrame() : null);
+	}
 	
 	private void init() {
 		setupToolbar();
