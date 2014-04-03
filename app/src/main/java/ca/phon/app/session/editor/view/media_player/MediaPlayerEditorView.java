@@ -19,6 +19,7 @@
 package ca.phon.app.session.editor.view.media_player;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -42,6 +43,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 
@@ -52,6 +54,11 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.media_player.actions.ExportAction;
+import ca.phon.app.session.editor.view.media_player.actions.PlayAdjacencySequenceAction;
+import ca.phon.app.session.editor.view.media_player.actions.PlayCustomSegmentAction;
+import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.view.media_player.actions.PlaySpeechTurnAction;
 import ca.phon.media.VLCHelper;
 import ca.phon.media.exportwizard.MediaExportWizard;
 import ca.phon.media.exportwizard.MediaExportWizardProp;
@@ -528,37 +535,21 @@ public class MediaPlayerEditorView extends EditorView {
 		}
 
 		private JMenuItem getMediaExportItem() {
-			PhonUIAction mediaExportAct =
-					new PhonUIAction(MediaPlayerEditorView.this, "onExportMedia");
-			mediaExportAct.putValue(Action.NAME, "Export media...");
-			mediaExportAct.putValue(Action.SHORT_DESCRIPTION, "Export media");
-
-			JMenuItem retVal = new JMenuItem(mediaExportAct);
+			JMenuItem retVal = new JMenuItem(new ExportAction(MediaPlayerEditorView.this));
 			return retVal;
 		}
 		
 		private void setupPlaytoItems(JPopupMenu menu) {
-			PhonUIAction playCustomAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlayCustomSegment");
-			playCustomAct.putValue(PhonUIAction.NAME, "Play custom segment");
-			JMenuItem playCustomItem = new JMenuItem(playCustomAct);
+			final JMenuItem playCustomItem = new JMenuItem(new PlayCustomSegmentAction(MediaPlayerEditorView.this));
 			menu.add(playCustomItem);
 			
-			PhonUIAction playSegmentAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlaySpeakerSegment", false);
-			playSegmentAct.putValue(PhonUIAction.NAME, "Play current segment");
-			playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment for current record");
-			JMenuItem playSegmentItem = new JMenuItem(playSegmentAct);
+			final JMenuItem playSegmentItem = new JMenuItem(new PlaySegmentAction(MediaPlayerEditorView.this));
 			menu.add(playSegmentItem);
 			
-			PhonUIAction playContiguousAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlaySpeakerSegment", true);
-			playContiguousAct.putValue(PhonUIAction.NAME, "Play current speech turn");
-			playContiguousAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play contiguous segments for current speaker");
-			JMenuItem playContiguousItem = new JMenuItem(playContiguousAct);
+			final JMenuItem playContiguousItem = new JMenuItem(new PlaySpeechTurnAction(MediaPlayerEditorView.this));
 			menu.add(playContiguousItem);
 			
-			PhonUIAction playConvPeriodAct = new PhonUIAction(MediaPlayerEditorView.this, "onPlayConvPeriod");
-			playConvPeriodAct.putValue(PhonUIAction.NAME, "Play adjacency sequence");
-			playConvPeriodAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play a sequence of speaker turns");
-			JMenuItem playConvPeriodItem = new JMenuItem(playConvPeriodAct);
+			final JMenuItem playConvPeriodItem = new JMenuItem(new PlayAdjacencySequenceAction(MediaPlayerEditorView.this));
 			menu.add(playConvPeriodItem);
 		}
 
@@ -609,8 +600,11 @@ public class MediaPlayerEditorView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		// TODO Auto-generated method stub
-		return null;
+		final JMenu menu = new JMenu();
+		
+		
+		
+		return menu;
 	}
 
 	@Override
