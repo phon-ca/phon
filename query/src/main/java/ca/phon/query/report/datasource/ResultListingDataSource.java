@@ -52,6 +52,8 @@ import ca.phon.session.Session;
  */
 public class ResultListingDataSource extends AbstractScriptTableModel implements TableDataSource {
 	
+	private static final long serialVersionUID = 6508115371509706432L;
+
 	private final static Logger LOGGER = Logger.getLogger(ResultListingDataSource.class.getName());
 
 	/**
@@ -296,7 +298,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		
 		Result result = null;
 		if(includeExcluded) {
-			result = resultSet.getResults().get(row);
+			result = resultSet.getResult(row);
 		} else {
 			int rIdx = -1;
 			for(int i = 0; i < resultSet.getResults().size(); i++) {

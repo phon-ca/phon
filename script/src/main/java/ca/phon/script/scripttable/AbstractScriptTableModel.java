@@ -222,15 +222,14 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 			final Context ctx = PhonScriptContext.enter();
 			try {
 				final Scriptable parentScope = createCellScope(cScript, row, col);
-				final Scriptable scope = cScript.getEvaluatedScope();
+				final Scriptable scope = cScript.createImporterScope();
 				scope.setParentScope(parentScope);
+				cScript.getCompiledScript().exec(ctx, scope);
 				
 				if(cScript.hasFunction(scope, "getValue", 0)) {
 					retVal = cScript.callFunction(scope, "getValue", new Object[0]);
 				} else if(scope.has("retVal", scope)) {
 					retVal = scope.get("retVal", scope);
-				} else {
-					retVal = cScript.exec(scope);
 				}
 				
 				if(retVal != null) {
@@ -278,19 +277,19 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	protected Scriptable createCellScope(PhonScriptContext ctx, int row, int col) {
 		final Context context = PhonScriptContext.enter();
 		final WrapFactory wf = context.getWrapFactory();
-		
 		final Scriptable retVal = ctx.createBasicScope();
+
+		try {
+			ctx.installParams(retVal);
+		} catch(PhonScriptException pse) {
+			LOGGER.log(Level.WARNING, pse.getLocalizedMessage(), pse);
+		}
+		
 		final Map<String, Object> mappings = getMappingsAt(row, col);
 		for(String key:mappings.keySet()) {
 			final Object obj = mappings.get(key);
 			final Object wrappedObj = wf.wrap(context, retVal, obj, null);
 			ScriptableObject.putProperty(retVal, key, wrappedObj);
-		}
-		
-		try {
-			ctx.installParams(retVal);
-		} catch(PhonScriptException pse) {
-			LOGGER.log(Level.WARNING, pse.getLocalizedMessage(), pse);
 		}
 		
 		PhonScriptContext.exit();

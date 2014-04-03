@@ -224,6 +224,11 @@ public class PhonScriptContext {
 		return retVal;
 	}
 	
+	public Scriptable getEvaluatedScope() 
+		throws PhonScriptException {
+		return getEvaluatedScope(null);
+	}
+	
 	/**
 	 * Get the evaluated scope for the script.  The evaluated scope
 	 * is the Scriptable object resulting from evaulating the script.
@@ -231,15 +236,18 @@ public class PhonScriptContext {
 	 * The evaluated scope is useful for working with functions
 	 * defined in the scropt.
 	 * 
+	 * @param parentScope may be <code>null</code>
+	 * 
 	 * @return the evaluated scope
 	 */
-	public Scriptable getEvaluatedScope() 
+	public Scriptable getEvaluatedScope(Scriptable parentScope) 
 		throws PhonScriptException {
 		if(evaluatedScope == null) {
 			final Context ctx = enter();
 			
 			evaluatedScope = createImporterScope();
-//			evaluatedScope.setParentScope(parentScope);
+			if(parentScope != null)
+				evaluatedScope.setParentScope(parentScope);
 			final Script compiledScript = getCompiledScript();
 			
 			try {

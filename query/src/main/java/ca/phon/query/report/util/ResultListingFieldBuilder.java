@@ -34,37 +34,37 @@ public class ResultListingFieldBuilder {
 	public final static String SESSION_NAME_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output session name\", \"\"};\n" + "*/\n" + "\n"
-			+ "session.name\n" + "";
+			+ "function getValue() { return session.name; }\n" + "";
 
 	public final static String SESSION_DATE_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output session date (YYYY-MM-DD)\", \"\"};\n"
-			+ "*/\n" + "\n" + "session.date\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return session.date; }\n" + "";
 
 	public final static String SESSION_MEDIA_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output session media filename\", \"\"};\n" + "*/\n"
-			+ "\n" + "session.mediaLocation\n" + "";
+			+ "\n" + "function getValue() { return session.mediaLocation; }\n" + "";
 
 	public final static String RECORD_NUMBER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output record number\", \"\"};\n" + "*/\n" + "\n" 
-			+ "retVal = recordIndex+1;\n" + "";
+			+ "function getValue() { return recordIndex.intValue() + 1; }\n" + "";
 
 	public final static String SPEAKER_NAME_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) name\", \"\"};\n"
-			+ "*/\n" + "\n" + "record.speaker.name\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return (record.speaker ? record.speaker.name : \"\"); }\n" + "";
 
 	public final static String SPEAKER_AGE_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) age (YY;MM.DD)\", \"\"};\n"
-			+ "*/\n" + "\n" + "record.speaker.getAge(session.date)\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return record.speaker.getAge(session.date); }\n" + "";
 
 	public final static String SPEAKER_GENDER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) gender\", \"\"};\n"
-			+ "*/\n" + "\n" + "record.speaker.sex\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return record.speaker.sex; }\n" + "";
 
 	public final static String RECORD_TIER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
@@ -72,33 +72,33 @@ public class ResultListingFieldBuilder {
 			+ "		{separator, \"Options\", false},\n"
 			+ "			{string, tierName, \"${TIER}\", \"Tier name:\"},\n"
 			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
-			+ "*/\n" + "\n" + "retVal = \"\";\n"
+			+ "*/\n" + "function getValue() { \n" + "retVal = \"\";\n"
 			+ "retVal += record.getTier(tierName).toString();\n" + "\n"
 			+ "if(removeGroupMarkers) {\n"
 			+ "	retVal = retVal.replace(/\\[/g, \"\").replace(/\\]/g, \"\");\n"
-			+ "}\n" + "";
+			+ "}\n return retVal; }\n" + "";
 
 	public final static String RESULT_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output result\", \"\"};\n" + "*/\n" + "\n"
-			+ "result\n" + "";
+			+ "function getValue() { return result; }\n" + "";
 
 	public final static String RESULT_FORMAT_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output result format\", \"\"};\n" + "*/\n" + "\n"
-			+ "result.schema\n" + "";
+			+ "function getValue() { return result.schema; }\n" + "";
 
 	public final static String RESULT_EXCLUDED_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Outputs 'true' if result was marked as excluded from reports\", \"\"};\n"
-			+ "*/\n" + "\n" + "result.excluded\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { result.excluded;} \n" + "";
 
 	public final static String METADATA_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output value for specified metadata field\", \"\"},\n"
 			+ "		{separator, \"Options\", false},\n"
 			+ "			{string, fieldName, \"\", \"Metadata type:\"};\n" + "*/\n"
-			+ "\n" + "retVal = \"\";\n" + "\n"
+			+ "\n function getValue() {\n" + "retVal = \"\";\n" + "\n"
 			+ "metadata = result.metadata;\n" + "\n"
 			+ "if(fieldName == null || fieldName.length == 0) {\n"
 			+ "	// print metadata info with values\n"
@@ -111,8 +111,8 @@ public class ResultListingFieldBuilder {
 			+ "			retVal += (retVal.length > 0 ? \",\" : \"\")\n"
 			+ "				   + key + \"=\" + val;\n" + "		}\n" + "	}\n" + "} else {\n"
 			+ "	val = metadata.get(fieldName);\n" + "	if(val)\n"
-			+ "		retVal = val + \"\";\n" + "	else\n" + "		retVal = \"\";\n"
-			+ "}\n" + "";
+			+ "		retVal = val + \"\";\n" + "	else\n" + "		retVal = \"blah\";\n"
+			+ "}\n return retVal; }\n" + "";
 
 	public final static String SYLLABIFICATION_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
@@ -120,7 +120,7 @@ public class ResultListingFieldBuilder {
 			+ "		{separator, \"Options\", false},\n"
 			+ "			{enum, tierName, \"IPA Target\"|\"IPA Actual\", ${TIER}, \"Tier name:\"},\n"
 			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
-			+ "*/\n" + "\n" + "var retVal = \"\";\n" + "\n"
+			+ "*/\n" + "function getValue() { \n" + "var retVal = \"\";\n" + "\n"
 			+ "for(grpIdx = 0; grpIdx < record.numberOfGroups; grpIdx++)\n"
 			+ "{\n" + "	var ipaGrp = record.getGroup(tierName, grpIdx);\n"
 			+ "\n" + "	retVal += (grpIdx > 0 ? \" \" : \"\");\n"
@@ -136,7 +136,7 @@ public class ResultListingFieldBuilder {
 			+ "				retVal += (pIdx > 0 ? \";\" : \"\");\n"
 			+ "				retVal += phone + \":\" + phone.scType.identifier;\n"
 			+ "			}\n" + "		}\n" + "	}\n" + "\n"
-			+ "	if(!removeGroupMarkers) retVal += \"]\";\n" + "}";
+			+ "	if(!removeGroupMarkers) retVal += \"]\";\n" + "}\n return retVal; }\n";
 
 	public final static String ALIGNMENT_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
@@ -144,7 +144,7 @@ public class ResultListingFieldBuilder {
 			+ "		{separator, \"Options\", false},\n"
 			+ "			{bool, includeConstituentType, false, \"Include syllable constituent\", \"Syllabification:\"},\n"
 			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
-			+ "*/\n" + "\n" + "var retVal = \"\";\n" + "\n"
+			+ "*/\n" + "function getValue() { \n" + "var retVal = \"\";\n" + "\n"
 			+ "for(grpIdx = 0; grpIdx < record.numberOfGroups; grpIdx++)\n"
 			+ "{\n" + "	alignmentChar = \"\\u2194\";\n"
 			+ "	ipaGrp = record.getGroup(\"IPA Target\", grpIdx);\n" + "\n"
@@ -165,7 +165,7 @@ public class ResultListingFieldBuilder {
 			+ "		retVal += (btmPhone ? btmPhone : \"_\");\n"
 			+ "		if(btmPhone && includeConstituentType)\n"
 			+ "			retVal += \":\" + btmPhone.scType.identifier;\n" + "	}\n"
-			+ "\n" + "	if(!removeGroupMarkers) retVal += \"]\";\n" + "}";
+			+ "\n" + "	if(!removeGroupMarkers) retVal += \"]\";\n" + "}\n return retVal; }\n";
 	
 	/**
 	 * Returns fields: 'record #', 'Speaker' and 'Result'
