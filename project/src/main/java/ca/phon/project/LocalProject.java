@@ -506,8 +506,9 @@ public class LocalProject implements Project {
 	@Override
 	public void releaseSessionWriteLock(String corpus, String session,
 			UUID writeLock) throws IOException {
+		final String sessionLoc = sessionProjectPath(corpus, session);
 		checkSessionWriteLock(corpus, session, writeLock);
-		sessionLocks.remove(writeLock);
+		sessionLocks.remove(sessionLoc);
 	}
 
 	@Override
