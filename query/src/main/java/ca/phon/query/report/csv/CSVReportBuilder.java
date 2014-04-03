@@ -347,7 +347,7 @@ public class CSVReportBuilder extends ReportBuilder {
 							participant.getLanguage(), participant.getEducation(),
 							participant.getGroup(), participant.getRole().getTitle()
 					};
-					for(int j = 0; j < participantLine.length; j++) currentLine.add(participantLine[i]);
+					for(int j = 0; j < participantLine.length; j++) currentLine.add(participantLine[j]);
 					
 					writer.writeNext(currentLine.toArray(new String[0]));
 				}
