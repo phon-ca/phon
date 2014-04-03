@@ -18,6 +18,8 @@
 package ca.phon.alignment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -94,6 +96,24 @@ public class AlignmentMap<T> {
 		this.topElements = topElements;
 	}
 	
+	public T[] getAligned(T[] eles) {
+		return getAligned(Arrays.asList(eles));
+	}
+	
+	/**
+	 * Return the list of object that are aligned
+	 * with the given iterable list of object.
+	 * 
+	 * @param eles
+	 * @return aligned lements
+	 */
+	public T[] getAligned(Iterable<T> iterable) {
+		final Iterator<T> itr = iterable.iterator();
+		final List<T> list = new ArrayList<T>();
+		while(itr.hasNext()) list.add(itr.next());
+		return getAligned(list);
+	}
+	
 	/**
 	 * Return the list of objects that are aligned
 	 * with the given list of objects.
@@ -104,8 +124,10 @@ public class AlignmentMap<T> {
 	 * @param eles
 	 * @return aligned elements
 	 */
-	public List<T> getAligned(List<T> eles) {
-		if(eles.size() == 0) return new ArrayList<T>();
+	@SuppressWarnings("unchecked")
+	public T[] getAligned(List<T> eles) {
+		final List<T> retVal = new ArrayList<T>();		
+		if(eles.size() == 0) return null;
 		final List<T> topElements = getTopAlignmentElements();
 		final List<T> btmElements = getBottomAlignmentElements();
 		
@@ -114,15 +136,14 @@ public class AlignmentMap<T> {
 		final int startIdx = (isTop ? topElements.indexOf(eles.get(0)) : btmElements.indexOf(eles.get(0)));
 		final int endIdx = (isTop ? topElements.indexOf(eles.get(eles.size()-1)) : btmElements.indexOf(eles.get(eles.size()-1)));
 		
-		if(startIdx < 0 || endIdx < 0) return new ArrayList<T>();
+		if(startIdx < 0 || endIdx < 0) return null;
 		
-		final List<T> retVal = new ArrayList<T>();
 		for(int i = startIdx; i <= endIdx; i++) {
 			final T ele = (isTop ? btmElements.get(i) : topElements.get(i));
 			if(ele != null)
 				retVal.add(ele);
 		}
-		return retVal;
+		return (T[])retVal.toArray();
 	}
 	
 	/** Get the top alignment as an array of elements */
