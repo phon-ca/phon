@@ -187,6 +187,11 @@ public class RecordImpl implements Record {
 			tier.addGroup("");
 		}
 		
+		if(gidx == 0) {
+			notes.addGroup("");
+			segment.addGroup(SessionFactory.newFactory().createMediaSegment());
+		}
+		
 		return new GroupImpl(this, gidx);
 	}
 

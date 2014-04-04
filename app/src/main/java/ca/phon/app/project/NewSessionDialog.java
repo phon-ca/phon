@@ -6,8 +6,10 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,9 +25,16 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import ca.phon.app.session.editor.undo.TierViewEdit;
+import ca.phon.orthography.Orthography;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierViewItem;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -262,11 +271,11 @@ public class NewSessionDialog extends JDialog {
 				// open the session
 				HashMap<String, Object> initInfo = new HashMap<String, Object>();
 				initInfo.put("project", proj);
-				initInfo.put("corpus", corpusName);
-				initInfo.put("session", sessionName);
+				initInfo.put("corpusName", corpusName);
+				initInfo.put("sessionName", sessionName);
 				
 				try {
-					PluginEntryPointRunner.executePlugin("RecordEditor", initInfo);
+					PluginEntryPointRunner.executePlugin("SessionEditor", initInfo);
 				} catch (PluginException e) {
 					LOGGER.log(Level.SEVERE, e.getMessage(), e);
 					
@@ -297,7 +306,23 @@ public class NewSessionDialog extends JDialog {
 		final String fCorpusName = corpusName;
 		final String fSessionName = sessionName;
 		
-		// TODO create new session
+		final SessionFactory factory = SessionFactory.newFactory();
+		final Session s = factory.createSession(fCorpusName, fSessionName);
+		final Record r = factory.createRecord();
+		r.addGroup();
+		s.addRecord(r);
+		
+		final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
+		tierView.add(factory.createTierViewItem(SystemTierType.Orthography.getName(), true));
+		tierView.add(factory.createTierViewItem(SystemTierType.IPATarget.getName(), true));
+		tierView.add(factory.createTierViewItem(SystemTierType.IPAActual.getName(), true));
+		tierView.add(factory.createTierViewItem(SystemTierType.Notes.getName(), true));
+		tierView.add(factory.createTierViewItem(SystemTierType.Segment.getName(), true));
+		s.setTierView(tierView);
+		
+		final UUID writeLock = proj.getSessionWriteLock(s);
+		proj.saveSession(s, writeLock);
+		proj.releaseSessionWriteLock(s, writeLock);
 	}
 	
 	/**

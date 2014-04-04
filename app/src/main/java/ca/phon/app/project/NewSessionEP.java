@@ -20,6 +20,7 @@ package ca.phon.app.project;
 import java.util.Map;
 
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -42,24 +43,29 @@ public class NewSessionEP implements IPluginEntryPoint {
 	}
 
 	@Override
-	public void pluginStart(Map<String, Object> initInfo)  {
-		if(initInfo.get("project") == null)
-			throw new IllegalArgumentException("Project property not set.");
-		
-		proj = (Project)initInfo.get("project");
-		
-		JDialog dlg = null;
-		if(initInfo.get("corpus") == null) {
-			dlg = new NewSessionDialog(proj);
-		} else {
-			dlg = new NewSessionDialog(proj, initInfo.get("corpus").toString());
-		}
-
-		dlg.setVisible(true);
-		while(dlg.isVisible()) {
-			try {
-				Thread.sleep(500);
-			} catch(Exception e) { break; }
-		}
+	public void pluginStart(final Map<String, Object> initInfo)  {
+		final Runnable onEDT = new Runnable() {
+			
+			@Override
+			public void run() {
+				if(initInfo.get("project") == null)
+					throw new IllegalArgumentException("Project property not set.");
+				
+				proj = (Project)initInfo.get("project");
+				
+				JDialog dlg = null;
+				if(initInfo.get("corpus") == null) {
+					dlg = new NewSessionDialog(proj);
+				} else {
+					dlg = new NewSessionDialog(proj, initInfo.get("corpus").toString());
+				}
+				dlg.setModal(true);
+				dlg.setVisible(true);
+			}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			SwingUtilities.invokeLater(onEDT);
 	}
 }
