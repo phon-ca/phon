@@ -36,7 +36,7 @@ public class OrthoComment extends AbstractOrthoElement {
 	
 	@Override
 	public String text() {
-		return ( (this.type == null ? "" : this.type + ":") + this.data );
+		return ("(" + (this.type == null ? "" : this.type + ":") + this.data + ")");
 	}
 
 }
