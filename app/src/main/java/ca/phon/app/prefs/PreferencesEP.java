@@ -19,6 +19,8 @@ package ca.phon.app.prefs;
 
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.ui.CommonModuleFrame;
@@ -37,25 +39,33 @@ public class PreferencesEP implements IPluginEntryPoint {
 	}
 	
 	@Override
-	public void pluginStart(Map<String, Object> mi) {
-		final CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
-		
-		PrefsDialog dlg = null;
-		if(currentFrame != null)
-			dlg = new PrefsDialog(currentFrame);
+	public void pluginStart(final Map<String, Object> mi) {
+		final Runnable onEDT = new Runnable() {
+			public void run() {
+				final CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
+				
+				PrefsDialog dlg = null;
+				if(currentFrame != null)
+					dlg = new PrefsDialog(currentFrame);
+				else
+					dlg = new PrefsDialog();
+				dlg.setVisible(true);
+				dlg.setModal(true);
+				
+				dlg.pack();
+				if(currentFrame != null)
+					dlg.setLocationRelativeTo(currentFrame);
+				
+				if(mi.containsKey("prefpanel")) {
+					dlg.setActiveTab(mi.get("prefpanel").toString());
+				}
+				
+				dlg.setVisible(true);
+			}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
 		else
-			dlg = new PrefsDialog();
-		dlg.setVisible(true);
-		dlg.setModal(true);
-
-		dlg.pack();
-		if(currentFrame != null)
-			dlg.setLocationRelativeTo(currentFrame);
-		
-		if(mi.containsKey("prefpanel")) {
-			dlg.setActiveTab(mi.get("prefpanel").toString());
-		}
-		
-		dlg.setVisible(true);
+			SwingUtilities.invokeLater(onEDT);
 	}
 }

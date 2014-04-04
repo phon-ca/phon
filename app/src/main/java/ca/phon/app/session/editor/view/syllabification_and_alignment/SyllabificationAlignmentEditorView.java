@@ -21,6 +21,7 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
@@ -272,6 +273,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 	
 	/*---- Editor Actions -------------------*/
+	@RunOnEDT
 	public void onDataChanged(EditorEvent ee) {
 		update();
 		repaint();

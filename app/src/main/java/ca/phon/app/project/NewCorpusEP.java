@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -279,8 +280,18 @@ public class NewCorpusEP implements IPluginEntryPoint {
 	private void begin() {
 		if(proj == null) return;
 
-		JDialog dlg = new NewCorpusDialog();
-		dlg.setVisible(true);
+		final Runnable onEDT = new Runnable() {
+			
+			@Override
+			public void run() {
+				final JDialog dlg = new NewCorpusDialog();
+				dlg.setVisible(true);
+			}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			SwingUtilities.invokeLater(onEDT);
 	}
 
 	@Override
