@@ -101,6 +101,21 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		extSupport.initExtensions();
 	}
 	
+	
+	public IPATranscript(Object ...elements) {
+		super();
+		this.transcription = new IPAElement[elements.length];
+		for(int i = 0; i < elements.length; i++) {
+			final Object ele = elements[i];
+			if(ele instanceof IPAElement) {
+				transcription[i] = (IPAElement)ele;
+			} else {
+				transcription[i] = (new IPAElementFactory()).createPhone();
+			}
+		}
+		extSupport.initExtensions();
+	}
+	
 	/**
 	 * Length of transcription (in elements)
 	 * 
