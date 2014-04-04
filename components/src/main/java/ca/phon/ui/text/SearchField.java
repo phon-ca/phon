@@ -336,6 +336,19 @@ public class SearchField extends JPanel {
 		}
 		
 		@Override
+		public Dimension getPreferredSize() {
+			final Dimension retVal = super.getPreferredSize();
+			
+			final Icon icon = getIcon();
+			if(icon != null) {
+				retVal.width = icon.getIconWidth();
+				retVal.height = icon.getIconHeight();
+			}
+			
+			return retVal;
+		}
+		
+		@Override
 		public void paintComponent(Graphics g) {
 			g.setColor(Color.white);
 			
