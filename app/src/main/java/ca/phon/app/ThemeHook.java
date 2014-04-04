@@ -36,8 +36,7 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					try {
-						final String uiClassName = PrefHelper.get(PhonProperties.UI_THEME, 
-								OSInfo.isMacOs() ? null : SubstanceCeruleanLookAndFeel.class.getName());
+						final String uiClassName = PrefHelper.get(PhonProperties.UI_THEME, SubstanceCeruleanLookAndFeel.class.getName());
 						if(uiClassName != null) {
 							UIManager.setLookAndFeel(uiClassName);
 							UIManager.put(SubstanceLookAndFeel.COLORIZATION_FACTOR, 1.0);
