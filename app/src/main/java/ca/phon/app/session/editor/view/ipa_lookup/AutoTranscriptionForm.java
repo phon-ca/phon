@@ -181,7 +181,7 @@ public class AutoTranscriptionForm extends JPanel {
 	private class SyllabifierCellRenderer extends DefaultListCellRenderer {
 
 		@Override
-		public Component getListCellRendererComponent(JList<?> list,
+		public Component getListCellRendererComponent(JList list,
 				Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,

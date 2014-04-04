@@ -216,7 +216,7 @@ public class IPALookupView extends EditorView {
 		private static final long serialVersionUID = -5753923740573333306L;
 
 		@Override
-		public Component getListCellRendererComponent(JList<?> list,
+		public Component getListCellRendererComponent(JList list,
 				Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,

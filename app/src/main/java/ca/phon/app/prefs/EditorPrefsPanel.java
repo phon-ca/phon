@@ -359,7 +359,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		private static final long serialVersionUID = -5753923740573333306L;
 
 		@Override
-		public Component getListCellRendererComponent(JList<?> list,
+		public Component getListCellRendererComponent(JList list,
 				Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
@@ -388,7 +388,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 	private class SyllabifierCellRenderer extends DefaultListCellRenderer {
 
 		@Override
-		public Component getListCellRendererComponent(JList<?> list,
+		public Component getListCellRendererComponent(JList list,
 				Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
