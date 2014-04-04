@@ -112,7 +112,7 @@ public class SegmentationEditorView extends EditorView {
 		super(editor);
 		
 		this.mediaPlayerView = playerView;
-//		this.mediaPlayerView.getPlayer().addMediaPlayerListener(_locationListener);
+		this.mediaPlayerView.getPlayer().addMediaPlayerListener(_locationListener);
 		
 		init();
 	}

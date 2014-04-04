@@ -48,6 +48,7 @@ import javax.swing.event.ChangeListener;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import ca.phon.media.VLCHelper;
 import ca.phon.ui.CommonModuleFrame;
@@ -398,6 +399,9 @@ public class PhonMediaPlayer extends JPanel {
 			
 			mediaPlayer.prepareMedia(uriLoc, ":play-and-pause");
 			mediaPlayer.addMediaPlayerEventListener(mediaListener);
+			for(MediaPlayerEventListener listener:cachedListenerrs) {
+				mediaPlayer.addMediaPlayerEventListener(listener);
+			}
 		}
 	}
 
@@ -808,6 +812,15 @@ public class PhonMediaPlayer extends JPanel {
 		final float pos = getMediaPlayer().getPosition();
 		final int sliderPos = Math.round(SLIDER_MAX * pos);
 		slider.setValue(sliderPos);
+	}
+
+	private final List<MediaPlayerEventListener> cachedListenerrs = 
+			new ArrayList<MediaPlayerEventListener>();
+	public void addMediaPlayerListener(MediaPlayerEventListener listener) {
+		if(getMediaPlayer() != null) {
+			getMediaPlayer().addMediaPlayerEventListener(listener);
+		}
+		cachedListenerrs.add(listener);
 	}
 	
 }
