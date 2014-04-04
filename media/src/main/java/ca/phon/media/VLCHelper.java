@@ -43,7 +43,7 @@ public class VLCHelper {
 	
 	private final static String VLC_LOCATION_WIN = System.getenv("PROGRAMFILES") + "\\VideoLAN\\VLC";
 	
-	private final static String VLC_LOCATION_MAC = "/Applications/VLC.app/Contents/MacOS";
+	private final static String VLC_LOCATION_MAC = "/Applications/VLC.app/Contents/MacOS/lib";
 	
 	private final static Logger LOGGER = Logger.getLogger(VLCHelper.class
 			.getName());
@@ -79,15 +79,15 @@ public class VLCHelper {
 				isLoaded = true;
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				if(showError) {
-					final MessageDialogProperties props = new MessageDialogProperties();
-					props.setRunAsync(false);
-					props.setParentWindow(null);
-					props.setMessage("<html><p>" + e.getLocalizedMessage() + "</p></html>");
-					props.setTitle("Unable to load VLC");
-					props.setOptions(MessageDialogProperties.okOptions);
-					NativeDialogs.showMessageDialog(props);
-				}
+//				if(showError) {
+//					final MessageDialogProperties props = new MessageDialogProperties();
+//					props.setRunAsync(false);
+//					props.setParentWindow(null);
+//					props.setMessage("<html><p>" + e.getLocalizedMessage() + "</p></html>");
+//					props.setTitle("Unable to load VLC");
+//					props.setOptions(MessageDialogProperties.okOptions);
+//					NativeDialogs.showMessageDialog(props);
+//				}
 			}
 		}
 
