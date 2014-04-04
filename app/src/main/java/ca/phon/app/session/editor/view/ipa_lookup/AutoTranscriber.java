@@ -3,9 +3,12 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
 
+import ca.phon.alignment.Aligner;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.session.Group;
@@ -149,6 +152,7 @@ public class AutoTranscriber {
 		if(getSyllabifier() != null) {
 			getSyllabifier().syllabify(ipaT.toList());
 			getSyllabifier().syllabify(ipaA.toList());
+			
 		}
 		
 		return new Tuple<IPATranscript, IPATranscript>(ipaT, ipaA);
@@ -182,6 +186,13 @@ public class AutoTranscriber {
 				actualEdit.doIt();
 				retVal.addEdit(actualEdit);
 			}
+			
+			final PhoneAligner aligner = new PhoneAligner();
+			final PhoneMap pm = aligner.calculatePhoneMap(autoTranscription.getObj1(), autoTranscription.getObj2());
+			final TierEdit<PhoneMap> alignmentEdit = 
+					new TierEdit<PhoneMap>(null, record.getPhoneAlignment(), i, pm);
+			alignmentEdit.doIt();
+			retVal.addEdit(alignmentEdit);
 		}
 		
 		return retVal;

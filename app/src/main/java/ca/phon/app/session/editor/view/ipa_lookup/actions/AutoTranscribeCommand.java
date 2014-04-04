@@ -49,11 +49,11 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 			// TODO move to background thread
 			final AutoTranscriber transcriber = new AutoTranscriber();
 			transcriber.setDictionary(getLookupView().getLookupContext().getDictionary());
-			transcriber.setOverwrite(autoTranscribeDialog.getForm().isSetIPATarget());
+			transcriber.setOverwrite(autoTranscribeDialog.getForm().isOverwrite());
 			transcriber.setSetIPAActual(autoTranscribeDialog.getForm().isSetIPAActual());
 			transcriber.setSetIPATarget(autoTranscribeDialog.getForm().isSetIPATarget());
 			transcriber.setRecordFilter(autoTranscribeDialog.getForm().getRecordFilter());
-//			transcriber.setSyllabifier(autoTranscribeDialog.getForm().getSyllabifier());
+			transcriber.setSyllabifier(autoTranscribeDialog.getForm().getSyllabifier());
 			final UndoableEdit edit = transcriber.transcribeSession(sessionEditor.getSession());
 			sessionEditor.getUndoSupport().postEdit(edit);
 		}			
