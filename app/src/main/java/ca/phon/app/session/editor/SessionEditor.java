@@ -143,6 +143,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		init();
 	}
 	
+	@Override
+	public String getTitle() {
+		return generateTitle();
+	}
+	
 	private void init() {
 		final BorderLayout layout = new BorderLayout();
 		final Container contentPane = getContentPane();
@@ -162,8 +167,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		
 		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
 		viewModel.applyPerspective(perspective);
-		
-		// TODO statusbar
 		
 		setupEditorActions();
 	}
@@ -594,6 +597,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			final EditorEvent refreshAct = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
 			getEventManager().queueEvent(refreshAct);
 		}
+	}
+	
+	@Override
+	public boolean hasUnsavedChanges() {
+		return this.isModified();
 	}
 	
 	@Override
