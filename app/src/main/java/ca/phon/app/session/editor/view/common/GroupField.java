@@ -2,14 +2,18 @@ package ca.phon.app.session.editor.view.common;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Caret;
@@ -19,6 +23,7 @@ import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
+import ca.phon.ui.action.PhonUIAction;
 
 /**
  * Text field for editing tier data for a group.
@@ -62,6 +67,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		setOpaque(false);
 		init();
 		tier.addTierListener(tierListener);
+		addFocusListener(focusListener);
 	}
 	
 	public Tier<T> getTier() {
@@ -93,7 +99,18 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		}
 		setText(text);
 		
-		getDocument().addDocumentListener(docListener);
+		// validate text when 'enter' is pressed
+		final ActionMap actionMap = getActionMap();
+		final InputMap inputMap = getInputMap(JComponent.WHEN_FOCUSED);
+		
+		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		final String validateId = "validate";
+		final PhonUIAction validateAct = new PhonUIAction(this, "validateAndUpdate");
+		actionMap.put(validateId, validateAct);
+		inputMap.put(validateKs, validateId);
+		
+		setActionMap(actionMap);
+		setInputMap(JComponent.WHEN_FOCUSED, inputMap);
 	}
 	
 	/**
@@ -147,6 +164,11 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		}
 	}
 	
+	public void validateAndUpdate() {
+		if(validateText())
+			update();
+	}
+	
 	protected T getValidatedObject() {
 		return this.validatedObjRef.get();
 	}
@@ -155,27 +177,41 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		this.validatedObjRef.getAndSet(object);
 	}
 	
-	private final DocumentListener docListener = new DocumentListener() {
+	private final FocusListener focusListener = new FocusListener() {
 		
 		@Override
-		public void removeUpdate(DocumentEvent e) {
-			if(hasFocus() && validateText()) {
+		public void focusLost(FocusEvent e) {
+			if(!e.isTemporary() && validateText())
 				update();
-			}
 		}
 		
 		@Override
-		public void insertUpdate(DocumentEvent e) {
-			if(hasFocus() && validateText()) {
-				update();
-			}
+		public void focusGained(FocusEvent e) {
 		}
 		
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			
-		}
 	};
+	
+//	private final DocumentListener docListener = new DocumentListener() {
+//		
+//		@Override
+//		public void removeUpdate(DocumentEvent e) {
+//			if(hasFocus() && validateText()) {
+//				update();
+//			}
+//		}
+//		
+//		@Override
+//		public void insertUpdate(DocumentEvent e) {
+//			if(hasFocus() && validateText()) {
+//				update();
+//			}
+//		}
+//		
+//		@Override
+//		public void changedUpdate(DocumentEvent e) {
+//			
+//		}
+//	};
 
 	@Override
 	public JComponent getEditorComponent() {

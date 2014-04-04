@@ -57,7 +57,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	@Override
 	protected void setValidatedObject(IPATranscript object) {
 		final Transcriber transcriber = getTranscriber();
-		final IPATranscript groupVal = getGroupValue();
+		final IPATranscript groupVal = super.getGroupValue();
 		if(transcriber != null) {
 			AlternativeTranscript alts = groupVal.getExtension(AlternativeTranscript.class);
 			if(alts == null) {
