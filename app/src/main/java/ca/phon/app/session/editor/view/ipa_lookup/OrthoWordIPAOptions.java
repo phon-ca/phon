@@ -7,6 +7,7 @@ import java.util.List;
 
 import ca.phon.extensions.Extension;
 import ca.phon.orthography.OrthoWord;
+import ca.phon.util.Language;
 
 /**
  * Extension for {@link OrthoWord} objects providing
@@ -20,6 +21,9 @@ public class OrthoWordIPAOptions {
 	
 	private final List<String> options = Collections.synchronizedList(new ArrayList<String>());
 	
+	private Language dictLang;
+	
+
 	public OrthoWordIPAOptions() {
 		super();
 	}
@@ -31,6 +35,14 @@ public class OrthoWordIPAOptions {
 	public OrthoWordIPAOptions(List<String> opts) {
 		super();
 		this.options.addAll(opts);
+	}
+
+	public Language getDictLang() {
+		return dictLang;
+	}
+	
+	public void setDictLang(Language dictLang) {
+		this.dictLang = dictLang;
 	}
 	
 	public List<String> getOptions() {

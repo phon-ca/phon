@@ -65,9 +65,10 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 		if(ctx == null) return new OrthoWordIPAOptions();
 		
 		OrthoWordIPAOptions ext = word.getExtension(OrthoWordIPAOptions.class);
-		if(ext == null) {
+		if(ext == null || ext.getDictLang() != ctx.getLanguage()) {
 			final String[] opts = ctx.lookup(word.getWord());
 			ext = new OrthoWordIPAOptions(opts);
+			ext.setDictLang(ctx.getLanguage());
 			if(opts.length > 0) ext.setSelectedOption(0);
 			word.putExtension(OrthoWordIPAOptions.class, ext);
 		}
