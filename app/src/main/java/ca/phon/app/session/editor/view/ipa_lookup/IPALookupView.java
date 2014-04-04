@@ -1,15 +1,20 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Set;
 
 import javax.swing.Action;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -92,6 +97,8 @@ public class IPALookupView extends EditorView {
 		setupTierTab();
 		setupConsoleTab();
 		
+		onLanguageSwitch();
+		
 		add(tabPane, BorderLayout.CENTER);
 	}
 	
@@ -109,8 +116,13 @@ public class IPALookupView extends EditorView {
 		toolbar = new JToolBar();
 
 		Set<Language> langs = IPADictionaryLibrary.getInstance().availableLanguages();
-		langBox = new JComboBox(langs.toArray(new Language[0]));
-		langBox.setSelectedItem(IPADictionaryLibrary.getInstance().getDefaultLanguage());
+		Language langArray[] = langs.toArray(new Language[0]);
+		Arrays.sort(langArray, new LanguageComparator());
+		final Language defLang = IPADictionaryLibrary.getInstance().getDefaultLanguage();
+		final int langIdx = Arrays.binarySearch(langArray, defLang);
+		langBox = new JComboBox(langArray);
+		langBox.setRenderer(new LanguageCellRenderer());
+		langBox.setSelectedIndex(langIdx);
 		langBox.addItemListener(new ItemListener() {
 			
 			@Override
@@ -121,24 +133,10 @@ public class IPALookupView extends EditorView {
 		});
 
 		autoTranscribeBtn = new JButton(new AutoTranscribeCommand(this));
-//		PhonUIAction autoTranscribeAct =
-//				new PhonUIAction(this, "onAutoTranscribe");
-//		autoTranscribeAct.putValue(Action.NAME, "Auto Transcribe Session");
-//		autoTranscribeBtn.setAction(autoTranscribeAct);
 		
 		importIPABtn = new JButton(new ImportIPACommand(this));
-//		PhonUIAction importIPAAct = 
-//			new PhonUIAction(this, "onImportIPA");
-//		importIPAAct.putValue(Action.NAME, "Import IPA");
-//		importIPAAct.putValue(Action.SHORT_DESCRIPTION, "Import custom IPA transcriptions...");
-//		importIPABtn.setAction(importIPAAct);
 		
 		exportIPABtn = new JButton(new ExportIPACommand(this));
-//		PhonUIAction exportIPAAct =
-//			new PhonUIAction(this, "onExportIPA");
-//		exportIPAAct.putValue(Action.NAME, "Export IPA");
-//		exportIPAAct.putValue(Action.SHORT_DESCRIPTION, "Export custom IPA transcriptions...");
-//		exportIPABtn.setAction(exportIPAAct);
 
 		toolbar.add(new JLabel("IPA Dictionary:"));
 		toolbar.add(langBox);
@@ -203,5 +201,35 @@ public class IPALookupView extends EditorView {
 	public JMenu getMenu() {
 		return new IPALookupViewMenu(this);
 	}
+	
+	private class LanguageComparator implements Comparator<Language> {
 
+		@Override
+		public int compare(Language o1, Language o2) {
+			return o1.toString().compareTo(o2.toString());
+		}
+		
+	}
+
+	private class LanguageCellRenderer extends DefaultListCellRenderer {
+
+		private static final long serialVersionUID = -5753923740573333306L;
+
+		@Override
+		public Component getListCellRendererComponent(JList<?> list,
+				Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+		
+			if(value != null) {
+				final Language lang = (Language)value;
+				final String text = lang.getPrimaryLanguage().getName() + " (" + lang.toString() + ")";
+				retVal.setText(text);
+			}
+			
+			return retVal;
+		}
+	
+	}
 }
