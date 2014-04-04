@@ -232,26 +232,12 @@ public class RecordLookupPanel extends JPanel {
 		
 		final SessionEditor editor = getEditor();
 		if(editor == null) return;
-
-		final Tier<IPATranscript> ipaTarget = r.getIPATarget();
-		final Tier<IPATranscript> ipaActual = r.getIPAActual();
 		
 		boolean groupsNumsMatch = (r.numberOfGroups() == lookupTier.numberOfGroups());
 		if(!groupsNumsMatch) return;
 		
 		for(int i = 0; i < r.numberOfGroups(); i++) {
-			final IPATranscript ipa = lookupTier.getGroup(i);
-			
-			// TODO syllabify ipa
-			
-			if(ipaTargetBox.isSelected()) {
-				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
-				editor.getUndoSupport().postEdit(ipaTargetEdit);
-			}
-			if(ipaActualBox.isSelected()) {
-				final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipa);
-				editor.getUndoSupport().postEdit(ipaActualEdit);
-			}
+			onSetGroup(i);
 		}
 	}
 	
@@ -270,12 +256,18 @@ public class RecordLookupPanel extends JPanel {
 		// TODO syllabify ipa
 		
 		if(ipaTargetBox.isSelected()) {
-			final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
-			editor.getUndoSupport().postEdit(ipaTargetEdit);
+			boolean set = (overwriteBox.isSelected() ? true : ipaTarget.getGroup(i).length() == 0);
+			if(set) {
+				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
+				editor.getUndoSupport().postEdit(ipaTargetEdit);
+			}
 		}
 		if(ipaActualBox.isSelected()) {
-			final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipa);
-			editor.getUndoSupport().postEdit(ipaActualEdit);
+			boolean set = (overwriteBox.isSelected() ? true : ipaActual.getGroup(i).length() == 0);
+			if(set) {
+				final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipa);
+				editor.getUndoSupport().postEdit(ipaActualEdit);
+			}
 		}
 	}
 	
