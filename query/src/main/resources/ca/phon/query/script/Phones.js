@@ -244,13 +244,13 @@ function query_record(recordIndex, record) {
     			    // get index of aligned in opposite tier
     			    var alignedGroup = (searchTier == "IPA Target" ? group.IPAActual : group.IPATarget);
     			    var alignedStart = 
-    			        (aligned.size() > 0 ? alignedGroup.indexOf(aligned.get(0)) : 0);
+    			        (aligned != null && aligned.length > 0 ? alignedGroup.indexOf(aligned[0]) : 0);
     			    
     			    var alignedRv = factory.createResultValue();
     			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
     			    alignedRv.groupIndex = group.groupIndex;
-    			    alignedRv.range = new Range(alignedStart, alignedStart + aligned.size(), true);
-    			    alignedRv.data = new IPATranscript(aligned);
+    			    alignedRv.range = new Range(alignedStart, alignedStart + (aligned != null ? aligned.length : 0), true);
+    			    alignedRv.data = new IPATranscript((aligned != null ? aligned : []));
     			    result.resultValues.add(alignedRv);
     			    result.schema = "ALIGNED";
     			}
