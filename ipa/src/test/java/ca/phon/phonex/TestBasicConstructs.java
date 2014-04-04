@@ -61,6 +61,18 @@ public class TestBasicConstructs {
 	}
 	
 	@Test
+	public void testRegexMatcher() throws ParseException {
+		final String text =  "st\u0361\u0283aad\u035c\u0292";
+		final String phonex = "'t.+'";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher matcher = pattern.matcher(ipa);
+		
+		Assert.assertEquals(true, matcher.find());
+	}
+	
+	@Test
 	public void testFeatureSetMatcher() throws ParseException {
 		
 	}

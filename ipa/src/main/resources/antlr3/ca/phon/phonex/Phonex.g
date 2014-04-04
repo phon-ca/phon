@@ -144,7 +144,7 @@ base_phone_matcher
 	;
 	
 regex_matcher
-	:	STRING
+	:	REGEX_STRING
 	;
 	
 identifier
@@ -339,6 +339,10 @@ WS  :   ( ' '
         | '\n'
         ) {$channel=HIDDEN;}
     ;
+    
+REGEX_STRING
+	:	'\'' ( ESC_SEQ | HEX_CHAR | ~(BACKSLASH|'\'') )* '\''
+	;
 	
 STRING
     :  '\"' ( ESC_SEQ | HEX_CHAR | ~(BACKSLASH|'\"') )* '\"'

@@ -343,10 +343,10 @@ base_phone_matcher returns [PhoneMatcher matcher]
 	;
 	
 regex_matcher returns [PhoneMatcher matcher]
-	:	STRING
+	:	REGEX_STRING
 	{
 		RegexMatcher retVal = new RegexMatcher(
-			StringEscapeUtils.unescapeJava($STRING.text.substring(1, $STRING.text.length()-1)));
+			StringEscapeUtils.unescapeJava($REGEX_STRING.text.substring(1, $REGEX_STRING.text.length()-1)));
 		$matcher = retVal;
 	}
 	;
