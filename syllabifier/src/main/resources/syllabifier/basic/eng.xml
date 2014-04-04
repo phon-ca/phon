@@ -87,7 +87,7 @@
     <Stage name="MarkOnset" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
@@ -124,7 +124,7 @@
     <Stage name="MaxOnset" useMDC="true" mdc="2" sonorityDirection="Right" allowsFlatSonority="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
@@ -175,7 +175,7 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
@@ -190,7 +190,7 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
@@ -234,7 +234,7 @@
             <Constraint>
                 <PhoneSequence>{}:Coda</PhoneSequence>
                 <connector type="or"/>
-                <PhoneSequence>{}:SyllableStressMarker|SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{}:sctype("SyllableStressMarker|SyllableBoundaryMarker")</PhoneSequence>
                 <connector type="or"/>
                 <PhoneSequence>{}:Nucleus</PhoneSequence>
             </Constraint>
@@ -287,7 +287,7 @@
     <Stage name="MarkOEHS" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>OEHS</MarkAs>
         </PhoneOfInterest>

@@ -76,7 +76,7 @@
     <Stage name="MarkOnset" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
@@ -113,7 +113,7 @@
     <Stage name="MaxOnset" useMDC="true" mdc="2" sonorityDirection="Right" allowsFlatSonority="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
@@ -155,7 +155,7 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
@@ -170,7 +170,7 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
