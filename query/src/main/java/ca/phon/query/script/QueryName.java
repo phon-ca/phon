@@ -1,7 +1,9 @@
 package ca.phon.query.script;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,18 +27,21 @@ public class QueryName {
 	
 	public QueryName(URL url) {
 		this.location = url;
-		String path;
+		String path = url.getPath();
+		final int lastSlash = path.lastIndexOf("/");
+
+		this.name = (lastSlash > 0 ? path.substring(lastSlash + 1) : path);
+		
+		final URLDecoder urlDecoder = new URLDecoder();
 		try {
-			path = url.toURI().getPath();
-			final int lastSlash = path.lastIndexOf("/");
-			this.name = (lastSlash > 0 ? path.substring(lastSlash + 1) : path);
-			this.name = StringEscapeUtils.unescapeXml(name);
-			final int lastDot = this.name.lastIndexOf('.');
-			if(lastDot > 0) {
-				this.name = this.name.substring(0, lastDot);
-			}
-		} catch (URISyntaxException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			this.name = urlDecoder.decode(this.name, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+		}
+		
+		final int lastDot = this.name.lastIndexOf('.');
+		if(lastDot > 0) {
+			this.name = this.name.substring(0, lastDot);
 		}
 	}
 	
