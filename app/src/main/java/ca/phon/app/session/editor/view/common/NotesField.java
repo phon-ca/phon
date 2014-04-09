@@ -27,7 +27,8 @@ public class NotesField extends JTextArea implements TierEditor {
 	}
 	
 	private void update() {
-		final String text = notesTier.getGroup(0);
+		final String text = 
+				(notesTier.numberOfGroups() == 0 ? new String() : notesTier.getGroup(0));
 		setText(text);
 	}
 

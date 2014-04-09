@@ -467,11 +467,18 @@ public class RecordImpl implements Record {
 		group1.setOrthography(ortho);
 		
 		// ipa target
-		final IPATranscript ipaTarget = (new IPATranscriptBuilder()).append(group1.getIPATarget())
-				.appendWordBoundary().append(group2.getIPATarget()).toIPATranscript();
+		final IPATranscriptBuilder tBuilder = new IPATranscriptBuilder();
+		tBuilder.append(group1.getIPATarget());
+		if(tBuilder.size() > 0) tBuilder.appendWordBoundary();
+		tBuilder.append(group2.getIPATarget());
+		final IPATranscript ipaTarget = tBuilder.toIPATranscript();
 		group1.setIPATarget(ipaTarget);
-		final IPATranscript ipaActual = (new IPATranscriptBuilder()).append(group1.getIPAActual())
-				.appendWordBoundary().append(group2.getIPAActual()).toIPATranscript();
+		
+		final IPATranscriptBuilder aBuilder = new IPATranscriptBuilder();
+		aBuilder.append(group1.getIPAActual());
+		if(aBuilder.size() > 0) aBuilder.appendWordBoundary();
+		aBuilder.append(group2.getIPAActual());
+		final IPATranscript ipaActual = aBuilder.toIPATranscript();
 		group1.setIPAActual(ipaActual);
 		
 		// TODO alignment
@@ -514,16 +521,24 @@ public class RecordImpl implements Record {
 		// ipa target
 		final IPATranscript ipaT = word.getIPATarget();
 		int ipaTIdx = group.getIPATarget().indexOf(ipaT);
-		final IPATranscript ipaTarget = group.getIPATarget().subsection(0, ipaTIdx);
-		final IPATranscript newIpaTarget = group.getIPATarget().subsection(ipaTIdx, group.getIPATarget().length());
+		IPATranscript ipaTarget = group.getIPATarget();
+		IPATranscript newIpaTarget = new IPATranscript();
+		if(ipaTIdx >= 0) {
+			ipaTarget = group.getIPATarget().subsection(0, ipaTIdx);
+			newIpaTarget = group.getIPATarget().subsection(ipaTIdx+1, group.getIPATarget().length());
+		}
 		group.setIPATarget(ipaTarget);
 		newGroup.setIPATarget(newIpaTarget);
 		
 		// ipa actual
 		final IPATranscript ipaA = word.getIPAActual();
 		int ipaAIdx = group.getIPAActual().indexOf(ipaA);
-		final IPATranscript ipaActual = group.getIPAActual().subsection(0, ipaAIdx);
-		final IPATranscript newIpaActual = group.getIPAActual().subsection(ipaAIdx, group.getIPAActual().length());
+		IPATranscript ipaActual = group.getIPAActual();
+		IPATranscript newIpaActual = new IPATranscript();
+		if(ipaAIdx >= 0) {
+			ipaActual = group.getIPAActual().subsection(0, ipaAIdx);
+			newIpaActual = group.getIPAActual().subsection(ipaAIdx+1, group.getIPAActual().length());
+		}
 		group.setIPAActual(ipaActual);
 		newGroup.setIPAActual(newIpaActual);
 

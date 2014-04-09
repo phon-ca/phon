@@ -213,7 +213,7 @@ public class RecordDataEditorView extends EditorView {
 			}
 			if(isGrouped) {
 				for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
-					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, gIdx);
+					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, gIdx);
 					tierEditor.addTierEditorListener(tierEditorListener);
 					final Component tierComp = tierEditor.getEditorComponent();
 					tierComp.setFont(tierFont);
@@ -221,7 +221,7 @@ public class RecordDataEditorView extends EditorView {
 					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
 				}
 			} else {
-				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tier, 0);
+				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
 
 				tierEditor.addTierEditorListener(tierEditorListener);
 				final Component tierComp = tierEditor.getEditorComponent();

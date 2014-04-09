@@ -120,9 +120,11 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 */
 	public T getGroupValue() {
 		T retVal = null;
-		if(groupIndex < tier.numberOfGroups()) {
-			retVal = tier.getGroup(groupIndex);
+		if(groupIndex >= tier.numberOfGroups()) {
+//			retVal = tier.getGroup(groupIndex);
+			for(int i = tier.numberOfGroups(); i <= groupIndex; i++) tier.addGroup();
 		}
+		retVal = tier.getGroup(groupIndex);
 		return retVal;
 	}
 	
@@ -181,8 +183,8 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		@Override
 		public void focusLost(FocusEvent e) {
-			if(!e.isTemporary() && validateText())
-				update();
+//			if(!e.isTemporary() && validateText())
+//				update();
 		}
 		
 		@Override

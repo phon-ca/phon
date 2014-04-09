@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ca.phon.app.prefs.PhonProperties;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
@@ -145,7 +147,10 @@ public class TierInfoEditor extends JPanel {
 	
 	public TierViewItem createTierViewItem() {
 		final SessionFactory factory = SessionFactory.newFactory();
-		return factory.createTierViewItem(getTierName(), isVisible(), getTierFont().toString());
+		final Font selectedFont = getTierFont();
+		final Formatter<Font> fontFormatter = FormatterFactory.createFormatter(Font.class);
+		final String fontString = (fontFormatter == null ? selectedFont.toString() : fontFormatter.format(selectedFont));
+		return factory.createTierViewItem(getTierName(), isVisible(), fontString);
 	}
 	
 	public TierDescription createTierDescription() {

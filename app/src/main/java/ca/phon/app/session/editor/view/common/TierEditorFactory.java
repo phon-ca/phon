@@ -15,6 +15,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Tier;
+import ca.phon.session.TierDescription;
 import ca.phon.ui.action.PhonUIAction;
 
 /**
@@ -32,7 +33,8 @@ public class TierEditorFactory {
 	 * @param tier
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public TierEditor createTierEditor(SessionEditor editor, Tier<?> tier, int group) {
+	public TierEditor createTierEditor(SessionEditor editor, TierDescription tierDescription,
+			Tier<?> tier, int group) {
 		TierEditor retVal = null;
 		
 		final Class<?> tierType = tier.getDeclaredType();
@@ -43,6 +45,9 @@ public class TierEditorFactory {
 			final TierEditorInfo info = extPt.getClass().getAnnotation(TierEditorInfo.class);
 			if(info != null) {
 				if(info.type() == tierType) {
+					if(info.tierName().length() > 0) {
+						if(!info.tierName().equals(tier.getName())) continue;
+					}
 					retVal = extPt.getFactory().createObject(editor, tier, group);
 					// don't continue to look use this editor
 					if(info.tierName().equalsIgnoreCase(tier.getName())) {
