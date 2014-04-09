@@ -39,24 +39,23 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 				public void run() {
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
 					if(OSInfo.isMacOs()) {
-						try {
-							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-						} catch (ClassNotFoundException e) {
-							LOGGER.log(Level.SEVERE,
-									e.getLocalizedMessage(), e);
-						} catch (InstantiationException e) {
-							LOGGER.log(Level.SEVERE,
-									e.getLocalizedMessage(), e);
-						} catch (IllegalAccessException e) {
-							LOGGER.log(Level.SEVERE,
-									e.getLocalizedMessage(), e);
-						} catch (UnsupportedLookAndFeelException e) {
-							LOGGER.log(Level.SEVERE,
-									e.getLocalizedMessage(), e);
-						}
+//						try {
+//							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//						} catch (ClassNotFoundException e) {
+//							LOGGER.log(Level.SEVERE,
+//									e.getLocalizedMessage(), e);
+//						} catch (InstantiationException e) {
+//							LOGGER.log(Level.SEVERE,
+//									e.getLocalizedMessage(), e);
+//						} catch (IllegalAccessException e) {
+//							LOGGER.log(Level.SEVERE,
+//									e.getLocalizedMessage(), e);
+//						} catch (UnsupportedLookAndFeelException e) {
+//							LOGGER.log(Level.SEVERE,
+//									e.getLocalizedMessage(), e);
+//						}
 						final String[] uiKeys = new String[]{
-								"MenuBarUI", "MenuUI", "MenuItemUI", "CheckBoxMenuItemUI",
-								"RadioButtonMenuItemUI", "PopupMenuUI" };
+								"MenuBarUI", "MenuUI" };
 						for(String key:uiKeys) {
 							uiMap.put(key, UIManager.get(key));
 						}
