@@ -2,6 +2,8 @@ package ca.phon.app;
 
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,6 +37,30 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
+					final Map<String, Object> uiMap = new HashMap<String, Object>();
+					if(OSInfo.isMacOs()) {
+						try {
+							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+						} catch (ClassNotFoundException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
+						} catch (InstantiationException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
+						} catch (IllegalAccessException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
+						} catch (UnsupportedLookAndFeelException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
+						}
+						final String[] uiKeys = new String[]{
+								"MenuBarUI", "MenuUI", "MenuItemUI", "CheckBoxMenuItemUI",
+								"RadioButtonMenuItemUI", "PopupMenuUI" };
+						for(String key:uiKeys) {
+							uiMap.put(key, UIManager.get(key));
+						}
+					}
 					try {
 						final String uiClassName = PrefHelper.get(PhonProperties.UI_THEME, SubstanceCeruleanLookAndFeel.class.getName());
 						if(uiClassName != null) {
@@ -49,6 +75,11 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					} catch (IllegalAccessException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+					if(OSInfo.isMacOs()) {
+						for(String key:uiMap.keySet()) {
+							UIManager.put(key, uiMap.get(key));
+						}
 					}
 				}
 			});
