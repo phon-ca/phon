@@ -214,11 +214,14 @@ public class TierImpl<T> implements Tier<T> {
 			buffer.append("[");
 			for(int i = 0; i < numberOfGroups(); i++) {
 				if(i > 0) buffer.append("] [");
-				buffer.append(getGroup(i).toString());
+				final T grpVal = getGroup(i);
+				if(grpVal != null)
+					buffer.append(grpVal.toString());
 			}
 			buffer.append("]");
 		} else {
-			buffer.append(getGroup(0).toString());
+			if(numberOfGroups() > 0)
+				buffer.append(getGroup(0).toString());
 		}
 		
 		return buffer.toString();
