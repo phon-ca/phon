@@ -488,11 +488,20 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+	
+	public String toString(final boolean includeScType) {
 		final StringBuffer buffer = new StringBuffer();
 		final Visitor<IPAElement> visitor = new Visitor<IPAElement>() {
+			
 			@Override
 			public void visit(IPAElement obj) {
 				buffer.append(obj.toString());
+				if(includeScType) {
+					buffer.append(":");
+					buffer.append(obj.getScType().getIdChar());
+				}
 			}
 		};
 		accept(visitor);
