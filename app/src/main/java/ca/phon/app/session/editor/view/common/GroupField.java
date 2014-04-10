@@ -68,6 +68,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		init();
 		tier.addTierListener(tierListener);
 		addFocusListener(focusListener);
+		getDocument().addDocumentListener(docListener);
 	}
 	
 	public Tier<T> getTier() {
@@ -193,27 +194,27 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 	};
 	
-//	private final DocumentListener docListener = new DocumentListener() {
-//		
-//		@Override
-//		public void removeUpdate(DocumentEvent e) {
-//			if(hasFocus() && validateText()) {
-//				update();
-//			}
-//		}
-//		
-//		@Override
-//		public void insertUpdate(DocumentEvent e) {
-//			if(hasFocus() && validateText()) {
-//				update();
-//			}
-//		}
-//		
-//		@Override
-//		public void changedUpdate(DocumentEvent e) {
-//			
-//		}
-//	};
+	private final DocumentListener docListener = new DocumentListener() {
+		
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			if(hasFocus() && validateText()) {
+				update();
+			}
+		}
+		
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			if(hasFocus() && validateText()) {
+				update();
+			}
+		}
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			
+		}
+	};
 
 	@Override
 	public JComponent getEditorComponent() {

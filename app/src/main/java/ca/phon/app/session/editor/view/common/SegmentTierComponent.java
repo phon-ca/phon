@@ -17,7 +17,12 @@
  */
 
 package ca.phon.app.session.editor.view.common;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
@@ -27,7 +32,9 @@ import javax.swing.event.DocumentListener;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
+import ca.phon.session.TierListener;
 
 /**
  * Editor for media segments.
@@ -45,82 +52,107 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 	
 	private int groupIndex = 0;
 
-	private volatile boolean dontUpdate = false;
-
 	public SegmentTierComponent(Tier<MediaSegment> tier, int groupIndex) {
 		super();
 		
 		this.segmentTier = tier;
+		segmentTier.addTierListener(tierListener);
 		this.groupIndex = groupIndex;
 		
 		super.setBorder(new GroupFieldBorder());
 		
 		updateText();
-		getDocument().addDocumentListener(new SegmentDocumentListener());
+		getDocument().addDocumentListener(docListener);
 	}
 
+	/**
+	 * Validate text contents
+	 * 
+	 * @return <code>true</code> if the contents of the field
+	 *  are valid, <code>false</code> otherwise.
+	 */
+	private final AtomicReference<MediaSegment> validatedObjRef = new AtomicReference<MediaSegment>();
+	protected boolean validateText() {
+		boolean retVal = true;
+
+		final String text = getText();
+		
+		// look for a formatter
+		final Formatter<MediaSegment> formatter = FormatterFactory.createFormatter(MediaSegment.class);
+
+		try {
+			final MediaSegment validatedObj = formatter.parse(text);
+			if(validatedObj.getEndValue() >= validatedObj.getStartValue()) {
+				setValidatedObject(validatedObj);
+			} else {
+				retVal = false;
+			}
+		} catch (ParseException e) {
+			retVal = false;
+		}
+		
+		return retVal;
+	}
+	
+	public void validateAndUpdate() {
+		if(validateText())
+			updateTier();
+	}
+	
+	protected MediaSegment getValidatedObject() {
+		return this.validatedObjRef.get();
+	}
+	
+	protected void setValidatedObject(MediaSegment object) {
+		this.validatedObjRef.getAndSet(object);
+	}
 
 	public void updateText() {
-		final MediaSegment segment = segmentTier.getGroup(groupIndex);
+		final MediaSegment segment = getGroupValue();
 		final Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
 		
 		String tierTxt = 
 				(segmentFormatter != null ? segmentFormatter.format(segment) : DEFAULT_SEGMENT_TEXT);
-		dontUpdate = true;
-		int caretLocation = -1;
-		if(super.hasFocus()) {
-			caretLocation = super.getCaretPosition();
-		}
+//		int caretLocation = -1;
+//		if(super.hasFocus()) {
+//			caretLocation = super.getCaretPosition();
+//		}
 //		setFormatter(formatter);
 		setText(tierTxt);
-		if(super.hasFocus() && caretLocation >= 0) {
-			super.setCaretPosition(caretLocation);
+//		if(super.hasFocus() && caretLocation >= 0) {
+//			super.setCaretPosition(caretLocation);
+//		}
+	}
+	
+	private void updateTier() {
+		final MediaSegment oldVal = getGroupValue();
+		final MediaSegment newVal = getValidatedObject();
+		if(newVal != null) {
+			for(TierEditorListener listener:listeners) {
+				listener.tierValueChanged(segmentTier, groupIndex, newVal, oldVal);
+			}
 		}
-		dontUpdate = false;
 	}
 
-//	public void saveData() {
-//		if(dontUpdate) return;
-//
-//		IUtterance utt = model.getRecord();
-//		try {
-//			String oldVal = utt.getTierString(SystemTierType.Segment.getTierName());
-//			utt.setTierString(SystemTierType.Segment.getTierName(), getText());
-//			String newVal = utt.getTierString(SystemTierType.Segment.getTierName());
-//
-//			model.fireRecordEditorEvent(TIER_CHANGE_EVT, this,
-//					SystemTierType.Segment.getTierName());
-//
-//			TierDataEdit edit =
-//					new TierDataEdit(utt, SystemTierType.Segment.getTierName(), oldVal, newVal) {
-//
-//				@Override
-//				public void redo() throws CannotRedoException {
-//					super.redo();
-//					updateText();
-//				}
-//
-//				@Override
-//				public void undo() throws CannotUndoException {
-//					super.undo();
-//					updateText();
-//				}
-//
-//
-//
-//			};
-//			model.getUndoSupport().postEdit(edit);
-//		} catch (ParserException ex) {
-//			PhonLogger.severe(ex.toString());
-//			ex.printStackTrace();
-//		}
-//	}
+	private MediaSegment getGroupValue() {
+		MediaSegment retVal = null;
+		
+		if(groupIndex < segmentTier.numberOfGroups()) {
+			retVal = segmentTier.getGroup(groupIndex);
+		} else {
+			final SessionFactory factory = SessionFactory.newFactory();
+			retVal = factory.createMediaSegment();
+		}
+		
+		return retVal;
+	}
 	
-	private class SegmentDocumentListener implements DocumentListener {
+	private final DocumentListener docListener = new DocumentListener() {
 
 		@Override
 		public void insertUpdate(DocumentEvent de) {
-//			saveData();
+			if(hasFocus() && validateText())
+				updateTier();
 		}
 
 		@Override
@@ -131,31 +163,55 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 		public void changedUpdate(DocumentEvent de) {
 		}
 
-	}
+	};
 
+	private final TierListener<MediaSegment> tierListener = new TierListener<MediaSegment>() {
+		
+		@Override
+		public void groupsCleared(Tier<MediaSegment> tier) {
+		}
+		
+		@Override
+		public void groupRemoved(Tier<MediaSegment> tier, int index,
+				MediaSegment value) {
+		}
+		
+		@Override
+		public void groupChanged(Tier<MediaSegment> tier, int index,
+				MediaSegment oldValue, MediaSegment value) {
+			if(!hasFocus() && index == groupIndex) {
+				updateText();
+			}
+		}
+		
+		@Override
+		public void groupAdded(Tier<MediaSegment> tier, int index,
+				MediaSegment value) {
+		}
+	};
+	
 	@Override
 	public JComponent getEditorComponent() {
 		return this;
 	}
 
+	private final List<TierEditorListener> listeners = 
+			Collections.synchronizedList(new ArrayList<TierEditorListener>());
+	
 	@Override
 	public void addTierEditorListener(TierEditorListener listener) {
-		// TODO Auto-generated method stub
-		
+		if(!listeners.contains(listener))
+			listeners.add(listener);
 	}
-
 
 	@Override
 	public void removeTierEditorListener(TierEditorListener listener) {
-		// TODO Auto-generated method stub
-		
+		listeners.remove(listener);
 	}
-
 
 	@Override
 	public List<TierEditorListener> getTierEditorListeners() {
-		// TODO Auto-generated method stub
-		return null;
+		return listeners;
 	}
 
 }
