@@ -200,6 +200,7 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 			props.setParentWindow(this);
 			props.setOptions(MessageDialogProperties.yesNoCancelOptions);
 			props.setTitle("Save changes?");
+			props.setHeader("Save changes?");
 			props.setMessage("Save changes before closing?");
 			props.setRunAsync(false);
 			
