@@ -401,6 +401,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 		props.setRunAsync(false);
 		props.setOptions(MessageDialogProperties.yesNoCancelOptions);
 		props.setTitle("Begin New Report");
+		props.setHeader("Begin New Report");
 		props.setMessage(msg);
 		
 		int retVal = NativeDialogs.showMessageDialog(props);
