@@ -287,6 +287,7 @@ public class SaveQueryDialog extends JDialog {
 				props.setParentWindow(this);
 				props.setRunAsync(false);
 				props.setTitle("Save failed");
+				props.setHeader("Save failed");
 				props.setMessage(ex.getLocalizedMessage());
 				NativeDialogs.showMessageDialog(props);
 				return;

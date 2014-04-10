@@ -205,6 +205,13 @@ public final class SyllabifierLibrary implements IExtendable {
 		return retVal;
 	}
 	
+	public Syllabifier defaultSyllabifier() {
+		final List<Syllabifier> vals = getSyllabifiersForLanguage(defaultSyllabifierLanguage());
+		if(vals.size() > 0)
+			return vals.get(0);
+		return null;
+	}
+	
 	@Override
 	public Set<Class<?>> getExtensions() {
 		return extSupport.getExtensions();

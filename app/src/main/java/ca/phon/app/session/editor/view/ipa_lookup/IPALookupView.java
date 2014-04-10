@@ -162,6 +162,7 @@ public class IPALookupView extends EditorView {
 	
 	public void onLanguageSwitch() {
 		final Language lang = (Language)langBox.getSelectedItem();
+		if(lang == null) return;
 		lookupContext.switchDictionary(lang.toString());
 		recordLookupPanel.setDictionary(lookupContext.getDictionary());
 	}

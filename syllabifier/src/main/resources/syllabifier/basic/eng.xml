@@ -68,15 +68,15 @@
     <Stage name="MarkNuclei" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>j{Vowel}</PhoneSequence>
+                <PhoneSequence>j\v</PhoneSequence>
                 <connector type="or"/>
-                <PhoneSequence>{Vowel,-Long}ə</PhoneSequence>
+                <PhoneSequence>{v,-long}ə</PhoneSequence>
                 <connector type="or"/>
-                <PhoneSequence>{Vowel,-Long}{Glide,-Stop,-Fricative,-Affricate,-Liquid}</PhoneSequence>
+                <PhoneSequence>{v,-long}{g,-stop,-fricative,-affricate,-liquid}</PhoneSequence>
                 <connector type="or"/>
-                <PhoneSequence>{Vowel,-Long}{Vowel,High,Lax}</PhoneSequence>
+                <PhoneSequence>{v,-long}{v,high,lax}</PhoneSequence>
                 <connector type="or"/>
-                <PhoneSequence>{Vowel}</PhoneSequence>
+                <PhoneSequence>\v</PhoneSequence>
                 <connector type="or"/>
                 <PhoneSequence>'.*[\u0329].*'</PhoneSequence>
             </Constraint>
@@ -87,14 +87,14 @@
     <Stage name="MarkOnset" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
+                <PhoneSequence>{-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
         
         <NextPhone>
             <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
+                <PhoneSequence>.:N</PhoneSequence>
             </Constraint>
         </NextPhone>
     </Stage>
@@ -103,20 +103,20 @@
     <Stage name="MarkOnset 2">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
+                <PhoneSequence>.:N</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{Glide}:Nucleus</PhoneSequence>
+                <PhoneSequence>\g:N</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
         
         <NextPhone>
             <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
+                <PhoneSequence>.:N</PhoneSequence>
             </Constraint>
         </NextPhone>
     </Stage>
@@ -124,14 +124,14 @@
     <Stage name="MaxOnset" useMDC="true" mdc="2" sonorityDirection="Right" allowsFlatSonority="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
+                <PhoneSequence>{-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
         
         <NextPhone>
             <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
+                <PhoneSequence>.:O</PhoneSequence>
             </Constraint>
         </NextPhone>
     </Stage>
@@ -139,20 +139,20 @@
     <Stage name="Fix Diphthongs" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:-Onset?</PhoneSequence>
+                <PhoneSequence>.:-O?</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{Glide}:Nucleus</PhoneSequence>
+                <PhoneSequence>\g:N</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
         
         <NextPhone>
             <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
+                <PhoneSequence>.:N</PhoneSequence>
             </Constraint>
         </NextPhone>
     </Stage>
@@ -160,7 +160,7 @@
     <Stage name="Glide Initial [j]" useMDC="false">
     	<PhoneOfInterest>
     		<Constraint>
-    			<PhoneSequence>$j:Nucleus</PhoneSequence>
+    			<PhoneSequence>$j:N</PhoneSequence>
     		</Constraint>
     		<MarkAs>Onset</MarkAs>
     	</PhoneOfInterest>
@@ -169,13 +169,13 @@
     <Stage name="MarkCoda" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
+                <PhoneSequence>.:N</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
+                <PhoneSequence>{-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
@@ -184,13 +184,13 @@
     <Stage name="MaxCoda" useMDC="true" mdc="1" sonorityDirection="Left" allowsFlatSonority="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:Coda</PhoneSequence>
+                <PhoneSequence>.:C</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
+                <PhoneSequence>{-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
@@ -199,13 +199,13 @@
     <Stage name="Fix Branching Codas" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:Coda</PhoneSequence>
+                <PhoneSequence>.:C</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{Obstruent,-Coronal}:Unknown</PhoneSequence>
+                <PhoneSequence>{obs,-cor}:U</PhoneSequence>
             </Constraint>
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
@@ -215,14 +215,14 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>${Strident,Voiceless}</PhoneSequence>
+                <PhoneSequence>${strident,voiceless}</PhoneSequence>
             </Constraint>
             <MarkAs>Left Appendix</MarkAs>
         </PhoneOfInterest>
         
         <NextPhone>
             <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
+                <PhoneSequence>.:O</PhoneSequence>
             </Constraint>
         </NextPhone>
         
@@ -232,24 +232,24 @@
         
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:Coda</PhoneSequence>
+                <PhoneSequence>.:Coda</PhoneSequence>
                 <connector type="or"/>
-                <PhoneSequence>{}:sctype("SyllableStressMarker|SyllableBoundaryMarker")</PhoneSequence>
+                <PhoneSequence>.:sctype("SyllableStressMarker|SyllableBoundaryMarker")</PhoneSequence>
                 <connector type="or"/>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
+                <PhoneSequence>.:N</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{Strident,Voiceless}</PhoneSequence>
+                <PhoneSequence>{strident,voiceless}</PhoneSequence>
             </Constraint>
             <MarkAs>Left Appendix</MarkAs>
         </PhoneOfInterest>
         
         <NextPhone>
             <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
+                <PhoneSequence>.:O</PhoneSequence>
             </Constraint>
         </NextPhone>
     </Stage>
@@ -257,13 +257,13 @@
     <Stage name="MarkRA" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:Coda</PhoneSequence>
+                <PhoneSequence>.:C</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{Coronal}:Unknown</PhoneSequence>
+                <PhoneSequence>{coronal}:U</PhoneSequence>
             </Constraint>
             <MarkAs>Right Appendix</MarkAs>
         </PhoneOfInterest>
@@ -272,13 +272,13 @@
     <Stage name="MaxRA" useMDC="false" continueUntilFail="true">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:RightAppendix</PhoneSequence>
+                <PhoneSequence>.:R</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{Coronal}:Unknown</PhoneSequence>
+                <PhoneSequence>{coronal}:U</PhoneSequence>
             </Constraint>
             <MarkAs>Right Appendix</MarkAs>
         </PhoneOfInterest>
@@ -287,7 +287,7 @@
     <Stage name="MarkOEHS" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
+                <PhoneSequence>{-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")</PhoneSequence>
             </Constraint>
             <MarkAs>OEHS</MarkAs>
         </PhoneOfInterest>

@@ -26,11 +26,14 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
 import ca.phon.app.session.editor.view.common.TierDataLayoutButtons;
+import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
+import ca.phon.session.TierListener;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
@@ -52,7 +55,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private JCheckBox alignmentBox;
 	private JCheckBox colorInAlignmentBox;
 	
-	private JPanel contentPane;
+	private TierDataLayoutPanel contentPane;
 	private JScrollPane scroller;
 	
 	// components
@@ -68,10 +71,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	
 	private void init() {
 		// tier content
-		contentPane = new JPanel();
-		final TierDataLayout layout = new TierDataLayout();
-		contentPane.setLayout(layout);
-		contentPane.setBackground(Color.white);
+		contentPane = new TierDataLayoutPanel();
 		
 		// top panel
 		final FormLayout topLayout = new FormLayout(
@@ -102,7 +102,8 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		toggleAlignmentColorAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.FALSE);
 		colorInAlignmentBox = new JCheckBox(toggleAlignmentColorAct);
 		
-		final TierDataLayoutButtons tdlb = new TierDataLayoutButtons(contentPane, layout);
+		final TierDataLayoutButtons tdlb = new TierDataLayoutButtons(contentPane, 
+				(TierDataLayout)contentPane.getLayout());
 		
 		final CellConstraints cc = new CellConstraints();
 		topPanel.add(targetIPABox, cc.xy(1,1));
@@ -167,13 +168,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 	
 	public void update() {
-//		for(SyllabificationDisplay targetDisplay:targetDisplays)
-//			contentPane.remove(targetDisplay);
-//		for(SyllabificationDisplay actualDisplay:actualDisplays)
-//			contentPane.remove(actualDisplay);
-//		for(PhoneMapDisplay alignmentDisplay:alignmentDisplayus) {
-//			contentPane.remove(alignmentDisplay);
-//		}
 		final boolean showTarget = targetIPABox.isSelected();
 		final boolean showActual = actualIPABox.isSelected();
 		final boolean showAlignment = alignmentBox.isSelected();
@@ -181,6 +175,9 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		
 		final SessionEditor editor = getEditor();
 		final Record record = editor.currentRecord();
+		
+		record.getIPATarget().addTierListener(ipaListener);
+		record.getIPAActual().addTierListener(ipaListener);
 		
 		int maxExtra = Math.max(targetDisplays.size(), actualDisplays.size());
 		maxExtra = Math.max(maxExtra, alignmentDisplayus.size());
@@ -200,7 +197,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		
 		if(showAlignment) {
 			final JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-//			separator.setPreferredSize(new Dimension(0, 1));
 			separator.setForeground(Color.lightGray);
 			final TierDataConstraint sepConstraint = new TierDataConstraint(TierDataConstraint.FULL_TIER_COLUMN, 2);
 			contentPane.add(separator, sepConstraint);
@@ -247,16 +243,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				pmDisplay.setPhoneMapForGroup(0, pm);
 				pmDisplay.setPaintPhoneBackground(colorInAlignment);
 				
-//				pmDisplay.addPropertyChangeListener(new PropertyChangeListener() {
-//					
-//					@Override
-//					public void propertyChange(PropertyChangeEvent arg0) {
-//						if(arg0.getPropertyName().equals(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP)
-//								|| arg0.getPropertyName().equals(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP)) 
-//						layout.layoutContainer(contentPane);
-//					}
-//				});
-				
 				if(!layout.hasLayoutComponent(pmDisplay)) {
 					final TierDataConstraint pmConstraint = 
 							new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIndex, 3);
@@ -279,6 +265,11 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		repaint();
 	}
 	
+	@RunOnEDT
+	public void onTierChanged(EditorEvent ee) {
+		
+	}
+	
 	@Override
 	public String getName() {
 		return VIEW_NAME;
@@ -294,4 +285,36 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		return null;
 	}
 	
+	private final TierListener<IPATranscript> ipaListener = new TierListener<IPATranscript>() {
+		
+		@Override
+		public void groupsCleared(Tier<IPATranscript> tier) {
+		}
+		
+		@Override
+		public void groupRemoved(Tier<IPATranscript> tier, int index,
+				IPATranscript value) {
+		}
+		
+		@Override
+		public void groupChanged(Tier<IPATranscript> tier, int index,
+				IPATranscript oldValue, IPATranscript value) {
+			if(tier.getName().equals(SystemTierType.IPATarget.getName())) {
+				if(index < targetDisplays.size()) {
+					final SyllabificationDisplay targetDisplay = targetDisplays.get(index);
+					targetDisplay.setPhonesForGroup(0, value.toList());
+				}
+			} else if(tier.getName().equals(SystemTierType.IPAActual.getName())) {
+				if(index < actualDisplays.size()) {
+					final SyllabificationDisplay actualDisplay = actualDisplays.get(index);
+					actualDisplay.setPhonesForGroup(0, value.toList());
+				}
+			}
+		}
+		
+		@Override
+		public void groupAdded(Tier<IPATranscript> tier, int index,
+				IPATranscript value) {
+		}
+	};
 }

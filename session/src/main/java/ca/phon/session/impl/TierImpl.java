@@ -78,7 +78,7 @@ public class TierImpl<T> implements Tier<T> {
 	public T getGroup(int idx) {
 		T retVal = null;
 		synchronized(tierData) {
-			if(!grouped && idx > 0) {
+			if(!grouped && (idx > 0 || idx >= numberOfGroups())) {
 				throw new ArrayIndexOutOfBoundsException(idx);
 			}
 			if(!grouped && idx == 0 && tierData.size() == 0) {
@@ -110,6 +110,32 @@ public class TierImpl<T> implements Tier<T> {
 				tierData.set(idx, val);
 		}
 		fireTierGroupChanged(idx, oldVal, val);
+	}
+	
+	@Override
+	public void addGroup() {
+		final Class<? extends T> type = getDeclaredType();
+		try {
+			final T obj = type.newInstance();
+			addGroup(obj);
+		} catch (InstantiationException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (IllegalAccessException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	@Override
+	public void addGroup(int idx) {
+		final Class<? extends T> type = getDeclaredType();
+		try {
+			final T obj = type.newInstance();
+			addGroup(idx, obj);
+		} catch (InstantiationException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (IllegalAccessException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 	}
 
 	@Override
@@ -188,11 +214,14 @@ public class TierImpl<T> implements Tier<T> {
 			buffer.append("[");
 			for(int i = 0; i < numberOfGroups(); i++) {
 				if(i > 0) buffer.append("] [");
-				buffer.append(getGroup(i).toString());
+				final T grpVal = getGroup(i);
+				if(grpVal != null)
+					buffer.append(grpVal.toString());
 			}
 			buffer.append("]");
 		} else {
-			buffer.append(getGroup(0).toString());
+			if(numberOfGroups() > 0)
+				buffer.append(getGroup(0).toString());
 		}
 		
 		return buffer.toString();

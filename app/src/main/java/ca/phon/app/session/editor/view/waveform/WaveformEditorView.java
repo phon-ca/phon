@@ -75,6 +75,7 @@ import ca.phon.session.MediaUnit;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
@@ -161,6 +162,10 @@ public class WaveformEditorView extends EditorView {
 		final DelegateEditorAction sessionMediaChangedAct =
 				new DelegateEditorAction(this, "onSessionMediaChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
+	
+		final DelegateEditorAction segmentChangedAct =
+				new DelegateEditorAction(this, "onMediaSegmentChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, segmentChangedAct);
 	}
 	
 	private void init() {
@@ -650,6 +655,12 @@ public class WaveformEditorView extends EditorView {
 	@RunOnEDT
 	public void onSessionMediaChanged(EditorEvent ee) {
 		update();
+	}
+	
+	@RunOnEDT
+	public void onMediaSegmentChanged(EditorEvent ee) {
+		if(ee.getEventData() != null && ee.getEventData().toString().equals(SystemTierType.Segment.getName()))
+			update();
 	}
 	
 	/**

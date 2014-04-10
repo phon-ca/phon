@@ -52,6 +52,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -180,28 +182,28 @@ public class SessionEditorQuickSearch {
 				
 			}
 		});
-		searchField.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				if(searchField.getState() == FieldState.INPUT) {
-					updateFilter();
-				}
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				if(searchField.getState() == FieldState.INPUT) 
-					updateFilter();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
+//		searchField.getDocument().addDocumentListener(new DocumentListener() {
+//			
+//			@Override
+//			public void removeUpdate(DocumentEvent e) {
+//				if(searchField.getState() == FieldState.INPUT) {
+//					updateFilter();
+//				}
+//			}
+//			
+//			@Override
+//			public void insertUpdate(DocumentEvent e) {
+//				if(searchField.getState() == FieldState.INPUT) 
+//					updateFilter();
+//			}
+//			
+//			@Override
+//			public void changedUpdate(DocumentEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//		});
 		searchField.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -246,24 +248,24 @@ public class SessionEditorQuickSearch {
 	private void updateFilter() {
 		//searchField.updateTableFilter();
 		filterTableModel.setRowFilter(searchField.getRowFilter(searchField.getText()));
-		if(searchField.getText().length() > 0) {
-			showTablePopup();
-		} else {
-			hideTablePopup();
-		}
+//		if(searchField.getText().length() > 0) {
+//			showTablePopup();
+//		} else {
+//			hideTablePopup();
+//		}
 	}
 	
 	public void showRecordList() {
-		hideTablePopup();
+		updateFilter();
 		final SessionEditor editor = editorRef.get();
 		
 		final JTable table = createTable();
 		table.setAutoCreateColumnsFromModel(true);
+		table.setModel(tableModel);
 		if(searchField.getText().length() > 0) {
-			final FilterTableModel tblModel = new FilterTableModel(filterTableModel);
-			table.setModel(tblModel);
-		} else {
-			table.setModel(tableModel);
+			final TableRowSorter<TableModel> rowSorter = new TableRowSorter<TableModel>(tableModel);
+			rowSorter.setRowFilter(searchField.getRowFilter(searchField.getText()));
+			table.setRowSorter(rowSorter);
 		}
 		
 		final String searchText = searchField.getText();

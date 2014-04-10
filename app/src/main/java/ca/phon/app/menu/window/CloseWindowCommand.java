@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
+import ca.phon.ui.CommonModuleFrame;
+
 /**
  * Close the specified window, prompting a save dialog
  * if necessary.
@@ -27,8 +29,11 @@ public class CloseWindowCommand extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		window.setVisible(false);
-		window.dispose();
+		if(window instanceof CommonModuleFrame){
+			((CommonModuleFrame)window).close();
+		} else {
+			window.setVisible(false);
+		}
 	}
 	
 }

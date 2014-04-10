@@ -38,6 +38,22 @@ public interface Tier<T> extends TierDescription, Iterable<T> {
 	public void setGroup(int idx, T val);
 	
 	/**
+	 * Attempts to add a new group to the end of this tier
+	 * and increments the number of groups.
+	 * 
+	 * 
+	 */
+	public void addGroup();
+	
+	/**
+	 * Attempts to add a new group to the end of this tier
+	 * and increments the number of groups.
+	 * 
+	 * @param idx
+	 */
+	public void addGroup(int idx);
+	
+	/**
 	 * Adds a new group to the end of this tier and increments
 	 * the number of groups.
 	 * 

@@ -109,6 +109,8 @@ public class Language implements Comparable<Language> {
 
 	@Override
 	public int compareTo(Language o) {
+		if(toString() == null) return -1;
+		if(o == null || o.toString() == null) return 1;
 		return toString().compareTo(o.toString());
 	}
 	

@@ -42,6 +42,7 @@ import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
@@ -195,9 +196,16 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 	
 	public void close() {
 		if(hasUnsavedChanges()) {
-			int retVal = NativeDialogs.showYesNoCancelDialogBlocking(this, "",
-					"Save changes?", "Save changes before closing?");
-			if(retVal == NativeDialogEvent.YES_OPTION) {
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setParentWindow(this);
+			props.setOptions(MessageDialogProperties.yesNoCancelOptions);
+			props.setTitle("Save changes?");
+			props.setHeader("Save changes?");
+			props.setMessage("Save changes before closing?");
+			props.setRunAsync(false);
+			
+			int retVal = NativeDialogs.showMessageDialog(props);
+			if(retVal == 0) {
 				try {
 					if(!saveData()) {
 						throw new IOException("");
@@ -207,7 +215,7 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 					e.printStackTrace();
 					LOGGER.warning(e.getMessage());
 				}
-			} else if(retVal == NativeDialogEvent.NO_OPTION) {
+			} else if(retVal == 1) {
 				dispose();
 			}
 		} else {

@@ -179,6 +179,7 @@ public class PhonMediaPlayer extends JPanel {
 			
 			remove(mediaPlayerComponent);
 			mediaPlayerComponent.release();
+			mediaPlayerComponent = null;
 		}
 	}
 		

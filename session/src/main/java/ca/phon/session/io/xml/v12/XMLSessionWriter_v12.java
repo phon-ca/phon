@@ -358,7 +358,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		
 		// notes
 		final Tier<String> notesTier = record.getNotes();
-		if(notesTier.getGroup(0).length() > 0) {
+		if(notesTier.numberOfGroups() > 0 && notesTier.getGroup(0).length() > 0) {
 			final FlatTierType notesType = factory.createFlatTierType();
 			notesType.setContent(notesTier.getGroup(0));
 			notesType.setTierName(notesTier.getName());

@@ -68,6 +68,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		init();
 		tier.addTierListener(tierListener);
 		addFocusListener(focusListener);
+		getDocument().addDocumentListener(docListener);
 	}
 	
 	public Tier<T> getTier() {
@@ -120,9 +121,11 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 */
 	public T getGroupValue() {
 		T retVal = null;
-		if(groupIndex < tier.numberOfGroups()) {
-			retVal = tier.getGroup(groupIndex);
+		if(groupIndex >= tier.numberOfGroups()) {
+//			retVal = tier.getGroup(groupIndex);
+			for(int i = tier.numberOfGroups(); i <= groupIndex; i++) tier.addGroup();
 		}
+		retVal = tier.getGroup(groupIndex);
 		return retVal;
 	}
 	
@@ -181,8 +184,8 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		@Override
 		public void focusLost(FocusEvent e) {
-			if(!e.isTemporary() && validateText())
-				update();
+//			if(!e.isTemporary() && validateText())
+//				update();
 		}
 		
 		@Override
@@ -191,27 +194,27 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 	};
 	
-//	private final DocumentListener docListener = new DocumentListener() {
-//		
-//		@Override
-//		public void removeUpdate(DocumentEvent e) {
-//			if(hasFocus() && validateText()) {
-//				update();
-//			}
-//		}
-//		
-//		@Override
-//		public void insertUpdate(DocumentEvent e) {
-//			if(hasFocus() && validateText()) {
-//				update();
-//			}
-//		}
-//		
-//		@Override
-//		public void changedUpdate(DocumentEvent e) {
-//			
-//		}
-//	};
+	private final DocumentListener docListener = new DocumentListener() {
+		
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			if(hasFocus() && validateText()) {
+				update();
+			}
+		}
+		
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			if(hasFocus() && validateText()) {
+				update();
+			}
+		}
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			
+		}
+	};
 
 	@Override
 	public JComponent getEditorComponent() {
