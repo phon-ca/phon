@@ -154,31 +154,20 @@ public class SaveOnExitDialog extends JDialog {
 				boolean arg2, boolean arg3, boolean arg4, int arg5, boolean arg6) {
 			Component retVal = super.getTreeCellRendererComponent(arg0, arg1, arg2, arg3, arg4, arg5,
 					arg6);
-		
-//			String labelText = "";
+			
+			String labelText = arg1.toString();
+			
 			if(arg1 instanceof CommonModuleFrame) {
-				String labelText = "";
 				// get the corpus.id of the session
 				CommonModuleFrame editor = (CommonModuleFrame)arg1;
-				
-//				if(editor instanceof RecordEditor) {
-//					ITranscript t = ((RecordEditor)editor).getModel().getSession();
-//					labelText = t.getCorpus() + "." + t.getID();
-//				} else {
-					labelText = editor.getWindowName();
-//				}
-				
-//				ITranscript t = editor.getModel().getSession();
-//				String labelText = t.getCorpus() + "." + t.getID();
-
-				super.label.setText(labelText);
+				labelText = editor.getTitle();
+			} else if(arg1 instanceof Project) {
+				labelText = ((Project)arg1).getName();
 			}
-			
+			super.label.setText(labelText);
 			
 			return retVal;
 		}
-		
-		
 		
 	}
 	
