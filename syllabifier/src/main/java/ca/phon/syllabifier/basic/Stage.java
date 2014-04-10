@@ -54,24 +54,6 @@ public class Stage {
 		List<Range> phoneRanges = phoneOfInterestConstraint.findRangesInList(tape);
 		if(phoneRanges == null)
 			phoneRanges = new ArrayList<Range>();
-//		if(this.getPhoneOfInterest().getSyllabificationStatus() != null) {
-//			tempList.clear();
-//			for(Range r:phoneRanges) {
-//				boolean keep = true;
-//				for(int phoneIndex:r) {
-//					if(!checkPhoneSyllabification(tape.get(phoneIndex),
-//							getPhoneOfInterest().getSyllabificationStatus())){
-//						keep = false;
-//						break;
-//					}
-//				}
-//				if(keep)
-//					tempList.add(r);
-//			}
-//			
-//			phoneRanges.clear();
-//			phoneRanges.addAll(tempList);
-//		}
 		
 		// step 2 - check previous phone(s)
 		if(st.getPrevPhone() != null) {
@@ -106,23 +88,6 @@ public class Stage {
 				phoneRanges.addAll(tempList);
 			}
 			
-//			if(this.getPrevPhone().getSyllabificationStatus() != null) {
-//				tempList.clear();
-//				for(Range r:phoneRanges) {
-//					int prevPhoneIndex = r.getFirst()-1;
-//					if(prevPhoneIndex < 0) {
-//						if(!this.getPrevPhone().isMustExist())
-//							tempList.add(r);
-//						continue;
-//					}
-//					
-//					if(checkPhoneSyllabification(tape.get(prevPhoneIndex), 
-//							getPrevPhone().getSyllabificationStatus()))
-//						tempList.add(r);
-//				}
-//				phoneRanges.clear();
-//				phoneRanges.addAll(tempList);
-//			}
 		}
 		
 		// step 3 - check next phone
@@ -134,11 +99,6 @@ public class Stage {
 				tempList.clear();
 				for(Range r:phoneRanges) {
 					int nextPhoneIndex = r.getFirst()+1;
-//					if(nextPhoneIndex >= tape.size()) {
-//						if(!this.getNextPhone().isMustExist())
-//							tempList.add(r);
-//						continue;
-//					}
 					
 					List<IPAElement> testPhones = new ArrayList<IPAElement>();
 					if(nextPhoneIndex <= tape.size()) {
@@ -162,23 +122,6 @@ public class Stage {
 				phoneRanges.clear();
 				phoneRanges.addAll(tempList);
 			}
-			
-//			if(this.getNextPhone().getSyllabificationStatus() != null) {
-//				tempList.clear();
-//				for(Range r:phoneRanges) {
-//					int nextPhoneIndex = r.getFirst()+1;
-//					if(nextPhoneIndex >= tape.size()) {
-//						if(!this.getNextPhone().isMustExist())
-//							tempList.add(r);
-//						continue;
-//					}
-//					if(checkPhoneSyllabification(tape.get(nextPhoneIndex), 
-//							getNextPhone().getSyllabificationStatus()))
-//						tempList.add(r);
-//				}
-//				phoneRanges.clear();
-//				phoneRanges.addAll(tempList);
-//			}
 		}
 		
 		// what are we trying to mark..
