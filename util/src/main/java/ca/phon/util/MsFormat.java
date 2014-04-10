@@ -21,7 +21,8 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
-import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -31,6 +32,8 @@ import java.util.logging.Logger;
 public class MsFormat extends Format {
 
 	private static final long serialVersionUID = 4432179935812692306L;
+	
+	private final static String PATTERN = "([0-9]{3})\\:([0-9]{2})\\.([0-9]{3})";
 
 	@Override
 	public StringBuffer format(Object obj, StringBuffer toAppendTo,
@@ -82,8 +85,24 @@ public class MsFormat extends Format {
 	
 	@Override
 	public Object parseObject(String source, ParsePosition pos) {
-		Logger.getLogger(getClass().getName()).warning("Method parseObject(String, ParsePosition) not implemented.");
-		return new Long(0);
+		Object retVal = null;
+		final Pattern pattern = Pattern.compile(PATTERN);
+		final Matcher matcher = pattern.matcher(source);
+		if(matcher.matches()) {
+			final String minString = matcher.group(1);
+			final int mins = Integer.parseInt(minString);
+			
+			final String secString = matcher.group(2);
+			final int secs = Integer.parseInt(secString);
+			
+			final String msString = matcher.group(3);
+			final int ms = Integer.parseInt(msString);
+			
+			retVal = new Long(
+					ms + (secs * 1000) + (mins * 60 * 1000));
+			pos.setIndex(source.length());
+		}
+		return retVal;
 	}
 
 }
