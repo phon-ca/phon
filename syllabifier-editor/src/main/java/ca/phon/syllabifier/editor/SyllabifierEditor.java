@@ -137,13 +137,13 @@ public class SyllabifierEditor extends JFrame {
 				final Processor processor = graphEditor.getDocument().getProcessingContext();
 				if(processor != null) {
 					final SyllabificationDisplay display = graphEditor.getSyllabificationDisplay();
-					display.setPhonesForGroup(0, new IPATranscript().toList());
+					display.setPhonesForGroup(0, new IPATranscript());
 					final Object obj = graphEditor.getDocument().getProcessingContext().getContext().get("__ipa__");
 					if(obj != null && obj instanceof IPATranscript) {
 						final IPATranscript ipa = (IPATranscript)obj;
-						display.setPhonesForGroup(0, ipa.toList());
+						display.setPhonesForGroup(0, ipa);
 					} else {
-						display.setPhonesForGroup(0, new IPATranscript().toList());
+						display.setPhonesForGroup(0, new IPATranscript());
 					}
 				}
 			}

@@ -214,7 +214,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				// target
 				final IPATranscript ipaTarget = group.getIPATarget();
 				final SyllabificationDisplay ipaTargetDisplay = getIPATargetDisplay(gIndex);
-				ipaTargetDisplay.setPhonesForGroup(0, ipaTarget.toList());
+				ipaTargetDisplay.setPhonesForGroup(0, ipaTarget);
 				
 				if(!layout.hasLayoutComponent(ipaTargetDisplay)) {
 					final TierDataConstraint ipaTargetConstraint = 
@@ -227,7 +227,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				// actual
 				final IPATranscript ipaActual = group.getIPAActual();
 				final SyllabificationDisplay ipaActualDisplay = getIPAActualDisplay(gIndex);
-				ipaActualDisplay.setPhonesForGroup(0, ipaActual.toList());
+				ipaActualDisplay.setPhonesForGroup(0, ipaActual);
 				
 				if(!layout.hasLayoutComponent(ipaActualDisplay)) {
 					final TierDataConstraint ipaActualConstraint = 
@@ -302,12 +302,12 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			if(tier.getName().equals(SystemTierType.IPATarget.getName())) {
 				if(index < targetDisplays.size()) {
 					final SyllabificationDisplay targetDisplay = targetDisplays.get(index);
-					targetDisplay.setPhonesForGroup(0, value.toList());
+					targetDisplay.setPhonesForGroup(0, value);
 				}
 			} else if(tier.getName().equals(SystemTierType.IPAActual.getName())) {
 				if(index < actualDisplays.size()) {
 					final SyllabificationDisplay actualDisplay = actualDisplays.get(index);
-					actualDisplay.setPhonesForGroup(0, value.toList());
+					actualDisplay.setPhonesForGroup(0, value);
 				}
 			}
 		}

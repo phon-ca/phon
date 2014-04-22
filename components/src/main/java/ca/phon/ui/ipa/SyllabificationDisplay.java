@@ -108,13 +108,13 @@ public class SyllabificationDisplay extends JComponent {
 		return groups.get(gIdx);
 	}
 
-	public void setPhonesForGroup(int gIdx, List<IPAElement> phones) {
+	public void setPhonesForGroup(int gIdx, IPATranscript phones) {
 		IPATranscript currentPhones = null;
 
 		if(gIdx < groups.size())
-			groups.set(gIdx, new IPATranscript(phones));
+			groups.set(gIdx, phones);
 		else
-			groups.add(gIdx, new IPATranscript(phones));
+			groups.add(gIdx, phones);
 		repaint();
 
 		super.invalidate();
