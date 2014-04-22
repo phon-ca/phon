@@ -126,7 +126,7 @@ scope {
 @init { 
 	$word::builder = new IPATranscriptBuilder(); 
 }
-	:	(we=word_element {$word::builder.append($we.p);})+
+	:	(we=word_element {$word::builder.append($we.p);}  ( COLON sc=sctype {$we.p.setScType($sc.value);} )? )+
 	{
 		$w = $word::builder.toIPATranscript();
 	}
@@ -238,19 +238,13 @@ pause_length returns [PauseLength length]
  *
  */
 phone returns [IPAElement ele]
-	:	single_phone ( COLON sc=sctype )?
+	:	single_phone
 	{	
 		$ele = $single_phone.phone;
-		if(sc != null) {
-			$ele.setScType($sc.value);
-		}
 	}
 	|	compound_phone ( COLON sc=sctype )?
 	{	
 		$ele = $compound_phone.phone;
-		if(sc != null) {
-			$ele.setScType($sc.value);
-		}
 	}
 	;
 	
