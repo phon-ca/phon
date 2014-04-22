@@ -16,12 +16,12 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     xmlns="https://www.phon.ca/ns/syllabifier" targetNamespace="https://www.phon.ca/ns/syllabifier"
-    version="1.0">
+    version="2.0">
     
     <xs:annotation>
-        <xs:documentation> This document describes the structure of the Phon syllabifier definition
+        <xs:documentation> This document describes the structure of the Phon ca.phon.syllabifier.basic.BasicSyllabifier definition
             files. Author: Greg J. Hedlund &lt;ghedlund@cs.mun.ca&gt; (C) 2006-2007 The Phon
             Project </xs:documentation>
     </xs:annotation>
@@ -50,31 +50,8 @@
     
     <xs:complexType name="StageType" mixed="false">
         <xs:sequence minOccurs="1" maxOccurs="1">
-            <xs:element name="PrevPhone" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:sequence maxOccurs="1" minOccurs="1">
-                        <xs:element name="Constraint" type="ConstraintType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            
-            <xs:element name="PhoneOfInterest" minOccurs="1" maxOccurs="1">
-                <xs:complexType>
-                    <xs:sequence maxOccurs="1" minOccurs="1">
-                        <xs:element name="Constraint" type="ConstraintType" maxOccurs="1" minOccurs="1"/>
-                        <xs:element name="MarkAs" type="ConstituentType" minOccurs="0" maxOccurs="1"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            
-            <xs:element name="NextPhone" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:sequence maxOccurs="1" minOccurs="1">
-                        <xs:element name="Constraint" type="ConstraintType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-       
+            <xs:element name="exprs" type="PhonexList"/>
+            <xs:element name="map" type="TypeMap"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="useMDC" type="xs:boolean" default="false"/>
@@ -83,48 +60,13 @@
         <xs:attribute name="continueUntilFail" type="xs:boolean" default="false"/>
         <xs:attribute name="sonorityDirection" type="SonorityDirection"/>
     </xs:complexType>
-
-    <xs:complexType name="ConstraintType" mixed="false">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-            <xs:element name="operator" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:attribute name="type" type="BooleanOperator"/>
-                </xs:complexType>
-            </xs:element>
-
-            <xs:element name="PhoneSequence" type="PhoneSequenceConstraint"/>
-
-            <xs:element name="connector" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:attribute name="type" type="BooleanConnector"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    
-    <xs:simpleType name="PhoneSequenceConstraint">
-        <xs:restriction base="xs:string"/>
-    </xs:simpleType>
-
-    <xs:simpleType name="BooleanConnector">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="and"/>
-            <xs:enumeration value="or"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="BooleanOperator">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="not"/>
-        </xs:restriction>
-    </xs:simpleType>
     
     <xs:complexType name="SonorityValues" mixed="false">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="SonorityClass">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="Constraint" type="ConstraintType"/>
+                        <xs:element name="exprs" type="PhonexList"/>
                         <xs:element name="sonorityValue" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -139,6 +81,23 @@
         </xs:restriction>
     </xs:simpleType>
     
+    <xs:complexType name="PhonexList">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="phonex" type="nonEmptyString"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="TypeMap">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="set" type="MarkGroup"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="MarkGroup">
+        <xs:attribute name="group" type="nonEmptyString" use="required"/>
+        <xs:attribute name="mark" type="ConstituentType" use="required"/>
+    </xs:complexType>
+    
     <xs:simpleType name="ConstituentType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="Left Appendix"/>
@@ -150,6 +109,12 @@
             <xs:enumeration value="Ambisyllabic"/>
             <xs:enumeration value="Unknown"/>
             <xs:enumeration value="Don't Care"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="nonEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
