@@ -17,8 +17,8 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="French (simple)" language="fra">
+    
     <SonorityScale>
-        
         <SonorityClass>
             <Constraint>
                 <PhoneSequence>{Obstruent}</PhoneSequence>
@@ -27,14 +27,14 @@
             </Constraint>
             <sonorityValue>0</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
             <Constraint>
                 <PhoneSequence>{Nasal,Consonant}</PhoneSequence>
             </Constraint>
             <sonorityValue>1</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
             <Constraint>
                 <PhoneSequence>{Liquid}</PhoneSequence>
@@ -43,23 +43,22 @@
             </Constraint>
             <sonorityValue>2</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
             <Constraint>
                 <PhoneSequence>{Glide}</PhoneSequence>
             </Constraint>
             <sonorityValue>3</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
             <Constraint>
                 <PhoneSequence>{Vowel}</PhoneSequence>
             </Constraint>
             <sonorityValue>4</sonorityValue>
         </SonorityClass>
-        
     </SonorityScale>
-    
+
     <Stage name="MarkNuclei" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
@@ -72,7 +71,7 @@
             <MarkAs>Nucleus</MarkAs>
         </PhoneOfInterest>
     </Stage>
-    
+
     <Stage name="Final Consonant" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
@@ -81,10 +80,9 @@
             <MarkAs>OEHS</MarkAs>
         </PhoneOfInterest>
     </Stage>
-    
+
     <Stage name="Max OEHS" useMDC="true" mdc="2" sonorityDirection="Right"
         allowsFlatSonority="false">
-        
         <PhoneOfInterest>
             <Constraint>
                 <PhoneSequence>{Consonant}</PhoneSequence>
@@ -98,7 +96,7 @@
             </Constraint>
         </NextPhone>
     </Stage>
-    
+
     <Stage name="MarkOnset" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
@@ -113,7 +111,7 @@
             </Constraint>
         </NextPhone>
     </Stage>
-    
+
     <!-- Glides which should be onsets -->
     <Stage name="MarkOnset 2">
         <PrevPhone>
@@ -151,7 +149,7 @@
             </Constraint>
         </NextPhone>
     </Stage>
-    
+
     <Stage name="Fix Diphthongs" useMDC="false">
         <PrevPhone>
             <Constraint>
@@ -172,7 +170,7 @@
             </Constraint>
         </NextPhone>
     </Stage>
-    
+
     <Stage name="MarkCoda" useMDC="false">
         <PrevPhone>
             <Constraint>
@@ -188,8 +186,7 @@
         </PhoneOfInterest>
     </Stage>
     
-    <Stage name="MarkLA" useMDC="false">
-        
+    <Stage name="MarkLA1" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
                 <PhoneSequence>#{Strident,Voiceless}</PhoneSequence>
@@ -202,13 +199,35 @@
                 <PhoneSequence>{}:Onset</PhoneSequence>
             </Constraint>
         </NextPhone>
-        
     </Stage>
-    
+
+    <Stage name="MarkLA2" useMDC="false">
+        <PrevPhone>
+            <Constraint>
+                <PhoneSequence>{}:Coda</PhoneSequence>
+                <connector type="or"/>
+                <PhoneSequence>{}:SyllableStressMarker|SyllableBoundaryMarker</PhoneSequence>
+            </Constraint>
+        </PrevPhone>
+        
+        <PhoneOfInterest>
+            <Constraint>
+                <PhoneSequence>{Strident,Voiceless}</PhoneSequence>
+            </Constraint>
+            <MarkAs>Left Appendix</MarkAs>
+        </PhoneOfInterest>
+        
+        <NextPhone>
+            <Constraint>
+                <PhoneSequence>{}:Onset</PhoneSequence>
+            </Constraint>
+        </NextPhone>
+    </Stage>
+
     <Stage name="Fix p[sn]" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:SyllableStressMarker?</PhoneSequence>
+                <PhoneSequence>{}:SyllableBoundaryMarker?</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
@@ -229,7 +248,7 @@
     <Stage name="Fix gz" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:SyllableStressMarker?</PhoneSequence>
+                <PhoneSequence>{}:SyllableBoundaryMarker?</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
@@ -247,16 +266,16 @@
         </NextPhone>
     </Stage>
     
-    <Stage name="Change OEHS" useMDC="false">
+    <Stage name="Fix OEHS" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
                 <PhoneSequence>{}:OEHS</PhoneSequence>
             </Constraint>
-            <MarkAs>Coda</MarkAs>
+            <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
     </Stage>
     
-    <Stage name="Change LA" useMDC="false">
+    <Stage name="Fix LA" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
                 <PhoneSequence>{}:LeftAppendix</PhoneSequence>
@@ -264,5 +283,14 @@
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
     </Stage>
-
+    
+    <Stage name="Fix RA" useMDC="false">
+        <PhoneOfInterest>
+            <Constraint>
+                <PhoneSequence>{}:RightAppendix</PhoneSequence>
+            </Constraint>
+            <MarkAs>Coda</MarkAs>
+        </PhoneOfInterest>
+    </Stage>
+    
 </SyllabifierDef>
