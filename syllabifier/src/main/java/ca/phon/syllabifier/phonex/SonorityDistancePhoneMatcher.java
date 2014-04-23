@@ -41,8 +41,12 @@ public class SonorityDistancePhoneMatcher implements PhoneMatcher {
 		if(info != null) {
 			distance = info.getDistance();
 		}
-		if(distance > 0) {
-			retVal = Math.abs(distance) >= Math.abs(minDistance);
+		if(Math.abs(distance) > 0) {
+			if(this.minDistance < 0) {
+				retVal = distance <= this.minDistance;
+			} else {
+				retVal = distance >= this.minDistance;
+			}
 		} else {
 			retVal = allowFlat;
 		}
