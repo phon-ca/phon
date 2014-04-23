@@ -145,6 +145,7 @@ public class BasicSyllabifierTest extends JFrame {
 	
 	public static void main(String[] args) {
 		final BasicSyllabifierTest f = new BasicSyllabifierTest();
+		f.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		f.pack();
 		f.setVisible(true);
 	}

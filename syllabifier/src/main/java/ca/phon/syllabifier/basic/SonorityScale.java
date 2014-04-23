@@ -1,70 +1,77 @@
-/*
- * Phon - An open source tool for research in phonology.
- * Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-
 package ca.phon.syllabifier.basic;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.syllabifier.basic.io.PhonexList;
 import ca.phon.syllabifier.basic.io.SonorityValues;
 import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;
+import ca.phon.syllabifier.phonex.SonorityInfo;
 
-/**
- * @author Greg
- *
- */
-public class SonorityScale {
+public class SonorityScale implements SyllabifierStage {
 
-	private final SonorityValues values;
+	private final SonorityValues sonorityValues;
 	
-	SonorityScale(SonorityValues values) {
+	private final Map<Integer, List<PhonexPattern>> sonorityPatterns = 
+			new LinkedHashMap<Integer, List<PhonexPattern>>();
+	
+	public SonorityScale(SonorityValues values) {
 		super();
-		this.values = values;
-	}
-	
-	/**
-	 * Calculate the sonority distance between 
-	 * two syllabification components.
-	 * 
-	 * @param comp1
-	 * @param comp2
-	 * @return int positive if rising sonority, negative is falling sonority
-	 */
-	public int calculateSonorityDistance(IPAElement comp1, IPAElement comp2) {
-		// from our list of rules, try to
-		// get a match on the correct sonority value
-		int comp1SonorityValue = getSonorityValue(comp1);
-		int comp2SonorityValue = getSonorityValue(comp2);
+		this.sonorityValues = values;
 		
-		return comp1SonorityValue - comp2SonorityValue;
+		compile();
 	}
 	
-	private int getSonorityValue(IPAElement phone) {
-		// rules are checked in the order they are specified in
-		// the xml description.  The value from the first matched
-		// rule is used
-		for(SonorityClass sonorityDef:values.getSonorityClass()) {
-			final Constraint currentConstraint = 
-				new Constraint(sonorityDef.getConstraint());
-			if(currentConstraint.matchesPhone(phone)) {
-				return sonorityDef.getSonorityValue();
+	private void compile() {
+		for(SonorityClass sc:sonorityValues.getSonorityClass()) {
+			final List<PhonexPattern> patterns = new ArrayList<PhonexPattern>();
+			final PhonexList pl = sc.getExprs();
+			for(String phonex:pl.getPhonex()) {
+				final PhonexPattern pattern = PhonexPattern.compile(phonex);
+				patterns.add(pattern);
+			}
+			sonorityPatterns.put(sc.getSonorityValue(), patterns);
+		}
+	}
+
+	@Override
+	public boolean run(List<IPAElement> phones) {
+		Integer lastVal = null;
+		for(IPAElement ele:phones) {
+			for(int sval:sonorityPatterns.keySet()) {
+				boolean handeled = false;
+				for(PhonexPattern p:sonorityPatterns.get(sval)) {
+					final PhonexMatcher m = p.matcher(new IPATranscript(ele));
+					if(m.matches()) {
+						final SonorityInfo sInfo = new SonorityInfo(sval, 
+								(lastVal == null ? 0 : sval - lastVal));
+						ele.putExtension(SonorityInfo.class, sInfo);
+						lastVal = sval;
+						handeled = true;
+						break;
+					}
+				}
+				if(handeled) break;
 			}
 		}
-		return 0;
+		// always return false in this stage
+		return false;
 	}
 
+	@Override
+	public boolean repeatWhileChanges() {
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return SonorityScale.class.getSimpleName();
+	}
+	
 }

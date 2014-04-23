@@ -54,11 +54,7 @@
             <xs:element name="map" type="TypeMap"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="useMDC" type="xs:boolean" default="false"/>
-        <xs:attribute name="mdc" type="xs:int" default="0"/>
-        <xs:attribute name="allowsFlatSonority" type="xs:boolean" default="false"/>
         <xs:attribute name="continueUntilFail" type="xs:boolean" default="false"/>
-        <xs:attribute name="sonorityDirection" type="SonorityDirection"/>
     </xs:complexType>
     
     <xs:complexType name="SonorityValues" mixed="false">
@@ -107,6 +103,7 @@
             <xs:enumeration value="Right Appendix"/>
             <xs:enumeration value="OEHS"/>
             <xs:enumeration value="Ambisyllabic"/>
+            <xs:enumeration value="Diphthong"/>
             <xs:enumeration value="Unknown"/>
             <xs:enumeration value="Don't Care"/>
         </xs:restriction>

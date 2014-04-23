@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  Phon - An open source tool for research in phonology.
- Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ Copyright (C) 2008-2014 The Phon Project, Memorial University <https://www.phon.ca>
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -62,48 +62,40 @@
         
     </SonorityScale>
     
-    <Stage name="MarkNuclei" useMDC="false">
+    <Stage name="MarkNuclei">
         <exprs>
-            <phonex>(N=j{v})</phonex>
-            <phonex>(N={v,-long}[ə{g,-stop,-fri,-affricate,-liquid}{v,high,lax}])</phonex>
-            <phonex>(N={v})</phonex>
+            <phonex>(D=j{v})</phonex>
+            <phonex>(D={v,-long}[ə{g,-stop,-fricative,-affricate,-liquid}{v,high,lax}])</phonex>
+            <phonex>(N={v}:U)</phonex>
             <phonex>(N='.*[\u0329].*')</phonex>
         </exprs>
         <map>
+            <set group="D" mark="Diphthong"/>
             <set group="N" mark="Nucleus"/>
         </map>
     </Stage>
     
-    <Stage name="MarkOnset" useMDC="false">
+    <Stage name="MarkOnset">
         <exprs>
-            <phonex>(O={-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker")).:N</phonex>
+            <phonex>(O=\c:U).:N</phonex>
+            <phonex>.:N(O={g}:N).:N</phonex>
         </exprs>
         <map>
             <set group="O" mark="Onset"/>
         </map>
     </Stage>
     
-    <!-- Glides which should be onsets -->
-    <Stage name="MarkOnset 2">
+    <Stage name="MaxOnset">
         <exprs>
-            <phonex>.:N(G={g}:N).:N</phonex>
-        </exprs>
-        <map>
-            <set group="G" mark="Onset"/>
-        </map>
-    </Stage>
-    
-    <Stage name="MaxOnset" useMDC="true" mdc="2" sonorityDirection="Right" allowsFlatSonority="false">
-        <exprs>
-            <phonex>(O={-v,-strident}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker"))</phonex>
-            <phonex>(O={strident, -anterior}:U</phonex>
+            <phonex>(O={c,-strident}:U).:O:mdc("2","false")</phonex>
+            <phonex>(O={strident, -anterior}:U).:O:mdc("2","false")</phonex>
         </exprs>
         <map>
             <set group="O" mark="Onset"/>
         </map>
     </Stage>
     
-    <Stage name="Fix Diphthongs" useMDC="false">
+    <Stage name="Fix Diphthongs">
         <exprs>
             <phonex>.:-O?(G={g}:N).:N</phonex>
         </exprs>
@@ -112,34 +104,34 @@
         </map>
     </Stage>
     
-    <Stage name="Glide Initial [j]" useMDC="false">
+    <Stage name="Glide Initial [j]">
         <exprs>
-            <phonex>#(O=j:N)</phonex>
+            <phonex>$(O=j:N)</phonex>
         </exprs>
         <map>
             <set group="O" mark="Onset"/>
         </map>
     </Stage>
     
-    <Stage name="MarkCoda" useMDC="false">
+    <Stage name="MarkCoda">
         <exprs>
-            <phonex>.:N(C={-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker"))</phonex>
+            <phonex>.:N(C=\c:U)</phonex>
         </exprs>
         <map>
             <set group="C" mark="Coda"/>
         </map>
     </Stage>
     
-    <Stage name="MaxCoda" useMDC="true" mdc="1" sonorityDirection="Left" allowsFlatSonority="false">
+    <Stage name="MaxCoda">
         <exprs>
-            <phonex>.:C(C={-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker"))</phonex>
+            <phonex>.:C(C=\c:U):mdc("-1","false")</phonex>
         </exprs>
         <map>
             <set group="C" mark="Coda"/>
         </map>
     </Stage>
     
-    <Stage name="Fix Branching Codas" useMDC="false">
+    <Stage name="Fix Branching Codas">
         <exprs>
             <phonex>.:N(C={obs,-cor}:U)</phonex>
         </exprs>
@@ -148,25 +140,17 @@
         </map>
     </Stage>
     
-    <Stage name="MarkLA1" useMDC="false">
+    <Stage name="MarkLA">
         <exprs>
-            <phonex>#(LA={anterior,strident,voiceless})</phonex>
+            <phonex>$(LA={anterior,strident,voiceless}:U)</phonex>
+            <phonex>.:sctype("Coda|SyllableStressMarker|SyllableBoundaryMarker|Nucleus")(LA={anterior,strident,voiceless}:U).:O</phonex>
         </exprs>
         <map>
             <set group="LA" mark="Left Appendix"/>
         </map>
     </Stage>
     
-    <Stage name="MarkLA2" useMDC="false">
-        <exprs>
-            <phonex>.:sctype("Coda|SyllableStressMarker|SyllableBoundaryMarker|Nucleus")(LA={anterior,strident,voiceless}).:O</phonex>
-        </exprs>
-        <map>
-            <set group="LA" mark="Left Appendix"/>
-        </map>
-    </Stage>
-    
-    <Stage name="MarkRA" useMDC="false">
+    <Stage name="MarkRA">
         <exprs>
             <phonex>.:C(RA={cor}:U)</phonex>
         </exprs>
@@ -175,18 +159,18 @@
         </map>
     </Stage>
     
-    <Stage name="MaxRA" useMDC="false" continueUntilFail="true">
+    <Stage name="MaxRA">
         <exprs>
-            <phonex>.:R(RA={c}:U)</phonex>
+            <phonex>.:R(RA={c}:U+)</phonex>
         </exprs>
         <map>
             <set group="RA" mark="Right Appendix"/>
         </map>
     </Stage>
     
-    <Stage name="MarkOEHS" useMDC="false">
+    <Stage name="MarkOEHS">
         <exprs>
-            <phonex>(O={-v}:sctype("Unknown|-SyllableStressMarker|-SyllableBoundaryMarker"))</phonex>
+            <phonex>(O=\c:U)</phonex>
         </exprs>
         <map>
             <set group="O" mark="OEHS"/>

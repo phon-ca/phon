@@ -17,11 +17,11 @@
  */
 package ca.phon.syllabifier.basic;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import ca.phon.extensions.Extension;
 import ca.phon.extensions.ExtensionSupport;
@@ -31,7 +31,6 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.basic.io.StageType;
 import ca.phon.syllabifier.basic.io.SyllabifierDef;
-import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 
@@ -52,10 +51,11 @@ public class BasicSyllabifier implements Syllabifier, IExtendable {
 		final Map<String, String> stages = new LinkedHashMap<String, String>();
 	}
 	
-	
 	private final ExtensionSupport extSupport = new ExtensionSupport(BasicSyllabifier.class, this);
 
 	private final SyllabifierDef def;
+	
+	private final List<SyllabifierStage> stages = new ArrayList<SyllabifierStage>();
 	
 	/** Constructor */
 	BasicSyllabifier(SyllabifierDef def) {
@@ -63,6 +63,18 @@ public class BasicSyllabifier implements Syllabifier, IExtendable {
 		
 		extSupport.initExtensions();
 		this.def = def;
+		
+		compile();
+	}
+	
+	private void compile() {
+		final SonorityScale scale = new SonorityScale(def.getSonorityScale());
+		stages.add(scale);
+		
+		for(StageType st:def.getStage()) {
+			final SyllabifierStage stage = new Stage(st);
+			stages.add(stage);
+		}
 	}
 
 	@Override
@@ -77,59 +89,29 @@ public class BasicSyllabifier implements Syllabifier, IExtendable {
 
 	@Override
 	public void syllabify(List<IPAElement> phones) {
-		final SonorityScale scale = new SonorityScale(def.getSonorityScale());
-		SyllabifierStageResults stageResults = null;
-		
+		Map<String, String> stageValues = null;
 		if(trackStages) {
-			stageResults = new SyllabifierStageResults();
+			final SyllabifierStageResults stageResults = new SyllabifierStageResults();
 			putExtension(SyllabifierStageResults.class, stageResults);
-			
-			stageResults.stages.put("<init>", new IPATranscript(phones).toString(true));
+			stageValues = stageResults.stages;
 		}
 		
-		for(StageType stage:def.getStage()) {
-			Stage currentStage = new Stage(stage);
-			
-			if(stage.isContinueUntilFail()) {
-				boolean hasChanged = true;
-				while(hasChanged) {
-					for(IPAElement ele:phones) {
-						LastScType lastType = ele.getExtension(LastScType.class);
-						if(lastType == null) {
-							lastType = new LastScType();
-							ele.putExtension(LastScType.class, lastType);
-						}
-						lastType.lastType = ele.getScType();
-					}
-					currentStage.run(phones, scale);
-					hasChanged = false;
-					for(IPAElement ele:phones) {
-						LastScType lastType = ele.getExtension(LastScType.class);
-						if(lastType.lastType != ele.getScType()) {
-							hasChanged = true;
-							break;
-						}
+		for(SyllabifierStage stage:stages) {
+			if(stage.repeatWhileChanges()) {
+				int repeatCount = 0;
+				while(stage.run(phones)) {
+					if(trackStages) {
+						final String stageName = stage.getName() + "_" + repeatCount;
+						stageValues.put(stageName, (new IPATranscript(phones)).toString(true));
 					}
 				}
 			} else {
-				currentStage.run(phones, scale);
-			}
-			
-			if(trackStages) {
-				stageResults.stages.put(stage.getName(), new IPATranscript(phones).toString(true));
-			}
-		}
-
-		for(IPAElement p:phones) {
-			if(p.getFeatureSet().hasFeature("Untranscribed")) {
-				p.setScType(SyllableConstituentType.UNKNOWN);
+				stage.run(phones);
+				if(trackStages) {
+					stageValues.put(stage.getName(), (new IPATranscript(phones)).toString(true));
+				}
 			}
 		}
-	}
-
-	@Extension(IPAElement.class)
-	private class LastScType {
-		SyllableConstituentType lastType = SyllableConstituentType.UNKNOWN;
 	}
 
 	@Override
