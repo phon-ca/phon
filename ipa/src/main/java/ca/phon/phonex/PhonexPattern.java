@@ -148,6 +148,19 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	public String groupName(int gIdx) {
 		return fsa.getGroupName(gIdx);
 	}
+	
+	/**
+	 * Return the group index for the given group name.
+	 * 
+	 * 
+	 * @return group index or < 0 if not found
+	 */
+	public int groupIndex(String groupName) {
+		for(int i = 1; i <= numberOfGroups(); i++) {
+			if(groupName(i).equals(groupName)) return i;
+		}
+		return -1;
+	}
 
 	/**
 	 * Compares phonex pattern strings.

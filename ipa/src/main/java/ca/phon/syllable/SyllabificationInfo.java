@@ -128,7 +128,7 @@ public class SyllabificationInfo {
 	 *  otherwise
 	 */
 	public boolean isDiphthongMember() {
-		return this.isDipththongMember;
+		return (getConstituentType() == SyllableConstituentType.NUCLEUS && this.isDipththongMember);
 	}
 	
 	/**
@@ -139,11 +139,9 @@ public class SyllabificationInfo {
 	 * @param isDiphthongMember
 	 */
 	public void setDiphthongMember(boolean isDiphthongMember) {
-		if(getConstituentType() == SyllableConstituentType.NUCLEUS) {
-			final boolean wasDiphthongMember = this.isDipththongMember;
-			this.isDipththongMember = isDiphthongMember;
-			getPhone().firePropertyChange(PHONE_DIPHTHONG_MEMBER, wasDiphthongMember, isDiphthongMember);
-		}
+		final boolean wasDiphthongMember = this.isDipththongMember;
+		this.isDipththongMember = isDiphthongMember;
+		getPhone().firePropertyChange(PHONE_DIPHTHONG_MEMBER, wasDiphthongMember, isDiphthongMember);
 	}
 
 }

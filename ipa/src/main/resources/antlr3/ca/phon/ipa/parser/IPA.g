@@ -126,7 +126,12 @@ scope {
 @init { 
 	$word::builder = new IPATranscriptBuilder(); 
 }
-	:	(we=word_element {$word::builder.append($we.p);}  ( COLON sc=sctype {$we.p.setScType($sc.value);} )? )+
+	:	(we=word_element {$word::builder.append($we.p);}  
+		( COLON sc=sctype {
+			SyllabificationInfo sInfo = $we.p.getExtension(SyllabificationInfo.class);
+			sInfo.setConstituentType($sc.value);
+			sInfo.setDiphthongMember($sc.isDiphthongMember);
+		} )? )+
 	{
 		$w = $word::builder.toIPATranscript();
 	}
@@ -382,9 +387,10 @@ phone_length returns [Float length]
 	}
 	;
 	
-sctype returns [SyllableConstituentType value]
+sctype returns [SyllableConstituentType value, boolean isDiphthongMember]
 	:	SCTYPE
 	{
 		$value = SyllableConstituentType.fromString($SCTYPE.text);
+		$isDiphthongMember = ($SCTYPE.text.equalsIgnoreCase("D"));
 	}
 	;
