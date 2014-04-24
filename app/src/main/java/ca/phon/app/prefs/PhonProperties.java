@@ -32,7 +32,7 @@ public class PhonProperties {
 	public final static String WORKSPACE_FOLDER = Workspace.WORKSPACE_FOLDER;
 	
 	/**
-	 * Default syllabifier language
+	 * Default syllabifier language (IPA Target)
 	 */
 	public final static String SYLLABIFIER_LANGUAGE = SyllabifierLibrary.DEFAULT_SYLLABIFIER_LANG_PROP;
 	

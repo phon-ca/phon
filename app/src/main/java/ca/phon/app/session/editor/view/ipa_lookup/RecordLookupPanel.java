@@ -16,6 +16,8 @@ import javax.swing.SwingConstants;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.IPAGroupField;
@@ -23,6 +25,7 @@ import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.Orthography;
@@ -274,10 +277,17 @@ public class RecordLookupPanel extends JPanel {
 	private final TierEditorListener tierListener = new TierEditorListener() {
 		
 		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
+		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
 				T oldValue) {
 			final TierEdit<T> edit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
 			getEditor().getUndoSupport().postEdit(edit);
+		}
+
+		@Override
+		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
+				T newValue, T oldValue) {
+			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, RecordLookupPanel.this, tier.getName());
+			getEditor().getEventManager().queueEvent(ee);
 		}
 		
 	};

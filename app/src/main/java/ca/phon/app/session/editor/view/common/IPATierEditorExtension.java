@@ -4,7 +4,10 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.Tier;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 
 /**
  * Editor for IPATranscript tiers 
@@ -35,8 +38,16 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 			}
 			
 			@SuppressWarnings("unchecked")
-			final Tier<IPATranscript> orthoTier = (Tier<IPATranscript>)tier;
-			return new IPAGroupField(orthoTier, group, editor.getDataModel().getTranscriber());
+			final Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+			
+			Syllabifier syllabifier = null;
+			final SyllabifierInfo info = editor.getSession().getExtension(SyllabifierInfo.class);
+			if(info != null && info.getSyllabifierLanguageForTier(tier.getName()) != null) {
+				syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
+						info.getSyllabifierLanguageForTier(tier.getName()));
+			}
+			
+			return new IPAGroupField(ipaTier, group, editor.getDataModel().getTranscriber(), syllabifier);
 		}
 		
 	};

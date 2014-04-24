@@ -133,7 +133,7 @@ public class BasicSyllabifierTest extends JFrame {
 			final SyllabificationDisplay display = new SyllabificationDisplay();
 			final IPATranscript stageIPA = IPATranscript.parseIPATranscript(results.stages.get(stageName));
 			
-			display.setPhonesForGroup(0, stageIPA);
+			display.setTranscript(stageIPA);
 			display.setBorder(BorderFactory.createTitledBorder(stageName));
 			
 			stagePanel.add(display);

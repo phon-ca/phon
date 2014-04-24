@@ -18,14 +18,6 @@ import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Tuple;
 
 /**
- * Displays groups of phones with their syllabification
- * and allows editing of syllabification.  This component
- * works with a list of phones.  To 'simiulate' word-groups
- * place 2 consecutive word boundary markers in between
- * phones.  E.g.,  'a', 'b', ' ', ' ', 'c', 'd'.
- *
- * While not printed, a small space will be left where
- * the double word-boundary marker is found.
  */
 public class SyllabificationDisplay extends JComponent {
 
@@ -39,13 +31,12 @@ public class SyllabificationDisplay extends JComponent {
 	private static final String uiClassId = "SyllabificationDisplayUI";
 
 	/**
-	 * Groups of phones
+	 * Transcription
 	 */
-	private List<IPATranscript> groups =
-			new ArrayList<IPATranscript>();
+	private IPATranscript transcript = new IPATranscript();
 
 	/** The focused phone */
-	private int focusedPhone = 0;
+	private int focusedPhone = -1;
 
 	/** Phon focus property */
 	public final static String PHONE_FOCUS = "_phone_focus_";
@@ -97,58 +88,29 @@ public class SyllabificationDisplay extends JComponent {
 	}
 
 	public int getNumberOfDisplayedPhones() {
-		return getDisplayedPhones().size();
+		return this.transcript.removePunctuation().length();
+	}
+	public IPATranscript getTranscript() {
+		return this.transcript;
 	}
 
-	public int getNumberOfGroups() {
-		return groups.size();
-	}
-
-	public IPATranscript getPhonesForGroup(int gIdx) {
-		return groups.get(gIdx);
-	}
-
-	public void setPhonesForGroup(int gIdx, IPATranscript phones) {
-		IPATranscript currentPhones = null;
-
-		if(gIdx < groups.size())
-			groups.set(gIdx, phones);
-		else
-			groups.add(gIdx, phones);
+	public void setTranscript(IPATranscript phones) {
+		this.transcript = phones;
 		repaint();
 
 		super.invalidate();
-//		groups.add(gIdx, phones);
 	}
 
 	public void clear() {
-		groups.clear();
+		this.transcript = new IPATranscript();
 		repaint();
-	}
-
-	/**
-	 * The list of phones with the non-sound
-	 * phones filtered out.  WordBoundaries
-	 * are placed between groups.
-	 */
-	public List<IPAElement> getDisplayedPhones() {
-		List<IPAElement> retVal =
-				new ArrayList<IPAElement>();
-
-		for(IPATranscript grpPhones:groups) {
-//			if(retVal.size() > 0)
-//				retVal.add(new Phone(" "));
-			retVal.addAll(grpPhones.removePunctuation().toList());
-		}
-
-		return retVal;
 	}
 
 	public IPAElement getPhoneAtIndex(int idx) {
 		IPAElement retVal = null;
-		List<IPAElement> soundPhones = getDisplayedPhones();
-		if(idx >= 0 && idx < soundPhones.size()) {
-			retVal = soundPhones.get(idx);
+		IPATranscript soundPhones = this.transcript.removePunctuation();
+		if(idx >= 0 && idx < soundPhones.length()) {
+			retVal = soundPhones.elementAt(idx);
 		}
 		return retVal;
 	}
@@ -168,25 +130,6 @@ public class SyllabificationDisplay extends JComponent {
 
 			super.firePropertyChange(SYLLABIFICATION_PROP_ID, oldData, newData);
 		}
-	}
-
-	/**
-	 * Convert a phone index to a group index.
-	 */
-	public int getGroupIndexForPhone(int pIdx) {
-		int currentIdx = 0;
-		for(int gIdx = 0; gIdx < groups.size(); gIdx++) {
-			IPATranscript grpPhones = 
-					groups.get(gIdx).removePunctuation();
-
-			for(IPAElement p:grpPhones) {
-				if(currentIdx == pIdx)
-					return gIdx;
-				currentIdx++;
-			}
-		}
-		
-		return -1;
 	}
 
 //	/**

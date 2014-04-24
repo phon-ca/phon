@@ -306,13 +306,21 @@ public class RecordDataEditorView extends EditorView {
 		return topPanel;
 	}
 	
-	private final TierEditorListener tierEditorListener = new TierEditorListener() {
+	private final TierEditorListener tierEditorListener = new TierEditorListener
+			() {
 		
 		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
+		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
 				T oldValue) {
 			final TierEdit<T> tierEdit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
 			getEditor().getUndoSupport().postEdit(tierEdit);
+		}
+
+		@Override
+		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
+				T newValue, T oldValue) {
+			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, RecordDataEditorView.this, tier.getName());
+			getEditor().getEventManager().queueEvent(ee);
 		}
 		
 	};

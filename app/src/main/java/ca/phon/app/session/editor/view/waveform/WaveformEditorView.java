@@ -165,7 +165,7 @@ public class WaveformEditorView extends EditorView {
 	
 		final DelegateEditorAction segmentChangedAct =
 				new DelegateEditorAction(this, "onMediaSegmentChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, segmentChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
 	}
 	
 	private void init() {
@@ -286,49 +286,6 @@ public class WaveformEditorView extends EditorView {
 		
 		setupEditorActions();
 	}
-
-//	@Override
-//	public void setModel(RecordEditorModel model) {
-//		super.setModel(model);
-//		
-//		if(getModel() != null) {
-//			setupEditorActions();
-//			File audioFile = getAudioFile();
-//			if(audioFile != null) {
-//				wavDisplay.loadFile(audioFile);
-//				update();
-//			}
-//			
-////			File projFile = new File(getModel().getProject().getProjectLocation());
-////			String parentPath = projFile.getParent();
-////			final String segmentPath = parentPath + File.separator + "media" + File.separator + "segments/";
-////			quickExportButton.setToolTipText("Quick export to " + segmentPath);
-//			
-//			final JPanel tierPanel = new JPanel(new VerticalLayout(0));
-//			final PluginManager pluginManager = PluginManager.getInstance();
-//			final List<IPluginExtensionPoint<SegmentPanelTier>> extraTiers = pluginManager.getExtensionPoints(SegmentPanelTier.class);
-//			for(IPluginExtensionPoint<SegmentPanelTier> extraTier:extraTiers) {
-//				final SegmentPanelTier tier = extraTier.getFactory().createObject();
-//				final Component tierView = tier.createView(this, new WaveformEditorViewCalculator(wavDisplay.get_timeBar()));
-//				
-//				tierPanel.add(tierView);
-//			}
-//			final GridBagConstraints gbc = new GridBagConstraints();
-//			gbc.gridx = 0;
-//			gbc.gridy = 2;
-//			gbc.fill = GridBagConstraints.HORIZONTAL;
-//			gbc.anchor = GridBagConstraints.LINE_START;
-//			gbc.gridheight = 1;
-//			gbc.gridwidth = 1;
-//			gbc.weightx = 1.0;
-//			gbc.weighty = 0.0;
-////			contentPane.setRightComponent(tierPanel);
-//			contentPane.add(tierPanel, gbc);
-//		} else {
-//			wavDisplay.loadFile(null);
-//			wavDisplay = null;
-//		}
-//	}
 	
 	public WaveformViewCalculator getCalculator() {
 		return new WaveformEditorViewCalculator(wavDisplay.get_timeBar());
@@ -394,17 +351,6 @@ public class WaveformEditorView extends EditorView {
 		exportButton = new JButton(exportAct);
 		exportButton.setFocusable(false);
 		
-//		String segmentFile = segmentPath + File.separator +
-//			getModel().getSession().getID() + "_" + getModel().getSession().getCorpus() + "_" + (getModel().getCurrentIndex()+1) + ".wav";
-//		ImageIcon qExportIcon = 
-//			IconManager.getInstance().getIcon("actions/fileexport", IconSize.SMALL);
-//		final PhonUIAction qExportAct = new PhonUIAction(this, "onQuickExport");
-//		qExportAct.putValue(PhonUIAction.NAME, "Quick Save");
-//		qExportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save segment to __res/media/segments folder");
-//		qExportAct.putValue(PhonUIAction.SMALL_ICON, qExportIcon);
-//		quickExportButton = new JButton(qExportAct);
-//		quickExportButton.setFocusable(false);
-		
 		final PhonUIAction showMoreAct = new PhonUIAction(this, "showMore");
 		showMoreAct.putValue(PhonUIAction.NAME, "Show more");
 		showMoreAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show more");
@@ -420,7 +366,6 @@ public class WaveformEditorView extends EditorView {
 		toolbar.add(refreshButton);
 		toolbar.addSeparator();
 		toolbar.add(exportButton);
-//		toolbar.add(quickExportButton);
 		toolbar.addSeparator();
 		toolbar.add(showMoreButton);
 		toolbar.addSeparator();
@@ -737,10 +682,6 @@ public class WaveformEditorView extends EditorView {
 			CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
 			currentFrame.showStatusMessage("Saving audio segment...");
 			
-//			File projFile = new File(getModel().getProject().getProjectLocation());
-//			String projPath = projFile.getParent();
-//			String segmentPath = projPath + File.separator + "media" + File.separator + "segments";
-			
 			File projFile = new File(getEditor().getProject().getLocation());
 			File resFile = new File(projFile, "__res");
 			File mediaResFile = new File(resFile, "media");
@@ -754,7 +695,6 @@ public class WaveformEditorView extends EditorView {
 			
 //			final PathExpander pe = new PathExpander();
 			final String mediaLocation = getEditor().getSession().getMediaLocation();
-//					pe.expandPath(getEditor().getSession().getMediaLocation());
 			
 			File mediaFile = 
 				MediaLocator.findMediaFile(mediaLocation, getEditor().getProject(), getEditor().getSession().getCorpus());
@@ -768,13 +708,7 @@ public class WaveformEditorView extends EditorView {
 				if(segLen > 0) {
 					FileFilter[] filters = new FileFilter[1];
 					filters[0] = FileFilter.wavFilter;
-//					String selectedFile = 
-//						NativeDialogs.showSaveFileDialogBlocking(CommonModuleFrame.getCurrentFrame(), 
-//								System.getProperty("user.home", "."), ".wav", filters, "Save segment");
-//					String segPath = segmentPath + File.separator + 
-//						getModel().getSession().getID() + "_" + getModel().getSession().getCorpus() + "_" + (getModel().getCurrentIndex()+1) + ".wav";
-//					File selectedFile = new File(segPath);
-//					File parentPath = selectedFile.getParentFile();
+					
 					File selectedFile = new File(segmentFile, getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ".wav");
 				
 					int fIdx = 0;
@@ -784,9 +718,6 @@ public class WaveformEditorView extends EditorView {
 								"(" + (++fIdx) + ").wav");
 					}
 					String segPath = selectedFile.getAbsolutePath();
-//					if(!parentPath.exists()) {
-//						parentPath.mkdirs();
-//					}
 					try {
 						audioInfo.saveToFile(selectedFile);
 //						currentFrame.showStatusMessage("Saved segment as '" + 
@@ -795,13 +726,6 @@ public class WaveformEditorView extends EditorView {
 					} catch (IOException e) {
 //						currentFrame.showErrorMessage("Could not export audio segment.");
 					}
-//					if(PhonMediaUtilities.create16bitAudioSample(mediaFile.getAbsolutePath(), segStart, (int)segLen, selectedFile.getAbsolutePath())) {
-//						currentFrame.showStatusMessage("Saved segment as '" + 
-//								"." + File.separator + "media" + File.separator + "segments" + File.separator + selectedFile.getName() + "'");
-//						getModel().getWorker().invokeLater(new HideStatusComponentTask(currentFrame));
-//					} else {
-//						currentFrame.showErrorMessage("Could not export audio segment.");
-//					}
 				} // if segLen
 			} // if mediafile
 		}

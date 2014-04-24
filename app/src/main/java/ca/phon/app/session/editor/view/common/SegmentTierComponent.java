@@ -17,6 +17,9 @@
  */
 
 package ca.phon.app.session.editor.view.common;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +28,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -33,8 +39,10 @@ import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
+import ca.phon.ui.action.PhonUIAction;
 
 /**
  * Editor for media segments.
@@ -63,6 +71,21 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 		
 		updateText();
 		getDocument().addDocumentListener(docListener);
+		
+		// validate text when 'enter' is pressed
+		final ActionMap actionMap = getActionMap();
+		final InputMap inputMap = getInputMap(JComponent.WHEN_FOCUSED);
+		
+		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		final String validateId = "validate";
+		final PhonUIAction validateAct = new PhonUIAction(this, "onEnter");
+		actionMap.put(validateId, validateAct);
+		inputMap.put(validateKs, validateId);
+		
+		setActionMap(actionMap);
+		setInputMap(JComponent.WHEN_FOCUSED, inputMap);
+		
+		addFocusListener(focusListener);
 	}
 
 	/**
@@ -124,12 +147,21 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 //		}
 	}
 	
+	public void onEnter() {
+		if(getGroupValue() != initialGroupVal) {
+			for(TierEditorListener listener:getTierEditorListeners()) {
+				listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
+			}
+			initialGroupVal = getGroupValue();
+		}
+	}
+	
 	private void updateTier() {
 		final MediaSegment oldVal = getGroupValue();
 		final MediaSegment newVal = getValidatedObject();
 		if(newVal != null) {
 			for(TierEditorListener listener:listeners) {
-				listener.tierValueChanged(segmentTier, groupIndex, newVal, oldVal);
+				listener.tierValueChange(segmentTier, groupIndex, newVal, oldVal);
 			}
 		}
 	}
@@ -146,6 +178,25 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 		
 		return retVal;
 	}
+	
+	private MediaSegment initialGroupVal;
+	private final FocusListener focusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+			if(getGroupValue() != initialGroupVal) {
+				for(TierEditorListener listener:getTierEditorListeners()) {
+					listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
+				}
+			}
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+			initialGroupVal = getGroupValue();
+		}
+		
+	};
 	
 	private final DocumentListener docListener = new DocumentListener() {
 

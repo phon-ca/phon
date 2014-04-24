@@ -18,6 +18,7 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -60,7 +61,6 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	private static final int insetSize = 2;
 	private Insets phoneBoxInsets = new Insets(insetSize, insetSize, insetSize, insetSize);
 	private Dimension phoneBoxSize = new Dimension(18, 20);
-	private static final int groupSpace = 5;
 	
 	/** Display we are installed on */
 	private SyllabificationDisplay display;
@@ -391,8 +391,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		List<Area> syllAreas = new ArrayList<Area>();
 		List<Area> phoneAreas = new ArrayList<Area>();
 		int syllCurrentX = phoneRect.x;
-		for(int gIdx = 0; gIdx < display.getNumberOfGroups(); gIdx++) {
-			IPATranscript grpPhones = display.getPhonesForGroup(gIdx);
+			IPATranscript grpPhones = display.getTranscript();
 			List<IPATranscript> syllables = grpPhones.syllables();
 //			List<Syllable> grpSylls = Syllabifier.getSyllabification(grpPhones);
 
@@ -628,129 +627,11 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 //				}
 
 			}
-			syllCurrentX += groupSpace;
-			phoneRect.translate(groupSpace, 0);
-//			phoneAreas.add(new Area());
-		}
-
-		
-
-//		List<Syllable> sylls = Syllabifier.getSyllabification(display.getPhones());
-//		List<Rectangle> sRs = new ArrayList<Rectangle>();
-//		int startIdx = 0;
-//		for(Syllable s:sylls) {
-//			List<Phone> syllablePhones =
-//					new ArrayList<Phone>();
-//			for(Phone p:s.getPhones()) syllablePhones.add(p);
-//			syllablePhones = Phone.getSoundPhones(syllablePhones);
-//
-//			int sX = startIdx * phoneRect.width;
-//			int sY = 0;
-//			int sW = syllablePhones.size() * phoneRect.width;
-//			int sH = phoneRect.height;
-//
-//			sRs.add(new Rectangle(sX, sY, sW, sH));
-//
-//			// draw syllable rectangle
-//			Color syllColor = new Color(180, 180, 180);
-//
-//			// setup gradient paint
-//			Paint oldPaint = g2d.getPaint();
-//			Color grad_topT = syllColor.brighter();
-//			Color grad_bottomT = syllColor.darker();
-//			Color grad_top = new Color(grad_topT.getRed(), grad_topT.getGreen(), grad_topT.getBlue(), 100);
-//			Color grad_bottom = new Color(grad_bottomT.getRed(), grad_bottomT.getGreen(), grad_bottomT.getBlue(), 100);
-//			GradientPaint bg = new GradientPaint(
-//					new Point(sX,sY), grad_top,
-//					new Point(sX, sY+sH*2), grad_bottom);
-//			g2d.setPaint(bg);
-//			g2d.fillRoundRect(sX, sY, sW, sH, 10, 2);
-//			g2d.setPaint(oldPaint);
-//
-//			startIdx += syllablePhones.size();
-//
-//
-//			// check for ambisyllabic
-//			if(syllablePhones.get(syllablePhones.size()-1).getScType() ==
-//					SyllableConstituentType.Ambisyllabic) {
-//				startIdx--;
-//			}
-//		}
-
-//		for(int i = 0; i < display.getNumberOfDisplayedPhones(); i++) {
-//			Phone p = display.getPhoneAtIndex(i);
-//
-//			if(p.getPhoneString() == " ")
-//			{
-//				phoneRect.translate(groupSpace, 0);
-//				continue;
-//			}
-//			// draw phone string
-//			Rectangle pBox =
-//					new Rectangle(phoneRect.x + phoneBoxInsets.left,
-//						phoneRect.y + phoneBoxInsets.top,
-//						phoneBoxSize.width, phoneBoxSize.height);
-//
-//			// draw phone background
-//			Color baseColor = p.getScType().getColor();
-//
-//			Point2D center = new Point2D.Float(
-//						(float)(phoneRect.x+phoneRect.width/2),
-//						(float)(phoneRect.y+phoneRect.height/2));
-//			float radius = Math.max(phoneRect.width/1.7f, phoneRect.height/1.7f);
-//			float[] fracts = { 0.25f, 1.0f };
-//			Color[] colours = { baseColor, new Color(255,255,255,100) };
-//			RadialGradientPaint paint =
-//				new RadialGradientPaint(center, radius, fracts, colours);
-//			g2d.setPaint(paint);
-//			g2d.fillRect(phoneRect.x, phoneRect.y, phoneRect.width, phoneRect.height);
-//
-//			Font f = displayFont;
-//			FontMetrics fm = g.getFontMetrics(f);
-//			Rectangle2D stringBounds =
-//					fm.getStringBounds(p.getPhoneString(), g);
-//			while(
-//					(stringBounds.getWidth() > pBox.width)
-//					|| (stringBounds.getHeight() > pBox.height)) {
-//				f = f.deriveFont(f.getSize2D()-0.2f);
-//				fm = g.getFontMetrics(f);
-//				stringBounds = fm.getStringBounds(p.getPhoneString(), g);
-//			}
-//
-//			int phoneX =
-//					pBox.x + (pBox.width/2) - (int)(stringBounds.getWidth()/2);
-//			int phoneY =
-//					pBox.y + pBox.height - fm.getDescent();
-//
-//			g.setColor(c.getForeground());
-//			g.drawString(p.getPhoneString(), phoneX, phoneY);
-//
-//			// if phone is focused, draw focus rect
-//			if(display.isFocusOwner() && display.getFocusedPhone() == i) {
-//				Stroke oldSt = g2d.getStroke();
-//				float dash1[] = {1.5f};
-//				BasicStroke bs = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-//						BasicStroke.JOIN_MITER, 2.0f, dash1, 0.0f);
-//				g2d.setStroke(bs);
-//				g2d.setColor(Color.black);
-//				g2d.drawRect(pBox.x, pBox.y, pBox.width, pBox.height);
-//				g2d.setStroke(oldSt);
-//			}
-//
-//			phoneRect.translate(phoneRect.width, 0);
-//		}
-
-//		// draw syllable outlines
+			
+		// draw syllable outlines
 		for(Area syllArea:syllAreas) {
-
 			g2d.setStroke(new BasicStroke(1.5f));
-				g2d.setColor(Color.darkGray);
-				g2d.draw(syllArea);
-
-//			g.setColor(Color.black);
-//			g.drawRoundRect(sR.x, sR.y, sR.width, sR.height, 10, 2);
-
-
+			g2d.setColor(Color.darkGray);
 		}
 
 		if(display.hasFocus()
@@ -784,14 +665,46 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 		retVal.width = widthPerPhone * (display.getNumberOfDisplayedPhones())
 				+ c.getInsets().right + c.getInsets().left;
-		if(display.getNumberOfGroups() > 0)
-			retVal.width += (display.getNumberOfGroups() - 1) * groupSpace
-					+ 2 * insetSize;
+		
 		retVal.height = height
 				+ c.getInsets().top + c.getInsets().bottom
 				+ /*padding*/ 2 * insetSize;
 
 		return retVal;
+	}
+	
+	private Dimension getPhoneSize() {
+		int widthPerPhone =
+				phoneBoxInsets.right + phoneBoxInsets.left +
+				phoneBoxSize.width;
+		int height =
+				phoneBoxInsets.top + phoneBoxInsets.bottom +
+				phoneBoxSize.height;
+		return new Dimension(widthPerPhone, height);
+	}
+	
+	private Shape getSyllableStartShape() {
+		final Dimension phoneSize = getPhoneSize();
+		final Rectangle rect = new Rectangle(0, 0, phoneSize.width, phoneSize.height);
+		
+		
+		return rect;
+	}
+	
+	private Shape getSyllableMedianShape() {
+		final Dimension phoneSize = getPhoneSize();
+		final Rectangle rect = new Rectangle(0, 0, phoneSize.width, phoneSize.height);
+		
+		
+		return rect;
+	}
+	
+	private Shape getSyllableFinalShape() {
+		final Dimension phoneSize = getPhoneSize();
+		final Rectangle rect = new Rectangle(0, 0, phoneSize.width, phoneSize.height);
+		
+		
+		return rect;
 	}
 
 	public int locationToPhoneIndex(Point p) {
@@ -801,26 +714,18 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		int currentX = display.getInsets().left + insetSize;
 		int pIdx = 0;
 
-		for(int gIdx = 0; gIdx < display.getNumberOfGroups(); gIdx++) {
-			IPATranscript grpPhones = display.getPhonesForGroup(gIdx);
+		IPATranscript grpPhones = display.getTranscript().removePunctuation();
+		int grpSize = widthPerPhone * grpPhones.length();
 
-			int grpSize = widthPerPhone * grpPhones.length();
-
-			if( (currentX + grpSize) >= p.x ) {
-				// the phone we are looking for is in this group
-
-				for(int grpPIdx = 0; grpPIdx < grpPhones.length(); grpPIdx++) {
-					currentX += widthPerPhone;
-					if(currentX >= p.x) {
-						break;
-					}
-					pIdx++;
+		if( (currentX + grpSize) >= p.x ) {
+			for(int grpPIdx = 0; grpPIdx < grpPhones.length(); grpPIdx++) {
+				currentX += widthPerPhone;
+				if(currentX >= p.x) {
+					break;
 				}
-
-			} else {
-				pIdx += grpPhones.length();
-				currentX += grpSize + groupSpace;
+				pIdx++;
 			}
+
 		}
 		
 		return pIdx;
