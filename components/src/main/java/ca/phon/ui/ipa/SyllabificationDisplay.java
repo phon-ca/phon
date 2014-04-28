@@ -12,8 +12,11 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
+import com.jgoodies.common.display.Displayable;
+
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Tuple;
 
@@ -43,6 +46,7 @@ public class SyllabificationDisplay extends JComponent {
 
 	public SyllabificationDisplay() {
 		super();
+		setOpaque(false);
 		updateUI();
 	}
 
@@ -121,44 +125,43 @@ public class SyllabificationDisplay extends JComponent {
 	public void setSyllabificationAtIndex(int pIdx, SyllableConstituentType scType) {
 		IPAElement p = getPhoneAtIndex(pIdx);
 		if(p != null) {
+			final int realPhonexIndex = getTranscript().indexOf(p);
 			SyllabificationChangeData oldData =
-					new SyllabificationChangeData(pIdx, p.getScType());
-//			p.setScType(scType);
-			repaint();
+					new SyllabificationChangeData(realPhonexIndex, p.getScType());
 			SyllabificationChangeData newData =
-					new SyllabificationChangeData(pIdx, scType);
+					new SyllabificationChangeData(realPhonexIndex, scType);
 
 			super.firePropertyChange(SYLLABIFICATION_PROP_ID, oldData, newData);
 		}
 	}
 
-//	/**
-//	 * Re-syllabifiy using given syllabifier
-//	 * @param syllabifier
-//	 */
-//	public void resyllabifiy(Syllabifier syllabifier) {
-////		int pIdx = 0;
-////		for(int gIdx = 0; gIdx < groups.size(); gIdx++) {
-////			List<Phone> grpPhones = groups.get(gIdx);
-////
-////			String grpTxt = "";
-////			for(Phone grpP:grpPhones) grpTxt += grpP.getPhoneString();
-////			List<Phone> unsyllabifiedPhones =
-////					Phone.toPhoneList(grpTxt);
-////			syllabifier.syllabify(unsyllabifiedPhones);
-////
-////			// copy syllabification
-////			for(int i = 0; i < grpPhones.size(); i++) {
-////				if(i < unsyllabifiedPhones.size()) {
-////					Phone newSyllabifiedPhone = unsyllabifiedPhones.get(i);
-////					grpPhones.get(i).setScType(newSyllabifiedPhone.getScType());
-////				}
-////			}
-////			
-////		}
-////		repaint();
-////		super.firePropertyChange(RESYLLABIFY_PROP_ID, true, false);
-//	}
+	/**
+	 * Re-syllabifiy using given syllabifier
+	 * @param syllabifier
+	 */
+	public void resyllabifiy(Syllabifier syllabifier) {
+//		int pIdx = 0;
+//		for(int gIdx = 0; gIdx < groups.size(); gIdx++) {
+//			List<Phone> grpPhones = groups.get(gIdx);
+//
+//			String grpTxt = "";
+//			for(Phone grpP:grpPhones) grpTxt += grpP.getPhoneString();
+//			List<Phone> unsyllabifiedPhones =
+//					Phone.toPhoneList(grpTxt);
+//			syllabifier.syllabify(unsyllabifiedPhones);
+//
+//			// copy syllabification
+//			for(int i = 0; i < grpPhones.size(); i++) {
+//				if(i < unsyllabifiedPhones.size()) {
+//					Phone newSyllabifiedPhone = unsyllabifiedPhones.get(i);
+//					grpPhones.get(i).setScType(newSyllabifiedPhone.getScType());
+//				}
+//			}
+//			
+//		}
+//		repaint();
+//		super.firePropertyChange(RESYLLABIFY_PROP_ID, true, false);
+	}
 
 	public void resyllabifiy(String name) {
 //		Syllabifier syllabifier = Syllabifier.getInstance(name);

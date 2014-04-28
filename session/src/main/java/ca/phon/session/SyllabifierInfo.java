@@ -25,7 +25,7 @@ public class SyllabifierInfo {
 	
 	private final static String COMMENT_FORMAT = "syllabifier: %s, tier: %s";
 	
-	private final static String COMMENT_PATTERN = "syllabifier: ([a-zA-Z]{2,3}(-[a-zA-Z]{8})*), tier: (.+)";
+	private final static String COMMENT_PATTERN = "syllabifier: ([a-zA-Z]{2,3}(-[a-zA-Z]{1,8})*), tier: (.+)";
 	
 	/**
 	 * Map of tier name to syllabifier languague
@@ -58,7 +58,7 @@ public class SyllabifierInfo {
 				final Matcher matcher = commentPattern.matcher(commentValue);
 				if(matcher.matches()) {
 					final String langString = matcher.group(1);
-					final String tierName = matcher.group(2);
+					final String tierName = matcher.group(3);
 					syllabifierMap.put(tierName, Language.parseLanguage(langString));
 				}
 			}
@@ -80,10 +80,10 @@ public class SyllabifierInfo {
 				final Matcher matcher = commentPattern.matcher(commentValue);
 				if(matcher.matches()) {
 					final String langString = matcher.group(1);
-					final String tierName = matcher.group(2);
+					final String tierName = matcher.group(3);
 					if(syllabifierMap.containsKey(tierName)) {
 						updatedTiers.add(tierName);
-						comment.setValue(String.format(COMMENT_FORMAT, langString, tierName));
+						comment.setValue(String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName));
 					} else {
 						toRemove.add(i);
 					}
@@ -102,8 +102,9 @@ public class SyllabifierInfo {
 		final Set<String> set = new HashSet<String>(syllabifierMap.keySet());
 		set.removeAll(updatedTiers);
 		for(String tierName:set) {
+			if(tierName == null) break;
 			final Comment c = 
-					factory.createComment(CommentEnum.Generic, String.format(COMMENT_FORMAT, tierName, syllabifierMap.get(tierName).toString()));
+					factory.createComment(CommentEnum.Generic, String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName));
 			session.getMetadata().addComment(c);
 		}
 		

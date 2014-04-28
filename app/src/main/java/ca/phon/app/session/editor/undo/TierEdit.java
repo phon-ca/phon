@@ -77,8 +77,12 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void doIt() {
-		setOldValue(tier.getGroup(groupIndex));
-		tier.setGroup(groupIndex, newValue);
+		if(groupIndex < tier.numberOfGroups()) {
+			setOldValue(tier.getGroup(groupIndex));			
+			tier.setGroup(groupIndex, newValue);
+		} else {
+			tier.addGroup(groupIndex, newValue);
+		}
 		
 		if(getEditor() != null)
 			queueEvent(EditorEventType.TIER_CHANGE_EVT, getSource(), tier.getName());

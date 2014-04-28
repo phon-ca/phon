@@ -134,4 +134,9 @@ public class BasicSyllabifier implements Syllabifier, IExtendable {
 		return extSupport.removeExtension(cap);
 	}
 
+	@Override
+	public boolean equals(Object b) {
+		return (b instanceof BasicSyllabifier && ((BasicSyllabifier)b).getLanguage().equals(getLanguage()));
+	}
+	
 }

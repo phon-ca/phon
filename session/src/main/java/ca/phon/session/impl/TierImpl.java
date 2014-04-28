@@ -78,7 +78,7 @@ public class TierImpl<T> implements Tier<T> {
 	public T getGroup(int idx) {
 		T retVal = null;
 		synchronized(tierData) {
-			if(!grouped && (idx > 0 || idx >= numberOfGroups())) {
+			if(grouped && (idx < 0 || idx >= numberOfGroups())) {
 				throw new ArrayIndexOutOfBoundsException(idx);
 			}
 			if(!grouped && idx == 0 && tierData.size() == 0) {

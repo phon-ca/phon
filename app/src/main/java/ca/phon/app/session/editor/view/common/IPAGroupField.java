@@ -49,9 +49,8 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			@Override
 			public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
 					T oldValue) {
-				
-				final IPATranscript transcript = (IPATranscript)newValue;
 				if(syllabifier != null) {
+					final IPATranscript transcript = (IPATranscript)newValue;
 					syllabifier.syllabify(transcript.toList());
 				}
 			}

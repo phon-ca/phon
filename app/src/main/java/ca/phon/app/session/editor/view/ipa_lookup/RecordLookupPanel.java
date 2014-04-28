@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
@@ -16,6 +17,7 @@ import javax.swing.SwingConstants;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
+import ca.phon.alignment.Aligner;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
@@ -27,13 +29,19 @@ import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
 
 /**
@@ -255,23 +263,44 @@ public class RecordLookupPanel extends JPanel {
 		final Tier<IPATranscript> ipaActual = r.getIPAActual();
 		
 		final IPATranscript ipa = lookupTier.getGroup(i);
+		final IPATranscript ipaA = (new IPATranscriptBuilder()).append(ipa.toString()).toIPATranscript();
 		
-		// TODO syllabify ipa
+		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
+		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
+		if(info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()) != null) {
+			final Syllabifier syllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()));
+			if(syllabifier != null) syllabifier.syllabify(ipa.toList());
+		}
+		if(info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName()) != null) {
+			final Syllabifier syllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName()));
+			if(syllabifier != null) syllabifier.syllabify(ipaA.toList());
+		}
 		
+		IPATranscript targetIpa = ipaTarget.getGroup(i);
 		if(ipaTargetBox.isSelected()) {
 			boolean set = (overwriteBox.isSelected() ? true : ipaTarget.getGroup(i).length() == 0);
 			if(set) {
 				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
 				editor.getUndoSupport().postEdit(ipaTargetEdit);
+				targetIpa = ipa;
 			}
 		}
+		
+		IPATranscript actualIpa = ipaActual.getGroup(i);
 		if(ipaActualBox.isSelected()) {
 			boolean set = (overwriteBox.isSelected() ? true : ipaActual.getGroup(i).length() == 0);
 			if(set) {
 				final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipa);
 				editor.getUndoSupport().postEdit(ipaActualEdit);
+				actualIpa = ipaA;
 			}
 		}
+		
+		final PhoneAligner aligner = new PhoneAligner();
+		final PhoneMap pm = aligner.calculatePhoneMap(targetIpa, actualIpa);
+		
+		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
+		editor.getUndoSupport().postEdit(pmEdit);
 	}
 	
 	private final TierEditorListener tierListener = new TierEditorListener() {

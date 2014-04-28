@@ -260,6 +260,9 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 //					g2d.setColor(p.getScType().getColor());
 			g2d.fill(pArea);
 			g2d.setPaint(oldPaiont);
+		} else {
+			g2d.setColor(display.getBackground());
+			g2d.fill(pArea);
 		}
 
 		// draw phone string
@@ -302,9 +305,11 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
                              RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		Dimension size = display.getSize();
-		g2d.setColor(display.getBackground());
-		g2d.fillRect(0, 0, size.width, size.height);
-
+		if(display.isOpaque()) {
+			g2d.setColor(display.getBackground());
+			g2d.fillRect(0, 0, size.width, size.height);
+		}
+		
 		// setup phone rect
 		int pX = c.getInsets().left + insetSize;
 		int pY = c.getInsets().top + insetSize;
