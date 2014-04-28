@@ -93,6 +93,15 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		}
 		retVal.setHeader(headerData);
 		
+
+		final TranscriptType transcript = factory.createTranscriptType();
+		// commets
+		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
+			final Comment c = session.getMetadata().getComment(i);
+			final CommentType ct = copyComment(factory, c);
+			transcript.getUOrComment().add(ct);
+		}
+		
 		// participants
 		final ParticipantsType parts = factory.createParticipantsType();
 		for(int i = 0; i < session.getParticipantCount(); i++) {
@@ -127,7 +136,6 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		}
 		retVal.setTierOrder(tot);
 		
-		final TranscriptType transcript = factory.createTranscriptType();
 		// session data
 		for(int i = 0; i < session.getRecordCount(); i++) {
 			final Record record = session.getRecord(i);
