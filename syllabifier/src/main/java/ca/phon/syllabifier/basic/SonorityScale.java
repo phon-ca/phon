@@ -9,7 +9,6 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
-import ca.phon.syllabifier.basic.io.PhonexList;
 import ca.phon.syllabifier.basic.io.SonorityValues;
 import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;
 import ca.phon.syllabifier.phonex.SonorityInfo;
@@ -31,8 +30,7 @@ public class SonorityScale implements SyllabifierStage {
 	private void compile() {
 		for(SonorityClass sc:sonorityValues.getSonorityClass()) {
 			final List<PhonexPattern> patterns = new ArrayList<PhonexPattern>();
-			final PhonexList pl = sc.getExprs();
-			for(String phonex:pl.getPhonex()) {
+			for(String phonex:sc.getPhonex()) {
 				final PhonexPattern pattern = PhonexPattern.compile(phonex);
 				patterns.add(pattern);
 			}

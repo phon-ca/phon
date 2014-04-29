@@ -8,9 +8,7 @@ import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.syllabifier.basic.io.ConstituentType;
 import ca.phon.syllabifier.basic.io.MarkGroup;
-import ca.phon.syllabifier.basic.io.PhonexList;
 import ca.phon.syllabifier.basic.io.StageType;
-import ca.phon.syllabifier.basic.io.TypeMap;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableStress;
@@ -29,8 +27,7 @@ public class Stage implements SyllabifierStage {
 	}
 	
 	private void compile() {
-		final PhonexList phonexList = stageType.getExprs();
-		for(String phonex:phonexList.getPhonex()) {
+		for(String phonex:stageType.getPhonex()) {
 			final PhonexPattern pattern = PhonexPattern.compile(phonex);
 			compiledPatterns.add(pattern);
 		}
@@ -44,13 +41,12 @@ public class Stage implements SyllabifierStage {
 	@Override
 	public boolean run(List<IPAElement> phones) {
 		boolean retVal = false;
-		final TypeMap typeMap = stageType.getMap();
 		for(PhonexPattern pattern:compiledPatterns) {
 			final PhonexMatcher matcher = pattern.matcher(phones);
 			while(matcher.find()) {
-				for(MarkGroup mg:typeMap.getSet()) {
+				for(MarkGroup mg:stageType.getGroup()) {
 					final SyllableConstituentType scType = scTypeFromXMLType(mg.getMark());
-					int groupIdx = pattern.groupIndex(mg.getGroup());
+					int groupIdx = pattern.groupIndex(mg.getName());
 					if(groupIdx > 0) {
 						final List<IPAElement> grp = matcher.group(groupIdx);
 						for(IPAElement ele:grp) {
