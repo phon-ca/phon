@@ -500,7 +500,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 			@Override
 			public void visit(IPAElement obj) {
 				buffer.append(obj.toString());
-				if(includeScType) {
+				if(includeScType && obj.getScType() != SyllableConstituentType.WORDBOUNDARYMARKER) {
 					buffer.append(":");
 					final SyllabificationInfo sInfo = obj.getExtension(SyllabificationInfo.class);
 					if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())

@@ -9,9 +9,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -31,10 +33,14 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
 import ca.phon.app.session.editor.view.common.TierDataLayoutButtons;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.ResetAlignmentCommand;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.ResetSyllabificationCommand;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.SyllabificationSettingsCommand;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Group;
@@ -47,6 +53,7 @@ import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.ipa.PhoneMapDisplay;
+import ca.phon.ui.ipa.PhoneMapDisplay.AlignmentChangeData;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay.SyllabificationChangeData;
 import ca.phon.util.icons.IconManager;
@@ -93,8 +100,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				"pref, pref, pref, pref, pref, fill:pref:grow, right:pref", "pref");
 		topPanel = new JPanel(topLayout);
 		
-		final PhonUIAction settingsAct = new PhonUIAction(this, "onShowSettings");
-		settingsAct.putValue(PhonUIAction.NAME, "Syllabifier settings");
+		final SyllabificationSettingsCommand settingsAct = new SyllabificationSettingsCommand(getEditor(), this);
 		settingsBtn = new JButton(settingsAct);
 		
 		final PhonUIAction toggleTargetAct = new PhonUIAction(this, "toggleCheckbox");
@@ -152,10 +158,13 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		eventManager.registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, updateAct);
 		eventManager.registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, updateAct);
 		
+		final EditorAction tierChangeAct =
+				new DelegateEditorAction(this, "onTierChange");
+		eventManager.registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, tierChangeAct);
+		
 		final EditorAction tierChangedAct =
 				new DelegateEditorAction(this, "onTierChanged");
 		eventManager.registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangedAct);
-		
 		
 		final EditorAction scChangeAct = 
 				new DelegateEditorAction(this, "onScChange");
@@ -181,6 +190,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		} else {
 			retVal = new SyllabificationDisplay();
 			retVal.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, syllabificationDisplayListener);
+			retVal.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, hiatusChangeListener);
 			actualDisplays.add(retVal);
 		}
 		return retVal;
@@ -198,16 +208,50 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		
 	};
 	
+	private final PropertyChangeListener hiatusChangeListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+			final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(getEditor(), display.getTranscript(), (Integer)evt.getNewValue());
+			getEditor().getUndoSupport().postEdit(edit);
+		}
+		
+	};
+	
 	private PhoneMapDisplay getAlignmentDisplay(int group) {
 		PhoneMapDisplay retVal = null;
 		if(group < alignmentDisplayus.size()) {
 			retVal = alignmentDisplayus.get(group);
 		} else {
 			retVal = new PhoneMapDisplay();
+			retVal.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, alignmentDisplayListener);
 			alignmentDisplayus.add(retVal);
 		}
 		return retVal;
 	}
+	
+	private final PropertyChangeListener alignmentDisplayListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			final AlignmentChangeData newVal = (AlignmentChangeData)evt.getNewValue();
+			final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
+
+			final int gIdx = alignmentDisplayus.indexOf(display);
+			
+			final SyllabificationDisplay tDisplay = targetDisplays.get(gIdx);
+			final SyllabificationDisplay aDisplay = actualDisplays.get(gIdx);
+			final PhoneMap pm = new PhoneMap(tDisplay.getTranscript(), aDisplay.getTranscript());
+			pm.setTopAlignment(newVal.getAlignment()[0]);
+			pm.setBottomAlignment(newVal.getAlignment()[1]);
+			
+			final Record r = getEditor().currentRecord();
+			final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignment(), gIdx, pm);
+			getEditor().getUndoSupport().postEdit(edit);
+		}
+		
+	};
 	
 	public void update() {
 		final boolean showTarget = targetIPABox.isSelected();
@@ -222,23 +266,52 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		maxExtra = Math.max(maxExtra, alignmentDisplayus.size());
 		contentPane.removeAll();
 		
+		final ImageIcon reloadIcn = IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
+		
 		if(showTarget) {
+			final ResetSyllabificationCommand resetTargetAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPATarget.getName());
+			resetTargetAct.putValue(Action.NAME, null);
+			resetTargetAct.putValue(Action.SMALL_ICON, reloadIcn);
+			final JButton btn = new JButton(resetTargetAct);
+			
 			final JLabel targetSyllLbl = new JLabel(SystemTierType.TargetSyllables.getName());
 			targetSyllLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 			targetSyllLbl.setHorizontalTextPosition(SwingConstants.RIGHT);
+			
+			final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			panel.setOpaque(false);
+			panel.add(btn);
+			panel.add(targetSyllLbl);
+			
 			final TierDataConstraint targetConstraint = new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, 0);
-			contentPane.add(targetSyllLbl, targetConstraint);
+			contentPane.add(panel, targetConstraint);
 		}
 		
 		if(showActual) {
+			final ResetSyllabificationCommand resetActualAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPAActual.getName());
+			resetActualAct.putValue(Action.NAME, null);
+			resetActualAct.putValue(Action.SMALL_ICON, reloadIcn);
+			final JButton btn = new JButton(resetActualAct);
+			
 			final JLabel actualSyllLbl = new JLabel(SystemTierType.ActualSyllables.getName());
 			actualSyllLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 			actualSyllLbl.setHorizontalTextPosition(SwingConstants.RIGHT);
+			
+			final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			panel.setOpaque(false);
+			panel.add(btn);
+			panel.add(actualSyllLbl);
+			
 			final TierDataConstraint actualConstraint = new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, 1);
-			contentPane.add(actualSyllLbl, actualConstraint);
+			contentPane.add(panel, actualConstraint);
 		}
 		
 		if(showAlignment) {
+			final ResetAlignmentCommand resetAct = new ResetAlignmentCommand(getEditor(), this);
+			resetAct.putValue(Action.NAME, null);
+			resetAct.putValue(Action.SMALL_ICON, reloadIcn);
+			final JButton btn = new JButton(resetAct);
+			
 			final JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
 			separator.setForeground(Color.lightGray);
 			final TierDataConstraint sepConstraint = new TierDataConstraint(TierDataConstraint.FULL_TIER_COLUMN, 2);
@@ -247,8 +320,14 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			final JLabel alignSyllLbl = new JLabel(SystemTierType.SyllableAlignment.getName());
 			alignSyllLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 			alignSyllLbl.setHorizontalTextPosition(SwingConstants.RIGHT);
+			
+			final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			panel.setOpaque(false);
+			panel.add(btn);
+			panel.add(alignSyllLbl);
+			
 			final TierDataConstraint alignConstraint = new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, 3);
-			contentPane.add(alignSyllLbl, alignConstraint);
+			contentPane.add(panel, alignConstraint);
 		}
 		
 		final TierDataLayout layout = TierDataLayout.class.cast(contentPane.getLayout());		
@@ -283,7 +362,13 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			
 			if(showAlignment) {
 				// alignment
-				final PhoneMap pm = group.getPhoneAlignment();
+				final PhoneMap grp = group.getPhoneAlignment();
+				PhoneMap pm = null;
+				if(grp != null) {
+					pm = new PhoneMap(grp.getTargetRep(), grp.getActualRep());
+					pm.setTopAlignment(Arrays.copyOf(grp.getTopAlignment(), grp.getAlignmentLength()));
+					pm.setBottomAlignment(Arrays.copyOf(grp.getBottomAlignment(), grp.getAlignmentLength()));
+				}
 				final PhoneMapDisplay pmDisplay = getAlignmentDisplay(gIndex);
 				pmDisplay.setPhoneMapForGroup(0, pm);
 				pmDisplay.setPaintPhoneBackground(colorInAlignment);
@@ -303,52 +388,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		repaint();
 	}
 	
-	/**
-	 * Show syllabifier settings dialog.
-	 * 
-	 */
-	public void onShowSettings() {
-		final JDialog settingsDialog = new JDialog(getEditor());
-		settingsDialog.setModal(true);
-		
-		settingsDialog.setLayout(new BorderLayout());
-		final DialogHeader header = new DialogHeader("Syllabifier settings", "Select syllabifier for IPA tiers.");
-		settingsDialog.add(header, BorderLayout.NORTH);
-		
-		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
-		final SyllabificationSettingsPanel settingsPanel = new SyllabificationSettingsPanel(info);
-		settingsDialog.add(settingsPanel, BorderLayout.CENTER);
-		
-		final AtomicBoolean wasCanceled = new AtomicBoolean(true);
-		final JPanel btmPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		final JButton okBtn = new JButton("Ok");
-		okBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				wasCanceled.getAndSet(false);
-				settingsDialog.setVisible(false);
-			}
-			
-		});
-		btmPanel.add(okBtn);
-		settingsDialog.getRootPane().setDefaultButton(okBtn);
-		
-		settingsDialog.add(btmPanel, BorderLayout.SOUTH);
-		settingsDialog.pack();
-		settingsDialog.setLocationRelativeTo(this);
-		settingsDialog.setVisible(true);
-		
-		// wait
-		
-		if(!wasCanceled.get()) {
-			info.setSyllabifierLanguageForTier(SystemTierType.IPATarget.getName(), settingsPanel.getSelectedTargetSyllabifier());
-			info.setSyllabifierLanguageForTier(SystemTierType.IPAActual.getName(), settingsPanel.getSelectedActualSyllabifier());
-			
-			info.saveInfo(getEditor().getSession());
-		}
-	}
-	
 	/*---- Editor Actions -------------------*/
 	@RunOnEDT
 	public void onDataChanged(EditorEvent ee) {
@@ -366,6 +405,15 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				update();
 				repaint();
 			}
+		}
+	}
+	
+	@RunOnEDT
+	public void onTierChange(EditorEvent ee) {
+		if(ee.getEventData() != null && ee.getSource() == getEditor().getUndoSupport() &&
+				ee.getEventData().toString().equals(SystemTierType.SyllableAlignment.getName())) {
+			update();
+			repaint();
 		}
 	}
 	
@@ -405,7 +453,22 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		return null;
+		final JMenu retVal = new JMenu();
+		
+		retVal.add(new SyllabificationSettingsCommand(getEditor(), this));
+		
+		retVal.addSeparator();
+		
+		final ResetSyllabificationCommand resetIPATargetAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPATarget.getName());
+		retVal.add(resetIPATargetAct);
+		
+		final ResetSyllabificationCommand resetIPAActualAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPAActual.getName());
+		retVal.add(resetIPAActualAct);
+		
+		final ResetAlignmentCommand resetAlignmentAct = new ResetAlignmentCommand(getEditor(), this);
+		retVal.add(resetAlignmentAct);
+		
+		return retVal;
 	}
 	
 }

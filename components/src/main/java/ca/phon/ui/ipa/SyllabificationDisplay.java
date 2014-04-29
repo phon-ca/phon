@@ -17,6 +17,7 @@ import com.jgoodies.common.display.Displayable;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Tuple;
 
@@ -26,6 +27,8 @@ public class SyllabificationDisplay extends JComponent {
 
 	/** Syllabification prop */
 	public static final String SYLLABIFICATION_PROP_ID = "_syllabification_";
+	
+	public static final String HIATUS_CHANGE_PROP_ID = "_hiatus_change_";
 	
 	public static final String RESYLLABIFY_PROP_ID = "_resyllabify_";
 
@@ -173,16 +176,9 @@ public class SyllabificationDisplay extends JComponent {
 	}
 	
 	public void toggleHiatus(int pIdx) {
-//		Phone p = getPhoneAtIndex(pIdx);
-//		Phone prevP = getPhoneAtIndex(pIdx - 1);
-//
-//		if(prevP != null) {
-//			if(prevP.getScType() == SyllableConstituentType.NUCLEUS
-//					&& p.getScType() == prevP.getScType()) {
-//				p.setDiphthongMember(!p.isDiphthongMember());
-//				super.firePropertyChange(RESYLLABIFY_PROP_ID, true, false);
-//			}
-//		}
+		final IPAElement ele = getPhoneAtIndex(pIdx);
+		final int realIdx = getTranscript().indexOf(ele);
+		super.firePropertyChange(HIATUS_CHANGE_PROP_ID, -1, realIdx);
 	}
 
 	@Override

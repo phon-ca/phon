@@ -637,7 +637,7 @@ public class PhoneAligner implements Aligner<IPAElement> {
 	private SyllableStress getSyllableStress(IPATranscript phoRep, IPAElement p, List<IPATranscript> syllList) {
 		int syllIndex = getSyllableIndex(phoRep, p, syllList);
 		
-		if(syllIndex == -1)
+		if(syllIndex == -1 || syllIndex >= syllList.size())
 			return SyllableStress.NoStress;
 		
 		IPATranscript syll = syllList.get(syllIndex);

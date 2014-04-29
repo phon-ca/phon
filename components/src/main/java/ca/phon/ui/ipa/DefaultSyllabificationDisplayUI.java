@@ -30,9 +30,11 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputAdapter;
@@ -216,84 +218,63 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	 * Get the context menu for the specified phone
 	 */
 	private JPopupMenu getContextMenu(int pIdx) {
-		JPopupMenu retVal = new JPopupMenu();
+		final JPopupMenu retVal = new JPopupMenu();
+//		final IPATranscript ipa = display.getContextMenuTranscript();
 
-		// Phone phone = display.getPhoneAtIndex(pIdx);
-		// if(phone != null) {
-		// for(int i = 0; i < SyllableConstituentType.values().length; i++) {
-		// SyllableConstituentType scType = SyllableConstituentType.values()[i];
-		//
-		// String itemText = "<html>";
-		// if(scType == SyllableConstituentType.ONSET) {
-		// itemText += "<u><b>O</b></u>nset";
-		// } else if(scType == SyllableConstituentType.NUCLEUS) {
-		// itemText += "<u><b>N</b></u>ucleus";
-		// } else if(scType == SyllableConstituentType.CODA) {
-		// itemText += "<u><b>C</b></u>oda";
-		// } else if(scType == SyllableConstituentType.LEFTAPPENDIX) {
-		// itemText += "<u><b>L</b></u>eft Appendix";
-		// } else if(scType == SyllableConstituentType.RIGHTAPPENDIX) {
-		// itemText += "<u><b>R</b></u>ight Appendix";
-		// } else if(scType == SyllableConstituentType.OEHS) {
-		// itemText += "O<u><b>E</b></u>HS";
-		// } else if(scType == SyllableConstituentType.AMBISYLLABIC) {
-		// itemText += "<u><b>A</b></u>mbisyllabic";
-		// } else if(scType == SyllableConstituentType.UNKNOWN) {
-		// itemText += "<u><b>U</b></u>nknown";
-		// } else {
-		// continue;
-		// }
-		// itemText += "</html>";
-		//
-		// JMenuItem constituentItem = new JMenuItem(itemText);
-		// PhonUIAction constituentAction =
-		// new PhonUIAction(this, "menuSetScType", scType);
-		// constituentAction.putValue(Action.NAME, itemText);
-		// constituentItem.setAction(constituentAction);
-		//
-		// retVal.add(constituentItem);
-		// }
-		//
-		// retVal.addSeparator();
-		//
-		// if(pIdx > 0 && phone.getScType() == SyllableConstituentType.NUCLEUS)
-		// {
-		// Phone prevPhone = display.getPhoneAtIndex(pIdx-1);
-		//
-		// if(prevPhone.getPhoneIndex() == phone.getPhoneIndex()-1
-		// && prevPhone.getScType() == SyllableConstituentType.NUCLEUS) {
-		// String itemText = "<html>Toggle <u><b>H</b></u>iatus";
-		// JMenuItem item = new JMenuItem();
-		// PhonUIAction toggleHiatusAct =
-		// new PhonUIAction(this, "toggleHiatus");
-		// toggleHiatusAct.putValue(Action.NAME, itemText);
-		// item.setAction(toggleHiatusAct);
-		//
-		// retVal.add(item);
-		// retVal.addSeparator();
-		// }
-		// }
-		//
-		// JMenu syllabifyMenu = new JMenu("Syllabify Using");
-		// List<String> syllabifierNames =
-		// Syllabifier.getAvailableSyllabifiers();
-		// Collections.sort(syllabifierNames);
-		// for(String syllabifierName:syllabifierNames) {
-		// JMenuItem item = new JMenuItem(syllabifierName);
-		// String itemText =
-		// (syllabifierName.equals(Syllabifier.getDefaultLanguage())
-		// ? "<html><b>" + item.getText() + "</b></html>"
-		// : syllabifierName);
-		// PhonUIAction syllabifierAct =
-		// new PhonUIAction(this, "resyllabify", syllabifierName);
-		// syllabifierAct.putValue(Action.NAME, itemText);
-		// item.setAction(syllabifierAct);
-		//
-		// syllabifyMenu.add(item);
-		// }
-		//
-		// retVal.add(syllabifyMenu);
-		// }
+		IPAElement phone = display.getPhoneAtIndex(pIdx);
+		if (phone != null) {
+			for (int i = 0; i < SyllableConstituentType.values().length; i++) {
+				SyllableConstituentType scType = SyllableConstituentType
+						.values()[i];
+
+				String itemText = "<html>";
+				if (scType == SyllableConstituentType.ONSET) {
+					itemText += "<u><b>O</b></u>nset";
+				} else if (scType == SyllableConstituentType.NUCLEUS) {
+					itemText += "<u><b>N</b></u>ucleus";
+				} else if (scType == SyllableConstituentType.CODA) {
+					itemText += "<u><b>C</b></u>oda";
+				} else if (scType == SyllableConstituentType.LEFTAPPENDIX) {
+					itemText += "<u><b>L</b></u>eft Appendix";
+				} else if (scType == SyllableConstituentType.RIGHTAPPENDIX) {
+					itemText += "<u><b>R</b></u>ight Appendix";
+				} else if (scType == SyllableConstituentType.OEHS) {
+					itemText += "O<u><b>E</b></u>HS";
+				} else if (scType == SyllableConstituentType.AMBISYLLABIC) {
+					itemText += "<u><b>A</b></u>mbisyllabic";
+				} else if (scType == SyllableConstituentType.UNKNOWN) {
+					itemText += "<u><b>U</b></u>nknown";
+				} else {
+					continue;
+				}
+				itemText += "</html>";
+
+				final JMenuItem constituentItem = new JMenuItem(itemText);
+				PhonUIAction constituentAction = new PhonUIAction(this,
+						"menuSetScType", scType);
+				constituentAction.putValue(Action.NAME, itemText);
+				constituentItem.setAction(constituentAction);
+
+				retVal.add(constituentItem);
+			}
+
+			if (pIdx > 0
+					&& phone.getScType() == SyllableConstituentType.NUCLEUS) {
+				IPAElement prevPhone = display.getPhoneAtIndex(pIdx - 1);
+
+				if (prevPhone.getScType() == SyllableConstituentType.NUCLEUS) {
+					String itemText = "<html>Toggle <u><b>H</b></u>iatus";
+					JMenuItem item = new JMenuItem();
+					PhonUIAction toggleHiatusAct = new PhonUIAction(this,
+							"toggleHiatus");
+					toggleHiatusAct.putValue(Action.NAME, itemText);
+					item.setAction(toggleHiatusAct);
+
+					retVal.addSeparator();
+					retVal.add(item);
+				}
+			}
+		}
 
 		return retVal;
 	}

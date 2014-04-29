@@ -223,16 +223,12 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
 		display.movePhoneRight(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
-
-		display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 	}
 
 	public void movePhoneLeft(PhonActionEvent pae) {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
 		display.movePhoneLeft(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
-
-		display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 	}
 
 	public void togglePhoneColour(PhonActionEvent pae) {
@@ -758,9 +754,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 	 * Key listener for cmd/ctrl key press/release
 	 */
 	private class ChangeKeyListener implements KeyListener {
-
-		Integer[][] origAlignment = null;
-
+		
 		@Override
 		public void keyTyped(KeyEvent ke) {
 		}
@@ -768,16 +762,6 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		@Override
 		public void keyPressed(KeyEvent ke) {
 			if(ke.getKeyCode() == KeyEvent.VK_ALT) {
-				// get original alignment
-				// for group
-				Tuple<Integer, Integer> gPos =
-						display.positionToGroupPos(display.getFocusedPosition());
-				PhoneMap pm = display.getPhoneMapForGroup(gPos.getObj1());
-
-				origAlignment = new Integer[2][];
-				origAlignment[0] = Arrays.copyOf(pm.getTopAlignment(), pm.getAlignmentLength());
-				origAlignment[1] = Arrays.copyOf(pm.getBottomAlignment(), pm.getAlignmentLength());
-
 				drawPhoneLock = true;
 				display.repaint();
 			}
@@ -786,23 +770,8 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		@Override
 		public void keyReleased(KeyEvent ke) {
 			if(ke.getKeyCode() == KeyEvent.VK_ALT) {
-				// get original alignment
-				// for group
-				Tuple<Integer, Integer> gPos =
-						display.positionToGroupPos(display.getFocusedPosition());
-				PhoneMap pm = display.getPhoneMapForGroup(gPos.getObj1());
-
 				drawPhoneLock = false;
 				display.repaint();
-
-				Integer[][] newAlignment = new Integer[2][];
-				newAlignment[0] = Arrays.copyOf(pm.getTopAlignment(), pm.getAlignmentLength());
-				newAlignment[1] = Arrays.copyOf(pm.getBottomAlignment(), pm.getAlignmentLength());
-
-				display.fireAlignmentChange(
-						new PhoneMapDisplay.AlignmentChangeData(gPos.getObj1(), origAlignment)
-						, new PhoneMapDisplay.AlignmentChangeData(gPos.getObj1(), newAlignment));
-				origAlignment = null;
 			}
 		}
 
@@ -812,9 +781,6 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 	 * Mouse handler for modifying alignment via drags.
 	 */
 	private class AlignmentMouseHandler extends MouseInputAdapter {
-
-		Integer[][] origAlignment = null;
-
 		@Override
 		public void mouseClicked(MouseEvent me) {
 
@@ -826,15 +792,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 			display.requestFocusInWindow();
 			int pIdx = locationToAlignmentPosition(me.getPoint());
 			if(pIdx >= 0) {
-				// get original alignment
-				// for group
-				Tuple<Integer, Integer> gPos =
-						display.positionToGroupPos(pIdx);
-				PhoneMap pm = display.getPhoneMapForGroup(gPos.getObj1());
-
-				origAlignment = new Integer[2][];
-				origAlignment[0] = Arrays.copyOf(pm.getTopAlignment(), pm.getAlignmentLength());
-				origAlignment[1] = Arrays.copyOf(pm.getBottomAlignment(), pm.getAlignmentLength());
+				
 
 				drawPhoneLock = true;
 				if(me.getPoint().getY() > (phoneBoxSize.height
@@ -850,14 +808,6 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 				display.setFocusedPosition(pIdx);
 				display.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			}
-//					int pIdx = locationToPhoneIndex(me.getPoint());
-//					if(pIdx >= 0) {
-//						display.setFocusedPhone(pIdx);
-//						if(me.isPopupTrigger()) {
-//							JPopupMenu menu = getContextMenu(pIdx);
-//							menu.show(display, me.getPoint().x, me.getPoint().y);
-//						}
-//					}
 		}
 
 		@Override
@@ -866,21 +816,6 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 				drawPhoneLock = false;
 				display.repaint();
 				display.setCursor(Cursor.getDefaultCursor());
-
-				// get original alignment
-				// for group
-				Tuple<Integer, Integer> gPos =
-						display.positionToGroupPos(display.getFocusedPosition());
-				PhoneMap pm = display.getPhoneMapForGroup(gPos.getObj1());
-
-				Integer[][] newAlignment = new Integer[2][];
-				newAlignment[0] = Arrays.copyOf(pm.getTopAlignment(), pm.getAlignmentLength());
-				newAlignment[1] = Arrays.copyOf(pm.getBottomAlignment(), pm.getAlignmentLength());
-
-				display.fireAlignmentChange(
-						new PhoneMapDisplay.AlignmentChangeData(gPos.getObj1(), origAlignment)
-						, new PhoneMapDisplay.AlignmentChangeData(gPos.getObj1(), newAlignment));
-				origAlignment = null;
 			}
 		}
 
@@ -891,7 +826,6 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
 					display.movePhoneRight(
 							groupPos.getObj1(), groupPos.getObj2(), lockTop);
-					display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 					Rectangle newPRect = phoneRectForPosition(
 							display.getFocusedPosition());
 					dragLeftEdge = newPRect.x;
@@ -901,7 +835,6 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
 					display.movePhoneLeft(
 							groupPos.getObj1(), groupPos.getObj2(), lockTop);
-					display.firePropertyChange(PhoneMapDisplay.TEMP_ALIGNMENT_CHANGE_PROP, true, false);
 					Rectangle newPRect = phoneRectForPosition(
 							display.getFocusedPosition());
 					dragLeftEdge = newPRect.x;
