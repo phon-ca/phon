@@ -4,7 +4,7 @@ syllabifier/basic/cat-simple.xml
 #syllabifier/basic/eng-Smith-simple.xml
 #syllabifier/basic/eng-Smith.xml
 #syllabifier/basic/eng-ambi.xml
-#syllabifier/basic/eng-simple.xml
+syllabifier/basic/eng-simple.xml
 syllabifier/basic/eng.xml
 #syllabifier/basic/fra-simple.xml
 #syllabifier/basic/fra.xml

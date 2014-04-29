@@ -1,141 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Phon - An open source tool for research in phonology.
- Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+Phon - An open source tool for research in phonology.
+Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://www.phon.ca/ns/syllabifier ../../xml/xsd/syllabifier.xsd"
     name="Catalan (simple)" language="cat-simple">
     <SonorityScale>
-        
+
         <SonorityClass>
-            <exprs>
-                <phonex>{obs}</phonex>
-            </exprs>
+            <phonex>{obs}</phonex>
             <sonorityValue>0</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
-            <exprs>
-                <phonex>{c,nasal}</phonex>
-            </exprs>
+            <phonex>{c,nasal}</phonex>
             <sonorityValue>1</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
-            <exprs>
-                <phonex>{liquid}</phonex>
-            </exprs>
+            <phonex>{liquid}</phonex>
             <sonorityValue>2</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
-            <exprs>
-                <phonex>\g</phonex>
-            </exprs>
+            <phonex>\g</phonex>
             <sonorityValue>3</sonorityValue>
         </SonorityClass>
-        
+
         <SonorityClass>
-            <exprs>
-                <phonex>\v</phonex>
-            </exprs>
+            <phonex>\v</phonex>
             <sonorityValue>4</sonorityValue>
         </SonorityClass>
-        
+
     </SonorityScale>
-    
+
     <Stage name="MarkNuclei">
-        <exprs>
-            <phonex>(D=\g\v)</phonex>
-            <phonex>(D=\v[{v,high,lax}{g,-stop,-fricative,-affricate,-liquid}])</phonex>
-            <phonex>(D={v, high, lax}\v)</phonex>
-            <phonex>(N=\v:U)</phonex>
-        </exprs>
-        <map>
-            <set group="D" mark="Diphthong"/>
-            <set group="N" mark="Nucleus"/>
-        </map>
+        <phonex>(D=\g\v)</phonex>
+        <phonex>(D=\v[{v,high,lax}{g,-stop,-fricative,-affricate,-liquid}])</phonex>
+        <phonex>(D={v, high, lax}\v)</phonex>
+        <phonex>(N=\v:U)</phonex>
+
+        <group name="D" mark="Diphthong"/>
+        <group name="N" mark="Nucleus"/>
     </Stage>
-    
+
     <Stage name="MarkOnset">
-        <exprs>
-            <phonex>(O=\c:U).:N</phonex>
-            <!-- Fix glides which should be onsets -->
-            <phonex>.:N(O=\g:N).:N</phonex>
-        </exprs>
-        <map>
-            <set group="O" mark="Onset"/>
-        </map>
+        <phonex>(O=\c:U).:N</phonex>
+        <!-- Fix glides which should be onsets -->
+        <phonex>.:N(O=\g:N).:N</phonex>
+
+        <group name="O" mark="Onset"/>
     </Stage>
-    
+
     <Stage name="MaxOnset">
-        <exprs>
-            <phonex>(O=\c:U).:O:mdc("2","false")</phonex>
-        </exprs>
-        <map>
-            <set group="O" mark="Onset"/>
-        </map>
+        <phonex>(O=\c:U).:O:mdc("2","false")</phonex>
+        <group name="O" mark="Onset"/>
     </Stage>
-    
+
     <Stage name="Fix Diphthongs">
-        <exprs>
-            <phonex>.:-O?(O=\g:N).:N</phonex>
-        </exprs>
-        <map>
-            <set group="O" mark="Onset"/>
-        </map>
+        <phonex>.:-O?(O=\g:N).:N</phonex>
+
+        <group name="O" mark="Onset"/>
     </Stage>
-    
+
     <Stage name="MarkCoda">
-        <exprs>
-            <phonex>.:N(C=\c:U)</phonex>
-        </exprs>
-        <map>
-            <set group="C" mark="Coda"/>
-        </map>
+        <phonex>.:N(C=\c:U)</phonex>
+
+        <group name="C" mark="Coda"/>
     </Stage>
-    
+
     <Stage name="MaxCoda">
-        <exprs>
-            <phonex>.:C(C=\c:U)</phonex>
-        </exprs>
-        <map>
-            <set group="C" mark="Coda"/>
-        </map>
+        <phonex>.:C(C=\c:U)</phonex>
+
+        <group name="C" mark="Coda"/>
     </Stage>
-    
-    <!-- In cat-simple, right appendicies are marked as codas -->
+
     <Stage name="MarkRA">
-        <exprs>
-            <phonex>.:C(R={cor}:U)</phonex>
-        </exprs>
-        <map>
-            <set group="R" mark="Coda"/>
-        </map>
+        <phonex>.:C(R={cor}:U)</phonex>
+
+        <group name="R" mark="Right Appendix"/>
     </Stage>
-    
-    
+
     <Stage name="MaxRA">
-        <exprs>
-            <phonex>.:R(R={cor}:U+)</phonex>
-        </exprs>
-        <map>
-            <set group="R" mark="Coda"/>
-        </map>
+        <phonex>.:R(R={cor}:U+)</phonex>
+
+        <group name="R" mark="Coda"/>
     </Stage>
-    
+
+    <Stage name="Make Simple">
+        <phonex>(R=.:R+)</phonex>
+
+        <group name="R" mark="Coda"/>
+    </Stage>
+
 </SyllabifierDef>

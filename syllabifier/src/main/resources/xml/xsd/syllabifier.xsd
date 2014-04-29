@@ -50,8 +50,8 @@
     
     <xs:complexType name="StageType" mixed="false">
         <xs:sequence minOccurs="1" maxOccurs="1">
-            <xs:element name="exprs" type="PhonexList"/>
-            <xs:element name="map" type="TypeMap"/>
+            <xs:element name="phonex" type="nonEmptyString" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="group" type="MarkGroup" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="continueUntilFail" type="xs:boolean" default="false"/>
@@ -62,7 +62,7 @@
             <xs:element name="SonorityClass">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="exprs" type="PhonexList"/>
+                        <xs:element name="phonex" type="nonEmptyString" minOccurs="1" maxOccurs="unbounded"/>
                         <xs:element name="sonorityValue" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -70,27 +70,8 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:simpleType name="SonorityDirection">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="Right"/>
-            <xs:enumeration value="Left"/>
-        </xs:restriction>
-    </xs:simpleType>
-    
-    <xs:complexType name="PhonexList">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-            <xs:element name="phonex" type="nonEmptyString"/>
-        </xs:sequence>
-    </xs:complexType>
-    
-    <xs:complexType name="TypeMap">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-            <xs:element name="set" type="MarkGroup"/>
-        </xs:sequence>
-    </xs:complexType>
-    
     <xs:complexType name="MarkGroup">
-        <xs:attribute name="group" type="nonEmptyString" use="required"/>
+        <xs:attribute name="name" type="nonEmptyString" use="required"/>
         <xs:attribute name="mark" type="ConstituentType" use="required"/>
     </xs:complexType>
     
