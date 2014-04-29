@@ -34,7 +34,7 @@ public class StopCommandHook implements CommandHook {
 		if(editorModel instanceof SyllabifierGraphEditorModel) {
 			final SyllabifierGraphEditorModel syllabifierEditorModel = 
 					(SyllabifierGraphEditorModel)editorModel;
-			syllabifierEditorModel.getSyllabificationDisplay().setPhonesForGroup(0, new IPATranscript());
+			syllabifierEditorModel.getSyllabificationDisplay().setTranscript(new IPATranscript());
 		} else {
 			LOGGER.severe("Editor model is of incorrect type!");
 		}
