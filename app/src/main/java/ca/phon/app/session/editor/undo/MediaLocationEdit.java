@@ -8,14 +8,15 @@ import ca.phon.session.Session;
 
 public class MediaLocationEdit extends SessionEditorUndoableEdit {
 
+	private static final long serialVersionUID = 7934882593502356426L;
+
 	private final String mediaLocation;
 	
-	private final String oldLocation;
+	private String oldLocation;
 	
-	public MediaLocationEdit(SessionEditor editor, String mediaLocation, String oldLocation) {
+	public MediaLocationEdit(SessionEditor editor, String mediaLocation) {
 		super(editor);
 		this.mediaLocation = mediaLocation;
-		this.oldLocation = oldLocation;
 	}
 	
 	public String getMediaLocation() {
@@ -25,43 +26,13 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 	public String getOldLocation() {
 		return this.oldLocation;
 	}
-	
-	@Override
-	public boolean canRedo() {
-		// TODO Auto-generated method stub
-		return super.canRedo();
-	}
-
-	@Override
-	public boolean canUndo() {
-		// TODO Auto-generated method stub
-		return super.canUndo();
-	}
-
-	@Override
-	public String getRedoPresentationName() {
-		// TODO Auto-generated method stub
-		return super.getRedoPresentationName();
-	}
-
-	@Override
-	public String getUndoPresentationName() {
-		// TODO Auto-generated method stub
-		return super.getUndoPresentationName();
-	}
-
-	@Override
-	public boolean isSignificant() {
-		// TODO Auto-generated method stub
-		return super.isSignificant();
-	}
 
 	@Override
 	public void undo() throws CannotUndoException {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		
-		session.setMediaLocation(getMediaLocation());
+		session.setMediaLocation(getOldLocation());
 		
 		queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, editor.getUndoSupport(), getOldLocation());
 	}
@@ -70,6 +41,8 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 	public void doIt() {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
+		
+		oldLocation = session.getMediaLocation();
 		
 		session.setMediaLocation(getMediaLocation());
 		

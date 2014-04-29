@@ -151,6 +151,11 @@ public class RecordDataEditorView extends EditorView {
 		final EditorAction onGroupListChangeAct =
 				new DelegateEditorAction(this, "onGroupsChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, onGroupListChangeAct);
+		
+		final EditorAction onParticipantsChangedAct =
+				new DelegateEditorAction(this, "onParticipantsChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantsChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantsChangedAct);
 	}
 	
 	/**
@@ -432,6 +437,16 @@ public class RecordDataEditorView extends EditorView {
 	@RunOnEDT
 	public void onGroupsChange(EditorEvent event) {
 		update();
+		repaint();
+	}
+	
+	@RunOnEDT
+	public void onParticipantsChanged(EditorEvent event) {
+		remove(topPanel);
+		topPanel = null;
+		topPanel = getTopPanel();
+		add(topPanel, BorderLayout.NORTH);
+		revalidate();
 		repaint();
 	}
 	
