@@ -29,8 +29,8 @@ public class PlaySegmentAction extends MediaPlayerAction {
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 	
-	public PlaySegmentAction(MediaPlayerEditorView view) {
-		super(view);
+	public PlaySegmentAction(SessionEditor editor, MediaPlayerEditorView view) {
+		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);

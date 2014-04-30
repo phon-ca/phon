@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.ui.action.PhonActionEvent;
 
@@ -18,17 +19,13 @@ public class ExportAction extends MediaPlayerAction {
 	private final static String SHORT_DESC = "";
 	
 	private final static String ICON = "";
-	
-	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_E,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.VK_SHIFT);
 
-	public ExportAction(MediaPlayerEditorView view) {
-		super(view);
+	public ExportAction(SessionEditor editor, MediaPlayerEditorView view) {
+		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
-		putValue(ACCELERATOR_KEY, KS);
+//		putValue(ACCELERATOR_KEY, KS);
 	}
 
 	@Override

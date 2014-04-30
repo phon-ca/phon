@@ -55,10 +55,14 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.actions.ExportAction;
+import ca.phon.app.session.editor.view.media_player.actions.GoToAction;
+import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
 import ca.phon.app.session.editor.view.media_player.actions.PlayAdjacencySequenceAction;
 import ca.phon.app.session.editor.view.media_player.actions.PlayCustomSegmentAction;
 import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.view.media_player.actions.PlaySpeechTurnAction;
+import ca.phon.app.session.editor.view.media_player.actions.TakeSnapshotAction;
+import ca.phon.app.session.editor.view.media_player.actions.ToggleAdjustVideoAction;
 import ca.phon.media.VLCHelper;
 import ca.phon.media.exportwizard.MediaExportWizard;
 import ca.phon.media.exportwizard.MediaExportWizardProp;
@@ -535,44 +539,35 @@ public class MediaPlayerEditorView extends EditorView {
 		}
 
 		private JMenuItem getMediaExportItem() {
-			JMenuItem retVal = new JMenuItem(new ExportAction(MediaPlayerEditorView.this));
+			JMenuItem retVal = new JMenuItem(new ExportAction(getEditor(), MediaPlayerEditorView.this));
 			return retVal;
 		}
 		
 		private void setupPlaytoItems(JPopupMenu menu) {
-			final JMenuItem playCustomItem = new JMenuItem(new PlayCustomSegmentAction(MediaPlayerEditorView.this));
+			final JMenuItem playCustomItem = new JMenuItem(new PlayCustomSegmentAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playCustomItem);
 			
-			final JMenuItem playSegmentItem = new JMenuItem(new PlaySegmentAction(MediaPlayerEditorView.this));
+			final JMenuItem playSegmentItem = new JMenuItem(new PlaySegmentAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playSegmentItem);
 			
-			final JMenuItem playContiguousItem = new JMenuItem(new PlaySpeechTurnAction(MediaPlayerEditorView.this));
+			final JMenuItem playContiguousItem = new JMenuItem(new PlaySpeechTurnAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playContiguousItem);
 			
-			final JMenuItem playConvPeriodItem = new JMenuItem(new PlayAdjacencySequenceAction(MediaPlayerEditorView.this));
+			final JMenuItem playConvPeriodItem = new JMenuItem(new PlayAdjacencySequenceAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playConvPeriodItem);
 		}
 
 		private void setupGotoItems(JPopupMenu menu) {
-			PhonUIAction adjustVideoAct = 
-					new PhonUIAction(MediaPlayerEditorView.this, "onToggleAdjustVideo");
-			adjustVideoAct.putValue(PhonUIAction.NAME, "Move media position with record");
-			adjustVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move media to beginning of each record's segment");
+			final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
 			adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
 			JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
 			menu.add(adjustVideoItem); 
 			
-			PhonUIAction gotoSelectAct =
-					new PhonUIAction(MediaPlayerEditorView.this, "onMenuSelectGoto");
-			gotoSelectAct.putValue(Action.NAME, "Go to...");
-			gotoSelectAct.putValue(Action.SHORT_DESCRIPTION, "Go to a specific time");
-
+			final GoToAction gotoSelectAct = new GoToAction(getEditor(), MediaPlayerEditorView.this);
 			JMenuItem gotoSelectItem = new JMenuItem(gotoSelectAct);
 			menu.add(gotoSelectItem);
 
-			PhonUIAction gotoLastSegmentAct =
-					new PhonUIAction(MediaPlayerEditorView.this, "onMenuGoto");
-			gotoLastSegmentAct.putValue(Action.NAME, "Go to end of segmented media");
+			final GoToEndOfSegmentedAction gotoLastSegmentAct = new GoToEndOfSegmentedAction(getEditor(), MediaPlayerEditorView.this);
 			menu.add(gotoLastSegmentAct);
 			
 			final SessionEditor editor = getEditor();
@@ -581,12 +576,8 @@ public class MediaPlayerEditorView extends EditorView {
 			// for each participant
 			for(int i = 0; i < session.getParticipantCount(); i++) {
 				final Participant p = session.getParticipant(i);
-				String msg =
-						"Go to end of last segment for " +
-							(p.getName() == null ? p.getId() : p.getName());
-				PhonUIAction gotoPartSegmentAct =
-						new PhonUIAction(MediaPlayerEditorView.this, "onMenuGoto", p);
-				gotoPartSegmentAct.putValue(Action.NAME, msg);
+				final GoToEndOfSegmentedAction gotoPartSegmentAct =
+						new GoToEndOfSegmentedAction(getEditor(), MediaPlayerEditorView.this, p);
 				menu.add(gotoPartSegmentAct);
 			}
 		}
@@ -602,7 +593,31 @@ public class MediaPlayerEditorView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu menu = new JMenu();
 		
+		menu.add(new TakeSnapshotAction(getEditor(), this));
+		menu.add(new ExportAction(getEditor(), this));
+		menu.addSeparator();
+		menu.add(new PlayCustomSegmentAction(getEditor(), this));
+		menu.add(new PlaySegmentAction(getEditor(), this));
+		menu.add(new PlaySpeechTurnAction(getEditor(), this));
+		menu.add(new PlayAdjacencySequenceAction(getEditor(), this));
+		menu.addSeparator();
+		final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
+		adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
+		JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
+		menu.add(adjustVideoItem); 
+		menu.addSeparator();
+		menu.add(new GoToAction(getEditor(), this));
+		menu.add(new GoToEndOfSegmentedAction(getEditor(), this));
 		
+		final SessionEditor editor = getEditor();
+		final Session session = editor.getSession();
+		// for each participant
+		for(int i = 0; i < session.getParticipantCount(); i++) {
+			final Participant p = session.getParticipant(i);
+			final GoToEndOfSegmentedAction gotoPartSegmentAct =
+					new GoToEndOfSegmentedAction(getEditor(), this, p);
+			menu.add(gotoPartSegmentAct);
+		}
 		
 		return menu;
 	}

@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.ui.action.PhonActionEvent;
 
@@ -23,8 +24,8 @@ public class PlayCustomSegmentAction extends MediaPlayerAction {
 			KeyStroke.getKeyStroke(KeyEvent.VK_R,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.ALT_MASK);
 
-	public PlayCustomSegmentAction(MediaPlayerEditorView view) {
-		super(view);
+	public PlayCustomSegmentAction(SessionEditor editor, MediaPlayerEditorView view) {
+		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
