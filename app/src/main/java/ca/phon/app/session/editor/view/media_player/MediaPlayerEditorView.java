@@ -428,8 +428,10 @@ public class MediaPlayerEditorView extends EditorView {
 		if(pae.getData() == null) {
 			for(int uttIdx = t.getRecordCount()-1; uttIdx >= 0; uttIdx--) {
 				final Record utt = t.getRecord(uttIdx);
-				lastSegment = utt.getSegment().getGroup(0);
-				break;
+				if(utt.getSegment().numberOfGroups() == 0) continue;
+				
+				if(utt.getSegment().getGroup(0).getEndValue() > lastSegment.getEndValue())
+					lastSegment = utt.getSegment().getGroup(0);
 			}
 		} else {
 			final Participant p = (Participant)pae.getData();
