@@ -40,33 +40,19 @@ public class PhoneAligner implements Aligner<IPAElement> {
 			boolean rewardExactMatch,
 			boolean rewardStressedVowels,
 			boolean rewardPlace) {
-		// setup vars
+		final List<IPATranscript> targetSylls = targetRep.syllables();
+		final List<IPATranscript> actualSylls = actualRep.syllables();
 		
-		final SyllableVisitor syllVisitor = new SyllableVisitor();
-		
-		targetRep.accept(syllVisitor);
-		final List<IPATranscript> targetSylls = syllVisitor.getSyllables();
-				
-		syllVisitor.reset();
-		actualRep.accept(syllVisitor);
-		final List<IPATranscript> actualSylls = syllVisitor.getSyllables();
-		
-		final AudiblePhoneVisitor soundPhoneVisitor = new AudiblePhoneVisitor();
-		targetRep.accept(soundPhoneVisitor);
-		IPAElement[] targetPhones = soundPhoneVisitor.getPhones().toArray(new IPAElement[0]);
-		
-		soundPhoneVisitor.reset();
-		actualRep.accept(soundPhoneVisitor);
-		IPAElement[] actualPhones = soundPhoneVisitor.getPhones().toArray(new Phone[0]);
+		final IPATranscript targetPhones = targetRep.removePunctuation();
+		final IPATranscript actualPhones = actualRep.removePunctuation();
 		
 		int matrix[][];
 		int width, height, score;
 		Integer[][] retVal = new Integer[2][];
 		Stack<Integer> tp, ap;
 		
-		
-		width = targetPhones.length+1;
-		height = actualPhones.length+1;
+		width = targetPhones.length()+1;
+		height = actualPhones.length()+1;
 		tp = new Stack<Integer>();
 		ap = new Stack<Integer>();
 		
@@ -76,21 +62,23 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		matrix[0][0] = 0;
 		
 		for(int i = 1; i < width; i++)
-			matrix[i][0] = matrix[i-1][0] + this.costSkip(targetPhones[i-1]);
+			matrix[i][0] = matrix[i-1][0] + this.costSkip(targetPhones.elementAt(i-1));
 		
 		for(int j = 1; j < height; j++)
-			matrix[0][j] = matrix[0][j-1] + this.costSkip(actualPhones[j-1]);
+			matrix[0][j] = matrix[0][j-1] + this.costSkip(actualPhones.elementAt(j-1));
 		
 		// fill in the matrix
 		for(int i = 1; i < width; i++) {
 			for(int j = 1; j < height; j++) {
 				int values[] = new int[3];
 				
-				values[0] = matrix[i-1][j] + this.costSkip(targetPhones[i-1]);
-				values[1] = matrix[i][j-1] + this.costSkip(actualPhones[j-1]);
+				values[0] = matrix[i-1][j] + this.costSkip(targetPhones.elementAt(i-1));
+				values[1] = matrix[i][j-1] + this.costSkip(actualPhones.elementAt(j-1));
 				values[2] = matrix[i-1][j-1] + 
 					this.costSubstitute(targetRep, i-1,
 							actualRep, j-1,
+							targetPhones, actualPhones,
+							targetSylls, actualSylls,
 							rewardStress, rewardExactMatch,
 							rewardStressedVowels, rewardPlace);
 				
@@ -102,6 +90,8 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		
 		retVal = this.retreiveAlignment(
 				width-1, height-1, 0, matrix, targetRep, actualRep, 
+				targetPhones, actualPhones,
+				targetSylls, actualSylls,
 				tp, ap, rewardStress, rewardExactMatch, rewardStressedVowels, rewardPlace,score);
 		
 		
@@ -268,30 +258,15 @@ public class PhoneAligner implements Aligner<IPAElement> {
 	protected int costSubstitute(
 			IPATranscript targetRep, int targetIndex,
 			IPATranscript actualRep, int actualIndex,
+			IPATranscript targetPhones, IPATranscript actualPhones,
+			List<IPATranscript> targetSylls, List<IPATranscript> actualSylls,
 			boolean rewardStress, boolean rewardExactMatch,
 			boolean rewardStressedVowels, boolean rewardPlace) {
 		int count = 0;
 		int tally = PhoneAlignmentConstants.FeatureMultiplier;
 		
-		final SyllableVisitor syllVisitor = new SyllableVisitor();
-		targetRep.accept(syllVisitor);
-		final List<IPATranscript> targetSylls = syllVisitor.getSyllables();
-				
-		syllVisitor.reset();
-		actualRep.accept(syllVisitor);
-		final List<IPATranscript> actualSylls = syllVisitor.getSyllables();
-		
-
-		final AudiblePhoneVisitor soundPhoneVisitor = new AudiblePhoneVisitor();
-		targetRep.accept(soundPhoneVisitor);
-		final IPAElement[] targetPhones = soundPhoneVisitor.getPhones().toArray(new IPAElement[0]);
-		
-		soundPhoneVisitor.reset();
-		actualRep.accept(soundPhoneVisitor);
-		final IPAElement[] actualPhones = soundPhoneVisitor.getPhones().toArray(new Phone[0]);
-		
-		final IPAElement a = (targetIndex < targetPhones.length ? targetPhones[targetIndex] : null);
-		final IPAElement b = (actualIndex < actualPhones.length ? actualPhones[actualIndex] : null);
+		final IPAElement a = (targetIndex < targetPhones.length() ? targetPhones.elementAt(targetIndex) : null);
+		final IPAElement b = (actualIndex < actualPhones.length() ? actualPhones.elementAt(actualIndex) : null);
 				
 		// check for spacers
 		if(isSpacer(a)) {
@@ -425,17 +400,13 @@ public class PhoneAligner implements Aligner<IPAElement> {
 	protected Integer[][] retreiveAlignment(
 			int i, int j, int tally, int[][] matrix,
 			IPATranscript targetRep, IPATranscript actualRep,
+			IPATranscript targetPhones, IPATranscript actualPhones,
+			List<IPATranscript> targetSylls, List<IPATranscript> actualSylls,
 			Stack<Integer> tp, Stack<Integer> ap,
 			boolean rewardStress, boolean rewardExactMatch, 
 			boolean rewardStressedVowels, boolean rewardPlace,
 			int score) {
-		final AudiblePhoneVisitor soundPhoneVisitor = new AudiblePhoneVisitor();
-		targetRep.accept(soundPhoneVisitor);
-		final IPAElement[] target = soundPhoneVisitor.getPhones().toArray(new IPAElement[0]);
 		
-		soundPhoneVisitor.reset();
-		actualRep.accept(soundPhoneVisitor);
-		final IPAElement[] actual = soundPhoneVisitor.getPhones().toArray(new Phone[0]);
 		
 		// the base case for our recursion, we are looking at a 0x0 matrix
 		if(i == 0 && j == 0) {
@@ -462,6 +433,8 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		if(i > 0 && j > 0) {
 			int subVal = this.costSubstitute(
 					targetRep, i-1, actualRep, j-1,
+					targetPhones, actualPhones,
+					targetSylls, actualSylls,
 					rewardStress, rewardExactMatch, rewardStressedVowels,
 					rewardPlace);
 			
@@ -475,7 +448,10 @@ public class PhoneAligner implements Aligner<IPAElement> {
 				
 				return this.retreiveAlignment(
 						i-1, j-1, newTally,
-						matrix, targetRep, actualRep, tp, ap,
+						matrix, targetRep, actualRep, 
+						targetPhones, actualPhones,
+						targetSylls, actualSylls,
+						tp, ap,
 						rewardStress, rewardExactMatch,
 						rewardStressedVowels, rewardPlace, score);
 			}
@@ -483,23 +459,26 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		
 		// check if max value came from skipping target[i]
 		if(j > 0) {
-			int chkVal = matrix[i][j-1] + this.costSkip(actual[j-1]) + tally;
+			int chkVal = matrix[i][j-1] + this.costSkip(actualPhones.elementAt(j-1)) + tally;
 			
 			if(chkVal >= score) {
 //				Phone stackPhone = null; // make an indel
 				
-				if(isSpacer(actual[j-1])) {
+				if(isSpacer(actualPhones.elementAt(j-1))) {
 					tp.push(AlignmentMap.SPACER_VALUE); // put the new phone
 				} else {
 					tp.push(AlignmentMap.INDEL_VALUE);
 				}
 				ap.push(j-1); // with actual
 				
-				int newTally = tally + this.costSkip(actual[j-1]);
+				int newTally = tally + this.costSkip(actualPhones.elementAt(j-1));
 				
 				return this.retreiveAlignment(
 						i, j-1, newTally,
-						matrix, targetRep, actualRep, tp, ap,
+						matrix, targetRep, actualRep, 
+						targetPhones, actualPhones,
+						targetSylls, actualSylls,
+						tp, ap,
 						rewardStress, rewardExactMatch,
 						rewardStressedVowels, rewardPlace, score);
 			}
@@ -509,7 +488,7 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		if(i > 0) {
 //			Phone stackPhone = null; // make an indel
 			
-			if(isSpacer(target[i-1])) {
+			if(isSpacer(targetPhones.elementAt(i-1))) {
 				ap.push(AlignmentMap.SPACER_VALUE);
 			} else {
 				ap.push(AlignmentMap.INDEL_VALUE);
@@ -518,11 +497,14 @@ public class PhoneAligner implements Aligner<IPAElement> {
 			tp.push(i-1);
 //			ap.push(stackPhone);
 			
-			int newTally = tally + this.costSkip(target[i-1]);
+			int newTally = tally + this.costSkip(targetPhones.elementAt(i-1));
 			
 			return this.retreiveAlignment(
 					i-1, j, newTally,
-					matrix, targetRep, actualRep, tp, ap,
+					matrix, targetRep, actualRep, 
+					targetPhones, actualPhones,
+					targetSylls, actualSylls,
+					tp, ap,
 					rewardStress, rewardExactMatch,
 					rewardStressedVowels, rewardPlace, score);
 		} else {
@@ -535,10 +517,13 @@ public class PhoneAligner implements Aligner<IPAElement> {
 				tp.push(AlignmentMap.INDEL_VALUE);
 				ap.push(j-1);
 				
-				int newTally = tally + this.costSkip(target[i]);
+				int newTally = tally + this.costSkip(targetPhones.elementAt(i));
 				
 				return this.retreiveAlignment(i, j-1, newTally, 
-						matrix, targetRep, actualRep, tp, ap, 
+						matrix, targetRep, actualRep,
+						targetPhones, actualPhones,
+						targetSylls, actualSylls,
+						tp, ap, 
 						rewardStress, rewardExactMatch, 
 						rewardStressedVowels, rewardPlace, score);
 			} else {
@@ -547,18 +532,18 @@ public class PhoneAligner implements Aligner<IPAElement> {
 				//PhonLogger.warning("[Aligner] Could not determine an appropriate alignment, returning default.");
 				
 				
-				int maxLen = Math.max(target.length, actual.length);
+				int maxLen = Math.max(targetPhones.length(), actualPhones.length());
 				Integer[][] toReturn = new Integer[2][];
 				toReturn[0] = new Integer[maxLen];
 				int tIndex = 0;
-				for( ; tIndex < target.length; tIndex++)
+				for( ; tIndex < targetPhones.length(); tIndex++)
 					toReturn[0][tIndex] = tIndex;
 				for(int pIndex = tIndex; pIndex < maxLen; pIndex++)
 					toReturn[0][pIndex] = AlignmentMap.INDEL_VALUE;
 				
 				toReturn[1] = new Integer[maxLen];
 				int aIndex = 0;
-				for( ; aIndex < actual.length; aIndex++)
+				for( ; aIndex < actualPhones.length(); aIndex++)
 					toReturn[1][aIndex] = aIndex;
 				for(int pIndex = aIndex; pIndex < maxLen; pIndex++)
 					toReturn[1][pIndex] = AlignmentMap.INDEL_VALUE;
@@ -652,7 +637,7 @@ public class PhoneAligner implements Aligner<IPAElement> {
 	private SyllableStress getSyllableStress(IPATranscript phoRep, IPAElement p, List<IPATranscript> syllList) {
 		int syllIndex = getSyllableIndex(phoRep, p, syllList);
 		
-		if(syllIndex == -1)
+		if(syllIndex == -1 || syllIndex >= syllList.size())
 			return SyllableStress.NoStress;
 		
 		IPATranscript syll = syllList.get(syllIndex);

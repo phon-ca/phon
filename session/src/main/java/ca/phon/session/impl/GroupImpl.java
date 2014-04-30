@@ -77,7 +77,8 @@ public class GroupImpl implements Group {
 
 	@Override
 	public PhoneMap getPhoneAlignment() {
-		return record.getPhoneAlignment().getGroup(groupIndex);
+		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+		return (alignmentTier.numberOfGroups() > groupIndex ? alignmentTier.getGroup(groupIndex) : null);
 	}
 
 	@Override

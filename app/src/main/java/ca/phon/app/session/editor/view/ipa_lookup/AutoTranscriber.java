@@ -194,6 +194,7 @@ public class AutoTranscriber {
 			alignmentEdit.doIt();
 			retVal.addEdit(alignmentEdit);
 		}
+		retVal.end();
 		
 		return retVal;
 	}
@@ -218,6 +219,7 @@ public class AutoTranscriber {
 				retVal.addEdit(edit);
 			}
 		}
+		retVal.end();
 		
 		return retVal;
 	}

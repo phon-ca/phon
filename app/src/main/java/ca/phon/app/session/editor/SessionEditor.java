@@ -44,8 +44,12 @@ import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SyllabifierInfo;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.Language;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -139,6 +143,15 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		// setup undo support and manager extensions
 		putExtension(UndoManager.class, undoManager);
 		putExtension(UndoableEditSupport.class, undoSupport);
+		
+		// setup syllabification info
+		final SyllabifierInfo info = new SyllabifierInfo(session);
+		final Language defaultSyllabifierLanguage = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage();
+		if(info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()) == null)
+			info.setSyllabifierLanguageForTier(SystemTierType.IPATarget.getName(), defaultSyllabifierLanguage);
+		if(info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName()) == null)
+			info.setSyllabifierLanguageForTier(SystemTierType.IPAActual.getName(), defaultSyllabifierLanguage);
+		session.putExtension(SyllabifierInfo.class, info);
 		
 		init();
 	}

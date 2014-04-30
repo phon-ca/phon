@@ -171,12 +171,20 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		// copy transcript data
 		final List<Comment> recordComments = new ArrayList<Comment>();
+		boolean foundFirstRecord = false;
 		for(Object uOrComment:sessionType.getTranscript().getUOrComment()) {
 			if(uOrComment instanceof CommentType) {
 				final CommentType ct = (CommentType)uOrComment;
 				final Comment comment = copyComment(factory, ct);
 				recordComments.add(comment);
 			} else {
+				if(!foundFirstRecord && recordComments.size() > 0) {
+					// add record comments to session metadata
+					for(Comment c:recordComments) {
+						retVal.getMetadata().addComment(c);
+					}
+					recordComments.clear();
+				}
 				final RecordType rt = (RecordType)uOrComment;
 				final Record record = copyRecord(factory, rt);
 				

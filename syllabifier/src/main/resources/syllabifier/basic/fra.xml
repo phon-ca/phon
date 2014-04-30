@@ -16,9 +16,9 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="French" language="fra-simple">
+<SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="French" language="fra">
+    
     <SonorityScale>
-
         <SonorityClass>
             <Constraint>
                 <PhoneSequence>{Obstruent}</PhoneSequence>
@@ -57,7 +57,6 @@
             </Constraint>
             <sonorityValue>4</sonorityValue>
         </SonorityClass>
-
     </SonorityScale>
 
     <Stage name="MarkNuclei" useMDC="false">
@@ -84,7 +83,6 @@
 
     <Stage name="Max OEHS" useMDC="true" mdc="2" sonorityDirection="Right"
         allowsFlatSonority="false">
-        
         <PhoneOfInterest>
             <Constraint>
                 <PhoneSequence>{Consonant}</PhoneSequence>
@@ -97,7 +95,6 @@
                 <PhoneSequence>{}:OEHS</PhoneSequence>
             </Constraint>
         </NextPhone>
-        
     </Stage>
 
     <Stage name="MarkOnset" useMDC="false">
@@ -190,7 +187,6 @@
     </Stage>
     
     <Stage name="MarkLA1" useMDC="false">
-        
         <PhoneOfInterest>
             <Constraint>
                 <PhoneSequence>#{Strident,Voiceless}</PhoneSequence>
@@ -203,11 +199,9 @@
                 <PhoneSequence>{}:Onset</PhoneSequence>
             </Constraint>
         </NextPhone>
-        
     </Stage>
 
     <Stage name="MarkLA2" useMDC="false">
-        
         <PrevPhone>
             <Constraint>
                 <PhoneSequence>{}:Coda</PhoneSequence>
@@ -228,13 +222,12 @@
                 <PhoneSequence>{}:Onset</PhoneSequence>
             </Constraint>
         </NextPhone>
-        
     </Stage>
 
     <Stage name="Fix p[sn]" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:SyllableStressMarker?</PhoneSequence>
+                <PhoneSequence>{}:SyllableBoundaryMarker?</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
@@ -255,7 +248,7 @@
     <Stage name="Fix gz" useMDC="false">
         <PrevPhone>
             <Constraint>
-                <PhoneSequence>{}:SyllableStressMarker?</PhoneSequence>
+                <PhoneSequence>{}:SyllableBoundaryMarker?</PhoneSequence>
             </Constraint>
         </PrevPhone>
         
@@ -272,6 +265,5 @@
             </Constraint>
         </NextPhone>
     </Stage>
-
-
+    
 </SyllabifierDef>

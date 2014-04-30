@@ -11,15 +11,22 @@ import ca.phon.session.Session;
  * Undo-able edit for adding participants in a {@link Session}.
  *
  */
-public class AddParticipantEdit extends ParticipantUndoableEdit {
+public class AddParticipantEdit extends SessionEditorUndoableEdit {
 
 	private static final long serialVersionUID = 2633079803945025310L;
+	
+	private final Participant participant;
 	
 	/**
 	 * Constructor
 	 */
 	public AddParticipantEdit(SessionEditor editor, Participant participant) {
-		super(editor, participant);
+		super(editor);
+		this.participant = participant;
+	}
+	
+	public Participant getParticipant() {
+		return this.participant;
 	}
 
 	@Override

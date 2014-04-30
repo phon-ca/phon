@@ -16,7 +16,6 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Caret;
 import javax.swing.text.DefaultCaret;
 
 import ca.phon.formatter.Formatter;
@@ -106,7 +105,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		final String validateId = "validate";
-		final PhonUIAction validateAct = new PhonUIAction(this, "validateAndUpdate");
+		final PhonUIAction validateAct = new PhonUIAction(this, "onEnter");
 		actionMap.put(validateId, validateAct);
 		inputMap.put(validateKs, validateId);
 		
@@ -127,6 +126,19 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		}
 		retVal = tier.getGroup(groupIndex);
 		return retVal;
+	}
+	
+	/**
+	 * Called when the 'Enter' key is pressed.
+	 * 
+	 */
+	public void onEnter() {
+		if(getGroupValue() != initialGroupVal) {
+			for(TierEditorListener listener:getTierEditorListeners()) {
+				listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+			}
+			initialGroupVal = getGroupValue();
+		}
 	}
 	
 	/**
@@ -162,7 +174,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		if(validatedObj != null) {
 			final T oldVal = getGroupValue();
 			for(TierEditorListener listener:getTierEditorListeners()) {
-				listener.tierValueChanged(getTier(), getGroupIndex(), validatedObj, oldVal);
+				listener.tierValueChange(getTier(), getGroupIndex(), validatedObj, oldVal);
 			}
 		}
 	}
@@ -180,16 +192,21 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		this.validatedObjRef.getAndSet(object);
 	}
 	
+	private T initialGroupVal;
 	private final FocusListener focusListener = new FocusListener() {
 		
 		@Override
 		public void focusLost(FocusEvent e) {
-//			if(!e.isTemporary() && validateText())
-//				update();
+			if(getGroupValue() != initialGroupVal) {
+				for(TierEditorListener listener:getTierEditorListeners()) {
+					listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+				}
+			}
 		}
 		
 		@Override
 		public void focusGained(FocusEvent e) {
+			initialGroupVal = getGroupValue();
 		}
 		
 	};

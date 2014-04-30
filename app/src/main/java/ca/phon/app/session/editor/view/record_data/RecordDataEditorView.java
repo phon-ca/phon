@@ -51,6 +51,9 @@ import ca.phon.app.session.editor.view.record_data.actions.DeleteGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.MergeGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.NewGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.SplitGroupCommand;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -148,6 +151,11 @@ public class RecordDataEditorView extends EditorView {
 		final EditorAction onGroupListChangeAct =
 				new DelegateEditorAction(this, "onGroupsChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, onGroupListChangeAct);
+		
+		final EditorAction onParticipantsChangedAct =
+				new DelegateEditorAction(this, "onParticipantsChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantsChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantsChangedAct);
 	}
 	
 	/**
@@ -306,13 +314,47 @@ public class RecordDataEditorView extends EditorView {
 		return topPanel;
 	}
 	
-	private final TierEditorListener tierEditorListener = new TierEditorListener() {
+	private void updateRecordAlignment(int group) {
+		final Record record = getEditor().currentRecord();
+		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
+		final Tier<IPATranscript> ipaActual = record.getIPAActual();
+		
+		final IPATranscript targetGroup = (group < ipaTarget.numberOfGroups() ? ipaTarget.getGroup(group) : new IPATranscript());
+		final IPATranscript actualGroup = (group < ipaActual.numberOfGroups() ? ipaActual.getGroup(group) : new IPATranscript());
+		final PhoneAligner aligner = new PhoneAligner();
+		final PhoneMap pm = aligner.calculatePhoneMap(targetGroup, actualGroup);
+		
+		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), group, pm);
+		getEditor().getUndoSupport().postEdit(pmEdit);
+		
+		// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
+		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
+		getEditor().getEventManager().queueEvent(ee);
+	}
+	
+	private final TierEditorListener tierEditorListener = new TierEditorListener
+			() {
 		
 		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
+		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
 				T oldValue) {
 			final TierEdit<T> tierEdit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
 			getEditor().getUndoSupport().postEdit(tierEdit);
+		}
+
+		@Override
+		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
+				T newValue, T oldValue) {
+			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, RecordDataEditorView.this, tier.getName());
+			getEditor().getEventManager().queueEvent(ee);
+			
+			// XXX
+			// Special case for IPATranscript tiers
+			// alignment should be updated here!
+			if(SystemTierType.IPATarget.getName().equals(tier.getName()) ||
+					SystemTierType.IPAActual.getName().equals(tier.getName())) {
+				updateRecordAlignment(groupIndex);
+			}
 		}
 		
 	};
@@ -395,6 +437,16 @@ public class RecordDataEditorView extends EditorView {
 	@RunOnEDT
 	public void onGroupsChange(EditorEvent event) {
 		update();
+		repaint();
+	}
+	
+	@RunOnEDT
+	public void onParticipantsChanged(EditorEvent event) {
+		remove(topPanel);
+		topPanel = null;
+		topPanel = getTopPanel();
+		add(topPanel, BorderLayout.NORTH);
+		revalidate();
 		repaint();
 	}
 	

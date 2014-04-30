@@ -1,6 +1,7 @@
 package ca.phon.syllable;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipa.IPAElement;
@@ -55,14 +56,14 @@ public class SyllabificationInfo {
 	/**
 	 * weak reference to parent
 	 */
-	private final WeakReference<IPAElement> phoneRef;
+	private final AtomicReference<IPAElement> phoneRef;
 	
 	public SyllabificationInfo(IPAElement phone) {
 		this(phone, SyllableConstituentType.UNKNOWN);
 	}
 	
 	public SyllabificationInfo(IPAElement phone, SyllableConstituentType scType) {
-		phoneRef = new WeakReference<IPAElement>(phone);
+		phoneRef = new AtomicReference<IPAElement>(phone);
 		this.scType = scType;
 	}
 	
@@ -128,7 +129,7 @@ public class SyllabificationInfo {
 	 *  otherwise
 	 */
 	public boolean isDiphthongMember() {
-		return this.isDipththongMember;
+		return (getConstituentType() == SyllableConstituentType.NUCLEUS && this.isDipththongMember);
 	}
 	
 	/**
@@ -139,11 +140,9 @@ public class SyllabificationInfo {
 	 * @param isDiphthongMember
 	 */
 	public void setDiphthongMember(boolean isDiphthongMember) {
-		if(getConstituentType() == SyllableConstituentType.NUCLEUS) {
-			final boolean wasDiphthongMember = this.isDipththongMember;
-			this.isDipththongMember = isDiphthongMember;
-			getPhone().firePropertyChange(PHONE_DIPHTHONG_MEMBER, wasDiphthongMember, isDiphthongMember);
-		}
+		final boolean wasDiphthongMember = this.isDipththongMember;
+		this.isDipththongMember = isDiphthongMember;
+		getPhone().firePropertyChange(PHONE_DIPHTHONG_MEMBER, wasDiphthongMember, isDiphthongMember);
 	}
 
 }

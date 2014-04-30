@@ -6,6 +6,7 @@ import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
+import ca.phon.syllabifier.Syllabifier;
 
 /**
  * Editor for IPA Transcriptions (validated and blind.)
@@ -13,6 +14,8 @@ import ca.phon.session.Transcriber;
 public class IPAGroupField extends GroupField<IPATranscript> {
 
 	private static final long serialVersionUID = 3938081453789426396L;
+	
+	private final Syllabifier syllabifier;
 	
 	private final WeakReference<Transcriber> transcriberRef;
 
@@ -22,7 +25,12 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	}
 	
 	public IPAGroupField(Tier<IPATranscript> tier, int groupIndex, Transcriber transcriber) {
+		this(tier, groupIndex, transcriber, null);
+	}
+	
+	public IPAGroupField(Tier<IPATranscript> tier, int groupIndex, Transcriber transcriber, Syllabifier syllabifier) {
 		super(tier, groupIndex);
+		this.syllabifier = syllabifier;
 		this.transcriberRef = new WeakReference<Transcriber>(transcriber);
 		// init after transcriber is set
 		init();
@@ -36,6 +44,23 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	protected void init() {
 		if(transcriberRef == null) return;
 		super.init();
+		addTierEditorListener(new TierEditorListener() {
+			
+			@Override
+			public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
+					T oldValue) {
+				if(syllabifier != null) {
+					final IPATranscript transcript = (IPATranscript)newValue;
+					syllabifier.syllabify(transcript.toList());
+				}
+			}
+			
+			@Override
+			public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
+					T oldValue) {
+			}
+			
+		});
 	}
 	
 	@Override
@@ -58,6 +83,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	protected void setValidatedObject(IPATranscript object) {
 		final Transcriber transcriber = getTranscriber();
 		final IPATranscript groupVal = super.getGroupValue();
+		
 		if(transcriber != null) {
 			AlternativeTranscript alts = groupVal.getExtension(AlternativeTranscript.class);
 			if(alts == null) {

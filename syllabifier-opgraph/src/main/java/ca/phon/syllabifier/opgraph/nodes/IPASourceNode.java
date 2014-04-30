@@ -30,7 +30,7 @@ import ca.phon.ipa.IPATranscript;
 public class IPASourceNode extends OpNode implements NodeSettings {
 	
 	// context value
-	private final static String IPA_KEY = "__ipa__";
+	public final static String IPA_KEY = "__ipa__";
 	
 	// single output
 	private final OutputField ipaOut = 
@@ -55,10 +55,9 @@ public class IPASourceNode extends OpNode implements NodeSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-		} 
-//		else if (context.containsKey(IPA_KEY)) {
-//			context.put(ipaOut, (IPATranscript)context.get(IPA_KEY));
-//		}
+		} else if(context.containsKey(IPA_KEY)) {
+			context.put(ipaOut, (IPATranscript)context.get(IPA_KEY));
+		}
 	}
 	
 	public String getIpa() {

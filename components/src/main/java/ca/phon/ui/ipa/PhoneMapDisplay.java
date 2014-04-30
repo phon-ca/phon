@@ -19,6 +19,7 @@
 package ca.phon.ui.ipa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,9 +41,6 @@ public class PhoneMapDisplay extends JComponent {
 
 	/** Alignment change property */
 	public static final String ALIGNMENT_CHANGE_PROP = "_aligned_changed_";
-	
-	/** Temporary change in alignment (editing) */
-	public static final String TEMP_ALIGNMENT_CHANGE_PROP = "_temp_aligned_changed_";
 
 	/** Property for drawing colours */
 	public static final String PAINT_PHONE_BACKGROUND_PROP = "_paint_phone_background_";
@@ -242,37 +240,41 @@ public class PhoneMapDisplay extends JComponent {
 		// is always +1 except when moving into an indel
 		Integer newTopAlignment[] = null;
 		Integer newBottomAlignment[] = null;
+		
+		int nextIndel = -1;
+		for(int i = position+1; i < alignment[0].length; i++) {
+			if(alignment[0][i] == -1) {
+				nextIndel = i;
+				break;
+			}
+		}
 
-		if(position+1 < alignment[0].length
-				&& alignment[0][position+1] == -1) {
+		if(nextIndel >= 0) {
 			// in this case we can just swap the values
 			newTopAlignment = alignment[0];
-			int temp = newTopAlignment[position];
+			Integer[] temp = Arrays.copyOfRange(newTopAlignment, position, nextIndel);
 			newTopAlignment[position] = -1;
-			newTopAlignment[position+1] = temp;
+			for(int i = 0; i < temp.length; i++) {
+				newTopAlignment[position+(i+1)] = temp[i];
+			}
 
 			newBottomAlignment = alignment[1];
 		} else {
 			int newAlignmentSize = alignment[0].length+1;
 			newTopAlignment = new Integer[newAlignmentSize];
-			int oldAlignmentIndex = 0;
-			for(int i = 0; i < newAlignmentSize; i++) {
-				if(i == position) {
-					// insert an indel at old position
-					newTopAlignment[i] = -1;
-				} else {
-					newTopAlignment[i] = alignment[0][oldAlignmentIndex++];
-				}
-			}
-
 			newBottomAlignment = new Integer[newAlignmentSize];
-			oldAlignmentIndex = 0;
-			for(int i = 0; i < newAlignmentSize; i++) {
-				if(oldAlignmentIndex >= alignment[1].length) {
-					newBottomAlignment[i] = -1;
-				} else {
-					newBottomAlignment[i] = alignment[1][oldAlignmentIndex++];
-				}
+
+			for(int i = 0; i < position; i++) {
+				newTopAlignment[i] = alignment[0][i];
+			}
+			newTopAlignment[position] = -1;
+			for(int i = position; i < alignment[0].length; i++) {
+				newTopAlignment[i+1] = alignment[0][i];
+			}
+			
+			newBottomAlignment[newAlignmentSize-1] = -1;
+			for(int i = 0; i < alignment[1].length; i++) {
+				newBottomAlignment[i] = alignment[1][i];
 			}
 		}
 
@@ -325,18 +327,22 @@ public class PhoneMapDisplay extends JComponent {
 
 		Integer[][] oldAlignment = new Integer[2][];
 		oldAlignment[0] =
-				(!top ? pm.getBottomAlignment() : pm.getTopAlignment());
+				Arrays.copyOf((!top ? pm.getBottomAlignment() : pm.getTopAlignment()), pm.getAlignmentLength());
 		oldAlignment[1] =
-				(!top ? pm.getTopAlignment() : pm.getBottomAlignment());
+				Arrays.copyOf((!top ? pm.getTopAlignment() : pm.getBottomAlignment()), pm.getAlignmentLength());
 
-		Integer[][] newAlignment =
+		Integer[][] newAlignment = 
 				mutateAlignment(oldAlignment, pos);
+		
+		if(!top) {
+			final Integer[] temp = newAlignment[0];
+			newAlignment[0] = newAlignment[1];
+			newAlignment[1] = temp;
+		}
 
-		pm.setTopAlignment(
-				(!top ? newAlignment[1] : newAlignment[0]));
-		pm.setBottomAlignment(
-				(!top ? newAlignment[0] : newAlignment[1]));
-
+		pm.setTopAlignment(newAlignment[0]);
+		pm.setBottomAlignment(newAlignment[1]);
+		
 		// check to see if we need to move our focus
 		IPAElement phoneAfterMove = 
 				(!top ? pm.getBottomAlignmentElements().get(pos)
@@ -344,15 +350,18 @@ public class PhoneMapDisplay extends JComponent {
 		
 		if(phoneAfterMove == null || phoneAfterMove != phoneToMove) {
 			setFocusedPosition(getFocusedPosition()+1);
-		} else {
-			repaint();
 		}
 		AlignmentChangeData oldData =
 				new AlignmentChangeData(groupIndex, oldAlignment);
 		AlignmentChangeData newData =
 				new AlignmentChangeData(groupIndex, newAlignment);
+		
+		if(oldAlignment[0].length != newAlignment[0].length) {
+			revalidate();
+		}
+		repaint();
 
-//		super.firePropertyChange(ALIGNMENT_CHANGE_PROP, oldData, newData);
+		super.firePropertyChange(ALIGNMENT_CHANGE_PROP, oldData, newData);
 	}
 
 	public void movePhoneLeft(int groupIndex, int alignmentIndex, boolean top) {
@@ -424,8 +433,6 @@ public class PhoneMapDisplay extends JComponent {
 
 			if(phoneAfterMove == null || phoneAfterMove != phoneToMove) {
 				setFocusedPosition(getFocusedPosition()-1);
-			} else {
-				repaint();
 			}
 		}
 
@@ -433,8 +440,13 @@ public class PhoneMapDisplay extends JComponent {
 				new AlignmentChangeData(groupIndex, oldAlignment);
 		AlignmentChangeData newData =
 				new AlignmentChangeData(groupIndex, newAlignment);
+		
+		if(oldAlignment[0].length != newAlignment[0].length) {
+			revalidate();
+		}
+		repaint();
 
-//		super.firePropertyChange(ALIGNMENT_CHANGE_PROP, oldData, newData);
+		super.firePropertyChange(ALIGNMENT_CHANGE_PROP, oldData, newData);
 	}
 
 	public void fireAlignmentChange(AlignmentChangeData oldValue, AlignmentChangeData newValue) {

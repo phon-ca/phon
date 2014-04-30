@@ -7,12 +7,19 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
 
-public class RemoveParticipantEdit extends ParticipantUndoableEdit {
+public class RemoveParticipantEdit extends SessionEditorUndoableEdit {
 	
 	private static final long serialVersionUID = 156824656495715840L;
 
+	private final Participant participant;
+	
 	public RemoveParticipantEdit(SessionEditor editor, Participant participant) {
-		super(editor, participant);
+		super(editor);
+		this.participant = participant;
+	}
+	
+	public Participant getParticipant() {
+		return this.participant;
 	}
 	
 	@Override

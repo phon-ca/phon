@@ -17,7 +17,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    name="English-Smith (simple)" language="eng-simple-smith">
+    name="English-Smith (simple)" language="eng">
     <SonorityScale>
         <!-- Plosive,Fricative,Affricate - 0 -->
         <SonorityClass>
@@ -124,7 +124,9 @@
     <Stage name="MaxOnset" useMDC="true" mdc="2" sonorityDirection="Right" allowsFlatSonority="false">
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <PhoneSequence>{-Vowel, -Strident}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
+                <connector type="or"/>
+                <PhoneSequence>{Strident, -Anterior}:Unknown</PhoneSequence>
             </Constraint>
             <MarkAs>Onset</MarkAs>
         </PhoneOfInterest>
@@ -215,7 +217,7 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>#{Strident,Voiceless}</PhoneSequence>
+                <PhoneSequence>#{Anterior,Strident,Voiceless}</PhoneSequence>
             </Constraint>
             <MarkAs>Left Appendix</MarkAs>
         </PhoneOfInterest>
@@ -242,7 +244,7 @@
         
         <PhoneOfInterest>
             <Constraint>
-                <PhoneSequence>{Strident,Voiceless}</PhoneSequence>
+                <PhoneSequence>{Anterior, Strident,Voiceless}:Unknown</PhoneSequence>
             </Constraint>
             <MarkAs>Left Appendix</MarkAs>
         </PhoneOfInterest>
@@ -251,7 +253,7 @@
             <Constraint>
                 <PhoneSequence>{}:Onset</PhoneSequence>
             </Constraint>
-        </NextPhone>  
+        </NextPhone>
     </Stage>
     
     <Stage name="MarkRA" useMDC="false">
@@ -292,7 +294,7 @@
             <MarkAs>OEHS</MarkAs>
         </PhoneOfInterest>
     </Stage>
-
+    
     <Stage name="Fix OEHS" useMDC="false">
         <PhoneOfInterest>
             <Constraint>
@@ -319,5 +321,5 @@
             <MarkAs>Coda</MarkAs>
         </PhoneOfInterest>
     </Stage>
-
+    
 </SyllabifierDef>

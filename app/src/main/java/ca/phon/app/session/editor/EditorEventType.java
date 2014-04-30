@@ -18,6 +18,8 @@
 
 package ca.phon.app.session.editor;
 
+import ca.phon.session.TierListener;
+
 /**
  * The class holds the event names that are sent
  * by the editor model while the editor is displayed.
@@ -97,11 +99,22 @@ public class EditorEventType {
 	public final static String SESSION_LOCATION_CHANGED_EVT = "_SESSION_LOCATION_CHANGED_EVT_";
 
 	/**
-	 * Changes in tier data
+	 * Changes in tier data.
+	 * 
 	 * data: the tier name - String
 	 */
 	public final static String TIER_CHANGE_EVT = MODIFICATION_EVENT + "TIER_CHANGE_";
-
+	
+	/**
+	 * Changes in tier data.  Unlike {@link TierListener}s, this event is only called after 
+	 * focus has changed in a component.  This is useful for view which should not update 
+	 * data as it is typed into editor fields. To listen for tier changes as they occur, use {@link TierListener}s
+	 * instead.
+	 * 
+	 * data: the tier name - String
+	 */
+	public final static String TIER_CHANGED_EVT = MODIFICATION_EVENT + "TIER_CHANGED_";
+	
 	/**
 	 * Fired when user clicks on the exclude record box
 	 * Data: null

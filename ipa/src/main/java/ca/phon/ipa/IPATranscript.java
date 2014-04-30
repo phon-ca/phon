@@ -20,6 +20,8 @@ import ca.phon.ipa.parser.IPAParser;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableVisitor;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
@@ -498,9 +500,13 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 			@Override
 			public void visit(IPAElement obj) {
 				buffer.append(obj.toString());
-				if(includeScType) {
+				if(includeScType && obj.getScType() != SyllableConstituentType.WORDBOUNDARYMARKER) {
 					buffer.append(":");
-					buffer.append(obj.getScType().getIdChar());
+					final SyllabificationInfo sInfo = obj.getExtension(SyllabificationInfo.class);
+					if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())
+						buffer.append("D");
+					else
+						buffer.append(sInfo.getConstituentType().getIdChar());
 				}
 			}
 		};

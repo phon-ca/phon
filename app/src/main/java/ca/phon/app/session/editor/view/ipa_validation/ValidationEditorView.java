@@ -26,6 +26,7 @@ import ca.phon.app.session.editor.view.common.IPAGroupField;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
@@ -246,10 +247,17 @@ public class ValidationEditorView extends EditorView {
 	private final TierEditorListener tierListener = new TierEditorListener() {
 		
 		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
+		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
 				T oldValue) {
 			final TierEdit<T> edit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
 			getEditor().getUndoSupport().postEdit(edit);
+		}
+
+		@Override
+		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
+				T newValue, T oldValue) {
+			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, ValidationEditorView.this, tier.getName());
+			getEditor().getEventManager().queueEvent(ee);
 		}
 		
 	};

@@ -77,11 +77,16 @@ public enum SyllableConstituentType {
 	public static SyllableConstituentType fromString(String identifier) {
 		SyllableConstituentType retVal = SyllableConstituentType.UNKNOWN;
 		
-		for(SyllableConstituentType v:values()) {
-			if(v.toString().equalsIgnoreCase(identifier) || v.getIdentifier().equalsIgnoreCase(identifier)
-					|| v.mnemonic.equalsIgnoreCase(identifier)) {
-				retVal = v;
-				break;
+		// special case for diphthongs
+		if(identifier.equalsIgnoreCase("D")) {
+			retVal = NUCLEUS;
+		} else {
+			for(SyllableConstituentType v:values()) {
+				if(v.toString().equalsIgnoreCase(identifier) || v.getIdentifier().equalsIgnoreCase(identifier)
+						|| v.mnemonic.equalsIgnoreCase(identifier)) {
+					retVal = v;
+					break;
+				}
 			}
 		}
 		

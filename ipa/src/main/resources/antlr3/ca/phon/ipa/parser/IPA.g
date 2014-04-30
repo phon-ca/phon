@@ -126,7 +126,12 @@ scope {
 @init { 
 	$word::builder = new IPATranscriptBuilder(); 
 }
-	:	(we=word_element {$word::builder.append($we.p);})+
+	:	(we=word_element {$word::builder.append($we.p);}  
+		( COLON sc=sctype {
+			SyllabificationInfo sInfo = $we.p.getExtension(SyllabificationInfo.class);
+			sInfo.setConstituentType($sc.value);
+			sInfo.setDiphthongMember($sc.isDiphthongMember);
+		} )? )+
 	{
 		$w = $word::builder.toIPATranscript();
 	}
@@ -238,19 +243,13 @@ pause_length returns [PauseLength length]
  *
  */
 phone returns [IPAElement ele]
-	:	single_phone ( COLON sc=sctype )?
+	:	single_phone
 	{	
 		$ele = $single_phone.phone;
-		if(sc != null) {
-			$ele.setScType($sc.value);
-		}
 	}
 	|	compound_phone ( COLON sc=sctype )?
 	{	
 		$ele = $compound_phone.phone;
-		if(sc != null) {
-			$ele.setScType($sc.value);
-		}
 	}
 	;
 	
@@ -388,9 +387,10 @@ phone_length returns [Float length]
 	}
 	;
 	
-sctype returns [SyllableConstituentType value]
+sctype returns [SyllableConstituentType value, boolean isDiphthongMember]
 	:	SCTYPE
 	{
 		$value = SyllableConstituentType.fromString($SCTYPE.text);
+		$isDiphthongMember = ($SCTYPE.text.equalsIgnoreCase("D"));
 	}
 	;

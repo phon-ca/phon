@@ -2,6 +2,7 @@ package ca.phon.visitor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.visitor.annotation.Visits;
@@ -30,14 +31,11 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 			try {
 				visitMethod.invoke(this, obj);
 			} catch (IllegalArgumentException e) {
-				LOGGER.severe(e.getMessage());
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			} catch (IllegalAccessException e) {
-				LOGGER.severe(e.getMessage());
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			} catch (InvocationTargetException e) {
-				LOGGER.severe(e.getMessage());
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		} else {
 			fallbackVisit(obj);

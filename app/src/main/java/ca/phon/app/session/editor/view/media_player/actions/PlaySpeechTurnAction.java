@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.ui.action.PhonActionEvent;
 
@@ -23,8 +24,8 @@ public class PlaySpeechTurnAction extends MediaPlayerAction {
 			KeyStroke.getKeyStroke(KeyEvent.VK_L,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 
-	public PlaySpeechTurnAction(MediaPlayerEditorView view) {
-		super(view);
+	public PlaySpeechTurnAction(SessionEditor editor, MediaPlayerEditorView view) {
+		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);

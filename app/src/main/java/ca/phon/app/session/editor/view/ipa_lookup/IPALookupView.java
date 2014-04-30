@@ -109,7 +109,7 @@ public class IPALookupView extends EditorView {
 		editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
 		
 		final DelegateEditorAction tierChangeAct = new DelegateEditorAction(this, "onTierChanged");
-		editor.getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, tierChangeAct);
+		editor.getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangeAct);
 	}
 	
 	private void setupToolbar() {
