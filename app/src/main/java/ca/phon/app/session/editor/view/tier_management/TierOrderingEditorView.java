@@ -17,13 +17,9 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -36,11 +32,9 @@ import javax.swing.ComponentInputMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -63,6 +57,15 @@ import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.RemoveTierEdit;
 import ca.phon.app.session.editor.undo.TierNameEdit;
 import ca.phon.app.session.editor.undo.TierViewEdit;
+import ca.phon.app.session.editor.view.tier_management.actions.EditTierAction;
+import ca.phon.app.session.editor.view.tier_management.actions.MoveTierAction;
+import ca.phon.app.session.editor.view.tier_management.actions.NewTierAction;
+import ca.phon.app.session.editor.view.tier_management.actions.RemoveTierAction;
+import ca.phon.app.session.editor.view.tier_management.actions.ResetTierFontAction;
+import ca.phon.app.session.editor.view.tier_management.actions.ToggleHideAllTiersAction;
+import ca.phon.app.session.editor.view.tier_management.actions.ToggleLockAllTiersAction;
+import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierLockAction;
+import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierVisibleAction;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
@@ -70,7 +73,6 @@ import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.Toast;
@@ -79,7 +81,6 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -121,16 +122,6 @@ public class TierOrderingEditorView extends EditorView {
 	 */
 	private JButton editButton;
 	
-	/**
-	 * Lock/unlock all button
-	 */
-	private JCheckBox lockAllBox;
-	
-	/**
-	 * Hide/show all button
-	 */
-	private JCheckBox hideAllBox;
-	
 	/*
 	 * Custom tier view order list
 	 */
@@ -146,31 +137,42 @@ public class TierOrderingEditorView extends EditorView {
 		setupEditorActions();
 	}
 	
-//	private void setupTierOrder() {
-//		final SessionEditor editor = getEditor();
-//		final Session session = editor.getSession();
-//		
-//		for(TierViewItem tierOrderItem:session.getTierView()) {
-//			if(SystemTierType.isSystemTier(tierOrderItem.getTierName())) {
-//				SystemTierType systemTier = SystemTierType.tierFromString(tierOrderItem.getTierName());
-//				// don't add syllable, alignment and segment tiers
-//				if(
-//						systemTier != SystemTierType.TargetSyllables &&
-//						systemTier != SystemTierType.ActualSyllables &&
-//						systemTier != SystemTierType.SyllableAlignment ) {
-//					tierOrder.add(tierOrderItem);
-//				}
-//			} else {
-//				tierOrder.add(tierOrderItem);
-//			}
-//		}
-//	}
+	private void toggleTierVisible(int rowIndex) {
+		final TierViewItem[] tierView = getCurrentOrder().toArray(new TierViewItem[0]);
+		final TierViewItem tv = tierView[rowIndex];
+		
+		final ToggleTierVisibleAction act = new ToggleTierVisibleAction(getEditor(), this, tv);
+		act.actionPerformed(new ActionEvent(this, 0, null));
+	}
+	
+	private void toggleTierLocked(int rowIndex) {
+		final TierViewItem[] tierView = getCurrentOrder().toArray(new TierViewItem[0]);
+		final TierViewItem tv = tierView[rowIndex];
+		
+		final ToggleTierLockAction act = new ToggleTierLockAction(getEditor(), this, tv);
+		act.actionPerformed(new ActionEvent(this, 0, null));
+	}
 	
 	private void init() {
 		final SessionEditor sessionEditor = getEditor();
 		final Session session = sessionEditor.getSession();
 		final TierOrderingTableModel tableModel =
-				new TierOrderingTableModel(session, getCurrentOrder());
+				new TierOrderingTableModel(session, getCurrentOrder()) {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void setValueAt(Object aValue, int rowIndex,
+							int columnIndex) {
+						super.setValueAt(aValue, rowIndex, columnIndex);
+						if(columnIndex == TierOrderingTableModel.TierOrderingTableColumn.SHOW_TIER.ordinal()) {
+							toggleTierVisible(rowIndex);
+						} else if(columnIndex == TierOrderingTableModel.TierOrderingTableColumn.LOCK_TIER.ordinal()) {
+							toggleTierLocked(rowIndex);
+						}
+					}
+			
+		};
 		tierOrderingTable = new JXTable(tableModel);
 //		tierOrderingTable = new JXTable(new TierOrderingTableModel(getModel().getSession(), tierOrder));
 		
@@ -203,7 +205,7 @@ public class TierOrderingEditorView extends EditorView {
 		ActionMap tierOrderActionMap = new ActionMap();
 		ComponentInputMap tableInputMap = new ComponentInputMap(tierOrderingTable);
 		
-		final PhonUIAction deleteAction = new PhonUIAction(this, "deleteTier");
+		final PhonUIAction deleteAction = new PhonUIAction(this, "onDeleteTier");
 		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete the currently selected tier.");
 		deleteAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		tierOrderActionMap.put("DELETE_TIER", deleteAction);
@@ -213,11 +215,7 @@ public class TierOrderingEditorView extends EditorView {
 		tierOrderingTable.setActionMap(tierOrderActionMap);
 		tierOrderingTable.setInputMap(WHEN_FOCUSED, tableInputMap);
 		
-		final ImageIcon addIcon = 
-			IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
-		final PhonUIAction addAction = new PhonUIAction(this, "newTier");
-		addAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "New tier");
-		addAction.putValue(PhonUIAction.SMALL_ICON, addIcon);
+		final NewTierAction addAction = new NewTierAction(getEditor(), this);
 		newTierButton = new JButton(addAction);
 		newTierButton.setFocusable(false);
 		
@@ -228,7 +226,7 @@ public class TierOrderingEditorView extends EditorView {
 		deleteTierButton.setFocusable(false);
 		
 		final ImageIcon upIcon =
-			IconManager.getInstance().getIcon("actions/go-up", IconSize.XSMALL);
+			IconManager.getInstance().getIcon("actions/go-up", IconSize.SMALL);
 		final PhonUIAction upAction = new PhonUIAction(this, "moveUp");
 		upAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier up");
 		upAction.putValue(PhonUIAction.SMALL_ICON, upIcon);
@@ -236,7 +234,7 @@ public class TierOrderingEditorView extends EditorView {
 		moveUpButton.setFocusable(false);
 		
 		final ImageIcon downIcon = 
-			IconManager.getInstance().getIcon("actions/go-down", IconSize.XSMALL);
+			IconManager.getInstance().getIcon("actions/go-down", IconSize.SMALL);
 		final PhonUIAction downAction = new PhonUIAction(this, "moveDown");
 		downAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier down");
 		downAction.putValue(PhonUIAction.SMALL_ICON, downIcon);
@@ -244,22 +242,19 @@ public class TierOrderingEditorView extends EditorView {
 		moveDownButton.setFocusable(false);
 		
 		final ImageIcon fontIcon = 
-			IconManager.getInstance().getIcon("actions/edit", IconSize.XSMALL);
-		final PhonUIAction fontAction = new PhonUIAction(this, "editTier");
+			IconManager.getInstance().getIcon("actions/edit", IconSize.SMALL);
+		final PhonUIAction fontAction = new PhonUIAction(this, "onEditTier");
+		fontAction.putValue(PhonUIAction.NAME, "Edit tier...");
 		fontAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit tier...");
 		fontAction.putValue(PhonUIAction.SMALL_ICON, fontIcon);
 		editButton = new JButton(fontAction);
 		editButton.setFocusable(false);
 		
-		final PhonUIAction lockAllAction = new PhonUIAction(this, "toggleLockAll");
-		lockAllAction.putValue(PhonUIAction.NAME, "Lock all");
-		lockAllBox = new JCheckBox(lockAllAction);
-		lockAllBox.setSelected(false);
+		final ToggleLockAllTiersAction lockAllAction = new ToggleLockAllTiersAction(getEditor(), this);
+		final JButton lockAllButton = new JButton(lockAllAction);
 		
-		final PhonUIAction hideAllAction = new PhonUIAction(this, "toggleShowAll");
-		hideAllAction.putValue(PhonUIAction.NAME, "Hide all");
-		hideAllBox = new JCheckBox(hideAllAction);
-		hideAllBox.setSelected(true);
+		final ToggleHideAllTiersAction hideAllAction = new ToggleHideAllTiersAction(getEditor(), this);
+		final JButton hideAllButton = new JButton(hideAllAction);
 		
 		FormLayout layout = new FormLayout(
 				"pref, pref, fill:pref:grow, pref, pref, pref",
@@ -274,44 +269,9 @@ public class TierOrderingEditorView extends EditorView {
 		
 		add(newTierButton, cc.xy(5, 1));
 		
-		add(lockAllBox, cc.xy(1, 1));
-		add(hideAllBox, cc.xy(2, 1));
+		add(lockAllButton, cc.xy(1, 1));
+		add(hideAllButton, cc.xy(2, 1));
 	}
-
-//	@Override
-//	public void setModel(RecordEditorModel mod) {
-//		super.setModel(mod);
-//		if(getModel() != null) {
-//			setupTierOrder();
-//			TierOrderingTableModel tableModel =
-//					new TierOrderingTableModel(getModel().getSession(), tierOrder);
-//			tierOrderingTable.setModel(tableModel);
-//			tableModel.addTableModelListener(new TableModelListener() {
-//	
-//				@Override
-//				public void tableChanged(TableModelEvent e) {
-//	//				System.out.println(e.getType() + " " + e.getColumn() + " " +e.getFirstRow() + " " + e.getLastRow());
-//					if(e.getType() == TableModelEvent.UPDATE
-//							&& e.getColumn() == TierOrderingTableModel.TierOrderingTableColumn.SHOW_TIER.ordinal()) {
-//						getModel().getSession().setTierView(tierOrder);
-//						getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, TierOrderingEditorView.this);
-//					} else if(e.getType() == TableModelEvent.UPDATE
-//							&& e.getColumn() == TierOrderingTableModel.TierOrderingTableColumn.LOCK_TIER.ordinal()) {
-//						getModel().getSession().setTierView(tierOrder);
-//						getModel().fireRecordEditorEvent(TIER_LOCK_CHANGED_EVT, TierOrderingEditorView.this,
-//								tierOrder.get(e.getFirstRow()).getTierName());
-//					}
-//				}
-//	
-//			});
-//			
-//			// TODO: handle external updates to tier ordering
-//			EditorAction ee = new DelegateEditorAction(this, "onTierViewChange");
-//			getModel().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, ee);
-//		} else {
-//			tierOrderingTable.setModel(new DefaultTableModel());
-//		}
-//	}
 	
 	private void setupEditorActions() {
 		final EditorAction tierViewChangeAct = new DelegateEditorAction(this, "onTierViewChange");
@@ -342,74 +302,17 @@ public class TierOrderingEditorView extends EditorView {
 	}
 	
 	/**
-	 * Toggle lock all tiers
-	 */
-	public void toggleLockAll() {
-		boolean lock = lockAllBox.getText().equals("Lock all");
-		
-		final SessionFactory factory = SessionFactory.newFactory();
-		final List<TierViewItem> currentView = getCurrentOrder();
-		final List<TierViewItem> newTierView = new ArrayList<TierViewItem>();
-		for(TierViewItem toi:currentView) {
-			final TierViewItem newItem = 
-					factory.createTierViewItem(toi.getTierName(), toi.isVisible(), toi.getTierFont(), lock);
-		}
-		setOrder(newTierView);
-		
-//		getModel().getSession().setTierView(tierOrder);
-//		
-//		final TierOrderingTableModel tableModel = (TierOrderingTableModel)tierOrderingTable.getModel();
-//		for(int i = 0; i < tierOrder.size(); i++) {
-//			final ITierOrderItem toi = tierOrder.get(i);
-//			getModel().fireRecordEditorEvent(TIER_LOCK_CHANGED_EVT, TierOrderingEditorView.this,
-//					toi.getTierName());
-//			tableModel.fireTableCellUpdated(i, TierOrderingTableModel.TierOrderingTableColumn.LOCK_TIER.ordinal());
-//		}
-		
-		lockAllBox.setText(lock ? "Unlock all" : "Lock all");
-	}
-	
-	/**
-	 * Toggle show all tiers
-	 */
-	public void toggleShowAll() {
-		boolean hide = hideAllBox.getText().equals("Hide all");
-		
-		final SessionFactory factory = SessionFactory.newFactory();
-		final List<TierViewItem> currentView = getCurrentOrder();
-		final List<TierViewItem> newTierView = new ArrayList<TierViewItem>();
-		for(TierViewItem toi:currentView) {
-			final TierViewItem newItem = 
-					factory.createTierViewItem(toi.getTierName(), !hide, toi.getTierFont(), toi.isTierLocked());
-		}
-		setOrder(newTierView);
-		
-//		getModel().getSession().setTierView(tierOrder);
-//		
-//		final TierOrderingTableModel tableModel = (TierOrderingTableModel)tierOrderingTable.getModel();
-//		for(int i = 0; i < tierOrder.size(); i++) {
-//			tableModel.fireTableCellUpdated(i, TierOrderingTableModel.TierOrderingTableColumn.SHOW_TIER.ordinal());
-//		}
-//		getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, TierOrderingEditorView.this);
-		
-		hideAllBox.setText(hide ? "Show all" : "Hide all");
-	}
-	
-	/**
 	 * Move selected tier up in order
 	 */
 	public void moveUp() {
 		int selectedRow = tierOrderingTable.getSelectedRow();
 		
 		final List<TierViewItem> tierOrder = getCurrentOrder();
-		final List<TierViewItem> newOrder = new ArrayList<TierViewItem>(tierOrder);
 		if(selectedRow > 0) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
 			
-			newOrder.remove(tierItem);
-			newOrder.add(selectedRow-1, tierItem);
-			
-			setOrder(newOrder);
+			final MoveTierAction act = new MoveTierAction(getEditor(), this, tierItem, -1);
+			act.actionPerformed(new ActionEvent(this, 0, null));
 		}
 	}
 	
@@ -420,151 +323,26 @@ public class TierOrderingEditorView extends EditorView {
 		int selectedRow = tierOrderingTable.getSelectedRow();
 		
 		final List<TierViewItem> tierOrder = getCurrentOrder();
-		final List<TierViewItem> newOrder = new ArrayList<TierViewItem>(tierOrder);
 		if(selectedRow >= 0 && selectedRow < tierOrder.size()-1) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
 			
-			newOrder.remove(tierItem);
-			newOrder.add(selectedRow+1, tierItem);
-			
-			setOrder(newOrder);
+			final MoveTierAction act = new MoveTierAction(getEditor(), this, tierItem, 1);
+			act.actionPerformed(new ActionEvent(this, 0, null));
 		}
 	}
 	
 	public void onEditTier(PhonActionEvent pae) {
-		editTier();
-	}
-	
-	/**
-	 * Edit the currently selected tier
-	 */
-	public void editTier() {
-		final SessionFactory factory = SessionFactory.newFactory();
 		int selectedRow = tierOrderingTable.getSelectedRow();
-		
 		final List<TierViewItem> tierOrder = getCurrentOrder();
+		
 		if(selectedRow >= 0) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
-			final SystemTierType systemTierType = SystemTierType.tierFromString(tierItem.getTierName());
-			
-			TierDescription depTierDesc  = null;
-			if(systemTierType != null) {
-				depTierDesc = factory.createTierDescription(systemTierType.getName(), systemTierType.isGrouped());
-			} else {
-				final SessionEditor editor = getEditor();
-				final Session session = editor.getSession();
-				
-				for(int i = 0; i < session.getUserTierCount(); i++) {
-					final TierDescription td = session.getUserTier(i);
-					if(td.getName().equals(tierItem.getTierName())) {
-						depTierDesc = td;
-						break;
-					}
-				}
-			}
-			
-			if(depTierDesc != null) {
-				final Font transcriptFont = 
-						(tierItem.getTierFont().equals("default") ? 
-								PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT)) :
-									Font.decode(tierItem.getTierFont()));
-
-				TierEditorDialog tierDialog = new TierEditorDialog(true);
-				TierInfoEditor tierEditor = tierDialog.getTierEditor();
-				tierEditor.setGrouped(depTierDesc.isGrouped());
-				tierEditor.setTierName(tierItem.getTierName());
-				tierEditor.setTierFont(transcriptFont);
-				
-				tierDialog.add(tierEditor);
-				tierDialog.setTitle("New Tier");
-				tierDialog.setModal(true);
-				tierDialog.pack();
-				
-				if(tierDialog.showDialog()) {
-					// change of tier name
-					if(!depTierDesc.getName().equals(tierEditor.getTierName())) {
-						String oldTierName = depTierDesc.getName();
-						
-						final TierNameEdit edit = new TierNameEdit(getEditor(), tierEditor.getTierName(), oldTierName);
-						getEditor().getUndoSupport().postEdit(edit);
-					}
-					
-					
-					// change font
-//					if(!tierItem.getTierFont().equals(StringUtils.fontToString(tierEditor.getTierFont()))) {
-//						final String test = StringUtils.fontToString(UserPrefManager.getTranscriptFont());
-//						String fontString = StringUtils.fontToString(tierEditor.getTierFont());
-//						if(fontString.equals(test))
-//							fontString = "default";
-//						tierItem.setTierFont(fontString);
-//					}
-//					
-//					((TierOrderingTableModel)tierOrderingTable.getModel()).fireTableRowsUpdated(selectedRow, selectedRow);
-//					
-//					getModel().getSession().setTierView(tierOrder);
-//					getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, this);
-				} // if (showDialog())
-			} // if (depTierDesc != null)
-		} // if (selectedRow >= 0)
-	}
-	
-	/**
-	 * Show the new tier dialog
-	 */
-	public void newTier() {
-//		TierInfoEditor tierEditor = new TierInfoEditor();
-		TierEditorDialog newTierDialog = new TierEditorDialog(false);
-		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
-		newTierDialog.add(tierEditor);
-		newTierDialog.setTitle("New Tier");
-		newTierDialog.setModal(true);
-		newTierDialog.pack();
-		
-		if(newTierDialog.showDialog()) {
-			final SessionEditor editor = getEditor();
-			final Session session = editor.getSession();
-			// get tier info
-			String tierName = tierEditor.getTierName();
-			tierName = StringUtils.strip(tierName);
-			if(tierName.length() == 0) {
-				return;
-			}
-			
-			boolean tierExists = false;
-			if(SystemTierType.isSystemTier(tierName)) {
-				tierExists = true;
-			} else {
-				for(TierDescription td:session.getUserTiers()) {
-					if(td.getName().equals(tierName)) {
-						tierExists = true;
-						break;
-					}
-				}
-			}
-			
-			if(tierExists){
-				final Toast toast = ToastFactory.makeToast("A tier with name " + tierEditor.getTierName() + " already exists.");
-				toast.start(tierEditor);
-				return;
-			}
-			
-			// create tier
-			final TierDescription tierDescription = tierEditor.createTierDescription();
-			final TierViewItem tierViewItem = tierEditor.createTierViewItem();
-			
-			final AddTierEdit edit = new AddTierEdit(editor, tierDescription, tierViewItem);
-			editor.getUndoSupport().postEdit(edit);
+			final EditTierAction act = new EditTierAction(getEditor(), this, tierItem);
+			act.actionPerformed(pae.getActionEvent());
 		}
 	}
 	
 	public void onDeleteTier(PhonActionEvent pae) {
-		deleteTier();
-	}
-	
-	/**
-	 * Delete the currently selected tier
-	 */
-	public void deleteTier() {
 		int selectedRow = tierOrderingTable.getSelectedRow();
 		final List<TierViewItem> tierOrder = getCurrentOrder();
 		final SessionEditor editor = getEditor();
@@ -573,39 +351,17 @@ public class TierOrderingEditorView extends EditorView {
 		if(selectedRow >= 0) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
 			
-			if(!SystemTierType.isSystemTier(tierItem.getTierName())) {
-				final MessageDialogProperties props = new MessageDialogProperties();
-				props.setParentWindow(getEditor());
-				props.setOptions(MessageDialogProperties.okCancelOptions);
-				props.setRunAsync(false);
-				props.setTitle("Delete tier");
-				props.setHeader("Delete tier?");
-				props.setMessage("Delete tier '" + tierItem.getTierName() + "'? This action cannot be undone.");
-				
-				int retVal = NativeDialogs.showMessageDialog(props);
-				if(retVal == 0) {
-					TierDescription tierDesc = null;
-					for(TierDescription td:session.getUserTiers()) {
-						if(td.getName().equals(tierItem.getTierName())) {
-							tierDesc = td;
-							break;
-						}
-					}
-					
-					final RemoveTierEdit edit = new RemoveTierEdit(editor, tierDesc, tierItem);
-					editor.getUndoSupport().postEdit(edit);
+			TierDescription tierDesc = null;
+			for(TierDescription td:session.getUserTiers()) {
+				if(td.getName().equals(tierItem.getTierName())) {
+					tierDesc = td;
+					break;
 				}
 			}
+			
+			final RemoveTierAction act = new RemoveTierAction(getEditor(), this, tierDesc, tierItem);
+			act.actionPerformed(pae.getActionEvent());
 		}
-	}
-	
-	public void onResetTierFont(PhonActionEvent pae) {
-//		int row = (Integer)pae.getData();
-//		
-//		tierOrder.get(row).setTierFont("default");
-//		
-//		getModel().getSession().setTierView(tierOrder);
-//		getModel().fireRecordEditorEvent(TIER_VIEW_CHANGED_EVT, this);
 	}
 	
 	/*
@@ -651,27 +407,29 @@ public class TierOrderingEditorView extends EditorView {
 				tierOrderingTable.getSelectionModel().setSelectionInterval(row, row);
 				JPopupMenu popupMenu = new JPopupMenu();
 				
-				PhonUIAction resetFontAction = 
-					new PhonUIAction(TierOrderingEditorView.this, "onResetTierFont", row);
-				resetFontAction.putValue(Action.NAME, "Reset tier font");
-				resetFontAction.putValue(Action.SHORT_DESCRIPTION, "Reset tier font to default");
+				final ResetTierFontAction resetFontAction = new ResetTierFontAction(getEditor(), 
+						TierOrderingEditorView.this, tierOrder.get(row));
 				JMenuItem resetItem = new JMenuItem(resetFontAction);
 				popupMenu.add(resetItem);
 				
-				PhonUIAction editTierAction = 
-					new PhonUIAction(TierOrderingEditorView.this, "onEditTier", row);
-				editTierAction.putValue(Action.NAME, "Edit tier...");
-				editTierAction.putValue(Action.SHORT_DESCRIPTION, "Edit tier properties");
+				final EditTierAction editTierAction = new EditTierAction(getEditor(), TierOrderingEditorView.this, tierOrder.get(row));
 				JMenuItem editTierItem = new JMenuItem(editTierAction);
 				popupMenu.add(editTierItem);
 				
-				PhonUIAction deleteTierAction =
-					new PhonUIAction(TierOrderingEditorView.this, "onDeleteTier", row);
-				deleteTierAction.putValue(Action.NAME, "Delete tier");
-				deleteTierAction.putValue(Action.SHORT_DESCRIPTION, "Delete tier from session");
-				deleteTierAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-				JMenuItem deleteTierItem = new JMenuItem(deleteTierAction);
-				popupMenu.add(deleteTierItem);
+				TierDescription td = null;
+				for(TierDescription t:getEditor().getSession().getUserTiers()) {
+					if(t.getName().equals(tierOrder.get(row).getTierName())) {
+						td = t;
+						break;
+					}
+				}
+				
+				if(td != null) {
+					final RemoveTierAction deleteTierAction = new RemoveTierAction(getEditor(), TierOrderingEditorView.this, td, tierOrder.get(row));
+					deleteTierAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+					JMenuItem deleteTierItem = new JMenuItem(deleteTierAction);
+					popupMenu.add(deleteTierItem);
+				}
 				
 				popupMenu.show(tierOrderingTable, arg0.getPoint().x, arg0.getPoint().y);
 			} 
@@ -679,124 +437,6 @@ public class TierOrderingEditorView extends EditorView {
 		
 	}
 	
-	/**
-	 * Simple dialog that closes on OK or Cancel.  Use showDialog() to display the
-	 * dialog and get the return value.
-	 */
-	private class TierEditorDialog extends JDialog {
-		
-		private static final long serialVersionUID = 1218564949424490169L;
-
-		private DialogHeader header;
-		
-		private TierInfoEditor tierEditor;
-		
-		private JButton okButton;
-		
-		private JButton cancelButton;
-		
-		private boolean okPressed = false;
-		
-		public TierEditorDialog(boolean editMode) {
-			super();
-			
-			if(editMode)
-				super.setTitle("Edit Tier");
-			else
-				super.setTitle("New Tier");
-			
-			super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-
-			tierEditor = new TierInfoEditor(editMode);
-			
-			init();
-		}
-		
-		private void init() {
-			header = new DialogHeader(getTitle(), "");
-			
-			
-			okButton = new JButton("Ok");
-			okButton.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					okPressed = true;
-					TierEditorDialog.this.setVisible(false);
-				}
-				
-			});
-			
-			cancelButton = new JButton("Cancel");
-			cancelButton.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					okPressed = false;
-					TierEditorDialog.this.setVisible(false);
-				}
-				
-			});
-			
-			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-			JPanel btnPanel = 
-				barBuilder.addButton(okButton).addButton(cancelButton).build();
-//					ButtonBarFactory.buildOKCancelBar(okButton, cancelButton);
-			
-			BorderLayout layout = new BorderLayout();
-			setLayout(layout);
-			
-			add(header, BorderLayout.NORTH);
-			add(tierEditor, BorderLayout.CENTER);
-			add(btnPanel, BorderLayout.SOUTH);
-			
-			getRootPane().setDefaultButton(okButton);
-		}
-		
-		public TierInfoEditor getTierEditor() {
-			return tierEditor;
-		}
-		
-		/**
-		 * Displays dialog to user, closes when either button is
-		 * pressed.
-		 * 
-		 * @return true if ok was pressed, false otherwise
-		 */
-		public boolean showDialog() {
-			pack();
-			Dimension size = getSize();
-			
-			// center dialog on screen
-			Dimension ss = 
-				Toolkit.getDefaultToolkit().getScreenSize();
-			
-			if(size.width == 0 && size.height == 0)
-				size = getPreferredSize();
-			
-			int xPos = ss.width / 2 - (size.width/2);
-			int yPos = ss.height / 2 - (size.height/2);
-			
-			setBounds(xPos, yPos, size.width, size.height);
-			
-			setVisible(true);
-			
-			// .. wait for dialog
-			
-			return okPressed;
-		}
-		
-		/**
-		 * If not modal, showDialog will always return false.
-		 * Use this method to get the dialog result.
-		 * 
-		 * @return
-		 */
-		public boolean wasOkPressed() {
-			return okPressed;
-		}
-	}
-
 	@Override
 	public ImageIcon getIcon() {
 		return IconManager.getInstance().getIcon("misc/record-settings", IconSize.SMALL);
@@ -804,8 +444,45 @@ public class TierOrderingEditorView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		// TODO Auto-generated method stub
-		return null;
+		final JMenu retVal = new JMenu();
+		
+		retVal.add(new ToggleLockAllTiersAction(getEditor(), this));
+		retVal.add(new ToggleHideAllTiersAction(getEditor(), this));
+		retVal.addSeparator();
+		
+		final List<TierViewItem> view = getCurrentOrder();
+		for(int i = 0; i < view.size(); i++) {
+			final TierViewItem tvi = view.get(i);
+			final JMenu tierMenu = new JMenu(tvi.getTierName());
+			
+			TierDescription tierDesc = null;
+			for(TierDescription td:getEditor().getSession().getUserTiers()) {
+				if(td.getName().equals(tvi.getTierName())) {
+					tierDesc = td;
+					break;
+				}
+			}
+			
+			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), this, tvi, -1);
+			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), this, tvi, 1);
+			if(i > 0)
+				tierMenu.add(moveUpAction);
+			if(i < view.size() - 1)
+				tierMenu.add(moveDownAction);
+			tierMenu.addSeparator();
+			tierMenu.add(new ToggleTierLockAction(getEditor(), this, tvi));
+			tierMenu.add(new ToggleTierVisibleAction(getEditor(), this, tvi));
+			tierMenu.addSeparator();
+			tierMenu.add(new EditTierAction(getEditor(), this, tvi));
+			tierMenu.add(new ResetTierFontAction(getEditor(), this, tvi));
+			if(tierDesc != null)
+				tierMenu.add(new RemoveTierAction(getEditor(), this, tierDesc, tvi));
+		
+			retVal.add(tierMenu);
+		}
+		retVal.add(new NewTierAction(getEditor(), this));
+		
+		return retVal;
 	}
 	
 	

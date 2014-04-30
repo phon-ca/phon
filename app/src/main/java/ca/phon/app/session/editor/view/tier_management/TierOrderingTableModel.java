@@ -23,6 +23,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import ca.phon.app.prefs.PhonProperties;
+import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierVisibleAction;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
@@ -154,14 +155,14 @@ public class TierOrderingTableModel extends AbstractTableModel {
 		return retVal;
 	}
 
-	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		if (columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal()) {
-			toggleTierLock(rowIndex);
-		} else if (columnIndex == TierOrderingTableColumn.SHOW_TIER.ordinal()) {
-			toggleTierVisible(rowIndex);
-		}
-	}
+//	@Override
+//	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+//		if (columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal()) {
+//			toggleTierLock(rowIndex);
+//		} else if (columnIndex == TierOrderingTableColumn.SHOW_TIER.ordinal()) {
+//			toggleTierVisible(rowIndex);
+//		}
+//	}
 	
 	private TierDescription getTierDescription(String tierName) {
 		TierDescription retVal = null;
@@ -181,25 +182,16 @@ public class TierOrderingTableModel extends AbstractTableModel {
 		return retVal;
 	}
 	
-	private void toggleTierLock(int rowIndex) {
-		final SessionFactory factory = SessionFactory.newFactory();
-		final TierViewItem[] tierView = getTierView();
-		final TierViewItem tv = tierView[rowIndex];
-		final TierViewItem newItem = factory.createTierViewItem(tv.getTierName(), tv.isVisible(), tv.getTierFont(), !tv.isTierLocked());
-		tierView[rowIndex] = newItem;
-		setTierView(tierView);
-		super.fireTableCellUpdated(rowIndex, 
-				TierOrderingTableColumn.LOCK_TIER.ordinal());
-	}
+//	private void toggleTierLock(int rowIndex) {
+//		final SessionFactory factory = SessionFactory.newFactory();
+//		final TierViewItem[] tierView = getTierView();
+//		final TierViewItem tv = tierView[rowIndex];
+//		final TierViewItem newItem = factory.createTierViewItem(tv.getTierName(), tv.isVisible(), tv.getTierFont(), !tv.isTierLocked());
+//		tierView[rowIndex] = newItem;
+//		setTierView(tierView);
+//		super.fireTableCellUpdated(rowIndex, 
+//				TierOrderingTableColumn.LOCK_TIER.ordinal());
+//	}
 	
-	private void toggleTierVisible(int rowIndex) {
-		final SessionFactory factory = SessionFactory.newFactory();
-		final TierViewItem[] tierView = getTierView();
-		final TierViewItem tv = tierView[rowIndex];
-		final TierViewItem newItem = factory.createTierViewItem(tv.getTierName(), !tv.isVisible(), tv.getTierFont(), tv.isTierLocked());
-		tierView[rowIndex] = newItem;
-		setTierView(tierView);
-		super.fireTableCellUpdated(rowIndex, 
-				TierOrderingTableColumn.SHOW_TIER.ordinal());
-	}
+	
 }

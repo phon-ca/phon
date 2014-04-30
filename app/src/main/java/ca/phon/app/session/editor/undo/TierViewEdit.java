@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.undo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.undo.CannotUndoException;
@@ -29,7 +30,7 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 	
 	public TierViewEdit(SessionEditor editor, List<TierViewItem> oldView, List<TierViewItem> newView) {
 		super(editor);
-		this.oldView = oldView;
+		this.oldView = new ArrayList<TierViewItem>(oldView);
 		this.newView = newView;
 	}
 	
