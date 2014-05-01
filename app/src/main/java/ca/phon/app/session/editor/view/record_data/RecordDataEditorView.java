@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.TextComponent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
@@ -19,12 +20,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
@@ -419,6 +422,27 @@ public class RecordDataEditorView extends EditorView {
 		return (currentGroupIndex != null ? currentGroupIndex.get() : -1);
 	}
 	
+	public int currentWordIndex() {
+		int retVal = -1;
+		
+		final JComponent lastComp = lastFocusedRef.get();
+		if(lastComp != null && lastComp instanceof JTextComponent) {
+			final JTextComponent textComp = (JTextComponent)lastComp;
+			
+			final String text = textComp.getText();
+			final int caretIdx = textComp.getCaretPosition();
+			retVal = 0;
+			for(int i = 0; i < caretIdx; i++) {
+				if(text.charAt(i) == ' ') 
+					retVal++;
+			}
+			if(caretIdx == text.length() || text.charAt(caretIdx) == ' ')
+				retVal++;
+		}
+		
+		return retVal;
+	}
+	
 	/*
 	 * Editor Actions
 	 */
@@ -465,6 +489,7 @@ public class RecordDataEditorView extends EditorView {
 		return new RecordDataMenu(this);
 	}
 
+	private AtomicReference<JComponent> lastFocusedRef = new AtomicReference<JComponent>();
 	private final class TierEditorComponentFocusListener implements FocusListener {
 		
 		private final Tier<?> tier;
@@ -481,6 +506,7 @@ public class RecordDataEditorView extends EditorView {
 		public void focusGained(FocusEvent e) {
 			currentTierRef.getAndSet(tier);
 			currentGroupIndex.getAndSet(group);
+			lastFocusedRef.getAndSet((JComponent)e.getComponent());
 		}
 
 		@Override

@@ -31,11 +31,28 @@ public class SplitGroupEdit extends SessionEditorUndoableEdit {
 	}
 	
 	@Override
+	public void undo() {
+		final Record record = getRecord();
+		if(record == null) return;
+		
+		record.mergeGroups(gIndex, gIndex+1);
+		
+		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getEditor().getUndoSupport(), null);
+	}
+	
+	@Override
 	public void doIt() {
 		final Record record = getRecord();
 		if(record == null) return;
 		
-		record.splitGroup(gIndex, wIndex);
+		int wIdx = wIndex;
+		if(wIdx < 0) {
+			record.addGroup(gIndex);
+		} else if(wIdx >= record.getGroup(gIndex).getAlignedWordCount()) {
+			record.addGroup(gIndex+1);
+		} else {
+			record.splitGroup(gIndex, wIdx);
+		}
 		
 		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
 	}

@@ -48,7 +48,7 @@ public class BasicSyllabifier implements Syllabifier, IExtendable {
 	
 	@Extension(IPAElement.class)
 	public static class SyllabifierStageResults {
-		final Map<String, String> stages = new LinkedHashMap<String, String>();
+		public final Map<String, String> stages = new LinkedHashMap<String, String>();
 	}
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(BasicSyllabifier.class, this);

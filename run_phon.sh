@@ -1,5 +1,8 @@
 #!/bin/sh
 
+PHON_OPTS=-Dphon.debug=true \
+-Dca.phon.syllabifier.basic.BasicSyllabifier.trackStages=true
+
 JAVA_HOME=`/usr/libexec/java_home -v1.6` \
 java -Xms250m -Xmx1024m \
 -Xdock:name=Phon \
@@ -15,6 +18,7 @@ java -Xms250m -Xmx1024m \
 -Dfile.encoding=UTF-8 \
 -Dsun.jnu.encoding=UTF-8 \
 -Dapple.laf.useScreenMenuBar=true \
+-Dapple.awt.graphics.UseQuartz=true \
 $PHON_OPTS \
 ca.phon.app.Main 2>&1 | tee phon.log
 

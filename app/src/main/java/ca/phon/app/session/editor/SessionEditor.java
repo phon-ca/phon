@@ -7,11 +7,14 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -19,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.MenuElement;
@@ -49,6 +53,8 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -62,6 +68,9 @@ import ca.phon.util.icons.IconSize;
 public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	private final static long serialVersionUID = 2831713307191769522L;
+	
+	private final static Logger LOGGER = Logger
+			.getLogger(SessionEditor.class.getName());
 	
 	private final static String WINDOW_NAME = "Session Editor";
 	
@@ -118,6 +127,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * Toolbar
 	 */
 	private SessionEditorToolbar toolbar;
+	
+	private JMenu viewMenu;
 	
 	/**
 	 * Constructor
@@ -181,6 +192,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
 		viewModel.applyPerspective(perspective);
 		
+		setupViewMenu(viewMenu);
+
 		setupEditorActions();
 	}
 	
@@ -262,7 +275,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is
 		// setup
-		final JMenu viewMenu = new JMenu("View");
+		viewMenu = new JMenu("View");
 		viewMenu.addMenuListener(new MenuListener() {
 			
 			@Override
@@ -458,6 +471,28 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				// thrown when URI is not heirarchical (i.e., is in a jar)
 			}
 		}
+	}
+	
+	public void onSaveLayout() {
+		// get a perspective name
+		final String layoutName = JOptionPane.showInputDialog(this, "Enter layout name:");
+		if(RecordEditorPerspective.getPerspective(layoutName) != null) {
+			final Toast toast = ToastFactory.makeToast("Layout named " + layoutName + " already exists.");
+			toast.start(this.getRootPane());
+			return;
+		}
+		
+		final File perspectiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER, layoutName + ".xml");
+		try {
+			final RecordEditorPerspective perspective = new RecordEditorPerspective(layoutName, perspectiveFile.toURI().toURL());
+			getViewModel().savePerspective(perspective);
+		} catch (MalformedURLException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}	
+	}
+	
+	public void onDeleteLayout(RecordEditorPerspective perspective) {
+		RecordEditorPerspective.deletePerspective(perspective);
 	}
 	
 	/**

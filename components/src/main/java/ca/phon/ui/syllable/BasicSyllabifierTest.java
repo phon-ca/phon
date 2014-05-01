@@ -1,4 +1,4 @@
-package ca.phon.syllabifier.basic;
+package ca.phon.ui.syllable;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -32,6 +32,9 @@ import javax.swing.ListCellRenderer;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.basic.BasicSyllabifier;
+import ca.phon.syllabifier.basic.BasicSyllabifierClassLoaderProvider;
+import ca.phon.syllabifier.basic.BasicSyllabifier.SyllabifierStageResults;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
@@ -72,8 +75,8 @@ public class BasicSyllabifierTest extends JFrame {
 					syllabify();
 				} catch (ParseException e1) {
 					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
-					final Toast t = ToastFactory.makeToast(e1.getLocalizedMessage());
-					t.start(ipaField);
+//					final Toast t = ToastFactory.makeToast(e1.getLocalizedMessage());
+//					t.start(ipaField);
 				}
 			}
 			

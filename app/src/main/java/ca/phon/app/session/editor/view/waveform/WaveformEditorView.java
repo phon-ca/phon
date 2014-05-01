@@ -62,6 +62,11 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.waveform.actions.GenerateAction;
+import ca.phon.app.session.editor.view.waveform.actions.PlayAction;
+import ca.phon.app.session.editor.view.waveform.actions.RefreshAction;
+import ca.phon.app.session.editor.view.waveform.actions.SaveAction;
+import ca.phon.app.session.editor.view.waveform.actions.ShowMoreAction;
 import ca.phon.media.exceptions.PhonMediaException;
 import ca.phon.media.exportwizard.MediaExportWizard;
 import ca.phon.media.exportwizard.MediaExportWizardProp;
@@ -94,6 +99,8 @@ import ca.phon.worker.PhonTask;
  */
 public class WaveformEditorView extends EditorView {
 	
+	private static final long serialVersionUID = -1680881691504590317L;
+
 	private static final Logger LOGGER = Logger
 			.getLogger(WaveformEditorView.class.getName());
 
@@ -323,52 +330,30 @@ public class WaveformEditorView extends EditorView {
 		toolbar.setFloatable(false);
 		
 		// play button
-		ImageIcon playIcon = 
-			IconManager.getInstance().getIcon("actions/media-playback-start", 
-					IconSize.SMALL);
-		final PhonUIAction playAct = new PhonUIAction(this, "play");
-		playAct.putValue(PhonUIAction.NAME, "Play");
-		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
-		playAct.putValue(PhonUIAction.SMALL_ICON, playIcon);
+		final PlayAction playAct = new PlayAction(getEditor(), this);
 		playButton = new JButton(playAct);
 		playButton.setFocusable(false);
 		
-		ImageIcon refreshIcon =
-			IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
-		final PhonUIAction refereshAct = new PhonUIAction(this, "update");
-		refereshAct.putValue(PhonUIAction.NAME, "Refresh");
-		refereshAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reload display");
-		refereshAct.putValue(PhonUIAction.SMALL_ICON, refreshIcon);
-		refreshButton = new JButton(refereshAct);
+		final RefreshAction refreshAct = new RefreshAction(getEditor(), this);
+		refreshButton = new JButton(refreshAct);
 		refreshButton.setFocusable(false);
 		
-		ImageIcon exportIcon =
-			IconManager.getInstance().getIcon("actions/filesave", IconSize.SMALL);
-		final PhonUIAction exportAct = new PhonUIAction(this, "onExport");
-		exportAct.putValue(PhonUIAction.NAME, "Save...");
-		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save segment/selection to file.");
-		exportAct.putValue(PhonUIAction.SMALL_ICON, exportIcon);
+		final SaveAction exportAct = new SaveAction(getEditor(), this);
 		exportButton = new JButton(exportAct);
 		exportButton.setFocusable(false);
 		
-		final PhonUIAction showMoreAct = new PhonUIAction(this, "showMore");
-		showMoreAct.putValue(PhonUIAction.NAME, "Show more");
-		showMoreAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show more");
+		final ShowMoreAction showMoreAct = new ShowMoreAction(getEditor(), this);
 		showMoreButton = new JButton(showMoreAct);
 		
-		final PhonUIAction generateAct = new PhonUIAction(this, "generateAudioFile");
-		generateAct.putValue(PhonUIAction.NAME, "Generate wav...");
-		generateAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Generate required wav file.");
+		final GenerateAction generateAct = new GenerateAction(getEditor(), this);
 		generateButton = new JButton(generateAct);
 		
 		toolbar.add(playButton);
 		toolbar.addSeparator();
 		toolbar.add(refreshButton);
-		toolbar.addSeparator();
-		toolbar.add(exportButton);
-		toolbar.addSeparator();
 		toolbar.add(showMoreButton);
 		toolbar.addSeparator();
+		toolbar.add(exportButton);
 		toolbar.add(generateButton);
 		
 		add(toolbar, BorderLayout.NORTH);
@@ -738,8 +723,17 @@ public class WaveformEditorView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		// TODO Auto-generated method stub
-		return null;
+		final JMenu retVal = new JMenu();
+		
+		retVal.add(new PlayAction(getEditor(), this));
+		retVal.addSeparator();
+		retVal.add(new RefreshAction(getEditor(), this));
+		retVal.add(new ShowMoreAction(getEditor(), this));
+		retVal.addSeparator();
+		retVal.add(new SaveAction(getEditor(), this));
+		retVal.add(new GenerateAction(getEditor(), this));
+		
+		return retVal;	
 	}
 
 	@Override

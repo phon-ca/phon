@@ -40,7 +40,11 @@ public class SplitGroupCommand extends RecordDataEditorViewAction {
 		
 		final int grp = getIndex();
 		
-		final SplitGroupEdit edit = new SplitGroupEdit(getEditorView().getEditor(), r, grp, getWordIndex());
+		int wIdx = getWordIndex();
+		if(wIdx < 0) {
+			wIdx = getEditorView().currentWordIndex();
+		}
+		final SplitGroupEdit edit = new SplitGroupEdit(getEditorView().getEditor(), r, grp, wIdx);
 		getEditorView().getEditor().getUndoSupport().postEdit(edit);
 	}
 

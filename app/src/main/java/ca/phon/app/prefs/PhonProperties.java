@@ -14,6 +14,10 @@ import ca.phon.workspace.Workspace;
  */
 public class PhonProperties {
 	
+	public final static String DEBUG = "phon.debug";
+	
+	public final static Boolean DEFAULT_DEBUG = Boolean.FALSE;
+	
 	/**
 	 * Autosave interval
 	 */

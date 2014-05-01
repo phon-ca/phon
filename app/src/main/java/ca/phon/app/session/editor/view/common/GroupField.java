@@ -120,11 +120,11 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 */
 	public T getGroupValue() {
 		T retVal = null;
-		if(groupIndex >= tier.numberOfGroups()) {
-//			retVal = tier.getGroup(groupIndex);
-			for(int i = tier.numberOfGroups(); i <= groupIndex; i++) tier.addGroup();
+		if(groupIndex < tier.numberOfGroups()) {
+			retVal = tier.getGroup(groupIndex);
+//			for(int i = tier.numberOfGroups(); i <= groupIndex; i++) tier.addGroup();
 		}
-		retVal = tier.getGroup(groupIndex);
+//		retVal = tier.getGroup(groupIndex);
 		return retVal;
 	}
 	

@@ -43,6 +43,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.segmentation.actions.NewSegmentAction;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;
@@ -65,7 +66,7 @@ public class SegmentationEditorView extends EditorView {
 
 	private final static String VIEW_NAME = "Segmentation";
 	
-	private enum SegmentationMode {
+	public enum SegmentationMode {
 		INSERT_AT_END("Insert record at end of session"),
 		INSERT_AFTER_CURRENT("Insert record after current record"),
 		REPLACE_CURRENT("Replace segment for current record");
@@ -213,18 +214,7 @@ public class SegmentationEditorView extends EditorView {
 		participantPanel.repaint();
 	}
 	
-	/**
-	 * Called for segmentation.
-	 * Data given is the speaker:IParticipant or
-	 * null if the speaker is undefined.
-	 *
-	 */
-	public void performSegmentation(PhonActionEvent pae) {
-		Participant speaker = null;
-		if(pae.getData() != null) {
-			speaker = (Participant)pae.getData();
-		}
-
+	public MediaSegment getCurrentSegement() {
 		// get the segment time
 		long segStart = 0L;
 		long segEnd = 0L;
@@ -235,47 +225,21 @@ public class SegmentationEditorView extends EditorView {
 
 			segmentLabel.lockSegmentStartTime(segEnd+1);
 		}
-
+		
 		long segLength = segEnd - segStart;
 
+		final MediaSegment m = SessionFactory.newFactory().createMediaSegment();
+		m.setUnitType(MediaUnit.Millisecond);
 		if(segLength > 0) {
-			
-			// should we create a new record or overwrite
-			// the data in the curent?
-			final SessionFactory factory = SessionFactory.newFactory();
-			Record utt = factory.createRecord();
-			// setup speaker
-			utt.setSpeaker(speaker);
-
-			// setup orthography
-			utt.getOrthography().addGroup(new Orthography());
-			
 			// setup segment
-			final MediaSegment m = factory.createMediaSegment();
 			m.setStartValue(segStart);
 			m.setEndValue(segEnd);
-			m.setUnitType(MediaUnit.Millisecond);
-			utt.getSegment().setGroup(0, m);
-			
-			// should we replace segment for current record instead?
-			SegmentationMode mode = (SegmentationMode)modeBox.getSelectedItem();
-			if(mode == SegmentationMode.REPLACE_CURRENT) {
-				utt = getEditor().currentRecord();
-			}
-
-			if(mode == SegmentationMode.REPLACE_CURRENT) {
-				final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getEditor(), utt.getSegment(), 0, m);
-				getEditor().getUndoSupport().postEdit(segEdit);
-			} else {
-				int idx = getEditor().getDataModel().getRecordCount();
-				// where are we going to insert
-				if(mode == SegmentationMode.INSERT_AFTER_CURRENT) {
-					idx = getEditor().getCurrentRecordIndex() + 1;
-				}
-				final AddRecordEdit edit = new AddRecordEdit(getEditor(), utt, idx);
-				getEditor().getUndoSupport().postEdit(edit);
-			}
 		}
+		return m;
+	}
+	
+	public SegmentationMode getSegmentationMode() {
+		return (SegmentationMode)modeBox.getSelectedItem();
 	}
 	
 	private void updateParticipantPanel() {
@@ -292,24 +256,13 @@ public class SegmentationEditorView extends EditorView {
 		CellConstraints cc = new CellConstraints();
 		int currentRow = 1;
 		
-		InputMap inputMap = participantPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-		ActionMap actionMap = participantPanel.getActionMap();
-
-		String performSegmentationID = "_perform_segmentation_";
-
 		String ksStr = (OSInfo.isMacOs() ? "\u2318" : "CTRL +")
 				+ "0";
 		PhonUIAction noPartSegmentAct =
 				new PhonUIAction(this, "performSegmentation", null);
 		noPartSegmentAct.putValue(Action.NAME,
 				ksStr + " speaker undefined");
-		KeyStroke noPartKs =
-				KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-
-		String segID = performSegmentationID + "_no_spekaer_";
-		actionMap.put(segID, noPartSegmentAct);
-		inputMap.put(noPartKs, segID);
-		
+	
 		// setup labels to be used like buttons
 		String segMsg = 
 			"Click name to create a new record:";
@@ -331,16 +284,10 @@ public class SegmentationEditorView extends EditorView {
 		final Session session = getEditor().getSession();
 		int pIdx = 1;
 		for(Participant p:session.getParticipants()) {
-
-			KeyStroke segmentKs =
-					KeyStroke.getKeyStroke(KeyEvent.VK_0 + pIdx,
-					getToolkit().getMenuShortcutKeyMask());
-
 			ksStr = (OSInfo.isMacOs() ? "\u2318" : "CTRL +")
 					+ pIdx;
 
-			PhonUIAction segmentAction =
-					new PhonUIAction(this, "performSegmentation", p);
+			final NewSegmentAction segmentAction = new NewSegmentAction(getEditor(), this, p);
 			segmentAction.putValue(Action.NAME,
 					ksStr + " " + p.getName());
 			
@@ -353,10 +300,6 @@ public class SegmentationEditorView extends EditorView {
 			participantLbl.setOpaque(false);
 			participantPanel.add(participantLbl, cc.xy(1, currentRow));
 			currentRow += 2;
-			
-			segID = performSegmentationID + p.getId() + "_";
-			actionMap.put(segID, segmentAction);
-			inputMap.put(segmentKs, segID);
 			
 			pIdx++;
 		}
@@ -397,8 +340,8 @@ public class SegmentationEditorView extends EditorView {
 			// create a fake PhonActionEvent for segmentation
 			ActionEvent ae = 
 				new ActionEvent(arg0.getSource(), arg0.getID(), "_new_segment_");
-			PhonActionEvent pae = new PhonActionEvent(ae, p);
-			performSegmentation(pae);
+			final NewSegmentAction act = new NewSegmentAction(getEditor(), SegmentationEditorView.this, p);
+			act.actionPerformed(ae);
 		}
 		
 	}
@@ -476,7 +419,31 @@ public class SegmentationEditorView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		return null;
+		final JMenu retVal = new JMenu();
+		
+		final KeyStroke noPartKs =
+				KeyStroke.getKeyStroke(KeyEvent.VK_0, 
+						Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final NewSegmentAction noSpeakerAct = new NewSegmentAction(getEditor(), this, null);
+		noSpeakerAct.putValue(NewSegmentAction.NAME, "New record with unspecified speaker");
+		noSpeakerAct.putValue(NewSegmentAction.ACCELERATOR_KEY, noPartKs);
+		
+		retVal.add(noSpeakerAct);
+		
+		final Session session = getEditor().getSession();
+		int pIdx = 1;
+		for(Participant p:session.getParticipants()) {
+			final KeyStroke partKs = 
+					KeyStroke.getKeyStroke(KeyEvent.VK_0 + pIdx,
+							Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			final NewSegmentAction speakerAct = new NewSegmentAction(getEditor(), this, p);
+			speakerAct.putValue(NewSegmentAction.NAME, "New record for " + p.getName());
+			speakerAct.putValue(NewSegmentAction.ACCELERATOR_KEY, partKs);
+			
+			retVal.add(speakerAct);
+		}
+		
+		return retVal;
 	}
 
 }

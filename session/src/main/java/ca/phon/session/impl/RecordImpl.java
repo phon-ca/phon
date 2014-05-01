@@ -524,7 +524,7 @@ public class RecordImpl implements Record {
 		IPATranscript ipaTarget = group.getIPATarget();
 		IPATranscript newIpaTarget = new IPATranscript();
 		if(ipaTIdx >= 0) {
-			ipaTarget = group.getIPATarget().subsection(0, ipaTIdx-1);
+			ipaTarget = group.getIPATarget().subsection(0, (ipaTIdx-1 >= 0 ? ipaTIdx-1 : 0));
 			newIpaTarget = group.getIPATarget().subsection(ipaTIdx, group.getIPATarget().length());
 		}
 		group.setIPATarget(ipaTarget);
@@ -536,7 +536,7 @@ public class RecordImpl implements Record {
 		IPATranscript ipaActual = group.getIPAActual();
 		IPATranscript newIpaActual = new IPATranscript();
 		if(ipaAIdx >= 0) {
-			ipaActual = group.getIPAActual().subsection(0, ipaAIdx-1);
+			ipaActual = group.getIPAActual().subsection(0, (ipaAIdx-1 >= 0 ? ipaAIdx-1 :0));
 			newIpaActual = group.getIPAActual().subsection(ipaAIdx, group.getIPAActual().length());
 		}
 		group.setIPAActual(ipaActual);

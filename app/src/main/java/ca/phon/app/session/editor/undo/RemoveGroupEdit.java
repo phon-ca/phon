@@ -18,6 +18,8 @@ import ca.phon.session.Tier;
 
 public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 
+	private static final long serialVersionUID = 546623740766808063L;
+
 	/**
 	 * tier
 	 */
