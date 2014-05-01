@@ -1,7 +1,6 @@
 #!/bin/sh
 
-PHON_OPTS=-Dphon.debug=true \
--Dca.phon.syllabifier.basic.BasicSyllabifier.trackStages=true
+PHON_OPTS="-Dphon.debug=true -Dca.phon.syllabifier.basic.BasicSyllabifier.trackStages=true"
 
 JAVA_HOME=`/usr/libexec/java_home -v1.6` \
 java -Xms250m -Xmx1024m \
