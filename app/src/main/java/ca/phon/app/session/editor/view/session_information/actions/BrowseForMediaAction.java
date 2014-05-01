@@ -23,7 +23,7 @@ public class BrowseForMediaAction extends SessionInfoAction {
 	private final static String DESC = "Select media file for session.";
 	
 	private final static ImageIcon ICON = 
-			IconManager.getInstance().getIcon("actions/browse", IconSize.SMALL);
+			IconManager.getInstance().getIcon("actions/film-link", IconSize.SMALL);
 
 	public BrowseForMediaAction(SessionEditor editor, SessionInfoEditorView view) {
 		super(editor, view);
