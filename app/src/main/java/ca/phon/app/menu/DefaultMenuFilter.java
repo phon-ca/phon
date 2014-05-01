@@ -45,14 +45,17 @@ import ca.phon.app.menu.file.WorkspaceCommand;
 import ca.phon.app.menu.help.HelpCommand;
 import ca.phon.app.menu.help.LogCommand;
 import ca.phon.app.menu.query.QueryMenuListener;
+import ca.phon.app.menu.tools.BasicSyllabifierTestCommand;
 import ca.phon.app.menu.tools.IpaMapCommand;
 import ca.phon.app.menu.tools.LanguageCodesCommand;
 import ca.phon.app.menu.window.OpenWindowsMenuListener;
+import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.plugin.PluginAction;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.util.PrefHelper;
 
 /**
  * Create the default menu for all Phon windows.
@@ -177,6 +180,10 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		// language codes
 		final JMenuItem langItem = new JMenuItem(new LanguageCodesCommand());
 		toolsMenu.add(langItem);
+		
+		if(PrefHelper.getBoolean(PhonProperties.DEBUG, false)) {
+			toolsMenu.add(new BasicSyllabifierTestCommand());
+		}
 		
 		menu.add(toolsMenu);
 	}
