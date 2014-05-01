@@ -37,13 +37,8 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
-					final Map<String, Object> uiMap = new HashMap<String, Object>();
 					if(OSInfo.isMacOs()) {
-						final String[] uiKeys = new String[]{
-								"MenuBarUI", "MenuUI" };
-						for(String key:uiKeys) {
-							uiMap.put(key, UIManager.get(key));
-						}
+						return;
 					}
 					try {
 						final String uiClassName = PrefHelper.get(PhonProperties.UI_THEME, SubstanceCeruleanLookAndFeel.class.getName());
@@ -59,11 +54,6 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					} catch (IllegalAccessException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					}
-					if(OSInfo.isMacOs()) {
-						for(String key:uiMap.keySet()) {
-							UIManager.put(key, uiMap.get(key));
-						}
 					}
 				}
 			});
