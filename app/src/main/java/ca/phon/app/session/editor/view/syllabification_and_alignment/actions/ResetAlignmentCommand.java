@@ -11,6 +11,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
@@ -39,9 +40,9 @@ public class ResetAlignmentCommand extends SyllabificationAlignmentCommand {
 		final CompoundEdit edit = new CompoundEdit();
 		final PhoneAligner aligner = new PhoneAligner();
 		
-		for(int i = 0; i < alignmentTier.numberOfGroups(); i++) {
-			final PhoneMap pm = alignmentTier.getGroup(i);
-			final PhoneMap newPm = aligner.calculatePhoneMap(pm.getTargetRep(), pm.getActualRep());
+		for(int i = 0; i < r.numberOfGroups(); i++) {
+			final Group group = r.getGroup(i);
+			final PhoneMap newPm = aligner.calculatePhoneMap(group.getIPATarget(), group.getIPAActual());
 			
 			final TierEdit<PhoneMap> ed = new TierEdit<PhoneMap>(getEditor(), alignmentTier, i, newPm);
 			ed.doIt();
