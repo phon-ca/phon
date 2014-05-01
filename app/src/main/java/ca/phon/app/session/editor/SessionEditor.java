@@ -119,6 +119,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	private SessionEditorToolbar toolbar;
 	
+	private JMenu viewMenu;
+	
 	/**
 	 * Constructor
 	 */
@@ -181,6 +183,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
 		viewModel.applyPerspective(perspective);
 		
+		setupViewMenu(viewMenu);
+
 		setupEditorActions();
 	}
 	
@@ -262,7 +266,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is
 		// setup
-		final JMenu viewMenu = new JMenu("View");
+		viewMenu = new JMenu("View");
 		viewMenu.addMenuListener(new MenuListener() {
 			
 			@Override
