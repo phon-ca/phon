@@ -15,6 +15,7 @@ java -Xms250m -Xmx1024m \
 -Dfile.encoding=UTF-8 \
 -Dsun.jnu.encoding=UTF-8 \
 -Dapple.laf.useScreenMenuBar=true \
+-Dapple.awt.graphics.UseQuartz=true \
 $PHON_OPTS \
 ca.phon.app.Main 2>&1 | tee phon.log
 
