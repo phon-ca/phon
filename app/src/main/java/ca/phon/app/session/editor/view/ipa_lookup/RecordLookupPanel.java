@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
@@ -276,12 +277,14 @@ public class RecordLookupPanel extends JPanel {
 			if(syllabifier != null) syllabifier.syllabify(ipaA.toList());
 		}
 		
+		final CompoundEdit edit = new CompoundEdit();
 		IPATranscript targetIpa = ipaTarget.getGroup(i);
 		if(ipaTargetBox.isSelected()) {
 			boolean set = (overwriteBox.isSelected() ? true : ipaTarget.getGroup(i).length() == 0);
 			if(set) {
 				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
-				editor.getUndoSupport().postEdit(ipaTargetEdit);
+				ipaTargetEdit.doIt();
+				edit.addEdit(ipaTargetEdit);
 				targetIpa = ipa;
 			}
 		}
@@ -290,8 +293,9 @@ public class RecordLookupPanel extends JPanel {
 		if(ipaActualBox.isSelected()) {
 			boolean set = (overwriteBox.isSelected() ? true : ipaActual.getGroup(i).length() == 0);
 			if(set) {
-				final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipa);
-				editor.getUndoSupport().postEdit(ipaActualEdit);
+				final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipaA);
+				ipaActualEdit.doIt();
+				edit.addEdit(ipaActualEdit);
 				actualIpa = ipaA;
 			}
 		}
@@ -300,7 +304,14 @@ public class RecordLookupPanel extends JPanel {
 		final PhoneMap pm = aligner.calculatePhoneMap(targetIpa, actualIpa);
 		
 		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
-		editor.getUndoSupport().postEdit(pmEdit);
+		pmEdit.doIt();
+		edit.addEdit(pmEdit);
+		
+		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
+		getEditor().getEventManager().queueEvent(ee);
+		
+		edit.end();
+		getEditor().getUndoSupport().postEdit(edit);
 	}
 	
 	private final TierEditorListener tierListener = new TierEditorListener() {
