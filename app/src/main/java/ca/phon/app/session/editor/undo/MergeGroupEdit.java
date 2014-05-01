@@ -33,7 +33,14 @@ public class MergeGroupEdit extends SessionEditorUndoableEdit {
 	public void undo() throws CannotUndoException {
 		super.undo();
 		
-		record.splitGroup(groupIndex, wordIndex);
+		int wIdx = wordIndex;
+		if(wIdx < 0) {
+			record.addGroup(groupIndex);
+		} else if(wIdx >= record.getGroup(groupIndex).getAlignedWordCount()) {
+			record.addGroup(groupIndex+1);
+		} else {
+			record.splitGroup(groupIndex, wIdx);
+		}
 		
 		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
 	}
