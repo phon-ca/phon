@@ -20,4 +20,3 @@ java -Xms250m -Xmx1024m \
 -Dapple.awt.graphics.UseQuartz=true \
 $PHON_OPTS \
 ca.phon.app.Main 2>&1 | tee phon.log
-

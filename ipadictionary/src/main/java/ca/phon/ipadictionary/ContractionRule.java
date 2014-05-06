@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,6 +40,63 @@ public final class ContractionRule implements Serializable {
 		PLAIN,
 		REGEX,
 		PHONEX;
+	}
+	
+	public static ContractionRule parseContractionRule(String text) {
+		final ContractionRule cr = new ContractionRule();
+		
+		final String regex = "([a-zA-Z.]+):\\\"([^\"]+)\\\"";
+		final Pattern pattern = Pattern.compile(regex);
+		final Matcher matcher = pattern.matcher(text);
+		
+		while(matcher.find()) {
+			final String key = matcher.group(1);
+			final String val = matcher.group(2);
+			
+			if(key.equalsIgnoreCase("split")) {
+				// TODO
+			} else if(key.startsWith("lhs") && !(key.startsWith("lhs.ipa"))) {
+				if(key.endsWith(".regex")) {
+					cr.setLhsType(ConditionType.REGEX);
+				} else if(key.endsWith(".phonex")) {
+					cr.setLhsType(ConditionType.PHONEX);
+				} else {
+					cr.setLhsType(ConditionType.PLAIN);
+				}
+				cr.setLhsExpr(val);
+			} else if(key.startsWith("lhs.ipa")) {
+				if(key.endsWith(".regex")) {
+					cr.setTlhsType(ConditionType.REGEX);
+				} else if(key.endsWith(".phonex")) {
+					cr.setTlhsType(ConditionType.PHONEX);
+				} else {
+					cr.setTlhsType(ConditionType.PLAIN);
+				}
+				cr.setTlhsExpr(val);
+			} else if(key.startsWith("rhs") && !(key.startsWith("rhs.ipa"))) {
+				if(key.endsWith(".regex")) {
+					cr.setRhsType(ConditionType.REGEX);
+				} else if(key.endsWith(".phonex")) {
+					cr.setRhsType(ConditionType.PHONEX);
+				} else {
+					cr.setRhsType(ConditionType.PLAIN);
+				}
+				cr.setRhsExpr(val);
+			} else if(key.startsWith("rhs.ipa")) {
+				if(key.endsWith(".regex")) {
+					cr.setTrhsType(ConditionType.REGEX);
+				} else if(key.endsWith(".phonex")) {
+					cr.setTrhsType(ConditionType.PHONEX);
+				} else {
+					cr.setTrhsType(ConditionType.PLAIN);
+				}
+				cr.setTrhsExpr(val);
+			} else if(key.startsWith("expr")) {
+				cr.setVExpr(val);
+			}
+		}
+		
+		return cr;
 	}
 	
 	/* By default all expressions are regex with '.*' as the value. (i.e., match anything) */
@@ -91,8 +150,8 @@ public final class ContractionRule implements Serializable {
 		private static final String[] exprs = {
 				"\\$\\{lhs\\}",
 				"\\$\\{rhs\\}",
-				"\\$\\{transcript:lhs\\}",
-				"\\$\\{transcript:rhs\\}",
+				"\\$\\{lhs.ipa\\}",
+				"\\$\\{rhs.ipa\\}",
 				"[^${}+]*"
 		};
 		
