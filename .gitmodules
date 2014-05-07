@@ -1,3 +1,0 @@
-[submodule "ipadictionary/src/main/resources/META-INF/dict"]
-	path = ipadictionary/src/main/resources/META-INF/dict
-	url = git@phon.ca:phon-dict.git

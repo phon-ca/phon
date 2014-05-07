@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.extensions.ExtensionSupport;
@@ -36,6 +37,9 @@ import ca.phon.util.LanguageEntry;
  * 
  */
 public final class IPADictionary implements IExtendable {
+	
+	private final static Logger LOGGER = Logger
+			.getLogger(IPADictionary.class.getName());
 
 	/** 
 	 * Implementing dictionary
@@ -72,8 +76,7 @@ public final class IPADictionary implements IExtendable {
 		try {
 			retVal = impl.lookup(orthography);
 		} catch (IPADictionaryExecption e) {
-			e.printStackTrace();
-			Logger.getLogger(getClass().getName()).severe(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		
 		// generate suggestions and add them to the end 

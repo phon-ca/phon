@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.WordBoundary;
 import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.spi.GenerateSuggestions;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.OrthoWord;
 import ca.phon.orthography.OrthoWordnet;
@@ -66,7 +67,7 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 		
 		OrthoWordIPAOptions ext = word.getExtension(OrthoWordIPAOptions.class);
 		if(ext == null || ext.getDictLang() != ctx.getLanguage()) {
-			final String[] opts = ctx.lookup(word.getWord());
+			String[] opts = ctx.lookup(word.getWord());
 			ext = new OrthoWordIPAOptions(opts);
 			ext.setDictLang(ctx.getLanguage());
 			if(opts.length > 0) ext.setSelectedOption(0);

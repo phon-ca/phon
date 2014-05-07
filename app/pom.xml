@@ -120,22 +120,6 @@
 			<groupId>com.github.insubstantial</groupId>
 			<artifactId>substance-swingx</artifactId>
 		</dependency>
-		
-		<dependency>
-      <groupId>com.orientechnologies</groupId>
-      <artifactId>orient-commons</artifactId>
-      <version>1.7-rc1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.orientechnologies</groupId>
-      <artifactId>orientdb-core</artifactId>
-      <version>1.7-rc1</version>
-    </dependency>
-    <dependency>
-    <groupId>org.json</groupId>
-    <artifactId>json</artifactId>
-    <version>20140107</version>
-    </dependency>
 	</dependencies>
 
 	<build>

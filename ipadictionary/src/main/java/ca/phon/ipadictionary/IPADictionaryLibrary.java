@@ -115,7 +115,7 @@ public class IPADictionaryLibrary implements IExtendable {
 				retVal = dicts.get(0);
 			}
 		}
-		if(retVal == null) {
+		if(retVal == null && availableDictionaries().hasNext()) {
 			retVal = availableDictionaries().next();
 		}
 		return retVal;

@@ -30,6 +30,7 @@ import ca.phon.ipadictionary.spi.NameInfo;
 import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.PrefixSearch;
 import ca.phon.util.Language;
+import ca.phon.util.Tuple;
 
 /**
  * Implements the basic dictionary format used by Phon.
@@ -254,7 +255,8 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 			final Language lang = Language.parseLanguage(value);
 			this.language = lang;
 		} else if(token.equalsIgnoreCase(MetadataToken.CONTRACTION_RULE.toString())) {
-			// TODO load contraction rules
+			final ContractionRule cr = ContractionRule.parseContractionRule(value);
+			ctrRules.add(cr);
 		} else {
 			metadata.put(token, value);
 		}
@@ -343,7 +345,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		
 		List<String> ipaEntries = 
 			db.get(orthography.toLowerCase());
-		if(ipaEntries != null) {
+		if(ipaEntries != null && ipaEntries.size() > 0) {
 			return ipaEntries.toArray(new String[0]);
 		} else {
 			return new String[0];
@@ -353,7 +355,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	@Override
 	public String[] generateSuggestions(String orthography) {
 		// deal with contractions
-		String regex = "(.*)'(.*)";
+		String regex = "(.+)'(.+)";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(orthography);
 		String[] retVal = new String[0];
@@ -364,30 +366,41 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 			// get entries for both sides
 			String[] lhsEntries = new String[0];
 			try {
-				lookup(lhs);
+				lhsEntries = lookup(lhs);
 			} catch (IPADictionaryExecption e) {
 				
 			}
 			
 			String[] rhsEntries = new String[0];
 			try {
-				lookup(rhs);
+				rhsEntries = lookup(rhs);
 			} catch (IPADictionaryExecption e ) {
 				
 			}
 			
 			Set<String> transcriptions = new HashSet<String>();
 			
-			if(lhsEntries.length > 0 && rhsEntries.length > 0) {
-				for(String lhsEntry:lhsEntries) {
+			final List<Tuple<String, String>> ipaPairs = new ArrayList<Tuple<String,String>>();
+			for(String lhsEntry:lhsEntries) {
+				if(rhsEntries.length == 0) {
+					final Tuple<String, String> ipaPair = new Tuple<String, String>(lhsEntry, new String());
+					ipaPairs.add(ipaPair);
+				} else {
 					for(String rhsEntry:rhsEntries) {
-						for(ContractionRule ctrRule:ctrRules) {
-							if(ctrRule.matches(lhs, rhs, lhsEntry, rhsEntry)) {
-								String tr = ctrRule.buildTranscript(lhs, rhs, lhsEntry, rhsEntry);
-								transcriptions.add(tr);
-							}
-						}
-					}                   
+						final Tuple<String, String> ipaPair = new Tuple<String, String>(lhsEntry, rhsEntry);
+						ipaPairs.add(ipaPair);
+					}
+				}
+			}
+			
+			for(Tuple<String, String> ipaPair:ipaPairs) {
+				final String lhsEntry = ipaPair.getObj1();
+				final String rhsEntry = ipaPair.getObj2();
+				for(ContractionRule ctrRule:ctrRules) {
+					if(ctrRule.matches(lhs, rhs, lhsEntry, rhsEntry)) {
+						String tr = ctrRule.buildTranscript(lhs, rhs, lhsEntry, rhsEntry);
+						transcriptions.add(tr);
+					}
 				}
 			}
 			retVal = transcriptions.toArray(new String[0]);
