@@ -61,10 +61,11 @@ exports.FeatureFilter = function(id) {
     
     
     this.param_setup = function(params) {
-        var featureListParam = new(
+        var featureListParam = new StringScriptParam(
             featureListParamInfo.id,
             featureListParamInfo.title,
             featureListParamInfo.def);
+        featureListParam.setPrompt(featureListParamInfo.prompt);
 //        featureListParam.getEditorComponent().setPrompt(featureListParamInfo.prompt);
     
 //        var featureListListener = new java.awt.event.KeyListener() {

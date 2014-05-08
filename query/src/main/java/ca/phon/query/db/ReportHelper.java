@@ -139,6 +139,8 @@ public class ReportHelper {
 			retVal = createAlignedReportString(values);
 		} else if(resultType.equalsIgnoreCase("DETECTOR")) {
 			retVal = createDetectorReportString(values);
+		} else {
+			// TODO add support for custom schema types
 		}
 		
 		return retVal;

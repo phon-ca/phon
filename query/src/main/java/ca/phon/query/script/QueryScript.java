@@ -93,6 +93,7 @@ public class QueryScript extends LazyQueryScript {
 		} catch (URISyntaxException e) {}
 		
 		super.addPackageImport("Packages.ca.phon.ipa");
+		super.addPackageImport("Packages.ca.phon.ipa.features");
 		super.addPackageImport("Packages.ca.phon.phonex");
 		super.addPackageImport("Packages.ca.phon.syllable");
 		super.addPackageImport("Packages.ca.phon.util");
