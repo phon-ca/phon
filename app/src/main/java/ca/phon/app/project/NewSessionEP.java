@@ -68,4 +68,5 @@ public class NewSessionEP implements IPluginEntryPoint {
 		else
 			SwingUtilities.invokeLater(onEDT);
 	}
+	
 }

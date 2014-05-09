@@ -189,8 +189,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final Container dock = viewModel.getRoot();
 		contentPane.add(dock, BorderLayout.CENTER);
 		
-		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
-		viewModel.applyPerspective(perspective);
+		// don't do this here - wait until window has been initialized
+		
 		
 		setupViewMenu(viewMenu);
 

@@ -306,19 +306,32 @@ public class NewSessionDialog extends JDialog {
 		final String fCorpusName = corpusName;
 		final String fSessionName = sessionName;
 		
+		Session template = null;
+		try {
+			template = proj.getSessionTemplate(fCorpusName);
+		} catch (IOException e) { // do nothing 
+		}
+
 		final SessionFactory factory = SessionFactory.newFactory();
-		final Session s = factory.createSession(fCorpusName, fSessionName);
-		final Record r = factory.createRecord();
-		r.addGroup();
-		s.addRecord(r);
-		
-		final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
-		tierView.add(factory.createTierViewItem(SystemTierType.Orthography.getName(), true));
-		tierView.add(factory.createTierViewItem(SystemTierType.IPATarget.getName(), true));
-		tierView.add(factory.createTierViewItem(SystemTierType.IPAActual.getName(), true));
-		tierView.add(factory.createTierViewItem(SystemTierType.Notes.getName(), true));
-		tierView.add(factory.createTierViewItem(SystemTierType.Segment.getName(), true));
-		s.setTierView(tierView);
+		Session s = null;
+		if(template != null) {
+			s = template;
+			s.setName(fSessionName);
+		} else {
+			s = factory.createSession(fCorpusName, fSessionName);
+			
+			final Record r = factory.createRecord();
+			r.addGroup();
+			s.addRecord(r);
+			
+			final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
+			tierView.add(factory.createTierViewItem(SystemTierType.Orthography.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.IPATarget.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.IPAActual.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.Notes.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.Segment.getName(), true));
+			s.setTierView(tierView);
+		}
 		
 		final UUID writeLock = proj.getSessionWriteLock(s);
 		proj.saveSession(s, writeLock);

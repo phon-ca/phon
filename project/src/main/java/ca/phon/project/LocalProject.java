@@ -69,6 +69,8 @@ public class LocalProject implements Project {
 	private ProjectType projectData;
 	private final static String projectDataFile = "project.xml";
 	
+	private final static String sessionTemplateFile = "__template.xml";
+	
 	/**
 	 * Session write locks
 	 */
@@ -713,4 +715,37 @@ public class LocalProject implements Project {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Session getSessionTemplate(String corpus) throws IOException {
+		final File corpusFolder = new File(getLocation(), corpus);
+		final File templateFile = new File(corpusFolder, sessionTemplateFile);
+		
+		if(templateFile.exists()) {
+			final SessionInputFactory inputFactory = new SessionInputFactory();
+			// TODO use method to find which reader will work for the file
+			final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
+			if(reader == null) {
+				throw new IOException("No session reader available for " + templateFile.toURI().toASCIIString());
+			}
+			final Session retVal = reader.readSession(templateFile.toURI().toURL().openStream());
+			return retVal;
+		} else {
+			throw new FileNotFoundException(templateFile.getAbsolutePath());
+		}
+	}
+
+	@Override
+	public void saveSessionTemplate(String corpus, Session template)
+			throws IOException {
+		final File corpusFolder = new File(getLocation(), corpus);
+		final File templateFile = new File(corpusFolder, sessionTemplateFile);
+		
+		final SessionOutputFactory outputFactory = new SessionOutputFactory();
+		final SessionWriter writer = outputFactory.createWriter();
+		
+		final FileOutputStream fOut  = new FileOutputStream(templateFile);
+		writer.writeSession(template, fOut);
+	}
+	
 }

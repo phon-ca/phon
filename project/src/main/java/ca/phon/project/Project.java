@@ -139,6 +139,28 @@ public interface Project extends IExtendable {
 	public void setCorpusDescription(String corpus, String description);
 	
 	/**
+	 * Get the Session template for the given corpus.
+	 * 
+	 * @param corpus
+	 * 
+	 * @return session template or <code>null</code> if not found
+	 * @throws IOException
+	 */
+	public Session getSessionTemplate(String corpus)
+		throws IOException;
+	
+	/**
+	 * Save the Session template for the given corpus.
+	 * 
+	 * @param corpus
+	 * @param template
+	 * 
+	 * @throws IOException
+	 */
+	public void saveSessionTemplate(String corpus, Session template) 
+			throws IOException;
+	
+	/**
 	 * Get the session names contained in a corpus in alphabetical
 	 * order.
 	 * 
