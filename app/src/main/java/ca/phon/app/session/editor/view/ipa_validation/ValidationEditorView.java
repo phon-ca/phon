@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.view.ipa_validation;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.util.Iterator;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -12,6 +14,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoableEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
@@ -25,18 +29,27 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.IPAGroupField;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
+import ca.phon.app.session.editor.view.common.TierDataLayoutType;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.view.ipa_validation.actions.AutoValidateAction;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.session.Transcribers;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.Language;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -61,9 +74,7 @@ public class ValidationEditorView extends EditorView {
 	private final TierDataLayoutPanel actualValidationPanel;
 	
 	private final Tier<IPATranscript> actualCandidateTier;
-	
-	private JToolBar toolbar;
-	
+		
 	private JButton autoValidateButton;
 
 	public ValidationEditorView(SessionEditor editor) {
@@ -74,7 +85,9 @@ public class ValidationEditorView extends EditorView {
 		actualCandidateTier = factory.createTier("Actual Validation", IPATranscript.class, true);
 		
 		targetValidationPanel = new TierDataLayoutPanel();
+		targetValidationPanel.getTierLayout().setLayoutType(TierDataLayoutType.ALIGN_GROUPS);
 		actualValidationPanel = new TierDataLayoutPanel();
+		actualValidationPanel.getTierLayout().setLayoutType(TierDataLayoutType.ALIGN_GROUPS);
 		init();
 		update();
 		setupEditorActions();
@@ -83,11 +96,31 @@ public class ValidationEditorView extends EditorView {
 	private void init() {
 		setLayout(new BorderLayout());
 		
+		final JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		
+		autoValidateButton = new JButton(new AutoValidateAction(getEditor(), this));
+		toolBar.add(autoValidateButton);
+		toolBar.addSeparator();
+		
+		final PhonUIAction setTargetAct = new PhonUIAction(this, "onValidateIPATarget");
+		setTargetAct.putValue(PhonUIAction.NAME, "Validate IPA Target");
+		setTargetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Target using current candidate transcription");
+		final JButton setTargetBtn = new JButton(setTargetAct);
+		toolBar.add(setTargetBtn);
+		
+		final PhonUIAction setActualAct = new PhonUIAction(this, "onValidateIPAActual");
+		setActualAct.putValue(PhonUIAction.NAME, "Validate IPA Actual");
+		setActualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Actual using current candidate transcription");
+		final JButton setActualBtn = new JButton(setActualAct);
+		toolBar.add(setActualBtn);
+		
 		final JPanel panel = new JPanel(new BorderLayout());
 		panel.add(targetValidationPanel, BorderLayout.NORTH);
 		panel.add(actualValidationPanel, BorderLayout.CENTER);
 		final JScrollPane scroller = new JScrollPane(panel);
 		
+		add(toolBar, BorderLayout.NORTH);
 		add(scroller, BorderLayout.CENTER);
 	}
 	
@@ -113,7 +146,28 @@ public class ValidationEditorView extends EditorView {
 		
 		for(IPATranscript t:tier) {
 			final AlternativeTranscript alts = t.getExtension(AlternativeTranscript.class);
-			final IPATranscript candidate = (alts != null && alts.getSelected() != null ? alts.get(alts.getSelected()) : new IPATranscript());
+			IPATranscript candidate = new IPATranscript();
+			if(alts != null) {
+				if(alts.getSelected() != null) {
+					candidate = alts.get(alts.getSelected());
+				} else if(alts.size() == 1) {
+					final Iterator<String> keyItr = alts.keySet().iterator();
+					while(keyItr.hasNext()) {
+						final String key = keyItr.next();
+						final IPATranscript tr = alts.get(key);
+						if(candidate.length() == 0) {
+							candidate = tr;
+							alts.setSelected(key);
+						} else {
+							if(!candidate.toString().equals(tr.toString())) {
+								candidate = new IPATranscript();
+								alts.setSelected(null);
+								break;
+							}
+						}
+					}
+				}
+			}
 			candidateTier.addGroup(candidate);
 		}
 	}
@@ -157,7 +211,7 @@ public class ValidationEditorView extends EditorView {
 			p.add(candidateField);
 			p.add(btn);
 			
-			final TierDataConstraint candidateRestraint = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, row++);
+			final TierDataConstraint candidateRestraint = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, row);
 			panel.add(p, candidateRestraint);
 
 			final IPATranscript ipa = tier.getGroup(i);
@@ -165,7 +219,7 @@ public class ValidationEditorView extends EditorView {
 			final ButtonGroup btnGrp = new ButtonGroup();
 			j = row;
 			for(Transcriber t:transcribers) {
-				final IPATranscript opt = (alts.containsKey(t.getUsername()) ? alts.get(t.getUsername()) : null);
+				final IPATranscript opt = (alts != null && alts.containsKey(t.getUsername()) ? alts.get(t.getUsername()) : null);
 				if(opt == null) continue;
 				
 				final SelectIPAData selectData = new SelectIPAData();
@@ -183,15 +237,29 @@ public class ValidationEditorView extends EditorView {
 				final JRadioButton optBtn = new JRadioButton(optAct);
 				optBtn.setOpaque(false);
 				btnGrp.add(optBtn);
-				final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, j++);
+				final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, ++j);
 				panel.add(optBtn, tdc);
 			}
 		}
+		panel.revalidate();
+		panel.repaint();
 	}
 	
 	/*
 	 * UI actions
 	 */
+	
+	public void onValidateIPATarget() {
+		final Record r = getEditor().currentRecord();
+		final Tier<IPATranscript> tier = r.getIPATarget();
+		validateTier(tier, targetCandidateTier);
+	}
+	
+	public void onValidateIPAActual() {
+		final Record r = getEditor().currentRecord();
+		final Tier<IPATranscript> tier = r.getIPAActual();
+		validateTier(tier, actualCandidateTier);
+	}
 
 	/**
 	 * Data passed to onSetGroup method
@@ -201,14 +269,72 @@ public class ValidationEditorView extends EditorView {
 		Tier<IPATranscript> candidateTier;
 		int group;
 	}
+	
+	private void validateTier(Tier<IPATranscript> tier, Tier<IPATranscript> candidateTier) {
+		final CompoundEdit edit = new CompoundEdit();
+		
+		for(int i = 0; i < tier.numberOfGroups(); i++) {
+			final SetGroupData data = new SetGroupData();
+			data.tier = tier;
+			data.candidateTier = candidateTier;
+			data.group = i;
+			edit.addEdit(setGroup(data));
+		}
+		
+		edit.end();
+		getEditor().getUndoSupport().postEdit(edit);
+		
+		// force update of tier in other views
+		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, tier.getName());
+		getEditor().getEventManager().queueEvent(ee);
+	}
+	
+	private UndoableEdit setGroup(SetGroupData data) {
+		final Tier<IPATranscript> tier = data.tier;
+		final IPATranscript ipa = data.candidateTier.getGroup(data.group);
+		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
+		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
+		final Language lang = 
+				(info != null && info.getSyllabifierLanguageForTier(tier.getName()) != null ? 
+						info.getSyllabifierLanguageForTier(tier.getName()) : library.defaultSyllabifierLanguage());
+		final Syllabifier syllabifier = library.getSyllabifierForLanguage(lang);
+		if(syllabifier != null) {
+			syllabifier.syllabify(ipa.toList());
+		}
+		ipa.putExtension(AlternativeTranscript.class, tier.getGroup(data.group).getExtension(AlternativeTranscript.class));
+		
+		final CompoundEdit cmpEdit = new CompoundEdit();
+		
+		final TierEdit<IPATranscript> edit = new TierEdit<IPATranscript>(getEditor(),
+				data.tier, data.group, ipa);
+		edit.doIt();
+		cmpEdit.addEdit(edit);
+		
+		final Record r = getEditor().currentRecord();
+		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignment();
+		final PhoneAligner aligner = new PhoneAligner();
+		final PhoneMap pm = aligner.calculatePhoneMap(r.getIPATarget().getGroup(data.group), r.getIPAActual().getGroup(data.group));
+		
+		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), alignmentTier, data.group, pm);
+		pmEdit.doIt();
+		cmpEdit.addEdit(pmEdit);
+		
+		cmpEdit.end();
+		
+		return cmpEdit;
+	}
+	
 	/**
 	 * Set ipa for a group
 	 * @param data
 	 */
 	public void onSetGroup(SetGroupData data) {
-		final TierEdit<IPATranscript> edit = new TierEdit<IPATranscript>(getEditor(),
-				data.tier, data.group, data.candidateTier.getGroup(data.group));
+		final UndoableEdit edit = setGroup(data);
 		getEditor().getUndoSupport().postEdit(edit);
+		
+		// force update of tier in other views
+		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, data.tier.getName());
+		getEditor().getEventManager().queueEvent(ee);
 	}
 	
 	/**
@@ -274,7 +400,22 @@ public class ValidationEditorView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		return null;
+		final JMenu retVal = new JMenu();
+		
+		retVal.add(new AutoValidateAction(getEditor(), this));
+		retVal.addSeparator();
+		
+		final PhonUIAction setTargetAct = new PhonUIAction(this, "onValidateIPATarget");
+		setTargetAct.putValue(PhonUIAction.NAME, "Validate IPA Target");
+		setTargetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Target using current candidate transcription");
+		retVal.add(setTargetAct);
+		
+		final PhonUIAction setActualAct = new PhonUIAction(this, "onValidateIPAActual");
+		setActualAct.putValue(PhonUIAction.NAME, "Validate IPA Actual");
+		setActualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Actual using current candidate transcription");
+		retVal.add(setActualAct);
+		
+		return retVal;
 	}
 
 	
