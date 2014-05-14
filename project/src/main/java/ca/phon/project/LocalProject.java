@@ -45,7 +45,11 @@ import ca.phon.project.io.CorpusType;
 import ca.phon.project.io.ObjectFactory;
 import ca.phon.project.io.ProjectType;
 import ca.phon.project.io.SessionType;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierViewItem;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
@@ -746,6 +750,42 @@ public class LocalProject implements Project {
 		
 		final FileOutputStream fOut  = new FileOutputStream(templateFile);
 		writer.writeSession(template, fOut);
+	}
+
+	@Override
+	public Session createSessionFromTemplate(String corpus, String session)
+			throws IOException {
+		Session template = null;
+		try {
+			template = getSessionTemplate(corpus);
+		} catch (IOException e) { // do nothing 
+		}
+
+		final SessionFactory factory = SessionFactory.newFactory();
+		Session s = null;
+		if(template != null) {
+			s = template;
+			s.setName(session);
+		} else {
+			s = factory.createSession(corpus, session);
+			
+			final Record r = factory.createRecord();
+			r.addGroup();
+			s.addRecord(r);
+			
+			final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
+			tierView.add(factory.createTierViewItem(SystemTierType.Orthography.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.IPATarget.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.IPAActual.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.Notes.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.Segment.getName(), true));
+			s.setTierView(tierView);
+		}
+		
+		final UUID writeLock = getSessionWriteLock(s);
+		saveSession(s, writeLock);
+		releaseSessionWriteLock(s, writeLock);
+		return s;
 	}
 	
 }

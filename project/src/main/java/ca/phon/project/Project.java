@@ -161,6 +161,18 @@ public interface Project extends IExtendable {
 			throws IOException;
 	
 	/**
+	 * Create a new session from the corpus template (if it exists)
+	 * This method will also add the session to the specified corpus.
+	 * 
+	 * @param corpus
+	 * @param sessionName
+	 * 
+	 * @return new Session object
+	 */
+	public Session createSessionFromTemplate(String corpus, String session)
+		throws IOException;
+	
+	/**
 	 * Get the session names contained in a corpus in alphabetical
 	 * order.
 	 * 
