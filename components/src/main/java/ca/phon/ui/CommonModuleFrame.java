@@ -69,7 +69,6 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 	
 	private static void newWindowCreated(CommonModuleFrame f) {
 		openFrames.add(f);
-//		updateWindowMenus();
 	}
 	
 	public static ArrayList<CommonModuleFrame> getOpenWindows() {
@@ -79,7 +78,6 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 	private static void removeWindow(CommonModuleFrame f) {
 		if(openFrames.contains(f))
 			openFrames.remove(f);
-//		updateWindowMenus();
 		
 		/**if(openFrames.size() == 0 && !PhonUtilities.isMacOs()) {
 			ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(

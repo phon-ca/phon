@@ -632,11 +632,6 @@ public class ProjectWindow extends CommonModuleFrame
 		} catch (PluginException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.transcript.RecordEditorController");
-//		LoadModule lm = new LoadModule(mi, initInfo, true);
-//		lm.start();
 	}
 	
 	/**
@@ -694,19 +689,14 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 			initInfo.put("project", proj1);
-			initInfo.put("corpus", corpus);
-			initInfo.put("session", session);
+			initInfo.put("corpusName", corpus);
+			initInfo.put("sessionName", session);
 			initInfo.put("destproject", proj2);
 			initInfo.put("destcorpus", destCorpus);
 			initInfo.put("overwrite", true);
 			initInfo.put("move", move);
 		
 		PluginEntryPointRunner.executePluginInBackground("CopySession", initInfo);
-			
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.CopySessionController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
 	}
 	
 	/**
@@ -718,8 +708,8 @@ public class ProjectWindow extends CommonModuleFrame
 	private void deleteSession(String corpus, String session) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
-		initInfo.put("session", session);
+		initInfo.put("corpusName", corpus);
+		initInfo.put("sessionName", session);
 		
 		PluginEntryPointRunner.executePluginInBackground("DeleteSession", initInfo);
 	}
@@ -733,15 +723,10 @@ public class ProjectWindow extends CommonModuleFrame
 	private void saveSessionAs(String corpus, String session) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
-		initInfo.put("session", session);
+		initInfo.put("corpusName", corpus);
+		initInfo.put("sessionName", session);
 		
 		PluginEntryPointRunner.executePluginInBackground("ExportSession", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.ExportSessionController");
-//		LoadModule lm = new LoadModule(mi,initInfo);
-//		lm.start();
 	}
 	
 	/**
@@ -753,15 +738,10 @@ public class ProjectWindow extends CommonModuleFrame
 	private void renameSession(String corpus, String session) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
-		initInfo.put("session", session);
+		initInfo.put("corpusName", corpus);
+		initInfo.put("sessionName", session);
 		
 		PluginEntryPointRunner.executePluginInBackground("RenameSession", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.RenameSessionController");
-//		LoadModule lm = new LoadModule(mi,initInfo);
-//		lm.start();
 	}
 	
 	/**
@@ -773,15 +753,10 @@ public class ProjectWindow extends CommonModuleFrame
 	private void duplicateSession(String corpus, String session) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
-		initInfo.put("session", session);
+		initInfo.put("corpusName", corpus);
+		initInfo.put("sessionName", session);
 		
 		PluginEntryPointRunner.executePluginInBackground("DuplicateSession", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.DuplicateSessionController");
-//		LoadModule lm = new LoadModule(mi,initInfo);
-//		lm.start();
 	}
 
 	/**
@@ -792,14 +767,9 @@ public class ProjectWindow extends CommonModuleFrame
 	private void openCorpusTemplate(String corpus) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
+		initInfo.put("corpusName", corpus);
 
 		PluginEntryPointRunner.executePluginInBackground("CorpusTemplate", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.project.CorpusTemplateController");
-//		LoadModule lm = new LoadModule(mi,initInfo);
-//		lm.start();
 	}
 			
 	/**
@@ -810,14 +780,9 @@ public class ProjectWindow extends CommonModuleFrame
 	private void createNewSession(String corpus) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
+		initInfo.put("corpusName", corpus);
 		
 		PluginEntryPointRunner.executePluginInBackground("NewSession", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.NewSessionController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
 	}
 	
 	/**
@@ -828,14 +793,9 @@ public class ProjectWindow extends CommonModuleFrame
 	private void deleteCorpus(String corpus) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
+		initInfo.put("corpusName", corpus);
 		
 		PluginEntryPointRunner.executePluginInBackground("DeleteCorpus", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.DeleteCorpusController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
 	}
 	
 	/**
@@ -844,7 +804,7 @@ public class ProjectWindow extends CommonModuleFrame
 	private void renameCorpus(String corpus) {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getProject());
-		initInfo.put("corpus", corpus);
+		initInfo.put("corpusName", corpus);
 		
 		PluginEntryPointRunner.executePluginInBackground("RenameCorpus", initInfo);
 		

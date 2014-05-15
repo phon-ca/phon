@@ -57,12 +57,20 @@ public class GroupImpl implements Group {
 	
 	@Override
 	public Object getTier(String name) {
-		return record.getTier(name).getGroup(groupIndex);
+		final Tier<?> tier = record.getTier(name);
+		if(tier.isGrouped())
+			return tier.getGroup(groupIndex);
+		else
+			return tier.getGroup(0);
 	}
 
 	@Override
 	public <T> T getTier(String name, Class<T> type) {
-		return record.getTier(name, type).getGroup(groupIndex);
+		final Tier<T> tier = record.getTier(name, type);
+		if(tier.isGrouped())
+			return tier.getGroup(groupIndex);
+		else
+			return tier.getGroup(0);
 	}
 
 	@Override
@@ -93,14 +101,17 @@ public class GroupImpl implements Group {
 
 	@Override
 	public void setNotes(String notes) {
-		record.getNotes().setGroup(groupIndex, notes);
+		record.getNotes().setGroup(0, notes);
 	}
 
 	@Override
 	public <T> void setTier(String name, Class<T> type, T val) {
 		final Tier<T> tier = record.getTier(name, type);
 		if(tier != null) {
-			tier.setGroup(groupIndex, val);
+			if(tier.isGrouped())
+				tier.setGroup(groupIndex, val);
+			else
+				tier.setGroup(0, val);
 		}
 	}
 	

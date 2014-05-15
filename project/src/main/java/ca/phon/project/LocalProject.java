@@ -45,7 +45,11 @@ import ca.phon.project.io.CorpusType;
 import ca.phon.project.io.ObjectFactory;
 import ca.phon.project.io.ProjectType;
 import ca.phon.project.io.SessionType;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierViewItem;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
@@ -68,6 +72,8 @@ public class LocalProject implements Project {
 	 */
 	private ProjectType projectData;
 	private final static String projectDataFile = "project.xml";
+	
+	private final static String sessionTemplateFile = "__sessiontemplate.xml";
 	
 	/**
 	 * Session write locks
@@ -713,4 +719,73 @@ public class LocalProject implements Project {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Session getSessionTemplate(String corpus) throws IOException {
+		final File corpusFolder = new File(getLocation(), corpus);
+		final File templateFile = new File(corpusFolder, sessionTemplateFile);
+		
+		if(templateFile.exists()) {
+			final SessionInputFactory inputFactory = new SessionInputFactory();
+			// TODO use method to find which reader will work for the file
+			final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
+			if(reader == null) {
+				throw new IOException("No session reader available for " + templateFile.toURI().toASCIIString());
+			}
+			final Session retVal = reader.readSession(templateFile.toURI().toURL().openStream());
+			return retVal;
+		} else {
+			throw new FileNotFoundException(templateFile.getAbsolutePath());
+		}
+	}
+
+	@Override
+	public void saveSessionTemplate(String corpus, Session template)
+			throws IOException {
+		final File corpusFolder = new File(getLocation(), corpus);
+		final File templateFile = new File(corpusFolder, sessionTemplateFile);
+		
+		final SessionOutputFactory outputFactory = new SessionOutputFactory();
+		final SessionWriter writer = outputFactory.createWriter();
+		
+		final FileOutputStream fOut  = new FileOutputStream(templateFile);
+		writer.writeSession(template, fOut);
+	}
+
+	@Override
+	public Session createSessionFromTemplate(String corpus, String session)
+			throws IOException {
+		Session template = null;
+		try {
+			template = getSessionTemplate(corpus);
+		} catch (IOException e) { // do nothing 
+		}
+
+		final SessionFactory factory = SessionFactory.newFactory();
+		Session s = null;
+		if(template != null) {
+			s = template;
+			s.setName(session);
+		} else {
+			s = factory.createSession(corpus, session);
+			
+			final Record r = factory.createRecord();
+			r.addGroup();
+			s.addRecord(r);
+			
+			final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
+			tierView.add(factory.createTierViewItem(SystemTierType.Orthography.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.IPATarget.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.IPAActual.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.Notes.getName(), true));
+			tierView.add(factory.createTierViewItem(SystemTierType.Segment.getName(), true));
+			s.setTierView(tierView);
+		}
+		
+		final UUID writeLock = getSessionWriteLock(s);
+		saveSession(s, writeLock);
+		releaseSessionWriteLock(s, writeLock);
+		return s;
+	}
+	
 }

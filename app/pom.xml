@@ -16,6 +16,8 @@
 	
 	<properties>
 		<ca.phon.app.dep.folder>target/deps</ca.phon.app.dep.folder>
+		<com.orientechnologies.orient-commons.version>1.7-rc1</com.orientechnologies.orient-commons.version>
+		<com.orientechnologies.orientdb-core.version>1.7-rc1</com.orientechnologies.orientdb-core.version>
 	</properties>
 
 	<dependencies>
@@ -119,6 +121,22 @@
 		<dependency>
 			<groupId>com.github.insubstantial</groupId>
 			<artifactId>substance-swingx</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orient-commons</artifactId>
+			<version>${com.orientechnologies.orient-commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-core</artifactId>
+			<version>${com.orientechnologies.orientdb-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20140107</version>
 		</dependency>
 	</dependencies>
 

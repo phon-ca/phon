@@ -110,7 +110,7 @@ public class BasicSyllabifierTest extends JFrame {
 		private static final long serialVersionUID = 1584799534042871645L;
 
 		@Override
-		public Component getListCellRendererComponent(JList<?> list,
+		public Component getListCellRendererComponent(JList list,
 				Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,

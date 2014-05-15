@@ -101,8 +101,13 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		}
 		
 		final SessionEditor editor = new SessionEditor(project, session, transcriber);
-		editor.pack();
 		editor.setLocationByPlatform(true);
+		
+		// load editor perspective
+		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
+		editor.getViewModel().applyPerspective(perspective);
+		
+		editor.pack();
 		editor.setVisible(true);
 	}
 	

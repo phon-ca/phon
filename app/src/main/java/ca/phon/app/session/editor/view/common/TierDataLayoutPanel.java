@@ -34,6 +34,10 @@ public class TierDataLayoutPanel extends JPanel {
 		bgPainter = new TierDataLayoutBgPainter();
 	}
 	
+	public TierDataLayout getTierLayout() {
+		return (TierDataLayout)super.getLayout();
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		final Graphics2D g2 = (Graphics2D)g;
