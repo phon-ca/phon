@@ -157,7 +157,6 @@
 	<module>query</module>
 	<module>app</module>
     <module>workspace</module>
-    <module>csv2phon</module>
   </modules>
   
   <dependencyManagement>
