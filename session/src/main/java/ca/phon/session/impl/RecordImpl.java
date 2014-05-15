@@ -154,7 +154,7 @@ public class RecordImpl implements Record {
 			
 			for(String tierName:getExtraTierNames()) {
 				final Tier<?> tier = getTier(tierName);
-				if(tier.isGrouped()) {
+				if(tier.isGrouped() && idx < tier.numberOfGroups()) {
 					tier.removeGroup(idx);
 				}
 			}
@@ -162,16 +162,6 @@ public class RecordImpl implements Record {
 			throw new IndexOutOfBoundsException("Invalid group index " + idx);
 		}
 	}
-
-//	@Override
-//	public void mergeGroups(int startIdx, int endIdx) {
-//		// TODO Auto-generated method stub
-//	}
-//
-//	@Override
-//	public void splitGroup(int groupIdx, int wordIdx) {
-//		// TODO Auto-generated method stub
-//	}
 
 	@Override
 	public Group addGroup() {
@@ -184,13 +174,16 @@ public class RecordImpl implements Record {
 		
 		for(String tierName:getExtraTierNames()) {
 			final Tier<String> tier = getTier(tierName, String.class);
-			tier.addGroup("");
+			if(tier.isGrouped())
+				tier.addGroup();
+			else if(tier.numberOfGroups() == 0)
+				tier.addGroup("");
 		}
 		
-		if(gidx == 0) {
+		if(notes.numberOfGroups() == 0)
 			notes.addGroup("");
+		if(segment.numberOfGroups() == 0)
 			segment.addGroup(SessionFactory.newFactory().createMediaSegment());
-		}
 		
 		return new GroupImpl(this, gidx);
 	}
@@ -204,7 +197,10 @@ public class RecordImpl implements Record {
 		
 		for(String tierName:getExtraTierNames()) {
 			final Tier<String> tier = getTier(tierName, String.class);
-			tier.addGroup(idx, "");
+			if(tier.isGrouped())
+				tier.addGroup(idx, "");
+			else if(tier.numberOfGroups() == 0)
+				tier.addGroup();
 		}
 		
 		return new GroupImpl(this, idx);
@@ -485,10 +481,12 @@ public class RecordImpl implements Record {
 		
 		// other tiers
 		for(String tierName:getExtraTierNames()) {
-			final String tierVal = group1.getTier(tierName, String.class);
-			if(tierVal != null) {
-				final String newVal = tierVal + " " + group2.getTier(tierName, String.class);
-				group1.setTier(tierName, String.class, newVal);
+			if(getTier(tierName).isGrouped()) {
+				final String tierVal = group1.getTier(tierName, String.class);
+				if(tierVal != null) {
+					final String newVal = new String(tierVal + " " + group2.getTier(tierName, String.class)).trim();
+					group1.setTier(tierName, String.class, newVal);
+				}
 			}
 		}
 		
@@ -546,21 +544,23 @@ public class RecordImpl implements Record {
 		
 		// other tiers
 		for(String tierName:getExtraTierNames()) {
-			final String tierVal = group.getTier(tierName, String.class);
-			if(tierVal != null) {
-				final String words[] = tierVal.split("\\p{Space}");
-				
-				String val = "";
-				String newVal = "";
-				for(int i = 0; i < words.length; i++) {
-					if(i < wrd) {
-						val += (val.length() > 0 ? " " : "") + words[i];
-					} else {
-						newVal += (newVal.length() > 0 ? " " : "") + words[i];
+			if(getTier(tierName).isGrouped()) {
+				final String tierVal = group.getTier(tierName, String.class);
+				if(tierVal != null) {
+					final String words[] = tierVal.split("\\p{Space}");
+					
+					String val = "";
+					String newVal = "";
+					for(int i = 0; i < words.length; i++) {
+						if(i < wrd) {
+							val += (val.length() > 0 ? " " : "") + words[i];
+						} else {
+							newVal += (newVal.length() > 0 ? " " : "") + words[i];
+						}
 					}
+					group.setTier(tierName, String.class, val);
+					newGroup.setTier(tierName, String.class, newVal);
 				}
-				group.setTier(tierName, String.class, val);
-				newGroup.setTier(tierName, String.class, newVal);
 			}
 		}
 		

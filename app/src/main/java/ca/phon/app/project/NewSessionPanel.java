@@ -72,6 +72,13 @@ public class NewSessionPanel extends JPanel {
 		this(project);
 		cmbCorpus.setSelectedItem(corpusName);
 	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		txtName.setEnabled(enabled);
+		cmbCorpus.setEnabled(enabled);
+		btnCreateCorpus.setEnabled(enabled);
+	}
 
 	/**
 	 * Adds fill components to empty cells in the first row and first column
