@@ -73,7 +73,7 @@ public class LocalProject implements Project {
 	private ProjectType projectData;
 	private final static String projectDataFile = "project.xml";
 	
-	private final static String sessionTemplateFile = "__template.xml";
+	private final static String sessionTemplateFile = "__sessiontemplate.xml";
 	
 	/**
 	 * Session write locks
