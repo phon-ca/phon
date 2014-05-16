@@ -220,6 +220,7 @@ public class WaveformEditorView extends EditorView {
 					
 					final TierEdit<MediaSegment> segmentEdit = 
 							new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
+					segmentEdit.setFireHardChangeOnUndo(true);
 					editor.getUndoSupport().postEdit(segmentEdit);
 				}
 			}

@@ -31,12 +31,15 @@ import java.util.logging.Logger;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.media.exceptions.PhonMediaException;
+import ca.phon.util.Tuple;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
 
@@ -55,8 +58,7 @@ public class WavDisplay extends JComponent {
 	/* List of properties */
 	public static final String _SEGMENT_VALUE_PROP_ = "_Segment_";
 	
-//	/** Send when the segment selection was manually chagned (i.e., using enter) */
-//	public static final String _SEGMENT_MODIFIED_PROP_ = "_Segment_Modified_";
+	public static final String _SELECTION_PROP_ = "_Selection_";
 	
 	/* File */
 	private File _file;
@@ -434,11 +436,16 @@ public class WavDisplay extends JComponent {
 			
 			if(_selecting) {
 				double msPerPixel = _segmentInfo.timeForFile() / (getWidth() - 2 * _TIME_INSETS_);
-				_selectionEnd = (e.getX() - WavDisplay._TIME_INSETS_) * msPerPixel;
-				if(_selectionEnd < 0.0)
-					_selectionEnd = 0.0;
-				if(_selectionEnd > _segmentInfo.timeForFile()) 
-					_selectionEnd = _segmentInfo.timeForFile();
+				double selEnd = (e.getX() - WavDisplay._TIME_INSETS_) * msPerPixel;
+				if(selEnd < 0.0)
+					selEnd = 0.0;
+				if(selEnd > _segmentInfo.timeForFile()) 
+					selEnd = _segmentInfo.timeForFile();
+				final Tuple<Double, Double> old = getSelection();
+				_selectionEnd = selEnd;
+				final Tuple<Double, Double> v = getSelection();
+				firePropertyChange(_SELECTION_PROP_, old, v);
+				
 				_timeBar.setCurrentMs(Math.round(_selectionEnd));
 				repaint();
 			} else {
@@ -452,6 +459,7 @@ public class WavDisplay extends JComponent {
 				if(_playing) return;
 			}
 			requestFocusInWindow();
+			final Tuple<Double, Double> old = getSelection();
 			_selectionStart = -1;
 			_selectionEnd = -1;
 			if(!_selecting) {
@@ -462,6 +470,8 @@ public class WavDisplay extends JComponent {
 					_selectionStart = _xPos * msPerPixel;
 				}
 			}
+			final Tuple<Double, Double> v = getSelection();
+			firePropertyChange(_SELECTION_PROP_, old, v);
 			repaint();
 		}
 
@@ -649,7 +659,10 @@ public class WavDisplay extends JComponent {
 	}
 
 	public void set_selectionStart(int start) {
+		final Tuple<Double, Double> old = getSelection();
 		_selectionStart = start;
+		final Tuple<Double, Double> v = getSelection();
+		firePropertyChange(_SELECTION_PROP_, old, v);
 	}
 
 	public double get_selectionEnd() {
@@ -657,7 +670,14 @@ public class WavDisplay extends JComponent {
 	}
 
 	public void set_selectionEnd(int end) {
+		final Tuple<Double, Double> old = getSelection();
 		_selectionEnd = end;
+		final Tuple<Double, Double> v = getSelection();
+		firePropertyChange(_SELECTION_PROP_, old, v);
+	}
+	
+	private Tuple<Double, Double> getSelection() {
+		return new Tuple<Double, Double>(get_selectionStart(), get_selectionEnd());
 	}
 	
 	/** Playback */
