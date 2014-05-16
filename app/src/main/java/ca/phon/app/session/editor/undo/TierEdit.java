@@ -33,6 +33,12 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	private final T newValue;
 	
 	/**
+	 * Tells this edit to fire a 'hard' change on undo.
+	 * A 'hard' change calls TIER_CHANGED_EVENT after TIER_CHANGE_EVENT
+	 */
+	private boolean fireHardChangeOnUndo = false;
+	
+	/**
 	 * Constructor 
 	 * 
 	 * @param group
@@ -66,13 +72,25 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	public T getNewValue() {
 		return newValue;
 	}
+	
+	public boolean isFireHardChangeOnUndo() {
+		return fireHardChangeOnUndo;
+	}
+
+	public void setFireHardChangeOnUndo(boolean fireHardChangeOnUndo) {
+		this.fireHardChangeOnUndo = fireHardChangeOnUndo;
+	}
 
 	@Override
 	public void undo() {
 		tier.setGroup(groupIndex, getOldValue());
 		
-		if(getEditor() != null)
+		if(getEditor() != null) {
 			queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());
+			if(isFireHardChangeOnUndo()) {
+				queueEvent(EditorEventType.TIER_CHANGED_EVT, getEditor().getUndoSupport(), tier.getName());
+			}
+		}
 	}
 	
 	@Override
