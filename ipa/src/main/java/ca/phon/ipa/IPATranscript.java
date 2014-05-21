@@ -414,7 +414,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 */
 	public int stringIndexOf(IPATranscript transcript) {
 		if(transcript.length() > 0)
-			return stringIndexOfElement(transcription[0]);
+			return stringIndexOfElement(transcript.elementAt(0));
 		else
 			return -1;
 	}
