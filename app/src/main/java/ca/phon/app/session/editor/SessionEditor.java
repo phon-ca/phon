@@ -151,12 +151,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
 		this.selectioModelRef = 
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
-		
-		// XXX
-		final SessionEditorSelection selection = new SessionEditorSelection(0, "Orthography", 0, new Range(0, 1, false));
-		getSelectionModel().addSelection(selection);
-		final SessionEditorSelection selection2 = new SessionEditorSelection(0, "Orthography", 0, new Range(2, 3, false));
-		getSelectionModel().addSelection(selection2);
 	
 		// setup title
 		final String title = generateTitle();
