@@ -13,6 +13,8 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -27,10 +29,14 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
+import ca.phon.app.log.LogEP;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -39,9 +45,11 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.RecordExcludeEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.common.GroupFieldHighlighter;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
 import ca.phon.app.session.editor.view.common.TierDataLayoutBgPainter;
@@ -65,8 +73,10 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -78,6 +88,8 @@ import com.jgoodies.forms.layout.FormLayout;
  *
  */
 public class RecordDataEditorView extends EditorView {
+	
+	private final static Logger LOGGER = Logger.getLogger(RecordDataEditorView.class.getName());
 
 	private static final long serialVersionUID = 2961561720211049250L;
 	
@@ -230,6 +242,24 @@ public class RecordDataEditorView extends EditorView {
 					tierComp.setFont(tierFont);
 					tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, gIdx));
 					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
+					
+					if(tierComp instanceof JTextComponent) {
+						final JTextComponent textComp = (JTextComponent)tierComp;
+						final List<SessionEditorSelection> selections = 
+								getEditor().getSelectionModel().getSelectionsForGroup(editor.getCurrentRecordIndex(),
+										tierName, gIdx);
+						final Highlighter hl = new GroupFieldHighlighter();
+						textComp.setHighlighter(hl);
+						for(SessionEditorSelection selection:selections) {
+							final Range r = selection.getGroupRange();
+							try {
+								hl.addHighlight(r.getFirst(), r.getLast(), 
+										new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
+							} catch (BadLocationException e) {
+								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+							}
+						}
+					}
 				}
 			} else {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);

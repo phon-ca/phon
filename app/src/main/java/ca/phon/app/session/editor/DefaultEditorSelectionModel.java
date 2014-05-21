@@ -1,62 +1,118 @@
 package ca.phon.app.session.editor;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DefaultEditorSelectionModel implements EditorSelectionModel {
+	
+	private final List<SessionEditorSelection> selections =
+			Collections.synchronizedList(new ArrayList<SessionEditorSelection>());
 
 	@Override
 	public List<SessionEditorSelection> getSelections() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableList(selections);
 	}
 
 	@Override
 	public SessionEditorSelection getFirstSelection() {
-		// TODO Auto-generated method stub
-		return null;
+		return (selections.size() > 0 ? selections.get(0) : null);
 	}
 
 	@Override
 	public SessionEditorSelection getLastSelection() {
-		// TODO Auto-generated method stub
-		return null;
+		return (selections.size() > 0 ? selections.get(selections.size()-1) : null);
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		selections.clear();
+		fireSelectionsCleared();
 	}
 
 	@Override
 	public void setSelection(SessionEditorSelection selection) {
-		// TODO Auto-generated method stub
-		
+		selections.clear();
+		selections.add(selection);
+		fireSelectionSet(selection);
 	}
 
 	@Override
 	public void addSelection(SessionEditorSelection selection) {
-		// TODO Auto-generated method stub
-		
+		selections.add(selection);
+		fireSelectionAdded(selection);
 	}
+	
+	private final List<EditorSelectionModelListener> listeners = 
+			Collections.synchronizedList(new ArrayList<EditorSelectionModelListener>());
 
 	@Override
 	public void addSelectionModelListener(EditorSelectionModelListener listener) {
-		// TODO Auto-generated method stub
-		
+		listeners.add(listener);
 	}
 
 	@Override
 	public void removeSelectionModelListener(
 			EditorSelectionModelListener listener) {
-		// TODO Auto-generated method stub
-		
+		listeners.remove(listener);
+	}
+	
+	@Override
+	public List<SessionEditorSelection> getSelectionsForRecord(int recordIndex) {
+		return getSelectionsForTier(recordIndex, null);
+	}
+	
+	@Override
+	public List<SessionEditorSelection> getSelectionsForTier(int recordIndex, String tierName) {
+		return getSelectionsForGroup(recordIndex, tierName, -1);
+	}
+
+	@Override
+	public List<SessionEditorSelection> getSelectionsForGroup(int recordIndex, String tierName, int groupIndex) {
+		final List<SessionEditorSelection> retVal = new ArrayList<SessionEditorSelection>();
+		for(SessionEditorSelection selection:getSelections()) {
+			boolean keep = true;
+			
+			if(recordIndex >= 0) {
+				keep &= selection.getRecordIndex() == recordIndex;
+			}
+			
+			if(tierName != null) {
+				keep &= selection.getTierName().equals(tierName);
+			}
+			
+			if(groupIndex >= 0) {
+				keep &= selection.getGroupIndex() == groupIndex;
+			}
+			
+			if(keep) {
+				retVal.add(selection);
+			}
+		}
+		return retVal;
 	}
 
 	@Override
 	public List<EditorSelectionModelListener> getSelectionModelListeners() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableList(listeners);
+	}
+	
+	public void fireSelectionAdded(SessionEditorSelection selection) {
+		for(EditorSelectionModelListener listener:getSelectionModelListeners()) {
+			listener.selectionAdded(this, selection);
+		}
 	}
 
+	public void fireSelectionSet(SessionEditorSelection selection) {
+		for(EditorSelectionModelListener listener:getSelectionModelListeners()) {
+			listener.selectionSet(this, selection);
+		}
+	}
+	
+	public void fireSelectionsCleared() {
+		for(EditorSelectionModelListener listener:getSelectionModelListeners()) {
+			listener.selectionsCleared(this);
+		}
+	}
+	
 }

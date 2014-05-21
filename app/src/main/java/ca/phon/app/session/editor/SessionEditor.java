@@ -56,6 +56,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
+import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -150,6 +151,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
 		this.selectioModelRef = 
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
+		
+		// XXX
+		final SessionEditorSelection selection = new SessionEditorSelection(0, "Orthography", 0, new Range(0, 1, false));
+		getSelectionModel().addSelection(selection);
+		final SessionEditorSelection selection2 = new SessionEditorSelection(0, "Orthography", 0, new Range(2, 3, false));
+		getSelectionModel().addSelection(selection2);
 	
 		// setup title
 		final String title = generateTitle();

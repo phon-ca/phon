@@ -54,6 +54,19 @@ public interface EditorSelectionModel {
 	public void addSelection(SessionEditorSelection selection);
 	
 	/**
+	 * Get selections for the specified record.
+	 * 
+	 * @param recordIndex
+	 * 
+	 * @return selections for record index
+	 */
+	public List<SessionEditorSelection> getSelectionsForRecord(int recordIndex);
+	
+	public List<SessionEditorSelection> getSelectionsForTier(int recordIndex, String tierName);
+	
+	public List<SessionEditorSelection> getSelectionsForGroup(int recordIndex, String tierName, int groupIndex);
+	
+	/**
 	 * Add a listener for this model.
 	 * 
 	 * @param listener
