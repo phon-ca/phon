@@ -233,24 +233,30 @@ function query_record(recordIndex, record) {
     			var rv = factory.createResultValue();
     			rv.tierName = searchTier;
     			rv.groupIndex = group.groupIndex;
-    			rv.range = new Range(match.start, match.end, false);
+    			rv.range = new Range(startIndex, startIndex + length, false);
     			rv.data = match.value;
     			result.resultValues.add(rv);
     			
     			if(includeAligned) {
     			    var phoneMap = group.phoneAlignment;
+    			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
     			    var aligned = phoneMap.getAligned(match.value);
-    			    
-    			    // get index of aligned in opposite tier
-    			    var alignedGroup = (searchTier == "IPA Target" ? group.IPAActual : group.IPATarget);
-    			    var alignedStart = 
-    			        (aligned != null && aligned.length > 0 ? alignedGroup.indexOf(aligned[0]) : 0);
     			    
     			    var alignedRv = factory.createResultValue();
     			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
     			    alignedRv.groupIndex = group.groupIndex;
-    			    alignedRv.range = new Range(alignedStart, alignedStart + (aligned != null ? aligned.length : 0), true);
-    			    alignedRv.data = new IPATranscript((aligned != null ? aligned : []));
+    			   	if(aligned != null && aligned.length > 0) {
+    			   		var alignedIpa = new IPATranscript(aligned);
+    			   		var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
+    			   		var alignedLength = alignedIpa.toString().length();
+    			   		
+    			   		alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, false);
+    			    	alignedRv.data = alignedIpa;
+    			   	} else {
+    			   		alignedRv.range = new Range(0, 0, true);
+    			   		alignedRv.data = "";
+    			   	}
+    			    
     			    result.resultValues.add(alignedRv);
     			    result.schema = "ALIGNED";
     			}
