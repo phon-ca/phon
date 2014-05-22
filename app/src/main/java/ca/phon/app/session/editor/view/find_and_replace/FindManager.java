@@ -19,7 +19,9 @@
 package ca.phon.app.session.editor.view.find_and_replace;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,11 +42,6 @@ public class FindManager {
 		BACKWARDS;
 	}
 
-	public enum SearchType {
-		PLAIN,
-		REGEX;
-	}
-
 	public enum FindStatus {
 		HIT_END,			// searching forward, hit end of session
 		HIT_BEGINNING,		// search backward, hit beginning of session
@@ -54,18 +51,14 @@ public class FindManager {
 
 	/** Session */
 	private Session session;
-
-	/** Search type */
-	private SearchType searchType = SearchType.PLAIN;
 	
 	private final Integer exprMutex = new Integer(1);
 
 	/** Search expr */
-	private String expr = "";
-
-	/** case sensitivity */
-	private boolean caseSensitive = false;
+	private FindExpr anyExpr;
 	
+	private final Map<String, FindExpr> tierExprs = new HashMap<String, FindExpr>();
+
 	/** Current location */
 	private SessionLocation currentLocation;
 	
@@ -111,23 +104,7 @@ public class FindManager {
 	public void setStatus(FindStatus status) {
 		this.findStatus = status;
 	}
-
-	public String getExpr() {
-		return this.expr;
-	}
-
-	public void setExpr(String expr) {
-		this.expr = expr;
-	}
-
-	public SearchType getSearchType() {
-		return this.searchType;
-	}
-
-	public void setSearchType(SearchType st) {
-		this.searchType = st;
-	}
-
+	
 	public String[] getSearchTiers() {
 		return this.searchTiers.toArray(new String[0]);
 	}
@@ -150,13 +127,21 @@ public class FindManager {
 	public void setCurrentLocation(SessionLocation location) {
 		this.currentLocation = location;
 	}
-
-	public boolean isCaseSensitive() {
-		return this.caseSensitive;
+	
+	public FindExpr getAnyExpr() {
+		return this.anyExpr;
 	}
-
-	public void setCaseSensitive(boolean cs) {
-		this.caseSensitive = cs;
+	
+	public void setAnyExpr(FindExpr expr) {
+		this.anyExpr = expr;
+	}
+	
+	public FindExpr getExprForTier(String tierName) {
+		return tierExprs.get(tierName);
+	}
+	
+	public void setExprForTier(String tierName, FindExpr expr) {
+		tierExprs.put(tierName, expr);
 	}
 
 	/**
