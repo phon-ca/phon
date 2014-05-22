@@ -40,16 +40,13 @@ import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.swingx.JXTable;
 
-import ca.phon.application.transcript.IParticipant;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ObjectFactory;
 import ca.phon.csv2phon.io.ParticipantType;
-import ca.phon.gui.CommonModuleFrame;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.recordeditor.ParticipantEditor;
-import ca.phon.util.PhonDateFormat;
-import ca.phon.util.iconManager.IconManager;
-import ca.phon.util.iconManager.IconSize;
+import ca.phon.session.Participant;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -193,7 +190,7 @@ public class ParticipantsStep extends CSVImportStep {
 		if(selectedRow < 0) return;
 		selectedRow = participantTable.convertRowIndexToModel(selectedRow);
 		if(selectedRow >= 0 && selectedRow < getParticipants().size()) {
-			IParticipant part = getParticipants().get(selectedRow);
+			Participant part = getParticipants().get(selectedRow);
 			
 			ParticipantEditor.editParticipant(CommonModuleFrame.getCurrentFrame(), part);
 		

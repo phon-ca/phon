@@ -35,6 +35,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
 
+import org.jdesktop.swingx.JXTable;
+
 import ca.phon.csv2phon.io.FileType;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ObjectFactory;

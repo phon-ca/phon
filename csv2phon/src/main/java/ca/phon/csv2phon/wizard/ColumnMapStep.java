@@ -54,9 +54,8 @@ import ca.phon.csv2phon.io.ColumnMapType;
 import ca.phon.csv2phon.io.FileType;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ObjectFactory;
-import ca.phon.engines.syllabifier.Syllabifier;
-import ca.phon.gui.DialogHeader;
-import ca.phon.util.transconv.TranscriptConverter;
+import ca.phon.fontconverter.TranscriptConverter;
+import ca.phon.ui.decorations.DialogHeader;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
