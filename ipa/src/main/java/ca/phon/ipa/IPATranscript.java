@@ -183,6 +183,29 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 	
 	/**
+	 * Return the ipa element index of
+	 * the given string index.
+	 * 
+	 * @param charIdx
+	 * @return ipaIndex
+	 * 
+	 */
+	public int ipaIndexOf(int charIdx) {
+		int retVal = -1;
+		
+		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		for(int i = 0; i < length(); i++) {
+			builder.append(elementAt(i));
+			if(builder.toIPATranscript().toString().length() > charIdx) {
+				retVal = i;
+				break;
+			}
+		}
+		
+		return retVal;
+	}
+	
+	/**
 	 * Return the index of the given element
 	 * 
 	 * @param ele
@@ -428,7 +451,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 *  or < 0 if not found
 	 */
 	public int stringIndexOfElement(int index) {
-		if(index < 0 || index >= length()) 
+		if(index < 0 || index > length()) 
 			throw new ArrayIndexOutOfBoundsException(index);
 		final IPATranscript before =
 				new IPATranscript(Arrays.copyOfRange(transcription, 0, index));

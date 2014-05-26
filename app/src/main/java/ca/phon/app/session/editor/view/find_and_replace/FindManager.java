@@ -18,13 +18,16 @@
 
 package ca.phon.app.session.editor.view.find_and_replace;
 
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
@@ -52,8 +55,6 @@ public class FindManager {
 	/** Session */
 	private Session session;
 	
-	private final Integer exprMutex = new Integer(1);
-
 	/** Search expr */
 	private FindExpr anyExpr;
 	
@@ -156,27 +157,26 @@ public class FindManager {
 	public SessionRange findNext() {
 		SessionRange retVal = null;
 
-		// be wary of expression changes in the middle of a search
-		synchronized(exprMutex) {
-			// start from current location and in specified direction
-			if(direction == FindDirection.FORWARDS) {
-				retVal = findForwards(currentLocation);
-			} else if(direction == FindDirection.BACKWARDS) {
-				retVal = findBackwards(currentLocation);
-			}
+		// start from current location and in specified direction
+		if(direction == FindDirection.FORWARDS) {
+			retVal = findForwards(currentLocation);
+		} else if(direction == FindDirection.BACKWARDS) {
+			retVal = findBackwards(currentLocation);
 		}
 
 		// update current position if we have a result
 		if(retVal != null) {
 			int charPos =
 					(direction == FindDirection.FORWARDS
-						? retVal.getRange().getRange().getLast()
-						: retVal.getRange().getRange().getFirst());
-
+						? retVal.getRecordRange().getGroupRange().getRange().getLast()
+						: retVal.getRecordRange().getGroupRange().getRange().getFirst());
+			final GroupLocation grpLocation = new GroupLocation();
+			grpLocation.setGroupIndex(retVal.getRecordRange().getGroupRange().getGroupIndex());
+			grpLocation.setCharIndex(charPos);
+			final RecordLocation recordLocation = new RecordLocation(retVal.getRecordRange().getTier(), grpLocation);
 			currentLocation = new SessionLocation(
 					retVal.getRecordIndex(),
-					new RecordLocation(retVal.getRange().getTier(),
-									charPos));
+					recordLocation);
 			findStatus = FindStatus.HIT_RESULT;
 		} else {
 			if(direction == FindDirection.FORWARDS)
@@ -200,27 +200,26 @@ public class FindManager {
 	public SessionRange findPrev() {
 		SessionRange retVal = null;
 
-		// be wary of expression changes in the middle of a search
-		synchronized(exprMutex) {
-			// start from current location and in specified direction
-			if(direction == FindDirection.FORWARDS) {
-				retVal = findBackwards(currentLocation);
-			} else if(direction == FindDirection.BACKWARDS) {
-				retVal = findForwards(currentLocation);
-			}
+		// start from current location and in specified direction
+		if(direction == FindDirection.FORWARDS) {
+			retVal = findBackwards(currentLocation);
+		} else if(direction == FindDirection.BACKWARDS) {
+			retVal = findForwards(currentLocation);
 		}
 
 		// update current position if we have a result
 		if(retVal != null) {
 			int charPos =
 					(direction == FindDirection.BACKWARDS
-						? retVal.getRange().getRange().getLast()
-						: retVal.getRange().getRange().getFirst());
-
+						? retVal.getRecordRange().getGroupRange().getRange().getLast()
+						: retVal.getRecordRange().getGroupRange().getRange().getFirst());
+			final GroupLocation grpLocation = new GroupLocation();
+			grpLocation.setGroupIndex(retVal.getRecordRange().getGroupRange().getGroupIndex());
+			grpLocation.setCharIndex(charPos);
+			final RecordLocation recordLocation = new RecordLocation(retVal.getRecordRange().getTier(), grpLocation);
 			currentLocation = new SessionLocation(
 					retVal.getRecordIndex(),
-					new RecordLocation(retVal.getRange().getTier(),
-									charPos));
+					recordLocation);
 			findStatus = FindStatus.HIT_RESULT;
 		} else {
 			if(direction == FindDirection.BACKWARDS)
@@ -240,57 +239,52 @@ public class FindManager {
 		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int charIdx = pos.getRecordLocation().getLocation();
+		int grpIdx = pos.getRecordLocation().getGroupLocation().getGroupIndex();
+		int charIdx = pos.getRecordLocation().getGroupLocation().getCharIndex();
 
+		final FindExpr anyExpr = getAnyExpr();
 		while(uttIdx < session.getRecordCount()) {
 			Record currentUtt = session.getRecord(uttIdx);
 
-			while(tierIdx < searchTiers.size()) {
+			while(tierIdx < searchTiers.size() && retVal == null) {
 				String searchTier = searchTiers.get(tierIdx);
 
 				final Tier<?> tier = currentUtt.getTier(searchTier);
+				if(tier == null) continue;
 				
-				// look for expression in tierData
-				if(searchType == SearchType.PLAIN) {
+				for(int i = grpIdx; i < tier.numberOfGroups(); i++) {
+					Range charRange = null;
+					Range tierExprRange = null;
+					Range anyExprRange = null;
 					
-					if(!isCaseSensitive()) {
-						tierData = tierData.toLowerCase();
+					final FindExpr tierExpr = getExprForTier(tier.getName());
+					if(tierExpr != null) {
+						tierExprRange = tierExpr.findNext(tier.getGroup(i), charIdx);
+					} 
+					if(anyExpr != null) {
+						anyExprRange = anyExpr.findNext(tier.getGroup(i), charIdx);
 					}
-					String expression =
-							(!isCaseSensitive() ? expr.toLowerCase() : expr);
-					int idx = tierData.indexOf(expression, charIdx);
-					if(idx >= 0) {
-						// we have a match, create a new range to return
-						RecordRange recRange =
-								new RecordRange(searchTier,
-								new Range(idx, idx+expr.length(), true));
+					
+					if(tierExprRange != null && anyExprRange != null) {
+						charRange = 
+								(tierExprRange.getFirst() <= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+					} else {
+						charRange =
+								(tierExprRange != null ? tierExprRange : anyExprRange);
+					}
+					
+					if(charRange != null) {
+						final RecordRange recRange =
+								new RecordRange(tier.getName(), new GroupRange(i, charRange));
 						retVal = new SessionRange(uttIdx, recRange);
 						break;
-					} else {
-						// goto next tier
-						tierIdx++;
-						charIdx = 0;
 					}
-				} else if(searchType == SearchType.REGEX) {
-					int flags =
-							(!isCaseSensitive() ? Pattern.CASE_INSENSITIVE : 0);
-					Pattern p = Pattern.compile(expr, flags);
-					Matcher m = p.matcher(tierData);
-
-					if(charIdx < tierData.length() && m.find(charIdx)) {
-						int startIdx = m.start();
-						int endIdx = m.end();
-
-						RecordRange recRange =
-								new RecordRange(searchTier,
-								new Range(startIdx, endIdx, true));
-						retVal = new SessionRange(uttIdx, recRange);
-						break;
-					} else {
-						tierIdx++;
-						charIdx = 0;
-					}
+					// reset charIdx
+					charIdx = 0;
 				}
+				if(retVal != null) break;
+				tierIdx++;
+				grpIdx = 0;
 			}
 			if(retVal != null) break;
 			uttIdx++;
@@ -302,72 +296,71 @@ public class FindManager {
 
 	private SessionRange findBackwards(SessionLocation pos) {
 		SessionRange retVal = null;
-
+		
 		int uttIdx = pos.getRecordIndex();
 		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int charIdx = pos.getRecordLocation().getLocation();
+		int grpIdx = pos.getRecordLocation().getGroupLocation().getGroupIndex();
+		int charIdx = pos.getRecordLocation().getGroupLocation().getCharIndex();
 
-		while(uttIdx >= 0) {
+		final FindExpr anyExpr = getAnyExpr();
+		while(uttIdx < session.getRecordCount()) {
 			Record currentUtt = session.getRecord(uttIdx);
 
-			while(tierIdx >= 0) {
+			while(tierIdx >= 0 && retVal == null) {
 				String searchTier = searchTiers.get(tierIdx);
+
+				final Tier<?> tier = currentUtt.getTier(searchTier);
+				if(tier == null) continue;
 				
-				final Tier<?> tierData = currentUtt.getTier(searchTier);
-				
-				if(searchType == SearchType.PLAIN) {
-					if(charIdx == -1)
-						charIdx = tierData.length();
-					String searchStr = tierData.substring(0, charIdx);
-					
-					if(!isCaseSensitive()) {
-						tierData = tierData.toLowerCase();
-					}
-					String expression =
-							(!isCaseSensitive() ? expr.toLowerCase() : expr);
-					int idx = searchStr.lastIndexOf(expression);
-
-					if(idx >= 0) {
-						RecordRange recRange =
-								new RecordRange(searchTier,
-								new Range(idx, idx+expr.length(), false));
-						retVal = new SessionRange(uttIdx, recRange);
-						break;
-					} else {
-						tierIdx--;
-						charIdx = -1;
-					}
-				} else if(searchType == SearchType.REGEX) {
-					int flags =
-							(!isCaseSensitive() ? Pattern.CASE_INSENSITIVE : 0);
-					Pattern p = Pattern.compile(expr, flags);
-					Matcher m = p.matcher(searchStr);
-
-					int startIdx = -1;
-					int endIdx = -1;
-					while(m.find()) {
-						startIdx = m.start();
-						endIdx = m.end();
-					}
-
-					if(startIdx >= 0 && endIdx >= 0) {
-						RecordRange recRange =
-								new RecordRange(searchTier,
-								new Range(startIdx, endIdx, false));
-						retVal = new SessionRange(uttIdx, recRange);
-						break;
-					} else {
-						tierIdx--;
-						charIdx = -1;
-					}
+				if(grpIdx == Integer.MAX_VALUE) {
+					grpIdx = currentUtt.numberOfGroups() - 1;
 				}
+				
+				for(int i = grpIdx; i >= 0; i--) {
+					Range charRange = null;
+					Range tierExprRange = null;
+					Range anyExprRange = null;
+					
+					Object grpVal = tier.getGroup(i);
+					if(charIdx == Integer.MAX_VALUE) {
+						final String grpTxt = FormatterUtil.format(grpVal);
+						charIdx = grpTxt.length();
+					}
+					
+					final FindExpr tierExpr = getExprForTier(tier.getName());
+					if(tierExpr != null) {
+						tierExprRange = tierExpr.findPrev(tier.getGroup(i), charIdx);
+					} 
+					if(anyExpr != null) {
+						anyExprRange = anyExpr.findPrev(tier.getGroup(i), charIdx);
+					}
+					
+					if(tierExprRange != null && anyExprRange != null) {
+						charRange = 
+								(tierExprRange.getFirst() >= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+					} else {
+						charRange =
+								(tierExprRange != null ? tierExprRange : anyExprRange);
+					}
+					
+					if(charRange != null) {
+						final RecordRange recRange =
+								new RecordRange(tier.getName(), new GroupRange(i, charRange));
+						retVal = new SessionRange(uttIdx, recRange);
+						break;
+					}
+					// reset char idx
+					charIdx = Integer.MAX_VALUE;
+				}
+				if(retVal != null) break;
+				tierIdx--;
+				grpIdx = Integer.MAX_VALUE;
 			}
-
 			if(retVal != null) break;
 			uttIdx--;
-			tierIdx = searchTiers.size()-1;
+			tierIdx = searchTiers.size() - 1;
 		}
 
 		return retVal;
@@ -391,21 +384,31 @@ public class FindManager {
 
 			int AtIdx = searchTiers.indexOf(Ar.getTier());
 			int BtIdx = searchTiers.indexOf(Br.getTier());
+			
+			int AgIdx = Ar.getGroupLocation().getGroupIndex();
+			int BgIdx = Br.getGroupLocation().getGroupIndex();
+			
+			int AcIdx = Ar.getGroupLocation().getCharIndex();
+			int BcIdx = Br.getGroupLocation().getCharIndex();
 
 			if(AtIdx < BtIdx) {
 				retVal = -1;
 			} else if(AtIdx > BtIdx) {
 				retVal = 1;
 			} else {
-
-				if(Ar.getLocation() < Br.getLocation()) {
+				if(AgIdx < BgIdx) {
 					retVal = -1;
-				} else if(Ar.getLocation() > Br.getLocation()) {
+				} else if (AgIdx > BgIdx) {
 					retVal = 1;
 				} else {
-					retVal = 0;
+					if(AcIdx < BcIdx) {
+						retVal = -1;
+					} else if(AcIdx > BcIdx) {
+						retVal = 1;
+					} else {
+						retVal = 0;
+					}
 				}
-
 			}
 		}
 

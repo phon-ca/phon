@@ -128,6 +128,8 @@ public class RecordDataEditorView extends EditorView {
 	
 	private final AtomicInteger currentGroupIndex = new AtomicInteger(-1);
 	
+	private final AtomicInteger currentRecordIndex = new AtomicInteger(-1);
+	
 	public RecordDataEditorView(SessionEditor editor) {
 		super(editor);
 		init();
@@ -245,20 +247,7 @@ public class RecordDataEditorView extends EditorView {
 					
 					if(tierComp instanceof JTextComponent) {
 						final JTextComponent textComp = (JTextComponent)tierComp;
-						final List<SessionEditorSelection> selections = 
-								getEditor().getSelectionModel().getSelectionsForGroup(editor.getCurrentRecordIndex(),
-										tierName, gIdx);
-						final Highlighter hl = new GroupFieldHighlighter();
-						textComp.setHighlighter(hl);
-						for(SessionEditorSelection selection:selections) {
-							final Range r = selection.getGroupRange();
-							try {
-								hl.addHighlight(r.getFirst(), r.getLast(), 
-										new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
-							} catch (BadLocationException e) {
-								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-							}
-						}
+						addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, gIdx);
 					}
 				}
 			} else {
@@ -269,12 +258,34 @@ public class RecordDataEditorView extends EditorView {
 				tierComp.setFont(tierFont);
 				tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
 				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
+				
+				if(tierComp instanceof JTextComponent) {
+					final JTextComponent textComp = (JTextComponent)tierComp;
+					addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, 0);
+				}
 			}
 			row++;
 		}
 		
 		updating = false;
 		revalidate();
+	}
+	
+	private void addSelectionHighlights(JTextComponent textComp, int recordIndex, String tierName, int groupIndex) {
+		final List<SessionEditorSelection> selections = 
+				getEditor().getSelectionModel().getSelectionsForGroup(recordIndex,
+						tierName, groupIndex);
+		final Highlighter hl = new GroupFieldHighlighter();
+		textComp.setHighlighter(hl);
+		for(SessionEditorSelection selection:selections) {
+			final Range r = selection.getGroupRange();
+			try {
+				hl.addHighlight(r.getFirst(), r.getLast(), 
+						new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
+			} catch (BadLocationException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
 	}
 	
 	private JPanel getTopPanel() {
@@ -433,6 +444,15 @@ public class RecordDataEditorView extends EditorView {
 	}
 	
 	/**
+	 * Return the record of the last tier that was focused.
+	 * 
+	 * @return record index
+	 */
+	public int currentRecordIndex() {
+		return (currentRecordIndex != null ? currentRecordIndex.get() : -1);
+	}
+	
+	/**
 	 * Return the 'current' tier.  This is the last tier that
 	 * was focused within the editor.
 	 * 
@@ -468,6 +488,18 @@ public class RecordDataEditorView extends EditorView {
 			}
 			if(caretIdx == text.length() || text.charAt(caretIdx) == ' ')
 				retVal++;
+		}
+		
+		return retVal;
+	}
+	
+	public int currentCharIndex() {
+		int retVal = -1;
+		
+		final JComponent lastComp = lastFocusedRef.get();
+		if(lastComp != null && lastComp instanceof JTextComponent) {
+			final JTextComponent textComp = (JTextComponent)lastComp;
+			retVal = textComp.getCaretPosition();
 		}
 		
 		return retVal;
@@ -534,6 +566,7 @@ public class RecordDataEditorView extends EditorView {
 
 		@Override
 		public void focusGained(FocusEvent e) {
+			currentRecordIndex.getAndSet(getEditor().getCurrentRecordIndex());
 			currentTierRef.getAndSet(tier);
 			currentGroupIndex.getAndSet(group);
 			lastFocusedRef.getAndSet((JComponent)e.getComponent());

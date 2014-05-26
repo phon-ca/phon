@@ -33,11 +33,11 @@ public class SessionRange extends Tuple<Integer, RecordRange> {
 		super.setObj1(idx);
 	}
 
-	public RecordRange getRange() {
+	public RecordRange getRecordRange() {
 		return super.getObj2();
 	}
 
-	public void setRange(RecordRange r) {
+	public void setRecordRange(RecordRange r) {
 		super.setObj2(r);
 	}
 }

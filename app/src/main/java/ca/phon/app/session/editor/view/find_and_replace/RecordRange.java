@@ -20,9 +20,9 @@ package ca.phon.app.session.editor.view.find_and_replace;
 import ca.phon.util.Range;
 import ca.phon.util.Tuple;
 
-public class RecordRange extends Tuple<String, Range> {
+public class RecordRange extends Tuple<String, GroupRange> {
 
-	public RecordRange(String tier, Range r) {
+	public RecordRange(String tier, GroupRange r) {
 		super(tier, r);
 	}
 
@@ -34,11 +34,11 @@ public class RecordRange extends Tuple<String, Range> {
 		super.setObj1(tier);
 	}
 
-	public Range getRange() {
+	public GroupRange getGroupRange() {
 		return super.getObj2();
 	}
 
-	public void setRange(Range r) {
+	public void setGroupRange(GroupRange r) {
 		super.setObj2(r);
 	}
 }

@@ -19,9 +19,9 @@ package ca.phon.app.session.editor.view.find_and_replace;
 
 import ca.phon.util.Tuple;
 
-public class RecordLocation extends Tuple<String, Integer> {
+public class RecordLocation extends Tuple<String, GroupLocation> {
 
-	public RecordLocation(String tier, Integer pos) {
+	public RecordLocation(String tier, GroupLocation pos) {
 		super(tier, pos);
 	}
 
@@ -33,11 +33,11 @@ public class RecordLocation extends Tuple<String, Integer> {
 		super.setObj1(tier);
 	}
 
-	public Integer getLocation() {
+	public GroupLocation getGroupLocation() {
 		return super.getObj2();
 	}
 
-	public void setLocation(Integer loc) {
+	public void setGroupLocation(GroupLocation loc) {
 		super.setObj2(loc);
 	}
 }

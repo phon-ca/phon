@@ -93,7 +93,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	/**
 	 * Selection model
 	 */
-	private final transient AtomicReference<EditorSelectionModel> selectioModelRef;
+	private final transient AtomicReference<EditorSelectionModel> selectionModelRef;
 	
 	/**
 	 * Index of the current record
@@ -149,7 +149,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
 		this.eventManagerRef = 
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
-		this.selectioModelRef = 
+		this.selectionModelRef = 
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
 	
 		// setup title
@@ -537,7 +537,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * @return editor selection model
 	 */
 	public EditorSelectionModel getSelectionModel() {
-		return selectioModelRef.get();
+		return selectionModelRef.get();
 	}
 	
 	/**
