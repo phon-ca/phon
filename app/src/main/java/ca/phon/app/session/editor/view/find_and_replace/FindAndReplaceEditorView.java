@@ -53,7 +53,7 @@ public class FindAndReplaceEditorView extends EditorView {
 
 	public final static String VIEW_NAME = "Find & Replace";
 	
-	public final static String VIEW_ICON = "";
+	public final static String VIEW_ICON = "actions/edit-find-replace";
 	
 	private JToolBar toolBar;
 	

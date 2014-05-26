@@ -50,7 +50,7 @@ public class IPALookupView extends EditorView {
 
 	public final static String VIEW_NAME = "IPA Lookup";
 	
-	public final static String VIEW_ICON = "apps/preferences-desktop-font";
+	public final static String VIEW_ICON = "misc/ipa-dict";
 	
 	/*
 	 * Lookup context
