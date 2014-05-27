@@ -37,6 +37,21 @@
   </developers>
   
   <contributors>
+    <contributor>
+      <name>Kelly Burkinshaw</name>
+      <email>kburkin@mun.ca</email>
+    </contributor>
+    <contributor>      
+      <name>Jason Gedge</name>
+      <email>gedge@cs.mun.ca</email>
+    </contributor>
+    <contributor>
+      <name>Keith Maddocks</name>
+    </contributor>
+    <contributor>
+      <name>Philip O'Brien</name>
+      <email>pobrien@cs.mun.ca</email>
+    </contributor>
   </contributors>
 
   <licenses>
