@@ -1,4 +1,6 @@
-== Introduction ==
+![https://www.phon.ca](https://github.com/ghedlund/phon/raw/master/app/src/main/resources/data/icons/Phon_128x128.png)
+
+# Introduction 
 
 Phon is a software program that greatly facilitates a number of tasks related 
 to the analysis of phonological data. Built to support research in 
@@ -20,7 +22,31 @@ currently used for the elaboration of the shared
 CHILDES to support empirical needs of research in all areas of phonological 
 development.
 
-== Building Phon ==
+# Building Phon
 
-** TODO **
+## Requirements
 
+The following software must be installed in order to download and compile Phon:
+
+ * [http://www.oracle.com/technetwork/java/javase/downloads/index.html Java JDK - 1.6 or higher]
+ * [http://maven.apache.org/ maven]
+
+## Downloading Phon
+
+Phon's source code can be found on [https://github.com/ghedlund/phon GitHub]
+
+```
+git clone https://github.com/ghedlund/phon
+```
+
+## Compiling Phon
+
+```
+mvn package
+```
+
+## Running Phon
+
+```
+java -cp "app/target/phon-app-<version>.jar:app/target/deps/*" ca.phon.app.Main
+```
