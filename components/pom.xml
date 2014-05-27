@@ -31,14 +31,9 @@
     </dependency>
   	<dependency>
   	    <groupId>${project.groupId}</groupId>
-  		<artifactId>phon-ipa</artifactId>
+  		<artifactId>phon-session</artifactId>
   	  <version>${project.version}</version>
   	</dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>phon-ipa-alignment</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
   
 </project>
