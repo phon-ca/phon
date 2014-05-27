@@ -19,6 +19,7 @@ package ca.phon.csv2phon.wizard;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -29,21 +30,24 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
-import ca.phon.application.PhonWorker;
 import ca.phon.csv2phon.CSVImporter;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ObjectFactory;
-import ca.phon.gui.DialogHeader;
-import ca.phon.gui.components.PhonLoggerConsole;
-import ca.phon.gui.wizard.WizardFrame;
-import ca.phon.gui.wizard.WizardStep;
-import ca.phon.system.logger.PhonLogger;
+import ca.phon.project.Project;
+import ca.phon.ui.PhonLoggerConsole;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.worker.PhonWorker;
 
 /**
  * CSV import wizard.
  *
  */
 public class CSVImportWizard extends WizardFrame {
+	
+	private final static Logger LOGGER = Logger
+			.getLogger(CSVImportWizard.class.getName());
 
 	/** CSV Import settings */
 	private ImportDescriptionType importDescription;
@@ -59,8 +63,12 @@ public class CSVImportWizard extends WizardFrame {
 	
 	private final String settingsFileName = "importsettings.xml";
 	
-	public CSVImportWizard() {
+	private final Project project;
+	
+	public CSVImportWizard(Project project) {
 		super("CSV Import");
+		
+		this.project = project;
 		
 		setWindowName("CSV Import");
 		super.btnFinish.setVisible(false);
@@ -109,6 +117,7 @@ public class CSVImportWizard extends WizardFrame {
 		
 		console = new PhonLoggerConsole();
 		consolePanel.add(console, BorderLayout.CENTER);
+		console.addLogger(LOGGER);
 		
 		importPanel.add(consolePanel, BorderLayout.CENTER);
 		
@@ -119,9 +128,6 @@ public class CSVImportWizard extends WizardFrame {
 		PhonWorker worker = PhonWorker.createWorker();
 		worker.setName("CSV Importer");
 		worker.setFinishWhenQueueEmpty(true);
-
-		console.addReportThread(worker);
-		
 		
 		Runnable r = new Runnable() {
 			@Override
@@ -144,15 +150,11 @@ public class CSVImportWizard extends WizardFrame {
 				};
 				SwingUtilities.invokeLater(turnOffBack);
 				
-				console.startLogging();
 				saveSettings();
 				CSVImporter importer =
 					new CSVImporter(dirStep.getBase(), importDescription, getProject());
 				importer.setFileEncoding(dirStep.getFileEncoding());
 				importer.performImport();
-				console.stopLogging();
-				
-				console.removeReportThread(Thread.currentThread());
 				
 				SwingUtilities.invokeLater(turnOnBack);
 			}
@@ -167,7 +169,7 @@ public class CSVImportWizard extends WizardFrame {
 		// write settings to file
 		try {
 			File settingsFile = new File(dirStep.getBase(), "importsettings.xml");
-			PhonLogger.info("Saving settings to file '.../" + settingsFile.getName() + "'");
+			LOGGER.info("Saving settings to file '.../" + settingsFile.getName() + "'");
 			
 			JAXBContext ctx = JAXBContext.newInstance(ObjectFactory.class);
 			Marshaller marshaller = ctx.createMarshaller();
@@ -185,6 +187,9 @@ public class CSVImportWizard extends WizardFrame {
 		}
 	}
 	
+	public Project getProject() {
+		return this.project;
+	}
 	
 	@Override
 	protected void next() {

@@ -36,10 +36,14 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.swingx.JXTable;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import ca.phon.csv2phon.io.FileType;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ObjectFactory;
+import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.decorations.DialogHeader;
 
 /**
@@ -189,7 +193,9 @@ public class SessionInfoStep extends CSVImportStep {
 			}
 			
 			ObjectFactory factory = new ObjectFactory();
-			PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
+			
+			final DateTimeFormatter dateFormatter = 
+					DateTimeFormat.forPattern("yyyy-MM-dd");
 			// next, add entries for all csv files found in base
 			File[] csvFiles = getCSVFiles();
 			for(File csvFile:csvFiles) {
@@ -201,7 +207,7 @@ public class SessionInfoStep extends CSVImportStep {
 					ft.setImport(true);
 					ft.setLocation(csvFile.getName());
 					// try to find a date in the name or use today
-					ft.setDate(pdf.format(findDate(ft.getLocation())));
+					ft.setDate(dateFormatter.print(findDate(ft.getLocation())));
 					ft.setMedia("");
 					ft.setSession(csvFile.getName().substring(0, 
 							csvFile.getName().indexOf(".csv")));
@@ -217,22 +223,18 @@ public class SessionInfoStep extends CSVImportStep {
 		 * 
 		 * @return the date found in the string or ${today}
 		 */
-		private Calendar findDate(String s) {
+		private DateTime findDate(String s) {
 			Pattern p = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
 			Matcher m = p.matcher(s);
 			
-			Calendar retVal = Calendar.getInstance();
+			DateTime retVal = DateTime.now();
 			
 			if(m.find()) {
 				String dateStr = 
 					s.substring(m.start(), m.end());
-				PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-				
-				try {
-					retVal = (Calendar)pdf.parseObject(dateStr);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				final DateTimeFormatter dateFormatter = 
+						DateTimeFormat.forPattern("yyyy-MM-dd");
+				retVal = dateFormatter.parseDateTime(dateStr);
 			}
 			
 			return retVal;
@@ -369,16 +371,12 @@ public class SessionInfoStep extends CSVImportStep {
 				ft.setSession(value.toString());
 			} else if(columnIndex == 3) {
 				// convert to date
-				PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-				try {
-					Calendar setDate = (Calendar)pdf.parseObject(value.toString());
-					
-					// and back to string
-					ft.setDate(pdf.format(setDate));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				final DateTimeFormatter dateFormatter = 
+						DateTimeFormat.forPattern("yyyy-MM-dd");
+				DateTime setDate = dateFormatter.parseDateTime(value.toString());
 				
+				// and back to string
+				ft.setDate(dateFormatter.print(setDate));
 			}
 		}
 	}
@@ -388,7 +386,7 @@ public class SessionInfoStep extends CSVImportStep {
 		public SessionDateEditor(JTextField textField) {
 			super(textField);
 			
-			textField.setDocument(new CalendarDocument(Calendar.getInstance()));
+			textField.setDocument(new DateTimeDocument(DateTime.now()));
 		}
 		
 	}

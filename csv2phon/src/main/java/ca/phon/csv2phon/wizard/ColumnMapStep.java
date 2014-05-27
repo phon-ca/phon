@@ -28,6 +28,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -55,7 +58,10 @@ import ca.phon.csv2phon.io.FileType;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ObjectFactory;
 import ca.phon.fontconverter.TranscriptConverter;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.util.Language;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -382,20 +388,39 @@ public class ColumnMapStep extends CSVImportStep {
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED) {
 						JComboBox comboBox = (JComboBox)e.getSource();
-						String syllabifier = (String)comboBox.getSelectedItem();
+						Syllabifier syllabifier = (Syllabifier)comboBox.getSelectedItem();
 						ColumnMapType mapping = getMapping(colName);
 						if(mapping != null) {
-							mapping.setSyllabifier(syllabifier);
+							mapping.setSyllabifier(syllabifier.getLanguage().toString());
 						}
 					}
 				}
 			};
-			List<String> syllabifiers = new ArrayList<String>();
-			syllabifiers.add("");
-			syllabifiers.addAll(Syllabifier.getAvailableSyllabifiers());
-			targetSyllabifierBox = new JComboBox(syllabifiers.toArray(new String[0]));
+			final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
+			
+			final Language syllLangPref = syllabifierLibrary.defaultSyllabifierLanguage();
+
+			Syllabifier defSyllabifier = null;
+			final Iterator<Syllabifier> syllabifiers = syllabifierLibrary.availableSyllabifiers();
+			List<Syllabifier> sortedSyllabifiers = new ArrayList<Syllabifier>();
+			while(syllabifiers.hasNext()) {
+				final Syllabifier syllabifier = syllabifiers.next();
+				if(syllabifier.getLanguage().equals(syllLangPref))
+					defSyllabifier = syllabifier;
+				sortedSyllabifiers.add(syllabifier);
+			}
+			Collections.sort(sortedSyllabifiers, new SyllabifierComparator());
+		
+			targetSyllabifierBox = new JComboBox(sortedSyllabifiers.toArray(new Syllabifier[0]));
+			targetSyllabifierBox.setRenderer(new SyllabifierCellRenderer());
+			if(defSyllabifier != null)
+				targetSyllabifierBox.setSelectedItem(defSyllabifier);
 			targetSyllabifierBox.addItemListener(syllabifierListener);
-			actualSyllabifierBox = new JComboBox(syllabifiers.toArray(new String[0]));
+			
+			actualSyllabifierBox = new JComboBox(sortedSyllabifiers.toArray(new Syllabifier[0]));
+			actualSyllabifierBox.setRenderer(new SyllabifierCellRenderer());
+			if(defSyllabifier != null)
+				targetSyllabifierBox.setSelectedItem(defSyllabifier);
 			actualSyllabifierBox.addItemListener(syllabifierListener);
 			
 			depTierField = new JTextField();
@@ -532,5 +557,33 @@ public class ColumnMapStep extends CSVImportStep {
 		
 	}
 	
+	private class SyllabifierComparator implements Comparator<Syllabifier> {
+
+		@Override
+		public int compare(Syllabifier o1, Syllabifier o2) {
+			return o1.getLanguage().toString().compareTo(o2.getLanguage().toString());
+		}
+		
+	}
+
+	private class SyllabifierCellRenderer extends DefaultListCellRenderer {
+
+		@Override
+		public Component getListCellRendererComponent(JList list,
+				Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+			
+			if(value != null) {
+				final Syllabifier syllabifier = (Syllabifier)value;
+				final String text = syllabifier.getName() + " (" + syllabifier.getLanguage().toString() + ")";
+				retVal.setText(text);
+			}
+			
+			return retVal;
+		}
+		
+	}
 	
 }

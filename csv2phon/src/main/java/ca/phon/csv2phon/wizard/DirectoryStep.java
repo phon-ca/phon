@@ -35,12 +35,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import ca.phon.gui.DialogHeader;
+import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.text.FileSelectionField;
+import ca.phon.ui.text.FileSelectionField.SelectionMode;
 import ca.phon.util.PhonConstants;
-import ca.phon.util.StringUtils;
-import ca.phon.util.iconManager.IconManager;
-import ca.phon.util.iconManager.IconSize;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -54,8 +55,8 @@ public class DirectoryStep extends CSVImportStep {
 	/** UI */
 	private DialogHeader header;
 	private JLabel infoLbl;
-	private JLabel csvDirLbl;
-	private JButton csvDirBtn;
+	
+	private FileSelectionField csvDirField;
 	
 	private JComboBox charsetBox;
 	
@@ -85,13 +86,9 @@ public class DirectoryStep extends CSVImportStep {
 		infoLbl = new JLabel(lblTxt);
 		centerPanel.add(infoLbl, cc.xyw(1,1,3));
 		
-		csvDirLbl = new JLabel();
-		
-		ImageIcon openIcon = 
-			IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
-		csvDirBtn = new JButton(openIcon);
-		csvDirBtn.addActionListener(new DirBrowseAction());
-		csvDirBtn.setToolTipText("Browse for folder...");
+		csvDirField = new FileSelectionField();
+		csvDirField.setMode(SelectionMode.FOLDERS);
+		csvDirField.setEditable(false);
 		
 		// setup charset chooser
 		SortedMap<String, Charset> availableCharset = 
@@ -110,8 +107,7 @@ public class DirectoryStep extends CSVImportStep {
 		charsetBox.setSelectedItem("UTF-8");
 		
 		centerPanel.add(new JLabel("Folder:"), cc.xy(1,3));
-		centerPanel.add(csvDirLbl, cc.xy(3,3));
-		centerPanel.add(csvDirBtn, cc.xy(4,3));
+		centerPanel.add(csvDirField, cc.xyw(3,3,2));
 		
 		centerPanel.add(new JLabel("File encoding:"), cc.xy(1, 5));
 		centerPanel.add(charsetBox, cc.xy(3, 5));
@@ -140,22 +136,4 @@ public class DirectoryStep extends CSVImportStep {
 		return this.charsetName;
 	}
 	
-	private class DirBrowseAction implements ActionListener {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JFrame parentFrame = 
-				(JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, DirectoryStep.this);
-			String selectedDir = 
-				NativeDialogs.browseForDirectoryBlocking(parentFrame, 
-						null, "Select folder");
-			if(selectedDir != null) {
-				base = selectedDir;
-				
-				csvDirLbl.setText(StringUtils.shortenStringUsingToken(
-						new File(selectedDir).getAbsolutePath(), PhonConstants.ellipsis+"", 50));
-			}
-		}
-		
-	}
 }

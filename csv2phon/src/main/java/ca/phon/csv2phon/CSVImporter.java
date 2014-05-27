@@ -24,20 +24,42 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import au.com.bytecode.opencsv.CSVReader;
+import ca.phon.csv2phon.io.ColumnMapType;
 import ca.phon.csv2phon.io.FileType;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ParticipantType;
-import ca.phon.csv2phon.wizard.CSVImportParticipant;
+import ca.phon.fontconverter.TranscriptConverter;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.Orthography;
 import ca.phon.project.Project;
+import ca.phon.session.Group;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaSegmentFormatter;
+import ca.phon.session.MediaUnit;
 import ca.phon.session.Participant;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
+import ca.phon.session.TierDescription;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.util.Language;
 import ca.phon.util.OSInfo;
-import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Reads in the XML description of a CSV import and performs the import.
@@ -141,31 +163,26 @@ public class CSVImporter {
 			project.addCorpus(corpus, "");
 		}
 		
+		final SessionFactory factory = SessionFactory.newFactory();
+		
 		final Session t = project.createSessionFromTemplate(corpus, session);
 		if(t.getRecordCount() > 0) t.removeRecord(0);
 		
+		if(fileInfo.getDate() != null) {
+			final DateTimeFormatter dateFormatter = 
+					DateTimeFormat.forPattern("yyyy-MM-dd");
+			DateTime sessionDate = dateFormatter.parseDateTime(fileInfo.getDate());
+			t.setDate(sessionDate);
+		}
+		
 		// add participants
-//		int participantIdx = 0;
 		for(ParticipantType pt:importDescription.getParticipant()) {
-			Participant part = new CSVImportParticipant(pt);
-			Participant newPart = t.newParticipant();
-			TranscriptUtils.copyParticipant(part, newPart);
-//			newPart.setId("p" + (participantIdx++));
+			Participant newPart = CSVParticipantUtil.copyXmlParticipant(factory, pt, t.getDate());
+			t.addParticipant(newPart);
 		}
 		
 		if(fileInfo.getMedia() != null) {
 			t.setMediaLocation(fileInfo.getMedia());
-		}
-		if(fileInfo.getDate() != null) {
-			// convert date to calendar
-			PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-			try {
-				Calendar sessionDate = (Calendar)pdf.parseObject(fileInfo.getDate());
-				t.setDate(sessionDate);
-			} catch (ParseException e) {
-				PhonLogger.warning(e.toString());
-			}
-			
 		}
 		// set media file and date
 		String[] colLine = reader.readNext();
@@ -178,11 +195,9 @@ public class CSVImporter {
 				if(tierName.equalsIgnoreCase("Don't import")) continue;
 				
 				if(!SystemTierType.isSystemTier(tierName) && !tierName.equalsIgnoreCase("Speaker:Name")) {
-					// create a new tier description
-					IDepTierDesc tierDesc = t.newDependentTier();
-//					tierDesc.setTierFont("default");
-					tierDesc.setTierName(tierName);
-					tierDesc.setIsGrouped(colmap.isGrouped());
+					final TierDescription tierDesc =
+							factory.createTierDescription(tierName, colmap.isGrouped(), String.class);
+					t.addUserTier(tierDesc);
 				}
 			}
 		}
@@ -191,7 +206,7 @@ public class CSVImporter {
 		while((currentRow = reader.readNext()) != null) {
 			
 			// add a new record to the transcript
-			IUtterance utt = t.newUtterance();
+			Record utt = factory.createRecord();
 			
 			for(int colIdx = 0; colIdx < colLine.length; colIdx++) {
 				String csvcol = colLine[colIdx];
@@ -200,10 +215,18 @@ public class CSVImporter {
 				ColumnMapType colmap = getColumnMap(csvcol);
 				if(colmap == null) {
 					// print warning and continue
-					PhonLogger.warning("No column map for csv column '" + csvcol + "'");
+					LOGGER.warning("No column map for csv column '" + csvcol + "'");
 					continue;
 				}
 
+				// convert if necessary
+				TranscriptConverter tc = null;
+				if(colmap.getFilter() != null && colmap.getFilter().length() > 0) {
+					tc = TranscriptConverter.getInstanceOf(colmap.getFilter());
+					if(tc == null) {
+						LOGGER.warning("Could not find transcript converter '" + colmap.getFilter() + "'");
+					}
+				}
 				
 				String phontier = colmap.getPhontier();
 				if(phontier.equalsIgnoreCase("Don't Import")) {
@@ -219,8 +242,8 @@ public class CSVImporter {
 				if(phontier.equals("Speaker:Name")) {
 
 					// look for the participant in the transcript
-					IParticipant speaker = null;
-					for(IParticipant p:t.getParticipants()) {
+					Participant speaker = null;
+					for(Participant p:t.getParticipants()) {
 						if(p.getName().equals(rowval)) {
 							speaker = p;
 							break;
@@ -231,105 +254,114 @@ public class CSVImporter {
 					// participant info in the import description
 					// add add the participant
 					if(speaker == null) {
-//						ParticipantType pt = getParticipant(rowval);
-//						if(pt == null) {
-//							pt = (new ObjectFactory()).createParticipantType();
-//							pt.setName(rowval);
-//						}
-
-						speaker = t.newParticipant();
-
-						// copy participant information
+						speaker = factory.createParticipant();
 						speaker.setName(rowval);
-						
 					}
 
 					utt.setSpeaker(speaker);
 				} else {
-					try {
-						
-						// use transcript converter if necessary
-						if(colmap.getFilter() != null && colmap.getFilter().length() > 0) {
-							
-							if(SystemTierType.IPATarget.getTierName().equalsIgnoreCase(phontier)
-									|| SystemTierType.IPAActual.getTierName().equalsIgnoreCase(phontier)) {
-								ArrayList<String> vals = StringUtils.extractedBracketedStrings(rowval);
-								TranscriptConverter tc = TranscriptConverter.getInstanceOf(colmap.getFilter());
+					// convert rowval into a list of group values
+					List<String> rowVals = new ArrayList<String>();
+					if(colmap.isGrouped() && rowval.startsWith("[") && rowval.endsWith("]")) {
+						String[] splitRow = rowval.split("\\[");
+						for(int i = 1; i < splitRow.length; i++) {
+							String splitVal = splitRow[i];
+							splitVal = splitVal.replaceAll("\\]", "");
+							rowVals.add(splitVal);
+						}
+					} else {
+						rowVals.add(rowval);
+					}
+					
+					final SystemTierType systemTier = SystemTierType.tierFromString(phontier);
+					if(systemTier != null) {
+						if(systemTier == SystemTierType.Orthography) {
+							final Tier<Orthography> orthoTier = utt.getOrthography();
+							for(String grpVal:rowVals) {
+								final Orthography ortho = Orthography.parseOrthography(grpVal);
+								orthoTier.addGroup(ortho);
+							}
+						} else if(systemTier == SystemTierType.IPATarget 
+								|| systemTier == SystemTierType.IPAActual) {
+							final Tier<IPATranscript> ipaTier = 
+									(systemTier == SystemTierType.IPATarget ? utt.getIPATarget() : utt.getIPAActual());
+							for(String grpVal:rowVals) {
 								if(tc != null) {
-									String newval = "";
-									for(String v:vals) {
-										newval += (newval.length() > 0 ? " " : "") + "[";
-										newval += tc.convert(v);
-										newval += "]";
-									}
-									
-//									System.out.println(rowval);
-									rowval = newval;
+									grpVal = tc.convert(grpVal);
 								}
+								final IPATranscript ipa = (new IPATranscriptBuilder()).append(grpVal).toIPATranscript();
+								ipaTier.addGroup(ipa);
 							}
+						} else if(systemTier == SystemTierType.Notes) {
+							utt.getNotes().addGroup(rowval);
+						} else if(systemTier == SystemTierType.Segment) {
+							final MediaSegmentFormatter segmentFormatter = new MediaSegmentFormatter();
+							MediaSegment segment = factory.createMediaSegment();
+							segment.setStartValue(0.0f);
+							segment.setEndValue(0.0f);
+							segment.setUnitType(MediaUnit.Millisecond);
+							try {
+								segment = segmentFormatter.parse(rowval);
+							} catch (ParseException e) {
+								LOGGER.log(Level.SEVERE,
+										e.getLocalizedMessage(), e);
+							}
+							utt.getSegment().addGroup(segment);
+						}
+					} else {
+						Tier<String> tier = utt.getTier(phontier, String.class);
+						if(tier == null) {
+							tier = factory.createTier(phontier, String.class, colmap.isGrouped());
+							utt.putTier(tier);
 						}
 						
-						// make sure grouped data is enclosed in '[]'
-						if(!SystemTierType.isSystemTier(phontier) &&
-								colmap.isGrouped()) {
-							if(rowval.indexOf('[') < 0 && rowval.indexOf(']') < 0) {
-								rowval = '[' + rowval + ']';
-							}
+						for(String grpVal:rowVals) {
+							tier.addGroup(grpVal);
 						}
-						
-						utt.setTierString(phontier, rowval);
-					} catch (ParserException e) {
-						PhonLogger.warning(e.toString());
 					}
 				}
 			} // end for(colIdx)
 			
 			// do syllabification + alignment if necessary
-			ColumnMapType targetMapping = getPhonColumnMap(SystemTierType.IPATarget.getTierName());
-			ColumnMapType actualMapping = getPhonColumnMap(SystemTierType.IPAActual.getTierName());
+			ColumnMapType targetMapping = getPhonColumnMap(SystemTierType.IPATarget.getName());
+			ColumnMapType actualMapping = getPhonColumnMap(SystemTierType.IPAActual.getName());
 			if(targetMapping != null && actualMapping != null) {
 				
-				Syllabifier targetSyllabifier = null;
-				Syllabifier actualSyllabifier = null;
-				// check for syllabifiers
-				if(targetMapping.getSyllabifier() != null 
-						&& Syllabifier.getAvailableSyllabifiers().contains(targetMapping.getSyllabifier())) {
-					targetSyllabifier = Syllabifier.getInstance(targetMapping.getSyllabifier());
-				}
+				final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
 				
-				if(actualMapping.getSyllabifier() != null
-						&& Syllabifier.getAvailableSyllabifiers().contains(actualMapping.getSyllabifier())) {
-					actualSyllabifier = Syllabifier.getInstance(actualMapping.getSyllabifier());
-				}
+				final Language targetLang = Language.parseLanguage(targetMapping.getSyllabifier());
+				final Language actualLang = Language.parseLanguage(actualMapping.getSyllabifier());
 				
-				for(IWord w:utt.getWords()) {
-					IPhoneticRep targetRep = w.getPhoneticRepresentation(Form.Target);
+				final PhoneAligner aligner = new PhoneAligner();
+				
+				Syllabifier targetSyllabifier = library.getSyllabifierForLanguage(targetLang);
+				Syllabifier actualSyllabifier = library.getSyllabifierForLanguage(actualLang);
+				
+				for(int i = 0; i < utt.numberOfGroups(); i++) {
+					final Group grp = utt.getGroup(i);
+					final IPATranscript targetRep = grp.getIPATarget();
 					if(targetSyllabifier != null) {
-						List<Phone> targetPhones = targetRep.getPhones();
-						targetSyllabifier.syllabify(targetPhones);
-						targetRep.setPhones(targetPhones);
+						targetSyllabifier.syllabify(targetRep.toList());
 					}
 					
-					IPhoneticRep actualRep = w.getPhoneticRepresentation(Form.Actual);
+					final IPATranscript actualRep = grp.getIPAActual();
 					if(actualSyllabifier != null) {
-						List<Phone> actualPhones = actualRep.getPhones();
-						actualSyllabifier.syllabify(actualPhones);
-						actualRep.setPhones(actualPhones);
+						actualSyllabifier.syllabify(actualRep.toList());
 					}
 					
-					PhoneMap pm = Aligner.getPhoneAlignment(w);
-					if(pm != null) {
-						w.setPhoneAlignment(pm);
-					}
+					PhoneMap pm = aligner.calculatePhoneMap(targetRep, actualRep);
+					grp.setPhoneAlignment(pm);
 				}
 				
 			}
 		} // end while(currentRow)
 		
 		// save transcript
-		int writeLock = project.getTranscriptWriteLock(corpus, session);
-		project.saveTranscript(t, writeLock);
-		project.releaseTranscriptWriteLock(corpus, session, writeLock);
+		final UUID writeLock = project.getSessionWriteLock(t);
+		if(writeLock != null) {
+			project.saveSession(t, writeLock);
+			project.releaseSessionWriteLock(t, writeLock);
+		}
 	}
 	
 	/**

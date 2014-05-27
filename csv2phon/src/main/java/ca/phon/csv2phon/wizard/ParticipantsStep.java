@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -39,12 +40,19 @@ import javax.swing.KeyStroke;
 import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.swingx.JXTable;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
+import ca.phon.csv2phon.CSVParticipantUtil;
 import ca.phon.csv2phon.io.ImportDescriptionType;
 import ca.phon.csv2phon.io.ObjectFactory;
 import ca.phon.csv2phon.io.ParticipantType;
 import ca.phon.session.Participant;
+import ca.phon.session.SessionFactory;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.participant.ParticipantEditor;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -56,6 +64,11 @@ import com.jgoodies.forms.layout.FormLayout;
  *
  */
 public class ParticipantsStep extends CSVImportStep {
+	
+	private static final long serialVersionUID = -2083303664285587057L;
+
+	private final static Logger LOGGER = Logger
+			.getLogger(ParticipantsStep.class.getName());
 	
 	private DialogHeader header;
 	
@@ -147,41 +160,14 @@ public class ParticipantsStep extends CSVImportStep {
 	}
 	
 	private void newParticipant() {
-//		IPhonFactory factory = IPhonFactory.getDefaultFactory();
-//		IParticipant part = factory.createParticipant();
-		ObjectFactory factory = new ObjectFactory();
-		ParticipantType pt = factory.createParticipantType();
-		IParticipant part = new CSVImportParticipant(pt);
+		final SessionFactory factory = SessionFactory.newFactory();
+		Participant part = factory.createParticipant();
 		
 		boolean canceled = ParticipantEditor.editParticipant(CommonModuleFrame.getCurrentFrame(), part);
 		
 		if(!canceled) {
-//			IParticipant newPart = model.getSession().newParticipant();
-//			if(part.getName() != null)
-//				newPart.setName(part.getName());
-//			if(part.getBirthDate() != null)
-//				newPart.setBirthDate(part.getBirthDate());
-//			if(part.getEducation() != null)
-//				newPart.setEducation(part.getEducation());
-//			if(part.getGroup() != null)
-//				newPart.setGroup(part.getGroup());
-//			if(part.getLanguage() != null)
-//				newPart.setLanguage(part.getLanguage());
-//			if(part.getRole() != null)
-//				newPart.setRole(part.getRole());
-//			if(part.getSES() != null)
-//				newPart.setSES(part.getSES());
-//			if(part.getSex() != null)
-//				newPart.setSex(part.getSex());
-//			
-//			ParticipantListEdit edit = 
-//				new ParticipantListEdit(ParticipantListEdit.ParticipantEditType.Insertion,
-//						model.getSession(), part);
-//			model.getUndoSupport().postEdit(edit);
-//			
-			getSettings().getParticipant().add(pt);
+			getSettings().getParticipant().add(CSVParticipantUtil.copyPhonParticipant(new ObjectFactory(), part));
 			((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
-//			model.fireRecordEditorEvent(PARTICIPANT_LIST_CHANGED, this);
 		}
 	}
 	
@@ -212,19 +198,17 @@ public class ParticipantsStep extends CSVImportStep {
 	}
 	
 	
-	public List<IParticipant> getParticipants() {
-		List<IParticipant> retVal = new ArrayList<IParticipant>();
+	public List<Participant> getParticipants() {
+		List<Participant> retVal = new ArrayList<Participant>();
 		
 		if(getSettings() != null) {
 			for(ParticipantType pt:getSettings().getParticipant()) {
-				retVal.add(new CSVImportParticipant(pt));
+				retVal.add(CSVParticipantUtil.copyXmlParticipant(SessionFactory.newFactory(), pt, DateTime.now()));
 			}
 		}
 		
 		return retVal;
 	}
-	
-	
 	
 	
 	@Override
@@ -233,9 +217,6 @@ public class ParticipantsStep extends CSVImportStep {
 		
 		participantTable.setModel(new ParticipantsTableModel());
 	}
-
-
-
 
 	private class ParticipantsTableModel extends AbstractTableModel {
 		
@@ -267,19 +248,19 @@ public class ParticipantsStep extends CSVImportStep {
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			Object retVal = new String();
-			IParticipant p = getParticipants().get(rowIndex);
+			Participant p = getParticipants().get(rowIndex);
 			if(columnIndex == 0) {
 				if(p.getName() == null) return p.getId();
 				retVal = p.getName();
 			} else if(columnIndex == 1) {
 				if(p.getBirthDate() != null) {
-					PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
-					retVal = pdf.format(p.getBirthDate());
+					final DateTimeFormatter dateFormatter = 
+							DateTimeFormat.forPattern("yyyy-MM-dd");
+					retVal = dateFormatter.print(p.getBirthDate());
 				}
 			} 
 			return retVal;
 		}
-
 	}
-
+	
 }
