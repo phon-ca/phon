@@ -18,14 +18,10 @@
 
 package ca.phon.app.session.editor.view.find_and_replace;
 
-import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.session.Record;
@@ -305,7 +301,7 @@ public class FindManager {
 		int charIdx = pos.getRecordLocation().getGroupLocation().getCharIndex();
 
 		final FindExpr anyExpr = getAnyExpr();
-		while(uttIdx < session.getRecordCount()) {
+		while(uttIdx >= 0) {
 			Record currentUtt = session.getRecord(uttIdx);
 
 			while(tierIdx >= 0 && retVal == null) {

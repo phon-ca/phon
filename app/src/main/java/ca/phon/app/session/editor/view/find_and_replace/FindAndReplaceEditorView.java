@@ -4,12 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -18,6 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -44,6 +50,7 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -55,8 +62,8 @@ public class FindAndReplaceEditorView extends EditorView {
 	
 	public final static String VIEW_ICON = "actions/edit-find-replace";
 	
-	private JToolBar toolBar;
-	
+	private JPanel sidePanel;
+
 	private TierDataLayoutPanel tierPanel;
 	
 	private final static String ANY_TIER_NAME = "__any_tier__";
@@ -67,31 +74,48 @@ public class FindAndReplaceEditorView extends EditorView {
 	
 	private final Map<String, FindOptionsPanel> searchOptions = new LinkedHashMap<String, FindOptionsPanel>();
 	
+	private final FindManager findManager;
+	
+	
 	public FindAndReplaceEditorView(SessionEditor editor) {
 		super(editor);
 		
 		init();
-		setupToolbar();
 		updateTierView();
 		setupEditorActions();
+		
+		findManager = new FindManager(editor.getSession());
 	}
 	
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		toolBar = new JToolBar();
-		toolBar.setFloatable(false);
-		add(toolBar, BorderLayout.NORTH);
+		sidePanel = new JPanel();
+		sidePanel.setBackground(PhonGuiConstants.PHON_SHADED);
+		sidePanel.setOpaque(true);
+		sidePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		setupSidePanel();
+		add(sidePanel, BorderLayout.EAST);
 
 		tierPanel = new TierDataLayoutPanel();
 		add(tierPanel, BorderLayout.CENTER);
 	}
 	
-	private void setupToolbar() {
-		toolBar.add(new FindNextAction(getEditor(), this));
-		toolBar.add(new FindPrevAction(getEditor(), this));
-		toolBar.add(new ReplaceAction(getEditor(), this, false));
-		toolBar.add(new ReplaceAction(getEditor(), this, true));
+	private void setupSidePanel() {
+		final FormLayout layout = new FormLayout(
+				"pref, 3dlu, pref", "pref, pref, pref");
+		final CellConstraints cc = new CellConstraints();
+		sidePanel.setLayout(layout);
+		
+		final JButton nextBtn = new JButton(new FindNextAction(getEditor(), this));
+		final JButton prevBtn = new JButton(new FindPrevAction(getEditor(), this));
+		final JButton replaceBtn = new JButton(new ReplaceAction(getEditor(), this, false));
+		final JButton replaceFindBtn = new JButton(new ReplaceAction(getEditor(), this, true));
+		
+		sidePanel.add(nextBtn, cc.xy(3,1));
+		sidePanel.add(prevBtn, cc.xy(1,1));
+		sidePanel.add(replaceBtn,cc.xy(1,2));
+		sidePanel.add(replaceFindBtn,cc.xy(3, 2));
 	}
 	
 	private void setupEditorActions() {
@@ -219,51 +243,34 @@ public class FindAndReplaceEditorView extends EditorView {
 		return retVal;
 	}
 	
-	private final AtomicReference<FindManager> findManagerRef = new AtomicReference<FindManager>();
 	public FindManager getFindManager() {
-		if(findManagerRef.get() == null) {
-			final Session session = getEditor().getSession();
-			final FindManager manager = new FindManager(session);
-			manager.setAnyExpr(getAnyTierExpr());
-			
-			final List<TierViewItem> tierView = session.getTierView();
+		return findManager;
+	}
+	
+	private List<String> getSearchTiers() {
+		final Session session = getEditor().getSession();
+		final List<TierViewItem> tierView = session.getTierView();
+		final List<String> findManagerTiers = new ArrayList<String>();
+		final String anyExpr = searchTiers.get(ANY_TIER_NAME).getGroup(0);
+		if(anyExpr.length() != 0) {
+			// add all tiers to find manager
 			for(TierViewItem tvi:tierView) {
 				final SystemTierType systemTier = SystemTierType.tierFromString(tvi.getTierName());
 				if(systemTier == SystemTierType.Segment) {
 					continue;
 				}
-				manager.setExprForTier(tvi.getTierName(), exprForTier(tvi.getTierName()));
+				findManagerTiers.add(tvi.getTierName());
 			}
-			
-			final List<String> findManagerTiers = new ArrayList<String>();
-			final String anyExpr = searchTiers.get(ANY_TIER_NAME).getGroup(0);
-			if(anyExpr.length() != 0) {
-				// add all tiers to find manager
-				for(TierViewItem tvi:tierView) {
-					final SystemTierType systemTier = SystemTierType.tierFromString(tvi.getTierName());
-					if(systemTier == SystemTierType.Segment) {
-						continue;
-					}
+		} else {
+			// only add tiers that have expressions
+			for(TierViewItem tvi:tierView) {
+				final FindExpr expr = exprForTier(tvi.getTierName());
+				if(expr != null) {
 					findManagerTiers.add(tvi.getTierName());
 				}
-			} else {
-				// only add tiers that have expressions
-				for(TierViewItem tvi:tierView) {
-					final FindExpr expr = exprForTier(tvi.getTierName());
-					if(expr != null) {
-						findManagerTiers.add(tvi.getTierName());
-					}
-				}
 			}
-			manager.setSearchTier(findManagerTiers);
-			
-			final SessionLocation sessionLocation = getSessionLocation();
-			manager.setCurrentLocation(sessionLocation);
-			
-			findManagerRef.getAndSet(manager);
 		}
-		
-		return findManagerRef.get();
+		return findManagerTiers;
 	}
 
 	/*
@@ -346,6 +353,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			setLayout(new FlowLayout(FlowLayout.LEFT));
 			
 			caseSensitiveBox = new JCheckBox("Case sensitive");
+			caseSensitiveBox.setOpaque(false);
 			add(caseSensitiveBox);
 			
 			typeBox = new JComboBox(FindExpr.SearchType.values());
@@ -367,6 +375,14 @@ public class FindAndReplaceEditorView extends EditorView {
 		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
 				T oldValue) {
 			tier.setGroup(groupIndex, newValue);
+			if(findManager != null) {
+				if(tier.getName().equals(ANY_TIER_NAME)) {
+					findManager.setAnyExpr(getAnyTierExpr());
+				} else {
+					findManager.setExprForTier(tier.getName(), exprForTier(tier.getName()));
+				}
+				findManager.setSearchTier(getSearchTiers());
+			}
 		}
 		
 	};
