@@ -24,7 +24,7 @@ public class LogManager {
 	public void setupLogging() {
 		final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
 		try {
-			manager.readConfiguration(getClass().getResourceAsStream("phonlog.properties"));
+			manager.readConfiguration(getClass().getResourceAsStream(PROPERTIES_FILE));
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -31,7 +31,7 @@
     </dependency>
   	<dependency>
   	    <groupId>${project.groupId}</groupId>
-  		<artifactId>phon-session</artifactId>
+  		<artifactId>phon-project</artifactId>
   	  <version>${project.version}</version>
   	</dependency>
   </dependencies>

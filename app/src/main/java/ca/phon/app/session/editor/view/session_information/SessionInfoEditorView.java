@@ -57,7 +57,6 @@ import ca.phon.app.session.editor.view.session_information.actions.BrowseForMedi
 import ca.phon.app.session.editor.view.session_information.actions.DeleteParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.EditParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
-import ca.phon.app.session.participant.ParticipantsTableModel;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.DateFormatter;
@@ -65,6 +64,7 @@ import ca.phon.session.Participant;
 import ca.phon.session.Session;
 import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconManager;
