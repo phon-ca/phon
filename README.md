@@ -12,13 +12,12 @@ and actual (produced) phonological forms. All of these functions are accessible
 through a user-friendly graphical interface. Databases managed within Phon can 
 also be queried using a powerful search system adapted for the needs of the 
 phonologist. This software program works on Mac OS X, Windows and Linux 
-platforms and is compliant with the CHILDES ([http://talkbank.org/ TalkBank]) 
+platforms and is compliant with the CHILDES TalklBank (http://talkbank.org) 
 XML data format. Phon is being made freely available to the community as 
 open-source software. Phon facilitates data exchange among researchers and is 
-currently used for the elaboration of the shared 
-[http://childes.psy.cmu.edu/phon/ PhonBank] database, a new initiative within 
-CHILDES to support empirical needs of research in all areas of phonological 
-development.
+currently used for the elaboration of the shared PhonBank (http://childes.psy.cmu.edu/phon/)
+database, a new initiative within CHILDES to support empirical needs of research
+in all areas of phonological development.
 
 For more information, visit https://www.phon.ca
 
@@ -28,12 +27,11 @@ For more information, visit https://www.phon.ca
 
 The following software must be installed in order to download and compile Phon:
 
- * [http://www.oracle.com/technetwork/java/javase/downloads/index.html Java JDK - 1.6 or higher]
- * [http://maven.apache.org/ maven]
+ * Java JDK - 1.6 or higher (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+ * maven (http://maven.apache.org/)
 
 ### Downloading Phon
 
-Phon's source code can be found on [https://github.com/ghedlund/phon GitHub]
 
 ```
 git clone https://github.com/ghedlund/phon
