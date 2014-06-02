@@ -5,6 +5,11 @@ import java.util.List;
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSAState.RunningState;
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.visitor.Visitor;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 public class PhonexMatcher {
 	
@@ -29,6 +34,18 @@ public class PhonexMatcher {
 	private int lastMatchStart = 0;
 	
 	/**
+	 * Last append position
+	 */
+	private int lastAppendPosition = 0;
+	
+	/**
+	 * Region
+	 */
+	private int regionStart = -1;
+	
+	private int regionEnd = -1;
+	
+	/**
 	 * Constructor
 	 */
 	PhonexMatcher(PhonexPattern pattern, List<IPAElement> input) {
@@ -51,9 +68,17 @@ public class PhonexMatcher {
 	 */
 	public void reset() {
 		lastMatchState = new FSAState<IPAElement>();
-		lastMatchState.setTape(input.toArray(new IPAElement[0]));
+		final int rs = (regionStart >= 0 ? regionStart : 0);
+		final int re = (regionEnd >= 0 ? regionEnd : input.size());
+		lastMatchState.setTape(input.subList(rs, re).toArray(new IPAElement[0]));
 		lastMatchState.setTapeIndex(0);
 		lastMatchStart = 0;
+	}
+	
+	public void region(int regionStart, int regionEnd) {
+		this.regionStart = regionStart;
+		this.regionEnd = regionEnd;
+		reset();
 	}
 	
 	/**
@@ -92,13 +117,6 @@ public class PhonexMatcher {
 	 */
 	public boolean find() {
 		boolean retVal = false;
-		
-//		// reset if no previous match
-//		try {
-//			checkLastMatch();
-//		} catch (IllegalStateException ex) {
-//			reset();
-//		}
 		
 		int currentIdx = lastMatchState.getTapeIndex();
 		while(!retVal && currentIdx < input.size()) {
@@ -230,6 +248,48 @@ public class PhonexMatcher {
 	}
 	
 	/**
+	 * <p>This method performs the following actions:
+     * 
+     * <ul>
+     * <li>It reads {@link IPAElement}s from the input sequence, starting at the append position,
+     * and appends them to the given {@link IPATranscriptBuilder}. It stops after reading the last 
+	 * element preceding the previous match, that is, the element at index start() - 1.</li>
+     * <li>It appends the given replacement string to the string buffer.</li>
+     * <li>It sets the append position of this matcher to the index of the last element matched, 
+     * plus one, that is, to end().</li>
+     * </ul>
+     * </p>
+     * 
+	 * <p>The replacement string may contain references to subsequences captured during the previous match:
+	 * Each occurrence of ${name} or $g will be replaced by the result of evaluating the corresponding group(name) 
+	 * or group(g) respectively. Only the numerals '0' through '9' are considered as potential components of the group reference.
+     * If the second group matched the string "foo", for example, then passing the replacement string "$2bar" 
+     * would cause "foobar" to be appended to the string buffer.</p>
+	 * 
+	 * @param builder
+	 * @param replacement
+	 */
+	public void appendReplacement(IPATranscriptBuilder builder, IPATranscript replacement) {
+		final ReplaceExpressionVisitor visitor = new ReplaceExpressionVisitor(this);
+		replacement.accept(visitor);
+		final IPATranscript replace = visitor.getTranscript();
+		
+		builder.append(input.subList(lastAppendPosition, start()));
+		builder.append(replace);
+		lastAppendPosition = end();
+	}
+	
+	/**
+	 * <p>Append {@link IPAElement}s from the input sequence to the {@link IPATranscriptBuilder}
+	 * from the last append position to the end of the input sequence.</p>
+	 * 
+	 * @param builder
+	 */
+	public void appendTail(IPATranscriptBuilder builder) {
+		builder.append(input.subList(lastAppendPosition, input.size()));
+	}
+	
+	/**
 	 * Return the group value for this match.  
 	 * 
 	 * @return group value for group zero
@@ -248,5 +308,5 @@ public class PhonexMatcher {
 	public List<IPAElement> group(int gIdx) {
 		return input.subList(start(gIdx), end(gIdx));
 	}
-
+	
 }
