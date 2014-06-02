@@ -204,4 +204,17 @@ public class TestIPAParser {
 		Assert.assertEquals(SyllableConstituentType.RIGHTAPPENDIX, transcript.elementAt(5).getScType());
 	}
 
+	@Test
+	public void testPhonexMatcherRefernce() throws Exception {
+		for(int i = 0; i < 10; i++) {
+			final String ipaTxt = "t$" + i + "st";
+			final IPATranscript ipa = IPATranscript.parseIPATranscript(ipaTxt);
+			Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(1).getClass());
+		}
+		
+		final String ipaTxt = "t${o}st";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(ipaTxt);
+		Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(1).getClass());
+	}
+	
 }

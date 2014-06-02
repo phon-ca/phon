@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -35,6 +36,7 @@ import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.action.CloseActionFactory;
 import bibliothek.gui.dock.common.event.CDockableStateListener;
+import bibliothek.gui.dock.common.group.CGroupBehavior;
 import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
@@ -42,12 +44,18 @@ import bibliothek.gui.dock.common.perspective.CDockablePerspective;
 import bibliothek.gui.dock.common.perspective.CPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.gui.dock.common.theme.ThemeMap;
+import bibliothek.gui.dock.themes.color.TitleColor;
+import bibliothek.gui.dock.util.Priority;
+import bibliothek.gui.dock.util.color.ColorBridge;
+import bibliothek.gui.dock.util.color.ColorManager;
+import bibliothek.gui.dock.util.color.DockColor;
 import bibliothek.util.Filter;
 import bibliothek.util.xml.XElement;
 import bibliothek.util.xml.XIO;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
@@ -109,6 +117,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		// theme
 		dockControl.setTheme(ThemeMap.KEY_FLAT_THEME);
 		
+		dockControl.setGroupBehavior(CGroupBehavior.TOPMOST);
+		
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
 			// fix accelerators for non-mac systems
@@ -117,10 +127,14 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			dockControl.putProperty( CControl.KEY_GOTO_NORMALIZED, KeyStroke.getKeyStroke( KeyEvent.VK_N, InputEvent.CTRL_MASK | InputEvent.SHIFT_DOWN_MASK ) );
 		}
 		
-		// icons
-		
 		// setup factory
 		dockControl.addSingleDockableFactory(dockableFilter, dockFactory);
+		
+		// fix title colours using substance theme on windows/linux
+		final TitleColorBridge bridge = new TitleColorBridge();
+		final ColorManager colorManager = dockControl.getController().getColors();
+		colorManager.publish(Priority.CLIENT, TitleColor.KIND_TITLE_COLOR, bridge);
+		colorManager.publish(Priority.CLIENT, TitleColor.KIND_FLAP_BUTTON_COLOR, bridge);
 	}
 	
 	private SessionEditor getEditor() {
@@ -263,7 +277,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
 			dockable = factory.createBackup(viewName);
 		}
-		
+
 		final EditorView editorView = getView(viewName);
 		
 		if(dockable != null) {
@@ -295,7 +309,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			default:
 				break;
 			}
-//			dockControl.getLocationManager().setLocation(dockable.intern(), location);
 		}
 	}
 
@@ -514,6 +527,29 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			action.intern().trigger(dockable.intern());
+		}
+		
+	}
+
+	private class TitleColorBridge implements ColorBridge {
+
+		@Override
+		public void add(String id, DockColor uiValue) {
+		}
+
+		@Override
+		public void remove(String id, DockColor uiValue) {
+		}
+
+		@Override
+		public void set(String id, Color value, DockColor uiValue) {
+			if("title.active.text".equals(id)) {
+				uiValue.set(Color.white);
+			} else if("title.flap.active.text".equals(id)) {
+				uiValue.set(Color.white);
+			} else {
+				uiValue.set(value);
+			}
 		}
 		
 	}

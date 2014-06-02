@@ -56,6 +56,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
+import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -88,6 +89,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * Event manager
 	 */
 	private final transient AtomicReference<EditorEventManager> eventManagerRef;
+	
+	/**
+	 * Selection model
+	 */
+	private final transient AtomicReference<EditorSelectionModel> selectionModelRef;
 	
 	/**
 	 * Index of the current record
@@ -143,6 +149,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
 		this.eventManagerRef = 
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
+		this.selectionModelRef = 
+				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
 	
 		// setup title
 		final String title = generateTitle();
@@ -520,6 +528,16 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	public EditorEventManager getEventManager() {
 		return eventManagerRef.get();
+	}
+	
+	/**
+	 * Get the selection model
+	 * 
+	 * 
+	 * @return editor selection model
+	 */
+	public EditorSelectionModel getSelectionModel() {
+		return selectionModelRef.get();
 	}
 	
 	/**

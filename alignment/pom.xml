@@ -12,5 +12,6 @@
   <artifactId>phon-alignment</artifactId>
   <name>Phon Alignment</name>
   <description/>
+  <packaging>jar</packaging>
 
 </project>

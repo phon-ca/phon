@@ -17,30 +17,37 @@
  */
 package ca.phon.session;
 
+import ca.phon.util.Range;
 import ca.phon.util.Tuple;
 
-/**
- * Helper classes for holding current and start locations
- */
-public class SessionLocation extends Tuple<Integer, RecordLocation> {
+public class RecordRange extends Tuple<String, GroupRange> {
 
-	public SessionLocation(Integer recIdx, RecordLocation recLoc) {
-		super(recIdx, recLoc);
+	public RecordRange(String tier, GroupRange r) {
+		super(tier, r);
 	}
 
-	public Integer getRecordIndex() {
+	public String getTier() {
 		return super.getObj1();
 	}
 
-	public void setRecordIndex(Integer idx) {
-		super.setObj1(idx);
+	public void setTier(String tier) {
+		super.setObj1(tier);
 	}
 
-	public RecordLocation getRecordLocation() {
+	public GroupRange getGroupRange() {
 		return super.getObj2();
 	}
 
-	public void setRecordLocation(RecordLocation recLoc) {
-		super.setObj2(recLoc);
+	public void setGroupRange(GroupRange r) {
+		super.setObj2(r);
 	}
+	
+	public RecordLocation start() {
+		return new RecordLocation(getTier(), getGroupRange().start());
+	}
+	
+	public RecordLocation end() {
+		return new RecordLocation(getTier(), getGroupRange().end());
+	}
+	
 }

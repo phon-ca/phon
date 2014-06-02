@@ -51,6 +51,13 @@
             <xs:enumeration value="TONE"/>
             <xs:enumeration value="SANDHI"/>
             
+            <!-- Phonex matcher references -->
+            <xs:enumeration value="OPEN_BRACE"/>
+            <xs:enumeration value="CLOSE_BRACE"/>
+            <xs:enumeration value="DOLLAR_SIGN"/>
+            <xs:enumeration value="GROUP_NAME"/>
+            <xs:enumeration value="DIGIT"/>
+            
             <!-- denotes syllable constituent type -->
             <xs:enumeration value="COLON"/>
         </xs:restriction>

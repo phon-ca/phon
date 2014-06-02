@@ -72,13 +72,16 @@ import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.EditorSelectionModel;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.ResultSetListingManager;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.query.report.io.InventorySection;
@@ -97,6 +100,7 @@ import ca.phon.ui.text.TableSearchField;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -111,6 +115,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class ResultSetEditor extends ProjectFrame {
 	
+	private static final long serialVersionUID = -4309831950609525140L;
+
 	private final static Logger LOGGER = Logger.getLogger(ResultSetEditor.class.getName());
 	
 	/* 
@@ -154,6 +160,8 @@ public class ResultSetEditor extends ProjectFrame {
 	
 	private boolean modified = false;
 	
+	private EditorAction recordChangedAct;
+	
 	/**
 	 * Constructor
 	 * @param project
@@ -194,9 +202,9 @@ public class ResultSetEditor extends ProjectFrame {
 						super.setParentFrame(cmf);
 						final SessionEditor editor = getEditor();
 						
-						final EditorAction recordChangeAct = 
+						recordChangedAct = 
 								new DelegateEditorAction(this, "onRecordChange");
-						editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
+						editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
 						
 						break;
 					}
@@ -642,6 +650,17 @@ public class ResultSetEditor extends ProjectFrame {
 		return true;
 	}
 	
+	
+	
+	@Override
+	public void close() {
+		if(getEditor() != null) {
+			getEditor().getSelectionModel().clear();
+			getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+		}
+		super.close();
+	}
+
 	private void updateRowFilter() {
 		// get the row filter (if any) from the search field
 		final RowFilter<TableModel, Integer> searchFieldFilter =
@@ -736,20 +755,30 @@ public class ResultSetEditor extends ProjectFrame {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			// TODO
-//			if(!e.getValueIsAdjusting() && getEditor() != null) {
-//				final int rowIdx = resultTable.getSelectedRow();
-//				if(rowIdx < 0) return;
-//				
-//				final int resultIdx = resultTable.convertRowIndexToModel(rowIdx);
-//				if(resultIdx >= 0) {
-//					final Result r = resultSet.getResult(resultIdx);
-//					getEditor().getModel().setCurrentIndex(r.getRecordIndex());
-//					getEditor().getModel().setSearchResult(r);
-//				}
-//				
-//				// update status label
-//				updateStatus(); 
-//			}
+			if(!e.getValueIsAdjusting() && getEditor() != null) {
+				final int rowIdx = resultTable.getSelectedRow();
+				if(rowIdx < 0) return;
+				
+				final int resultIdx = resultTable.convertRowIndexToModel(rowIdx);
+				if(resultIdx >= 0) {
+					final Result r = resultSet.getResult(resultIdx);
+					final EditorSelectionModel selectionModel = getEditor().getSelectionModel();
+					selectionModel.clear();
+					for(ResultValue rv:r.getResultValues()) {
+						final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
+						final SessionEditorSelection selection = 
+								new SessionEditorSelection(r.getRecordIndex(), rv.getTierName(),
+										rv.getGroupIndex(), range);
+						selectionModel.addSelection(selection);
+					}
+					getEditor().setCurrentRecordIndex(r.getRecordIndex());
+				} else {
+					getEditor().getSelectionModel().clear();
+				}
+				
+				// update status label
+				updateStatus(); 
+			}
 		}
 	};
 	

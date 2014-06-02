@@ -6,9 +6,9 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddParticipantEdit;
 import ca.phon.app.session.editor.undo.ParticipantUndoableEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.app.session.participant.ParticipantEditor;
 import ca.phon.session.Participant;
 import ca.phon.session.SessionFactory;
+import ca.phon.ui.participant.ParticipantEditor;
 
 public class EditParticipantAction extends SessionInfoAction {
 

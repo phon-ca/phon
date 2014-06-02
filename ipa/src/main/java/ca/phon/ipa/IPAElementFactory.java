@@ -240,4 +240,23 @@ public class IPAElementFactory {
 			return null;
 		}
 	}
+	
+	/**
+	 * Create a phonex matcher reference.
+	 * 
+	 * @param groupIndex
+	 */
+	public PhonexMatcherReference createPhonexMatcherReference(int groupIndex) {
+		return new PhonexMatcherReference(groupIndex);
+	}
+	
+	/**
+	 * Create a phonex matcher reference.
+	 * 
+	 * @param groupName
+	 * @return
+	 */
+	public PhonexMatcherReference createPhonexMatcherReference(String groupName) {
+		return new PhonexMatcherReference(groupName);
+	}
 }

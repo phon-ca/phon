@@ -15,32 +15,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.session;
+package ca.phon.ui.participant;
 
-import ca.phon.util.Tuple;
-
-/**
- * Helper classes for holding current and start locations
- */
-public class SessionLocation extends Tuple<Integer, RecordLocation> {
-
-	public SessionLocation(Integer recIdx, RecordLocation recLoc) {
-		super(recIdx, recLoc);
+public enum ParticipantTableField {
+	Name,
+	Sex,
+	Birthday,
+	Age,
+	Education,
+	Group,
+	Language,
+	Role;
+	
+	String colNames[] = {
+			"Name",
+			"Gender",
+			"Birthday",
+			"Age",
+			"Education",
+			"Group",
+			"Language",
+			"Role"
+	};
+	
+	public String getColumnName() {
+		return colNames[ordinal()];
 	}
-
-	public Integer getRecordIndex() {
-		return super.getObj1();
-	}
-
-	public void setRecordIndex(Integer idx) {
-		super.setObj1(idx);
-	}
-
-	public RecordLocation getRecordLocation() {
-		return super.getObj2();
-	}
-
-	public void setRecordLocation(RecordLocation recLoc) {
-		super.setObj2(recLoc);
-	}
+	
 }

@@ -35,7 +35,7 @@ import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
-import ca.phon.query.replace.SessionLocation;
+import ca.phon.session.SessionLocation;
 import ca.phon.ui.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
@@ -214,9 +214,9 @@ public class NavigationPanel extends JPanel {
 	}
 
 	public void onSessionLocationChanged(EditorEvent ee) {
-		SessionLocation location = (SessionLocation)ee.getEventData();
-		currentTierLabel.setText(location.getRecordLocation().getTier() + "  ");
-		currentCharPosLabel.setText(location.getRecordLocation().getLocation()+"");
+//		SessionLocation location = (SessionLocation)ee.getEventData();
+//		currentTierLabel.setText(location.getRecordLocation().getTier() + "  ");
+//		currentCharPosLabel.setText(location.getRecordLocation().get+"");
 	}
 	
 }

@@ -15,32 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.session;
 
-import ca.phon.util.Tuple;
+package ca.phon.app.session.editor.view.find_and_replace;
 
 /**
- * Helper classes for holding current and start locations
+ *
+ * @author ghedlund
  */
-public class SessionLocation extends Tuple<Integer, RecordLocation> {
+public class FindException extends Exception {
 
-	public SessionLocation(Integer recIdx, RecordLocation recLoc) {
-		super(recIdx, recLoc);
+	public enum ExceptionType {
+		HIT_BEGINNING,
+		HIT_END,
+		NOT_FOUND
+	};
+
+	public ExceptionType reason = ExceptionType.NOT_FOUND;
+
+	public FindException(String msg) {
+		super(msg);
+		
 	}
 
-	public Integer getRecordIndex() {
-		return super.getObj1();
+	public FindException(ExceptionType reason, String msg) {
+		super(msg);
+		this.reason = reason;
 	}
 
-	public void setRecordIndex(Integer idx) {
-		super.setObj1(idx);
+	public ExceptionType getReason() {
+		return this.reason;
 	}
 
-	public RecordLocation getRecordLocation() {
-		return super.getObj2();
-	}
-
-	public void setRecordLocation(RecordLocation recLoc) {
-		super.setObj2(recLoc);
+	public void setReason(ExceptionType reason) {
+		this.reason = reason;
 	}
 }
