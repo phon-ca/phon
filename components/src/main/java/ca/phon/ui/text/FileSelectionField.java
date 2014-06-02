@@ -27,6 +27,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -41,6 +42,8 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -214,6 +217,14 @@ public class FileSelectionField extends PromptedTextField {
 		return this.mode;
 	}
 	
+	public FileFilter getFileFilter() {
+		return fileFilter;
+	}
+
+	public void setFileFilter(FileFilter fileFilter) {
+		this.fileFilter = fileFilter;
+	}
+
 	/**
 	 * Open browse dialog.
 	 */
@@ -226,12 +237,25 @@ public class FileSelectionField extends PromptedTextField {
 		}
 		
 		if(mode == SelectionMode.FILES) {
-			path = NativeDialogs.browseForFileBlocking(CommonModuleFrame.getCurrentFrame(), parentPath, 
-					"*", new FileFilter[]{ fileFilter }, null);
+			final SaveDialogProperties props = new SaveDialogProperties();
+			if(fileFilter != null)
+				props.setFileFilter(fileFilter);
+			props.setCanCreateDirectories(true);
+			props.setRunAsync(false);
+			
+			path = NativeDialogs.showSaveDialog(props);
 		} else {
-			path = 
-					NativeDialogs.browseForDirectoryBlocking(
-							CommonModuleFrame.getCurrentFrame(), null, null);
+			final OpenDialogProperties props = new OpenDialogProperties();
+			props.setCanChooseDirectories(true);
+			props.setCanChooseFiles(false);
+			props.setCanCreateDirectories(true);
+			props.setAllowMultipleSelection(false);
+			props.setRunAsync(false);
+			
+			final List<String> paths = NativeDialogs.showOpenDialog(props);
+			if(paths.size() > 0) {
+				path = paths.get(0);
+			}
 		}
 		if(path != null) {
 			setState(FieldState.INPUT);
