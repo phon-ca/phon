@@ -50,6 +50,8 @@ public class IPATranscriptBuilder {
 		return this;
 	}
 	
+	
+	
 	/**
 	 * Append the given string to the transcript.
 	 * This utilizes the {@link IPATranscript#parseIPATranscript(String)} method.

@@ -43,6 +43,8 @@ public class IPALexer implements TokenSource {
 	 */
 	private boolean expectingScType = false;
 	
+	private boolean expectingGroupReference = false;
+	
 	/**
 	 * Error handlers
 	 */
@@ -92,12 +94,16 @@ public class IPALexer implements TokenSource {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	@Override
 	public Token nextToken() {
 		Token retVal = null;
 		
 		while(retVal == null && currentPosition < source.length()) {
 			char currentChar = source.charAt(currentPosition);
+			IPATokenType tokenType = tokenMapper.getTokenType(currentChar);
 			
 			if(expectingScType) {
 				final SyllableConstituentType scType = SyllableConstituentType.fromString(currentChar+"");
@@ -112,9 +118,25 @@ public class IPALexer implements TokenSource {
 					retVal.setCharPositionInLine(currentPosition);
 				}
 				expectingScType = false;
+			} else if(expectingGroupReference) {
+				final StringBuffer buffer = new StringBuffer();
+				int startPos = currentPosition;
+				while(tokenType != IPATokenType.CLOSE_BRACE && currentPosition < source.length()) {
+					buffer.append(currentChar);
+					currentChar = source.charAt(++currentPosition);
+					tokenType = tokenMapper.getTokenType(currentChar);
+				}
+				
+				int antlrType = tokenMapper.getTypeValue(IPATokenType.GROUP_NAME);
+				retVal = new CommonToken(antlrType, buffer.toString());
+				retVal.setCharPositionInLine(startPos);
+				
+				expectingGroupReference = false;
+				
+				// returrn close brace as next token
+				if(tokenType == IPATokenType.CLOSE_BRACE)
+					--currentPosition;
 			} else {
-				IPATokenType tokenType =
-						(currentChar == ':' ? IPATokenType.COLON : tokenMapper.getTokenType(currentChar));
 				if(tokenType == null) {
 					IPAParserException ex = new IPAParserException("Invalid token '" + currentChar + "'");
 					ex.setPositionInLine(currentPosition);
@@ -127,6 +149,8 @@ public class IPALexer implements TokenSource {
 					
 					if(tokenType == IPATokenType.COLON) {
 						expectingScType = true;
+					} else if(tokenType == IPATokenType.OPEN_BRACE) {
+						expectingGroupReference = true;
 					}
 				}
 				

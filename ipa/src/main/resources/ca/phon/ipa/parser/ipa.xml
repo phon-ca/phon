@@ -6,6 +6,63 @@
         <name>Space</name>
         <token>SPACE</token>
     </char>
+    <char value="&#x0024;">
+        <name>Dollar Sign</name>
+        <token>DOLLAR_SIGN</token>
+    </char>
+    <char value="&#x007b;">
+        <name>Open Brace</name>
+        <token>OPEN_BRACE</token>
+    </char>
+    <char value="&#x007d;">
+        <name>Close Brace</name>
+        <token>CLOSE_BRACE</token>
+    </char>
+    <char value="&#x003a;">
+        <name>Colon</name>
+        <token>COLON</token>
+    </char>
+    <char value="&#x0030;">
+        <name>Zero</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0031;">
+        <name>One</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0032;">
+        <name>Two</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0033;">
+        <name>Three</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0034;">
+        <name>Four</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0035;">
+        <name>Five</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0036;">
+        <name>Six</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0037;">
+        <name>Seven</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0038;">
+        <name>Eight</name>
+        <token>DIGIT</token>
+    </char>
+    <char value="&#x0039;">
+        <name>Nine</name>
+        <token>DIGIT</token>
+    </char>
+    
     <char value="&#x01c3;">
         <name>Latin Letter Retroflex Click</name>
         <token>CONSONANT</token>

@@ -158,6 +158,10 @@ word_element returns [IPAElement p]
 	{
 		$p = $word_net_marker.wordnetMarker;
 	}
+	|	phonex_matcher_ref
+	{
+		$p = $phonex_matcher_ref.phonexMatcherRef;
+	}
 	;
 
 /**
@@ -197,6 +201,17 @@ word_net_marker returns [IPAElement wordnetMarker]
 	|	SANDHI
 	{
 		$wordnetMarker = factory.createSandhi($SANDHI.text);
+	}
+	;
+	
+phonex_matcher_ref returns [IPAElement phonexMatcherRef]
+	:	DOLLAR_SIGN DIGIT
+	{
+		$phonexMatcherRef = factory.createPhonexMatcherReference(Integer.parseInt($DIGIT.text));
+	}
+	|	DOLLAR_SIGN OPEN_BRACE GROUP_NAME CLOSE_BRACE
+	{
+		$phonexMatcherRef = factory.createPhonexMatcherReference($GROUP_NAME.text);
 	}
 	;
 	

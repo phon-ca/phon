@@ -33,7 +33,12 @@ public enum IPATokenType {
     VOWEL("Vowel"),
     COLON("Colon"),
     SCTYPE("Syllable ConstituentType"),
-    SANDHI("Sandhi");
+    SANDHI("Sandhi"),
+    DOLLAR_SIGN("Dollar sign"),
+    OPEN_BRACE("Open brace"),
+    GROUP_NAME("Group name"),
+    CLOSE_BRACE("Close brace"),
+    DIGIT("Digit");
 	
 	String tokenName = "Unknown";
 	
