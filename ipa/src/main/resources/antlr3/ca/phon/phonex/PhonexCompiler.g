@@ -267,13 +267,13 @@ scope {
 sctype returns [SyllableConstituentType value]
 	:	SCTYPE
 	{
-		SyllableConstituentType scType = null;
-		for(SyllableConstituentType type:SyllableConstituentType.values()){
-			if(type.getMnemonic().toLowerCase().equals($SCTYPE.text.toLowerCase())) {
-				scType = type;
-				break;
-			}
+		SyllableConstituentType scType = SyllableConstituentType.fromString($SCTYPE.text);
+		
+		if(scType == SyllableConstituentType.NUCLEUS && 
+			$SCTYPE.text.equalsIgnoreCase("D")) {
+			$matcher::pluginMatchers.add(new DiphthongMatcher(true));
 		}
+		
 		if(scType == null)
 			throw new PhonexPluginException("Invalid syllable constituent type '" + $SCTYPE.text + "'");
 		$value = scType;
