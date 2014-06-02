@@ -543,7 +543,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 		@Override
 		public void set(String id, Color value, DockColor uiValue) {
-			System.out.println(id);
 			if("title.active.text".equals(id)) {
 				uiValue.set(Color.white);
 			} else if("title.flap.active.text".equals(id)) {
