@@ -30,7 +30,7 @@ public class GroupRange extends Tuple<Integer, Range> {
 	}
 	
 	public GroupLocation end() {
-		return new GroupLocation(getGroupIndex(), getRange().getStart());
+		return new GroupLocation(getGroupIndex(), getRange().getEnd());
 	}
 
 }

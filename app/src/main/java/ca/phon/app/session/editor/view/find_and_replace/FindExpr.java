@@ -1,17 +1,22 @@
 package ca.phon.app.session.editor.view.find_and_replace;
 
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.util.Range;
 
 public class FindExpr {
+	
+	private static final Logger LOGGER = Logger.getLogger(FindExpr.class
+			.getName());
 	
 	public enum SearchType {
 		PLAIN("Plain text"),
@@ -35,6 +40,12 @@ public class FindExpr {
 	private boolean caseSensitive;
 	
 	private String expr;
+	
+	/* Last matched object */
+	private Object lastObj;
+	
+	/* Plain members */
+	private Range lastRange;
 	
 	/* Regex members */
 	private Pattern regexPattern;
@@ -102,6 +113,12 @@ public class FindExpr {
 			} 
 		}
 		
+		if(retVal != null) {
+			lastObj = obj;
+		} else {
+			lastObj = null;
+		}
+		
 		return retVal;
 	}
 	
@@ -118,6 +135,12 @@ public class FindExpr {
 			}
 		}
 		
+		if(retVal != null) {
+			lastObj = obj;
+		} else {
+			lastObj = null;
+		}
+		
 		return retVal;
 	}
 	
@@ -126,7 +149,10 @@ public class FindExpr {
 		final String val = (isCaseSensitive() ? txt : txt.toLowerCase());
 		int nextIdx = val.indexOf(expr, charIdx);
 		if(nextIdx >= 0) {
-			return new Range(nextIdx, nextIdx + expr.length(), false);
+			lastRange = new Range(nextIdx, nextIdx + expr.length(), false);
+			return lastRange;
+		} else {
+			lastRange = null;
 		}
 		return null;
 	}
@@ -137,7 +163,10 @@ public class FindExpr {
 		
 		int prevIdx = val.lastIndexOf(expr);
 		if(prevIdx >= 0) {
-			return new Range(prevIdx, prevIdx + expr.length(), false);
+			lastRange = new Range(prevIdx, prevIdx + expr.length(), false);
+			return lastRange;
+		} else {
+			lastRange = null;
 		}
 		return null;
 	}
@@ -159,6 +188,7 @@ public class FindExpr {
 			regexPattern = Pattern.compile(getExpr(), (isCaseSensitive() ? 0 : Pattern.CASE_INSENSITIVE));
 		}
 		lastMatcher = regexPattern.matcher(txt);
+		lastMatcher.region(0, charIdx);
 		
 		int start = -1;
 		int end = -1;
@@ -168,6 +198,8 @@ public class FindExpr {
 		}
 		
 		if(start >= 0 && end >= start) {
+			// reset matcher to position
+			lastMatcher.find(start);
 			return new Range(start, end, false);
 		}
 		return null;
@@ -202,8 +234,8 @@ public class FindExpr {
 		int lastPhonexIdx = ipa.ipaIndexOf(charIdx);
 		if(lastPhonexIdx < 0 && charIdx == ipa.toString().length()) lastPhonexIdx = ipa.length();
 		
-		final IPATranscript val = ipa.subsection(0, lastPhonexIdx);
-		lastPhonexMatcher = phonexPattern.matcher(val);
+		lastPhonexMatcher = phonexPattern.matcher(ipa);
+		lastPhonexMatcher.region(0, lastPhonexIdx);
 		
 		int ipaStart = -1;
 		int ipaEnd = -1;
@@ -217,11 +249,69 @@ public class FindExpr {
 			final int end = ipa.stringIndexOfElement(ipaEnd);
 			
 			if(start >= 0 && end >= start) {
+				lastPhonexMatcher.find(start);
 				return new Range(start, end, false);
 			}
 		}
 		
 		return null;
+	}
+
+	public Object replace(String expr) {
+		Object retVal = lastObj;
+		
+		if(lastObj != null) {
+			if(type == SearchType.PLAIN) {
+				return replacePlain(lastObj, expr);
+			} else if(type == SearchType.REGEX) {
+				return replaceRegex(lastObj, expr);
+			} else if(type == SearchType.PHONEX) {
+				if(retVal instanceof IPATranscript) {
+					try {
+						return replacePhonex((IPATranscript)retVal, IPATranscript.parseIPATranscript(expr));
+					} catch (ParseException e) {
+						LOGGER.log(Level.SEVERE,
+								e.getLocalizedMessage(), e);
+					}
+				}
+			}
+		}
+		
+		return retVal;
+	}
+	
+	public Object replacePlain(Object obj, String expr) {
+		final String val = FormatterUtil.format(obj);
+		
+		final StringBuffer buffer = new StringBuffer();
+		if(lastRange != null) {
+			buffer.append(val.substring(0, lastRange.getStart()));
+			buffer.append(expr);
+			buffer.append(val.substring(lastRange.getEnd()));
+		}
+		
+		final String newTxt = buffer.toString();
+		return FormatterUtil.parse(obj.getClass(), newTxt);
+	}
+	
+	public Object replaceRegex(Object obj, String expr) {
+		final StringBuffer buffer = new StringBuffer();
+		if(lastMatcher != null) {
+			lastMatcher.appendReplacement(buffer, expr);
+			lastMatcher.appendTail(buffer);
+		}
+		
+		final String newTxt = buffer.toString();
+		return FormatterUtil.parse(obj.getClass(), newTxt);
+	}
+	
+	public IPATranscript replacePhonex(IPATranscript ipa, IPATranscript expr) {
+		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		if(lastPhonexMatcher != null) {
+			lastPhonexMatcher.appendReplacement(builder, expr);
+			lastPhonexMatcher.appendTail(builder);
+		}
+		return builder.toIPATranscript();
 	}
 	
 }

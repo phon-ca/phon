@@ -4,12 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.TextComponent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -29,6 +27,8 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -36,7 +36,6 @@ import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
-import ca.phon.app.log.LogEP;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -52,7 +51,6 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.GroupFieldHighlighter;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
-import ca.phon.app.session.editor.view.common.TierDataLayoutBgPainter;
 import ca.phon.app.session.editor.view.common.TierDataLayoutButtons;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditor;
@@ -65,10 +63,13 @@ import ca.phon.app.session.editor.view.record_data.actions.SplitGroupCommand;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.session.GroupLocation;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
+import ca.phon.session.RecordLocation;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionLocation;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
@@ -120,6 +121,19 @@ public class RecordDataEditorView extends EditorView {
 	 */
 	private TierDataLayoutPanel contentPane;
 	
+	/**
+	 * Status panel
+	 */
+	private JPanel statusPanel;
+	
+	private JLabel recordIdLbl;
+	
+	private JLabel currentTierLbl;
+	
+	private JLabel currentGroupLbl;
+	
+	private JLabel currentCharLbl;
+	
 	/*
 	 * Keep track of 'current' group and tier.  This is done by tracking
 	 * focus of the various TierEditors.
@@ -129,6 +143,8 @@ public class RecordDataEditorView extends EditorView {
 	private final AtomicInteger currentGroupIndex = new AtomicInteger(-1);
 	
 	private final AtomicInteger currentRecordIndex = new AtomicInteger(-1);
+	
+	private final AtomicInteger currentCharIndex = new AtomicInteger(-1);
 	
 	public RecordDataEditorView(SessionEditor editor) {
 		super(editor);
@@ -140,7 +156,6 @@ public class RecordDataEditorView extends EditorView {
 		
 		setBackground(Color.white);
 		
-//		final TierDataLayout layout = new TierDataLayout();
 		contentPane = new TierDataLayoutPanel();
 		contentPane.setBackground(Color.white);
 		
@@ -151,7 +166,53 @@ public class RecordDataEditorView extends EditorView {
 		final JPanel panel = getTopPanel();
 		add(panel, BorderLayout.NORTH);
 		
+		final FormLayout statusLayout = 
+				new FormLayout("pref, pref, fill:pref:grow, "
+						+ "right:pref, right:pref, right:pref, right:pref, right:pref, right:pref", "pref");
+		final CellConstraints cc = new CellConstraints();
+		statusPanel = new JPanel(statusLayout);
+		
+		final Font font = Font.decode("monospace-PLAIN-10");
+		final JLabel idLbl = new JLabel("Id: ");
+		idLbl.setFont(font);
+		
+		recordIdLbl = new JLabel();
+		recordIdLbl.setFont(font);
+
+		statusPanel.add(idLbl, cc.xy(1,1));
+		statusPanel.add(recordIdLbl, cc.xy(2,1));
+		
+		final JLabel tierLbl = new JLabel("Tier: ");
+		tierLbl.setFont(font);
+		
+		currentTierLbl = new JLabel();
+		currentTierLbl.setFont(font);
+		
+		statusPanel.add(tierLbl, cc.xy(4,1));
+		statusPanel.add(currentTierLbl, cc.xy(5,1));
+		
+		final JLabel grpLbl = new JLabel(" Group: ");
+		grpLbl.setFont(font);
+		
+		currentGroupLbl = new JLabel();
+		currentGroupLbl.setFont(font);
+		
+		statusPanel.add(grpLbl, cc.xy(6,1));
+		statusPanel.add(currentGroupLbl, cc.xy(7,1));
+		
+		final JLabel charLbl = new JLabel(" Character: ");
+		charLbl.setFont(font);
+		
+		currentCharLbl = new JLabel();
+		currentCharLbl.setFont(font);
+		
+		statusPanel.add(charLbl, cc.xy(8,1));
+		statusPanel.add(currentCharLbl, cc.xy(9,1));
+		
+		add(statusPanel, BorderLayout.SOUTH);
+		
 		update();
+		updateStatus();
 		setupEditorActions();
 	}
 	
@@ -173,6 +234,10 @@ public class RecordDataEditorView extends EditorView {
 				new DelegateEditorAction(this, "onParticipantsChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantsChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantsChangedAct);
+
+		final EditorAction onSessionLocationChangedAct = 
+				new DelegateEditorAction(this, "onSessionLocationChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, onSessionLocationChangedAct);
 	}
 	
 	/**
@@ -194,6 +259,8 @@ public class RecordDataEditorView extends EditorView {
 		
 		final List<TierViewItem> tierView = session.getTierView();
 		int row = 0;
+		
+		JComponent toFocus = null;
 		for(TierViewItem tierItem:tierView) {
 			if(!tierItem.isVisible()) continue;
 			
@@ -248,6 +315,11 @@ public class RecordDataEditorView extends EditorView {
 					if(tierComp instanceof JTextComponent) {
 						final JTextComponent textComp = (JTextComponent)tierComp;
 						addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, gIdx);
+						textComp.addCaretListener(caretListener);
+					}
+					
+					if(toFocus == null) {
+						toFocus = (JComponent)tierComp;
 					}
 				}
 			} else {
@@ -262,13 +334,36 @@ public class RecordDataEditorView extends EditorView {
 				if(tierComp instanceof JTextComponent) {
 					final JTextComponent textComp = (JTextComponent)tierComp;
 					addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, 0);
+					textComp.addCaretListener(caretListener);
+				}
+				
+				if(toFocus == null) {
+					toFocus = (JComponent)tierComp;
 				}
 			}
 			row++;
 		}
 		
+		if(hasFocus() && toFocus != null) {
+			toFocus.requestFocusInWindow();
+		}
+		
 		updating = false;
 		revalidate();
+	}
+	
+	private void updateStatus() {
+		final Record r = getEditor().currentRecord();
+		recordIdLbl.setText(r.getUuid().toString());
+		
+		final Tier<?> currentTier = currentTier();
+		if(currentTier != null) {
+			currentTierLbl.setText(currentTier.getName());
+		
+			currentGroupLbl.setText((currentGroupIndex()+1) + " ");
+			
+			currentCharLbl.setText(currentCharIndex() + " ");
+		}
 	}
 	
 	private void addSelectionHighlights(JTextComponent textComp, int recordIndex, String tierName, int groupIndex) {
@@ -494,15 +589,21 @@ public class RecordDataEditorView extends EditorView {
 	}
 	
 	public int currentCharIndex() {
-		int retVal = -1;
-		
-		final JComponent lastComp = lastFocusedRef.get();
-		if(lastComp != null && lastComp instanceof JTextComponent) {
-			final JTextComponent textComp = (JTextComponent)lastComp;
-			retVal = textComp.getCaretPosition();
-		}
-		
-		return retVal;
+		return currentCharIndex.get();
+	}
+	
+	public SessionLocation getSessionLocation() {
+		if(currentTierRef.get() == null) return null;
+		final GroupLocation grpLoc = new GroupLocation(currentGroupIndex(), currentCharIndex());
+		final RecordLocation recLoc = new RecordLocation(currentTier().getName(), grpLoc);
+		final SessionLocation sessionLoc = new SessionLocation(currentRecordIndex(), recLoc);
+		return sessionLoc;
+	}
+	
+	private void fireSessionLocationChanged() {
+		final EditorEvent ee = new EditorEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, this,
+				getSessionLocation());
+		getEditor().getEventManager().queueEvent(ee);
 	}
 	
 	/*
@@ -517,6 +618,7 @@ public class RecordDataEditorView extends EditorView {
 	@RunOnEDT
 	public void onRecordChange(EditorEvent event) {
 		update();
+		updateStatus();
 		repaint();
 	}
 	
@@ -534,6 +636,11 @@ public class RecordDataEditorView extends EditorView {
 		add(topPanel, BorderLayout.NORTH);
 		revalidate();
 		repaint();
+	}
+	
+	@RunOnEDT
+	public void onSessionLocationChanged(EditorEvent event) {
+		updateStatus();
 	}
 	
 	@Override
@@ -566,16 +673,49 @@ public class RecordDataEditorView extends EditorView {
 
 		@Override
 		public void focusGained(FocusEvent e) {
+			final JComponent tierComp = (JComponent)e.getComponent();
+			lastFocusedRef.getAndSet(tierComp);
+			
 			currentRecordIndex.getAndSet(getEditor().getCurrentRecordIndex());
 			currentTierRef.getAndSet(tier);
 			currentGroupIndex.getAndSet(group);
-			lastFocusedRef.getAndSet((JComponent)e.getComponent());
+			
+			if(tierComp instanceof JTextComponent) {
+				final JTextComponent textComp = (JTextComponent)tierComp;
+				currentCharIndex.getAndSet(textComp.getCaretPosition());
+			} else {
+				currentCharIndex.getAndSet(0);
+			}
+			
+			fireSessionLocationChanged();
 		}
 
 		@Override
 		public void focusLost(FocusEvent e) {
+			final JComponent comp = (JComponent)e.getSource();
+			if(comp != null && comp instanceof JTextComponent) {
+				final JTextComponent textComp = (JTextComponent)comp;
+				if(textComp.getSelectedText() != null) {
+					textComp.setSelectionStart(-1);
+					textComp.setSelectionEnd(-1);
+				}
+			}
 		}
 		
 	}
+	
+	private final CaretListener caretListener = new CaretListener() {
+		
+		@Override
+		public void caretUpdate(CaretEvent e) {
+			if(((JComponent)e.getSource()).hasFocus()) {
+				if(e.getDot() >= 0) {
+					currentCharIndex.getAndSet(e.getDot());
+					fireSessionLocationChanged();
+				}
+			}
+		}
+		
+	};
 	
 }

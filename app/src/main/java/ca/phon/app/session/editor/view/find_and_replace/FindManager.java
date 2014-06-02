@@ -24,8 +24,14 @@ import java.util.List;
 import java.util.Map;
 
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.session.GroupLocation;
+import ca.phon.session.GroupRange;
 import ca.phon.session.Record;
+import ca.phon.session.RecordLocation;
+import ca.phon.session.RecordRange;
 import ca.phon.session.Session;
+import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionRange;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
 import ca.phon.util.Range;
@@ -57,7 +63,8 @@ public class FindManager {
 	private final Map<String, FindExpr> tierExprs = new HashMap<String, FindExpr>();
 
 	/** Current location */
-	private SessionLocation currentLocation;
+	private SessionLocation forwardsLocation = null;
+	private SessionLocation backwardsLocation = null;
 	
 	/** Direction */
 	private FindDirection direction = FindDirection.FORWARDS;
@@ -67,6 +74,13 @@ public class FindManager {
 
 	/** Tiers to search */
 	private List<String> searchTiers;
+	
+	/**
+	 * Last expression that matched
+	 */
+	private FindExpr lastExpr = null;
+	
+	private SessionRange lastRange = null;
 	
 	/**
 	 * Constructor
@@ -81,9 +95,6 @@ public class FindManager {
 				this.searchTiers.add(toi.getTierName());
 			}
 		}
-
-		// setup start location
-		currentLocation = null;
 	}
 
 	public FindDirection getDirection() {
@@ -118,11 +129,23 @@ public class FindManager {
 	}
 
 	public SessionLocation getCurrentLocation() {
-		return this.currentLocation;
+		return (getDirection() == FindDirection.FORWARDS ? 
+				forwardsLocation : backwardsLocation);
+	}
+	
+	private SessionLocation getNextLocation() {
+		return (getDirection() == FindDirection.FORWARDS ? 
+				forwardsLocation : backwardsLocation);
+	}
+	
+	private SessionLocation getPrevLocation() {
+		return (getDirection() == FindDirection.BACKWARDS ?
+				forwardsLocation : backwardsLocation);
 	}
 
 	public void setCurrentLocation(SessionLocation location) {
-		this.currentLocation = location;
+		this.forwardsLocation = location;
+		this.backwardsLocation = location;
 	}
 	
 	public FindExpr getAnyExpr() {
@@ -140,6 +163,14 @@ public class FindManager {
 	public void setExprForTier(String tierName, FindExpr expr) {
 		tierExprs.put(tierName, expr);
 	}
+	
+	public FindExpr getMatchedExpr() {
+		return this.lastExpr;
+	}
+	
+	public SessionRange getMatchedRange() {
+		return this.lastRange;
+	}
 
 	/**
 	 * Search for the next instance of the given expression
@@ -153,6 +184,7 @@ public class FindManager {
 	public SessionRange findNext() {
 		SessionRange retVal = null;
 
+		final SessionLocation currentLocation = getNextLocation();
 		// start from current location and in specified direction
 		if(direction == FindDirection.FORWARDS) {
 			retVal = findForwards(currentLocation);
@@ -162,17 +194,8 @@ public class FindManager {
 
 		// update current position if we have a result
 		if(retVal != null) {
-			int charPos =
-					(direction == FindDirection.FORWARDS
-						? retVal.getRecordRange().getGroupRange().getRange().getLast()
-						: retVal.getRecordRange().getGroupRange().getRange().getFirst());
-			final GroupLocation grpLocation = new GroupLocation();
-			grpLocation.setGroupIndex(retVal.getRecordRange().getGroupRange().getGroupIndex());
-			grpLocation.setCharIndex(charPos);
-			final RecordLocation recordLocation = new RecordLocation(retVal.getRecordRange().getTier(), grpLocation);
-			currentLocation = new SessionLocation(
-					retVal.getRecordIndex(),
-					recordLocation);
+			forwardsLocation = retVal.end();
+			backwardsLocation = retVal.start();
 			findStatus = FindStatus.HIT_RESULT;
 		} else {
 			if(direction == FindDirection.FORWARDS)
@@ -180,6 +203,8 @@ public class FindManager {
 			else if(direction == FindDirection.BACKWARDS)
 				findStatus = FindStatus.HIT_BEGINNING;
 		}
+		
+		lastRange = retVal;
 
 		return retVal;
 	}
@@ -196,6 +221,7 @@ public class FindManager {
 	public SessionRange findPrev() {
 		SessionRange retVal = null;
 
+		final SessionLocation currentLocation = getPrevLocation();
 		// start from current location and in specified direction
 		if(direction == FindDirection.FORWARDS) {
 			retVal = findBackwards(currentLocation);
@@ -205,17 +231,8 @@ public class FindManager {
 
 		// update current position if we have a result
 		if(retVal != null) {
-			int charPos =
-					(direction == FindDirection.BACKWARDS
-						? retVal.getRecordRange().getGroupRange().getRange().getLast()
-						: retVal.getRecordRange().getGroupRange().getRange().getFirst());
-			final GroupLocation grpLocation = new GroupLocation();
-			grpLocation.setGroupIndex(retVal.getRecordRange().getGroupRange().getGroupIndex());
-			grpLocation.setCharIndex(charPos);
-			final RecordLocation recordLocation = new RecordLocation(retVal.getRecordRange().getTier(), grpLocation);
-			currentLocation = new SessionLocation(
-					retVal.getRecordIndex(),
-					recordLocation);
+			forwardsLocation = retVal.end();
+			backwardsLocation = retVal.start();
 			findStatus = FindStatus.HIT_RESULT;
 		} else {
 			if(direction == FindDirection.BACKWARDS)
@@ -223,6 +240,8 @@ public class FindManager {
 			else if(direction == FindDirection.FORWARDS)
 				findStatus = FindStatus.HIT_BEGINNING;
 		}
+		
+		lastRange = retVal;
 
 		return retVal;
 
@@ -260,6 +279,9 @@ public class FindManager {
 					if(anyExpr != null) {
 						anyExprRange = anyExpr.findNext(tier.getGroup(i), charIdx);
 					}
+					
+					lastExpr = (tierExprRange != null ? tierExpr : 
+						(anyExprRange != null ? anyExpr : null));
 					
 					if(tierExprRange != null && anyExprRange != null) {
 						charRange = 
@@ -332,6 +354,9 @@ public class FindManager {
 					if(anyExpr != null) {
 						anyExprRange = anyExpr.findPrev(tier.getGroup(i), charIdx);
 					}
+					
+					lastExpr = (tierExprRange != null ? tierExpr : 
+						(anyExprRange != null ? anyExpr : null));
 					
 					if(tierExprRange != null && anyExprRange != null) {
 						charRange = 

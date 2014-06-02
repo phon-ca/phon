@@ -26,8 +26,10 @@ public class ReplaceAction extends FindAndReplaceAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		getView().replace();
+		if(andFind) {
+			getView().findNext();
+		}
 	}
 
 }

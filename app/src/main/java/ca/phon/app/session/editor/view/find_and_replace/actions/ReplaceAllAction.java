@@ -22,7 +22,7 @@ public class ReplaceAllAction extends FindAndReplaceAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO 
+		getView().replaceAll();
 	}
 
 }

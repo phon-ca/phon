@@ -2,15 +2,19 @@ package ca.phon.app.session.editor.view.find_and_replace;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,13 +22,16 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.undo.CompoundEdit;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
+import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -33,27 +40,47 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.EditorViewCategory;
 import ca.phon.app.session.editor.EditorViewInfo;
 import ca.phon.app.session.editor.RecordEditorPerspective;
+import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorSelection;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.GroupField;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.view.find_and_replace.FindExpr.SearchType;
 import ca.phon.app.session.editor.view.find_and_replace.FindManager.FindDirection;
 import ca.phon.app.session.editor.view.find_and_replace.FindManager.FindStatus;
 import ca.phon.app.session.editor.view.find_and_replace.actions.FindNextAction;
 import ca.phon.app.session.editor.view.find_and_replace.actions.FindPrevAction;
 import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAction;
+import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAllAction;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.session.GroupLocation;
+import ca.phon.session.Record;
+import ca.phon.session.RecordLocation;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionRange;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
+/**
+ * An {@link SessionEditor} {@link EditorView} implementing Find & Replace
+ * for a {@link Session}.
+ *
+ */
 public class FindAndReplaceEditorView extends EditorView {
 	
 	private static final long serialVersionUID = 3981954934024480576L;
@@ -61,10 +88,6 @@ public class FindAndReplaceEditorView extends EditorView {
 	public final static String VIEW_NAME = "Find & Replace";
 	
 	public final static String VIEW_ICON = "actions/edit-find-replace";
-	
-	private JPanel sidePanel;
-
-	private TierDataLayoutPanel tierPanel;
 	
 	private final static String ANY_TIER_NAME = "__any_tier__";
 	
@@ -75,7 +98,23 @@ public class FindAndReplaceEditorView extends EditorView {
 	private final Map<String, FindOptionsPanel> searchOptions = new LinkedHashMap<String, FindOptionsPanel>();
 	
 	private final FindManager findManager;
+
+	/* UI */
+	private JPanel sidePanel;
 	
+	private TierDataLayoutPanel tierPanel;
+	
+	private JCheckBox wrapBox;
+	
+	private JButton nextBtn;
+	
+	private JButton prevBtn;
+	
+	private JButton replaceBtn;
+	
+	private JButton replaceFindBtn;
+	
+	private JButton replaceAllBtn;
 	
 	public FindAndReplaceEditorView(SessionEditor editor) {
 		super(editor);
@@ -93,34 +132,67 @@ public class FindAndReplaceEditorView extends EditorView {
 		sidePanel = new JPanel();
 		sidePanel.setBackground(PhonGuiConstants.PHON_SHADED);
 		sidePanel.setOpaque(true);
-		sidePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		sidePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		
 		setupSidePanel();
 		add(sidePanel, BorderLayout.EAST);
 
 		tierPanel = new TierDataLayoutPanel();
-		add(tierPanel, BorderLayout.CENTER);
+		final JScrollPane scroller = new JScrollPane(tierPanel);
+		add(scroller, BorderLayout.CENTER);
 	}
 	
 	private void setupSidePanel() {
-		final FormLayout layout = new FormLayout(
-				"pref, 3dlu, pref", "pref, pref, pref");
-		final CellConstraints cc = new CellConstraints();
+		final VerticalLayout layout = new VerticalLayout(5);
 		sidePanel.setLayout(layout);
 		
-		final JButton nextBtn = new JButton(new FindNextAction(getEditor(), this));
-		final JButton prevBtn = new JButton(new FindPrevAction(getEditor(), this));
-		final JButton replaceBtn = new JButton(new ReplaceAction(getEditor(), this, false));
-		final JButton replaceFindBtn = new JButton(new ReplaceAction(getEditor(), this, true));
+		nextBtn = new JButton(new FindNextAction(getEditor(), this));
+		prevBtn = new JButton(new FindPrevAction(getEditor(), this));
+		replaceBtn = new JButton(new ReplaceAction(getEditor(), this, false));
+		replaceFindBtn = new JButton(new ReplaceAction(getEditor(), this, true));
+		replaceAllBtn = new JButton(new ReplaceAllAction(getEditor(), this));
 		
-		sidePanel.add(nextBtn, cc.xy(3,1));
-		sidePanel.add(prevBtn, cc.xy(1,1));
-		sidePanel.add(replaceBtn,cc.xy(1,2));
-		sidePanel.add(replaceFindBtn,cc.xy(3, 2));
+		wrapBox = new JCheckBox("Wrap");
+		wrapBox.setToolTipText("Wrap search");
+		wrapBox.setSelected(false);
+		
+		sidePanel.add(nextBtn);
+		sidePanel.add(prevBtn);
+		sidePanel.add(replaceBtn);
+		sidePanel.add(replaceFindBtn);
+		sidePanel.add(replaceAllBtn);
+		sidePanel.add(wrapBox);
+		
+		final ButtonGroup directionGrp = new ButtonGroup();
+		
+		final PhonUIAction setDirectionForwardsAct = new PhonUIAction(this, "setDirection", FindManager.FindDirection.FORWARDS);
+		setDirectionForwardsAct.putValue(PhonUIAction.NAME, "Search Forwards");
+		setDirectionForwardsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Search forwards in session");
+		setDirectionForwardsAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
+		final JRadioButton forwardsBtn = new JRadioButton(setDirectionForwardsAct);
+		directionGrp.add(forwardsBtn);
+		
+		final PhonUIAction setDirectionBackwardAct = new PhonUIAction(this, "setDirection", FindManager.FindDirection.BACKWARDS);
+		setDirectionBackwardAct.putValue(PhonUIAction.NAME, "Search Backwards");
+		setDirectionBackwardAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Search backwards in session");
+		setDirectionBackwardAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.FALSE);
+		final JRadioButton backwardsBtn = new JRadioButton(setDirectionBackwardAct);
+		directionGrp.add(backwardsBtn);
+		
+		sidePanel.add(forwardsBtn);
+		sidePanel.add(backwardsBtn);
 	}
 	
 	private void setupEditorActions() {
-		final EditorAction viewChangedAct = new DelegateEditorAction(this, "onTierViewChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, viewChangedAct);
+		final EditorAction viewChangedAct = 
+				new DelegateEditorAction(this, "onTierViewChanged");
+		getEditor().getEventManager().registerActionForEvent(
+				EditorEventType.TIER_VIEW_CHANGED_EVT, viewChangedAct);
+		
+		final EditorAction sessionLocationChangedAct = 
+				new DelegateEditorAction(this, "onSessionLocationChanged");
+		getEditor().getEventManager().registerActionForEvent(
+				EditorEventType.SESSION_LOCATION_CHANGED_EVT, sessionLocationChangedAct);	
 	}
 
 	private void updateTierView() {
@@ -137,6 +209,8 @@ public class FindAndReplaceEditorView extends EditorView {
 		FindOptionsPanel anyOptsPanel = searchOptions.get(ANY_TIER_NAME);
 		if(anyOptsPanel == null) {
 			anyOptsPanel = new FindOptionsPanel();
+			final FindOptionsListener anyOptsListener = new FindOptionsListener(ANY_TIER_NAME);
+			anyOptsListener.install(anyOptsPanel);
 			searchOptions.put(ANY_TIER_NAME, anyOptsPanel);
 		}
 		final GroupField<String> anyTierField = new GroupField<String>(anyTier, 0);
@@ -156,6 +230,14 @@ public class FindAndReplaceEditorView extends EditorView {
 			if(systemTier != null && systemTier == SystemTierType.Segment) {
 				continue;
 			}
+			if(!tvi.isVisible()) continue;
+			
+			final String fontString = tvi.getTierFont();
+			Font tierFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
+					Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
+			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
+				tierFont = Font.decode(fontString);
+			}
 			
 			Tier<String> tier = searchTiers.get(tvi.getTierName());
 			if(tier == null) {
@@ -166,9 +248,20 @@ public class FindAndReplaceEditorView extends EditorView {
 			FindOptionsPanel optsPanel = searchOptions.get(tvi.getTierName());
 			if(optsPanel == null) {
 				optsPanel = new FindOptionsPanel();
+				final Class<?> tierType = (systemTier != null ? systemTier.getDeclaredType() : String.class);
+				if(tierType != IPATranscript.class) {
+					optsPanel.typeBox.removeItem(SearchType.PHONEX);
+				} else {
+					optsPanel.typeBox.setSelectedItem(SearchType.PHONEX);
+					optsPanel.caseSensitiveBox.setEnabled(false);
+				}
+				final FindOptionsListener optsListener = new FindOptionsListener(tier.getName());
+				optsListener.install(optsPanel);
+				
 				searchOptions.put(tvi.getTierName(), optsPanel);
 			}
 			final GroupField<String> tierField = new GroupField<String>(tier, 0);
+			tierField.setFont(tierFont);
 			tierField.addTierEditorListener(tierEditorListener);
 			final JLabel tierLbl = new JLabel(tvi.getTierName());
 			tierLbl.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -198,8 +291,19 @@ public class FindAndReplaceEditorView extends EditorView {
 	}
 	
 	/* Editor Actions */
+	@RunOnEDT
 	public void onTierViewChanged(EditorEvent ee) {
 		updateTierView();
+		getFindManager().setSearchTier(getSearchTiers());
+	}
+	
+	@RunOnEDT
+	public void onSessionLocationChanged(EditorEvent ee) {
+		final SessionLocation location = 
+				(SessionLocation)ee.getEventData();
+		if(location != null) {
+			findManager.setCurrentLocation(location);
+		}
 	}
 	
 	@Override
@@ -220,6 +324,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		retVal.add(new FindPrevAction(getEditor(), this));
 		retVal.add(new ReplaceAction(getEditor(), this, false));
 		retVal.add(new ReplaceAction(getEditor(), this, true));
+		retVal.add(new ReplaceAllAction(getEditor(), this));
 		
 		return retVal;
 	}
@@ -259,11 +364,13 @@ public class FindAndReplaceEditorView extends EditorView {
 				if(systemTier == SystemTierType.Segment) {
 					continue;
 				}
+				if(!tvi.isVisible()) continue;
 				findManagerTiers.add(tvi.getTierName());
 			}
 		} else {
 			// only add tiers that have expressions
 			for(TierViewItem tvi:tierView) {
+				if(!tvi.isVisible()) continue;
 				final FindExpr expr = exprForTier(tvi.getTierName());
 				if(expr != null) {
 					findManagerTiers.add(tvi.getTierName());
@@ -272,30 +379,211 @@ public class FindAndReplaceEditorView extends EditorView {
 		}
 		return findManagerTiers;
 	}
+	
+	/*
+	 * Return the 'start' location of the session.
+	 * 
+	 * @return startLocation
+	 */
+	private SessionLocation startLocation() {
+		final FindManager findManager = getFindManager();
+		
+		final String tier = 
+				(findManager.getSearchTiers().length > 0 ? findManager.getSearchTiers()[0] :
+					SystemTierType.Orthography.getName());
+		
+		return new SessionLocation(0, 
+				new RecordLocation(tier, new GroupLocation(0, 0)));
+	}
 
+	/*
+	 * Return the end location when searching this session.
+	 *  
+	 * @return endLocation
+	 */
+	private SessionLocation endLocation() {
+		final Session session = getEditor().getSession();
+		final FindManager findManager = getFindManager();
+		
+		final String tierName = 
+				(findManager.getSearchTiers().length > 0 ? findManager.getSearchTiers()[findManager.getSearchTiers().length-1] :
+					SystemTierType.Notes.getName());
+		final Record r = session.getRecord(session.getRecordCount()-1);
+		final Tier<String> tier = r.getTier(tierName, String.class);
+		final String grp = tier.getGroup(tier.numberOfGroups()-1);
+		
+		return new SessionLocation(session.getRecordCount()-1, new RecordLocation(tierName, 
+				new GroupLocation(tier.numberOfGroups()-1, grp.length())));
+	}
+	
 	/*
 	 * Actions 
 	 */
 	public void findNext() {
 		final FindManager findManager = getFindManager();
 		
-		final SessionRange nextInstance = findManager.findNext();
+		if(findManager.getCurrentLocation() == null) {
+			findManager.setCurrentLocation(
+					findManager.getDirection() == FindDirection.FORWARDS ? startLocation() : endLocation());
+		}
+		
+		SessionRange nextInstance = findManager.findNext();
 		if(nextInstance != null) {
 			setupSessionSelection(nextInstance);
-		} else if(findManager.getStatus() == FindStatus.HIT_END) {
-			// XXX
+		} else if(findManager.getDirection() == FindDirection.FORWARDS &&
+				findManager.getStatus() == FindStatus.HIT_END) {
+			if(wrapBox.isSelected()) {
+				findManager.setCurrentLocation(startLocation());
+				nextInstance = findManager.findNext();
+				if(nextInstance == null) {
+					Toolkit.getDefaultToolkit().beep();
+				} else {
+					setupSessionSelection(nextInstance);
+				}
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+			}
+		} else if(findManager.getDirection() == FindDirection.BACKWARDS &&
+				findManager.getStatus() == FindStatus.HIT_BEGINNING) {
+			if(wrapBox.isSelected()) {
+				findManager.setCurrentLocation(endLocation());
+				nextInstance = findManager.findNext();
+				if(nextInstance == null) {
+					Toolkit.getDefaultToolkit().beep();
+				} else {
+					setupSessionSelection(nextInstance);
+				}
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
 	}
 	
 	public void findPrev() {
 		final FindManager findManager = getFindManager();
 		
-		final SessionRange nextInstance = findManager.findPrev();
+		if(findManager.getCurrentLocation() == null) {
+			findManager.setCurrentLocation(
+					findManager.getDirection() == FindDirection.FORWARDS ? endLocation() : startLocation());
+		}
+		
+		
+		SessionRange nextInstance = findManager.findPrev();
 		if(nextInstance != null) {
 			setupSessionSelection(nextInstance);
-		} else if(findManager.getStatus() == FindStatus.HIT_BEGINNING) {
-			// XXX
+		} else if(findManager.getDirection() == FindDirection.FORWARDS &&
+				findManager.getStatus() == FindStatus.HIT_BEGINNING) {
+			if(wrapBox.isSelected()) {
+				findManager.setCurrentLocation(endLocation());
+				nextInstance = findManager.findPrev();
+				if(nextInstance == null) {
+					Toolkit.getDefaultToolkit().beep();
+				} else {
+					setupSessionSelection(nextInstance);
+				}
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+			}
+		} else if(findManager.getDirection() == FindDirection.BACKWARDS &&
+				findManager.getStatus() == FindStatus.HIT_END) {
+			if(wrapBox.isSelected()) {
+				findManager.setCurrentLocation(startLocation());
+				nextInstance = findManager.findPrev();
+				if(nextInstance == null) {
+					Toolkit.getDefaultToolkit().beep();
+				} else {
+					setupSessionSelection(nextInstance);
+				}
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
+	}
+	
+	public void replace() {
+		final FindManager findManager = getFindManager();
+		
+		if(findManager.getMatchedExpr() != null && findManager.getMatchedRange() != null) {
+			final Tier<String> replaceTier = searchTiers.get(REPLACE_TIER_NAME);
+			if(replaceTier != null && replaceTier.numberOfGroups() > 0) {
+				final String replaceExpr = replaceTier.getGroup(0);
+				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
+				
+				// re-syllabify if an IPA tier
+				
+				
+				final SessionRange sr = findManager.getMatchedRange();
+				
+				getEditor().getSelectionModel().clear();
+				
+				@SuppressWarnings({ "unchecked", "rawtypes" })
+				final TierEdit<?> tierEdit = new TierEdit(getEditor(), 
+						getEditor().currentRecord().getTier(sr.getRecordRange().getTier()),
+						sr.getRecordRange().getGroupRange().getGroupIndex(), newVal);
+				getEditor().getUndoSupport().postEdit(tierEdit);
+				
+			}
+		}
+	}
+	
+	public void replaceAll() {
+		final Tier<String> replaceTier = searchTiers.get(REPLACE_TIER_NAME);
+		final String replaceExpr = replaceTier.getGroup(0);
+
+		// create a new find manager
+		final Session session = getEditor().getSession();
+		final FindManager findManager = new FindManager(session);
+		findManager.setAnyExpr(getAnyTierExpr());
+		findManager.setSearchTier(getSearchTiers());
+		for(String searchTier:findManager.getSearchTiers()) {
+			findManager.setExprForTier(searchTier, exprForTier(searchTier));
+		}
+		findManager.setDirection(FindDirection.FORWARDS);
+		final SessionLocation startLoc = 
+				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0],
+						new GroupLocation(0, 0)));
+		findManager.setCurrentLocation(startLoc);
+		
+		
+		final CompoundEdit edit = new CompoundEdit();
+		int occurences = 0;
+		
+		SessionRange currentRange = null;
+		while((currentRange = findManager.findNext()) != null) {
+			++occurences;
+			
+			final Record r = session.getRecord(currentRange.getRecordIndex());
+			final Tier<?> tier = r.getTier(currentRange.getRecordRange().getTier());
+			
+			final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
+			
+			// passing 'null' as session editor will suppress excessive editor repainting,
+			// tell editor about changes in a single update afterwards
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			final TierEdit<?> tierEdit = new TierEdit(null, tier, 
+					currentRange.getRecordRange().getGroupRange().getGroupIndex(), newVal);
+			tierEdit.doIt();
+			edit.addEdit(tierEdit);
+		}
+		edit.end();
+		
+		if(occurences > 0) {
+			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFICATION_EVENT, this);
+			getEditor().getEventManager().queueEvent(ee);
+			final EditorEvent refresh = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
+			getEditor().getEventManager().queueEvent(refresh);
+			
+			getEditor().getUndoSupport().postEdit(edit);
+		}
+		
+		final String message = 
+				"Replaced " + occurences + " occurences with " + replaceExpr;
+		final Toast toast = ToastFactory.makeToast(message);
+		toast.start(replaceAllBtn);
+	}
+	
+	public void setDirection(FindManager.FindDirection direction) {
+		getFindManager().setDirection(direction);
 	}
 	
 	private void setupSessionSelection(SessionRange sessionRange) {
@@ -314,22 +602,18 @@ public class FindAndReplaceEditorView extends EditorView {
 			final RecordDataEditorView recordDataView = 
 					(RecordDataEditorView)getEditor().getViewModel().getView(RecordDataEditorView.VIEW_NAME);
 			if(recordDataView.currentTier() != null) {
-				final GroupLocation grpLocation = new GroupLocation();
-				grpLocation.setGroupIndex(recordDataView.currentGroupIndex());
-				grpLocation.setCharIndex(recordDataView.currentCharIndex());
-				final RecordLocation recLocation = new RecordLocation(recordDataView.currentTier().getName(), grpLocation);
-				retVal = new SessionLocation(recordDataView.currentRecordIndex(), recLocation);
+				retVal = recordDataView.getSessionLocation();
 			}
 		}
 		
 		if(retVal == null) {
-			final List<TierViewItem> tierView = getEditor().getSession().getTierView();
+			final String[] searchTiers = findManager.getSearchTiers();
 			
-			final GroupLocation grpLocation = new GroupLocation();
+			final GroupLocation grpLocation = new GroupLocation(0, 0);
 			grpLocation.setGroupIndex(0);
 			grpLocation.setCharIndex(0);
 			final RecordLocation recordLocation = new RecordLocation(
-					(tierView.size() > 0 ? tierView.get(0).getTierName() : SystemTierType.Orthography.getName()), grpLocation);
+					(searchTiers.length > 0 ? searchTiers[0] : SystemTierType.Orthography.getName()), grpLocation);
 			retVal = new SessionLocation(getEditor().getCurrentRecordIndex(), recordLocation);
 		}
 		
@@ -347,6 +631,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			init();
 			
 			setOpaque(false);
+			caseSensitiveBox.setOpaque(false);
 		}
 		
 		private void init() {
@@ -386,5 +671,47 @@ public class FindAndReplaceEditorView extends EditorView {
 		}
 		
 	};
+	
+	private class FindOptionsListener implements ItemListener, ActionListener {
+		
+		private String tierName;
+		
+		private FindOptionsPanel panel;
+		
+		public FindOptionsListener(String tierName) {
+			this.tierName = tierName;
+		}
+		
+		private void install(FindOptionsPanel panel) {
+			this.panel = panel;
+			panel.typeBox.addItemListener(this);
+			panel.caseSensitiveBox.addActionListener(this);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setupExpr();
+		}
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			setupExpr();
+			panel.caseSensitiveBox.setEnabled(panel.typeBox.getSelectedItem() != SearchType.PHONEX);
+		}
+		
+		private void setupExpr() {
+			FindExpr expr = null;
+			if(tierName.equals(ANY_TIER_NAME)) {
+				expr = findManager.getAnyExpr();
+			} else {
+				expr = findManager.getExprForTier(tierName);
+			}
+			if(expr != null) {
+				expr.setCaseSensitive(panel.caseSensitiveBox.isSelected());
+				expr.setType((SearchType)panel.typeBox.getSelectedItem());
+			}
+		}
+		
+	}
 	
 }
