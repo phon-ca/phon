@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.find_and_replace;
+package ca.phon.session;
 
 import ca.phon.util.Range;
 import ca.phon.util.Tuple;
@@ -23,6 +23,14 @@ public class GroupRange extends Tuple<Integer, Range> {
 	
 	public void setRange(Range r) {
 		super.setObj2(r);
+	}
+	
+	public GroupLocation start() {
+		return new GroupLocation(getGroupIndex(), getRange().getStart());
+	}
+	
+	public GroupLocation end() {
+		return new GroupLocation(getGroupIndex(), getRange().getStart());
 	}
 
 }

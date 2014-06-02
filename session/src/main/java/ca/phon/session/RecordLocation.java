@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.session.editor.view.find_and_replace;
+package ca.phon.session;
 
 import ca.phon.util.Tuple;
 

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.session.editor.view.find_and_replace;
+package ca.phon.session;
 
 import ca.phon.util.Tuple;
 
@@ -40,4 +40,13 @@ public class SessionRange extends Tuple<Integer, RecordRange> {
 	public void setRecordRange(RecordRange r) {
 		super.setObj2(r);
 	}
+	
+	public SessionLocation start() {
+		return new SessionLocation(getRecordIndex(), getRecordRange().start());
+	}
+	
+	public SessionLocation end() {
+		return new SessionLocation(getRecordIndex(), getRecordRange().end());
+	}
+	
 }

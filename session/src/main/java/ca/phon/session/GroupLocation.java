@@ -1,8 +1,12 @@
-package ca.phon.app.session.editor.view.find_and_replace;
+package ca.phon.session;
 
 import ca.phon.util.Tuple;
 
 public class GroupLocation extends Tuple<Integer, Integer> {
+	
+	public GroupLocation(Integer groupIndex, Integer charIndex) {
+		super(groupIndex, charIndex);
+	}
 	
 	public Integer getGroupIndex() {
 		return super.getObj1();
