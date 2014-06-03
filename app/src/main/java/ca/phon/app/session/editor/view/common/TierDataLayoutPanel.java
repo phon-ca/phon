@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.common;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -30,6 +31,7 @@ public class TierDataLayoutPanel extends JPanel {
 		setLayout(layout);
 		
 		// turn off swing background painting
+		setBackground(Color.white);
 		setOpaque(false);
 		bgPainter = new TierDataLayoutBgPainter();
 	}
