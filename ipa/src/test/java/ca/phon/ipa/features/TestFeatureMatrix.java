@@ -45,14 +45,14 @@ public class TestFeatureMatrix {
 		Assert.assertEquals(0, fmSet.size());
 	}
 	
-	@Test
-	public void ensureIpaFullySupported() {
-		final FeatureMatrix fm = FeatureMatrix.getInstance();
-		final Set<Character> fmSet = new TreeSet<Character>(fm.getCharacterSet());
-		final Set<Character> tokenSet = new TreeSet<Character>(IPATokens.getSharedInstance().getCharacterSet());
-		
-		// remove all supported characters
-		tokenSet.removeAll(fmSet);
-		Assert.assertEquals(0, tokenSet.size());
-	}
+//	@Test
+//	public void ensureIpaFullySupported() {
+//		final FeatureMatrix fm = FeatureMatrix.getInstance();
+//		final Set<Character> fmSet = new TreeSet<Character>(fm.getCharacterSet());
+//		final Set<Character> tokenSet = new TreeSet<Character>(IPATokens.getSharedInstance().getCharacterSet());
+//		
+//		// remove all supported characters
+//		tokenSet.removeAll(fmSet);
+//		Assert.assertEquals(0, tokenSet.size());
+//	}
 }
