@@ -84,7 +84,7 @@ public class TierDataLayoutBgPainter {
 		// label area
 		Color labelBgColor = getLabelBgColor();
 		if(labelBgColor == null) labelBgColor = PhonGuiConstants.PHON_UI_STRIP_COLOR;
-		final Rectangle labelBgRect = new Rectangle(0, 0, layout.getTierLabelWidth() + layout.getHorizontalGap() - 1, compSize.height);
+		final Rectangle labelBgRect = new Rectangle(0, 0, layout.getTierLabelWidth() + layout.getHorizontalGap() / 2, compSize.height);
 		g2.setColor(labelBgColor);
 		g2.fill(labelBgRect);
 		
@@ -96,7 +96,7 @@ public class TierDataLayoutBgPainter {
 		
 		for(int i = 0; i < layout.getRowCount(); i++) {
 			final Rectangle rowRect = layout.getLayoutProvider().rowRect((Container)c, layout, i);
-			rowRect.x += layout.getHorizontalGap() - 1;
+			rowRect.x += layout.getHorizontalGap() / 2;
 			rowRect.width -= layout.getHorizontalGap() - 1;
 			rowRect.y -= layout.getVerticalGap() / 2;
 			rowRect.height += layout.getVerticalGap();

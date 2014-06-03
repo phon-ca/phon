@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Enumeration of availabe tier data layout types.
+ * Enumeration of available tier data layout types.
  *
  */
 public enum TierDataLayoutType {

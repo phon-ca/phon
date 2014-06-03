@@ -27,9 +27,20 @@ public class AlignGroupsLayoutProvider implements TierDataLayoutProvider {
 	public void layoutContainer(Container parent, TierDataLayout layout) {
 		final Map<Component, TierDataConstraint> constraintMap = layout.getConstraintMap();
 		for(Component comp:constraintMap.keySet()) {
+			final Dimension prefSize = comp.getPreferredSize();
+			
 			final TierDataConstraint constraint = constraintMap.get(comp);
 			Rectangle rect = alignedRectForConstaint(parent, layout, constraint);
-			comp.setBounds(rect);
+			
+			Rectangle compRect = new Rectangle(rect);
+			
+			if(constraint.getColumnIndex() != TierDataConstraint.TIER_LABEL_COLUMN) {
+				if(rect.height > prefSize.height) {
+					// center in rect
+					compRect.y += (rect.height - prefSize.height) / 2;
+				}
+			}
+			comp.setBounds(compRect);
 		}
 	}
 
@@ -121,7 +132,7 @@ public class AlignGroupsLayoutProvider implements TierDataLayoutProvider {
 		} else if(col == TierDataConstraint.FLAT_TIER_COLUMN) {
 			x = layout.getTierLabelWidth() + layout.getHorizontalGap();
 		} else {
-			x = layout.getTierLabelWidth() + layout.getVerticalGap();
+			x = layout.getTierLabelWidth() + layout.getHorizontalGap();
 			for(int i = TierDataConstraint.GROUP_START_COLUMN; i < col; i++) {
 				x += calcAlignedColumnWidth(parent, layout, i) + layout.getHorizontalGap();
 			}

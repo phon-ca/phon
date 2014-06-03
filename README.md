@@ -1,4 +1,4 @@
-# ![https://www.phon.ca](https://github.com/ghedlund/phon/raw/master/app/src/main/resources/data/icons/Phon_32x32.png) Phon  ![DOI:10.5281/zenodo.10061](https://zenodo.org/badge/4147/ghedlund/phon.png) 
+# ![https://www.phon.ca](https://github.com/ghedlund/phon/raw/master/app/src/main/resources/data/icons/Phon_32x32.png) Phon  
 
 Phon is a software program that greatly facilitates a number of tasks related 
 to the analysis of phonological data. Built to support research in 
