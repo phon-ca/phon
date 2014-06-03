@@ -48,8 +48,8 @@ public class SessionEditorToolbar extends JPanel {
 	}
 	
 	private void init() {
-		final FormLayout layout = new FormLayout("pref, fill:pref:grow, right:pref, 5dlu, right:pref",
-				"pref");
+		final FormLayout layout = new FormLayout("3dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref, 3dlu",
+				"3dlu, pref");
 		setLayout(layout);
 		final CellConstraints cc = new CellConstraints();
 		
@@ -80,13 +80,13 @@ public class SessionEditorToolbar extends JPanel {
 //		saveButton.setEnabled(getEditor().isModified());  // enable on modified flag change
 		
 		buttonPanel.add(saveButton);
-		add(buttonPanel, cc.xy(1, 1));
+		add(buttonPanel, cc.xy(2, 2));
 		
 		navigationPanel = new NavigationPanel(getEditor());
-		add(navigationPanel, cc.xy(3, 1));
+		add(navigationPanel, cc.xy(4, 2));
 		
 		quickSearch = new SessionEditorQuickSearch(getEditor());
-		add(quickSearch.getSearchField(), cc.xy(5, 1));
+		add(quickSearch.getSearchField(), cc.xy(6, 2));
 	}
 	
 }
