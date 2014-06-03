@@ -210,6 +210,7 @@ public class ValidationEditorView extends EditorView {
 			final JPanel p = new JPanel(new HorizontalLayout(3));
 			p.add(candidateField);
 			p.add(btn);
+			p.setOpaque(false);
 			
 			final TierDataConstraint candidateRestraint = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, row);
 			panel.add(p, candidateRestraint);

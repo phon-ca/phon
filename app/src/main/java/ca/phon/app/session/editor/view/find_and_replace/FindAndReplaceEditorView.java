@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.find_and_replace;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -128,6 +129,7 @@ public class FindAndReplaceEditorView extends EditorView {
 	
 	private void init() {
 		setLayout(new BorderLayout());
+		setBackground(Color.white);
 		
 		sidePanel = new JPanel();
 		sidePanel.setBackground(PhonGuiConstants.PHON_SHADED);
@@ -138,6 +140,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		add(sidePanel, BorderLayout.EAST);
 
 		tierPanel = new TierDataLayoutPanel();
+		
 		final JScrollPane scroller = new JScrollPane(tierPanel);
 		add(scroller, BorderLayout.CENTER);
 	}
