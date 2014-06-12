@@ -183,6 +183,7 @@ public class LocalProject implements Project {
 		for(File f:getFolder().listFiles()) {
 			if(f.isDirectory() 
 					&& !f.getName().startsWith("~") 
+					&& !f.getName().endsWith("~") 
 					&& !f.getName().startsWith("__") 
 					&& !f.isHidden()) {
 				final String corpusName = f.getName();
@@ -196,9 +197,10 @@ public class LocalProject implements Project {
 				// look for all xml files inside corpus folder
 				for(File xmlFile:f.listFiles()) {
 					if(xmlFile.getName().endsWith(".xml")
-							&& !f.getName().startsWith("~")
-							&& !f.getName().startsWith("__")
-							&& !f.isHidden()) {
+							&& !xmlFile.getName().startsWith("~")
+							&& !xmlFile.getName().endsWith("~")
+							&& !xmlFile.getName().startsWith("__")
+							&& !xmlFile.isHidden()) {
 						final String sessionName = xmlFile.getName().substring(0, xmlFile.getName().lastIndexOf('.'));
 						
 						SessionType sessionType = null;
