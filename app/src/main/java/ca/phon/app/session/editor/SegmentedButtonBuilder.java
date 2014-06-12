@@ -15,15 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.ui;
+package ca.phon.app.session.editor;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
+
+import org.pushingpixels.substance.api.SubstanceConstants.Side;
+import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
 /**
  * Utility methods for creating segmented buttons.
@@ -43,8 +49,25 @@ public class SegmentedButtonBuilder {
 
 	public static JButton createSegmentButton(String style, String position, ButtonGroup buttonGrp) {
 	  JButton button = new JButton();
+	  
+	  // client properties for Mac OS X
 	  button.putClientProperty("JButton.buttonType", style);
 	  button.putClientProperty("JButton.segmentPosition", position);
+	  
+	  // client properties for Substance L&F
+	  Set<Side> openSides = new LinkedHashSet<Side>();
+	  if(position.equals("first")) {
+		  openSides.add(Side.RIGHT);
+	  } else if(position.equals("middle")) {
+		  openSides.add(Side.LEFT);
+		  openSides.add(Side.RIGHT);
+	  } else if(position.equals("last")) {
+		  openSides.add(Side.LEFT);
+	  }
+	  
+	  button.putClientProperty(SubstanceLookAndFeel.BUTTON_OPEN_SIDE_PROPERTY,
+			  openSides);
+	  
 	  buttonGrp.add(button);
 	  return button;
 	}
