@@ -36,7 +36,6 @@ import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.session.SessionLocation;
-import ca.phon.ui.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

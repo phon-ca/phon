@@ -86,8 +86,7 @@ public class WorkspaceEP implements IPluginEntryPoint {
 			if(!startDialog.isShowing()) {
 				// display start dialog
 				startDialog.setSize(new Dimension(725, 600));
-//				startDialog.centerWindow();
-				startDialog.setLocationByPlatform(true);
+				startDialog.centerWindow();
 				
 				if(!startDialog.isVisible())
 					startDialog.setVisible(true);

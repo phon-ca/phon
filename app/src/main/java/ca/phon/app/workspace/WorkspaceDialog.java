@@ -111,8 +111,6 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		super.setWindowName("Workspace");
 		
-//		loadIPAFonts();
-		
 		init();
 		super.addWindowListener(this);
 		super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -430,10 +428,6 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 	public void onNewProject(PhonActionEvent pae) {
 		pae.setData(newProjectButton);
 		onSwapNewAndCreate(pae);
-//		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.core.NewController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
 	}
 	
 	public void onCreateProject(PhonActionEvent pae) {
@@ -458,7 +452,6 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 			final ProjectFactory factory = new ProjectFactory();
 			Project newProject = factory.createProject(projectFile);
 			newProject.setName(projectName);
-//			newProject.save();
 			
 			// refresh project list
 			workspacePanel.refresh();
@@ -623,11 +616,6 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		}
 		
 		PluginEntryPointRunner.executePluginInBackground("Preferences", initInfo);
-		
-//		ModuleInformation mi =
-//			ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.edit.PropertiesController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
 	}
 	
 	private class BtnBgPainter extends MouseInputAdapter implements Painter<MultiActionButton> {
@@ -665,13 +653,11 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		@Override
 		public void mouseEntered(MouseEvent me) {
 			useSelected = true;
-			repaint();
 		}
 		
 		@Override
 		public void mouseExited(MouseEvent me) {
 			useSelected = false;
-			repaint();
 		}
 		
 	}
@@ -712,7 +698,6 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 			if(val.matches(projectRegex)) {
 				super.insertString(offs, str, a);
 			}
-//			super.insertString(offs, str, a);
 		}
 		
 	}

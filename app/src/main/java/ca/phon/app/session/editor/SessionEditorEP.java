@@ -22,6 +22,7 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Transcriber;
+import ca.phon.ui.CommonModuleFrame;
 
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -101,13 +102,13 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		}
 		
 		final SessionEditor editor = new SessionEditor(project, session, transcriber);
-		editor.setLocationByPlatform(true);
 		
 		// load editor perspective
 		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
 		editor.getViewModel().applyPerspective(perspective);
 		
 		editor.pack();
+		editor.cascadeWindow(CommonModuleFrame.getCurrentFrame());
 		editor.setVisible(true);
 	}
 	
