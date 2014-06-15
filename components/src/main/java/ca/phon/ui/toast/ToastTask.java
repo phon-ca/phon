@@ -1,11 +1,16 @@
 package ca.phon.ui.toast;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.Timer;
@@ -14,6 +19,10 @@ import javax.swing.Timer;
  * Task to display a toast.
  */
 public class ToastTask implements Runnable {
+	
+	public final static int CENTER_X = Integer.MAX_VALUE;
+	
+	public final static int CENTER_Y = Integer.MAX_VALUE;
 
 	/**
 	 * The toast
@@ -41,10 +50,36 @@ public class ToastTask implements Runnable {
 		this(toast, parent, new Point(x, y));
 	}
 
+	private JLabel createLabel() {
+		final JLabel label = new JLabel();
+		
+		label.setText(toast.getMessage());
+		label.setBackground(toast.getMessageBackground());
+		label.setForeground(toast.getMessageForeground());
+		label.setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		return label;
+	}
+	
 	@Override
 	public void run() {
 		final PopupFactory factory = new PopupFactory();
-		final Popup popup = factory.getPopup(parent, toast.getLabel(), p.x, p.y);
+		final JLabel label = createLabel();
+		final Dimension prefSize = label.getPreferredSize();
+		
+		if(p.x == CENTER_X) {
+			final Dimension bounds = 
+					(parent == null ? Toolkit.getDefaultToolkit().getScreenSize() : parent.getSize());
+			p.x = (bounds.width / 2) - (prefSize.width / 2);
+		}
+		
+		if(p.y == CENTER_Y) {
+			final Dimension bounds = 
+					(parent == null ? Toolkit.getDefaultToolkit().getScreenSize() : parent.getSize());
+			p.y = (bounds.height / 2) - (prefSize.height / 2);
+		}
+		
+		final Popup popup = factory.getPopup(parent, label, p.x, p.y);
 		
 		if(toast.isFinishOnClink()) {
 			toast.addToastListener(new ToastListener() {
