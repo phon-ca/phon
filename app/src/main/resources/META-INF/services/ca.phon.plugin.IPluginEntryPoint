@@ -39,3 +39,7 @@ ca.phon.app.query.QueryEditorEP
 ca.phon.app.query.QueryHistoryEP
 # Session template
 ca.phon.app.corpus.CorpusTemplateEP
+# Copy/Move session
+ca.phon.app.project.CopySessionEP
+# Rename session
+ca.phon.app.project.RenameSessionEP

@@ -62,13 +62,16 @@ import ca.phon.project.Project;
 import ca.phon.project.ProjectListener;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
+import ca.phon.workspace.Workspace;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -133,8 +136,6 @@ public class ProjectWindow extends CommonModuleFrame
 		this.addWindowListener(this);
 		this.setTitle("Phon : " + project.getName() + " : Project Manager");
 		
-		
-//		this.addModuleController(this);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		init();
@@ -220,12 +221,6 @@ public class ProjectWindow extends CommonModuleFrame
 				initInfo.put("project", getProject());
 				
 				PluginEntryPointRunner.executePluginInBackground("NewSession", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.core.NewSessionController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
 			}
 			
 		});
@@ -239,12 +234,6 @@ public class ProjectWindow extends CommonModuleFrame
 				initInfo.put("project", getProject());
 				
 				PluginEntryPointRunner.executePluginInBackground("CheckIPA", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.RepairController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
 			}
 			
 		});
@@ -260,92 +249,10 @@ public class ProjectWindow extends CommonModuleFrame
 				initInfo.put("project", getProject());
 				
 				PluginEntryPointRunner.executePluginInBackground("DeriveSession", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.MergeSessionsController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
 			}
 			
 		});
 		projectMenu.add(deriveItem);
-		
-		projectMenu.addSeparator();
-		
-		JMenuItem csvImportItem = new JMenuItem("Import Data from CSV...");
-		csvImportItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = 
-					new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				
-				PluginEntryPointRunner.executePluginInBackground("CSVImport", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.CSVImportController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-			}
-		});
-		projectMenu.add(csvImportItem);
-		
-		JMenuItem csvExportItem = new JMenuItem("Export Data as CSV...");
-		csvExportItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = 
-					new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				
-				PluginEntryPointRunner.executePluginInBackground("CSVExport", initInfo);
-				
-//				ModuleInformation mi =
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.CSVExportController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-			}
-			
-		});
-		projectMenu.add(csvExportItem);
-		
-//		JMenuItem importSessionItem = new JMenuItem("Import Session From XML...");
-//		importSessionItem.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				HashMap<String, Object> initInfo = 
-//					new HashMap<String, Object>();
-//				initInfo.put("project", project);
-//				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.ImportSessionController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-//			}
-//			
-//		});
-			
-	//	projectMenu.add(importSessionItem);
-		
-//		JMenu importCorpusMenu = new JMenu("Import Corpus");
-//		JMenuItem fromTalkbankItem = new JMenuItem("from Talkbank-xml folder");
-//		fromTalkbankItem.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				HashMap<String, Object> initInfo = new HashMap<String, Object>();
-//				initInfo.put("project", project);
-//				ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.project.ImportFolderModule");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-//			}
-//			
-//		});
-//		importCorpusMenu.add(fromTalkbankItem);
-//		projectMenu.add(importCorpusMenu);
 	}
 
 	private void init() {
@@ -654,16 +561,7 @@ public class ProjectWindow extends CommonModuleFrame
 			List<String> proj2Sessions = 
 				proj2.getCorpusSessions(destCorpus);
 			if(proj2Sessions.contains(session)) {
-				
-//				SystemProperties proj1VData = 
-//					proj1.getSessionValidationData();
-//				
-//				SystemProperties proj2VData = 
-//					proj2.getSessionValidationData();
-				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm");
-				
-//				String lastModifiedProp = corpus + "." + session + ".modified";
 				
 				String proj1LastModified = 
 					sdf.format(proj1.getSessionModificationTime(corpus, session).toDate());
@@ -675,16 +573,24 @@ public class ProjectWindow extends CommonModuleFrame
 					"Replace '" + corpus + "." + session + "' modified " + proj2LastModified + 
 					" with file modified on " + proj1LastModified + "?";
 				
-				int result = 
-					NativeDialogs.showYesNoDialogBlocking(this, "", "Session Already Exists", msg);
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setRunAsync(false);
+				props.setTitle("Session Already Exists");
+				props.setMessage(msg);
+				props.setOptions(MessageDialogProperties.yesNoOptions);
 				
-				if(result != NativeDialogEvent.YES_OPTION) {
+				int result = 
+					NativeDialogs.showMessageDialog(props);
+				
+				if(result != 0) {
 					return;
 				}
 				
 			}
 		} catch (Exception e) {
-			LOGGER.warning("Could not check existing transcript.");
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			ToastFactory.makeToast(e.getLocalizedMessage()).start(this.getRootPane());
 		}
 		
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
@@ -807,11 +713,6 @@ public class ProjectWindow extends CommonModuleFrame
 		initInfo.put("corpusName", corpus);
 		
 		PluginEntryPointRunner.executePluginInBackground("RenameCorpus", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.RenameCorpusController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
 	}
 	
 //	/**
@@ -983,6 +884,10 @@ public class ProjectWindow extends CommonModuleFrame
 		JMenu moveToMenu = new JMenu("Move Session To");
 		JMenu copyToMenu = new JMenu("Copy Session To");
 		
+		final String corpusListMsg = "<html><b>This project:</b></html>";
+		moveToMenu.add(corpusListMsg).setEnabled(false);
+		copyToMenu.add(corpusListMsg).setEnabled(false);
+		
 		List<String> projectCorpora = null;
 		
 		Collator collator = CollatorFactory.defaultCollator();
@@ -1021,9 +926,9 @@ public class ProjectWindow extends CommonModuleFrame
 			moveToMenu.add(currentMoveItem);
 		}
 		
-		// corpora in other projects
-//		List<Project> openProjects = 
-//			PhonEnvironment.getInstance().getOpenProjects();
+		final String openProjectsMsg = "<html><b>Open project:</b></html>";
+		boolean openProjectMsgAdded = false;
+		
 		List<CommonModuleFrame> openWindows = CommonModuleFrame.getOpenWindows();
 		for(int i = 0; i < openWindows.size(); i++) {
 			final CommonModuleFrame cmf = openWindows.get(i);
@@ -1035,6 +940,11 @@ public class ProjectWindow extends CommonModuleFrame
 			if(proj == null) continue;
 			
 			if(proj != getProject()) {
+				if(!openProjectMsgAdded) {
+					copyToMenu.add(openProjectsMsg).setEnabled(false);
+					moveToMenu.add(openProjectsMsg).setEnabled(false);
+					openProjectMsgAdded = true;
+				}
 				List<String> projCorpora = null;
 				String projName = new String();
 				projCorpora = 
@@ -1078,6 +988,64 @@ public class ProjectWindow extends CommonModuleFrame
 				copyToMenu.add(projCopyToMenu);
 				moveToMenu.add(projMoveToMenu);
 			}
+		}
+		
+		final String workspaceMsg = "<html><b>Workspace project:</b></html>";
+		boolean workspaceMsgAdded = false;
+		
+		// workspace projects
+		final List<Project> workspaceProjects = Workspace.userWorkspace().getProjects();
+		for(final Project p:workspaceProjects) {
+			if(p.getLocation().equals(getProject().getLocation())) {
+				continue;
+			}
+			if(!workspaceMsgAdded) {
+				copyToMenu.add(workspaceMsg).setEnabled(false);
+				moveToMenu.add(workspaceMsg).setEnabled(false);
+				workspaceMsgAdded = true;
+			}
+			List<String> projCorpora = null;
+			String projName = new String();
+			projCorpora = 
+				p.getCorpora();
+			Collections.sort(projCorpora, collator);
+			projName = p.getName();
+			
+			JMenu projMoveToMenu = new JMenu(projName);
+			JMenu projCopyToMenu = new JMenu(projName);
+			for(int j = 0; j < projCorpora.size(); j++) {
+				final String projCorpus = 
+					projCorpora.get(j);
+				
+				JMenuItem projMoveToItem = 
+					new JMenuItem(projCorpus);
+				projMoveToItem.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						copySession(
+								getProject(), corpus, session,
+								p, projCorpus, false, true);
+					}
+					
+				});
+				projMoveToMenu.add(projMoveToItem);
+				
+				JMenuItem projCopyToItem = 
+					new JMenuItem(projCorpus);
+				projCopyToItem.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						copySession(
+								getProject(), corpus, session,
+								p, projCorpus, false, false);
+					}
+					
+				});
+				projCopyToMenu.add(projCopyToItem);
+			}
+			
+			copyToMenu.add(projCopyToMenu);
+			moveToMenu.add(projMoveToMenu);
 		}
 		
 		contextMenu.add(copyToMenu);

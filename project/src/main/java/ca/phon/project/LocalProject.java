@@ -463,6 +463,16 @@ public class LocalProject implements Project {
 			throw new IOException("No session reader available for " + uri.toASCIIString());
 		}
 		final Session retVal = reader.readSession(uri.toURL().openStream());
+		
+		// make sure corpus and session match the expected values, these
+		// can change if the session file has been manually moved
+		if(!retVal.getCorpus().equals(corpus)) {
+			retVal.setCorpus(corpus);
+		}
+		if(!retVal.getName().equals(session)) {
+			retVal.setName(session);
+		}
+		
 		return retVal;
 	}
 
@@ -565,15 +575,24 @@ public class LocalProject implements Project {
 	@Override
 	public InputStream getResourceInputStream(String resourceName)
 			throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		final File resFolder = new File(getLocation(), "__res");
+		final File resFile = new File(resFolder, resourceName);
+		
+		return new FileInputStream(resFile);
 	}
 
 	@Override
 	public OutputStream getResourceOutputStream(String resourceName)
 			throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		final File resFolder = new File(getLocation(), "__res");
+		final File resFile = new File(resFolder, resourceName);
+		
+		// make parent folders as necessary
+		if(!resFile.getParentFile().exists()) {
+			resFile.getParentFile().mkdirs();
+		}
+		
+		return new FileOutputStream(resFile);
 	}
 	
 	@Override
@@ -707,19 +726,6 @@ public class LocalProject implements Project {
 	@Override
 	public String getLocation() {
 		return projectFolder.getAbsolutePath();
-	}
-
-	@Override
-	public boolean hasAutosaveFile(String corpus, String session) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void removeAutosaveFile(String corpus, String session)
-			throws IOException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -56,12 +56,6 @@ public class IPAGridPanel extends JPanel {
 		this.ipaGrid = grid;
 		this.parent = parent;
 		
-
-		MouseHandler mouseHandler = new MouseHandler();
-		this.addMouseListener(mouseHandler);
-		this.addMouseMotionListener(mouseHandler);
-		this.addMouseWheelListener(mouseHandler);
-		
 		setupGrid();
 	}
 	
@@ -70,8 +64,6 @@ public class IPAGridPanel extends JPanel {
 		
 		gridLayout = new GridCellLayout(ipaGrid.getRows(), ipaGrid.getCols(),
 				(int)cellDim.getWidth(), (int)cellDim.getHeight());
-//		super.setLayout(gridLayout);
-		
 	}
 	
 	public GridCellLayout getGridLayout() {
@@ -117,40 +109,5 @@ public class IPAGridPanel extends JPanel {
 		
 		painter.paint(g2d, this, getWidth(), getHeight());
 	}
-	
-	/**
-	 * Mouse listener
-	 */
-	private class MouseHandler extends MouseInputAdapter {
 
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			super.mouseClicked(arg0);
-		}
-
-		@Override
-		public void mouseMoved(MouseEvent arg0) {
-			Point p = arg0.getPoint();
-			
-			// calculate cell row & col
-			int row = (int)(p.getX() % gridLayout.getCellWidth());
-			int col = (int)(p.getY() % gridLayout.getCellHeight());
-			
-			System.out.println("[" + row + "," + col + "]");
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			super.mousePressed(arg0);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			super.mouseReleased(arg0);
-		}
-		
-	}
 }

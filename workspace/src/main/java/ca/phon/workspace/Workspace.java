@@ -1,10 +1,22 @@
 package ca.phon.workspace;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import ca.phon.project.LocalProject;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectFactory;
+import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.util.PrefHelper;
 
 public class Workspace {
+	
+	private static final Logger LOGGER = Logger.getLogger(Workspace.class
+			.getName());
 	
 	/**
 	 * Property for the current workspace folder setting
@@ -79,5 +91,37 @@ public class Workspace {
 	 */
 	public File getWorkspaceFolder() {
 		return this.workspaceFolder;
+	}
+	
+	/**
+	 * Get projects located in the workspace folder.
+	 * 
+	 * @return list of project
+	 */
+	public List<Project> getProjects() {
+		final List<Project> retVal = new ArrayList<Project>();
+		// scan workspace folder for projects
+		final File workspaceFolder = getWorkspaceFolder();
+		
+		final ProjectFactory pf = new ProjectFactory();
+		for(File workspaceFile:workspaceFolder.listFiles()) {
+			if(workspaceFile.isDirectory() 
+					&& !workspaceFile.isHidden()
+					&& !workspaceFile.getName().startsWith("~")
+					&& !workspaceFile.getName().endsWith("~")
+					&& !workspaceFile.getName().startsWith("__")
+					&& !workspaceFile.getName().equals("backups")) {
+				// check to see if we can open the project
+				try {
+					final Project p = pf.openProject(workspaceFile);
+					retVal.add(p);
+				} catch (IOException e) {} catch (ProjectConfigurationException e) {
+					LOGGER
+							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+			}
+		}
+		
+		return retVal;
 	}
 }
