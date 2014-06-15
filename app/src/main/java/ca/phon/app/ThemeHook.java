@@ -41,10 +41,10 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
+					// keep mac OS X menu bars
 					if(OSInfo.isMacOs()) {
 						final String[] uiKeys = new String[]{
-								"MenuBarUI", "MenuUI", "MenuItemUI", "CheckBoxMenuItemUI",
-								"RadioButtonMenuItemUI", "PopupMenuUI" };
+								"MenuBarUI" };
 						for(String key:uiKeys) {
 							uiMap.put(key, UIManager.get(key));
 						}
