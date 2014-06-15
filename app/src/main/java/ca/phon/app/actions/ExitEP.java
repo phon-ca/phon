@@ -86,9 +86,9 @@ public class ExitEP implements IPluginEntryPoint
 			= new ArrayList<CommonModuleFrame>();
 		Set<Project> projectSet = new HashSet<Project>();
 		for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
-			final Project pfe = f.getExtension(Project.class);
-			if(pfe != null) {
-				projectSet.add(pfe);
+			final Project project = f.getExtension(Project.class);
+			if(project != null) {
+				projectSet.add(project);
 			}
 			if(f.hasUnsavedChanges())
 				editorsWithChanges.add(f);
@@ -124,15 +124,7 @@ public class ExitEP implements IPluginEntryPoint
 			}
 		}
 	    
-		for(Project project:projectSet) {
-			try {
-				cleanupAutosaves(project);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		// if we get here, we are shutting down
-		
 		// call plug-in shutdown methods
 		final List<IPluginExtensionPoint<PhonShutdownHook>> shutdownHookPts = 
 				PluginManager.getInstance().getExtensionPoints(PhonShutdownHook.class);
@@ -147,15 +139,6 @@ public class ExitEP implements IPluginEntryPoint
 		
 	    // exit program
 	    System.exit( 0 );
-	}
-	
-	private void cleanupAutosaves(Project project) throws IOException {
-		for(String corpus:project.getCorpora()) {
-			for(String session:project.getCorpusSessions(corpus)) {
-				if(project.hasAutosaveFile(corpus, session))
-					project.removeAutosaveFile(corpus, session);
-			}
-		}
 	}
 
 	@Override

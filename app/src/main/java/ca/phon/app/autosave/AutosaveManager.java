@@ -19,11 +19,17 @@ package ca.phon.app.autosave;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Timer;
 
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 
 /**
@@ -40,6 +46,8 @@ public class AutosaveManager {
 	 * Autosave property
 	 */
 	public static final String AUTOSAVE_INTERVAL_PROP = AutosaveManager.class.getName() + ".interval";
+	
+	public static final String AUTOSAVE_PREFIX = "__autosave_";
 	
 	/**
 	 * Default interval (seconds)
@@ -140,27 +148,28 @@ public class AutosaveManager {
 			
 			// find all open sessions
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-				// TODO Fix Session autosave
-//				if(cmf instanceof RecordEditor) {
-//					RecordEditor editor = (RecordEditor)cmf;
-//					
-//					// autosave if we have changes
-//					if(editor.getModel().isModified()) {
-//						
-//						ITranscript t = editor.getModel().getSession();
-//						
-//						PhonLogger.info("Autosaving session '" + 
-//								t.getCorpus() + "." + t.getID() + "'...");
-//						
-//						IPhonProject project = editor.getProject();
-//						try {
-//							project.autosaveTranscript(editor.getModel().getSession());
-//						} catch (IOException e1) {
-//							PhonLogger.severe(AutosaveManager.class, e1.toString());
-//							editor.showErrorMessage("Failed to autosave!  See log for details.");
-//						}
-//					}
-//				}
+				if(cmf instanceof SessionEditor) {
+					final SessionEditor editor = (SessionEditor)cmf;
+					
+					if(editor.isModified()) {
+						final Project project = editor.getProject();
+						final Session session = editor.getSession();
+						
+						LOGGER.info("Autosaving session '" + 
+								session.getCorpus() + "." + session.getName() + "'...");
+						
+						try {
+							final UUID writeLock = project.getSessionWriteLock(session.getCorpus(), 
+									AUTOSAVE_PREFIX + session.getName());
+							project.saveSession(session.getCorpus(), AUTOSAVE_PREFIX + session.getName(), 
+									session, writeLock);
+							project.releaseSessionWriteLock(session.getCorpus(), AUTOSAVE_PREFIX + session.getName(), writeLock);
+						} catch (IOException e1) {
+							LOGGER.log(Level.SEVERE,
+									e1.getLocalizedMessage(), e1);
+						}
+					}
+				}
 			}
 			
 			LOGGER.info(
