@@ -43,3 +43,7 @@ ca.phon.app.corpus.CorpusTemplateEP
 ca.phon.app.project.CopySessionEP
 # Rename session
 ca.phon.app.project.RenameSessionEP
+# Delete session
+ca.phon.app.project.DeleteSessionEP
+# Duplicate session
+ca.phon.app.project.DuplicateSessionEP
