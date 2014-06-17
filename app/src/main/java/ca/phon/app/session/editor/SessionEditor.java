@@ -200,7 +200,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		// don't do this here - wait until window has been initialized
 		
 		
-		setupViewMenu(viewMenu);
+		getViewModel().setupViewMenu(viewMenu);
 
 		setupEditorActions();
 	}
@@ -289,8 +289,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			@Override
 			public void menuSelected(MenuEvent e) {
 				viewMenu.removeAll();
-				setupLayoutManagmentMenuItems(viewMenu);
-				setupViewMenu(viewMenu);
+				getViewModel().setupPerspectiveMenu(viewMenu);
+				viewMenu.addSeparator();
+				getViewModel().setupViewMenu(viewMenu);
 			}
 			
 			@Override
@@ -305,202 +306,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		menuBar.add(viewMenu, 3);
 		
 		super.setJMenuBar(menuBar);
-	}
-	
-	private void setupLayoutManagmentMenuItems(JMenu viewMenu) {
-		final JMenu layoutMenu = new JMenu("Load layout");
-		ImageIcon loadLayoutIcon = IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
-		layoutMenu.setIcon(loadLayoutIcon);
-		layoutMenu.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent e) {
-				layoutMenu.removeAll();
-				setupLayoutMenu(layoutMenu);
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent e) {
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent e) {
-			}
-		});
-		viewMenu.add(layoutMenu);
-		
-		final JMenu deleteMenu = new JMenu("Delete layout");
-		ImageIcon deleteLayoutIcon = IconManager.getInstance().getIcon("actions/layout-delete", IconSize.SMALL);
-		deleteMenu.setIcon(deleteLayoutIcon);
-		deleteMenu.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent arg0) {
-				setupDeleteLayoutMenu(deleteMenu);
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent arg0) {
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent arg0) {
-			}
-		});
-		viewMenu.add(deleteMenu);
-		
-		// save current layout
-		final PhonUIAction saveLayoutAct = new PhonUIAction(SessionEditor.this, "onSaveLayout");
-		ImageIcon saveLayoutIcon = IconManager.getInstance().getIcon("actions/layout-add", IconSize.SMALL);
-		saveLayoutAct.putValue(PhonUIAction.SMALL_ICON, saveLayoutIcon);
-		saveLayoutAct.putValue(PhonUIAction.NAME, "Save current layout...");
-		saveLayoutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current layout as a preset.");
-		final JMenuItem saveLayoutItem = new JMenuItem(saveLayoutAct);
-		viewMenu.add(saveLayoutItem);
-		
-		viewMenu.addSeparator();
-	}
-	
-	/**
-	 * Adds all available views - by category - to the given
-	 * {@link MenuElement}
-	 * 
-	 * @param ele
-	 */
-	private void setupViewMenu(MenuElement ele) {
-		final Map<EditorViewCategory, List<String>> viewsByCategory = 
-				getViewModel().getViewsByCategory();
-		for(EditorViewCategory category:viewsByCategory.keySet()) {
-			final JMenuItem categoryItem = new JMenuItem("-- " + category.title + " --");
-			categoryItem.setEnabled(false);
-			if(ele.getComponent() instanceof JMenu) {
-				final JMenu menu = (JMenu)ele;
-				menu.add(categoryItem);
-			} else if(ele.getComponent() instanceof JPopupMenu) {
-				final JPopupMenu menu = (JPopupMenu)ele;
-				menu.add(categoryItem);
-			}
-			
-			for(String view:viewsByCategory.get(category)) {
-				final PhonUIAction toggleViewAct = new PhonUIAction(view, getViewModel(), "showView", view);
-				toggleViewAct.putValue(PhonUIAction.SMALL_ICON, getViewModel().getViewIcon(view));
-				
-				JComponent viewItem = new JMenuItem(toggleViewAct);
-				
-				if(getViewModel().isShowing(view)) {
-					JMenu menu = getViewModel().getView(view).getMenu();
-					if(menu != null) {
-						menu.addSeparator();
-					} else {
-						menu = new JMenu();
-					}
-					menu.setText(toggleViewAct.getValue(PhonUIAction.NAME).toString());
-					menu.setIcon(getViewModel().getViewIcon(view));
-					final Action closeAct = getViewModel().getCloseAction(view);
-					menu.add(closeAct);
-					
-					viewItem = menu;
-				}
-				
-				if(ele.getComponent() instanceof JMenu) {
-					final JMenu menu = (JMenu)ele;
-					menu.add(viewItem);
-				} else if(ele.getComponent() instanceof JPopupMenu) {
-					final JPopupMenu menu = (JPopupMenu)ele;
-					menu.add(viewItem);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Adds a menu item for all available editor perspecitves.
-	 * 
-	 * @param menu
-	 */
-	private void setupLayoutMenu(MenuElement menu) {
-		if(menu.getComponent() instanceof JMenu) {
-			((JMenu)menu).removeAll();
-		} else if(menu.getComponent() instanceof JPopupMenu) {
-			((JPopupMenu)menu).removeAll();
-		}
-		
-		for(RecordEditorPerspective editorPerspective:RecordEditorPerspective.availablePerspectives()) {
-			
-			final PhonUIAction showPerspectiveAct = new PhonUIAction(getViewModel(), "applyPerspective", editorPerspective);
-			showPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
-			showPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Load perspective: " + editorPerspective.getName());
-			final JMenuItem showPerspectiveItem = new JMenuItem(showPerspectiveAct);
-			
-			
-			if(menu.getComponent() instanceof JMenu) {
-				final JMenu m = (JMenu)menu;
-				m.add(showPerspectiveItem);
-			} else if(menu.getComponent() instanceof JPopupMenu) {
-				final JPopupMenu m = (JPopupMenu)menu;
-				m.add(showPerspectiveItem);
-			}
-		}
-	}
-	
-	/**
-	 * Add a menu to delete user-defined editor perspectives.
-	 * 
-	 * @param ele
-	 */
-	private void setupDeleteLayoutMenu(MenuElement ele) {
-		if(ele.getComponent() instanceof JMenu) {
-			((JMenu)ele).removeAll();
-		} else if(ele.getComponent() instanceof JPopupMenu) {
-			((JPopupMenu)ele).removeAll();
-		}
-		for(RecordEditorPerspective editorPerspective:RecordEditorPerspective.availablePerspectives()) {
-			try {
-				final File perspectiveFile = new File(editorPerspective.getLocation().toURI());
-				if(perspectiveFile.canWrite()) {
-					// add delete item
-					final PhonUIAction delPerspectiveAct = 
-							new PhonUIAction(this, "onDeleteLayout", editorPerspective);
-					delPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
-					delPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete layout " + editorPerspective.getName());
-					final JMenuItem delPerspectiveItem = new JMenuItem(delPerspectiveAct);
-					
-					if(ele.getComponent() instanceof JMenu) {
-						final JMenu menu = (JMenu)ele;
-						menu.add(delPerspectiveItem);
-					} else if(ele.getComponent() instanceof JPopupMenu) {
-						final JPopupMenu menu = (JPopupMenu)ele;
-						menu.add(delPerspectiveItem);
-					}
-				}
-			} catch (URISyntaxException e) {
-				
-			} catch (IllegalArgumentException e) {
-				// thrown when URI is not heirarchical (i.e., is in a jar)
-			}
-		}
-	}
-	
-	public void onSaveLayout() {
-		// get a perspective name
-		final String layoutName = JOptionPane.showInputDialog(this, "Enter layout name:");
-		if(RecordEditorPerspective.getPerspective(layoutName) != null) {
-			final Toast toast = ToastFactory.makeToast("Layout named " + layoutName + " already exists.");
-			toast.start(this.getRootPane());
-			return;
-		}
-		
-		final File perspectiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER, layoutName + ".xml");
-		try {
-			final RecordEditorPerspective perspective = new RecordEditorPerspective(layoutName, perspectiveFile.toURI().toURL());
-			getViewModel().savePerspective(perspective);
-		} catch (MalformedURLException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}	
-	}
-	
-	public void onDeleteLayout(RecordEditorPerspective perspective) {
-		RecordEditorPerspective.deletePerspective(perspective);
 	}
 	
 	/**

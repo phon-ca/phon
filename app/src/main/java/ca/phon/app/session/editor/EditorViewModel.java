@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.MenuElement;
 
 /**
  * <p>View model for the {@link SessionEditor}.  This class
@@ -123,5 +124,19 @@ public interface EditorViewModel {
 	 * @param editorPerspective
 	 */
 	public void removePrespective(RecordEditorPerspective editorPerspective);
+	
+	/**
+	 * Setup view menu
+	 * 
+	 * @param menuElement
+	 */
+	public void setupViewMenu(MenuElement menuElement);
+	
+	/**
+	 * Setup perspective menu.
+	 * 
+	 * @param menuElement
+	 */
+	public void setupPerspectiveMenu(MenuElement menuElement);
 
 }

@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,14 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
@@ -56,8 +64,11 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -282,7 +293,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		if(dockable != null) {
 			final DockPosition position = (editorView == null ? DockPosition.CENTER : editorView.getPreferredDockPosition());
-//			final CLocation location = locationFromPosition(position);
 			dockControl.addDockable(dockable);
 			
 			switch(position) {
@@ -326,38 +336,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		dockControl.addDockable(dockable);
 		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
 	}
-	
-//	private CLocation locationFromPosition(DockPosition position) {
-//		CLocation retVal = CLocation.base().normal();
-//		
-//		switch(position) {
-//		case CENTER:
-//			break;
-//			
-//		case EAST:
-//			retVal = CLocation.base().normalEast(DockPosition.EAST.getSize());
-//			break;
-//			
-//		case WEST:
-//			retVal = CLocation.base().normalWest(DockPosition.WEST.getSize());
-//			break;
-//			
-//		case NORTH:
-//			retVal = CLocation.base().normalNorth(DockPosition.NORTH.getSize());
-//			break;
-//			
-//		case SOUTH:
-//			retVal = CLocation.base().normalSouth(DockPosition.SOUTH.getSize());
-//			break;
-//			
-//		default:
-//			break;
-//		}
-//		
-//		return retVal;
-//	}
-	
-	
 	
 	/**
 	 * Delete given perspective.
@@ -552,6 +530,204 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			}
 		}
 		
+	}
+
+	@Override
+	public void setupViewMenu(MenuElement ele) {
+		final Map<EditorViewCategory, List<String>> viewsByCategory = 
+				getViewsByCategory();
+		for(EditorViewCategory category:viewsByCategory.keySet()) {
+			final JMenuItem categoryItem = new JMenuItem("-- " + category.title + " --");
+			categoryItem.setEnabled(false);
+			if(ele.getComponent() instanceof JMenu) {
+				final JMenu menu = (JMenu)ele;
+				menu.add(categoryItem);
+			} else if(ele.getComponent() instanceof JPopupMenu) {
+				final JPopupMenu menu = (JPopupMenu)ele;
+				menu.add(categoryItem);
+			}
+			
+			for(String view:viewsByCategory.get(category)) {
+				final PhonUIAction toggleViewAct = new PhonUIAction(view, this, "showView", view);
+				toggleViewAct.putValue(PhonUIAction.SMALL_ICON, getViewIcon(view));
+				
+				JComponent viewItem = new JMenuItem(toggleViewAct);
+				
+				if(isShowing(view)) {
+					JMenu menu = getView(view).getMenu();
+					if(menu != null) {
+						menu.addSeparator();
+					} else {
+						menu = new JMenu();
+					}
+					menu.setText(toggleViewAct.getValue(PhonUIAction.NAME).toString());
+					menu.setIcon(getViewIcon(view));
+					final Action closeAct = getCloseAction(view);
+					menu.add(closeAct);
+					
+					viewItem = menu;
+				}
+				
+				if(ele.getComponent() instanceof JMenu) {
+					final JMenu menu = (JMenu)ele;
+					menu.add(viewItem);
+				} else if(ele.getComponent() instanceof JPopupMenu) {
+					final JPopupMenu menu = (JPopupMenu)ele;
+					menu.add(viewItem);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void setupPerspectiveMenu(MenuElement menuElement) {
+		final JMenu layoutMenu = new JMenu("Load layout");
+		ImageIcon loadLayoutIcon = IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
+		layoutMenu.setIcon(loadLayoutIcon);
+		layoutMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				layoutMenu.removeAll();
+				setupLayoutMenu(layoutMenu);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+		});
+		
+		if(menuElement instanceof JPopupMenu) 
+			((JPopupMenu)menuElement).add(layoutMenu);
+		else if(menuElement instanceof JMenu) 
+			((JMenu)menuElement).add(layoutMenu);
+		
+		final JMenu deleteMenu = new JMenu("Delete layout");
+		ImageIcon deleteLayoutIcon = IconManager.getInstance().getIcon("actions/layout-delete", IconSize.SMALL);
+		deleteMenu.setIcon(deleteLayoutIcon);
+		deleteMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				setupDeleteLayoutMenu(deleteMenu);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent arg0) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent arg0) {
+			}
+		});
+		
+		if(menuElement instanceof JPopupMenu) 
+			((JPopupMenu)menuElement).add(deleteMenu);
+		else if(menuElement instanceof JMenu) 
+			((JMenu)menuElement).add(deleteMenu);
+		
+		// save current layout
+		final PhonUIAction saveLayoutAct = new PhonUIAction(this, "onSaveLayout");
+		ImageIcon saveLayoutIcon = IconManager.getInstance().getIcon("actions/layout-add", IconSize.SMALL);
+		saveLayoutAct.putValue(PhonUIAction.SMALL_ICON, saveLayoutIcon);
+		saveLayoutAct.putValue(PhonUIAction.NAME, "Save current layout...");
+		saveLayoutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current layout as a preset.");
+		final JMenuItem saveLayoutItem = new JMenuItem(saveLayoutAct);
+		
+		if(menuElement instanceof JPopupMenu) 
+			((JPopupMenu)menuElement).add(saveLayoutItem);
+		else if(menuElement instanceof JMenu) 
+			((JMenu)menuElement).add(saveLayoutItem);
+	}
+	
+	/**
+	 * Adds a menu item for all available editor perspecitves.
+	 * 
+	 * @param menu
+	 */
+	private void setupLayoutMenu(MenuElement menu) {
+		if(menu.getComponent() instanceof JMenu) {
+			((JMenu)menu).removeAll();
+		} else if(menu.getComponent() instanceof JPopupMenu) {
+			((JPopupMenu)menu).removeAll();
+		}
+		
+		for(RecordEditorPerspective editorPerspective:RecordEditorPerspective.availablePerspectives()) {
+			
+			final PhonUIAction showPerspectiveAct = new PhonUIAction(this, "applyPerspective", editorPerspective);
+			showPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
+			showPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Load perspective: " + editorPerspective.getName());
+			final JMenuItem showPerspectiveItem = new JMenuItem(showPerspectiveAct);
+			
+			
+			if(menu.getComponent() instanceof JMenu) {
+				final JMenu m = (JMenu)menu;
+				m.add(showPerspectiveItem);
+			} else if(menu.getComponent() instanceof JPopupMenu) {
+				final JPopupMenu m = (JPopupMenu)menu;
+				m.add(showPerspectiveItem);
+			}
+		}
+	}
+	
+	/**
+	 * Add a menu to delete user-defined editor perspectives.
+	 * 
+	 * @param ele
+	 */
+	private void setupDeleteLayoutMenu(MenuElement ele) {
+		if(ele.getComponent() instanceof JMenu) {
+			((JMenu)ele).removeAll();
+		} else if(ele.getComponent() instanceof JPopupMenu) {
+			((JPopupMenu)ele).removeAll();
+		}
+		for(RecordEditorPerspective editorPerspective:RecordEditorPerspective.availablePerspectives()) {
+			try {
+				final File perspectiveFile = new File(editorPerspective.getLocation().toURI());
+				if(perspectiveFile.canWrite()) {
+					// add delete item
+					final PhonUIAction delPerspectiveAct = 
+							new PhonUIAction(this, "deletePerspective", editorPerspective);
+					delPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
+					delPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete layout " + editorPerspective.getName());
+					final JMenuItem delPerspectiveItem = new JMenuItem(delPerspectiveAct);
+					
+					if(ele.getComponent() instanceof JMenu) {
+						final JMenu menu = (JMenu)ele;
+						menu.add(delPerspectiveItem);
+					} else if(ele.getComponent() instanceof JPopupMenu) {
+						final JPopupMenu menu = (JPopupMenu)ele;
+						menu.add(delPerspectiveItem);
+					}
+				}
+			} catch (URISyntaxException e) {
+				
+			} catch (IllegalArgumentException e) {
+				// thrown when URI is not heirarchical (i.e., is in a jar)
+			}
+		}
+	}
+	
+	public void onSaveLayout() {
+		// get a perspective name
+		final String layoutName = JOptionPane.showInputDialog(this, "Enter layout name:");
+		if(RecordEditorPerspective.getPerspective(layoutName) != null) {
+			final Toast toast = ToastFactory.makeToast("Layout named " + layoutName + " already exists.");
+			toast.start(getEditor());
+			return;
+		}
+		
+		final File perspectiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER, layoutName + ".xml");
+		try {
+			final RecordEditorPerspective perspective = new RecordEditorPerspective(layoutName, perspectiveFile.toURI().toURL());
+			savePerspective(perspective);
+		} catch (MalformedURLException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}	
 	}
 	
 }
