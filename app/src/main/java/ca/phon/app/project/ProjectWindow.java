@@ -17,6 +17,8 @@
  */
 package ca.phon.app.project;
 
+import groovy.ui.view.GTKDefaults;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -60,6 +62,7 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectListener;
+import ca.phon.project.ProjectRefresh;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -104,14 +107,6 @@ public class ProjectWindow extends CommonModuleFrame
 	
 	/** Label for messages */
 	private MessagePanel msgPanel;
-	
-	/** Project sharing */
-	private JToggleButton shareButton;
-	private JLabel rmiPathLabel;
-	private JLabel sharingStatusLabel;
-	
-	/** menus */
-	private JMenu scriptMenu;
 	
 	/** Project path (used to load the project) */
 	private String projectLoadPath = new String();
@@ -187,7 +182,7 @@ public class ProjectWindow extends CommonModuleFrame
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateLists();
+				refreshProject();
 			}
 			
 		});
@@ -1129,8 +1124,6 @@ public class ProjectWindow extends CommonModuleFrame
 		CorpusListModel corpusListModel = 
 			(CorpusListModel)corpusList.getModel();
 		corpusListModel.refresh();
-//		corpusListModel.fireDataChange();
-//		corpusList.revalidate();
 		corpusList.repaint();
 		
 		SessionListModel sessionListModel = 
@@ -1141,40 +1134,21 @@ public class ProjectWindow extends CommonModuleFrame
 			sessionListModel.setCorpus(corpusList.getSelectedValue().toString());
 		else
 			sessionListModel.setCorpus(null);
-//		sessionListModel.setCorpus(corpusList.getSelectedValue().toString());
-//		sessionListModel.fireDataChange();
-//		sessionList.revalidate();
+		
 		sessionList.repaint();
 	}
-
-//	public void handleModuleEvent(IModuleEvent e) throws ModuleException {
-//		if(e instanceof SaveDataEvent) {
-//			try {
-//				project.save();
-//			} catch (IOException ex) {
-//				PhonLogger.warning(this.getClass(), ex.getMessage());
-//				throw new ModuleException(this, "IO Error: " + ex.getMessage());
-//			}
-//		} else if (e instanceof SaveAsEvent) {
-////			FileFilter filters[] = new FileFilter[1];
-////			filters[0] = FileFilter.phonFilter;
-////			// show the save dialog
-////			String newFile = NativeDialogs.showSaveFileDialogBlocking(this, 
-////					"", ".phon", filters, "Save Project As");
-////			if(newFile != null) {
-////				try {
-////					project.saveAs(newFile);
-////				} catch (IOException ex) {
-////					NativeDialogs.showMessageDialogBlocking(
-////							this, null, "Cannot Save Project", ex.getMessage());
-////					PhonLogger.warning(this.getClass(), ex.getMessage());
-////				}
-////			}
-//		}
-//	}
 	
 	public MessagePanel getMessagePanel() {
 		return msgPanel;
+	}
+	
+	public void refreshProject() {
+		final Project project = getProject();
+		final ProjectRefresh impl = project.getExtension(ProjectRefresh.class);
+		if(impl != null) {
+			impl.refresh();
+			updateLists();
+		}
 	}
 	
 	private class MessagePanel extends JComponent {

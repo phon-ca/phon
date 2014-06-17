@@ -182,28 +182,7 @@ public class SessionEditorQuickSearch {
 				
 			}
 		});
-//		searchField.getDocument().addDocumentListener(new DocumentListener() {
-//			
-//			@Override
-//			public void removeUpdate(DocumentEvent e) {
-//				if(searchField.getState() == FieldState.INPUT) {
-//					updateFilter();
-//				}
-//			}
-//			
-//			@Override
-//			public void insertUpdate(DocumentEvent e) {
-//				if(searchField.getState() == FieldState.INPUT) 
-//					updateFilter();
-//			}
-//			
-//			@Override
-//			public void changedUpdate(DocumentEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//		});
+		
 		searchField.addFocusListener(new FocusListener() {
 			
 			@Override

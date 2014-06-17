@@ -77,8 +77,6 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 		caseSensitive = !caseSensitive;
 	}
 
-
-
 	private class RecordRowFilter extends RowFilter<TableModel, Integer> {
 
 		private RowFilter<TableModel, Integer> filter;

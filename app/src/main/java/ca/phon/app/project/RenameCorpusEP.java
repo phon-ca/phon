@@ -36,6 +36,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -86,7 +87,6 @@ public class RenameCorpusEP implements IPluginEntryPoint {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 			initializePanel();
-//			parentWindow = this;
 		}
 		
 		/**
@@ -288,13 +288,19 @@ public class RenameCorpusEP implements IPluginEntryPoint {
 	private void begin() {
 		if(project == null) return;
 		
-		JDialog dlg = new RenameCorpusDialog();
-		dlg.setVisible(true);
-		while(dlg.isVisible()) {
-			try {
-				Thread.sleep(500);
-			} catch(Exception e) { break; }
-		}
+		final Runnable onEDT = new Runnable() {
+			
+			@Override
+			public void run() {
+				JDialog dlg = new RenameCorpusDialog();
+				dlg.setModal(true);
+				dlg.setVisible(true);
+			}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			SwingUtilities.invokeLater(onEDT);
 	}
 
 	@Override
@@ -304,26 +310,31 @@ public class RenameCorpusEP implements IPluginEntryPoint {
 		
 		project = (Project)initInfo.get("project");
 		
-		if(initInfo.get("corpus") == null) {
+		if(initInfo.get("corpusName") == null) {
 			begin();
 			return;
 		}
 		
-		String corpusName = initInfo.get("corpus").toString();
+		final String corpusName = initInfo.get("corpusName").toString();
 		
 		if(initInfo.get("newCorpus") == null) {
-			JDialog dlg = new RenameCorpusDialog(corpusName);
-			dlg.setVisible(true);
-			while(dlg.isVisible()) {
-				try {
-					Thread.sleep(500);
-				} catch(Exception e) { break; }
-			}
+			final Runnable onEDT = new Runnable() {
+				
+				@Override
+				public void run() {
+					JDialog dlg = new RenameCorpusDialog(corpusName);
+					dlg.setModal(true);
+					dlg.setVisible(true);
+				}
+			};
+			if(SwingUtilities.isEventDispatchThread())
+				onEDT.run();
+			else
+				SwingUtilities.invokeLater(onEDT);
 			return;
 		}
 		
-		String newName = initInfo.get("corpus").toString();
-		
+		String newName = initInfo.get("newCorpusName").toString();
 		renameCorpus(corpusName, newName);
 	}
 
