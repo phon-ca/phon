@@ -1,12 +1,19 @@
 package ca.phon.app.session.editor;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.actions.DuplicateRecordAction;
+import ca.phon.app.session.editor.actions.NewRecordAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
 import ca.phon.ui.action.PhonUIAction;
@@ -31,7 +38,6 @@ public class SessionEditorToolbar extends JPanel {
 	 * Buttons
 	 */
 	private JButton saveButton;
-	// TODO other buttons
 	
 	private NavigationPanel navigationPanel;
 	
@@ -48,45 +54,51 @@ public class SessionEditorToolbar extends JPanel {
 	}
 	
 	private void init() {
-		final FormLayout layout = new FormLayout("3dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref, 3dlu",
+		final FormLayout layout = new FormLayout(
+				"3dlu, pref, 3dlu, pref, 3dlu, pref, "
+				+ "fill:pref:grow, right:pref, 5dlu, right:pref, 3dlu",
 				"3dlu, pref");
 		setLayout(layout);
 		final CellConstraints cc = new CellConstraints();
-		
-		final JPanel buttonPanel = new JPanel();
-		BoxLayout buttonLayout = new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS);
-		buttonPanel.setLayout(buttonLayout);
-		
-//		// load button icons
-//		final ImageIcon saveIcon = 
-//			IconManager.getInstance().getIcon("actions/filesave", IconSize.SMALL);
-//		final ImageIcon reloadLayoutIcon = 
-//			IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
-//		final ImageIcon newRecordIcon = 
-//			IconManager.getInstance().getIcon("misc/record-add", IconSize.SMALL);
-//		final ImageIcon deleteRecordIcon = 
-//			IconManager.getInstance().getIcon("misc/record-delete", IconSize.SMALL);
-//		final ImageIcon duplicateRecordIcon = 
-//			IconManager.getInstance().getIcon("misc/record-duplicate", IconSize.SMALL);
 		
 		// save button
 		final SaveSessionAction saveAction = new SaveSessionAction(getEditor());
 		saveButton = new JButton(saveAction);
 		saveButton.setText(null);
-//		final PhonUIAction saveAction = new PhonUIAction(this, "saveSession");
-//		saveAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save session");
-//		saveAction.putValue(PhonUIAction.SMALL_ICON, saveIcon);
-//		saveButton = new JButton(saveAction);
-//		saveButton.setEnabled(getEditor().isModified());  // enable on modified flag change
+		add(saveButton, cc.xy(2, 2));
 		
-		buttonPanel.add(saveButton);
-		add(buttonPanel, cc.xy(2, 2));
+		final ImageIcon reloadLayoutIcon = 
+				IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
+		final PhonUIAction showViewMenuAct = new PhonUIAction(this, "showViewMenu");
+		showViewMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show view menu");
+		showViewMenuAct.putValue(PhonUIAction.SMALL_ICON, reloadLayoutIcon);
+		final JButton viewBtn = new JButton(showViewMenuAct);
+		add(viewBtn, cc.xy(4,2));
 		
+		final ButtonGroup btnGrp = new ButtonGroup();
+		final List<JButton> buttons = SegmentedButtonBuilder.createSegmentedButtons(3, btnGrp);
+		
+		final NewRecordAction newRecordAct = new NewRecordAction(getEditor());
+		buttons.get(0).setAction(newRecordAct);
+		buttons.get(0).setText(null);
+		
+		final DuplicateRecordAction dupRecordAct = new DuplicateRecordAction(getEditor());
+		buttons.get(1).setAction(dupRecordAct);
+		buttons.get(1).setText(null);
+		
+		final DeleteRecordAction delRecordAct = new DeleteRecordAction(getEditor());
+		buttons.get(2).setAction(delRecordAct);
+		buttons.get(2).setText(null);
+		
+		final JComponent btnComp = SegmentedButtonBuilder.createLayoutComponent(buttons);
+		
+		add(btnComp, cc.xy(6,2));
+
 		navigationPanel = new NavigationPanel(getEditor());
-		add(navigationPanel, cc.xy(4, 2));
+		add(navigationPanel, cc.xy(8, 2));
 		
 		quickSearch = new SessionEditorQuickSearch(getEditor());
-		add(quickSearch.getSearchField(), cc.xy(6, 2));
+		add(quickSearch.getSearchField(), cc.xy(10, 2));
 	}
 	
 }
