@@ -494,18 +494,25 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(reader == null) {
 			throw new IOException("No session reader available for " + uri.toASCIIString());
 		}
-		final Session retVal = reader.readSession(uri.toURL().openStream());
 		
-		// make sure corpus and session match the expected values, these
-		// can change if the session file has been manually moved
-		if(!retVal.getCorpus().equals(corpus)) {
-			retVal.setCorpus(corpus);
+		try {
+			final Session retVal = reader.readSession(uri.toURL().openStream());
+			
+			// make sure corpus and session match the expected values, these
+			// can change if the session file has been manually moved
+			if(!retVal.getCorpus().equals(corpus)) {
+				retVal.setCorpus(corpus);
+			}
+			if(!retVal.getName().equals(session)) {
+				retVal.setName(session);
+			}
+			
+			return retVal;
+		} catch (Exception e) {
+			// catch all exceptions
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-		if(!retVal.getName().equals(session)) {
-			retVal.setName(session);
-		}
-		
-		return retVal;
+		return null;
 	}
 
 	@Override
