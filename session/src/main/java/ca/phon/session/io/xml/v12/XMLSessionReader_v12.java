@@ -581,7 +581,12 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		int gidx = 0;
 		for(AlignmentType at:att.getAg()) {
-			final PhoneMap pm = new PhoneMap(ipaT.getGroup(gidx), ipaA.getGroup(gidx));
+			final IPATranscript ipaTGrp = (ipaT.numberOfGroups() < gidx && ipaT.getGroup(gidx) != null ?
+					ipaT.getGroup(gidx) : new IPATranscript());
+			final IPATranscript ipaAGrp = (ipaA.numberOfGroups() < gidx && ipaA.getGroup(gidx) != null ?
+					ipaA.getGroup(gidx) : new IPATranscript());
+		
+			final PhoneMap pm = new PhoneMap(ipaTGrp, ipaAGrp);
 			
 			final Integer[][] alignmentData = new Integer[2][];
 			alignmentData[0] = new Integer[at.getLength()];
