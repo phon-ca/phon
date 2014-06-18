@@ -316,6 +316,12 @@ public class RecordDataEditorView extends EditorView {
 						final JTextComponent textComp = (JTextComponent)tierComp;
 						addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, gIdx);
 						textComp.addCaretListener(caretListener);
+						
+						if(tierItem.isTierLocked()) {
+							textComp.setEditable(false);
+						}
+					} else if(tierItem.isTierLocked()) {
+						tierComp.setEnabled(false);
 					}
 					
 					if(toFocus == null) {
@@ -335,6 +341,12 @@ public class RecordDataEditorView extends EditorView {
 					final JTextComponent textComp = (JTextComponent)tierComp;
 					addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, 0);
 					textComp.addCaretListener(caretListener);
+					
+					if(tierItem.isTierLocked()) {
+						textComp.setEditable(false);
+					}
+				} else if(tierItem.isTierLocked()) {
+					tierComp.setEnabled(false);
 				}
 				
 				if(toFocus == null) {
