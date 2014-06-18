@@ -9,7 +9,6 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
 
