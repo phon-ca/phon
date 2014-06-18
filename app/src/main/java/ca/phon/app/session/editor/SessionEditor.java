@@ -48,6 +48,7 @@ import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
@@ -151,6 +152,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
 		this.selectionModelRef = 
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
+		
+		
+		// check to ensure that the session has a tier view
+		if(session.getTierView() == null || session.getTierView().size() == 0) {
+			session.setTierView(SessionFactory.newFactory().createDefaultTierView(session));
+		}
 	
 		// setup title
 		final String title = generateTitle();
@@ -196,9 +203,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		// setup content/dock area
 		final Container dock = viewModel.getRoot();
 		contentPane.add(dock, BorderLayout.CENTER);
-		
-		// don't do this here - wait until window has been initialized
-		
 		
 		getViewModel().setupViewMenu(viewMenu);
 
