@@ -511,8 +511,8 @@ public class LocalProject implements Project, ProjectRefresh {
 		} catch (Exception e) {
 			// catch all exceptions
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			throw new IOException(e);
 		}
-		return null;
 	}
 
 	@Override
