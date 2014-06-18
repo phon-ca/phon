@@ -349,20 +349,16 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public void renameCorpus(String corpus, String newName) throws IOException {
-		// add new corpus first
-		addCorpus(newName, getCorpusDescription(corpus));
+		final File corpusFolder = getCorpusFolder(corpus);
+		final File newCorpusFolder = getCorpusFolder(newName);
 		
-		// copy sessions
-		for(String sessionName:getCorpusSessions(corpus)) {
-			final Session session = openSession(corpus, sessionName);
-			
-			final UUID writeLock = getSessionWriteLock(newName, sessionName);
-			saveSession(newName, sessionName, session, writeLock);
-			releaseSessionWriteLock(newName, sessionName, writeLock);
+		// rename folder
+		corpusFolder.renameTo(newCorpusFolder);
+
+		final CorpusType ct = getCorpusInfo(corpus);
+		if(ct != null) {
+			ct.setName(newName);
 		}
-		
-		// remove old corpus
-		removeCorpus(corpus);
 		
 		ProjectEvent pe = ProjectEvent.newCorpusRemovedEvent(corpus);
 		fireProjectStructureChanged(pe);
