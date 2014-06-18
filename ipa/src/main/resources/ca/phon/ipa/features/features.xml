@@ -458,6 +458,8 @@
    </feature>
 
    <!--Consonants-->
+   <!-- X -->
+   <feature_set char="&#x58;">unintelligible </feature_set>
    <!--C-->
    <feature_set char="&#x43;">consonant </feature_set>
    <!--b-->

@@ -99,6 +99,10 @@
         <name>Latin Capital Letter G</name>
         <token>COVER_SYMBOL</token>
     </char>
+    <char value="&#x0058;">
+        <name>Latin Capital Letter X</name>
+        <token>COVER_SYMBOL</token>
+    </char>
     <char value="&#x0061;">
         <name>Latin Letter Small A</name>
         <token>VOWEL</token>
