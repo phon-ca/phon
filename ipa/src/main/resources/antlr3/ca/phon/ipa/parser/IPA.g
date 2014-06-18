@@ -126,7 +126,7 @@ scope {
 @init { 
 	$word::builder = new IPATranscriptBuilder(); 
 }
-	:	(we=word_element {$word::builder.append($we.p);}  
+	:	(we=word_element {if($we.p != null) $word::builder.append($we.p);}  
 		( COLON sc=sctype {
 			SyllabificationInfo sInfo = $we.p.getExtension(SyllabificationInfo.class);
 			sInfo.setConstituentType($sc.value);
@@ -267,6 +267,20 @@ phone returns [IPAElement ele]
 		$ele = $compound_phone.phone;
 	}
 	;
+	catch [NoViableAltException ex] {
+		if(state.lastErrorIndex != input.index()) {
+			Token t = input.get(input.index());
+			String txt = t.getText();
+			char filler = (txt != null && txt.length() > 0 ? txt.charAt(0) : 'X');
+			$ele = (new IPAElementFactory()).createPhone(filler);
+		}
+		reportError(ex);
+		recover(input, ex);
+	}
+	catch [RecognitionException re] {
+		reportError(re);
+		recover(input, re);
+	}
 	
 /**
  * A single (non-compound) phone.
