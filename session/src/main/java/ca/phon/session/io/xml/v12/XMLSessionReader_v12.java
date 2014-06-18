@@ -202,7 +202,10 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					final ParticipantType pt = (ParticipantType)rt.getSpeaker();
 					for(int pIdx = 0; pIdx < retVal.getParticipantCount(); pIdx++) {
 						final Participant participant = retVal.getParticipant(pIdx);
-						if(participant.getName().equals(pt.getName())) {
+						if(participant.getName() != null  && participant.getName().equals(pt.getName())) {
+							record.setSpeaker(participant);
+							break;
+						} else if(participant.getId() != null && participant.getId().equals(pt.getId())) {
 							record.setSpeaker(participant);
 							break;
 						}
