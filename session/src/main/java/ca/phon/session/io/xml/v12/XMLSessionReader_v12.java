@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -72,6 +74,9 @@ import ca.phon.xml.annotation.XMLSerial;
 		name="Phon 1.4-1.6"
 )
 public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session> {
+	
+	private static final Logger LOGGER = Logger
+			.getLogger(XMLSessionReader_v12.class.getName());
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -172,52 +177,64 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		// copy transcript data
 		final List<Comment> recordComments = new ArrayList<Comment>();
 		boolean foundFirstRecord = false;
-		for(Object uOrComment:sessionType.getTranscript().getUOrComment()) {
-			if(uOrComment instanceof CommentType) {
-				final CommentType ct = (CommentType)uOrComment;
-				final Comment comment = copyComment(factory, ct);
-				recordComments.add(comment);
-			} else {
-				if(!foundFirstRecord && recordComments.size() > 0) {
-					// add record comments to session metadata
-					for(Comment c:recordComments) {
-						retVal.getMetadata().addComment(c);
+		if(sessionType.getTranscript() != null) {
+			for(Object uOrComment:sessionType.getTranscript().getUOrComment()) {
+				if(uOrComment instanceof CommentType) {
+					final CommentType ct = (CommentType)uOrComment;
+					final Comment comment = copyComment(factory, ct);
+					recordComments.add(comment);
+				} else {
+					if(!foundFirstRecord && recordComments.size() > 0) {
+						// add record comments to session metadata
+						for(Comment c:recordComments) {
+							retVal.getMetadata().addComment(c);
+						}
+						recordComments.clear();
+					}
+					final RecordType rt = (RecordType)uOrComment;
+					
+					
+					Record record = null;
+					try {
+						record = copyRecord(factory, rt);
+					} catch (Exception e) {
+						LOGGER.info(rt.getId());
+						LOGGER.log(Level.SEVERE,
+								e.getLocalizedMessage(), e);
+						
+					}
+					
+					try {
+						if(rt.getId() != null) {
+							UUID uuid = UUID.fromString(rt.getId());
+							record.setUuid(uuid);
+						}
+					} catch (IllegalArgumentException e) {
+					}
+					
+					record.setExcludeFromSearches(rt.isExcludeFromSearches());
+					
+					if(rt.getSpeaker() != null) {
+						final ParticipantType pt = (ParticipantType)rt.getSpeaker();
+						for(int pIdx = 0; pIdx < retVal.getParticipantCount(); pIdx++) {
+							final Participant participant = retVal.getParticipant(pIdx);
+							if(participant.getName() != null  && participant.getName().equals(pt.getName())) {
+								record.setSpeaker(participant);
+								break;
+							} else if(participant.getId() != null && participant.getId().equals(pt.getId())) {
+								record.setSpeaker(participant);
+								break;
+							}
+						}
+					}
+					
+					retVal.addRecord(record);
+					
+					for(Comment comment:recordComments) {
+						record.addComment(comment);
 					}
 					recordComments.clear();
 				}
-				final RecordType rt = (RecordType)uOrComment;
-				final Record record = copyRecord(factory, rt);
-				
-				try {
-					if(rt.getId() != null) {
-						UUID uuid = UUID.fromString(rt.getId());
-						record.setUuid(uuid);
-					}
-				} catch (IllegalArgumentException e) {
-				}
-				
-				record.setExcludeFromSearches(rt.isExcludeFromSearches());
-				
-				if(rt.getSpeaker() != null) {
-					final ParticipantType pt = (ParticipantType)rt.getSpeaker();
-					for(int pIdx = 0; pIdx < retVal.getParticipantCount(); pIdx++) {
-						final Participant participant = retVal.getParticipant(pIdx);
-						if(participant.getName() != null  && participant.getName().equals(pt.getName())) {
-							record.setSpeaker(participant);
-							break;
-						} else if(participant.getId() != null && participant.getId().equals(pt.getId())) {
-							record.setSpeaker(participant);
-							break;
-						}
-					}
-				}
-				
-				retVal.addRecord(record);
-				
-				for(Comment comment:recordComments) {
-					record.addComment(comment);
-				}
-				recordComments.clear();
 			}
 		}
 		
@@ -450,15 +467,15 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 				} else if(ele instanceof CommentType) {
 					CommentType oct = (CommentType)ele;
 					eleList.add("(" + oct.getContent() + ")");
-				} else if(ele instanceof ChatCodeType) {
-					ChatCodeType cc = (ChatCodeType)ele;
-					eleList.add("<" + cc.getContent() + ">");
 				} else if(ele instanceof InnerGroupMarker) {
 					InnerGroupMarker ig = (InnerGroupMarker)ele;
 					if(ig.getType() == InnerGroupMarkerType.S)
 						eleList.add("{");
 					else
 						eleList.add("}");
+				} else if(ele instanceof PunctuationType) {
+					PunctuationType pt = (PunctuationType)ele;
+					eleList.add(pt.getContent());
 				}
 			}
 			
@@ -492,26 +509,30 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		// attempt an exact copy first
 		for(PhoType pt:itt.getPg()) {
-			final StringBuffer groupBuffer = new StringBuffer();
-			for(WordType wt:pt.getW()) {
-				if(groupBuffer.length() > 0)
-					groupBuffer.append(" ");
-				groupBuffer.append(wt.getContent());
-			}
 			
-			try {
-				final IPATranscript transcript = IPATranscript.parseIPATranscript(groupBuffer.toString());
-				
-				// copy syllabification if transcript is the same size as our provided syllabification
-				if(pt.getSb() != null && transcript.length() == pt.getSb().getPh().size()) {
-					final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
-					transcript.accept(visitor);
+			if(pt != null && pt.getW() != null) {
+				final StringBuffer groupBuffer = new StringBuffer();
+				for(WordType wt:pt.getW()) {
+					if(groupBuffer.length() > 0)
+						groupBuffer.append(" ");
+					groupBuffer.append(wt.getContent());
 				}
 				
-				retVal.addGroup(transcript);
-			} catch (ParseException pe) {
-				pe.printStackTrace();
-				
+				try {
+					final IPATranscript transcript = IPATranscript.parseIPATranscript(groupBuffer.toString());
+					
+					// copy syllabification if transcript is the same size as our provided syllabification
+					if(pt.getSb() != null && transcript.length() == pt.getSb().getPh().size()) {
+						final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
+						transcript.accept(visitor);
+					}
+					
+					retVal.addGroup(transcript);
+				} catch (ParseException pe) {
+					LOGGER.log(Level.SEVERE, pe.getLocalizedMessage(), pe);
+					retVal.addGroup(new IPATranscript());
+				}
+			} else {
 				retVal.addGroup(new IPATranscript());
 			}
 		}
@@ -581,9 +602,9 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		int gidx = 0;
 		for(AlignmentType at:att.getAg()) {
-			final IPATranscript ipaTGrp = (ipaT.numberOfGroups() < gidx && ipaT.getGroup(gidx) != null ?
+			final IPATranscript ipaTGrp = (ipaT.numberOfGroups() > gidx && ipaT.getGroup(gidx) != null ?
 					ipaT.getGroup(gidx) : new IPATranscript());
-			final IPATranscript ipaAGrp = (ipaA.numberOfGroups() < gidx && ipaA.getGroup(gidx) != null ?
+			final IPATranscript ipaAGrp = (ipaA.numberOfGroups() > gidx && ipaA.getGroup(gidx) != null ?
 					ipaA.getGroup(gidx) : new IPATranscript());
 		
 			final PhoneMap pm = new PhoneMap(ipaTGrp, ipaAGrp);
