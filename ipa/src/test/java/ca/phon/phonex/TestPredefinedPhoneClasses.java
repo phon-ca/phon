@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import antlr.collections.Stack;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.parser.IPATokenType;
@@ -91,5 +92,23 @@ public class TestPredefinedPhoneClasses {
 		
 			Assert.assertEquals(true, matcher.matches());
 		}
+	}
+	
+	@Test
+	public void testPauseClass() throws ParseException {
+		final String phonex = "\\p";
+		final String txt = "one (.) two (..) three (...) four";
+		
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher pm = pattern.matcher(ipa);
+		
+		final int[] locations = new int[]{ 4, 10, 18 };
+		int idx = 0;
+		while(pm.find()) {
+			Assert.assertEquals(locations[idx++], pm.start());
+		}
+		Assert.assertEquals(3, idx);
 	}
 }

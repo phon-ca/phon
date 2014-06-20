@@ -204,7 +204,7 @@ sctype
 	;
 
 ESCAPED_PHONE_CLASS
-	:	BACKSLASH ('c'|'v'|'g'|'w'|'W'|'s')
+	:	BACKSLASH ('c'|'v'|'g'|'p'|'w'|'W'|'s')
 	;
 	
 ESCAPED_PUNCT
