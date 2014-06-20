@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Insets;
-import java.awt.TextComponent;
 
 import javax.swing.ImageIcon;
 import javax.swing.border.Border;
@@ -74,9 +73,14 @@ public class GroupFieldBorder implements Border {
 		g.setColor(COLOR);
 		g.drawString(GROUP_START+"", 1, baseline);
 		g.drawString(GROUP_END+"", width-endWidth-(isShowLock(c) ? IconSize.XSMALL.getWidth()-1 : 1), baseline);
-		
+				
 		if(isShowLock(c)) {
 			g.drawImage(lockIcon.getImage(), width-IconSize.XSMALL.getWidth(), height-IconSize.XSMALL.getHeight(), c);
+		}
+		
+		if(c.hasFocus()) {
+			g.setColor(Color.blue);
+			g.drawRect(x, y, width-1, height-1);
 		}
 	}
 	
