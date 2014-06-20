@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -90,8 +91,6 @@ public class IpaMapFrame extends JFrame {
 		super("IPA Chart");
 		
 		super.setFocusableWindowState(false);
-		super.setUndecorated(true);
-//		super.setDefaultLookAndFeelDecorated(false);
 		super.setAlwaysOnTop(true);
 		
 		init();
@@ -112,7 +111,7 @@ public class IpaMapFrame extends JFrame {
 //		GlassPaneFadeHandler gpfh = new GlassPaneFadeHandler(getGlassPane());
 //		getGlassPane().setVisible(true);
 		
-		Toolkit.getDefaultToolkit().addAWTEventListener(new FadeListener(), AWTEvent.MOUSE_EVENT_MASK);
+//		Toolkit.getDefaultToolkit().addAWTEventListener(new FadeListener(), AWTEvent.MOUSE_EVENT_MASK);
 		
 		mapContents.addListener(new ButtonListener());
 	}
@@ -183,19 +182,9 @@ public class IpaMapFrame extends JFrame {
 	    	Component focusedComp = focusManager.getFocusOwner();
 	    	if(focusedComp != null && focusedComp instanceof JTextComponent) {
 	    		JTextComponent tc = (JTextComponent)focusedComp;
-
-	    		int currentPos = 
-	    			(tc.getSelectedText() == null ? tc.getCaretPosition() : tc.getSelectionStart());
-	    	
-//	    		String replacement = event.getText();
-	    		// remove filler 'circle'
-	    		String replacement = txt;
-	    		
-	    		tc.replaceSelection(replacement);
-	    		
-	    		int newPos = Math.min(tc.getText().length(), currentPos + replacement.length());
-	    		
-				tc.setCaretPosition(newPos);
+	    		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(txt), mapContents);
+	    		if(tc.isEnabled() && tc.isEditable())
+	    			tc.paste();
 			}
 		}
 		

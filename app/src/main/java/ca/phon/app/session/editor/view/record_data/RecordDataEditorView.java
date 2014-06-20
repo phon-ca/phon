@@ -704,14 +704,14 @@ public class RecordDataEditorView extends EditorView {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			final JComponent comp = (JComponent)e.getSource();
-			if(comp != null && comp instanceof JTextComponent) {
-				final JTextComponent textComp = (JTextComponent)comp;
-				if(textComp.getSelectedText() != null) {
-					textComp.setSelectionStart(-1);
-					textComp.setSelectionEnd(-1);
-				}
-			}
+//			final JComponent comp = (JComponent)e.getSource();
+//			if(comp != null && comp instanceof JTextComponent) {
+//				final JTextComponent textComp = (JTextComponent)comp;
+//				if(textComp.getSelectedText() != null) {
+//					textComp.setSelectionStart(-1);
+//					textComp.setSelectionEnd(-1);
+//				}
+//			}
 		}
 		
 	}

@@ -35,6 +35,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -302,29 +303,29 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	 */
 	private final static String GRID_FILE = "ipagrids.xml";
 	
-	/**
-	 * Keep a reference to the DOM version of the XML file
-	 */
-	private static Document gridDoc;
-	
-	private static Document getGridDoc() {
-		if(gridDoc == null) {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			dbFactory.setNamespaceAware(true);
-			DocumentBuilder dBuilder;
-			try {
-				dBuilder = dbFactory.newDocumentBuilder();
-				gridDoc = dBuilder.parse(IpaMap.class.getResourceAsStream(GRID_FILE));
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return gridDoc;
-	}
+//	/**
+//	 * Keep a reference to the DOM version of the XML file
+//	 */
+//	private static Document gridDoc;
+//	
+//	private static Document getGridDoc() {
+//		if(gridDoc == null) {
+//			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//			dbFactory.setNamespaceAware(true);
+//			DocumentBuilder dBuilder;
+//			try {
+//				dBuilder = dbFactory.newDocumentBuilder();
+//				gridDoc = dBuilder.parse(IpaMap.class.getResourceAsStream(GRID_FILE));
+//			} catch (ParserConfigurationException e) {
+//				e.printStackTrace();
+//			} catch (SAXException e) {
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		return gridDoc;
+//	}
 	
 	/**
 	 * Static ref to ipa map data
@@ -341,7 +342,9 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			try {
 				JAXBContext ctx = JAXBContext.newInstance(factory.getClass());
 				Unmarshaller unmarshaller = ctx.createUnmarshaller();
-				grids = (IpaGrids)unmarshaller.unmarshal(getGridDoc());
+//				unmarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+				grids = (IpaGrids)unmarshaller.unmarshal(
+						IpaMap.class.getResource(GRID_FILE));
 				
 				// add generated grids
 				generateMissingGrids(grids);
@@ -422,7 +425,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		}
 		
 		// everything else...
-		final Set<Character> everything = tokens.getCharacterSet();
+		final Set<Character> everything = new HashSet<Character>(tokens.getCharacterSet());
 		everything.removeAll(supportedChars);
 		everything.removeAll(cSet);
 		everything.removeAll(vSet);
