@@ -208,7 +208,7 @@ ESCAPED_PHONE_CLASS
 	;
 	
 ESCAPED_PUNCT
-	:	BACKSLASH ('.'|'*')
+	:	BACKSLASH ('.'|'*'|CARET)
 	;
 	
 ESCAPED_BOUNDARY
@@ -322,7 +322,7 @@ BOUND_END
 LETTER
 	:	'a'..'z'
 	|	'A'..'Z'
-	|	'\u0250'..'\u036f'
+	|	'\u00e6'..'\u036f'
 	;
 
 fragment

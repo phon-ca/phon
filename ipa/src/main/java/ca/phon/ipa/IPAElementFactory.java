@@ -191,6 +191,15 @@ public class IPAElementFactory {
 	}
 	
 	/**
+	 * Create an intra-word pause
+	 * 
+	 * @return new intra-word pause
+	 */
+	public IntraWordPause createIntraWordPause() {
+		return new IntraWordPause();
+	}
+	
+	/**
 	 * Create a new diacritic
 	 * 
 	 * @param diacritic

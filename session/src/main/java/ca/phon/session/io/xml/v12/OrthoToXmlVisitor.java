@@ -51,6 +51,7 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 		final PunctuationType pt = factory.createPunctuationType();
 		pt.setContent(punct.text());
 		pt.setType(punct.getType().toString());
+		gt.getWOrComOrE().add(pt);
 	}
 
 	@Visits
@@ -66,6 +67,5 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 		wt.setContent(wordnet.text());
 		gt.getWOrComOrE().add(wt);
 	}
-	
 
 }

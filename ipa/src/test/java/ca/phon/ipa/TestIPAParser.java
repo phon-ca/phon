@@ -217,4 +217,37 @@ public class TestIPAParser {
 		Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(1).getClass());
 	}
 	
+	@Test
+	public void testLengthDiacritics() throws Exception {
+		final String ipa = "oːːː";
+		for(int i = 0; i < 3; i++) {
+			final String test = ipa.substring(0, ipa.length()-i);
+			final IPATranscript t = IPATranscript.parseIPATranscript(test);
+			
+			Assert.assertEquals(1, t.length());
+			Assert.assertEquals((float)3-i, ((Phone)t.elementAt(0)).getLength());
+		}
+	}
+	
+	@Test
+	public void testIntraWordPause() throws Exception {
+		final String txt = "te^st";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		
+		Assert.assertEquals(5, ipa.length());
+		Assert.assertEquals(IntraWordPause.class, ipa.elementAt(2).getClass());
+	}
+	
+	@Test
+	public void testInterWordPause() throws Exception {
+		for(PauseLength pl:PauseLength.values()) {
+			final String txt = "hello (" + pl.getText() + ") world";
+			final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+			
+			Assert.assertEquals(13, ipa.length());
+			Assert.assertEquals(Pause.class, ipa.elementAt(6).getClass());
+			Assert.assertEquals(pl, ((Pause)ipa.elementAt(6)).getLength());
+		}
+	}
+	
 }
