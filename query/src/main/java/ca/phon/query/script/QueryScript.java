@@ -17,12 +17,16 @@
  */
 package ca.phon.query.script;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ca.phon.plugin.PluginManager;
 import ca.phon.script.PhonScriptContext;
 
 /**
@@ -85,12 +89,22 @@ public class QueryScript extends LazyQueryScript {
 	 * Setup library folders for 'require'
 	 */
 	private void setupLibraryFolders() {
-		final URL scriptFolder = ClassLoader.getSystemClassLoader().getResource("ca/phon/query/script/");
-//		LOGGER.info(scriptFolder.toString());
+		final ClassLoader cl = PluginManager.getInstance();
+		Enumeration<URL> libUrls;
 		try {
-			final URI uri = scriptFolder.toURI();
-			super.addRequirePath(uri);
-		} catch (URISyntaxException e) {}
+			libUrls = cl.getResources("ca/phon/query/script/");
+			while(libUrls.hasMoreElements()) {
+				final URL url = libUrls.nextElement();
+				try {
+					final URI uri = url.toURI();
+					super.addRequirePath(uri);
+				} catch (URISyntaxException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+			}
+		} catch (IOException e1) {
+			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+		}
 		
 		super.addPackageImport("Packages.ca.phon.ipa");
 		super.addPackageImport("Packages.ca.phon.ipa.features");

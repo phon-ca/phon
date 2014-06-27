@@ -118,6 +118,11 @@ public class QueryTask extends PhonTask {
 			throw new PhonScriptException("Script must define the " + QueryFunction.QUERY_RECORD.getName() + " function");
 		}
 		
+		scope.put("project", scope, project);
+		
+		scope.put("err", scope, ctx.getStdErr());
+		scope.put("out", scope, ctx.getStdOut());
+		
 		// add result set ass top-level object
 		scope.put("results", scope, rs);
 		
