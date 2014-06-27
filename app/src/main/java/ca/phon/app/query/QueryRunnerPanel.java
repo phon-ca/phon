@@ -404,6 +404,7 @@ public class QueryRunnerPanel extends JPanel {
 			// setup query object
 			query = qfactory.createQuery(project);
 			final QueryScriptContext ctx = queryScript.getQueryContext();
+			
 			ScriptParameters scriptParams = new ScriptParameters();
 			try {
 				scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());

@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PipedReader;
+import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
@@ -51,10 +52,14 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import javax.swing.undo.UndoManager;
 
+import ca.phon.app.log.BufferWindow;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
@@ -539,23 +544,48 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			return;
 		}
 		
+		
         // create ui
         PhonLoggerConsole errDisplay = new PhonLoggerConsole();
         errDisplay.addLogger(LOGGER);
         
         final PhonWorkerGroup workerGroup = new PhonWorkerGroup(1);
         final QueryScript script = scriptEditor.getScript();
-
+       
         final List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
         final QueryRunnerPanel queryRunnerPanel = new QueryRunnerPanel(getProject(), script, selectedSessions);
         
         final QueryName queryName = script.getExtension(QueryName.class);
         final String name = (queryName != null ? queryName.getName() : "untitled");
-//		if(queryName.endsWith(".js")) {
-//			queryName = queryName.substring(0, queryName.length()-3);
-//		} else if(queryName.endsWith(".xml")) {
-//			queryName = queryName.substring(0, queryName.length()-4);
-//		}
+        
+        final BufferWindow buffers = BufferWindow.getInstance();
+        final LogBuffer logBuffer = buffers.createBuffer(name).getLogBuffer();
+        script.getContext().redirectStdErr(new PrintStream(logBuffer.getStdErrStream()));
+        script.getContext().redirectStdOut(new PrintStream(logBuffer.getStdOutStream()));
+        
+        logBuffer.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if(!buffers.isVisible()) {
+			        buffers.setSize(500, 600);
+			        buffers.centerWindow();
+			        buffers.setVisible(true);
+		        } else {
+		        	buffers.requestFocus();
+		        }
+				logBuffer.getDocument().removeDocumentListener(this);
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+		});
+        
 		
 		String tabName = "Results : " + name;
 		editorTabs.addTab(tabName, queryRunnerPanel);

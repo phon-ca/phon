@@ -108,9 +108,17 @@ public class RecordFilterPanel extends JPanel {
 	 * Constructor
 	 */
 	public RecordFilterPanel(Project project, Session t) {
-		this.t = t;
 		this.project = project;
-		
+		if(t != null)
+			setSession(t);
+	}	
+	
+	public RecordFilterPanel(Project project) {
+		this.project = project;
+	}
+
+	public void setSession(Session session) {
+		this.t = session;
 		init();
 	}
 	
