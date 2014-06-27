@@ -397,26 +397,47 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return filter.getIPATranscript();
 	}
 	
+	private List<IPATranscript> syllList = null;
 	/**
 	 * Break the transcript into syllables.
 	 * 
 	 * @return syllables
 	 */
 	public List<IPATranscript> syllables() {
-		final SyllableVisitor visitor = new SyllableVisitor();
-		accept(visitor);
-		return visitor.getSyllables();
+		if(syllList == null) {
+			final SyllableVisitor visitor = new SyllableVisitor();
+			accept(visitor);
+			syllList = Collections.unmodifiableList(visitor.getSyllables());
+		}
+		return syllList;
 	}
 	
+	/**
+	 * Reset syllabification for the transcript.
+	 * 
+	 */
+	public void resetSyllabification() {
+		final PunctuationFilter filter = new PunctuationFilter();
+		accept(filter);
+		for(IPAElement ele:filter.getIPATranscript()) {
+			ele.setScType(SyllableConstituentType.UNKNOWN);
+		}
+		syllList = null;
+	}
+	
+	private List<IPATranscript> wordList = null;
 	/**
 	 * Break the transcript into words
 	 * 
 	 * @return words
 	 */
 	public List<IPATranscript> words() {
-		final WordVisitor visitor = new WordVisitor();
-		accept(visitor);
-		return visitor.getWords();
+		if(wordList == null) {
+			final WordVisitor visitor = new WordVisitor();
+			accept(visitor);
+			wordList = visitor.getWords();
+		}
+		return wordList;
 	}
 
 	@Override
