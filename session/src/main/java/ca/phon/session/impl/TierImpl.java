@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ca.phon.extensions.ExtensionSupport;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
 
@@ -46,6 +48,11 @@ public class TierImpl<T> implements Tier<T> {
 	private final Map<TierListener<T>, Boolean> tierListeners;
 	
 	/**
+	 * Extension support
+	 */
+	private final ExtensionSupport extSupport = new ExtensionSupport(Tier.class, this);
+	
+	/**
 	 * Constructor
 	 * 
 	 * @param name
@@ -57,6 +64,8 @@ public class TierImpl<T> implements Tier<T> {
 		this.tierName = name;
 		this.declaredType = type;
 		this.grouped = grouped;
+		
+		extSupport.initExtensions();
 		
 		final WeakHashMap<TierListener<T>, Boolean> weakHash = 
 				new WeakHashMap<TierListener<T>, Boolean>();
@@ -263,4 +272,22 @@ public class TierImpl<T> implements Tier<T> {
 			listener.groupsCleared(this);
 		}
 	}
+
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
+	
+	
 }

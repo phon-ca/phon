@@ -1,11 +1,13 @@
 package ca.phon.session;
 
+import ca.phon.extensions.IExtendable;
+
 /**
  * A tier in a record.  A tier has a name, type and a number
  * of groups.
  * 
  */
-public interface Tier<T> extends TierDescription, Iterable<T> {
+public interface Tier<T> extends TierDescription, Iterable<T>, IExtendable {
 	
 	/**
 	 * Get the number of groups in the tier
