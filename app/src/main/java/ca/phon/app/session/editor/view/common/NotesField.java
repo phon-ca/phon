@@ -45,7 +45,7 @@ public class NotesField extends JTextArea implements TierEditor {
 		final String oldVal = getGroupValue();
 		final String newVal = getText();
 		for(TierEditorListener listener:listeners) {
-			listener.tierValueChanged(notesTier, 0, newVal, oldVal);
+			listener.tierValueChange(notesTier, 0, newVal, oldVal);
 		}
 	}
 

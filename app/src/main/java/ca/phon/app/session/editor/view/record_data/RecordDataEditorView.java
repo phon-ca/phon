@@ -330,7 +330,6 @@ public class RecordDataEditorView extends EditorView {
 				}
 			} else {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
-
 				tierEditor.addTierEditorListener(tierEditorListener);
 				final Component tierComp = tierEditor.getEditorComponent();
 				tierComp.setFont(tierFont);
