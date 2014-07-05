@@ -1,10 +1,14 @@
 package ca.phon.app.session.editor;
 
 import java.lang.ref.WeakReference;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 
 /**
  * A view in the {@link SessionEditor}.  Each editor view
@@ -12,9 +16,11 @@ import javax.swing.JPanel;
  * 
  * 
  */
-public abstract class EditorView extends JPanel {
+public abstract class EditorView extends JPanel implements IExtendable {
 	
 	private static final long serialVersionUID = 907723403385573953L;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(EditorView.class, this);
 
 	/**
 	 * Preferred dock position
@@ -30,6 +36,7 @@ public abstract class EditorView extends JPanel {
 	public EditorView(SessionEditor editor) {
 		super();
 		editorRef = new WeakReference<SessionEditor>(editor);
+		extSupport.initExtensions();
 	}
 	
 	/**
@@ -80,6 +87,29 @@ public abstract class EditorView extends JPanel {
 	public void setPreferredDockPosition(DockPosition dockPosition) {
 		this.preferredDockPosition = dockPosition;
 	}
-	
+
+	public void initExtensions() {
+		extSupport.initExtensions();
+	}
+
+	@Override
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	@Override
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	@Override
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	@Override
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
 	
 }
