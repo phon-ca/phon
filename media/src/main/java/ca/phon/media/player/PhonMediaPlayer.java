@@ -73,10 +73,6 @@ import com.jgoodies.forms.layout.FormLayout;
 public class PhonMediaPlayer extends JPanel {
 	
 	private static final long serialVersionUID = -5365398623998749265L;
-
-	static {
-		VLCHelper.checkNativeLibrary(true);
-	}
 	
 	private static final Logger LOGGER = Logger
 			.getLogger(PhonMediaPlayer.class.getName());
