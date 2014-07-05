@@ -38,7 +38,8 @@ public class DeleteRecordAction extends SessionEditorAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor());
+		getEditor().getUndoSupport().postEdit(edit);
 	}
 
 }
