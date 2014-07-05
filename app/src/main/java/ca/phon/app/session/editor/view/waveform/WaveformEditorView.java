@@ -35,6 +35,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,6 +48,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -53,6 +56,10 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.VerticalLayout;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
@@ -104,7 +111,7 @@ public class WaveformEditorView extends EditorView {
 	private static final Logger LOGGER = Logger
 			.getLogger(WaveformEditorView.class.getName());
 
-	private final String VIEW_TITLE = "Waveform";
+	public static final String VIEW_TITLE = "Waveform";
 
 	private JPanel contentPane;
 	
@@ -129,6 +136,9 @@ public class WaveformEditorView extends EditorView {
 	private JLabel msgLabel;
 	
 	private JComponent sizer;
+	
+	private final List<WaveformTier> pluginTiers = 
+			Collections.synchronizedList(new ArrayList<WaveformTier>());
 	
 	private class HideStatusComponentTask extends PhonTask {
 		
@@ -173,6 +183,27 @@ public class WaveformEditorView extends EditorView {
 		final DelegateEditorAction segmentChangedAct =
 				new DelegateEditorAction(this, "onMediaSegmentChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
+	}
+	
+	private void loadPlugins() {
+		pluginTiers.clear();
+		
+		final PluginManager pluginManager = PluginManager.getInstance();
+		final List<IPluginExtensionPoint<WaveformTier>> extraTiers = 
+				pluginManager.getExtensionPoints(WaveformTier.class);
+		for(IPluginExtensionPoint<WaveformTier> extraTier:extraTiers) {
+			try {
+				// ANYTHING can happen during plug-in object creation, 
+				// try to catch exceptions which the plug-in lets through
+				pluginTiers.add(extraTier.getFactory().createObject(this));
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+	}
+	
+	public List<WaveformTier> getPluginTiers() {
+		return Collections.unmodifiableList(this.pluginTiers);
 	}
 	
 	private void init() {
@@ -271,16 +302,7 @@ public class WaveformEditorView extends EditorView {
 		contentPane.add(sizer, gbc);
 		
 		// add plug-in tiers
-		final JPanel tierPanel = new JPanel(new VerticalLayout(0));
-		final PluginManager pluginManager = PluginManager.getInstance();
-		final List<IPluginExtensionPoint<WaveformTier>> extraTiers = 
-				pluginManager.getExtensionPoints(WaveformTier.class);
-		for(IPluginExtensionPoint<WaveformTier> extraTier:extraTiers) {
-			final WaveformTier tier = extraTier.getFactory().createObject(this);
-			final JComponent comp = tier.getTierComponent();
-			tierPanel.add(comp);
-		}
-		gbc.gridx = 0;
+		final JPanel tierPanel = initPlugins();
 		gbc.gridy = 2;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.LINE_START;
@@ -293,6 +315,22 @@ public class WaveformEditorView extends EditorView {
 		add(new JScrollPane(contentPane), BorderLayout.CENTER);
 		
 		setupEditorActions();
+	}
+	
+	private JPanel initPlugins() {
+		loadPlugins();
+		final PanelBuilder builder = new PanelBuilder(new FormLayout("fill:pref:grow", ""));
+		
+		int rIdx = 1;
+		final CellConstraints cc = new CellConstraints();
+		for(WaveformTier tier:pluginTiers) {
+			final JComponent comp = tier.getTierComponent();
+			
+			builder.appendRow("fill:pref:grow");
+			builder.add(comp, cc.xy(1, rIdx++));
+		}
+		
+		return builder.getPanel();
 	}
 	
 	public WaveformViewCalculator getCalculator() {
@@ -733,6 +771,10 @@ public class WaveformEditorView extends EditorView {
 		retVal.addSeparator();
 		retVal.add(new SaveAction(getEditor(), this));
 		retVal.add(new GenerateAction(getEditor(), this));
+		
+		for(WaveformTier tier:pluginTiers) {
+			tier.addMenuItems(retVal);
+		}
 		
 		return retVal;	
 	}
