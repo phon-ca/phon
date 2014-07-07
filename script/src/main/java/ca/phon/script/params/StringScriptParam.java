@@ -27,7 +27,11 @@ public class StringScriptParam extends ScriptParam {
 	 */
 	public static final String PROMPT_PROP = StringScriptParam.class.getName() + ".promptText";
 	
+	public static final String VALIDATE_PROP = StringScriptParam.class.getName() + ".validate";
+	
 	private String promptText = new String();
+	
+	private boolean validate = true;
 	
 	/**
 	 * Constructor
@@ -69,5 +73,17 @@ public class StringScriptParam extends ScriptParam {
 	public String getPrompt() {
 		return this.promptText;
 	}
+
+	public boolean isValidate() {
+		return validate;
+	}
+
+	public void setValidate(boolean validate) {
+		boolean old = this.validate;
+		this.validate = validate;
+		super.propSupport.firePropertyChange(VALIDATE_PROP, old, this.validate);
+	}
+	
+	
 	
 }

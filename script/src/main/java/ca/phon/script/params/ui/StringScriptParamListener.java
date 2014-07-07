@@ -45,7 +45,7 @@ public class StringScriptParamListener extends ScriptParamAction implements Docu
 	}
 	
 	private void updateParam(PromptedTextField textField) {
-		if(textField.getState() == FieldState.INPUT) {
+		if(textField.getState() != FieldState.PROMPT) {
 			final String val = textField.getText();
 			final String paramId = getParamId();
 			final ScriptParam param = getScriptParam();
