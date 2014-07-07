@@ -559,6 +559,9 @@ public class WaveformEditorView extends EditorView {
 		return audioFile;
 	}
 	
+	private final static long CLIP_EXTENSION_MIN = 100L;
+	private final static long CLIP_EXTENSION_MAX = 500L;
+	
 	public void update() {
 		Record utt = getEditor().currentRecord();
 		if(utt != null) {
@@ -571,19 +574,23 @@ public class WaveformEditorView extends EditorView {
 				}
 				
 				final MediaSegment segment = utt.getSegment().getGroup(0);
-//			File f = new File(getModel().getSession().getMediaLocation());
-//			if(f.exists()) {
-				long clipStart = Math.round(segment.getStartValue() - 500);
+				
+				double length = (segment.getEndValue() - segment.getStartValue());
+				long preferredClipExtension = (long)Math.ceil(length * 0.1);
+				if(preferredClipExtension < CLIP_EXTENSION_MIN)
+					preferredClipExtension = CLIP_EXTENSION_MIN;
+				if(preferredClipExtension > CLIP_EXTENSION_MAX)
+					preferredClipExtension = CLIP_EXTENSION_MAX;
+				
+				long clipStart = Math.round(segment.getStartValue() - preferredClipExtension);
 				
 				long displayStart = 
 					Math.max(0,
 							clipStart);
-				long segStart = 
-					(clipStart < 0 ? 500 + clipStart : 500);
 				long segLength = 
 					Math.round(segment.getEndValue() - segment.getStartValue());
 				long displayLength = 
-					segLength + 1000;
+					segLength + (2*preferredClipExtension);
 				
 				wavDisplay.load(displayStart, displayLength);
 				wavDisplay.get_timeBar().setSegStart((int)segment.getStartValue());
