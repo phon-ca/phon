@@ -33,6 +33,8 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEditSupport;
 
+import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
@@ -427,6 +429,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		if(lastVal != modified) {
 			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFIED_FLAG_CHANGED, this);
 			getEventManager().queueEvent(ee);
+			
+			getRootPane().putClientProperty(SubstanceLookAndFeel.WINDOW_MODIFIED, modified);
 		}
 	}
 	
