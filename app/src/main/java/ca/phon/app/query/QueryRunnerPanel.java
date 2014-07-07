@@ -445,6 +445,7 @@ public class QueryRunnerPanel extends JPanel {
 			
 //			final QueryTask queryTask = new QueryTask(project, queryScript);
 //			queryTask.addTaskListener(queryTaskListener);
+			int serial = 0;
 			for(SessionPath sessionLocation:tableModel.sessions) {
 				if(isShutdown()) break;
 				// load session
@@ -452,7 +453,7 @@ public class QueryRunnerPanel extends JPanel {
 					final Session session = 
 							project.openSession(sessionLocation.getCorpus(), sessionLocation.getSession());
 					
-					final QueryTask queryTask = new QueryTask(project, session, queryScript);
+					final QueryTask queryTask = new QueryTask(project, session, queryScript, ++serial);
 					queryTask.addTaskListener(queryTaskListener);
 					
 					queryTask.run();

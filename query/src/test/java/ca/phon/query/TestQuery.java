@@ -77,7 +77,7 @@ public class TestQuery {
 
 	@Test
 	public void testQuery() {
-		final QueryTask task = new QueryTask(project, session, queryScript);
+		final QueryTask task = new QueryTask(project, session, queryScript, 1);
 		task.run();
 		
 		final ResultSet rs = task.getResultSet();

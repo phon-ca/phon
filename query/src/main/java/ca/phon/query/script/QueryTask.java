@@ -29,6 +29,8 @@ public class QueryTask extends PhonTask {
 	
 	private final QueryScript queryScript;
 	
+	private final int serial;
+	
 	// include excluded records?
 	private boolean includeExcludedRecords = false;
 	
@@ -37,12 +39,12 @@ public class QueryTask extends PhonTask {
 	 */
 	private ResultSet resultSet = null;
 	
-	public QueryTask(Project project, Session session, QueryScript queryScript) {
+	public QueryTask(Project project, Session session, QueryScript queryScript, int serial) {
 		super();
 		this.project = project;
 		this.session = session;
 		this.queryScript = queryScript;
-		
+		this.serial = serial;
 	}
 	
 	public Project getProject() {
@@ -119,6 +121,7 @@ public class QueryTask extends PhonTask {
 		}
 		
 		scope.put("project", scope, project);
+		scope.put("serial", scope, serial);
 		
 		scope.put("err", scope, ctx.getStdErr());
 		scope.put("out", scope, ctx.getStdOut());
