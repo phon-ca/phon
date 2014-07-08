@@ -322,7 +322,7 @@ BOUND_END
 LETTER
 	:	'a'..'z'
 	|	'A'..'Z'
-	|	'\u00e6'..'\u036f'
+	|	'\u00e6'..'\u03df'
 	;
 
 fragment

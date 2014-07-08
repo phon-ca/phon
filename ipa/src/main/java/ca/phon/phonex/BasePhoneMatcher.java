@@ -52,7 +52,7 @@ public class BasePhoneMatcher implements PhoneMatcher {
 		@Visits
 		public void visitBasicPhone(Phone bp) {
 			Character phoneBp = bp.getBasePhone();
-			matches = phoneBp == baseChar;
+			matches = (phoneBp.equals(baseChar));
 		}
 		
 		@Visits

@@ -23,7 +23,6 @@ import ca.phon.ipa.features.FeatureSet;
 @RunWith(JUnit4.class)
 public class TestBasicConstructs {
 
-	@Ignore
 	@Test
 	public void testSinglePhoneMatcher() throws ParseException {
 		// create a test string 
