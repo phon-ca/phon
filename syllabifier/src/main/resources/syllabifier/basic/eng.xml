@@ -85,7 +85,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </Stage>
 
     <Stage name="MaxCoda">
-        <phonex>.:C(C=\c:U):mdc("-1","false")</phonex>
+        <phonex>.:C(C=\c:U:mdc("-1","false"))</phonex>
 
         <group name="C" mark="Coda"/>
     </Stage>
