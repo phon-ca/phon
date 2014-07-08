@@ -1,5 +1,5 @@
-#syllabifier/basic/ara.xml
-#syllabifier/basic/ara-simple.xml
+syllabifier/basic/ara.xml
+syllabifier/basic/ara-simple.xml
 syllabifier/basic/cat-simple.xml
 syllabifier/basic/cat.xml
 syllabifier/basic/cre.xml
@@ -10,7 +10,7 @@ syllabifier/basic/eng-simple.xml
 syllabifier/basic/eng.xml
 syllabifier/basic/fra-simple.xml
 syllabifier/basic/fra.xml
-#syllabifier/basic/gue.xml
+syllabifier/basic/gue.xml
 #syllabifier/basic/ita.xml
 #syllabifier/basic/nld-CLPF-ambi.xml
 #syllabifier/basic/nld-CLPF.xml
