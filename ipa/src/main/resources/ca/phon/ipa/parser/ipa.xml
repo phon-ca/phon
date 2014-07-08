@@ -915,10 +915,6 @@
         <name>Combining Minus Sign Below</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
-    <char value="&#x0321;">
-        <name>Combining Palatal Hook</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
     <char value="&#x0323;">
         <name>Combining Dot Below</name>
         <token>COMBINING_DIACRITIC</token>
