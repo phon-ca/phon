@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GradientPaint;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -1949,10 +1950,10 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		
 	}
 
-	private class CellButtonBgPainter implements Painter<JXButton> {
+	private class CellButtonBgPainter implements Painter<JButton> {
 		
 		@Override
-		public void paint(Graphics2D g, JXButton arg1, int width, int height) {
+		public void paint(Graphics2D g, JButton arg1, int width, int height) {
 			final CellButton cellButton = (CellButton)arg1;
 			final Cell cell = cellButton.cell;
 			final boolean highlight = cellButton.highlight;
@@ -2006,16 +2007,16 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		
 	}
 	
-	private class CellButtonFgPainter implements Painter<JXButton> {
+	private class CellButtonFgPainter implements Painter<JButton> {
 
 		@Override
-		public void paint(Graphics2D g, JXButton arg1, int width, int height) {
+		public void paint(Graphics2D g, JButton arg1, int width, int height) {
 			final FontMetrics fm = g.getFontMetrics();
 			final String txt = arg1.getText();
 			final Rectangle2D b = fm.getStringBounds(txt, g);
 			
 			float x = Math.round((width / 2.0f) - (b.getCenterX()));
-			float y = Math.round((height / 2.0f) + (b.getCenterY()));
+			float y = Math.round((height / 2.0f) + (b.getCenterY()) + fm.getAscent() - fm.getDescent());
 			
 			g.setColor(arg1.getForeground());
 			g.setFont(arg1.getFont());
@@ -2027,7 +2028,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Button class for cells
 	 */
-	private class CellButton extends JXButton implements MouseListener {
+	private class CellButton extends JButton implements MouseListener {
 		
 		private Cell cell;
 		
@@ -2041,8 +2042,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			setOpaque(false);
 			super.setBorderPainted(false);
 //			super.setPaintBorderInsets(false);
-			setBackgroundPainter(new CellButtonBgPainter());
-			setForegroundPainter(new CellButtonFgPainter());
+//			setBackgroundPainter(new CellButtonBgPainter());
+//			setForegroundPainter(new CellButtonFgPainter());
 			addMouseListener(this);
 		}
 		
@@ -2095,6 +2096,13 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		public void mouseReleased(MouseEvent e) {
 		}
 		
+		@Override
+		public void paintComponent(Graphics g) {
+			final Graphics2D g2d = (Graphics2D)g;
+			
+			(new CellButtonBgPainter()).paint(g2d, this, getWidth(), getHeight());
+			(new CellButtonFgPainter()).paint(g2d, this, getWidth(), getHeight());
+		}
 		
 	}
 	
