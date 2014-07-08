@@ -84,4 +84,10 @@ public class CSVTableModel extends AbstractTableModel {
 		this.useFirstRowAsHeader = useFirstRowAsHeader;
 	}
 
+	public String[] deleteRow(int row) {
+		final String[] retVal = data.remove(row + 1);
+		super.fireTableRowsDeleted(row, row);
+		return retVal;
+	}
+
 }

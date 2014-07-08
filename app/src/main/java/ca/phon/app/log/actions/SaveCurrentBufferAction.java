@@ -44,28 +44,7 @@ public class SaveCurrentBufferAction extends HookableAction {
 		final BufferPanel panel = window.getCurrentBuffer();
 		
 		if(panel != null) {
-			final LogBuffer logBuffer = panel.getLogBuffer();
-			final SaveDialogProperties props = new SaveDialogProperties();
-			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-			props.setRunAsync(false);
-			props.setCanCreateDirectories(true);
-			props.setTitle("Save buffer: "  + logBuffer.getBufferName());
-			props.setInitialFile(logBuffer.getBufferName() + ".txt");
-			
-			final String bufferFile = NativeDialogs.showSaveDialog(props);
-			if(bufferFile != null) {
-				try {
-					final FileOutputStream out = new FileOutputStream(new File(bufferFile));
-					final OutputStreamWriter writer = new OutputStreamWriter(out, logBuffer.getEncoding());
-					writer.write(logBuffer.getText());
-					writer.flush();
-					writer.close();
-				} catch (IOException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
-				}
-			}
+			panel.onSaveBuffer();
 		}
 	}
 

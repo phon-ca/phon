@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +15,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+
 
 
 
@@ -53,11 +55,11 @@ public class LogBuffer extends JTextPane {
 		setFont(font);
 	}
 	
-	public DocumentOutputStream getStdOutStream() {
+	public OutputStream getStdOutStream() {
 		return stdOutStream;
 	}
 
-	public DocumentOutputStream getStdErrStream() {
+	public OutputStream getStdErrStream() {
 		return stdErrStream;
 	}
 	
@@ -81,29 +83,40 @@ public class LogBuffer extends JTextPane {
 		
 		@Override
 		public void write(int b) throws IOException {
-			if(b == '\n') {
-				final String line = buffer.toString(encoding);
-				buffer = new ByteArrayOutputStream();
-				final Runnable onEDT = new Runnable() {
-					
-					@Override
-					public void run() {
-						try {
-							getDocument().insertString(getDocument().getLength(), line + "\n", style);
-						} catch (BadLocationException e) {
-							LOGGER.log(Level.SEVERE,
-									e.getLocalizedMessage(), e);
-						}
-					}
-				};
-				if(SwingUtilities.isEventDispatchThread())
-					onEDT.run();
-				else
-					SwingUtilities.invokeLater(onEDT);
-			} else if(b == '\r') { // ignore
-			} else {
+			if(b != '\r') {
 				buffer.write(b);
 			}
+			// keep full lines so we don't cut multi-byte characters
+			if(b == '\n' && buffer.size() >= 512) {
+				writeToDocument(buffer.toString(encoding));
+				buffer = new ByteArrayOutputStream();
+			}
+		}
+		
+		private void writeToDocument(final String data) throws UnsupportedEncodingException {
+			final Runnable onEDT = new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						getDocument().insertString(getDocument().getLength(), data, style);
+					} catch (BadLocationException e) {
+						LOGGER.log(Level.SEVERE,
+								e.getLocalizedMessage(), e);
+					}
+				}
+			};
+			if(SwingUtilities.isEventDispatchThread())
+				onEDT.run();
+			else
+				SwingUtilities.invokeLater(onEDT);
+		}
+		
+		@Override
+		public void flush() throws IOException {
+			super.flush();
+			writeToDocument(buffer.toString(encoding));
+			buffer = new ByteArrayOutputStream();
 		}
 		
 	}

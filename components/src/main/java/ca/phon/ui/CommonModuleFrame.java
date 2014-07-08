@@ -230,10 +230,6 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 	@Override
 	public String getTitle() {
 		String retVal = "";
-		// TODO fix window title w/ project name
-//		if(getProject() != null) {
-//			retVal += getProject().getProjectName();
-//		}
 		if(getWindowName() != null) {
 			retVal += (retVal.length() > 0 ? " : " : "") + getWindowName();
 		}
