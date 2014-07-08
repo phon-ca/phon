@@ -166,6 +166,11 @@ public class LocalProject implements Project, ProjectRefresh {
 			
 			final File dataFile = new File(getFolder(), projectDataFile);
 			
+			final ProjectType projectData = getProjectData();
+			// HACK to ensure compatibility with Phon 1.6.2
+			projectData.setAppid("1.5");
+			projectData.setVersion("1.5");
+			
 			final JAXBElement<ProjectType> projectDataEle = factory.createProject(getProjectData());
 			marshaller.marshal(projectDataEle, dataFile);
 		} catch (JAXBException e) {
