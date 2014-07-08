@@ -179,20 +179,16 @@ public class TableSearchField extends SearchField {
 				
 				ColumnFilter colFilter = null;
 				try {
-					final Pattern pattern = Pattern.compile(expr, (!isCaseSensitive() ? Pattern.CASE_INSENSITIVE : 0));
-
-					colFilter = new RegexColumnFilter(columns, pattern);
-					retVal.add(colFilter);
-				} catch (PatternSyntaxException pse) {
+					final PhonexPattern pattern = PhonexPattern.compile(expr);
+					colFilter = new PhonexColumnFilter(columns, pattern);
+				} catch (PhonexPatternException e) {
 					try {
-						// try a phones pattern instead
-						final PhonexPattern phonexMatcher = PhonexPattern.compile(expr);
-						colFilter = new PhonexColumnFilter(columns, phonexMatcher);
-					} catch (PhonexPatternException pe) {
-						// fall back to plain text method
+						final Pattern pattern = Pattern.compile(expr, (!isCaseSensitive() ? Pattern.CASE_INSENSITIVE : 0));
+						
+						colFilter = new RegexColumnFilter(columns, pattern);
+					} catch (PatternSyntaxException e1) {
 						colFilter = new PlainColumnFilter(columns, expr);
 					}
-					
 				}
 				retVal.add(colFilter);
 			}
@@ -364,6 +360,7 @@ public class TableSearchField extends SearchField {
 			// attempt to convert the given string into a list of phones
 			try {
 				IPATranscript t = IPATranscript.parseIPATranscript(val);
+				if(t == null) t = new IPATranscript();
 				final PhonexMatcher matcher = getObj2().matcher(t);
 				return matcher.find();
 			} catch (ParseException e) {
