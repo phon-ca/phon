@@ -116,9 +116,9 @@
     
     <!-- Dependency versions -->
     <ca.hedlund.vlc4j.version>2.2</ca.hedlund.vlc4j.version>
-    <ca.hedlund.tst.version>0.0.2-SNAPSHOT</ca.hedlund.tst.version>
-    <ca.gedge.opgraph.version>0.2-SNAPSHOT</ca.gedge.opgraph.version>
-    <ca.phon.native-dialogs.version>3-SNAPSHOT</ca.phon.native-dialogs.version>
+    <ca.hedlund.tst.version>0.2</ca.hedlund.tst.version>
+    <ca.gedge.opgraph.version>0.2</ca.gedge.opgraph.version>
+    <ca.phon.native-dialogs.version>3</ca.phon.native-dialogs.version>
     <commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
     <com.fifesoft.rsyntaxtextarea.version>2.0.2</com.fifesoft.rsyntaxtextarea.version>
     <com.jgoodies.jgoodies-common.version>1.7.0</com.jgoodies.jgoodies-common.version>

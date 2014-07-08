@@ -67,8 +67,8 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 					
 					@Override
 					public void handleError(IPAParserException ex) {
-						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(),
-								ex);
+//						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(),
+//								ex);
 					}
 				};
 				IPALexer lexer = new IPALexer(transcript);
