@@ -95,7 +95,8 @@ public class SyllabificationDisplay extends JComponent {
 	}
 
 	public int getNumberOfDisplayedPhones() {
-		return this.transcript.removePunctuation().length();
+		return 
+				(this.transcript == null ? 0 : this.transcript.removePunctuation().length());
 	}
 	public IPATranscript getTranscript() {
 		return this.transcript;
