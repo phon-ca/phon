@@ -8,6 +8,8 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Add a new record to the current session.  The record
@@ -21,7 +23,7 @@ public class NewRecordAction extends SessionEditorAction {
 	
 	private final static String SHORT_DESC = "New record after current";
 	
-	private final static String ICON = "";
+	private final static String ICON = "misc/record-add";
 	
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(
 			KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
@@ -32,6 +34,7 @@ public class NewRecordAction extends SessionEditorAction {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(ACCELERATOR_KEY, KS);
+		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
 	}
 
 	@Override

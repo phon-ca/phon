@@ -60,6 +60,9 @@
             
             <!-- denotes syllable constituent type -->
             <xs:enumeration value="COLON"/>
+            
+            <!-- pause inside a word -->
+            <xs:enumeration value="INTRA_WORD_PAUSE"/>
         </xs:restriction>
     </xs:simpleType>
     

@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.common;
 
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.session.MediaSegment;
@@ -23,6 +24,7 @@ public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEdi
 		@SuppressWarnings("unchecked")
 		@Override
 		public TierEditor createObject(Object... args) {
+			final SessionEditor editor = SessionEditor.class.cast(args[0]);
 			final Tier<?> tier = Tier.class.cast(args[1]);
 			final Integer group = Integer.class.cast(args[2]);
 			
@@ -30,7 +32,7 @@ public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEdi
 				throw new IllegalArgumentException("Tier type must be " + MediaSegment.class.getName());
 			}
 			
-			return new SegmentTierComponent((Tier<MediaSegment>)tier, group);
+			return new SegmentTierComponent(editor, (Tier<MediaSegment>)tier, group);
 		}
 		
 	};

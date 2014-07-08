@@ -11,7 +11,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.pushingpixels.lafwidget.LafWidget;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.fonts.FontPolicy;
+import org.pushingpixels.substance.api.fonts.SubstanceFontUtilities;
 import org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel;
 
 import ca.phon.app.hooks.PhonStartupHook;
@@ -37,14 +40,22 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
+					final Map<String, Object> uiMap = new HashMap<String, Object>();
+					// keep mac OS X menu bars
 					if(OSInfo.isMacOs()) {
-						return;
+						final String[] uiKeys = new String[]{
+								"MenuBarUI" };
+						for(String key:uiKeys) {
+							uiMap.put(key, UIManager.get(key));
+						}
 					}
 					try {
 						final String uiClassName = PrefHelper.get(PhonProperties.UI_THEME, SubstanceCeruleanLookAndFeel.class.getName());
 						if(uiClassName != null) {
 							UIManager.setLookAndFeel(uiClassName);
 							UIManager.put(SubstanceLookAndFeel.COLORIZATION_FACTOR, 1.0);
+							UIManager.put(SubstanceLookAndFeel.SHOW_EXTRA_WIDGETS, Boolean.TRUE);
+							UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU, Boolean.TRUE);
 						}
 					} catch (UnsupportedLookAndFeelException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -54,6 +65,12 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					} catch (IllegalAccessException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+					
+					if(OSInfo.isMacOs()) {
+						for(String key:uiMap.keySet()) {
+							UIManager.put(key, uiMap.get(key));
+						}
 					}
 				}
 			});

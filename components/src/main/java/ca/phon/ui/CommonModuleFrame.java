@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.SwingConstants;
@@ -229,10 +230,6 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 	@Override
 	public String getTitle() {
 		String retVal = "";
-		// TODO fix window title w/ project name
-//		if(getProject() != null) {
-//			retVal += getProject().getProjectName();
-//		}
 		if(getWindowName() != null) {
 			retVal += (retVal.length() > 0 ? " : " : "") + getWindowName();
 		}
@@ -348,6 +345,34 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 		int yPos = ss.height / 2 - (size.height/2);
 		
 		setBounds(xPos, yPos, size.width, size.height);
+	}
+	
+	public void cascadeWindow(JFrame frame) {
+		int x = 50;
+		int y = 50;
+		
+		if(frame != null) {
+			final int titleHeight = frame.getInsets().top;
+			final int borderWidth = frame.getInsets().left;
+			final int x2 = frame.getX();
+			final int y2 = frame.getY();
+			y = y2 + titleHeight;
+			x = x2 + borderWidth;
+		}
+		
+		Dimension size = getSize();
+		if(size.width == 0 && size.height == 0)
+			size = getPreferredSize();
+		
+		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		if(y + size.height > screenSize.height) {
+			y = screenSize.height - size.height;
+		}
+		if(x + size.width > screenSize.width) {
+			x = screenSize.width - size.width;
+		}
+		
+		setBounds(x, y, size.width, size.height);
 	}
 	
 	/**

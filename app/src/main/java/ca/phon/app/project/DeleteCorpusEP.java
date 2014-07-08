@@ -35,6 +35,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -210,10 +211,10 @@ public class DeleteCorpusEP implements IPluginEntryPoint {
 
 		project = (Project)initInfo.get("project");
 		
-		if(initInfo.get("corpus") == null)
+		if(initInfo.get("corpusName") == null)
 			begin();
 		else
-			deleteCorpus(initInfo.get("corpus").
+			deleteCorpus(initInfo.get("corpusName").
 					toString());
 	}
 	
@@ -222,13 +223,19 @@ public class DeleteCorpusEP implements IPluginEntryPoint {
 				corpus == null)
 			return;
 		
-		JDialog dlg = new DeleteCorpusDialog();
-		dlg.setVisible(true);
-		while(dlg.isVisible()) {
-			try {
-				Thread.sleep(500);
-			} catch(Exception e) { break; }
-		}
+		final Runnable onEDT = new Runnable() {
+			
+			@Override
+			public void run() {
+				JDialog dlg = new DeleteCorpusDialog();
+				dlg.setModal(true);
+				dlg.setVisible(true);
+			}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			SwingUtilities.invokeLater(onEDT);
 	}
 	
 	private void deleteCorpus(String corpusName) {

@@ -456,6 +456,11 @@ predefined_phone_class returns [PhoneMatcher value]
 			$value = gm;
 			break;
 			
+		case 'p':
+			RegexMatcher rm = new RegexMatcher("\\(\\.{1,3}\\)");
+			$value = rm;
+			break;
+			
 		case 'w':
 			PhoneClassMatcher wm = new PhoneClassMatcher();
 			FeatureSetMatcher cfsm = new FeatureSetMatcher();

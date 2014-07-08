@@ -172,13 +172,16 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		return factory.createSession(retVal);
 	}
 	
+	private int pIdx = 0;
 	/**
 	 * copy participant info
 	 */
 	private ParticipantType copyParticipant(ObjectFactory factory, Participant part) {
 		final ParticipantType retVal = factory.createParticipantType();
 		
-		retVal.setId(part.getId());
+		if(part.getId() != null)
+			retVal.setId(part.getId());
+		
 		retVal.setName(part.getName());
 		
 		final DateTime bday = part.getBirthDate();
@@ -197,7 +200,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		retVal.setGroup(part.getGroup());
 		
 		final String lang = part.getLanguage();
-		final String langs[] = lang.split(",");
+		final String langs[] = (lang != null ? lang.split(",") : new String[0]);
 		for(String l:langs) {
 			retVal.getLanguage().add(StringUtils.strip(l));
 		}
@@ -208,6 +211,21 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		if(prole == null)
 			prole = ParticipantRole.TARGET_CHILD;
 		retVal.setRole(prole.toString());
+		
+		// create ID based on role if possible
+		if(retVal.getId() == null && prole != null) {
+			if(prole == ParticipantRole.TARGET_CHILD) {
+				retVal.setId("CHI");
+			} else if(prole == ParticipantRole.MOTHER) {
+				retVal.setId("MOT");
+			} else if(prole == ParticipantRole.FATHER) {
+				retVal.setId("FAT");
+			} else if(prole == ParticipantRole.INTERVIEWER) {
+				retVal.setId("INT");
+			} else {
+				retVal.setId("p" + (++pIdx));
+			}
+		}
 		
 		retVal.setSES(part.getSES());
 			

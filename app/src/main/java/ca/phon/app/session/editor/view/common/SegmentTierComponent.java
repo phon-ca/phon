@@ -17,6 +17,9 @@
  */
 
 package ca.phon.app.session.editor.view.common;
+
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -25,29 +28,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.waveform.WaveformEditorView;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.SessionFactory;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Editor for media segments.
  */
-public class SegmentTierComponent extends SegmentField implements TierEditor {
+public class SegmentTierComponent extends JComponent implements TierEditor {
 	
 	private static final long serialVersionUID = 5303962410367183323L;
 
@@ -55,26 +63,37 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 			.getLogger(SegmentTierComponent.class.getName());
 	
 	private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
+	
+	private final SessionEditor editor;
 
 	private Tier<MediaSegment> segmentTier;
 	
 	private int groupIndex = 0;
+	
+	private final SegmentField segmentField;
+	
+	private final JButton playButton;
 
-	public SegmentTierComponent(Tier<MediaSegment> tier, int groupIndex) {
+	public SegmentTierComponent(SessionEditor editor, Tier<MediaSegment> tier, int groupIndex) {
 		super();
+		setOpaque(false);
+		setFocusable(false);
+		
+		this.editor = editor;
 		
 		this.segmentTier = tier;
 		segmentTier.addTierListener(tierListener);
 		this.groupIndex = groupIndex;
 		
-		super.setBorder(new GroupFieldBorder());
+		segmentField = new SegmentField();
+		segmentField.setBorder(new GroupFieldBorder());
 		
 		updateText();
-		getDocument().addDocumentListener(docListener);
+		segmentField.getDocument().addDocumentListener(docListener);
 		
 		// validate text when 'enter' is pressed
-		final ActionMap actionMap = getActionMap();
-		final InputMap inputMap = getInputMap(JComponent.WHEN_FOCUSED);
+		final ActionMap actionMap = segmentField.getActionMap();
+		final InputMap inputMap = segmentField.getInputMap(JComponent.WHEN_FOCUSED);
 		
 		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		final String validateId = "validate";
@@ -82,10 +101,59 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 		actionMap.put(validateId, validateAct);
 		inputMap.put(validateKs, validateId);
 		
-		setActionMap(actionMap);
-		setInputMap(JComponent.WHEN_FOCUSED, inputMap);
+		segmentField.setActionMap(actionMap);
+		segmentField.setInputMap(JComponent.WHEN_FOCUSED, inputMap);
 		
-		addFocusListener(focusListener);
+		segmentField.addFocusListener(focusListener);
+		
+		final PhonUIAction playAct = new PhonUIAction(this, "onPlaySegment");
+		
+		playAct.putValue(PhonUIAction.SMALL_ICON, 
+				IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		playButton = new JButton(playAct);
+		playButton.setFocusable(false);
+		
+		setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		add(playButton);
+		add(new JSeparator());
+		add(segmentField);
+	}
+	
+	@Override
+	public void setFont(Font font) {
+		super.setFont(font);
+		segmentField.setFont(font);
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		segmentField.setEnabled(enabled);
+	}
+	
+	public void onPlaySegment() {
+		if(editor == null) return;
+		
+		final MediaSegment segment = getGroupValue();
+		if(segment.getEndValue() - segment.getStartValue() <= 0) {
+			return;
+		}
+		
+		// try the media player first
+		if(editor.getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			final MediaPlayerEditorView mediaPlayerEditorView = 
+					(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaPlayerEditorView != null) {
+				mediaPlayerEditorView.getPlayer().playSegment((long)segment.getStartValue(), 
+						(long)(segment.getEndValue()-segment.getStartValue()));
+			}
+		} else if(editor.getViewModel().isShowing(WaveformEditorView.VIEW_TITLE)) {
+			final WaveformEditorView waveformEditorView =
+					(WaveformEditorView)editor.getViewModel().getView(WaveformEditorView.VIEW_TITLE);
+			if(waveformEditorView != null) {
+				waveformEditorView.play();
+			}
+		}
 	}
 
 	/**
@@ -98,7 +166,7 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 	protected boolean validateText() {
 		boolean retVal = true;
 
-		final String text = getText();
+		final String text = segmentField.getText();
 		
 		// look for a formatter
 		final Formatter<MediaSegment> formatter = FormatterFactory.createFormatter(MediaSegment.class);
@@ -141,7 +209,7 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 //			caretLocation = super.getCaretPosition();
 //		}
 //		setFormatter(formatter);
-		setText(tierTxt);
+		segmentField.setText(tierTxt);
 //		if(super.hasFocus() && caretLocation >= 0) {
 //			super.setCaretPosition(caretLocation);
 //		}
@@ -202,7 +270,7 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 
 		@Override
 		public void insertUpdate(DocumentEvent de) {
-			if(hasFocus() && validateText())
+			if(segmentField.hasFocus() && validateText())
 				updateTier();
 		}
 
@@ -230,7 +298,7 @@ public class SegmentTierComponent extends SegmentField implements TierEditor {
 		@Override
 		public void groupChanged(Tier<MediaSegment> tier, int index,
 				MediaSegment oldValue, MediaSegment value) {
-			if(!hasFocus() && index == groupIndex) {
+			if(!segmentField.hasFocus() && index == groupIndex) {
 				updateText();
 			}
 		}

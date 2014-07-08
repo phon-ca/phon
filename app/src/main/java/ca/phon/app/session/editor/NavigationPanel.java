@@ -35,11 +35,7 @@ import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
-import ca.phon.session.SessionLocation;
-import ca.phon.ui.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -93,10 +89,6 @@ public class NavigationPanel extends JPanel {
 		DelegateEditorAction recordDeletedAct =
 				new DelegateEditorAction(this, "onRecordDeleted");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, recordDeletedAct);
-
-		DelegateEditorAction sessionLocationChangedAct =
-				new DelegateEditorAction(this, "onSessionLocationChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, sessionLocationChangedAct);
 	}
 	
 	private void init() {
@@ -200,7 +192,8 @@ public class NavigationPanel extends JPanel {
 	
 	/** Editor events */
 	public void onRecordChanged(EditorEvent ee) {
-		recordNumberField.setText(""+(getEditor().getCurrentRecordIndex()+1));
+		if(!recordNumberField.hasFocus())
+			recordNumberField.setText(""+(getEditor().getCurrentRecordIndex()+1));
 	}
 
 	public void onRecordAdded(EditorEvent ee) {
@@ -211,12 +204,6 @@ public class NavigationPanel extends JPanel {
 	public void onRecordDeleted(EditorEvent ee) {
 		numRecordsLabel.setText(""+getEditor().getDataModel().getRecordCount());
 		recordNumberField.setMaxNumber(getEditor().getDataModel().getRecordCount());
-	}
-
-	public void onSessionLocationChanged(EditorEvent ee) {
-//		SessionLocation location = (SessionLocation)ee.getEventData();
-//		currentTierLabel.setText(location.getRecordLocation().getTier() + "  ");
-//		currentCharPosLabel.setText(location.getRecordLocation().get+"");
 	}
 	
 }

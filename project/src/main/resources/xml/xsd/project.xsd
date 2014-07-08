@@ -37,7 +37,8 @@
     <xs:sequence>
       <xs:element ref="corpus" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="version" type="xs:string" use="optional" default="1.5"/>
+    <xs:attribute name="Version" type="xs:string" use="optional" default="1.5"/>
+
     <xs:attribute name="name" type="validName" use="required"/>
     <xs:attribute name="appid" type="xs:string" use="optional">
       <xs:annotation>

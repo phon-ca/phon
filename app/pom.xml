@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>phon</artifactId>
 		<groupId>ca.phon</groupId>
-		<version>1.7.0-SNAPSHOT</version>
+		<version>1.7.0beta1</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -132,11 +132,6 @@
 			<groupId>com.orientechnologies</groupId>
 			<artifactId>orientdb-core</artifactId>
 			<version>${com.orientechnologies.orientdb-core.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20140107</version>
 		</dependency>
 	</dependencies>
 

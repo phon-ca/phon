@@ -1,5 +1,6 @@
 package ca.phon.script;
 
+import java.io.PrintStream;
 import java.net.URI;
 import java.util.List;
 
@@ -42,6 +43,26 @@ public class PhonScriptContext {
 	 * as properties in the wrapped object. 
 	 */
 	private final static WrapFactory wrapFactory = new ExtendableWrapFactory();
+	
+	private PrintStream stdOutStream;
+	
+	private PrintStream stdErrStream;
+	
+	public void redirectStdOut(PrintStream stream) {
+		this.stdOutStream = stream;
+	}
+	
+	public PrintStream getStdOut() {
+		return (this.stdOutStream == null ? System.out : this.stdOutStream);
+	}
+	
+	public void redirectStdErr(PrintStream stream) {
+		this.stdErrStream = stream;
+	}
+	
+	public PrintStream getStdErr() {
+		return (this.stdErrStream == null ? System.err : this.stdErrStream);
+	}
 	
 	/**
 	 * Enter and return a new script context.  Every call

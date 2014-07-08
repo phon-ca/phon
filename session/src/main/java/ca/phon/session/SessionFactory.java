@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -272,4 +274,25 @@ public abstract class SessionFactory {
 	 * @return
 	 */
 	public abstract TierViewItem createTierViewItem(String name, boolean visible, String font, boolean locked);
+	
+	/**
+	 * Get the default tier view for a given sesion.
+	 * 
+	 * @param session
+	 */
+	public List<TierViewItem> createDefaultTierView(Session session) {
+		final List<TierViewItem> retVal = new ArrayList<TierViewItem>();
+		
+		retVal.add(createTierViewItem(SystemTierType.Orthography.getName(), true, "default", false));
+		retVal.add(createTierViewItem(SystemTierType.IPATarget.getName(), true, "default", false));
+		retVal.add(createTierViewItem(SystemTierType.IPAActual.getName(), true, "default", false));
+		retVal.add(createTierViewItem(SystemTierType.Notes.getName(), true, "default", false));
+		retVal.add(createTierViewItem(SystemTierType.Segment.getName(), true, "default", false));
+		
+		for(TierDescription tierDesc:session.getUserTiers()) {
+			retVal.add(createTierViewItem(tierDesc.getName(), true, "default", false));
+		}
+		
+		return retVal;
+	}
 }

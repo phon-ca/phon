@@ -103,7 +103,7 @@ scope {
 @init {
 	$transcription::builder = new IPATranscriptBuilder();
 }
-	:	w1=word {if($w1.w != null) { $transcription::builder.append($w1.w);} } 
+	:	w1=word {if($w1.w != null) { $transcription::builder.append($w1.w);} else { if(input.get(input.index()).getType() != EOF) return transcription(); } } 
 		(word_boundary {$transcription::builder.appendWordBoundary();}
 		w2=word {if($w2.w != null) { $transcription::builder.append($w2.w);} } )*
 	{
@@ -126,7 +126,7 @@ scope {
 @init { 
 	$word::builder = new IPATranscriptBuilder(); 
 }
-	:	(we=word_element {$word::builder.append($we.p);}  
+	:	(we=word_element {if($we.p != null) $word::builder.append($we.p); }  
 		( COLON sc=sctype {
 			SyllabificationInfo sInfo = $we.p.getExtension(SyllabificationInfo.class);
 			sInfo.setConstituentType($sc.value);
@@ -135,7 +135,25 @@ scope {
 	{
 		$w = $word::builder.toIPATranscript();
 	}
+	|	p=pause
+	{
+		$word::builder.append($pause.pause);
+		$w = $word::builder.toIPATranscript();
+	}
 	;
+	catch [EarlyExitException ex] {
+		reportError(ex);
+		
+		if(state.lastErrorIndex != input.index() && input.index() == 0) {
+			state.lastErrorIndex = input.index();
+			beginResync();
+			input.consume();
+			endResync();
+		} else {
+			recover(input, ex);
+		}
+	}
+	
 	
 word_element returns [IPAElement p]
 	:	stress
@@ -146,10 +164,6 @@ word_element returns [IPAElement p]
 	{
 		$p = $phone.ele;
 	}
-	|	pause
-	{
-		$p = $pause.pause;
-	}
 	|	syllable_boundary
 	{
 		$p = $syllable_boundary.syllableBoundary;
@@ -157,6 +171,10 @@ word_element returns [IPAElement p]
 	|	word_net_marker
 	{
 		$p = $word_net_marker.wordnetMarker;
+	}
+	|	intra_word_pause
+	{
+		$p = $intra_word_pause.intraWordPause;
 	}
 	|	phonex_matcher_ref
 	{
@@ -175,6 +193,13 @@ stress returns [StressMarker stressMarker]
 	|	SECONDARY_STRESS
 	{
 		$stressMarker = factory.createStress(StressType.SECONDARY);
+	}
+	;
+	
+intra_word_pause returns [IntraWordPause intraWordPause]
+	:	INTRA_WORD_PAUSE
+	{
+		$intraWordPause = factory.createIntraWordPause();
 	}
 	;
 	
@@ -267,6 +292,27 @@ phone returns [IPAElement ele]
 		$ele = $compound_phone.phone;
 	}
 	;
+	catch [NoViableAltException ex] {
+		if(state.lastErrorIndex != input.index()) {
+			Token t = input.get(input.index());
+			if(t.getType() == CONSONANT
+            					|| t.getType() == COVER_SYMBOL
+            					|| t.getType() == GLIDE
+            					|| t.getType() == VOWEL) {            				
+				String txt = t.getText();
+				char filler = (txt != null && txt.length() > 0 ? txt.charAt(0) : 'X');
+				ele = (new IPAElementFactory()).createPhone(filler);
+			} else {
+				ele = (new IPAElementFactory()).createPhone('X');
+			}
+		}
+		reportError(ex);
+		recover(input, ex);
+	}
+	catch [RecognitionException re] {
+		reportError(re);
+		recover(input, re);
+	}
 	
 /**
  * A single (non-compound) phone.
@@ -368,8 +414,8 @@ complex_phone returns [Phone phone]
 compound_phone returns [CompoundPhone phone]
 	:	sp1=single_phone LIGATURE sp2=single_phone
 	{
-		Phone firstPhone = $sp1.phone;
-		Phone secondPhone = $sp2.phone;
+		Phone firstPhone = ($sp1.phone != null ? $sp1.phone : (new IPAElementFactory()).createPhone('X')) ;
+		Phone secondPhone = ($sp2.phone != null ? $sp2.phone : (new IPAElementFactory()).createPhone('X')) ;
 		Character ligature = $LIGATURE.text.charAt(0);
 		$phone = factory.createCompoundPhone(firstPhone, secondPhone, ligature);	
 	}

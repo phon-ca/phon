@@ -37,7 +37,9 @@ public class GroupImpl implements Group {
 	
 	@Override
 	public Orthography getOrthography() {
-		return record.getOrthography().getGroup(groupIndex);
+		return 
+				(record.getOrthography().numberOfGroups() > groupIndex ? record.getOrthography().getGroup(groupIndex) 
+						: null);
 	}
 
 	@Override
@@ -47,30 +49,38 @@ public class GroupImpl implements Group {
 
 	@Override
 	public IPATranscript getIPATarget() {
-		return record.getIPATarget().getGroup(groupIndex);
+		return 
+				(record.getIPATarget().numberOfGroups() > groupIndex ?  record.getIPATarget().getGroup(groupIndex)
+						: null);
 	}
 
 	@Override
 	public IPATranscript getIPAActual() {
-		return record.getIPAActual().getGroup(groupIndex);
+		return 
+				(record.getIPAActual().numberOfGroups() > groupIndex ? record.getIPAActual().getGroup(groupIndex)
+						: null);
 	}
 	
 	@Override
 	public Object getTier(String name) {
 		final Tier<?> tier = record.getTier(name);
-		if(tier.isGrouped())
-			return tier.getGroup(groupIndex);
-		else
-			return tier.getGroup(0);
+		int gIdx = groupIndex;
+		if(!tier.isGrouped())
+			gIdx = 0;
+		final Object retVal = 
+				(tier.numberOfGroups() > gIdx ? tier.getGroup(gIdx) : null);
+		return retVal;
 	}
 
 	@Override
 	public <T> T getTier(String name, Class<T> type) {
 		final Tier<T> tier = record.getTier(name, type);
-		if(tier.isGrouped())
-			return tier.getGroup(groupIndex);
-		else
-			return tier.getGroup(0);
+		int gIdx = groupIndex;
+		if(!tier.isGrouped())
+			gIdx = 0;
+		final T retVal = 
+				(tier.numberOfGroups() > gIdx ? tier.getGroup(gIdx) : null);
+		return retVal;
 	}
 
 	@Override
@@ -96,7 +106,8 @@ public class GroupImpl implements Group {
 
 	@Override
 	public String getNotes() {
-		return record.getNotes().getGroup(0);
+		return 
+				(record.getNotes().numberOfGroups() > 0 ? record.getNotes().getGroup(0) : null);
 	}
 
 	@Override

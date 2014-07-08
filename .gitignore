@@ -4,3 +4,6 @@
 target/
 ipadictionary/src/main/resources/META-INF/dict
 *\~
+*.backup
+*.versionsBackup
+.Changes.md.html

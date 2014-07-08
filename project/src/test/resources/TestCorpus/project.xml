@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<project uuid="969c122a-6049-41c0-a347-4ecdebae8e89" appId="1.5.3" name="TestCorpus"
-    Version="1.5">
+<project Version="1.5" name="TestCorpus" appid="1.5" uuid="969c122a-6049-41c0-a347-4ecdebae8e89">
     <corpus name="Anne">
         <description>Recordings of an English-speaking interview of a bilingual child.</description>
+        <session name="TestSession"/>
     </corpus>
 </project>

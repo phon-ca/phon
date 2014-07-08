@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Phon - An open source tool for research in phonology.
+ Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phon.ca/ns/syllabifier ../../xml/xsd/syllabifier.xsd"
+    name="Slovak" language="slk">
+    <SonorityScale>
+        <SonorityClass>
+            <phonex>{obs}</phonex>
+            <sonorityValue>0</sonorityValue>
+        </SonorityClass>
+        
+        <SonorityClass>
+            <phonex>{nas}</phonex>
+            <sonorityValue>1</sonorityValue>
+        </SonorityClass>
+        
+        <SonorityClass>
+            <phonex>{liq}</phonex>
+            <sonorityValue>2</sonorityValue>
+        </SonorityClass>
+        
+        <SonorityClass>
+            <phonex>\g</phonex>
+            <sonorityValue>3</sonorityValue>
+        </SonorityClass>
+        
+        <SonorityClass>
+            <phonex>\v</phonex>
+            <sonorityValue>4</sonorityValue>
+        </SonorityClass>
+    </SonorityScale>
+    
+    <Stage name="MarkNuclei">
+        <phonex>(D=\v{v,nonsyllabic})</phonex>
+        <phonex>(D={v,nonsyllabic}\v)</phonex>
+        <phonex>(N=\v)</phonex>
+        <phonex>(N={liq,long})</phonex>
+        
+        <group name="D" mark="Diphthong"/>
+        <group name="N" mark="Nucleus"/>
+    </Stage>
+
+    <Stage name="MarkNuclei (short liquids)">
+        <phonex>\c(N={liq}:U)\c</phonex>
+        <group name="N" mark="Nucleus"/>
+    </Stage>
+    
+    <Stage name="MarkOnset">
+        <phonex>(O=\c:U).:N</phonex>
+        <group name="O" mark="Onset"/>
+    </Stage>
+    
+    <Stage name="MaxOnset1">
+        <phonex>(O=\c:U).:O:mdc("1","false")</phonex>
+        <group name="O" mark="Onset"/>
+    </Stage>
+
+    <Stage name="MaxOnset(Sibilant)">
+        <phonex>.:sctype("-N")(O={cor,fri,anterior}){-continuant}:O</phonex>
+        <group name="O" mark="Onset"/>
+    </Stage>
+    
+    <Stage name="MarkCoda">
+        <phonex>.:N(C=\c:U)</phonex>
+        <group name="C" mark="Coda"/>
+    </Stage>    
+
+    <Stage name="MaxCoda1">
+        <phonex>.:C(C=\c:U:mdc("-1","true"))</phonex>
+        <group name="" mark=""/>
+    </Stage>
+
+    <Stage name="MaxOnset2">
+        <phonex>(O=\c:U).:O:mdc("1","false")</phonex>
+        <group name="O" mark="Onset"/>
+    </Stage>
+
+    <Stage name="MaxCoda2">
+        <phonex>.:C(C=\c:U:mdc("-1","false"))</phonex>
+        <group name="C" mark="Coda"/>
+    </Stage>
+    
+    <Stage name="MaxOnset3">
+        <phonex>(O=\c:U+).:O</phonex>
+        <group name="O" mark="Onset"/>
+    </Stage>
+   
+    <Stage name="MaxCoda3">
+        <phonex>.:C(C=\c:U+)</phonex>
+        <group name="C" mark="Coda"/>
+    </Stage>
+    
+</SyllabifierDef>

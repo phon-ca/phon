@@ -23,13 +23,13 @@ import ca.phon.ipa.features.FeatureSet;
 @RunWith(JUnit4.class)
 public class TestBasicConstructs {
 
-	@Ignore
 	@Test
 	public void testSinglePhoneMatcher() throws ParseException {
 		// create a test string 
 		final FeatureMatrix fm = FeatureMatrix.getInstance();
 		String text = new String();
 		final FeatureSet testFeatures = FeatureSet.fromArray(new String[]{"Consonant", "Obs"});
+		
 		for(Character c:fm.getCharacterSet()) {
 			if(fm.getFeatureSet(c).intersect(testFeatures).equals(testFeatures))
 				text += c;

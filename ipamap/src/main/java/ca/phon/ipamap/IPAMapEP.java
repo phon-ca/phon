@@ -47,48 +47,6 @@ public class IPAMapEP implements IPluginEntryPoint {
 		if(window == null) {
 			window = new IpaMapFrame();
 			
-			IpaMap cm = new IpaMap();
-			cm.addListener(new IpaMapListener() {
-				
-				@Override
-				public void ipaMapEvent(String txt) {
-					KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-			    	Component focusedComp = focusManager.getFocusOwner();
-			    	if(focusedComp != null && focusedComp instanceof JTextComponent) {
-			    		JTextComponent tc = (JTextComponent)focusedComp;
-
-			    		int currentPos = 
-			    			(tc.getSelectedText() == null ? tc.getCaretPosition() : tc.getSelectionStart());
-			    	
-//			    		String replacement = event.getText();
-			    		// remove filler 'circle'
-			    		String replacement = txt;
-			    		
-			    		tc.replaceSelection(replacement);
-			    		
-			    		int newPos = Math.min(tc.getText().length(), currentPos + replacement.length());
-			    		
-						tc.setCaretPosition(newPos);
-					}
-				}
-			});
-			
-//			window.setFocusable(false);
-//			window.setFocusableWindowState(false);
-//			window.setLocationByPlatform(true);
-//			window.getContentPane().add(cm);
-//			Dimension screenDim = 
-//				java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-//			int w = window.getMapContents().getPreferredSize().width + ((new JScrollPane()).getVerticalScrollBar().getPreferredSize().width);
-//			if(w > screenDim.width/2)
-//				w = screenDim.width/2;
-//			int h = window.getMapContents().getPreferredSize().height;
-//			if(h > 2 * (screenDim.height/3))
-//				h = 2 * (screenDim.height/3);
-//			
-//			window.setSize(w, h);
-//			window.setAlwaysOnTop(true);
-			
 			window.addWindowListener(new WindowAdapter() {
 
 				@Override

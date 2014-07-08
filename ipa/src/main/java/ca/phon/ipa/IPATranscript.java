@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -17,6 +18,8 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
+import ca.phon.ipa.parser.IPAParserErrorHandler;
+import ca.phon.ipa.parser.IPAParserException;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
@@ -58,13 +61,27 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		throws ParseException {
 		IPATranscript retVal = new IPATranscript();
 		
-		try {
-			IPALexer lexer = new IPALexer(transcript);
-			TokenStream tokenStream = new CommonTokenStream(lexer);
-			IPAParser parser = new IPAParser(tokenStream);
-			retVal = parser.transcription();
-		} catch (RecognitionException re) {
-			throw new ParseException(transcript, re.charPositionInLine);
+		if(transcript.trim().length() > 0) {
+			try {
+				IPAParserErrorHandler handler = new IPAParserErrorHandler() {
+					
+					@Override
+					public void handleError(IPAParserException ex) {
+//						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(),
+//								ex);
+					}
+				};
+				IPALexer lexer = new IPALexer(transcript);
+				lexer.addErrorHandler(handler);
+				TokenStream tokenStream = new CommonTokenStream(lexer);
+				
+				IPAParser parser = new IPAParser(tokenStream);
+				parser.addErrorHandler(handler);
+				
+				retVal = parser.transcription();
+			} catch (RecognitionException re) {
+				throw new ParseException(transcript, re.charPositionInLine);
+			}
 		}
 		
 		return retVal;
@@ -380,26 +397,47 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return filter.getIPATranscript();
 	}
 	
+	private List<IPATranscript> syllList = null;
 	/**
 	 * Break the transcript into syllables.
 	 * 
 	 * @return syllables
 	 */
 	public List<IPATranscript> syllables() {
-		final SyllableVisitor visitor = new SyllableVisitor();
-		accept(visitor);
-		return visitor.getSyllables();
+		if(syllList == null) {
+			final SyllableVisitor visitor = new SyllableVisitor();
+			accept(visitor);
+			syllList = Collections.unmodifiableList(visitor.getSyllables());
+		}
+		return syllList;
 	}
 	
+	/**
+	 * Reset syllabification for the transcript.
+	 * 
+	 */
+	public void resetSyllabification() {
+		final PunctuationFilter filter = new PunctuationFilter();
+		accept(filter);
+		for(IPAElement ele:filter.getIPATranscript()) {
+			ele.setScType(SyllableConstituentType.UNKNOWN);
+		}
+		syllList = null;
+	}
+	
+	private List<IPATranscript> wordList = null;
 	/**
 	 * Break the transcript into words
 	 * 
 	 * @return words
 	 */
 	public List<IPATranscript> words() {
-		final WordVisitor visitor = new WordVisitor();
-		accept(visitor);
-		return visitor.getWords();
+		if(wordList == null) {
+			final WordVisitor visitor = new WordVisitor();
+			accept(visitor);
+			wordList = visitor.getWords();
+		}
+		return wordList;
 	}
 
 	@Override

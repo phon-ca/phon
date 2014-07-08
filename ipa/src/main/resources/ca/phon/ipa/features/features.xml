@@ -458,6 +458,8 @@
    </feature>
 
    <!--Consonants-->
+   <!-- X -->
+   <feature_set char="&#x58;">unintelligible </feature_set>
    <!--C-->
    <feature_set char="&#x43;">consonant </feature_set>
    <!--b-->
@@ -1032,8 +1034,6 @@
    <feature_set char="&#x31f;">diacritic advanced </feature_set>
    <!--◌̠ combining minus below-->
    <feature_set char="&#x320;">diacritic retracted </feature_set>
-   <!--◌̠-->
-   <feature_set char="&#x321;">diacritic palatal </feature_set>
    <!--◌̣ under-dot-->
    <feature_set char="&#x323;">diacritic lenis </feature_set>
    <!-- over-dot -->

@@ -93,12 +93,13 @@ exports.PatternFilter = function (id) {
         var msg = (loc >= 0 ?
         "Error at index " + loc + ": " + message:
         message);
-        
+       	filterParam.setValidate(false);
         //        textField.setToolTipText(msg);
         //        textField.setState("UNDEFINED");
     };
     
     var setPatternFilterOk = function (textField) {
+    	filterParam.setValidate(true);
         //        textField.setToolTipText("");
         //        textField.setState("INPUT");
     };
@@ -226,17 +227,15 @@ exports.PatternFilter = function (id) {
         return retVal;
     };
     
-    var validateTextField = function (textField) {
-        var txt = textField.getText();
-        if (textField.getState() == Packages.ca.phon.gui.components.PromptedTextField.FieldState.PROMPT)
-        return;
+    var validatePattern = function () {
+        var txt = filterParam.getValue(filterParamInfo.id);
         
         var filterType = filterTypeParam.getValue(filterTypeParamInfo.id);
         var filterCheck = checkFilter(txt, filterType.index);
         if (! filterCheck.valid) {
-            setPatternFilterInvalid(textField, filterCheck.message, filterCheck.loc);
+            setPatternFilterInvalid(filterCheck.message, filterCheck.loc);
         } else {
-            setPatternFilterOk(textField);
+            setPatternFilterOk();
         }
     };
     
@@ -254,23 +253,14 @@ exports.PatternFilter = function (id) {
         filterParamInfo.id,
         filterParamInfo.title,
         filterParamInfo.def);
-        //        var textField = filterParam.getEditorComponent();
-        //        textField.setPrompt(filterParamInfo.prompt);
         filterParam.setPrompt(filterParamInfo.prompt);
         
-        //        var filterListener = new java.awt.event.KeyListener() {
-        //            keyPressed: function(e) {
-        //            },
-        //
-        //            keyReleased: function(e) {
-        //            },
-        //
-        //            keyTyped: function(e) {
-        //                var textField = e.getSource();
-        //                validateTextField(textField);
-        //            }
-        //       };
-        //       filterParam.getEditorComponent().addKeyListener(filterListener);
+        var filterListener = new java.beans.PropertyChangeListener() {
+        	propertyChange: function(e) {
+        		validatePattern();
+        	}
+        };
+        filterParam.addPropertyChangeListener(filterParamInfo.id, filterListener);
         
         filterTypeParam = new EnumScriptParam(
         filterTypeParamInfo.id,
@@ -340,7 +330,7 @@ exports.PatternFilter = function (id) {
     var checkRegex = function (obj, filter, caseSensitive, exactMatch) {
         var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
-        if (exactMatch) {
+        if (exactMatch == true) {
             return matcher.matches();
         } else {
             return matcher.find();
@@ -350,7 +340,7 @@ exports.PatternFilter = function (id) {
     var checkPhonex = function (obj, filter, exactMatch) {
         if (!(obj instanceof IPATranscript)) return false;
         
-        if (exactMatch) {
+        if (exactMatch == true) {
             return obj.matches(filter);
         } else {
             return obj.contains(filter);
@@ -413,7 +403,7 @@ exports.PatternFilter = function (id) {
         
         var strA = (caseSensitive ? obj.toString(): obj.toString().toLowerCase());
         var strB = (caseSensitive ? filter: filter.toLowerCase());
-        if (exactMatch) {
+        if (exactMatch == true) {
             if (strA == strB) {
                 var v = {
                     start: 0, end: strA.length, value: obj
@@ -439,7 +429,7 @@ exports.PatternFilter = function (id) {
         var regexMatcher = regexPattern.matcher(obj.toString());
         var retVal = new Array();
         
-        if (exactMatch) {
+        if (exactMatch == true) {
             if (regexMatcher.matches()) {
                 v = {
                     start: 0, end: obj.toString().length(), value: obj

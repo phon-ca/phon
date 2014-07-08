@@ -2,40 +2,30 @@
 ## Print message and class#method if a warning or severe
 ($log.level.toString().charAt(0)) $log.message #if($log.level == "SEVERE" || $log.level == "WARNING")($log.sourceClassName#$log.sourceMethodName)#end
 
+#macro( logException $thrown )
+#foreach($ste in $thrown.stackTrace)
+#if($ste.className.startsWith("ca.phon"))
+#if($printEllipses == "true")
+		...
+#set($printEllipses = "false")
+#end
+		$ste.className#$ste.methodName ($ste.fileName:$ste.lineNumber)
+#else
+#set($printEllipses = "true")
+#end
+#end
+#if($printEllipses == "true")
+		...
+#set($printEllipses = "false")
+#end
+#end
 ## Print throwable information if available
 #if($log.thrown)
-	$log.thrown.toString()
-#set($printEllipses = "false")
-#foreach($ste in $log.thrown.stackTrace)
-#if($ste.className.startsWith("ca.phon"))
-#if($printEllipses == "true")
-		...
-#set($printEllipses = "false")
-#end
-		$ste.className#$ste.methodName ($ste.fileName:$ste.lineNumber)
-#else
-#set($printEllipses = "true")
-#end
-#end
-#if($printEllipses == "true")
-		...
-#set($printEllipses = "false")
-#end
+#logException($log.thrown)
 #if($log.thrown.cause)
-	Caused by $log.thrown.cause.toString()
-#foreach($ste in $log.thrown.cause.stackTrace)
-#if($ste.className.startsWith("ca.phon"))
-#if($printEllipses == "true")
-		...
-#set($printEllipses = "false")
-#end
-		$ste.className#$ste.methodName ($ste.fileName:$ste.lineNumber)
-#else
-#set($printEllipses = "true")
-#end
-#end
-#if($printEllipses == "true")
-		...
+#logException($log.thrown.cause)
+#if($log.thrown.cause.cause)
+#logException($log.thrown.cause.cause)
 #end
 #end
 #end

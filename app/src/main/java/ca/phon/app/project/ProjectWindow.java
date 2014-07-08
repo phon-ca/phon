@@ -17,6 +17,8 @@
  */
 package ca.phon.app.project;
 
+import groovy.ui.view.GTKDefaults;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -60,15 +62,19 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectListener;
+import ca.phon.project.ProjectRefresh;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
+import ca.phon.workspace.Workspace;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -102,14 +108,6 @@ public class ProjectWindow extends CommonModuleFrame
 	/** Label for messages */
 	private MessagePanel msgPanel;
 	
-	/** Project sharing */
-	private JToggleButton shareButton;
-	private JLabel rmiPathLabel;
-	private JLabel sharingStatusLabel;
-	
-	/** menus */
-	private JMenu scriptMenu;
-	
 	/** Project path (used to load the project) */
 	private String projectLoadPath = new String();
 	
@@ -133,8 +131,6 @@ public class ProjectWindow extends CommonModuleFrame
 		this.addWindowListener(this);
 		this.setTitle("Phon : " + project.getName() + " : Project Manager");
 		
-		
-//		this.addModuleController(this);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		init();
@@ -186,7 +182,7 @@ public class ProjectWindow extends CommonModuleFrame
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateLists();
+				refreshProject();
 			}
 			
 		});
@@ -220,12 +216,6 @@ public class ProjectWindow extends CommonModuleFrame
 				initInfo.put("project", getProject());
 				
 				PluginEntryPointRunner.executePluginInBackground("NewSession", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.core.NewSessionController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
 			}
 			
 		});
@@ -239,12 +229,6 @@ public class ProjectWindow extends CommonModuleFrame
 				initInfo.put("project", getProject());
 				
 				PluginEntryPointRunner.executePluginInBackground("CheckIPA", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.RepairController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
 			}
 			
 		});
@@ -260,92 +244,10 @@ public class ProjectWindow extends CommonModuleFrame
 				initInfo.put("project", getProject());
 				
 				PluginEntryPointRunner.executePluginInBackground("DeriveSession", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.MergeSessionsController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
 			}
 			
 		});
 		projectMenu.add(deriveItem);
-		
-		projectMenu.addSeparator();
-		
-		JMenuItem csvImportItem = new JMenuItem("Import Data from CSV...");
-		csvImportItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = 
-					new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				
-				PluginEntryPointRunner.executePluginInBackground("CSVImport", initInfo);
-				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.CSVImportController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-			}
-		});
-		projectMenu.add(csvImportItem);
-		
-		JMenuItem csvExportItem = new JMenuItem("Export Data as CSV...");
-		csvExportItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = 
-					new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				
-				PluginEntryPointRunner.executePluginInBackground("CSVExport", initInfo);
-				
-//				ModuleInformation mi =
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.CSVExportController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-			}
-			
-		});
-		projectMenu.add(csvExportItem);
-		
-//		JMenuItem importSessionItem = new JMenuItem("Import Session From XML...");
-//		importSessionItem.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				HashMap<String, Object> initInfo = 
-//					new HashMap<String, Object>();
-//				initInfo.put("project", project);
-//				
-//				ModuleInformation mi = 
-//					ResourceLocator.getInstance().getModuleInformationByAction(
-//							"ca.phon.modules.project.ImportSessionController");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-//			}
-//			
-//		});
-			
-	//	projectMenu.add(importSessionItem);
-		
-//		JMenu importCorpusMenu = new JMenu("Import Corpus");
-//		JMenuItem fromTalkbankItem = new JMenuItem("from Talkbank-xml folder");
-//		fromTalkbankItem.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				HashMap<String, Object> initInfo = new HashMap<String, Object>();
-//				initInfo.put("project", project);
-//				ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.project.ImportFolderModule");
-//				LoadModule lm = new LoadModule(mi, initInfo);
-//				lm.start();
-//			}
-//			
-//		});
-//		importCorpusMenu.add(fromTalkbankItem);
-//		projectMenu.add(importCorpusMenu);
 	}
 
 	private void init() {
@@ -654,16 +556,7 @@ public class ProjectWindow extends CommonModuleFrame
 			List<String> proj2Sessions = 
 				proj2.getCorpusSessions(destCorpus);
 			if(proj2Sessions.contains(session)) {
-				
-//				SystemProperties proj1VData = 
-//					proj1.getSessionValidationData();
-//				
-//				SystemProperties proj2VData = 
-//					proj2.getSessionValidationData();
-				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm");
-				
-//				String lastModifiedProp = corpus + "." + session + ".modified";
 				
 				String proj1LastModified = 
 					sdf.format(proj1.getSessionModificationTime(corpus, session).toDate());
@@ -675,16 +568,24 @@ public class ProjectWindow extends CommonModuleFrame
 					"Replace '" + corpus + "." + session + "' modified " + proj2LastModified + 
 					" with file modified on " + proj1LastModified + "?";
 				
-				int result = 
-					NativeDialogs.showYesNoDialogBlocking(this, "", "Session Already Exists", msg);
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setRunAsync(false);
+				props.setTitle("Session Already Exists");
+				props.setMessage(msg);
+				props.setOptions(MessageDialogProperties.yesNoOptions);
 				
-				if(result != NativeDialogEvent.YES_OPTION) {
+				int result = 
+					NativeDialogs.showMessageDialog(props);
+				
+				if(result != 0) {
 					return;
 				}
 				
 			}
 		} catch (Exception e) {
-			LOGGER.warning("Could not check existing transcript.");
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			ToastFactory.makeToast(e.getLocalizedMessage()).start(this.getRootPane());
 		}
 		
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
@@ -807,11 +708,6 @@ public class ProjectWindow extends CommonModuleFrame
 		initInfo.put("corpusName", corpus);
 		
 		PluginEntryPointRunner.executePluginInBackground("RenameCorpus", initInfo);
-		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.RenameCorpusController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
 	}
 	
 //	/**
@@ -983,6 +879,10 @@ public class ProjectWindow extends CommonModuleFrame
 		JMenu moveToMenu = new JMenu("Move Session To");
 		JMenu copyToMenu = new JMenu("Copy Session To");
 		
+		final String corpusListMsg = "<html><b>This project:</b></html>";
+		moveToMenu.add(corpusListMsg).setEnabled(false);
+		copyToMenu.add(corpusListMsg).setEnabled(false);
+		
 		List<String> projectCorpora = null;
 		
 		Collator collator = CollatorFactory.defaultCollator();
@@ -1021,9 +921,9 @@ public class ProjectWindow extends CommonModuleFrame
 			moveToMenu.add(currentMoveItem);
 		}
 		
-		// corpora in other projects
-//		List<Project> openProjects = 
-//			PhonEnvironment.getInstance().getOpenProjects();
+		final String openProjectsMsg = "<html><b>Open project:</b></html>";
+		boolean openProjectMsgAdded = false;
+		
 		List<CommonModuleFrame> openWindows = CommonModuleFrame.getOpenWindows();
 		for(int i = 0; i < openWindows.size(); i++) {
 			final CommonModuleFrame cmf = openWindows.get(i);
@@ -1035,6 +935,11 @@ public class ProjectWindow extends CommonModuleFrame
 			if(proj == null) continue;
 			
 			if(proj != getProject()) {
+				if(!openProjectMsgAdded) {
+					copyToMenu.add(openProjectsMsg).setEnabled(false);
+					moveToMenu.add(openProjectsMsg).setEnabled(false);
+					openProjectMsgAdded = true;
+				}
 				List<String> projCorpora = null;
 				String projName = new String();
 				projCorpora = 
@@ -1078,6 +983,64 @@ public class ProjectWindow extends CommonModuleFrame
 				copyToMenu.add(projCopyToMenu);
 				moveToMenu.add(projMoveToMenu);
 			}
+		}
+		
+		final String workspaceMsg = "<html><b>Workspace project:</b></html>";
+		boolean workspaceMsgAdded = false;
+		
+		// workspace projects
+		final List<Project> workspaceProjects = Workspace.userWorkspace().getProjects();
+		for(final Project p:workspaceProjects) {
+			if(p.getLocation().equals(getProject().getLocation())) {
+				continue;
+			}
+			if(!workspaceMsgAdded) {
+				copyToMenu.add(workspaceMsg).setEnabled(false);
+				moveToMenu.add(workspaceMsg).setEnabled(false);
+				workspaceMsgAdded = true;
+			}
+			List<String> projCorpora = null;
+			String projName = new String();
+			projCorpora = 
+				p.getCorpora();
+			Collections.sort(projCorpora, collator);
+			projName = p.getName();
+			
+			JMenu projMoveToMenu = new JMenu(projName);
+			JMenu projCopyToMenu = new JMenu(projName);
+			for(int j = 0; j < projCorpora.size(); j++) {
+				final String projCorpus = 
+					projCorpora.get(j);
+				
+				JMenuItem projMoveToItem = 
+					new JMenuItem(projCorpus);
+				projMoveToItem.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						copySession(
+								getProject(), corpus, session,
+								p, projCorpus, false, true);
+					}
+					
+				});
+				projMoveToMenu.add(projMoveToItem);
+				
+				JMenuItem projCopyToItem = 
+					new JMenuItem(projCorpus);
+				projCopyToItem.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						copySession(
+								getProject(), corpus, session,
+								p, projCorpus, false, false);
+					}
+					
+				});
+				projCopyToMenu.add(projCopyToItem);
+			}
+			
+			copyToMenu.add(projCopyToMenu);
+			moveToMenu.add(projMoveToMenu);
 		}
 		
 		contextMenu.add(copyToMenu);
@@ -1161,8 +1124,6 @@ public class ProjectWindow extends CommonModuleFrame
 		CorpusListModel corpusListModel = 
 			(CorpusListModel)corpusList.getModel();
 		corpusListModel.refresh();
-//		corpusListModel.fireDataChange();
-//		corpusList.revalidate();
 		corpusList.repaint();
 		
 		SessionListModel sessionListModel = 
@@ -1173,40 +1134,21 @@ public class ProjectWindow extends CommonModuleFrame
 			sessionListModel.setCorpus(corpusList.getSelectedValue().toString());
 		else
 			sessionListModel.setCorpus(null);
-//		sessionListModel.setCorpus(corpusList.getSelectedValue().toString());
-//		sessionListModel.fireDataChange();
-//		sessionList.revalidate();
+		
 		sessionList.repaint();
 	}
-
-//	public void handleModuleEvent(IModuleEvent e) throws ModuleException {
-//		if(e instanceof SaveDataEvent) {
-//			try {
-//				project.save();
-//			} catch (IOException ex) {
-//				PhonLogger.warning(this.getClass(), ex.getMessage());
-//				throw new ModuleException(this, "IO Error: " + ex.getMessage());
-//			}
-//		} else if (e instanceof SaveAsEvent) {
-////			FileFilter filters[] = new FileFilter[1];
-////			filters[0] = FileFilter.phonFilter;
-////			// show the save dialog
-////			String newFile = NativeDialogs.showSaveFileDialogBlocking(this, 
-////					"", ".phon", filters, "Save Project As");
-////			if(newFile != null) {
-////				try {
-////					project.saveAs(newFile);
-////				} catch (IOException ex) {
-////					NativeDialogs.showMessageDialogBlocking(
-////							this, null, "Cannot Save Project", ex.getMessage());
-////					PhonLogger.warning(this.getClass(), ex.getMessage());
-////				}
-////			}
-//		}
-//	}
 	
 	public MessagePanel getMessagePanel() {
 		return msgPanel;
+	}
+	
+	public void refreshProject() {
+		final Project project = getProject();
+		final ProjectRefresh impl = project.getExtension(ProjectRefresh.class);
+		if(impl != null) {
+			impl.refresh();
+			updateLists();
+		}
 	}
 	
 	private class MessagePanel extends JComponent {

@@ -5,7 +5,7 @@
 
   <groupId>ca.phon</groupId>
   <artifactId>phon</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
+  <version>1.7.0beta1</version>
   <packaging>pom</packaging>
 
   <name>Phon</name>
@@ -116,9 +116,9 @@
     
     <!-- Dependency versions -->
     <ca.hedlund.vlc4j.version>2.2</ca.hedlund.vlc4j.version>
-    <ca.hedlund.tst.version>0.0.2-SNAPSHOT</ca.hedlund.tst.version>
-    <ca.gedge.opgraph.version>0.2-SNAPSHOT</ca.gedge.opgraph.version>
-    <ca.phon.native-dialogs.version>3-SNAPSHOT</ca.phon.native-dialogs.version>
+    <ca.hedlund.tst.version>0.2</ca.hedlund.tst.version>
+    <ca.gedge.opgraph.version>0.2</ca.gedge.opgraph.version>
+    <ca.phon.native-dialogs.version>3</ca.phon.native-dialogs.version>
     <commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
     <com.fifesoft.rsyntaxtextarea.version>2.0.2</com.fifesoft.rsyntaxtextarea.version>
     <com.jgoodies.jgoodies-common.version>1.7.0</com.jgoodies.jgoodies-common.version>
@@ -146,6 +146,7 @@
     <org.apache.maven.plugins.maven-compiler-plugin.version>3.1</org.apache.maven.plugins.maven-compiler-plugin.version>
     <org.apache.maven.plugins.maven-javadoc-plugin.version>2.8.1</org.apache.maven.plugins.maven-javadoc-plugin.version>
     <org.apache.maven.plugins.maven-shade-plugin.version>2.2</org.apache.maven.plugins.maven-shade-plugin.version>
+    <org.apache.maven.plugins.maven-surefire-plugin.version>2.16</org.apache.maven.plugins.maven-surefire-plugin.version>
     <org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.8.3</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version> 
     <org.apache.maven.plugins.maven-dependency-plugin.version>2.8</org.apache.maven.plugins.maven-dependency-plugin.version>
   </properties>
@@ -370,6 +371,12 @@
         </plugin>
         
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${org.apache.maven.plugins.maven-surefire-plugin.version}</version>
+        </plugin>
+        
+        <plugin>
           <groupId>org.jvnet.jaxb2.maven2</groupId>
           <artifactId>maven-jaxb2-plugin</artifactId>
           <version>${org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version}</version>
@@ -432,6 +439,14 @@
           <source>${project.build.sourceVersion}</source>
           <target>${project.build.targetVersion}</target>
           <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <reuseForks>false</reuseForks>
+          <forkCount>1</forkCount>
         </configuration>
       </plugin>
       <plugin>

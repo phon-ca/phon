@@ -62,6 +62,10 @@
         <name>Nine</name>
         <token>DIGIT</token>
     </char>
+    <char value="&#x005e;">
+        <name>Caret</name>
+        <token>INTRA_WORD_PAUSE</token>
+    </char>
     
     <char value="&#x01c3;">
         <name>Latin Letter Retroflex Click</name>
@@ -97,6 +101,10 @@
     </char>
     <char value="&#x0047;">
         <name>Latin Capital Letter G</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0058;">
+        <name>Latin Capital Letter X</name>
         <token>COVER_SYMBOL</token>
     </char>
     <char value="&#x0061;">
@@ -905,10 +913,6 @@
     </char>
     <char value="&#x0320;">
         <name>Combining Minus Sign Below</name>
-        <token>COMBINING_DIACRITIC</token>
-    </char>
-    <char value="&#x0321;">
-        <name>Combining Palatal Hook</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x0323;">

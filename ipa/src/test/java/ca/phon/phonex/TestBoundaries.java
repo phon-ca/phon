@@ -78,4 +78,13 @@ public class TestBoundaries {
 		while(m2.find()) numFound++;
 		Assert.assertEquals(3, numFound);
 	}
+	
+	@Test
+	public void testIntraWordPause() throws ParseException {
+		final String text = "te^st";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "\\^";
+		Assert.assertEquals(2, ipa.indexOf(phonex));
+	}
 }

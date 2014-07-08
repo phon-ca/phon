@@ -23,9 +23,8 @@ import java.util.logging.Logger;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OSInfo;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 
 import com.sun.jna.Native;
@@ -71,7 +70,8 @@ public class VLCHelper {
 				} else if (OSInfo.isWindows()) {
 					vlcLocationDefault = VLC_LOCATION_WIN;
 				} else if (OSInfo.isNix()) {
-					// TODO
+					// libvlc should be in /usr/lib and already included in LD_LIBRARY_PATH
+					// on most systems
 				}
 				final String vlcLocation = PrefHelper.get(VLC_LOCATION, vlcLocationDefault);
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
@@ -79,15 +79,8 @@ public class VLCHelper {
 				isLoaded = true;
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//				if(showError) {
-//					final MessageDialogProperties props = new MessageDialogProperties();
-//					props.setRunAsync(false);
-//					props.setParentWindow(null);
-//					props.setMessage("<html><p>" + e.getLocalizedMessage() + "</p></html>");
-//					props.setTitle("Unable to load VLC");
-//					props.setOptions(MessageDialogProperties.okOptions);
-//					NativeDialogs.showMessageDialog(props);
-//				}
+				if(showError)
+					ToastFactory.makeToast(e.getLocalizedMessage()).start();
 			}
 		}
 

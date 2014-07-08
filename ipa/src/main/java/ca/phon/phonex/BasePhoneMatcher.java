@@ -2,6 +2,7 @@ package ca.phon.phonex;
 
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IntraWordPause;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.SyllableBoundary;
 import ca.phon.visitor.VisitorAdapter;
@@ -51,7 +52,7 @@ public class BasePhoneMatcher implements PhoneMatcher {
 		@Visits
 		public void visitBasicPhone(Phone bp) {
 			Character phoneBp = bp.getBasePhone();
-			matches = phoneBp == baseChar;
+			matches = (phoneBp.equals(baseChar));
 		}
 		
 		@Visits
@@ -64,6 +65,11 @@ public class BasePhoneMatcher implements PhoneMatcher {
 		public void visitDiacritic(Diacritic diacritic) {
 			matches = diacritic.toString().equals(
 					BasePhoneMatcher.this.toString());
+		}
+		
+		@Visits
+		public void visitIntraWordPause(IntraWordPause intraWordPause) {
+			matches = baseChar.equals(IntraWordPause.INTRA_WORD_PAUSE_CHAR);
 		}
 
 		@Override

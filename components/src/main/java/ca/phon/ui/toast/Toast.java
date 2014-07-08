@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
+import javax.swing.JFrame;
 import javax.swing.JWindow;
 import javax.swing.Popup;
 import javax.swing.SwingUtilities;
@@ -33,10 +32,11 @@ import javax.swing.SwingUtilities;
  */
 public final class Toast {
 	
-	/**
-	 * Message label
-	 */
-	private JLabel label;
+	private String messageTxt;
+	
+	private Color messageBackground;
+	
+	private Color messgaeForeground;
 	
 	private final static long DEFAULT_DISPLAY_TIME = 2000;
 	
@@ -63,14 +63,6 @@ public final class Toast {
 	Toast() {
 	}
 	
-	JLabel getLabel() {
-		if(label == null) {
-			label = new JLabel();
-			label.setBorder(BorderFactory.createLineBorder(Color.black));
-		}
-		return label;
-	}
-	
 	/**
 	 * Is finished on clink?
 	 * 
@@ -90,11 +82,11 @@ public final class Toast {
 	 * @param message
 	 */
 	public void setMessage(String message) {
-		getLabel().setText(message);
+		this.messageTxt = message;
 	}
 	
 	public String getMessage() {
-		return getLabel().getText();
+		return this.messageTxt;
 	}
 	
 	/**
@@ -103,22 +95,23 @@ public final class Toast {
 	 * @param c
 	 */
 	public void setMessageBackground(Color c) {
-		getLabel().setBackground(c);
+		this.messageBackground = c;
 	}
 	
 	public Color getMessageBackground() {
-		return getLabel().getBackground();
+		return this.messageBackground;
 	}
+	
 	
 	/**
 	 * Foreground
 	 */
 	public void setMessageForeground(Color c) {
-		getLabel().setForeground(c);
+		this.messgaeForeground = c;
 	}
-
+	
 	public Color getMessageForeground() {
-		return getLabel().getForeground();
+		return this.messgaeForeground;
 	}
 	
 	/**
@@ -191,7 +184,7 @@ public final class Toast {
 	 * 
 	 */
 	public void start() {
-		// TODO
+		start(null, ToastTask.CENTER_X, ToastTask.CENTER_Y);
 	}
 	
 	/**
@@ -201,7 +194,17 @@ public final class Toast {
 	 * @param window
 	 */
 	public void start(JWindow window) {
-		// TODO
+		start(window.getRootPane(), ToastTask.CENTER_X, ToastTask.CENTER_Y);
+	}
+	
+	/**
+	 * Start the toast display in the center of the 
+	 * frame.
+	 * 
+	 * @param frame
+	 */
+	public void start(JFrame frame) {
+		start(frame.getRootPane(), ToastTask.CENTER_X, ToastTask.CENTER_Y);
 	}
 	
 	/**

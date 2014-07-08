@@ -32,6 +32,7 @@ import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.SeparatorScriptParam;
 import ca.phon.script.params.StringScriptParam;
 import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 
 /**
  * Factory responsible for creating components for script parameter
@@ -233,6 +234,17 @@ public class ParamComponentFactory {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				textField.setPrompt(param.getPrompt());
+			}
+		});
+		param.addPropertyChangeListener(StringScriptParam.VALIDATE_PROP, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if((Boolean)evt.getNewValue()) {
+					textField.setState(FieldState.INPUT);
+				} else {
+					textField.setState(FieldState.UNDEFINED);
+				}
 			}
 		});
 	}

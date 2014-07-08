@@ -316,6 +316,12 @@ public class RecordDataEditorView extends EditorView {
 						final JTextComponent textComp = (JTextComponent)tierComp;
 						addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, gIdx);
 						textComp.addCaretListener(caretListener);
+						
+						if(tierItem.isTierLocked()) {
+							textComp.setEditable(false);
+						}
+					} else if(tierItem.isTierLocked()) {
+						tierComp.setEnabled(false);
 					}
 					
 					if(toFocus == null) {
@@ -324,7 +330,6 @@ public class RecordDataEditorView extends EditorView {
 				}
 			} else {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
-
 				tierEditor.addTierEditorListener(tierEditorListener);
 				final Component tierComp = tierEditor.getEditorComponent();
 				tierComp.setFont(tierFont);
@@ -335,6 +340,12 @@ public class RecordDataEditorView extends EditorView {
 					final JTextComponent textComp = (JTextComponent)tierComp;
 					addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, 0);
 					textComp.addCaretListener(caretListener);
+					
+					if(tierItem.isTierLocked()) {
+						textComp.setEditable(false);
+					}
+				} else if(tierItem.isTierLocked()) {
+					tierComp.setEnabled(false);
 				}
 				
 				if(toFocus == null) {
@@ -692,14 +703,14 @@ public class RecordDataEditorView extends EditorView {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			final JComponent comp = (JComponent)e.getSource();
-			if(comp != null && comp instanceof JTextComponent) {
-				final JTextComponent textComp = (JTextComponent)comp;
-				if(textComp.getSelectedText() != null) {
-					textComp.setSelectionStart(-1);
-					textComp.setSelectionEnd(-1);
-				}
-			}
+//			final JComponent comp = (JComponent)e.getSource();
+//			if(comp != null && comp instanceof JTextComponent) {
+//				final JTextComponent textComp = (JTextComponent)comp;
+//				if(textComp.getSelectedText() != null) {
+//					textComp.setSelectionStart(-1);
+//					textComp.setSelectionEnd(-1);
+//				}
+//			}
 		}
 		
 	}

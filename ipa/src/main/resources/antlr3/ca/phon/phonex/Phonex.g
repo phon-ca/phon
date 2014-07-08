@@ -204,11 +204,11 @@ sctype
 	;
 
 ESCAPED_PHONE_CLASS
-	:	BACKSLASH ('c'|'v'|'g'|'w'|'W'|'s')
+	:	BACKSLASH ('c'|'v'|'g'|'p'|'w'|'W'|'s')
 	;
 	
 ESCAPED_PUNCT
-	:	BACKSLASH ('.'|'*')
+	:	BACKSLASH ('.'|'*'|CARET)
 	;
 	
 ESCAPED_BOUNDARY
@@ -322,7 +322,7 @@ BOUND_END
 LETTER
 	:	'a'..'z'
 	|	'A'..'Z'
-	|	'\u0250'..'\u036f'
+	|	'\u00e6'..'\u03df'
 	;
 
 fragment

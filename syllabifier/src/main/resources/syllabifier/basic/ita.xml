@@ -16,162 +16,66 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phon.ca/ns/syllabifier ../../xml/xsd/syllabifier.xsd"
     name="Italian" language="ita">
+    
     <SonorityScale>
-        
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Obstruent}</PhoneSequence>
-            </Constraint>
+            <phonex>{obs}</phonex>
             <sonorityValue>0</sonorityValue>
         </SonorityClass>
         
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Nasal,Consonant}</PhoneSequence>
-            </Constraint>
+            <phonex>{nas,c}</phonex>
             <sonorityValue>1</sonorityValue>
         </SonorityClass>
         
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Liquid}</PhoneSequence>
-            </Constraint>
+            <phonex>{liq}</phonex>
             <sonorityValue>2</sonorityValue>
         </SonorityClass>
         
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Glide}</PhoneSequence>
-            </Constraint>
+            <phonex>\g</phonex>
             <sonorityValue>3</sonorityValue>
         </SonorityClass>
         
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Vowel}</PhoneSequence>
-            </Constraint>
+            <phonex>\v</phonex>
             <sonorityValue>4</sonorityValue>
         </SonorityClass>
-        
     </SonorityScale>
     
-    <Stage name="MarkNuclei" useMDC="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Vowel}</PhoneSequence>
-                <connector type="or"/>
-                <PhoneSequence>{Vowel}{Vowel,High,Lax}</PhoneSequence>
-                <connector type="or"/>
-                <PhoneSequence>{Vowel}{Glide}</PhoneSequence>
-            </Constraint>
-            <MarkAs>Nucleus</MarkAs>
-        </PhoneOfInterest>
+    <Stage name="MarkNuclei">
+        <phonex>(D=\v[{v,high,lax}\g])</phonex>
+        <phonex>(N=\v)</phonex>
+         
+        <group name="D" mark="Diphthong"/>
+        <group name="N" mark="Nucleus"/>
     </Stage>
     
-    <Stage name="MarkOnset" useMDC="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
+    <Stage name="MarkOnset">
+        <phonex>(O=\c:U).:N</phonex>
+        <phonex>.:sctype("-O")?(O=\g:N).:N</phonex>      
         
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+        <group name="O" mark="Onset"/>
     </Stage>
     
-    <!-- Glides which should be onsets -->
-    <Stage name="MarkOnset 2">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Glide}:Nucleus</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+    <Stage name="MaxOnset">
+        <phonex>(O=\c:U).:O:mdc("2","false")</phonex>
+        <group name="" mark=""/>
     </Stage>
     
-    <Stage name="MaxOnset" useMDC="true" mdc="2" sonorityDirection="Right"
-        allowsFlatSonority="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+    <Stage name="MarkCoda">
+        <phonex>.:N(C=\c:U)</phonex>
+        <group name="C" mark="Coda"/>
     </Stage>
     
-    <Stage name="Fix Diphthongs" useMDC="false">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:-Onset?</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Glide}:Nucleus</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </NextPhone>
-    </Stage>
-    
-    <Stage name="MarkCoda" useMDC="false">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
-            </Constraint>
-            <MarkAs>Coda</MarkAs>
-        </PhoneOfInterest>
-    </Stage>
-    
-    <Stage name="MarkLA" useMDC="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Strident}:Unknown</PhoneSequence>
-            </Constraint>
-            <MarkAs>Left Appendix</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+    <Stage name="MarkLA">
+        <phonex>(LA={strident}:U).:O</phonex>
+        <group name="LA" mark="Left Appendix"/>
     </Stage>
     
 </SyllabifierDef>

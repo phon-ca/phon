@@ -9,7 +9,6 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
 
@@ -46,7 +45,7 @@ public class NotesField extends JTextArea implements TierEditor {
 		final String oldVal = getGroupValue();
 		final String newVal = getText();
 		for(TierEditorListener listener:listeners) {
-			listener.tierValueChanged(notesTier, 0, newVal, oldVal);
+			listener.tierValueChange(notesTier, 0, newVal, oldVal);
 		}
 	}
 

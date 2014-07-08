@@ -1,12 +1,15 @@
 # BootHook
 ca.phon.app.BootHook
 # StartupHook
+ca.phon.app.autosave.AutosaveStartupHook
+# Theme
 ca.phon.app.ThemeHook
+# VLC
+ca.phon.app.VLCInitHook
 # Window menu
 ca.phon.app.menu.DefaultMenuFilterExtensionPt
 
 ## Editor Views
-# Session Info
 ca.phon.app.session.editor.view.session_information.SessionInfoExtension
 ca.phon.app.session.editor.view.media_player.MediaPlayerExtension
 ca.phon.app.session.editor.view.waveform.WaveformExtension

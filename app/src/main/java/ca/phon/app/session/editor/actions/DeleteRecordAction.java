@@ -8,6 +8,8 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Delete the current record.
@@ -20,7 +22,7 @@ public class DeleteRecordAction extends SessionEditorAction {
 	
 	private final static String SHORT_DESC = "Delete current record";
 	
-	private final static String ICON = "";
+	private final static String ICON = "misc/record-delete";
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
@@ -31,6 +33,7 @@ public class DeleteRecordAction extends SessionEditorAction {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(ACCELERATOR_KEY, KS);
+		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
 	}
 
 	@Override

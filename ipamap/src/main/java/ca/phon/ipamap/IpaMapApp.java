@@ -39,7 +39,7 @@ public class IpaMapApp {
 			mapFrame.pack();
 			mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
-			mapFrame.getMapContents().addListener(new IpaMapRobot());
+			mapFrame.getMapContents().addListener(new IpaMapRobot(mapFrame.getMapContents()));
 		}
 		return mapFrame;
 	}

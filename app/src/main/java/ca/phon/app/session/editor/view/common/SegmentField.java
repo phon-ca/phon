@@ -17,6 +17,7 @@
  */
 package ca.phon.app.session.editor.view.common;
 
+import java.awt.Dimension;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +40,15 @@ public class SegmentField extends JFormattedTextField {
 		
 		setOpaque(false);
 		this.setFormatterFactory(new SegmentFormatterFactory());
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		Dimension retVal = super.getPreferredSize();
+		
+		retVal.width += 5;
+		
+		return retVal;
 	}
 
 	/** Formatter factory */

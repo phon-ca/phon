@@ -19,6 +19,7 @@
 package ca.phon.media.player;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
@@ -46,6 +48,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.log.LogEventListener;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
@@ -56,6 +59,8 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -68,10 +73,6 @@ import com.jgoodies.forms.layout.FormLayout;
 public class PhonMediaPlayer extends JPanel {
 	
 	private static final long serialVersionUID = -5365398623998749265L;
-
-	static {
-		VLCHelper.checkNativeLibrary(true);
-	}
 	
 	private static final Logger LOGGER = Logger
 			.getLogger(PhonMediaPlayer.class.getName());
@@ -147,24 +148,28 @@ public class PhonMediaPlayer extends JPanel {
 	@Override
 	public void addNotify() {
 		super.addNotify();
-		mediaPlayerComponent = new EmbeddedMediaPlayerComponent() {
-			private static final long serialVersionUID = 1L;
-
-			// allow media player to be shrunk
-			@Override
-			public Dimension getMinimumSize() {
-				return new Dimension(0, 0);
+		try {
+			mediaPlayerComponent = new EmbeddedMediaPlayerComponent() {
+				private static final long serialVersionUID = 1L;
+	
+				// allow media player to be shrunk
+				@Override
+				public Dimension getMinimumSize() {
+					return new Dimension(0, 0);
+				}
+			};
+			add(mediaPlayerComponent, BorderLayout.CENTER);
+			
+			loadMedia();
+					
+			if(wasPlaying) {
+				mediaPlayerComponent.getMediaPlayer().play();
 			}
-		};
-		add(mediaPlayerComponent, BorderLayout.CENTER);
-		
-		loadMedia();
-				
-		if(wasPlaying) {
-			mediaPlayerComponent.getMediaPlayer().play();
-		}
-		if(lastLocation > 0) {
-			mediaPlayerComponent.getMediaPlayer().setTime(lastLocation);
+			if(lastLocation > 0) {
+				mediaPlayerComponent.getMediaPlayer().setTime(lastLocation);
+			}
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
 	

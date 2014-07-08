@@ -355,7 +355,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		List<Area> syllAreas = new ArrayList<Area>();
 		List<Area> phoneAreas = new ArrayList<Area>();
 		int syllCurrentX = phoneRect.x;
-		IPATranscript grpPhones = display.getTranscript();
+		IPATranscript grpPhones = 
+				(display.getTranscript() == null ? new IPATranscript() : display.getTranscript());
 		List<IPATranscript> syllables = grpPhones.syllables();
 
 		for (IPATranscript s : syllables) {
