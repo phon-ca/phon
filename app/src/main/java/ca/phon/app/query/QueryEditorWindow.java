@@ -571,13 +571,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if(!buffers.isVisible()) {
-			        buffers.setSize(500, 600);
-			        buffers.centerWindow();
-			        buffers.setVisible(true);
-		        } else {
-		        	buffers.requestFocus();
-		        }
+				buffers.showWindow();
 				logBuffer.getDocument().removeDocumentListener(this);
 			}
 			
