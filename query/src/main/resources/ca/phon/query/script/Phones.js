@@ -222,6 +222,12 @@ function query_record(recordIndex, record) {
 		    for(k = 0; k < matches.length; k++) {
     	        var match = matches[k];
     	        
+    	        if(filters.targetResultFilter.isUseFilter()) {
+    	        	if(!filters.targetResultFilter.check_filter(new IPATranscript(match.value))) {
+    	        		continue;
+    	        	}
+    	        }
+    	        
     			var result = factory.createResult();
     			// calculate start/end positions of data in text
     			var startIndex = ipa.stringIndexOf(match.value);
@@ -241,12 +247,18 @@ function query_record(recordIndex, record) {
     			    var phoneMap = group.phoneAlignment;
     			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
     			    var aligned = phoneMap.getAligned(match.value);
+			   		var alignedIpa = new IPATranscript(aligned);
+    			    
+    			    if(filters.actualResultFilter.isUseFilter()) {
+    			    	if(!filters.actualResultFilter.check_filter(alignedIpa)) {
+    			    		continue;
+    			    	}
+    			    }
     			    
     			    var alignedRv = factory.createResultValue();
     			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
     			    alignedRv.groupIndex = group.groupIndex;
     			   	if(aligned != null && aligned.length > 0) {
-    			   		var alignedIpa = new IPATranscript(aligned);
     			   		var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
     			   		var alignedLength = alignedIpa.toString().length();
     			   		

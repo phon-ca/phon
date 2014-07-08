@@ -330,7 +330,7 @@ exports.PatternFilter = function (id) {
     var checkRegex = function (obj, filter, caseSensitive, exactMatch) {
         var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
-        if (exactMatch) {
+        if (exactMatch == true) {
             return matcher.matches();
         } else {
             return matcher.find();
@@ -340,7 +340,7 @@ exports.PatternFilter = function (id) {
     var checkPhonex = function (obj, filter, exactMatch) {
         if (!(obj instanceof IPATranscript)) return false;
         
-        if (exactMatch) {
+        if (exactMatch == true) {
             return obj.matches(filter);
         } else {
             return obj.contains(filter);
@@ -403,7 +403,7 @@ exports.PatternFilter = function (id) {
         
         var strA = (caseSensitive ? obj.toString(): obj.toString().toLowerCase());
         var strB = (caseSensitive ? filter: filter.toLowerCase());
-        if (exactMatch) {
+        if (exactMatch == true) {
             if (strA == strB) {
                 var v = {
                     start: 0, end: strA.length, value: obj
@@ -429,7 +429,7 @@ exports.PatternFilter = function (id) {
         var regexMatcher = regexPattern.matcher(obj.toString());
         var retVal = new Array();
         
-        if (exactMatch) {
+        if (exactMatch == true) {
             if (regexMatcher.matches()) {
                 v = {
                     start: 0, end: obj.toString().length(), value: obj
