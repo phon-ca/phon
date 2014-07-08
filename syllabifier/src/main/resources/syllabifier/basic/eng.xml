@@ -65,7 +65,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <Stage name="MarkOnset">
         <phonex>(O=\c:U).:N</phonex>
-        <phonex>.:N(O={g}:N).:N</phonex>
+        <phonex>.:sctype("-O")?(O={g}:N).:N</phonex>
+        <phonex>^(O=j:N)</phonex>
 
         <group name="O" mark="Onset"/>
     </Stage>
@@ -73,18 +74,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <Stage name="MaxOnset">
         <phonex>(O={c,-strident}:U).:O:mdc("2","false")</phonex>
         <phonex>(O={strident, -anterior}:U).:O:mdc("2","false")</phonex>
-
-        <group name="O" mark="Onset"/>
-    </Stage>
-
-    <Stage name="Fix Diphthongs">
-        <phonex>.:-O?(G={g}:N).:N</phonex>
-
-        <group name="G" mark="Onset"/>
-    </Stage>
-
-    <Stage name="Glide Initial [j]">
-        <phonex>$(O=j:N)</phonex>
 
         <group name="O" mark="Onset"/>
     </Stage>

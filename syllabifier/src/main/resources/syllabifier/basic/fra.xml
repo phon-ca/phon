@@ -16,254 +16,88 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<SyllabifierDef xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="French" language="fra">
+<SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phon.ca/ns/syllabifier ../../xml/xsd/syllabifier.xsd"
+    name="French" language="fra">
+    
     
     <SonorityScale>
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Obstruent}</PhoneSequence>
-                <connector type="and"/>
-                <PhoneSequence>{-Uvular, -Fricative}</PhoneSequence>
-            </Constraint>
+            <phonex>{obs,-uvular,-fri}</phonex>
             <sonorityValue>0</sonorityValue>
         </SonorityClass>
-
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Nasal,Consonant}</PhoneSequence>
-            </Constraint>
+            <phonex>{c,nas}</phonex>
             <sonorityValue>1</sonorityValue>
         </SonorityClass>
-
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Liquid}</PhoneSequence>
-                <connector type="or"/>
-                <PhoneSequence>{Uvular, Fricative}</PhoneSequence>
-            </Constraint>
+            <phonex>[{liq}{uvular,fri}]</phonex>
             <sonorityValue>2</sonorityValue>
         </SonorityClass>
-
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Glide}</PhoneSequence>
-            </Constraint>
+            <phonex>\g</phonex>
             <sonorityValue>3</sonorityValue>
         </SonorityClass>
-
         <SonorityClass>
-            <Constraint>
-                <PhoneSequence>{Vowel}</PhoneSequence>
-            </Constraint>
+            <phonex>\v</phonex>
             <sonorityValue>4</sonorityValue>
         </SonorityClass>
     </SonorityScale>
-
-    <Stage name="MarkNuclei" useMDC="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Glide}{Vowel}</PhoneSequence>
-                <connector type="or"/>
-                <PhoneSequence>{Vowel}</PhoneSequence>
-                <connector type="or"/>
-                <PhoneSequence>{Vowel}{Vowel,High,Lax}</PhoneSequence>
-            </Constraint>
-            <MarkAs>Nucleus</MarkAs>
-        </PhoneOfInterest>
-    </Stage>
-
-    <Stage name="Final Consonant" useMDC="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Consonant}:Unknown#</PhoneSequence>
-            </Constraint>
-            <MarkAs>OEHS</MarkAs>
-        </PhoneOfInterest>
-    </Stage>
-
-    <Stage name="Max OEHS" useMDC="true" mdc="2" sonorityDirection="Right"
-        allowsFlatSonority="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Consonant}</PhoneSequence>
-            </Constraint>
-            <MarkAs>OEHS</MarkAs>
-        </PhoneOfInterest>
+    
+    <Stage name="MarkNuclei">
+        <phonex>(D=\g\v)</phonex>
+        <phonex>(D=\v{v,high,lax})</phonex>
+        <phonex>(N=\v)</phonex>
         
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:OEHS</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+        <group name="D" mark="Diphthong"/>
+        <group name="N" mark="Nucleus"/>
     </Stage>
-
-    <Stage name="MarkOnset" useMDC="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
+  
+    <Stage name="Final Consonant">
+        <phonex>(E=\c:U$)</phonex>
         
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </NextPhone>
-    </Stage>
-
-    <!-- Glides which should be onsets -->
-    <Stage name="MarkOnset 2">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Glide}:Nucleus</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+        <group name="E" mark="OEHS"/>
     </Stage>
     
-    <Stage name="MaxOnset" useMDC="true" mdc="2" sonorityDirection="Right"
-        allowsFlatSonority="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+    <Stage name="MaxOEHS">
+        <phonex>(E=\c:U)\c:E:mdc("2","false")</phonex>
+        <group name="E" mark="OEHS"/>
     </Stage>
 
-    <Stage name="Fix Diphthongs" useMDC="false">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:-Onset?</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
+    <Stage name="MarkOnset">
+        <phonex>(O=\c:U).:N</phonex>
+        <phonex>.:sctype("-O")?(O=\g:N).:N</phonex>
         
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Glide}:Nucleus</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </NextPhone>
-    </Stage>
-
-    <Stage name="MarkCoda" useMDC="false">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:Nucleus</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{-Vowel}:Unknown|-SyllableStressMarker|-SyllableBoundaryMarker</PhoneSequence>
-            </Constraint>
-            <MarkAs>Coda</MarkAs>
-        </PhoneOfInterest>
+        <group name="O" mark="Onset"/>
     </Stage>
     
-    <Stage name="MarkLA1" useMDC="false">
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>#{Strident,Voiceless}</PhoneSequence>
-            </Constraint>
-            <MarkAs>Left Appendix</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
-            </Constraint>
-        </NextPhone>
-    </Stage>
-
-    <Stage name="MarkLA2" useMDC="false">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:Coda</PhoneSequence>
-                <connector type="or"/>
-                <PhoneSequence>{}:SyllableStressMarker|SyllableBoundaryMarker</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>{Strident,Voiceless}</PhoneSequence>
-            </Constraint>
-            <MarkAs>Left Appendix</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>{}:Onset</PhoneSequence>
-            </Constraint>
-        </NextPhone>
-    </Stage>
-
-    <Stage name="Fix p[sn]" useMDC="false">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:SyllableBoundaryMarker?</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>p</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>'[sn]':Onset</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+    <Stage name="MaxOnset">
+        <phonex>(O=\c:U)\c:O:mdc("2","false")</phonex>
+        <group name="O" mark="Onset"/>
     </Stage>
     
-    <Stage name="Fix gz" useMDC="false">
-        <PrevPhone>
-            <Constraint>
-                <PhoneSequence>{}:SyllableBoundaryMarker?</PhoneSequence>
-            </Constraint>
-        </PrevPhone>
-        
-        <PhoneOfInterest>
-            <Constraint>
-                <PhoneSequence>'[g\u0261]'</PhoneSequence>
-            </Constraint>
-            <MarkAs>Onset</MarkAs>
-        </PhoneOfInterest>
-        
-        <NextPhone>
-            <Constraint>
-                <PhoneSequence>z:Onset</PhoneSequence>
-            </Constraint>
-        </NextPhone>
+    <Stage name="MarkCoda">
+        <phonex>.:N(C=\c:U)</phonex>
+        <group name="C" mark="Coda"/>
     </Stage>
     
+    <Stage name="MarkLA">
+        <phonex>\s?(LA={strident,voiceless}).:O</phonex>
+        <phonex>^(LA={strident,voiceless}).:O</phonex>
+        <phonex>.:C(LA={strident,voiceless}).:O</phonex>
+        
+        <group name="LA" mark="Left Appendix"/>
+    </Stage>
+
+    <Stage name="Fix p[sn]">
+        <phonex>\s?(O=p)[sn]:O</phonex>
+        <group name="O" mark="Onset"/>
+    </Stage>
+    
+    <Stage name="Fiz gz">
+        <phonex>\s?(O=[g\u0261])z:O</phonex>
+        <group name="O" mark="Onset"/>
+    </Stage>
+   
 </SyllabifierDef>
