@@ -3,6 +3,7 @@ package ca.phon.app.log;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Collection;
@@ -200,10 +201,16 @@ public class BufferWindow extends CommonModuleFrame {
 	
 	public void showWindow() {
 		if(!isVisible()) {
-			final Dimension prefSize = getPreferredSize();
-			prefSize.height = 600;
+			pack();
+			final Dimension size = getSize();
 			
-			setSize(prefSize);
+			if(size.width > Toolkit.getDefaultToolkit().getScreenSize().width) {
+				size.width = Toolkit.getDefaultToolkit().getScreenSize().width;
+			} else if(size.width < 550) {
+				size.width = 550;
+			}
+			size.height = 600;
+			setSize(size);
 			centerWindow();
 			setVisible(true);
 		} else {
