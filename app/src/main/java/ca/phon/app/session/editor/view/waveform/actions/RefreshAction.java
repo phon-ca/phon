@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.waveform.WaveformEditorView;
+import ca.phon.app.session.editor.view.waveform.WaveformTier;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -31,6 +32,9 @@ public class RefreshAction extends WaveformEditorViewAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		getView().update();
+		for(WaveformTier tier:getView().getPluginTiers()) {
+			tier.onRefresh();
+		}
 	}
 
 }
