@@ -24,4 +24,10 @@ public interface WaveformTier {
 	 */
 	public void addMenuItems(JMenu menuEle);
 	
+	/**
+	 * Called on the Refresh action for the tier.
+	 * 
+	 */
+	public void onRefresh();
+	
 }

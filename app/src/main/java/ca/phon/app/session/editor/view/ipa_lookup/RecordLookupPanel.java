@@ -278,7 +278,7 @@ public class RecordLookupPanel extends JPanel {
 		}
 		
 		final CompoundEdit edit = new CompoundEdit();
-		IPATranscript targetIpa = ipaTarget.getGroup(i);
+		IPATranscript targetIpa = (ipaTarget.numberOfGroups() > i ? ipaTarget.getGroup(i) : new IPATranscript());
 		if(ipaTargetBox.isSelected()) {
 			boolean set = (overwriteBox.isSelected() ? true : ipaTarget.getGroup(i).length() == 0);
 			if(set) {
@@ -289,7 +289,7 @@ public class RecordLookupPanel extends JPanel {
 			}
 		}
 		
-		IPATranscript actualIpa = ipaActual.getGroup(i);
+		IPATranscript actualIpa = (ipaActual.numberOfGroups() > i ? ipaActual.getGroup(i) : new IPATranscript());
 		if(ipaActualBox.isSelected()) {
 			boolean set = (overwriteBox.isSelected() ? true : ipaActual.getGroup(i).length() == 0);
 			if(set) {

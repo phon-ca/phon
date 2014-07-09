@@ -72,7 +72,7 @@ public class TimeBar extends JComponent {
 	
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(0, 40);
+		return new Dimension(0, 50);
 	}
 	
 	@Override

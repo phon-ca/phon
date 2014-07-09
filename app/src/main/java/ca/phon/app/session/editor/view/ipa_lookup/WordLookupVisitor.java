@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.logging.Level;
 
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.WordBoundary;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.spi.GenerateSuggestions;
@@ -50,15 +51,20 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	private void addWordToTier(String txt) {
-		try {
+//		try {
 			int grpIdx = recordLookupPanel.lookupTier.numberOfGroups()-1;
 			IPATranscript grp = recordLookupPanel.lookupTier.getGroup(grpIdx);
-			grp = grp.append(IPATranscript.parseIPATranscript(
-					(grp.length() > 0 ? " " : "") + txt));
-			recordLookupPanel.lookupTier.setGroup(grpIdx, grp);
-		} catch (ParseException e) {
-			RecordLookupPanel.LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
+			final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+			builder.append(grp);
+			if(builder.size() > 0)
+				builder.appendWordBoundary();
+			builder.append(txt);
+//			grp = grp.append(IPATranscript.parseIPATranscript(
+//					(grp.length() > 0 ? " " : "") + txt));
+			recordLookupPanel.lookupTier.setGroup(grpIdx, builder.toIPATranscript());
+//		} catch (ParseException e) {
+//			RecordLookupPanel.LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+//		}
 	}
 	
 	private OrthoWordIPAOptions updateAnnotation(OrthoWord word) {
