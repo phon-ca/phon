@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
@@ -38,6 +39,8 @@ public class SessionEditorToolbar extends JPanel {
 	 * Buttons
 	 */
 	private JButton saveButton;
+	
+	private JButton viewBtn;
 	
 	private NavigationPanel navigationPanel;
 	
@@ -72,7 +75,7 @@ public class SessionEditorToolbar extends JPanel {
 		final PhonUIAction showViewMenuAct = new PhonUIAction(this, "showViewMenu");
 		showViewMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show view menu");
 		showViewMenuAct.putValue(PhonUIAction.SMALL_ICON, reloadLayoutIcon);
-		final JButton viewBtn = new JButton(showViewMenuAct);
+		viewBtn = new JButton(showViewMenuAct);
 		add(viewBtn, cc.xy(4,2));
 		
 		final ButtonGroup btnGrp = new ButtonGroup();
@@ -99,6 +102,18 @@ public class SessionEditorToolbar extends JPanel {
 		
 		quickSearch = new SessionEditorQuickSearch(getEditor());
 		add(quickSearch.getSearchField(), cc.xy(10, 2));
+	}
+	
+	public void showViewMenu() {
+		final SessionEditor editor = getEditor();
+		
+		final JPopupMenu menu = new JPopupMenu();
+		
+		editor.getViewModel().setupPerspectiveMenu(menu);
+		menu.addSeparator();
+		editor.getViewModel().setupViewMenu(menu);
+		
+		menu.show(viewBtn, 0, viewBtn.getHeight());
 	}
 	
 }
