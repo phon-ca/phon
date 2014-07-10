@@ -359,15 +359,23 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				(display.getTranscript() == null ? new IPATranscript() : display.getTranscript());
 		List<IPATranscript> syllables = grpPhones.syllables();
 
-		for (IPATranscript s : syllables) {
+		for (int sIdx = 0; sIdx < syllables.size(); sIdx++) {
+			final IPATranscript s = syllables.get(sIdx);
 			IPATranscript syllablePhones = s.removePunctuation();
-
+			
 			int sX = syllCurrentX;
 			int sY = phoneRect.y;
 			int sW = syllablePhones.length() * phoneRect.width;
 			int sH = phoneRect.height;
 
 			syllCurrentX += sW;
+			
+			if((sIdx+1) < syllables.size()) {
+				final IPATranscript nextSyll = syllables.get(sIdx+1);
+				if(nextSyll.length() > 0 && nextSyll.elementAt(0).getScType() == SyllableConstituentType.AMBISYLLABIC) {
+					sW += phoneRect.width;
+				}
+			}
 
 			Rectangle sR = new Rectangle(sX, sY, sW, sH);
 
@@ -382,7 +390,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 			Rectangle savedPhoneRect = new Rectangle(phoneRect);
 			for (int pIdx = 0; pIdx < syllablePhones.length(); pIdx++) {
 				IPAElement p = syllablePhones.elementAt(pIdx);
-
+				
 				// calculate fill area
 				Rectangle2D.Double phoneRect2d = new Rectangle2D.Double(
 						phoneRect.x, phoneRect.y, phoneRect.width,
