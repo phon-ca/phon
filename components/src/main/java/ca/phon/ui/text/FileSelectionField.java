@@ -32,25 +32,29 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
-import ca.phon.ui.CommonModuleFrame;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 /**
  * Special text field for selecting file/folders.
  */
-public class FileSelectionField extends PromptedTextField {
+public class FileSelectionField extends JPanel {
 	
 	private static final long serialVersionUID = 7059011387085702827L;
 
@@ -58,6 +62,8 @@ public class FileSelectionField extends PromptedTextField {
 	 * Property for changes to the selected file
 	 */
 	public final static String FILE_PROP = "_selected_file_";
+	
+	private PromptedTextField textField;
 	
 	/**
 	 * Browse button
@@ -89,11 +95,18 @@ public class FileSelectionField extends PromptedTextField {
 	public FileSelectionField() {
 		super();
 		init();
-		getDocument().addDocumentListener(validationListener);
+		textField.getDocument().addDocumentListener(validationListener);
 		addFocusListener(focusListener);
 	}
 	
 	private void init() {
+		final FormLayout layout = new FormLayout("fill:pref:grow, pref", "pref");
+		final CellConstraints cc = new CellConstraints();
+		setLayout(layout);
+		
+		textField = new PromptedTextField();
+		add(textField, cc.xy(1,1));
+		
 		final ImageIcon browseIcon = 
 				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
 		final PhonUIAction browseAct = 
@@ -103,25 +116,12 @@ public class FileSelectionField extends PromptedTextField {
 		browseButton = new JButton(browseAct);
 		browseButton.putClientProperty("JButton.buttonType", "square");
 		browseButton.setCursor(Cursor.getDefaultCursor());
+		add(browseButton, cc.xy(2,1));
 		
-//		addKeyListener(keyListener);
-		add(browseButton);
+		setBorder(textField.getBorder());
+		textField.setBorder(null);
 		
-		// setup empty border with space for the button
-		final int leftSpace = 0;
-		final int rightSpace = browseButton.getPreferredSize().width;
-		final int topSpace = 0;
-		final int btmSpace = 0;
-		
-		final Border emptyBorder =
-				BorderFactory.createEmptyBorder(topSpace, leftSpace, btmSpace, rightSpace);
-		final Border border = 
-				BorderFactory.createCompoundBorder(getBorder(), emptyBorder);
-		setBorder(border);
-
-		addComponentListener(resizeListener);
-		
-		addActionListener(new ActionListener() {
+		textField.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -140,8 +140,8 @@ public class FileSelectionField extends PromptedTextField {
 	public File getSelectedFile() {
 		File retVal = null;
 		
-		if(getState() != FieldState.PROMPT) {
-			String txt = getText();
+		if(textField.getState() != FieldState.PROMPT) {
+			String txt = textField.getText();
 //			txt = (new PathExpander()).expandPath(txt);
 			retVal = new File(txt);
 		}
@@ -157,14 +157,14 @@ public class FileSelectionField extends PromptedTextField {
 	private File lastSelectedFile = null;
 	public void setFile(File f) {
 		if(f == null) {
-			setText("");
+			textField.setText("");
 		} else {
-			setState(FieldState.INPUT);
+			textField.setState(FieldState.INPUT);
 			
 			String path = f.getAbsolutePath();
 			String collapsedPath = path;
 //					(new PathExpander()).compressPath(path);
-			setText(collapsedPath);
+			textField.setText(collapsedPath);
 			
 			super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
 			lastSelectedFile = f;
@@ -172,7 +172,7 @@ public class FileSelectionField extends PromptedTextField {
 	}
 	
 	private void checkPath() {
-		if(getState() == FieldState.PROMPT || !validatePath) return;
+		if(textField.getState() == FieldState.PROMPT || !validatePath) return;
 		File f = getSelectedFile();
 		boolean valid = true;
 		String toolTip = "";
@@ -224,7 +224,26 @@ public class FileSelectionField extends PromptedTextField {
 	public void setFileFilter(FileFilter fileFilter) {
 		this.fileFilter = fileFilter;
 	}
-
+	
+	public String getText() {
+		return textField.getText();
+	}
+	
+	public void setText(String text) {
+		textField.setText(text);
+	}
+	
+	public PromptedTextField getTextField() {
+		return this.textField;
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		textField.setEnabled(enabled);
+		browseButton.setEnabled(enabled);
+	}
+	
 	/**
 	 * Open browse dialog.
 	 */
@@ -258,43 +277,43 @@ public class FileSelectionField extends PromptedTextField {
 			}
 		}
 		if(path != null) {
-			setState(FieldState.INPUT);
+			textField.setState(FieldState.INPUT);
 			setFile(new File(path));
 		}
 	}
 	
-	/**
-	 * Listener to keep browse button at end of component
-	 */
-	private final ComponentListener resizeListener = new ComponentListener() {
-		
-		@Override
-		public void componentShown(ComponentEvent arg0) {
-			
-		}
-		
-		@Override
-		public void componentResized(ComponentEvent arg0) {
-			Runnable moveBtn = new Runnable() {
-				
-				@Override
-				public void run() {
-					browseButton.setBounds(
-							getWidth()-browseButton.getPreferredSize().width, 0,
-							browseButton.getPreferredSize().width, getHeight());
-				}
-			};
-			SwingUtilities.invokeLater(moveBtn);
-		}
-		
-		@Override
-		public void componentMoved(ComponentEvent arg0) {
-		}
-		
-		@Override
-		public void componentHidden(ComponentEvent arg0) {
-		}
-	};
+//	/**
+//	 * Listener to keep browse button at end of component
+//	 */
+//	private final ComponentListener resizeListener = new ComponentListener() {
+//		
+//		@Override
+//		public void componentShown(ComponentEvent arg0) {
+//			
+//		}
+//		
+//		@Override
+//		public void componentResized(ComponentEvent arg0) {
+//			Runnable moveBtn = new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					browseButton.setBounds(
+//							getWidth()-browseButton.getPreferredSize().width, 0,
+//							browseButton.getPreferredSize().width, getHeight());
+//				}
+//			};
+//			SwingUtilities.invokeLater(moveBtn);
+//		}
+//		
+//		@Override
+//		public void componentMoved(ComponentEvent arg0) {
+//		}
+//		
+//		@Override
+//		public void componentHidden(ComponentEvent arg0) {
+//		}
+//	};
 	
 	/**
 	 * Document listener
@@ -352,9 +371,9 @@ public class FileSelectionField extends PromptedTextField {
 				final String compressedPath = path;
 //						pe.compressPath(path);
 				
-				FileSelectionField.this.setText(compressedPath);
+				textField.setText(compressedPath);
 			} else {
-				setState(FieldState.PROMPT);
+				textField.setState(FieldState.PROMPT);
 			}
 			firePropertyChange(FILE_PROP, lastSelectedFile, f);
 			lastSelectedFile = f;

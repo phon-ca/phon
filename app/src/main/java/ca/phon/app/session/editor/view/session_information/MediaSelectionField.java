@@ -5,6 +5,7 @@ import java.io.File;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.ui.text.FileSelectionField;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 
 public class MediaSelectionField extends FileSelectionField {
 	
@@ -36,7 +37,7 @@ public class MediaSelectionField extends FileSelectionField {
 		
 //		final PathExpander pe = new PathExpander();
 		
-		if(getState() == FieldState.INPUT && txt.length() > 0) {
+		if(getTextField().getState() == FieldState.INPUT && txt.length() > 0) {
 			File mediaLocatorFile = MediaLocator.findMediaFile(txt, project, null);
 			if(mediaLocatorFile != null) {
 				retVal = mediaLocatorFile;
