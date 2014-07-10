@@ -4,6 +4,7 @@ import java.io.File;
 
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 
@@ -15,11 +16,13 @@ public class MediaSelectionField extends FileSelectionField {
 	
 	public MediaSelectionField() {
 		super();
+		setFileFilter(FileFilter.mediaFilter);
 	}
 
 	public MediaSelectionField(Project project) {
 		super();
 		this.project = project;
+		setFileFilter(FileFilter.mediaFilter);
 	}
 
 	public void setProject(Project project) {

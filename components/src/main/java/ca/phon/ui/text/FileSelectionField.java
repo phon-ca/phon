@@ -87,7 +87,7 @@ public class FileSelectionField extends JPanel {
 	/**
 	 * File filter
 	 */
-	private FileFilter fileFilter = FileFilter.allFilesFilter;
+	private FileFilter fileFilter = null;
 	
 	/**
 	 * Constructor
@@ -194,7 +194,7 @@ public class FileSelectionField extends JPanel {
 				}
 			}
 			
-			if(!fileFilter.accept(f)) {
+			if(fileFilter != null && !fileFilter.accept(f)) {
 				valid = false;
 				toolTip = "File type not accepted";
 			}
@@ -255,27 +255,20 @@ public class FileSelectionField extends JPanel {
 			parentPath = f.getParent();
 		}
 		
-		if(mode == SelectionMode.FILES) {
-			final SaveDialogProperties props = new SaveDialogProperties();
-			if(fileFilter != null)
-				props.setFileFilter(fileFilter);
-			props.setCanCreateDirectories(true);
-			props.setRunAsync(false);
-			
-			path = NativeDialogs.showSaveDialog(props);
-		} else {
-			final OpenDialogProperties props = new OpenDialogProperties();
-			props.setCanChooseDirectories(true);
-			props.setCanChooseFiles(false);
-			props.setCanCreateDirectories(true);
-			props.setAllowMultipleSelection(false);
-			props.setRunAsync(false);
-			
-			final List<String> paths = NativeDialogs.showOpenDialog(props);
-			if(paths.size() > 0) {
-				path = paths.get(0);
-			}
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setRunAsync(false);
+		props.setAllowMultipleSelection(false);
+		props.setCanChooseDirectories(mode == SelectionMode.FOLDERS);
+		props.setCanChooseFiles(mode == SelectionMode.FILES);
+		props.setCanCreateDirectories(true);
+		if(getFileFilter() != null)
+			props.setFileFilter(getFileFilter());
+		
+		final List<String> selections = NativeDialogs.showOpenDialog(props);
+		if(selections != null && selections.size() == 1) {
+			path = selections.get(0);
 		}
+
 		if(path != null) {
 			textField.setState(FieldState.INPUT);
 			setFile(new File(path));
