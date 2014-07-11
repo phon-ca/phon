@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
@@ -66,14 +67,6 @@ public class SessionEditorToolbar extends JPanel {
 		saveButton = new JButton(saveAction);
 		saveButton.setText(null);
 		add(saveButton, cc.xy(2, 2));
-		
-		final ImageIcon reloadLayoutIcon = 
-				IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
-		final PhonUIAction showViewMenuAct = new PhonUIAction(this, "showViewMenu");
-		showViewMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show view menu");
-		showViewMenuAct.putValue(PhonUIAction.SMALL_ICON, reloadLayoutIcon);
-		final JButton viewBtn = new JButton(showViewMenuAct);
-		add(viewBtn, cc.xy(4,2));
 		
 		final ButtonGroup btnGrp = new ButtonGroup();
 		final List<JButton> buttons = SegmentedButtonBuilder.createSegmentedButtons(3, btnGrp);

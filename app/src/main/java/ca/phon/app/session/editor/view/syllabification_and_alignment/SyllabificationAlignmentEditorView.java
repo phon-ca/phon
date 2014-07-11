@@ -409,8 +409,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	
 	@RunOnEDT
 	public void onTierChange(EditorEvent ee) {
-		if(ee.getEventData() != null && ee.getSource() == getEditor().getUndoSupport() &&
-				ee.getEventData().toString().equals(SystemTierType.SyllableAlignment.getName())) {
+		if(ee.getEventData() != null && ee.getSource() == getEditor().getUndoSupport()) {
 			update();
 			repaint();
 		}

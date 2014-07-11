@@ -40,7 +40,7 @@ public class SyllabificationSettingsPanel extends JPanel {
 	}
 	
 	private void init() {
-		final FormLayout layout = new FormLayout("right:pref, fill:pref:grow", "pref, pref");
+		final FormLayout layout = new FormLayout("right:pref, fill:pref:grow", "5dlu, pref, 3dlu, pref, 5dlu");
 		setLayout(layout);
 		final CellConstraints cc = new CellConstraints();
 		
@@ -61,11 +61,11 @@ public class SyllabificationSettingsPanel extends JPanel {
 				syllabifierInfo.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName())));
 		this.actualSyllabifierBox.setRenderer(new SyllabifierCellRenderer());
 		
-		add(new JLabel("Target syllabifier:"), cc.xy(1,1));
-		add(targetSyllabifierBox, cc.xy(2,1));
+		add(new JLabel("Target syllabifier:"), cc.xy(1,2));
+		add(targetSyllabifierBox, cc.xy(2,2));
 		
-		add(new JLabel("Actual syllabifier:"), cc.xy(1,2));
-		add(actualSyllabifierBox, cc.xy(2,2));
+		add(new JLabel("Actual syllabifier:"), cc.xy(1,4));
+		add(actualSyllabifierBox, cc.xy(2,4));
 	}
 
 	public Language getSelectedTargetSyllabifier() {

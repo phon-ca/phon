@@ -412,6 +412,24 @@ public final class Phone extends IPAElement {
 	public FeatureSet getSuffixFeatures() {
 		return getFeatures(getSuffixDiacritic());
 	}
+	
+	/**
+	 * Get the feature set fo the long section
+	 * of the element
+	 * 
+	 * @return
+	 */
+	public FeatureSet getLongFeatures() {
+		final FeatureSet retVal = new FeatureSet();
+		
+		if(getLength() == 0.5) {
+			retVal.addFeature("halflong");
+		} else if(getLength() >= 1.0) {
+			retVal.addFeature("long");
+		}
+		
+		return retVal;
+	}
 
 	private FeatureSet getFeatures(Character c) {
 		final FeatureSet retVal = new FeatureSet();
@@ -431,6 +449,7 @@ public final class Phone extends IPAElement {
 			retVal.union(getBaseFeatures());
 			retVal.union(getCombiningFeatures());
 			retVal.union(getSuffixFeatures());
+			retVal.union(getLongFeatures());
 		return retVal;
 	}
 

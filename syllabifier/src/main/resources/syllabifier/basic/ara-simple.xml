@@ -71,7 +71,7 @@
     </Stage>
     
     <Stage name="MarkCoda">
-        <phonex>.:sctype("N|C")(C=\c:U+).:O</phonex>
+        <phonex>.:sctype("N|C")(C=\c:U)\c</phonex>
         <group name="C" mark="Coda"/>
     </Stage>
     
@@ -81,7 +81,7 @@
     </Stage>
    
     <Stage name="FinalCoda">
-        <phonex>(C=\c:U$)</phonex>
+        <phonex>(C=\c:U)$</phonex>
         <group name="C" mark="Coda"/>
     </Stage>
     

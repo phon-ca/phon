@@ -80,7 +80,8 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 					T oldValue) {
 				if(syllabifier != null) {
 					final IPATranscript transcript = (IPATranscript)newValue;
-					syllabifier.syllabify(transcript.toList());
+					if(transcript != null && syllabifier != null)
+						syllabifier.syllabify(transcript.toList());
 				}
 			}
 			

@@ -286,10 +286,10 @@ public class SessionInfoEditorView extends DividedEditorView {
 		} else {
 			if(session.getMediaLocation() != null &&
 					StringUtils.strip(session.getMediaLocation()).length() > 0) {
-				mediaLocationField.setState(FieldState.INPUT);
+				mediaLocationField.getTextField().setState(FieldState.INPUT);
 				mediaLocationField.setText(session.getMediaLocation());
 			} else {
-				mediaLocationField.setState(FieldState.PROMPT);
+				mediaLocationField.getTextField().setState(FieldState.PROMPT);
 			}
 		}
 		
