@@ -128,7 +128,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		// theme
 		dockControl.setTheme(ThemeMap.KEY_FLAT_THEME);
 		
-		dockControl.setGroupBehavior(CGroupBehavior.TOPMOST);
+//		dockControl.setGroupBehavior(CGroupBehavior.TOPMOST);
 		
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
