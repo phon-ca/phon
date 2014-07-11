@@ -40,8 +40,6 @@ public class SessionEditorToolbar extends JPanel {
 	 */
 	private JButton saveButton;
 	
-	private JButton viewBtn;
-	
 	private NavigationPanel navigationPanel;
 	
 	private SessionEditorQuickSearch quickSearch;
@@ -70,14 +68,6 @@ public class SessionEditorToolbar extends JPanel {
 		saveButton.setText(null);
 		add(saveButton, cc.xy(2, 2));
 		
-		final ImageIcon reloadLayoutIcon = 
-				IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
-		final PhonUIAction showViewMenuAct = new PhonUIAction(this, "showViewMenu");
-		showViewMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show view menu");
-		showViewMenuAct.putValue(PhonUIAction.SMALL_ICON, reloadLayoutIcon);
-		viewBtn = new JButton(showViewMenuAct);
-		add(viewBtn, cc.xy(4,2));
-		
 		final ButtonGroup btnGrp = new ButtonGroup();
 		final List<JButton> buttons = SegmentedButtonBuilder.createSegmentedButtons(3, btnGrp);
 		
@@ -102,18 +92,6 @@ public class SessionEditorToolbar extends JPanel {
 		
 		quickSearch = new SessionEditorQuickSearch(getEditor());
 		add(quickSearch.getSearchField(), cc.xy(10, 2));
-	}
-	
-	public void showViewMenu() {
-		final SessionEditor editor = getEditor();
-		
-		final JPopupMenu menu = new JPopupMenu();
-		
-		editor.getViewModel().setupPerspectiveMenu(menu);
-		menu.addSeparator();
-		editor.getViewModel().setupViewMenu(menu);
-		
-		menu.show(viewBtn, 0, viewBtn.getHeight());
 	}
 	
 }
