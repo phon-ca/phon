@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -40,6 +41,8 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
+					JPopupMenu.setDefaultLightWeightPopupEnabled(true);
+					
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
 					// keep mac OS X menu bars
 					if(OSInfo.isMacOs()) {
