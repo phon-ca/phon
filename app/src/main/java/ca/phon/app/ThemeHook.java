@@ -41,7 +41,7 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
-					JPopupMenu.setDefaultLightWeightPopupEnabled(true);
+					JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 					
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
 					// keep mac OS X menu bars
