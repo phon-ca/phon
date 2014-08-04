@@ -1,5 +1,6 @@
 package ca.phon.ipadictionary.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,15 +17,19 @@ import ca.phon.util.Language;
  * Perform lookups on multiple dictionaries at once.
  * 
  */
-public class CompundDictionary implements IPADictionarySPI,
+public class CompoundDictionary implements IPADictionarySPI,
 	NameInfo, LanguageInfo, PrefixSearch {
 	
 	/**
 	 * Dictionaries
 	 * 
 	 */
-	private List<IPADictionary> dicts;
+	private final IPADictionary[] dicts;
 
+	public CompoundDictionary(IPADictionary[] dicts) {
+		this.dicts = dicts;
+	}
+	
 	@Override
 	public String[] lookup(String orthography) throws IPADictionaryExecption {
 		Set<String> allTranscripts = new TreeSet<String>();
@@ -46,12 +51,12 @@ public class CompundDictionary implements IPADictionarySPI,
 	@Override
 	public Language getLanguage() {
 		Language detectedLang = new Language();
-		if(dicts.size() > 0) {
-			detectedLang = dicts.get(0).getLanguage();
+		if(dicts.length > 0) {
+			detectedLang = dicts[0].getLanguage();
 			
-			for(int i = 1; i < dicts.size(); i++) {
-				if(!dicts.get(i).getLanguage().equals(detectedLang)) {
-					detectedLang.appendUserID(dicts.get(i).getLanguage().toString());
+			for(int i = 1; i < dicts.length; i++) {
+				if(!dicts[i].getLanguage().equals(detectedLang)) {
+					detectedLang.appendUserID(dicts[i].getLanguage().toString());
 				}
 			}
 		}
