@@ -90,8 +90,8 @@ public class IPALookupPanel extends JPanel {
 		@Override
 		public void performTask() {
 			// output input line
-			LOGGER.info(">" + query);
-			
+			context.fireMessage(">" + query);
+
 			long st = System.currentTimeMillis();
 			// parse the line
 			ByteArrayInputStream bin = new ByteArrayInputStream(query.getBytes());
@@ -112,11 +112,13 @@ public class IPALookupPanel extends JPanel {
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				err = e;
+				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);
 				return;
 			} catch (RecognitionException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				err = e;
+				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);
 				return;
 			}
@@ -124,7 +126,7 @@ public class IPALookupPanel extends JPanel {
 
 			String msg =
 					"Query completed in " + MsFormatter.msToDisplayString(et-st);
-			LOGGER.info("Query completed in " + msg);
+			context.fireMessage(msg);
 		}
 		
 	}
@@ -140,6 +142,7 @@ public class IPALookupPanel extends JPanel {
 				query = "lookup " + query;
 			
 			if(
+					!query.startsWith("help") &&
 					!query.startsWith("list") &&
 					!query.startsWith("lookup") &&
 					!query.startsWith("import") &&

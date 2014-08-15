@@ -21,7 +21,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,7 +31,6 @@ import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.LanguageInfo;
-import ca.phon.ipadictionary.spi.NameInfo;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
 

@@ -39,8 +39,6 @@ import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
 
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
-import ca.phon.util.LanguageParser;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 
