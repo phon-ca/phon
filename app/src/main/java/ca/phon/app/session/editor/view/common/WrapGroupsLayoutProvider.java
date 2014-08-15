@@ -63,6 +63,7 @@ public class WrapGroupsLayoutProvider implements TierDataLayoutProvider {
 	public void invalidate(Container parent, TierDataLayout layout) {
 		prefSizeRef.getAndSet(null);
 		cachedRects.clear();
+		rowRects.clear();
 	}
 	
 	/**
@@ -113,7 +114,9 @@ public class WrapGroupsLayoutProvider implements TierDataLayoutProvider {
 		
 		for(TierDataConstraint tdc:cachedRects.keySet()) {
 			final Rectangle rect = cachedRects.get(tdc);
-			if(tdc.getColumnIndex() != TierDataConstraint.TIER_LABEL_COLUMN) {
+			// only consider GROUPED tiers in calculation of max width, other
+			// tiers should conform to maxGroupWidth
+			if(tdc.getColumnIndex() >= TierDataConstraint.GROUP_START_COLUMN) {
 				maxGroupWidth = Math.max(maxGroupWidth, rect.width);
 			}
 			height = Math.max(height, rect.y + rect.height);
@@ -133,12 +136,12 @@ public class WrapGroupsLayoutProvider implements TierDataLayoutProvider {
 		// keep a reference to each row's bounding rectangle
 		rowRects.clear();
 		Rectangle rowRect = new Rectangle();
-		rowRect.x = 0; rowRect.y = 0;
+		rowRect.x = 0; rowRect.y = layout.getVerticalGap()/2;
 		int currentRow = 0;
 		rowRects.add(rowRect);
 		
 		int currentX = 0;
-		int currentY = 0;
+		int currentY = layout.getVerticalGap()/2;
 		
 		final Dimension size = parent.getSize();
 		
@@ -172,7 +175,7 @@ public class WrapGroupsLayoutProvider implements TierDataLayoutProvider {
 			// adjust size of full/flat tiers correctly
 			if(constraint.getColumnIndex() == TierDataConstraint.FLAT_TIER_COLUMN) {
 				compX = layout.getTierLabelWidth() + layout.getHorizontalGap();
-				compWidth = size.width - layout.getTierLabelWidth() - layout.getHorizontalGap();
+				compWidth = size.width - compX;
 			} else if(constraint.getColumnIndex() == TierDataConstraint.FULL_TIER_COLUMN) {
 				compX = 0;
 				compWidth = size.width;
@@ -189,7 +192,13 @@ public class WrapGroupsLayoutProvider implements TierDataLayoutProvider {
 
 	@Override
 	public Rectangle rowRect(Container parent, TierDataLayout layout, int row) {
-		return new Rectangle();
+		final Rectangle rowRect =
+				new Rectangle(rowRects.size() > row ? rowRects.get(row) : new Rectangle());
+		
+		rowRect.x = layout.getTierLabelWidth();
+		rowRect.width = parent.getWidth();
+		
+		return rowRect;
 	}
 
 }

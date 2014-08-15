@@ -1,10 +1,16 @@
 package ca.phon.app.session.editor.view.common;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.LayoutManager2;
+import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JPanel;
+import javax.swing.Scrollable;
 
 /**
  * {@link JPanel} which uses {@link TierDataLayout} and {@link TierDataLayoutBgPainter}
