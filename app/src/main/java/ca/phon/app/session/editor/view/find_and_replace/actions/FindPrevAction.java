@@ -21,7 +21,7 @@ public class FindPrevAction extends FindAndReplaceAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getView().findPrev();
 	}
 

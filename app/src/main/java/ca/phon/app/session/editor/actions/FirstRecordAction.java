@@ -37,7 +37,7 @@ public class FirstRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getEditor().setCurrentRecordIndex(0);
 	}
 

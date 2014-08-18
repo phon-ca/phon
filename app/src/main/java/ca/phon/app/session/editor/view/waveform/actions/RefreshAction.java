@@ -30,7 +30,7 @@ public class RefreshAction extends WaveformEditorViewAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getView().update();
 		for(WaveformTier tier:getView().getPluginTiers()) {
 			tier.onRefresh();

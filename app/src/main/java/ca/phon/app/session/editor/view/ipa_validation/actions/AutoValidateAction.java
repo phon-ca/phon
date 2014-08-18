@@ -30,7 +30,7 @@ public class AutoValidateAction extends ValidationAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		// show dialog
 		final AutoValidateDialog dialog = new AutoValidateDialog(getEditor().getProject(), getEditor().getSession());
 		final AutoValidateReturnValue retVal = dialog.showModalDialog();

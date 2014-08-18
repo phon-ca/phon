@@ -29,7 +29,7 @@ public class PlayAction extends WaveformEditorViewAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getView().play();
 	}
 

@@ -32,7 +32,7 @@ public class CutRecordAction extends CopyRecordAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
 		
 		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor());

@@ -37,7 +37,7 @@ public class EditTierAction extends TierManagementAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 			final SystemTierType systemTierType = SystemTierType.tierFromString(tierItem.getTierName());
 			

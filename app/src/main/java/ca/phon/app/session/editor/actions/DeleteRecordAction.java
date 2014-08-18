@@ -37,7 +37,7 @@ public class DeleteRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor());
 		getEditor().getUndoSupport().postEdit(edit);
 	}

@@ -32,7 +32,7 @@ public class ResetSyllabificationCommand extends SyllabificationAlignmentCommand
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
 		final Record r = getEditor().currentRecord();
 		

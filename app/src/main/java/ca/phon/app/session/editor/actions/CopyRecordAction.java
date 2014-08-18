@@ -37,7 +37,7 @@ public class CopyRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SessionEditor editor = getEditor();
 		final Record record = editor.currentRecord();
 		

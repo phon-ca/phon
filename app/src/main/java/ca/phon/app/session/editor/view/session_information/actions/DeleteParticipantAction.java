@@ -29,7 +29,7 @@ public class DeleteParticipantAction extends SessionInfoAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		

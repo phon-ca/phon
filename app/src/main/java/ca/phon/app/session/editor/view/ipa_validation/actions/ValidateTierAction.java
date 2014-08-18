@@ -28,7 +28,7 @@ public class ValidateTierAction extends ValidationAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final CompoundEdit edit = new CompoundEdit();
 		
 		for(int i = 0; i < tier.numberOfGroups(); i++) {

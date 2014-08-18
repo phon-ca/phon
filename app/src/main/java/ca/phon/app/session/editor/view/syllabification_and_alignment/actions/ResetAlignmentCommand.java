@@ -33,7 +33,7 @@ public class ResetAlignmentCommand extends SyllabificationAlignmentCommand {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final Record r = getEditor().currentRecord();
 		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignment();
 		

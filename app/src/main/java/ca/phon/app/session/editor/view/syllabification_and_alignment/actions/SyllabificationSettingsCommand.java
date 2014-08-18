@@ -35,7 +35,7 @@ public class SyllabificationSettingsCommand extends SyllabificationAlignmentComm
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final JDialog settingsDialog = new JDialog(getEditor());
 		settingsDialog.setModal(true);
 		

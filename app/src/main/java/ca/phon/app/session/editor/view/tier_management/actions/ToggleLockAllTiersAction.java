@@ -37,7 +37,7 @@ public class ToggleLockAllTiersAction extends TierManagementAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		

@@ -37,7 +37,7 @@ public class LastRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getEditor().setCurrentRecordIndex(getEditor().getDataModel().getRecordCount()-1);
 	}
 

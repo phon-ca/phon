@@ -34,7 +34,7 @@ public class BrowseForMediaAction extends SessionInfoAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setRunAsync(false);
 		props.setAllowMultipleSelection(false);

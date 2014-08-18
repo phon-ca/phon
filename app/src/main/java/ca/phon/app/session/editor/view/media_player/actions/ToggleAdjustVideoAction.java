@@ -22,7 +22,7 @@ private final static String CMD_NAME = "Move media position with record";
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		super.getMediaPlayerView().onToggleAdjustVideo();
 	}
 

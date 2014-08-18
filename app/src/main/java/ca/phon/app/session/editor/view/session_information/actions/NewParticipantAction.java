@@ -34,7 +34,7 @@ public class NewParticipantAction extends SessionInfoAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
 		part.setId(UUID.randomUUID().toString());

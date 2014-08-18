@@ -26,7 +26,7 @@ public class NewSegmentAction extends SegmentationViewAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final MediaSegment m = getSegmentationView().getCurrentSegement();
 			
 		// should we create a new record or overwrite

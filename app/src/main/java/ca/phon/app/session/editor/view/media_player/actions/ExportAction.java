@@ -29,7 +29,7 @@ public class ExportAction extends MediaPlayerAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final MediaPlayerEditorView view = getMediaPlayerView();
 		view.onExportMedia(new PhonActionEvent(e));
 	}

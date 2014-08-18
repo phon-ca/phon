@@ -28,7 +28,7 @@ public class ResetTierFontAction extends TierManagementAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final TierViewItem newItem = factory.createTierViewItem(item.getTierName(), item.isVisible(), "default", item.isTierLocked());
 		
