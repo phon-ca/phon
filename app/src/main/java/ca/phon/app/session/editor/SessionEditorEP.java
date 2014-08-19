@@ -3,7 +3,11 @@ package ca.phon.app.session.editor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,7 +108,10 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		final SessionEditor editor = new SessionEditor(project, session, transcriber);
 		
 		// load editor perspective
-		final RecordEditorPerspective perspective = RecordEditorPerspective.getPerspective("Default");
+		final RecordEditorPerspective prevPerspective = 
+				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
+		final RecordEditorPerspective perspective = 
+				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
 		editor.getViewModel().applyPerspective(perspective);
 		
 		editor.pack();
