@@ -45,6 +45,7 @@ import ca.phon.session.ParticipantRole;
 import ca.phon.session.Sex;
 import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.text.DatePicker;
 
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -58,7 +59,7 @@ public class ParticipantEditor extends JDialog {
 	private JTextField nameField;
 	private JRadioButton maleButton;
 	private JRadioButton femaleButton;
-	private JTextField bdayField;
+	private DatePicker bdayField;
 	private JLabel ageLabel;
 	private JTextField educationField;
 	private JTextField groupField;
@@ -217,88 +218,28 @@ public class ParticipantEditor extends JDialog {
 		return ageLabel;
 	}
 
-	private JTextField getBdayField() {
+	private DatePicker getBdayField() {
 		if(bdayField == null) {
-			bdayField = new JTextField();
-			
-			bdayField.addFocusListener(new FocusListener() {
-
-				@Override
-				public void focusGained(FocusEvent e) {
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-//					// make sure the format is correct!
-//					// ppl can put in crazy dates, allow them, but fix it
-//					final JTextField textField = getBdayField();
-//					final DateTimeDocument dateTimeDoc = (DateTimeDocument)textField.getDocument();
-//					final DateTime dateTime = dateTimeDoc.getDateTime();
-				}
-				
-			});
+			bdayField = new DatePicker();
 			
 			DateTime bday = participant.getBirthDate();
 			if(bday == null)
 				bday = DateTime.now();
 			
-			bdayField.setDocument(new DateTimeDocument(bday));
+			bdayField.setDate(bday.toDate());
 			
-			bdayField.getDocument().addDocumentListener(new DocumentListener() {
-
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					updateAge();
-				}
-
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					updateAge();
-				}
-
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					updateAge();
-				}
+			bdayField.addActionListener(new ActionListener() {
 				
-				private void updateAge() {
-//					 update age string as birthdate is changed
-					final JTextField textField = getBdayField();
-					final DateTimeDocument dateTimeDoc = (DateTimeDocument)textField.getDocument();
-					final DateTime dateTime = dateTimeDoc.getDateTime();
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					final DateTime dateTime = new DateTime(bdayField.getDate());
 					
 					final Period age = new Period(dateTime, sessionDate);
-//					final PeriodFormatter ageFormatter = 
-//							new PeriodFormatterBuilder().printZeroAlways()
-//								.minimumPrintedDigits(2).appendYears()
-//								.appendLiteral(";")
-//								.minimumPrintedDigits(2).appendMonths()
-//								.appendLiteral(".")
-//								.minimumPrintedDigits(2).appendDays()
-//								.toFormatter();
 					final String ageString = AgeFormatter.ageToString(age);
 					getAgeLabel().setText(ageString);
-					
-//					Calendar calendar = 
-//						((CalendarDocument)getBdayField().getDocument()).getCalendar();
-//					PhonDuration age = 
-//						PhonDuration.getDuration(calendar, sessionDate);
-//					if(age != null) {
-//						PhonDuration dur = null;
-//						if(age.valid())
-//							dur = age;
-//						else
-//							dur = new PhonDuration();
-//						PhonDurationFormat ageFormat = 
-//							new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
-//						getAgeLabel().setText(ageFormat.format(dur));
-//					}
-//					getAgeLabel().repaint();
 				}
+				
 			});
-			
-			
-			
 			
 		}
 		return bdayField;
@@ -446,9 +387,7 @@ public class ParticipantEditor extends JDialog {
 		
 		participant.setName(getNameField().getText());
 		
-		final JTextField textField = getBdayField();
-		final DateTimeDocument dateTimeDoc = (DateTimeDocument)textField.getDocument();
-		final DateTime bday = dateTimeDoc.getDateTime();
+		final DateTime bday = new DateTime(bdayField.getDate());
 		participant.setBirthDate(bday);
 		
 		Sex selectedSex = 

@@ -20,11 +20,14 @@ package ca.phon.app.session.editor.view.session_information;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
@@ -40,6 +43,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.joda.time.DateTime;
 
@@ -65,6 +69,7 @@ import ca.phon.session.Session;
 import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.participant.ParticipantsTableModel;
+import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconManager;
@@ -85,7 +90,7 @@ public class SessionInfoEditorView extends DividedEditorView {
 	/**
 	 * Date editor
 	 */
-	private JTextField dateField;
+	private DatePicker dateField;
 	
 	/**
 	 * Media field
@@ -236,29 +241,23 @@ public class SessionInfoEditorView extends DividedEditorView {
 		update();
 	}
 
-	public JTextField createDateField() {
-		final JTextField retVal = new JTextField();
+	public DatePicker createDateField() {
+		final DatePicker retVal = new DatePicker();
 		
-		final DateTime sessionDate = DateTime.now();
+		retVal.setDate(getEditor().getSession().getDate().toDate());
 		
-		retVal.addKeyListener(new KeyListener() {
+		retVal.addActionListener(new ActionListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
+				final Date selectedDate = retVal.getDate();
+				final DateTime newDate = new DateTime(selectedDate);
+				
+				final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, getEditor().getSession().getDate());
+				getEditor().getUndoSupport().postEdit(edit);
 			}
 			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				updateSessionDate();
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-			}
 		});
-		
-		final DateTimeDocument doc = new DateTimeDocument(sessionDate);
-		retVal.setDocument(doc);
 		
 		return retVal;
 	}
@@ -275,8 +274,7 @@ public class SessionInfoEditorView extends DividedEditorView {
 		final Project project = editor.getExtension(Project.class);
 		if(project == null) return;
 		
-		final DateTimeDocument doc = (DateTimeDocument)dateField.getDocument();
-		doc.setDateTime(session.getDate());
+		dateField.setDate(getEditor().getSession().getDate().toDate());
 		
 		final File mediaFile = MediaLocator.findMediaFile(project,  session);
 		if(mediaFile != null) {
@@ -302,13 +300,11 @@ public class SessionInfoEditorView extends DividedEditorView {
 	}
 
 	private void updateSessionDate() {
-		final DateTimeDocument doc = (DateTimeDocument)dateField.getDocument();
-		
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getDataModel().getSession();
 		
 		final DateTime currentDate = session.getDate();
-		final DateTime newDate = doc.getDateTime();
+		final DateTime newDate = new DateTime(dateField.getDate());
 		
 		if(!currentDate.isEqual(newDate)) {
 			final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, currentDate);
@@ -377,7 +373,7 @@ public class SessionInfoEditorView extends DividedEditorView {
 	public void onDateChanged(EditorEvent ee) {
 		if(ee.getSource() != dateField) {
 			final DateTime newDate = (DateTime)ee.getEventData();
-			dateField.setText(DateFormatter.dateTimeToString(newDate));
+			dateField.setDate(newDate.toDate());
 		}
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
 	}
