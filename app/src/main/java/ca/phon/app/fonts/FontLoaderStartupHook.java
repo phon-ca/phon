@@ -35,38 +35,7 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 	@Override
 	public void startup() throws PluginException {
 		loadFonts();
-		setupFontPreferences();
-	}
-	
-	private void setupFontPreferences() {
-		final Runnable onEDT = new Runnable() {
-			
-			@Override
-			public void run() {
-				SubstanceLookAndFeel.setFontPolicy(null);
-	            
-	              // Create the wrapper font set
-	              FontPolicy newFontPolicy = new FontPolicy() {
-	                public FontSet getFontSet(String lafName,
-	                    UIDefaults table) {
-	                  return new PhonUIFontSet();
-	                }
-	              };
-
-				SubstanceLookAndFeel.setFontPolicy(newFontPolicy);
-			}
-			
-		};
-		if(SwingUtilities.isEventDispatchThread())
-			onEDT.run();
-		else
-			try {
-				SwingUtilities.invokeAndWait(onEDT);
-			} catch (InvocationTargetException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			} catch (InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
+		FontPreferences.setupFontPreferences();
 	}
 	
 	private void loadFonts() throws PluginException {
@@ -120,39 +89,5 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 			return FontLoaderStartupHook.this;
 		}
 	};
-	
-	private static class PhonUIFontSet implements FontSet {
-		
-		public FontUIResource getSizedFont(Font font) {
-			final FontUIResource retVal = new FontUIResource(font);
-			retVal.deriveFont((float)(retVal.getSize() + FontPreferences.getFontSizeIncrease()));
-			return retVal;
-		}
-
-		public FontUIResource getControlFont() {
-			return getSizedFont(FontPreferences.getControlFont());
-		}
-
-		public FontUIResource getMenuFont() {
-			return getSizedFont(FontPreferences.getMenuFont());
-		}
-
-		public FontUIResource getMessageFont() {
-			return getSizedFont(FontPreferences.getMenuFont());
-		}
-
-		public FontUIResource getSmallFont() {
-			return getSizedFont(FontPreferences.getSmallFont());
-		}
-
-		public FontUIResource getTitleFont() {
-			return getSizedFont(FontPreferences.getTierFont());
-		}
-
-		public FontUIResource getWindowTitleFont() {
-			return getSizedFont(FontPreferences.getWindowTitleFont());
-		}
-
-	}
 
 }

@@ -8,3 +8,4 @@ ipadictionary/src/main/resources/META-INF/dict
 *.versionsBackup
 .Changes.md.html
 app/derby.log
+Thumbs.db
