@@ -49,10 +49,6 @@ public class LogBuffer extends JTextPane {
 		stdErrStream = new DocumentOutputStream(as);
 		
 		stdOutStream = new DocumentOutputStream(null);
-		
-		final Font font = PrefHelper.getFont(PhonProperties.IPA_UI_FONT, 
-				Font.decode(PhonProperties.DEFAULT_IPA_UI_FONT));
-		setFont(font);
 	}
 	
 	public OutputStream getStdOutStream() {

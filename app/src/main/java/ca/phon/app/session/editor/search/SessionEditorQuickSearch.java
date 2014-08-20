@@ -123,10 +123,6 @@ public class SessionEditorQuickSearch {
 	}
 	
 	public JTable createTable() {
-		final Font ipaFont = 
-				PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-						Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-		
 		final JXTable table = new JXTable();
 		table.setColumnControlVisible(true);
 		table.setSortable(true);
@@ -134,16 +130,11 @@ public class SessionEditorQuickSearch {
 		table.getSelectionModel().addListSelectionListener(new SessionTableListener(table));
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addHighlighter(HighlighterFactory.createSimpleStriping(PhonGuiConstants.PHON_UI_STRIP_COLOR));
-		table.setFont(ipaFont);
 		
 		return table;
 	}
 	
 	private void initComponents() {
-		final Font ipaFont = 
-				PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-						Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-		
 		tableModel = 
 				new SessionScriptTableModel(getEditor().getSession());
 		filterTableModel = new FilterTableModel(tableModel);
@@ -161,7 +152,6 @@ public class SessionEditorQuickSearch {
 		});
 		
 		searchField.setColumnLabel("tier");
-		searchField.setFont(ipaFont);
 		searchField.setColumns(20);
 		searchField.setAutoscrolls(true);
 		searchField.addKeyListener(new KeyListener() {

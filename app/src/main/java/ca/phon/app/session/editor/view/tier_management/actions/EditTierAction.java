@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.swing.undo.CompoundEdit;
 
+import org.pushingpixels.substance.api.fonts.FontPolicy;
+
+import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierNameEdit;
@@ -60,7 +63,7 @@ public class EditTierAction extends TierManagementAction {
 			if(depTierDesc != null) {
 				final Font transcriptFont = 
 						(tierItem.getTierFont().equals("default") ? 
-								PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT)) :
+								FontPreferences.getTierFont() :
 									Font.decode(tierItem.getTierFont()));
 
 				TierEditorDialog tierDialog = new TierEditorDialog(true);

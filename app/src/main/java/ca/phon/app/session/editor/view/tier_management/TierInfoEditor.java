@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
@@ -95,8 +96,7 @@ public class TierInfoEditor extends JPanel {
 		
 		fontPanel = new JFontPanel();
 		fontPanel.setSelectedFont(
-				PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT,
-						Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT)));
+				FontPreferences.getTierFont());
 		
 		add(new JLabel("Font"), cc.xy(2, 5));
 		add(useDefaultFontButton, cc.xy(4, 5));
@@ -132,8 +132,7 @@ public class TierInfoEditor extends JPanel {
 	}
 	
 	public void useDefaultFont() {
-		fontPanel.setSelectedFont(PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT,
-				Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT)));
+		fontPanel.setSelectedFont(FontPreferences.getTierFont());
 	}
 
 	public boolean isEditMode() {

@@ -80,10 +80,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 	private JComboBox autosaveBox;
 	private final Integer[] autosaveTimes = { 0, 5, 10, 15, 20, 30 }; // minutes
 	
-	private JLabel lblFont;
-	private JLabel lblPreviewFont;
-	private JButton btnChooseFont;
-	
 	public EditorPrefsPanel() {
 		super("Session Editor");
 		init();
@@ -135,30 +131,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		jpanel2.add(cmbSyllabifierLanguage);
 		
 		Charset cs = Charset.forName("UTF-8");
-		Font editorFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-				Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-		lblFont = new JLabel(fontToString(editorFont));
-		lblPreviewFont = new JLabel();
-		lblPreviewFont.setVerticalAlignment(SwingConstants.TOP);
 		
-		btnChooseFont = new JButton("Select...");
-		btnChooseFont.addActionListener(new EditorFontListener());
-		
-		JPanel jpanel3 = new JPanel(new FormLayout(
-				"pref, 3dlu, left:pref:grow",
-				"pref, 5dlu, pref, 5dlu, top:pref"));
-
-		jpanel3.setBorder(new TitledBorder("Default Editor Font"));
-		jpanel3.add(lblFont, cc.xy(1, 1));
-		jpanel3.add(btnChooseFont, cc.xy(3, 1));
-		
-		JScrollPane fontScrollPane = new JScrollPane(lblPreviewFont);
-		fontScrollPane.getViewport().setOpaque(false);
-		fontScrollPane.setOpaque(false);
-		fontScrollPane.setBorder(null);
-		fontScrollPane.setPreferredSize(new Dimension(500, 100));
-		jpanel3.add(fontScrollPane,	cc.xyw(1, 5, 3));
-			
 		autosaveBox = new JComboBox(autosaveTimes);
 		
 		final Integer autosavePref = PrefHelper.getInt(PhonProperties.AUTOSAVE_INTERVAL, PhonProperties.DEFAULT_AUTOSAVE_INTERVAL);
@@ -182,18 +155,11 @@ public class EditorPrefsPanel extends PrefsPanel {
 		
 		innerPanel.add(jpanel1, cc.xy(1,1));
 		innerPanel.add(jpanel2, cc.xy(1,2));
-		innerPanel.add(jpanel3, cc.xy(1,3));
 		innerPanel.add(jpanel4, cc.xy(1, 4));
 		
 		setLayout(new BorderLayout());
 		JScrollPane innerScroller = new JScrollPane(innerPanel);
 		add(innerScroller, BorderLayout.CENTER);
-	}
-	
-	private void updateDialogFonts() {
-		Font font = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-				Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-		lblPreviewFont.setFont(font);
 	}
 	
 	/**
@@ -222,53 +188,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 		ret.append(font.getSize());
 		
 		return ret.toString();
-	}
-	
-	private class EditorFontListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-//			JFontChooser fontChooser = new JFontChooser();
-//			
-//			Font editorFont = Font.decode((String)props.getProperty("editor_font"));
-//			fontChooser.setSelectedFont(editorFont);
-//			
-//			int ret = fontChooser.showDialog(PropertiesDialog.this);
-//			if(ret == JFontChooser.OK_OPTION) {
-//				Font font = fontChooser.getSelectedFont();
-//				lblFont.setText(fontToString(font));					
-//				props.addProperty("editor_font", fontToString(font));
-//				PhonUtilities.saveUserPrefs(props);
-//				
-//				updateDialogFonts();
-//			}
-//			Runnable run = new Runnable() {
-//				@Override
-//				public void run() {
-					Font editorFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-							Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-					
-					final FontDialogProperties dialogProps = new FontDialogProperties();
-					dialogProps.setFontName(editorFont.getName());
-					dialogProps.setFontSize(editorFont.getSize());
-					dialogProps.setBold(editorFont.isBold());
-					dialogProps.setItalic(editorFont.isItalic());
-					dialogProps.setTitle("Select Font");
-					dialogProps.setParentWindow(CommonModuleFrame.getCurrentFrame());
-					dialogProps.setRunAsync(false);
-					
-					Font newEditorFont = NativeDialogs.showFontDialog(dialogProps);
-					
-					if(newEditorFont != null) {
-						lblFont.setText(fontToString(newEditorFont));
-						PrefHelper.getUserPreferences().put(PhonProperties.IPA_TRANSCRIPT_FONT, fontToString(newEditorFont));
-						
-						updateDialogFonts();
-					}
-//				}
-//			};
-//			PhonWorker.getInstance().invokeLater(run);
-			
-		}
 	}
 	
 	private class AutosaveTimeRenderer extends DefaultListCellRenderer {

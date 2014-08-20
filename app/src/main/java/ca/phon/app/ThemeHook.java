@@ -9,12 +9,15 @@ import java.util.logging.Logger;
 
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.FontUIResource;
 
 import org.pushingpixels.lafwidget.LafWidget;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.fonts.FontPolicy;
+import org.pushingpixels.substance.api.fonts.FontSet;
 import org.pushingpixels.substance.api.fonts.SubstanceFontUtilities;
 import org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel;
 
@@ -30,33 +33,42 @@ import ca.phon.util.PrefHelper;
  * Sets UI theme
  *
  */
-public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
-	
-	private final static Logger LOGGER = Logger.getLogger(ThemeHook.class.getName());
-	
+public class ThemeHook implements PhonStartupHook,
+		IPluginExtensionPoint<PhonStartupHook> {
+
+	private final static Logger LOGGER = Logger.getLogger(ThemeHook.class
+			.getName());
+
 	@Override
 	public void startup() throws PluginException {
-		if(GraphicsEnvironment.isHeadless()) return;
-		
+		if (GraphicsEnvironment.isHeadless())
+			return;
+
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
 					// keep mac OS X menu bars
-					if(OSInfo.isMacOs()) {
-						final String[] uiKeys = new String[]{
-								"MenuBarUI" };
-						for(String key:uiKeys) {
+					if (OSInfo.isMacOs()) {
+						final String[] uiKeys = new String[] { "MenuBarUI" };
+						for (String key : uiKeys) {
 							uiMap.put(key, UIManager.get(key));
 						}
 					}
 					try {
-						final String uiClassName = PrefHelper.get(PhonProperties.UI_THEME, SubstanceCeruleanLookAndFeel.class.getName());
-						if(uiClassName != null) {
+						final String uiClassName = PrefHelper.get(
+								PhonProperties.UI_THEME,
+								SubstanceCeruleanLookAndFeel.class.getName());
+						if (uiClassName != null) {
 							UIManager.setLookAndFeel(uiClassName);
-							UIManager.put(SubstanceLookAndFeel.COLORIZATION_FACTOR, 1.0);
-							UIManager.put(SubstanceLookAndFeel.SHOW_EXTRA_WIDGETS, Boolean.TRUE);
-							UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU, Boolean.TRUE);
+							UIManager.put(
+									SubstanceLookAndFeel.COLORIZATION_FACTOR,
+									1.0);
+							UIManager.put(
+									SubstanceLookAndFeel.SHOW_EXTRA_WIDGETS,
+									Boolean.TRUE);
+							UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU,
+									Boolean.TRUE);
 						}
 					} catch (UnsupportedLookAndFeelException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -67,9 +79,9 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 					} catch (IllegalAccessException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					}
-					
-					if(OSInfo.isMacOs()) {
-						for(String key:uiMap.keySet()) {
+
+					if (OSInfo.isMacOs()) {
+						for (String key : uiMap.keySet()) {
 							UIManager.put(key, uiMap.get(key));
 						}
 					}
@@ -80,7 +92,7 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 		} catch (InvocationTargetException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-		
+
 	}
 
 	@Override
@@ -94,11 +106,11 @@ public class ThemeHook implements PhonStartupHook, IPluginExtensionPoint<PhonSta
 	}
 
 	private final IPluginExtensionFactory<PhonStartupHook> factory = new IPluginExtensionFactory<PhonStartupHook>() {
-		
+
 		@Override
 		public PhonStartupHook createObject(Object... args) {
 			return ThemeHook.this;
 		}
 	};
-	
+
 }

@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierVisibleAction;
 import ca.phon.session.Session;
@@ -149,21 +150,12 @@ public class TierOrderingTableModel extends AbstractTableModel {
 			retVal = (tierDesc == null ? false : tierDesc.isGrouped());
 		} else if (columnIndex == TierOrderingTableColumn.TIER_FONT.ordinal()) {
 			retVal = (tv.getTierFont().equals("default") ?
-					PrefHelper.get(PhonProperties.IPA_TRANSCRIPT_FONT, PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT) : tv.getTierFont());
+					PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT) : tv.getTierFont());
 		}
 		
 		return retVal;
 	}
 
-//	@Override
-//	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-//		if (columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal()) {
-//			toggleTierLock(rowIndex);
-//		} else if (columnIndex == TierOrderingTableColumn.SHOW_TIER.ordinal()) {
-//			toggleTierVisible(rowIndex);
-//		}
-//	}
-	
 	private TierDescription getTierDescription(String tierName) {
 		TierDescription retVal = null;
 		

@@ -4,6 +4,8 @@ ca.phon.app.BootHook
 ca.phon.app.autosave.AutosaveStartupHook
 # Theme
 ca.phon.app.ThemeHook
+# Fonts
+ca.phon.app.fonts.FontLoaderStartupHook
 # VLC
 ca.phon.app.VLCInitHook
 # Window menu

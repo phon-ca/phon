@@ -32,6 +32,7 @@ import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -235,13 +236,6 @@ public class FindAndReplaceEditorView extends EditorView {
 			}
 			if(!tvi.isVisible()) continue;
 			
-			final String fontString = tvi.getTierFont();
-			Font tierFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-					Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
-				tierFont = Font.decode(fontString);
-			}
-			
 			Tier<String> tier = searchTiers.get(tvi.getTierName());
 			if(tier == null) {
 				tier = factory.createTier(tvi.getTierName(), String.class, true);
@@ -264,7 +258,14 @@ public class FindAndReplaceEditorView extends EditorView {
 				searchOptions.put(tvi.getTierName(), optsPanel);
 			}
 			final GroupField<String> tierField = new GroupField<String>(tier, 0);
+			
+			final String fontString = tvi.getTierFont();
+			Font tierFont = FontPreferences.getTierFont();
+			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
+				tierFont = Font.decode(fontString);
+			}
 			tierField.setFont(tierFont);
+			
 			tierField.addTierEditorListener(tierEditorListener);
 			final JLabel tierLbl = new JLabel(tvi.getTierName());
 			tierLbl.setHorizontalAlignment(SwingConstants.RIGHT);

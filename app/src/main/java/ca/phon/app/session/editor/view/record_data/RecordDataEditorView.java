@@ -39,6 +39,7 @@ import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
+import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -295,8 +296,7 @@ public class RecordDataEditorView extends EditorView {
 			
 			// load tier font
 			final String fontString = tierItem.getTierFont();
-			Font tierFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-					Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
+			Font tierFont = FontPreferences.getTierFont();
 			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
 				tierFont = Font.decode(fontString);
 			}
@@ -311,7 +311,8 @@ public class RecordDataEditorView extends EditorView {
 					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, gIdx);
 					tierEditor.addTierEditorListener(tierEditorListener);
 					final Component tierComp = tierEditor.getEditorComponent();
-					tierComp.setFont(tierFont);
+					if(tierFont != null)
+						tierComp.setFont(tierFont);
 					tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, gIdx));
 					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
 					
@@ -335,7 +336,8 @@ public class RecordDataEditorView extends EditorView {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
 				tierEditor.addTierEditorListener(tierEditorListener);
 				final Component tierComp = tierEditor.getEditorComponent();
-				tierComp.setFont(tierFont);
+				if(tierFont != null)
+					tierComp.setFont(tierFont);
 				tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
 				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 				

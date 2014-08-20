@@ -550,8 +550,6 @@ public class ResultSetEditor extends ProjectFrame {
 	}
 
 	private void setupResultTable() {
-		final Font ipaFont = PrefHelper.getFont(PhonProperties.IPA_UI_FONT, Font.decode(PhonProperties.DEFAULT_IPA_UI_FONT));
-		
 		final ResultListingTableModel model = new ResultListingTableModel(session, resultSet, getListing());
 		resultTable = new JXTable(model);
 		resultTable.setColumnControlVisible(true);
@@ -560,7 +558,6 @@ public class ResultSetEditor extends ProjectFrame {
 		resultTable.addHighlighter(stripeHighlighter);
 		resultTable.addHighlighter(currentRecordHighlighter);
 		resultTable.addHighlighter(excludedHighlighter);
-		resultTable.setFont(ipaFont);
 		
 		final String toggleId = "_toggle_result_excluded_";
 		final Action toggleAct = getToggleExcludedAction();
@@ -585,7 +582,6 @@ public class ResultSetEditor extends ProjectFrame {
 			
 		};
 		tableSearchField.setColumns(20);
-		tableSearchField.setFont(ipaFont);
 		tableSearchField.setPrompt("Filter results");
 		tableSearchField.addKeyListener(new KeyListener() {
 			
