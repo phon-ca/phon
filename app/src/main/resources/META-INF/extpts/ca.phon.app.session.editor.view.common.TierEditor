@@ -1,0 +1,6 @@
+## Tier Editors
+ca.phon.app.session.editor.view.common.DefaultTierEditorExtension
+ca.phon.app.session.editor.view.common.OrthographyTierEditorExtension
+ca.phon.app.session.editor.view.common.IPATierEditorExtension
+ca.phon.app.session.editor.view.common.SegmentTierEditorExtension
+ca.phon.app.session.editor.view.common.NotesFieldExtension

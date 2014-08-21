@@ -1,5 +1,7 @@
 package ca.phon.app.fonts;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
@@ -21,12 +23,15 @@ import com.jgoodies.forms.layout.FormLayout;
 import ca.phon.app.prefs.PrefsPanel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.ui.HidablePanel;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 public class FontPreferencesPanel extends PrefsPanel implements IPluginExtensionPoint<PrefsPanel> {
 
 	private static final long serialVersionUID = 5418907041332250697L;
+	
+	private HidablePanel restartPanel;
 	
 	private JSlider fontSizeSlider;
 	
@@ -49,6 +54,12 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 	}
 	
 	private void init() {
+		restartPanel = new HidablePanel(FontPreferencesPanel.class.getName() + ".restartPanel");
+		restartPanel.setTopLabelText("Please re-open Phon");
+		restartPanel.getTopLabel().setFont(FontPreferences.getTitleFont());
+		restartPanel.setBottomLabelText("It is recommended to restart Phon after making changes to font settings.");
+		restartPanel.setVisible(false);
+		
 		tierFontBtn = new FontSelectionButton();
 		tierFontBtn.setFontProp(FontPreferences.TIER_FONT);
 		tierFontBtn.setDefaultVal(FontPreferences.DEFAULT_TIER_FONT);
@@ -150,6 +161,7 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		uiFontsPanel.setBorder(BorderFactory.createTitledBorder("UI Fonts"));
 		
 		setLayout(new VerticalLayout());
+		add(restartPanel);
 		add(tierFontsPanel);
 		add(uiFontsPanel);
 	}

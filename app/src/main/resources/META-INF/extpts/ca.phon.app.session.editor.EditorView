@@ -1,0 +1,11 @@
+## Editor Views
+ca.phon.app.session.editor.view.session_information.SessionInfoExtension
+ca.phon.app.session.editor.view.media_player.MediaPlayerExtension
+ca.phon.app.session.editor.view.waveform.WaveformExtension
+ca.phon.app.session.editor.view.segmentation.SegmentationExtension
+ca.phon.app.session.editor.view.tier_management.TierOrderingExtensionPoint
+ca.phon.app.session.editor.view.record_data.RecordDataViewExtension
+ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentExtension
+ca.phon.app.session.editor.view.ipa_validation.ValidationExtension
+ca.phon.app.session.editor.view.ipa_lookup.IPALookupViewExtension
+ca.phon.app.session.editor.view.find_and_replace.FindAndReplaceEditorViewExtension
