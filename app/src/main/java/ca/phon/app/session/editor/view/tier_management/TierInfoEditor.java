@@ -148,7 +148,11 @@ public class TierInfoEditor extends JPanel {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Font selectedFont = getTierFont();
 		final Formatter<Font> fontFormatter = FormatterFactory.createFormatter(Font.class);
-		final String fontString = (fontFormatter == null ? selectedFont.toString() : fontFormatter.format(selectedFont));
+		String fontString = 
+				(fontFormatter == null ? selectedFont.toString() : fontFormatter.format(selectedFont));
+		if(fontString.equals(PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT))) {
+			fontString = "default";
+		}
 		return factory.createTierViewItem(getTierName(), isVisible(), fontString);
 	}
 	
