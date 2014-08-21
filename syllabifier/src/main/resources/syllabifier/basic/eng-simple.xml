@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://www.phon.ca/ns/syllabifier ../../xml/xsd/syllabifier.xsd"
-        name="English (simple)" language="eng-simple">
+        name="English-simple" language="eng-simple">
         <SonorityScale>
                 <!-- Plosive,Fricative,Affricate - 0 -->
                 <SonorityClass>

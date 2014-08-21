@@ -19,7 +19,7 @@
 <SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://www.phon.ca/ns/syllabifier ../../xml/xsd/syllabifier.xsd"
-    name="Portuguese (European)" language="por">
+    name="Portuguese-European" language="por">
     
     <SonorityScale>
         <SonorityClass>
