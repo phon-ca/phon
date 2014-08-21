@@ -15,6 +15,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -35,6 +37,7 @@ import javax.swing.undo.UndoableEditSupport;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
+import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
@@ -59,6 +62,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -182,6 +186,17 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		session.putExtension(SyllabifierInfo.class, info);
 		
 		init();
+		
+		PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+			
+			@Override
+			public void preferenceChange(PreferenceChangeEvent evt) {
+				if(evt.getKey().equals(FontPreferences.TIER_FONT)) {
+					final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
+					getEventManager().queueEvent(ee);
+				}
+			}
+		});
 	}
 	
 	@Override
