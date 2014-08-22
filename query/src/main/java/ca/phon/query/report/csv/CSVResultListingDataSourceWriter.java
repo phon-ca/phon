@@ -17,8 +17,11 @@
  */
 package ca.phon.query.report.csv;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +31,9 @@ import ca.phon.query.report.io.ResultListingFormatType;
 
 public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 
+	private static final Logger LOGGER = Logger
+			.getLogger(CSVResultListingDataSourceWriter.class.getName());
+	
 	public CSVResultListingDataSourceWriter(CSVReportBuilder builder, ResultListingDataSource ds) {
 		super(builder, ds);
 	}

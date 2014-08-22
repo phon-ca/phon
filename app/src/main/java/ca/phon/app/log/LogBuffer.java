@@ -20,7 +20,9 @@ import javax.swing.text.StyleConstants;
 
 
 
+
 import ca.phon.app.prefs.PhonProperties;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 public class LogBuffer extends JTextPane {
@@ -49,6 +51,8 @@ public class LogBuffer extends JTextPane {
 		stdErrStream = new DocumentOutputStream(as);
 		
 		stdOutStream = new DocumentOutputStream(null);
+		
+		setFont(FontPreferences.getMonospaceFont());
 	}
 	
 	public OutputStream getStdOutStream() {

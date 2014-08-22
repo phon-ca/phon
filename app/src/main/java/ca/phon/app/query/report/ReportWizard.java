@@ -20,21 +20,18 @@ package ca.phon.app.query.report;
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import ca.phon.app.log.BufferPanel;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -46,13 +43,11 @@ import ca.phon.query.report.csv.CSVReportBuilder;
 import ca.phon.query.report.io.ObjectFactory;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.PhonLoggerConsole;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -66,6 +61,8 @@ import ca.phon.worker.PhonWorker;
  */
 public class ReportWizard extends WizardFrame {
 	
+	private static final long serialVersionUID = -334722251289455999L;
+
 	private final static Logger LOGGER = Logger.getLogger(ReportWizard.class.getName());
 	
 	private final static String AUTOSAVE_FILENAME = "lastreport.xml";
@@ -81,18 +78,14 @@ public class ReportWizard extends WizardFrame {
 	/*
 	 * Console 
 	 */
-	private PhonLoggerConsole console;
+	private BufferPanel console;
 	
 	/*
 	 * Session selection
 	 */
 	private ResultSetSelector resultSetSelector;
 	
-	/*
-	 * Open after gen button 
-	 */
-	private JCheckBox openReportBox;
-	private final String OPEN_REPORT_PROP = getClass().getName() + ".openReportWhenDone";
+	private JButton saveReportBtn;
 	
 	/*
 	 * Query
@@ -146,9 +139,7 @@ public class ReportWizard extends WizardFrame {
 		// setup navigation buttons
 		super.btnBack.setVisible(false);
 		
-		final ImageIcon saveIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-		super.btnNext.setIcon(saveIcon);
-		super.btnNext.setText("Save Report");
+		super.btnNext.setText("Generate report");
 		super.btnNext.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		
 		super.getRootPane().setDefaultButton(btnNext);
@@ -201,25 +192,22 @@ public class ReportWizard extends WizardFrame {
 		
 		JPanel consolePanel = new JPanel(new BorderLayout());
 		
-		console = new PhonLoggerConsole();
+		console = new BufferPanel(getReportDesign().getName());
 		consolePanel.add(console, BorderLayout.CENTER);
 		
 		importPanel.add(consolePanel, BorderLayout.CENTER);
 		
-		openReportBox = new JCheckBox("Open report when done");
-		boolean openReportWhenDone = PrefHelper.getBoolean(OPEN_REPORT_PROP, true);
-		openReportBox.setSelected(openReportWhenDone);
-		openReportBox.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				PrefHelper.getUserPreferences().putBoolean(OPEN_REPORT_PROP, openReportBox.isSelected());
-			}
-		});
+		final PhonUIAction saveAct = new PhonUIAction(console, "onSaveBuffer");
+		saveAct.putValue(PhonUIAction.NAME, "Save Report");
+		saveAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+		saveReportBtn = new JButton(saveAct);
+		
 		FlowLayout optLayout = new FlowLayout(FlowLayout.RIGHT);
 		optLayout.setVgap(0);
+		optLayout.setHgap(0);
+		
 		JPanel optPanel = new JPanel(optLayout);
-		optPanel.add(openReportBox);
+		optPanel.add(saveReportBtn);
 		consolePanel.add(optPanel, BorderLayout.NORTH);
 		
 		return super.addWizardStep(importPanel);
@@ -257,42 +245,17 @@ public class ReportWizard extends WizardFrame {
 	}
 	
 	@Override
+	public void prev() {
+		super.prev();
+		btnBack.setVisible(false);
+	}
+	
+	@Override
 	public void next() {
-		String saveAs = null;
-		if(super.getCurrentStep() == editorStep) {
-//			File reportDir = 
-//				new File(PhonUtilities.getPhonWorkspace(), "reports");
-//			if(!reportDir.exists()) {
-//				reportDir.mkdirs();
-//			}
-			
-			String reportBaseName = 
-				reportEditor.getReportDesign().getName();
-			// remove extension
-//			if(reportBaseName.indexOf('.') > 0) {
-//				reportBaseName = reportBaseName.substring(0, reportBaseName.lastIndexOf('.'));
-//			}
-			String reportName = reportBaseName;
-			String defExt = ".csv";
-			
-//			String rptFullName = reportBaseName + defExt;
-//			File rptFile = new File(reportDir, rptFullName);
-//			int fIdx = 0;
-//			while(rptFile.exists()) {
-//				reportName = reportBaseName + " (" + (++fIdx) + ")";
-//				rptFile = new File(reportDir, reportName + defExt);
-//			}
-			
-			// generate report
-			FileFilter filters[] = { FileFilter.csvFilter };
-			saveAs = NativeDialogs.showSaveFileDialogBlocking(this, null, reportName, null, filters, "Save report");
-			if(saveAs == null) return;
-		}
-		
 		super.next();
 		
 		if(super.getCurrentStep() == reportStep) {
-			generateReport(saveAs);
+			generateReport();
 		}
 	}
 	
@@ -300,74 +263,69 @@ public class ReportWizard extends WizardFrame {
 	public void cancel() {
 		if(currentTask != null
 				&& currentTask.getStatus() == TaskStatus.RUNNING) {
-//			console.appendWarning("Stopping report generation...");
 			currentTask.shutdown();
 		} else {
 			super.cancel();
 		}
 	}
 	
-	private void generateReport(String saveAs) {
-		if(saveAs != null) {
-
-			// save last design
-			writeAutosaveReport();
-			
-//			PathExpander pe = new PathExpander();
-//			busyMsgLabel.setText("Saving report to file '" +
-//					pe.compressPath(saveAs) + "'...");
-			
-			CSVReportBuilder builder = new CSVReportBuilder();
-			builder.putProperty(CSVReportBuilder.INDENT_CONTENT, Boolean.TRUE);
-			builder.putProperty(ReportBuilder.TEMP_PROJECT, tempProject);
-			
-			PhonWorker worker = PhonWorker.createWorker();
-			worker.setName("Report");
-			worker.setFinishWhenQueueEmpty(true);
-			
-			Runnable onStart = new Runnable() {
-				@Override
-				public void run() {
-					Runnable turnOffBack = new Runnable() {
-						@Override
-						public void run() {
-							btnBack.setEnabled(false);
-							btnCancel.setText("Cancel");
-							showBusyLabel(console);
+	private void generateReport() {
+		// save last design
+		writeAutosaveReport();
+		
+		CSVReportBuilder builder = new CSVReportBuilder();
+		builder.putProperty(CSVReportBuilder.INDENT_CONTENT, Boolean.TRUE);
+		builder.putProperty(ReportBuilder.TEMP_PROJECT, tempProject);
+		
+		PhonWorker worker = PhonWorker.createWorker();
+		worker.setName("Report");
+		worker.setFinishWhenQueueEmpty(true);
+		
+		Runnable onStart = new Runnable() {
+			@Override
+			public void run() {
+				Runnable turnOffBack = new Runnable() {
+					@Override
+					public void run() {
+						btnBack.setEnabled(false);
+						btnCancel.setText("Cancel");
+						showBusyLabel(console);
+						if(!console.isShowingBuffer()) {
+							console.getLogBuffer().setText("");
+							console.onSwapBuffer();
 						}
-					};
-					
-					SwingUtilities.invokeLater(turnOffBack);
-				}
-			};
-			Runnable onEnd = new Runnable() {
-				@Override
-				public void run() {
-					Runnable turnOnBack = new Runnable() {
-						@Override
-						public void run() {
-							console.removeLogger(LOGGER);
-							btnBack.setEnabled(true);
-							btnCancel.setText("Close");
-							stopBusyLabel();
-							currentTask = null;
-						}
-					};
-					SwingUtilities.invokeLater(turnOnBack);
-				}
-			};
-			GenerateReportTask task = new GenerateReportTask(reportEditor.getReportDesign(), getProject(), query, 
-					resultSetSelector.getSelectedSearches(), new File(saveAs), builder);
-			
-			worker.invokeLater(onStart);
-			worker.invokeLater(task);
-			worker.setFinalTask(onEnd);
-			currentTask = task;
-			
-			console.addLogger(LOGGER);
-			
-			worker.start();
-		}
+					}
+				};
+				
+				SwingUtilities.invokeLater(turnOffBack);
+			}
+		};
+		Runnable onEnd = new Runnable() {
+			@Override
+			public void run() {
+				Runnable turnOnBack = new Runnable() {
+					@Override
+					public void run() {
+						btnBack.setEnabled(true);
+						btnCancel.setText("Close");
+						stopBusyLabel();
+						console.onSwapBuffer();
+						btnBack.setVisible(true);
+						currentTask = null;
+					}
+				};
+				SwingUtilities.invokeLater(turnOnBack);
+			}
+		};
+		GenerateReportTask task = new GenerateReportTask(reportEditor.getReportDesign(), getProject(), query, 
+				resultSetSelector.getSelectedSearches(), console.getLogBuffer().getStdOutStream(), builder);
+		
+		worker.invokeLater(onStart);
+		worker.invokeLater(task);
+		worker.setFinalTask(onEnd);
+		currentTask = task;
+		
+		worker.start();
 	}
 	
 	/**
@@ -380,7 +338,7 @@ public class ReportWizard extends WizardFrame {
 		private Project project;
 		private Query query;
 		private ResultSet[] resultSets;
-		private File output;
+		private OutputStream output;
 		
 		private ReportBuilder builder = null;
 		
@@ -388,24 +346,8 @@ public class ReportWizard extends WizardFrame {
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
 			
-			LOGGER.info("Writing report to file: " + output.getAbsolutePath());
-			
 			try {
 				builder.buildReport(design, project, query, resultSets, output);
-				Boolean openWhenDone = openReportBox.isSelected();
-				if(openWhenDone) {
-					try {
-						LOGGER.info("Opening report in default editor...");
-						OpenFileLauncher.openURL(new URL("file://" + output.getAbsolutePath()));
-					} catch (MalformedURLException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-						
-						NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null,
-								"Failed to open report", "Message: " + e.getMessage());
-					}
-				}
-				
-				LOGGER.info("Report generation finished.");
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (ReportBuilderException e) {
@@ -421,7 +363,7 @@ public class ReportWizard extends WizardFrame {
 				Project project,
 				Query query,
 				ResultSet[] search,
-				File output,
+				OutputStream output,
 				ReportBuilder builder) {
 			this.design = design;
 			this.project = project;
