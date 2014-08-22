@@ -24,6 +24,7 @@ import ca.phon.app.prefs.PrefsPanel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.ui.HidablePanel;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -95,8 +96,9 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 						
 						@Override
 						public void run() {
-							FontPreferences.setupFontPreferences();
+//							FontPreferences.setupFontPreferences();
 						}
+						
 					};
 					SwingUtilities.invokeLater(later);
 				}

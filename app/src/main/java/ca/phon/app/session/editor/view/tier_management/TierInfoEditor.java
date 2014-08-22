@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
@@ -35,6 +34,7 @@ import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 import com.jgoodies.forms.layout.CellConstraints;

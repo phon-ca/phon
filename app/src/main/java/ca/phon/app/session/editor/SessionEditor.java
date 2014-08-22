@@ -37,7 +37,6 @@ import javax.swing.undo.UndoableEditSupport;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
-import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
@@ -59,6 +58,7 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;

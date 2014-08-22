@@ -306,8 +306,7 @@ public class PluginManager extends URLClassLoader {
 		final String extPtFile = "META-INF/extpts/" + clazz.getName();
 		
 		try {
-			final Enumeration<URL> urlList = 
-					getClass().getClassLoader().getResources(extPtFile);
+			final Enumeration<URL> urlList = getResources(extPtFile);
 			while(urlList.hasMoreElements()) {
 				final URL url = urlList.nextElement();
 				final InputStream in = url.openStream();

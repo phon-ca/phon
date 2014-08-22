@@ -38,6 +38,7 @@ import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import ca.phon.ui.MultiActionButton;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
 
@@ -113,6 +114,7 @@ public class LocalProjectButton extends MultiActionButton {
 //			}
 //		}
 		getTopLabel().setText(WorkspaceTextStyler.toHeaderText(projPath));
+		getTopLabel().setFont(FontPreferences.getTitleFont());
 		getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		
 		SimpleDateFormat sdf =

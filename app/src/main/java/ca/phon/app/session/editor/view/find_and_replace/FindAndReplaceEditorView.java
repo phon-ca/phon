@@ -32,7 +32,6 @@ import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -72,6 +71,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;

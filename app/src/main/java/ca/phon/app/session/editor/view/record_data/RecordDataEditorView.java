@@ -39,7 +39,6 @@ import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
-import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -80,6 +79,7 @@ import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;

@@ -100,7 +100,6 @@ public class FontSelectionButton extends MultiActionButton {
 	public void onReload() {
 		PrefHelper.getUserPreferences()
 			.put(getFontProp(), getDefaultVal());
-		FontPreferences.setupFontPreferences();
 		setBottomLabelText(getDefaultVal());
 	}
 	
@@ -114,7 +113,6 @@ public class FontSelectionButton extends MultiActionButton {
 				
 				PrefHelper.getUserPreferences()
 					.put(getFontProp(), (new FontFormatter()).format(font));
-				FontPreferences.setupFontPreferences();
 			}
 		}
 		

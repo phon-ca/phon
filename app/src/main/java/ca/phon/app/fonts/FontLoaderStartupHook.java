@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
-import javax.swing.plaf.FontUIResource;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.fonts.FontPolicy;
@@ -24,6 +23,7 @@ import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
+import ca.phon.ui.fonts.FontPreferences;
 
 public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
@@ -35,7 +35,7 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 	@Override
 	public void startup() throws PluginException {
 		loadFonts();
-		FontPreferences.setupFontPreferences();
+		setupFontPreferences();
 	}
 	
 	private void loadFonts() throws PluginException {
@@ -89,5 +89,36 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 			return FontLoaderStartupHook.this;
 		}
 	};
+	
+	private void setupFontPreferences() {
+		final Runnable onEDT = new Runnable() {
+			
+			@Override
+			public void run() {
+				SubstanceLookAndFeel.setFontPolicy(null);
+	            
+	              // Create the wrapper font set
+	              FontPolicy newFontPolicy = new FontPolicy() {
+	                public FontSet getFontSet(String lafName,
+	                    UIDefaults table) {
+	                  return new PhonUIFontSet();
+	                }
+	              };
+
+				SubstanceLookAndFeel.setFontPolicy(newFontPolicy);
+			}
+			
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			try {
+				SwingUtilities.invokeAndWait(onEDT);
+			} catch (InvocationTargetException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} catch (InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+	}
 
 }

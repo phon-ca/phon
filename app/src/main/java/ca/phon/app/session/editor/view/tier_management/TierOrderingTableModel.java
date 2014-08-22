@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import ca.phon.app.fonts.FontPreferences;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierVisibleAction;
 import ca.phon.session.Session;
@@ -30,6 +29,7 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 public class TierOrderingTableModel extends AbstractTableModel {
