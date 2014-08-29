@@ -38,7 +38,7 @@ public class CSVTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int column) {
 		String colName = super.getColumnName(column);
-		if(useFirstRowAsHeader && data.size() > 0) {
+		if(isUseFirstRowAsHeader() && data.size() > 0) {
 			String[] columnRow = data.get(0);
 			if(column < columnRow.length) {
 				colName = columnRow[column];

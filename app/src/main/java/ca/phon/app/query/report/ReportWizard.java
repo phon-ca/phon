@@ -31,7 +31,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import org.jdesktop.swingx.JXTable;
+
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.CSVTableModel;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -187,7 +190,7 @@ public class ReportWizard extends WizardFrame {
 	private WizardStep createReportStep() {
 		JPanel importPanel = new JPanel(new BorderLayout());
 		
-		DialogHeader importHeader = new DialogHeader("Report", "Writing report to file, this may take some time.");
+		DialogHeader importHeader = new DialogHeader("Report", "Generating report, this may take some time.");
 		importPanel.add(importHeader, BorderLayout.NORTH);
 		
 		JPanel consolePanel = new JPanel(new BorderLayout());
@@ -310,6 +313,10 @@ public class ReportWizard extends WizardFrame {
 						btnCancel.setText("Close");
 						stopBusyLabel();
 						console.onSwapBuffer();
+						final JXTable tbl = console.getDataTable();
+						final CSVTableModel model = (CSVTableModel)tbl.getModel();
+						model.setUseFirstRowAsHeader(false);
+						model.fireTableStructureChanged();
 						btnBack.setVisible(true);
 						currentTask = null;
 					}
