@@ -15,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.Toolkit;
@@ -62,6 +63,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JToolTip;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
@@ -130,7 +132,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * set as a floating point value between 0 and 1.
  * 
  */
-public class IpaMap extends JPanel implements ClipboardOwner {
+public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	
 	private static final Logger LOGGER = Logger.getLogger(IpaMap.class
 			.getName());
@@ -797,11 +799,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		searchField = new IpaMapSearchField();
 		searchField.setPrompt("Search Glyphs");
 		searchField.setFont(getFont().deriveFont(12.0f));
-//		if(PhonUtilities.isMacOs()) {
-//			// add mac os specific properties for search fields
-//			searchField.putClientProperty( "JTextField.variant", "search");
-//			searchField.putClientProperty( "JTextField.Search.Prompt", "Search");
-//		}
 		searchField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -838,31 +835,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			}
 		});
 		
-//		String[] availFonts =
-//			GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-//		fontSelectionBox = new JComboBox(availFonts);
-//		fontSelectionBox.setFocusable(false);
-//		fontSelectionBox.setSelectedItem(getFont().getFontName());
-//		fontSelectionBox.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				String fontName = fontSelectionBox.getSelectedItem().toString();
-//				Font f = Font.decode(fontName);
-//				setFont(f);
-//				getFont();
-//				updateDisplay();
-//			}
-//		});
-		
-//		toolBar.setFloatable(false);
-		
-//		searchBar.add(new JLabel());
-//		searchBar.add(searchField);
-		
 		headerPanel = new JXPanel(new GridLayout(0, 2));
 		JLabel headerLabel = new JLabel();
-//		headerLabel.setFont(headerLabel.getFont().deriveFont(Font.BOLD, 12.0f));
 		headerLabel.setVerticalTextPosition(SwingConstants.TOP);
 		headerLabel.setVerticalAlignment(SwingConstants.TOP);
 		headerPanel.add(headerLabel);
@@ -877,13 +851,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		
 		CompoundPainter<DialogHeader> cmpPainter = new CompoundPainter<DialogHeader>(mp, pinstripe, gloss);
 		headerPanel.setBackgroundPainter(cmpPainter);
-//		JPanel searchTopPanel = new JPanel(new GridLayout(0, 2));
-//		searchTopPanel.add(searchToggleButton);
-//		searchTopPanel.add(searchField);
-//		searchToggleContainer = searchTopPanel;
 		
 		JPanel searchSection = new JPanel(new VerticalLayout(0));
-//		searchSection.add(searchField);
 		searchSection.add(searchToggleButton);
 		searchSection.add(headerPanel);
 		searchContainer = searchSection;
@@ -1047,26 +1016,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			_cFont = baseFont.deriveFont(fontSize);
 		}
 		return _cFont;
-	}
-	
-	public boolean isFadeWindow() {
-		return fadeWindow;
-	}
-
-	public void setFadeWindow(boolean fadeWindow) {
-		boolean oldFade = this.fadeWindow;
-		this.fadeWindow = fadeWindow;
-		super.firePropertyChange(FADE_WINDOW_PROP, oldFade, fadeWindow);
-	}
-
-	public float getFadeOpacity() {
-		return fadeOpacity;
-	}
-
-	public void setFadeOpacity(float fadeOpacity) {
-		float oldOpacity = this.fadeOpacity;
-		this.fadeOpacity = fadeOpacity;
-		super.firePropertyChange(FADE_OPACITY_PROP, oldOpacity, fadeOpacity);
 	}
 
 	public boolean isHighlightRecent() {
@@ -1421,74 +1370,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		onToggleHighlightAct.putValue(PhonUIAction.SELECTED_KEY, isHighlightRecent());
 		JCheckBoxMenuItem onToggleHighlightItm = new JCheckBoxMenuItem(onToggleHighlightAct);
 		menu.add(onToggleHighlightItm);
-		
-		menu.addSeparator();
-		
-		// fading
-		PhonUIAction onToggleFadingAct = 
-			new PhonUIAction(this, "onToggleFadeWindow");
-		onToggleFadingAct.putValue(PhonUIAction.NAME, "Fade window");
-		onToggleFadingAct.putValue(PhonUIAction.SELECTED_KEY, isFadeWindow());
-		JCheckBoxMenuItem onToggleFadingItm = new JCheckBoxMenuItem(onToggleFadingAct);
-		menu.add(onToggleFadingItm);
-		
-		final JLabel fadeLabel = new JLabel("A");
-		fadeLabel.setFont(getFont().deriveFont(24.0f));
-		fadeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		int cAlpha = (int)(255 * getFadeOpacity());
-		Color c = new Color(0, 0, 0, Math.min(255, cAlpha));
-		fadeLabel.setForeground(c);
-		
-		final JSlider fadeSlider = new JSlider(1, 101);
-		fadeSlider.setValue((int)(getFadeOpacity()*100));
-		fadeSlider.setMajorTickSpacing(20);
-		fadeSlider.setMinorTickSpacing(10);
-		fadeSlider.setSnapToTicks(true);
-		fadeSlider.setPaintTicks(true);
-		fadeSlider.addChangeListener(new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				int sliderVal = fadeSlider.getValue();
-				
-				float opacity = (float)sliderVal/(float)100;
-				opacity = Math.min(1.0f, opacity);
-				
-				_cFont = null;
-							
-				setSavedFadeOpacity(opacity);
-				setFadeOpacity(opacity);
-				
-				int cAlpha = (int)(255 * opacity);
-				Color c = new Color(0, 0, 0, Math.min(255, cAlpha));
-				fadeLabel.setForeground(c);
-				fadeLabel.repaint();
-			}
-		});
-		
-		FormLayout fadeLayout = new FormLayout(
-				"3dlu, fill:pref:grow, center:pref, 3dlu",
-				"pref");
-		JPanel fadePanel = new JPanel(fadeLayout){
-			@Override
-			public Insets getInsets() {
-				Insets retVal = super.getInsets();
-				
-				// make both slider line up in the menu
-				retVal.left += UIManager.getIcon("Tree.collapsedIcon").getIconWidth();
-				retVal.left += smallLbl.getPreferredSize().width;
-				
-				return retVal;
-			}
-		};
-//		scalePanel.add(smallLbl, cc.xy(2, 1));
-		fadePanel.add(fadeSlider, cc.xy(2, 1));
-		fadePanel.add(fadeLabel, cc.xy(3, 1));
-		
-		JMenuItem fadeItem = new JMenuItem("Fade opacity");
-		fadeItem.setEnabled(false);
-		menu.add(fadeItem);
-		menu.add(fadePanel);
 	}
 	
 	/**
@@ -1541,15 +1422,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		setSavedHighlightRecent(newVal);
 		
 		repaint();
-	}
-	
-	/**
-	 * Toggle window fading
-	 */
-	public void onToggleFadeWindow(PhonActionEvent pae) {
-		boolean newVal = !isFadeWindow();
-		setFadeWindow(newVal);
-		setSavedFadeWindow(newVal);
 	}
 	
 	/**
@@ -1662,26 +1534,12 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		searchContainer.remove(oldToggle);
 		searchContainer.remove(oldPanel);
 		
-//		Action toggleAction = searchPanel.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION);
-//		
-//		// use the collapse/expand icons from the JTree UI
-//		toggleAction.putValue(JXCollapsiblePane.COLLAPSE_ICON,
-//		                      UIManager.getIcon("Tree.expandedIcon"));
-//		toggleAction.putValue(JXCollapsiblePane.EXPAND_ICON,
-//		                      UIManager.getIcon("Tree.collapsedIcon"));
-//		toggleAction.putValue(Action.NAME, grid.getName());
-//		
-//		searchToggleButton.setAction(toggleAction);
-		
-//		searchToggleContainer.add(searchToggleButton);
-//		searchToggleContainer.add(searchField);
 		searchContainer.add(searchToggleButton);
 		searchContainer.add(searchPanel);
 		
 		boolean visible = searchResults.size() > 0;
 		searchContainer.setVisible(visible);
 		
-//		searchToggleContainer.validate();
 		searchContainer.validate();
 		
 		repaint();
@@ -1830,8 +1688,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 						convertGridPointToView(line.getObj2(), gridw, gridh) );
 				g2d.draw(l);
 			}
-//			Line2D line = new Line2D.Float(linex1, liney1, linex2, liney2);
-//			g2d.draw(line);
 		}
 		
 		private Point2D convertGridPointToView(Point2D p, int cw, int ch) {
@@ -1879,16 +1735,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			GridCellLayout grid = (GridCellLayout)arg1.getLayout();
 			int gridw = grid.getCellWidth();
 			int gridh = grid.getCellHeight();
-//			Stroke s = new BasicStroke(3.0f*getScale());
-//			g2d.setStroke(s);
 			g2d.setColor(Color.LIGHT_GRAY);
-//			for(LineSegment line:lines) {
-////				Line2D l = new Line2D.Float(
-////						convertGridPointToView(line.getObj1(), gridw, gridh), 
-////						convertGridPointToView(line.getObj2(), gridw, gridh) );
-////				g2d.draw(l);
-//				
-//			}
 			for(int x = 0; x < width; x+=4*gridw) {
 				g2d.drawLine(x, 0, x, height);
 			}
@@ -2235,5 +2082,32 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 
 	@Override
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return getPreferredSize();
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect,
+			int orientation, int direction) {
+		return 5;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect,
+			int orientation, int direction) {
+		return 5;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
 	}
 }
