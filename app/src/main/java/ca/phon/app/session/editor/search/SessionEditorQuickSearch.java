@@ -122,6 +122,7 @@ public class SessionEditorQuickSearch {
 		super();
 		editorRef = new WeakReference<SessionEditor>(editor);
 		initComponents();
+		setupEditorActions();
 	}
 	
 	public JTable createTable() {
@@ -353,7 +354,7 @@ public class SessionEditorQuickSearch {
 	
 	public void setupEditorActions() {
 		final DelegateEditorAction tierChangeAct = new DelegateEditorAction(this, "onTierDataChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, tierChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangeAct);
 		
 		final DelegateEditorAction tierNumberChangedAct = new DelegateEditorAction(this, "onTierNumberChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, tierNumberChangedAct);
@@ -376,14 +377,12 @@ public class SessionEditorQuickSearch {
 	
 	@RunOnEDT
 	public void onTierDataChanged(EditorEvent ee) {
-		// get the current record index
-		final int recIdx = getEditor().getCurrentRecordIndex();
-//		tableModel.setRowDirty(recIdx);
-		tableModel.fireTableRowsUpdated(recIdx, recIdx);
+		tableModel.fireTableDataChanged();
 	}
 	
 	@RunOnEDT
 	public void onTierNumberChanged(EditorEvent ee) {
+		tableModel.fireTableStructureChanged();
 	}
 	
 	@RunOnEDT
