@@ -1,11 +1,14 @@
 package ca.phon.extensions;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
@@ -64,6 +67,13 @@ public final class ExtensionSupport implements IExtendable {
 	
 	private final static Logger LOGGER = Logger.getLogger(ExtensionSupport.class.getName());
 	
+	private final static Map<Class<?>, List<ExtensionProvider>> _extMap =
+			Collections.synchronizedMap(new HashMap<Class<?>, List<ExtensionProvider>>());
+	
+	private static <T extends IExtendable> void initExtensions(Class<T> type, T obj) {
+		
+	}
+	
 	/**
 	 * extensions
 	 */
@@ -96,16 +106,24 @@ public final class ExtensionSupport implements IExtendable {
 	 * META-INF/services files
 	 */
 	public void initExtensions() {
-		final ServiceLoader<ExtensionProvider> services =
-				ServiceLoader.load(ExtensionProvider.class);
-		for(ExtensionProvider provider:services) {
-			final Class<?> providerClass = provider.getClass();
-			
-			// check for the @Extension annotation
-			final Extension extensionClass = providerClass.getAnnotation(Extension.class);
-			if(extensionClass != null && extensionClass.value().isAssignableFrom(declaredType)) {
-				provider.installExtension(parent.get());
+		List<ExtensionProvider> providers = _extMap.get(declaredType);
+		if(providers == null) {
+			providers = new ArrayList<ExtensionProvider>();
+			_extMap.put(declaredType, providers);
+			final ServiceLoader<ExtensionProvider> services =
+					ServiceLoader.load(ExtensionProvider.class);
+			for(ExtensionProvider provider:services) {
+				final Class<?> providerClass = provider.getClass();
+				
+				// check for the @Extension annotation
+				final Extension extensionClass = providerClass.getAnnotation(Extension.class);
+				if(extensionClass != null && extensionClass.value().isAssignableFrom(declaredType)) {
+					providers.add(provider);
+				}
 			}
+		}
+		for(ExtensionProvider provider:providers) {
+			provider.installExtension(parent.get());
 		}
 	}
 
