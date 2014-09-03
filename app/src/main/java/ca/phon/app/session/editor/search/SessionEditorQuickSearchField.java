@@ -47,7 +47,8 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 
 	@Override
 	public RowFilter<TableModel, Integer> getRowFilter(String expr) {
-		final RowFilter<TableModel, Integer> filter = super.getRowFilter(expr);
+		final RowFilter<TableModel, Integer> filter = new SessionRowFilter(expr);
+				//super.getRowFilter(expr);
 		return new RecordRowFilter(filter);
 	}
 	

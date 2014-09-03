@@ -115,7 +115,7 @@ public class SessionTableModel extends AbstractTableModel {
 			final Record record = session.getRecord(rowIndex);
 			
 			if(columnIndex == Columns.RECORD_INDEX.ordinal()) {
-				retVal = columnIndex + 1;
+				retVal = rowIndex + 1;
 			} else if(columnIndex == Columns.SPEAKER.ordinal()) {
 				retVal = record.getSpeaker();
 			} else {

@@ -1,6 +1,7 @@
 package ca.phon.session.impl;
 
 import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaSegmentFormatter;
 import ca.phon.session.MediaUnit;
 
 /**
@@ -64,4 +65,8 @@ public class MediaSegmentImpl implements MediaSegment {
 		this.unit = type;
 	}
 
+	public String toString() {
+		return (new MediaSegmentFormatter()).format(this);
+	}
+	
 }

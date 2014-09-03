@@ -9,6 +9,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.tree.RewriteEarlyExitException;
 
 import ca.phon.ipa.IPAElement;
 
@@ -78,6 +79,8 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 			retVal.pattern = phonex;
 			return retVal;
 		} catch (RecognitionException e) {
+			throw new PhonexPatternException(e);
+		} catch (RewriteEarlyExitException e) {
 			throw new PhonexPatternException(e);
 		}
 	}

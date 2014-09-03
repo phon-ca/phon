@@ -67,6 +67,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.query.report.csv.CSVTableDataWriter;
+import ca.phon.session.Participant;
+import ca.phon.session.Tier;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -154,7 +156,7 @@ public class SessionEditorQuickSearch {
 		searchField.setColumnLabel("tier");
 		searchField.setColumns(20);
 		searchField.setAutoscrolls(true);
-		searchField.addKeyListener(new KeyListener() {
+		searchField.getTextField().addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -172,8 +174,30 @@ public class SessionEditorQuickSearch {
 				
 			}
 		});
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if(searchField.getState() == FieldState.INPUT) {
+					updateFilter();
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if(searchField.getState() == FieldState.INPUT) 
+					updateFilter();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
-		searchField.addFocusListener(new FocusListener() {
+		searchField.getTextField().addFocusListener(new FocusListener() {
 			
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -217,11 +241,11 @@ public class SessionEditorQuickSearch {
 	private void updateFilter() {
 		//searchField.updateTableFilter();
 		filterTableModel.setRowFilter(searchField.getRowFilter(searchField.getText()));
-//		if(searchField.getText().length() > 0) {
-//			showTablePopup();
-//		} else {
-//			hideTablePopup();
-//		}
+		if(searchField.getText().length() > 0) {
+			showTablePopup();
+		} else {
+			hideTablePopup();
+		}
 	}
 	
 	public void showRecordList() {
