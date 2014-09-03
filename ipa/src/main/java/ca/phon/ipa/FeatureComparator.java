@@ -14,6 +14,39 @@ public class FeatureComparator implements Comparator<IPAElement> {
 	
 	private final List<FeatureSet> featureSets = new ArrayList<FeatureSet>();
 	
+	public static FeatureComparator createPlaceComparator() {
+		return new FeatureComparator(
+				FeatureSet.fromArray(new String[]{"Labial"}),
+				FeatureSet.fromArray(new String[]{"Coronal"}),
+				FeatureSet.fromArray(new String[]{"Dorsal"}),
+				FeatureSet.fromArray(new String[]{"Glottal"}));
+	}
+	
+	public static FeatureComparator createVoicingComparator() {
+		return new FeatureComparator(
+				FeatureSet.fromArray(new String[]{"Voiceless"}),
+				FeatureSet.fromArray(new String[]{"Voiced"}));
+	}
+	
+	public static FeatureComparator createMannerComparator() {
+		return new FeatureComparator(
+				FeatureSet.fromArray(new String[]{"Stop"}),
+				FeatureSet.fromArray(new String[]{"Fricative"}),
+				FeatureSet.fromArray(new String[]{"Affricate"}),
+				FeatureSet.fromArray(new String[]{"Nasal"}),
+				FeatureSet.fromArray(new String[]{"Lateral"}),
+				FeatureSet.fromArray(new String[]{"Rhotic"}),
+				FeatureSet.fromArray(new String[]{"Glide"}),
+				FeatureSet.fromArray(new String[]{"Vowel"}));
+	}
+	
+	public static FeatureComparator createContinuancyComparator() {
+		return new FeatureComparator(
+				FeatureSet.fromArray(new String[]{"Stop"}),
+				FeatureSet.fromArray(new String[]{"Fricative"}),
+				FeatureSet.fromArray(new String[]{"Approximant"}));
+	}
+	
 	public FeatureComparator() {
 		super();
 	}
