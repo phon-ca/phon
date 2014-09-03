@@ -101,7 +101,7 @@ public class SessionEditorQuickSearch {
 	 * Table model
 	 */
 	private FilterTableModel filterTableModel;
-	private SessionScriptTableModel tableModel;
+	private SessionTableModel tableModel;
 	
 	/**
 	 * Editor reference
@@ -136,7 +136,7 @@ public class SessionEditorQuickSearch {
 	
 	private void initComponents() {
 		tableModel = 
-				new SessionScriptTableModel(getEditor().getSession());
+				new SessionTableModel(getEditor().getSession());
 		filterTableModel = new FilterTableModel(tableModel);
 		table = createTable();
 		table.setModel(filterTableModel);
@@ -354,18 +354,16 @@ public class SessionEditorQuickSearch {
 	public void onTierDataChanged(EditorEvent ee) {
 		// get the current record index
 		final int recIdx = getEditor().getCurrentRecordIndex();
-		tableModel.setRowDirty(recIdx);
+//		tableModel.setRowDirty(recIdx);
+		tableModel.fireTableRowsUpdated(recIdx, recIdx);
 	}
 	
 	@RunOnEDT
 	public void onTierNumberChanged(EditorEvent ee) {
-		// reset column layout
-		tableModel.resetColumns();
 	}
 	
 	@RunOnEDT
 	public void onRecordNumberChanged(EditorEvent ee) {
-		tableModel.clearCache();
 		tableModel.fireTableDataChanged();
 	}
 	
