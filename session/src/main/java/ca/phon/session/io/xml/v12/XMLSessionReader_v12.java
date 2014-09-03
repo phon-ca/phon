@@ -196,36 +196,12 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					
 					Record record = null;
 					try {
-						record = copyRecord(factory, rt);
+						record = new LazyRecord(factory, retVal, rt);
 					} catch (Exception e) {
 						LOGGER.info(rt.getId());
 						LOGGER.log(Level.SEVERE,
 								e.getLocalizedMessage(), e);
 						
-					}
-					
-					try {
-						if(rt.getId() != null) {
-							UUID uuid = UUID.fromString(rt.getId());
-							record.setUuid(uuid);
-						}
-					} catch (IllegalArgumentException e) {
-					}
-					
-					record.setExcludeFromSearches(rt.isExcludeFromSearches());
-					
-					if(rt.getSpeaker() != null) {
-						final ParticipantType pt = (ParticipantType)rt.getSpeaker();
-						for(int pIdx = 0; pIdx < retVal.getParticipantCount(); pIdx++) {
-							final Participant participant = retVal.getParticipant(pIdx);
-							if(participant.getName() != null  && participant.getName().equals(pt.getName())) {
-								record.setSpeaker(participant);
-								break;
-							} else if(participant.getId() != null && participant.getId().equals(pt.getId())) {
-								record.setSpeaker(participant);
-								break;
-							}
-						}
 					}
 					
 					retVal.addRecord(record);
@@ -316,10 +292,32 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		return factory.createComment(type, value);
 	}
 	
-	private Record copyRecord(SessionFactory factory, RecordType rt) {
+	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {
 		final Record retVal = factory.createRecord();
 		
 		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
+		
+		try {
+			if(rt.getId() != null) {
+				UUID uuid = UUID.fromString(rt.getId());
+				retVal.setUuid(uuid);
+			}
+		} catch (IllegalArgumentException e) {
+		}
+		
+		if(rt.getSpeaker() != null) {
+			final ParticipantType pt = (ParticipantType)rt.getSpeaker();
+			for(int pIdx = 0; pIdx < session.getParticipantCount(); pIdx++) {
+				final Participant participant = session.getParticipant(pIdx);
+				if(participant.getName() != null  && participant.getName().equals(pt.getName())) {
+					retVal.setSpeaker(participant);
+					break;
+				} else if(participant.getId() != null && participant.getId().equals(pt.getId())) {
+					retVal.setSpeaker(participant);
+					break;
+				}
+			}
+		}
 		
 		// orthography
 		final OrthographyType ot = rt.getOrthography();
