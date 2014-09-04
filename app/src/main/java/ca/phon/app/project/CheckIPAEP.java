@@ -19,6 +19,8 @@ package ca.phon.app.project;
 
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import ca.phon.app.project.checkwizard.CheckWizard;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -37,10 +39,20 @@ public class CheckIPAEP implements IPluginEntryPoint {
 		if(args.get("project") != null) {
 			final Project project = (Project)args.get("project");
 			
-			final CheckWizard cw = new CheckWizard(project);
-			cw.setSize(600, 500);
-			cw.setLocationByPlatform(true);
-			cw.setVisible(true);
+			final Runnable onEDT = new Runnable() {
+				
+				@Override
+				public void run() {
+					final CheckWizard cw = new CheckWizard(project);
+					cw.setSize(600, 500);
+					cw.setLocationByPlatform(true);
+					cw.setVisible(true);
+				}
+			};
+			if(SwingUtilities.isEventDispatchThread())
+				onEDT.run();
+			else
+				SwingUtilities.invokeLater(onEDT);
 		}
 	}
 

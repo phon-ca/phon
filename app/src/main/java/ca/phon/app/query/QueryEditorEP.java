@@ -74,7 +74,10 @@ public class QueryEditorEP implements IPluginEntryPoint {
 		// check to make sure we have necessary resources
 		if(project == null || script == null) return;
 		
-		final QueryName queryName = script.getExtension(QueryName.class);
+		QueryName queryName = script.getExtension(QueryName.class);
+		if(queryName == null)
+			queryName = new QueryName("Untitled");
+		
 		final QueryEditorWindow queryEditor = new QueryEditorWindow(queryName.getName(), project, script);
 		queryEditor.setWindowName(queryName.getName());
 		queryEditor.pack();

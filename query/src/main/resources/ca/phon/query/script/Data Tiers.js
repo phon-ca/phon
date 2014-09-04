@@ -94,7 +94,7 @@ function query_record(recordIndex, record) {
 	        rv.groupIndex = searchObj.groupIndex;
 	        rv.range = new Range(v.start, v.end, false);
 	        rv.data = v.value;
-	        result.resultValues.add(rv);
+	        result.addResultValue(rv);
 	        
 	        results.addResult(result);
 	    }
