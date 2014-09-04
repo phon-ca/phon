@@ -36,7 +36,7 @@ exports.DetectorResultFactory = function() {
         stringIdx = ipaT.stringIndexOfElement(ipaE);
         rv1.range = new Range(stringIdx, stringIdx, false);        
         rv1.data = ipaE.text;
-        retVal.resultValues.add(rv1);
+        retVal.addResultValue(rv1);
         
         var rv2 = factory.createResultValue();
         rv2.tierName = ipaT.tierName;
@@ -45,7 +45,7 @@ exports.DetectorResultFactory = function() {
         stringIdx = ipaT.stringIndexOfElement(ipaE);
         rv2.range = new Range(stringIdx, stringIdx, false);        
         rv2.data = ipaE.text;
-        retVal.resultValues.add(rv2);
+        retVal.addResultValue(rv2);
         
         var rv3 = factory.createResultValue();
         rv3.tierName = ipaA.tierName;
@@ -54,7 +54,7 @@ exports.DetectorResultFactory = function() {
         stringIdx = ipaA.stringIndexOfElement(ipaE);
         rv3.range = new Range(stringIdx, stringIdx, false);        
         rv3.data = ipaE.text;
-        retVal.resultValues.add(rv3);
+        retVal.addResultValue(rv3);
         
         var rv4 = factory.createResultValue();
         rv4.tierName = ipaA.tierName;
@@ -63,7 +63,7 @@ exports.DetectorResultFactory = function() {
         stringIdx = ipaA.stringIndexOfElement(ipaE);
         rv4.range = new Range(stringIdx, stringIdx, false);        
         rv4.data = ipaE.text;
-        retVal.resultValues.add(rv4);
+        retVal.addResultValue(rv4);
         
         // metadata
         var metadata = retVal.metadata;

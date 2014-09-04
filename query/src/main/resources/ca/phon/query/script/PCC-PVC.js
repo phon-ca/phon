@@ -81,14 +81,14 @@ function query_record(recordIndex, record)
     	rvt.groupIndex = grp.groupIndex;
     	rvt.range = new Range(0, ipaTGroup.toString().length(), false);
     	rvt.data = ipaTGroup;
-    	result.resultValues.add(rvt);
+    	result.addResultValue(rvt);
     	
     	var rva = factory.createResultValue();
     	rva.tierName = "IPA Actual";
     	rva.groupIndex = grp.groupIndex;
     	rva.range = new Range(0, ipaAGroup.toString().length(), false);
     	rva.data = ipaAGroup;
-        result.resultValues.add(rva);
+        result.addResultValue(rva);
 	    
 	    var metadata = result.metadata;
 	    //pccOptions.standard.setup_pcc_standard_metadata(ipaTGroup, ipaAGroup, metadata);
