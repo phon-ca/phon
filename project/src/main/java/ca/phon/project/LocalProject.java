@@ -194,6 +194,7 @@ public class LocalProject implements Project, ProjectRefresh {
 					&& !f.getName().startsWith("~") 
 					&& !f.getName().endsWith("~") 
 					&& !f.getName().startsWith("__") 
+					&& !f.getName().startsWith(".")
 					&& !f.isHidden()) {
 				final String corpusName = f.getName();
 				CorpusType ct = getCorpusInfo(corpusName);
@@ -210,6 +211,7 @@ public class LocalProject implements Project, ProjectRefresh {
 							&& !xmlFile.getName().startsWith("~")
 							&& !xmlFile.getName().endsWith("~")
 							&& !xmlFile.getName().startsWith("__")
+							&& !xmlFile.getName().startsWith(".")
 							&& !xmlFile.isHidden()) {
 						final String sessionName = xmlFile.getName().substring(0, xmlFile.getName().lastIndexOf('.'));
 						
