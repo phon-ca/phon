@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.JTextComponent;
 
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
@@ -44,8 +45,10 @@ import ca.phon.util.PrefHelper;
  * </ul>
  *</p>
  */
-public class IpaMapFrame extends JFrame {
+public class IpaMapFrame extends CommonModuleFrame {
 	
+	private static final long serialVersionUID = 5216574250809340476L;
+
 	/**
 	 * Property to save window location
 	 */

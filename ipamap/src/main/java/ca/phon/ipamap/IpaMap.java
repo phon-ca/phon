@@ -15,7 +15,6 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.Toolkit;
@@ -37,7 +36,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -63,7 +61,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JToolTip;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
@@ -76,11 +73,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXCollapsiblePane;
@@ -93,8 +86,6 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.PinstripePainter;
 import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import ca.phon.ipa.features.Feature;
 import ca.phon.ipa.features.FeatureMatrix;
@@ -132,8 +123,10 @@ import com.jgoodies.forms.layout.FormLayout;
  * set as a floating point value between 0 and 1.
  * 
  */
-public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
+public class IpaMap extends JPanel implements ClipboardOwner {
 	
+	private static final long serialVersionUID = 1758355523938039972L;
+
 	private static final Logger LOGGER = Logger.getLogger(IpaMap.class
 			.getName());
 	
@@ -196,11 +189,6 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	private final static String DEFAULT_FONT = "Charis SIL Compact-PLAIN-13";
 	
 	/**
-	 * Top panel
-	 */
-	private JXPanel headerPanel;
-	
-	/**
 	 * Load the scale property
 	 * @return
 	 */
@@ -255,21 +243,10 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	}
 	
 	/**
-	 * Set saved fade opacity
-	 */
-	private static void setSavedFadeOpacity(float opacity) {
-		PrefHelper.getUserPreferences().putFloat(FADE_OPACITY_PROP, opacity);
-	}
-	
-	/**
 	 * Pref for using window fading
 	 */
 	private static boolean getSavedFadeWindow() {
 		return PrefHelper.getBoolean(FADE_WINDOW_PROP, Boolean.TRUE);
-	}
-	
-	private static void setSavedFadeWindow(boolean fade) {
-		PrefHelper.getUserPreferences().putBoolean(FADE_WINDOW_PROP, fade);
 	}
 	
 	/**
@@ -305,31 +282,7 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	 * Location of the grid file
 	 */
 	private final static String GRID_FILE = "ipagrids.xml";
-	
-//	/**
-//	 * Keep a reference to the DOM version of the XML file
-//	 */
-//	private static Document gridDoc;
-//	
-//	private static Document getGridDoc() {
-//		if(gridDoc == null) {
-//			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//			dbFactory.setNamespaceAware(true);
-//			DocumentBuilder dBuilder;
-//			try {
-//				dBuilder = dbFactory.newDocumentBuilder();
-//				gridDoc = dBuilder.parse(IpaMap.class.getResourceAsStream(GRID_FILE));
-//			} catch (ParserConfigurationException e) {
-//				e.printStackTrace();
-//			} catch (SAXException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return gridDoc;
-//	}
-	
+
 	/**
 	 * Static ref to ipa map data
 	 */
@@ -371,7 +324,6 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 			}
 		}
 	
-		final ObjectFactory factory = new ObjectFactory();
 		final IPATokens tokens = IPATokens.getSharedInstance();
 		
 		// generate 'Other consonants' section
@@ -835,26 +787,9 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 			}
 		});
 		
-		headerPanel = new JXPanel(new GridLayout(0, 2));
-		JLabel headerLabel = new JLabel();
-		headerLabel.setVerticalTextPosition(SwingConstants.TOP);
-		headerLabel.setVerticalAlignment(SwingConstants.TOP);
-		headerPanel.add(headerLabel);
-		headerPanel.add(searchField);
-		headerPanel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-		GlossPainter gloss = new GlossPainter();
-		
-		GradientPaint gp = new GradientPaint(new Point(0, 0), Color.white, new Point(200, 100), PhonGuiConstants.PHON_UI_STRIP_COLOR);
-		MattePainter mp = new MattePainter(gp);
-		
-		PinstripePainter pinstripe = new PinstripePainter(new Color(240, 240, 240), 45.0, 0.5, 5.0);
-		
-		CompoundPainter<DialogHeader> cmpPainter = new CompoundPainter<DialogHeader>(mp, pinstripe, gloss);
-		headerPanel.setBackgroundPainter(cmpPainter);
 		
 		JPanel searchSection = new JPanel(new VerticalLayout(0));
 		searchSection.add(searchToggleButton);
-		searchSection.add(headerPanel);
 		searchContainer = searchSection;
 		searchContainer.setVisible(false);
 		
@@ -915,25 +850,16 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 		statusBar.setLayout(new BorderLayout());
 		statusBar.add(infoLabel, BorderLayout.CENTER);
 		
-//		btmPanel.add(infoLabel, BorderLayout.NORTH);
-		
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setCorner(ScrollPaneConstants.LOWER_RIGHT_CORNER, scrollBtn);
 		
 		add(statusBar, BorderLayout.SOUTH);
 		
-//		toolBar = new JToolBar();
-		
 		JPanel topPanel = new JPanel(new VerticalLayout(0));
-//		topPanel.add(search);
-		topPanel.add(headerPanel);
 		topPanel.add(searchSection);
 		topPanel.add(favSection);
 		add(topPanel, BorderLayout.NORTH);
 		
-//		toolBar.add(searchField);
-		
-//		add(toolBar, BorderLayout.NORTH);
 	}
 	
 	public float getScale() {
@@ -948,7 +874,6 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	
 	public void onGoto(PhonActionEvent pae) {
 		JComponent comp = (JComponent)pae.getData();
-//		scrollPane.getViewport().scrollRectToVisible(comp.getBounds());
 		scrollPane.getViewport().setViewPosition(
 				new Point(comp.getBounds().x, comp.getBounds().y));
 	}
@@ -1102,14 +1027,8 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	
 	
 	private JXCollapsiblePane getGridPanel(Grid grid) {
-//		int fontSize = Math.round(fmin + scale * (fmax - fmin));
 		Font tFont = getFont();
 		
-//		int wmin = 0;
-//		int wmax = 0;
-//		wmin = Math.max(fm.getWidths()['w'], wmin) /2 + 2;
-//		wmax = wmin * 2;
-//		int cellWidth = Math.round(wmin + scale * (wmax - wmin));
 		Dimension cellDim = getCellDimension();
 		int cellWidth = cellDim.width;
 		int cellHeight = cellDim.height;
@@ -1118,7 +1037,6 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 		final JXPanel contentPanel = new JXPanel();
 		retVal.setContentPane(contentPanel);
 		
-//		JPanel innerPanel = new JPanel();
 		GridCellLayout layout = new GridCellLayout(
 				grid.getRows(), grid.getCols(),
 				cellWidth, cellHeight);
@@ -1126,18 +1044,10 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 		
 		contentPanel.setOpaque(true);
 		contentPanel.setBackground(Color.white);
-//		contentPanel.setBackground(Color.white);
 		
 		for(Cell cell:grid.getCell()) {
 			JButton mapButton = getMapButton(cell);
 			mapButton.setFont(tFont);
-			
-//			if(grid.getName().equalsIgnoreCase("consonants")) {
-//				CompoundPainter<JXButton> btnPainter = 
-//					new CompoundPainter<JXButton>(mapButton.getBackgroundPainter(),
-//							new OrthoCellPainter(cell));
-//				mapButton.setBackgroundPainter(btnPainter);
-//			}
 			
 			GridCellConstraint cc = GridCellConstraint.xywh(cell.getX(), cell.getY(), cell.getW(), cell.getH());
 			retVal.getContentPane().add(mapButton, cc);
@@ -1156,7 +1066,6 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 		contentPanel.addMouseListener(new ContextMouseHandler());
 		
 		retVal.setAnimated(false);
-//		retVal.add(innerPanel);
 		retVal.setFocusable(false);
 		
 		return retVal;
@@ -2083,31 +1992,5 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	@Override
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
 	}
-
-	@Override
-	public Dimension getPreferredScrollableViewportSize() {
-		return getPreferredSize();
-	}
-
-	@Override
-	public int getScrollableUnitIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		return 5;
-	}
-
-	@Override
-	public int getScrollableBlockIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		return 5;
-	}
-
-	@Override
-	public boolean getScrollableTracksViewportWidth() {
-		return false;
-	}
-
-	@Override
-	public boolean getScrollableTracksViewportHeight() {
-		return false;
-	}
+	
 }
