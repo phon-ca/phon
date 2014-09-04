@@ -18,13 +18,13 @@
 
 package ca.phon.query.db;
 
-import java.util.List;
+import java.util.Iterator;
 
 /**
  * Interface for a set of results from a Phon query.
  *
  */
-public interface ResultSet {
+public interface ResultSet extends Iterable<Result> {
 	/**
 	 * Gets the corpus name for this result set.
 	 * 
@@ -63,13 +63,6 @@ public interface ResultSet {
 	 */
 	public abstract void setSessionPath(String corpus, String session);
 
-	/**
-	 * Gets the list of results for this result set.
-	 * 
-	 * @return the list of results
-	 */
-	public abstract List<Result> getResults();
-	
 	/**
 	 * Get the number of results in this set.
 	 * 
@@ -120,4 +113,21 @@ public interface ResultSet {
 	 * @return the list of metadata keys
 	 */
 	public abstract String[] getMetadataKeys();
+	
+	/**
+	 * Return an iterator for results
+	 * 
+	 * @param includeExcluded
+	 * @return iterator
+	 */
+	public abstract Iterator<Result> iterator(boolean includeExcluded);
+	
+	/**
+	 * Return an iterator for all results in this set.
+	 * This is the same as calling iterator(true).
+	 * 
+	 * 
+	 */
+	public abstract Iterator<Result> iterator();
+	
 }

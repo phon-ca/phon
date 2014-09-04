@@ -18,12 +18,12 @@
 
 package ca.phon.query.db.xml;
 
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.xml.JAXBArrayList.Mapper;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.db.xml.io.resultset.MetaKeyList;
 import ca.phon.query.db.xml.io.resultset.ObjectFactory;
 import ca.phon.query.db.xml.io.resultset.ResultSetType;
@@ -84,25 +84,6 @@ public class XMLResultSet implements ResultSet, JAXBWrapper<ResultSetType> {
 	public void setSessionPath(String corpus, String session) {
 		resultSet.setSessionPath(corpus + "." + session);
 	};
-
-	@Override
-	public List<Result> getResults() {
-		Mapper<Result, ResultType> mapper = new Mapper<Result, ResultType>() {
-			@Override
-			public ResultType map(Result x) {
-				if(x instanceof XMLResult)
-					return ((XMLResult)x).getXMLObject();
-				return null;
-			}
-
-			@Override
-			public Result create(ResultType x) {
-				return new XMLResult(x);
-			}
-		};
-		
-		return new JAXBArrayList<Result, ResultType>(resultSet.getResult(), mapper);
-	}
 	
 	@Override
 	public int size() {
@@ -126,12 +107,23 @@ public class XMLResultSet implements ResultSet, JAXBWrapper<ResultSetType> {
 	
 	@Override
 	public void addResult(Result res) {
-		getResults().add(res);
+		if(res instanceof XMLResult) {
+			resultSet.getResult().add( ((XMLResult)res).getXMLObject() );
+		} else {
+			final XMLResult result = new XMLResult();
+			result.setExcluded(res.isExcluded());
+			result.setRecordIndex(res.getRecordIndex());
+			result.setSchema(res.getSchema());
+			for(ResultValue rv:res) {
+				result.addResultValue(rv);
+			}
+			addResult(result);
+		}
 	}
 	
 	private int numberOfExcludedResults() {
 		int retVal = 0;
-		for(Result r:getResults()) {
+		for(ResultType r:resultSet.getResult()) {
 			if(r.isExcluded()) retVal++;
 		}
 		return retVal;
@@ -139,7 +131,7 @@ public class XMLResultSet implements ResultSet, JAXBWrapper<ResultSetType> {
 	
 	@Override
 	public int numberOfResults(boolean includeExcluded) {
-		int retVal = getResults().size();
+		int retVal = resultSet.getResult().size();
 		if(!includeExcluded) {
 			retVal -= numberOfExcludedResults();
 		}
@@ -159,12 +151,67 @@ public class XMLResultSet implements ResultSet, JAXBWrapper<ResultSetType> {
 		final MetaKeyList keyList = factory.createMetaKeyList();
 		resultSet.setMetaKeys(keyList);
 		
-		for(final Result r:getResults()) {
+		for(final Result r:this) {
 			final Map<String, String> metadata = r.getMetadata();
 			for(String metakey:metadata.keySet()) {
 				if(!resultSet.getMetaKeys().getMetaKey().contains(metakey)) 
 					resultSet.getMetaKeys().getMetaKey().add(metakey);
 			}
 		}
+	}
+
+	@Override
+	public Iterator<Result> iterator(boolean includeExcluded) {
+		return new ResultIterator(includeExcluded);
+	}
+
+	@Override
+	public Iterator<Result> iterator() {
+		return new ResultIterator();
+	}
+	
+	private final class ResultIterator implements Iterator<Result> {
+		
+		private final boolean includeExcluded;
+		
+		private volatile int idx = 0;
+		
+		public ResultIterator() {
+			this(true);
+		}
+		
+		public ResultIterator(boolean includeExcluded) {
+			super();
+			this.includeExcluded = includeExcluded;
+		}
+
+		@Override
+		public boolean hasNext() {
+			if(idx < numberOfResults(true)) {
+				if(includeExcluded) {
+					return true;
+				} else {
+					final ResultType rt = resultSet.getResult().get(idx);
+					if(rt.isExcluded()) {
+						++idx; return hasNext();
+					} else {
+						return true;
+					}
+				}
+			} else {
+				return false;
+			}
+		}
+
+		@Override
+		public Result next() {
+			return new XMLResult(resultSet.getResult().get(idx++));
+		}
+
+		@Override
+		public void remove() {
+			resultSet.getResult().remove(idx);
+		}
+		
 	}
 }

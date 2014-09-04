@@ -574,7 +574,7 @@ public class RecordFilterPanel extends JPanel {
 			retVal = rangeField.getInputVerifier().verify(rangeField);
 		} else if(searchBtn.isSelected()) {
 			// make sure selected search has data
-			if(selectedSearch.getResults().size() == 0) {
+			if(selectedSearch.numberOfResults(true) == 0) {
 				final Toast toast = ToastFactory.makeToast("Selected search has no data.");
 				toast.start(searchBtn);
 			} else {

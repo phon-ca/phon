@@ -301,8 +301,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 			result = resultSet.getResult(row);
 		} else {
 			int rIdx = -1;
-			for(int i = 0; i < resultSet.getResults().size(); i++) {
-				Result r = resultSet.getResult(i);
+			for(Result r:resultSet) {
 				if(!r.isExcluded()) rIdx++;
 				if(rIdx == row) {
 					result = r;

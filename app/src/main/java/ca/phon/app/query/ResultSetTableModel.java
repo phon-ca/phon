@@ -302,7 +302,7 @@ public class ResultSetTableModel extends AbstractTableModel {
 						super.setStatus(TaskStatus.TERMINATED);
 						break;
 					}
-					rs.getResults();
+//					rs.getResults();
 					rowCount = getRowCount();
 					synchronized(resultSetList) {
 						resultSetList.add(rs);

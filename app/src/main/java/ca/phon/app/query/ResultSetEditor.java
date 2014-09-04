@@ -456,13 +456,9 @@ public class ResultSetEditor extends ProjectFrame {
 	 */
 	private Action getToggleExcludedAction() {
 		if(this.toggleExcludedAction == null) {
-			final ImageIcon icon = 
-					IconManager.getInstance().getIcon("actions/toggle", IconSize.SMALL);
-			
 			toggleExcludedAction = new PhonUIAction(this, "toggleExcluded");
 			toggleExcludedAction.putValue(PhonUIAction.NAME, "Toggle result excluded");
 			toggleExcludedAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle current result exclusion");
-			toggleExcludedAction.putValue(PhonUIAction.SMALL_ICON, icon);
 			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 			toggleExcludedAction.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
 		}
@@ -760,7 +756,7 @@ public class ResultSetEditor extends ProjectFrame {
 					final Result r = resultSet.getResult(resultIdx);
 					final EditorSelectionModel selectionModel = getEditor().getSelectionModel();
 					selectionModel.clear();
-					for(ResultValue rv:r.getResultValues()) {
+					for(ResultValue rv:r) {
 						final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
 						final SessionEditorSelection selection = 
 								new SessionEditorSelection(r.getRecordIndex(), rv.getTierName(),
