@@ -36,7 +36,7 @@ public class DuplicateRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void hookableActionPerformed(ActionEvent arg0) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Record r = getEditor().currentRecord();
 		if(r != null) {

@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.LayoutManager2;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
@@ -76,6 +79,7 @@ import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
@@ -292,8 +296,7 @@ public class RecordDataEditorView extends EditorView {
 			
 			// load tier font
 			final String fontString = tierItem.getTierFont();
-			Font tierFont = PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-					Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
+			Font tierFont = FontPreferences.getTierFont();
 			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
 				tierFont = Font.decode(fontString);
 			}
@@ -308,7 +311,8 @@ public class RecordDataEditorView extends EditorView {
 					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, gIdx);
 					tierEditor.addTierEditorListener(tierEditorListener);
 					final Component tierComp = tierEditor.getEditorComponent();
-					tierComp.setFont(tierFont);
+					if(tierFont != null)
+						tierComp.setFont(tierFont);
 					tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, gIdx));
 					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
 					
@@ -332,7 +336,8 @@ public class RecordDataEditorView extends EditorView {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
 				tierEditor.addTierEditorListener(tierEditorListener);
 				final Component tierComp = tierEditor.getEditorComponent();
-				tierComp.setFont(tierFont);
+				if(tierFont != null)
+					tierComp.setFont(tierFont);
 				tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
 				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 				

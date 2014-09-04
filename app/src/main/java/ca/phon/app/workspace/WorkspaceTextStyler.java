@@ -28,9 +28,9 @@ public class WorkspaceTextStyler {
 		
 		retVal += "<html><div style='";
 		
-		retVal += "color:black; font-size:14;";
+		retVal += "color:black;";
 		
-		retVal += "'><b>" + v + "</b></div></html>";
+		retVal += "'>" + v + "</div></html>";
 		
 		return retVal;
 	}

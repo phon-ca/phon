@@ -68,6 +68,7 @@ import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
@@ -197,6 +198,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setIcon(newIcn);
 		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
 		retVal.setOpaque(false);
@@ -228,6 +230,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setIcon(newIcn);
 		retVal.setAlwaysDisplayActions(true);
 		
@@ -310,6 +313,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setIcon(browseIcn);
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
 		
@@ -342,6 +346,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setIcon(importIcn);
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
 		
@@ -373,6 +378,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		retVal.setTopLabelText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setIcon(prefsIcn);
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.setBottomLabelText(WorkspaceTextStyler.toDescText(s2));
 		
@@ -403,6 +409,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		retVal.setTopLabelText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setIcon(videoFolderIcn);
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.setBottomLabelText(WorkspaceTextStyler.toDescText(s2));
 		

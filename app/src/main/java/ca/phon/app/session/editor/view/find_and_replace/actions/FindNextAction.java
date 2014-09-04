@@ -21,7 +21,7 @@ public class FindNextAction extends FindAndReplaceAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void hookableActionPerformed(ActionEvent arg0) {
 		getView().findNext();
 	}
 

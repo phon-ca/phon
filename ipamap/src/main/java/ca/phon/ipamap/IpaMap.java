@@ -36,7 +36,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -74,11 +73,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXCollapsiblePane;
@@ -91,8 +86,6 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.PinstripePainter;
 import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import ca.phon.ipa.features.Feature;
 import ca.phon.ipa.features.FeatureMatrix;
@@ -132,6 +125,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class IpaMap extends JPanel implements ClipboardOwner {
 	
+	private static final long serialVersionUID = 1758355523938039972L;
+
 	private static final Logger LOGGER = Logger.getLogger(IpaMap.class
 			.getName());
 	
@@ -194,11 +189,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	private final static String DEFAULT_FONT = "Charis SIL Compact-PLAIN-13";
 	
 	/**
-	 * Top panel
-	 */
-	private JXPanel headerPanel;
-	
-	/**
 	 * Load the scale property
 	 * @return
 	 */
@@ -253,21 +243,10 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	}
 	
 	/**
-	 * Set saved fade opacity
-	 */
-	private static void setSavedFadeOpacity(float opacity) {
-		PrefHelper.getUserPreferences().putFloat(FADE_OPACITY_PROP, opacity);
-	}
-	
-	/**
 	 * Pref for using window fading
 	 */
 	private static boolean getSavedFadeWindow() {
 		return PrefHelper.getBoolean(FADE_WINDOW_PROP, Boolean.TRUE);
-	}
-	
-	private static void setSavedFadeWindow(boolean fade) {
-		PrefHelper.getUserPreferences().putBoolean(FADE_WINDOW_PROP, fade);
 	}
 	
 	/**
@@ -303,31 +282,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	 * Location of the grid file
 	 */
 	private final static String GRID_FILE = "ipagrids.xml";
-	
-//	/**
-//	 * Keep a reference to the DOM version of the XML file
-//	 */
-//	private static Document gridDoc;
-//	
-//	private static Document getGridDoc() {
-//		if(gridDoc == null) {
-//			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//			dbFactory.setNamespaceAware(true);
-//			DocumentBuilder dBuilder;
-//			try {
-//				dBuilder = dbFactory.newDocumentBuilder();
-//				gridDoc = dBuilder.parse(IpaMap.class.getResourceAsStream(GRID_FILE));
-//			} catch (ParserConfigurationException e) {
-//				e.printStackTrace();
-//			} catch (SAXException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return gridDoc;
-//	}
-	
+
 	/**
 	 * Static ref to ipa map data
 	 */
@@ -369,7 +324,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			}
 		}
 	
-		final ObjectFactory factory = new ObjectFactory();
 		final IPATokens tokens = IPATokens.getSharedInstance();
 		
 		// generate 'Other consonants' section
@@ -797,11 +751,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		searchField = new IpaMapSearchField();
 		searchField.setPrompt("Search Glyphs");
 		searchField.setFont(getFont().deriveFont(12.0f));
-//		if(PhonUtilities.isMacOs()) {
-//			// add mac os specific properties for search fields
-//			searchField.putClientProperty( "JTextField.variant", "search");
-//			searchField.putClientProperty( "JTextField.Search.Prompt", "Search");
-//		}
 		searchField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -838,54 +787,9 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			}
 		});
 		
-//		String[] availFonts =
-//			GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-//		fontSelectionBox = new JComboBox(availFonts);
-//		fontSelectionBox.setFocusable(false);
-//		fontSelectionBox.setSelectedItem(getFont().getFontName());
-//		fontSelectionBox.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				String fontName = fontSelectionBox.getSelectedItem().toString();
-//				Font f = Font.decode(fontName);
-//				setFont(f);
-//				getFont();
-//				updateDisplay();
-//			}
-//		});
-		
-//		toolBar.setFloatable(false);
-		
-//		searchBar.add(new JLabel());
-//		searchBar.add(searchField);
-		
-		headerPanel = new JXPanel(new GridLayout(0, 2));
-		JLabel headerLabel = new JLabel();
-//		headerLabel.setFont(headerLabel.getFont().deriveFont(Font.BOLD, 12.0f));
-		headerLabel.setVerticalTextPosition(SwingConstants.TOP);
-		headerLabel.setVerticalAlignment(SwingConstants.TOP);
-		headerPanel.add(headerLabel);
-		headerPanel.add(searchField);
-		headerPanel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-		GlossPainter gloss = new GlossPainter();
-		
-		GradientPaint gp = new GradientPaint(new Point(0, 0), Color.white, new Point(200, 100), PhonGuiConstants.PHON_UI_STRIP_COLOR);
-		MattePainter mp = new MattePainter(gp);
-		
-		PinstripePainter pinstripe = new PinstripePainter(new Color(240, 240, 240), 45.0, 0.5, 5.0);
-		
-		CompoundPainter<DialogHeader> cmpPainter = new CompoundPainter<DialogHeader>(mp, pinstripe, gloss);
-		headerPanel.setBackgroundPainter(cmpPainter);
-//		JPanel searchTopPanel = new JPanel(new GridLayout(0, 2));
-//		searchTopPanel.add(searchToggleButton);
-//		searchTopPanel.add(searchField);
-//		searchToggleContainer = searchTopPanel;
 		
 		JPanel searchSection = new JPanel(new VerticalLayout(0));
-//		searchSection.add(searchField);
 		searchSection.add(searchToggleButton);
-		searchSection.add(headerPanel);
 		searchContainer = searchSection;
 		searchContainer.setVisible(false);
 		
@@ -946,25 +850,16 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		statusBar.setLayout(new BorderLayout());
 		statusBar.add(infoLabel, BorderLayout.CENTER);
 		
-//		btmPanel.add(infoLabel, BorderLayout.NORTH);
-		
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setCorner(ScrollPaneConstants.LOWER_RIGHT_CORNER, scrollBtn);
 		
 		add(statusBar, BorderLayout.SOUTH);
 		
-//		toolBar = new JToolBar();
-		
 		JPanel topPanel = new JPanel(new VerticalLayout(0));
-//		topPanel.add(search);
-		topPanel.add(headerPanel);
 		topPanel.add(searchSection);
 		topPanel.add(favSection);
 		add(topPanel, BorderLayout.NORTH);
 		
-//		toolBar.add(searchField);
-		
-//		add(toolBar, BorderLayout.NORTH);
 	}
 	
 	public float getScale() {
@@ -979,7 +874,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	
 	public void onGoto(PhonActionEvent pae) {
 		JComponent comp = (JComponent)pae.getData();
-//		scrollPane.getViewport().scrollRectToVisible(comp.getBounds());
 		scrollPane.getViewport().setViewPosition(
 				new Point(comp.getBounds().x, comp.getBounds().y));
 	}
@@ -1047,26 +941,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			_cFont = baseFont.deriveFont(fontSize);
 		}
 		return _cFont;
-	}
-	
-	public boolean isFadeWindow() {
-		return fadeWindow;
-	}
-
-	public void setFadeWindow(boolean fadeWindow) {
-		boolean oldFade = this.fadeWindow;
-		this.fadeWindow = fadeWindow;
-		super.firePropertyChange(FADE_WINDOW_PROP, oldFade, fadeWindow);
-	}
-
-	public float getFadeOpacity() {
-		return fadeOpacity;
-	}
-
-	public void setFadeOpacity(float fadeOpacity) {
-		float oldOpacity = this.fadeOpacity;
-		this.fadeOpacity = fadeOpacity;
-		super.firePropertyChange(FADE_OPACITY_PROP, oldOpacity, fadeOpacity);
 	}
 
 	public boolean isHighlightRecent() {
@@ -1153,14 +1027,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	
 	
 	private JXCollapsiblePane getGridPanel(Grid grid) {
-//		int fontSize = Math.round(fmin + scale * (fmax - fmin));
 		Font tFont = getFont();
 		
-//		int wmin = 0;
-//		int wmax = 0;
-//		wmin = Math.max(fm.getWidths()['w'], wmin) /2 + 2;
-//		wmax = wmin * 2;
-//		int cellWidth = Math.round(wmin + scale * (wmax - wmin));
 		Dimension cellDim = getCellDimension();
 		int cellWidth = cellDim.width;
 		int cellHeight = cellDim.height;
@@ -1169,7 +1037,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		final JXPanel contentPanel = new JXPanel();
 		retVal.setContentPane(contentPanel);
 		
-//		JPanel innerPanel = new JPanel();
 		GridCellLayout layout = new GridCellLayout(
 				grid.getRows(), grid.getCols(),
 				cellWidth, cellHeight);
@@ -1177,18 +1044,10 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		
 		contentPanel.setOpaque(true);
 		contentPanel.setBackground(Color.white);
-//		contentPanel.setBackground(Color.white);
 		
 		for(Cell cell:grid.getCell()) {
 			JButton mapButton = getMapButton(cell);
 			mapButton.setFont(tFont);
-			
-//			if(grid.getName().equalsIgnoreCase("consonants")) {
-//				CompoundPainter<JXButton> btnPainter = 
-//					new CompoundPainter<JXButton>(mapButton.getBackgroundPainter(),
-//							new OrthoCellPainter(cell));
-//				mapButton.setBackgroundPainter(btnPainter);
-//			}
 			
 			GridCellConstraint cc = GridCellConstraint.xywh(cell.getX(), cell.getY(), cell.getW(), cell.getH());
 			retVal.getContentPane().add(mapButton, cc);
@@ -1207,7 +1066,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		contentPanel.addMouseListener(new ContextMouseHandler());
 		
 		retVal.setAnimated(false);
-//		retVal.add(innerPanel);
 		retVal.setFocusable(false);
 		
 		return retVal;
@@ -1421,74 +1279,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		onToggleHighlightAct.putValue(PhonUIAction.SELECTED_KEY, isHighlightRecent());
 		JCheckBoxMenuItem onToggleHighlightItm = new JCheckBoxMenuItem(onToggleHighlightAct);
 		menu.add(onToggleHighlightItm);
-		
-		menu.addSeparator();
-		
-		// fading
-		PhonUIAction onToggleFadingAct = 
-			new PhonUIAction(this, "onToggleFadeWindow");
-		onToggleFadingAct.putValue(PhonUIAction.NAME, "Fade window");
-		onToggleFadingAct.putValue(PhonUIAction.SELECTED_KEY, isFadeWindow());
-		JCheckBoxMenuItem onToggleFadingItm = new JCheckBoxMenuItem(onToggleFadingAct);
-		menu.add(onToggleFadingItm);
-		
-		final JLabel fadeLabel = new JLabel("A");
-		fadeLabel.setFont(getFont().deriveFont(24.0f));
-		fadeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		int cAlpha = (int)(255 * getFadeOpacity());
-		Color c = new Color(0, 0, 0, Math.min(255, cAlpha));
-		fadeLabel.setForeground(c);
-		
-		final JSlider fadeSlider = new JSlider(1, 101);
-		fadeSlider.setValue((int)(getFadeOpacity()*100));
-		fadeSlider.setMajorTickSpacing(20);
-		fadeSlider.setMinorTickSpacing(10);
-		fadeSlider.setSnapToTicks(true);
-		fadeSlider.setPaintTicks(true);
-		fadeSlider.addChangeListener(new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				int sliderVal = fadeSlider.getValue();
-				
-				float opacity = (float)sliderVal/(float)100;
-				opacity = Math.min(1.0f, opacity);
-				
-				_cFont = null;
-							
-				setSavedFadeOpacity(opacity);
-				setFadeOpacity(opacity);
-				
-				int cAlpha = (int)(255 * opacity);
-				Color c = new Color(0, 0, 0, Math.min(255, cAlpha));
-				fadeLabel.setForeground(c);
-				fadeLabel.repaint();
-			}
-		});
-		
-		FormLayout fadeLayout = new FormLayout(
-				"3dlu, fill:pref:grow, center:pref, 3dlu",
-				"pref");
-		JPanel fadePanel = new JPanel(fadeLayout){
-			@Override
-			public Insets getInsets() {
-				Insets retVal = super.getInsets();
-				
-				// make both slider line up in the menu
-				retVal.left += UIManager.getIcon("Tree.collapsedIcon").getIconWidth();
-				retVal.left += smallLbl.getPreferredSize().width;
-				
-				return retVal;
-			}
-		};
-//		scalePanel.add(smallLbl, cc.xy(2, 1));
-		fadePanel.add(fadeSlider, cc.xy(2, 1));
-		fadePanel.add(fadeLabel, cc.xy(3, 1));
-		
-		JMenuItem fadeItem = new JMenuItem("Fade opacity");
-		fadeItem.setEnabled(false);
-		menu.add(fadeItem);
-		menu.add(fadePanel);
 	}
 	
 	/**
@@ -1541,15 +1331,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		setSavedHighlightRecent(newVal);
 		
 		repaint();
-	}
-	
-	/**
-	 * Toggle window fading
-	 */
-	public void onToggleFadeWindow(PhonActionEvent pae) {
-		boolean newVal = !isFadeWindow();
-		setFadeWindow(newVal);
-		setSavedFadeWindow(newVal);
 	}
 	
 	/**
@@ -1662,26 +1443,12 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		searchContainer.remove(oldToggle);
 		searchContainer.remove(oldPanel);
 		
-//		Action toggleAction = searchPanel.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION);
-//		
-//		// use the collapse/expand icons from the JTree UI
-//		toggleAction.putValue(JXCollapsiblePane.COLLAPSE_ICON,
-//		                      UIManager.getIcon("Tree.expandedIcon"));
-//		toggleAction.putValue(JXCollapsiblePane.EXPAND_ICON,
-//		                      UIManager.getIcon("Tree.collapsedIcon"));
-//		toggleAction.putValue(Action.NAME, grid.getName());
-//		
-//		searchToggleButton.setAction(toggleAction);
-		
-//		searchToggleContainer.add(searchToggleButton);
-//		searchToggleContainer.add(searchField);
 		searchContainer.add(searchToggleButton);
 		searchContainer.add(searchPanel);
 		
 		boolean visible = searchResults.size() > 0;
 		searchContainer.setVisible(visible);
 		
-//		searchToggleContainer.validate();
 		searchContainer.validate();
 		
 		repaint();
@@ -1830,8 +1597,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 						convertGridPointToView(line.getObj2(), gridw, gridh) );
 				g2d.draw(l);
 			}
-//			Line2D line = new Line2D.Float(linex1, liney1, linex2, liney2);
-//			g2d.draw(line);
 		}
 		
 		private Point2D convertGridPointToView(Point2D p, int cw, int ch) {
@@ -1879,16 +1644,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			GridCellLayout grid = (GridCellLayout)arg1.getLayout();
 			int gridw = grid.getCellWidth();
 			int gridh = grid.getCellHeight();
-//			Stroke s = new BasicStroke(3.0f*getScale());
-//			g2d.setStroke(s);
 			g2d.setColor(Color.LIGHT_GRAY);
-//			for(LineSegment line:lines) {
-////				Line2D l = new Line2D.Float(
-////						convertGridPointToView(line.getObj1(), gridw, gridh), 
-////						convertGridPointToView(line.getObj2(), gridw, gridh) );
-////				g2d.draw(l);
-//				
-//			}
 			for(int x = 0; x < width; x+=4*gridw) {
 				g2d.drawLine(x, 0, x, height);
 			}
@@ -2236,4 +1992,5 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	@Override
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
 	}
+	
 }

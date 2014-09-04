@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,6 +45,9 @@ import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.action.CloseActionFactory;
+import bibliothek.gui.dock.common.event.CControlListener;
+import bibliothek.gui.dock.common.event.CDockableLocationEvent;
+import bibliothek.gui.dock.common.event.CDockableLocationListener;
 import bibliothek.gui.dock.common.event.CDockableStateListener;
 import bibliothek.gui.dock.common.group.CGroupBehavior;
 import bibliothek.gui.dock.common.intern.CDockable;
@@ -60,6 +65,7 @@ import bibliothek.gui.dock.util.color.DockColor;
 import bibliothek.util.Filter;
 import bibliothek.util.xml.XElement;
 import bibliothek.util.xml.XIO;
+import ca.phon.app.log.actions.SaveLogBufferAction;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -114,6 +120,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		super();
 		
 		editorRef = new WeakReference<SessionEditor>(editor);
+		editor.addWindowListener(windowChangeListener);
 	}
 	
 	private CControl getDockControl() {
@@ -127,8 +134,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	private void setupDockControl() {	
 		// theme
 		dockControl.setTheme(ThemeMap.KEY_FLAT_THEME);
-		
-//		dockControl.setGroupBehavior(CGroupBehavior.TOPMOST);
 		
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
@@ -319,6 +324,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			default:
 				break;
 			}
+			
+			savePreviousPerspective();
 		}
 	}
 
@@ -396,6 +403,20 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 	}
 	
+	private void savePreviousPerspective() {
+		final File prevPerspetiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER, 
+				RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME + ".xml");
+		try {
+			final RecordEditorPerspective prevPerspective = 
+					new RecordEditorPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME, 
+							prevPerspetiveFile.toURI().toURL());
+			savePerspective(prevPerspective);
+		} catch (MalformedURLException e1) {
+			LOGGER
+					.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+		}
+	}
+	
 	@Override
 	public void removePrespective(RecordEditorPerspective editorPerspective) {
 		dockControl.getPerspectives().removePerspective(editorPerspective.getName());
@@ -420,6 +441,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			final EditorView editorView = getView(id);
 			if(editorView != null) {
 				retVal = new EditorViewDockable(editorView.getName(), editorView, new CAction[0]);
+				retVal.addCDockableLocationListener(dockableLocationListener);
 			}
 			return retVal;
 		}
@@ -729,5 +751,46 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}	
 	}
+
+	private final WindowListener windowChangeListener = new WindowListener() {
+		
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
+		
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
+		
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
+		
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
+		
+		@Override
+		public void windowClosing(WindowEvent e) {
+			savePreviousPerspective();
+		}
+		
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+		
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
+	};
+	
+	private final CDockableLocationListener dockableLocationListener = new CDockableLocationListener() {
+		
+		@Override
+		public void changed(CDockableLocationEvent event) {
+			savePreviousPerspective();
+		}
+		
+	};
 	
 }

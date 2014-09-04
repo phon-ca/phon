@@ -29,92 +29,22 @@ public class ReportHelper {
 	
 	public static String createResultString(Result r) 
 	{
-		final int numVals = r.getResultValues().size();
+		final int numVals = r.getNumberOfResultValues();
 		String[] rvals = new String[numVals];
 		for(int i = 0; i < numVals; i++) {
-			rvals[i] = r.getResultValues().get(i).getData();
+			rvals[i] = r.getResultValue(i).getData();
 		}
 		return createReportString(rvals, r.getSchema());
 	}
 	
 	public static String createResultSchemaString(Result r) 
 	{
-		final int numVals = r.getResultValues().size();
+		final int numVals = r.getNumberOfResultValues();
 		String[] rvals = new String[numVals];
 		for(int i = 0; i < numVals; i++) {
-			rvals[i] = r.getResultValues().get(i).getTierName();
+			rvals[i] = r.getResultValue(i).getTierName();
 		}
 		return createReportString(rvals, r.getSchema());
-	}
-	
-	@Deprecated
-	public static void getDataBreakdown(ResultSet s,
-			/*out*/ Map<String, Map<String, Integer>> dataBreakdown,
-			boolean caseSensitive) {
-//		// Query
-//		String qSt = 
-//			"SELECT RID, RVID, TIERNAME, DATA FROM " +
-//			"VIEWRESULTVALUES WHERE RID = ? ORDER BY RVID";
-//		
-//		// get a connection
-//		Connection conn = QueryDBManager.connect();
-//		
-//		if(conn != null) {
-//			PreparedStatement stmt = null;
-//			try {
-//				stmt = QueryDBManager.getInstance().prepareStatement(conn, qSt);
-//			} catch (SQLException e) {
-//				PhonLogger.warning(e.toString());
-//				return;
-//			}
-//			
-//			// for each result, get the tier list (in order)
-//			for(int rIndex = 0; rIndex < s.numberOfResults(); rIndex++) {
-//				Result r = s.getResult(rIndex);
-//				
-//				try {
-//					stmt.setLong(1, r.getId());
-//					
-//					List<String> tierNames = new ArrayList<String>();
-//					List<String> vals = new ArrayList<String>();
-////					boolean aligned = false;
-//					java.sql.ResultSet rs = stmt.executeQuery();
-//					while(rs.next()) {
-//						String tier = rs.getString("TIERNAME");
-//						tierNames.add(tier);
-//						String v = rs.getString("DATA");
-//						vals.add(v);
-////						if(!aligned && r.getType().equals("ALIGNED")) {
-////							aligned = true;
-////						}
-//					}
-//					rs.close();
-//					
-//					// Create key string
-//					String keyString = 
-//						createReportString(tierNames.toArray(new String[0]), r.getType());
-//					if(!caseSensitive)
-//						keyString = keyString.toLowerCase();
-//					String resultString = 
-//						createReportString(vals.toArray(new String[0]), r.getType());
-//					if(!caseSensitive)
-//						resultString = resultString.toLowerCase();
-//					Map<String, Integer> tierData = dataBreakdown.get(keyString);
-//					if(tierData == null) {
-//						tierData = new HashMap<String, Integer>();
-//						dataBreakdown.put(keyString, tierData);
-//					}
-//					Integer v = tierData.get(resultString);
-//					if(v == null) {
-//						v = new Integer(0);
-//					}
-//					v++;
-//					tierData.put(resultString, v);
-//				} catch (SQLException e) {
-//					PhonLogger.warning(e.toString());
-//				}
-//			}
-//		}
 	}
 	
 	private static final char sepChar = ',';

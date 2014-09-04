@@ -173,7 +173,7 @@ public class InventoryDataSource implements TableDataSource {
 		for(ResultSet s:searches) {
 			final int numResults = s.size();
 			for(int rIdx = 0; rIdx < numResults; rIdx++) {
-				Result result = s.getResults().get(rIdx);
+				Result result = s.getResult(rIdx);
 				
 				if(result.isExcluded()) {
 					if(!isIncludeExcluded()) continue;

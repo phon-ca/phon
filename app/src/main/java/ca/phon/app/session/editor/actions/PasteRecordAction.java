@@ -46,7 +46,7 @@ public class PasteRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e1) {
+	public void hookableActionPerformed(ActionEvent e1) {
 		final Transferable clipboardContents = 
 				Toolkit.getDefaultToolkit().getSystemClipboard().getContents(getEditor());
 		if(clipboardContents == null) return;

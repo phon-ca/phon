@@ -43,7 +43,7 @@ public class GoToEndOfSegmentedAction extends MediaPlayerAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getMediaPlayerView().onMenuGoto(new PhonActionEvent(e, participant));
 	}
 

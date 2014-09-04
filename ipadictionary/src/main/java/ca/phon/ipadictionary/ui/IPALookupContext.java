@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.ipadictionary.spi.AddEntry;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
@@ -263,7 +264,6 @@ public class IPALookupContext {
 		
 		String msg = "Found " + dictLangs.size()  + " dictionaries:";
 
-//		PhonLogger.info("Found " + dictLangs.length + " dictionaries:");
 		for(Language dict:dictLangs) {
 			msg += "\n\t" + dict;
 		}
@@ -391,8 +391,7 @@ public class IPALookupContext {
 	 * Create
 	 */
 	public void createDictionary(String lang, String name) {
-//		IPADictionaries.createDictionary(lang, name);
-//		fireDictionaryAdded(lang);
+		
 	}
 	
 	/**

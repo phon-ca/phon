@@ -22,7 +22,7 @@ public class TakeSnapshotAction extends MediaPlayerAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getMediaPlayerView().getPlayer().onTakeSnapshot(new PhonActionEvent(e));
 	}
 

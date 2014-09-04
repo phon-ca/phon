@@ -20,6 +20,7 @@ package ca.phon.query.db.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,13 +73,7 @@ public class XMLLazyResultSet extends XMLResultSet {
 			}
 		}
 	}
-
-	@Override
-	public List<Result> getResults() {
-		loadData();
-		return super.getResults();
-	}
-
+	
 	@Override
 	public ResultSetType getXMLObject() {
 		loadData();
@@ -108,6 +103,23 @@ public class XMLLazyResultSet extends XMLResultSet {
 		loadData();
 		super.addResult(res);
 	}
-	
+
+	@Override
+	public int numberOfResults(boolean includeExcluded) {
+		loadData();
+		return super.numberOfResults(includeExcluded);
+	}
+
+	@Override
+	public Iterator<Result> iterator(boolean includeExcluded) {
+		loadData();
+		return super.iterator(includeExcluded);
+	}
+
+	@Override
+	public Iterator<Result> iterator() {
+		loadData();
+		return super.iterator();
+	}
 	
 }

@@ -43,7 +43,7 @@ public class SaveSessionAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent ae) {
+	public void hookableActionPerformed(ActionEvent ae) {
 		try {
 			getEditor().saveData();
 		} catch (IOException e) {

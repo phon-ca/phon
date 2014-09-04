@@ -40,7 +40,7 @@ public class NewTierAction extends TierManagementAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		TierEditorDialog newTierDialog = new TierEditorDialog(false);
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
 		newTierDialog.add(tierEditor);

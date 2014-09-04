@@ -38,7 +38,7 @@ public class PlaySegmentAction extends MediaPlayerAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final MediaPlayerEditorView view = getMediaPlayerView();
 		view.onPlaySpeakerSegment(new PhonActionEvent(e));
 	}

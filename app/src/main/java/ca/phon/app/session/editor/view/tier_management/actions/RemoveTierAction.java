@@ -26,7 +26,7 @@ public class RemoveTierAction extends TierManagementAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final RemoveTierEdit edit = new RemoveTierEdit(getEditor(), td, tvi);
 		getEditor().getUndoSupport().postEdit(edit);
 	}

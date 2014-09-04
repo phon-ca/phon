@@ -67,6 +67,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.query.report.csv.CSVTableDataWriter;
+import ca.phon.session.Participant;
+import ca.phon.session.Tier;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -101,7 +103,7 @@ public class SessionEditorQuickSearch {
 	 * Table model
 	 */
 	private FilterTableModel filterTableModel;
-	private SessionScriptTableModel tableModel;
+	private SessionTableModel tableModel;
 	
 	/**
 	 * Editor reference
@@ -120,13 +122,10 @@ public class SessionEditorQuickSearch {
 		super();
 		editorRef = new WeakReference<SessionEditor>(editor);
 		initComponents();
+		setupEditorActions();
 	}
 	
 	public JTable createTable() {
-		final Font ipaFont = 
-				PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-						Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-		
 		final JXTable table = new JXTable();
 		table.setColumnControlVisible(true);
 		table.setSortable(true);
@@ -134,18 +133,13 @@ public class SessionEditorQuickSearch {
 		table.getSelectionModel().addListSelectionListener(new SessionTableListener(table));
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addHighlighter(HighlighterFactory.createSimpleStriping(PhonGuiConstants.PHON_UI_STRIP_COLOR));
-		table.setFont(ipaFont);
 		
 		return table;
 	}
 	
 	private void initComponents() {
-		final Font ipaFont = 
-				PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT, 
-						Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT));
-		
 		tableModel = 
-				new SessionScriptTableModel(getEditor().getSession());
+				new SessionTableModel(getEditor().getSession());
 		filterTableModel = new FilterTableModel(tableModel);
 		table = createTable();
 		table.setModel(filterTableModel);
@@ -161,10 +155,9 @@ public class SessionEditorQuickSearch {
 		});
 		
 		searchField.setColumnLabel("tier");
-		searchField.setFont(ipaFont);
 		searchField.setColumns(20);
 		searchField.setAutoscrolls(true);
-		searchField.addKeyListener(new KeyListener() {
+		searchField.getTextField().addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -182,8 +175,30 @@ public class SessionEditorQuickSearch {
 				
 			}
 		});
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if(searchField.getState() == FieldState.INPUT) {
+					updateFilter();
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if(searchField.getState() == FieldState.INPUT) 
+					updateFilter();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
-		searchField.addFocusListener(new FocusListener() {
+		searchField.getTextField().addFocusListener(new FocusListener() {
 			
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -227,11 +242,11 @@ public class SessionEditorQuickSearch {
 	private void updateFilter() {
 		//searchField.updateTableFilter();
 		filterTableModel.setRowFilter(searchField.getRowFilter(searchField.getText()));
-//		if(searchField.getText().length() > 0) {
-//			showTablePopup();
-//		} else {
-//			hideTablePopup();
-//		}
+		if(searchField.getText().length() > 0) {
+			showTablePopup();
+		} else {
+			hideTablePopup();
+		}
 	}
 	
 	public void showRecordList() {
@@ -339,7 +354,7 @@ public class SessionEditorQuickSearch {
 	
 	public void setupEditorActions() {
 		final DelegateEditorAction tierChangeAct = new DelegateEditorAction(this, "onTierDataChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, tierChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangeAct);
 		
 		final DelegateEditorAction tierNumberChangedAct = new DelegateEditorAction(this, "onTierNumberChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, tierNumberChangedAct);
@@ -362,20 +377,16 @@ public class SessionEditorQuickSearch {
 	
 	@RunOnEDT
 	public void onTierDataChanged(EditorEvent ee) {
-		// get the current record index
-		final int recIdx = getEditor().getCurrentRecordIndex();
-		tableModel.setRowDirty(recIdx);
+		tableModel.fireTableDataChanged();
 	}
 	
 	@RunOnEDT
 	public void onTierNumberChanged(EditorEvent ee) {
-		// reset column layout
-		tableModel.resetColumns();
+		tableModel.fireTableStructureChanged();
 	}
 	
 	@RunOnEDT
 	public void onRecordNumberChanged(EditorEvent ee) {
-		tableModel.clearCache();
 		tableModel.fireTableDataChanged();
 	}
 	

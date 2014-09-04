@@ -20,7 +20,9 @@ import javax.swing.text.StyleConstants;
 
 
 
+
 import ca.phon.app.prefs.PhonProperties;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 public class LogBuffer extends JTextPane {
@@ -50,9 +52,7 @@ public class LogBuffer extends JTextPane {
 		
 		stdOutStream = new DocumentOutputStream(null);
 		
-		final Font font = PrefHelper.getFont(PhonProperties.IPA_UI_FONT, 
-				Font.decode(PhonProperties.DEFAULT_IPA_UI_FONT));
-		setFont(font);
+		setFont(FontPreferences.getMonospaceFont());
 	}
 	
 	public OutputStream getStdOutStream() {

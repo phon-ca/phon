@@ -44,9 +44,9 @@ public class RecordEditorPerspective {
 	private static final Logger LOGGER = Logger
 			.getLogger(RecordEditorPerspective.class.getName());
 	
-	public final static String DEFAULT_PERSPECTIVE = "Default";
+	public final static String DEFAULT_PERSPECTIVE_NAME = "Default";
 	
-	public final static String LAST_USED_PERSPECTIVE = "Previous";
+	public final static String LAST_USED_PERSPECTIVE_NAME = "Previous";
 	
 	private final static String PERSPECTIVE_LIST = "META-INF/layouts/layouts.list";
 	

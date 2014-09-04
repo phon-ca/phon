@@ -35,7 +35,7 @@ public class NextRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final int newIndex = 
 				(getEditor().getCurrentRecordIndex() == getEditor().getDataModel().getRecordCount()-1 ? 
 						getEditor().getCurrentRecordIndex() : getEditor().getCurrentRecordIndex()+1);

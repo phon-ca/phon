@@ -19,7 +19,7 @@
 <SyllabifierDef xmlns="https://www.phon.ca/ns/syllabifier"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://www.phon.ca/ns/syllabifier ../../xml/xsd/syllabifier.xsd"
-    name="Dutch (ambisyllabic)" language="nld-ambi">
+    name="Dutch-ambisyllabic" language="nld-ambi">
     
     <SonorityScale>
         <!-- Plosive,Fricative,Affricate - 0 -->

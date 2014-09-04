@@ -17,15 +17,21 @@
  */
 package ca.phon.plugin;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -254,6 +260,10 @@ public class PluginManager extends URLClassLoader {
 		List<IPluginExtensionPoint<T>> retVal = 
 			new ArrayList<IPluginExtensionPoint<T>>();
 		
+		// load extension point from specific files - preferred method!
+		retVal.addAll(loadExtensionPoints(clazz));
+		
+		// deprecated method, supported while things get converted in plug-ins
 		ServiceLoader<IPluginExtensionPoint> extPtProvider = 
 			ServiceLoader.load(IPluginExtensionPoint.class, this);
 		Iterator<IPluginExtensionPoint> extPtItr = 
@@ -274,6 +284,66 @@ public class PluginManager extends URLClassLoader {
 				LOGGER.warning(e.getMessage());
 				e.printStackTrace();
 			}
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Load extension point implementations for the given class.
+	 * The extension point class list is located at
+	 * META-INF/extpts/<classname>
+	 * 
+	 * This is the preferred method of defining extension point
+	 * implementations, the {@link ServiceLoader} method is still
+	 * supported but deprecated.
+	 */
+	@SuppressWarnings("unchecked")
+	private <T> List<IPluginExtensionPoint<T>> loadExtensionPoints(Class<T> clazz) {
+		List<IPluginExtensionPoint<T>> retVal = 
+				new ArrayList<IPluginExtensionPoint<T>>();
+		
+		final String extPtFile = "META-INF/extpts/" + clazz.getName();
+		
+		try {
+			final Enumeration<URL> urlList = getResources(extPtFile);
+			while(urlList.hasMoreElements()) {
+				final URL url = urlList.nextElement();
+				final InputStream in = url.openStream();
+				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				String line = null;
+				while((line = reader.readLine()) != null) {
+					if(line.startsWith("#") || line.trim().length() == 0) continue;
+					
+					final String extPtName = line.trim();
+					try {
+						final Class<?> extPtClazz = Class.forName(extPtName, true, this);
+						
+						// make sure we have an extension point
+						if(IPluginExtensionPoint.class.isAssignableFrom(extPtClazz)) {
+							try {
+								final IPluginExtensionPoint<?> extPt = 
+										IPluginExtensionPoint.class.cast(extPtClazz.newInstance());
+								
+								if(extPt.getExtensionType().isAssignableFrom(clazz)) {
+									retVal.add((IPluginExtensionPoint<T>)extPt);
+								}
+							} catch (InstantiationException e) {
+								LOGGER.log(Level.SEVERE,
+										e.getLocalizedMessage(), e);
+							} catch (IllegalAccessException e) {
+								LOGGER.log(Level.SEVERE,
+										e.getLocalizedMessage(), e);
+							}
+						}
+					} catch (ClassNotFoundException e) {
+						LOGGER.log(Level.SEVERE,
+								e.getLocalizedMessage(), e);
+					}
+				}
+			}
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;

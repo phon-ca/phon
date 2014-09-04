@@ -187,6 +187,11 @@ public class ParticipantImpl implements Participant {
 		return extSupport.removeExtension(cap);
 	}
 	
+	public String toString() {
+		return (getName() != null ? getName() : 
+				(getId() != null ? getId() : getRole().toString() ));
+	}
+	
 //	@Override
 //	public Object clone() {
 //		final ParticipantImpl retVal = new ParticipantImpl();

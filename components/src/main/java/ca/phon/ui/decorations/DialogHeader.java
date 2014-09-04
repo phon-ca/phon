@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.peer.FontPeer;
 
 import javax.swing.ImageIcon;
 
@@ -36,6 +37,7 @@ import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.PinstripePainter;
 
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -59,6 +61,7 @@ public class DialogHeader extends JXHeader {
 		super();
 		
 		super.setTitle(header);
+		super.setTitleFont(FontPreferences.getTitleFont());
 		super.setDescription(description);
 		
 		super.setTitleFont(getTitleFont().deriveFont(Font.BOLD, 16.0f));

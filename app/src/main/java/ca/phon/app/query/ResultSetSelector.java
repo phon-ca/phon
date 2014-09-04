@@ -164,7 +164,7 @@ public class ResultSetSelector extends JPanel {
 		
 		if(hideEmptyBox.isSelected()) {
 			for(ResultSet rs:selected) {
-				if(rs.getResults().size() == 0) {
+				if(rs.numberOfResults(true) == 0) {
 					retVal.remove(rs);
 				}
 			}

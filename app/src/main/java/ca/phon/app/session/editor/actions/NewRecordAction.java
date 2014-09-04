@@ -38,7 +38,7 @@ public class NewRecordAction extends SessionEditorAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final AddRecordEdit edit = new AddRecordEdit(getEditor());
 		getEditor().getUndoSupport().postEdit(edit);
 	}

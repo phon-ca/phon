@@ -56,26 +56,6 @@ public class PhonProperties {
 	public final static String DEFAULT_IPADICTIONARY_LANGUAGE = "eng";
 	
 	/**
-	 * Transcription font
-	 */
-	public final static String IPA_TRANSCRIPT_FONT = IPATranscript.class.getName() + ".transcriptFont";
-	
-	/**
-	 * Default transcription font
-	 */
-	public final static String DEFAULT_IPA_TRANSCRIPT_FONT = "Charis SIL-12-PLAIN";
-	
-	/**
-	 * UI transcript font
-	 */
-	public final static String IPA_UI_FONT = IPATranscript.class.getName() + ".uiFont";
-	
-	/**
-	 * Default UI font
-	 */
-	public final static String DEFAULT_IPA_UI_FONT = "Charis SIL Compact-12-PLAIN"; 
-	
-	/**
 	 * UI Theme
 	 */
 	public final static String UI_THEME = "ca.phon.app.ui.theme";

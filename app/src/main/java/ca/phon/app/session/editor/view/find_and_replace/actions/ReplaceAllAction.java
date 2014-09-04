@@ -21,7 +21,7 @@ public class ReplaceAllAction extends FindAndReplaceAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getView().replaceAll();
 	}
 

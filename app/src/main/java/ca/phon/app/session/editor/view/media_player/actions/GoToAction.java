@@ -28,7 +28,7 @@ public class GoToAction extends MediaPlayerAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		try {
 			getMediaPlayerView().onMenuSelectGoto(new PhonActionEvent(e));
 		} catch (ParseException e1) {

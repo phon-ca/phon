@@ -30,6 +30,7 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.TextField;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.Area;
@@ -264,6 +265,10 @@ public class SearchField extends JPanel {
 	
 	public Document getDocument() {
 		return queryField.getDocument();
+	}
+	
+	public PromptedTextField getTextField() {
+		return queryField;
 	}
 
 	/**

@@ -49,7 +49,6 @@ public class PreferencesEP implements IPluginEntryPoint {
 					dlg = new PrefsDialog(currentFrame);
 				else
 					dlg = new PrefsDialog();
-				dlg.setVisible(true);
 				dlg.setModal(true);
 				
 				dlg.pack();

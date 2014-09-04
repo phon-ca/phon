@@ -19,6 +19,8 @@ package ca.phon.app.query;
 
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
@@ -45,31 +47,41 @@ public class QueryHistoryEP implements IPluginEntryPoint {
 		// check args
 		if(initInfo.get("project") == null)
 			throw new IllegalArgumentException("A project must be given.");
-		Project project = (Project)initInfo.get("project");
+		final Project project = (Project)initInfo.get("project");
 		
-		// look for an existing query history window
-		QueryHistory window = null;
-		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			if(cmf instanceof QueryHistory) {
-				final QueryHistory qh = (QueryHistory)cmf;
-				if(qh.getProject() == project) {
-					window = (QueryHistory)cmf;
-					break;
+		final Runnable onEDT = new Runnable() {
+			
+			@Override
+			public void run() {
+				// look for an existing query history window
+				QueryHistory window = null;
+				for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+					if(cmf instanceof QueryHistory) {
+						final QueryHistory qh = (QueryHistory)cmf;
+						if(qh.getProject() == project) {
+							window = (QueryHistory)cmf;
+							break;
+						}
+					}
+				}
+				
+				// bring located window to front, create a new window if existing 
+				// query history is not found
+				if(window != null) {
+					window.toFront();
+					window.requestFocus();
+				} else {
+					window = new QueryHistory(project);
+					window.pack();
+					window.setLocationByPlatform(true);
+					window.setVisible(true);
 				}
 			}
-		}
-		
-		// bring located window to front, create a new window if existing 
-		// query history is not found
-		if(window != null) {
-			window.toFront();
-			window.requestFocus();
-		} else {
-			window = new QueryHistory(project);
-			window.pack();
-			window.setLocationByPlatform(true);
-			window.setVisible(true);
-		}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			SwingUtilities.invokeLater(onEDT);
 	}
 
 }

@@ -280,6 +280,12 @@ public class CSVReportBuilder extends ReportBuilder {
 			if(sectionWriter != null) {
 				sectionWriter.writeSection(writer, getIndentLevel());
 				writer.writeNext(new String[0]);
+				try {
+					writer.flush();
+				} catch (IOException e) {
+					LOGGER
+							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
 			}
  
 //			if(isPrintSectionNames() && isIndentContent())
@@ -352,6 +358,7 @@ public class CSVReportBuilder extends ReportBuilder {
 					writer.writeNext(currentLine.toArray(new String[0]));
 				}
 				writer.writeNext(new String[0]);
+				writer.flush();
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}

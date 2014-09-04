@@ -241,7 +241,7 @@ function query_record(recordIndex, record) {
     			rv.groupIndex = group.groupIndex;
     			rv.range = new Range(startIndex, startIndex + length, false);
     			rv.data = match.value;
-    			result.resultValues.add(rv);
+    			result.addResultValue(rv);
     			
     			if(includeAligned) {
     			    var phoneMap = group.phoneAlignment;
@@ -269,7 +269,7 @@ function query_record(recordIndex, record) {
     			   		alignedRv.data = "";
     			   	}
     			    
-    			    result.resultValues.add(alignedRv);
+    			    result.addResultValue(alignedRv);
     			    result.schema = "ALIGNED";
     			}
     			

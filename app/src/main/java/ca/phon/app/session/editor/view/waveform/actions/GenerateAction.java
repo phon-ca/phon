@@ -21,7 +21,7 @@ public class GenerateAction extends WaveformEditorViewAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		getView().generateAudioFile();
 	}
 

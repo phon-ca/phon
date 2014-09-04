@@ -7,3 +7,5 @@ ipadictionary/src/main/resources/META-INF/dict
 *.backup
 *.versionsBackup
 .Changes.md.html
+app/derby.log
+Thumbs.db

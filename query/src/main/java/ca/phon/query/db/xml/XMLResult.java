@@ -20,16 +20,13 @@ package ca.phon.query.db.xml;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import ca.phon.query.db.ReportHelper;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
-import ca.phon.query.db.xml.JAXBArrayList.Mapper;
 import ca.phon.query.db.xml.io.resultset.MetaType;
 import ca.phon.query.db.xml.io.resultset.ResultType;
-import ca.phon.query.db.xml.io.resultset.ResultValueType;
 
 /**
  * XML-based implementation of {@link Result}.
@@ -144,25 +141,6 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 	public void setSchema(String format) {
 		result.setSchema(format == null ? "" : format);
 	}
-
-	@Override
-	public List<ResultValue> getResultValues() {
-		Mapper<ResultValue, ResultValueType> mapper = new Mapper<ResultValue, ResultValueType>() {
-			@Override
-			public ResultValueType map(ResultValue x) {
-				if(x instanceof XMLResultValue)
-					return ((XMLResultValue)x).getXMLObject();
-				return null;
-			}
-
-			@Override
-			public ResultValue create(ResultValueType x) {
-				return new XMLResultValue(x);
-			}
-		};
-		
-		return new JAXBArrayList<ResultValue, ResultValueType>(result.getResultValue(), mapper);
-	}
 	
 	@Override
 	public String toString() {
@@ -181,5 +159,64 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 		if(xmlObj != null) {
 			xmlObj.setExcluded(excluded);
 		}
+	}
+
+	@Override
+	public Iterator<ResultValue> iterator() {
+		return new ResultValueIterator();
+	}
+
+	@Override
+	public int getNumberOfResultValues() {
+		return result.getResultValue().size();
+	}
+
+	@Override
+	public ResultValue getResultValue(int idx) {
+		return new XMLResultValue(result.getResultValue().get(idx));
+	}
+
+	@Override
+	public ResultValue removeResultValue(int idx) {
+		final ResultValue retVal = getResultValue(idx);
+		result.getResultValue().remove(idx);
+		return retVal;
+	}
+
+	@Override
+	public int addResultValue(ResultValue resultValue) {
+		if(resultValue instanceof XMLResultValue) {
+			result.getResultValue().add(((XMLResultValue)resultValue).getXMLObject());
+			return result.getResultValue().size() - 1;
+		} else {
+			// convert type
+			final XMLResultValue xmlResultVal = new XMLResultValue();
+			xmlResultVal.setData(resultValue.getData());
+			xmlResultVal.setGroupIndex(resultValue.getGroupIndex());
+			xmlResultVal.setTierName(resultValue.getTierName());
+			xmlResultVal.setRange(resultValue.getRange());
+			return addResultValue(xmlResultVal);
+		}
+	}
+	
+	private final class ResultValueIterator implements Iterator<ResultValue> {
+		
+		private volatile int idx = 0;
+
+		@Override
+		public boolean hasNext() {
+			return idx < getNumberOfResultValues();
+		}
+
+		@Override
+		public ResultValue next() {
+			return new XMLResultValue(result.getResultValue().get(idx++));
+		}
+
+		@Override
+		public void remove() {
+			result.getResultValue().remove(idx);
+		}
+		
 	}
 }

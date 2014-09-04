@@ -41,7 +41,7 @@ public class ResultSetRecordFilter extends AbstractRecordFilter {
 	public ResultSetRecordFilter(Session t, ResultSet s) {
 		this.resultSet = s;
 		this.t = t;
-		for(Result r : resultSet.getResults())
+		for(Result r : resultSet)
 			resultRecords.add(r.getRecordIndex());
 	}
 

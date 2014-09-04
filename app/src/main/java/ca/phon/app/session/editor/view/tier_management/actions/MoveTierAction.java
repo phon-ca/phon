@@ -27,7 +27,7 @@ public class MoveTierAction extends TierManagementAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final List<TierViewItem> view = getEditor().getSession().getTierView();
 		final List<TierViewItem> newView = new ArrayList<TierViewItem>(view);
 		final int currentIndex = view.indexOf(item);

@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.JTextComponent;
 
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
@@ -44,8 +45,10 @@ import ca.phon.util.PrefHelper;
  * </ul>
  *</p>
  */
-public class IpaMapFrame extends JFrame {
+public class IpaMapFrame extends CommonModuleFrame {
 	
+	private static final long serialVersionUID = 5216574250809340476L;
+
 	/**
 	 * Property to save window location
 	 */
@@ -89,9 +92,8 @@ public class IpaMapFrame extends JFrame {
 	 */
 	public IpaMapFrame() {
 		super("IPA Chart");
-		
-		super.setFocusableWindowState(false);
 		super.setAlwaysOnTop(true);
+		setFocusableWindowState(false);
 		
 		init();
 	}
@@ -107,11 +109,6 @@ public class IpaMapFrame extends JFrame {
 		WindowMoveListener l = new WindowMoveListener();
 		super.addMouseListener(l);
 		super.addMouseMotionListener(l);
-		
-//		GlassPaneFadeHandler gpfh = new GlassPaneFadeHandler(getGlassPane());
-//		getGlassPane().setVisible(true);
-		
-//		Toolkit.getDefaultToolkit().addAWTEventListener(new FadeListener(), AWTEvent.MOUSE_EVENT_MASK);
 		
 		mapContents.addListener(new ButtonListener());
 	}
@@ -153,19 +150,6 @@ public class IpaMapFrame extends JFrame {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(evt.getPropertyName().equals(IpaMap.SCALE_PROP)) {
 				mapContents.updateDisplay();
-				Dimension screenDim = 
-					Toolkit.getDefaultToolkit().getScreenSize();
-				// calculate new window size
-				int w = mapContents.getPreferredSize().width + ((new JScrollPane()).getVerticalScrollBar().getPreferredSize().width);
-				if(w > (2 * (screenDim.width/3)))
-					w = 2 * (screenDim.width/3);
-				int h = mapContents.getPreferredSize().height;
-				if(h > screenDim.height)
-					h = screenDim.height;
-				
-				Point loc = IpaMapFrame.this.getLocation();
-//				IpaMapFrame.this.setBounds(loc.x, loc.y, w, h);
-				IpaMapFrame.this.setSize(w, h);
 			}
 		}
 		
@@ -188,136 +172,6 @@ public class IpaMapFrame extends JFrame {
 			}
 		}
 		
-	}
-	
-	/**
-	 * Listener for fading in and out the window (if supported)
-	 */
-	private class FadeListener implements AWTEventListener {
-		
-		boolean hasExited = true;
-
-		@Override
-		public void eventDispatched(AWTEvent event) {
-//			if(!IpaMapFrame.this.isVisible() || !mapContents.isFadeWindow()) return;
-//			// only process mouse events for this window
-//			if(SwingUtilities.isDescendingFrom((Component)event.getSource(),
-//					IpaMapFrame.this) && event instanceof MouseEvent) {
-////				if(AWTUtilities.getWindowOpacity(IpaMapFrame.this) < 1.0f) {
-////					AWTUtilities.setWindowOpacity(IpaMapFrame.this, 1.0f);
-////				}
-//			} else {
-////				if(AWTUtilities.getWindowOpacity(IpaMapFrame.this) >= 1.0f) {
-////					AWTUtilities.setWindowOpacity(IpaMapFrame.this, mapContents.getFadeOpacity());
-////				}
-//			}
-		}
-		
-	}
-	
-	/**
-	 * Pass-thru mouse handler for the glasspane, another
-	 * approach to detecting when to fade the window
-	 */
-	private class GlassPaneFadeHandler extends MouseInputAdapter {
-		
-		/**
-		 * Install the handler on the given component
-		 * @param c
-		 */
-		public GlassPaneFadeHandler(Component c) {
-			c.addMouseListener(this);
-			c.addMouseMotionListener(this);
-			c.addMouseWheelListener(this);
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			redispatch(e);
-		}
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			redispatch(e);
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-//			AWTUtilities.setWindowOpacity(IpaMapFrame.this, 1.0f);
-			redispatch(e);
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-//			AWTUtilities.setWindowOpacity(IpaMapFrame.this, 0.1f);
-			redispatch(e);
-//			super.mouseExited(e);
-		}
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			redispatch(e);
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			redispatch(e);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			redispatch(e);
-		}
-
-		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-			redispatch(e);
-		}
-		
-		/*
-		 * Redirect the mouse event the 
-		 * underlying component
-		 */
-		private void redispatch(MouseEvent e) {
-			 Point glassPanePoint = e.getPoint();
-			    Container container = IpaMapFrame.this.getContentPane();
-			    Component glassPane = IpaMapFrame.this.getGlassPane();
-			    Component contentPane = mapContents;
-			    Point containerPoint = SwingUtilities.convertPoint(
-			                                    glassPane,
-			                                    glassPanePoint,
-			                                    contentPane);
-
-			    if (containerPoint.y < 0) { //we're not in the content pane
-			        //Could have special code to handle mouse events over
-			        //the menu bar or non-system window decorations, such as
-			        //the ones provided by the Java look and feel.
-			    } else {
-			        //The mouse event is probably over the content pane.
-			        //Find out exactly which component it's over.
-			        Component component =
-			            SwingUtilities.getDeepestComponentAt(
-			                                    container,
-			                                    containerPoint.x,
-			                                    containerPoint.y);
-
-			        if ((component != null)) {
-			            //Forward events over the check box.
-			            Point componentPoint = SwingUtilities.convertPoint(
-			                                        glassPane,
-			                                        glassPanePoint,
-			                                        component);
-			            component.dispatchEvent(new MouseEvent(component,
-			                                                 e.getID(),
-			                                                 e.getWhen(),
-			                                                 e.getModifiers(),
-			                                                 componentPoint.x,
-			                                                 componentPoint.y,
-			                                                 e.getClickCount(),
-			                                                 e.isPopupTrigger()));
-			        }
-			    }
-		}
 	}
 	
 	/**

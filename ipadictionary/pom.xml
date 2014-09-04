@@ -3,7 +3,7 @@
   <parent>
     <artifactId>phon</artifactId>
     <groupId>ca.phon</groupId>
-    <version>1.7.0beta1</version>
+    <version>1.7.0beta2</version>
     <relativePath>..</relativePath>
   </parent>
  
@@ -35,6 +35,10 @@
       <groupId>ca.hedlund</groupId>
       <artifactId>tst</artifactId>
     </dependency>
+    <dependency>
+		<groupId>org.apache.derby</groupId>
+		<artifactId>derby</artifactId>
+	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

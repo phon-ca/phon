@@ -114,6 +114,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		final Transcriber transcriber = getTranscriber();
 		final IPATranscript groupVal = 
 				(super.getGroupValue() != null ? super.getGroupValue() : new IPATranscript());
+		if(object == null) object = new IPATranscript();
 		
 		if(transcriber != null) {
 			AlternativeTranscript alts = groupVal.getExtension(AlternativeTranscript.class);

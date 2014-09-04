@@ -8,7 +8,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabifyEdit;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipadictionary.impl.CompundDictionary;
+import ca.phon.ipadictionary.impl.CompoundDictionary;
 import ca.phon.session.Record;
 import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.Tier;
@@ -32,7 +32,7 @@ public class ResetSyllabificationCommand extends SyllabificationAlignmentCommand
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void hookableActionPerformed(ActionEvent e) {
 		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
 		final Record r = getEditor().currentRecord();
 		

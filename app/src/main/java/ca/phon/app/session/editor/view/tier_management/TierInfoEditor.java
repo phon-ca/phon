@@ -34,6 +34,7 @@ import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -95,8 +96,7 @@ public class TierInfoEditor extends JPanel {
 		
 		fontPanel = new JFontPanel();
 		fontPanel.setSelectedFont(
-				PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT,
-						Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT)));
+				FontPreferences.getTierFont());
 		
 		add(new JLabel("Font"), cc.xy(2, 5));
 		add(useDefaultFontButton, cc.xy(4, 5));
@@ -132,8 +132,7 @@ public class TierInfoEditor extends JPanel {
 	}
 	
 	public void useDefaultFont() {
-		fontPanel.setSelectedFont(PrefHelper.getFont(PhonProperties.IPA_TRANSCRIPT_FONT,
-				Font.decode(PhonProperties.DEFAULT_IPA_TRANSCRIPT_FONT)));
+		fontPanel.setSelectedFont(FontPreferences.getTierFont());
 	}
 
 	public boolean isEditMode() {
@@ -149,7 +148,11 @@ public class TierInfoEditor extends JPanel {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Font selectedFont = getTierFont();
 		final Formatter<Font> fontFormatter = FormatterFactory.createFormatter(Font.class);
-		final String fontString = (fontFormatter == null ? selectedFont.toString() : fontFormatter.format(selectedFont));
+		String fontString = 
+				(fontFormatter == null ? selectedFont.toString() : fontFormatter.format(selectedFont));
+		if(fontString.equals(PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT))) {
+			fontString = "default";
+		}
 		return factory.createTierViewItem(getTierName(), isVisible(), fontString);
 	}
 	

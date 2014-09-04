@@ -24,11 +24,7 @@ import java.util.Map;
 /**
  * Interface for the result of a Phon query. 
  */
-public interface Result {
-	/** The key used for storing a "default" piece of metadata */
-	@Deprecated
-	public static final String DEFAULT_META = "<default>";
-	
+public interface Result extends Iterable<ResultValue> {
 	/**
 	 * Gets the record index for this result.
 	 * 
@@ -63,13 +59,6 @@ public interface Result {
 	 * @param schema  the format 
 	 */
 	public abstract void setSchema(String schema);
-
-	/**
-	 * Gets the list of result values for this result.
-	 * 
-	 * @return the list of result values
-	 */
-	public abstract List<ResultValue> getResultValues();
 	
 	/**
 	 * Is this result excluded from reports
@@ -85,4 +74,38 @@ public interface Result {
 	 * @param excluded
 	 */
 	public abstract void setExcluded(boolean excluded);
+	
+	/**
+	 * Get the number of result values.
+	 * 
+	 * @return number of result values
+	 */
+	public abstract int getNumberOfResultValues();
+	
+	/**
+	 * Get the specified result value
+	 * 
+	 * @param idx
+	 * @return result value
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public abstract ResultValue getResultValue(int idx);
+	
+	/**
+	 * Remove the specified result value
+	 * 
+	 * @param idx
+	 * @return the removed result value
+	 */
+	public abstract ResultValue removeResultValue(int idx);
+	
+	/**
+	 * Add the given result value.
+	 * 
+	 * @param resultValue
+	 * @return index of added result value
+	 */
+	public abstract int addResultValue(ResultValue resultValue);
+	
 }
