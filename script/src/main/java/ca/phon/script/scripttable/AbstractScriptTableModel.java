@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -212,6 +213,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		return retVal;
 	}
 
+	private final AtomicReference<Scriptable> importerScopeRef = new AtomicReference<Scriptable>();
 	@Override
 	public Object getValueAt(int row, int col) {
 		Object retVal = null;
@@ -222,7 +224,11 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 			final Context ctx = PhonScriptContext.enter();
 			try {
 				final Scriptable parentScope = createCellScope(cScript, row, col);
-				final Scriptable scope = cScript.createImporterScope();
+				Scriptable scope = importerScopeRef.get();
+				if(scope == null) {
+					scope = cScript.createImporterScope();
+					importerScopeRef.getAndSet(scope);
+				}
 				scope.setParentScope(parentScope);
 				cScript.getCompiledScript().exec(ctx, scope);
 				
