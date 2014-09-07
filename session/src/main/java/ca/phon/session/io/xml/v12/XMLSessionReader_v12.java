@@ -242,7 +242,12 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			langs += (langs.length() > 0 ? ", " : "") + lang;
 		retVal.setLanguage(langs);
 
-		retVal.setSex(pt.getSex() == SexType.MALE ? Sex.MALE : Sex.FEMALE);
+		if(pt.getSex() == SexType.MALE)
+			retVal.setSex(Sex.MALE);
+		else if(pt.getSex() == SexType.FEMALE)
+			retVal.setSex(Sex.FEMALE);
+		else
+			retVal.setSex(Sex.UNSPECIFIED);
 		
 		ParticipantRole prole = ParticipantRole.fromString(pt.getRole());
 		if(prole == null)

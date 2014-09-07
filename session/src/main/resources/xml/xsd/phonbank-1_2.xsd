@@ -412,6 +412,7 @@ Schema for Phon sessions.
         <xs:restriction base="xs:NMTOKEN">
             <xs:enumeration value="male"/>
             <xs:enumeration value="female"/>
+            <xs:enumeration value="unspecified"/>
         </xs:restriction>
     </xs:simpleType>
 

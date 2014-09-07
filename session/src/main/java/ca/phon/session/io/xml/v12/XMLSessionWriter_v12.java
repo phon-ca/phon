@@ -205,7 +205,10 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			retVal.getLanguage().add(StringUtils.strip(l));
 		}
 
-		retVal.setSex(part.getSex() == Sex.MALE ? SexType.MALE : SexType.FEMALE);
+		if(part.getSex() == Sex.MALE)
+			retVal.setSex(SexType.MALE);
+		else if(part.getSex() == Sex.FEMALE)
+			retVal.setSex(SexType.FEMALE);
 		
 		ParticipantRole prole = part.getRole();
 		if(prole == null)

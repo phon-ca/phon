@@ -20,7 +20,8 @@ package ca.phon.session;
 
 public enum Sex {
 	MALE("M"),
-	FEMALE("F");
+	FEMALE("F"),
+	UNSPECIFIED("U");
 	
 	String val;
 	
