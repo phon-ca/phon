@@ -39,7 +39,8 @@ public enum IPATokenType {
     GROUP_NAME("Group name"),
     CLOSE_BRACE("Close brace"),
     DIGIT("Digit"),
-    INTRA_WORD_PAUSE("Intra-word pause");
+    INTRA_WORD_PAUSE("Intra-word pause"),
+    ALIGNMENT("Alignment");
 	
 	String tokenName = "Unknown";
 	
