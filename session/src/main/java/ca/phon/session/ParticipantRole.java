@@ -22,71 +22,74 @@ package ca.phon.session;
  *
  */
 public enum ParticipantRole {
-	TARGET_CHILD("Target Child"),
-	TARGET_ADULT("Target Adult"),
-	CHILD("Child"),
-	MOTHER("Mother"),
-	FATHER("Father"),
-	BROTHER("Brother"),
-	SISTER("Sister"),
-	SIBLING("Sibling"),
-	GRANDMOTHER("Grandmother"),
-	GRANDFATHER("Grandfather"),
-	AUNT("Aunt"),
-	UNCLE("Uncle"),
-	COUSIN("Cousin"),
-	FAMILY_FRIEND("Family Friend"),
-	STUDENT("Student"),
-	TEACHER("Teacher"),
-	PLAYMATE("Playmate"),
-	VISITOR("Visitor"),
-	BABYSITTER("Babysitter"),
-	CARETAKER("Caretaker"),
-	HOUSEKEEPER("Housekeeper"),
-	INVESTIGATOR("Investigator"),
-	OBSERVER("Observer"),
-	CLINICIAN("Clinician"),
-	THERAPIST("Therapist"),
-	INTERVIEWER("Interviewer"),
-	INFORMANT("Informant"),
-	PARTICIPANT("Participant"),
-	SUBJECT("Subject"),
-	PARTNER("Partner"),
-	DOCTOR("Doctor"),
-	NURSE("Nurse"),
-	PATIENT("Patient"),
-	UNIDENTIFIED("Unidentified"),
-	UNCERTAIN("Uncertain"),
-	CAMERA_OPERATOR("Camera Operator"),
-	GROUP("Group"),
-	NARRATOR("Narrator"),
-	ADULT("Adult"),
-	TEENAGER("Teenager"),
-	BOY("Boy"),
-	GIRL("Girl"),
-	MALE("Male"),
-	FEMALE("Female"),
-	NON_HUMAN("Non Human"),
-	TOY("Toy"),
-	MEDIA("Media"),
-	ENVIRONMENT("Environment"),
-	OFFSCRIPT("Offscript"),
-	TEXT("Text"),
-	PLAYROLE("PlayRole"),
-	JUSTICE("Justice"),
-	JUDGE("Judge"),
-	ATTORNEY("Attorney"),
-	SPEAKER("Speaker"),
-	SHOWHOST("ShowHost"),
-	SHOWGUEST("ShowGuest"),
-	OPERATOR("Operator"),
-	CALLER("Caller")
+	TARGET_CHILD("Target Child", "CHI"),
+	TARGET_ADULT("Target Adult", "ADU"),
+	CHILD("Child", "CHI"),
+	MOTHER("Mother", "MOT"),
+	FATHER("Father", "FAT"),
+	BROTHER("Brother", "BRO"),
+	SISTER("Sister", "SIS"),
+	SIBLING("Sibling", "SIB"),
+	GRANDMOTHER("Grandmother", "GRM"),
+	GRANDFATHER("Grandfather", "GRF"),
+	AUNT("Aunt", "AUN"),
+	UNCLE("Uncle", "UNC"),
+	COUSIN("Cousin", "COU"),
+	FAMILY_FRIEND("Family Friend", "FAM"),
+	STUDENT("Student", "STU"),
+	TEACHER("Teacher", "TEA"),
+	PLAYMATE("Playmate", "PLA"),
+	VISITOR("Visitor", "VIS"),
+	BABYSITTER("Babysitter", "SIT"),
+	CARETAKER("Caretaker", "CAR"),
+	HOUSEKEEPER("Housekeeper", "HOU"),
+	INVESTIGATOR("Investigator", "INV"),
+	OBSERVER("Observer", "OBS"),
+	CLINICIAN("Clinician", "CLI"),
+	THERAPIST("Therapist", "THE"),
+	INTERVIEWER("Interviewer", "INT"),
+	INFORMANT("Informant", "INF"),
+	PARTICIPANT("Participant", "PAR"),
+	SUBJECT("Subject", "SUB"),
+	PARTNER("Partner", "NER"),
+	DOCTOR("Doctor", "DOC"),
+	NURSE("Nurse", "NUR"),
+	PATIENT("Patient", "PAT"),
+	UNIDENTIFIED("Unidentified", "UNI"),
+	UNCERTAIN("Uncertain", "UNC"),
+	CAMERA_OPERATOR("Camera Operator", "CAM"),
+	GROUP("Group", "GRO"),
+	NARRATOR("Narrator", "NAR"),
+	ADULT("Adult", "ADU"),
+	TEENAGER("Teenager", "TEE"),
+	BOY("Boy", "BOY"),
+	GIRL("Girl", "GIR"),
+	MALE("Male", "MAL"),
+	FEMALE("Female", "FEM"),
+	NON_HUMAN("Non Human", "NOH"),
+	TOY("Toy", "TOY"),
+	MEDIA("Media", "MED"),
+	ENVIRONMENT("Environment", "ENV"),
+	OFFSCRIPT("Offscript", "OFF"),
+	TEXT("Text", "TXT"),
+	PLAYROLE("PlayRole", "PLR"),
+	JUSTICE("Justice", "JUS"),
+	JUDGE("Judge", "JUD"),
+	ATTORNEY("Attorney", "ATT"),
+	SPEAKER("Speaker", "SPE"),
+	SHOWHOST("ShowHost", "SHO"),
+	SHOWGUEST("ShowGuest", "SHG"),
+	OPERATOR("Operator", "OPR"),
+	CALLER("Caller", "CAL")
 	;
 
 	private String title;
 	
-	private ParticipantRole(String title) {
+	private String id;
+	
+	private ParticipantRole(String title, String id) {
 		this.title = title;
+		this.id = id;
 	}
 	
 	public static ParticipantRole fromString(String title) {
@@ -102,6 +105,10 @@ public enum ParticipantRole {
 		}
 		
 		return retVal;
+	}
+	
+	public String getId() {
+		return this.id;
 	}
 	
 	public String getTitle() {
