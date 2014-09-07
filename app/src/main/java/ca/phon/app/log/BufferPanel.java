@@ -21,11 +21,13 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import org.apache.commons.io.filefilter.FileFileFilter;
+import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -63,6 +65,7 @@ public class BufferPanel extends JPanel {
 		logBuffer = new LogBuffer(name);
 		dataTable = new JXTable();
 		dataTable.setColumnControlVisible(true);
+		dataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		init();
 	}
@@ -74,7 +77,7 @@ public class BufferPanel extends JPanel {
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		logScroller = new JScrollPane(logBuffer);
+		logScroller = new RTextScrollPane(logBuffer, true);
 		add(logScroller, BorderLayout.CENTER);
 		
 		final ActionMap am = dataTable.getActionMap();
@@ -90,7 +93,7 @@ public class BufferPanel extends JPanel {
 		dataTable.setActionMap(am);
 		dataTable.setInputMap(JComponent.WHEN_FOCUSED, im);
 		
-		tableScroller = new JScrollPane(dataTable);
+		tableScroller = new JScrollPane(dataTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	}
 	
 	public String getBufferName() {

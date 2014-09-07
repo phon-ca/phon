@@ -2,6 +2,9 @@ package ca.phon.app.log;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,11 +24,17 @@ import javax.swing.text.StyleConstants;
 
 
 
+
+
+
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
-public class LogBuffer extends JTextPane {
+public class LogBuffer extends RSyntaxTextArea {
 	
 	private static final Logger LOGGER = Logger.getLogger(LogBuffer.class
 			.getName());
@@ -51,6 +60,8 @@ public class LogBuffer extends JTextPane {
 		stdErrStream = new DocumentOutputStream(as);
 		
 		stdOutStream = new DocumentOutputStream(null);
+		
+		setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
 		
 		setFont(FontPreferences.getMonospaceFont());
 	}
@@ -119,6 +130,14 @@ public class LogBuffer extends JTextPane {
 			buffer = new ByteArrayOutputStream();
 		}
 		
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		final Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		super.paintComponent(g2);
 	}
 	
 }
