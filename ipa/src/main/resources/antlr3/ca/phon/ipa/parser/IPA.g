@@ -104,8 +104,8 @@ scope {
 	$transcription::builder = new IPATranscriptBuilder();
 }
 	:	w1=word {if($w1.w != null) { $transcription::builder.append($w1.w);} else { if(input.get(input.index()).getType() != EOF) return transcription(); } } 
-		(word_boundary {$transcription::builder.appendWordBoundary();}
-		w2=word {if($w2.w != null) { $transcription::builder.append($w2.w);} } )*
+		( (word_boundary {$transcription::builder.append($word_boundary.wordBoundary);})+
+		w2=word? {if($w2.w != null) { $transcription::builder.append($w2.w);} } )*
 	{
 		$transcript = $transcription::builder.toIPATranscript();
 	}
@@ -240,10 +240,14 @@ phonex_matcher_ref returns [IPAElement phonexMatcherRef]
 	}
 	;
 	
-word_boundary returns [WordBoundary wordBoundary]
+word_boundary returns [IPAElement wordBoundary]
 	:	SPACE
 	{
 		$wordBoundary = factory.createWordBoundary();
+	}
+	|	ALIGNMENT
+	{
+		$wordBoundary = factory.createAlignmentMarker();
 	}
 	;
 	

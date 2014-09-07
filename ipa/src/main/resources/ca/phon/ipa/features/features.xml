@@ -457,6 +457,7 @@
       <primary_family>diacritic</primary_family>
    </feature>
 
+   <feature_set char="&#x2194;">diacritic </feature_set>
    <!--Consonants-->
    <!-- X -->
    <feature_set char="&#x58;">unintelligible </feature_set>

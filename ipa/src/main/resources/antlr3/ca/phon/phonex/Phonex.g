@@ -323,6 +323,7 @@ LETTER
 	:	'a'..'z'
 	|	'A'..'Z'
 	|	'\u00e6'..'\u03df'
+	|	'\u2194'
 	;
 
 fragment

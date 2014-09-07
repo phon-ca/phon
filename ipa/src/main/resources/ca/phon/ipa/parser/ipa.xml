@@ -66,7 +66,10 @@
         <name>Caret</name>
         <token>INTRA_WORD_PAUSE</token>
     </char>
-    
+    <char value="&#x2194;">
+        <name>Left Right Arrow</name>
+        <token>ALIGNMENT</token>
+    </char>
     <char value="&#x01c3;">
         <name>Latin Letter Retroflex Click</name>
         <token>CONSONANT</token>

@@ -268,4 +268,13 @@ public class IPAElementFactory {
 	public PhonexMatcherReference createPhonexMatcherReference(String groupName) {
 		return new PhonexMatcherReference(groupName);
 	}
+	
+	/**
+	 * Create a new alignment marker (left-right arrow 0x2194)
+	 * 
+	 * @return
+	 */
+	public AlignmentMarker createAlignmentMarker() {
+		return new AlignmentMarker();
+	}
 }

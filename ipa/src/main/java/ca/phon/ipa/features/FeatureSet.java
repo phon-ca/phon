@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -32,8 +33,7 @@ import org.apache.commons.lang3.StringUtils;
  * set.
  *
  */
-public class FeatureSet 
-{
+public class FeatureSet implements Iterable<Feature> {
 	/** Sonority Class constants */
 	final static int STOP      = 0;
 	final static int FRICATIVE = 1;
@@ -49,9 +49,6 @@ public class FeatureSet
 	/** The character this feature set represents */
 	private char ipaChar;
 	
-	/** The collection of diacritics associated with this phone */
-//	private final Collection<FeatureSet> diacritics;
-	
 	/**
 	 * Utility method for creating features sets from
 	 * an array of values.
@@ -65,37 +62,33 @@ public class FeatureSet
 		Set<String> fs = new HashSet<String>();
 		
 		for(String f:features) {
-//			if(f.length() == 1) {
-//				FeatureSet charFs = FeatureMatrix.getInstance().getFeatureSet(f.charAt(0));
-//				fs.addAll(charFs.getFeatures());
-//			} else {
-				if(f.indexOf(',') >= 0) {
-					//seperate and add features
-					String[] tokens = f.split(",");
-					for(int i = 0; i < tokens.length; i++) {
-						String feature = StringUtils.strip(tokens[i]).toLowerCase();
-						Feature fObj = FeatureMatrix.getInstance().getFeature(feature);
-						if(fObj != null) {
-							fs.add(feature);
-						} else {
-							Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + feature);
-						}
-					}
-					
-				} else {
-					if(FeatureMatrix.getInstance().getFeature(f.toLowerCase()) != null) {
-						fs.add(f);
+			if(f.indexOf(',') >= 0) {
+				//seperate and add features
+				String[] tokens = f.split(",");
+				for(int i = 0; i < tokens.length; i++) {
+					String feature = StringUtils.strip(tokens[i]).toLowerCase();
+					Feature fObj = FeatureMatrix.getInstance().getFeature(feature);
+					if(fObj != null) {
+						fs.add(feature);
 					} else {
-						Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + f);
+						Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + feature);
 					}
 				}
-//			}
+				
+			} else {
+				if(FeatureMatrix.getInstance().getFeature(f.toLowerCase()) != null) {
+					fs.add(f);
+				} else {
+					Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + f);
+				}
+			}
 		}
 		
 		return new FeatureSet(fs);
 	}
 	
-	/** Create a new instance of a feature set
+	/** 
+	 * Create a new instance of a feature set
 	 * 
 	 */
 	public FeatureSet() {
@@ -109,7 +102,6 @@ public class FeatureSet
 		for(String f:features) {
 			addFeature(f);
 		}
-//		this.diacritics = new ArrayList<FeatureSet>();
 	}
 	
 	public FeatureSet(BitSet featureSet) {
@@ -119,7 +111,6 @@ public class FeatureSet
 	
 	/** Add a new feature to the set */
 	public FeatureSet addFeature(String feature) {
-//		this.features.add(feature);
 		FeatureSet fs = 
 			FeatureMatrix.getInstance().getFeatureSetForFeature(feature);
 		this.features.or(fs.features);
@@ -128,7 +119,6 @@ public class FeatureSet
 	
 	/** Remove a feature from the set */
 	public FeatureSet removeFeature(String feature) {
-//		this.features.remove(feature);
 		FeatureSet fs = 
 			FeatureMatrix.getInstance().getFeatureSetForFeature(feature);
 		this.features.andNot(fs.features);
@@ -137,7 +127,6 @@ public class FeatureSet
 	
 	/** Check for existance of a feature */
 	public boolean hasFeature(String feature) {
-//		return this.features.contains(feature);
 		FeatureSet fs = 
 			FeatureMatrix.getInstance().getFeatureSetForFeature(feature);
 		return this.features.intersects(fs.features);
@@ -146,16 +135,13 @@ public class FeatureSet
 	/** Returnt the features.  This is not a live list. */
 	public Collection<String> getFeatures() {
 		Collection<String> retVal = new ArrayList<String>();
-//		Set<String> featureSet = FeatureMatrix.getInstance().getFeatures();
-//		String allFeatures[] = featureSet.toArray(new String[0]);
-//		
+
 		for(int i = this.features.nextSetBit(0);
 			i >= 0; i = this.features.nextSetBit(i+1)) {
 			retVal.add(FeatureMatrix.getInstance().getFeatureForIndex(i));
 		}
-//		
+
 		return retVal;
-//		return this.features;
 	}
 	
 	/**
@@ -189,9 +175,6 @@ public class FeatureSet
 	public String getIpaChar() {
 		String retVal = new String();
 		retVal += ipaChar + "";
-//		for(Iterator i = this.diacritics.iterator(); i.hasNext();) {
-//			retVal += ((FeatureSet)i.next()).getIpaChar();
-//		}
 		return retVal;
 	}
 	
@@ -202,20 +185,6 @@ public class FeatureSet
 		this.ipaChar = ipaChar;
 	}
 	
-//	/**
-//	 * @param diacriticFS the feature set for a diacritic
-//	 */
-//	public void addDiacritic(FeatureSet diacriticFS) {
-//		this.diacritics.add(diacriticFS);
-//	}
-//	
-//	/**
-//	 * @return the list of diacritics
-//	 */
-//	public Collection getDiacritics() {
-//		return this.diacritics;
-//	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof FeatureSet)) return false;
@@ -223,18 +192,6 @@ public class FeatureSet
 		FeatureSet fs = (FeatureSet)obj;
 		
 		return this.features.equals(fs.features);
-		
-//		Collection<String> fsFeatures = fs.getFeatures();
-//		Collection<String> myFeatures = this.getFeatures();
-//		
-//		if(fsFeatures.size() != myFeatures.size()) return false;
-//		
-//		for(String testFeature:myFeatures) {
-//			if(!fs.hasFeature(testFeature))
-//				return false;
-//		}
-//		
-//		return true;
 	}
 	
 	public FeatureSet union(FeatureSet fs2) {
@@ -253,23 +210,6 @@ public class FeatureSet
 	 * @return fs1 UNION fs2
 	 */
 	public static FeatureSet union(FeatureSet fs1, FeatureSet fs2) {
-//		FeatureSet unionFeatures = new FeatureSet();
-//		Collection fs1Features = fs1.getFeatures();
-//		Collection fs2Features = fs2.getFeatures();
-//		
-//		for(Iterator i = fs1Features.iterator(); i.hasNext(); )
-//			unionFeatures.addFeature(i.next().toString());
-//		for(Iterator i = fs2Features.iterator(); i.hasNext(); )
-//			unionFeatures.addFeature(i.next().toString());
-//		return unionFeatures;
-//		FeatureSet retVal = new FeatureSet();
-		
-//		// the hashset takes care of duplicates
-//		retVal.features.addAll(fs1.getFeatures());
-//		retVal.features.addAll(fs2.getFeatures());
-//		
-//		return retVal;
-		
 		BitSet bs = 
 			(BitSet)fs1.features.clone();
 		bs.or(fs2.features);
@@ -309,30 +249,9 @@ public class FeatureSet
 	 * @return fs1 INTERSECT fs2
 	 */
 	public static FeatureSet intersect(FeatureSet fs1, FeatureSet fs2) {
-//		FeatureSet intersectFeatures = new FeatureSet();
-//		Collection fs1Features = fs1.getFeatures();
-//		Collection fs2Features = fs2.getFeatures();
-//		
-//		for(Iterator i = fs1Features.iterator(); i.hasNext(); ) {
-//			String feature = i.next().toString();
-//			if(fs2Features.contains(feature))
-//				intersectFeatures.addFeature(feature);
-//		}
-//		return intersectFeatures;
-		
 		BitSet bs = 
 			(BitSet)fs1.features.clone();
 		bs.and(fs2.features);
-		
-//		if(PhonUtilities.isDebugMode()) {
-//			PhonLogger.fine("FS1: " + 
-//					fs1.toString());
-//			PhonLogger.fine("FS2: " + 
-//					fs2.toString());
-//			PhonLogger.fine("Intersect: " + 
-//					(new FeatureSet(bs)).toString());
-//		}
-		
 		return new FeatureSet(bs);
 	}
 	
@@ -354,33 +273,46 @@ public class FeatureSet
 	 *
 	 */
 	public static FeatureSet minus(FeatureSet fs1, FeatureSet fs2) {
-//		FeatureSet minusFeatures = new FeatureSet();
-//		Collection fs1Features = fs1.getFeatures();
-//		Collection fs2Features = fs2.getFeatures();
-//		
-//		for(Iterator i = fs1Features.iterator(); i.hasNext();)
-//			minusFeatures.addFeature(i.next().toString());
-//		
-//		for(Iterator i = fs2Features.iterator(); i.hasNext(); ) {
-//			String feature = i.next().toString();
-//			if(fs1Features.contains(feature))
-//				minusFeatures.removeFeature(feature);
-//		}
-//		return minusFeatures;
-		
 		BitSet bs = 
 			(BitSet)fs1.features.clone();
 		bs.andNot(fs2.features);
-		
-//		if(PhonUtilities.isDebugMode()) {
-//			PhonLogger.fine("FS1: " + 
-//					fs1.toString());
-//			PhonLogger.fine("FS2: " + 
-//					fs2.toString());
-//			PhonLogger.fine("Exclusion: " + 
-//					(new FeatureSet(bs)).toString());
-//		}
-		
 		return new FeatureSet(bs);
+	}
+	
+	/**
+	 * Convert this feature set to a byte array.  Useful
+	 * for feature collator comparison. 
+	 * 
+	 * @return byte array of feature set
+	 */
+	public byte[] toByteArray() {
+		return features.toByteArray();
+	}
+
+	@Override
+	public Iterator<Feature> iterator() {
+		return new FeatureIterator();
+	}
+	
+	private class FeatureIterator implements Iterator<Feature> {
+		
+		private final Iterator<String> strItr = getFeatures().iterator();
+
+		@Override
+		public boolean hasNext() {
+			return strItr.hasNext();
+		}
+
+		@Override
+		public Feature next() {
+			final String nextFeature = strItr.next();
+			return FeatureMatrix.getInstance().getFeature(nextFeature);
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+		
 	}
 }

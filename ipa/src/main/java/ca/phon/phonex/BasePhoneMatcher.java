@@ -1,5 +1,6 @@
 package ca.phon.phonex;
 
+import ca.phon.ipa.AlignmentMarker;
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IntraWordPause;
@@ -72,6 +73,11 @@ public class BasePhoneMatcher implements PhoneMatcher {
 			matches = baseChar.equals(IntraWordPause.INTRA_WORD_PAUSE_CHAR);
 		}
 
+		@Visits
+		public void visitAlignmentMarker(AlignmentMarker marker) {
+			matches = baseChar.equals(AlignmentMarker.ALIGNMENT_CHAR);
+		}
+		
 		@Override
 		public void fallbackVisit(IPAElement obj) {
 		}

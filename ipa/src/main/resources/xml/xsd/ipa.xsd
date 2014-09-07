@@ -63,6 +63,10 @@
             
             <!-- pause inside a word -->
             <xs:enumeration value="INTRA_WORD_PAUSE"/>
+            
+            
+            <!-- alignment -->
+            <xs:enumeration value="ALIGNMENT"/>
         </xs:restriction>
     </xs:simpleType>
     
