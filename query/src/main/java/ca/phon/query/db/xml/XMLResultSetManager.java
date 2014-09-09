@@ -142,8 +142,6 @@ public class XMLResultSetManager implements ResultSetManager {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.marshal(jaxbElem, queryFile);
 		} catch (JAXBException exc) {
-			//PhonLogger.severe(XMLResultSetManager.class, "Could not save query to disk.");
-			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
 			throw new IOException("Could not save query to disk", exc);
 		}
 	}
@@ -240,8 +238,6 @@ public class XMLResultSetManager implements ResultSetManager {
 			unmarshaller.setSchema(schema);
 			resultSet = ((JAXBElement<ResultSetType>)unmarshaller.unmarshal(resultSetFile)).getValue();
 		} catch(JAXBException exc) {
-			//PhonLogger.severe(XMLResultSetManager.class, "Could not load result set file.");
-			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
 			throw new IOException("Could not load result set file", exc);
 		}
 		

@@ -341,6 +341,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 					final String[] words = blindTranscript.toString().split("\\p{Space}");
 					for(String w:words) {
 						final WordType wt = factory.createWordType();
+						if(w == null) w = new String();
 						wt.setContent(w);
 						bg.getW().add(wt);
 					}

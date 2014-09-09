@@ -113,9 +113,6 @@ public class InventoryDataSource implements TableDataSource {
 				
 				Map<String, Integer[]> counter = inventories.get(format);
 				if(row < cIdx + counter.size()) {
-//					List<String> resultKeys = new ArrayList<String>();
-//					resultKeys.addAll(counter.keySet());
-//					Collections.sort(resultKeys, CollatorFactory.defaultCollator());
 					final List<String> resultKeys = orderedKeys.get(format);
 					
 					int subIdx = row - cIdx;
@@ -135,9 +132,6 @@ public class InventoryDataSource implements TableDataSource {
 			}
 		} else {
 			Map<String, Integer[]> counter = inventories.get("ALL");
-//			List<String> keys = new ArrayList<String>();
-//			keys.addAll(counter.keySet());
-//			Collections.sort(keys, CollatorFactory.defaultCollator());
 			final List<String> keys = orderedKeys.get("ALL");
 			
 			String key = keys.get(row);
