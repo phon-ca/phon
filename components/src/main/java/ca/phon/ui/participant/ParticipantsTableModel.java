@@ -70,11 +70,17 @@ public class ParticipantsTableModel extends AbstractTableModel {
 		Participant p = session.getParticipant(rowIndex);
 		Columns col = Columns.values()[columnIndex];
 		if(col == Columns.Name) {
-			if(p.getName() == null) return p.getId();
-			return p.getName();
+			return
+					(p.getName() != null && p.getName().trim().length() > 0 
+						? p.getName() : p.getId() != null 
+							? p.getId() : p.getRole() );
 		} else if(col == Columns.Age) {
-			final Period age = p.getAge(session.getDate());
-			return AgeFormatter.ageToString(age);
+			final Period age = p.getAge(null);
+			if(age != null && age.getYears() > 0) {
+				return AgeFormatter.ageToString(age);
+			} else {
+				return "Unknown";
+			}
 		} else {
 			return "";
 		}

@@ -1,5 +1,9 @@
 package ca.phon.session;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
@@ -50,4 +54,47 @@ public abstract class Participants implements Iterable<Participant>, IExtendable
 		}
 	}
 	
+	public Map<ParticipantRole, Integer> getRoleCount() {
+		final Map<ParticipantRole, Integer> retVal = new HashMap<ParticipantRole, Integer>();
+		
+		for(Participant p:this) {
+			Integer rc = retVal.get(p.getRole());
+			if(rc == null) {
+				rc = 0;
+			}
+			rc++;
+			retVal.put(p.getRole(), rc);
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Returns a list of participants which does not include
+	 * the given participant.
+	 * 
+	 * @param part
+	 * @return
+	 */
+	public List<Participant> otherParticipants(Participant part) {
+		List<Participant> retVal = new ArrayList<Participant>();
+		for(Participant p:this) {
+			if(p == part) continue;
+			retVal.add(p);
+		}
+		return retVal;
+	}
+	
+	public static void copyParticipantInfo(Participant src, Participant dest) {
+		dest.setId(src.getId());
+		dest.setBirthDate(src.getBirthDate());
+		dest.setAge(src.getAge(null));
+		dest.setEducation(src.getEducation());
+		dest.setGroup(src.getGroup());
+		dest.setLanguage(src.getLanguage());
+		dest.setName(src.getName());
+		dest.setRole(src.getRole());
+		dest.setSES(src.getSES());
+		dest.setSex(src.getSex());
+	}
 }

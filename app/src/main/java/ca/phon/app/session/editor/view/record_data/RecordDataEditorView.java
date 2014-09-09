@@ -413,6 +413,7 @@ public class RecordDataEditorView extends EditorView {
 			topPanel = new JPanel(layout);
 			
 			final DefaultComboBoxModel speakerBoxModel = new DefaultComboBoxModel();
+			speakerBoxModel.addElement(null);
 			for(Participant participant:session.getParticipants()) {
 				speakerBoxModel.addElement(participant);
 			}
@@ -523,7 +524,12 @@ public class RecordDataEditorView extends EditorView {
 					cellHasFocus);
 			if(value != null) {
 				final Participant participant = (Participant)value;
-				retVal.setText(participant.getName());
+				final String val = 
+						(participant.getName() != null && participant.getName().length() > 0 ? participant.getName() :
+							participant.getId() != null ? participant.getId() : participant.getRole().toString());
+				retVal.setText(val);
+			} else {
+				retVal.setText("Unspecified");
 			}
 			return retVal;
 		}
@@ -538,11 +544,9 @@ public class RecordDataEditorView extends EditorView {
 				final Object selectedObj = speakerBox.getSelectedItem();
 				final SessionEditor editor = getEditor();
 				final Record record = editor.currentRecord();
-				if(selectedObj != null) {
-					final Participant selectedSpeaker = Participant.class.cast(selectedObj);
-					final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(editor, record, selectedSpeaker);
-					editor.getUndoSupport().postEdit(edit);
-				}
+				final Participant selectedSpeaker = Participant.class.cast(selectedObj);
+				final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(editor, record, selectedSpeaker);
+				editor.getUndoSupport().postEdit(edit);
 			}
 		}
 		

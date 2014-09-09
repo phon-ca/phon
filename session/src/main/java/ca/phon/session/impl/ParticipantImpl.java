@@ -49,7 +49,7 @@ public class ParticipantImpl implements Participant {
 	@Override
 	public Period getAge(DateTime fromDate) {
 		// return forced age
-		if(age != null) {
+		if(age != null || fromDate == null) {
 			return age;
 		} else {
 			final DateTime start = getBirthDate();

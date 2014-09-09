@@ -1,12 +1,19 @@
 package ca.phon.app.session.editor.view.session_information.actions;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddParticipantEdit;
 import ca.phon.app.session.editor.undo.ParticipantUndoableEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.session.Participant;
+import ca.phon.session.ParticipantRole;
+import ca.phon.session.Participants;
+import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.ui.participant.ParticipantEditor;
 
@@ -29,25 +36,26 @@ public class EditParticipantAction extends SessionInfoAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
-		copyParticipantInfo(participant, part);
+		Participants.copyParticipantInfo(participant, part);
+		
 		boolean canceled = ParticipantEditor.editParticipant(getEditor(), part, 
-				getEditor().getDataModel().getSession().getDate());
+				getEditor().getDataModel().getSession().getDate(),
+				getEditor().getDataModel().getSession().getParticipants().otherParticipants(participant));
 		
 		if(!canceled) {
+			if(!participant.getId().equals(part.getId())) {
+				// XXX we need to ensure that every record is loaded 
+				// so that participant information changes when id is modified
+				for(Record r:getEditor().getSession().getRecords()) {
+					r.getSpeaker();
+				}
+			}
 			final ParticipantUndoableEdit edit = new ParticipantUndoableEdit(getEditor(), participant, part);
 			getEditor().getUndoSupport().postEdit(edit);
+			
+			final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
+			getEditor().getEventManager().queueEvent(ee);
 		}
-	}
-	
-	private void copyParticipantInfo(Participant src, Participant dest) {
-		dest.setBirthDate(src.getBirthDate());
-		dest.setEducation(src.getEducation());
-		dest.setGroup(src.getGroup());
-		dest.setLanguage(src.getLanguage());
-		dest.setName(src.getName());
-		dest.setRole(src.getRole());
-		dest.setSES(src.getSES());
-		dest.setSex(src.getSex());
 	}
 
 }

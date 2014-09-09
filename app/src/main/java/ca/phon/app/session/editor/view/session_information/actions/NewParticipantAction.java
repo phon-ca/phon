@@ -37,8 +37,9 @@ public class NewParticipantAction extends SessionInfoAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
-		part.setId(UUID.randomUUID().toString());
-		boolean canceled = ParticipantEditor.editParticipant(getEditor(), part, getEditor().getDataModel().getSession().getDate());
+		boolean canceled = ParticipantEditor.editParticipant(getEditor(), part, 
+				getEditor().getDataModel().getSession().getDate(),
+				getEditor().getDataModel().getSession().getParticipants().otherParticipants(null));
 
 		if(!canceled) {
 			final AddParticipantEdit edit = new AddParticipantEdit(getEditor(), part);

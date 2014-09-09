@@ -4,6 +4,7 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Participant;
+import ca.phon.session.Participants;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 
@@ -35,7 +36,7 @@ public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void undo() {
-		copyParticipantInfo(oldVals, participant);
+		Participants.copyParticipantInfo(oldVals, participant);
 
 		final EditorEvent ee = new EditorEvent(EditorEventType.PARTICIPANT_CHANGED, getSource(), participant);
 		getEditor().getEventManager().queueEvent(ee);
@@ -45,23 +46,13 @@ public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
 	public void doIt() {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant p = factory.createParticipant();
-		copyParticipantInfo(participant, p);
+		Participants.copyParticipantInfo(participant, p);
 		oldVals = p;
 		
-		copyParticipantInfo(template, participant);
+		Participants.copyParticipantInfo(template, participant);
 		
 		final EditorEvent ee = new EditorEvent(EditorEventType.PARTICIPANT_CHANGED, getSource(), participant);
 		getEditor().getEventManager().queueEvent(ee);
 	}
 	
-	private void copyParticipantInfo(Participant src, Participant dest) {
-		dest.setBirthDate(src.getBirthDate());
-		dest.setEducation(src.getEducation());
-		dest.setGroup(src.getGroup());
-		dest.setLanguage(src.getLanguage());
-		dest.setName(src.getName());
-		dest.setRole(src.getRole());
-		dest.setSES(src.getSES());
-		dest.setSex(src.getSex());
-	}
 }
