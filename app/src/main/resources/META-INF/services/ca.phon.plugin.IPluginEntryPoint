@@ -49,3 +49,5 @@ ca.phon.app.project.DeleteSessionEP
 ca.phon.app.project.DuplicateSessionEP
 # Export session
 ca.phon.app.project.ExportSessionEP
+# Strip Participant Information
+ca.phon.app.project.AnonymizeParticipantInfoEP

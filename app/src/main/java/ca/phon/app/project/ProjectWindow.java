@@ -57,7 +57,9 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.workspace.WorkspaceDialog;
+import ca.phon.plugin.PluginAction;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
@@ -220,6 +222,21 @@ public class ProjectWindow extends CommonModuleFrame
 			
 		});
 		projectMenu.add(newSessionItem);
+		
+		projectMenu.addSeparator();
+		
+		JMenuItem anonymizeParticipantInfoItem = new JMenuItem("Anonymize Participant Information...");
+		anonymizeParticipantInfoItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				HashMap<String, Object> initInfo = new HashMap<String, Object>();
+				initInfo.put("project", getProject());
+				
+				PluginEntryPointRunner.executePluginInBackground(AnonymizeParticipantInfoEP.EP_NAME, initInfo);
+			}
+		});
+		projectMenu.add(anonymizeParticipantInfoItem);
 		
 		JMenuItem repairItem = new JMenuItem("Check Transcriptions...");
 		repairItem.addActionListener(new ActionListener() {
