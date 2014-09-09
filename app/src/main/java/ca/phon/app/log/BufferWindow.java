@@ -55,7 +55,7 @@ public class BufferWindow extends CommonModuleFrame {
 	
 	private JButton saveButton;
 	
-	private JToggleButton tableToggle;
+	private JPanel topPanel;
 	
 	private final Map<String, BufferPanel> panels = 
 			Collections.synchronizedMap(new HashMap<String, BufferPanel>());
@@ -100,7 +100,7 @@ public class BufferWindow extends CommonModuleFrame {
 		add(header, BorderLayout.NORTH);
 		
 		final JPanel centerPanel = new JPanel(new BorderLayout());
-		final JPanel selectionPanel = new JPanel(new FormLayout("pref, 3dlu, fill:pref:grow, 3dlu, pref, 3dlu, pref", "pref"));
+		final JPanel selectionPanel = new JPanel(new FormLayout("pref, 3dlu, fill:pref:grow, 3dlu, pref", "pref, pref"));
 		final CellConstraints cc = new CellConstraints();
 		selectionPanel.add(new JLabel("Buffer: "), cc.xy(1,1));
 		buffersBox = new JComboBox();
@@ -108,10 +108,8 @@ public class BufferWindow extends CommonModuleFrame {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange() == ItemEvent.SELECTED) {
-					final String bufferName = e.getItem().toString();
-					selectBuffer(bufferName);
-				}
+				final String bufferName = e.getItem().toString();
+				selectBuffer(bufferName);
 			}
 			
 		});
@@ -121,12 +119,7 @@ public class BufferWindow extends CommonModuleFrame {
 		saveButton = new JButton(saveAct);
 		saveButton.setText(null);
 		selectionPanel.add(saveButton, cc.xy(5, 1));
-		
-		final PhonUIAction swapBufferAct = new PhonUIAction(this, "onSwapCurrentBuffer");
-		swapBufferAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show as table");
-		swapBufferAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("mimetypes/x-office-spreadsheet", IconSize.SMALL));
-		tableToggle = new JToggleButton(swapBufferAct);
-		selectionPanel.add(tableToggle, cc.xy(7, 1));
+		topPanel = selectionPanel;
 		
 		centerPanel.add(selectionPanel, BorderLayout.NORTH);
 		
@@ -134,14 +127,6 @@ public class BufferWindow extends CommonModuleFrame {
 		centerPanel.add(buffersPanel, BorderLayout.CENTER);
 		
 		add(centerPanel, BorderLayout.CENTER);
-	}
-	
-	public void onSwapCurrentBuffer() {
-		final BufferPanel panel = getCurrentBuffer();
-		if(panel != null) {
-			panel.onSwapBuffer();
-			tableToggle.setSelected(!panel.isShowingBuffer());
-		}
 	}
 	
 	public BufferPanel createBuffer(String name) {
@@ -159,6 +144,7 @@ public class BufferWindow extends CommonModuleFrame {
 		
 		panels.put(name, retVal);
 		
+		selectBuffer(name);
 		return retVal;
 	}
 	
@@ -180,6 +166,11 @@ public class BufferWindow extends CommonModuleFrame {
 	
 	public void selectBuffer(String name) {
 		buffersLayout.show(buffersPanel, name);
+		final BufferPanel panel = getCurrentBuffer();
+		if(panel != null) {
+			final BufferPanelButtons btns = new BufferPanelButtons(this, panel);
+			topPanel.add(btns, (new CellConstraints()).xy(5, 2));
+		}
 	}
 	
 	public BufferPanel getCurrentBuffer() {

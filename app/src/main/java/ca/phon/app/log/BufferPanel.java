@@ -59,6 +59,8 @@ public class BufferPanel extends JPanel {
 	
 	private boolean showingBuffer = true;
 	
+	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
+	
 	public BufferPanel(String name) {
 		super();
 		
@@ -109,6 +111,7 @@ public class BufferPanel extends JPanel {
 	}
 
 	public void onSwapBuffer() {
+		boolean wasShowingBuffer = isShowingBuffer();
 		if(showingBuffer) {
 			final CSVReader reader = new CSVReader(new StringReader(logBuffer.getText()));
 			final CSVTableModel tableModel = new CSVTableModel(reader);
@@ -124,6 +127,7 @@ public class BufferPanel extends JPanel {
 			add(logScroller, BorderLayout.CENTER);
 			showingBuffer = true;
 		}
+		super.firePropertyChange(SHOWING_BUFFER_PROP, wasShowingBuffer, isShowingBuffer());
 		revalidate();
 		repaint();
 	}

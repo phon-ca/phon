@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -33,7 +34,11 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXTable;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferPanelButtons;
 import ca.phon.app.log.CSVTableModel;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.project.Project;
@@ -87,8 +92,6 @@ public class ReportWizard extends WizardFrame {
 	 * Session selection
 	 */
 	private ResultSetSelector resultSetSelector;
-	
-	private JButton saveReportBtn;
 	
 	/*
 	 * Query
@@ -148,6 +151,12 @@ public class ReportWizard extends WizardFrame {
 		super.getRootPane().setDefaultButton(btnNext);
 		
 		super.btnFinish.setVisible(false);
+		
+		final PhonUIAction saveAct = new PhonUIAction(console, "onSaveBuffer");
+		saveAct.putValue(PhonUIAction.NAME, "Save Report");
+		saveAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+		super.btnFinish.setAction(saveAct);
+		
 		super.btnCancel.setText("Close");
 	}
 	
@@ -200,17 +209,11 @@ public class ReportWizard extends WizardFrame {
 		
 		importPanel.add(consolePanel, BorderLayout.CENTER);
 		
-		final PhonUIAction saveAct = new PhonUIAction(console, "onSaveBuffer");
-		saveAct.putValue(PhonUIAction.NAME, "Save Report");
-		saveAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
-		saveReportBtn = new JButton(saveAct);
-		
-		FlowLayout optLayout = new FlowLayout(FlowLayout.RIGHT);
-		optLayout.setVgap(0);
-		optLayout.setHgap(0);
-		
+		final CellConstraints cc = new CellConstraints();
+		final FormLayout optLayout = new FormLayout(
+				"pref, pref, fill:pref:grow, right:pref", "pref");
 		JPanel optPanel = new JPanel(optLayout);
-		optPanel.add(saveReportBtn);
+		optPanel.add(new BufferPanelButtons(this, console), cc.xy(4, 1));
 		consolePanel.add(optPanel, BorderLayout.NORTH);
 		
 		return super.addWizardStep(importPanel);
@@ -251,6 +254,7 @@ public class ReportWizard extends WizardFrame {
 	public void prev() {
 		super.prev();
 		btnBack.setVisible(false);
+		btnFinish.setVisible(false);
 	}
 	
 	@Override
@@ -260,6 +264,12 @@ public class ReportWizard extends WizardFrame {
 		if(super.getCurrentStep() == reportStep) {
 			generateReport();
 		}
+	}
+	
+	
+	@Override
+	public void finish() {
+		
 	}
 	
 	@Override
@@ -318,6 +328,7 @@ public class ReportWizard extends WizardFrame {
 						model.setUseFirstRowAsHeader(false);
 						model.fireTableStructureChanged();
 						btnBack.setVisible(true);
+						btnFinish.setVisible(true);
 						currentTask = null;
 					}
 				};
