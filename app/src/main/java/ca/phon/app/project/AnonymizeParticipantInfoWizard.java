@@ -21,6 +21,7 @@ import ca.phon.project.Project;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.Participants;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.session.Sex;
@@ -147,6 +148,11 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 			@Override
 			public void statusChanged(PhonTask task, TaskStatus oldStatus,
 					TaskStatus newStatus) {
+				if(newStatus == TaskStatus.RUNNING) {
+					showBusyLabel(sessionSelector);
+				} else {
+					stopBusyLabel();
+				}
 				btnFinish.setEnabled(newStatus != TaskStatus.RUNNING);
 			}
 			
@@ -172,8 +178,18 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 					final Session session = project.openSession(sp.getCorpus(), sp.getSession());
 					final Participants parts = session.getParticipants();
 					
+					// XXX we need to ensure all records are loaded
+					// if changing id
+					if(assignIDBox.isSelected()) {
+						for(Record r:session.getRecords()) {
+							r.getSpeaker();
+						}
+					}
+					
 					for(Participant p:parts) {
 						if(assignIDBox.isSelected()) {
+							
+							
 							String id = p.getRole().getId();
 							
 							int idx = 0;
