@@ -260,6 +260,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	@Override
 	public void setJMenuBar(JMenuBar menuBar) {
+		setupMenu(menuBar);
+		super.setJMenuBar(menuBar);
+	}
+	
+	public void setupMenu(JMenuBar menuBar) {
 		// get 'File' menu reference
 		final JMenu fileMenu = menuBar.getMenu(0);
 		final SaveSessionAction saveAct = new SaveSessionAction(this);
@@ -325,8 +330,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			
 		});
 		menuBar.add(viewMenu, 3);
-		
-		super.setJMenuBar(menuBar);
 	}
 	
 	/**

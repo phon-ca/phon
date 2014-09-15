@@ -114,8 +114,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
 		editor.getViewModel().applyPerspective(perspective);
 		
-		editor.pack();
-		editor.cascadeWindow(CommonModuleFrame.getCurrentFrame());
+//		editor.pack();
+//		editor.cascadeWindow(CommonModuleFrame.getCurrentFrame());
 		editor.setVisible(true);
 	}
 	

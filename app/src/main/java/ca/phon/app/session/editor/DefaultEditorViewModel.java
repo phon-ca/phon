@@ -1,8 +1,10 @@
 package ca.phon.app.session.editor;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +31,9 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -37,6 +42,11 @@ import javax.swing.MenuElement;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import antlr.CommonAST;
+import bibliothek.gui.dock.action.DefaultDockActionSource;
+import bibliothek.gui.dock.action.LocationHint;
+import bibliothek.gui.dock.action.actions.SimpleButtonAction;
+import bibliothek.gui.dock.common.CContentArea;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
 import bibliothek.gui.dock.common.CLocation;
@@ -58,17 +68,21 @@ import bibliothek.gui.dock.common.perspective.CPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.gui.dock.common.theme.ThemeMap;
 import bibliothek.gui.dock.themes.color.TitleColor;
+import bibliothek.gui.dock.util.FocusedWindowProvider;
 import bibliothek.gui.dock.util.Priority;
 import bibliothek.gui.dock.util.color.ColorBridge;
 import bibliothek.gui.dock.util.color.ColorManager;
 import bibliothek.gui.dock.util.color.DockColor;
 import bibliothek.util.Filter;
+import bibliothek.util.xml.XAttribute;
 import bibliothek.util.xml.XElement;
 import bibliothek.util.xml.XIO;
 import ca.phon.app.log.actions.SaveLogBufferAction;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.session.Session;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -84,10 +98,19 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	private static final Logger LOGGER = Logger
 			.getLogger(DefaultEditorViewModel.class.getName());
 	
+	/* Since there is not one but many main-Frames, it is hard to specify which one is the root-window. The
+     * FocusedWindowProvider always assumes that the window that is or was focused is the root-window. */
+	private FocusedWindowProvider windows = new FocusedWindowProvider();
+	
 	/**
 	 * Dock control
 	 */
 	private CControl dockControl;
+	
+	/**
+	 * Primary content area - one used for SessionEditor
+	 */
+	private CContentArea rootArea;
 	
 	/**
 	 * Dockables
@@ -121,12 +144,15 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		editorRef = new WeakReference<SessionEditor>(editor);
 		editor.addWindowListener(windowChangeListener);
+		getDockControl();
 	}
 	
 	private CControl getDockControl() {
 		if(dockControl == null) {
-			dockControl = new CControl(getEditor());
+			dockControl = new CControl( windows );
+			windows.add(getEditor());
 			setupDockControl();
+			rootArea = dockControl.createContentArea( "root" );
 		}
 		return dockControl;
 	}
@@ -203,7 +229,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	@Override
 	public Container getRoot() {
-		return getDockControl().getContentArea();
+		return rootArea;
 	}
 
 	@Override
@@ -294,36 +320,17 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			dockable = factory.createBackup(viewName);
 		}
 
-		final EditorView editorView = getView(viewName);
-		
 		if(dockable != null) {
-			final DockPosition position = (editorView == null ? DockPosition.CENTER : editorView.getPreferredDockPosition());
 			dockControl.addDockable(dockable);
 			
-			switch(position) {
-			case NORTH:
-				dockControl.getContentArea().getNorth().add(dockable.intern());
-				break;
-				
-			case SOUTH:
-				dockControl.getContentArea().getSouth().add(dockable.intern());
-				break;
-				
-			case CENTER:
-				dockControl.getContentArea().getCenter().addDockable(dockable.intern());
-				break;
-				
-			case WEST:
-				dockControl.getContentArea().getWest().add(dockable.intern());
-				break;
-				
-			case EAST:
-				dockControl.getContentArea().getEast().add(dockable.intern());
-				break;
-				
-			default:
-				break;
+			final CDockable focusedDockable = dockControl.getFocusedCDockable();
+			if(focusedDockable != null) {
+				dockable.setLocationsAside(focusedDockable);
+			} else {
+				final CLocation location = CLocation.base( rootArea ).normal();
+				dockable.setLocation(location);
 			}
+			dockable.setVisible(true);
 			
 			savePreviousPerspective();
 		}
@@ -331,6 +338,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void hideView(String viewName) {
+		if(!isShowing(viewName)) return;
+		
 		
 	}
 	
@@ -367,22 +376,57 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	@Override
 	public void applyPerspective(RecordEditorPerspective editorPerspective) {
-		if(dockControl.getPerspectives().getPerspective(editorPerspective.getName()) == null) {
-			try {
-				final InputStream is = editorPerspective.getLocation().openStream();
-				
-				if(is != null) {
-					final XElement xele = XIO.readUTF(is);
-					final CPerspective perspective = dockControl.getPerspectives().readXML( xele );
-					
-					dockControl.getPerspectives().setPerspective( editorPerspective.getName(), perspective);
-					perspective.storeLocations();
-				}
-			} catch (IOException e) {
-				
-			}
+		final AccessoryWindow[] windows = accessoryWindows.toArray(new AccessoryWindow[0]);
+		for(AccessoryWindow window:windows) {
+			window.setVisible(false);
+			accessoryWindows.remove(window);
+			dockControl.removeStationContainer(window.getArea());
+			window.dispose();
 		}
-		dockControl.load(editorPerspective.getName());
+		
+		CPerspective perspective = null;
+		try {
+			final InputStream is = editorPerspective.getLocation().openStream();
+			
+			if(is != null) {
+				final XElement xele = XIO.readUTF(is);
+				perspective = dockControl.getPerspectives().readXML( xele );
+				
+				final XElement boundsEle = xele.getElement("bounds");
+				if(boundsEle != null) {
+					int x = boundsEle.getAttribute("x").getInt();
+					int y = boundsEle.getAttribute("y").getInt();
+					int width = boundsEle.getAttribute("width").getInt();
+					int height = boundsEle.getAttribute("height").getInt();
+					
+					getEditor().setBounds(x, y, width, height);
+				}
+				
+				final XElement windowsEle = xele.getElement("windows");
+				if(windowsEle != null) {
+					for(int i = 0; i < windowsEle.getElementCount(); i++) {
+						final XElement winEle = windowsEle.getElement(i);
+						
+						final String uuid = winEle.getAttribute("uid").getString();
+						
+						final AccessoryWindow window = (AccessoryWindow)createAccessoryWindow(
+								UUID.fromString(uuid));
+						int x = winEle.getAttribute("x").getInt();
+						int y = winEle.getAttribute("y").getInt();
+						int width = winEle.getAttribute("width").getInt();
+						int height = winEle.getAttribute("height").getInt();
+						
+						window.setBounds(x, y, width, height);
+						window.setVisible(true);
+					}
+				}
+			}
+			dockControl.getPerspectives().setPerspective( editorPerspective.getName(), perspective);
+			perspective.storeLocations();
+			dockControl.load(editorPerspective.getName());
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 	}
 	
 	@Override
@@ -391,6 +435,21 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		if(perspective != null) {
 			try {
 				final XElement root = new XElement("root");
+				
+				// add position of window as attributes
+				final XElement rootBoundsEle = root.addElement("bounds");
+				writeBoundsInfo(rootBoundsEle, getEditor());
+				
+				final XElement accessoryWindowsEle = root.addElement("windows");
+				for(AccessoryWindow window:accessoryWindows) {
+					final XElement winEle = accessoryWindowsEle.addElement("window");
+					final XAttribute uuid = new XAttribute("uid");
+					uuid.setString(window.uuid.toString());
+					winEle.addAttribute(uuid);
+					
+					writeBoundsInfo(winEle, window);
+				}
+				
 				dockControl.getPerspectives().writeXML(root, perspective);
 				
 				final File f = new File(editorPerspective.getLocation().toURI());
@@ -401,6 +460,24 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void writeBoundsInfo(XElement rootBoundsEle, JFrame frame) {
+		final XAttribute xAttr = new XAttribute("x");
+		xAttr.setInt(frame.getX());
+		rootBoundsEle.addAttribute(xAttr);
+		
+		final XAttribute yAttr = new XAttribute("y");
+		yAttr.setInt(frame.getY());
+		rootBoundsEle.addAttribute(yAttr);
+		
+		final XAttribute widthAttr = new XAttribute("width");
+		widthAttr.setInt(frame.getWidth());
+		rootBoundsEle.addAttribute(widthAttr);
+		
+		final XAttribute heightAttr = new XAttribute("height");
+		heightAttr.setInt(frame.getHeight());
+		rootBoundsEle.addAttribute(heightAttr);
 	}
 	
 	private void savePreviousPerspective() {
@@ -490,6 +567,29 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		public EditorViewDockable(String id, EditorView editorView, CAction[] actions) {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
 			super.setCloseable(true);
+			
+			final SimpleButtonAction externalizeAct = new SimpleButtonAction();
+			externalizeAct.setText("Open view in new window");
+			externalizeAct.setIcon(IconManager.getInstance().getIcon("actions/externalize-to-window", IconSize.SMALL));
+			externalizeAct.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					final AccessoryWindow window = (AccessoryWindow)createAccessoryWindow(UUID.randomUUID());
+					window.getArea().getCenter().drop(EditorViewDockable.this.intern());
+					window.pack();
+					window.setVisible(true);
+				}
+				
+			});
+			
+			final DefaultDockActionSource actionSource = new DefaultDockActionSource(
+					new LocationHint( LocationHint.DOCKABLE, LocationHint.RIGHT ));
+			actionSource.add(externalizeAct);
+			super.intern().setActionOffers(actionSource);
+			
+			
 			viewRef = new WeakReference<EditorView>(editorView);
 		}
 		
@@ -751,7 +851,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}	
 	}
-
+	
 	private final WindowListener windowChangeListener = new WindowListener() {
 		
 		@Override
@@ -792,5 +892,108 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 		
 	};
+	
+	public CommonModuleFrame createAccessoryWindow(UUID uuid) {
+		final AccessoryWindow retVal = new AccessoryWindow(uuid);
+		return retVal;
+	}
+	
+	private List<AccessoryWindow> accessoryWindows = new ArrayList<AccessoryWindow>();
+	private class AccessoryWindow extends CommonModuleFrame {
+
+		private static final long serialVersionUID = -8637239684975912272L;
+		
+		private CContentArea contentArea;
+		
+		private UUID uuid;
+		
+		public AccessoryWindow() {
+			this(UUID.randomUUID());
+		}
+		
+		public AccessoryWindow(UUID uuid) {
+			super();
+			
+			this.uuid = uuid;
+			
+			setWindowName("(" + (accessoryWindows.size()+1) + ") " + getEditor().getWindowName());
+			
+			setShowInWindowMenu(false);
+			setParentFrame(getEditor());
+			
+			accessoryWindows.add(this);
+			
+			addWindowListener(new WindowListener() {
+				
+				@Override
+				public void windowOpened(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowIconified(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowClosing(WindowEvent e) {
+					accessoryWindows.remove(AccessoryWindow.this);
+					dockControl.removeStationContainer(getArea());
+				}
+				
+				@Override
+				public void windowClosed(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowActivated(WindowEvent e) {
+					
+				}
+			});
+			init();
+		}
+		
+		@Override
+		public void setJMenuBar(JMenuBar menuBar) {
+			getEditor().setupMenu(menuBar);
+			super.setJMenuBar(menuBar);
+		}
+		
+		@Override
+		public String getTitle() {
+			final Session session = getEditor().getSession();
+			String retVal = "(" + (accessoryWindows.indexOf(this)+1) + ") Session Editor";
+			if(session != null) {
+				retVal += " : " + session.getCorpus() + "." + session.getName();
+				if(getEditor().isModified())
+					retVal += "*";
+			}
+			return retVal;
+		}
+
+
+		private void init() {
+			setLayout(new BorderLayout());
+			
+			SessionEditorToolbar toolbar = new SessionEditorToolbar(getEditor());
+			
+			add(toolbar, BorderLayout.NORTH);
+
+			contentArea = dockControl.createContentArea(uuid.toString());
+			
+			add(contentArea, BorderLayout.CENTER);
+		}
+		
+		public CContentArea getArea() {
+			return this.contentArea;
+		}
+		
+	}
 	
 }
