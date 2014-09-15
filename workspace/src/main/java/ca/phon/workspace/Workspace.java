@@ -68,8 +68,8 @@ public class Workspace {
 	 */
 	public static File defaultWorkspaceFolder() {
 		final String userPath = System.getProperty("user.home");
-		final File userHome = new File(userPath);
-		return new File(userHome, WORKSPACE_FOLDER_NAME);
+		final File userDocs = new File(userPath, "Documents");
+		return new File(userDocs, WORKSPACE_FOLDER_NAME);
 	}
 	
 	/**

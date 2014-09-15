@@ -61,22 +61,24 @@ public class PrefHelper {
 	 * @return application support folder location
 	 */
 	public static String getUserDataFolder() {
-		String retVal = System.getProperty("user.home");
+		String userHomePath = System.getProperty("user.home");
 		
-		if(OSInfo.isMacOs()) {
-			retVal += 
-				File.separator + "Library" + File.separator + "Application Support"
-				+ File.separator + "Phon";
-		} else if(OSInfo.isWindows()) {
-			retVal = System.getenv("APPDATA") + File.separator + "Phon";
-		} else if(OSInfo.isNix()) {
-			retVal += File.separator + ".phon";
-		} else {
-			// should not get here
-			LOGGER.info("Unsupported os: " + System.getProperty("os.name"));
-		}
+//		if(OSInfo.isMacOs()) {
+//			retVal += 
+//				File.separator + "Library" + File.separator + "Application Support"
+//				+ File.separator + "Phon";
+//		} else if(OSInfo.isWindows()) {
+//			retVal = System.getenv("APPDATA") + File.separator + "Phon";
+//		} else if(OSInfo.isNix()) {
+//			retVal += File.separator + ".phon";
+//		} else {
+//			// should not get here
+//			LOGGER.info("Unsupported os: " + System.getProperty("os.name"));
+//		}
+		final File userDocs = new File(userHomePath, "Documents");
+		final File phonPrefs = new File(userDocs, "Phon");
 		
-		return retVal;
+		return phonPrefs.getAbsolutePath();
 	}
 	
 	/**
