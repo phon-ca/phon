@@ -126,19 +126,19 @@ public class TimeBar extends JComponent {
 		
 		g2.setColor(Color.gray);
 		// draw time values
-		String startString = MsFormatter.msToDisplayString(startMs);
-		Rectangle2D startStringBounds = 
-			g2.getFontMetrics(_timeFont).getStringBounds(startString, g);
-		float startX = 
-			WavDisplay._TIME_INSETS_ - (float)(startStringBounds.getWidth()/2);
-		g2.drawString(startString, startX, (float)startStringBounds.getHeight());
-		
-		String endString = MsFormatter.msToDisplayString(endMs);
-		Rectangle2D endStringBounds = 
-			g2.getFontMetrics(_timeFont).getStringBounds(endString, g);
-		float endX = 
-			(size.width - WavDisplay._TIME_INSETS_) - (float)(endStringBounds.getWidth()/2.0);
-		g2.drawString(endString, endX, (float)endStringBounds.getHeight());
+//		String startString = MsFormatter.msToDisplayString(startMs);
+//		Rectangle2D startStringBounds = 
+//			g2.getFontMetrics(_timeFont).getStringBounds(startString, g);
+//		float startX = 
+//			WavDisplay._TIME_INSETS_ - (float)(startStringBounds.getWidth()/2);
+//		g2.drawString(startString, startX, (float)startStringBounds.getHeight());
+//		
+//		String endString = MsFormatter.msToDisplayString(endMs);
+//		Rectangle2D endStringBounds = 
+//			g2.getFontMetrics(_timeFont).getStringBounds(endString, g);
+//		float endX = 
+//			(size.width - WavDisplay._TIME_INSETS_) - (float)(endStringBounds.getWidth()/2.0);
+//		g2.drawString(endString, endX, (float)endStringBounds.getHeight());
 		
 		// segment boundaries
 		if(segStart >= 0) {
@@ -324,5 +324,9 @@ public class TimeBar extends JComponent {
 
 	public void setSegLength(long segLength) {
 		this.segLength = segLength;
+	}
+	
+	public WavDisplay getWavDisplay() {
+		return _parent;
 	}
 }

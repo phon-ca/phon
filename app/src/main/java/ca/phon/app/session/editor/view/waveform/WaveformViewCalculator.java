@@ -30,4 +30,11 @@ public interface WaveformViewCalculator {
 	 */
 	public Rectangle2D getSegmentRect();
 	
+	/**
+	 * Get the rectanle for the current selection.
+	 * 
+	 * @return selection rect
+	 */
+	public Rectangle2D getSelectionRect();
+	
 }

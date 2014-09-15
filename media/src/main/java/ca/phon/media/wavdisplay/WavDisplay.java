@@ -390,7 +390,11 @@ public class WavDisplay extends JComponent {
 		
 	}
 	
-	private class MouseTimeListener extends MouseInputAdapter {
+	public MouseTimeListener createMouseTimeListener() {
+		return new MouseTimeListener();
+	}
+	
+	public class MouseTimeListener extends MouseInputAdapter {
 
 		private boolean _selecting = false;
 		private int _xPos = 0;
