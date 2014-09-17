@@ -25,6 +25,8 @@ public class QueryName {
 	
 	private URL location;
 	
+	private String category;
+	
 	public QueryName(URL url) {
 		this.location = url;
 		String path = url.getPath();
@@ -64,6 +66,14 @@ public class QueryName {
 
 	public void setLocation(URL location) {
 		this.location = location;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	public String getCategory() {
+		return (this.category != null ? this.category : "default");
 	}
 	
 }

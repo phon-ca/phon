@@ -14,6 +14,9 @@ import java.util.TreeMap;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
@@ -21,6 +24,7 @@ import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Script;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.FolderHandler;
+import ca.phon.util.resources.ResourceHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -47,6 +51,8 @@ public class QueryScriptLibrary implements IExtendable {
 	
 	private final ResourceLoader<QueryScript> userScriptLoader = new ResourceLoader<QueryScript>();
 	
+	private final ResourceLoader<QueryScript> pluginScriptLoader = new ResourceLoader<QueryScript>();
+	
 	public static String projectScriptFolder(Project project) {
 		return project.getLocation() + File.separator + "__res" + File.separator + "script";
 	}
@@ -67,6 +73,13 @@ public class QueryScriptLibrary implements IExtendable {
 		
 		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(USER_SCRIPT_FOLDER));
 		userScriptLoader.addHandler(userFolderScriptHandler);
+		
+		// plug-ins
+		final List<IPluginExtensionPoint<QueryScriptHandler>> queryScriptHandlers = 
+				PluginManager.getInstance().getExtensionPoints(QueryScriptHandler.class);
+		for(IPluginExtensionPoint<QueryScriptHandler> queryScriptHandler:queryScriptHandlers) {
+			pluginScriptLoader.addHandler(queryScriptHandler.getFactory().createObject());
+		}
 	}
 	
 	public ResourceLoader<QueryScript> stockScriptFiles() {
@@ -82,6 +95,18 @@ public class QueryScriptLibrary implements IExtendable {
 		
 		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(projectScriptFolder(project)));
 		retVal.addHandler(userFolderScriptHandler);
+		
+		return retVal;
+	}
+	
+	public ResourceLoader<QueryScript> pluginScriptFiles(Project project) {
+		final ResourceLoader<QueryScript> retVal = new ResourceLoader<QueryScript>();
+		
+		final List<IPluginExtensionPoint<QueryScriptHandler>> queryScriptHandlers = 
+				PluginManager.getInstance().getExtensionPoints(QueryScriptHandler.class);
+		for(IPluginExtensionPoint<QueryScriptHandler> queryScriptHandler:queryScriptHandlers) {
+			retVal.addHandler(queryScriptHandler.getFactory().createObject());
+		}
 		
 		return retVal;
 	}

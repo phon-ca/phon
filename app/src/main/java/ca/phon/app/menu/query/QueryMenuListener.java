@@ -1,6 +1,11 @@
 package ca.phon.app.menu.query;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -9,6 +14,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.CommonModuleFrame;
@@ -74,6 +80,34 @@ public class QueryMenuListener implements MenuListener {
 			
 			final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
 			queryMenu.add(sItem);
+		}
+		
+		// plug-in script
+		final ResourceLoader<QueryScript> pluginScriptLoader = queryScriptLibrary.pluginScriptFiles(project);
+		final Iterator<QueryScript> pluginScriptIterator = pluginScriptLoader.iterator();
+		// organize into categories
+		
+		final Map<String, List<QueryScript>> categories = new TreeMap<String, List<QueryScript>>();
+		
+		while(pluginScriptIterator.hasNext()) {
+			final QueryScript queryScript = pluginScriptIterator.next();
+			final QueryName qn = queryScript.getExtension(QueryName.class);
+			
+			List<QueryScript> categoryScripts = categories.get(qn.getCategory());
+			if(categoryScripts == null) {
+				categoryScripts = new ArrayList<QueryScript>();
+				categories.put(qn.getCategory(), categoryScripts);
+			}
+			categoryScripts.add(queryScript);
+		}
+		for(String category:categories.keySet()) {
+			queryMenu.addSeparator();
+			final JLabel lbl = new JLabel("<html><b>" + category + "</b></html>");
+			queryMenu.add(lbl);
+			for(QueryScript qs:categories.get(category)) {
+				final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
+				queryMenu.add(sItem);
+			}
 		}
 		
 		final JMenuItem scriptItem = new JMenuItem(new QueryScriptEditorCommand(project));
