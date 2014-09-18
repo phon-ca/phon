@@ -29,6 +29,7 @@ import javax.swing.event.MenuListener;
 import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
 import ca.phon.app.menu.file.WorkspaceCommand;
+import ca.phon.app.menu.file.WorkspaceMenuListener;
 import ca.phon.app.menu.help.HelpCommand;
 import ca.phon.app.menu.help.LogCommand;
 import ca.phon.app.menu.query.QueryMenuListener;
@@ -55,6 +56,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	public void filterWindowMenu(Window owner, JMenuBar menu) {
 		addFileMenu(owner, menu);
 		addEditMenu(owner, menu);
+		addWorkspaceMenu(owner, menu);
 		addQueryMenu(owner, menu);
 		addToolsMenu(owner, menu);
 		addPluginMenu(owner, menu);
@@ -67,13 +69,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 */
 	protected void addFileMenu(Window owner, JMenuBar menu) {
 		JMenu fileMenu = new JMenu("File");
-		
-		// start dialog item
-		final JMenuItem workspaceItem = new JMenuItem(new WorkspaceCommand());
-		fileMenu.add(workspaceItem);
-		
-		// exit item
-		fileMenu.addSeparator();
 		
 		final JMenuItem exitItem = new JMenuItem(new ExitCommand());
 		fileMenu.add(exitItem);
@@ -106,6 +101,10 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		if(!(frame instanceof WorkspaceDialog)) {
 			final JMenu queryMenu  = new JMenu("Query");
 			queryMenu.addMenuListener(queryMenuListener);
+			
+			final MenuEvent me = new MenuEvent(queryMenu);
+			queryMenuListener.menuSelected(me);
+			
 			menu.add(queryMenu);
 		}
 	}
@@ -173,6 +172,21 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		helpMenu.add(aboutItem);
 		
 		menu.add(helpMenu);
+	}
+	
+	/**
+	 * Add 'Workspace' menu
+	 */
+	protected void addWorkspaceMenu(Window owner, JMenuBar menu) {
+		JMenu workspaceMenu = new JMenu("Workspace");
+		
+		workspaceMenu.add(new WorkspaceCommand());
+		
+		final JMenu workspaceProjectsMenu = new JMenu("Workspace projects");
+		workspaceProjectsMenu.addMenuListener(new WorkspaceMenuListener());
+		workspaceMenu.add(workspaceProjectsMenu);
+		
+		menu.add(workspaceMenu);
 	}
 	
 	/**

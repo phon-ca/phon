@@ -81,8 +81,10 @@ import ca.phon.app.log.actions.SaveLogBufferAction;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.MenuManager;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -323,16 +325,28 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		if(dockable != null) {
 			dockControl.addDockable(dockable);
 			
+			final CommonModuleFrame focusedWindow = CommonModuleFrame.getCurrentFrame();
+			CContentArea contentArea = rootArea;
+			if(focusedWindow instanceof AccessoryWindow) {
+				final AccessoryWindow accWin = (AccessoryWindow)focusedWindow;
+				contentArea = accWin.getArea();
+			}
+			
 			final CDockable focusedDockable = dockControl.getFocusedCDockable();
 			if(focusedDockable != null) {
 				dockable.setLocationsAside(focusedDockable);
 			} else {
-				final CLocation location = CLocation.base( rootArea ).normal();
+				final CLocation location = CLocation.base( contentArea ).normal();
 				dockable.setLocation(location);
 			}
 			dockable.setVisible(true);
 			
 			savePreviousPerspective();
+			
+			getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
+			for(AccessoryWindow accWin:accessoryWindows) {
+				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
+			}
 		}
 	}
 
@@ -400,6 +414,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 					int height = boundsEle.getAttribute("height").getInt();
 					
 					getEditor().setBounds(x, y, width, height);
+					
+					
 				}
 				
 				final XElement windowsEle = xele.getElement("windows");
@@ -424,6 +440,11 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			dockControl.getPerspectives().setPerspective( editorPerspective.getName(), perspective);
 			perspective.storeLocations();
 			dockControl.load(editorPerspective.getName());
+			
+			getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
+			for(AccessoryWindow accWin:accessoryWindows) {
+				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
+			}
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
@@ -920,6 +941,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			
 			setShowInWindowMenu(false);
 			setParentFrame(getEditor());
+			
+			putExtension(Project.class, getEditor().getProject());
 			
 			accessoryWindows.add(this);
 			

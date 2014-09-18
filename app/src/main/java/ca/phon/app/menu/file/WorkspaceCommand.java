@@ -19,7 +19,7 @@ public class WorkspaceCommand extends PluginAction {
 	
 	public WorkspaceCommand() {
 		super(EP);
-		putValue(Action.NAME, "Workspace...");
+		putValue(Action.NAME, "Show Workspace window");
 		putValue(Action.SHORT_DESCRIPTION, "Open the workspace dialog.");
 		putValue(Action.ACCELERATOR_KEY, 
 				KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));

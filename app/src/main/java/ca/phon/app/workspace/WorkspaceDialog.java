@@ -44,6 +44,7 @@ import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -63,6 +64,7 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.MenuManager;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
@@ -115,6 +117,9 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		init();
 		super.addWindowListener(this);
 		super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
+		setJMenuBar(menuBar);
 	}
 	
 	private void init() {

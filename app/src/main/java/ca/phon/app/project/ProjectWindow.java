@@ -66,6 +66,7 @@ import ca.phon.project.Project;
 import ca.phon.project.ProjectListener;
 import ca.phon.project.ProjectRefresh;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.MenuManager;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
@@ -136,6 +137,9 @@ public class ProjectWindow extends CommonModuleFrame
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		init();
+		
+		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
+		setJMenuBar(menuBar);
 	}
 	
 	/**
@@ -167,7 +171,7 @@ public class ProjectWindow extends CommonModuleFrame
 		for(int i = 0; i < menu.getMenuCount(); i++) {
 			JMenu currentBar = menu.getMenu(i);
 			
-			if(currentBar != null && currentBar.getText() != null && currentBar.getText().equals("Edit")) {
+			if(currentBar != null && currentBar.getText() != null && currentBar.getText().equals("Workspace")) {
 				projectMenuIndex = i+1;
 			}
 		}

@@ -57,6 +57,7 @@ import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.MenuManager;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.Toast;
@@ -141,8 +142,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	private SessionEditorToolbar toolbar;
 	
-	private JMenu viewMenu;
-	
 	/**
 	 * Constructor
 	 */
@@ -197,6 +196,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				}
 			}
 		});
+		
+		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
+		setJMenuBar(menuBar);
 	}
 	
 	@Override
@@ -221,8 +223,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final Container dock = viewModel.getRoot();
 		contentPane.add(dock, BorderLayout.CENTER);
 		
-		getViewModel().setupViewMenu(viewMenu);
-
 		setupEditorActions();
 	}
 	
@@ -270,7 +270,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final SaveSessionAction saveAct = new SaveSessionAction(this);
 		final JMenuItem saveItem = new JMenuItem(saveAct);
 		fileMenu.add(saveItem, 0);
-		fileMenu.add(new JSeparator(), 1);
 		fileMenu.addMenuListener(new MenuListener() {
 			
 			@Override
@@ -304,14 +303,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		sessionMenu.add(new PreviousRecordAction(this));
 		sessionMenu.add(new NextRecordAction(this));
 		sessionMenu.add(new LastRecordAction(this));
-		menuBar.add(sessionMenu, 3);
 		
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is
 		// setup
-		viewMenu = new JMenu("View");
-		viewMenu.addMenuListener(new MenuListener() {
-			
+		final JMenu viewMenu = new JMenu("View");
+		final MenuListener viewMenuListener = new MenuListener() {
 			@Override
 			public void menuSelected(MenuEvent e) {
 				viewMenu.removeAll();
@@ -327,9 +324,16 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			@Override
 			public void menuCanceled(MenuEvent e) {
 			}
-			
-		});
+		};
+		viewMenu.addMenuListener(viewMenuListener);
+		
+		if(getViewModel() != null) {
+			final MenuEvent me = new MenuEvent(viewMenu);
+			viewMenuListener.menuSelected(me);
+		}
+		
 		menuBar.add(viewMenu, 3);
+		menuBar.add(sessionMenu, 3);
 	}
 	
 	/**
@@ -347,7 +351,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * @return the editor view model
 	 */
 	public EditorViewModel getViewModel() {
-		return viewModelRef.get();
+		return (viewModelRef != null ? viewModelRef.get() : null);
 	}
 	
 	/**
@@ -356,7 +360,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * @return the editor event model
 	 */
 	public EditorEventManager getEventManager() {
-		return eventManagerRef.get();
+		return (eventManagerRef != null ? eventManagerRef.get() : null);
 	}
 	
 	/**
@@ -366,7 +370,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * @return editor selection model
 	 */
 	public EditorSelectionModel getSelectionModel() {
-		return selectionModelRef.get();
+		return (selectionModelRef != null ? selectionModelRef.get() : null);
 	}
 	
 	/**

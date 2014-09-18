@@ -57,7 +57,7 @@ import com.jgoodies.forms.layout.FormLayout;
 /**
  * The common class for a gui window
  */
-public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
+public class CommonModuleFrame extends JFrame implements IExtendable {
 	
 	private static final long serialVersionUID = 2112769368100535156L;
 	
@@ -134,7 +134,7 @@ public class CommonModuleFrame extends SnapshotFrame implements IExtendable {
 		// make the frame resizable
 		this.setResizable(true);
 		
-		JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
+		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
 		setJMenuBar(menuBar);
 		
 		this.addWindowListener(new WindowListener() {
