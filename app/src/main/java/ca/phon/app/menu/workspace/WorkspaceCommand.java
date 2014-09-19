@@ -1,4 +1,4 @@
-package ca.phon.app.menu.file;
+package ca.phon.app.menu.workspace;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -22,7 +22,8 @@ public class WorkspaceCommand extends PluginAction {
 		putValue(Action.NAME, "Show Workspace window");
 		putValue(Action.SHORT_DESCRIPTION, "Open the workspace dialog.");
 		putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				KeyStroke.getKeyStroke(KeyEvent.VK_W, 
+						Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK));
 	}
 	
 }

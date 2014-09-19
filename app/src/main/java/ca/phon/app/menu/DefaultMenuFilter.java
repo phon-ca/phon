@@ -28,8 +28,7 @@ import javax.swing.event.MenuListener;
 
 import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
-import ca.phon.app.menu.file.WorkspaceCommand;
-import ca.phon.app.menu.file.WorkspaceMenuListener;
+import ca.phon.app.menu.file.OpenProjectCommand;
 import ca.phon.app.menu.help.HelpCommand;
 import ca.phon.app.menu.help.LogCommand;
 import ca.phon.app.menu.query.QueryMenuListener;
@@ -37,6 +36,9 @@ import ca.phon.app.menu.tools.BasicSyllabifierTestCommand;
 import ca.phon.app.menu.tools.IpaMapCommand;
 import ca.phon.app.menu.tools.LanguageCodesCommand;
 import ca.phon.app.menu.window.OpenWindowsMenuListener;
+import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
+import ca.phon.app.menu.workspace.WorkspaceCommand;
+import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.IPluginMenuFilter;
@@ -69,6 +71,10 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 */
 	protected void addFileMenu(Window owner, JMenuBar menu) {
 		JMenu fileMenu = new JMenu("File");
+		
+		fileMenu.add(new OpenProjectCommand());
+		
+		fileMenu.addSeparator();
 		
 		final JMenuItem exitItem = new JMenuItem(new ExitCommand());
 		fileMenu.add(exitItem);
@@ -182,8 +188,10 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		
 		workspaceMenu.add(new WorkspaceCommand());
 		
+		workspaceMenu.add(new SelectWorkspaceCommand());
+		
 		final JMenu workspaceProjectsMenu = new JMenu("Workspace projects");
-		workspaceProjectsMenu.addMenuListener(new WorkspaceMenuListener());
+		workspaceProjectsMenu.addMenuListener(new WorkspaceProjectsMenuListener());
 		workspaceMenu.add(workspaceProjectsMenu);
 		
 		menu.add(workspaceMenu);

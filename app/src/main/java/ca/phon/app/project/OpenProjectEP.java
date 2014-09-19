@@ -51,6 +51,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	
 	private final static Logger LOGGER = Logger.getLogger(OpenProjectEP.class.getName());
 	
+	public static final String EP_NAME = "OpenProject";
+	
 	/** The project path property */
 	public final static String PROJECTPATH_PROPERTY = 
 		"ca.phon.modules.core.OpenProjectController.projectpath";
@@ -60,7 +62,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 
 	private String projectpath;
 	
-	private final static String EP_NAME = "OpenProject";
 	@Override
 	public String getName() {
 		return EP_NAME;
