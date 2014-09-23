@@ -35,6 +35,7 @@ public class AlignGroupsLayoutProvider implements TierDataLayoutProvider {
 			Rectangle compRect = new Rectangle(rect);
 			
 			if(constraint.getColumnIndex() != TierDataConstraint.TIER_LABEL_COLUMN) {
+				compRect.height = prefSize.height;
 				if(rect.height > prefSize.height) {
 					// center in rect
 					compRect.y += (rect.height - prefSize.height) / 2;

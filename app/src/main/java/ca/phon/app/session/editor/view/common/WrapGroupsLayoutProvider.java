@@ -31,7 +31,18 @@ public class WrapGroupsLayoutProvider implements TierDataLayoutProvider {
 		final Map<Component, TierDataConstraint> constraintMap = layout.getConstraintMap();
 		for(Component comp:constraintMap.keySet()) {
 			final TierDataConstraint constraint = constraintMap.get(comp);
+			
+			final Dimension prefSize = comp.getPreferredSize();
+			
 			Rectangle rect = wrappedRectForConstraint(parent, layout, constraint);
+
+			if(constraint.getColumnIndex() != TierDataConstraint.TIER_LABEL_COLUMN) {
+				if(rect.height > prefSize.height){
+					rect.y += (rect.height - prefSize.height) / 2; 
+				}
+				rect.height = prefSize.height;
+			}
+			
 			comp.setBounds(rect);
 		}
 	}
