@@ -84,6 +84,8 @@ public class AddParticipantEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void undo() throws CannotUndoException {
+		super.undo();
+		
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		session.removeParticipant(getParticipant());

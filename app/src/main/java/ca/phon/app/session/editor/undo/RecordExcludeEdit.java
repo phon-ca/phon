@@ -33,6 +33,8 @@ public class RecordExcludeEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
+		super.undo();
+		
 		record.setExcludeFromSearches(wasExcluded);
 		
 		queueEvent(EditorEventType.RECORD_EXCLUDE_CHANGE_EVT, getEditor().getUndoSupport(), record);

@@ -1,5 +1,8 @@
 package ca.phon.app.session.editor.view.common;
 
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -13,12 +16,13 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
-
-import org.pushingpixels.lafwidget.LafWidget;
+import javax.swing.undo.UndoManager;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
@@ -29,7 +33,7 @@ import ca.phon.ui.action.PhonUIAction;
 /**
  * Text field for editing tier data for a group.
  */
-public class GroupField<T> extends JTextArea implements TierEditor {
+public class GroupField<T> extends JTextPane implements TierEditor {
 	
 	private static final long serialVersionUID = -5541784214656593497L;
 	
@@ -37,10 +41,18 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	
 	private final int groupIndex;
 	
+	private final UndoManager undoManager = new UndoManager();
+	
+	private volatile boolean hasChanges = false;
+	
+	protected volatile boolean allowNewline = false;
+	
 	public GroupField(Tier<T> tier, int groupIndex) {
 		super();
 		this.tier = tier;
 		this.groupIndex = groupIndex;
+		
+		setupInputMap();
 		
 		// XXX
 		// When added to a panel which is inside a scroll pane
@@ -65,11 +77,48 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			
 		});
 		
+		
 		setOpaque(false);
 		init();
 		tier.addTierListener(tierListener);
 		addFocusListener(focusListener);
 		getDocument().addDocumentListener(docListener);
+		getDocument().addUndoableEditListener(undoManager);
+	}
+	
+	private void setupInputMap() {
+		final ActionMap am = getActionMap();
+		final InputMap im = getInputMap(WHEN_FOCUSED);
+		
+		// remove actions for PG_UP and PG_DOWN
+		final KeyStroke pgUpKs = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
+		final KeyStroke pgDnKs = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0);
+		im.remove(pgDnKs);
+		im.remove(pgUpKs);
+		
+		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		final String validateId = "validate";
+		final PhonUIAction validateAct = new PhonUIAction(this, "onEnter");
+		am.put(validateId, validateAct);
+		im.put(validateKs, validateId);
+		
+		// override undo/redo for editor window
+		final KeyStroke undoKs = 
+				KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final PhonUIAction undoAct = new PhonUIAction(this, "onUndo");
+		final String undoKey = "_custom_undo_";
+		am.put(undoKey, undoAct);
+		im.put(undoKs, undoKey);
+		
+		final KeyStroke redoKs = 
+				KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final PhonUIAction redoAct = new PhonUIAction(this, "onRedo");
+		final String redoKey = "_custom_redo_";
+		am.put(redoKey, redoAct);
+		im.put(redoKs, redoKey);
+		
+		setActionMap(am);
+		setInputMap(WHEN_FOCUSED, im);
 	}
 	
 	public Tier<T> getTier() {
@@ -78,6 +127,35 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	
 	public int getGroupIndex() {
 		return this.groupIndex;
+	}
+	
+	public void onUndo() {
+		undoManager.undo();
+	}
+	
+	public void onRedo() {
+		undoManager.redo();
+	}
+	
+	@Override
+	public void setFont(Font font) {
+		lastPrefSize = null;
+		super.setFont(font);
+	}
+	
+	private Dimension lastPrefSize = null;
+	@Override
+	public Dimension getPreferredSize() {
+		final Dimension retVal = super.getPreferredSize();
+		
+		if(lastPrefSize != null && lastPrefSize.height < retVal.height) {
+			if(!allowNewline) {
+				retVal.height = lastPrefSize.height;
+			}
+		}
+		lastPrefSize = retVal;
+		
+		return retVal;
 	}
 	
 	/**
@@ -100,19 +178,6 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			}
 		}
 		setText(text);
-		
-		// validate text when 'enter' is pressed
-		final ActionMap actionMap = getActionMap();
-		final InputMap inputMap = getInputMap(JComponent.WHEN_FOCUSED);
-		
-		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		final String validateId = "validate";
-		final PhonUIAction validateAct = new PhonUIAction(this, "onEnter");
-		actionMap.put(validateId, validateAct);
-		inputMap.put(validateKs, validateId);
-		
-		setActionMap(actionMap);
-		setInputMap(JComponent.WHEN_FOCUSED, inputMap);
 	}
 	
 	/**
@@ -133,11 +198,23 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 * 
 	 */
 	public void onEnter() {
-		if(getGroupValue() != initialGroupVal) {
-			for(TierEditorListener listener:getTierEditorListeners()) {
-				listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+		if(allowNewline) {
+			try {
+				getDocument().insertString(getCaretPosition(), "\n", null);
+			} catch (BadLocationException e) {}
+		} else {
+			if(hasChanges) {
+				if(validateText()) {
+					update();
+					for(TierEditorListener listener:getTierEditorListeners()) {
+						listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+					}
+					hasChanges = false;
+				} else {
+					Toolkit.getDefaultToolkit().beep();
+					requestFocus();
+				}
 			}
-			initialGroupVal = getGroupValue();
 		}
 	}
 	
@@ -172,9 +249,8 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	protected void update() {
 		final T validatedObj = getValidatedObject();
 		if(validatedObj != null) {
-			final T oldVal = getGroupValue();
 			for(TierEditorListener listener:getTierEditorListeners()) {
-				listener.tierValueChange(getTier(), getGroupIndex(), validatedObj, oldVal);
+				listener.tierValueChange(getTier(), getGroupIndex(), validatedObj, initialGroupVal);
 			}
 		}
 	}
@@ -197,16 +273,25 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		@Override
 		public void focusLost(FocusEvent e) {
-			if(getGroupValue() != initialGroupVal) {
-				for(TierEditorListener listener:getTierEditorListeners()) {
-					listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+			if(validateText()) {
+				undoManager.discardAllEdits();
+				if(hasChanges) {
+					update();
+					for(TierEditorListener listener:getTierEditorListeners()) {
+						listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+					}
 				}
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+				requestFocus();
 			}
 		}
 		
 		@Override
 		public void focusGained(FocusEvent e) {
 			initialGroupVal = getGroupValue();
+			validatedObjRef.set(initialGroupVal);
+			hasChanges = false;
 		}
 		
 	};
@@ -215,16 +300,14 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			if(hasFocus() && validateText()) {
-				update();
-			}
+			if(getText().length() > 0) validateText();
+			hasChanges = true;
 		}
 		
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			if(hasFocus() && validateText()) {
-				update();
-			}
+			if(getText().length() > 0) validateText();
+			hasChanges = true;
 		}
 		
 		@Override
@@ -269,7 +352,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 
 		@Override
 		public void groupChanged(Tier<T> tier, int index, T oldValue, T value) {
-			if(!hasFocus() && getGroupIndex() == index) {
+			if(getGroupIndex() == index) {
 				final T val = getGroupValue();
 				String text = new String();
 				if(val != null) {

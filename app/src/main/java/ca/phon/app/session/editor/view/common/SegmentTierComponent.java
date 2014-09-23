@@ -204,15 +204,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		
 		String tierTxt = 
 				(segmentFormatter != null ? segmentFormatter.format(segment) : DEFAULT_SEGMENT_TEXT);
-//		int caretLocation = -1;
-//		if(super.hasFocus()) {
-//			caretLocation = super.getCaretPosition();
-//		}
-//		setFormatter(formatter);
 		segmentField.setText(tierTxt);
-//		if(super.hasFocus() && caretLocation >= 0) {
-//			super.setCaretPosition(caretLocation);
-//		}
 	}
 	
 	public void onEnter() {

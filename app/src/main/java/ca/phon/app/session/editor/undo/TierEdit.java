@@ -52,6 +52,16 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 		this.groupIndex = groupIndex;
 		this.newValue = newValue;
 	}
+	
+	@Override
+	public String getUndoPresentationName() {
+		return "Undo edit tier " + tier.getName();
+	}
+	
+	@Override
+	public String getRedoPresentationName() {
+		return "Redo edit tier " + tier.getName();
+	}
 
 	public T getOldValue() {
 		return oldValue;
@@ -80,9 +90,23 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	public void setFireHardChangeOnUndo(boolean fireHardChangeOnUndo) {
 		this.fireHardChangeOnUndo = fireHardChangeOnUndo;
 	}
+	
+	@Override
+	public void redo() {
+		super.redo();
+		
+		if(getEditor() != null) {
+			queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());
+			if(isFireHardChangeOnUndo()) {
+				queueEvent(EditorEventType.TIER_CHANGED_EVT, getEditor().getUndoSupport(), tier.getName());
+			}
+		}
+	}
 
 	@Override
 	public void undo() {
+		super.undo();
+		
 		tier.setGroup(groupIndex, getOldValue());
 		
 		if(getEditor() != null) {

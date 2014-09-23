@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.undo;
 
 import java.lang.ref.WeakReference;
+import java.util.Set;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
@@ -8,6 +9,8 @@ import javax.swing.undo.UndoManager;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.session.Session;
 
 /**
@@ -15,9 +18,11 @@ import ca.phon.session.Session;
  * {@link Session} should go through the {@link UndoManager}.
  *
  */
-public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit {
+public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit implements IExtendable {
 
 	private static final long serialVersionUID = 7922388747133546800L;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorUndoableEdit.class, this);
 
 	/**
 	 * Reference to the session editor
@@ -37,6 +42,8 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit {
 	public SessionEditorUndoableEdit(SessionEditor editor) {
 		super();
 		this.editorRef = new WeakReference<SessionEditor>(editor);
+		
+		extSupport.initExtensions();
 	}
 	
 	public SessionEditor getEditor() {
@@ -83,9 +90,28 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit {
 	@Override
 	public void redo() {
 		final Object oldSource = getSource();
-		setSource(getEditor().getUndoSupport());
+	
+		if(getEditor() != null) {
+			setSource(getEditor().getUndoSupport());
+			
+			final Integer recordIdx = getExtension(Integer.class);
+			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
+				getEditor().setCurrentRecordIndex(recordIdx.intValue());
+			}
+		}
+		
 		doIt();
 		setSource(oldSource);
+	}
+	
+	@Override
+	public void undo() {
+		if(getEditor() != null) {
+			final Integer recordIdx = getExtension(Integer.class);
+			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
+				getEditor().setCurrentRecordIndex(recordIdx.intValue());
+			}
+		}
 	}
 	
 	/**
@@ -109,6 +135,22 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit {
 	@Override
 	public boolean isSignificant() {
 		return true;
+	}
+
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
 	}
 	
 }

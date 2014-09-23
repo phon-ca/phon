@@ -21,6 +21,8 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void undo() {
+		super.undo();
+		
 		if(deletedRecord == null || recordIndex < 0) return;
 		
 		final SessionEditor editor = getEditor();

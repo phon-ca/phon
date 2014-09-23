@@ -150,22 +150,43 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		
 		return retVal;
 	}
+	
+	@Override
+	protected void update() {
+		if(syllabifier != null) {
+			final IPATranscript validatedObj = getValidatedObject();
+			IPATranscript ipa = validatedObj;
+			if(validatedObj != null) {
+				if(getTranscriber() != null) {
+					final AlternativeTranscript alts = validatedObj.getExtension(AlternativeTranscript.class);
+					ipa = alts.get(getTranscriber().getUsername());
+				}
+				syllabifier.syllabify(ipa.toList());
+			}
+		}
+		super.update();
+	}
 
 	@Override
 	protected boolean validateText() {
+		boolean valid = true;
 		clearErrors();
 		getHighlighter().removeAllHighlights();
 		
+		if(getText().trim().length() == 0) return valid;
+		
+		IPATranscript validatedIPA = null;
 		try {
 			IPALexer lexer = new IPALexer(getText().trim());
 			TokenStream tokenStream = new CommonTokenStream(lexer);
 			IPAParser parser = new IPAParser(tokenStream);
 			parser.addErrorHandler(ipaErrHandler);
-			parser.transcription();
+			validatedIPA = parser.transcription();
 		} catch (Exception e) {
 		}
 		
 		if(errors.size() > 0) {
+			valid = false;
 			for(IPAParserException error:errors) {
 				try {
 					getHighlighter().addHighlight(error.getPositionInLine(), error.getPositionInLine()+1, new Highlighter.HighlightPainter() {
@@ -207,9 +228,10 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			}
 		} else {
 			setForeground(Color.black);
+			setValidatedObject(validatedIPA);
 		}
 		
-		return super.validateText();
+		return valid;
 	}
 	
 	private final IPAParserErrorHandler ipaErrHandler = new IPAParserErrorHandler() {

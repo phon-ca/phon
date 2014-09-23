@@ -36,6 +36,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoableEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
@@ -50,6 +52,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.RecordExcludeEdit;
+import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.GroupFieldHighlighter;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
@@ -470,7 +473,7 @@ public class RecordDataEditorView extends EditorView {
 		return topPanel;
 	}
 	
-	private void updateRecordAlignment(int group) {
+	private SessionEditorUndoableEdit updateRecordAlignment(int group) {
 		final Record record = getEditor().currentRecord();
 		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
 		final Tier<IPATranscript> ipaActual = record.getIPAActual();
@@ -481,11 +484,8 @@ public class RecordDataEditorView extends EditorView {
 		final PhoneMap pm = aligner.calculatePhoneMap(targetGroup, actualGroup);
 		
 		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), group, pm);
-		getEditor().getUndoSupport().postEdit(pmEdit);
-		
-		// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
-		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
-		getEditor().getEventManager().queueEvent(ee);
+	
+		return pmEdit;
 	}
 	
 	private final TierEditorListener tierEditorListener = new TierEditorListener
@@ -495,7 +495,30 @@ public class RecordDataEditorView extends EditorView {
 		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
 				T oldValue) {
 			final TierEdit<T> tierEdit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
-			getEditor().getUndoSupport().postEdit(tierEdit);
+			tierEdit.setFireHardChangeOnUndo(true);
+			
+			UndoableEdit edit = tierEdit;
+			
+			// XXX
+			// Special case for IPA tiers, alignment must be updated as well
+			if(SystemTierType.IPATarget.getName().equals(tier.getName()) ||
+					SystemTierType.IPAActual.getName().equals(tier.getName())) {
+				edit = new CompoundEdit();
+				tierEdit.doIt();
+				edit.addEdit(tierEdit);
+				
+				final SessionEditorUndoableEdit alignEdit = updateRecordAlignment(groupIndex);
+				alignEdit.doIt();
+				edit.addEdit(alignEdit);
+				
+				((CompoundEdit)edit).end();
+				
+				// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
+				final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
+				getEditor().getEventManager().queueEvent(ee);
+			}
+			
+			getEditor().getUndoSupport().postEdit(edit);
 		}
 
 		@Override
@@ -503,14 +526,6 @@ public class RecordDataEditorView extends EditorView {
 				T newValue, T oldValue) {
 			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, RecordDataEditorView.this, tier.getName());
 			getEditor().getEventManager().queueEvent(ee);
-			
-			// XXX
-			// Special case for IPATranscript tiers
-			// alignment should be updated here!
-			if(SystemTierType.IPATarget.getName().equals(tier.getName()) ||
-					SystemTierType.IPAActual.getName().equals(tier.getName())) {
-				updateRecordAlignment(groupIndex);
-			}
 		}
 		
 	};

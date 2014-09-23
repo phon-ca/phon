@@ -16,7 +16,6 @@ import javax.swing.text.JTextComponent;
 import ca.phon.orthography.OrthoComment;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.OrthoEvent;
-import ca.phon.orthography.OrthoPunct;
 import ca.phon.orthography.OrthoWord;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Tier;

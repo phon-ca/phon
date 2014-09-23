@@ -35,7 +35,19 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 	}
 	
 	@Override
+	public String getUndoPresentationName() {
+		return "Undo add record " + record.getUuid().toString();
+	}
+	
+	@Override
+	public String getRedoPresentationName() {
+		return "Redo add record " + record.getUuid().toString();
+	}
+	
+	@Override
 	public void undo() {
+		super.undo();
+		
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		

@@ -36,6 +36,8 @@ public class AddGroupEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
+		super.undo();
+		
 		record.removeGroup(groupIndex);
 		
 		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getEditor().getUndoSupport(), null);

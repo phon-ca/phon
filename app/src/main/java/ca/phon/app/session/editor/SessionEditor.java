@@ -120,7 +120,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	/**
 	 * Undo support for the editor
 	 */
-	private final SessionEditorUndoSupport undoSupport = new SessionEditorUndoSupport();
+	private final SessionEditorUndoSupport undoSupport = new SessionEditorUndoSupport(this);
 	
 	/**
 	 * Undo manager
