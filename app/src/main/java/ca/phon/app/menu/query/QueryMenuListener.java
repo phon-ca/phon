@@ -37,6 +37,8 @@ public class QueryMenuListener implements MenuListener {
 		final JMenu queryMenu = (JMenu)e.getSource();
 		queryMenu.removeAll();
 		
+		final CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
+		if(currentFrame == null) return;
 		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
 		if(project == null) return;
 
