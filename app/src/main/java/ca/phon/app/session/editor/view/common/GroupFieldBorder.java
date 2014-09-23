@@ -20,10 +20,6 @@ import ca.phon.util.icons.IconSize;
  */
 public class GroupFieldBorder implements Border {
 	
-	private final static char GROUP_START = '[';
-	
-	private final static char GROUP_END = ']';
-	
 	private final static int TOP_INSET = 2;
 	
 	private final static int BOTTOM_INSET = 2;
@@ -32,20 +28,19 @@ public class GroupFieldBorder implements Border {
 	
 	private final static Color COLOR = Color.LIGHT_GRAY;
 	
+	private final static int NOTCH_WIDTH = 4;
+	
 	private final ImageIcon lockIcon = 
 			IconManager.getInstance().getIcon("emblems/emblem-readonly", IconSize.XSMALL);
 
 	@Override
 	public Insets getBorderInsets(Component c) {
-		final Font font = c.getFont();
-		final FontMetrics metrics = c.getFontMetrics(font);
-		
-		final int startWidth = metrics.getWidths()[(int)GROUP_START];
-		final int endWidth = metrics.getWidths()[(int)GROUP_END];
+		final int startWidth = NOTCH_WIDTH + 1;
+		final int endWidth = NOTCH_WIDTH + 1;
 		
 		final int top = TOP_INSET;
 		final int left = startWidth + SIDE_INSET * 2;
-		final int right = (isShowLock(c) ? IconSize.XSMALL.getWidth() : 0) + endWidth + SIDE_INSET;
+		final int right = endWidth + SIDE_INSET;
 		final int bottom = BOTTOM_INSET;
 		
 		return new Insets(top, left, bottom, right);
@@ -63,17 +58,16 @@ public class GroupFieldBorder implements Border {
 	@Override
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,
 			int height) {
-		final int baseline = c.getBaseline(width, height);
-		
-		final Font font = c.getFont();
-		final FontMetrics metrics = c.getFontMetrics(font);
-		
-		final int endWidth = metrics.getWidths()[(int)GROUP_END];
-		
 		g.setColor(COLOR);
-		g.drawString(GROUP_START+"", 1, baseline);
-		g.drawString(GROUP_END+"", width-endWidth-(isShowLock(c) ? IconSize.XSMALL.getWidth()-1 : 1), baseline);
-				
+		
+		g.drawLine(x+SIDE_INSET, y+TOP_INSET, x+SIDE_INSET, y+(height-BOTTOM_INSET));
+		g.drawLine(x+SIDE_INSET, y+TOP_INSET, x+SIDE_INSET+NOTCH_WIDTH, y+TOP_INSET);
+		g.drawLine(x+SIDE_INSET, y+(height-BOTTOM_INSET), x+SIDE_INSET+NOTCH_WIDTH, y+(height-BOTTOM_INSET));
+		
+		g.drawLine(x+(width-SIDE_INSET)-1, y+TOP_INSET, x+(width-SIDE_INSET)-1, y+(height-BOTTOM_INSET));
+		g.drawLine(x+(width-SIDE_INSET)-1, y+TOP_INSET, x+(width-SIDE_INSET-NOTCH_WIDTH)-1, y+TOP_INSET);
+		g.drawLine(x+(width-SIDE_INSET)-1, y+(height-BOTTOM_INSET), x+(width-SIDE_INSET-NOTCH_WIDTH)-1, y+(height-BOTTOM_INSET));
+		
 		if(isShowLock(c)) {
 			g.drawImage(lockIcon.getImage(), width-IconSize.XSMALL.getWidth(), height-IconSize.XSMALL.getHeight(), c);
 		}
