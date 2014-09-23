@@ -6,3 +6,5 @@ ca.phon.app.ThemeHook
 ca.phon.app.fonts.FontLoaderStartupHook
 # VLC
 ca.phon.app.VLCInitHook
+# IPA Dictionaries
+ca.phon.app.IPADictionaryInitHook
