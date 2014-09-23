@@ -18,12 +18,10 @@ public class UndoCommand extends AbstractAction {
 
 	private UndoManager undoManager;
 	
-	private final static String PREFIX = "Undo";
-	
 	public UndoCommand(UndoManager manager) {
 		super();
 		this.undoManager = manager;
-		putValue(NAME, PREFIX + manager.getPresentationName());
+		putValue(NAME, manager.getUndoPresentationName());
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
