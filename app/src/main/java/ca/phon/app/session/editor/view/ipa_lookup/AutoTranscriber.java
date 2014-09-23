@@ -4,7 +4,10 @@ import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
 
 import ca.phon.alignment.Aligner;
+import ca.phon.app.session.editor.undo.BlindTierEdit;
+import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -15,6 +18,7 @@ import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 import ca.phon.session.Word;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.util.Tuple;
@@ -38,8 +42,18 @@ public class AutoTranscriber {
 	
 	private Syllabifier syllabifier;
 	
+	private Transcriber transcriber = null;
+	
 	public AutoTranscriber() {
 		super();
+	}
+	
+	public void setTranscriber(Transcriber transcriber) {
+		this.transcriber = transcriber;
+	}
+	
+	public Transcriber getTranscriber() {
+		return this.transcriber;
 	}
 
 	public boolean isSetIPATarget() {
@@ -174,25 +188,45 @@ public class AutoTranscriber {
 					transcribeGroup(g);
 			
 			if(isSetIPATarget()) {
-				final TierEdit<IPATranscript> targetEdit = 
-						new TierEdit<IPATranscript>(null, record.getIPATarget(), i, autoTranscription.getObj1());
+				SessionEditorUndoableEdit targetEdit = null;
+				if(getTranscriber() != null) {
+					IPATranscript grpVal = (g.getIPATarget() != null ? g.getIPATarget() : new IPATranscript());
+					targetEdit = 
+							new BlindTierEdit(null, record.getIPATarget(), i, getTranscriber(), 
+									autoTranscription.getObj1(), grpVal);
+				} else {
+					targetEdit = 
+							new TierEdit<IPATranscript>(null, record.getIPATarget(), i, 
+									autoTranscription.getObj1());
+				}
 				targetEdit.doIt();
 				retVal.addEdit(targetEdit);
 			}
 			
 			if(isSetIPAActual()) {
-				final TierEdit<IPATranscript> actualEdit = 
-						new TierEdit<IPATranscript>(null, record.getIPAActual(), i, autoTranscription.getObj2());
+				SessionEditorUndoableEdit actualEdit = null;
+				if(getTranscriber() != null) {
+					IPATranscript grpVal = (g.getIPAActual() != null ? g.getIPAActual() : new IPATranscript());
+					actualEdit = 
+							new BlindTierEdit(null, record.getIPAActual(), i, getTranscriber(),
+									autoTranscription.getObj2(), grpVal);
+				} else {
+					actualEdit = 
+							new TierEdit<IPATranscript>(null, record.getIPAActual(), i, 
+									autoTranscription.getObj2());
+				}
 				actualEdit.doIt();
 				retVal.addEdit(actualEdit);
 			}
 			
-			final PhoneAligner aligner = new PhoneAligner();
-			final PhoneMap pm = aligner.calculatePhoneMap(autoTranscription.getObj1(), autoTranscription.getObj2());
-			final TierEdit<PhoneMap> alignmentEdit = 
-					new TierEdit<PhoneMap>(null, record.getPhoneAlignment(), i, pm);
-			alignmentEdit.doIt();
-			retVal.addEdit(alignmentEdit);
+			if(getTranscriber() == null) {
+				final PhoneAligner aligner = new PhoneAligner();
+				final PhoneMap pm = aligner.calculatePhoneMap(autoTranscription.getObj1(), autoTranscription.getObj2());
+				final TierEdit<PhoneMap> alignmentEdit = 
+						new TierEdit<PhoneMap>(null, record.getPhoneAlignment(), i, pm);
+				alignmentEdit.doIt();
+				retVal.addEdit(alignmentEdit);
+			}
 		}
 		retVal.end();
 		

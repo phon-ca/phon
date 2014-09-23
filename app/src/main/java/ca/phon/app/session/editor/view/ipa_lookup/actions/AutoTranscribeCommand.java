@@ -12,6 +12,7 @@ import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionForm;
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.session.Session;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Action for auto-transcribing a {@link Session} using the
@@ -46,17 +47,24 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 		
 		if(!autoTranscribeDialog.wasCanceled()) {
 			// perform auto transcription
-			// TODO move to background thread
-			final AutoTranscriber transcriber = new AutoTranscriber();
-			transcriber.setDictionary(getLookupView().getLookupContext().getDictionary());
-			transcriber.setOverwrite(autoTranscribeDialog.getForm().isOverwrite());
-			transcriber.setSetIPAActual(autoTranscribeDialog.getForm().isSetIPAActual());
-			transcriber.setSetIPATarget(autoTranscribeDialog.getForm().isSetIPATarget());
-			transcriber.setRecordFilter(autoTranscribeDialog.getForm().getRecordFilter());
-			transcriber.setSyllabifier(autoTranscribeDialog.getForm().getSyllabifier());
-			final UndoableEdit edit = transcriber.transcribeSession(sessionEditor.getSession());
-			sessionEditor.getUndoSupport().postEdit(edit);
-		}			
+			final Runnable task = new Runnable() {
+				
+				@Override
+				public void run() {
+					final AutoTranscriber transcriber = new AutoTranscriber();
+					transcriber.setDictionary(getLookupView().getLookupContext().getDictionary());
+					transcriber.setOverwrite(autoTranscribeDialog.getForm().isOverwrite());
+					transcriber.setSetIPAActual(autoTranscribeDialog.getForm().isSetIPAActual());
+					transcriber.setSetIPATarget(autoTranscribeDialog.getForm().isSetIPATarget());
+					transcriber.setRecordFilter(autoTranscribeDialog.getForm().getRecordFilter());
+					transcriber.setSyllabifier(autoTranscribeDialog.getForm().getSyllabifier());
+					transcriber.setTranscriber(getLookupView().getEditor().getDataModel().getTranscriber());
+					final UndoableEdit edit = transcriber.transcribeSession(sessionEditor.getSession());
+					sessionEditor.getUndoSupport().postEdit(edit);
+				}
+			};
+			PhonWorker.getInstance().invokeLater(task);
+		}
 	}
 	
 }
