@@ -63,7 +63,7 @@ public class FileSelectionField extends JPanel {
 	 */
 	public final static String FILE_PROP = "_selected_file_";
 	
-	private PromptedTextField textField;
+	protected PromptedTextField textField;
 	
 	/**
 	 * Browse button
@@ -96,7 +96,7 @@ public class FileSelectionField extends JPanel {
 		super();
 		init();
 		textField.getDocument().addDocumentListener(validationListener);
-		addFocusListener(focusListener);
+		textField.addFocusListener(focusListener);
 	}
 	
 	private void init() {
@@ -142,8 +142,9 @@ public class FileSelectionField extends JPanel {
 		
 		if(textField.getState() != FieldState.PROMPT) {
 			String txt = textField.getText();
-//			txt = (new PathExpander()).expandPath(txt);
-			retVal = new File(txt);
+			if(txt.length() > 0) {
+				retVal = new File(txt);
+			}
 		}
 		
 		return retVal;
@@ -154,21 +155,20 @@ public class FileSelectionField extends JPanel {
 	 * 
 	 * @param file
 	 */
-	private File lastSelectedFile = null;
+	protected File lastSelectedFile = null;
 	public void setFile(File f) {
 		if(f == null) {
 			textField.setText("");
+			textField.setState(FieldState.PROMPT);
+			
 		} else {
 			textField.setState(FieldState.INPUT);
 			
 			String path = f.getAbsolutePath();
-			String collapsedPath = path;
-//					(new PathExpander()).compressPath(path);
-			textField.setText(collapsedPath);
-			
-			super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
-			lastSelectedFile = f;
+			textField.setText(path);
 		}
+		super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
+		lastSelectedFile = f;
 	}
 	
 	private void checkPath() {
@@ -349,7 +349,7 @@ public class FileSelectionField extends JPanel {
 //		public void keyPressed(KeyEvent e) {
 //		}
 //	};
-	
+//	
 	/**
 	 * Focus listener
 	 */
@@ -358,18 +358,7 @@ public class FileSelectionField extends JPanel {
 		@Override
 		public void focusLost(FocusEvent arg0) {
 			final File f = FileSelectionField.this.getSelectedFile();
-			if(f != null) {
-				final String path = f.getPath();
-//				final PathExpander pe = new PathExpander();
-				final String compressedPath = path;
-//						pe.compressPath(path);
-				
-				textField.setText(compressedPath);
-			} else {
-				textField.setState(FieldState.PROMPT);
-			}
-			firePropertyChange(FILE_PROP, lastSelectedFile, f);
-			lastSelectedFile = f;
+			setFile(f);
 		}
 		
 		@Override

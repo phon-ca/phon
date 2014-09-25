@@ -23,6 +23,7 @@ public class MediaSelectionField extends FileSelectionField {
 		super();
 		this.project = project;
 		setFileFilter(FileFilter.mediaFilter);
+		textField.setPrompt("Session media location");
 	}
 
 	public void setProject(Project project) {
@@ -31,6 +32,27 @@ public class MediaSelectionField extends FileSelectionField {
 	
 	public Project getProject() {
 		return this.project;
+	}
+	
+	@Override
+	public void setFile(File f) {
+		if(f == null) {
+			textField.setText("");
+		} else {
+			textField.setState(FieldState.INPUT);
+			
+			String txt = f.getAbsolutePath();
+			final File parentFolder = f.getParentFile();
+			for(String includePath:MediaLocator.getMediaIncludePaths(project)) {
+				if(includePath.equals(parentFolder.getAbsolutePath())) {
+					txt = f.getName();
+					break;
+				}
+			}
+			textField.setText(txt);
+		}
+		super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
+		lastSelectedFile = f;
 	}
 	
 	@Override
