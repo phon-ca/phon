@@ -18,6 +18,7 @@
 
 package ca.phon.app.session.editor.view.common;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
@@ -114,9 +115,9 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		playButton.setFocusable(false);
 		
 		setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		add(playButton);
-		add(new JSeparator());
 		add(segmentField);
+		add(new JSeparator());
+		add(playButton);
 	}
 	
 	@Override
