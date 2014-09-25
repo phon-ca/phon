@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +40,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,10 +50,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.project.LocalProject;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FontDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.Language;
@@ -79,6 +83,8 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 	private JComboBox autosaveBox;
 	private final Integer[] autosaveTimes = { 0, 5, 10, 15, 20, 30 }; // minutes
+	
+	private JCheckBox backupWhenSaveBox;
 	
 	public EditorPrefsPanel() {
 		super("Session Editor");
@@ -140,22 +146,32 @@ public class EditorPrefsPanel extends PrefsPanel {
 		autosaveBox.addItemListener(new AutosaveTimeListener());
 		autosaveBox.setRenderer(new AutosaveTimeRenderer());
 		
-		JPanel jpanel4 = new JPanel(new FormLayout(
-				"pref",
-				"pref"));
+		JPanel jpanel4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		
-		jpanel4.add(autosaveBox, cc.xy(1,1));
+		jpanel4.add(autosaveBox);
 		jpanel4.setBorder(BorderFactory.createTitledBorder("Autosave Sessions"));
+		
+		final PhonUIAction backupAct = new PhonUIAction(this, "toggleBackupWhenSave");
+		backupAct.putValue(PhonUIAction.NAME, "Backup session file to <project>" + File.separator + 
+				"__backup" + File.separator + "<corpus>" + File.separator + " when saving sessions.");
+		backupAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(LocalProject.PROJECT_BACKUP_WHEN_SAVING_PROP, true));
+		backupWhenSaveBox = new JCheckBox(backupAct);
+		
+		JPanel jpanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		jpanel5.add(backupWhenSaveBox);
+		jpanel5.setBorder(BorderFactory.createTitledBorder("Backup Sessions"));
 		
 		JPanel innerPanel = new JPanel();
 		FormLayout layout = new FormLayout(
 				"fill:pref:grow",
-				"pref, pref, pref, pref");
+				"pref, pref, pref, pref, pref");
 		innerPanel.setLayout(layout);
 		
 		innerPanel.add(jpanel1, cc.xy(1,1));
 		innerPanel.add(jpanel2, cc.xy(1,2));
 		innerPanel.add(jpanel4, cc.xy(1, 4));
+		innerPanel.add(jpanel5, cc.xy(1, 5));
 		
 		setLayout(new BorderLayout());
 		JScrollPane innerScroller = new JScrollPane(innerPanel);
@@ -188,6 +204,10 @@ public class EditorPrefsPanel extends PrefsPanel {
 		ret.append(font.getSize());
 		
 		return ret.toString();
+	}
+	
+	public void toggleBackupWhenSave() {
+		PrefHelper.getUserPreferences().putBoolean(LocalProject.PROJECT_BACKUP_WHEN_SAVING_PROP, backupWhenSaveBox.isSelected());
 	}
 	
 	private class AutosaveTimeRenderer extends DefaultListCellRenderer {

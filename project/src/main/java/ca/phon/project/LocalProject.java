@@ -1,5 +1,7 @@
 package ca.phon.project;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,6 +39,9 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -56,12 +61,18 @@ import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.util.FileUtil;
+import ca.phon.util.PrefHelper;
 
 /**
  * A local on-disk project
  * 
  */
 public class LocalProject implements Project, ProjectRefresh {
+	
+	public final static String PROJECT_BACKUP_WHEN_SAVING_PROP =
+			LocalProject.class.getName() + ".backupWhenSaving";
+	private final static Boolean DEFAULT_BACKUP_WHEN_SAVING = Boolean.TRUE;
 	
 	private final static Logger LOGGER = Logger.getLogger(LocalProject.class.getName());
 	
@@ -485,6 +496,22 @@ public class LocalProject implements Project, ProjectRefresh {
 		return retVal;
 	}
 	
+	private File getSessionBackupFile(String corpus, String session) {
+		final File backupFolder = new File(getLocation(), "__backup");
+		final File corpusFolder = new File(backupFolder, corpus);
+		if(!corpusFolder.exists()) {
+			corpusFolder.mkdirs();
+		}
+		
+		final DateTime dateTime = DateTime.now();
+		final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
+		final String dateSuffix = formatterBuilder.appendYear(4, 4).appendLiteral("-").appendMonthOfYear(2).appendLiteral("-")
+			.appendDayOfMonth(2).appendLiteral("_").appendHourOfDay(2).appendLiteral(".")
+			.appendMinuteOfHour(2).appendLiteral(".").appendSecondOfMinute(2).toFormatter().print(dateTime);
+		
+		return new File(corpusFolder, session + "_" + dateSuffix +".xml");
+	}
+	
 	private String sessionProjectPath(String corpus, String session) {
 		return corpus + "." + session;
 	}
@@ -597,6 +624,30 @@ public class LocalProject implements Project, ProjectRefresh {
 		
 		final File sessionFile = getSessionFile(corpus, sessionName);
 		final boolean created = !sessionFile.exists();
+		
+		// XXX safety checks, make sure we can read back in what we write.
+		// also make sure the number of records has not changed between
+		// the original and serialized session
+		final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		try {
+			writer.writeSession(session, bout);
+			
+			final SessionReader reader = (new SessionInputFactory()).createReader("phonbank", "1.2");
+			final Session testSession = reader.readSession(new ByteArrayInputStream(bout.toByteArray()));
+			if(testSession.getRecordCount() != session.getRecordCount()) {
+				throw new IOException("Session serialization failed.");
+			}
+			bout.close();
+		} catch (IOException e) {
+			// unable to write the session, bail!
+			throw new IOException("Session not written to disk", e);
+		}
+		
+		if(!created && isBackupWhenSaving()) {
+			final File backupFile = getSessionBackupFile(corpus, sessionName);
+			FileUtil.copyFile(sessionFile, backupFile);
+		}
+		
 		final FileOutputStream fOut  = new FileOutputStream(sessionFile);
 		writer.writeSession(session, fOut);
 		
@@ -614,6 +665,10 @@ public class LocalProject implements Project, ProjectRefresh {
 			final ProjectEvent pe = ProjectEvent.newSessionAddedEvent(corpus, sessionName);
 			fireProjectStructureChanged(pe);
 		}
+	}
+	
+	public boolean isBackupWhenSaving() {
+		return PrefHelper.getBoolean(PROJECT_BACKUP_WHEN_SAVING_PROP, DEFAULT_BACKUP_WHEN_SAVING);
 	}
 
 	@Override
