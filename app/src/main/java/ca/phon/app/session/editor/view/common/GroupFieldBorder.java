@@ -5,12 +5,22 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Polygon;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 
 import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
+import org.jdesktop.swingx.painter.effects.GlowPathEffect;
+
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -24,9 +34,13 @@ public class GroupFieldBorder implements Border {
 	
 	private final static int BOTTOM_INSET = 2;
 	
-	private final static int SIDE_INSET = 2;
+	private final static int LEFT_INSET = 2;
+	
+	private final static int RIGHT_INSET = 2;
 	
 	private final static Color COLOR = Color.LIGHT_GRAY;
+	
+	private final static double LINE_WIDTH = 1.5;
 	
 	private final static int NOTCH_WIDTH = 4;
 	
@@ -38,10 +52,10 @@ public class GroupFieldBorder implements Border {
 		final int startWidth = NOTCH_WIDTH + 1;
 		final int endWidth = NOTCH_WIDTH + 1;
 		
-		final int top = TOP_INSET;
-		final int left = startWidth + SIDE_INSET * 2;
-		final int right = endWidth + SIDE_INSET;
-		final int bottom = BOTTOM_INSET;
+		final int top = TOP_INSET + (int)LINE_WIDTH;
+		final int left = startWidth + LEFT_INSET * 2 + (int)LINE_WIDTH;
+		final int right = endWidth + RIGHT_INSET * 2 + (int)LINE_WIDTH;
+		final int bottom = BOTTOM_INSET + (int)LINE_WIDTH;
 		
 		return new Insets(top, left, bottom, right);
 	}
@@ -58,24 +72,55 @@ public class GroupFieldBorder implements Border {
 	@Override
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,
 			int height) {
-		g.setColor(COLOR);
+		final Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		
-		g.drawLine(x+SIDE_INSET, y+TOP_INSET, x+SIDE_INSET, y+(height-BOTTOM_INSET));
-		g.drawLine(x+SIDE_INSET, y+TOP_INSET, x+SIDE_INSET+NOTCH_WIDTH, y+TOP_INSET);
-		g.drawLine(x+SIDE_INSET, y+(height-BOTTOM_INSET), x+SIDE_INSET+NOTCH_WIDTH, y+(height-BOTTOM_INSET));
 		
-		g.drawLine(x+(width-SIDE_INSET)-1, y+TOP_INSET, x+(width-SIDE_INSET)-1, y+(height-BOTTOM_INSET));
-		g.drawLine(x+(width-SIDE_INSET)-1, y+TOP_INSET, x+(width-SIDE_INSET-NOTCH_WIDTH)-1, y+TOP_INSET);
-		g.drawLine(x+(width-SIDE_INSET)-1, y+(height-BOTTOM_INSET), x+(width-SIDE_INSET-NOTCH_WIDTH)-1, y+(height-BOTTOM_INSET));
+		if(c.hasFocus())
+			g.setColor(PhonGuiConstants.PHON_FOCUS);
+		else
+			g.setColor(COLOR);
+		
+		
+		final Rectangle2D r1 = new Rectangle2D.Double(
+				x+LEFT_INSET, y+TOP_INSET,
+				LINE_WIDTH, height-BOTTOM_INSET);
+		
+		final Rectangle2D r2 = new Rectangle2D.Double(
+				x+LEFT_INSET, y+TOP_INSET,
+				LINE_WIDTH + NOTCH_WIDTH, LINE_WIDTH);
+		
+		final Rectangle2D r3 = new Rectangle2D.Double(
+				x+LEFT_INSET, r1.getY() + r1.getHeight() - LINE_WIDTH,
+				LINE_WIDTH + NOTCH_WIDTH, LINE_WIDTH);
+		
+		g2.fill(r1);
+		g2.fill(r2);
+		g2.fill(r3);
+		
+		final double rightX = x + (width - RIGHT_INSET - 1 - LINE_WIDTH);
+		
+		final Rectangle2D r4 = new Rectangle2D.Double(
+				rightX - LINE_WIDTH, y+TOP_INSET,
+				LINE_WIDTH, height-BOTTOM_INSET);
+				
+		final Rectangle2D r5 = new Rectangle2D.Double(
+				rightX - LINE_WIDTH - NOTCH_WIDTH, y+TOP_INSET,
+				LINE_WIDTH + NOTCH_WIDTH, LINE_WIDTH);
+		
+		final Rectangle2D r6 = new Rectangle2D.Double(
+				rightX - LINE_WIDTH - NOTCH_WIDTH, r4.getY() + r4.getHeight() - LINE_WIDTH,
+				LINE_WIDTH + NOTCH_WIDTH, LINE_WIDTH);
+		
+		g2.fill(r4);
+		g2.fill(r5);
+		g2.fill(r6);
 		
 		if(isShowLock(c)) {
 			g.drawImage(lockIcon.getImage(), width-IconSize.XSMALL.getWidth(), height-IconSize.XSMALL.getHeight(), c);
 		}
 		
-		if(c.hasFocus()) {
-			g.setColor(Color.blue);
-			g.drawRect(x, y, width-1, height-1);
-		}
 	}
 	
 }
