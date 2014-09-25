@@ -430,6 +430,15 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	}
 	
 	/**
+	 * Get undo manager for the editor
+	 * 
+	 * @return undo manager
+	 */
+	public UndoManager getUndoManager() {
+		return this.undoManager;
+	}
+	
+	/**
 	 * Has session data been modified
 	 * 
 	 * @return <code>true</code> if modified flag is set, 

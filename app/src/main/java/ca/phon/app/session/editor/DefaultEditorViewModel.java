@@ -41,6 +41,8 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEditSupport;
 
 import antlr.CommonAST;
 import bibliothek.gui.dock.action.DefaultDockActionSource;
@@ -943,6 +945,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			setParentFrame(getEditor());
 			
 			putExtension(Project.class, getEditor().getProject());
+			putExtension(UndoManager.class, getEditor().getUndoManager());
 			
 			accessoryWindows.add(this);
 			
