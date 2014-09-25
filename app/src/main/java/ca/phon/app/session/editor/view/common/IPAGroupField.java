@@ -62,7 +62,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		this.syllabifier = syllabifier;
 		this.transcriberRef = new WeakReference<Transcriber>(transcriber);
 		// init after transcriber is set
-		init();
+		_init();
 	}
 
 	public Transcriber getTranscriber() {
@@ -70,9 +70,9 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	}
 	
 	@Override
-	protected void init() {
+	protected void _init() {
 		if(transcriberRef == null) return;
-		super.init();
+		super._init();
 		addTierEditorListener(new TierEditorListener() {
 			
 			@Override
