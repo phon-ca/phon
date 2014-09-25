@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -52,11 +53,15 @@ import ca.phon.app.session.editor.DividedEditorView;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.undo.SessionDateEdit;
 import ca.phon.app.session.editor.undo.SessionLanguageEdit;
+import ca.phon.app.session.editor.view.common.GroupFieldBorder;
+import ca.phon.app.session.editor.view.common.TierDataConstraint;
+import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.session_information.actions.BrowseForMediaAction;
 import ca.phon.app.session.editor.view.session_information.actions.DeleteParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.EditParticipantAction;
@@ -81,7 +86,7 @@ import com.jgoodies.forms.layout.FormLayout;
 /**
  * 
  */
-public class SessionInfoEditorView extends DividedEditorView {
+public class SessionInfoEditorView extends EditorView {
 
 	private static final long serialVersionUID = -3112381708875592956L;
 
@@ -91,7 +96,7 @@ public class SessionInfoEditorView extends DividedEditorView {
 	 * Date editor
 	 */
 	private DatePicker dateField;
-	
+
 	/**
 	 * Media field
 	 */
@@ -101,6 +106,8 @@ public class SessionInfoEditorView extends DividedEditorView {
 	 * Language
 	 */
 	private JTextField languageField;
+	
+	private TierDataLayoutPanel contentPanel;
 
 	private boolean updatingLanguage = false;
 	private final DocumentListener languageFieldListener = new DocumentListener() {
@@ -138,6 +145,7 @@ public class SessionInfoEditorView extends DividedEditorView {
 	private JXTable participantTable;
 	private JButton editParticipantButton;
 	private JButton addParticipantButton;
+	private JButton removeParticipantButton;
 	
 	/**
 	 * Constructor
@@ -171,19 +179,12 @@ public class SessionInfoEditorView extends DividedEditorView {
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		final JPanel contentPanel = new JPanel();
-		contentPanel.setBackground(Color.white);
-		
-		FormLayout layout = new FormLayout(
-				"right:150px, 5px, fill:pref:grow",
-				"pref, 3dlu, pref, 3dlu, pref, 3dlu, pref");
-		CellConstraints cc = new CellConstraints();
-		contentPanel.setLayout(layout);
+		contentPanel = new TierDataLayoutPanel();
 		
 		dateField = createDateField();
 		dateField.setBackground(Color.white);
 		
-		mediaLocationField = new MediaSelectionField();
+		mediaLocationField = new MediaSelectionField(getEditor().getProject());
 		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		
 		participantTable = new JXTable();
@@ -192,10 +193,17 @@ public class SessionInfoEditorView extends DividedEditorView {
 		ComponentInputMap participantTableInputMap = new ComponentInputMap(participantTable);
 		ActionMap participantTableActionMap = new ActionMap();
 		
+		ImageIcon deleteIcon = 
+				IconManager.getInstance().getIcon("actions/delete_user", IconSize.SMALL);
 		final PhonUIAction deleteAction = new PhonUIAction(this, "deleteParticipant");
+//		deleteAction.putValue(PhonUIAction.NAME, "Delete participant");
+		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete selected participant");
+		deleteAction.putValue(PhonUIAction.SMALL_ICON, deleteIcon);
 		participantTableActionMap.put("DELETE_PARTICIPANT", deleteAction);
 		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE_PARTICIPANT");
 		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "DELETE_PARTICIPANT");
+		
+		removeParticipantButton = new JButton(deleteAction);
 		
 		participantTable.setInputMap(WHEN_FOCUSED, participantTableInputMap);
 		participantTable.setActionMap(participantTableActionMap);
@@ -212,29 +220,48 @@ public class SessionInfoEditorView extends DividedEditorView {
 		editParticipantButton = new JButton(editParticipantAct);
 		editParticipantButton.setFocusable(false);
 		
+		final CellConstraints cc = new CellConstraints();
 		FormLayout participantLayout = new FormLayout(
-				"fill:pref:grow, pref",
+				"fill:pref:grow, pref, pref, pref",
 				"pref, pref, pref:grow");
 		JPanel participantPanel = new JPanel(participantLayout);
 		participantPanel.setBackground(Color.white);
-		participantPanel.add(new JScrollPane(participantTable), cc.xywh(1, 1, 1, 3));
-		participantPanel.add(addParticipantButton, cc.xy(2,1));
-		participantPanel.add(editParticipantButton, cc.xy(2,2));
+		participantPanel.add(new JScrollPane(participantTable), cc.xywh(1, 2, 3, 2));
+		participantPanel.add(addParticipantButton, cc.xy(3,1));
+		participantPanel.add(editParticipantButton, cc.xy(2,1));
+		participantPanel.add(removeParticipantButton, cc.xy(4, 2));
 		
 		languageField = new JTextField();
 		languageField.getDocument().addDocumentListener(languageFieldListener);
 		
-		contentPanel.add(new JLabel("Session Date"), cc.xy(1,1));
-		contentPanel.add(dateField, cc.xy(3,1));
+		int rowIdx = 0;
+		final JLabel dateLbl = new JLabel("Session Date");
+		dateLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPanel.add(dateLbl, 
+				new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, rowIdx));
+		contentPanel.add(dateField, 
+				new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, rowIdx++));
 		
-		contentPanel.add(new JLabel("Media"), cc.xy(1, 3));
-		contentPanel.add(mediaLocationField, cc.xy(3, 3));
+		final JLabel mediaLbl = new JLabel("Media");
+		mediaLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPanel.add(mediaLbl,
+				new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, rowIdx));
+		contentPanel.add(mediaLocationField, 
+				new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, rowIdx++));
 		
-		contentPanel.add(new JLabel("Participants"), cc.xy(1, 5));
-		contentPanel.add(participantPanel, cc.xy(3, 5));
+		final JLabel partLbl = new JLabel("Participants");
+		partLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPanel.add(partLbl,
+				new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, rowIdx));
+		contentPanel.add(participantPanel, 
+				new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, rowIdx++));
 		
-		contentPanel.add(new JLabel("Language"), cc.xy(1, 7));
-		contentPanel.add(languageField, cc.xy(3, 7));
+		final JLabel langLbl = new JLabel("Language");
+		langLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPanel.add(langLbl,
+				new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, rowIdx));
+		contentPanel.add(languageField, 
+				new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, rowIdx++));
 		
 		add(new JScrollPane(contentPanel), BorderLayout.CENTER);
 		
@@ -349,7 +376,7 @@ public class SessionInfoEditorView extends DividedEditorView {
 		if(ee.getSource() != this) {
 			final String mediaPath = getEditor().getSession().getMediaLocation();
 			updatingMediaLocation = true;
-			mediaLocationField.setFile(new File(mediaPath));
+			mediaLocationField.setFile(mediaPath != null ? new File(mediaPath) : null);
 			updatingMediaLocation = false;
 		}
 	}

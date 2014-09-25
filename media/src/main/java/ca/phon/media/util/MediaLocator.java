@@ -66,6 +66,17 @@ public class MediaLocator {
 		return parseMediaIncludePaths();
 	}
 	
+	public static List<String> getMediaIncludePaths(Project project) {
+		List<String> retVal = new ArrayList<String>(getMediaIncludePaths());
+		
+		if(project != null) {
+			final File projectResFolder = new File(project.getLocation(), "__res" + File.separator + "media");
+			retVal.add(projectResFolder.getAbsolutePath());
+		}
+		
+		return retVal;
+	}
+	
 	/**
 	 * Get media include path as a list of
 	 * paths.
