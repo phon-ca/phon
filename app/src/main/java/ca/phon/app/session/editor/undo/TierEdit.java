@@ -123,7 +123,8 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 			setOldValue(tier.getGroup(groupIndex));			
 			tier.setGroup(groupIndex, newValue);
 		} else {
-			tier.addGroup(groupIndex, newValue);
+			while(tier.numberOfGroups() < groupIndex) tier.addGroup();
+			tier.addGroup(newValue);
 		}
 		
 		if(getEditor() != null)
