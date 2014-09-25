@@ -219,6 +219,9 @@ public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+		
 		if(_buffer == null ||
 				(_buffer.getWidth() != _display.getWidth() || _buffer.getHeight() != _display.getHeight())) {
 			g.setColor(Color.black);
