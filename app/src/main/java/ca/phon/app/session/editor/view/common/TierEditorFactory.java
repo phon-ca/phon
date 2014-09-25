@@ -58,8 +58,9 @@ public class TierEditorFactory {
 		}
 		
 		// create a generic tier editor
-		if(retVal == null)
-			retVal = new GroupField(tier, group);
+		if(retVal == null) {
+			retVal = new GroupField(tier, group, !tierDescription.isGrouped());
+		}
 		
 		installTierEditorActions(retVal.getEditorComponent());
 		

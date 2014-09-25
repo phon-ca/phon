@@ -35,7 +35,7 @@ public class DefaultTierEditorExtension implements IPluginExtensionPoint<TierEdi
 			
 			@SuppressWarnings("unchecked")
 			final Tier<String> stringTier = (Tier<String>)tier;
-			return new GroupField<String>(stringTier, group);
+			return new GroupField<String>(stringTier, group, !tier.isGrouped());
 		}
 		
 	};

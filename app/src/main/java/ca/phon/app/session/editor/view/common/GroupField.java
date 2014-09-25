@@ -1,7 +1,12 @@
 package ca.phon.app.session.editor.view.common;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -18,14 +23,22 @@ import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.TextUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.undo.UndoManager;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.jdesktop.swingx.JXTextArea;
+import org.jdesktop.swingx.JXTextField;
+
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
+import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
 import ca.phon.ui.action.PhonUIAction;
@@ -33,7 +46,7 @@ import ca.phon.ui.action.PhonUIAction;
 /**
  * Text field for editing tier data for a group.
  */
-public class GroupField<T> extends JTextPane implements TierEditor {
+public class GroupField<T> extends JTextArea implements TierEditor {
 	
 	private static final long serialVersionUID = -5541784214656593497L;
 	
@@ -48,9 +61,14 @@ public class GroupField<T> extends JTextPane implements TierEditor {
 	protected volatile boolean allowNewline = false;
 	
 	public GroupField(Tier<T> tier, int groupIndex) {
+		this(tier, groupIndex, false);
+	}
+	
+	public GroupField(Tier<T> tier, int groupIndex, boolean allowNewLine) {
 		super();
 		this.tier = tier;
 		this.groupIndex = groupIndex;
+		this.allowNewline = allowNewLine;
 		
 		setupInputMap();
 		
@@ -76,15 +94,29 @@ public class GroupField<T> extends JTextPane implements TierEditor {
 			}
 			
 		});
+	
+		setLineWrap(allowNewLine);
+		setWrapStyleWord(allowNewline);
 		
-		
+		setBackground(new Color(255,255,255,0));
 		setOpaque(false);
-		init();
+		_init();
 		tier.addTierListener(tierListener);
 		addFocusListener(focusListener);
+		
 		getDocument().addDocumentListener(docListener);
 		getDocument().addUndoableEditListener(undoManager);
 	}
+	
+//	@Override
+//	public void paintComponent(Graphics g) {
+//		final Graphics2D g2 = (Graphics2D)g;
+//		
+//		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+//		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+//		
+//		super.paintComponent(g2);
+//	}
 	
 	private void setupInputMap() {
 		final ActionMap am = getActionMap();
@@ -161,7 +193,7 @@ public class GroupField<T> extends JTextPane implements TierEditor {
 	/**
 	 * Setup border, listeners and initial text value.
 	 */
-	protected void init() {
+	protected void _init() {
 		final GroupFieldBorder border = new GroupFieldBorder();
 		setBorder(border);
 		
