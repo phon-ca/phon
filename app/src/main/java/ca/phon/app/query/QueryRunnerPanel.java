@@ -25,6 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,6 +57,8 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.joda.time.DateTime;
 
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -464,6 +468,11 @@ public class QueryRunnerPanel extends JPanel {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
+			
+			final PrintStream bufferOut = queryScript.getQueryContext().getStdOut();
+			bufferOut.flush();
+			bufferOut.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+			bufferOut.flush();
 			
 			busyLabel.setBusy(false);
 			saveButton.setEnabled(true);

@@ -26,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -50,6 +51,10 @@ import ca.phon.util.icons.IconSize;
 
 public class BufferPanel extends JPanel {
 	
+	public final static String SHOW_TABLE_CODE = "SHOW_TABLE";
+	
+	public final static String SHOW_BUFFER_CODE = "SHOW_BUFFER";
+	
 	private static final Logger LOGGER = Logger
 			.getLogger(BufferPanel.class.getName());
 
@@ -73,6 +78,26 @@ public class BufferPanel extends JPanel {
 		super();
 		
 		logBuffer = new LogBuffer(name);
+		logBuffer.addEscapeCodeHandler(new LogEscapeCodeHandler() {
+			
+			@Override
+			public void handleEscapeCode(String code) {
+				final Runnable swapBuffer = new Runnable() {
+					
+					@Override
+					public void run() {
+						onSwapBuffer();
+					}
+				};
+				if(SHOW_TABLE_CODE.equals(code) && isShowingBuffer()) {
+					SwingUtilities.invokeLater(swapBuffer);
+				} else if(SHOW_BUFFER_CODE.equals(code) && !isShowingBuffer()) {
+					SwingUtilities.invokeLater(swapBuffer);
+				}
+			}
+			
+		});
+		
 		dataTable = new JXTable();
 		dataTable.setColumnControlVisible(true);
 		dataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

@@ -578,6 +578,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 			}
+			
 		});
         
 		

@@ -1,7 +1,6 @@
 package ca.phon.app.log;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -9,35 +8,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-
-
-
-
-
-
-
-
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
-import ca.phon.app.prefs.PhonProperties;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.PrefHelper;
 
 public class LogBuffer extends RSyntaxTextArea {
 	
 	private static final Logger LOGGER = Logger.getLogger(LogBuffer.class
 			.getName());
+	
+	public static final String ESCAPE_CODE_PREFIX = "\u0000\u0000";
 
 	private static final long serialVersionUID = -7321262414933863183L;
 
@@ -48,6 +41,9 @@ public class LogBuffer extends RSyntaxTextArea {
 	private final String name;
 	
 	private final String encoding = "UTF-8";
+	
+	private final List<LogEscapeCodeHandler> escapeCodeHandlers = 
+			Collections.synchronizedList(new ArrayList<LogEscapeCodeHandler>());
 	
 	public LogBuffer(String name) {
 		super();
@@ -66,6 +62,25 @@ public class LogBuffer extends RSyntaxTextArea {
 		setFont(FontPreferences.getMonospaceFont());
 	}
 	
+	public void addEscapeCodeHandler(LogEscapeCodeHandler escapeCodeHandler) {
+		if(!this.escapeCodeHandlers.contains(escapeCodeHandler))
+			this.escapeCodeHandlers.add(escapeCodeHandler);
+	}
+	
+	public void removeEscapeCodeHandler(LogEscapeCodeHandler escapeCodeHandler) {
+		this.escapeCodeHandlers.remove(escapeCodeHandler);
+	}
+	
+	public List<LogEscapeCodeHandler> getEscapeCodeHandlers() {
+		return Collections.unmodifiableList(escapeCodeHandlers);
+	}
+	
+	public void fireEscapeCodeEvent(String code) {
+		for(LogEscapeCodeHandler handler:getEscapeCodeHandlers()) {
+			handler.handleEscapeCode(code);
+		}
+	}
+	
 	public OutputStream getStdOutStream() {
 		return stdOutStream;
 	}
@@ -80,6 +95,26 @@ public class LogBuffer extends RSyntaxTextArea {
 	
 	public String getEncoding() {
 		return encoding;
+	}
+	
+	public void writeEscapeCode(String code) {
+		try {
+			stdOutStream.flush();
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		final StringBuffer buffer = new StringBuffer();
+		buffer.append(ESCAPE_CODE_PREFIX).append(code);
+		
+		try {
+			stdOutStream.write(buffer.toString().getBytes(encoding));
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
 	}
 	
 	private class DocumentOutputStream extends OutputStream {
@@ -126,7 +161,12 @@ public class LogBuffer extends RSyntaxTextArea {
 		@Override
 		public void flush() throws IOException {
 			super.flush();
-			writeToDocument(buffer.toString(encoding));
+			final String toWrite = buffer.toString(encoding);
+			if(toWrite.startsWith(ESCAPE_CODE_PREFIX)) {
+				fireEscapeCodeEvent(toWrite.substring(2));
+			} else {
+				writeToDocument(buffer.toString(encoding));
+			}
 			buffer = new ByteArrayOutputStream();
 		}
 		
