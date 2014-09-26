@@ -1,6 +1,5 @@
 package ca.phon.app.log;
 
-import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
@@ -36,7 +35,7 @@ public class BufferPanelButtons extends JComponent {
 	
 	private final WeakReference<BufferPanel> panelRef;
 	
-	public BufferPanelButtons(Container container, BufferPanel panel) {
+	public BufferPanelButtons(BufferPanel panel) {
 		super();
 		
 		panelRef = new WeakReference<BufferPanel>(panel);

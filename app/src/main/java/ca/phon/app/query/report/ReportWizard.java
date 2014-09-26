@@ -213,7 +213,7 @@ public class ReportWizard extends WizardFrame {
 		final FormLayout optLayout = new FormLayout(
 				"pref, pref, fill:pref:grow, right:pref", "pref");
 		JPanel optPanel = new JPanel(optLayout);
-		optPanel.add(new BufferPanelButtons(this, console), cc.xy(4, 1));
+		optPanel.add(new BufferPanelButtons(console), cc.xy(4, 1));
 		consolePanel.add(optPanel, BorderLayout.NORTH);
 		
 		return super.addWizardStep(importPanel);

@@ -53,8 +53,6 @@ public class BufferWindow extends CommonModuleFrame {
 	
 	private JButton closeButton;
 	
-	private JButton saveButton;
-	
 	private JPanel topPanel;
 	
 	private final Map<String, BufferPanel> panels = 
@@ -100,7 +98,7 @@ public class BufferWindow extends CommonModuleFrame {
 		add(header, BorderLayout.NORTH);
 		
 		final JPanel centerPanel = new JPanel(new BorderLayout());
-		final JPanel selectionPanel = new JPanel(new FormLayout("pref, 3dlu, fill:pref:grow, 3dlu, pref", "pref, pref"));
+		final JPanel selectionPanel = new JPanel(new FormLayout("pref, 3dlu, fill:pref:grow, 3dlu, pref", "pref"));
 		final CellConstraints cc = new CellConstraints();
 		selectionPanel.add(new JLabel("Buffer: "), cc.xy(1,1));
 		buffersBox = new JComboBox();
@@ -114,12 +112,9 @@ public class BufferWindow extends CommonModuleFrame {
 			
 		});
 		selectionPanel.add(buffersBox, cc.xy(3, 1));
-	
-		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction();
-		saveButton = new JButton(saveAct);
-		saveButton.setText(null);
-		selectionPanel.add(saveButton, cc.xy(5, 1));
-		topPanel = selectionPanel;
+		
+		closeButton = new JButton(new CloseCurrentBufferAction());
+		selectionPanel.add(closeButton, cc.xy(5, 1));
 		
 		centerPanel.add(selectionPanel, BorderLayout.NORTH);
 		
@@ -166,11 +161,6 @@ public class BufferWindow extends CommonModuleFrame {
 	
 	public void selectBuffer(String name) {
 		buffersLayout.show(buffersPanel, name);
-		final BufferPanel panel = getCurrentBuffer();
-		if(panel != null) {
-			final BufferPanelButtons btns = new BufferPanelButtons(this, panel);
-			topPanel.add(btns, (new CellConstraints()).xy(5, 2));
-		}
 	}
 	
 	public BufferPanel getCurrentBuffer() {

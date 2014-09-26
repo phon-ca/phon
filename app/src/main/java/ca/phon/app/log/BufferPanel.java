@@ -19,6 +19,7 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -37,12 +38,15 @@ import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.log.actions.SaveLogBufferAction;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.text.TableSearchField;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class BufferPanel extends JPanel {
 	
@@ -58,6 +62,10 @@ public class BufferPanel extends JPanel {
 	private JXTable dataTable;
 	
 	private boolean showingBuffer = true;
+	
+	private JButton saveButton;
+	
+	private BufferPanelButtons buttons;
 	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 	
@@ -78,6 +86,28 @@ public class BufferPanel extends JPanel {
 	
 	private void init() {
 		setLayout(new BorderLayout());
+		
+		final FormLayout topLayout = new FormLayout(
+				"pref, fill:pref:grow, right:pref", "pref, pref");
+		final CellConstraints cc = new CellConstraints();
+		final JPanel topPanel = new JPanel(topLayout);
+		
+		final PhonUIAction saveAct = new PhonUIAction(this, "onSaveBuffer");
+		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save buffer...");
+		saveAct.putValue(PhonUIAction.SMALL_ICON, 
+				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+		saveButton = new JButton(saveAct);
+		
+		final HidablePanel infoPanel = new HidablePanel(BufferPanel.class.getName() + ".infoMessage");
+		infoPanel.add(new JLabel("Use the buttons on the below and to the right to switch between text and table views"));
+		
+		buttons = new BufferPanelButtons(this);
+		
+		topPanel.add(saveButton, cc.xy(1,2));
+		topPanel.add(buttons, cc.xy(3, 2));
+		topPanel.add(infoPanel, cc.xyw(1, 1, 3));
+		
+		add(topPanel, BorderLayout.NORTH);
 		
 		logScroller = new RTextScrollPane(logBuffer, true);
 		add(logScroller, BorderLayout.CENTER);
