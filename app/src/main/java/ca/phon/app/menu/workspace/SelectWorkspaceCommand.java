@@ -15,8 +15,8 @@ public class SelectWorkspaceCommand extends HookableAction {
 
 	private static final long serialVersionUID = 6739632731206685754L;
 
-	private final static String TXT = "Select workspace folder...";
-	private final static String DESC = "Select workspace folder...";
+	private final static String TXT = "Select Workspace folder...";
+	private final static String DESC = "Select Workspace folder...";
 	
 	public SelectWorkspaceCommand() {
 		super();

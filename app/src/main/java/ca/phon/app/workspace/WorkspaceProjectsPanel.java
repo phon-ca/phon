@@ -27,10 +27,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.prefs.NodeChangeEvent;
+import java.util.prefs.NodeChangeListener;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.JXLabel;
@@ -38,11 +44,13 @@ import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
+import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.workspace.Workspace;
@@ -60,6 +68,31 @@ public class WorkspaceProjectsPanel extends JPanel {
 	
 	public WorkspaceProjectsPanel() {
 		super();
+		
+		final Preferences prefs = PrefHelper.getUserPreferences();
+		prefs.addPreferenceChangeListener(new PreferenceChangeListener() {
+			
+			@Override
+			public void preferenceChange(PreferenceChangeEvent evt) {
+				if(evt.getKey().equals(Workspace.WORKSPACE_FOLDER)) {
+					final Runnable onEdt = new Runnable() {
+						
+						@Override
+						public void run() {
+							projectList.setFolder(Workspace.userWorkspaceFolder());
+							workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
+							refresh();
+						}
+					};
+					if(SwingUtilities.isEventDispatchThread())
+						onEdt.run();
+					else
+						SwingUtilities.invokeLater(onEdt);
+				}
+				
+			}
+			
+		});
 		
 		init();
 	}
@@ -102,10 +135,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 		
 		ImageIcon browseIcn = IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
 		ImageIcon browseIcnL = IconManager.getInstance().getIcon("actions/document-open", IconSize.MEDIUM);
-		PhonUIAction changeWorkspaceAct = 
-			new PhonUIAction(this, "onChangeWorkspace");
-		changeWorkspaceAct.putValue(Action.NAME, "Choose workspace folder...");
-		changeWorkspaceAct.putValue(Action.SHORT_DESCRIPTION, "Choose workspace folder...");
+		final Action changeWorkspaceAct = new SelectWorkspaceCommand();
 		changeWorkspaceAct.putValue(Action.SMALL_ICON, browseIcn);
 		changeWorkspaceAct.putValue(Action.LARGE_ICON_KEY, browseIcnL);
 		
@@ -194,25 +224,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 //		
 //		add(infoPanel, BorderLayout.WEST);
 	}
-	
-	/* 
-	 * UI Actions
-	 */
-	public void onChangeWorkspace(PhonActionEvent pae) {
-		// show browse dialog
-		String selectedDir = 
-			NativeDialogs.browseForDirectoryBlocking(CommonModuleFrame.getCurrentFrame(), null, "Select workspace folder");
-		if(selectedDir != null) {
-			// save new workspace folder
-//			PhonUtilities.setPhonWorkspace(selectedDir);
-			Workspace.setUserWorkspaceFolder(new File(selectedDir));
-			
-			projectList.setFolder(new File(selectedDir));
-			
-			workspaceBtn.setBottomLabelText(selectedDir);
-		}
-	}
-	
+
 	public void onResetWorkspace(PhonActionEvent pae) {
 		final File defaultWorkspace = Workspace.defaultWorkspaceFolder();
 		Workspace.setUserWorkspaceFolder(defaultWorkspace);
