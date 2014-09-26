@@ -19,7 +19,7 @@
             </extensions>
         </node>
         <ogcn:macro id="50ba0dfc" name="Mark Nucleus" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-            <graph id="31dddb91">
+            <graph id="257c8eee">
                 <node id="1667e92a" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                     <extensions>
                         <oga:settings>
@@ -29,7 +29,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="6bcf8de2" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6c4fb761">
+                    <graph id="2b977df5">
                         <node id="7ba614a" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                             <extensions>
                                 <oga:settings>
@@ -67,7 +67,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="139f953" name="Mark Onset" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-            <graph id="21b60bad">
+            <graph id="6116aae3">
                 <node id="55ca6954" name="g1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                     <extensions>
                         <oga:settings>
@@ -85,7 +85,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="3be5d207" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="354c0a31">
+                    <graph id="18a8b019">
                         <node id="669aa3f3" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                             <extensions>
                                 <oga:settings>
@@ -123,9 +123,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="6f7b847c" name="Mark Nucleus Liquid" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5d4703c3">
+            <graph id="69afbfa">
                 <ogcn:macro id="4a3823c0" name="Mark Medial Liquid" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="6148270c">
+                    <graph id="2914dd79">
                         <node id="6c4b58f0" name="g1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -134,20 +134,20 @@
                                 <oga:meta x="100" y="170"/>
                             </extensions>
                         </node>
-                        <node id="46bc2c1b" name="liq" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="270"/>
-                            </extensions>
-                        </node>
                         <node id="5a588fd6" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </node>
+                        <node id="46bc2c1b" name="liq" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="270"/>
                             </extensions>
                         </node>
                         <node id="6bf3c4e4" name="g3" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
@@ -159,7 +159,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="598c3ce0" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="57ad85ed">
+                            <graph id="64f600fc">
                                 <node id="8a69d8" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -197,21 +197,21 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="51154edd" name="Mark Final LIquid" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="5e10a811">
-                        <node id="72e99437" name="liq" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="270"/>
-                            </extensions>
-                        </node>
+                    <graph id="72599eea">
                         <node id="14bccf7f" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </node>
+                        <node id="72e99437" name="liq" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="270"/>
                             </extensions>
                         </node>
                         <node id="33a66bb6" name="g1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
@@ -223,7 +223,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="4501e1d1" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="fc5f770">
+                            <graph id="a0b63ff">
                                 <node id="b504dd5" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -261,7 +261,15 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2fce5037" name="Mark Initial Liquid" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="7772d5dd">
+                    <graph id="4a3a4ccb">
+                        <node id="2267889d" name="g2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="270"/>
+                            </extensions>
+                        </node>
                         <node id="b2cae4e" name="liq" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -278,16 +286,8 @@
                                 <oga:meta x="100" y="70"/>
                             </extensions>
                         </node>
-                        <node id="2267889d" name="g2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="270"/>
-                            </extensions>
-                        </node>
                         <ogcn:macro id="3b3a0d10" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="78e76ee6">
+                            <graph id="54bc8598">
                                 <node id="679cf842" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -324,8 +324,8 @@
                         <oga:meta x="984" y="53"/>
                     </extensions>
                 </ogcn:macro>
-                <link dest="51154edd" destField="ipa" source="4a3823c0" sourceField="ipa out"/>
                 <link dest="2fce5037" destField="ipa" source="51154edd" sourceField="ipa out"/>
+                <link dest="51154edd" destField="ipa" source="4a3823c0" sourceField="ipa out"/>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="4a3823c0"/>
             <ogcn:published_output field="ipa out" name="ipa out" ref="2fce5037"/>
@@ -334,15 +334,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="6090a8fd" name="Mark Onset" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-            <graph id="7c6172b5">
-                <node id="2c69c4e9" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
-                        </oga:settings>
-                        <oga:meta x="100" y="70"/>
-                    </extensions>
-                </node>
+            <graph id="62b585b9">
                 <node id="53feb3c6" name="c" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                     <extensions>
                         <oga:settings>
@@ -351,8 +343,16 @@
                         <oga:meta x="100" y="170"/>
                     </extensions>
                 </node>
+                <node id="2c69c4e9" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="100" y="70"/>
+                    </extensions>
+                </node>
                 <ogcn:macro id="2e843769" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="250a68bd">
+                    <graph id="638b6eec">
                         <node id="2b4d5b4a" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                             <extensions>
                                 <oga:settings>
@@ -390,25 +390,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="54b772a7" name="Mark Nucleus Nasal" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="75dd085d">
+            <graph id="b77552">
                 <ogcn:macro id="c6696cf" name="Mark Medial Nasal" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="2504e1f">
-                        <node id="3669dc53" name="g1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="170"/>
-                            </extensions>
-                        </node>
-                        <node id="5fffe90d" name="nas" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="270"/>
-                            </extensions>
-                        </node>
+                    <graph id="c775adc">
                         <node id="4d72f5d6" name="g3" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -425,8 +409,24 @@
                                 <oga:meta x="100" y="70"/>
                             </extensions>
                         </node>
+                        <node id="5fffe90d" name="nas" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="270"/>
+                            </extensions>
+                        </node>
+                        <node id="3669dc53" name="g1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </node>
                         <ogcn:macro id="1a1d85b8" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="3fcdf989">
+                            <graph id="27fcd475">
                                 <node id="722ee101" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -464,15 +464,7 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="56e767d0" name="Mark Final Nasal" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="22981654">
-                        <node id="19fb9663" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="70"/>
-                            </extensions>
-                        </node>
+                    <graph id="59f11014">
                         <node id="35178098" name="nas" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -489,8 +481,16 @@
                                 <oga:meta x="100" y="170"/>
                             </extensions>
                         </node>
+                        <node id="19fb9663" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="70"/>
+                            </extensions>
+                        </node>
                         <ogcn:macro id="544e4ae8" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="2f41723f">
+                            <graph id="1db205fe">
                                 <node id="2d0de2ba" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -528,15 +528,7 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7a1b3866" name="Mark Initial Nasal" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="423dc00c">
-                        <node id="23fcbe09" name="nas" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="170"/>
-                            </extensions>
-                        </node>
+                    <graph id="3ea382d9">
                         <node id="286b6a02" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -553,8 +545,16 @@
                                 <oga:meta x="100" y="270"/>
                             </extensions>
                         </node>
+                        <node id="23fcbe09" name="nas" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="170"/>
+                            </extensions>
+                        </node>
                         <ogcn:macro id="26205354" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="61ffbe9a">
+                            <graph id="3b1d540f">
                                 <node id="49162edf" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -604,7 +604,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="54193d42" name="Mark Onset" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-            <graph id="3f6225b8">
+            <graph id="1a4ad72f">
                 <node id="2e0b5c4a" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                     <extensions>
                         <oga:settings>
@@ -622,7 +622,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="6bd815e3" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="51f6292b">
+                    <graph id="187ad6bb">
                         <node id="6b6faef7" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                             <extensions>
                                 <oga:settings>
@@ -660,7 +660,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="4ab0d24d" name="Mark Coda" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-            <graph id="6453043a">
+            <graph id="3c912eaa">
                 <node id="36b8ddd8" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                     <extensions>
                         <oga:settings>
@@ -678,7 +678,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="c3264a0" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6279c67f">
+                    <graph id="2bb49274">
                         <node id="2f3409c5" name="SyllableConstituentType.CODA" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                             <extensions>
                                 <oga:settings>
@@ -716,15 +716,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="296db5ee" name="Max Coda" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-            <graph id="42b522aa">
-                <node id="1763e4e7" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
-                        </oga:settings>
-                        <oga:meta x="100" y="70"/>
-                    </extensions>
-                </node>
+            <graph id="121309d4">
                 <node id="10cd508f" name="c" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                     <extensions>
                         <oga:settings>
@@ -733,8 +725,16 @@
                         <oga:meta x="100" y="170"/>
                     </extensions>
                 </node>
+                <node id="1763e4e7" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="100" y="70"/>
+                    </extensions>
+                </node>
                 <ogcn:macro id="1f4905b0" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="78c22d25">
+                    <graph id="30f1fbb3">
                         <node id="20885af" name="SyllableConstituentType.CODA" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                             <extensions>
                                 <oga:settings>
@@ -772,17 +772,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="70f4f7ea" name="Obs Patterns" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="2921a642">
+            <graph id="758e9f2b">
                 <ogcn:macro id="42978a93" name="4x0bs" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="602a4c26">
-                        <node id="784f6235" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="70"/>
-                            </extensions>
-                        </node>
+                    <graph id="6673fc58">
                         <node id="23b8c348" name="ob1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -799,12 +791,12 @@
                                 <oga:meta x="100" y="470"/>
                             </extensions>
                         </node>
-                        <node id="371cbe4a" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="784f6235" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="100" y="270"/>
+                                <oga:meta x="100" y="70"/>
                             </extensions>
                         </node>
                         <node id="4011088a" name="ob3" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
@@ -815,66 +807,16 @@
                                 <oga:meta x="100" y="370"/>
                             </extensions>
                         </node>
-                        <ogcn:macro id="2c6b4325" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="2c149d4d">
-                                <node id="40472e64" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="358" y="224"/>
-                                    </extensions>
-                                </node>
-                                <node id="136c834" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="692" y="190"/>
-                                    </extensions>
-                                </node>
-                                <link dest="136c834" destField="scType" source="40472e64" sourceField="value"/>
-                            </graph>
+                        <node id="371cbe4a" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="343" y="523"/>
+                                <oga:meta x="100" y="270"/>
                             </extensions>
-                        </ogcn:macro>
-                        <ogcn:macro id="3451b8b2" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="2bd640b2">
-                                <node id="fc877f5" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="358" y="224"/>
-                                    </extensions>
-                                </node>
-                                <node id="3a78c4cd" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="692" y="190"/>
-                                    </extensions>
-                                </node>
-                                <link dest="3a78c4cd" destField="scType" source="fc877f5" sourceField="value"/>
-                            </graph>
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="358" y="303"/>
-                            </extensions>
-                        </ogcn:macro>
+                        </node>
                         <ogcn:macro id="29b2148a" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="2c78f1a0">
+                            <graph id="261edc7f">
                                 <node id="241880aa" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -902,8 +844,37 @@
                                 <oga:meta x="339" y="206"/>
                             </extensions>
                         </ogcn:macro>
+                        <ogcn:macro id="3451b8b2" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                            <graph id="618c90ec">
+                                <node id="fc877f5" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="358" y="224"/>
+                                    </extensions>
+                                </node>
+                                <node id="3a78c4cd" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="692" y="190"/>
+                                    </extensions>
+                                </node>
+                                <link dest="3a78c4cd" destField="scType" source="fc877f5" sourceField="value"/>
+                            </graph>
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="358" y="303"/>
+                            </extensions>
+                        </ogcn:macro>
                         <ogcn:macro id="7a3d1139" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="4622fec1">
+                            <graph id="6fe8f518">
                                 <node id="3a311120" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -931,10 +902,39 @@
                                 <oga:meta x="348" y="410"/>
                             </extensions>
                         </ogcn:macro>
-                        <link dest="7a3d1139" destField="obj" source="4011088a" sourceField="ipa"/>
+                        <ogcn:macro id="2c6b4325" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                            <graph id="6ffef080">
+                                <node id="40472e64" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="358" y="224"/>
+                                    </extensions>
+                                </node>
+                                <node id="136c834" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="692" y="190"/>
+                                    </extensions>
+                                </node>
+                                <link dest="136c834" destField="scType" source="40472e64" sourceField="value"/>
+                            </graph>
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="343" y="523"/>
+                            </extensions>
+                        </ogcn:macro>
                         <link dest="29b2148a" destField="obj" source="23b8c348" sourceField="ipa"/>
-                        <link dest="2c6b4325" destField="obj" source="1e47bce2" sourceField="ipa"/>
                         <link dest="3451b8b2" destField="obj" source="371cbe4a" sourceField="ipa"/>
+                        <link dest="7a3d1139" destField="obj" source="4011088a" sourceField="ipa"/>
+                        <link dest="2c6b4325" destField="obj" source="1e47bce2" sourceField="ipa"/>
                     </graph>
                     <extensions>
                         <oga:settings>
@@ -944,7 +944,15 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="5c7fb43" name="3xobs" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="50b40c16">
+                    <graph id="5dc37d5f">
+                        <node id="7e66f32a" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="100" y="270"/>
+                            </extensions>
+                        </node>
                         <node id="48afca92" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -969,45 +977,8 @@
                                 <oga:meta x="100" y="170"/>
                             </extensions>
                         </node>
-                        <node id="7e66f32a" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="100" y="270"/>
-                            </extensions>
-                        </node>
-                        <ogcn:macro id="7f131719" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="36b1307a">
-                                <node id="772c59a3" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="386" y="189"/>
-                                    </extensions>
-                                </node>
-                                <node id="b11975" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="692" y="190"/>
-                                    </extensions>
-                                </node>
-                                <link dest="b11975" destField="scType" source="772c59a3" sourceField="value"/>
-                            </graph>
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="339" y="206"/>
-                            </extensions>
-                        </ogcn:macro>
                         <ogcn:macro id="eddb59a" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="59dec740">
+                            <graph id="134215c1">
                                 <node id="e9fdbf7" name="SyllableConstituentType.CODA" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -1035,8 +1006,37 @@
                                 <oga:meta x="348" y="410"/>
                             </extensions>
                         </ogcn:macro>
+                        <ogcn:macro id="7f131719" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                            <graph id="4907d91b">
+                                <node id="772c59a3" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="386" y="189"/>
+                                    </extensions>
+                                </node>
+                                <node id="b11975" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="692" y="190"/>
+                                    </extensions>
+                                </node>
+                                <link dest="b11975" destField="scType" source="772c59a3" sourceField="value"/>
+                            </graph>
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="339" y="206"/>
+                            </extensions>
+                        </ogcn:macro>
                         <ogcn:macro id="47bedb42" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="346dc38">
+                            <graph id="7d4f9978">
                                 <node id="522906e1" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -1076,7 +1076,7 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="29a9b88c" name="2xobs" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-                    <graph id="4772b4a6">
+                    <graph id="3b09c0e7">
                         <node id="238fde89" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
@@ -1102,7 +1102,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="2e0f09b2" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="304a90f6">
+                            <graph id="790b66b5">
                                 <node id="6e5e53d" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -1131,7 +1131,7 @@
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="642e89d" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="f6c7415">
+                            <graph id="1b579d61">
                                 <node id="35c1b25e" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
@@ -1169,8 +1169,8 @@
                         <oga:meta x="614" y="568"/>
                     </extensions>
                 </ogcn:macro>
-                <link dest="29a9b88c" destField="ipa" source="5c7fb43" sourceField="ipa out"/>
                 <link dest="5c7fb43" destField="ipa" source="42978a93" sourceField="ipa out"/>
+                <link dest="29a9b88c" destField="ipa" source="5c7fb43" sourceField="ipa out"/>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="42978a93"/>
             <ogcn:published_output field="ipa out" name="ipa out" ref="29a9b88c"/>
@@ -1179,7 +1179,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="1dd38d6e" name="Mark Initial Onset" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
-            <graph id="100133f1">
+            <graph id="6349677e">
                 <node id="2e1672ed" name="c" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
                     <extensions>
                         <oga:settings>
@@ -1197,7 +1197,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="62e147c9" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6d49d192">
+                    <graph id="d8e872">
                         <node id="dd85e80" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
                             <extensions>
                                 <oga:settings>
@@ -1234,17 +1234,74 @@
                 <oga:meta x="967" y="366"/>
             </extensions>
         </ogcn:macro>
-        <link dest="54b772a7" destField="ipa" source="6090a8fd" sourceField="ipa out"/>
-        <link dest="296db5ee" destField="ipa" source="4ab0d24d" sourceField="ipa out"/>
+        <ogcn:macro id="7d3712d5" name="Ambisyllabic Find" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+            <graph id="1d27454e">
+                <node id="1da7b5d1" name="A" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="100" y="170"/>
+                    </extensions>
+                </node>
+                <node id="6c2993d1" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="100" y="70"/>
+                    </extensions>
+                </node>
+                <ogcn:macro id="30e86747" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                    <graph id="69d47f66">
+                        <node id="a75ffec" name="SyllableConstituentType.AMBISYLLABIC" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[AMBISYLLABIC]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="192" y="341"/>
+                            </extensions>
+                        </node>
+                        <node id="7df837d1" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="616" y="328"/>
+                            </extensions>
+                        </node>
+                        <link dest="7df837d1" destField="scType" source="a75ffec" sourceField="value"/>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="379" y="192"/>
+                    </extensions>
+                </ogcn:macro>
+                <link dest="30e86747" destField="obj" source="1da7b5d1" sourceField="ipa"/>
+            </graph>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[.:N(A={c,long}:O).:N]]></oga:property>
+                </oga:settings>
+                <oga:meta x="1138" y="365"/>
+            </extensions>
+        </ogcn:macro>
         <link dest="139f953" destField="ipa" source="50ba0dfc" sourceField="ipa out"/>
         <link dest="6f7b847c" destField="ipa" source="139f953" sourceField="ipa out"/>
         <link dest="6090a8fd" destField="ipa" source="6f7b847c" sourceField="ipa out"/>
-        <link dest="54193d42" destField="ipa" source="54b772a7" sourceField="ipa out"/>
-        <link dest="1dd38d6e" destField="ipa" source="70f4f7ea" sourceField="ipa out"/>
         <link dest="70f4f7ea" destField="ipa" source="296db5ee" sourceField="ipa out"/>
+        <link dest="1dd38d6e" destField="ipa" source="70f4f7ea" sourceField="ipa out"/>
+        <link dest="7d3712d5" destField="ipa" source="1dd38d6e" sourceField="ipa out"/>
+        <link dest="296db5ee" destField="ipa" source="4ab0d24d" sourceField="ipa out"/>
         <link dest="50ba0dfc" destField="ipa" source="5b09062e" sourceField="ipa"/>
+        <link dest="54193d42" destField="ipa" source="54b772a7" sourceField="ipa out"/>
         <link dest="5b09062e" destField="ipa" source="25fe4d40" sourceField="ipa"/>
         <link dest="4ab0d24d" destField="ipa" source="54193d42" sourceField="ipa out"/>
+        <link dest="54b772a7" destField="ipa" source="6090a8fd" sourceField="ipa out"/>
         <extensions>
             <ops:settings lang="jbe" name="Berber"/>
         </extensions>
