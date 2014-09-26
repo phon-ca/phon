@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Set;
 
 import javax.swing.Action;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,6 +36,7 @@ import ca.phon.app.session.editor.view.ipa_lookup.actions.ImportIPACommand;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.ipadictionary.ui.IPALookupContext;
+import ca.phon.ipadictionary.ui.IPALookupContextListener;
 import ca.phon.ipadictionary.ui.IPALookupPanel;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
@@ -127,7 +129,8 @@ public class IPALookupView extends EditorView {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				onLanguageSwitch();
+				if(e.getStateChange() == ItemEvent.SELECTED) 
+					onLanguageSwitch();
 			}
 			
 		});
@@ -157,10 +160,59 @@ public class IPALookupView extends EditorView {
 	
 	private void setupConsoleTab() {
 		lookupPanel = new IPALookupPanel(lookupContext);
+		lookupPanel.getLookupContext().addLookupContextListener(new IPALookupContextListener() {
+			
+			@Override
+			public void handleMessage(String msg) {
+			}
+			
+			@Override
+			public void errorOccured(String err) {
+			}
+			
+			@Override
+			public void dictionaryRemoved(String dictName) {
+				updateLangBox();
+			}
+			
+			@Override
+			public void dictionaryChanged(String newDictionary) {
+//				updateLangBox();
+			}
+			
+			@Override
+			public void dictionaryAdded(String newDictionary) {
+				updateLangBox();
+			}
+		});
 		tabPane.addTab("Console", lookupPanel);
 	}
 	
+	private volatile boolean isUpdatingBox = false;
+	public void updateLangBox() {
+		final Runnable onEdt = new Runnable() {
+			
+			@Override
+			public void run() {
+				isUpdatingBox = true;
+				Set<Language> langs = IPADictionaryLibrary.getInstance().availableLanguages();
+				Language langArray[] = langs.toArray(new Language[0]);
+				Arrays.sort(langArray, new LanguageComparator());
+				final Language defLang = IPADictionaryLibrary.getInstance().getDefaultLanguage();
+				final int langIdx = Arrays.binarySearch(langArray, defLang);
+				langBox.setModel(new DefaultComboBoxModel(langArray));
+				langBox.setSelectedItem(lookupContext.getDictionary().getLanguage());
+				isUpdatingBox = false;
+			}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEdt.run();
+		else
+			SwingUtilities.invokeLater(onEdt);
+	}
+	
 	public void onLanguageSwitch() {
+		if(isUpdatingBox) return;
 		final Language lang = (Language)langBox.getSelectedItem();
 		if(lang == null) return;
 		lookupContext.switchDictionary(lang.toString());

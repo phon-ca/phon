@@ -34,6 +34,8 @@ import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.ipadictionary.spi.AddEntry;
+import ca.phon.ipadictionary.spi.ClearEntries;
+import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
 
@@ -95,7 +97,7 @@ public class IPALookupContext {
 
 		public String[] usages = {
 			"add \"<orthography>\"=\"<ipa>\"",
-			"create ",
+			"create <language> <name> ",
 			"drop ",
 			"import \"<file>\"",
 			"export \"<file>\"",
@@ -112,7 +114,7 @@ public class IPALookupContext {
 
 		public String[] examples = {
 			"add \"hello\"=\"helo\"",
-			"create ",
+			"create eng-test \"English Test Dictionary\"",
 			"drop ",
 			"import \"/Users/me/Desktop/myipa.txt\"",
 			"export \"/Users/me/Desktop/ipa.txt\"",
@@ -310,9 +312,19 @@ public class IPALookupContext {
 	/**
 	 * Remove all transcripts
 	 */
-	@Deprecated
 	public void removeAllTranscripts() {
-//		IPADictionaries.clearDictionary(dictionary.getLanguage());
+		final ClearEntries ce = dictionary.getExtension(ClearEntries.class);
+		if(ce != null) {
+			try {
+				ce.clear();
+			} catch (IPADictionaryExecption e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				fireError("Unable to remove user-defined entries: " + e.getLocalizedMessage());
+			}
+			fireMessage("Cleared user-defined entries from dictionary " + dictionary.getLanguage().toString());
+		} else {
+			fireError("Dictionary does not support the 'clear' operation");
+		}
 	}
 	
 	/**
@@ -338,8 +350,6 @@ public class IPALookupContext {
 	 * Import
 	 */
 	public void importData(String file) {
-//		PhonLogger.info("Import data from file `" + file + "`");
-
 		String msg = ("Import data from file `" + file + "`");
 		fireMessage(msg);
 
@@ -363,7 +373,6 @@ public class IPALookupContext {
 				} else {
 					String err = "Line " + lineIndex + " invalid. Skipping.";
 					fireError(err);
-//					PhonLogger.warning("Line " + lineIndex + " invalid.  Skipping.");
 				}
 				lineIndex++;
 			}
@@ -380,18 +389,28 @@ public class IPALookupContext {
 	 * Export
 	 */
 	public void exportData(String file) {
-//		try {
-//			IPADictionaries.writeDict(dictionary.getLanguage(), file);
-//		} catch (IOException e) {
-//			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//		}
+		try {
+			IPADatabaseManager.getInstance().saveDataToFile(file, dictionary.getLanguage().toString());
+			fireMessage("User dictionary entries saved to file " + file);
+		} catch (IOException e) {
+			fireError(e.getLocalizedMessage());
+		}
 	}
 	
 	/**
 	 * Create
 	 */
 	public void createDictionary(String lang, String name) {
-		
+		try {
+			if(!IPADatabaseManager.getInstance().createDictionary(lang, name)) {
+				fireError("Dictionary not created");
+			} else {
+				fireDictionaryAdded(lang);
+				fireMessage("Added dictionary " + lang);
+			}
+		} catch (IllegalArgumentException e) {
+			fireError(e.getMessage());
+		}
 	}
 	
 	/**

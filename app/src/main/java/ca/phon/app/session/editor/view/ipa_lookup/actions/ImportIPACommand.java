@@ -32,10 +32,8 @@ public class ImportIPACommand extends IPALookupViewAction {
 		props.setCanChooseDirectories(false);
 		props.setAllowMultipleSelection(false);
 		final List<String> selectedFiles = NativeDialogs.showOpenDialog(props);
-		if(selectedFiles.size() == 1) {
+		if(selectedFiles != null && selectedFiles.size() == 1) {
 			final String selectedFile = selectedFiles.get(0);
-			
-			// TODO CSV Options
 			
 			getLookupView().getLookupContext().importData(selectedFile);
 		}

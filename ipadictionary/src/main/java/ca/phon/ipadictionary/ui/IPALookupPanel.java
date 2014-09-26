@@ -252,6 +252,10 @@ public class IPALookupPanel extends JPanel {
 		init();
 	}
 	
+	public IPALookupContext getLookupContext() {
+		return this.context;
+	}
+	
 	private void init() {
 		setLayout(new BorderLayout());
 		
@@ -260,6 +264,7 @@ public class IPALookupPanel extends JPanel {
 		worker.start();
 		
 		console = new JTextPane();
+		console.setEditable(false);
 		console.setStyledDocument(new IPALookupDocument());
 		
 		inputField = new JTextField();

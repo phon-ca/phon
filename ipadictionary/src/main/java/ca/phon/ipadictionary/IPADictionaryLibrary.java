@@ -6,9 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.TreeSet;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
@@ -72,7 +74,7 @@ public class IPADictionaryLibrary implements IExtendable {
 	 * @return list of availble  languages
 	 */
 	public Set<Language> availableLanguages() {
-		final Set<Language> retVal = new HashSet<Language>();
+		final Set<Language> retVal = new TreeSet<Language>();
 		
 		final Iterator<IPADictionary> iterator = availableDictionaries();
 		while(iterator.hasNext()) {

@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
+import ca.phon.ipadictionary.spi.ClearEntries;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.RemoveEntry;
@@ -40,7 +41,7 @@ import ca.phon.util.Language;
  *
  */
 public class DatabaseDictionary implements IPADictionarySPI,
-	LanguageInfo, AddEntry, RemoveEntry {
+	LanguageInfo, AddEntry, RemoveEntry, ClearEntries {
 	
 	private static final Logger LOGGER = Logger
 			.getLogger(DatabaseDictionary.class.getName());
@@ -156,6 +157,24 @@ public class DatabaseDictionary implements IPADictionarySPI,
 		dict.putExtension(LanguageInfo.class, this);
 		dict.putExtension(AddEntry.class, this);
 		dict.putExtension(RemoveEntry.class, this);
+	}
+
+	@Override
+	public void clear() throws IPADictionaryExecption {
+		Connection conn = IPADatabaseManager.getInstance().getConnection();
+		
+		if(conn != null) {
+			String qSt = "DELETTE * FROM transcript WHERE langId = ?";
+			try {
+				PreparedStatement pSt = conn.prepareStatement(qSt);
+				pSt.setString(1, getLanguage().toString());
+				
+				pSt.executeUpdate();
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
 	}
 
 }

@@ -18,18 +18,25 @@
 package ca.phon.ipadictionary.impl;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -402,6 +409,126 @@ public class IPADatabaseManager {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Create a new dictionary with given language and name
+	 * 
+	 * @param langId
+	 * @param name
+	 * 
+	 * @return <code>true</code> if dictionary was created, <code>false</code>
+	 *  otherwise
+	 */
+	public boolean createDictionary(String langId, String name) {
+		final Set<Language> currentLangs = getAvailableLanguages();
+		boolean alreadyExists = false;
+		for(Language lang:currentLangs) if(lang.toString().equals(langId)) alreadyExists = true;
+		if(alreadyExists)
+			throw new IllegalArgumentException("Language with id '" + langId + "' already exists.");
+		
+		// add a new database entry for this language
+		Connection conn = getConnection();
+		if(conn != null) {
+			String qSt = "INSERT INTO language (langId, name) VALUES ( ? , ? )";
+			try {
+				PreparedStatement pSt = conn.prepareStatement(qSt);
+				pSt.setString(1, langId);
+				pSt.setString(2, name);
+				
+				pSt.execute();
+				return true;
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	public boolean clearDictionary(String langId) {
+		// add a new database entry for this language
+		Connection conn = getConnection();
+		if(conn != null) {
+			String qSt = "DELETE FROM language WHERE langId = ?";
+			try {
+				PreparedStatement pSt = conn.prepareStatement(qSt);
+				pSt.setString(1, langId);
+				
+				pSt.execute();
+				return true;
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Return a list of available languages in the database.
+	 * 
+	 * @return list of languages
+	 */
+	public Set<Language> getAvailableLanguages() {
+		final Set<Language> retVal = new TreeSet<Language>();
+		
+		Connection conn = getConnection();
+		if(conn != null) {
+			final String qSt = "SELECT * FROM language ORDER BY langId";
+			try {
+				final PreparedStatement pSt = conn.prepareStatement(qSt);
+				final ResultSet rs = pSt.executeQuery();
+				
+				while(rs.next()) {
+					final String langId = rs.getString("langId");
+					if(langId != null) {
+						try {
+							final Language lang = Language.parseLanguage(langId);
+							retVal.add(lang);
+						} catch (IllegalArgumentException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
+						}
+					}
+				}
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	public void saveDataToFile(String textFile, String langId) 
+		throws IOException {
+		final String querySt = 
+				"SELECT orthography, ipa FROM transcript WHERE langId = ? ORDER BY orthography";
+		
+		final File outFile = new File(textFile);
+		final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(outFile), "UTF-8"));
+		
+		Connection conn = getConnection();
+		// add language to langauge table
+		try {
+			PreparedStatement pSt = 
+				conn.prepareStatement(querySt);
+			
+			pSt.setString(1, langId);
+			
+			final StringBuilder sb = new StringBuilder();
+			final ResultSet rs = pSt.executeQuery();
+			while(rs.next()) {
+				sb.append(rs.getString("orthography")).append('\t').append(rs.getString("ipa")).append('\n');
+				writer.write(sb.toString());
+				sb.setLength(0);
+			}
+			writer.flush();
+			writer.close();
+		} catch (SQLException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 	}
 	
 	/**
