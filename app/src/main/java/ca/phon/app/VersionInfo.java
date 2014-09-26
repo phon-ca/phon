@@ -57,6 +57,8 @@ public class VersionInfo {
 	 */
 	private final static String BUILD_SCREVISION = "build.screvision";
 	
+	private final static String BUILD_CODENAME = "build.codename";
+	
 	/**
 	 * The shared instance
 	 */
@@ -129,7 +131,7 @@ public class VersionInfo {
 	public String getVersion() {
 		String retVal = 
 			getMajorVersion() + "." +
-			getMinorVersion() + "." + 
+			getMinorVersion() + 
 			getRevision();
 		return retVal;
 	}
@@ -148,8 +150,12 @@ public class VersionInfo {
 	 */
 	public String getLongVersion() {
 		String retVal = 
-			getVersion() + " " + getScRevision();
+			getVersion() + " (" + getScRevision() + ") \"" + getCodename() + "\"";
 		return retVal;
+	}
+	
+	public String getCodename() {
+		return versionProps.getProperty(BUILD_CODENAME);
 	}
 	
 }
