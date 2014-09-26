@@ -218,6 +218,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			searchOptions.put(ANY_TIER_NAME, anyOptsPanel);
 		}
 		final GroupField<String> anyTierField = new GroupField<String>(anyTier, 0);
+		anyTierField.setFont(FontPreferences.getTierFont());
 		anyTierField.addTierEditorListener(tierEditorListener);
 		final JLabel anyTierLbl = new JLabel("Any tier");
 		anyTierLbl.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -286,6 +287,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			searchTiers.put(REPLACE_TIER_NAME, replaceTier);
 		}
 		final GroupField<String> replaceTierField = new GroupField<String>(replaceTier, 0);
+		replateTierField.setFont(FontPreferences.getTierFont());
 		replaceTierField.addTierEditorListener(tierEditorListener);
 		final JLabel replaceLbl = new JLabel("Replace");
 		replaceLbl.setHorizontalAlignment(SwingConstants.RIGHT);
