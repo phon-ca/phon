@@ -49,6 +49,7 @@ import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Language;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
@@ -195,6 +196,7 @@ public class ValidationEditorView extends EditorView {
 		for(int i = 0; i < tier.numberOfGroups(); i++) {
 			// add candidate field object
 			final IPAGroupField candidateField = new IPAGroupField(candidateTier, i);
+			candidateField.setFont(FontPreferences.getTierFont());
 			candidateField.addTierEditorListener(tierListener);
 			
 			final SetGroupData data = new SetGroupData();
@@ -236,6 +238,7 @@ public class ValidationEditorView extends EditorView {
 				}
 				
 				final JRadioButton optBtn = new JRadioButton(optAct);
+				optBtn.setFont(FontPreferences.getTierFont());
 				optBtn.setOpaque(false);
 				btnGrp.add(optBtn);
 				final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, ++j);

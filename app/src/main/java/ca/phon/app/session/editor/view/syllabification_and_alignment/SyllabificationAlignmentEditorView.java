@@ -51,6 +51,7 @@ import ca.phon.session.TierListener;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.PhoneMapDisplay.AlignmentChangeData;
 import ca.phon.ui.ipa.SyllabificationDisplay;
@@ -337,6 +338,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				// target
 				final IPATranscript ipaTarget = group.getIPATarget();
 				final SyllabificationDisplay ipaTargetDisplay = getIPATargetDisplay(gIndex);
+				ipaTargetDisplay.setFont(FontPreferences.getTierFont());
 				ipaTargetDisplay.setTranscript(ipaTarget);
 				
 				if(!layout.hasLayoutComponent(ipaTargetDisplay)) {
@@ -350,6 +352,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				// actual
 				final IPATranscript ipaActual = group.getIPAActual();
 				final SyllabificationDisplay ipaActualDisplay = getIPAActualDisplay(gIndex);
+				ipaActualDisplay.setFont(FontPreferences.getTierFont());
 				ipaActualDisplay.setTranscript(ipaActual);
 				
 				if(!layout.hasLayoutComponent(ipaActualDisplay)) {
@@ -369,6 +372,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 					pm.setBottomAlignment(Arrays.copyOf(grp.getBottomAlignment(), grp.getAlignmentLength()));
 				}
 				final PhoneMapDisplay pmDisplay = getAlignmentDisplay(gIndex);
+				pmDisplay.setFont(FontPreferences.getTierFont());
 				pmDisplay.setPhoneMapForGroup(0, pm);
 				pmDisplay.setPaintPhoneBackground(colorInAlignment);
 				

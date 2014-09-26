@@ -17,6 +17,7 @@ import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.OrthoWord;
 import ca.phon.orthography.OrthoWordnet;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -49,6 +50,7 @@ public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 	@Visits
 	public void visitWord(OrthoWord word) {
 		final JLabel orthoLabel = new JLabel(word.getWord());
+		orthoLabel.setFont(FontPreferences.getTierFont());
 		groupPanel.add(orthoLabel, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+col, row));
 		
 		final JSeparator wordSep = new JSeparator(SwingConstants.VERTICAL);
@@ -64,6 +66,7 @@ public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 		for(int i = 0; i < options.length; i++) {
 			final String opt = options[i];
 			final JRadioButton btn = new JRadioButton(opt);
+			btn.setFont(FontPreferences.getTierFont());
 			btn.setOpaque(false);
 			btn.setBorderPainted(false);
 			if(opts.getSelectedOption() == i) 

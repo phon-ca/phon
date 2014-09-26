@@ -211,7 +211,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 	public void resyllabify(PhonActionEvent pae) {
 		String syllabifierName = pae.getData().toString();
-		display.resyllabifiy(syllabifierName);
+//		display.resyllabifiy(syllabifierName);
 	}
 
 	/**
@@ -343,7 +343,6 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				+ phoneBoxSize.height;
 
 		Font displayFont = display.getFont();
-		displayFont = new Font("Charis SIL Compact", Font.PLAIN, 12);
 
 		Rectangle phoneRect = new Rectangle(pX, pY, pW, pH);
 

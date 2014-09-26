@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -17,6 +18,9 @@ import javax.swing.SwingConstants;
 import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.alignment.Aligner;
 import ca.phon.app.session.editor.EditorEvent;
@@ -44,6 +48,7 @@ import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 
 /**
  * Provides a UI for selecting IPA transcriptions from 
@@ -186,6 +191,7 @@ public class RecordLookupPanel extends JPanel {
 		candidatePanel.add(transLbl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
 		for(int i = 0; i < lookupTier.numberOfGroups(); i++) {
 			final IPAGroupField ipaField = new IPAGroupField(lookupTier, i);
+			ipaField.setFont(FontPreferences.getTierFont());
 			ipaField.addTierEditorListener(tierListener);
 			candidatePanel.add(ipaField, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, row));
 		}
@@ -211,6 +217,7 @@ public class RecordLookupPanel extends JPanel {
 			groupPanel.add(pnl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
 			
 			final IPAGroupField grpField = new IPAGroupField(lookupTier, i);
+			grpField.setFont(FontPreferences.getTierFont());
 			grpField.addTierEditorListener(tierListener);
 			
 			final PhonUIAction setGrpAct = new PhonUIAction(this, "onSetGroup", i);
@@ -218,10 +225,13 @@ public class RecordLookupPanel extends JPanel {
 			setGrpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set transcription for group " + (i+1));
 			final JButton setGrpBtn = new JButton(setGrpAct);
 			
-			final JPanel grpPanel = new JPanel(new HorizontalLayout(groupLayout.getHorizontalGap()));
+			final String colLayout = "pref, " + groupLayout.getHorizontalGap() + "px, pref";
+			final FormLayout formLayout = new FormLayout(colLayout, "pref");
+			final CellConstraints cc = new CellConstraints();
+			final JPanel grpPanel = new JPanel(formLayout);
 			grpPanel.setOpaque(false);
-			grpPanel.add(grpField);
-			grpPanel.add(setGrpBtn);
+			grpPanel.add(grpField, cc.xy(1, 1));
+			grpPanel.add(setGrpBtn, cc.xy(3, 1));
 			
 			groupPanel.add(grpPanel, new TierDataConstraint(TierDataConstraint.FLAT_TIER_PREF_COLUMN, row));
 			
