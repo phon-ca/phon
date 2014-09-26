@@ -49,6 +49,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
@@ -152,6 +153,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 		
 		workspaceBtn.setTopLabelText(WorkspaceTextStyler.toHeaderText("Workspace Folder"));
 		workspaceBtn.getTopLabel().setIcon(workspaceIcn);
+		workspaceBtn.getTopLabel().setFont(FontPreferences.getTitleFont());
 		workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
 		workspaceBtn.setBackgroundPainter(bgPainter);
 		workspaceBtn.addMouseListener(bgPainter);
