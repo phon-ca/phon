@@ -18,11 +18,9 @@
 
 package ca.phon.query.db.xml;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;

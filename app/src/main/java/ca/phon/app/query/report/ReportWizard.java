@@ -19,27 +19,17 @@ package ca.phon.app.query.report;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
-import java.awt.FlowLayout;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingx.JXTable;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.BufferPanelButtons;
-import ca.phon.app.log.CSVTableModel;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;

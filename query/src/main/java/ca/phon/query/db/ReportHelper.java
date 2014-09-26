@@ -17,8 +17,6 @@
  */
 package ca.phon.query.db;
 
-import java.util.Map;
-
 import ca.phon.util.PhonConstants;
 
 /**

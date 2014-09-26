@@ -31,10 +31,8 @@ import java.util.logging.Logger;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 

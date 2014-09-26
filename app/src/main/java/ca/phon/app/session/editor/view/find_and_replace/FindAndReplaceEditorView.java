@@ -32,15 +32,11 @@ import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.EditorViewCategory;
-import ca.phon.app.session.editor.EditorViewInfo;
-import ca.phon.app.session.editor.RecordEditorPerspective;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorSelection;
@@ -57,7 +53,6 @@ import ca.phon.app.session.editor.view.find_and_replace.actions.FindPrevAction;
 import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAction;
 import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAllAction;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
-import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.GroupLocation;
 import ca.phon.session.Record;
@@ -74,7 +69,6 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

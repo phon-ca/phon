@@ -2,23 +2,15 @@ package ca.phon.app.session.editor.view.common;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.Polygon;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 
 import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
-
-import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.util.icons.IconManager;

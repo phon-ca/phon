@@ -1,8 +1,5 @@
 package ca.phon.app.session.editor.view.common;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;

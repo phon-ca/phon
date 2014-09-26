@@ -8,7 +8,6 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.ui.action.PhonActionEvent;
 
 public class PlayAdjacencySequenceAction extends MediaPlayerAction {
 	

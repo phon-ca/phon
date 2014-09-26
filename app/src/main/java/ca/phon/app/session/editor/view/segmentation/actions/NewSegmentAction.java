@@ -9,7 +9,6 @@ import ca.phon.app.session.editor.view.segmentation.SegmentationEditorView;
 import ca.phon.app.session.editor.view.segmentation.SegmentationEditorView.SegmentationMode;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
-import ca.phon.session.MediaUnit;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;

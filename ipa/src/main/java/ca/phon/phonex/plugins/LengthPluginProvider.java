@@ -1,6 +1,5 @@
 package ca.phon.phonex.plugins;
 
-import java.text.ParseException;
 import java.util.List;
 
 import ca.phon.phonex.PhoneMatcher;

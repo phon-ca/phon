@@ -1,8 +1,6 @@
 package ca.phon.app.log;
 
 import java.awt.Font;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -10,7 +8,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.text.BadLocationException;
 
 import ca.phon.worker.PhonTask;

@@ -64,7 +64,6 @@ import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.decorator.Highlighter;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.query.report.InventorySectionPanel;
 import ca.phon.app.query.report.ResultListingSectionPanel;
@@ -99,7 +98,6 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.text.TableSearchField;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

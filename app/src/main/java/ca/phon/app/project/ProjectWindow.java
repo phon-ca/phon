@@ -17,8 +17,6 @@
  */
 package ca.phon.app.project;
 
-import groovy.ui.view.GTKDefaults;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -48,7 +46,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -57,9 +54,7 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.workspace.WorkspaceDialog;
-import ca.phon.plugin.PluginAction;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
@@ -69,7 +64,6 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.CollatorFactory;

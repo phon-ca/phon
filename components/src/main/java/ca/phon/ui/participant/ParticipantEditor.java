@@ -21,7 +21,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -31,8 +30,6 @@ import javax.swing.JFrame;
 import org.joda.time.DateTime;
 
 import ca.phon.session.Participant;
-import ca.phon.session.ParticipantRole;
-import ca.phon.session.Participants;
 import ca.phon.ui.decorations.DialogHeader;
 
 import com.jgoodies.forms.builder.ButtonBarBuilder;

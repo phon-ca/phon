@@ -8,13 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 
-import antlr.ASdebug.IASDebugStream;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.Orthography;

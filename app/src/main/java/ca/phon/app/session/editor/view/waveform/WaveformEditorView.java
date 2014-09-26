@@ -48,18 +48,11 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputAdapter;
-
-import org.jdesktop.swingx.VerticalLayout;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
@@ -90,7 +83,6 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
@@ -99,6 +91,10 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Displays wavform and associated commands.
@@ -619,6 +615,8 @@ public class WaveformEditorView extends EditorView {
 
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
+		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
+		
 		if(lastRecord != getEditor().getCurrentRecordIndex()) {
 			update();
 			
@@ -630,6 +628,8 @@ public class WaveformEditorView extends EditorView {
 
 	@RunOnEDT
 	public void onSessionMediaChanged(EditorEvent ee) {
+		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
+		
 		update();
 	}
 	

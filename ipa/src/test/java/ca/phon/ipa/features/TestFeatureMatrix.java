@@ -1,28 +1,16 @@
 package ca.phon.ipa.features;
 
-import java.text.NumberFormat;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
-import javax.swing.text.NumberFormatter;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-
 import junit.framework.Assert;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
-import ca.phon.ipa.xml.CharType;
-import ca.phon.ipa.xml.ObjectFactory;
-import ca.phon.ipa.xml.TokenType;
 
 @RunWith(JUnit4.class)
 public class TestFeatureMatrix {

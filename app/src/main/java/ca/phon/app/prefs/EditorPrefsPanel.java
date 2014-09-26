@@ -19,11 +19,8 @@ package ca.phon.app.prefs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
@@ -34,30 +31,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.project.LocalProject;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.FontDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 

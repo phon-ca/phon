@@ -3,7 +3,6 @@ package ca.phon.syllable.phonex;
 import java.util.List;
 
 import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexPatternException;
 import ca.phon.phonex.PhonexPlugin;
 import ca.phon.phonex.PluginProvider;
 import ca.phon.syllable.SyllableConstituentType;

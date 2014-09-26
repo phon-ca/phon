@@ -9,8 +9,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.jdesktop.swingx.action.ActionManager;
-
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;

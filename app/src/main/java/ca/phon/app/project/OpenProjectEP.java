@@ -18,8 +18,6 @@
 package ca.phon.app.project;
 
 import java.awt.GraphicsEnvironment;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -33,7 +31,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -43,7 +40,6 @@ import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
 @PhonPlugin(name="default")

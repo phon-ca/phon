@@ -1,10 +1,8 @@
 package ca.phon.syllabifier.editor;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -14,8 +12,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -26,8 +22,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.MouseInputAdapter;
 
-import bibliothek.gui.DockController;
-import bibliothek.gui.dock.SplitDockStation;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CWorkingArea;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
@@ -35,13 +29,10 @@ import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.perspective.CControlPerspective;
-import bibliothek.gui.dock.common.perspective.CExternalizePerspective;
 import bibliothek.gui.dock.common.perspective.CGridPerspective;
-import bibliothek.gui.dock.common.perspective.CMinimizePerspective;
 import bibliothek.gui.dock.common.perspective.CPerspective;
 import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
-import bibliothek.gui.dock.station.split.SplitDockGrid;
 import bibliothek.util.Filter;
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphDocument;

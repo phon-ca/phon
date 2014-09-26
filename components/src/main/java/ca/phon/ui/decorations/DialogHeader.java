@@ -25,7 +25,6 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.peer.FontPeer;
 
 import javax.swing.ImageIcon;
 

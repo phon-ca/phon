@@ -1,7 +1,6 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 
 public class IntraWordPause extends IPAElement {

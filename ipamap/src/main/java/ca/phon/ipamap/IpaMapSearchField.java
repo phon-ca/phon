@@ -1,14 +1,7 @@
 package ca.phon.ipamap;
 
-import java.awt.Window;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;

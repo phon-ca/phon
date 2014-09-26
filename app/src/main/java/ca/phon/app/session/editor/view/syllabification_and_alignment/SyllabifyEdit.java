@@ -1,15 +1,12 @@
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
-import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;

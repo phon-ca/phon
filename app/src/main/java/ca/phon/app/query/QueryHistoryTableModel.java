@@ -33,8 +33,8 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSetManager;
 import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonWorker;
 
 public class QueryHistoryTableModel extends AbstractTableModel {

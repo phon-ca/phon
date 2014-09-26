@@ -1,13 +1,8 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.text.ParseException;
-import java.util.logging.Level;
-
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.WordBoundary;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.spi.GenerateSuggestions;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.OrthoWord;
 import ca.phon.orthography.OrthoWordnet;

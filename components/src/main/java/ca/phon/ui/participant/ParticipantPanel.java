@@ -6,11 +6,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.management.relation.RoleUnresolved;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -29,13 +26,9 @@ import org.jdesktop.swingx.VerticalLayout;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.functor.Functor;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
-import ca.phon.session.Participants;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Sex;
 import ca.phon.ui.CommonModuleFrame;
@@ -46,6 +39,9 @@ import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FormatterTextField;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * UI for editing participant information.

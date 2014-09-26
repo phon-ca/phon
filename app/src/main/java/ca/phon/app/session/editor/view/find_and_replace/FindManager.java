@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.session.GroupLocation;
 import ca.phon.session.GroupRange;
 import ca.phon.session.Record;
 import ca.phon.session.RecordLocation;

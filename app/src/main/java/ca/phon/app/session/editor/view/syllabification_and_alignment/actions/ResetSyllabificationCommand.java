@@ -8,7 +8,6 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabifyEdit;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipadictionary.impl.CompoundDictionary;
 import ca.phon.session.Record;
 import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.Tier;

@@ -4,14 +4,10 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Logger;
-
-import ca.phon.util.OSInfo;
 
 public class IpaMapRobot implements IpaMapListener {
 	

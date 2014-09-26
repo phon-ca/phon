@@ -7,9 +7,6 @@ import ca.phon.fsa.FSAState.RunningState;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.visitor.Visitor;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 
 public class PhonexMatcher {
 	

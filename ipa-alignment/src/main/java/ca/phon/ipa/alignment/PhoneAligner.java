@@ -10,7 +10,6 @@ import ca.phon.alignment.AlignmentMap;
 import ca.phon.ipa.AudiblePhoneVisitor;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.Phone;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableStress;

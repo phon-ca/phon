@@ -1,7 +1,5 @@
 package ca.phon.app.session.editor.view.segmentation.actions;
 
-import javax.swing.AbstractAction;
-
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SessionEditorAction;
 import ca.phon.app.session.editor.view.segmentation.SegmentationEditorView;

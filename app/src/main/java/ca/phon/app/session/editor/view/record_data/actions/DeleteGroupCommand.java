@@ -4,12 +4,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.undo.RemoveGroupEdit;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
-import ca.phon.session.Record;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

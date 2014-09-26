@@ -1,6 +1,5 @@
 package ca.phon.app.session.editor.view.waveform;
 
-import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.lang.ref.WeakReference;
 

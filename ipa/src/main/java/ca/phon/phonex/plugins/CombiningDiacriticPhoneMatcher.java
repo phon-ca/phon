@@ -1,8 +1,5 @@
 package ca.phon.phonex.plugins;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;

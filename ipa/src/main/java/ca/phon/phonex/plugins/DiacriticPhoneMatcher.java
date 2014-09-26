@@ -1,8 +1,5 @@
 package ca.phon.phonex.plugins;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +12,6 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.PhonexCompiler;
-import ca.phon.phonex.PhonexFSA;
 import ca.phon.phonex.PhonexLexer;
 import ca.phon.phonex.PhonexParser;
 

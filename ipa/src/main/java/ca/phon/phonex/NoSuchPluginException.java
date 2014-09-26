@@ -1,6 +1,5 @@
 package ca.phon.phonex;
 
-import org.antlr.runtime.IntStream;
 
 /**
  * Thrown during compilation when the specified plug-in 

@@ -3,16 +3,13 @@ package ca.phon.ipamap;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;

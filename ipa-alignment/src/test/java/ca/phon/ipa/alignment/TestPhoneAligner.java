@@ -1,16 +1,8 @@
 package ca.phon.ipa.alignment;
 
-import java.util.Collections;
-import java.util.List;
-
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
 
 @RunWith(JUnit4.class)
 public class TestPhoneAligner {

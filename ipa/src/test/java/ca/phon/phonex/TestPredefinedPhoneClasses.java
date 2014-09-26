@@ -1,9 +1,7 @@
 package ca.phon.phonex;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -12,13 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import antlr.collections.Stack;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.parser.IPATokenType;
-import ca.phon.ipa.parser.IPATokens;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
 
 @RunWith(JUnit4.class)
 public class TestPredefinedPhoneClasses {

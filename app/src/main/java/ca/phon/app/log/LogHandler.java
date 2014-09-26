@@ -1,13 +1,9 @@
 package ca.phon.app.log;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
-
-import ca.phon.util.PrefHelper;
 
 /**
  * Holds a specified number of log events in memory.

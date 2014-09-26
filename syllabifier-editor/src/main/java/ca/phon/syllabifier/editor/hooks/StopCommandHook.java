@@ -10,8 +10,6 @@ import ca.gedge.opgraph.app.commands.HookableCommand;
 import ca.gedge.opgraph.app.commands.debug.StopCommand;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.editor.SyllabifierGraphEditorModel;
-import ca.phon.syllabifier.editor.SyllabifierSettingsPanel;
-import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 
 /**
  * Resets syllabificiation display when debugging ends.

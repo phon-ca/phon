@@ -1,16 +1,10 @@
 package ca.phon.app.session.editor.undo;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.swing.undo.CannotUndoException;
 
-import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.Group;
 import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
 
 /**
  * Edit which will merge a group with the next adjacent group.

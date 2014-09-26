@@ -1,10 +1,7 @@
 package ca.phon.app.session.editor.undo;
 
 import java.lang.ref.WeakReference;
-import java.util.logging.Level;
 
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
 

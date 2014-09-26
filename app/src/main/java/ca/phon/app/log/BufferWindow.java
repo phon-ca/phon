@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,25 +18,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
-
-import org.jdesktop.swingx.HorizontalLayout;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.log.actions.CloseAllBuffersAction;
 import ca.phon.app.log.actions.CloseCurrentBufferAction;
 import ca.phon.app.log.actions.SaveCurrentBufferAction;
-import ca.phon.app.log.actions.SaveLogBufferAction;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class BufferWindow extends CommonModuleFrame {
 

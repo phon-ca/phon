@@ -2,7 +2,6 @@ package ca.phon.ui.text;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Date;
 
 import org.jdesktop.swingx.JXDatePicker;
 

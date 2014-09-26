@@ -11,7 +11,6 @@ import ca.phon.syllabifier.basic.io.MarkGroup;
 import ca.phon.syllabifier.basic.io.StageType;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.syllable.SyllableStress;
 
 public class Stage implements SyllabifierStage {
 	

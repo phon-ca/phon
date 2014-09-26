@@ -1,7 +1,6 @@
 package ca.phon.app.log;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,20 +23,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.io.filefilter.FileFileFilter;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import au.com.bytecode.opencsv.CSVReader;
-import ca.phon.app.log.actions.SaveLogBufferAction;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.HidablePanel;
@@ -45,10 +37,12 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.ui.text.TableSearchField;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class BufferPanel extends JPanel {
 	

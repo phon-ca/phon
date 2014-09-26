@@ -1,7 +1,5 @@
 package ca.phon.phonex.plugins;
 
-import java.text.ParseException;
-
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.Phone;

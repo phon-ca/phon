@@ -3,11 +3,9 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
 
-import ca.phon.alignment.Aligner;
 import ca.phon.app.session.editor.undo.BlindTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;

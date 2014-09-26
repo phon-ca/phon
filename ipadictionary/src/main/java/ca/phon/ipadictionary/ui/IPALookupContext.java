@@ -35,7 +35,6 @@ import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.ipadictionary.spi.AddEntry;
 import ca.phon.ipadictionary.spi.ClearEntries;
-import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
 

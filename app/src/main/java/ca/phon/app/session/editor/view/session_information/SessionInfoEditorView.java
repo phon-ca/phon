@@ -22,12 +22,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
@@ -44,12 +42,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.joda.time.DateTime;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
-import ca.phon.app.session.editor.DividedEditorView;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
@@ -59,7 +55,6 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.undo.SessionDateEdit;
 import ca.phon.app.session.editor.undo.SessionLanguageEdit;
-import ca.phon.app.session.editor.view.common.GroupFieldBorder;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.session_information.actions.BrowseForMediaAction;
@@ -68,10 +63,8 @@ import ca.phon.app.session.editor.view.session_information.actions.EditParticipa
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
-import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
-import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.DatePicker;

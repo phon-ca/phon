@@ -2,13 +2,11 @@ package ca.phon.app.session.editor.view.ipa_lookup.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.JDialog;
 import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriber;
 import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionDialog;
-import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionForm;
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.session.Session;

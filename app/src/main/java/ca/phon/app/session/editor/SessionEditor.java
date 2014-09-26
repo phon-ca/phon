@@ -5,29 +5,16 @@ import java.awt.Container;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.MenuElement;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.UndoableEditEvent;
@@ -58,15 +45,9 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.MenuManager;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.Range;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
 
 /**
  * <p>Main UI for the application.  This window provides the interface for

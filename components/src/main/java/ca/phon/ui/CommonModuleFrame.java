@@ -44,7 +44,6 @@ import javax.swing.event.MouseInputAdapter;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;

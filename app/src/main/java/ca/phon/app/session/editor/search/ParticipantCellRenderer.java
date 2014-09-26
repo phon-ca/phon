@@ -6,11 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
-import ca.phon.session.Tier;
 
 public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 

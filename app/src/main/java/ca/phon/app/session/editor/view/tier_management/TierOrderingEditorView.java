@@ -18,7 +18,6 @@
 package ca.phon.app.session.editor.view.tier_management;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -31,7 +30,6 @@ import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -42,10 +40,8 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 
-import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -53,9 +49,6 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.AddTierEdit;
-import ca.phon.app.session.editor.undo.RemoveTierEdit;
-import ca.phon.app.session.editor.undo.TierNameEdit;
 import ca.phon.app.session.editor.undo.TierViewEdit;
 import ca.phon.app.session.editor.view.tier_management.actions.EditTierAction;
 import ca.phon.app.session.editor.view.tier_management.actions.MoveTierAction;
@@ -67,17 +60,10 @@ import ca.phon.app.session.editor.view.tier_management.actions.ToggleLockAllTier
 import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierLockAction;
 import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierVisibleAction;
 import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

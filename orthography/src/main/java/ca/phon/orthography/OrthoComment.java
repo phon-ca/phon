@@ -1,8 +1,5 @@
 package ca.phon.orthography;
 
-import java.util.Set;
-
-import ca.phon.extensions.ExtensionSupport;
 
 /**
  * Comment with syntax

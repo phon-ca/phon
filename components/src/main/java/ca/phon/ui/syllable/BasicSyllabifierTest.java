@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,30 +13,22 @@ import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.ListCellRenderer;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.basic.BasicSyllabifier;
 import ca.phon.syllabifier.basic.BasicSyllabifierClassLoaderProvider;
-import ca.phon.syllabifier.basic.BasicSyllabifier.SyllabifierStageResults;
 import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.resources.ResourceLoader;
 
 public class BasicSyllabifierTest extends JFrame {

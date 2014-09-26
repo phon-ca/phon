@@ -3,8 +3,6 @@ package ca.phon.app.project;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,12 +12,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.jdesktop.swingx.VerticalLayout;
-
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
-import ca.phon.session.ParticipantRole;
 import ca.phon.session.Participants;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -29,9 +24,9 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonWorker;
-import ca.phon.worker.PhonTask.TaskStatus;
 
 /**
  * Wizard for stripping participant info.

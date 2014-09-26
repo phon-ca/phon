@@ -1,18 +1,11 @@
 package ca.phon.app.menu.window;
 
-import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.KeyEvent;
 
-import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-
-import ca.phon.plugin.PluginAction;
-import ca.phon.ui.CommonModuleFrame;
 
 /**
  * Populates a menu with open windows organized by project.

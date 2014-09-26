@@ -1,8 +1,6 @@
 package ca.phon.app.session.editor.view.session_information.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.undo.CompoundEdit;
 

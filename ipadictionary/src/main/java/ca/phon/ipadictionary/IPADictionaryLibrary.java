@@ -1,7 +1,6 @@
 package ca.phon.ipadictionary;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -10,7 +9,6 @@ import java.util.TreeSet;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;

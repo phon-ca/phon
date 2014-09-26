@@ -3,10 +3,8 @@ package ca.phon.query.script;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +12,6 @@ import java.util.TreeMap;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.project.Project;
@@ -23,8 +20,6 @@ import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Script;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.resources.FolderHandler;
-import ca.phon.util.resources.ResourceHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

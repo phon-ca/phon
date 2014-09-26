@@ -1,12 +1,8 @@
 package ca.phon.app.fonts;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -17,16 +13,14 @@ import javax.swing.event.ChangeListener;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.prefs.PrefsPanel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class FontPreferencesPanel extends PrefsPanel implements IPluginExtensionPoint<PrefsPanel> {
 

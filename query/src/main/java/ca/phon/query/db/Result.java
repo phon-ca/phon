@@ -18,7 +18,6 @@
 
 package ca.phon.query.db;
 
-import java.util.List;
 import java.util.Map;
 
 /**

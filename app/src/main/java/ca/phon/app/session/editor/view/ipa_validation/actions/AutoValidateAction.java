@@ -6,13 +6,13 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.ipa_validation.AutoValidateDialog;
-import ca.phon.app.session.editor.view.ipa_validation.AutoValidateTask;
 import ca.phon.app.session.editor.view.ipa_validation.AutoValidateDialog.AutoValidateReturnValue;
+import ca.phon.app.session.editor.view.ipa_validation.AutoValidateTask;
 import ca.phon.app.session.editor.view.ipa_validation.ValidationEditorView;
 import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonWorker;
-import ca.phon.worker.PhonTask.TaskStatus;
 
 public class AutoValidateAction extends ValidationAction {
 

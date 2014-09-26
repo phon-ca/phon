@@ -1,11 +1,8 @@
 package ca.phon.app.prefs;
 
 import ca.phon.app.autosave.AutosaveManager;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.media.util.MediaLocator;
-import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.workspace.Workspace;
 

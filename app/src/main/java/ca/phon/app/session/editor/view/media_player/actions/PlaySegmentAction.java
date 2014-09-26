@@ -8,9 +8,6 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Record;
-import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonActionEvent;
 
 /**

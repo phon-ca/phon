@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.view.waveform;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
-import javax.swing.MenuElement;
 
 /**
  * Extension point for waveform view tiers.

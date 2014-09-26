@@ -39,13 +39,13 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
-
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.builder.ButtonBarBuilder;
 
 /**
  * Save changes on exit dialog.

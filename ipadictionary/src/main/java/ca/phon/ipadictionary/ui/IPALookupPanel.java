@@ -19,7 +19,6 @@ package ca.phon.ipadictionary.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
@@ -49,7 +48,6 @@ import ca.phon.ipadictionary.cmd.IPADictLexer;
 import ca.phon.ipadictionary.cmd.IPADictParser;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
-import ca.phon.util.MsFormat;
 import ca.phon.util.MsFormatter;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;

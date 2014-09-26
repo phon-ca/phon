@@ -1,7 +1,6 @@
 package ca.phon.app.session.editor.view.session_information.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.UUID;
 
 import javax.swing.ImageIcon;
 

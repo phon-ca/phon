@@ -1,7 +1,6 @@
 package ca.phon.app.session.editor.view.ipa_validation;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.util.Iterator;
 
 import javax.swing.ButtonGroup;
@@ -32,7 +31,6 @@ import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierDataLayoutType;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
 import ca.phon.app.session.editor.view.ipa_validation.actions.AutoValidateAction;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -46,12 +44,9 @@ import ca.phon.session.Transcriber;
 import ca.phon.session.Transcribers;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Language;
-import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

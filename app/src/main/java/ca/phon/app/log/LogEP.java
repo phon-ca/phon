@@ -1,7 +1,6 @@
 package ca.phon.app.log;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;

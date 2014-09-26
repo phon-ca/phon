@@ -7,18 +7,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.FontUIResource;
 
 import org.pushingpixels.lafwidget.LafWidget;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.fonts.FontPolicy;
-import org.pushingpixels.substance.api.fonts.FontSet;
-import org.pushingpixels.substance.api.fonts.SubstanceFontUtilities;
 import org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel;
 
 import ca.phon.app.hooks.PhonStartupHook;
@@ -55,6 +49,7 @@ public class ThemeHook implements PhonStartupHook,
 							uiMap.put(key, UIManager.get(key));
 						}
 					}
+					
 					try {
 						final String uiClassName = PrefHelper.get(
 								PhonProperties.UI_THEME,
@@ -80,10 +75,8 @@ public class ThemeHook implements PhonStartupHook,
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					}
 
-					if (OSInfo.isMacOs()) {
-						for (String key : uiMap.keySet()) {
-							UIManager.put(key, uiMap.get(key));
-						}
+					for (String key : uiMap.keySet()) {
+						UIManager.put(key, uiMap.get(key));
 					}
 				}
 			});
