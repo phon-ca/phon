@@ -209,13 +209,6 @@ public class ReportWizard extends WizardFrame {
 		
 		importPanel.add(consolePanel, BorderLayout.CENTER);
 		
-		final CellConstraints cc = new CellConstraints();
-		final FormLayout optLayout = new FormLayout(
-				"pref, pref, fill:pref:grow, right:pref", "pref");
-		JPanel optPanel = new JPanel(optLayout);
-		optPanel.add(new BufferPanelButtons(console), cc.xy(4, 1));
-		consolePanel.add(optPanel, BorderLayout.NORTH);
-		
 		return super.addWizardStep(importPanel);
 	}
 
@@ -323,10 +316,7 @@ public class ReportWizard extends WizardFrame {
 						btnCancel.setText("Close");
 						stopBusyLabel();
 						console.onSwapBuffer();
-						final JXTable tbl = console.getDataTable();
-						final CSVTableModel model = (CSVTableModel)tbl.getModel();
-						model.setUseFirstRowAsHeader(false);
-						model.fireTableStructureChanged();
+						console.setFirstRowIsHeader(false);
 						btnBack.setVisible(true);
 						btnFinish.setVisible(true);
 						currentTask = null;

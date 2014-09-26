@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -72,6 +73,8 @@ public class BufferPanel extends JPanel {
 	
 	private BufferPanelButtons buttons;
 	
+	private JCheckBox firstRowAsHeaderBox;
+	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 	
 	public BufferPanel(String name) {
@@ -113,7 +116,7 @@ public class BufferPanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		final FormLayout topLayout = new FormLayout(
-				"pref, fill:pref:grow, right:pref", "pref, pref");
+				"pref, pref, fill:pref:grow, right:pref", "pref, pref");
 		final CellConstraints cc = new CellConstraints();
 		final JPanel topPanel = new JPanel(topLayout);
 		
@@ -123,13 +126,19 @@ public class BufferPanel extends JPanel {
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
 		saveButton = new JButton(saveAct);
 		
+		final PhonUIAction firstRowAsHeaderAct = new PhonUIAction(this, "onToggleFirstRowAsHeader");
+		firstRowAsHeaderAct.putValue(PhonUIAction.NAME, "Use first row as column header");
+		firstRowAsHeaderAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
+		firstRowAsHeaderBox = new JCheckBox(firstRowAsHeaderAct);
+		
 		final HidablePanel infoPanel = new HidablePanel(BufferPanel.class.getName() + ".infoMessage");
 		infoPanel.add(new JLabel("Use the buttons on the below and to the right to switch between text and table views"));
 		
 		buttons = new BufferPanelButtons(this);
 		
+		topPanel.add(firstRowAsHeaderBox, cc.xy(2, 2));
 		topPanel.add(saveButton, cc.xy(1,2));
-		topPanel.add(buttons, cc.xy(3, 2));
+		topPanel.add(buttons, cc.xy(4, 2));
 		topPanel.add(infoPanel, cc.xyw(1, 1, 3));
 		
 		add(topPanel, BorderLayout.NORTH);
@@ -164,7 +173,19 @@ public class BufferPanel extends JPanel {
 	public JXTable getDataTable() {
 		return dataTable;
 	}
+	
+	public void setFirstRowIsHeader(boolean firstRowIsColumnHeader) {
+		final CSVTableModel model = (CSVTableModel)getDataTable().getModel();
+		model.setUseFirstRowAsHeader(firstRowIsColumnHeader);
+		model.fireTableStructureChanged();
+		firstRowAsHeaderBox.setSelected(firstRowIsColumnHeader);
+	}
 
+	public void onToggleFirstRowAsHeader() {
+		boolean isFirstRowHeader = firstRowAsHeaderBox.isSelected();
+		setFirstRowIsHeader(isFirstRowHeader);
+	}
+	
 	public void onSwapBuffer() {
 		boolean wasShowingBuffer = isShowingBuffer();
 		if(showingBuffer) {
