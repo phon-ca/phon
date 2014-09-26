@@ -853,7 +853,13 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	public void onSaveLayout() {
 		// get a perspective name
-		final String layoutName = JOptionPane.showInputDialog(this, "Enter layout name:");
+		final String layoutName = JOptionPane.showInputDialog("Enter layout name:");
+		
+		if(layoutName == null || layoutName.trim().length() == 0) {
+			final Toast toast = ToastFactory.makeToast("You must enter a layout name!");
+			toast.start(getEditor());
+			return;
+		}
 		if(RecordEditorPerspective.getPerspective(layoutName) != null) {
 			final Toast toast = ToastFactory.makeToast("Layout named " + layoutName + " already exists.");
 			toast.start(getEditor());
