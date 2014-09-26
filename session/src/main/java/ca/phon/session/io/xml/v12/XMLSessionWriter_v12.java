@@ -72,7 +72,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		retVal.setCorpus(session.getCorpus());
 		
 		final HeaderType headerData = factory.createHeaderType();
-		if(session.getMediaLocation().length() > 0) {
+		if(session.getMediaLocation() != null && session.getMediaLocation().length() > 0) {
 			headerData.setMedia(session.getMediaLocation());
 		}
 		final DateTime date = (session.getDate() == null ? DateTime.now() : session.getDate());

@@ -86,7 +86,7 @@ public class SessionImpl implements Session {
 
 	@Override
 	public String getMediaLocation() {
-		return (mediaRef.get() != null ? mediaRef.get() : "");
+		return mediaRef.get();
 	}
 
 	@Override
