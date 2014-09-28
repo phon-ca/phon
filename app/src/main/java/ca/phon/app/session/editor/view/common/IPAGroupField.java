@@ -172,7 +172,10 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		clearErrors();
 		getHighlighter().removeAllHighlights();
 		
-		if(getText().trim().length() == 0) return valid;
+		if(getText().trim().length() == 0) {
+			setValidatedObject(new IPATranscript());
+			return valid;
+		}
 		
 		IPATranscript validatedIPA = null;
 		try {
@@ -199,8 +202,6 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 								final Rectangle p0rect = c.modelToView(p0);
 								final Rectangle p1rect = c.modelToView(p1);
 								
-								final Rectangle highlightRect = 
-										new Rectangle(p0rect.x, p0rect.y, p0rect.x + p1rect.x + p1rect.width, p1rect.height);
 								b = new Rectangle(p0rect).union(p1rect);
 							} catch (BadLocationException e) {
 								
