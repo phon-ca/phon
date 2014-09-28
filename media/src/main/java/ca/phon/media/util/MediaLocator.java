@@ -162,6 +162,8 @@ public class MediaLocator {
 	 public static File findMediaFile(String filename, Project project, String corpus) {
 		 File retVal = null;
 		 
+		 if(filename == null) return retVal;
+		 
 		 // do we already have an absolute path
 		 final File mediaFile = new File(filename);
 		 if(mediaFile.isAbsolute()) {

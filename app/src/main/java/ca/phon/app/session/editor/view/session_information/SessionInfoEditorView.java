@@ -25,6 +25,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.ActionMap;
@@ -264,7 +265,9 @@ public class SessionInfoEditorView extends EditorView {
 	public DatePicker createDateField() {
 		final DatePicker retVal = new DatePicker();
 		
-		retVal.setDate(getEditor().getSession().getDate().toDate());
+		final DateTime sessionDate = getEditor().getSession().getDate();
+		if(sessionDate != null)
+			retVal.setDate(sessionDate.toDate());
 		
 		retVal.addActionListener(new ActionListener() {
 			
@@ -294,7 +297,9 @@ public class SessionInfoEditorView extends EditorView {
 		final Project project = editor.getExtension(Project.class);
 		if(project == null) return;
 		
-		dateField.setDate(getEditor().getSession().getDate().toDate());
+		final DateTime sessionDate = getEditor().getSession().getDate();
+		if(sessionDate != null)
+			dateField.setDate(sessionDate.toDate());
 		
 		final File mediaFile = MediaLocator.findMediaFile(project,  session);
 		if(mediaFile != null) {
