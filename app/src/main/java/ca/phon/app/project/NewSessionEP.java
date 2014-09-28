@@ -60,6 +60,7 @@ public class NewSessionEP implements IPluginEntryPoint {
 					dlg = new NewSessionDialog(proj, initInfo.get("corpus").toString());
 				}
 				dlg.setModal(true);
+				dlg.pack();
 				dlg.setVisible(true);
 			}
 		};
