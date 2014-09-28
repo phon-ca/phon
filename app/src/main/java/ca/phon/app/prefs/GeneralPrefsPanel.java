@@ -44,6 +44,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class GeneralPrefsPanel extends PrefsPanel {
 
+	private static final long serialVersionUID = 8761130200130930937L;
+
 	private final String checkForUpdateAtStartupProp = "ca.phon.application.updater.checkOnStartup";
 	
 	public GeneralPrefsPanel() {

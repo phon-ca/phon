@@ -48,6 +48,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class PathListPanel extends JPanel {
 	
+	private static final long serialVersionUID = 3250575449792042295L;
+
 	/* UI */
 	private JButton addPathBtn;
 	private JButton removePathBtn;

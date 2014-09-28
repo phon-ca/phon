@@ -37,6 +37,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class MediaPrefsPanel extends PrefsPanel {
 	
+	private static final long serialVersionUID = -4239108936828092749L;
+
 	private PathListPanel pathListPanel;
 
 	public MediaPrefsPanel() {
