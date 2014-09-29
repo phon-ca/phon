@@ -67,7 +67,10 @@ public class ParticipantsTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Participant p = session.getParticipant(rowIndex);
+		Participant p = 
+				(session.getParticipantCount() > rowIndex ? session.getParticipant(rowIndex) : null);
+		if(p == null) return "";
+		
 		Columns col = Columns.values()[columnIndex];
 		if(col == Columns.Name) {
 			return
