@@ -1,68 +1,34 @@
 <?xml version='1.0'?>
 <root>
 	<stations>
-		<element name="ccontrol center">
-			<layout factory="predefined" placeholder="dock.single.ccontrol\ center">
-				<replacement id="rootccontrol center"/>
+		<element name="root center">
+			<layout factory="predefined" placeholder="dock.single.root\ center">
+				<replacement id="rootroot center"/>
 				<delegate id="delegate_CommonDockStationFactory">
-					<id>ccontrol center</id>
+					<id>root center</id>
 					<root>true</root>
 					<content delegate="SplitDockStationFactory">
 						<fullscreen-action>false</fullscreen-action>
-						<node nodeId="1399636476544" orientation="VERTICAL" divider="0.3753623188405797">
-							<leaf id="0" nodeId="1399636476542">
+						<node nodeId="1411986776101" orientation="VERTICAL" divider="0.5235404896421846">
+							<leaf id="0" nodeId="1411986763765">
 								<placeholders>
 									<placeholder>dock.single.Session\ Information</placeholder>
 								</placeholders>
+								<placeholder-map>
+									<version>0</version>
+									<format>dock.PlaceholderList</format>
+									<entry>
+										<key shared="false">
+											<placeholder>dock.single.Session\ Information</placeholder>
+										</key>
+									</entry>
+								</placeholder-map>
 							</leaf>
-							<node nodeId="1399636452746" orientation="VERTICAL" divider="0.5">
-								<leaf id="1" nodeId="1399636452743">
-									<placeholders>
-										<placeholder>dock.single.Tier\ Management</placeholder>
-									</placeholders>
-								</leaf>
-								<node nodeId="1349184103706" orientation="VERTICAL" divider="0.5">
-									<node nodeId="1349184116556" orientation="VERTICAL" divider="0.4334319526627219">
-										<node nodeId="1349184126081" orientation="HORIZONTAL" divider="0.3727810650887574">
-											<leaf id="-1" nodeId="1349184123866">
-												<placeholders>
-													<placeholder>dock.single.Media\ Player</placeholder>
-												</placeholders>
-											</leaf>
-											<leaf id="-1" nodeId="1349184113418">
-												<placeholders>
-													<placeholder>dock.single.Segmentation</placeholder>
-													<placeholder>dock.single.Waveform</placeholder>
-												</placeholders>
-												<placeholder-map>
-													<version>0</version>
-													<format>dock.PlaceholderList</format>
-													<entry>
-														<key shared="false">
-															<placeholder>dock.single.Segmentation</placeholder>
-														</key>
-													</entry>
-													<entry>
-														<key shared="false">
-															<placeholder>dock.single.Waveform</placeholder>
-														</key>
-													</entry>
-												</placeholder-map>
-											</leaf>
-										</node>
-										<leaf id="-1" nodeId="1349184103705">
-											<placeholders>
-												<placeholder>dock.single.Record\ Data</placeholder>
-											</placeholders>
-										</leaf>
-									</node>
-									<leaf id="-1" nodeId="1348154794376">
-										<placeholders>
-											<placeholder>dock.single.IPA\ Lookup</placeholder>
-										</placeholders>
-									</leaf>
-								</node>
-							</node>
+							<leaf id="1" nodeId="1411986776099">
+								<placeholders>
+									<placeholder>dock.single.Tier\ Management</placeholder>
+								</placeholders>
+							</leaf>
 						</node>
 					</content>
 				</delegate>
@@ -116,169 +82,11 @@
 			</adjacent>
 			<children ignore="false"/>
 		</element>
-		<element name="ccontrol north">
+		<element name="root south">
 			<layout factory="predefined">
-				<replacement id="rootccontrol north"/>
+				<replacement id="rootroot south"/>
 				<delegate id="delegate_CommonDockStationFactory">
-					<id>ccontrol north</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Media\ Player</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Record\ Data</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Record\ Data</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Record\ Data</placeholder>
-								</key>
-								<item key="map" type="p">
-									<version>0</version>
-									<format>dock.PlaceholderList</format>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.Record\ Data</placeholder>
-										</key>
-									</entry>
-								</item>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Segmentation</placeholder>
-									<placeholder>dock.single.Waveform</placeholder>
-								</key>
-								<item key="map" type="p">
-									<version>0</version>
-									<format>dock.PlaceholderList</format>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.Segmentation</placeholder>
-										</key>
-									</entry>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.Waveform</placeholder>
-										</key>
-									</entry>
-								</item>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Session\ Information</placeholder>
-								</key>
-							</entry>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="ccontrol south">
-			<layout factory="predefined">
-				<replacement id="rootccontrol south"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>ccontrol south</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.IPA\ Lookup</placeholder>
-								</key>
-								<item key="map" type="p">
-									<version>0</version>
-									<format>dock.PlaceholderList</format>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.IPA\ Lookup</placeholder>
-										</key>
-									</entry>
-								</item>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Media\ Player</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Record\ Data</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Segmentation</placeholder>
-									<placeholder>dock.single.Waveform</placeholder>
-									<placeholder>dock.single.Record\ Data</placeholder>
-								</key>
-								<item key="map" type="p">
-									<version>0</version>
-									<format>dock.PlaceholderList</format>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.Segmentation</placeholder>
-										</key>
-									</entry>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.Waveform</placeholder>
-										</key>
-									</entry>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.Record\ Data</placeholder>
-										</key>
-									</entry>
-								</item>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Session\ Information</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Tier\ Management</placeholder>
-								</key>
-							</entry>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="ccontrol east">
-			<layout factory="predefined">
-				<replacement id="rootccontrol east"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>ccontrol east</id>
+					<id>root south</id>
 					<root>true</root>
 					<content delegate="flap dock">
 						<window auto="true" direction="SOUTH"/>
@@ -296,11 +104,55 @@
 			</adjacent>
 			<children ignore="false"/>
 		</element>
-		<element name="ccontrol west">
+		<element name="root north">
 			<layout factory="predefined">
-				<replacement id="rootccontrol west"/>
+				<replacement id="rootroot north"/>
 				<delegate id="delegate_CommonDockStationFactory">
-					<id>ccontrol west</id>
+					<id>root north</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="root west">
+			<layout factory="predefined">
+				<replacement id="rootroot west"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>root west</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="root east">
+			<layout factory="predefined">
+				<replacement id="rootroot east"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>root east</id>
 					<root>true</root>
 					<content delegate="flap dock">
 						<window auto="true" direction="SOUTH"/>
@@ -320,120 +172,24 @@
 		</element>
 	</stations>
 	<invisible>
-		<dockable key="single Media Player">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Media\ Player">
-					<replacement id="dockablesingle Media Player"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Media Player</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
-			<location root="ccontrol center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Media\ Player</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.5" id="1349184103706"/>
-						<node location="TOP" size="0.4334319526627219" id="1349184116556"/>
-						<node location="LEFT" size="0.3727810650887574" id="1349184126081"/>
-						<leaf id="1349184123866"/>
-					</backup-path>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Record Data">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Record\ Data">
-					<replacement id="dockablesingle Record Data"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Record Data</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
-			<location root="ccontrol center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Record\ Data</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.5" id="1349184103706"/>
-						<node location="BOTTOM" size="0.5665680473372781" id="1349184116556"/>
-						<leaf id="1349184103705"/>
-					</backup-path>
-				</property>
-			</location>
-		</dockable>
 		<dockable key="single Tier Management">
-			<location root="ccontrol center" mode="dock.mode.normal">
+			<location root="root center" mode="dock.mode.normal">
 				<property factory="SplitDockPlaceholderProperty">
 					<placeholder>dock.single.Tier\ Management</placeholder>
 					<backup-path>
-						<node location="BOTTOM" size="0.6246376811594203" id="1399636476544"/>
-						<node location="TOP" size="0.5" id="1399636452746"/>
-						<leaf id="1399636452743"/>
-					</backup-path>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Segmentation">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Segmentation">
-					<replacement id="dockablesingle Segmentation"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Segmentation</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
-			<location root="ccontrol center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Segmentation</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.5" id="1349184103706"/>
-						<node location="TOP" size="0.4334319526627219" id="1349184116556"/>
-						<node location="RIGHT" size="0.6272189349112426" id="1349184126081"/>
-						<leaf id="1349184113418"/>
-					</backup-path>
-				</property>
-				<property factory="StackDockPropertyFactory">
-					<index>0</index>
-					<placeholder>dock.single.Segmentation</placeholder>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Waveform">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Waveform">
-					<replacement id="dockablesingle Waveform"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Waveform</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
-			<location root="ccontrol center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Waveform</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.5" id="1349184103706"/>
-						<node location="TOP" size="0.4334319526627219" id="1349184116556"/>
-						<node location="RIGHT" size="0.6272189349112426" id="1349184126081"/>
-						<leaf id="1349184113418"/>
+						<node location="BOTTOM" size="0.4764595103578154" id="1411986776101"/>
+						<leaf id="1411986776099"/>
 					</backup-path>
 				</property>
 			</location>
 		</dockable>
 		<dockable key="single Session Information">
-			<location root="ccontrol center" mode="dock.mode.normal">
+			<location root="root center" mode="dock.mode.normal">
 				<property factory="SplitDockPlaceholderProperty">
 					<placeholder>dock.single.Session\ Information</placeholder>
 					<backup-path>
-						<node location="TOP" size="0.3753623188405797" id="1399636476544"/>
-						<leaf id="1399636476542"/>
+						<node location="TOP" size="0.5235404896421846" id="1411986776101"/>
+						<leaf id="1411986763765"/>
 					</backup-path>
 				</property>
 			</location>
@@ -441,7 +197,7 @@
 	</invisible>
 	<modes>
 		<dockables>
-			<entry id="single ccontrol center">
+			<entry id="single root center">
 				<history/>
 				<properties/>
 			</entry>
@@ -453,13 +209,13 @@
 				<properties>
 					<property id="dock.mode.normal">
 						<mode>dock.mode.normal</mode>
-						<root>ccontrol center</root>
+						<root>root center</root>
 						<location>
 							<property factory="SplitDockPlaceholderProperty">
 								<placeholder>dock.single.Session\ Information</placeholder>
 								<backup-path>
-									<node location="TOP" size="0.3753623188405797" id="1399636476544"/>
-									<leaf id="1399636476542"/>
+									<node location="TOP" size="0.5235404896421846" id="1411986776101"/>
+									<leaf id="1411986763765"/>
 								</backup-path>
 							</property>
 						</location>
@@ -487,14 +243,13 @@
 				<properties>
 					<property id="dock.mode.normal">
 						<mode>dock.mode.normal</mode>
-						<root>ccontrol center</root>
+						<root>root center</root>
 						<location>
 							<property factory="SplitDockPlaceholderProperty">
 								<placeholder>dock.single.Tier\ Management</placeholder>
 								<backup-path>
-									<node location="BOTTOM" size="0.6246376811594203" id="1399636476544"/>
-									<node location="TOP" size="0.5" id="1399636452746"/>
-									<leaf id="1399636452743"/>
+									<node location="BOTTOM" size="0.4764595103578154" id="1411986776101"/>
+									<leaf id="1411986776099"/>
 								</backup-path>
 							</property>
 						</location>

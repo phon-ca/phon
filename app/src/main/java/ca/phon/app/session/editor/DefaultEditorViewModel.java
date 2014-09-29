@@ -398,6 +398,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		try {
 			final InputStream is = editorPerspective.getLocation().openStream();
 			
+			boolean boundsSet = false;
 			if(is != null) {
 				final XElement xele = XIO.readUTF(is);
 				perspective = dockControl.getPerspectives().readXML( xele );
@@ -410,8 +411,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 					int height = boundsEle.getAttribute("height").getInt();
 					
 					getEditor().setBounds(x, y, width, height);
-					
-					
+					boundsSet = true;
 				}
 				
 				final XElement windowsEle = xele.getElement("windows");
@@ -436,6 +436,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			dockControl.getPerspectives().setPerspective( editorPerspective.getName(), perspective);
 			perspective.storeLocations();
 			dockControl.load(editorPerspective.getName());
+			if(!boundsSet) {
+				getEditor().pack();
+				getEditor().centerWindow();
+			}
 			
 			getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
 			for(AccessoryWindow accWin:accessoryWindows) {
