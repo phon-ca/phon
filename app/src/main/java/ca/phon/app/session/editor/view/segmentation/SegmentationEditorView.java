@@ -426,10 +426,10 @@ public class SegmentationEditorView extends EditorView {
 		int pIdx = 1;
 		for(Participant p:session.getParticipants()) {
 			final KeyStroke partKs = 
-					KeyStroke.getKeyStroke(KeyEvent.VK_0 + pIdx,
+					KeyStroke.getKeyStroke(KeyEvent.VK_0 + (pIdx++),
 							Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 			final NewSegmentAction speakerAct = new NewSegmentAction(getEditor(), this, p);
-			speakerAct.putValue(NewSegmentAction.NAME, "New record for " + p.getName());
+			speakerAct.putValue(NewSegmentAction.NAME, "New record for " + p.toString());
 			speakerAct.putValue(NewSegmentAction.ACCELERATOR_KEY, partKs);
 			
 			retVal.add(speakerAct);
