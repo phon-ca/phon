@@ -7,6 +7,14 @@ exports.ParticipantFilter = function(id) {
 
     // form setup
     var sectionTitle = "Participant Filter";
+    
+    var participantRoleParamInfo = {
+    	"id": id+".participantRole",
+    	"title": "Particpiant role:",
+    	"def": 0
+    };
+    var participantRoleParam;
+    this.participantRole = null;
 	
 	var participantNamesParamInfo = {
 		"id": id+".participantNames",
@@ -95,6 +103,10 @@ exports.ParticipantFilter = function(id) {
 	    return this.isUseAge1Filter() && opSelected && checkAgeFilter(this.age2String);
 	};
 	
+	this.isUseRoleFilter = function() {
+		return this.participantRole != null && this.participantRole.index > 0;
+	};
+	
 	var setFieldInvalid = function(textField, message, loc) {
 	    var msg = (loc >= 0 ?
             "Error at index " + loc  +": " + messgae :
@@ -116,6 +128,20 @@ exports.ParticipantFilter = function(id) {
 	    // create a new section (collapsed by default)
 		var sep = new SeparatorScriptParam(sectionTitle, true); 
 		params.add(sep);
+		
+		var roleArray = new Array();
+		roleArray.push("(select role)");
+		var roles = ParticipantRole.values();
+		for(i = 0; i < roles.length; i++) {
+			role = roles[i];
+			roleArray.push(role.toString());
+		}
+		participantRoleParam = new EnumScriptParam(
+			participantRoleParamInfo.id,
+			participantRoleParamInfo.title,
+			0,
+			roleArray);
+		params.add(participantRoleParam);
 		
 		participantNamesParam = new StringScriptParam(
 		    participantNamesParamInfo.id,
@@ -173,6 +199,11 @@ exports.ParticipantFilter = function(id) {
 	    params.add(age2ComparatorParam);
 	    params.add(age2Param);
 	};
+	
+	this.checkRole = function(participant) {
+		if(participant == null || this.participantRole == null) return false;
+		return ParticipantRole.fromString(this.participantRole.toString()) == participant.role;
+	}
 	
 	this.checkSpeakerAge = function(speaker) {
     	if(speaker == null || speaker.ageTo == null)
@@ -244,6 +275,10 @@ exports.ParticipantFilter = function(id) {
 	 */
 	this.check_speaker = function(speaker) {
 	    var speakerOk = true;
+	    
+	    if(this.isUseRoleFilter() == true) {
+	    	speakerOk &= this.checkRole(speaker);
+	    }
 	    
 	    if (this.isUseNameFilter() == true) {
 	        speakerOk &= this.checkSpeakerName(speaker);
