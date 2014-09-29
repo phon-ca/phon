@@ -498,6 +498,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	}
 	
 	private void savePreviousPerspective() {
+		// XXX Only save previous perspective when running as
+		// a 'Session Editor' window
+		if(!getEditor().getTitle().startsWith("Session Editor")) return;
+		
 		final File prevPerspetiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER, 
 				RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME + ".xml");
 		try {
