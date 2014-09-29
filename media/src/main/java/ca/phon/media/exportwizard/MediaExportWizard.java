@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import ca.phon.media.FFMpegMediaExporter;
 import ca.phon.ui.PhonLoggerConsole;
@@ -77,11 +78,12 @@ public class MediaExportWizard extends WizardFrame {
 		addWizardStep(setupStep);
 
 		exportConsole = new PhonLoggerConsole();
+		final JScrollPane scroller = new JScrollPane(exportConsole);
 
 		JPanel exportPanel = new JPanel(new BorderLayout());
 		DialogHeader exportHeader = new DialogHeader("Export media", "Export media using ffmpeg");
 		exportPanel.add(exportHeader, BorderLayout.NORTH);
-		exportPanel.add(exportConsole, BorderLayout.CENTER);
+		exportPanel.add(scroller, BorderLayout.CENTER);
 
 		exportStep = super.addWizardStep(exportPanel);
 		exportStep.setPrevStep(0);
