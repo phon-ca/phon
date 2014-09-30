@@ -310,7 +310,9 @@ public class SessionInfoEditorView extends EditorView {
 			if(session.getMediaLocation() != null &&
 					StringUtils.strip(session.getMediaLocation()).length() > 0) {
 				mediaLocationField.getTextField().setState(FieldState.INPUT);
-				mediaLocationField.setText(session.getMediaLocation());
+				mediaLocationField.removePropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
+				mediaLocationField.setFile(new File(session.getMediaLocation()));
+				mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 			} else {
 				mediaLocationField.getTextField().setState(FieldState.PROMPT);
 			}

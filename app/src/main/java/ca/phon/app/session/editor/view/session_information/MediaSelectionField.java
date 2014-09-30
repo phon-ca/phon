@@ -41,12 +41,14 @@ public class MediaSelectionField extends FileSelectionField {
 		} else {
 			textField.setState(FieldState.INPUT);
 			
-			String txt = f.getAbsolutePath();
+			String txt = f.getPath();
 			final File parentFolder = f.getParentFile();
-			for(String includePath:MediaLocator.getMediaIncludePaths(project)) {
-				if(includePath.equals(parentFolder.getAbsolutePath())) {
-					txt = f.getName();
-					break;
+			if(parentFolder != null) {
+				for(String includePath:MediaLocator.getMediaIncludePaths(project)) {
+					if(includePath.equals(parentFolder.getAbsolutePath())) {
+						txt = f.getName();
+						break;
+					}
 				}
 			}
 			textField.setText(txt);
