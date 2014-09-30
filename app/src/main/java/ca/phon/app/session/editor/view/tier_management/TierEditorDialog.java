@@ -7,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import ca.phon.ui.decorations.DialogHeader;
-
-import com.jgoodies.forms.builder.ButtonBarBuilder;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
 /**
  * Simple dialog that closes on OK or Cancel. Use showDialog() to display the
@@ -72,11 +72,8 @@ public class TierEditorDialog extends JDialog {
 
 		});
 
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		JPanel btnPanel = barBuilder.addButton(okButton)
-				.addButton(cancelButton).build();
-		// ButtonBarFactory.buildOKCancelBar(okButton, cancelButton);
-
+		final JComponent btnPanel = ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton);
+		
 		BorderLayout layout = new BorderLayout();
 		setLayout(layout);
 

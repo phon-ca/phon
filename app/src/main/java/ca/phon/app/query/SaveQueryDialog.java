@@ -45,6 +45,7 @@ import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
@@ -52,7 +53,6 @@ import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -172,9 +172,7 @@ public class SaveQueryDialog extends JDialog {
 
 		final DialogHeader header =
 				new DialogHeader("Save Query", "");
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		JComponent btnBar =
-				barBuilder.addButton(saveBtn).addButton(cancelBtn).build();
+		JComponent btnBar = ButtonBarBuilder.buildOkCancelBar(saveBtn, cancelBtn);
 
 		final FormLayout formLayout = new FormLayout(
 				"3dlu, 12dlu, fill:pref:grow, 3dlu",

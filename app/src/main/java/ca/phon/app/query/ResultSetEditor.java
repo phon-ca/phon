@@ -92,6 +92,7 @@ import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
@@ -102,7 +103,6 @@ import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -437,8 +437,7 @@ public class ResultSetEditor extends ProjectFrame {
 			}
 		});
 		
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		final JPanel buttonBar = barBuilder.addButton(okButton).addButton(cancelButton).build();
+		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton);
 		
 		panel.add(buttonBar, BorderLayout.SOUTH);
 		

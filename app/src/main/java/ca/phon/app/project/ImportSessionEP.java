@@ -34,6 +34,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -55,13 +56,13 @@ import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionReader;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -395,9 +396,7 @@ public class ImportSessionEP implements IPluginEntryPoint {
 			pane.add(new JLabel("Session: "), cc.xy(2, 8));
 			pane.add(sessionNameField, cc.xyw(4, 8, 3));
 			
-			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-			JPanel buttonBar = 
-					barBuilder.addButton(importButton).addButton(cancelButton).build();
+			final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(importButton, cancelButton);
 			pane.add(buttonBar, cc.xyw(4, 10, 3));
 			
 			this.getRootPane().setDefaultButton(importButton);

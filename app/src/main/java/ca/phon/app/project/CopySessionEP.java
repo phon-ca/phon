@@ -34,11 +34,11 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -216,12 +216,10 @@ public class CopySessionEP implements IPluginEntryPoint {
 			dialog.getContentPane().add(header, cc.xyw(1,1, 2));
 			dialog.getContentPane().add(csf, cc.xyw(1, 3, 2));
 			
-			final ButtonBarBuilder builder = new ButtonBarBuilder();
-			builder.addButton(okButton);
-			builder.addButton(cancelButton);
-			
 			dialog.getContentPane().add(
-					builder.getPanel(), cc.xy(2, 5));
+					ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton), cc.xy(2, 5));
+			
+			dialog.getRootPane().setDefaultButton(okButton);
 			
 			dialog.pack();
 			dialog.setVisible(true);

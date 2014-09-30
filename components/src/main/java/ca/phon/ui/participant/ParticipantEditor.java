@@ -31,10 +31,8 @@ import org.joda.time.DateTime;
 
 import ca.phon.session.Participant;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
-
- 
 public class ParticipantEditor extends JDialog {
 	private static final long serialVersionUID = -878164228645403658L;
 	
@@ -100,9 +98,7 @@ public class ParticipantEditor extends JDialog {
 		
 		participantPanel = new ParticipantPanel(participant);
 		
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		JComponent btnGroup = 
-			barBuilder.addButton(saveButton).addButton(cancelButton).build();
+		final JComponent btnGroup = ButtonBarBuilder.buildOkCancelBar(saveButton, cancelButton);
 		
 		add(header, BorderLayout.NORTH);
 		add(participantPanel, BorderLayout.CENTER);

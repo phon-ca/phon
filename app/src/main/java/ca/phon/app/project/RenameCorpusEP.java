@@ -45,12 +45,12 @@ import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PhonConstants;
 import ca.phon.worker.PhonWorker;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -176,10 +176,7 @@ public class RenameCorpusEP implements IPluginEntryPoint {
 			btnCancel.setText("Cancel");
 			btnCancel.addActionListener(new CancelListener());
 
-			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-			JComponent buttonBar = 
-					barBuilder.addButton(btnRenameCorpus).addButton(btnCancel).build();
-//				ButtonBarFactory.buildOKCancelBar(btnRenameCorpus, btnCancel);
+			JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(btnRenameCorpus, btnCancel);
 			jpanel1.add(buttonBar, cc.xyw(1, 9, 2));
 
 			addFillComponents(jpanel1,new int[]{ 2 },new int[]{ 2,3,4,6,7,8 });

@@ -42,10 +42,9 @@ import javax.swing.tree.TreePath;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 
 /**
  * Save changes on exit dialog.
@@ -54,6 +53,8 @@ import com.jgoodies.forms.builder.ButtonBarBuilder;
  */
 public class SaveOnExitDialog extends JDialog {
 	
+	private static final long serialVersionUID = -5407557304432524751L;
+
 	public static enum QuitOption {
 		SaveSelected,
 		DiscardAll,
@@ -126,16 +127,15 @@ public class SaveOnExitDialog extends JDialog {
 			
 		});
 		
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		JComponent btnBar = 
-				barBuilder.addButton(cancelButton).addButton(discardAllButton).addButton(saveSelectedButton).build();
-//			ButtonBarFactory.buildCenteredBar(cancelButton, discardAllButton, saveSelectedButton);
+		final JComponent btnBar = 
+				ButtonBarBuilder.buildOkCancelBar(saveSelectedButton, cancelButton, discardAllButton);
 		
 		add(header, BorderLayout.NORTH);
 		add(new JScrollPane(checkboxTree), BorderLayout.CENTER);
 		add(btnBar, BorderLayout.SOUTH);
 		
 		getRootPane().setDefaultButton(saveSelectedButton);
+		saveSelectedButton.requestFocusInWindow();
 	}
 	
 	private class EditorTreeRenderer extends DefaultCheckboxTreeCellRenderer {

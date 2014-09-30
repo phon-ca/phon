@@ -26,6 +26,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,8 +41,8 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -160,8 +161,7 @@ public class AutoValidateDialog extends JDialog {
 		
 		cancelButton = new JButton(cancelAction);
 		
-		final ButtonBarBuilder builder = new ButtonBarBuilder();
-		JPanel buttonBar = builder.addButton(okButton).addButton(cancelButton).build();
+		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton);
 		
 		setLayout(new BorderLayout());
 		add(header, BorderLayout.NORTH);

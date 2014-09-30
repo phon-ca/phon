@@ -45,11 +45,11 @@ import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PhonConstants;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -177,9 +177,7 @@ public class NewCorpusEP implements IPluginEntryPoint {
 			btnCancel.setText("Cancel");
 			btnCancel.addActionListener(new CancelListener());
 			
-			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-			JComponent buttonBar = 
-				barBuilder.addButton(btnCreateCorpus).addButton(btnCancel).build();
+			JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(btnCreateCorpus, btnCancel);
 			
 			jpanel1.add(buttonBar, cc.xyw(1, 9, 2));
 

@@ -19,11 +19,10 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PhonConstants;
-
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 
 public class NewSessionDialog extends JDialog {
 	
@@ -80,9 +79,7 @@ public class NewSessionDialog extends JDialog {
 		
 		add(newSessionPanel, BorderLayout.CENTER);
 		
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		JComponent buttonBar = 
-				barBuilder.addButton(btnCreateSession).addButton(btnCancel).build();
+		JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(btnCreateSession, btnCancel);
 		add(buttonBar, BorderLayout.SOUTH);
 	}
 

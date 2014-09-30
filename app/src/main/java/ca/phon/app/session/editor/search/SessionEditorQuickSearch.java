@@ -64,6 +64,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
@@ -73,8 +74,6 @@ import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 
 /**
  */
@@ -186,7 +185,6 @@ public class SessionEditorQuickSearch {
 			
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -265,20 +263,11 @@ public class SessionEditorQuickSearch {
 		final ImageIcon saveIcon = IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
 		saveAct.putValue(PhonUIAction.SMALL_ICON, saveIcon);
 		final JButton saveButton = new JButton(saveAct);
-	
-//		final PhonUIAction refreshAct = new PhonUIAction(this, "refreshRecordList", tblModel);
-//		refreshAct.putValue(PhonUIAction.NAME, "Refresh table");
-//		refreshAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Refresh table contents with filter.");
-//		final ImageIcon refreshIcon = IconManager.getInstance().getIcon("actions/refresh", IconSize.SMALL);
-//		refreshAct.putValue(PhonUIAction.SMALL_ICON, refreshIcon);
-//		final JButton refreshButton = new JButton(refreshAct);
 		
 		final JPanel resultListPanel = new JPanel(new BorderLayout());
 		
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
 		final JComponent buttonPanel = 
-				barBuilder.addButton(saveButton).build();
-//				ButtonBarFactory.buildRightAlignedBar(saveButton);
+				ButtonBarBuilder.buildOkBar(saveButton);
 		resultListPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
 		final JScrollPane tableScroller = new JScrollPane(table);

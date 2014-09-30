@@ -34,8 +34,7 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
-
-import com.jgoodies.forms.builder.ButtonBarBuilder;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
 
 /**
@@ -111,10 +110,10 @@ public class PrefsDialog extends JDialog {
 		
 		super.getRootPane().setDefaultButton(okButton);
 		
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		JComponent buttonBar = barBuilder.addButton(okButton).build();
+		JComponent buttonBar = ButtonBarBuilder.buildOkBar(okButton);
 		
 		add(buttonBar, BorderLayout.SOUTH);
+		getRootPane().setDefaultButton(okButton);
 	}
 	
 	public void setActiveTab(String tabName) {

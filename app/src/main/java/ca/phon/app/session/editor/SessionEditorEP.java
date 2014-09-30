@@ -22,8 +22,8 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Transcriber;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -170,10 +170,9 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			
 			CellConstraints cc = new CellConstraints();
 			
-			final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
 			JComponent buttonBar = 
-				barBuilder.addButton(okButton).addButton(cancelButton).build();
-//				com.jgoodies.forms.factories.ButtonBarFactory.buildOKCancelBar(okButton, cancelButton);
+				ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton);
+			
 			this.add(new JLabel(labelText), cc.xy(2,2));
 			this.add(password, cc.xyw(2, 4, 2));
 			this.add(buttonBar, cc.xy(3, 6));

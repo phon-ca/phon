@@ -44,11 +44,11 @@ import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.worker.PhonWorker;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -160,10 +160,7 @@ public class DeleteCorpusEP implements IPluginEntryPoint {
 			btnCancel.setText("Cancel");
 			btnCancel.addActionListener(new CancelListener());
 
-			final ButtonBarBuilder builder = new ButtonBarBuilder();
-			builder.addButton(btnDeleteCorpus);
-			builder.addButton(btnCancel);
-			jpanel1.add(builder.build(), cc.xyw(1, 5, 2));
+			jpanel1.add(ButtonBarBuilder.buildOkCancelBar(btnDeleteCorpus, btnCancel), cc.xyw(1, 5, 2));
 			
 			addFillComponents(jpanel1,new int[]{ 2 },new int[]{ 2,3,4 });
 			return jpanel1;

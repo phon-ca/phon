@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -39,15 +40,18 @@ import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.session.Session;
 import ca.phon.session.Transcriber;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.JCrypt;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class TranscriberSelectionDialog extends JDialog {
+	
+	private static final long serialVersionUID = 4480663577002010254L;
+
 	/** GUI Components */
 	private JTextField realNameField;
 	private JTextField usernameField;
@@ -201,6 +205,7 @@ public class TranscriberSelectionDialog extends JDialog {
 				}
 				
 			});
+		getRootPane().setDefaultButton(okButton);
 			
 		this.cancelButton = new JButton("Cancel");
 			this.cancelButton.addActionListener(new ActionListener() {
@@ -212,8 +217,7 @@ public class TranscriberSelectionDialog extends JDialog {
 				
 			});
 		
-		final ButtonBarBuilder barBuilder = new ButtonBarBuilder();
-		final JPanel bar = barBuilder.addButton(okButton).addButton(cancelButton).build();
+		final JComponent bar = ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton);
 		this.getContentPane().add(
 				bar,
 				cc.xy(3,9));
