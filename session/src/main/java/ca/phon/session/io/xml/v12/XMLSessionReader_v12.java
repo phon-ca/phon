@@ -388,6 +388,8 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			segment.setUnitType(MediaUnit.Millisecond);
 			
 			retVal.getSegment().setGroup(0, segment);
+		} else {
+			retVal.getSegment().setGroup(0, factory.createMediaSegment());
 		}
 		
 		// alignment
