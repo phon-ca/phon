@@ -503,8 +503,13 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		
 		final UUID writeLock = project.getSessionWriteLock(session);
 		if(writeLock != null) {
-			project.saveSession(session, writeLock);
-			project.releaseSessionWriteLock(session, writeLock);
+			try {
+				project.saveSession(session, writeLock);
+			} catch (IOException e) {
+				throw e;
+			} finally {
+				project.releaseSessionWriteLock(session, writeLock);
+			}
 			
 			setModified(false);
 			
