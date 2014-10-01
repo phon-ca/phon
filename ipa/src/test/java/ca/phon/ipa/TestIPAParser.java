@@ -250,4 +250,14 @@ public class TestIPAParser {
 		}
 	}
 	
+	@Test
+	public void testIntonationGroups() throws Exception {
+		for(IntonationGroupType igType:IntonationGroupType.values()) {
+			final String txt = "o " + igType.getGlyph() + " ənˈʤi ˈɪn";
+			final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+			
+			Assert.assertEquals(igType.getGlyph() + "", ipa.elementAt(2).toString());
+		}
+	}
+	
 }
