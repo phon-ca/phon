@@ -18,6 +18,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.TokenStream;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.w3c.dom.Document;
@@ -30,6 +32,10 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.parser.IPALexer;
+import ca.phon.ipa.parser.IPAParser;
+import ca.phon.ipa.parser.IPAParserErrorHandler;
+import ca.phon.ipa.parser.IPAParserException;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Comment;
 import ca.phon.session.CommentEnum;
@@ -46,6 +52,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
+import ca.phon.session.UnvalidatedValue;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.syllable.SyllabificationInfo;
@@ -523,19 +530,53 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					groupBuffer.append(wt.getContent());
 				}
 				
-				try {
-					final IPATranscript transcript = IPATranscript.parseIPATranscript(groupBuffer.toString());
-					
-					// copy syllabification if transcript is the same size as our provided syllabification
-					if(pt.getSb() != null && transcript.length() == pt.getSb().getPh().size()) {
-						final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
-						transcript.accept(visitor);
-					}
-					
-					retVal.addGroup(transcript);
-				} catch (ParseException pe) {
-					LOGGER.log(Level.SEVERE, pe.getLocalizedMessage(), pe);
+				if(groupBuffer.toString().trim().length() == 0) {
 					retVal.addGroup(new IPATranscript());
+				} else {
+					try {
+						final List<IPAParserException> errors = new ArrayList<IPAParserException>();
+						final IPAParserErrorHandler ipaErrHandler = new IPAParserErrorHandler() {
+							
+							@Override
+							public void handleError(IPAParserException ex) {
+								errors.add(ex);
+							}
+							
+						};
+						try {
+							IPALexer lexer = new IPALexer(groupBuffer.toString());
+							TokenStream tokenStream = new CommonTokenStream(lexer);
+							IPAParser parser = new IPAParser(tokenStream);
+							parser.addErrorHandler(ipaErrHandler);
+							final IPATranscript transcript = parser.transcription();
+							
+							if(errors.size() > 0) {
+								throw new ParseException("Failed to parse transcript", -1);
+							}
+							
+							// check to make sure the text hasn't changed
+							if(!groupBuffer.toString().equals(transcript.toString())) {
+								LOGGER.info(groupBuffer.toString());
+								throw new ParseException("Parsed transcript is incorrect", -1);
+							}
+							
+							// copy syllabification if transcript is the same size as our provided syllabification
+							if(pt.getSb() != null && pt.getSb().getPh() != null 
+									&& transcript.length() == pt.getSb().getPh().size()) {
+								final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
+								transcript.accept(visitor);
+							}
+							retVal.addGroup(transcript);
+						} catch (Exception e) {
+							throw new ParseException(e.getLocalizedMessage(), -1);
+						}
+					} catch (ParseException pe) {
+						LOGGER.log(Level.SEVERE, pe.getLocalizedMessage(), pe);
+						
+						final IPATranscript ipa = new IPATranscript();
+						ipa.putExtension(UnvalidatedValue.class, new UnvalidatedValue(groupBuffer.toString(), pe));
+						retVal.addGroup(ipa);
+					}
 				}
 			} else {
 				retVal.addGroup(new IPATranscript());

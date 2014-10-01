@@ -24,10 +24,12 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.undo.UndoManager;
 
+import ca.phon.extensions.IExtendable;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
+import ca.phon.session.UnvalidatedValue;
 import ca.phon.ui.action.PhonUIAction;
 
 /**
@@ -194,6 +196,17 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 				text = formatter.format(val);
 			} else {
 				text = val.toString();
+			}
+			
+			// XXX if text length is 0, check to see if there's an
+			// UnvalidatedValue assigned to this object
+			if(val instanceof IExtendable) {
+				final IExtendable extVal = (IExtendable)val;
+				final UnvalidatedValue unvalidatedValue = extVal.getExtension(UnvalidatedValue.class);
+				if(unvalidatedValue != null) {
+					text = unvalidatedValue.getValue();
+					((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
+				}
 			}
 		}
 		setText(text);
@@ -383,7 +396,20 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 					} else {
 						text = val.toString();
 					}
+				
+					// XXX if text length is 0, check to see if there's an
+					// UnvalidatedValue assigned to this object
+					if(val instanceof IExtendable) {
+						final IExtendable extVal = (IExtendable)val;
+						final UnvalidatedValue unvalidatedValue = extVal.getExtension(UnvalidatedValue.class);
+						if(unvalidatedValue != null) {
+							text = unvalidatedValue.getValue();
+							// TODO show error
+						}
+					}
 				}
+				
+				
 				setText(text);
 			}
 		}

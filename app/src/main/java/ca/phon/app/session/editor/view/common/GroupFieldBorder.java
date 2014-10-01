@@ -39,6 +39,11 @@ public class GroupFieldBorder implements Border {
 	private final ImageIcon lockIcon = 
 			IconManager.getInstance().getIcon("emblems/emblem-readonly", IconSize.XSMALL);
 
+	private final ImageIcon warningIcon =
+			IconManager.getInstance().getIcon("emblems/emblem-unreadable", IconSize.XSMALL);
+	
+	private boolean showWarningIcon = false;
+	
 	@Override
 	public Insets getBorderInsets(Component c) {
 		final int startWidth = NOTCH_WIDTH + 1;
@@ -50,6 +55,14 @@ public class GroupFieldBorder implements Border {
 		final int bottom = BOTTOM_INSET + (int)LINE_WIDTH;
 		
 		return new Insets(top, left, bottom, right);
+	}
+	
+	public boolean isShowWarningIcon() {
+		return this.showWarningIcon;
+	}
+	
+	public void setShowWarningIcon(boolean show) {
+		this.showWarningIcon = show;
 	}
 
 	@Override
@@ -111,6 +124,10 @@ public class GroupFieldBorder implements Border {
 		
 		if(isShowLock(c)) {
 			g.drawImage(lockIcon.getImage(), width-IconSize.XSMALL.getWidth(), height-IconSize.XSMALL.getHeight(), c);
+		}
+		
+		if(isShowWarningIcon()) {
+			g.drawImage(warningIcon.getImage(), width-IconSize.XSMALL.getWidth(), 0, c);
 		}
 		
 	}

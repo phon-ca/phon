@@ -35,6 +35,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
+import ca.phon.session.UnvalidatedValue;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.xml.annotation.XMLSerial;
@@ -473,10 +474,23 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		final IpaTierType retVal = factory.createIpaTierType();
 		
 		for(IPATranscript ipa:ipaTier) {
-			final IpaToXmlVisitor visitor = new IpaToXmlVisitor();
-			ipa.accept(visitor);
-			final PhoType pt = visitor.getPho();
-			retVal.getPg().add(pt);
+			
+			// XXX Check for unvalidated values first
+			final UnvalidatedValue unvalidatedValue = ipa.getExtension(UnvalidatedValue.class);
+			if(unvalidatedValue != null) {
+				final PhoType pho = factory.createPhoType();
+				final SyllabificationType sb = factory.createSyllabificationType();
+				pho.setSb(sb);
+				final WordType currentWord = factory.createWordType();
+				currentWord.setContent(unvalidatedValue.getValue());
+				pho.getW().add(currentWord);
+				retVal.getPg().add(pho);
+			} else {
+				final IpaToXmlVisitor visitor = new IpaToXmlVisitor();
+				ipa.accept(visitor);
+				final PhoType pt = visitor.getPho();
+				retVal.getPg().add(pt);
+			}
 		}
 		
 		return retVal;

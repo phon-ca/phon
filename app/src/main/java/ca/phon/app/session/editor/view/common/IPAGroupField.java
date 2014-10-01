@@ -31,6 +31,7 @@ import ca.phon.ipa.parser.IPAParserErrorHandler;
 import ca.phon.ipa.parser.IPAParserException;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
+import ca.phon.session.UnvalidatedValue;
 import ca.phon.syllabifier.Syllabifier;
 
 /**
@@ -72,6 +73,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	protected void _init() {
 		if(transcriberRef == null) return;
 		super._init();
+		validateText();
 		addTierEditorListener(new TierEditorListener() {
 			
 			@Override
@@ -188,7 +190,13 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		}
 		
 		if(errors.size() > 0) {
-			valid = false;
+//			valid = false;
+			validatedIPA = new IPATranscript();
+			validatedIPA.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim()));
+			
+			
+			((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
+			
 			for(IPAParserException error:errors) {
 				try {
 					getHighlighter().addHighlight(error.getPositionInLine(), error.getPositionInLine()+1, new Highlighter.HighlightPainter() {
@@ -228,8 +236,9 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			}
 		} else {
 			setForeground(Color.black);
-			setValidatedObject(validatedIPA);
+			((GroupFieldBorder)getBorder()).setShowWarningIcon(false);
 		}
+		setValidatedObject(validatedIPA);
 		
 		return valid;
 	}
