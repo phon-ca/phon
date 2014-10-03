@@ -162,23 +162,20 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	protected boolean validateText() {
 		getHighlighter().removeAllHighlights();
 		
-		if(getText().trim().length() == 0) {
-			setValidatedObject(new IPATranscript());
-			return true;
-		}
-		
+		boolean wasShowingErr = ((GroupFieldBorder)getBorder()).isShowWarningIcon();
 		try {
 			IPATranscript validatedIPA = IPATranscript.parseIPATranscript(getText());
 			setValidatedObject(validatedIPA);
 			((GroupFieldBorder)getBorder()).setShowWarningIcon(false);
 			setToolTipText(null);
+			if(wasShowingErr) repaint();
 		} catch (final ParseException e) {
 			IPATranscript validatedIPA = new IPATranscript();
 			validatedIPA.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim()));
 			((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
 			
 			final StringBuilder sb = new StringBuilder();
-			sb.append("Error at position: ").append(e.getErrorOffset()).append(", ").append(e.getLocalizedMessage());
+			sb.append("Error at position ").append(e.getErrorOffset()).append(": ").append(e.getLocalizedMessage());
 			setToolTipText(sb.toString());
 			
 			try {
@@ -213,7 +210,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 					}
 				});
 				setValidatedObject(validatedIPA);
-				repaint();
+				if(!wasShowingErr) repaint();
 			} catch (BadLocationException e2) {
 				LOGGER
 						.log(Level.SEVERE, e2.getLocalizedMessage(), e2);

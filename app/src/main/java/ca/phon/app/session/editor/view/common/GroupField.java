@@ -332,13 +332,13 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			if(getText().length() > 0) validateText();
+			validateText();
 			hasChanges = true;
 		}
 		
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			if(getText().length() > 0) validateText();
+			validateText();
 			hasChanges = true;
 		}
 		

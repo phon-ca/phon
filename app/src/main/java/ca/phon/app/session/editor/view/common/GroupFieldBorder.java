@@ -40,7 +40,7 @@ public class GroupFieldBorder implements Border {
 			IconManager.getInstance().getIcon("emblems/emblem-readonly", IconSize.XSMALL);
 
 	private final ImageIcon warningIcon =
-			IconManager.getInstance().getIcon("emblems/emblem-unreadable", IconSize.XSMALL);
+			IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
 	
 	private boolean showWarningIcon = false;
 	
@@ -127,7 +127,7 @@ public class GroupFieldBorder implements Border {
 		}
 		
 		if(isShowWarningIcon()) {
-			g.drawImage(warningIcon.getImage(), width-IconSize.XSMALL.getWidth(), 0, c);
+			g.drawImage(warningIcon.getImage(), width-(int)(IconSize.XSMALL.getWidth()+1+LINE_WIDTH), 0, c);
 		}
 		
 	}
