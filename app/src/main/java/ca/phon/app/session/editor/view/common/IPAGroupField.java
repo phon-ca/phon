@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.IPAParserErrorHandler;
-import ca.phon.ipa.parser.IPAParserException;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.session.UnvalidatedValue;
@@ -133,21 +134,10 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		}
 	}
 	
-	private final List<IPAParserException> errors = 
-			Collections.synchronizedList(new ArrayList<IPAParserException>());
-	
-	private void clearErrors() {
-		errors.clear();
-	}
-	
 	@Override
 	public JToolTip createToolTip() {
 		JToolTip retVal = super.createToolTip();
 		retVal.setLayout(new VerticalLayout());
-		
-		for(IPAParserException error:errors) {
-			retVal.add(new JLabel(error.getLocalizedMessage()));
-		}
 		
 		return retVal;
 	}
@@ -170,86 +160,66 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 
 	@Override
 	protected boolean validateText() {
-		boolean valid = true;
-		clearErrors();
 		getHighlighter().removeAllHighlights();
 		
 		if(getText().trim().length() == 0) {
 			setValidatedObject(new IPATranscript());
-			return valid;
+			return true;
 		}
 		
-		IPATranscript validatedIPA = null;
 		try {
-			IPALexer lexer = new IPALexer(getText().trim());
-			TokenStream tokenStream = new CommonTokenStream(lexer);
-			IPAParser parser = new IPAParser(tokenStream);
-			parser.addErrorHandler(ipaErrHandler);
-			validatedIPA = parser.transcription();
-		} catch (Exception e) {
-		}
-		
-		if(errors.size() > 0) {
-//			valid = false;
-			validatedIPA = new IPATranscript();
+			IPATranscript validatedIPA = IPATranscript.parseIPATranscript(getText());
+			setValidatedObject(validatedIPA);
+			((GroupFieldBorder)getBorder()).setShowWarningIcon(false);
+			setToolTipText(null);
+		} catch (final ParseException e) {
+			IPATranscript validatedIPA = new IPATranscript();
 			validatedIPA.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim()));
-			
-			
 			((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
 			
-			for(IPAParserException error:errors) {
-				try {
-					getHighlighter().addHighlight(error.getPositionInLine(), error.getPositionInLine()+1, new Highlighter.HighlightPainter() {
+			final StringBuilder sb = new StringBuilder();
+			sb.append("Error at position: ").append(e.getErrorOffset()).append(", ").append(e.getLocalizedMessage());
+			setToolTipText(sb.toString());
+			
+			try {
+				getHighlighter().addHighlight(e.getErrorOffset(), e.getErrorOffset()+1, new Highlighter.HighlightPainter() {
+					
+					@Override
+					public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
+						final Graphics2D g2 = (Graphics2D)g;
 						
-						@Override
-						public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
-							final Graphics2D g2 = (Graphics2D)g;
+						Rectangle b = bounds.getBounds();
+						try {
+							final Rectangle p0rect = c.modelToView(p0);
+							final Rectangle p1rect = c.modelToView(p1);
 							
-							Rectangle b = bounds.getBounds();
-							try {
-								final Rectangle p0rect = c.modelToView(p0);
-								final Rectangle p1rect = c.modelToView(p1);
-								
-								b = new Rectangle(p0rect).union(p1rect);
-							} catch (BadLocationException e) {
-								
-							}
+							b = new Rectangle(p0rect).union(p1rect);
+						} catch (BadLocationException e) {
 							
-							g2.setColor(Color.red);
-							final float dash1[] = {1.0f};
-						    final BasicStroke dashed =
-						        new BasicStroke(1.0f,
-						                        BasicStroke.CAP_BUTT,
-						                        BasicStroke.JOIN_MITER,
-						                        1.0f, dash1, 0.0f);
-							g2.setStroke(dashed);
-							g2.drawLine(b.x, 
-									b.y + b.height, 
-									b.x + b.width, 
-									b.y + b.height);
 						}
-					});
-				} catch (BadLocationException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
+						
+						g2.setColor(Color.red);
+						final float dash1[] = {1.0f};
+					    final BasicStroke dashed =
+					        new BasicStroke(1.0f,
+					                        BasicStroke.CAP_BUTT,
+					                        BasicStroke.JOIN_MITER,
+					                        1.0f, dash1, 0.0f);
+						g2.setStroke(dashed);
+						g2.drawLine(b.x, 
+								b.y + b.height, 
+								b.x + b.width, 
+								b.y + b.height);
+					}
+				});
+				setValidatedObject(validatedIPA);
+				repaint();
+			} catch (BadLocationException e2) {
+				LOGGER
+						.log(Level.SEVERE, e2.getLocalizedMessage(), e2);
 			}
-		} else {
-			setForeground(Color.black);
-			((GroupFieldBorder)getBorder()).setShowWarningIcon(false);
 		}
-		setValidatedObject(validatedIPA);
-		
-		return valid;
+		return true;
 	}
-	
-	private final IPAParserErrorHandler ipaErrHandler = new IPAParserErrorHandler() {
-		
-		@Override
-		public void handleError(IPAParserException ex) {
-			errors.add(ex);
-		}
-		
-	};
 	
 }

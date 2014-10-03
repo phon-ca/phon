@@ -152,4 +152,25 @@ public class TestIPAParserErrors {
 		}
 	}
 	
+	@Test
+	public void testInvalidCompound() throws ParseException {
+		String txt = "e\u0361\u007c";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(InvalidTokenException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(2, pe.getErrorOffset());
+		}
+		
+		txt = "ʰ͡|ˑeːː͡ɪ̃n";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(InvalidTokenException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(2, pe.getErrorOffset());
+		}
+	}
+	
 }

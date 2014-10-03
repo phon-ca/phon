@@ -149,7 +149,9 @@ scope {
 	;
 	catch [IllegalStateException e] {
 		// this happens when compound phone elements are not phone objects
-		
+		final InvalidTokenException ite = new InvalidTokenException("Both elements in a compound phone must be phones");
+		ite.setPositionInLine(input.get(input.index()-1).getCharPositionInLine());
+		throw ite;
 	}
 	catch [NoViableAltException e] {
 		IPAParserException ipae = new IPAParserException(e);
@@ -321,6 +323,12 @@ scope {
 		$phone = factory.createPhone($initialToken.text.charAt(0), combiningDiacritics);
 	}
 	;
+	catch [MismatchedSetException mse] {
+		// happens when trying to match a character which cannot be a base-phone
+		final InvalidTokenException ite = new InvalidTokenException("Invalid token, expecting one of: consonant, vowel, or cover symbol");
+		ite.setPositionInLine(mse.charPositionInLine);
+		throw ite;
+	}
 	
 /**
  * Phone + optional COMBINING diacritics and
@@ -425,7 +433,7 @@ scope {
 @init {
 	$suffix_diacritic::dias = new ArrayList<Diacritic>();
 }
-	:	lig=LIGATURE? sd=SUFFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	:	lig=LIGATURE? sd=SUFFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$suffix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
 	{
 		final Diacritic[] prefix = ($lig != null ? new Diacritic[]{factory.createDiacritic($lig.text.charAt(0))} : new Diacritic[0]);
 		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()];
@@ -435,7 +443,7 @@ scope {
 		
 		$diacritic = factory.createDiacritic(prefix, $sd.text.charAt(0), suffix);
 	}
-	|	lig=LIGATURE pd=PREFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	|	lig=LIGATURE pd=PREFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$suffix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
 	{
 		final Diacritic[] prefix = new Diacritic[]{ factory.createDiacritic($lig.text.charAt(0)) };
 		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()];
@@ -445,7 +453,7 @@ scope {
 		
 		$diacritic = factory.createDiacritic(prefix, $pd.text.charAt(0), suffix);
 	}
-	|	pd=PREFIX_DIACRITIC rr=ROLE_REVERSAL (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	|	pd=PREFIX_DIACRITIC rr=ROLE_REVERSAL (cd=COMBINING_DIACRITIC {$suffix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
 	{
 		final Diacritic[] prefix = new Diacritic[0];
 		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()+1];
@@ -456,14 +464,13 @@ scope {
 		
 		$diacritic = factory.createDiacritic(prefix, $pd.text.charAt(0), suffix);
 	}
-	|	t=TONE (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	|	t=TONE (cd=COMBINING_DIACRITIC {$suffix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
 	{
 		final Diacritic[] prefix = new Diacritic[0];
 		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()];
 		for(int i = 0; i < $suffix_diacritic::dias.size(); i++) {
-			suffix[i+1] = $suffix_diacritic::dias.get(i);
+			suffix[i] = $suffix_diacritic::dias.get(i);
 		}
-		suffix[0] = factory.createDiacritic($rr.text.charAt(0));
 		
 		$diacritic = factory.createDiacritic(prefix, $t.text.charAt(0), suffix);
 	}

@@ -11,8 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
+import ca.phon.session.UnvalidatedValue;
 
 public class TierImpl<T> implements Tier<T> {
 	
@@ -223,13 +225,32 @@ public class TierImpl<T> implements Tier<T> {
 			for(int i = 0; i < numberOfGroups(); i++) {
 				if(i > 0) buffer.append("] [");
 				final T grpVal = getGroup(i);
+				String grpTxt = (grpVal != null ? grpVal.toString() : "");
+				if(grpTxt.length() == 0) {
+					// XXX Check for unvalidated values
+					if(grpVal instanceof IExtendable) {
+						final IExtendable extGrp = (IExtendable)grpVal;
+						final UnvalidatedValue uv = extGrp.getExtension(UnvalidatedValue.class);
+						if(uv != null) 
+							grpTxt = uv.getValue();
+					}
+				}
 				if(grpVal != null)
-					buffer.append(grpVal.toString());
+					buffer.append(grpTxt);
 			}
 			buffer.append("]");
 		} else {
-			if(numberOfGroups() > 0)
-				buffer.append(getGroup(0).toString());
+			if(numberOfGroups() > 0) {
+				final T grpVal = getGroup(0);
+				String grpTxt = (grpVal != null ? grpVal.toString() : "");
+				if(grpTxt.length() == 0 && grpVal instanceof IExtendable) {
+					final IExtendable extGrp = (IExtendable)grpVal;
+					final UnvalidatedValue uv = extGrp.getExtension(UnvalidatedValue.class);
+					if(uv != null) 
+						grpTxt = uv.getValue();
+				}
+				buffer.append(grpTxt);
+			}
 		}
 		
 		return buffer.toString();

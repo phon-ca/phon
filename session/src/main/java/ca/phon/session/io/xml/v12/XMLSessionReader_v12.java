@@ -35,7 +35,7 @@ import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.IPAParserErrorHandler;
-import ca.phon.ipa.parser.IPAParserException;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Comment;
 import ca.phon.session.CommentEnum;
@@ -534,42 +534,14 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					retVal.addGroup(new IPATranscript());
 				} else {
 					try {
-						final List<IPAParserException> errors = new ArrayList<IPAParserException>();
-						final IPAParserErrorHandler ipaErrHandler = new IPAParserErrorHandler() {
-							
-							@Override
-							public void handleError(IPAParserException ex) {
-								errors.add(ex);
-							}
-							
-						};
-						try {
-							IPALexer lexer = new IPALexer(groupBuffer.toString());
-							TokenStream tokenStream = new CommonTokenStream(lexer);
-							IPAParser parser = new IPAParser(tokenStream);
-							parser.addErrorHandler(ipaErrHandler);
-							final IPATranscript transcript = parser.transcription();
-							
-							if(errors.size() > 0) {
-								throw new ParseException("Failed to parse transcript", -1);
-							}
-							
-							// check to make sure the text hasn't changed
-							if(!groupBuffer.toString().equals(transcript.toString())) {
-								LOGGER.info(groupBuffer.toString());
-								throw new ParseException("Parsed transcript is incorrect", -1);
-							}
-							
-							// copy syllabification if transcript is the same size as our provided syllabification
-							if(pt.getSb() != null && pt.getSb().getPh() != null 
-									&& transcript.length() == pt.getSb().getPh().size()) {
-								final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
-								transcript.accept(visitor);
-							}
-							retVal.addGroup(transcript);
-						} catch (Exception e) {
-							throw new ParseException(e.getLocalizedMessage(), -1);
+						final IPATranscript transcript = IPATranscript.parseIPATranscript(groupBuffer.toString());
+						// copy syllabification if transcript is the same size as our provided syllabification
+						if(pt.getSb() != null && pt.getSb().getPh() != null 
+								&& transcript.length() == pt.getSb().getPh().size()) {
+							final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
+							transcript.accept(visitor);
 						}
+						retVal.addGroup(transcript);
 					} catch (ParseException pe) {
 						LOGGER.log(Level.SEVERE, pe.getLocalizedMessage(), pe);
 						
