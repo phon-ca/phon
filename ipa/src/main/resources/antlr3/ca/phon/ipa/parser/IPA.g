@@ -1,6 +1,6 @@
 /*
  * Phon - An open source tool for research in phonology.
- * Copyright (C) 2011 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * Copyright (C) 2011-2014 The Phon Project, Memorial University <http://phon.ling.mun.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,61 +33,17 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 import ca.phon.ipa.*;
+import ca.phon.ipa.parser.exceptions.*;
 import ca.phon.ipa.features.*;
 import ca.phon.syllable.*;
 }
 
 // custom methods for generated parser
 @members {
-
 /**
  * Phone factory
  */
 private final IPAElementFactory factory = new IPAElementFactory();
-
-/**
- * List of custom error handlers
- */
-private final List<IPAParserErrorHandler> errorHandlers = 
-	Collections.synchronizedList(new ArrayList<IPAParserErrorHandler>());
-	
-/**
- * Add an error handler to the lexer
- * 
- * @param handler
- */
-public void addErrorHandler(IPAParserErrorHandler handler) {
-	if(!errorHandlers.contains(handler)) {
-		errorHandlers.add(handler);
-	}
-}
-
-/**
- * Remove an error handler from the lexer
- * 
- * @param handler
- */
-public void removeErrorHandler(IPAParserErrorHandler handler) {
-	errorHandlers.remove(handler);
-}
-
-/**
- * Report an error to all handlers
- * 
- * @param ex
- */
-private void reportError(IPAParserException ex) {
-	for(IPAParserErrorHandler handler:errorHandlers) {
-		handler.handleError(ex);
-	}
-}
-
-@Override
-public void reportError(RecognitionException e) {
-	IPAParserException ex = new IPAParserException(e);
-	ex.setPositionInLine(e.charPositionInLine);
-	reportError(ex);
-}
 }
 
 /* RULES */
@@ -107,6 +63,20 @@ scope {
 		( (word_boundary {$transcription::builder.append($word_boundary.wordBoundary);})+
 		w2=word? {if($w2.w != null) { $transcription::builder.append($w2.w);} } )*
 	{
+		if(input.LA(1) != Token.EOF) {
+	  		IPAParserException ipae = new IPAParserException("Failed to process all text");
+		
+			int myLA = input.LA(1);
+			if(myLA == LIGATURE) 
+				ipae = new HangingLigatureException("Ligature missing left-hand element.");
+			else if(myLA == TONE)
+				ipae = new StrayDiacriticException("Stray tone diacritic");
+			else if(myLA == LONG || myLA == HALF_LONG)
+				ipae = new StrayDiacriticException("Stray length diacritic");
+				
+			ipae.setPositionInLine(input.LT(1).getCharPositionInLine());
+			throw ipae;
+		}
 		$transcript = $transcription::builder.toIPATranscript();
 	}
 	;
@@ -122,17 +92,53 @@ scope {
 word returns [IPATranscript w]
 scope {
 	IPATranscriptBuilder builder;
+	boolean hangingLig;
+	boolean makeCompound;
+	char hangingLigChar;
 }
 @init { 
-	$word::builder = new IPATranscriptBuilder(); 
+	$word::builder = new IPATranscriptBuilder();
+	$word::hangingLig = false;
+	$word::makeCompound = false;
 }
-	:	(we=word_element {if($we.p != null) $word::builder.append($we.p); }  
+	:	(we=word_element {
+	
+			if($we.p != null) { 
+				if($word::hangingLig) {
+					$word::hangingLig = false;
+					if($word::makeCompound) {
+						$word::builder.makeCompoundPhone($we.p, $word::hangingLigChar);
+					} else {
+						$word::builder.append($we.p);
+					}
+					$word::makeCompound = true;
+				} else {
+					if($word::makeCompound) {
+						$word::builder.makeCompoundPhone($we.p, $word::hangingLigChar);
+						$word::makeCompound = false;
+					} else {
+						$word::builder.append($we.p);
+					}
+				}
+			}
+		}  
+	
 		( COLON sc=sctype {
 			SyllabificationInfo sInfo = $we.p.getExtension(SyllabificationInfo.class);
 			sInfo.setConstituentType($sc.value);
 			sInfo.setDiphthongMember($sc.isDiphthongMember);
 		} )? )+
 	{
+		if($word::makeCompound) {
+			final HangingLigatureException hle = new HangingLigatureException("Ligature missing right-hand element");
+			int idx = input.LT(1).getCharPositionInLine();
+			if(idx < 0) {
+				// end of string
+				idx = input.toString().length();
+			}
+			hle.setPositionInLine(idx);
+			throw hle;
+		}
 		$w = $word::builder.toIPATranscript();
 	}
 	|	p=pause
@@ -141,17 +147,22 @@ scope {
 		$w = $word::builder.toIPATranscript();
 	}
 	;
-	catch [EarlyExitException ex] {
-		reportError(ex);
+	catch [IllegalStateException e] {
+		// this happens when compound phone elements are not phone objects
 		
-		if(state.lastErrorIndex != input.index() && input.index() == 0) {
-			state.lastErrorIndex = input.index();
-			beginResync();
-			input.consume();
-			endResync();
-		} else {
-			recover(input, ex);
-		}
+	}
+	catch [NoViableAltException e] {
+		IPAParserException ipae = new IPAParserException(e);
+		
+		int myLA = input.LA(1);
+		if(myLA == LIGATURE) 
+			ipae = new HangingLigatureException("Ligature missing left-hand element.");
+		else if(myLA == TONE)
+			ipae = new StrayDiacriticException("Stray tone diacritic");
+		else if(myLA == LONG || myLA == HALF_LONG)
+			ipae = new StrayDiacriticException("Stray length diacritic");
+		ipae.setPositionInLine(e.charPositionInLine);
+		throw ipae;
 	}
 	
 	
@@ -287,76 +298,27 @@ pause_length returns [PauseLength length]
  *
  */
 phone returns [IPAElement ele]
-	:	single_phone
+	:	p1=single_phone
 	{	
-		$ele = $single_phone.phone;
-	}
-	|	compound_phone ( COLON sc=sctype )?
-	{	
-		$ele = $compound_phone.phone;
-	}
-	;
-	catch [NoViableAltException ex] {
-		if(state.lastErrorIndex != input.index()) {
-			Token t = input.get(input.index());
-			if(t.getType() == CONSONANT
-            					|| t.getType() == COVER_SYMBOL
-            					|| t.getType() == GLIDE
-            					|| t.getType() == VOWEL) {            				
-				String txt = t.getText();
-				char filler = (txt != null && txt.length() > 0 ? txt.charAt(0) : 'X');
-				ele = (new IPAElementFactory()).createPhone(filler);
-			} else {
-				ele = (new IPAElementFactory()).createPhone('X');
-			}
-		}
-		reportError(ex);
-		recover(input, ex);
-	}
-	catch [RecognitionException re] {
-		reportError(re);
-		recover(input, re);
-	}
-	
-/**
- * A single (non-compound) phone.
- */
-single_phone returns [Phone phone]
-scope {	
-	List<Character> toneDias;
-}
-@init {
-	$single_phone::toneDias = new ArrayList<Character>();
-}
-	:	base_phone (tc=TONE {$single_phone::toneDias.add($tc.text.charAt(0));})*
-	{	
-		$phone = $base_phone.phone;
-		$phone.setToneDiacritics($single_phone::toneDias.toArray(new Character[0]));
-	}
-	|	complex_phone (tc=TONE {$single_phone::toneDias.add($tc.text.charAt(0));})*
-	{	
-		$phone = $complex_phone.phone;
-		$phone.setToneDiacritics($single_phone::toneDias.toArray(new Character[0]));
+		$ele = $p1.phone;
 	}
 	;
 	
-/**
- * Phone + optional COMBINING diacritics
- */
 base_phone returns [Phone phone]
 scope {
-	List<Character> cmbDias;
+	List<Diacritic> cmbDias;
 }
 @init {
-	$base_phone::cmbDias = new ArrayList<Character>();
+	$base_phone::cmbDias = new ArrayList<Diacritic>();
 }
-	:	initialToken=(CONSONANT|VOWEL|COVER_SYMBOL|GLIDE) (cd=COMBINING_DIACRITIC {$base_phone::cmbDias.add($cd.text.charAt(0));})* len=phone_length?
+	:	initialToken=(CONSONANT|VOWEL|COVER_SYMBOL|GLIDE) (cd=COMBINING_DIACRITIC {$base_phone::cmbDias.add( factory.createDiacritic( $cd.text.charAt(0) ) );})*
 	{
-		final Character basePhone = $initialToken.text.charAt(0);
+		Diacritic[] combiningDiacritics = new Diacritic[$base_phone::cmbDias.size()];
+		for(int i = 0; i < combiningDiacritics.length; i++) {
+			combiningDiacritics[i] = $base_phone::cmbDias.get(i);
+		}
 		
-		final float length = (len != null ? $len.length : 0.0f);
-		
-		$phone = factory.createPhone(basePhone, $base_phone::cmbDias.toArray(new Character[0]), length);
+		$phone = factory.createPhone($initialToken.text.charAt(0), combiningDiacritics);
 	}
 	;
 	
@@ -364,93 +326,167 @@ scope {
  * Phone + optional COMBINING diacritics and
  * a prefix and/or suffix superscript diacritic.
  */
-complex_phone returns [Phone phone]
-	:	PREFIX_DIACRITIC base_phone
-	{	
-		$phone = $base_phone.phone;
-		$phone.setPrefixDiacritic($PREFIX_DIACRITIC.text.charAt(0));
-	}
-	|	SUFFIX_DIACRITIC ROLE_REVERSAL base_phone
-	{	
-		$phone = $base_phone.phone;
-		$phone.setPrefixDiacritic($SUFFIX_DIACRITIC.text.charAt(0));
-	}
-	|	base_phone SUFFIX_DIACRITIC
-	{	
-		$phone = $base_phone.phone;
-		$phone.setSuffixDiacritic($SUFFIX_DIACRITIC.text.charAt(0));
-	}
-	|	base_phone PREFIX_DIACRITIC ROLE_REVERSAL
-	{	
-		$phone = $base_phone.phone;
-		$phone.setSuffixDiacritic($PREFIX_DIACRITIC.text.charAt(0));
-	}
-	|	PREFIX_DIACRITIC base_phone SUFFIX_DIACRITIC
-	{	
-		$phone = $base_phone.phone;
-		$phone.setPrefixDiacritic($PREFIX_DIACRITIC.text.charAt(0));
-		$phone.setSuffixDiacritic($SUFFIX_DIACRITIC.text.charAt(0));	
-	}
-	|	pd1=PREFIX_DIACRITIC base_phone pd2=PREFIX_DIACRITIC ROLE_REVERSAL
-	{	
-		$phone = $base_phone.phone;
-		$phone.setPrefixDiacritic($pd1.text.charAt(0));
-		$phone.setSuffixDiacritic($pd2.text.charAt(0));
-	}
-	|	sd1=SUFFIX_DIACRITIC ROLE_REVERSAL base_phone sd2=SUFFIX_DIACRITIC
-	{	
-		$phone = $base_phone.phone;
-		$phone.setPrefixDiacritic($sd1.text.charAt(0));
-		$phone.setSuffixDiacritic($sd2.text.charAt(0));
-	}
-	|	SUFFIX_DIACRITIC rr1=ROLE_REVERSAL base_phone PREFIX_DIACRITIC rr2=ROLE_REVERSAL
-	{	
-		$phone = $base_phone.phone;
-		$phone.setPrefixDiacritic($SUFFIX_DIACRITIC.text.charAt(0));	
-		$phone.setSuffixDiacritic($PREFIX_DIACRITIC.text.charAt(0));
-	}
-	;
-	
-/**
- * Compound phones - two single phones connected by 
- * a ligature.
- */
-compound_phone returns [CompoundPhone phone]
-	:	sp1=single_phone LIGATURE sp2=single_phone
+single_phone returns [Phone phone]
+options {
+	backtrack=true;
+}
+	:	ps=prefix_section? p1=base_phone ( id=(LONG|HALF_LONG|SUFFIX_DIACRITIC)? lig=LIGATURE p2=base_phone)?  ss=suffix_section?
 	{
-		Phone firstPhone = ($sp1.phone != null ? $sp1.phone : (new IPAElementFactory()).createPhone('X')) ;
-		Phone secondPhone = ($sp2.phone != null ? $sp2.phone : (new IPAElementFactory()).createPhone('X')) ;
-		Character ligature = $LIGATURE.text.charAt(0);
-		$phone = factory.createCompoundPhone(firstPhone, secondPhone, ligature);	
+		Diacritic[] prefixDiacritics = new Diacritic[0];
+		if(ps != null) {
+			prefixDiacritics = $ps.diacritics.toArray(prefixDiacritics);
+		}
+		Diacritic[] suffixDiacritics = new Diacritic[0];
+		if(ss != null) {
+			suffixDiacritics = $ss.diacritics.toArray(suffixDiacritics);
+		}
+		
+		$phone = $p1.phone;
+		if($lig != null) {
+			$phone = factory.createCompoundPhone($p1.phone, $p2.phone, $lig.text.charAt(0));
+		}
+		
+		$phone.setPrefixDiacritics(prefixDiacritics);
+		$phone.setSuffixDiacritics(suffixDiacritics);
 	}
 	;
 	
-/**
- * Rule for matching length diacritics
- */
-phone_length returns [Float length]
-@init{ $length = 0.0f; }
-	:	LONG						// long
-	{	
-		$length = 1.0f;	
-	}
-	|	l1=LONG l2=LONG					// x-long
-	{	
-		$length = 2.0f;	
-	}
-	|	l1=LONG l2=LONG l3=LONG				// xx-long
-	{	
-		$length = 3.0f;	
-	}
-	|	HALF_LONG					// half-long
-	{	
-		$length = 0.5f;	
-	}
-	|	LONG HALF_LONG					// long, half-long combo
-	{	
-		$length = 1.5f;	
+prefix_section returns [List<Diacritic> diacritics]
+scope {
+	List<Diacritic> dias;
+}
+@init {
+	$prefix_section::dias = new ArrayList<Diacritic>();
+}
+	:	(pd=prefix_diacritic {if(pd != null) $prefix_section::dias.add($pd.diacritic);})+
+	{
+		$diacritics = $prefix_section::dias;
 	}
 	;
+	
+prefix_diacritic returns [Diacritic diacritic]
+scope {
+	List<Diacritic> dias;
+}
+@init {
+	$prefix_diacritic::dias = new ArrayList<Diacritic>();
+}
+	:	pd=PREFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})* lig=LIGATURE?
+	{
+		final Diacritic[] suffix = new Diacritic[$prefix_diacritic::dias.size()+($lig != null ? 1 : 0)];
+		for(int i = 0; i < $prefix_diacritic::dias.size(); i++) {
+			suffix[i] = $prefix_diacritic::dias.get(i);
+		}
+		if($lig != null) {
+			suffix[suffix.length-1] = factory.createDiacritic($lig.text.charAt(0));
+		}
+		
+		$diacritic = factory.createDiacritic(new Diacritic[0], $pd.text.charAt(0), suffix);
+	}
+	|	sd=SUFFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})* lig=(ROLE_REVERSAL | LIGATURE)
+	{
+		final Diacritic[] suffix = new Diacritic[$prefix_diacritic::dias.size()+1];
+		for(int i = 0; i < $prefix_diacritic::dias.size(); i++) {
+			suffix[i] = $prefix_diacritic::dias.get(i);
+		}
+		suffix[suffix.length-1] = factory.createDiacritic($lig.text.charAt(0));
+		
+		$diacritic = factory.createDiacritic(new Diacritic[0], $sd.text.charAt(0), suffix);
+	}
+	;
+	catch [MismatchedSetException mse] {
+		final ca.phon.ipa.parser.exceptions.StrayDiacriticException sde = new ca.phon.ipa.parser.exceptions.StrayDiacriticException("Stray suffix diacritic, expecting \u0361");
+		sde.setPositionInLine(mse.charPositionInLine);
+		throw sde;
+	}
+	
+suffix_section returns [List<Diacritic> diacritics]
+scope {
+	List<Diacritic> dias;
+}
+@init {
+	$suffix_section::dias = new ArrayList<Diacritic>();
+}
+	:	(sd=suffix_diacritic {if(sd != null) $suffix_section::dias.add($sd.diacritic);})+
+	{
+		$diacritics = $suffix_section::dias;
+	}
+	;
+	catch [NoViableAltException e] {
+		final StrayDiacriticException sde = new StrayDiacriticException("Stray diacritic, expecting \u0361");
+		sde.setPositionInLine(e.index);
+		throw sde;
+	}
+	
+suffix_diacritic returns [Diacritic diacritic]
+scope {
+	List<Diacritic> dias;
+}
+@init {
+	$suffix_diacritic::dias = new ArrayList<Diacritic>();
+}
+	:	lig=LIGATURE? sd=SUFFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	{
+		final Diacritic[] prefix = ($lig != null ? new Diacritic[]{factory.createDiacritic($lig.text.charAt(0))} : new Diacritic[0]);
+		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()];
+		for(int i = 0; i < $suffix_diacritic::dias.size(); i++) {
+			suffix[i] = $suffix_diacritic::dias.get(i);
+		}
+		
+		$diacritic = factory.createDiacritic(prefix, $sd.text.charAt(0), suffix);
+	}
+	|	lig=LIGATURE pd=PREFIX_DIACRITIC (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	{
+		final Diacritic[] prefix = new Diacritic[]{ factory.createDiacritic($lig.text.charAt(0)) };
+		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()];
+		for(int i = 0; i < $suffix_diacritic::dias.size(); i++) {
+			suffix[i] = $suffix_diacritic::dias.get(i);
+		}
+		
+		$diacritic = factory.createDiacritic(prefix, $pd.text.charAt(0), suffix);
+	}
+	|	pd=PREFIX_DIACRITIC rr=ROLE_REVERSAL (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	{
+		final Diacritic[] prefix = new Diacritic[0];
+		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()+1];
+		for(int i = 0; i < $suffix_diacritic::dias.size(); i++) {
+			suffix[i+1] = $suffix_diacritic::dias.get(i);
+		}
+		suffix[0] = factory.createDiacritic($rr.text.charAt(0));
+		
+		$diacritic = factory.createDiacritic(prefix, $pd.text.charAt(0), suffix);
+	}
+	|	t=TONE (cd=COMBINING_DIACRITIC {$prefix_diacritic::dias.add(factory.createDiacritic($cd.text.charAt(0)));})*
+	{
+		final Diacritic[] prefix = new Diacritic[0];
+		final Diacritic[] suffix = new Diacritic[$suffix_diacritic::dias.size()];
+		for(int i = 0; i < $suffix_diacritic::dias.size(); i++) {
+			suffix[i+1] = $suffix_diacritic::dias.get(i);
+		}
+		suffix[0] = factory.createDiacritic($rr.text.charAt(0));
+		
+		$diacritic = factory.createDiacritic(prefix, $t.text.charAt(0), suffix);
+	}
+	|	len=LONG
+	{
+		$diacritic = factory.createDiacritic($len.text.charAt(0));
+	}
+	|	len=HALF_LONG
+	{
+		$diacritic = factory.createDiacritic($len.text.charAt(0));
+	}
+	;
+	catch [NoViableAltException nvae] {
+		int myLA = input.LA(1);
+		// special case when we have a hanging ligature between complex phones
+		if(myLA == LIGATURE) {
+			$word::hangingLig = true;
+			$word::hangingLigChar = input.LT(1).getText().charAt(0);
+			input.consume();
+		} else {
+			throw nvae;
+		}
+	}
 	
 sctype returns [SyllableConstituentType value, boolean isDiphthongMember]
 	:	SCTYPE

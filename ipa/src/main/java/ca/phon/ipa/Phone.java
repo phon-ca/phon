@@ -1,6 +1,7 @@
 package ca.phon.ipa;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
@@ -18,36 +19,15 @@ import ca.phon.ipa.parser.IPATokens;
  * <li>A (optional) suffix diacritic</li>
  * </ul>
  */
-public final class Phone extends IPAElement {
-	/**
-	 * Prefix diacritic
-	 */
-	private Character prefixDiacritic;
+public class Phone extends IPAElement {
 	
-	/**
-	 * Base
-	 */
+	private Diacritic[] prefixDiacritics = new Diacritic[0];
+	
+	private Diacritic[] suffixDiacritics = new Diacritic[0];
+	
+	private Diacritic[] combiningDiacritics = new Diacritic[0];
+	
 	private Character basePhone;
-	
-	/**
-	 * Combining diacritics
-	 */
-	private Character[] combiningDiacritics = new Character[0];
-	
-	/**
-	 * Tone diacritics
-	 */
-	private Character[] toneDiacritics = new Character[0];
-	
-	/**
-	 * Length
-	 */
-	private float length = 0;
-	
-	/**
-	 * Suffix diacritic
-	 */
-	private Character suffixDiacritic;
 	
 	/**
 	 * Create a new empty phone object.
@@ -70,52 +50,36 @@ public final class Phone extends IPAElement {
 	/**
 	 * Full constructor
 	 * 
-	 * @param prefixDiacritic
+	 * @param prefixDiacritics
 	 * @param basePhone
 	 * @param combiningDiacritics
-	 * @param length
-	 * @param suffixDiacritic
+	 * @param suffixDiacritics
 	 */
-	Phone(Character prefixDiacritic, Character basePhone,
-			Character[] combiningDiacritics, float length,
-			Character suffixDiacritic, Character[] toneDiacritics) {
+	Phone(Diacritic[] prefixDiacritics, Character basePhone,
+			Diacritic[] combiningDiacritics,
+			Diacritic[] suffixDiacritics) {
 		super();
-		if(prefixDiacritic != null)
-			setPrefixDiacritic(prefixDiacritic);
+		if(prefixDiacritics != null)
+			setPrefixDiacritics(prefixDiacritics);
 		setBasePhone(basePhone);
 		if(combiningDiacritics != null)
 			setCombiningDiacritics(combiningDiacritics);
-		if(length > 0.0f)
-			setLength(length);
-		if(suffixDiacritic != null)
-			setSuffixDiacritic(suffixDiacritic);
-		if(toneDiacritics != null)
-			setToneDiacritics(toneDiacritics);
+		if(suffixDiacritics != null)
+			setSuffixDiacritics(suffixDiacritics);
 	}
 
 	/* Get/Set methods */
-	public Character getPrefixDiacritic() {
-		return prefixDiacritic;
+	public Diacritic[] getPrefixDiacritics() {
+		return prefixDiacritics;
 	}
 
 	/**
-	 * Set the prefix diacritic for this Phone.
+	 * Set the prefix diacritics for this Phone.
 	 * 
-	 * @param prefixDiacritic
-	 * @throws IllegalArgumentException if the given character
-	 *  does not have the PREFIX_DIACRITIC or SUFFIX_DIACRITIC
-	 *  token type as specified by {@link IPATokens#getTokenType(Character)}
+	 * @param prefixDiacritics
 	 */
-	public void setPrefixDiacritic(Character prefixDiacritic) {
-		final IPATokenType tokenType = 
-				IPATokens.getSharedInstance().getTokenType(prefixDiacritic);
-		if(tokenType == null
-				|| (tokenType != IPATokenType.PREFIX_DIACRITIC && tokenType != IPATokenType.SUFFIX_DIACRITIC)) {
-			throw new IllegalArgumentException("Prefix diacritic must be a space-modifiying glyph.");
-		}
-		final String oldString = getText();
-		this.prefixDiacritic = prefixDiacritic;
-		super.firePropertyChange(PHONE_TEXT, oldString, getText());
+	public void setPrefixDiacritics(Diacritic[] prefixDiacritics) {
+		this.prefixDiacritics = prefixDiacritics;
 	}
 	
 	/**
@@ -124,15 +88,11 @@ public final class Phone extends IPAElement {
 	 * @return
 	 */
 	public String getPrefix() {
-		String retVal = "";
-		final Character prefixChar = getPrefixDiacritic();
-		if(prefixChar != null) {
-			retVal += prefixChar;
-			IPATokenType type = IPATokens.getSharedInstance().getTokenType(prefixChar);
-			if(type == IPATokenType.SUFFIX_DIACRITIC)
-				retVal += '\u0335';
+		final StringBuilder sb = new StringBuilder();
+		for(Diacritic dia:getPrefixDiacritics()) {
+			sb.append(dia.getText());
 		}
-		return retVal;
+		return sb.toString();
 	}
 	
 	/**
@@ -142,7 +102,11 @@ public final class Phone extends IPAElement {
 	 *  an empty set if not found
 	 */
 	public FeatureSet getPrefixFeatures() {
-		return getFeatures(getPrefixDiacritic());
+		final FeatureSet retVal = new FeatureSet();
+		for(Diacritic dia:getPrefixDiacritics()) {
+			retVal.union(dia.getFeatureSet());
+		}
+		return retVal;
 	}
 
 	/**
@@ -181,9 +145,7 @@ public final class Phone extends IPAElement {
 				throw new IllegalArgumentException("Base phones must be one of: CONSONANT, COVER_SYMBOL, GLIDE, VOWEL");
 			}
 		}
-		final String oldString = getText();
 		this.basePhone = basePhone;
-		super.firePropertyChange(PHONE_TEXT, oldString, getText());
 	}
 	
 	/**
@@ -213,7 +175,7 @@ public final class Phone extends IPAElement {
 	 * @return the combining diacritics, or an empty array
 	 *  if no combining diacritics are available.
 	 */
-	public Character[] getCombiningDiacritics() {
+	public Diacritic[] getCombiningDiacritics() {
 		return combiningDiacritics;
 	}
 
@@ -226,31 +188,12 @@ public final class Phone extends IPAElement {
 	 * @throws IllegalArgumentException if one of the given diacritics
 	 *  is not a combining diacritic
 	 */
-	public void setCombiningDiacritics(Character[] combiningDiacritics) {
-		for(Character dc:combiningDiacritics) {
-			final IPATokenType tt = IPATokens.getSharedInstance().getTokenType(dc);
-			if(tt != IPATokenType.COMBINING_DIACRITIC)
+	public void setCombiningDiacritics(Diacritic[] combiningDiacritics) {
+		for(Diacritic dc:combiningDiacritics) {
+			if(dc.getType() != DiacriticType.COMBINING)
 				throw new IllegalArgumentException();
 		}
 		this.combiningDiacritics = combiningDiacritics;
-	}
-	
-	/**
-	 * <p>Set the tone diacritics for ths phone.  Each character
-	 * must have the {@link IPATokenType#TONE} token type.</p>
-	 * 
-	 * @param toneDiacritics
-	 * @throws IllegalArgumentException if one of the given diacritics
-	 *  is not a tone diacritic
-	 */
-	public void setToneDiacritics(Character[] toneDiacritics) {
-		for(Character tc:toneDiacritics) {
-			final IPATokenType tt = IPATokens.getSharedInstance().getTokenType(tc);
-			if(tt != IPATokenType.TONE) {
-				throw new IllegalArgumentException();
-			}
-		}
-		this.toneDiacritics = toneDiacritics;
 	}
 	
 	/**
@@ -258,23 +201,24 @@ public final class Phone extends IPAElement {
 	 * 
 	 * @return tone diacritics
 	 */
-	public Character[] getToneDiacritics() {
-		return this.toneDiacritics;
+	public Diacritic[] getToneDiacritics() {
+		final List<Diacritic> retVal = new ArrayList<Diacritic>();
+		for(Diacritic dia:getSuffixDiacritics()) {
+			if(dia.getType() == DiacriticType.TONE) {
+				retVal.add(dia);
+			}
+		}
+		return retVal.toArray(new Diacritic[0]);
 	}
 	
-	/**
-	 * Get the string representing the tone section of this {@link Phone}.
-	 * 
-	 * @return tone string
-	 */
-	public String getTone() {
-		String retVal = "";
-		
-		for(Character c:getToneDiacritics()) {
-			retVal += c;
+	public Diacritic[] getLengthDiacritics() {
+		final List<Diacritic> retVal = new ArrayList<Diacritic>();
+		for(Diacritic dia:getSuffixDiacritics()) {
+			if(dia.getType() == DiacriticType.LENGTH) {
+				retVal.add(dia);
+			}
 		}
-		
-		return retVal;
+		return retVal.toArray(new Diacritic[0]);
 	}
 	
 	/**
@@ -284,12 +228,11 @@ public final class Phone extends IPAElement {
 	 * @return the combining diacritic string
 	 */
 	public String getCombining() {
-		String retVal = "";
-		
-		for(Character c:getCombiningDiacritics())
-			retVal += ""+c;
-		
-		return retVal;
+		final StringBuilder sb = new StringBuilder();
+		for(Diacritic dia:getCombiningDiacritics()) {
+			sb.append(dia.getText());
+		}
+		return sb.toString();
 	}
 	
 	/**
@@ -301,88 +244,24 @@ public final class Phone extends IPAElement {
 	 */
 	public FeatureSet getCombiningFeatures() {
 		final FeatureSet retVal = new FeatureSet();
-		
-		for(Character c:getCombiningDiacritics()) {
-			retVal.union(getFeatures(c));
+		for(Diacritic dia:getCombiningDiacritics()) {
+			retVal.union(dia.getFeatureSet());
 		}
-		
-		return retVal;
-	}
-
-	/**
-	 * Get the length of the phone as an integer value.
-	 * Length is measured between [0-3], with a step of
-	 * 0.5.
-	 * 
-	 * @return the length of the phone as an integer
-	 */
-	public float getLength() {
-		return length;
-	}
-
-	/**
-	 * Set the length of the phone.  Given length
-	 * must be a value between 0 and 3.
-	 * 
-	 * @param length
-	 * @throws IllegalArgumentException if the given length
-	 *  is not between 0 and 3 and/or not a multiple of 0.5.
-	 */
-	public void setLength(float length) {
-		if(length < 0 || length > 3) {
-			throw new IllegalArgumentException("Phone length must be one of: 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0");
-		}
-		this.length = length;
-	}
-	
-	/**
-	 * Get the phone length as a string.
-	 * 
-	 * @return the text representation of the phone's
-	 *  transcribed length
-	 */
-	public String getLengthString() {
-		String retVal = "";
-		
-		if(getLength() > 0) {
-			Set<Character> longChars = 
-					IPATokens.getSharedInstance().getCharactersForType(IPATokenType.LONG);
-			Character longChar = (longChars.size() > 0 ? longChars.iterator().next() : '\u02d0');
-			Set<Character> hlChars =
-					IPATokens.getSharedInstance().getCharactersForType(IPATokenType.HALF_LONG);
-			Character hlChar = (hlChars.size() > 0 ? hlChars.iterator().next() : '\u02d1');
-			
-			int numLongs = (int)getLength();
-			boolean hasHalf = (getLength() - numLongs) > 0;
-			
-			for(int i = 0; i < numLongs; i++) retVal += longChar + "";
-			if(hasHalf) retVal += hlChar + "";
-		}
-		
 		return retVal;
 	}
 	
-
-	public Character getSuffixDiacritic() {
-		return suffixDiacritic;
+	/* Get/Set methods */
+	public Diacritic[] getSuffixDiacritics() {
+		return suffixDiacritics;
 	}
 
 	/**
-	 * Set the suffix diacritic for this Phone.
+	 * Set the prefix diacritics for this Phone.
 	 * 
-	 * @param suffixDiacritic
-	 * @throws IllegalArgumentException if the given character
-	 *  does not have the PREFIX_DIACRITIC or SUFFIX_DIACRITIC
-	 *  token type as specified by {@link IPATokens#getTokenType(Character)} 
+	 * @param prefixDiacritics
 	 */
-	public void setSuffixDiacritic(Character suffixDiacritic) {
-		final IPATokenType tokenType = 
-				IPATokens.getSharedInstance().getTokenType(suffixDiacritic);
-		if(tokenType == null
-				|| (tokenType != IPATokenType.PREFIX_DIACRITIC && tokenType != IPATokenType.SUFFIX_DIACRITIC)) {
-			throw new IllegalArgumentException("Suffix diacritic must be a space-modifiying glyph.");
-		}
-		this.suffixDiacritic = suffixDiacritic;
+	public void setSuffixDiacritics(Diacritic[] suffixDiacritics) {
+		this.suffixDiacritics = suffixDiacritics;
 	}
 	
 	/**
@@ -392,15 +271,11 @@ public final class Phone extends IPAElement {
 	 *  the Phone
 	 */
 	public String getSuffix() {
-		String retVal = "";
-		Character suffixChar = getSuffixDiacritic();
-		if(suffixChar != null) {
-			retVal += suffixChar;
-			IPATokenType type = IPATokens.getSharedInstance().getTokenType(suffixChar);
-			if(type == IPATokenType.PREFIX_DIACRITIC)
-				retVal += '\u0335';
+		final StringBuilder sb = new StringBuilder();
+		for(Diacritic dia:getSuffixDiacritics()) {
+			sb.append(dia.getText());
 		}
-		return retVal;
+		return sb.toString();
 	}
 	
 	/**
@@ -410,27 +285,13 @@ public final class Phone extends IPAElement {
 	 *  or an empty set if not found
 	 */
 	public FeatureSet getSuffixFeatures() {
-		return getFeatures(getSuffixDiacritic());
-	}
-	
-	/**
-	 * Get the feature set fo the long section
-	 * of the element
-	 * 
-	 * @return
-	 */
-	public FeatureSet getLongFeatures() {
 		final FeatureSet retVal = new FeatureSet();
-		
-		if(getLength() == 0.5) {
-			retVal.addFeature("halflong");
-		} else if(getLength() >= 1.0) {
-			retVal.addFeature("long");
+		for(Diacritic dia:getSuffixDiacritics()) {
+			retVal.union(dia.getFeatureSet());
 		}
-		
 		return retVal;
 	}
-
+	
 	private FeatureSet getFeatures(Character c) {
 		final FeatureSet retVal = new FeatureSet();
 		if(c != null) {
@@ -449,19 +310,16 @@ public final class Phone extends IPAElement {
 			retVal.union(getBaseFeatures());
 			retVal.union(getCombiningFeatures());
 			retVal.union(getSuffixFeatures());
-			retVal.union(getLongFeatures());
 		return retVal;
 	}
 
 	@Override
 	public String getText() {
-		final String retVal =
-				getPrefix() +
-				getBase() +
-				getCombining() +
-				getLengthString() +
-				getSuffix() +
-				getTone();
-		return retVal;
+		final StringBuilder sb = new StringBuilder();
+		sb.append(getPrefix());
+		sb.append(getBasePhone());
+		sb.append(getCombining());
+		sb.append(getSuffix());
+		return sb.toString();
 	}
 }

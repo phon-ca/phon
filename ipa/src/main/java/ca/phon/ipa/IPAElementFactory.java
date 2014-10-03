@@ -1,5 +1,7 @@
 package ca.phon.ipa;
 
+import org.omg.PortableInterceptor.DISCARDING;
+
 
 
 /**
@@ -27,14 +29,18 @@ public class IPAElementFactory {
 		return new Phone(basePhone);
 	}
 	
+	public Phone createPhone(Character basePhone, Diacritic[] combiningDiacritics) {
+		return new Phone(new Diacritic[0], basePhone, combiningDiacritics, new Diacritic[0]);
+	}
+	
 	/**
 	 * Create a new basic phone
 	 * 
 	 * @param prefix
 	 * @param basePhone
 	 */
-	public Phone createPhone(Character prefix, Character basePhone) {
-		return new Phone(prefix, basePhone, new Character[0], 0, null, new Character[0]);
+	public Phone createPhone(Diacritic prefix, Character basePhone) {
+		return new Phone(new Diacritic[]{prefix}, basePhone, new Diacritic[0], new Diacritic[0]);
 	}
 	
 	/**
@@ -44,8 +50,8 @@ public class IPAElementFactory {
 	 * @param basePhone
 	 * @param suffix
 	 */
-	public Phone createPhone(Character prefix, Character basePhone, Character suffix) {
-		return new Phone(prefix, basePhone, new Character[0], 0, suffix, new Character[0]);
+	public Phone createPhone(Diacritic prefix, Character basePhone, Diacritic suffix) {
+		return new Phone(new Diacritic[]{prefix}, basePhone, new Diacritic[0], new Diacritic[]{suffix});
 	}
 	
 	/**
@@ -56,8 +62,8 @@ public class IPAElementFactory {
 	 * @param combining
 	 * @param suffix
 	 */
-	public Phone createPhone(Character prefix, Character basePhone, Character[] combining, Character suffix) {
-		return new Phone(prefix, basePhone, combining, 0, suffix, new Character[0]);
+	public Phone createPhone(Diacritic prefix, Character basePhone, Diacritic[] combining, Diacritic suffix) {
+		return new Phone(new Diacritic[]{prefix}, basePhone, combining, new Diacritic[]{suffix});
 	}
 	
 	/**
@@ -66,25 +72,18 @@ public class IPAElementFactory {
 	 * @param prefix
 	 * @param basePhone
 	 * @param combining
-	 * @param length
 	 * @param suffix
 	 */
-	public Phone createPhone(Character prefix, Character basePhone, Character[] combining, float length, Character suffix) {
-		return new Phone(prefix, basePhone, combining, length, suffix, new Character[0]);
+	public Phone createPhone(Diacritic[] prefix, Character basePhone, Diacritic[] combining, Diacritic[] suffix) {
+		return new Phone(prefix, basePhone, combining, suffix);
 	}
 	
-	/**
-	 * Create a new basic phone
-	 * 
-	 * @param basePhone
-	 * @param combining
-	 * @param length
-	 */
-	public Phone createPhone(Character basePhone, Character[] combining, float length) {
-		Phone retVal = new Phone(basePhone);
-		retVal.setCombiningDiacritics(combining);
-		retVal.setLength(length);
-		return retVal;
+	public Diacritic createDiacritic(Character dia) {
+		return new Diacritic(dia);
+	}
+	
+	public Diacritic createDiacritic(Diacritic[] prefix, Character dia, Diacritic[] suffix) {
+		return new Diacritic(prefix, dia, suffix);
 	}
 	
 	/**
@@ -197,15 +196,6 @@ public class IPAElementFactory {
 	 */
 	public IntraWordPause createIntraWordPause() {
 		return new IntraWordPause();
-	}
-	
-	/**
-	 * Create a new diacritic
-	 * 
-	 * @param diacritic
-	 */
-	public Diacritic createDiacritic(Character diacritic) {
-		return new Diacritic(diacritic);
 	}
 	
 	/**

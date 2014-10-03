@@ -3,7 +3,6 @@ package ca.phon.phonex.plugins;
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.Phone;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.visitor.VisitorAdapter;
@@ -46,37 +45,38 @@ public class AnyDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 		}
 		
 		@Visits
+		public void visitDiacritic(Diacritic dia) {
+			matches |= getMatcher().matches(dia);
+			if(!matches) {
+				// try sub-diacritics
+				for(Diacritic subdia:dia.getPrefixDiacritics()) {
+					visit(subdia);
+				}
+				for(Diacritic subdia:dia.getSuffixDiacritics()) {
+					visit(subdia);
+				}
+			}
+		}
+		
+		@Visits
 		public void visitBasicPhone(Phone phone) {
-			final IPAElementFactory factory = new IPAElementFactory();
-			
 			// prefix
-			if(phone.getPrefixDiacritic() != null) {
-				final Diacritic prefixDiacritic = factory.createDiacritic(phone.getPrefixDiacritic());
-				matches |= getMatcher().matches(prefixDiacritic);
+			for(Diacritic dia:phone.getPrefixDiacritics()) {
+				visit(dia);
 			}
 			
 			if(matches) return;
 			
 			// suffix
-			if(phone.getSuffixDiacritic() != null) {
-				final Diacritic suffixDiacritic = factory.createDiacritic(phone.getSuffixDiacritic());
-				matches |= getMatcher().matches(suffixDiacritic);
+			for(Diacritic dia:phone.getCombiningDiacritics()) {
+				visit(dia);
 			}
 			
 			if(matches) return;
 			
 			// combining
-			for(Character diacritic:phone.getCombiningDiacritics()) {
-				final Diacritic cmbDiacritic = factory.createDiacritic(diacritic);
-				matches |= getMatcher().matches(cmbDiacritic);
-				if(matches) return;
-			}
-			
-			// tone
-			for(Character diacritic:phone.getToneDiacritics()) {
-				final Diacritic toneDiacritic = factory.createDiacritic(diacritic);
-				matches |= getMatcher().matches(toneDiacritic);
-				if(matches) return;
+			for(Diacritic dia:phone.getSuffixDiacritics()) {
+				visit(dia);
 			}
 		}
 		

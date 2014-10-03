@@ -39,6 +39,37 @@ public class IPATranscriptBuilder {
 	}
 	
 	/**
+	 * Make the last added element plus  this phone a new compound phone.  This
+	 * will replace the last phone added.
+	 * 
+	 * @param phone
+	 * @param lig
+	 * @return
+	 * 
+	 * @throws IllegalStateException if previous phone is not present or is not an instance of
+	 *  Phone
+	 */
+	public IPATranscriptBuilder makeCompoundPhone(IPAElement phone, Character lig) {
+		if(size() == 0) {
+			throw new IllegalStateException("No previous phone");
+		}
+		final IPAElement prevEle = buffer.get(buffer.size()-1);
+		if(!(prevEle instanceof Phone)) {
+			throw new IllegalStateException("Previous element not a phone");
+		}
+		if(!(phone instanceof Phone)) {
+			throw new IllegalStateException("Element must be a phone.");
+		}
+		
+		final Phone prevPhone = (Phone)prevEle;
+		final CompoundPhone newPhone = factory.createCompoundPhone(prevPhone, (Phone)phone, lig);
+		buffer.remove(prevPhone);
+		buffer.add(newPhone);
+
+		return this;
+	}
+	
+	/**
 	 * Append all elements
 	 * 
 	 * @param eleList

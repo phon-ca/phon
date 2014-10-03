@@ -1,11 +1,11 @@
-package ca.phon.ipa.parser;
+package ca.phon.ipa.parser.exceptions;
 
 /**
  * Exception class for errors during Phone
  * lexing/parsing.
  * 
  */
-public class IPAParserException extends Exception {
+public class IPAParserException extends RuntimeException {
 
 	private static final long serialVersionUID = -3052112481299193424L;
 

@@ -9,71 +9,147 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import ca.phon.ipa.parser.exceptions.HangingLigatureException;
+import ca.phon.ipa.parser.exceptions.InvalidTokenException;
+import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
+
 @RunWith(JUnit4.class)
 public class TestIPAParserErrors {
+	
+	@Test
+	public void testInvalidTokenException() {
+		final String txt = "e#j";
+		
+		try {
+			final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+			Assert.fail(ipa.toString() + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(InvalidTokenException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(1, pe.getErrorOffset());
+		}
+	}
 
 	@Test
-	public void testStrayLongDiacritic() throws ParseException {
-		final String txt = "ɔ\u02d0\u02d0\u02d0\u02d0";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-		
-		// expected to recover by reducing to just the vowel
-		Assert.assertEquals(1, ipa.length());
-		Assert.assertEquals("ɔ", ipa.toString());
-	}
-	
-	@Test
-	public void testStrayInitialLengthDiacritic() throws ParseException {
+	public void testStrayInitialSuffixDiacritic() {
 		final String txt = "ʷɔ\u02d0";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-		
-		Assert.assertEquals(2, ipa.length());
-		Assert.assertEquals("Xɔ\u02d0", ipa.toString());
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(StrayDiacriticException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(1, pe.getErrorOffset());
+		}
 	}
 	
 	@Test
-	public void testStrayInitialSuffixDiacritic() throws ParseException {
-		final String txt = "ʷɔ\u02d0";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-		
-		Assert.assertEquals(2, ipa.length());
-		Assert.assertEquals("Xɔ\u02d0", ipa.toString());
-	}
-	
-	@Test
-	public void testStrayFinalPrefixDiacritic() throws ParseException {
+	public void testStrayFinalPrefixDiacritic() {
 		final String txt = "ɔʷⁿ";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-		
-		Assert.assertEquals(2, ipa.length());
-		Assert.assertEquals("ɔʷX", ipa.toString());
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(StrayDiacriticException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(3, pe.getErrorOffset());
+		}
 	}
 	
 	@Test
-	public void testMissingCompoundPhone() throws ParseException {
-		final String txt = "t\u035c t";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+	public void testHangingLigature() {
+		String txt = "t\u035c";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(HangingLigatureException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(2, pe.getErrorOffset());
+		}
 		
-		Assert.assertEquals(3, ipa.length());
-		Assert.assertEquals("t\u035cX t", ipa.toString());
+		txt = "\u035c";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(HangingLigatureException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(0, pe.getErrorOffset());
+		}
+		
+		txt = "";
+		
 	}
 	
-	@Ignore
+	
 	@Test
-	public void testStrayInitialLigature() throws ParseException {
-		final String txt = "\u035ct";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+	public void testStrayInitialLigature() {
+		String txt = "\u035ct";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(HangingLigatureException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(0, pe.getErrorOffset());
+		}
 		
-		Assert.assertEquals(1, ipa.length());
-		Assert.assertEquals("t", ipa.toString());
+		txt = "ab \u035ct";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(HangingLigatureException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(3, pe.getErrorOffset());
+		}
 	}
 	
-	@Ignore
+	@Test
+	public void testStrayLengthDiacritic() {
+		String txt = "\u02d0t";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(StrayDiacriticException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(0, pe.getErrorOffset());
+		}
+		
+		txt = "ab \u02d0t";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(StrayDiacriticException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(3, pe.getErrorOffset());
+		}
+	}
+	
+	@Test
+	public void testStrayToneDiacritic() {
+		String txt = "\u00b2t";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(StrayDiacriticException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(0, pe.getErrorOffset());
+		}
+		
+		txt = "ab \u00b2t";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(StrayDiacriticException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(3, pe.getErrorOffset());
+		}
+	}
+	
 	@Test
 	public void testPauseLocationError() throws ParseException {
 		final String txt = "hel(..)lo";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-		
-		Assert.assertEquals(6, ipa.length());
+		try {
+			IPATranscript.parseIPATranscript(txt);
+			Assert.fail(txt + " passed");
+		} catch (ParseException pe) {
+			Assert.assertEquals(6, pe.getErrorOffset());
+		}
 	}
+	
 }

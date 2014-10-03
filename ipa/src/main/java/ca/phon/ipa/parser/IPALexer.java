@@ -8,6 +8,8 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 
+import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.ipa.parser.exceptions.InvalidTokenException;
 import ca.phon.syllable.SyllableConstituentType;
 
 
@@ -46,12 +48,6 @@ public class IPALexer implements TokenSource {
 	private boolean expectingGroupReference = false;
 	
 	/**
-	 * Error handlers
-	 */
-	private List<IPAParserErrorHandler> errorHandlers = 
-			Collections.synchronizedList(new ArrayList<IPAParserErrorHandler>());
-	
-	/**
 	 * Constructor
 	 * 
 	 * @param string the string to tokenize
@@ -61,37 +57,6 @@ public class IPALexer implements TokenSource {
 		this.currentPosition = 0;
 		
 		tokenMapper = IPATokens.getSharedInstance();
-	}
-	
-	/**
-	 * Add an error handler to the lexer
-	 * 
-	 * @param handler
-	 */
-	public void addErrorHandler(IPAParserErrorHandler handler) {
-		if(!errorHandlers.contains(handler)) {
-			errorHandlers.add(handler);
-		}
-	}
-	
-	/**
-	 * Remove an error handler from the lexer
-	 * 
-	 * @param handler
-	 */
-	public void removeErrorHandler(IPAParserErrorHandler handler) {
-		errorHandlers.remove(handler);
-	}
-	
-	/**
-	 * Report an error to all handlers
-	 * 
-	 * @param ex
-	 */
-	private void reportError(IPAParserException ex) {
-		for(IPAParserErrorHandler handler:errorHandlers) {
-			handler.handleError(ex);
-		}
 	}
 
 	/**
@@ -111,7 +76,7 @@ public class IPALexer implements TokenSource {
 					IPAParserException ex = new IPAParserException("Invalid syllable constituent type '" +
 							currentChar + "'");
 					ex.setPositionInLine(currentPosition);
-					reportError(ex);
+					throw ex;
 				} else {
 					int antlrType = tokenMapper.getTypeValue(IPATokenType.SCTYPE);
 					retVal = new CommonToken(antlrType, currentChar+"");
@@ -138,9 +103,9 @@ public class IPALexer implements TokenSource {
 					--currentPosition;
 			} else {
 				if(tokenType == null) {
-					IPAParserException ex = new IPAParserException("Invalid token '" + currentChar + "'");
+					IPAParserException ex = new InvalidTokenException("Invalid token '" + currentChar + "'");
 					ex.setPositionInLine(currentPosition);
-					reportError(ex);
+					throw ex;
 				} else {
 					int antlrType = tokenMapper.getTypeValue(tokenType);
 					

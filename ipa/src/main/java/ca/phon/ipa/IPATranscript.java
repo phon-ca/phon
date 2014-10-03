@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -18,7 +19,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.IPAParserErrorHandler;
-import ca.phon.ipa.parser.IPAParserException;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
@@ -62,24 +63,17 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		
 		if(transcript.trim().length() > 0) {
 			try {
-				IPAParserErrorHandler handler = new IPAParserErrorHandler() {
-					
-					@Override
-					public void handleError(IPAParserException ex) {
-//						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(),
-//								ex);
-					}
-				};
 				IPALexer lexer = new IPALexer(transcript);
-				lexer.addErrorHandler(handler);
 				TokenStream tokenStream = new CommonTokenStream(lexer);
 				
 				IPAParser parser = new IPAParser(tokenStream);
-				parser.addErrorHandler(handler);
-				
 				retVal = parser.transcription();
 			} catch (RecognitionException re) {
 				throw new ParseException(transcript, re.charPositionInLine);
+			} catch (IPAParserException e) {
+				final ParseException pe = new ParseException(e.getLocalizedMessage(), e.getPositionInLine());
+				pe.addSuppressed(e);
+				throw pe;
 			}
 		}
 		

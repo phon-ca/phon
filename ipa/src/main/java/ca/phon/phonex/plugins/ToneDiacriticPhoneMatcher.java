@@ -3,7 +3,6 @@ package ca.phon.phonex.plugins;
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.Phone;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.visitor.VisitorAdapter;
@@ -41,14 +40,16 @@ public class ToneDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 		@Override
 		public void fallbackVisit(IPAElement obj) {
 		}
+		
+		@Visits
+		public void visitDiacritic(Diacritic dia) {
+			matches |= getMatcher().matches(dia);
+		}
 
 		@Visits
 		public void visitPhone(Phone p) {
-			final IPAElementFactory factory = new IPAElementFactory();
-			final PhoneMatcher pm = getMatcher();
-			for(Character c:p.getToneDiacritics()) {
-				final Diacritic diacritic = factory.createDiacritic(c);
-				matches |= pm.matches(diacritic);
+			for(Diacritic dia:p.getToneDiacritics()) {
+				visit(dia);
 			}
 		}
 		

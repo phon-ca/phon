@@ -72,7 +72,7 @@ public class TestIPAParser {
 				final Phone p = (Phone)ipaEle;
 				Assert.assertEquals(testString, p.getText());
 				
-				Assert.assertEquals(p.getPrefixDiacritic(), prefixChar);
+				Assert.assertEquals(p.getPrefixDiacritics()[0].getCharacter(), prefixChar);
 				Assert.assertEquals(p.getBasePhone(), c);
 			}
 		}
@@ -92,6 +92,8 @@ public class TestIPAParser {
 				final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 				if(transcript.length() < 1) {
 					System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
+				} else if(transcript.length() > 1) {
+					System.err.println(testString + " parsed as two phones.");
 				}
 				Assert.assertEquals(1, transcript.length());
 				
@@ -101,7 +103,7 @@ public class TestIPAParser {
 				final Phone p = (Phone)ipaEle;
 				Assert.assertEquals(testString, p.getText());
 				
-				Assert.assertEquals(suffixChar, p.getSuffixDiacritic());
+				Assert.assertEquals(suffixChar, p.getSuffixDiacritics()[0].getCharacter());
 				Assert.assertEquals(p.getBasePhone(), c);
 			}
 		}
@@ -111,56 +113,65 @@ public class TestIPAParser {
 	public void testReversedDiacritics() throws ParseException {
 		final IPATokens tokens = IPATokens.getSharedInstance();
 		final List<Character> testChars = new ArrayList<Character>();
-		final char roleReverse = '\u0335';
+		final char[] roleReversers = new char[]{'\u0335', '\u0361'};
 		testChars.addAll(tokens.getCharactersForType(IPATokenType.CONSONANT));
 		testChars.addAll(tokens.getCharactersForType(IPATokenType.VOWEL));
 		final Set<Character> prefixChars = tokens.getCharactersForType(IPATokenType.PREFIX_DIACRITIC);
 		final Set<Character> suffixChars = tokens.getCharactersForType(IPATokenType.SUFFIX_DIACRITIC);
 		
-		for(Character c:testChars) {
-			for(Character prefixChar:prefixChars) {
-				final String testString = c + "" + prefixChar + "" + roleReverse;
-				final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
-				if(transcript.length() < 1) {
-					System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
+		for(char roleReverse:roleReversers) {
+			for(Character c:testChars) {
+				for(Character prefixChar:prefixChars) {
+					final String testString = 
+							(roleReverse == roleReversers[0] ? c + "" + prefixChar + "" + roleReverse
+									: c + "" + roleReverse + "" + prefixChar);
+					final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
+					if(transcript.length() < 1) {
+						System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
+					}
+					Assert.assertEquals(1, transcript.length());
+					
+					final IPAElement ipaEle = transcript.elementAt(0);
+					Assert.assertEquals(Phone.class, ipaEle.getClass());
+					
+					final Phone p = (Phone)ipaEle;
+					Assert.assertEquals(testString, p.getText());
+					
+					Assert.assertEquals(p.getSuffixDiacritics()[0].getCharacter(), prefixChar);
+					Assert.assertEquals(p.getBasePhone(), c);
 				}
-				Assert.assertEquals(1, transcript.length());
-				
-				final IPAElement ipaEle = transcript.elementAt(0);
-				Assert.assertEquals(Phone.class, ipaEle.getClass());
-				
-				final Phone p = (Phone)ipaEle;
-				Assert.assertEquals(testString, p.getText());
-				
-				Assert.assertEquals(p.getSuffixDiacritic(), prefixChar);
-				Assert.assertEquals(p.getBasePhone(), c);
 			}
-		}
-		
-		for(Character c:testChars) {
-			for(Character suffixChar:suffixChars) {
-				final String testString = suffixChar + "" + roleReverse + "" + c;
-				final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
-				if(transcript.length() < 1) {
-					System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
+			
+			for(Character c:testChars) {
+				for(Character suffixChar:suffixChars) {
+					final String testString = suffixChar + "" + roleReverse + "" + c;
+					final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
+					if(transcript.length() < 1) {
+						System.err.println(testString + " " + Integer.toHexString((int)c.charValue()));
+					}
+					Assert.assertEquals(1, transcript.length());
+					
+					final IPAElement ipaEle = transcript.elementAt(0);
+					Assert.assertEquals(Phone.class, ipaEle.getClass());
+					
+					final Phone p = (Phone)ipaEle;
+					Assert.assertEquals(testString, p.getText());
+					
+					Assert.assertEquals(p.getPrefixDiacritics()[0].getCharacter(), suffixChar);
+					Assert.assertEquals(p.getBasePhone(), c);
 				}
-				Assert.assertEquals(1, transcript.length());
-				
-				final IPAElement ipaEle = transcript.elementAt(0);
-				Assert.assertEquals(Phone.class, ipaEle.getClass());
-				
-				final Phone p = (Phone)ipaEle;
-				Assert.assertEquals(testString, p.getText());
-				
-				Assert.assertEquals(p.getPrefixDiacritic(), suffixChar);
-				Assert.assertEquals(p.getBasePhone(), c);
 			}
 		}
 	}
 	
 	@Test
-	public void testCombinedDiacritics() {
+	public void testCompoundPhoneChaining() throws ParseException {
+		final String txt = "ɪ\u0361ʰ\u0361ʙ\u0361c";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
 		
+		Assert.assertEquals(txt, ipa.toString());
+		Assert.assertEquals(1, ipa.length());
+		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
 	}
 	
 	@Test
@@ -216,19 +227,7 @@ public class TestIPAParser {
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(ipaTxt);
 		Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(1).getClass());
 	}
-	
-	@Test
-	public void testLengthDiacritics() throws Exception {
-		final String ipa = "oːːː";
-		for(int i = 0; i < 3; i++) {
-			final String test = ipa.substring(0, ipa.length()-i);
-			final IPATranscript t = IPATranscript.parseIPATranscript(test);
-			
-			Assert.assertEquals(1, t.length());
-			Assert.assertEquals((float)3-i, ((Phone)t.elementAt(0)).getLength());
-		}
-	}
-	
+
 	@Test
 	public void testIntraWordPause() throws Exception {
 		final String txt = "te^st";

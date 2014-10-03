@@ -9,7 +9,7 @@ import ca.phon.ipa.parser.IPATokens;
  * by a ligature.
  * 
  */
-public final class CompoundPhone extends IPAElement {
+public final class CompoundPhone extends Phone {
 	
 	/**
 	 * First phone
@@ -26,9 +26,8 @@ public final class CompoundPhone extends IPAElement {
 	 */
 	private Character ligature;
 	
-	
 	public CompoundPhone() {
-		
+		super();
 	}
 	
 	/**
@@ -121,7 +120,13 @@ public final class CompoundPhone extends IPAElement {
 
 	@Override
 	public String getText() {
-		return firstPhone.getText() + ligature + secondPhone.getText();
+		final StringBuilder sb = new StringBuilder();
+		sb.append(getPrefix());
+		sb.append(getFirstPhone().getText());
+		sb.append(ligature);
+		sb.append(getSecondPhone().getText());
+		sb.append(getSuffix());
+		return sb.toString();
 	}
 
 }

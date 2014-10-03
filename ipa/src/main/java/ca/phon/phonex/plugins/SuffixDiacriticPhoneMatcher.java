@@ -3,7 +3,6 @@ package ca.phon.phonex.plugins;
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.Phone;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.visitor.VisitorAdapter;
@@ -47,13 +46,22 @@ public class SuffixDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 		}
 		
 		@Visits
+		public void visitDiacritic(Diacritic dia) {
+			matches |= getMatcher().matches(dia);
+			if(!matches) {
+				for(Diacritic subdia:dia.getPrefixDiacritics()) {
+					visit(subdia);
+				}
+				for(Diacritic subdia:dia.getSuffixDiacritics()) {
+					visit(subdia);
+				}
+			}
+		}
+		
+		@Visits
 		public void visitBasicPhone(Phone phone) {
-			final IPAElementFactory factory = new IPAElementFactory();
-			
-			// prefix
-			if(phone.getPrefixDiacritic() != null) {
-				final Diacritic suffixDiacritic = factory.createDiacritic(phone.getSuffixDiacritic());
-				matches |= getMatcher().matches(suffixDiacritic);
+			for(Diacritic dia:phone.getSuffixDiacritics()) {
+				visit(dia);
 			}
 		}
 		
