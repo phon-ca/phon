@@ -243,9 +243,9 @@ public class TestIPAParser {
 			final String txt = "hello (" + pl.getText() + ") world";
 			final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
 			
-			Assert.assertEquals(13, ipa.length());
-			Assert.assertEquals(Pause.class, ipa.elementAt(6).getClass());
-			Assert.assertEquals(pl, ((Pause)ipa.elementAt(6)).getLength());
+			Assert.assertEquals(3, ipa.words().size());
+			Assert.assertEquals(Pause.class, ipa.words().get(1).elementAt(0).getClass());
+			Assert.assertEquals(pl, ((Pause)ipa.words().get(1).elementAt(0)).getLength());
 		}
 	}
 	
