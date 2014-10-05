@@ -26,6 +26,16 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 		this.position = position;
 	}
 	
+	@Override
+	public String getRedoPresentationName() {
+		return "Redo move record " + record.getUuid().toString();
+	}
+
+	@Override
+	public String getUndoPresentationName() {
+		return "Undo move record " + record.getUuid().toString();
+	}
+	
 	public boolean isIssueRefresh() {
 		return this.issueRefresh;
 	}
@@ -47,8 +57,10 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 		session.setRecordPosition(record, oldPosition);
 		
 		queueEvent(EditorEventType.RECORD_MOVED_EVT, getSource(), record);
-		if(issueRefresh)
+		if(issueRefresh) {
 			queueEvent(EditorEventType.RECORD_REFRESH_EVT, getSource(), null);
+			getEditor().setCurrentRecordIndex(oldPosition);
+		}
 	}
 
 	@Override
@@ -57,8 +69,10 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 		getEditor().getSession().setRecordPosition(record, position);
 		
 		queueEvent(EditorEventType.RECORD_MOVED_EVT, getSource(), record);
-		if(issueRefresh)
+		if(issueRefresh) {
 			queueEvent(EditorEventType.RECORD_REFRESH_EVT, getSource(), null);
+			getEditor().setCurrentRecordIndex(position);
+		}
 	}
 
 }

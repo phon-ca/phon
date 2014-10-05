@@ -43,11 +43,13 @@ import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.RecordNumberField;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.RecordExcludeEdit;
+import ca.phon.app.session.editor.undo.RecordMoveEdit;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.GroupFieldHighlighter;
@@ -135,6 +137,8 @@ public class RecordDataEditorView extends EditorView {
 	private JLabel currentGroupLbl;
 	
 	private JLabel currentCharLbl;
+	
+	private RecordNumberField recNumField;
 	
 	/*
 	 * Keep track of 'current' group and tier.  This is done by tracking
@@ -254,6 +258,7 @@ public class RecordDataEditorView extends EditorView {
 		final Record record = editor.getDataModel().getRecord(editor.getCurrentRecordIndex());
 
 		// update speaker and query exclusion
+		recNumField.setText("" + (editor.getCurrentRecordIndex()+1));
 		speakerBox.setSelectedItem(record.getSpeaker());
 		excludeFromSearchesBox.setSelected(record.isExcludeFromSearches());
 		
@@ -406,9 +411,42 @@ public class RecordDataEditorView extends EditorView {
 			final Session session = editor.getSession();
 			
 			final FormLayout layout = new FormLayout(
-					"pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref",
+					"pref, pref, 3dlu, pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref",
 					"pref");
 			topPanel = new JPanel(layout);
+			
+			final JLabel recNumLbl = new JLabel("Record #");
+			recNumField = new RecordNumberField(1, getEditor().getSession().getRecordCount());
+			recNumField.setColumns(3);
+			recNumField.setText("" + (getEditor().getCurrentRecordIndex()+1));
+			final PhonUIAction moveRecordAct = new PhonUIAction(this, "moveRecord");
+			moveRecordAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit to set this record's position in session");
+			recNumField.setAction(moveRecordAct);
+			recNumField.addFocusListener(new FocusListener() {
+				
+				int initialNum = 0;
+				
+				@Override
+				public void focusLost(FocusEvent e) {
+					final Integer newNum = Integer.parseInt(recNumField.getText()) - 1;
+					if(newNum != initialNum && newNum != getEditor().getCurrentRecordIndex())
+						moveRecord();
+				}
+				
+				@Override
+				public void focusGained(FocusEvent e) {
+					initialNum = getEditor().getCurrentRecordIndex();
+				}
+				
+			});
+			
+			final CellConstraints cc = new CellConstraints();
+			int rowIdx = 1;
+			int colIdx = 1;
+			
+			topPanel.add(recNumLbl, cc.xy(colIdx++, rowIdx));
+			topPanel.add(recNumField, cc.xy(colIdx++, rowIdx));
+			colIdx++;  // 3dlu spacer
 			
 			final DefaultComboBoxModel speakerBoxModel = new DefaultComboBoxModel();
 			speakerBoxModel.addElement(null);
@@ -423,11 +461,12 @@ public class RecordDataEditorView extends EditorView {
 			excludeAct.putValue(PhonUIAction.NAME, excludeFromSearchesText);
 			excludeFromSearchesBox = new JCheckBox(excludeAct);
 			
-			final CellConstraints cc = new CellConstraints();
-			topPanel.add(new JLabel("Speaker: "), cc.xy(1,1));
-			topPanel.add(speakerBox, cc.xy(2,1));
+			topPanel.add(new JLabel("Speaker: "), cc.xy(colIdx++, rowIdx));
+			topPanel.add(speakerBox, cc.xy(colIdx++, rowIdx));
+			colIdx++; // spacer
 			
-			topPanel.add(excludeFromSearchesBox, cc.xy(4, 1));
+			topPanel.add(excludeFromSearchesBox, cc.xy(colIdx++, rowIdx));
+			colIdx++; // filler
 			
 			// create group management buttons
 			final JPanel btnPanel = new JPanel(new HorizontalLayout());
@@ -460,9 +499,10 @@ public class RecordDataEditorView extends EditorView {
 			delGroupBtn.setFocusable(false);
 			btnPanel.add(delGroupBtn);
 			
-			topPanel.add(btnPanel, cc.xy(6, 1));
+			topPanel.add(btnPanel, cc.xy(colIdx++, rowIdx));
+			colIdx++; // spacer
 			
-			topPanel.add(layoutButtons, cc.xy(8, 1));
+			topPanel.add(layoutButtons, cc.xy(colIdx++, rowIdx));
 		}
 		
 		return topPanel;
@@ -671,6 +711,15 @@ public class RecordDataEditorView extends EditorView {
 	@RunOnEDT
 	public void onSessionLocationChanged(EditorEvent event) {
 		updateStatus();
+	}
+	
+	public void moveRecord() {
+		final Integer newRecordNumber = Integer.parseInt(recNumField.getText())-1;
+		
+		if(newRecordNumber >= 0 && newRecordNumber < getEditor().getSession().getRecordCount()) {
+			final RecordMoveEdit edit = new RecordMoveEdit(getEditor(), getEditor().currentRecord(), newRecordNumber);
+			getEditor().getUndoSupport().postEdit(edit);
+		}
 	}
 	
 	@Override
