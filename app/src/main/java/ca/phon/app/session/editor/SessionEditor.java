@@ -28,6 +28,7 @@ import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.actions.DuplicateRecordAction;
 import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.NewRecordAction;
@@ -35,6 +36,7 @@ import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PasteRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
+import ca.phon.app.session.editor.actions.SortRecordsAction;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
@@ -272,12 +274,14 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");
 		sessionMenu.add(new NewRecordAction(this));
+		sessionMenu.add(new DuplicateRecordAction(this));
 		sessionMenu.add(new DeleteRecordAction(this));
 		sessionMenu.addSeparator();
 		
 		sessionMenu.add(new CutRecordAction(this));
 		sessionMenu.add(new CopyRecordAction(this));
 		sessionMenu.add(new PasteRecordAction(this));
+		sessionMenu.add(new SortRecordsAction(this));
 		sessionMenu.addSeparator();
 		
 		sessionMenu.add(new FirstRecordAction(this));
