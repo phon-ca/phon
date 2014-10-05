@@ -1,6 +1,7 @@
 package ca.phon.syllabifier;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -22,6 +23,8 @@ public final class SyllabifierLibrary implements IExtendable {
 			SyllabifierLibrary.class.getName() + ".defaultSyllabifierLanguage";
 	
 	private final static String SYLLABIFIER_LIBRARY_LIST = "META-INF/syllabifier.list";
+	
+	private List<Syllabifier> availableSyllabifiers = null;
 	
 	/**
 	 * Extension support
@@ -70,7 +73,14 @@ public final class SyllabifierLibrary implements IExtendable {
 	 * 
 	 */
 	public Iterator<Syllabifier> availableSyllabifiers() {
-		return getLoader().iterator();
+		if(availableSyllabifiers == null) {
+			availableSyllabifiers = new ArrayList<Syllabifier>();
+			final Iterator<Syllabifier> itr = getLoader().iterator();
+			while(itr.hasNext()) {
+				availableSyllabifiers.add(itr.next());
+			}
+		}
+		return Collections.unmodifiableList(availableSyllabifiers).iterator();
 	}
 	
 	/**
@@ -127,7 +137,7 @@ public final class SyllabifierLibrary implements IExtendable {
 	public Syllabifier getSyllabifierForLanguage(Language lang) {
 		Syllabifier retVal = null;
 		
-		final Iterator<Syllabifier> itr = resLoader.iterator();
+		final Iterator<Syllabifier> itr = availableSyllabifiers();
 		while(itr.hasNext()) {
 			final Syllabifier syllabifier = itr.next();
 			if(syllabifier.getLanguage().equals(lang)) {
@@ -155,7 +165,7 @@ public final class SyllabifierLibrary implements IExtendable {
 	public List<Syllabifier> getSyllabifiersForLanguage(Language lang) {
 		final List<Syllabifier> retVal = new ArrayList<Syllabifier>();
 		
-		final Iterator<Syllabifier> itr = resLoader.iterator();
+		final Iterator<Syllabifier> itr = availableSyllabifiers();
 		while(itr.hasNext()) {
 			final Syllabifier syllabifier = itr.next();
 			if(syllabifier.getLanguage().equals(lang)) {
@@ -175,7 +185,7 @@ public final class SyllabifierLibrary implements IExtendable {
 	public Syllabifier getSyllabifierByName(String name) {
 		Syllabifier retVal = null;
 		
-		final Iterator<Syllabifier> itr = resLoader.iterator();
+		final Iterator<Syllabifier> itr = availableSyllabifiers();
 		while(itr.hasNext()) {
 			final Syllabifier syllabifier = itr.next();
 			if(syllabifier.getName().equals(name)) {
