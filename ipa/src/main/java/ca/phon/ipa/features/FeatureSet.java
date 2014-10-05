@@ -279,16 +279,6 @@ public class FeatureSet implements Iterable<Feature> {
 		return new FeatureSet(bs);
 	}
 	
-	/**
-	 * Convert this feature set to a byte array.  Useful
-	 * for feature collator comparison. 
-	 * 
-	 * @return byte array of feature set
-	 */
-	public byte[] toByteArray() {
-		return features.toByteArray();
-	}
-
 	@Override
 	public Iterator<Feature> iterator() {
 		return new FeatureIterator();
