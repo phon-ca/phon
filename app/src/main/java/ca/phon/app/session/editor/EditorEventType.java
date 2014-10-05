@@ -60,6 +60,12 @@ public class EditorEventType {
 	 * data:
 	 */
 	public final static String RECORD_DELETED_EVT = MODIFICATION_EVENT + "RECORD_DELETED_";
+	
+	/**
+	 * Called when a record is moved
+	 * data: record
+	 */
+	public final static String RECORD_MOVED_EVT = MODIFICATION_EVENT + "RECORD_MOVED_";
 
 	/**
 	 * Called when the editor wants a refresh of the view for the
