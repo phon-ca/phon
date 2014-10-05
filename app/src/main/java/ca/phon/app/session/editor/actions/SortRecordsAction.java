@@ -41,7 +41,19 @@ public class SortRecordsAction extends SessionEditorAction {
 		}
 		Collections.sort(sortedRecords, dialog.getComparator());
 		
-		final CompoundEdit cmpEdit = new CompoundEdit();
+		final CompoundEdit cmpEdit = new CompoundEdit() {
+
+			@Override
+			public String getUndoPresentationName() {
+				return "Undo sort records";
+			}
+
+			@Override
+			public String getRedoPresentationName() {
+				return "Redo sort records";
+			}
+			
+		};
 		for(int i = 0; i < sortedRecords.size(); i++) {
 			final Record r = sortedRecords.get(i);
 			
