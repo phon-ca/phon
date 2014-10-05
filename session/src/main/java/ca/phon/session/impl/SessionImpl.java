@@ -148,6 +148,15 @@ public class SessionImpl implements Session {
 	public int getRecordPosition(Record record) {
 		return records.indexOf(record);
 	}
+	
+	@Override
+	public void setRecordPosition(Record record, int position) {
+		int currentPos = getRecordPosition(record);
+		if(currentPos >= 0) {
+			records.remove(currentPos);
+			records.add(position, record);
+		}
+	}
 
 	@Override
 	public int getParticipantCount() {

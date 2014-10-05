@@ -144,6 +144,14 @@ public interface Session extends IExtendable {
 	public int getRecordPosition(Record record);
 	
 	/**
+	 * Set the position of the given record
+	 * 
+	 * @param record
+	 * @param position
+	 */
+	public void setRecordPosition(Record record, int position);
+	
+	/**
 	 * Get the number of participants
 	 * 
 	 * @return the number of participants
