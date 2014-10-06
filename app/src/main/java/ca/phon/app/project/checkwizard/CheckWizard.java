@@ -355,7 +355,9 @@ public class CheckWizard extends WizardFrame {
 			worker = PhonWorker.createWorker();
 			worker.setFinishWhenQueueEmpty(true);
 			worker.setName("Check transcriptions");
-			showBusyLabel(bufferPanel);
+//			showBusyLabel(bufferPanel);
+			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
+			
 			
 			Runnable toRun = new Runnable() {
 				@Override
@@ -364,12 +366,12 @@ public class CheckWizard extends WizardFrame {
 						@Override
 						public void run() {
 							btnBack.setEnabled(false);
-//							btnCancel.setEnabled(false);
-							showBusyLabel(bufferPanel);
 						}
 					};
-					
 					SwingUtilities.invokeLater(turnOffBack);
+					out.flush();
+					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
+					out.flush();
 				}
 			};
 			worker.invokeLater(toRun);
@@ -387,12 +389,14 @@ public class CheckWizard extends WizardFrame {
 						public void run() {
 							btnBack.setEnabled(true);
 							btnCancel.setEnabled(true);
-							stopBusyLabel();
+							
 							worker = null;
 						}
 					};
-					
 					SwingUtilities.invokeLater(turnOffBack);
+					out.flush();
+					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
+					out.flush();
 				}
 			};
 			
