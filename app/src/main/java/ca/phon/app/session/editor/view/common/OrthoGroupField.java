@@ -172,13 +172,13 @@ public class OrthoGroupField extends GroupField<Orthography> {
 				g2.setFont(c.getFont());
 				g2.setColor(Color.blue);
 				
-				final String txt = c.getText().substring(p0, p1);
-				g2.drawString(txt, highlightRect.x, 
-						getBaseline(highlightRect.width, highlightRect.height));
-				
-				if(c.hasFocus() && highlightRange.contains(getCaretPosition())) {
-					getCaret().paint(g2);
+				if((p0 >= 0 && p0 < c.getText().length()) && (p1 >= p0 && p1 <= c .getText().length())) {
+					final String txt = c.getText().substring(p0, p1);
+					g2.drawString(txt, highlightRect.x, 
+							getBaseline(highlightRect.width, highlightRect.height));
 				}
+				
+				
 			} catch (BadLocationException e) {
 				
 			}

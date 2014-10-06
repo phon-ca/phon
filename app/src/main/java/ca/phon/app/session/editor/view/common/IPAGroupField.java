@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JToolTip;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 
@@ -48,7 +49,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	private final Syllabifier syllabifier;
 	
 	private final WeakReference<Transcriber> transcriberRef;
-
+	
 	public IPAGroupField(Tier<IPATranscript> tier,
 			int groupIndex) {
 		this(tier, groupIndex, null);
@@ -65,7 +66,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		// init after transcriber is set
 		_init();
 	}
-
+	
 	public Transcriber getTranscriber() {
 		return transcriberRef.get();
 	}
@@ -74,7 +75,6 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	protected void _init() {
 		if(transcriberRef == null) return;
 		super._init();
-		validateText();
 		addTierEditorListener(new TierEditorListener() {
 			
 			@Override
@@ -160,7 +160,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 
 	@Override
 	protected boolean validateText() {
-		getHighlighter().removeAllHighlights();
+		removeAllErrorHighlights();
 		
 		boolean wasShowingErr = ((GroupFieldBorder)getBorder()).isShowWarningIcon();
 		try {
@@ -175,46 +175,12 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
 			
 			final StringBuilder sb = new StringBuilder();
-			sb.append("Error at position ").append(e.getErrorOffset()).append(": ").append(e.getLocalizedMessage());
+			sb.append("Error at character ").append(e.getErrorOffset()).append(": ").append(e.getLocalizedMessage());
 			setToolTipText(sb.toString());
 			
-			try {
-				getHighlighter().addHighlight(e.getErrorOffset(), e.getErrorOffset()+1, new Highlighter.HighlightPainter() {
-					
-					@Override
-					public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
-						final Graphics2D g2 = (Graphics2D)g;
-						
-						Rectangle b = bounds.getBounds();
-						try {
-							final Rectangle p0rect = c.modelToView(p0);
-							final Rectangle p1rect = c.modelToView(p1);
-							
-							b = new Rectangle(p0rect).union(p1rect);
-						} catch (BadLocationException e) {
-							
-						}
-						
-						g2.setColor(Color.red);
-						final float dash1[] = {1.0f};
-					    final BasicStroke dashed =
-					        new BasicStroke(1.0f,
-					                        BasicStroke.CAP_BUTT,
-					                        BasicStroke.JOIN_MITER,
-					                        1.0f, dash1, 0.0f);
-						g2.setStroke(dashed);
-						g2.drawLine(b.x, 
-								b.y + b.height, 
-								b.x + b.width, 
-								b.y + b.height);
-					}
-				});
-				setValidatedObject(validatedIPA);
-				if(!wasShowingErr) repaint();
-			} catch (BadLocationException e2) {
-				LOGGER
-						.log(Level.SEVERE, e2.getLocalizedMessage(), e2);
-			}
+			addErrorHighlight(e.getErrorOffset(), e.getErrorOffset()+1);
+			setValidatedObject(validatedIPA);
+			if(!wasShowingErr) repaint();
 		}
 		return true;
 	}

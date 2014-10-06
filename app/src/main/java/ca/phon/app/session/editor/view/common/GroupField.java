@@ -1,8 +1,14 @@
 package ca.phon.app.session.editor.view.common;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -12,16 +18,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicTextAreaUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.PlainDocument;
+import javax.swing.text.Highlighter.Highlight;
+import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoManager;
 
 import ca.phon.extensions.IExtendable;
@@ -37,6 +54,9 @@ import ca.phon.ui.action.PhonUIAction;
  */
 public class GroupField<T> extends JTextArea implements TierEditor {
 	
+	private static final Logger LOGGER = Logger
+			.getLogger(GroupField.class.getName());
+	
 	private static final long serialVersionUID = -5541784214656593497L;
 	
 	private final Tier<T> tier;
@@ -48,6 +68,10 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	private volatile boolean hasChanges = false;
 	
 	protected volatile boolean allowNewline = false;
+	
+	private final Highlighter errHighlighter = new DefaultHighlighter();
+	
+	private final GroupFieldBorder groupFieldBorder = new GroupFieldBorder();
 	
 	public GroupField(Tier<T> tier, int groupIndex) {
 		this(tier, groupIndex, false);
@@ -95,17 +119,25 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		getDocument().addDocumentListener(docListener);
 		getDocument().addUndoableEditListener(undoManager);
+		getDocument().putProperty("i18n", Boolean.TRUE);
+		
+		errHighlighter.install(this);
 	}
 	
-//	@Override
-//	public void paintComponent(Graphics g) {
-//		final Graphics2D g2 = (Graphics2D)g;
-//		
-//		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-//		
-//		super.paintComponent(g2);
-//	}
+	@Override
+	public void paintComponent(Graphics g) {
+		final Graphics2D g2 = (Graphics2D)g;
+		
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_RENDERING,
+		          RenderingHints.VALUE_RENDER_QUALITY);
+		
+		super.paintComponent(g2);
+		if(getErrorHighlights().length > 0) {
+			getErrorHighlighter().paint(g2);
+		}
+	}
 	
 	private void setupInputMap() {
 		final ActionMap am = getActionMap();
@@ -183,8 +215,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 * Setup border, listeners and initial text value.
 	 */
 	protected void _init() {
-		final GroupFieldBorder border = new GroupFieldBorder();
-		setBorder(border);
+		setBorder(groupFieldBorder);
 		
 		final T val = getGroupValue();
 		String text = new String();
@@ -212,6 +243,46 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		setText(text);
 	}
 	
+	public GroupFieldBorder getGroupFieldBorder() {
+		return this.groupFieldBorder;
+	}
+	
+	public Highlighter getErrorHighlighter() {
+		return this.errHighlighter;
+	}
+	
+	public Object addErrorHighlight(int p0, int p1) {
+		Object retVal = null;
+		
+		try {
+			retVal = errHighlighter.addHighlight(p0, p1, errPainter);
+		} catch (BadLocationException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return retVal;
+	}
+
+	public void removeErrorHighlight(Object tag) {
+		errHighlighter.removeHighlight(tag);
+	}
+
+	public void removeAllErrorHighlights() {
+		errHighlighter.removeAllHighlights();
+	}
+
+	public void changeErrorHighlight(Object tag, int p0, int p1) {
+		try {
+			errHighlighter.changeHighlight(tag, p0, p1);
+		} catch (BadLocationException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
+
+	public Highlight[] getErrorHighlights() {
+		return errHighlighter.getHighlights();
+	}
+
 	/**
 	 * Get the group value
 	 * 
@@ -271,9 +342,11 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 				final T validatedObj = formatter.parse(text);
 				setValidatedObject(validatedObj);
 			} catch (ParseException e) {
+				addErrorHighlight(e.getErrorOffset(), e.getErrorOffset()+1);
 				retVal = false;
 			}
 		}
+		getGroupFieldBorder().setShowWarningIcon(!retVal);
 		
 		return retVal;
 	}
@@ -404,7 +477,6 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 						final UnvalidatedValue unvalidatedValue = extVal.getExtension(UnvalidatedValue.class);
 						if(unvalidatedValue != null) {
 							text = unvalidatedValue.getValue();
-							// TODO show error
 						}
 					}
 				}
@@ -418,5 +490,36 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		public void groupsCleared(Tier<T> tier) {
 		}
 		
+	};
+	
+	private final Highlighter.HighlightPainter errPainter = new Highlighter.HighlightPainter() {
+		
+		@Override
+		public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
+			final Graphics2D g2 = (Graphics2D)g;
+			
+			Rectangle b = bounds.getBounds();
+			try {
+				final Rectangle p0rect = c.modelToView(p0);
+				final Rectangle p1rect = c.modelToView(p1);
+				
+				b = new Rectangle(p0rect).union(p1rect);
+			} catch (BadLocationException e) {
+				
+			}
+			
+			g2.setColor(Color.red);
+			final float dash1[] = {1.0f};
+		    final BasicStroke dashed =
+		        new BasicStroke(1.0f,
+		                        BasicStroke.CAP_BUTT,
+		                        BasicStroke.JOIN_MITER,
+		                        1.0f, dash1, 0.0f);
+			g2.setStroke(dashed);
+			g2.drawLine(b.x, 
+					b.y + b.height - 1, 
+					b.x + b.width, 
+					b.y + b.height - 1);
+		}
 	};
 }
