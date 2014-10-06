@@ -51,3 +51,5 @@ ca.phon.app.project.DuplicateSessionEP
 ca.phon.app.project.ExportSessionEP
 # Strip Participant Information
 ca.phon.app.project.AnonymizeParticipantInfoEP
+# About Phon
+ca.phon.app.about.AboutDialogEP
