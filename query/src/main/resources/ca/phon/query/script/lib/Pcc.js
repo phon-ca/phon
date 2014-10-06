@@ -100,7 +100,7 @@ exports.Pcc = {
      *
      * @return PCC (standard) in the format x/y
      */
-    calc_pc_standard: function(targetGroup, actualGroup, features, ignoreDiacritics) {
+    calc_pc_standard: function(group, features, ignoreDiacritics) {
         var numTarget = 0;
         var numActual = 0;
         var targetVals = new Array();
@@ -121,7 +121,7 @@ exports.Pcc = {
     		if(phone.featureSet.intersects(featureSet)) {
     			numTarget++;
                 var targetPhoneString = 
-    			    (ignoreDiacritics ? StringUtils.stripDiacritics(phone.toString()) : phone.toString());
+                	(ignoreDiacritics ? (new IPATranscript([phone])).removePunctuation().toString() : phone.toString());
     		    targetVals[targetPhoneString] = 
     		        ( targetVals[targetPhoneString] ? targetVals[targetPhoneString] + 1 : 1 );
     		}
@@ -135,7 +135,7 @@ exports.Pcc = {
     		if(phone.featureSet.intersects(featureSet)) {
     		    numActual++;
                 var actualPhoneString = 
-    			    (ignoreDiacritics ? StringUtils.stripDiacritics(phone.toString()) : phone.toString());
+                	(ignoreDiacritics ? (new IPATranscript([phone])).removePunctuation().toString() : phone.toString());
     			    
     			var amountInTarget = targetVals[actualPhoneString];
     			if(amountInTarget != null && amountInTarget > 0) {
@@ -210,22 +210,22 @@ exports.PccOptions = function(id, aligned) {
     };
     
     this.setup_pcc_aligned_metadata = function(group, metadata) {
-        if(this.includePcc) {
+        if(this.includePcc == true) {
             var pccAligned = Pcc.calc_pc_aligned(group, "Consonant", this.ignoreDiacritics);
             metadata.put("APCC", pccAligned);
         }
-        if(this.includePvc) {
+        if(this.includePvc == true) {
             var pvcAligned = Pcc.calc_pc_aligned(group, "Vowel", this.ignoreDiacritics);
             metadata.put("APVC", pvcAligned);
         }
     };
     
     this.setup_pcc_standard_metadata = function(group, metadata) {
-        if(this.includePcc) {
+        if(this.includePcc == true) {
             var pccStandard = Pcc.calc_pc_standard(group, "Consonant", this.ignoreDiacritics);
             metadata.put("PCC", pccStandard);
         }
-        if(this.includePvc) {
+        if(this.includePvc == true) {
             var pvcStandard = Pcc.calc_pc_standard(group, "Vowel", this.ignoreDiacritics);
             metadata.put("PVC", pvcStandard);
         }

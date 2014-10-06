@@ -271,6 +271,9 @@ function query_record(recordIndex, record) {
     			    
     			    result.addResultValue(alignedRv);
     			    result.schema = "ALIGNED";
+    			    calcMetadata(record, group, result.metadata, new IPATranscript(match.value), new IPATranscript(aligned));
+    			} else {
+    				calcMetadata(record, group, result.metadata, new IPATranscript(match.value), null);
     			}
     			
     			results.addResult(result);
@@ -284,51 +287,49 @@ function query_record(recordIndex, record) {
  *******************************/
 
 /* Generate metadata based on parmeters */
-function getMetadata(record, ipaTVal, ipaAVal) {
-    var retVal = new Metadata();
+function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
+    var retVal = metadata;
     
-    if(metadataOptions.stressPattern.include) {
+    if(metadataOptions.stressPattern.include == true) {
         var tsp = (ipaTVal == null ? null : ipaTVal.stressPattern);
         var asp = (ipaAVal == null ? null : ipaAVal.stressPattern)
         
-        if(tsp != null && asp != null && !metadataOptions.stressPattern.separate) {
+        if(tsp != null && asp != null && metadataOptions.stressPattern.separate == false) {
             var sp = tsp + " \u2194 " + asp;
             retVal.put("SP", sp);
         } else {
             if(tsp != null) {
-                var name = (metadataOptions.stressPattern.separate ? "SP-T" : "SP");
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-T" : "SP");
                 retVal.put(name, tsp);
             }
             if(asp != null) {
-                var name = (metadataOptions.stressPattern.separate ? "SP-A" : "SP");
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-A" : "SP");
                 retVal.put(name, asp);
             }
         }
     }
     
-    if(metadataOptions.cvPattern.include) {
+    if(metadataOptions.cvPattern.include == true) {
         var tcv = (ipaTVal == null ? null : ipaTVal.cvPattern);
         var acv = (ipaAVal == null ? null : ipaAVal.cvPattern);
         
-        if(tcv != null && acv != null && !metadataOptions.cvPattern.separate) {
+        if(tcv != null && acv != null && metadataOptions.cvPattern.separate == false) {
             var cv = tcv + " \u2194 " + acv;
             retVal.put("CGV", cv);
         } else {
             if(tcv != null) {
-                var name = (metadataOptions.cvPattern.separate ? "CGV-T" : "SP");
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-T" : "SP");
                 retVal.put(name, tcv);
             }
             if(acv != null) {
-                var name = (metadataOptions.cvPattern.separate ? "CGV-A" : "SP");
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-A" : "SP");
                 retVal.put(name, acv);
             }
         }
     }
     
-    if(ipaTVal != null && ipaAVal != null) {
-        metadataOptions.pcc_standard.setup_pcc_standard_metadata(ipaTVal, ipaAVal, retVal);
-        metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(record, ipaTVal, ipaAVal, retVal);
+    if(group != null) {
+        metadataOptions.pcc_standard.setup_pcc_standard_metadata(group, retVal);
+        metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(group, retVal);
     }
-    
-    return retVal;
 }

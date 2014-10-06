@@ -91,7 +91,7 @@ function query_record(recordIndex, record)
         result.addResultValue(rva);
 	    
 	    var metadata = result.metadata;
-	    //pccOptions.standard.setup_pcc_standard_metadata(ipaTGroup, ipaAGroup, metadata);
+	    pccOptions.standard.setup_pcc_standard_metadata(grp, metadata);
 	    pccOptions.aligned.setup_pcc_aligned_metadata(grp, metadata);
 	    
 	    results.addResult(result);
