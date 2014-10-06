@@ -83,7 +83,6 @@ public class TestBasicConstructs {
 		final String text = "ba \u2194 ab";
 		final String phonex = "(\\w+)\\b\u2194\\b(\\w+)";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
-		System.out.println(ipa);
 		
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final PhonexMatcher matcher = pattern.matcher(ipa);

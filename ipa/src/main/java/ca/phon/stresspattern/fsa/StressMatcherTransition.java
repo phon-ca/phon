@@ -19,6 +19,7 @@ package ca.phon.stresspattern.fsa;
 
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSATransition;
+import ca.phon.fsa.TransitionType;
 import ca.phon.stresspattern.StressMatcherType;
 
 public class StressMatcherTransition extends FSATransition<StressMatcherType> {
@@ -28,7 +29,7 @@ public class StressMatcherTransition extends FSATransition<StressMatcherType> {
 	
 	public StressMatcherTransition(StressMatcherType mType) {
 		super();
-		
+		super.setType(TransitionType.GREEDY);
 		this.matchType = mType;
 	}
 
@@ -42,7 +43,15 @@ public class StressMatcherTransition extends FSATransition<StressMatcherType> {
 
 	@Override
 	public boolean follow(FSAState<StressMatcherType> currentState) {
-		return matchType.matches(currentState.getTape()[currentState.getTapeIndex()]);
+		if(currentState.getTapeIndex() >= currentState.getTape().length)
+			return false;
+		else
+			return matchType.matches(currentState.getTape()[currentState.getTapeIndex()]);
+	}
+	
+	@Override
+	public String getImage() {
+		return matchType.name();
 	}
 
 }

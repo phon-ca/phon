@@ -287,25 +287,16 @@ public class StressPatternCompiler {
 	}
 	
 	private void makeOneOrMore(SimpleFSA<StressMatcherType> fsa, StressMatcherType matcher) {
-		// make a new state
-		String newState = getNextStateName();
-		fsa.addState(newState);
-		
-		StressMatcherTransition	transition = new StressMatcherTransition(matcher);
-		transition.setFirstState(newState);
-		transition.setToState(newState);
-		fsa.addTransition(transition);
+		newTransition(fsa, matcher);
 		
 		for(String finalState:fsa.getFinalStates()) {
-			transition = null;
+			FSATransition<StressMatcherType> transition = null;
 			
 			transition = new StressMatcherTransition(matcher);
 			transition.setFirstState(finalState);
-			transition.setToState(newState);
+			transition.setToState(finalState);
 			fsa.addTransition(transition);
 		}
-		
-		fsa.addFinalState(newState);
 	}
 	
 	private void makeHashAtEnd(SimpleFSA<StressMatcherType> fsa) {

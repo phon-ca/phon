@@ -51,7 +51,10 @@ public class CVSeqTransition extends FSATransition<CVSeqType> {
 
 	@Override
 	public boolean follow(FSAState<CVSeqType> currentState) {
-		return matcherType.matches(currentState.getTape()[currentState.getTapeIndex()]);
+		if(currentState.getTapeIndex() >= currentState.getTape().length)
+			return false;
+		else 
+			return matcherType.matches(currentState.getTape()[currentState.getTapeIndex()]);
 	}
 	
 }

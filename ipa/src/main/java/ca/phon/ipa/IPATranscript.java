@@ -14,6 +14,8 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
 
+import ca.phon.cvseq.CVSeqPattern;
+import ca.phon.cvseq.CVSeqType;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.parser.IPALexer;
@@ -23,9 +25,12 @@ import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
+import ca.phon.stresspattern.StressMatcherType;
+import ca.phon.stresspattern.StressPattern;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableVisitor;
+import ca.phon.util.Range;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 import ca.phon.visitor.VisitorAdapter;
@@ -487,6 +492,134 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		final IPATranscript before =
 				new IPATranscript(Arrays.copyOfRange(transcription, 0, index));
 		return before.toString().length();
+	}
+	
+	/**
+	 * Does this transcript's stress pattern match the given
+	 * {@link StressPattern}
+	 * 
+	 * @param pattern
+	 * 
+	 * @return <code>true</code> if pattern matches, <code>false</code> otherwise
+	 */
+	public boolean matchesStressPattern(String pattern) {
+		boolean retVal = false;
+		try {
+			final StressPattern sp = StressPattern.compile(pattern);
+			final String mySp = StressPattern.getStressPattern(this.toList());
+			final List<StressMatcherType> stTypes = 
+					StressMatcherType.toStressMatcherList(mySp);
+			
+			retVal = sp.matches(stTypes);
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		return retVal;
+	}
+	
+	/**
+	 * Does this transcript contain the given {@link StressPattern}
+	 * 
+	 * @param pattern
+	 * @return <code>true</code> if this transcript contains the stress
+	 *  pattern, <code>false</code> otherwise
+	 */
+	public boolean containsStressPattern(String pattern) {
+		boolean retVal = false;
+		try {
+			final StressPattern sp = StressPattern.compile(pattern);
+			final String mySp = StressPattern.getStressPattern(this.toList());
+			final List<StressMatcherType> stTypes = 
+					StressMatcherType.toStressMatcherList(mySp);
+			
+			retVal = sp.findWithin(stTypes);
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		return retVal;
+	}
+	
+	/**
+	 * Find all occurrences of the given {@link StressPattern}
+	 * 
+	 * @param pattern
+	 * @return 
+	 */
+	public List<IPATranscript> findStressPattern(String pattern) {
+		List<IPATranscript> retVal = new ArrayList<IPATranscript>();
+		
+		try {
+			final StressPattern sp = StressPattern.compile(pattern);
+			final String mySp = StressPattern.getStressPattern(this.toList());
+			final List<StressMatcherType> stTypes = 
+					StressMatcherType.toStressMatcherList(mySp);
+			
+			final List<Range> ranges = sp.findRanges(stTypes);
+			for(Range range:ranges) {
+				final Range phoneRange = 
+						StressPattern.convertSPRToPR(this.toList(), mySp, range);
+				final IPATranscript subT = subsection(phoneRange.getStart(), phoneRange.getEnd());
+				retVal.add(subT);
+			}
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return retVal;
+	}
+	
+	public boolean matchesCVPattern(String pattern) {
+		boolean retVal = false;
+		
+		try {
+			final CVSeqPattern cvPattern = CVSeqPattern.compile(pattern);
+			final String myCVPattern = CVSeqPattern.getCVSeq(this.toList());
+			final List<CVSeqType> cvTypes = CVSeqType.toCVSeqMatcherList(myCVPattern);
+			
+			retVal = cvPattern.matches(cvTypes);
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return retVal;
+	}
+	
+	public boolean containsCVPattern(String pattern) {
+		boolean retVal = false;
+		
+		try {
+			final CVSeqPattern cvPattern = CVSeqPattern.compile(pattern);
+			final String myCVPattern = CVSeqPattern.getCVSeq(this.toList());
+			final List<CVSeqType> cvTypes = CVSeqType.toCVSeqMatcherList(myCVPattern);
+			
+			retVal = cvPattern.findWithin(cvTypes);
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return retVal;
+	}
+	
+	public List<IPATranscript> findCVPattern(String pattern) {
+		final List<IPATranscript> retVal = new ArrayList<IPATranscript>();
+		
+		try {
+			final CVSeqPattern cvPattern = CVSeqPattern.compile(pattern);
+			final String myCVPattern = CVSeqPattern.getCVSeq(this.toList());
+			final List<CVSeqType> cvTypes = CVSeqType.toCVSeqMatcherList(myCVPattern);
+			
+			final List<Range> ranges = cvPattern.findRanges(cvTypes);
+			for(Range range:ranges) {
+				final Range phoneRange = 
+						CVSeqPattern.convertCVRangeToPhoneRange(this.toList(), range);
+				final IPATranscript subT = subsection(phoneRange.getStart(), phoneRange.getEnd());
+				retVal.add(subT);
+			}
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return retVal;
 	}
 	
 	/**
