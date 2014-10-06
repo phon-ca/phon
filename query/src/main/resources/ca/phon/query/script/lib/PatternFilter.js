@@ -348,13 +348,23 @@ exports.PatternFilter = function (id) {
     };
     
     var checkStressPattern = function (obj, filter, exactMatch) {
-        // TODO
-        return false;
+    	if (!(obj instanceof IPATranscript)) return false;
+    	
+    	if(exactMatch == true) {
+    		return obj.matchesStressPattern(filter);
+    	} else {
+    		return obj.containsStressPattern(filter);
+    	}
     };
     
     var checkCVPattern = function (obj, filter, exactMatch) {
-        // TODO
-        return false;
+    	if (!(obj instanceof IPATranscript)) return false;
+    	
+    	if(exactMatch == true) {
+    		return obj.matchesCVPattern(filter);
+    	} else {
+    		return obj.containsCVPattern(filter);
+    	}
     };
     
     /**
@@ -458,7 +468,7 @@ exports.PatternFilter = function (id) {
         if (exactMatch == true) {
             if (obj.matches(filter)) {
                 v = {
-                    start: 0, end: obj.size(), value: obj
+                    start: 0, end: obj.length(), value: obj
                 };
                 retVal.push(v);
             }
@@ -479,11 +489,59 @@ exports.PatternFilter = function (id) {
     };
     
     var findCVPattern = function (obj, filter, exactMatch) {
-        return new Array();
+        var retVal = new Array();
+        
+        if(!(obj instanceof IPATranscript)) return retVal;
+        
+        if(exactMatch == true) {
+        	if(obj.matchesCVPattern(filter)) {
+        		v = {
+        			start: 0, end: obj.length(), value: obj
+        		};
+        		retVal.push(v);
+        	}
+        } else {
+        	var found = obj.findCVPattern(filter);
+        	
+        	for(i = 0; i < found.size(); i++) {
+        		var subT = found.get(i);
+        		var subTStart = obj.indexOf(subT);
+        		v = {
+        			start: subTStart, end: subTStart + subT.length(), value: subT
+        		};
+        		retVal.push(v);
+        	}
+        }
+        
+        return retVal;
     };
     
     var findStressPattern = function (obj, filter, exactMatch) {
-        return new Array();
+        var retVal = new Array();
+        
+        if(!(obj instanceof IPATranscript)) return retVal;
+        
+        if(exactMatch == true) {
+        	if(obj.matchesStressPattern(filter)) {
+        		v = {
+        			start: 0, end: obj.length(), value: obj
+        		};
+        		retVal.push(v);
+        	}
+        } else {
+        	var found = obj.findStressPattern(filter);
+        	
+        	for(i = 0; i < found.size(); i++) {
+        		var subT = found.get(i);
+        		var subTStart = obj.indexOf(subT);
+        		v = {
+        			start: subTStart, end: subTStart + subT.length(), value: subT
+        		};
+        		retVal.push(v);
+        	}
+        }
+        
+        return retVal;
     };
     
     /**
