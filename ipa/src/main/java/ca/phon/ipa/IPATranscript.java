@@ -494,6 +494,10 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return before.toString().length();
 	}
 	
+	public String getStressPattern() {
+		return StressPattern.getStressPattern(this.toList());
+	}
+	
 	/**
 	 * Does this transcript's stress pattern match the given
 	 * {@link StressPattern}
@@ -566,6 +570,10 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		}
 		
 		return retVal;
+	}
+	
+	public String getCvPattern() {
+		return CVSeqPattern.getCVSeq(this.toList());
 	}
 	
 	public boolean matchesCVPattern(String pattern) {
