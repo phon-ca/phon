@@ -48,6 +48,8 @@ public class BufferPanel extends JPanel {
 	
 	public final static String SHOW_TABLE_CODE = "SHOW_TABLE";
 	
+	public final static String PACK_TABLE_COLUMNS = "PACK_COLUMNS";
+	
 	public final static String SHOW_BUFFER_CODE = "SHOW_BUFFER";
 	
 	private static final Logger LOGGER = Logger
@@ -79,17 +81,27 @@ public class BufferPanel extends JPanel {
 			
 			@Override
 			public void handleEscapeCode(String code) {
+				System.out.println(code);
 				final Runnable swapBuffer = new Runnable() {
 					
 					@Override
 					public void run() {
 						onSwapBuffer();
 					}
+					
 				};
 				if(SHOW_TABLE_CODE.equals(code) && isShowingBuffer()) {
 					SwingUtilities.invokeLater(swapBuffer);
 				} else if(SHOW_BUFFER_CODE.equals(code) && !isShowingBuffer()) {
 					SwingUtilities.invokeLater(swapBuffer);
+				} else if(PACK_TABLE_COLUMNS.equals(code) && !isShowingBuffer()) {
+					SwingUtilities.invokeLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							getDataTable().packAll();
+						}
+					});
 				}
 			}
 			

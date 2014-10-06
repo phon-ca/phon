@@ -19,6 +19,7 @@ package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -27,6 +28,8 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -36,6 +39,7 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.session.Tier;
+import ca.phon.session.UnvalidatedValue;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
@@ -52,7 +56,7 @@ public class CheckWizard extends WizardFrame {
 	
 	private final static Logger LOGGER = Logger.getLogger(CheckWizard.class.getName());
 	
-	private PhonLoggerConsole console;
+	private BufferPanel bufferPanel;
 	
 	private CheckWizardStep1 step1;
 	
@@ -66,6 +70,8 @@ public class CheckWizard extends WizardFrame {
 		
 		setWindowName("Check Transcriptions");
 		super.putExtension(Project.class, project);
+		
+		btnCancel.setText("Close");
 		
 		init();
 	}
@@ -90,8 +96,8 @@ public class CheckWizard extends WizardFrame {
 		
 		JPanel consolePanel = new JPanel(new BorderLayout());
 		
-		console = new PhonLoggerConsole();
-		consolePanel.add(console, BorderLayout.CENTER);
+		bufferPanel = new BufferPanel("Check Transcripts");
+		consolePanel.add(bufferPanel, BorderLayout.CENTER);
 		
 		checkPanel.add(consolePanel, BorderLayout.CENTER);
 		
@@ -117,7 +123,14 @@ public class CheckWizard extends WizardFrame {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			LOGGER.fine("Check IPA: " + corpusName + "." + sessionName);
+			
+			final StringBuilder sb = new StringBuilder();
+			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
+			sb.append('\"').append("Record #").append('\"').append(',');
+			sb.append('\"').append("Tier").append('\"').append(',');
+			sb.append('\"').append("Group").append('\"').append(',');
+			sb.append('\"').append("Error").append('\"');
+			out.println(sb.toString());
 			
 			Session session = null;
 			try {
@@ -127,9 +140,7 @@ public class CheckWizard extends WizardFrame {
 				return;
 			}
 			
-			int progress = 0;
 			for(int i = 0; i < session.getRecordCount(); i++) {
-				int numErrors = 0;
 				if(super.isShutdown()) {
 					super.setStatus(TaskStatus.TERMINATED);
 					return; // get out immediately
@@ -137,24 +148,31 @@ public class CheckWizard extends WizardFrame {
 				
 				final Record record = session.getRecord(i);
 				
-				checkTier(record.getIPATarget());
-				checkTier(record.getIPAActual());
+				checkTier(i, record.getIPATarget(), out);
+				checkTier(i, record.getIPAActual(), out);
 			}
+			out.flush();
+			out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+			out.flush();
+			out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
+			out.flush();
 			
 			super.setStatus(TaskStatus.FINISHED);
 		}
 		
-		private void checkTier(Tier<IPATranscript> tier) {
-			for(IPATranscript ipa:tier) {
-				final String text = ipa.toString();
-				
-				// run text through parser manually
-				try {
-					IPATranscript.parseIPATranscript(text);
-				} catch (ParseException pe) {
-					LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
+		private void checkTier(int record, Tier<IPATranscript> tier, PrintWriter out) {
+			for(int gIdx = 0; gIdx < tier.numberOfGroups(); gIdx++) {
+				final IPATranscript ipa = tier.getGroup(gIdx);
+				// check for 'UnvalidatedValue's
+				final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
+				if(uv != null) {
+					out.print("\"" + (record+1) + "\",");
+					out.print("\"" + tier.getName() + "\",");
+					out.print("\"" + (gIdx+1) + "\",");
+					out.println("\"" + uv.getParseError().getLocalizedMessage() + "\"");
 				}
 			}
+			out.flush();
 		}
 		
 	}
@@ -180,21 +198,18 @@ public class CheckWizard extends WizardFrame {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			LOGGER.info(
-					"Reset Syllabification: " + corpusName + "." + sessionName);
+			final StringBuilder sb = new StringBuilder();
+			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
 			
 			Session session = null;
 			try {
 				session = getProject().openSession(corpusName, sessionName);
 			} catch (IOException e1) {
 				LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+				out.println(e1.getLocalizedMessage());
 				return;
 			}
 			
-//			glassPane.setProgressBarIntermediate(false);
-//			glassPane.setProgressBarRange(1, transcript.getUtterances().size());
-			
-			int progress = 0;
 			for(int i = 0; i < session.getRecordCount(); i++) {
 				
 				if(super.isShutdown()) {
@@ -216,13 +231,18 @@ public class CheckWizard extends WizardFrame {
 				final UUID writeLock = project.getSessionWriteLock(session);
 				
 				if(writeLock == null) {
-					LOGGER.warning(
+					out.println(
 							"Could not get write lock for: " + corpusName + "." + sessionName);
 					return;
 				}
 				
-				project.saveSession(session, writeLock);
-				project.releaseSessionWriteLock(session, writeLock);
+				try {
+					project.saveSession(session, writeLock);
+				} catch (IOException e) {
+					out.println(e.getLocalizedMessage());
+				} finally {
+					project.releaseSessionWriteLock(session, writeLock);
+				}
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
@@ -256,9 +276,9 @@ public class CheckWizard extends WizardFrame {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-//			glassPane.setProgressLabelText(
-			LOGGER.info(
-					"Reset Alignment: " + corpusName + "." + sessionName);
+			
+			final StringBuilder sb = new StringBuilder();
+			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
 			
 			final Project project = getProject();
 			Session session = null;
@@ -283,7 +303,7 @@ public class CheckWizard extends WizardFrame {
 				final Tier<IPATranscript> ipaActual = record.getIPAActual();
 				
 				if(ipaTarget.numberOfGroups() != ipaActual.numberOfGroups()) {
-					LOGGER.warning("Alignment error in record " + (i+1));
+					out.println("Alignment error in record " + (i+1));
 					continue;
 				}
 				
@@ -302,13 +322,18 @@ public class CheckWizard extends WizardFrame {
 				final UUID writeLock = project.getSessionWriteLock(session);
 				
 				if(writeLock == null) {
-					LOGGER.warning(
+					out.println(
 							"Could not get write lock for: " + corpusName + "." + sessionName);
 					return;
 				}
 				
-				project.saveSession(session, writeLock);
-				project.releaseSessionWriteLock(session, writeLock);
+				try {
+					project.saveSession(session, writeLock);
+				} catch (IOException e) {
+					out.println(e.getLocalizedMessage());
+				} finally {
+					project.releaseSessionWriteLock(session, writeLock);
+				}
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
@@ -330,8 +355,7 @@ public class CheckWizard extends WizardFrame {
 			worker = PhonWorker.createWorker();
 			worker.setFinishWhenQueueEmpty(true);
 			worker.setName("Check transcriptions");
-			console.addLogger(LOGGER);
-			showBusyLabel(console);
+			showBusyLabel(bufferPanel);
 			
 			Runnable toRun = new Runnable() {
 				@Override
@@ -341,7 +365,7 @@ public class CheckWizard extends WizardFrame {
 						public void run() {
 							btnBack.setEnabled(false);
 //							btnCancel.setEnabled(false);
-							showBusyLabel(console);
+							showBusyLabel(bufferPanel);
 						}
 					};
 					
@@ -361,7 +385,6 @@ public class CheckWizard extends WizardFrame {
 					Runnable turnOffBack = new Runnable() {
 						@Override
 						public void run() {
-							console.removeLogger(LOGGER);
 							btnBack.setEnabled(true);
 							btnCancel.setEnabled(true);
 							stopBusyLabel();
