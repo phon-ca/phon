@@ -29,6 +29,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.junit.runners.ParentRunner;
+
 import ca.phon.util.MsFormatter;
 
 public class TimeBar extends JComponent {
@@ -92,15 +94,11 @@ public class TimeBar extends JComponent {
 		double msPerPixel = (endMs - startMs) / (double)(size.width - 2 * WavDisplay._TIME_INSETS_);
 		
 		double lineHeight = size.height / 3.0;
-//		Line2D refLine = 
-//			new Line2D.Double(WavDisplay._TIME_INSETS_, lineHeight, (double)(size.width - WavDisplay._TIME_INSETS_), lineHeight);
-//		g2.draw(refLine);
 		
 		double lineMax = lineHeight + size.height/3.0;
 		
 		double xIndex = WavDisplay._TIME_INSETS_;
 		double oldX = xIndex;
-//		int tickIndex = 0;
 		for(int tickIndex = 0; tickIndex < _majorTick * _minorTick; tickIndex++) {
 			Line2D line = null;
 			if(tickIndex % _minorTick == 0) {
@@ -225,6 +223,18 @@ public class TimeBar extends JComponent {
 				new Rectangle2D.Double(xPos, lineHeight,
 						rectLen, getHeight());
 			g2.fill(selRect);
+			
+			// text
+			final double duration =
+					(Math.max(_parent.get_selectionEnd(), _parent.get_selectionStart())) - 
+					(Math.min(_parent.get_selectionStart(), _parent.get_selectionEnd()));
+			final String durationTxt = MsFormatter.msToDisplayString((long)duration);
+			final Rectangle2D durationBounds = g2.getFontMetrics().getStringBounds(durationTxt, g2);
+			double durationTxtX = xPos;
+			if(durationBounds.getWidth() < selRect.getWidth()) {
+				durationTxtX = selRect.getCenterX() - durationBounds.getCenterX();
+			}
+			g2.drawString(durationTxt, (float)durationTxtX, (float)durationBounds.getHeight());
 		}
 		
 		// draw currentms string
@@ -235,7 +245,6 @@ public class TimeBar extends JComponent {
 			
 			
 			double xPos = currentMs / msPerPixel + WavDisplay._TIME_INSETS_;
-//			System.out.println(xPos);
 			
 			g2.setColor(markerColor);
 			Line2D markerLine = 
