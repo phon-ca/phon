@@ -171,6 +171,10 @@ public class WaveformEditorView extends EditorView {
 		final DelegateEditorAction recordChangedAct =
 				new DelegateEditorAction(this, "onRecordChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+		
+		final DelegateEditorAction recordRefershAct = 
+				new DelegateEditorAction(this, "onRecordRefresh");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, recordRefershAct);
 
 		final DelegateEditorAction sessionMediaChangedAct =
 				new DelegateEditorAction(this, "onSessionMediaChanged");
@@ -637,6 +641,12 @@ public class WaveformEditorView extends EditorView {
 	public void onMediaSegmentChanged(EditorEvent ee) {
 		if(ee.getEventData() != null && ee.getEventData().toString().equals(SystemTierType.Segment.getName()))
 			update();
+	}
+	
+	@RunOnEDT
+	public void onRecordRefresh(EditorEvent ee) {
+		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
+		update();
 	}
 	
 	/**

@@ -428,9 +428,13 @@ public class RecordDataEditorView extends EditorView {
 				
 				@Override
 				public void focusLost(FocusEvent e) {
-					final Integer newNum = Integer.parseInt(recNumField.getText()) - 1;
-					if(newNum != initialNum && newNum != getEditor().getCurrentRecordIndex())
-						moveRecord();
+					if(recNumField.getText().length() == 0) {
+						recNumField.setText((getEditor().getCurrentRecordIndex() + 1) + "");
+					} else {
+						final Integer newNum = Integer.parseInt(recNumField.getText()) - 1;
+						if(newNum != initialNum && newNum != getEditor().getCurrentRecordIndex())
+							moveRecord();
+					}
 				}
 				
 				@Override
