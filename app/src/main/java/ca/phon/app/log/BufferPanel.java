@@ -1,6 +1,7 @@
 package ca.phon.app.log;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,6 +28,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTable;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -52,6 +54,10 @@ public class BufferPanel extends JPanel {
 	
 	public final static String SHOW_BUFFER_CODE = "SHOW_BUFFER";
 	
+	public final static String SHOW_BUSY = "SHOW_BUSY";
+	
+	public final static String STOP_BUSY = "STOP_BUSY";
+	
 	private static final Logger LOGGER = Logger
 			.getLogger(BufferPanel.class.getName());
 
@@ -71,6 +77,8 @@ public class BufferPanel extends JPanel {
 	
 	private JCheckBox firstRowAsHeaderBox;
 	
+	private JXBusyLabel busyLabel = new JXBusyLabel(new Dimension(16, 16));
+	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 	
 	public BufferPanel(String name) {
@@ -81,7 +89,6 @@ public class BufferPanel extends JPanel {
 			
 			@Override
 			public void handleEscapeCode(String code) {
-				System.out.println(code);
 				final Runnable swapBuffer = new Runnable() {
 					
 					@Override
@@ -100,6 +107,22 @@ public class BufferPanel extends JPanel {
 						@Override
 						public void run() {
 							getDataTable().packAll();
+						}
+					});
+				} else if(SHOW_BUSY.equals(code)) {
+					SwingUtilities.invokeLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							setBusy(true);
+						}
+					});
+				} else if(STOP_BUSY.equals(code)) {
+					SwingUtilities.invokeLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							setBusy(false);
 						}
 					});
 				}
@@ -122,7 +145,7 @@ public class BufferPanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		final FormLayout topLayout = new FormLayout(
-				"pref, pref, fill:pref:grow, right:pref", "pref, pref");
+				"pref, pref, fill:pref:grow, pref, 3dlu, right:pref", "pref");
 		final CellConstraints cc = new CellConstraints();
 		final JPanel topPanel = new JPanel(topLayout);
 		
@@ -137,15 +160,14 @@ public class BufferPanel extends JPanel {
 		firstRowAsHeaderAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
 		firstRowAsHeaderBox = new JCheckBox(firstRowAsHeaderAct);
 		
-		final HidablePanel infoPanel = new HidablePanel(BufferPanel.class.getName() + ".infoMessage");
-		infoPanel.add(new JLabel("Use the buttons on the below and to the right to switch between text and table views"));
+		busyLabel.setVisible(false);
 		
 		buttons = new BufferPanelButtons(this);
 		
-		topPanel.add(firstRowAsHeaderBox, cc.xy(2, 2));
-		topPanel.add(saveButton, cc.xy(1,2));
-		topPanel.add(buttons, cc.xy(4, 2));
-		topPanel.add(infoPanel, cc.xyw(1, 1, 3));
+		topPanel.add(firstRowAsHeaderBox, cc.xy(2, 1));
+		topPanel.add(saveButton, cc.xy(1,1));
+		topPanel.add(busyLabel, cc.xy(4, 1));
+		topPanel.add(buttons, cc.xy(6, 1));
 		
 		add(topPanel, BorderLayout.NORTH);
 		
@@ -178,6 +200,11 @@ public class BufferPanel extends JPanel {
 
 	public JXTable getDataTable() {
 		return dataTable;
+	}
+	
+	public void setBusy(boolean busy) {
+		busyLabel.setBusy(busy);
+		busyLabel.setVisible(busy);
 	}
 	
 	public void setFirstRowIsHeader(boolean firstRowIsColumnHeader) {
