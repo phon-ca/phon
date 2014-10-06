@@ -17,6 +17,7 @@ import org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
+import ca.phon.app.theme.PhonSubstanceLookAndFeel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
@@ -53,7 +54,7 @@ public class ThemeHook implements PhonStartupHook,
 					try {
 						final String uiClassName = PrefHelper.get(
 								PhonProperties.UI_THEME,
-								SubstanceCeruleanLookAndFeel.class.getName());
+								PhonSubstanceLookAndFeel.class.getName());
 						if (uiClassName != null) {
 							UIManager.setLookAndFeel(uiClassName);
 							UIManager.put(
