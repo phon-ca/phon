@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.actions;
 
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -7,10 +8,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Session;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -48,6 +52,11 @@ public class SaveSessionAction extends SessionEditorAction {
 			getEditor().saveData();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			
+			// show error
+			JOptionPane.showMessageDialog(getEditor(), 
+					e.getLocalizedMessage() + (e.getCause() != null ? " - " + e.getCause().getLocalizedMessage() : ""), 
+					"Unable to save Session!", JOptionPane.ERROR_MESSAGE, null);
 		}
 	}
 
