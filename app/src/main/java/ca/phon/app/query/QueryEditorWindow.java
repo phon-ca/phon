@@ -558,30 +558,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
         final QueryName queryName = script.getExtension(QueryName.class);
         final String name = (queryName != null ? queryName.getName() : "untitled");
         
-        final BufferWindow buffers = BufferWindow.getInstance();
-        final LogBuffer logBuffer = buffers.createBuffer(name).getLogBuffer();
-        script.getContext().redirectStdErr(new PrintStream(logBuffer.getStdErrStream()));
-        script.getContext().redirectStdOut(new PrintStream(logBuffer.getStdOutStream()));
-        
-        logBuffer.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				buffers.showWindow();
-				logBuffer.getDocument().removeDocumentListener(this);
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
-			
-		});
-        
-		
 		String tabName = "Results : " + name;
 		editorTabs.addTab(tabName, queryRunnerPanel);
 		editorTabs.setSelectedIndex(editorTabs.getTabCount()-1);

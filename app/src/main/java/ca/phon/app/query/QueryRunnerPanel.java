@@ -26,12 +26,14 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +47,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -57,6 +61,7 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.joda.time.DateTime;
 
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.app.query.report.ReportWizard;
@@ -446,13 +451,66 @@ public class QueryRunnerPanel extends JPanel {
 			
 			busyLabel.setBusy(true);
 			
-//			final QueryTask queryTask = new QueryTask(project, queryScript);
-//			queryTask.addTaskListener(queryTaskListener);
 			int serial = 0;
 			for(SessionPath sessionLocation:tableModel.sessions) {
 				if(isShutdown()) break;
 				// load session
 				try {
+					final String bufferName = query.getName() + ":" + 
+			        		sessionLocation.toString();
+					
+					final AtomicReference<BufferWindow> buffersRef = new AtomicReference<BufferWindow>();
+					final AtomicReference<LogBuffer> logBufferRef = new AtomicReference<LogBuffer>();
+					
+					final Runnable onEdt = new Runnable() {
+						public void run() {
+							final BufferWindow buffers = BufferWindow.getInstance();
+							final LogBuffer logBuffer = buffers.createBuffer(bufferName).getLogBuffer();
+							buffersRef.set(buffers);
+							logBufferRef.set(logBuffer);
+						}
+					};
+					try {
+						SwingUtilities.invokeAndWait(onEdt);
+					} catch (InterruptedException e1) {
+						LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(),
+								e1);
+					} catch (InvocationTargetException e1) {
+						LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(),
+								e1);
+					}
+					
+					if(logBufferRef.get() != null) {
+						final PrintStream outStream = new PrintStream(logBufferRef.get().getStdOutStream());
+				        ctx.redirectStdErr(new PrintStream(logBufferRef.get().getStdErrStream()));
+				        ctx.redirectStdOut(outStream);
+				        
+				        logBufferRef.get().getDocument().addDocumentListener(new DocumentListener() {
+							
+							@Override
+							public void removeUpdate(DocumentEvent e) {
+							}
+							
+							@Override
+							public void insertUpdate(DocumentEvent e) {
+								if(!buffersRef.get().isVisible()) {
+									buffersRef.get().showWindow();
+								}
+								buffersRef.get().selectBuffer(logBufferRef.get().getBufferName());
+								logBufferRef.get().getDocument().removeDocumentListener(this);
+							}
+							
+							@Override
+							public void changedUpdate(DocumentEvent e) {
+							}
+							
+						});
+				       
+				        outStream.flush();
+				        outStream.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
+				        outStream.flush();
+					}
+					
 					final Session session = 
 							project.openSession(sessionLocation.getCorpus(), sessionLocation.getSession());
 					
@@ -461,6 +519,16 @@ public class QueryRunnerPanel extends JPanel {
 					
 					queryTask.run();
 					taskCompleted();
+					
+					if(logBufferRef.get() != null) {
+						if(logBufferRef.get().getText().length() == 0) {
+							buffersRef.get().removeBuffer(logBufferRef.get().getBufferName());
+						}
+						final PrintStream outStream = new PrintStream(logBufferRef.get().getStdOutStream());
+						outStream.flush();
+				        outStream.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
+				        outStream.flush();
+					}
 					
 					rsManager.saveResultSet(tempProject, query, queryTask.getResultSet());
 				} catch (IOException e) {
