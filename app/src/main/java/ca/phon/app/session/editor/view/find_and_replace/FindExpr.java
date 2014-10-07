@@ -6,34 +6,21 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.phon.app.session.editor.search.SearchType;
+import ca.phon.extensions.IExtendable;
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
+import ca.phon.session.UnvalidatedValue;
 import ca.phon.util.Range;
 
 public class FindExpr {
 	
 	private static final Logger LOGGER = Logger.getLogger(FindExpr.class
 			.getName());
-	
-	public enum SearchType {
-		PLAIN("Plain text"),
-		REGEX("Regular expression"),
-		PHONEX("Phonex");
-		
-		private String title;
-		
-		private SearchType(String title) {
-			this.title = title;
-		}
-		
-		@Override
-		public String toString() {
-			return this.title;
-		}
-	}
 	
 	private SearchType type;
 	
@@ -103,10 +90,18 @@ public class FindExpr {
 	public Range findNext(Object obj, int charIdx) {
 		Range retVal = null;
 		
+		String plainTxt = FormatterUtil.format(obj);
+		if(plainTxt.length() == 0 && obj instanceof IExtendable) {
+			final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
+			if(uv != null) {
+				plainTxt = uv.getValue();
+			}
+		}
+		
 		if(getType() == SearchType.PLAIN) {
-			retVal = findNextPlain(FormatterUtil.format(obj), charIdx);
+			retVal = findNextPlain(plainTxt, charIdx);
 		} else if(getType() == SearchType.REGEX) {
-			retVal = findNextRegex(FormatterUtil.format(obj), charIdx);
+			retVal = findNextRegex(plainTxt, charIdx);
 		} else if(getType() == SearchType.PHONEX) {
 			if(obj instanceof IPATranscript) {
 				retVal = findNextPhonex((IPATranscript)obj, charIdx);
@@ -125,10 +120,18 @@ public class FindExpr {
 	public Range findPrev(Object obj, int charIdx) {
 		Range retVal = null;
 		
+		String plainTxt = FormatterUtil.format(obj);
+		if(plainTxt.length() == 0 && obj instanceof IExtendable) {
+			final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
+			if(uv != null) {
+				plainTxt = uv.getValue();
+			}
+		}
+		
 		if(getType() == SearchType.PLAIN) {
-			retVal = findPrevPlain(FormatterUtil.format(obj), charIdx);
+			retVal = findPrevPlain(plainTxt, charIdx);
 		} else if(getType() == SearchType.REGEX) {
-			retVal = findPrevRegex(FormatterUtil.format(obj), charIdx);
+			retVal = findPrevRegex(plainTxt, charIdx);
 		} else if(getType() == SearchType.PHONEX) {
 			if(obj instanceof IPATranscript) {
 				retVal = findPrevPhonex((IPATranscript)obj, charIdx);
@@ -281,17 +284,42 @@ public class FindExpr {
 	}
 	
 	public Object replacePlain(Object obj, String expr) {
-		final String val = FormatterUtil.format(obj);
+		String plainTxt = FormatterUtil.format(obj);
+		
+		if(plainTxt.length() == 0 && obj instanceof IExtendable) {
+			final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
+			if(uv != null) {
+				plainTxt = uv.getValue();
+			}
+		}
 		
 		final StringBuffer buffer = new StringBuffer();
 		if(lastRange != null) {
-			buffer.append(val.substring(0, lastRange.getStart()));
+			buffer.append(plainTxt.substring(0, lastRange.getStart()));
 			buffer.append(expr);
-			buffer.append(val.substring(lastRange.getEnd()));
+			buffer.append(plainTxt.substring(lastRange.getEnd()));
 		}
 		
 		final String newTxt = buffer.toString();
-		return FormatterUtil.parse(obj.getClass(), newTxt);
+		Object retVal = FormatterUtil.parse(obj.getClass(), newTxt);
+		
+		if(retVal == null && IExtendable.class.isAssignableFrom(obj.getClass())) {
+			try {
+				retVal = obj.getClass().newInstance();
+				((IExtendable)retVal).putExtension(UnvalidatedValue.class, new UnvalidatedValue(newTxt));
+			} catch (InstantiationException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} catch (IllegalAccessException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
+		if(obj instanceof IPATranscript && ((IExtendable)obj).getExtension(AlternativeTranscript.class) != null) {
+			((IExtendable)retVal).putExtension(AlternativeTranscript.class, 
+					((IExtendable)obj).getExtension(AlternativeTranscript.class));
+		}
+		
+		return retVal;
 	}
 	
 	public Object replaceRegex(Object obj, String expr) {
@@ -302,7 +330,24 @@ public class FindExpr {
 		}
 		
 		final String newTxt = buffer.toString();
-		return FormatterUtil.parse(obj.getClass(), newTxt);
+		Object retVal = FormatterUtil.parse(obj.getClass(), newTxt);
+		if(retVal == null && IExtendable.class.isAssignableFrom(obj.getClass())) {
+			try {
+				retVal = obj.getClass().newInstance();
+				((IExtendable)retVal).putExtension(UnvalidatedValue.class, new UnvalidatedValue(newTxt));
+			} catch (InstantiationException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} catch (IllegalAccessException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
+		if(obj instanceof IPATranscript && ((IExtendable)obj).getExtension(AlternativeTranscript.class) != null) {
+			((IExtendable)retVal).putExtension(AlternativeTranscript.class, 
+					((IExtendable)obj).getExtension(AlternativeTranscript.class));
+		}
+		
+		return retVal;
 	}
 	
 	public IPATranscript replacePhonex(IPATranscript ipa, IPATranscript expr) {
@@ -311,7 +356,11 @@ public class FindExpr {
 			lastPhonexMatcher.appendReplacement(builder, expr);
 			lastPhonexMatcher.appendTail(builder);
 		}
-		return builder.toIPATranscript();
+		final IPATranscript retVal = builder.toIPATranscript();
+		if(ipa.getExtension(AlternativeTranscript.class) != null) {
+			retVal.putExtension(AlternativeTranscript.class, ipa.getExtension(AlternativeTranscript.class));
+		}
+		return retVal;
 	}
 	
 }

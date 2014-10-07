@@ -146,6 +146,13 @@ public class SessionEditorQuickSearch {
 				updateFilter();
 			}
 		});
+		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.SEARCH_TYPE_PROP, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				updateFilter();
+			}
+		});
 		
 		searchField.setColumnLabel("tier");
 		searchField.setColumns(20);
@@ -413,7 +420,7 @@ public class SessionEditorQuickSearch {
 		getPopup().hide();
 		popup = null;
 	}
-	
+
 	/**
 	 * Table selection listener
 	 *

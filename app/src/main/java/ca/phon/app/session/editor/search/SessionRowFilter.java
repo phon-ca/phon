@@ -24,13 +24,16 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 	private final Map<String, String> tierExprs =
 			new HashMap<String, String>();
 	
+	private SearchType searchType = SearchType.PLAIN;
+	
 	public SessionRowFilter() {
 		
 	}
 	
-	public SessionRowFilter(String filter) {
+	public SessionRowFilter(String filter, SearchType searchType) {
 		super();
 		parseFilter(filter);
+		this.searchType = searchType;
 	}
 	
 	public void parseFilter(String filter) {
@@ -98,7 +101,7 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 		if(expr == null) return false;
 		if(expr.trim().length() == 0) return false;
 		
-		if(record.getTierType(tierName) == IPATranscript.class) {
+		if(record.getTierType(tierName) == IPATranscript.class && searchType == SearchType.PHONEX) {
 			final Tier<IPATranscript> ipaTier = 
 					record.getTier(tierName, IPATranscript.class);
 			try {
@@ -159,11 +162,15 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 		
 		for(String grp:tier) {			
 			if(retVal) break;
-			try {
-				final Pattern pattern = Pattern.compile(expr);
-				final Matcher matcher = pattern.matcher(grp);
-				retVal = matcher.find();
-			} catch (PatternSyntaxException pse) {
+			if(searchType == SearchType.REGEX) {
+				try {
+					final Pattern pattern = Pattern.compile(expr);
+					final Matcher matcher = pattern.matcher(grp);
+					retVal = matcher.find();
+				} catch (PatternSyntaxException e) {
+					
+				}
+			} else if(searchType == SearchType.PLAIN) {
 				retVal = grp.contains(expr);
 			}
 		}

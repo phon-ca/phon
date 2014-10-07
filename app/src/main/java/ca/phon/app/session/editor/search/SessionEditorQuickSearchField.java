@@ -1,7 +1,9 @@
 package ca.phon.app.session.editor.search;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
@@ -24,8 +26,12 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 
 	public final static String INCLUDE_EXCLUDED_PROP = "include_excluded";
 	
+	public final static String SEARCH_TYPE_PROP = "search_type";
+	
 	private boolean includeExcludedRecords = false;
 
+	private SearchType searchType = SearchType.PLAIN;
+	
 	private final Session session;
 	
 	public SessionEditorQuickSearchField(Session session, JTable table) {
@@ -41,13 +47,48 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 		incExcludedAct.putValue(PhonUIAction.SELECTED_KEY, this.includeExcludedRecords);
 		final JCheckBoxMenuItem incExcludedItem = new JCheckBoxMenuItem(incExcludedAct);
 		menu.add(incExcludedItem);
+		menu.addSeparator();
 		
+		ButtonGroup btnGroup = new ButtonGroup();
+		
+		final PhonUIAction usePlainAct = new PhonUIAction(this, "setSearchType", SearchType.PLAIN);
+		usePlainAct.putValue(PhonUIAction.NAME, "Plain text");
+		usePlainAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Plain text search");
+		usePlainAct.putValue(PhonUIAction.SELECTED_KEY, searchType == SearchType.PLAIN);
+		final JRadioButtonMenuItem usePlainItem = new JRadioButtonMenuItem(usePlainAct);
+		menu.add(usePlainItem);
+		
+		final PhonUIAction useRegexAct = new PhonUIAction(this, "setSearchType", SearchType.REGEX);
+		useRegexAct.putValue(PhonUIAction.NAME, "Regex");
+		useRegexAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Regex search");
+		useRegexAct.putValue(PhonUIAction.SELECTED_KEY, searchType == SearchType.REGEX);
+		final JRadioButtonMenuItem useRegexItem = new JRadioButtonMenuItem(useRegexAct);
+		menu.add(useRegexItem);
+
+		final PhonUIAction usePhonexAct = new PhonUIAction(this, "setSearchType", SearchType.PHONEX);
+		usePhonexAct.putValue(PhonUIAction.NAME, "Phonex");
+		usePhonexAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Phonex search");
+		usePhonexAct.putValue(PhonUIAction.SELECTED_KEY, searchType == SearchType.PHONEX);
+		final JRadioButtonMenuItem usePhonexItem = new JRadioButtonMenuItem(usePhonexAct);
+		menu.add(usePhonexItem);
+		
+		btnGroup.add(usePlainItem);
+		btnGroup.add(useRegexItem);
+		btnGroup.add(usePhonexItem);
+		
+		menu.addSeparator();
 		super.setupPopupMenu(menu);
+	}
+	
+	public void setSearchType(SearchType searchType) {
+		final SearchType oldType = this.searchType;
+		this.searchType = searchType;
+		super.firePropertyChange(SEARCH_TYPE_PROP, oldType, searchType);
 	}
 
 	@Override
 	public RowFilter<TableModel, Integer> getRowFilter(String expr) {
-		final RowFilter<TableModel, Integer> filter = new SessionRowFilter(expr);
+		final RowFilter<TableModel, Integer> filter = new SessionRowFilter(expr, searchType);
 				//super.getRowFilter(expr);
 		return new RecordRowFilter(filter);
 	}

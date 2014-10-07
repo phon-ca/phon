@@ -40,12 +40,12 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorSelection;
+import ca.phon.app.session.editor.search.SearchType;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.GroupField;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
-import ca.phon.app.session.editor.view.find_and_replace.FindExpr.SearchType;
 import ca.phon.app.session.editor.view.find_and_replace.FindManager.FindDirection;
 import ca.phon.app.session.editor.view.find_and_replace.FindManager.FindStatus;
 import ca.phon.app.session.editor.view.find_and_replace.actions.FindNextAction;
@@ -343,7 +343,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		final FindExpr retVal = new FindExpr();
 		retVal.setExpr(tier.getGroup(0));
 		retVal.setCaseSensitive(optsPanel.caseSensitiveBox.isSelected());
-		retVal.setType((FindExpr.SearchType)optsPanel.typeBox.getSelectedItem());
+		retVal.setType((SearchType)optsPanel.typeBox.getSelectedItem());
 		
 		return retVal;
 	}
@@ -641,8 +641,8 @@ public class FindAndReplaceEditorView extends EditorView {
 			caseSensitiveBox.setOpaque(false);
 			add(caseSensitiveBox);
 			
-			typeBox = new JComboBox(FindExpr.SearchType.values());
-			typeBox.setSelectedItem(FindExpr.SearchType.PLAIN);
+			typeBox = new JComboBox(SearchType.values());
+			typeBox.setSelectedItem(SearchType.PLAIN);
 			add(typeBox);
 		}
 		

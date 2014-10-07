@@ -154,10 +154,6 @@ public class FilterTableModel extends AbstractTableModel {
 	public void setRowFilter(RowFilter<TableModel, Integer> filter) {
 		this.rowFilter = filter;
 		
-//		if(exeService == null) {
-//			exeService = Executors.newSingleThreadExecutor();
-//		}
-		
 		if(worker != null && !worker.isDone()) {
 			worker.stop = true;
 		} 
@@ -207,7 +203,7 @@ public class FilterTableModel extends AbstractTableModel {
 			final RowFilter<TableModel, Integer> filter = getRowFilter();
 			publish(-1);
 			for(int i = 0; i < model.getRowCount(); i++) {
-				if(stop) return false;
+				if(stop) throw new InterruptedException();
 				final FilterEntry entry = new FilterEntry(i);
 				if(filter.include(entry)) {
 					publish(i);
@@ -225,7 +221,6 @@ public class FilterTableModel extends AbstractTableModel {
 					rowKeys.add(rowIdx);
 				}
 			}
-			//fireTableDataChanged();
 		}
 
 		@Override
