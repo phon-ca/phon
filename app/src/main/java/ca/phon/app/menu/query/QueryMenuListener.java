@@ -58,7 +58,8 @@ public class QueryMenuListener implements MenuListener {
 		final Iterator<QueryScript> userScriptIterator = userScriptLoader.iterator();
 		if(userScriptIterator.hasNext()) {
 			queryMenu.addSeparator();
-			final JLabel lbl = new JLabel("<html><b>User Library</b></html>");
+			final JMenuItem lbl = new JMenuItem("-- User Library --");
+			lbl.setEnabled(false);
 			queryMenu.add(lbl);
 		}
 		while(userScriptIterator.hasNext()) {
@@ -73,7 +74,8 @@ public class QueryMenuListener implements MenuListener {
 		final Iterator<QueryScript> projectScriptIterator = projectScriptLoader.iterator();
 		if(projectScriptIterator.hasNext()) {
 			queryMenu.addSeparator();
-			final JLabel lbl = new JLabel("<html><b>Project Library</b></html>");
+			final JMenuItem lbl = new JMenuItem("-- Project Library --");
+			lbl.setEnabled(false);
 			queryMenu.add(lbl);
 		}
 		while(projectScriptIterator.hasNext()) {
@@ -103,7 +105,8 @@ public class QueryMenuListener implements MenuListener {
 		}
 		for(String category:categories.keySet()) {
 			queryMenu.addSeparator();
-			final JLabel lbl = new JLabel("<html><b>" + category + "</b></html>");
+			final JMenuItem lbl = new JMenuItem("-- " + category + " --");
+			lbl.setEnabled(false);
 			queryMenu.add(lbl);
 			for(QueryScript qs:categories.get(category)) {
 				final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
