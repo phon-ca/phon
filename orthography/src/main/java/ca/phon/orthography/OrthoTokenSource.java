@@ -141,7 +141,6 @@ public class OrthoTokenSource implements TokenSource {
 				buffer.append(c);
 				break;
 				
-			case ']':
 			case '(':
 			case ')':
 				if(hadSlash) {
@@ -189,8 +188,7 @@ public class OrthoTokenSource implements TokenSource {
 		final StringBuffer evtBuffer = new StringBuffer();
 		String type = null;
 		
-		while(cIndex < data.length && data[cIndex] != '*'
-			&& data[cIndex] != ']') {
+		while(cIndex < data.length && data[cIndex] != '*') {
 			final char c = data[cIndex++];
 			if(c == ':') {
 				type = evtBuffer.toString();
@@ -219,7 +217,6 @@ public class OrthoTokenSource implements TokenSource {
 		while(cIndex < data.length && !Character.isWhitespace(data[cIndex])
 				&& data[cIndex] != '('
 				&& data[cIndex] != '*'
-				&& data[cIndex] != ']'
 				&& data[cIndex] != '+'
 				&& data[cIndex] != '~') {
 			buffer.append(data[cIndex++]);

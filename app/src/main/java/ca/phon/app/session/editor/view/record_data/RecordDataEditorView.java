@@ -240,7 +240,12 @@ public class RecordDataEditorView extends EditorView {
 				new DelegateEditorAction(this, "onParticipantsChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantsChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantsChangedAct);
-
+		
+		final EditorAction onNumRecordsChangeAct = 
+				new DelegateEditorAction(this, "onNumRecordsChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, onNumRecordsChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, onNumRecordsChangeAct);
+		
 		final EditorAction onSessionLocationChangedAct = 
 				new DelegateEditorAction(this, "onSessionLocationChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, onSessionLocationChangedAct);
@@ -683,6 +688,11 @@ public class RecordDataEditorView extends EditorView {
 	/*
 	 * Editor Actions
 	 */
+	@RunOnEDT
+	public void onNumRecordsChanged(EditorEvent event) {
+		recNumField.setMaxNumber(getEditor().getSession().getRecordCount());
+	}
+	
 	@RunOnEDT
 	public void onTierViewChange(EditorEvent event) {
 		update();
