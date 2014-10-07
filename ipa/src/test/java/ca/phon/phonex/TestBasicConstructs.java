@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -77,7 +78,8 @@ public class TestBasicConstructs {
 	public void testUnicodeValueMatcher() throws ParseException {
 		
 	}
-	
+
+	@Ignore
 	@Test
 	public void testAlignmentMarker() throws ParseException {
 		final String text = "ba \u2194 ab";
