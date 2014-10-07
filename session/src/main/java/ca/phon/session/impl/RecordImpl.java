@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -23,6 +24,7 @@ import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.UnvalidatedValue;
 import ca.phon.session.Word;
 
 /**
@@ -296,7 +298,14 @@ public class RecordImpl implements Record {
 					// copy group data as string
 					for(int i = 0; i < userTier.numberOfGroups(); i++) {
 						final Object obj = userTier.getGroup(i);
-						final String val = obj.toString();
+						String val = obj.toString();
+						
+						if(obj instanceof IExtendable) {
+							final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
+							if(uv != null) {
+								val = uv.getValue();
+							}
+						}
 						final T tierVal = (T)type.getClass().cast(val);
 						retVal.addGroup(tierVal);
 					}
@@ -351,8 +360,14 @@ public class RecordImpl implements Record {
 					// copy group data as string
 					for(int i = 0; i < systemTier.numberOfGroups(); i++) {
 						final Object obj = systemTier.getGroup(i);
-						final String val = obj.toString();
-//						final T tierVal = (T)type.getClass().cast(val);
+						String val = obj.toString();
+						
+						if(obj instanceof IExtendable) {
+							final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
+							if(uv != null) {
+								val = uv.getValue();
+							}
+						}
 						retVal.addGroup((T)val);
 					}
 				}
