@@ -29,8 +29,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.junit.runners.ParentRunner;
-
 import ca.phon.util.MsFormatter;
 
 public class TimeBar extends JComponent {
