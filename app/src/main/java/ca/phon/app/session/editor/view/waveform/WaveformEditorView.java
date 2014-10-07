@@ -50,9 +50,14 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
+
+import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
@@ -91,10 +96,6 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Displays wavform and associated commands.
@@ -258,21 +259,12 @@ public class WaveformEditorView extends EditorView {
 			
 		});
 		
-		final GridBagLayout layout = new GridBagLayout();
-		contentPane = new JPanel(layout);
+		contentPane = new JPanel(new VerticalLayout());
 		
-		final GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.anchor = GridBagConstraints.LINE_START;
-		gbc.gridheight = 1;
-		gbc.gridwidth = 1;
-		gbc.weighty = 1.0;
-		gbc.weightx = 1.0;
-		contentPane.add(wavDisplay, gbc);
+		contentPane.add(wavDisplay);
 		
-		sizer = new JLabel();
+		sizer = new JSeparator(SwingConstants.HORIZONTAL);
+		
 		sizer.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 		sizer.setPreferredSize(new Dimension(0, 5));
 		sizer.addMouseMotionListener(new MouseAdapter() {
@@ -296,21 +288,11 @@ public class WaveformEditorView extends EditorView {
 			}
 			
 		});
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.weighty = 0.0;
-		contentPane.add(sizer, gbc);
+		contentPane.add(sizer);
 		
 		// add plug-in tiers
 		final JPanel tierPanel = initPlugins();
-		gbc.gridy = 2;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.LINE_START;
-		gbc.gridheight = 1;
-		gbc.gridwidth = 1;
-		gbc.weightx = 1.0;
-		gbc.weighty = 0.0;
-		contentPane.add(tierPanel, gbc);
+		contentPane.add(tierPanel);
 		
 		add(new JScrollPane(contentPane), BorderLayout.CENTER);
 		
@@ -319,18 +301,12 @@ public class WaveformEditorView extends EditorView {
 	
 	private JPanel initPlugins() {
 		loadPlugins();
-		final PanelBuilder builder = new PanelBuilder(new FormLayout("fill:pref:grow", ""));
-		
-		int rIdx = 1;
-		final CellConstraints cc = new CellConstraints();
+		final JPanel retVal = new JPanel(new VerticalLayout());
 		for(WaveformTier tier:pluginTiers) {
 			final JComponent comp = tier.getTierComponent();
-			
-			builder.appendRow("fill:pref:grow");
-			builder.add(comp, cc.xy(1, rIdx++));
+			retVal.add(comp);
 		}
-		
-		return builder.getPanel();
+		return retVal;
 	}
 	
 	public WaveformViewCalculator getCalculator() {
