@@ -307,44 +307,6 @@ public class ExtractProjectArchiveTask extends PhonTask {
 			}
 		}
 		
-		// check project version
-		final ProjectFactory factory = new ProjectFactory();
-		Project extractedProject = null;
-		try {
-			extractedProject = factory.openProject(destDir);
-		} catch (ProjectConfigurationException e1) {
-			e1.printStackTrace();
-			LOGGER.severe(e1.getMessage());
-		}
-		if(extractedProject != null && extractedProject.getVersion().equals("unk")) {
-			// We have a Phon 1.3 project = upgrade it
-			HashMap<String, Object> initInfo = new HashMap<String, Object>();
-			initInfo.put("oldProjectPath", destDir.getAbsolutePath());
-			initInfo.put("silent", Boolean.TRUE);
-			
-			setProperty(STATUS_PROP, "Upgrading project files...");
-//			ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.project.ConvertProjectController");
-//			LoadModule lm = new LoadModule(mi, initInfo, true);
-//			try {
-//				lm.start();
-//			} catch (Exception e) {
-//				PhonLogger.severe(e.toString());
-//				super.err = e;
-//				setStatus(TaskStatus.ERROR);
-//				return;
-//			}
-			
-			try {
-				PluginEntryPointRunner.executePlugin("ConvertProject", initInfo);
-			} catch (PluginException e) {
-				LOGGER.severe(e.toString());
-				super.err = e;
-				setStatus(TaskStatus.ERROR);
-				return;
-			}
-			
-		}
-		
 		setProperty(STATUS_PROP, "Finished");
 	}
 	

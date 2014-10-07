@@ -48,11 +48,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+import org.apache.commons.io.filefilter.FileFileFilter;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.painter.MattePainter;
@@ -67,10 +69,12 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.PhonTaskButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
@@ -79,6 +83,10 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonWorker;
 import ca.phon.workspace.Workspace;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -359,7 +367,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		extractAct.putValue(PhonUIAction.SMALL_ICON, importIcn);
 		extractAct.putValue(PhonUIAction.LARGE_ICON_KEY, importIcnL);
 		extractAct.putValue(PhonUIAction.NAME, "Extract project...");
-		extractAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Extract project from .phon/.zip archive into current workspace...");
+		extractAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Extract project from .zip archive into current workspace...");
 		
 		BtnBgPainter bgPainter = new BtnBgPainter();
 		retVal.setBackgroundPainter(bgPainter);
@@ -545,76 +553,72 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 	}
 	
 	public void onExtract(PhonActionEvent pae) {
-//		FileFilter archiveFilter = 
-//			new FileFilter("Project Archive Files (*.phon;*.zip)", "*.phon;*.zip");
-//		FileFilter[] filters = new FileFilter[] { archiveFilter };
-//		String selectedFile = 
-//			NativeDialogs.browseForFileBlocking(CommonModuleFrame.getCurrentFrame(), null, ".phon", 
-//					filters, "Open project archive");
-//		if(selectedFile != null) {
-//			ExtractProjectArchiveTask task = new ExtractProjectArchiveTask(new File(selectedFile));
-//			File destDir = task.getDestDir();
-//			if(destDir == null) {
-//				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, 
-//						"Not a project archive", "'" + selectedFile + "' does not contain a phon project");
-//				return;
-//			}
-//			
-//			final PhonTaskButton taskBtn = new PhonTaskButton(task);
-//			taskBtn.setSize(extractProjectButton.getSize());
-//			taskBtn.setPreferredSize(extractProjectButton.getPreferredSize());
-//			CellConstraints cc = new CellConstraints();
-//			workspaceActionsContainer.remove(extractProjectButton);
-//			workspaceActionsContainer.add(taskBtn, cc.xy(1,2));
-//			workspaceActionsContainer.revalidate();
-//			workspaceActionsContainer.repaint();
-//			
-//			task.addTaskListener(new PhonTaskListener() {
-//				
-//				@Override
-//				public void statusChanged(PhonTask task, TaskStatus oldStatus,
-//						TaskStatus newStatus) {
-//					if(newStatus == TaskStatus.FINISHED) {
-//
-//						workspacePanel.refresh();
-//						
-//						long startTime = task.getStartTime();
-//						long curTime = System.currentTimeMillis();
-//						long totalTime = curTime - startTime;
-//						
-//						if(totalTime < 500) {
-//							try {
-//								Thread.sleep(500-totalTime);
-//							} catch (InterruptedException e) {}
-//						}
-//						
-//						// swap buttons back
-//						CellConstraints cc = new CellConstraints();
-//						workspaceActionsContainer.remove(taskBtn);
-//						workspaceActionsContainer.add(extractProjectButton, cc.xy(1,2));
-//						workspaceActionsContainer.revalidate();
-//						extractProjectButton.repaint();
-//					}
-//				}
-//				
-//				@Override
-//				public void propertyChanged(PhonTask task, String property,
-//						Object oldValue, Object newValue) {
-//					// TODO Auto-generated method stub
-//					
-//				}
-//			});
-//			
-////			task.performTask();
-//			PhonWorker.getInstance().invokeLater(task);
-//			
-////			JPanel projPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-////			
-////			JXBusyLabel busyLabel = new JXBusyLabel();
-////			busyLabel.setBusy(true);
-////			projPanel.add(busyLabel);
-////			projPanel.add(new JLabel("Extracting project..."));
-//		}
+		FileFilter archiveFilter = FileFilter.zipFilter;
+		FileFilter[] filters = new FileFilter[] { archiveFilter };
+		String selectedFile = 
+			NativeDialogs.browseForFileBlocking(CommonModuleFrame.getCurrentFrame(), null, ".phon", 
+					filters, "Open project archive");
+		if(selectedFile != null) {
+			ExtractProjectArchiveTask task = new ExtractProjectArchiveTask(new File(selectedFile));
+			File destDir = task.getDestDir();
+			if(destDir == null) {
+				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, 
+						"Not a project archive", "'" + selectedFile + "' does not contain a phon project");
+				return;
+			}
+			
+			final PhonTaskButton taskBtn = new PhonTaskButton(task);
+			taskBtn.setSize(extractProjectButton.getSize());
+			taskBtn.setPreferredSize(extractProjectButton.getPreferredSize());
+			CellConstraints cc = new CellConstraints();
+			workspaceActionsContainer.remove(extractProjectButton);
+			workspaceActionsContainer.add(taskBtn, cc.xy(1,2));
+			workspaceActionsContainer.revalidate();
+			workspaceActionsContainer.repaint();
+			
+			task.addTaskListener(new PhonTaskListener() {
+				
+				@Override
+				public void statusChanged(PhonTask task, TaskStatus oldStatus,
+						TaskStatus newStatus) {
+					if(newStatus == TaskStatus.FINISHED) {
+
+						
+						long startTime = task.getStartTime();
+						long curTime = System.currentTimeMillis();
+						long totalTime = curTime - startTime;
+						
+						if(totalTime < 500) {
+							try {
+								Thread.sleep(500-totalTime);
+							} catch (InterruptedException e) {}
+						}
+						
+						// swap buttons back
+						final Runnable onEDT = new Runnable() {
+							public void run() {
+								workspacePanel.refresh();
+								CellConstraints cc = new CellConstraints();
+								workspaceActionsContainer.remove(taskBtn);
+								workspaceActionsContainer.add(extractProjectButton, cc.xy(1,2));
+								workspaceActionsContainer.revalidate();
+								extractProjectButton.repaint();
+							}
+						};
+						SwingUtilities.invokeLater(onEDT);
+					}
+				}
+				
+				@Override
+				public void propertyChanged(PhonTask task, String property,
+						Object oldValue, Object newValue) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			PhonWorker.getInstance().invokeLater(task);
+		}
 		
 		
 		
