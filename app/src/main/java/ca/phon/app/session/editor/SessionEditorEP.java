@@ -22,6 +22,7 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Transcriber;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.layout.ButtonBarBuilder;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -72,6 +73,20 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	}
 
 	public void showEditor(Project project, Session session, boolean blindMode) {
+		// look for an already open editor
+		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+			if(cmf instanceof SessionEditor) {
+				final SessionEditor editor = (SessionEditor)cmf;
+				if(editor.getProject() == project && 
+						(editor.getSession().getCorpus().equals(session.getCorpus()) &&
+								editor.getSession().getName().equals(session.getName()))) {
+					editor.requestFocus();
+					editor.toFront();
+					return;
+				}
+			}
+		}
+		
 		Transcriber transcriber = null;
 		if(blindMode) {
 			// show transcriber selection dialog

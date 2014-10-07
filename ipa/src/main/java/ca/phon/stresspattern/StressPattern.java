@@ -53,7 +53,6 @@ public class StressPattern {
 	public static StressPattern compile(String matcherString) 
 		throws ParseException {
 		SimpleFSA<StressMatcherType> fsa = (new StressPatternCompiler()).compile(matcherString);
-		fsa.printDef();
 		return new StressPattern(fsa, matcherString);
 	}
 	
