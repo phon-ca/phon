@@ -37,6 +37,14 @@ package ca.phon.phonex;
 import org.apache.commons.lang3.StringEscapeUtils;
 }
 
+@members {
+
+public void reportError(RecognitionException e) {
+	throw new PhonexPatternException(e);
+}
+
+}
+
 /**
  * Start
  */
