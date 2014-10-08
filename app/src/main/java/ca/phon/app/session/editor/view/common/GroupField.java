@@ -114,7 +114,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		getDocument().addDocumentListener(docListener);
 		getDocument().addUndoableEditListener(undoManager);
-		getDocument().putProperty("i18n", Boolean.TRUE);
+//		getDocument().putProperty("i18n", Boolean.TRUE);
 		
 		errHighlighter.install(this);
 	}
@@ -123,7 +123,6 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	public void paintComponent(Graphics g) {
 		final Graphics2D g2 = (Graphics2D)g;
 		
-		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING,
 		          RenderingHints.VALUE_RENDER_QUALITY);
