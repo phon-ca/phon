@@ -3,6 +3,8 @@ package ca.phon.app.session.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -379,8 +381,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		final int retVal = NativeDialogs.showMessageDialog(props);
 		if(retVal == 0) {
-			removePrespective(perspective);
 			RecordEditorPerspective.deletePerspective(perspective);
+			removePrespective(perspective);
 		}
 	}
 	
@@ -403,12 +405,34 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				final XElement xele = XIO.readUTF(is);
 				perspective = dockControl.getPerspectives().readXML( xele );
 				
+				final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+				
 				final XElement boundsEle = xele.getElement("bounds");
 				if(boundsEle != null) {
 					int x = boundsEle.getAttribute("x").getInt();
 					int y = boundsEle.getAttribute("y").getInt();
 					int width = boundsEle.getAttribute("width").getInt();
 					int height = boundsEle.getAttribute("height").getInt();
+					
+					if(x + width > screenSize.width) {
+						if(screenSize.width - width >= 0) {
+							x = screenSize.width - width;
+						} else {
+							x = 0;
+							if(width > screenSize.width) {
+								width = screenSize.width;
+							}
+						}
+					}
+					
+					if(y + height > screenSize.height) {
+						if(screenSize.height - height >= 0) {
+							y = screenSize.height - height;
+							if(height > screenSize.height) {
+								height = screenSize.height;
+							}
+						}
+					}
 					
 					if(width >= 0 && height >= 0) {
 						getEditor().setSize(width, height);
@@ -436,6 +460,26 @@ public class DefaultEditorViewModel implements EditorViewModel {
 						int width = winEle.getAttribute("width").getInt();
 						int height = winEle.getAttribute("height").getInt();
 						
+						if(x + width > screenSize.width) {
+							if(screenSize.width - width >= 0) {
+								x = screenSize.width - width;
+							} else {
+								x = 0;
+								if(width > screenSize.width) {
+									width = screenSize.width;
+								}
+							}
+						}
+						
+						if(y + height > screenSize.height) {
+							if(screenSize.height - height >= 0) {
+								y = screenSize.height - height;
+								if(height > screenSize.height) {
+									height = screenSize.height;
+								}
+							}
+						}
+						
 						if(width >= 0 && height >= 0) {
 							window.setSize(width, height);
 						}
@@ -460,6 +504,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			for(AccessoryWindow accWin:accessoryWindows) {
 				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
 			}
+			
+			is.close();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
@@ -853,7 +899,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				if(perspectiveFile.canWrite()) {
 					// add delete item
 					final PhonUIAction delPerspectiveAct = 
-							new PhonUIAction(this, "deletePerspective", editorPerspective);
+							new PhonUIAction(this, "onDeletePerspective", editorPerspective);
 					delPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
 					delPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete layout " + editorPerspective.getName());
 					final JMenuItem delPerspectiveItem = new JMenuItem(delPerspectiveAct);
