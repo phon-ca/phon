@@ -33,36 +33,36 @@ exports.DetectorResultFactory = function() {
         rv1.tierName = ipaT.tierName;
         rv1.groupIndex = groupIndex;
         ipaE = phoneMap.topAlignmentElements.get(detectorResult.firstPosition);
-        stringIdx = ipaT.stringIndexOfElement(ipaE);
+        stringIdx = (ipaE == null ? -1 : ipaT.stringIndexOfElement(ipaE));
         rv1.range = new Range(stringIdx, stringIdx, false);        
-        rv1.data = ipaE.text;
+        rv1.data = (ipaE == null ? "" : ipaE.text);
         retVal.addResultValue(rv1);
         
         var rv2 = factory.createResultValue();
         rv2.tierName = ipaT.tierName;
         rv2.groupIndex = groupIndex;
         ipaE = phoneMap.topAlignmentElements.get(detectorResult.secondPosition);
-        stringIdx = ipaT.stringIndexOfElement(ipaE);
+        stringIdx = (ipaE == null ? -1 : ipaT.stringIndexOfElement(ipaE));
         rv2.range = new Range(stringIdx, stringIdx, false);        
-        rv2.data = ipaE.text;
+        rv2.data = (ipaE == null ? "" : ipaE.text);
         retVal.addResultValue(rv2);
         
         var rv3 = factory.createResultValue();
         rv3.tierName = ipaA.tierName;
         rv3.groupIndex = groupIndex;
         ipaE = phoneMap.bottomAlignmentElements.get(detectorResult.firstPosition);
-        stringIdx = ipaA.stringIndexOfElement(ipaE);
+        stringIdx = (ipaE == null ? -1 : ipaA.stringIndexOfElement(ipaE));
         rv3.range = new Range(stringIdx, stringIdx, false);        
-        rv3.data = ipaE.text;
+        rv3.data = (ipaE == null ? "" : ipaE.text);
         retVal.addResultValue(rv3);
         
         var rv4 = factory.createResultValue();
         rv4.tierName = ipaA.tierName;
         rv4.groupIndex = groupIndex;
         ipaE = phoneMap.bottomAlignmentElements.get(detectorResult.secondPosition);
-        stringIdx = ipaA.stringIndexOfElement(ipaE);
+        stringIdx = (ipaE == null ? -1 : ipaA.stringIndexOfElement(ipaE));
         rv4.range = new Range(stringIdx, stringIdx, false);        
-        rv4.data = ipaE.text;
+        rv4.data = (ipaE == null ? "" : ipaE.text);
         retVal.addResultValue(rv4);
         
         // metadata

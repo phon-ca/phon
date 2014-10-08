@@ -271,9 +271,12 @@ function query_record(recordIndex, record) {
     			    
     			    result.addResultValue(alignedRv);
     			    result.schema = "ALIGNED";
-    			    calcMetadata(record, group, result.metadata, new IPATranscript(match.value), new IPATranscript(aligned));
+    			    calcMetadata(record, group, result.metadata, 
+    			    		(match.value == null ? null : new IPATranscript(match.value)), 
+    			    		(aligned == null ? null : new IPATranscript(aligned)) );
     			} else {
-    				calcMetadata(record, group, result.metadata, new IPATranscript(match.value), null);
+    				calcMetadata(record, group, result.metadata, 
+    						(match.value == null ? null : new IPATranscript(match.value)), null);
     			}
     			
     			results.addResult(result);
