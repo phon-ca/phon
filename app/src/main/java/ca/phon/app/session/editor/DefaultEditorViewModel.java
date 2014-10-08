@@ -924,14 +924,18 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		// get a perspective name
 		final String layoutName = JOptionPane.showInputDialog("Enter layout name:");
 		
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setTitle("Unable to save layout");
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setOptions(MessageDialogProperties.okOptions);
 		if(layoutName == null || layoutName.trim().length() == 0) {
-			final Toast toast = ToastFactory.makeToast("You must enter a layout name!");
-			toast.start(getEditor());
+			props.setMessage("You must enter a layout name");
+			NativeDialogs.showMessageDialog(props);
 			return;
 		}
 		if(RecordEditorPerspective.getPerspective(layoutName) != null) {
-			final Toast toast = ToastFactory.makeToast("Layout named " + layoutName + " already exists.");
-			toast.start(getEditor());
+			props.setMessage("Layout named " + layoutName + " already exists");
+			NativeDialogs.showMessageDialog(props);
 			return;
 		}
 		
