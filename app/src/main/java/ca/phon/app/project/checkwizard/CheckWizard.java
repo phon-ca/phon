@@ -123,15 +123,7 @@ public class CheckWizard extends WizardFrame {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			
-			final StringBuilder sb = new StringBuilder();
 			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
-			sb.append('\"').append("Record #").append('\"').append(',');
-			sb.append('\"').append("Tier").append('\"').append(',');
-			sb.append('\"').append("Group").append('\"').append(',');
-			sb.append('\"').append("Error").append('\"');
-			out.println(sb.toString());
-			
 			Session session = null;
 			try {
 				session = getProject().openSession(corpusName, sessionName);
@@ -151,11 +143,6 @@ public class CheckWizard extends WizardFrame {
 				checkTier(i, record.getIPATarget(), out);
 				checkTier(i, record.getIPAActual(), out);
 			}
-			out.flush();
-			out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
-			out.flush();
-			out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
-			out.flush();
 			
 			super.setStatus(TaskStatus.FINISHED);
 		}
@@ -166,6 +153,7 @@ public class CheckWizard extends WizardFrame {
 				// check for 'UnvalidatedValue's
 				final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
 				if(uv != null) {
+					out.print("\"" + corpusName + "." + sessionName + "\",");
 					out.print("\"" + (record+1) + "\",");
 					out.print("\"" + tier.getName() + "\",");
 					out.print("\"" + (gIdx+1) + "\",");
@@ -355,9 +343,20 @@ public class CheckWizard extends WizardFrame {
 			worker = PhonWorker.createWorker();
 			worker.setFinishWhenQueueEmpty(true);
 			worker.setName("Check transcriptions");
-//			showBusyLabel(bufferPanel);
-			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
 			
+			if(!bufferPanel.isShowingBuffer()) {
+				bufferPanel.onSwapBuffer();
+				bufferPanel.getLogBuffer().setText("");
+			}
+			
+			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
+			final StringBuilder sb = new StringBuilder();
+			sb.append('\"').append("Session").append('\"').append(',');
+			sb.append('\"').append("Record #").append('\"').append(',');
+			sb.append('\"').append("Tier").append('\"').append(',');
+			sb.append('\"').append("Group").append('\"').append(',');
+			sb.append('\"').append("Error").append('\"');
+			out.println(sb.toString());
 			
 			Runnable toRun = new Runnable() {
 				@Override
@@ -372,6 +371,7 @@ public class CheckWizard extends WizardFrame {
 					out.flush();
 					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
 					out.flush();
+					
 				}
 			};
 			worker.invokeLater(toRun);
@@ -396,6 +396,10 @@ public class CheckWizard extends WizardFrame {
 					SwingUtilities.invokeLater(turnOffBack);
 					out.flush();
 					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
+					out.flush();
+					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+					out.flush();
+					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
 					out.flush();
 				}
 			};
