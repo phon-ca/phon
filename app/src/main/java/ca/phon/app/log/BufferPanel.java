@@ -224,6 +224,7 @@ public class BufferPanel extends JPanel {
 		if(showingBuffer) {
 			final CSVReader reader = new CSVReader(new StringReader(logBuffer.getText()));
 			final CSVTableModel tableModel = new CSVTableModel(reader);
+			tableModel.setUseFirstRowAsHeader(firstRowAsHeaderBox.isSelected());
 			dataTable.setModel(tableModel);
 			
 			remove(logScroller);
