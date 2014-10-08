@@ -399,7 +399,7 @@ public class WavDisplay extends JComponent {
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			
+			if(_segmentInfo == null) return;
 			synchronized(_playing) {
 				if(_playing) return;
 			}
