@@ -245,6 +245,13 @@ public class ParamComponentFactory {
 				}
 			}
 		});
+		param.addPropertyChangeListener(StringScriptParam.TOOLTIP_TEXT_PROP, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				textField.setToolTipText((String)evt.getNewValue());
+			}
+		});
 	}
 	
 	private void installLabelParamListener(final JLabel label, final LabelScriptParam param) {

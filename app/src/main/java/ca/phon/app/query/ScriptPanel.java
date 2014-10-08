@@ -40,7 +40,9 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.StringScriptParam;
 import ca.phon.script.params.ui.ParamPanelFactory;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -242,6 +244,31 @@ public class ScriptPanel extends JPanel {
 		formBtnPanel = new JPanel(layout);
 		formBtnPanel.add(scriptViewButton);
 		add(formBtnPanel, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * Check script params
+	 * 
+	 * @return <code>true</code> if script params all validate,
+	 *  <code>false</code> otherwise
+	 */
+	public boolean checkParams() {
+		ScriptParameters params;
+		try {
+			params = getScript().getContext().getScriptParameters(getScript().getContext().getEvaluatedScope());
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			return false;
+		}
+		for(ScriptParam sp:params) {
+			if(sp.getParamType().equals("string")) {
+				final StringScriptParam stringParam = (StringScriptParam)sp;
+				if(!stringParam.isValidate()) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	private boolean showingForm = false;

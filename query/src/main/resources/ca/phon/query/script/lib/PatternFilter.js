@@ -89,19 +89,17 @@ exports.PatternFilter = function (id) {
         matchGroupParam.setVisible(visible);
     };
     
-    var setPatternFilterInvalid = function (textField, message, loc) {
+    var setPatternFilterInvalid = function (message, loc) {
         var msg = (loc >= 0 ?
         "Error at index " + loc + ": " + message:
         message);
        	filterParam.setValidate(false);
-        //        textField.setToolTipText(msg);
-        //        textField.setState("UNDEFINED");
+       	filterParam.setTooltipText(message);
     };
     
-    var setPatternFilterOk = function (textField) {
+    var setPatternFilterOk = function () {
     	filterParam.setValidate(true);
-        //        textField.setToolTipText("");
-        //        textField.setState("INPUT");
+    	filterParam.setTooltipText(null);
     };
     
     /**

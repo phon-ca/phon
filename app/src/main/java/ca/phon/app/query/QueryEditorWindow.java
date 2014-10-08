@@ -65,6 +65,7 @@ import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.script.params.ScriptParam;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.PhonLoggerConsole;
@@ -125,6 +126,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	private JButton saveButton;
 	private JButton saveAsButton;
 	private JButton openButton;
+	private JButton execButton;
 	
 	public QueryEditorWindow(String title, Project project) {
 		super(title);
@@ -229,8 +231,8 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		positionLabel = new JLabel();
 		positionLabel.setFont(positionLabel.getFont().deriveFont(10.0f));
 		
-		JButton execLabel = new JButton("Run Query");
-		execLabel.addActionListener(new ActionListener() {
+		execButton = new JButton("Run Query");
+		execButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -238,13 +240,13 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			}
 			
 		});
-		getRootPane().setDefaultButton(execLabel);
+		getRootPane().setDefaultButton(execButton);
 		
 		CellConstraints cc = new CellConstraints();
 		
 		bottomPanel.add(positionLabel, cc.xy(1, 1));
 		bottomPanel.add(includeExcludedBox, cc.xy(1, 2));
-		bottomPanel.add(execLabel, cc.xy(3, 2));
+		bottomPanel.add(execButton, cc.xy(3, 2));
 		
 		
 		final JPanel editorPanel = new JPanel(new BorderLayout());
@@ -544,12 +546,16 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			return;
 		}
 		
+		if(!scriptEditor.checkParams()) {
+			final Toast toast = ToastFactory.makeToast("Invalid paramters, please check query form");
+			toast.start(execButton);
+			return;
+		}
 		
         // create ui
         PhonLoggerConsole errDisplay = new PhonLoggerConsole();
         errDisplay.addLogger(LOGGER);
         
-        final PhonWorkerGroup workerGroup = new PhonWorkerGroup(1);
         final QueryScript script = scriptEditor.getScript();
        
         final List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();

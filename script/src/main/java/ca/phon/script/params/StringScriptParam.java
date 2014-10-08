@@ -29,9 +29,13 @@ public class StringScriptParam extends ScriptParam {
 	
 	public static final String VALIDATE_PROP = StringScriptParam.class.getName() + ".validate";
 	
+	public static final String TOOLTIP_TEXT_PROP = StringScriptParam.class.getName() + ".tooltipText";
+	
 	private String promptText = new String();
 	
 	private boolean validate = true;
+	
+	private String tooltipText = null;
 	
 	/**
 	 * Constructor
@@ -84,6 +88,14 @@ public class StringScriptParam extends ScriptParam {
 		super.propSupport.firePropertyChange(VALIDATE_PROP, old, this.validate);
 	}
 	
+	public void setTooltipText(String tooltipText) {
+		String oldVal = this.tooltipText;
+		this.tooltipText = tooltipText;
+		super.propSupport.firePropertyChange(TOOLTIP_TEXT_PROP, oldVal, this.tooltipText);
+	}
 	
+	public String getTooltipText() {
+		return this.tooltipText;
+	}
 	
 }
