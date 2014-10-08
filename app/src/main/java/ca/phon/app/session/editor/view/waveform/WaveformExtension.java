@@ -12,8 +12,8 @@ import ca.phon.plugin.PhonPlugin;
  * Waveform view extension point for the {@link SessionEditor}
  *
  */
-@PhonPlugin(name="Waveform")
-@EditorViewInfo(name="Waveform", category=EditorViewCategory.MEDIA, icon="misc/oscilloscope")
+@PhonPlugin(name=WaveformEditorView.VIEW_TITLE)
+@EditorViewInfo(name=WaveformEditorView.VIEW_TITLE, category=EditorViewCategory.MEDIA, icon="misc/oscilloscope")
 public class WaveformExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

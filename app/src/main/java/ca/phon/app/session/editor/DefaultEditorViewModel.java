@@ -410,7 +410,15 @@ public class DefaultEditorViewModel implements EditorViewModel {
 					int width = boundsEle.getAttribute("width").getInt();
 					int height = boundsEle.getAttribute("height").getInt();
 					
-					getEditor().setBounds(x, y, width, height);
+					if(width >= 0 && height >= 0) {
+						getEditor().setSize(width, height);
+					}
+					if(x >= 0 && y >= 0) {
+						getEditor().setLocation(x, y);
+					} else {
+						if(!getEditor().isVisible())
+							getEditor().cascadeWindow(CommonModuleFrame.getCurrentFrame());
+					}
 					boundsSet = true;
 				}
 				
@@ -428,7 +436,14 @@ public class DefaultEditorViewModel implements EditorViewModel {
 						int width = winEle.getAttribute("width").getInt();
 						int height = winEle.getAttribute("height").getInt();
 						
-						window.setBounds(x, y, width, height);
+						if(width >= 0 && height >= 0) {
+							window.setSize(width, height);
+						}
+						if(x >= 0 && y >= 0) {
+							window.setLocation(x, y);
+						} else {
+							window.cascadeWindow(getEditor());
+						}
 						window.setVisible(true);
 					}
 				}

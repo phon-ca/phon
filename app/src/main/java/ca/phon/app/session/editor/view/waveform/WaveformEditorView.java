@@ -108,7 +108,7 @@ public class WaveformEditorView extends EditorView {
 	private static final Logger LOGGER = Logger
 			.getLogger(WaveformEditorView.class.getName());
 
-	public static final String VIEW_TITLE = "Waveform";
+	public static final String VIEW_TITLE = "Speech Analysis";
 
 	private JPanel contentPane;
 	
