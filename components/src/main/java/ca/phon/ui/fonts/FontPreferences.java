@@ -91,7 +91,7 @@ public class FontPreferences {
 	 */
 	public final static String TITLE_FONT = FontPreferences.class.getName() + ".titleFont";
 	
-	public final static String DEFAULT_TITLE_FONT = "Liberation Sans-BOLD-14";
+	public final static String DEFAULT_TITLE_FONT = "Liberation Sans-PLAIN-14";
 	
 	public static Font getTitleFont() {
 		return PrefHelper.getFont(TITLE_FONT, Font.decode(DEFAULT_TITLE_FONT));
