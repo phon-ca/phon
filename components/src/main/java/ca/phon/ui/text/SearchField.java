@@ -23,6 +23,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
@@ -33,6 +34,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -190,7 +192,8 @@ public class SearchField extends JPanel {
 		add(endButton, cc.xy(5,1));
 		
 		setBorder(queryField.getBorder());
-		queryField.setBorder(null);
+		final Insets insets = queryField.getBorder().getBorderInsets(queryField);
+		queryField.setBorder(BorderFactory.createEmptyBorder(insets.top, insets.left, insets.bottom, insets.right));
 	}
 	
 	@Override
