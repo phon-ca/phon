@@ -27,8 +27,8 @@ public class ReportSectionPanel extends SectionPanel<ReportDesign> {
 	 * Help text
 	 */
 	private final static String INFO_TEXT = 
-		"<html><p><i>Report Outline</i></p><p>To add/remove sections to the report, use the <img width='12' height='12' src='${section_add_img}' alt='+'/>" +
-		"and <img width='12' height='12' src='${section_remove_img}' alt='-'/> buttons in the report outline.</p>" +
+		"<html><p><i>Report Outline</i></p><p>To add/remove sections to the report, use the up " +
+		"and down buttons in the report outline.</p>" +
 		"<p>Use the 'Result Sets' tab to select result sets displayed in the report.</p>" +
 		"</html>";
 
