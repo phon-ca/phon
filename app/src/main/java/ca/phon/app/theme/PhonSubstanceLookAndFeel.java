@@ -12,6 +12,11 @@ public class PhonSubstanceLookAndFeel extends SubstanceLookAndFeel {
 
 	public PhonSubstanceLookAndFeel() {
 		super(new PhonSubstanceSkin());
+	}
+
+	@Override
+	public UIDefaults getDefaults() {
+		final UIDefaults retVal = super.getDefaults();
 		
 		SubstanceLookAndFeel.setFontPolicy(null);
         
@@ -24,13 +29,6 @@ public class PhonSubstanceLookAndFeel extends SubstanceLookAndFeel {
         };
 
 		SubstanceLookAndFeel.setFontPolicy(newFontPolicy);
-	}
-
-	@Override
-	public UIDefaults getDefaults() {
-		final UIDefaults retVal = super.getDefaults();
-		
-		
 		
 		return retVal;
 	}
