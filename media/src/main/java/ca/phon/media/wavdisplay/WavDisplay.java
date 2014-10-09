@@ -277,36 +277,19 @@ public class WavDisplay extends JComponent {
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
 			_loading = true;
-//			repaint();
 			
 			try {
-//				if(_audioInfo != null) {
-//					_audioInfo = null;
-//					_channelDisplays.clear();
-////					System.gc();
-//				}
-//				AudioInputStream audioInputStream = 
-//					AudioSystem.getAudioInputStream(_file);
-//				_audioInfo = new AudioInfo(audioInputStream);
-				
 				// create a task for the EVT thread
 				Runnable run = new Runnable() {
 					@Override
 					public void run() {
 						if(_audioInfo == null) return;
 						
-//						WavHelper _segInfo = 
-//							_audioInfo.getSegment(_dipslayOffset, _displayLength);
 						
 						MouseTimeListener mListener = new MouseTimeListener();
-//						_timeBar.setSegStart(500);
-//						_timeBar.setSegLength(3000);
-						_timeBar.setStartMs(_displayOffset);
-						_timeBar.setEndMs(_displayOffset+_displayLength);
-//						_timeBar.setEndMs((long)segmentInfo.timeForFile());
+						
 						_timeBar.addMouseMotionListener(mListener);
 						_timeBar.addMouseListener(mListener);
-						
 						
 						_channelPanel.removeAll();
 						
@@ -316,15 +299,10 @@ public class WavDisplay extends JComponent {
 							ChannelDisplay cd = new ChannelDisplay(segmentInfo, channel, WavDisplay.this);
 							cd.addMouseMotionListener(mListener);
 							cd.addMouseListener(mListener);
-//							_channelDisplays.add(cd);
 							_channelPanel.add(cd);
 						}
 						_timeBar.repaint();
 						revalidate();
-//						JFrame parentFrame = 
-//							(JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, WavDisplay.this);
-//						if(parentFrame != null)
-//							parentFrame.pack();
 					}
 				};
 				SwingUtilities.invokeLater(run);
@@ -432,6 +410,7 @@ public class WavDisplay extends JComponent {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			if(_segmentInfo == null) return;
 			synchronized(_playing) {
 				if(_playing) return;
 			}
@@ -457,6 +436,7 @@ public class WavDisplay extends JComponent {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
+			if(_segmentInfo == null) return;
 			synchronized(_playing) {
 				if(_playing) return;
 			}
@@ -479,6 +459,7 @@ public class WavDisplay extends JComponent {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			if(_segmentInfo == null) return;
 			synchronized(_playing) {
 				if(_playing) return;
 			}
@@ -604,7 +585,6 @@ public class WavDisplay extends JComponent {
 		this._displayLength = dur;
 		
 		_segmentInfo = _audioInfo.getSegment(_displayOffset, _displayLength);
-//		this._worker.invokeLater(new AudioExporter(bigFile, start, dur));
 		this._worker.invokeLater(new SampleLoader(_segmentInfo));
 	}
 	

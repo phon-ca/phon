@@ -568,9 +568,11 @@ public class WaveformEditorView extends EditorView {
 				long displayLength = 
 					segLength + (2*preferredClipExtension);
 				
-				wavDisplay.load(displayStart, displayLength);
 				wavDisplay.get_timeBar().setSegStart((int)segment.getStartValue());
 				wavDisplay.get_timeBar().setSegLength(segLength);
+				wavDisplay.get_timeBar().setStartMs(displayStart);
+				wavDisplay.get_timeBar().setEndMs(displayStart+displayLength);
+				wavDisplay.load(displayStart, displayLength);
 				
 				if(msgLabel.isVisible()) {
 					msgLabel.setVisible(false);
