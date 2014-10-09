@@ -147,7 +147,7 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		monospaceBtn.setSelectedFont(FontPreferences.getMonospaceFont());
 		
 		final JPanel uiFontsPanel = new JPanel(new VerticalLayout());
-		uiFontsPanel.add(fontSizePanel);
+//		uiFontsPanel.add(fontSizePanel);
 		uiFontsPanel.add(controlFontBtn);
 		uiFontsPanel.add(menuFontBtn);
 		uiFontsPanel.add(titleFontBtn);

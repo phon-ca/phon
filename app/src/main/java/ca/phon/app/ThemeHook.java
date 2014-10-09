@@ -11,13 +11,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.pushingpixels.lafwidget.LafWidget;
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel;
-
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.theme.PhonSubstanceLookAndFeel;
+import ca.phon.app.theme.PhonWindowsLookAndFeel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
@@ -54,18 +51,11 @@ public class ThemeHook implements PhonStartupHook,
 					try {
 						final String uiClassName = PrefHelper.get(
 								PhonProperties.UI_THEME,
-								PhonSubstanceLookAndFeel.class.getName());
-						if (uiClassName != null) {
+								OSInfo.isMacOs() ? PhonSubstanceLookAndFeel.class.getName()
+										: PhonWindowsLookAndFeel.class.getName()
+								);
+						if(uiClassName != null)
 							UIManager.setLookAndFeel(uiClassName);
-							UIManager.put(
-									SubstanceLookAndFeel.COLORIZATION_FACTOR,
-									1.0);
-							UIManager.put(
-									SubstanceLookAndFeel.SHOW_EXTRA_WIDGETS,
-									Boolean.TRUE);
-							UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU,
-									Boolean.TRUE);
-						}
 					} catch (UnsupportedLookAndFeelException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					} catch (ClassNotFoundException e) {

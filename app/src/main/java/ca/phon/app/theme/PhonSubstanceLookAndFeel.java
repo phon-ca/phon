@@ -1,6 +1,10 @@
 package ca.phon.app.theme;
 
+import javax.swing.UIDefaults;
+
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.fonts.FontPolicy;
+import org.pushingpixels.substance.api.fonts.FontSet;
 
 public class PhonSubstanceLookAndFeel extends SubstanceLookAndFeel {
 
@@ -8,6 +12,28 @@ public class PhonSubstanceLookAndFeel extends SubstanceLookAndFeel {
 
 	public PhonSubstanceLookAndFeel() {
 		super(new PhonSubstanceSkin());
+		
+		SubstanceLookAndFeel.setFontPolicy(null);
+        
+        // Create the wrapper font set
+        FontPolicy newFontPolicy = new FontPolicy() {
+          public FontSet getFontSet(String lafName,
+              UIDefaults table) {
+            return new PhonUIFontSet();
+          }
+        };
+
+		SubstanceLookAndFeel.setFontPolicy(newFontPolicy);
 	}
+
+	@Override
+	public UIDefaults getDefaults() {
+		final UIDefaults retVal = super.getDefaults();
+		
+		
+		
+		return retVal;
+	}
+	
 
 }

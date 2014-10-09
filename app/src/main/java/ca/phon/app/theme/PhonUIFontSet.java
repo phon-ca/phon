@@ -1,4 +1,4 @@
-package ca.phon.app.fonts;
+package ca.phon.app.theme;
 
 import javax.swing.plaf.FontUIResource;
 
