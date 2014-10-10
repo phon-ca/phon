@@ -148,7 +148,7 @@ public class TestIPAParserErrors {
 			IPATranscript.parseIPATranscript(txt);
 			Assert.fail(txt + " passed");
 		} catch (ParseException pe) {
-			Assert.assertEquals(6, pe.getErrorOffset());
+			Assert.assertEquals(3, pe.getErrorOffset());
 		}
 	}
 	
@@ -169,6 +169,16 @@ public class TestIPAParserErrors {
 			Assert.fail(txt + " passed");
 		} catch (ParseException pe) {
 //			Assert.assertEquals(InvalidTokenException.class, pe.getSuppressed()[0].getClass());
+			Assert.assertEquals(2, pe.getErrorOffset());
+		}
+	}
+	
+	@Test
+	public void testIntrWordNumber() throws ParseException {
+		final String txt = "he6lo";
+		try {
+			IPATranscript.parseIPATranscript(txt);
+		} catch (ParseException pe) {
 			Assert.assertEquals(2, pe.getErrorOffset());
 		}
 	}

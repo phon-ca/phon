@@ -194,6 +194,12 @@ word_element returns [IPAElement p]
 		$p = $phonex_matcher_ref.phonexMatcherRef;
 	}
 	;
+	catch [NoViableAltException e]
+	{
+		IPAParserException ipae = new IPAParserException(e);
+		ipae.setPositionInLine(e.charPositionInLine);
+		throw ipae;
+	}
 
 /**
  * Stress
@@ -358,6 +364,11 @@ options {
 		$phone.setSuffixDiacritics(suffixDiacritics);
 	}
 	;
+	catch [NoViableAltException e] {
+		IPAParserException ipae = new IPAParserException(e);
+		ipae.setPositionInLine(e.charPositionInLine);
+		throw ipae;
+	}
 	
 prefix_section returns [List<Diacritic> diacritics]
 scope {
