@@ -2,6 +2,7 @@ package ca.phon.app.theme;
 
 import javax.swing.UIDefaults;
 
+import org.pushingpixels.lafwidget.LafWidget;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.fonts.FontPolicy;
 import org.pushingpixels.substance.api.fonts.FontSet;
@@ -29,6 +30,16 @@ public class PhonSubstanceLookAndFeel extends SubstanceLookAndFeel {
         };
 
 		SubstanceLookAndFeel.setFontPolicy(newFontPolicy);
+		
+		retVal.put(
+                SubstanceLookAndFeel.COLORIZATION_FACTOR,
+                1.0);
+		retVal.put(
+                SubstanceLookAndFeel.SHOW_EXTRA_WIDGETS,
+                Boolean.TRUE);
+		retVal.put(LafWidget.TEXT_EDIT_CONTEXT_MENU,
+                Boolean.TRUE);
+
 		
 		return retVal;
 	}
