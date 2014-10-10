@@ -9,6 +9,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +28,10 @@ import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogAdapter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.OpenFileLauncher;
 
 public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
@@ -30,10 +39,52 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 			.getLogger(FontLoaderStartupHook.class.getName());
 	
 	private final static String FONT_LIST = "data/fonts/fonts.list";
+	
+	private final static String FONT_INFO_PAGE = "https://www.phon.ca/phontrac/wiki/Fonts";
 
 	@Override
 	public void startup() throws PluginException {
+		checkFonts();
 //		loadFonts();
+	}
+	
+	private void checkFonts() {
+		final String[] fontNames = new String[] {
+			"Liberation Sans", "Liberation Mono", "Charis SIL", "Charis SIL Compact"	
+		};
+		final Set<String> fontSet = new HashSet<String>();
+		fontSet.addAll(Arrays.asList(fontNames));
+		final String[] allFonts = 
+				GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		for(String systemFont:allFonts) {
+			if(fontSet.contains(systemFont)) {
+				fontSet.remove(systemFont);
+			}
+		}
+		
+		if(fontSet.size() > 0) {
+			String message = "The following fonts were not found on your computer:";
+			for(String fontName:fontSet) {
+				message += " " + fontName;
+			}
+			message += ". For best results, please install these fonts.";
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setMessage(message);
+			props.setTitle("Unable to find required fonts");
+			props.setOptions(new String[]{"More Information", "Ok"});
+			props.setRunAsync(false);
+			
+			int retVal = NativeDialogs.showMessageDialog(props);
+			if(retVal == 0) {
+				// show information page
+				try {
+					OpenFileLauncher.openURL(new URL(FONT_INFO_PAGE));
+				} catch (MalformedURLException e) {
+					LOGGER
+							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+			}
+		}
 	}
 	
 	private void loadFonts() throws PluginException {
