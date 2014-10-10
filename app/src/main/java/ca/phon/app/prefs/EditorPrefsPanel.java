@@ -144,7 +144,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		
 		final PhonUIAction backupAct = new PhonUIAction(this, "toggleBackupWhenSave");
 		backupAct.putValue(PhonUIAction.NAME, "Backup session file to <project>" + File.separator + 
-				"__backup" + File.separator + "<corpus>" + File.separator + " when saving sessions.");
+				"backups.zip when saving sessions.");
 		backupAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SessionEditor.BACKUP_WHEN_SAVING, true));
 		backupWhenSaveBox = new JCheckBox(backupAct);
 		
