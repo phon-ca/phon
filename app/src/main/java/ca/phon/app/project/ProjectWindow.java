@@ -17,6 +17,7 @@
  */
 package ca.phon.app.project;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -53,6 +55,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputAdapter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -370,10 +374,8 @@ public class ProjectWindow extends CommonModuleFrame
 //					msgPanel.add(new JLabel("Opening '" + corpus + "." + session + "'"));
 //					msgPanel.revalidate();
 					msgPanel.reset();
-					msgPanel.allowCancel(false);
 					msgPanel.setMessageLabel("Opening '" + corpus + "." + session + "'");
 					msgPanel.setItermediate(true);
-					msgPanel.showPanel(true);
 //					msgPanel.revalidate();
 					
 //					SwingUtilities.invokeLater(new Runnable() {
@@ -389,8 +391,6 @@ public class ProjectWindow extends CommonModuleFrame
 						public void run() {
 							openSession(corpus, session);
 							msgPanel.setItermediate(false);
-							msgPanel.showPanel(false);
-//							msgPanel.showPanel(false);
 						}
 					};
 					PhonWorker.getInstance().invokeLater(th);
@@ -431,8 +431,6 @@ public class ProjectWindow extends CommonModuleFrame
 		blindModeBox.setSelected(false);
 		
 		msgPanel = new MessagePanel();
-		msgPanel.showPanel(false);
-//		msgPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		
 		JPanel innerPanel = new JPanel(innerLayout);
@@ -451,83 +449,25 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		
 		// the frame layout
-		FormLayout frameLayout = new FormLayout(
-				"5dlu, fill:pref:grow, 5dlu, right:pref, 5dlu",
-				"pref, 3dlu, 40px, fill:pref:grow, 5dlu");
-		
 		String projectName = null;
 		projectName = getProject().getName();
 		
 		DialogHeader header = new DialogHeader(projectName,
 				StringUtils.abbreviate(projectLoadPath, 80));
-//				StringUtils.shortenStringUsingToken(projectLoadPath, "...", 80));
 		
-		getContentPane().setLayout(frameLayout);
-		getContentPane().add(header, cc.xyw(1,1,5));
-		getContentPane().add(msgPanel, cc.xy(2,3));
-		getContentPane().add(blindModeBox, cc.xy(4,3));
-		getContentPane().add(innerPanel, cc.xyw(2, 4, 3));
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(header, BorderLayout.NORTH);
+
+		final JPanel topPanel = new JPanel(new FormLayout("pref, fill:pref:grow, right:pref", "pref"));
+		topPanel.add(msgPanel, cc.xy(1,1));
+		topPanel.add(blindModeBox, cc.xy(3, 1));
+		final JPanel cPane = new JPanel(new BorderLayout());
+		cPane.add(topPanel, BorderLayout.NORTH);
+		cPane.add(innerPanel, BorderLayout.CENTER);
+		cPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
-//		if(!isRemoteProject()) {
-//			// show the sharing panel
-//			JComponent sharingComp = 
-//				createSharingPanel();
-//			ShrinkPanel sp = new ShrinkPanel("Sharing", sharingComp);
-//			sp.setBorder(BorderFactory.createLineBorder(Color.decode("0xbbbbbb")));
-//			sp.toggleVisible();
-//			
-//			getContentPane().add(sp, cc.xyw(2, 6, 2));
-//		}
+		getContentPane().add(cPane, BorderLayout.CENTER);
 	}
-	
-//	private JComponent createSharingPanel() {
-//		JPanel retVal = new JPanel();
-//		
-//		FormLayout layout = new FormLayout(
-//				"pref, 3dlu, fill:pref:grow",
-//				"pref, 3dlu, pref:grow");
-//		
-//		shareButton = new JToggleButton("Share Project");
-//		ImageIcon shareIcon = IconManager.getInstance().getIcon(
-//				"apps/internet-web-browser", IconSize.MEDIUM);
-//		shareButton.setIcon(shareIcon);
-//		shareButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-//		shareButton.setHorizontalTextPosition(SwingConstants.CENTER);
-//		shareButton.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				if(ProjectRMIServer.getInstance().getSharedProjects().contains(project)) {
-//					ProjectRMIServer.getInstance().unRegisterProject(project);
-//					
-//					sharingStatusLabel.setText("Not sharing project");
-//					rmiPathLabel.setText("rmi://");
-//				} else {
-//					String rmiPath = 
-//						ProjectRMIServer.getInstance().registerProject(project);
-//					
-//					if(rmiPath != null) {
-//					sharingStatusLabel.setText("Sharing project as:");
-//					rmiPathLabel.setText(rmiPath);
-//					}
-//				}
-//			}
-//			
-//		});
-//		
-//		sharingStatusLabel = new JLabel("Not sharing project");
-//		
-//		rmiPathLabel = new JLabel("rmi://");
-//		
-//		CellConstraints cc = new CellConstraints();
-//		
-//		retVal.setLayout(layout);
-//		
-//		retVal.add(shareButton, cc.xywh(1, 1, 1, 3));
-//		retVal.add(sharingStatusLabel, cc.xy(3, 1));
-//		retVal.add(rmiPathLabel, cc.xy(3, 3));
-//		
-//		return retVal;
-//	}
 	
 	/**
 	 * Opens a session.  If the 'Multi-blind' mode box is 
@@ -1167,9 +1107,8 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 	
 	private class MessagePanel extends JComponent {
-		private JLabel msgLabel = new JLabel("Hello World");
-		private JProgressBar progressBar = new JProgressBar();
-		private JButton cancelButton = new JButton();
+		private JLabel msgLabel = new JLabel("");
+		private JXBusyLabel progressBar = new JXBusyLabel(new Dimension(16, 16));
 		
 		public MessagePanel() {
 			super();
@@ -1177,73 +1116,19 @@ public class ProjectWindow extends CommonModuleFrame
 		}
 		
 		private void init() {
-			FormLayout layout = new FormLayout(
-					"fill:default:grow, pref",
-					"pref, pref");
-			setLayout(layout);
-			CellConstraints cc = new CellConstraints();
+			setLayout(new HorizontalLayout(3));
 			
-			progressBar.setMaximumSize(new Dimension(250, 20));
-			
-			// by default the cancel button is not shown
-			cancelButton.setIcon(IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
-			cancelButton.setToolTipText("Stop Task");
-			cancelButton.setVisible(false);
-			cancelButton.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					cancelButton.setEnabled(false);
-				}
-				
-			});
-			
-			add(msgLabel, cc.xy(1,1));
-			add(progressBar, cc.xy(1,2));
-			add(cancelButton, cc.xy(2,2));
+			add(progressBar);
+			add(msgLabel);
 		}
 		
-		public void allowCancel(boolean v) {
-			final boolean val = v;
+		public void setItermediate(final boolean v) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				public void run() {
-					cancelButton.setEnabled(val);
-					cancelButton.setVisible(val);
-				}
-				
-			});
-		}
-		
-		public void setItermediate(boolean v) {
-			final boolean val = v;
-			SwingUtilities.invokeLater(new Runnable() {
-
-				public void run() {
-					progressBar.setIndeterminate(val);
-				}
-				
-			});
-		}
-		
-		public void setProgressBarValue(int v) {
-			final int val = v;
-			SwingUtilities.invokeLater(new Runnable() {
-
-				public void run() {
-					progressBar.setValue(val);
-				}
-				
-			});
-		}
-		
-		public void setProgressBarRange(int min, int max) {
-			final int minimum = min;
-			final int maximum = max;
-			SwingUtilities.invokeLater(new Runnable() {
-
-				public void run() {
-					progressBar.setMinimum(minimum);
-					progressBar.setMaximum(maximum);
+					progressBar.setBusy(v);
+					if(!v) 
+						msgLabel.setText("");
 				}
 				
 			});
@@ -1260,30 +1145,11 @@ public class ProjectWindow extends CommonModuleFrame
 			});
 		}
 		
-		public boolean isCanceled() {
-			return (cancelButton.isVisible() && !cancelButton.isEnabled());
-		}
-		
 		public void reset() {
-			setItermediate(true);
+			setItermediate(false);
 			setMessageLabel("");
-			allowCancel(false);
 		}
 		
-		public void showPanel(boolean v) {
-			final boolean val = v;
-			SwingUtilities.invokeLater(new Runnable() {
-
-				public void run() {
-					msgLabel.setVisible(val);
-					progressBar.setVisible(val);
-					
-					if(cancelButton.isVisible() && !val)
-						cancelButton.setVisible(false);
-				}
-				
-			});
-		}
 	}
 	
 }
