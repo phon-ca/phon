@@ -237,6 +237,10 @@ exports.PatternFilter = function (id) {
         }
     };
     
+    this.set_required = function(required) {
+    	filterParam.setRequired(required);
+    }
+    
     this.param_setup = function (params) {
         // don't add a separator as this filter may be used inside a parent filter
         matchGroupParam = new MultiboolScriptParam(

@@ -54,6 +54,11 @@ exports.TierFilter = function(id) {
 	    return this.patternFilter.check_filter(tier);
 	};
 	
+	this.set_required = function(required) {
+		tierParam.setRequired(true);
+		this.patternFilter.set_required(true);
+	}
+	
 	this.filter_groups = function(record, groups) {
 	    var retVal = new Array();
 	    

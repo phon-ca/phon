@@ -35,6 +35,8 @@ public class StringScriptParam extends ScriptParam {
 	
 	private boolean validate = true;
 	
+	private boolean required = false;
+	
 	private String tooltipText = null;
 	
 	/**
@@ -79,7 +81,15 @@ public class StringScriptParam extends ScriptParam {
 	}
 
 	public boolean isValidate() {
-		return validate;
+		return (isRequired() ? getValue(getParamId()).toString().length() > 0 && validate : validate);
+	}
+	
+	public boolean isRequired() {
+		return this.required;
+	}
+	
+	public void setRequired(boolean required) {
+		this.required = required;
 	}
 
 	public void setValidate(boolean validate) {

@@ -25,6 +25,7 @@ var filters = {
 
 function setup_params(params) {
     filters.primary.param_setup(params);
+    filters.primary.set_required(true);
     
     filters.group.param_setup(params);
     var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");

@@ -56,6 +56,7 @@ function setup_params(params) {
 
 	filters.primary.setSelectedPatternType(PatternType.PHONEX);
 	filters.primary.param_setup(params);
+	filters.primary.set_required(true);
 	
 	// setup result filter section
 	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
