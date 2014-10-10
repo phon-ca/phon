@@ -547,7 +547,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		}
 		
 		if(!scriptEditor.checkParams()) {
-			final Toast toast = ToastFactory.makeToast("Invalid paramters, please check query form");
+			final Toast toast = ToastFactory.makeToast("Invalid parameters, please check query form");
 			toast.start(execButton);
 			return;
 		}
