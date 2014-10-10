@@ -438,7 +438,6 @@ public class RecordDataEditorView extends EditorView {
 			});
 			
 			recNumField = new RecordNumberField(1, getEditor().getSession().getRecordCount());
-			recNumField.setEnabled(false);
 			recNumField.setColumns(3);
 			recNumField.setText("" + (getEditor().getCurrentRecordIndex()+1));
 			final PhonUIAction moveRecordAct = new PhonUIAction(this, "moveRecord");
@@ -466,6 +465,7 @@ public class RecordDataEditorView extends EditorView {
 				}
 				
 			});
+			recNumField.setEnabled(false);
 			
 			final CellConstraints cc = new CellConstraints();
 			int rowIdx = 1;
