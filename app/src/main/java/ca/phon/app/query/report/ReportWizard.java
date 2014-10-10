@@ -22,6 +22,7 @@ import java.awt.ComponentOrientation;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +31,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -277,6 +279,11 @@ public class ReportWizard extends WizardFrame {
 		worker.setName("Report");
 		worker.setFinishWhenQueueEmpty(true);
 		
+		final PrintWriter out = new PrintWriter(console.getLogBuffer().getStdOutStream());
+		out.flush();
+		out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
+		out.flush();
+		
 		Runnable onStart = new Runnable() {
 			@Override
 			public void run() {
@@ -285,7 +292,6 @@ public class ReportWizard extends WizardFrame {
 					public void run() {
 						btnBack.setEnabled(false);
 						btnCancel.setText("Cancel");
-						showBusyLabel(console);
 						if(!console.isShowingBuffer()) {
 							console.getLogBuffer().setText("");
 							console.onSwapBuffer();
@@ -304,8 +310,10 @@ public class ReportWizard extends WizardFrame {
 					public void run() {
 						btnBack.setEnabled(true);
 						btnCancel.setText("Close");
-						stopBusyLabel();
 						console.onSwapBuffer();
+						out.flush();
+						out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
+						out.flush();
 						console.setFirstRowIsHeader(false);
 						btnBack.setVisible(true);
 						btnFinish.setVisible(true);
