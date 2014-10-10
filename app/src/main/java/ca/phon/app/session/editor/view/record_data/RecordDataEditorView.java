@@ -3,11 +3,13 @@ package ca.phon.app.session.editor.view.record_data;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -29,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -184,7 +187,7 @@ public class RecordDataEditorView extends EditorView {
 		
 		recordIdLbl = new JLabel();
 		recordIdLbl.setFont(font);
-
+		
 		statusPanel.add(idLbl, cc.xy(1,1));
 		statusPanel.add(recordIdLbl, cc.xy(2,1));
 		
@@ -420,8 +423,22 @@ public class RecordDataEditorView extends EditorView {
 					"pref");
 			topPanel = new JPanel(layout);
 			
-			final JLabel recNumLbl = new JLabel("Record #");
+			final JLabel recNumLbl = new JLabel("<html><u>Record #</u></html>");
+			recNumLbl.setForeground(Color.blue);
+			recNumLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			recNumLbl.setToolTipText("Click to edit record position (i.e., move record)");
+			recNumLbl.addMouseListener(new MouseInputAdapter() {
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					recNumField.setEnabled(true);
+					recNumField.requestFocus();
+				}
+				
+			});
+			
 			recNumField = new RecordNumberField(1, getEditor().getSession().getRecordCount());
+			recNumField.setEnabled(false);
 			recNumField.setColumns(3);
 			recNumField.setText("" + (getEditor().getCurrentRecordIndex()+1));
 			final PhonUIAction moveRecordAct = new PhonUIAction(this, "moveRecord");
@@ -440,6 +457,7 @@ public class RecordDataEditorView extends EditorView {
 						if(newNum != initialNum && newNum != getEditor().getCurrentRecordIndex())
 							moveRecord();
 					}
+					recNumField.setEnabled(false);
 				}
 				
 				@Override
