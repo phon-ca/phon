@@ -33,7 +33,7 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 
 	@Override
 	public void startup() throws PluginException {
-		loadFonts();
+//		loadFonts();
 	}
 	
 	private void loadFonts() throws PluginException {
