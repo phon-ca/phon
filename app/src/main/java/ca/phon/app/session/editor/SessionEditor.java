@@ -65,6 +65,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	private final static long serialVersionUID = 2831713307191769522L;
 	
+	public final static String BACKUP_WHEN_SAVING = 
+			SessionEditor.class.getName() + ".backupWhenSaving";
+	private boolean backupWhenSaving = PrefHelper.getBoolean(BACKUP_WHEN_SAVING, Boolean.TRUE);
+	
 	private final static Logger LOGGER = Logger
 			.getLogger(SessionEditor.class.getName());
 	
