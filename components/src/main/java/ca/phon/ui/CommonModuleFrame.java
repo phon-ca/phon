@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -30,6 +31,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -184,8 +186,13 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		if(!OSInfo.isMacOs()) {
 			ImageIcon icon = 
 				IconManager.getInstance().getIcon("apps/database-phon", IconSize.SMALL);
+			ImageIcon largeIcon =
+				IconManager.getInstance().getIcon("apps/database-phon", IconSize.LARGE);
+			ImageIcon xLargIcon =
+				IconManager.getInstance().getIcon("apps/database-phon", IconSize.XLARGE);
+			final Image icons[] = new Image[]{ icon.getImage(), largeIcon.getImage(), xLargIcon.getImage() };
 			if(icon != null) {
-				super.setIconImage(icon.getImage());
+				super.setIconImages(Arrays.asList(icons));
 			}
 		}
 		
