@@ -482,7 +482,7 @@ public class QueryRunnerPanel extends JPanel {
 					
 					if(logBufferRef.get() != null) {
 						final PrintStream outStream = new PrintStream(logBufferRef.get().getStdOutStream());
-				        ctx.redirectStdErr(new PrintStream(logBufferRef.get().getStdErrStream()));
+				        ctx.redirectStdErr(new PrintStream(logBufferRef.get().getStdErrStream(), false, "UTF-8"));
 				        ctx.redirectStdOut(outStream);
 				        
 				        logBufferRef.get().getDocument().addDocumentListener(new DocumentListener() {

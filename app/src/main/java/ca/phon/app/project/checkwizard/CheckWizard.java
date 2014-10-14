@@ -19,6 +19,7 @@ package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.UUID;
@@ -123,41 +124,46 @@ public class CheckWizard extends WizardFrame {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
-			Session session = null;
 			try {
-				session = getProject().openSession(corpusName, sessionName);
-			} catch (IOException e1) {
-				LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
-				return;
-			}
-			
-			for(int i = 0; i < session.getRecordCount(); i++) {
-				if(super.isShutdown()) {
-					super.setStatus(TaskStatus.TERMINATED);
-					return; // get out immediately
+				final OutputStreamWriter out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");
+				Session session = null;
+				try {
+					session = getProject().openSession(corpusName, sessionName);
+				} catch (IOException e1) {
+					LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+					return;
 				}
 				
-				final Record record = session.getRecord(i);
-				
-				checkTier(i, record.getIPATarget(), out);
-				checkTier(i, record.getIPAActual(), out);
+				for(int i = 0; i < session.getRecordCount(); i++) {
+					if(super.isShutdown()) {
+						super.setStatus(TaskStatus.TERMINATED);
+						return; // get out immediately
+					}
+					
+					final Record record = session.getRecord(i);
+					
+					checkTier(i, record.getIPATarget(), out);
+					checkTier(i, record.getIPAActual(), out);
+				}
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 			
 			super.setStatus(TaskStatus.FINISHED);
 		}
 		
-		private void checkTier(int record, Tier<IPATranscript> tier, PrintWriter out) {
+		private void checkTier(int record, Tier<IPATranscript> tier, OutputStreamWriter out) throws IOException {
 			for(int gIdx = 0; gIdx < tier.numberOfGroups(); gIdx++) {
 				final IPATranscript ipa = tier.getGroup(gIdx);
 				// check for 'UnvalidatedValue's
 				final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
 				if(uv != null) {
-					out.print("\"" + corpusName + "." + sessionName + "\",");
-					out.print("\"" + (record+1) + "\",");
-					out.print("\"" + tier.getName() + "\",");
-					out.print("\"" + (gIdx+1) + "\",");
-					out.println("\"" + uv.getParseError().getLocalizedMessage() + "\"");
+					out.write("\"" + corpusName + "." + sessionName + "\",");
+					out.write("\"" + (record+1) + "\",");
+					out.write("\"" + tier.getName() + "\",");
+					out.write("\"" + (gIdx+1) + "\",");
+					out.write("\"" + uv.getValue() + "\",");
+					out.write("\"" + uv.getParseError().getLocalizedMessage() + "\"\n");
 				}
 			}
 			out.flush();
@@ -348,65 +354,80 @@ public class CheckWizard extends WizardFrame {
 				bufferPanel.onSwapBuffer();
 				bufferPanel.getLogBuffer().setText("");
 			}
-			
-			final PrintWriter out = new PrintWriter(bufferPanel.getLogBuffer().getStdOutStream());
-			final StringBuilder sb = new StringBuilder();
-			sb.append('\"').append("Session").append('\"').append(',');
-			sb.append('\"').append("Record #").append('\"').append(',');
-			sb.append('\"').append("Tier").append('\"').append(',');
-			sb.append('\"').append("Group").append('\"').append(',');
-			sb.append('\"').append("Error").append('\"');
-			out.println(sb.toString());
-			
-			Runnable toRun = new Runnable() {
-				@Override
-				public void run() {
-					Runnable turnOffBack = new Runnable() {
-						@Override
-						public void run() {
-							btnBack.setEnabled(false);
+			try {
+				final OutputStreamWriter out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");
+				final StringBuilder sb = new StringBuilder();
+				sb.append('\"').append("Session").append('\"').append(',');
+				sb.append('\"').append("Record #").append('\"').append(',');
+				sb.append('\"').append("Tier").append('\"').append(',');
+				sb.append('\"').append("Group").append('\"').append(',');
+				sb.append('\"').append("Value").append('\"').append(',');
+				sb.append('\"').append("Error").append('\"').append('\n');
+				out.write(sb.toString());
+				out.flush();
+				
+				Runnable toRun = new Runnable() {
+					@Override
+					public void run() {
+						Runnable turnOffBack = new Runnable() {
+							@Override
+							public void run() {
+								btnBack.setEnabled(false);
+							}
+						};
+						SwingUtilities.invokeLater(turnOffBack);
+						try {
+						out.flush();
+						out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
+						out.flush();
+						} catch (IOException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
 						}
-					};
-					SwingUtilities.invokeLater(turnOffBack);
-					out.flush();
-					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
-					out.flush();
-					
+						
+					}
+				};
+				worker.invokeLater(toRun);
+				
+				for(SessionPath sessionLocation:step1.getSelectedSessions()) {
+					PhonTask t = createTask(sessionLocation);
+					worker.invokeLater(t);
 				}
-			};
-			worker.invokeLater(toRun);
-			
-			for(SessionPath sessionLocation:step1.getSelectedSessions()) {
-				PhonTask t = createTask(sessionLocation);
-				worker.invokeLater(t);
+				
+				Runnable atEnd = new Runnable() {
+					@Override
+					public void run() {
+						Runnable turnOffBack = new Runnable() {
+							@Override
+							public void run() {
+								btnBack.setEnabled(true);
+								btnCancel.setEnabled(true);
+								
+								worker = null;
+							}
+						};
+						SwingUtilities.invokeLater(turnOffBack);
+						try {
+							out.flush();
+							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
+							out.flush();
+							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+							out.flush();
+							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
+							out.flush();
+						} catch(IOException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
+						}
+					}
+				};
+				
+				worker.setFinalTask(atEnd);
+				
+				worker.start();
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
-			
-			Runnable atEnd = new Runnable() {
-				@Override
-				public void run() {
-					Runnable turnOffBack = new Runnable() {
-						@Override
-						public void run() {
-							btnBack.setEnabled(true);
-							btnCancel.setEnabled(true);
-							
-							worker = null;
-						}
-					};
-					SwingUtilities.invokeLater(turnOffBack);
-					out.flush();
-					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
-					out.flush();
-					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
-					out.flush();
-					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
-					out.flush();
-				}
-			};
-			
-			worker.setFinalTask(atEnd);
-			
-			worker.start();
 		}
 	}
 	

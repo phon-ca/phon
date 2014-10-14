@@ -22,6 +22,7 @@ import java.awt.ComponentOrientation;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -247,7 +248,11 @@ public class ReportWizard extends WizardFrame {
 		super.next();
 		
 		if(super.getCurrentStep() == reportStep) {
-			generateReport();
+			try {
+				generateReport();
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 		}
 	}
 	
@@ -267,7 +272,7 @@ public class ReportWizard extends WizardFrame {
 		}
 	}
 	
-	private void generateReport() {
+	private void generateReport() throws IOException {
 		// save last design
 		writeAutosaveReport();
 		
@@ -279,9 +284,9 @@ public class ReportWizard extends WizardFrame {
 		worker.setName("Report");
 		worker.setFinishWhenQueueEmpty(true);
 		
-		final PrintWriter out = new PrintWriter(console.getLogBuffer().getStdOutStream());
+		final OutputStreamWriter out = new OutputStreamWriter(console.getLogBuffer().getStdOutStream(), "UTF-8");
 		out.flush();
-		out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
+		out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
 		out.flush();
 		
 		Runnable onStart = new Runnable() {
@@ -311,9 +316,14 @@ public class ReportWizard extends WizardFrame {
 						btnBack.setEnabled(true);
 						btnCancel.setText("Close");
 						console.onSwapBuffer();
-						out.flush();
-						out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
-						out.flush();
+						try {
+							out.flush();
+							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
+							out.flush();
+						} catch (IOException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
+						}
 						console.setFirstRowIsHeader(false);
 						btnBack.setVisible(true);
 						btnFinish.setVisible(true);
