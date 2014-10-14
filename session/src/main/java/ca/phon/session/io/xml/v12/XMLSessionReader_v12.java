@@ -376,7 +376,8 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						}
 						at.put(name, blindTranscript);
 					} catch (ParseException e) {
-						e.printStackTrace();
+						LOGGER.log(Level.FINE,
+								e.getLocalizedMessage(), e);
 					}
 				}
 				gidx++;
@@ -543,7 +544,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						}
 						retVal.addGroup(transcript);
 					} catch (ParseException pe) {
-						LOGGER.log(Level.SEVERE, pe.getLocalizedMessage(), pe);
+						LOGGER.log(Level.FINE, pe.getLocalizedMessage(), pe);
 						
 						final IPATranscript ipa = new IPATranscript();
 						ipa.putExtension(UnvalidatedValue.class, new UnvalidatedValue(groupBuffer.toString(), pe));
