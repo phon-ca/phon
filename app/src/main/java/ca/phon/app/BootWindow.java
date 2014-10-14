@@ -27,6 +27,7 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.peer.FontPeer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -44,6 +45,7 @@ import org.jdesktop.swingx.JXBusyLabel;
 import ca.phon.app.hooks.PhonBootHook;
 import ca.phon.plugin.PluginException;
 import ca.phon.plugin.PluginManager;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.OSInfo;
 
 public class BootWindow extends Window {
@@ -92,7 +94,7 @@ public class BootWindow extends Window {
 		g.drawImage(bootImage, 0, 0, this);
 		
 		// paint the version string
-		Font versionFont = new Font("Arial", Font.PLAIN, 14);
+		Font versionFont = FontPreferences.getControlFont();
 		g.setFont(versionFont);
 		
 		String vString = "Version: " + VersionInfo.getInstance().getVersion();
