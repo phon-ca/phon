@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
@@ -19,6 +21,8 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Script;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
 
@@ -29,11 +33,9 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class QueryScriptLibrary implements IExtendable {
 
-//	/**
-//	 * Default script location
-//	 */
-//	public final static String SYSTEM_SCRIPT_FOLDER = "data/script";
-//	
+	private static final Logger LOGGER = Logger
+			.getLogger(QueryScriptLibrary.class.getName());
+	
 	/**
 	 * User script folder
 	 */
@@ -133,18 +135,21 @@ public class QueryScriptLibrary implements IExtendable {
 			final Script s = qf.createScript();
 			s.setSource(qs.getScript());
 
-			// TODO save params
 			final Map<String, String> paramMap = new TreeMap<String, String>();
-//			for(ScriptParam scriptParam:qs.getScriptParameters()) {
-//				if(scriptParam.hasChanged()) {
-//					for(String paramId:scriptParam.getParamIds()) {
-//						final Object v = scriptParam.getValue(paramId);
-//						if(v != null) {
-//							paramMap.put(paramId, v.toString());
-//						}
-//					}
-//				}
-//			}
+			try {
+				for(ScriptParam scriptParam:qs.getContext().getScriptParameters(qs.getContext().getEvaluatedScope())) {
+					if(scriptParam.hasChanged()) {
+						for(String paramId:scriptParam.getParamIds()) {
+							final Object v = scriptParam.getValue(paramId);
+							if(v != null) {
+								paramMap.put(paramId, v.toString());
+							}
+						}
+					}
+				}
+			} catch (PhonScriptException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 			s.setParameters(paramMap);
 			q.setScript(s);
 			
