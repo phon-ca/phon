@@ -44,6 +44,12 @@ import ca.phon.syllable.*;
  * Phone factory
  */
 private final IPAElementFactory factory = new IPAElementFactory();
+
+// die on any error
+public void reportError(RecognitionException e) {
+	throw new IPAParserException(e);
+}
+
 }
 
 /* RULES */
