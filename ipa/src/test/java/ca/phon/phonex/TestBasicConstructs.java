@@ -94,4 +94,10 @@ public class TestBasicConstructs {
 		Assert.assertEquals(ipa.subsection(5, 7).toList(), matcher.group(2));
 	}
 	
+	@Test
+	public void testEmptyQuery() throws ParseException {
+		final IPATranscript ipa = new IPATranscript();
+		
+		Assert.assertEquals(true, ipa.matches("^$"));
+	}
 }
