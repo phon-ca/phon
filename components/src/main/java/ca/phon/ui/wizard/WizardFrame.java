@@ -114,7 +114,7 @@ public class WizardFrame extends CommonModuleFrame {
 		});
 		super.getRootPane().setDefaultButton(btnFinish);
 		
-		btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Close");
 		btnCancel.setIcon(icnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 
