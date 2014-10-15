@@ -268,7 +268,8 @@ public class SimpleFSA<T> {
 			}
 		}
 		
-		if(cachedState.getTapeIndex() > machineState.getTapeIndex()) {
+		if(cachedState.getTapeIndex() >= machineState.getTapeIndex()
+				&& !isFinalState(machineState.getCurrentState())) {
 			machineState.setCurrentState(cachedState.getCurrentState());
 			machineState.setTapeIndex(cachedState.getTapeIndex());
 			machineState.setGroups(Arrays.copyOf(cachedState.getGroupStarts(), cachedState.numberOfGroups()), 
