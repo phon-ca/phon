@@ -8,13 +8,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.Script;
 import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
 
 /**
  * Defers loadsing of the query script until data is needed.
@@ -60,55 +54,17 @@ public class LazyQueryScript extends BasicScript {
 		if(scriptURL == null) return;
 		
 		try {
-			final String name = scriptURL.getPath();
-			if(name != null && name.trim().length() > 0) {
-				if(name.endsWith(".js")) {
-					readRawScript();
-				} else if(name.endsWith(".xml")) {
-					readXmlScript();
-				} else {
-					throw new IOException("Unknown query script type " + name);
-				}
+			final InputStream in = getScriptURL().openStream();
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+			final StringBuffer buffer = getBuffer();
+			String line = null;
+			while((line = reader.readLine()) != null) {
+				buffer.append(line);
+				buffer.append("\n");
 			}
+			in.close();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-	}
-	
-	private void readRawScript() throws IOException {
-		final InputStream in = getScriptURL().openStream();
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-		final StringBuffer buffer = getBuffer();
-		String line = null;
-		while((line = reader.readLine()) != null) {
-			buffer.append(line);
-			buffer.append("\n");
-		}
-		in.close();
-	}
-	
-	private void readXmlScript() throws IOException {
-		final InputStream in = getScriptURL().openStream();
-		final QueryManager qm = QueryManager.getInstance();
-		final Query q = qm.loadQuery(in);
-		
-		getBuffer().append(q.getScript().getSource());
-		loaded = true;
-		
-		// setup saved parameters
-		ScriptParameters params = new ScriptParameters();
-		try {
-			params = getContext().getScriptParameters(getContext().getEvaluatedScope());
-		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-		for(ScriptParam sp:params) {
-			for(String id:sp.getParamIds()) {
-				Object v = q.getScript().getParameters().get(id);
-				if(v != null) {
-					sp.setValue(id, v);
-				}
-			}
 		}
 	}
 	
