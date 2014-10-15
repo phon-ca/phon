@@ -40,7 +40,7 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 	
 	private final static String FONT_LIST = "data/fonts/fonts.list";
 	
-	private final static String FONT_INFO_PAGE = "https://www.phon.ca/phontrac/wiki/Fonts";
+	private final static String FONT_INFO_PAGE = "https://www.phon.ca/phontrac/wiki/CompleteInstall";
 
 	@Override
 	public void startup() throws PluginException {
