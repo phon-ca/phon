@@ -75,6 +75,14 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 			if(column.equals(ANY_TIER)) {
 				// search all columns
 				boolean anyTier = false;
+				
+				// check record number
+				anyTier = checkRecordNumber(row+1, tierExprs.get(ANY_TIER));
+				
+				// check speaker
+				anyTier |= (r.getSpeaker() != null ? r.getSpeaker().toString().contains(tierExprs.get(column))
+						: false);
+				
 				for(int i = 0; i < entry.getValueCount(); i++) {
 					if(anyTier) break;
 					anyTier = checkTier(r, model.getColumnName(i));
@@ -83,7 +91,7 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 			} else if(column.equals("Record #")) {
 				retVal &= checkRecordNumber(row+1, tierExprs.get(column));
 			} else if (column.equals("Speaker")) {
-				retVal &= (r.getSpeaker() != null ? r.getSpeaker().getName().contains(tierExprs.get(column))
+				retVal &= (r.getSpeaker() != null ? r.getSpeaker().toString().contains(tierExprs.get(column))
 						: false);
 			} else {
 				retVal &= checkTier(r, column);
