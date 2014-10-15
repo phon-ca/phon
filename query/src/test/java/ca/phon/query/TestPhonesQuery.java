@@ -87,6 +87,9 @@ public class TestPhonesQuery extends TestQuery {
 			retVal.add(secondaryStressedSyllableByGroupParams(project, session));
 			retVal.add(unStressedSyllableByGroupParams(project, session));
 			
+			retVal.add(deletions(project, session));
+			retVal.add(epenthesis(project, session));
+			
 			// TODO metadata tests?
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -471,5 +474,29 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.syllable.sNone", true);
 		
 		return new Object[] { project, session, PHONES_SCRIPT, params, 63 };
+	}
+	
+	private static Object[] deletions(Project project, Session session) {
+		final Map<String, Object> params = new HashMap<String, Object>();
+		params.put("filters.primary.filter", "[\\c\\v]");
+		params.put("filters.actualResultFilter.filter", "^$");
+		params.put("filters.actualResultFilter.exactMatch", true);
+		
+		return new Object[] { project, session, PHONES_SCRIPT, params, 388 };
+	}
+	
+	private static Object[] epenthesis(Project project, Session session) {
+		final Map<String, Object> params = new HashMap<String, Object>();
+		params.put("searchTier", new Object() { 
+			@SuppressWarnings("unused")
+			public int getIndex() { return 1; } 
+			@Override
+			public String toString() { return "IPA Actual";}
+		});
+		params.put("filters.primary.filter", "[\\c\\v]");
+		params.put("filters.targetResultFilter.filter", "^$");
+		params.put("filters.targetResultFilter.exactMatch", true);
+		
+		return new Object[] { project, session, PHONES_SCRIPT, params, 2 };
 	}
 }

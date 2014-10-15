@@ -228,6 +228,10 @@ exports.PatternFilter = function (id) {
     var validatePattern = function () {
         var txt = filterParam.getValue(filterParamInfo.id);
         
+        if(txt.trim().length() == 0) {
+        	return true;
+        }
+        
         var filterType = filterTypeParam.getValue(filterTypeParamInfo.id);
         var filterCheck = checkFilter(txt, filterType.index);
         if (! filterCheck.valid) {
