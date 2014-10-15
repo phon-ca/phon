@@ -51,7 +51,8 @@ public class GroupFieldBorder implements Border {
 		
 		final int top = TOP_INSET + (int)LINE_WIDTH;
 		final int left = startWidth + LEFT_INSET * 2 + (int)LINE_WIDTH;
-		final int right = endWidth + RIGHT_INSET * 2 + (int)LINE_WIDTH;
+		final int right = endWidth + RIGHT_INSET * 2 + (int)LINE_WIDTH  + 
+				(isShowWarningIcon() ? NOTCH_WIDTH + (int)LINE_WIDTH : 0);
 		final int bottom = BOTTOM_INSET + (int)LINE_WIDTH;
 		
 		return new Insets(top, left, bottom, right);
@@ -127,7 +128,7 @@ public class GroupFieldBorder implements Border {
 		}
 		
 		if(isShowWarningIcon()) {
-			g.drawImage(warningIcon.getImage(), width-(int)(IconSize.XSMALL.getWidth()+1+LINE_WIDTH), 0, c);
+			g.drawImage(warningIcon.getImage(), width-(int)(IconSize.XSMALL.getWidth()+1+LINE_WIDTH+NOTCH_WIDTH+LINE_WIDTH), 0, c);
 		}
 		
 	}
