@@ -4,3 +4,5 @@ META-INF/layouts/Segmentation.xml
 META-INF/layouts/Syllabification & Alignment.xml
 META-INF/layouts/Transcription.xml
 META-INF/layouts/Validation.xml
+META-INF/layouts/Speech Analysis (embedded).xml
+META-INF/layouts/Speech Analysis (external).xml
