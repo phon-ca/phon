@@ -43,7 +43,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -295,8 +298,23 @@ public class WaveformEditorView extends EditorView {
 		contentPane.add(tierPanel);
 		
 		add(new JScrollPane(contentPane), BorderLayout.CENTER);
-		
+
+		setupActions();
 		setupEditorActions();
+	}
+	
+	private void setupActions() {
+		final ActionMap am = getActionMap();
+		final InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		final String playId = "play";
+		final Action playAct = new PlayAction(getEditor(), this);
+		final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
+		am.put(playId, playAct);
+		im.put(ks, playId);
+		
+		setActionMap(am);
+		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
 	}
 	
 	private JPanel initPlugins() {
