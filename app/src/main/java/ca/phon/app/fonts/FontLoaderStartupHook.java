@@ -71,6 +71,7 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setMessage(message);
 			props.setTitle("Unable to find required fonts");
+			props.setHeader("Unable to find required fonts");
 			props.setOptions(new String[]{"More Information", "Ok"});
 			props.setRunAsync(false);
 			

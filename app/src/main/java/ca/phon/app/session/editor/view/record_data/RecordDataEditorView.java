@@ -423,7 +423,7 @@ public class RecordDataEditorView extends EditorView {
 					"pref");
 			topPanel = new JPanel(layout);
 			
-			final JLabel recNumLbl = new JLabel("<html><u>Record #</u></html>");
+			final JLabel recNumLbl = new JLabel("<html><u>#</u></html>");
 			recNumLbl.setForeground(Color.blue);
 			recNumLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			recNumLbl.setToolTipText("Click to edit record position (i.e., move record)");

@@ -89,6 +89,7 @@ public class CopySessionEP implements IPluginEntryPoint {
 				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 				props.setOptions(MessageDialogProperties.okOptions);
 				props.setTitle("Move Session");
+				props.setHeader("Move Session");
 				props.setMessage("Session already exists in the specified corpus. Session was not copied.");
 				
 				NativeDialogs.showMessageDialog(props);

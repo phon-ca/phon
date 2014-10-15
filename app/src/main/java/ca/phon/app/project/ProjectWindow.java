@@ -527,6 +527,7 @@ public class ProjectWindow extends CommonModuleFrame
 				props.setParentWindow(this);
 				props.setRunAsync(false);
 				props.setTitle("Session Already Exists");
+				props.setHeader("Session Already Exists");
 				props.setMessage(msg);
 				props.setOptions(MessageDialogProperties.yesNoOptions);
 				

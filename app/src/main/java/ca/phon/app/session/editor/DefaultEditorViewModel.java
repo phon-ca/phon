@@ -733,9 +733,14 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				uiValue.set(Color.white);
 			} else if("title.flap.active.text".equals(id)) {
 				uiValue.set(Color.white);
+			} else if("title.active.left".equals(id)) {
+				uiValue.set(Color.decode("#AAAAAA"));
+			} else if("title.active.right".equals(id)) {
+				uiValue.set(Color.decode("#EEEEEE"));
 			} else {
 				uiValue.set(value);
 			}
+			System.out.println(id);
 		}
 		
 	}
@@ -926,6 +931,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		final MessageDialogProperties props = new MessageDialogProperties();
 		props.setTitle("Unable to save layout");
+		props.setHeader("Unable to save layout");
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setOptions(MessageDialogProperties.okOptions);
 		if(layoutName == null || layoutName.trim().length() == 0) {
@@ -1048,6 +1054,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				
 				@Override
 				public void windowClosed(WindowEvent e) {
+					accessoryWindows.remove(AccessoryWindow.this);
+					dockControl.removeStationContainer(getArea());
 				}
 				
 				@Override
