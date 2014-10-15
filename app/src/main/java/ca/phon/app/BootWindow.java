@@ -54,8 +54,6 @@ public class BootWindow extends Window {
 	
 	private Image bootImage;
 	
-	private JXBusyLabel busyLabel;
-	
 	public BootWindow(Frame p, Image img) {
 		super(p);
 		
@@ -75,14 +73,6 @@ public class BootWindow extends Window {
 
 	private void init() {
 		setLayout(null);
-
-		busyLabel = new JXBusyLabel(new Dimension(20, 20));
-		busyLabel.setBounds(360, 10, 20, 20);
-		busyLabel.setBusy(true);
-		busyLabel.setBackground(Color.white);
-		busyLabel.setOpaque(true);
-		
-		add(busyLabel);
 	}
 	
 	private static volatile boolean paintCalled = false;
@@ -101,7 +91,7 @@ public class BootWindow extends Window {
 		FontMetrics fm = g.getFontMetrics();
 		int vWidth = (int)fm.getStringBounds(vString, g).getWidth();
 		g.setColor(Color.black);
-		g.drawString(vString, 390-vWidth, 250-20);
+		g.drawString(vString, 20, 250-20);
 		
 		if(!paintCalled)
 			paintCalled = true;
@@ -241,7 +231,7 @@ public class BootWindow extends Window {
 					int xPos = ss.width / 2 - 200;
 					int yPos = ss.height / 2 - 125;
 					
-					_instance.setBounds(xPos, yPos, 400, 250);
+					_instance.setBounds(xPos, yPos, 402, 252);
 					_instance.setVisible(true);
 				}
 			};
