@@ -384,6 +384,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 				Toolkit.getDefaultToolkit().beep();
 				requestFocus();
 			}
+			repaint();
 		}
 		
 		@Override
@@ -391,6 +392,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			initialGroupVal = getGroupValue();
 			validatedObjRef.set(initialGroupVal);
 			hasChanges = false;
+			repaint();
 		}
 		
 	};

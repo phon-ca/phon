@@ -330,6 +330,7 @@ public class ParticipantPanel extends JPanel {
 				} else {
 					bdayField.setEnabled(true);
 					calcBdayBtn.setEnabled(true);
+					bdayUpdater.op(obj);
 				}
 				return null;
 			}

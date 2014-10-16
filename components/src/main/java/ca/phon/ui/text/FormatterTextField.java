@@ -56,7 +56,7 @@ public class FormatterTextField<T> extends PromptedTextField {
 		try {
 			retVal = formatter.parse(getText());
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;

@@ -740,7 +740,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			} else {
 				uiValue.set(value);
 			}
-			System.out.println(id);
 		}
 		
 	}
