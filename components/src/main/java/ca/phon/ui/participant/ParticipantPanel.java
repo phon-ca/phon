@@ -155,10 +155,13 @@ public class ParticipantPanel extends JPanel {
 		calcAgeBtn.setEnabled(false);
 		
 		// setup info
-		roleBox.setSelectedItem(participant.getRole());
+		
+		if(participant.getRole() != null)
+			roleBox.setSelectedItem(participant.getRole());
 		if(participant.getId() != null) {
 			idField.setText(participant.getId());
 		}
+		idField.setText(participant.getId());
 		if(participant.getName() != null)
 			nameField.setText(participant.getName());
 		if(participant.getGroup() != null)
@@ -420,6 +423,12 @@ public class ParticipantPanel extends JPanel {
 	
 	public void setOtherParticipants(List<Participant> parts) {
 		this.otherParticipants = parts;
+		
+		if(participant.getRole() == null) {
+			participant.setRole(ParticipantRole.TARGET_CHILD);
+			participant.setId(getRoleId());
+			idField.setText(participant.getId());
+		}
 	}
 	
 	public DateTime getSessionDate() {
