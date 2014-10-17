@@ -65,7 +65,7 @@ public class PhonSplasher {
 		else
 			BootWindow.invokeMain(bootClass, args);
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {}
 		BootWindow.disposeSplash();
 		
