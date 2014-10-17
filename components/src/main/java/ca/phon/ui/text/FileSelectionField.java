@@ -88,6 +88,7 @@ public class FileSelectionField extends JPanel {
 	 */
 	public FileSelectionField() {
 		super();
+		setBackground(Color.white);
 		init();
 		textField.getDocument().addDocumentListener(validationListener);
 		textField.addFocusListener(focusListener);

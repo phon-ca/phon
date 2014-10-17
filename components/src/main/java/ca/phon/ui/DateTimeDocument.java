@@ -108,7 +108,7 @@ public class DateTimeDocument extends PlainDocument {
 		try {
 			retVal = dateFormatter.parseDateTime(dateText);
 		} catch (Exception e) {
-//			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;

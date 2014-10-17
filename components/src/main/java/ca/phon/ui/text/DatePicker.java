@@ -3,10 +3,15 @@ package ca.phon.ui.text;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.text.NavigationFilter;
+import javax.swing.text.NavigationFilter.FilterBypass;
+import javax.swing.text.Position.Bias;
+
 import org.jdesktop.swingx.JXDatePicker;
 import org.joda.time.DateTime;
 
 import ca.phon.ui.DateTimeDocument;
+import ca.phon.ui.fonts.FontPreferences;
 
 /**
  * Customizations for {@link JXDatePicker}
@@ -26,6 +31,7 @@ public class DatePicker extends JXDatePicker {
 		getEditor().setCaret(new OverwriteCaret());
 		getEditor().setDocument(dateTimeDoc);
 		getEditor().addFocusListener(fl);
+		getEditor().setFont(FontPreferences.getMonospaceFont());
 	}
 	
 	private void init() {
