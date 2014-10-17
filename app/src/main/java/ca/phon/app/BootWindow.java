@@ -87,11 +87,11 @@ public class BootWindow extends Window {
 		Font versionFont = FontPreferences.getControlFont();
 		g.setFont(versionFont);
 		
-		String vString = "Version: " + VersionInfo.getInstance().getVersion();
+		String vString = VersionInfo.getInstance().getVersion();
 		FontMetrics fm = g.getFontMetrics();
 		int vWidth = (int)fm.getStringBounds(vString, g).getWidth();
 		g.setColor(Color.black);
-		g.drawString(vString, 20, 250-20);
+		g.drawString(vString, 400-vWidth-20, 250-20);
 		
 		if(!paintCalled)
 			paintCalled = true;

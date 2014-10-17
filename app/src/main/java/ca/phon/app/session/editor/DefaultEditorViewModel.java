@@ -734,7 +734,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			} else if("title.flap.active.text".equals(id)) {
 				uiValue.set(Color.white);
 			} else if("title.active.left".equals(id)) {
-				uiValue.set(new Color(0.7f, 0.7f, 0.7f));
+				uiValue.set(Color.decode("#1f78b5"));
 			} else if("title.active.right".equals(id)) {
 				uiValue.set(new Color(0.9f, 0.9f, 0.9f));
 			} else {
