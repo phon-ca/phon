@@ -158,16 +158,14 @@ public class ScriptPanel extends JPanel {
 	
 	public void setScript(QueryScript script) {
 		QueryScript oldScript = this.script;
-//		this.script = script;
-//		for(ScriptParam param:oldScript.getScriptParams())
-//			param.removeListener(paramListener);
+		this.script = new EditableQueryScript(script);
+		
 		updateParamPanel();
-//		scriptEditor.setDocument(new RSyntaxQueryDocument(this.script));
 		scriptEditor.getDocument().removeDocumentListener(scriptDocListener);
 		scriptEditor.setText(script.getScript());
 		scriptEditor.setCaretPosition(0);
 		scriptEditor.getDocument().addDocumentListener(scriptDocListener);
-		super.firePropertyChange(SCRIPT_PROP, true, false);
+		super.firePropertyChange(SCRIPT_PROP, oldScript, this.script);
 	}
 	
 	public QueryScript getScript() {
@@ -176,9 +174,8 @@ public class ScriptPanel extends JPanel {
 	
 	private void updateParamPanel() {
 		paramPanel.removeAll();
-//		ScriptParam[] params = script.getScriptParams();
-//		for(ScriptParam p:params)
-//			p.addListener(paramListener);
+		
+		script.resetContext();
 		final PhonScriptContext ctx = script.getContext();
 		ScriptParameters scriptParams = new ScriptParameters();
 		try {

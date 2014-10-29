@@ -111,6 +111,8 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	/** The tabbed form/editor pane */
 	private JTabbedPane editorTabs;
 	
+	private JSplitPane contentPane;
+	
 	/** Session selector */
 	private SessionSelector sessionSelector;
 
@@ -297,13 +299,13 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		
 		JScrollPane selectorPane = new JScrollPane(sessionSelector);
 		
-		final JSplitPane content = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, selectorPane, form);
-		content.setOneTouchExpandable(true);
-		content.setDividerLocation(0.4f);
+		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, selectorPane, form);
+		contentPane.setOneTouchExpandable(true);
+		contentPane.setDividerLocation(0.4f);
 		
 		setLayout(new BorderLayout());
 		add(header, BorderLayout.NORTH);
-		add(content, BorderLayout.CENTER);
+		add(contentPane, BorderLayout.CENTER);
 
 		updateComponents();
 	}
