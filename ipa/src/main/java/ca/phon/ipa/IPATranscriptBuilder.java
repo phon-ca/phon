@@ -3,6 +3,7 @@ package ca.phon.ipa;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -191,6 +192,16 @@ public class IPATranscriptBuilder {
 	 */
 	public IPATranscript toIPATranscript() {
 		return new IPATranscript(buffer);
+	}
+	
+	/**
+	 * Reverse elements in this builder.
+	 * 
+	 * 
+	 */
+	public IPATranscriptBuilder reverse() {
+		Collections.reverse(buffer);
+		return this;
 	}
 	
 	/**
