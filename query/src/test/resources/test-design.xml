@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:report-design xmlns:ns2="http://phon.ling.mun.ca/ns/report" name="Epenthesis">
+    <ns2:report-section xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:group" printSessionHeader="false" name="Report Section">
+        <ns2:group-report-section xsi:type="ns2:resultListing" name="Result List">
+            <ns2:field title="Record #">
+                <ns2:field-value lang="Javascript">
+                    <script>/*
+params = {separator, &quot;Information&quot;, false},
+		{label, &quot;Output record number&quot;, &quot;&quot;};
+*/
+
+function getValue() { return recordIndex.intValue() + 1; }
+</script>
+                </ns2:field-value>
+            </ns2:field>
+            <ns2:field title="Speaker">
+                <ns2:field-value lang="Javascript">
+                    <script>/*
+params = {separator, &quot;Information&quot;, false},
+		{label, &quot;Output speaker (participant) name&quot;, &quot;&quot;};
+*/
+
+function getValue() { return (record.speaker ? record.speaker.name : &quot;&quot;); }
+</script>
+                </ns2:field-value>
+            </ns2:field>
+            <ns2:field title="Result">
+                <ns2:field-value lang="Javascript">
+                    <script>/*
+params = {separator, &quot;Information&quot;, false},
+		{label, &quot;Output result&quot;, &quot;&quot;};
+*/
+
+function getValue() { return result; }
+</script>
+                </ns2:field-value>
+            </ns2:field>
+        </ns2:group-report-section>
+    </ns2:report-section>
+</ns2:report-design>
