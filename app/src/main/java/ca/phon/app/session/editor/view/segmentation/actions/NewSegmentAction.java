@@ -48,6 +48,11 @@ public class NewSegmentAction extends SegmentationViewAction {
 		if(mode == SegmentationMode.REPLACE_CURRENT) {
 			final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getEditor(), utt.getSegment(), 0, m);
 			getEditor().getUndoSupport().postEdit(segEdit);
+			
+			// move to next record (if available)
+			int idx = getEditor().getCurrentRecordIndex() + 1;
+			if(idx < getEditor().getDataModel().getRecordCount())
+				getEditor().setCurrentRecordIndex(idx);
 		} else {
 			int idx = getEditor().getDataModel().getRecordCount();
 			// where are we going to insert
