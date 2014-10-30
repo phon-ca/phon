@@ -16,10 +16,6 @@ public class QueryAnalysisInput {
 
 	private List<SessionPath> sessions;
 
-	private QueryScript queryScript;
-	
-	private ReportDesign reportDesign;
-
 	public Project getProject() {
 		return project;
 	}
@@ -36,20 +32,4 @@ public class QueryAnalysisInput {
 		this.sessions = sessions;
 	}
 
-	public QueryScript getQueryScript() {
-		return queryScript;
-	}
-
-	public void setQuery(QueryScript queryScript) {
-		this.queryScript = queryScript;
-	}
-
-	public ReportDesign getReportDesign() {
-		return reportDesign;
-	}
-
-	public void setReportDesign(ReportDesign reportDesign) {
-		this.reportDesign = reportDesign;
-	}
-	
 }

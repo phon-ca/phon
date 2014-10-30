@@ -21,6 +21,12 @@ public class QueryStep implements AnalysisStep<QueryAnalysisResult, QueryAnalysi
 	private static final Logger LOGGER = Logger
 			.getLogger(QueryStep.class.getName());
 	
+	private final QueryScript queryScript;
+	
+	public QueryStep(QueryScript queryScript) {
+		this.queryScript = queryScript;
+	}
+	
 	@Override
 	public QueryAnalysisResult op(QueryAnalysisInput input) {
 		final QueryAnalysisResult result = new QueryAnalysisResult(input);
@@ -31,7 +37,7 @@ public class QueryStep implements AnalysisStep<QueryAnalysisResult, QueryAnalysi
 			try {
 				final Session session = project.openSession(path.getCorpus(), path.getSession());
 
-				final QueryScript qs = input.getQueryScript();
+				final QueryScript qs = queryScript;
 				
 				final ByteArrayOutputStream bout = new ByteArrayOutputStream();
 				final PrintStream writer = new PrintStream(bout, false, "UTF-8");

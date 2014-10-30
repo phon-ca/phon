@@ -3,6 +3,7 @@ package ca.phon.query.analysis;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import ca.phon.query.db.ResultSet;
 import ca.phon.session.SessionPath;
@@ -47,6 +48,14 @@ public class QueryAnalysisResult {
 	
 	public String getOutput(SessionPath location) {
 		return getQueryOutput().get(location);
+	}
+	
+	public Set<SessionPath> getResultSetKeys() {
+		return this.queryResults.keySet();
+	}
+	
+	public Set<SessionPath> getOutputKeys() {
+		return this.queryOutput.keySet();
 	}
 	
 }

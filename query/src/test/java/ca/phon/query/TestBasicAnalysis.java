@@ -26,6 +26,8 @@ import ca.phon.query.report.ReportIO;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.script.BasicScript;
+import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.EnumScriptParam;
@@ -43,9 +45,22 @@ public class TestBasicAnalysis {
 	private final static String TEST_SESSION = "session";
 	
 	private final static String PHONES_SCRIPT = "src/main/resources/ca/phon/query/script/Phones.js";
+	
+	private final static String REPORT_SCRIPT = 
+			"var keySet = queryAnalysisResult.resultSetKeys;\r\n" + 
+			"\r\n" + 
+			"out.println(\"\\\"Session\\\",\\\"Number of Results\\\"\");\r\n" + 
+			"\r\n" +
+			"var itr = keySet.iterator();\r\n" +
+			"while(itr.hasNext()) {\r\n" + 
+			"	var sessionPath = itr.next();\r\n" + 
+			"    var resultSet = queryAnalysisResult.getResultSet(sessionPath);\r\n" + 
+			"    \r\n" + 
+			"    out.println(\"\\\"\" + sessionPath + \"\\\",\\\"\" + resultSet.numberOfResults(true) + \"\\\"\");\r\n" + 
+			"}";
 
 	@Test
-	public void testPhonesAnalysis() throws IOException, ProjectConfigurationException {
+	public void testReportDesignAnalysis() throws IOException, ProjectConfigurationException {
 		final QueryScript qs = getScript();
 		final ReportDesign reportDesign = getReportDesign();
 		
@@ -55,15 +70,38 @@ public class TestBasicAnalysis {
 		
 		final QueryAnalysisInput input = new QueryAnalysisInput();
 		input.setProject(project);
-		input.setQuery(qs);
-		input.setReportDesign(reportDesign);
 		input.setSessions(Arrays.asList(selectedSessions));
 		
-		final QueryAnalysis analysis = new DefaultQueryAnalysis();
+		final QueryAnalysis analysis = new DefaultQueryAnalysis(qs, reportDesign);
 		final String result = analysis.performAnalysis(input);
 		
 		Assert.assertNotNull(result);
 		Assert.assertTrue(result.length() > 0);
+	}
+	
+	@Test
+	public void testScriptReportAnalysis() throws IOException, ProjectConfigurationException {
+		final QueryScript qs = getScript();
+		final PhonScript script = getReportScript();
+		
+		final Project project = (new ProjectFactory()).openProject(new File(TEST_PROJECT));
+		final SessionPath sp = new SessionPath(TEST_CORPUS, TEST_SESSION);
+		final SessionPath[] selectedSessions = new SessionPath[]{ sp };
+		
+		final QueryAnalysisInput input = new QueryAnalysisInput();
+		input.setProject(project);
+		input.setSessions(Arrays.asList(selectedSessions));
+		
+		final QueryAnalysis analysis = new DefaultQueryAnalysis(qs, script);
+		final String result = analysis.performAnalysis(input);
+		
+		Assert.assertNotNull(result);
+		Assert.assertTrue(result.length() > 0);
+	}
+	
+	private PhonScript getReportScript() throws IOException {
+		PhonScript retVal = new BasicScript(REPORT_SCRIPT);
+		return retVal;
 	}
 	
 	private ReportDesign getReportDesign() throws IOException {

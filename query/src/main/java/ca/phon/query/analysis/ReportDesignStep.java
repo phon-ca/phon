@@ -17,12 +17,19 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.ReportBuilder;
 import ca.phon.query.report.ReportBuilderException;
 import ca.phon.query.report.ReportBuilderFactory;
+import ca.phon.query.report.io.ReportDesign;
 import ca.phon.session.SessionPath;
 
 public class ReportDesignStep implements AnalysisStep<String, QueryAnalysisResult> {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(ReportDesignStep.class.getName());
+	
+	private final ReportDesign reportDesign;
+	
+	public ReportDesignStep(ReportDesign reportDesign) {
+		this.reportDesign = reportDesign;
+	}
 	
 	@Override
 	public String op(QueryAnalysisResult obj) {
@@ -44,7 +51,7 @@ public class ReportDesignStep implements AnalysisStep<String, QueryAnalysisResul
 		String retVal = "";
 		try {
 			builder.buildReport(
-					obj.getInput().getReportDesign(), 
+					reportDesign,
 					obj.getInput().getProject(), 
 					q, 
 					resultSets, bout);
