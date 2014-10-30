@@ -25,6 +25,7 @@ import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.VerticalLayout;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+import org.joda.time.PeriodType;
 
 import ca.phon.functor.Functor;
 import ca.phon.session.Participant;
@@ -33,6 +34,7 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.Sex;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.text.DatePicker;
@@ -148,6 +150,7 @@ public class ParticipantPanel extends JPanel {
 		ageField = FormatterTextField.createTextField(Period.class);
 		ageField.setPrompt("YY;MM.DD");
 		ageField.setEnabled(false);
+		ageField.setFont(FontPreferences.getMonospaceFont());
 		final PhonUIAction calcAgeAct = new PhonUIAction(this, "onCalculateAge");
 		calcAgeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Calculate age from birthday");
 		calcAgeAct.putValue(PhonUIAction.SMALL_ICON, calcIcon);
@@ -471,7 +474,7 @@ public class ParticipantPanel extends JPanel {
 	public void onCalculateAge() {
 		final DateTime bday = participant.getBirthDate();
 		if(bday != null && sessionDate != null) {
-			final Period age = participant.getAge(sessionDate);
+			final Period age = new Period(bday, sessionDate, PeriodType.yearMonthDay());
 			ageField.setValue(age);
 		}
 	}

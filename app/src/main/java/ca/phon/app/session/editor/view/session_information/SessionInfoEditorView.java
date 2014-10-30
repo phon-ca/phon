@@ -160,6 +160,7 @@ public class SessionInfoEditorView extends EditorView {
 				new DelegateEditorAction(this, "onParticipantListChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, participantsChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, participantsChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_CHANGED, participantsChangedAct);
 	
 		final DelegateEditorAction dateChangedAct = 
 				new DelegateEditorAction(this, "onDateChanged");
