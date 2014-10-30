@@ -19,6 +19,7 @@
 package ca.phon.media.exportwizard;
 
 import java.awt.BorderLayout;
+import java.io.File;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,8 @@ import javax.swing.JScrollPane;
 import ca.phon.media.FFMpegMediaExporter;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.MsFormatter;
@@ -97,7 +100,32 @@ public class MediaExportWizard extends WizardFrame {
 					new FFMpegMediaExporter();
 			exporter.setInputFile(setupStep.getInputFileLabel().getFile().getAbsolutePath());
 			exporter.setOutputFile(setupStep.getOutputFileLabel().getFile().getAbsolutePath());
+			
+			if(exporter.getInputFile().equals(exporter.getOutputFile())) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setTitle("Media export");
+				props.setHeader("Failed to export media");
+				props.setMessage("Source and destination file are the same.");
+				props.setRunAsync(false);
+				props.setOptions(MessageDialogProperties.okOptions);
+				NativeDialogs.showMessageDialog(props);
+				return;
+			}
 
+			if((new File(exporter.getOutputFile()).exists())) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setTitle("Media export");
+				props.setHeader("Overwrite file?");
+				props.setMessage("Overwrite file " + exporter.getOutputFile() + "?");
+				props.setRunAsync(false);
+				props.setOptions(MessageDialogProperties.yesNoOptions);
+				int retVal = NativeDialogs.showMessageDialog(props);
+				if(retVal != 0) 
+					return;
+			}
+			
 			exporter.setIncludeVideo(setupStep.getEncodeVideoBox().isSelected());
 			exporter.setVideoCodec(setupStep.getVideoCodecField().getText());
 

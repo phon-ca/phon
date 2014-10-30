@@ -92,6 +92,7 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.toast.Toast;
@@ -477,6 +478,19 @@ public class WaveformEditorView extends EditorView {
 		if(movFile != null && movFile.exists()) {
 			int lastDot = movFile.getName().lastIndexOf(".");
 			if(lastDot > 0) {
+				String movExt = movFile.getName().substring(lastDot);
+				if(movExt.equals(".wav")) {
+					// already a wav, do nothing!
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setParentWindow(getEditor());
+					props.setTitle("Generate Wav");
+					props.setHeader("Failed to generate wav");
+					props.setMessage("Source file is already in wav format.");
+					props.setRunAsync(false);
+					props.setOptions(MessageDialogProperties.okOptions);
+					NativeDialogs.showMessageDialog(props);
+					return;
+				}
 				String audioFileName = 
 					movFile.getName().substring(0, movFile.getName().lastIndexOf(".")) + 
 						".wav";
