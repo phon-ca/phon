@@ -1,6 +1,14 @@
 # Phon 2.0 Changes
 
-## User Interface
+## Changes from Phon 2.0.0
+
+### Bugs
+ * Fixed an issue where query form was not displayed when a script was loaded after the editor was open.
+ * Phon manual is now accessible from the Help menu.
+ 
+## Changes from Phon 1.6.2
+
+### User Interface
  * New icon and splash screen
  * New look and feel with ability to select fonts used in UI elements.
 	* Set default font for UI controls to Liberation Sans-PLAIN-12
@@ -15,11 +23,11 @@
 	* View text output from PhonShell and query scripts
 	* View CSV formatted text as a table
  
-### Project Manager
+#### Project Manager
  * New menu item Project -> Anonymize Participant Information
  * Sessions can now be copied/moved to other project within the workspace using the context menu.
 
-### Session Editor
+#### Session Editor
  * All actions are now undo-able.
  * Editor views may now be externalized into a new editor window.
  * Window position(s) and size are now saved with layout views.
@@ -30,22 +38,22 @@
  * Toolbar search field now supports record number queries, including ranges.  E.g., the string '2,5..10' will display records 2 and 5 through
  10 in the search table.  This may be combined with other queries by separating query string using a semi-colon.
  
-#### Session Information
+##### Session Information
  * Added button to delete selected participant
  * New participant editor.  Name, age and birthdays for participants are now optional and are only calculated when requested.
  * Added calendar drop-down control to date field.
   
-#### Find & Replace
+##### Find & Replace
  * New Find & Replace system
  * Supports plain text, regular expression, and phonex queries in multiple tiers
  * Support for regex/phonex group references in replace expression
  
-#### IPA Lookup
+##### IPA Lookup
  * Improved IPA Lookup view allowing more fine-grained editing of automatic transcriptions
  * System for transliteration (Arabic already implemented)
  * Automatic transcription now works for blind transcribers
  
-#### Record Data
+##### Record Data
  * Record data is now aligned by groups by default.  This can be changed using buttons in the toolbar.
  * New record number field in toolbar for setting the current record's position in the session.
  * New actions for group management avaiable from the View->Record Data menu or the Record Data view toolbar.
@@ -54,7 +62,7 @@
 	* Merge Groups (CMD/CTRL+SHIFT+G)
 	* Remove Group (CMD/CTRL+SHIFT+ALT+G)
 
-#### Syllabifiation & Alignment
+##### Syllabifiation & Alignment
  * New settings for selecting syllabifier based on tier
  * New buttons for re-setting syllabifiation and/or alignment
  * Added syllabification algorithms
@@ -68,19 +76,19 @@
 	* French
  * Support for geminates
  
-#### Speech Analysis
+##### Speech Analysis
  * The Waveform view has been renamed to Speech Analysis
  * 'Space' will now play the audio segment/selection
  * Added a new Praat button to the toolbar for Praat integration.  See '''Praat Integration''' below.
  
-#### IPA Validation
+##### IPA Validation
  * Improved validation UI using new tier layout.
 
-### Queries & Reporting
+#### Queries & Reporting
  * Participant filter in Query scripts now includes an option for filtering records by participant role.
  * Reports are now genereated inside a buffer which can then be viewed as a table and/or saved to disk.
 
-## Praat integration
+### Praat integration
  * Provided by new jpraat java library (Java Native Architecture (JNA) wrapper for Praat.)  For more information see
  https://github.com/ghedlund/jraat and https://github.com/ghedlund/libpraat
  * Generate TextGrids from Phon records.  TextGrid data for projects is stored in the __res/plugin_data/textgrid/data folder
@@ -98,7 +106,7 @@
 	* More to come..
  * Send information to Praat via Praat scripts and return data to Phon
 
-## IPA Support
+### IPA Support
  * Ligatures may be used to connect diacritics as well as create compound phones
  * Multiple prefix/suffix diacritics may be added to a phone
  * Added support for sandhi and linkers
@@ -109,7 +117,7 @@
  in Java.
  * For more information, see the '''IPA & Phonex Reference''' in the Help menu of Phon
 
-## Phonex
+### Phonex
  * New version 2.0 of Phonex with a similar API to the Java regular expression engine.
  * Support for many new constructs including:
 	* Groups (capturing, non-capturing)
@@ -119,7 +127,7 @@
  * Plug-in support allowing for creation of additional phone matchers
  * For more information, see the '''IPA & Phonex Reference''' in the Help menu of Phon
 
-## General
+### General
  * Default workspace folder is now <user home>/Documents/PhonWorkspace
  * Log location is now <user home>/Documents/Phon/phon.log.0 and <user home>/Documents/Phon/phon.log.1 (previous execution)
  * Location of user scripts, IPA dictionary, custom layouts, etc. is now <user home>/Documents/Phon
