@@ -281,7 +281,7 @@ public class SegmentationEditorView extends EditorView {
 
 			final NewSegmentAction segmentAction = new NewSegmentAction(getEditor(), this, p);
 			segmentAction.putValue(Action.NAME,
-					ksStr + " " + p.getName());
+					ksStr + " " + p.toString());
 			
 			JLabel participantLbl = new JLabel();
 			String participantStr = 
