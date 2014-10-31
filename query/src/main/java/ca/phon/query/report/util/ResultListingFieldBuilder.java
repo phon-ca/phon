@@ -54,7 +54,7 @@ public class ResultListingFieldBuilder {
 	public final static String SPEAKER_NAME_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) name\", \"\"};\n"
-			+ "*/\n" + "\n" + "function getValue() { return (record.speaker ? record.speaker.name : \"\"); }\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return (record.speaker ? record.speaker.toString() : \"\"); }\n" + "";
 
 	public final static String SPEAKER_AGE_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
