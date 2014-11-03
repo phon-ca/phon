@@ -29,12 +29,16 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.runner.Computer;
+
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.impl.CompoundDictionary;
 import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.ipadictionary.spi.AddEntry;
 import ca.phon.ipadictionary.spi.ClearEntries;
+import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
 
@@ -242,7 +246,11 @@ public class IPALookupContext {
 	public void switchDictionary(String lang) {
 		final IPADictionaryLibrary library = IPADictionaryLibrary.getInstance();
 		final List<IPADictionary> dicts = library.dictionariesForLanguage(lang);
-		final IPADictionary newDict = (dicts.size() > 0 ? dicts.get(0) : null);
+		
+		final IPADictionary newDict = 
+				(dicts.size() > 0
+					?	new IPADictionary(new CompoundDictionary(dicts.toArray(new IPADictionary[0])))
+					:	dicts.get(0));
 		
 		if(newDict != null) {
 			dictionary = newDict;
