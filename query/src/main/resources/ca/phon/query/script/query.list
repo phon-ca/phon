@@ -5,3 +5,4 @@ ca/phon/query/script/Harmony.js
 ca/phon/query/script/Metathesis.js
 ca/phon/query/script/PCC-PVC.js
 ca/phon/query/script/Phones.js
+ca/phon/query/script/Word Match.js
