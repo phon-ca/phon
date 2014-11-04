@@ -36,6 +36,8 @@ public class PhonGuiConstants {
 	public static final Color PHON_ORANGE = new Color(243, 202, 79);
 	public static final Color PHON_TIER_FOCUS_BACKGROUND = Color.decode("0xffff99");
 	
-	public static final Color PHON_UI_STRIP_COLOR = new Color(237, 243, 254);
+	public static final Color PHON_UI_STRIP_COLOR = new Color(240, 240, 240);
+	
+	public static final Color PHON_VIEW_TITLE_COLOR = new Color(125, 149, 169);
 
 }

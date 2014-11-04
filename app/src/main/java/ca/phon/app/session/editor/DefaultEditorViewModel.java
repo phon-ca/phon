@@ -84,6 +84,7 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -734,7 +735,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			} else if("title.flap.active.text".equals(id)) {
 				uiValue.set(Color.white);
 			} else if("title.active.left".equals(id)) {
-				uiValue.set(Color.decode("#1f78b5"));
+				uiValue.set(PhonGuiConstants.PHON_VIEW_TITLE_COLOR);
 			} else if("title.active.right".equals(id)) {
 				uiValue.set(new Color(0.9f, 0.9f, 0.9f));
 			} else {

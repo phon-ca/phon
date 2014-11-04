@@ -31,34 +31,31 @@ public class PhonSubstanceSkin extends SubstanceSkin {
      */
     private BottomLineOverlayPainter bottomLineOverlayPainter;
 
-    /**
-     * Creates a new <code>Nebulous</code> skin.
-     */
     public PhonSubstanceSkin() {
         super();
 
         ColorSchemes schemes = SubstanceSkin
-                .getColorSchemes("org/pushingpixels/substance/api/skin/nebula.colorschemes");
+                .getColorSchemes("ca/phon/app/theme/phon.colorschemes");
 
-        SubstanceColorScheme activeScheme = schemes.get("Nebula Active");
-        SubstanceColorScheme enabledScheme = schemes.get("Nebula Enabled").saturate(-0.9);
+        SubstanceColorScheme activeScheme = schemes.get("Phon Active");
+        SubstanceColorScheme enabledScheme = schemes.get("Phon Enabled").saturate(-0.9);
         SubstanceColorScheme rolloverUnselectedScheme = schemes
-                .get("Nebula Rollover Unselected");
-        final SubstanceColorScheme pressedScheme = schemes.get("Nebula Pressed");
+                .get("Phon Rollover Unselected");
+        final SubstanceColorScheme pressedScheme = schemes.get("Phon Pressed");
         SubstanceColorScheme rolloverSelectedScheme = schemes
-                .get("Nebula Rollover Selected");
-        SubstanceColorScheme disabledScheme = schemes.get("Nebula Disabled").saturate(-0.9);
+                .get("Phon Rollover Selected");
+        SubstanceColorScheme disabledScheme = schemes.get("Phon Disabled").saturate(-0.9);
 
         SubstanceColorSchemeBundle defaultSchemeBundle = new SubstanceColorSchemeBundle(
                 activeScheme, enabledScheme, disabledScheme);
 
-        CopyMutableColorScheme steelBlue= new CopyMutableColorScheme("Cerulean Hover", new SteelBlueColorScheme().tint(0.4));
+        CopyMutableColorScheme steelBlue= new CopyMutableColorScheme("Phon Hover", new SteelBlueColorScheme().tint(0.4));
         steelBlue.setForegroundColor(enabledScheme.getForegroundColor());
 
         double saturate = 0.1;
         double tint = 0.4;
         double shade = tint/4;
-        CopyMutableColorScheme pressed = new CopyMutableColorScheme("Cerulean Pressed", steelBlue.saturate(saturate).shade(shade));
+        CopyMutableColorScheme pressed = new CopyMutableColorScheme("Phon Pressed", steelBlue.saturate(saturate).shade(shade));
         //pressed.setForegroundColor(pressedScheme.getForegroundColor());
         defaultSchemeBundle.registerColorScheme(pressed,
                 ComponentState.PRESSED_SELECTED, ComponentState.PRESSED_UNSELECTED);
@@ -123,17 +120,12 @@ public class PhonSubstanceSkin extends SubstanceSkin {
         );
 
         // for text highlight
-        ColorSchemes kitchenSinkSchemes = SubstanceSkin
-                .getColorSchemes("org/pushingpixels/substance/api/skin/kitchen-sink.colorschemes");
-        SubstanceColorScheme highlightColorScheme = kitchenSinkSchemes
-                .get("Moderate Highlight");
-//        SubstanceColorScheme highlightColorScheme = activeScheme.hueShift(-0.5).saturate(0.5).tint(0.5);
-        defaultSchemeBundle.registerHighlightColorScheme(highlightColorScheme);
+        defaultSchemeBundle.registerHighlightColorScheme(steelBlue);
 
         registerDecorationAreaSchemeBundle(defaultSchemeBundle,
                 DecorationAreaType.NONE);
 
-        CopyMutableColorScheme chrome = new CopyMutableColorScheme("Cerulean Chrome", pressedScheme);
+        CopyMutableColorScheme chrome = new CopyMutableColorScheme("Phon Chrome", pressedScheme);
         chrome.setUltraDarkColor(chrome.getExtraLightColor());
         registerDecorationAreaSchemeBundle(new SubstanceColorSchemeBundle(pressedScheme, pressedScheme, disabledScheme), chrome,
                 DecorationAreaType.PRIMARY_TITLE_PANE,
