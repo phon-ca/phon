@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.BufferPanel;
@@ -71,15 +73,15 @@ public class QueryAnalysisWizard extends WizardFrame {
 		
 		retVal.add(createHeader(), BorderLayout.NORTH);
 		
-		final JPanel panel = new JPanel(new BorderLayout());
 		sessionSelector = new SessionSelector(getExtension(Project.class));
 		final JScrollPane scroller = new JScrollPane(sessionSelector);
-		panel.add(scroller, BorderLayout.WEST);
 		
 		queryScriptPanel = new ScriptPanel(queryScript);
-		panel.add(queryScriptPanel, BorderLayout.CENTER);
 		
-		retVal.add(panel, BorderLayout.CENTER);
+		final JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL, true, scroller, queryScriptPanel);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(0.4f);
+		retVal.add(splitPane, BorderLayout.CENTER);
 		
 		return retVal;
 	}
@@ -109,6 +111,9 @@ public class QueryAnalysisWizard extends WizardFrame {
 			
 			final QueryAnalysis queryAnalysis = 
 					new DefaultQueryAnalysis(queryScriptPanel.getScript(), reportScript);
+			
+			bufferPanel.getLogBuffer().setText(new String());
+			if(!bufferPanel.isShowingBuffer()) bufferPanel.onSwapBuffer();
 			
 			bufferPanel.setBusy(true);
 			btnBack.setEnabled(false);
