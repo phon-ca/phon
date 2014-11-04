@@ -1,10 +1,16 @@
 package ca.phon.script;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.ExtensionSupport;
@@ -46,6 +52,21 @@ public class BasicScript implements PhonScript {
 	public BasicScript(String text) {
 		super();
 		buffer.append(text);
+		
+		setupImports();
+	}
+	
+	public BasicScript(File file) throws IOException {
+		super();
+		
+		final FileInputStream fin = new FileInputStream(file);
+		final InputStreamReader reader = new InputStreamReader(fin, "UTF-8");
+		final char[] buf = new char[1024];
+		int read = -1;
+		while((read = reader.read(buf)) > 0) {
+			buffer.append(buf, 0, read);
+		}
+		reader.close();
 		
 		setupImports();
 	}

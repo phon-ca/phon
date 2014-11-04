@@ -64,7 +64,7 @@ public class MultiboolPanel extends JPanel {
 		public void propertyChange(PropertyChangeEvent evt) {
 			final String propName = evt.getPropertyName();
 			final int lastDot = propName.lastIndexOf('.');
-			final String id = propName.substring(0, lastDot);
+			final String id = (lastDot > 0 ? propName.substring(0, lastDot) : propName);
 			final int optIdx = param.getOptionIndex(id);
 			if(optIdx < 0) return;
 			if(propName.endsWith(".enabled")) {
