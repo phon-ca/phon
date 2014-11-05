@@ -8,7 +8,8 @@ import ca.phon.visitor.annotation.Visits;
 
 /**
  * Removes any comments, events, or punctuation
- * from Orthography
+ * from Orthography.  This is used for detecting
+ * the number of align-able elements in an Orthography instance.
  *
  */
 public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
@@ -23,6 +24,14 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 	@Visits
 	public void visitWordnet(OrthoWordnet wordnet) {
 		wordList.add(wordnet);
+	}
+	
+	@Visits
+	public void visitComment(OrthoComment comment) {
+		if(comment.getData().matches("\\.{1,3}")) {
+			// add pause as an alignment element
+			wordList.add(comment);
+		}
 	}
 	
 	public List<OrthoElement> getWordList() {
