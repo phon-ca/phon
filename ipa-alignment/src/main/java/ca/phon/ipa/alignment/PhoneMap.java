@@ -18,7 +18,11 @@
 
 package ca.phon.ipa.alignment;
 
+import java.util.Set;
+
 import ca.phon.alignment.AlignmentMap;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.AudiblePhoneVisitor;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
@@ -26,17 +30,21 @@ import ca.phon.ipa.IPATranscript;
 /**
  * 
  */
-public class PhoneMap extends AlignmentMap<IPAElement> {
+public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 	/** The target phonetic rep */
 	private IPATranscript targetRep;
 	/** The actual phonetic rep */
 	private IPATranscript actualRep;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(PhoneMap.class, this);
 	
 	/**
 	 * Constructor
 	 */
 	public PhoneMap(IPATranscript targetRep, IPATranscript actualRep) {
 		super();
+		
+		extSupport.initExtensions();
 		
 		setTargetRep(targetRep);
 		setActualRep(actualRep);
@@ -69,5 +77,26 @@ public class PhoneMap extends AlignmentMap<IPAElement> {
 		this.topElements = 
 			visitor.getPhones().toArray(new IPAElement[0]);
 	}
+
+	@Override
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	@Override
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	@Override
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	@Override
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
+	
 	
 }
