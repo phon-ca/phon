@@ -23,6 +23,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -277,6 +278,38 @@ public class FeatureSet implements Iterable<Feature> {
 			(BitSet)fs1.features.clone();
 		bs.andNot(fs2.features);
 		return new FeatureSet(bs);
+	}
+	
+	/**
+	 * Return the set of manner features for this feature set.
+	 * 
+	 * @return manner features
+	 */
+	public FeatureSet getManner() {
+		FeatureSet retVal = new FeatureSet();
+		for(Feature f:this) {
+			if(f.getPrimaryFamily() == FeatureFamily.MANNER)
+				retVal.addFeature(f.getName());
+		}
+		return retVal;
+	}
+	
+	public FeatureSet getPlace() {
+		FeatureSet retVal = new FeatureSet();
+		for(Feature f:this) {
+			if(f.getPrimaryFamily() == FeatureFamily.PLACE)
+				retVal.addFeature(f.getName());
+		}
+		return retVal;
+	}
+	
+	public FeatureSet getVoicing() {
+		FeatureSet retVal = new FeatureSet();
+		for(Feature f:this) {
+			if(f.getPrimaryFamily() == FeatureFamily.VOICING)
+				retVal.addFeature(f.getName());
+		}
+		return retVal;
 	}
 	
 	@Override
