@@ -44,6 +44,10 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	private enum MetadataToken {
 		NAME("name"),
 		LANGUAGE("lang"),
+		PREPROCESSEXPR("prefind"),
+		PREPROCESSREPLACE("prereplace"),
+		POSTPROCESSEXPR("postfind"),
+		POSTPROCESSREPLACE("postreplace"),
 		OTHER("other");
 		
 		private String value;
@@ -93,6 +97,28 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	 * #website http://www.uoh.org/
 	 */
 	private Map<String, String> metadata = new TreeMap<String, String>();
+	
+	/**
+	 * Regex pattern for pre-processing text
+	 */
+	private Pattern preFindPattern;
+	
+	/**
+	 * Replace expression used for each instance of preFindPattern found
+	 * in the orthographic text
+	 */
+	private String preReplaceExpr;
+	
+	/**
+	 * Regex pattern for post-processing text
+	 * 
+	 */
+	private Pattern postFindPattern;
+	
+	/**
+	 * Replace expression used for each instance of postFindPattern found
+	 */
+	private String postReplaceExpr;
 
 	public TransliterationDictionary(URL mapFile) {
 		super();
@@ -125,6 +151,12 @@ public class TransliterationDictionary implements IPADictionarySPI,
 
 	@Override
 	public String[] lookup(String orthography) throws IPADictionaryExecption {
+		
+		if(preFindPattern != null && preReplaceExpr != null) {
+			final Matcher m = preFindPattern.matcher(orthography);
+			orthography = m.replaceAll(preReplaceExpr);
+		}
+		
 		final StringBuilder builder = new StringBuilder();
 		final Tokenizer tokenizer = createTokenizer();
 		
@@ -146,7 +178,14 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		
-		return new String[] { builder.toString() };
+		String builderStr = builder.toString();
+		
+		if(postFindPattern != null && postReplaceExpr != null) {
+			final Matcher m = postFindPattern.matcher(builderStr);
+			builderStr = m.replaceAll(postReplaceExpr);
+		}
+		
+		return new String[] { builderStr };
 	}
 	
 	private Map<String, String> getTokenMap() {
@@ -279,6 +318,14 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			// attempt to load language
 			final Language lang = Language.parseLanguage(value);
 			this.language = lang;
+		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSEXPR.toString())) {
+			preFindPattern = Pattern.compile(value);
+		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSREPLACE.toString())) {
+			preReplaceExpr = value;
+		} else if(token.equalsIgnoreCase(MetadataToken.POSTPROCESSEXPR.toString())) {
+			postFindPattern = Pattern.compile(value);
+		} else if(token.equalsIgnoreCase(MetadataToken.POSTPROCESSREPLACE.toString())) {
+			postReplaceExpr = value;
 		} else {
 			metadata.put(token, value);
 		}
