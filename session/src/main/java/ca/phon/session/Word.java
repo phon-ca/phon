@@ -1,6 +1,7 @@
 package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.Orthography;
 
@@ -89,6 +90,13 @@ public interface Word {
 	 *  not found
 	 */
 	public int getIPAActualWordLocation();
+	
+	/**
+	 * Return the IPAElement alignment for this aligned word pair.
+	 * 
+	 * @return phone alignment for IPA Target vs. IPA Actual
+	 */
+	public PhoneMap getPhoneAlignment();
 	
 	/**
 	 * Notes - this will be the same for every group!

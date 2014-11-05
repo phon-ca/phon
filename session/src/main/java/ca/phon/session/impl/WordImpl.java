@@ -1,9 +1,13 @@
 package ca.phon.session.impl;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.List;
 
+import ca.phon.alignment.AlignmentMap;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.OrthoWordExtractor;
 import ca.phon.orthography.Orthography;
@@ -127,6 +131,58 @@ public class WordImpl implements Word {
 			retVal = actual.stringIndexOfElement(eleIdx);
 		}
 	
+		return retVal;
+	}
+	
+	@Override
+	public PhoneMap getPhoneAlignment() {
+		final IPATranscript ipaT = getIPATarget();
+		final IPATranscript ipaA = getIPAActual();
+		
+		final PhoneMap retVal = new PhoneMap(ipaT, ipaA);
+		final IPATranscript filteredT = ipaT.removePunctuation();
+		final IPATranscript filteredA = ipaA.removePunctuation();
+		
+		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
+		
+		final int ipaTAlignStart =
+				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(0)) : -1);
+		final int ipaAAlignStart = 
+				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(0)) : -1);
+		final int alignStart = Math.min(ipaTAlignStart, ipaAAlignStart);
+		
+		final int ipaTAlignEnd = 
+				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(filteredT.length()-1)) : -1);
+		final int ipaAAlignEnd =
+				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(filteredA.length()-1)) : -1);
+		final int alignEnd = Math.max(ipaTAlignEnd, ipaAAlignEnd);
+		
+		if(alignStart >= 0 && alignEnd >= alignStart) {
+			final int alignLen = alignEnd - alignStart + 1;
+			
+			final Integer topElements[] = new Integer[alignLen];
+			final Integer btmElements[] = new Integer[alignLen];
+			
+			// copy alignment, but don't keep elements which are not
+			// part of our word transcripts
+			for(int i = 0; i < alignLen; i++) {
+				final List<IPAElement> alignedPair = grpAlignment.getAlignedElements(alignStart+i);
+				final IPAElement tEle = alignedPair.get(0);
+				final IPAElement aEle = alignedPair.get(1);
+				
+				final Integer tIdx = 
+						(tEle == null ? AlignmentMap.INDEL_VALUE : filteredT.indexOf(tEle));
+				final Integer aIdx = 
+						(aEle == null ? AlignmentMap.INDEL_VALUE : filteredA.indexOf(aEle));
+				
+				topElements[i] = tIdx;
+				btmElements[i] = aIdx;
+			}
+			
+			retVal.setTopAlignment(topElements);
+			retVal.setBottomAlignment(btmElements);
+		}
+		
 		return retVal;
 	}
 
