@@ -102,12 +102,12 @@ function setup_params(params) {
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
 	params.add(wordsep);
+	filters.alignedWord.param_setup(params);
 
 	ignoreTruncatedParam = new BooleanScriptParam(ignoreTruncatedParamInfo.id,
 		ignoreTruncatedParamInfo.title, ignoreTruncatedParamInfo.desc,
 		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
-	filters.alignedWord.param_setup(params);
 	
 	filters.speaker.param_setup(params);
 }

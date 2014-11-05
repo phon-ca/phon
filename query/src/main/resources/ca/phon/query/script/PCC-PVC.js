@@ -8,6 +8,8 @@ params = {separator, "Information", false},
 var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var AlignedWordFilter = require("lib/TierFilter").TierFilter;
 var PccOptions = require("lib/Pcc").PccOptions;
 var Pcc = require("lib/Pcc").Pcc;
 
@@ -20,6 +22,8 @@ var pccOptions = {
 var filters = {
 	"group": new GroupFilter("filters.group"),
 	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+	"word": new WordFilter("filters.word"),
+	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
 	"speaker": new ParticipantFilter("filters.speaker")
 };
 
@@ -38,6 +42,12 @@ function setup_params(params) {
 	
 	filters.group.param_setup(params);
 	
+	filters.word.searchByWordEnabled = false;
+	filters.word.param_setup(params);
+	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
+	params.add(wordsep);
+	filters.alignedWord.param_setup(params);
+
 	var sep = new LabelScriptParam("", "Aligned Group Filter");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
@@ -57,43 +67,52 @@ function setup_params(params) {
  *******************************/
 function query_record(recordIndex, record)
 {
-    var searchTier = "IPA Target";
-    if(!filters.speaker.check_speaker(record.speaker)) return;
+	if(!filters.speaker.check_speaker(record.speaker)) return;
     
 	var searchObjects = filters.group.getRequestedGroups(record);
-	
 	// check aligned group for each group returned
 	if(filters.alignedGroup.isUseFilter()) {
 	    searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
 	}
 	
 	for(var gIdx = 0; gIdx < searchObjects.length; gIdx++) {
-	    var grp = searchObjects[gIdx];
-	    var ipaTGroup = grp.getIPATarget();
-	    var ipaAGroup = grp.getIPAActual();
-	    
-	    var result = factory.createResult();
-	    result.schema = "ALIGNED";
-	    result.recordIndex = recordIndex;
-	    
-	    var rvt = factory.createResultValue();
-	    rvt.tierName = "IPA Target";
-    	rvt.groupIndex = grp.groupIndex;
-    	rvt.range = new Range(0, ipaTGroup.toString().length(), false);
-    	rvt.data = ipaTGroup;
-    	result.addResultValue(rvt);
-    	
-    	var rva = factory.createResultValue();
-    	rva.tierName = "IPA Actual";
-    	rva.groupIndex = grp.groupIndex;
-    	rva.range = new Range(0, ipaAGroup.toString().length(), false);
-    	rva.data = ipaAGroup;
-        result.addResultValue(rva);
-	    
-	    var metadata = result.metadata;
-	    pccOptions.standard.setup_pcc_standard_metadata(grp, metadata);
-	    pccOptions.aligned.setup_pcc_aligned_metadata(grp, metadata);
-	    
-	    results.addResult(result);
+		var group = searchObjects[gIdx];
+		var words = filters.word.getRequestedWords(group);
+		
+		for(var wIdx = 0; wIdx < words.length; wIdx++) {
+			var word = words[wIdx];
+			if(filters.alignedWord.isUseFilter()) {
+				var alignedWord = word.getTier(filters.alignedWord.tierName);
+				if(!filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
+			}
+			
+			var grp = searchObjects[gIdx];
+		    var ipaT = word.getIPATarget();
+		    var ipaA = word.getIPAActual();
+		    
+		    var result = factory.createResult();
+		    result.schema = "ALIGNED";
+		    result.recordIndex = recordIndex;
+		    
+		    var rvt = factory.createResultValue();
+		    rvt.tierName = "IPA Target";
+	    	rvt.groupIndex = gIdx;
+	    	rvt.range = new Range(word.getIPATargetWordLocation(), ipaT.toString().length(), false);
+	    	rvt.data = ipaT;
+	    	result.addResultValue(rvt);
+	    	
+	    	var rva = factory.createResultValue();
+	    	rva.tierName = "IPA Actual";
+	    	rva.groupIndex = gIdx;
+	    	rva.range = new Range(word.getIPAActualWordLocation(), ipaA.toString().length(), false);
+	    	rva.data = ipaA;
+	        result.addResultValue(rva);
+		    
+		    var metadata = result.metadata;
+		    pccOptions.standard.setup_pcc_standard_metadata(word, metadata);
+		    pccOptions.aligned.setup_pcc_aligned_metadata(word, metadata);
+		    
+		    results.addResult(result);
+		}
 	}
 }
