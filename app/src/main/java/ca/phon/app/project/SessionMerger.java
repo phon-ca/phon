@@ -100,12 +100,12 @@ public class SessionMerger {
 		// to duplicate names
 		for(int i = 0; i < src.getParticipantCount(); i++) {
 			final Participant srcPart = src.getParticipant(i);
-			final String speakerName = srcPart.getName();
+			final String speakerName = srcPart.toString();
 			
 			Participant destPart = null;
 			for(int j = 0; j < dest.getParticipantCount(); j++) {
 				final Participant dp = dest.getParticipant(j);
-				if(dp.getName().equalsIgnoreCase(speakerName)) {
+				if(dp.toString().equalsIgnoreCase(speakerName)) {
 					destPart = dp;
 					break;
 				}
