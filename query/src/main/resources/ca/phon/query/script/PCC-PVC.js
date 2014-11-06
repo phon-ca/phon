@@ -13,6 +13,14 @@ var AlignedWordFilter = require("lib/TierFilter").TierFilter;
 var PccOptions = require("lib/Pcc").PccOptions;
 var Pcc = require("lib/Pcc").Pcc;
 
+var ignoreTruncatedParamInfo = {
+	"id": "ignoreTruncated",
+	"desc": "Ignore truncated words",
+	"title": "",
+	"def": true
+};
+var ignoreTruncatedParam;
+var ignoreTruncated = ignoreTruncatedParamInfo.def;
 
 var pccOptions = {
     "standard": new PccOptions("pccOptions.standard"),
@@ -86,9 +94,12 @@ function query_record(recordIndex, record)
 				if(!filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
 			}
 			
-			var grp = searchObjects[gIdx];
-		    var ipaT = word.getIPATarget();
-		    var ipaA = word.getIPAActual();
+			if(ignoreTruncated && word.getIPAActual() == null || word.getIPAActual().length() == 0) {
+				continue;
+			}
+			
+		    var ipaT = (word.getIPATarget() != null ? word.getIPATarget() : new IPATranscript());
+		    var ipaA = (word.getIPAActual() != null ? word.getIPAActual() : new IPATranscript());
 		    
 		    var result = factory.createResult();
 		    result.schema = "ALIGNED";
@@ -97,14 +108,18 @@ function query_record(recordIndex, record)
 		    var rvt = factory.createResultValue();
 		    rvt.tierName = "IPA Target";
 	    	rvt.groupIndex = gIdx;
-	    	rvt.range = new Range(word.getIPATargetWordLocation(), ipaT.toString().length(), false);
+	    	var startIndex = word.getIPATargetWordLocation();
+	    	var endIndex = startIndex + ipaT.toString().length();
+	    	rvt.range = new Range(startIndex, endIndex, false);
 	    	rvt.data = ipaT;
 	    	result.addResultValue(rvt);
 	    	
 	    	var rva = factory.createResultValue();
 	    	rva.tierName = "IPA Actual";
 	    	rva.groupIndex = gIdx;
-	    	rva.range = new Range(word.getIPAActualWordLocation(), ipaA.toString().length(), false);
+	    	startIndex = word.getIPAActualWordLocation();
+	    	endIndex = startIndex + ipaA.toString().length();
+	    	rva.range = new Range(startIndex, endIndex, false);
 	    	rva.data = ipaA;
 	        result.addResultValue(rva);
 		    
