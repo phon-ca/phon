@@ -51,7 +51,7 @@ public class EPMLU {
 	 * 
 	 * @return actual ePMLU-Features
 	 */
-	public int actualEMPLUFeatures() {
+	public int actualEPMLUFeatures() {
 		final PhoneMap pm = getPhoneMap();
 		int pmlu = 0;
 		
@@ -85,7 +85,7 @@ public class EPMLU {
 	 * @return actualEMPLUFeatures()/targetEMPLUFeatures()
 	 */
 	public float ePWPFeatures() {
-		return (float)actualEMPLUFeatures()/(float)targetEPMLUFeatures();
+		return (float)actualEPMLUFeatures()/(float)targetEPMLUFeatures();
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class EPMLU {
 	}
 	
 	public float actualEPMLU(float closedSyllBonus) {
-		return actualEMPLUFeatures() + actualEPMLUSyllables(closedSyllBonus);
+		return actualEPMLUFeatures() + actualEPMLUSyllables(closedSyllBonus);
 	}
 	
 	public float actualEPMLU() {
@@ -170,7 +170,7 @@ public class EPMLU {
 	}
 	
 	public float ePWP(float closedSyllBonus) {
-		return actualEPMLU(closedSyllBonus)/targetEPMLU(closedSyllBonus);
+		return ePWPFeatures() + ePWPSyllables(closedSyllBonus);
 	}
 	
 	public float ePWP() {
