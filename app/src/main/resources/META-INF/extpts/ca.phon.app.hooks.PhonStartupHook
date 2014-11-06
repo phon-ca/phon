@@ -1,3 +1,4 @@
+ca.phon.app.PreloaderStartupHook
 # StartupHook
 ca.phon.app.autosave.AutosaveStartupHook
 # Theme
