@@ -1,9 +1,14 @@
 package ca.phon.app.session.editor.undo;
 
+import java.awt.Component;
+
+import javax.swing.FocusManager;
 import javax.swing.undo.CannotUndoException;
 
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.common.GroupField;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
 
 /**
@@ -41,6 +46,17 @@ public class MergeGroupEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void doIt() {
+		RecordDataEditorView recordDataView = 
+				(RecordDataEditorView)getEditor().getViewModel().getView(RecordDataEditorView.VIEW_NAME);
+		if(recordDataView.currentGroupIndex() == groupIndex) {
+			final Component focusedComp = 
+					FocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+			if(focusedComp != null && focusedComp instanceof GroupField) {
+				final GroupField<?> grpField = (GroupField<?>)focusedComp;
+				grpField.validateAndUpdate();
+			}
+		}
+		
 		if(groupIndex+1 >= record.numberOfGroups()) return;
 		
 		wordIndex = record.mergeGroups(groupIndex, groupIndex+1);

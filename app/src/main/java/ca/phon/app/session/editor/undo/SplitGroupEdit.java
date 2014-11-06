@@ -1,9 +1,17 @@
 package ca.phon.app.session.editor.undo;
 
+import java.awt.Component;
 import java.lang.ref.WeakReference;
 
+import javax.swing.FocusManager;
+import javax.swing.JComponent;
+
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.common.GroupField;
+import ca.phon.app.session.editor.view.common.TierEditor;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
 
 /**
@@ -42,6 +50,17 @@ public class SplitGroupEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void doIt() {
+		RecordDataEditorView recordDataView = 
+				(RecordDataEditorView)getEditor().getViewModel().getView(RecordDataEditorView.VIEW_NAME);
+		if(recordDataView.currentGroupIndex() == gIndex) {
+			final Component focusedComp = 
+					FocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+			if(focusedComp != null && focusedComp instanceof GroupField) {
+				final GroupField<?> grpField = (GroupField<?>)focusedComp;
+				grpField.validateAndUpdate();
+			}
+		}
+		
 		final Record record = getRecord();
 		if(record == null) return;
 		
