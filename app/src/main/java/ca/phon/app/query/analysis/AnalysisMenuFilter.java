@@ -4,8 +4,10 @@ import java.awt.Window;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import ca.phon.app.query.analysis.actions.PCCAction;
+import ca.phon.app.query.analysis.actions.PMLUAction;
 import ca.phon.app.query.analysis.actions.WordMatchAction;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -42,10 +44,15 @@ public class AnalysisMenuFilter implements IPluginMenuFilter, IPluginExtensionPo
 		if(!(owner instanceof CommonModuleFrame)) return;
 		
 		toolsMenu.addSeparator();
+		final JMenuItem headerItm = new JMenuItem("-- Assessments --");
+		headerItm.setEnabled(false);
+		
+		toolsMenu.add(headerItm);
 		toolsMenu.add(new WordMatchAction((CommonModuleFrame)owner));
 		
-		// TODO This script needs modifications so that it's performed at a word-level
 		toolsMenu.add(new PCCAction((CommonModuleFrame)owner));
+		
+		toolsMenu.add(new PMLUAction((CommonModuleFrame)owner));
 	}
 	
 	private final IPluginExtensionFactory<IPluginMenuFilter> factory =  new IPluginExtensionFactory<IPluginMenuFilter>() {
