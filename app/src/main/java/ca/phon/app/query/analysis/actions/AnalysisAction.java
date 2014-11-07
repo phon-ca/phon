@@ -59,7 +59,9 @@ public class AnalysisAction extends HookableAction {
 		
 		final QueryAnalysisWizard wizard = new QueryAnalysisWizard(title, project, 
 				queryScript, reportScript);
-		wizard.showWizard();
+		wizard.pack();
+		wizard.centerWindow();
+		wizard.setVisible(true);
 	}
 
 	private QueryScript loadQueryScript(String queryScript) {

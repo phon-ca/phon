@@ -1,6 +1,7 @@
 package ca.phon.app.query.analysis;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -18,9 +19,11 @@ import ca.phon.query.analysis.QueryAnalysis;
 import ca.phon.query.analysis.QueryAnalysisInput;
 import ca.phon.query.analysis.QueryStep;
 import ca.phon.query.analysis.ScriptReportStep;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScript;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonWorker;
@@ -73,12 +76,19 @@ public class QueryAnalysisWizard extends WizardFrame {
 		
 		retVal.add(createHeader(), BorderLayout.NORTH);
 		
-		sessionSelector = new SessionSelector(getExtension(Project.class));
+		sessionSelector = new SessionSelector(getExtension(Project.class)){
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension retVal = super.getPreferredSize();
+				retVal.width = 230;
+				return retVal;
+			}
+		};
 		final JScrollPane scroller = new JScrollPane(sessionSelector);
 		
 		queryScriptPanel = new ScriptPanel(queryScript);
 		
-		final JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL, true, scroller, queryScriptPanel);
+		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, scroller, queryScriptPanel);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(0.4f);
 		retVal.add(splitPane, BorderLayout.CENTER);
@@ -90,6 +100,8 @@ public class QueryAnalysisWizard extends WizardFrame {
 		final WizardStep retVal = new WizardStep();
 		retVal.setLayout(new BorderLayout());
 		
+		retVal.add(createHeader(), BorderLayout.NORTH);
+		
 		bufferPanel = new BufferPanel(super.getTitle());
 		retVal.add(bufferPanel, BorderLayout.CENTER);
 		
@@ -97,12 +109,27 @@ public class QueryAnalysisWizard extends WizardFrame {
 	}
 	
 	private DialogHeader createHeader() {
-		final DialogHeader retVal = new DialogHeader(super.getTitle(), "");
-		return retVal;
+		final QueryName qn = queryScript.getExtension(QueryName.class);
+		if(qn != null) {
+			final DialogHeader retVal = new DialogHeader("Assessment: " + qn.getName(), "");
+			return retVal;
+		} else {
+			return new DialogHeader("Assessment", "");
+		}
 	}
+	
+	
 	
 	@Override
 	public void next() {
+		// make sure we have at least one session selected
+		if(sessionSelector.getSelectedSessions().size() == 0) {
+			ToastFactory.makeToast("Please select at least one session").start(sessionSelector);
+			return;
+		}
+		if(!queryScriptPanel.checkParams()) {
+			return;
+		}
 		super.next();
 		if(getCurrentStep() == reportStep) {
 			final QueryAnalysisInput input = new QueryAnalysisInput();
