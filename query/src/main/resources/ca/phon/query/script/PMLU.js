@@ -6,7 +6,7 @@
  */
  
 /*
-params = {label, "<html><p>Phonological Mean Length of Utterance (PMLU) [Ingram 2002]<br/> and Expanded PMLU (eMPLU) [Arais & Lleó 2013] calculations for aligned words.</p></html>",  "<html><b>Phonological Mean Length of Utterance</b></html>"};
+params = {label, "<html><p>Phonological Mean Length of Utterance (PMLU) [Ingram 2002] for aligned words</p></html>",  "<html><b>Phonological Mean Length of Utterance</b></html>"};
 */
 
 importClass(Packages.ca.phon.syllable.SyllableConstituentType)
