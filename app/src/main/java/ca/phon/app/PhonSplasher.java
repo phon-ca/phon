@@ -48,6 +48,9 @@ public class PhonSplasher {
 	public final static String BOOT_CLASS_PROPERTY =
 			PhonSplasher.class.getName() + ".bootClass";
 	
+	public final static String BOOT_FORK_PROPERTY =
+			PhonSplasher.class.getName() + ".fork";
+	
 	/**
 	 * Default boot class 
 	 */
@@ -60,8 +63,9 @@ public class PhonSplasher {
 		final String bootClass = PrefHelper.get(BOOT_CLASS_PROPERTY, DEFAULT_BOOT_CLASS);
 		
 		BootWindow.splash(ImageIO.read(splashStream));
-		if(!OSInfo.isMacOs())
-			BootWindow.invokeMainInNewProcess(bootClass, args);
+		final boolean fork = PrefHelper.getBoolean(BOOT_FORK_PROPERTY, Boolean.FALSE);
+		if(fork)
+			BootWindow.invokeMainInNewProcess(PhonSplasher.class.getName(), args);
 		else
 			BootWindow.invokeMain(bootClass, args);
 		try {
@@ -69,7 +73,7 @@ public class PhonSplasher {
 		} catch (InterruptedException e) {}
 		BootWindow.disposeSplash();
 		
-		if(!OSInfo.isMacOs())
+		if(fork) 
 			System.exit(0);
 	}
 
