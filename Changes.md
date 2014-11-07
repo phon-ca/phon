@@ -26,6 +26,8 @@
  * Fixed an issue where group functions (split group, merge group, etc.) would not work properly if tier data was not committed first
  * Session editor will now move to the next record after replacing a segment using the 'Replace current segment' mode for segmentation
  * Fixed transliteration dictionary for Arabic
+ * Fixed 'Formant listing' query script so that table header is printed for each session selected
+ * Punctuation in Orthography will no longer export as a word in TextGrid exports
  
 ## Changes from Phon 1.6.2
 
