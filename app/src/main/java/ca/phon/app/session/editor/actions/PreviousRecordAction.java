@@ -23,7 +23,7 @@ public class PreviousRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-previous";
 	
 	private final static KeyStroke KS =
-			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
+			KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_MASK );
 	
 	public PreviousRecordAction(SessionEditor editor) {
 		super(editor);

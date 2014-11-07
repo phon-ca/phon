@@ -23,7 +23,7 @@ public class NextRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-next";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0);
+			KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.ALT_MASK );
 	
 	public NextRecordAction(SessionEditor editor) {
 		super(editor);

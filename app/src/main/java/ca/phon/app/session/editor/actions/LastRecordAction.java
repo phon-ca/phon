@@ -25,7 +25,7 @@ public class LastRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-last";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.ALT_MASK | KeyEvent.SHIFT_MASK );
 
 	public LastRecordAction(SessionEditor editor) {
 		super(editor);

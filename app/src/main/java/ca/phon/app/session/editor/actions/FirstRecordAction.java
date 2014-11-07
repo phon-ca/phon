@@ -25,7 +25,7 @@ public class FirstRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-first";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_MASK | KeyEvent.SHIFT_MASK);
 
 	public FirstRecordAction(SessionEditor editor) {
 		super(editor);
