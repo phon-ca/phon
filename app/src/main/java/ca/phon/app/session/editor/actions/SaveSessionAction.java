@@ -1,6 +1,5 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -13,8 +12,6 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Session;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

@@ -21,7 +21,6 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.PrefHelper;
 
 /**

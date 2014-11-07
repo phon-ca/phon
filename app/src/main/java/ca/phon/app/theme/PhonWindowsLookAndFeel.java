@@ -1,6 +1,5 @@
 package ca.phon.app.theme;
 
-import com.jgoodies.looks.FontPolicy;
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
 
 public class PhonWindowsLookAndFeel extends WindowsLookAndFeel {

@@ -1,7 +1,5 @@
 package ca.phon.app.query.analysis.actions;
 
-import ca.phon.query.script.QueryScript;
-import ca.phon.script.PhonScript;
 import ca.phon.ui.CommonModuleFrame;
 
 public class PMLUAction extends AnalysisAction {

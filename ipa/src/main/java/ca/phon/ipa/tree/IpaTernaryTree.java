@@ -12,7 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.tree.IpaTernaryTreeNode.Position;
-import ca.phon.visitor.Visitor;
 
 /**
  * Ternary tree implementation for IPA transcripts

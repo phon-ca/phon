@@ -1,6 +1,5 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 

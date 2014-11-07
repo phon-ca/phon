@@ -88,8 +88,6 @@ import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

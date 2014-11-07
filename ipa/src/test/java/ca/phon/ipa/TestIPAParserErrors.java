@@ -4,14 +4,9 @@ import java.text.ParseException;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import ca.phon.ipa.parser.exceptions.HangingLigatureException;
-import ca.phon.ipa.parser.exceptions.InvalidTokenException;
-import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
 
 @RunWith(JUnit4.class)
 public class TestIPAParserErrors {

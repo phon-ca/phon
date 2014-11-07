@@ -45,7 +45,6 @@ import javax.swing.border.TitledBorder;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
-import ca.phon.project.LocalProject;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;

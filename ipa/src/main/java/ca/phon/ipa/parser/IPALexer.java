@@ -1,9 +1,5 @@
 package ca.phon.ipa.parser;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;

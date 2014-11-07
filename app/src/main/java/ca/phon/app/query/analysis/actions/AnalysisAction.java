@@ -4,18 +4,12 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.query.ScriptPanel;
 import ca.phon.app.query.analysis.QueryAnalysisWizard;
 import ca.phon.project.Project;
-import ca.phon.query.analysis.QueryAnalysis;
-import ca.phon.query.analysis.QueryStep;
-import ca.phon.query.analysis.ScriptReportStep;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.BasicScript;

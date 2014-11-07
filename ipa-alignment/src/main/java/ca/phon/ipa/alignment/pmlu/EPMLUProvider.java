@@ -1,9 +1,9 @@
 package ca.phon.ipa.alignment.pmlu;
 
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.extensions.Extension;
 import ca.phon.extensions.ExtensionProvider;
 import ca.phon.extensions.IExtendable;
+import ca.phon.ipa.alignment.PhoneMap;
 
 @Extension(PhoneMap.class)
 public class EPMLUProvider implements ExtensionProvider {

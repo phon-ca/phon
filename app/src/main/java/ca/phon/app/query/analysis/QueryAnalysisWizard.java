@@ -3,11 +3,8 @@ package ca.phon.app.query.analysis;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.BufferPanel;
@@ -17,8 +14,6 @@ import ca.phon.project.Project;
 import ca.phon.query.analysis.DefaultQueryAnalysis;
 import ca.phon.query.analysis.QueryAnalysis;
 import ca.phon.query.analysis.QueryAnalysisInput;
-import ca.phon.query.analysis.QueryStep;
-import ca.phon.query.analysis.ScriptReportStep;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScript;

@@ -1,7 +1,6 @@
 package ca.phon.session.impl;
 
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
 import java.util.List;
 
 import ca.phon.alignment.AlignmentMap;

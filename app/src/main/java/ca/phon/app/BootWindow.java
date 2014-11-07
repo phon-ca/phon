@@ -27,7 +27,6 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.peer.FontPeer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -39,8 +38,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-
-import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.app.hooks.PhonBootHook;
 import ca.phon.plugin.PluginException;

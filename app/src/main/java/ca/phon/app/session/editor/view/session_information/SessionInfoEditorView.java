@@ -25,7 +25,6 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.ActionMap;

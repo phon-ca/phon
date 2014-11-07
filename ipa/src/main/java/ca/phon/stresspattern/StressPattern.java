@@ -17,9 +17,6 @@
  */
 package ca.phon.stresspattern;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +27,6 @@ import ca.phon.fsa.SimpleFSA;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.stresspattern.fsa.StressPatternCompiler;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableStress;
 import ca.phon.util.Range;
 

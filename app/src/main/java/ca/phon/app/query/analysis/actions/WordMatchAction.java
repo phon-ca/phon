@@ -1,9 +1,5 @@
 package ca.phon.app.query.analysis.actions;
 
-import java.awt.event.ActionEvent;
-
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 
 public class WordMatchAction extends AnalysisAction {

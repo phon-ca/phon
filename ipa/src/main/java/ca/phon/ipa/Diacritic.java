@@ -1,8 +1,5 @@
 package ca.phon.ipa;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokenType;

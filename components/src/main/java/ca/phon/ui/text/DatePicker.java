@@ -3,10 +3,6 @@ package ca.phon.ui.text;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.text.NavigationFilter;
-import javax.swing.text.NavigationFilter.FilterBypass;
-import javax.swing.text.Position.Bias;
-
 import org.jdesktop.swingx.JXDatePicker;
 import org.joda.time.DateTime;
 

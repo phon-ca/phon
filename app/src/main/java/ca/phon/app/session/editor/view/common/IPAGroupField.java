@@ -1,36 +1,15 @@
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JLabel;
 import javax.swing.JToolTip;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.JTextComponent;
 
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.TokenStream;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.parser.IPALexer;
-import ca.phon.ipa.parser.IPAParser;
-import ca.phon.ipa.parser.IPAParserErrorHandler;
-import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.session.UnvalidatedValue;

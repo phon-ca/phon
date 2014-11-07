@@ -1,6 +1,5 @@
 package ca.phon.functor;
 
-import java.util.List;
 
 
 /**

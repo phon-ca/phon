@@ -20,7 +20,6 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
-import ca.phon.ipa.parser.IPAParserErrorHandler;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;

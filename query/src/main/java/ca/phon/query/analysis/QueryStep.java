@@ -3,14 +3,11 @@ package ca.phon.query.analysis;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.functor.AnalysisStep;
 import ca.phon.project.Project;
-import ca.phon.query.analysis.QueryAnalysisInput;
-import ca.phon.query.analysis.QueryAnalysisResult;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryTask;
 import ca.phon.session.Session;

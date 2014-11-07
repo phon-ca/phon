@@ -4,13 +4,10 @@ import java.awt.Component;
 import java.lang.ref.WeakReference;
 
 import javax.swing.FocusManager;
-import javax.swing.JComponent;
 
 import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.common.GroupField;
-import ca.phon.app.session.editor.view.common.TierEditor;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
 

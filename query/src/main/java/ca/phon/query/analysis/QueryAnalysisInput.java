@@ -1,14 +1,9 @@
 package ca.phon.query.analysis;
 
-import ca.phon.session.SessionLocation;
-import ca.phon.session.SessionPath;
-
 import java.util.List;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.report.io.ReportDesign;
-import ca.phon.query.script.QueryScript;
+import ca.phon.session.SessionPath;
 
 public class QueryAnalysisInput {
 	

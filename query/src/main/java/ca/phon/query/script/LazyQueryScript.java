@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.Script;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
