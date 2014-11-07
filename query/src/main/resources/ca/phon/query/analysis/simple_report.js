@@ -36,9 +36,11 @@ while(sessionPathItr.hasNext()) {
 	var resultSet = queryAnalysisResult.getResultSet(sessionPath);
 	for(j = 0; j < resultSet.numberOfResults(true); j++) {
 		var result = resultSet.getResult(j);
+		var record = session.getRecord(result.recordIndex);
+		var speaker = record.speaker;
 		
 		out.print("\"" + sessionPath + "\"");
-		out.print(",\"" + session.getRecord(result.recordIndex).speaker + "\"");
+		out.print(",\"" + (speaker == null ? "Unspecified" : speaker) + "\"");
 		out.print(",\"" + (result.recordIndex+1) + "\"");
 		out.print(",\"" + (result.getResultValue(0).groupIndex+1) + "\"");
 		out.print(",\"" + result.getResultValue(0).data + "\"");
