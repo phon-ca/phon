@@ -9,11 +9,7 @@
  * Added Japanese (jpn) transliteration dictionary
  * Changed background color for many panels from blue to gray
  * Changed selection highlight colours (Mac OS X) from orange to blue
- * Changed keystrokes for record navigation:
-	* Next record - ALT+N
-	* Previous record - ALT+P
-	* First record - ALT+SHIFT+N
-	* Last record - ALT+SHIFT+P
+ * Changed keystrokes for record navigation
  * Inter-word '(.)' pauses are now considered part of the set of aligned elements in tiers
  * Splash screen will now stay visible until the Workspace window appears (Windows)
 
