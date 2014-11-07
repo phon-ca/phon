@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -23,7 +24,7 @@ public class PreviousRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-previous";
 	
 	private final static KeyStroke KS =
-			KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_MASK );
+			KeyStroke.getKeyStroke(KeyEvent.VK_P, (OSInfo.isMacOs() ? KeyEvent.CTRL_MASK : KeyEvent.ALT_MASK) );
 	
 	public PreviousRecordAction(SessionEditor editor) {
 		super(editor);
