@@ -94,14 +94,14 @@ function setup_params(params) {
 		includeEPMLUParamInfo.desc,
 		includeEPMLUParamInfo.title,
 		includeEPMLUParamInfo.def);
-	params.add(includeEPMLUParam);
+	//params.add(includeEPMLUParam);
 	
 	ePMLUClosedSyllBonusParam = new StringScriptParam(
 		ePMLUClosedSyllBonusParamInfo.id,
 		ePMLUClosedSyllBonusParamInfo.desc,
 		ePMLUClosedSyllBonusParamInfo.def);
 	ePMLUClosedSyllBonusParam.setPrompt(ePMLUClosedSyllBonusParamInfo.prompt);
-	params.add(ePMLUClosedSyllBonusParam);
+	//params.add(ePMLUClosedSyllBonusParam);
 	
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
@@ -184,26 +184,29 @@ function query_record(recordIndex, record)
 	    	rva.data = ipaA;
 	        result.addResultValue(rva);
 	        
+	        var nf = java.text.NumberFormat.getNumberInstance();
+	    	nf.setMaximumFractionDigits(6);
+	    	
 	        var pm = (word.phoneAlignment != null ? word.phoneAlignment : new PhoneMap(ipaT, ipaA));
 	        if(includePMLU == true) {
-	        	result.metadata.put("target PMLU", pm.PMLU.targetPMLU() + "");
-	        	result.metadata.put("actual PMLU", pm.PMLU.actualPMLU() + "");
-	        	result.metadata.put("PWP", pm.PMLU.PWP() + "");
+	        	result.metadata.put("target PMLU", nf.format(pm.PMLU.targetPMLU()));
+	        	result.metadata.put("actual PMLU", nf.format(pm.PMLU.actualPMLU()));
+	        	result.metadata.put("PWP", nf.format(pm.PMLU.PWP()));
 	        }
 	        
-	        if(includeEPMLU == true) {
-	        	result.metadata.put("target ePMLU-Features", pm.EPMLU.targetEPMLUFeatures()+"");
-	        	result.metadata.put("actual ePMLU-Features", pm.EPMLU.actualEPMLUFeatures()+"");
-	        	result.metadata.put("ePWP-Features", pm.EPMLU.ePWPFeatures()+"");
-	        	
-	        	result.metadata.put("target ePMLU-Syllables", pm.EPMLU.targetEPMLUSyllables(closedSyllBonus)+"");
-	        	result.metadata.put("actual ePMLU-Syllables", pm.EPMLU.actualEPMLUSyllables(closedSyllBonus)+"");
-	        	result.metadata.put("ePWP-Syllables", pm.EPMLU.ePWPSyllables(closedSyllBonus)+"");
-	        	
-	        	result.metadata.put("target ePMLU", pm.EPMLU.targetEPMLU(closedSyllBonus)+"");
-	        	result.metadata.put("actual ePMLU", pm.EPMLU.actualEPMLU(closedSyllBonus)+"")
-	        	result.metadata.put("ePWP", pm.EPMLU.ePWP(closedSyllBonus)+"");
-	        }
+//	        if(includeEPMLU == true) {
+//	        	result.metadata.put("target ePMLU-Features", pm.EPMLU.targetEPMLUFeatures()+"");
+//	        	result.metadata.put("actual ePMLU-Features", pm.EPMLU.actualEPMLUFeatures()+"");
+//	        	result.metadata.put("ePWP-Features", pm.EPMLU.ePWPFeatures()+"");
+//	        	
+//	        	result.metadata.put("target ePMLU-Syllables", pm.EPMLU.targetEPMLUSyllables(closedSyllBonus)+"");
+//	        	result.metadata.put("actual ePMLU-Syllables", pm.EPMLU.actualEPMLUSyllables(closedSyllBonus)+"");
+//	        	result.metadata.put("ePWP-Syllables", pm.EPMLU.ePWPSyllables(closedSyllBonus)+"");
+//	        	
+//	        	result.metadata.put("target ePMLU", pm.EPMLU.targetEPMLU(closedSyllBonus)+"");
+//	        	result.metadata.put("actual ePMLU", pm.EPMLU.actualEPMLU(closedSyllBonus)+"")
+//	        	result.metadata.put("ePWP", pm.EPMLU.ePWP(closedSyllBonus)+"");
+//	        }
 	        
 	        results.addResult(result);
 		}
