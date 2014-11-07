@@ -2,9 +2,30 @@
 
 ## Changes from Phon 2.0.0
 
+### General 
+ * Moved PCC-PVC to Tools -> Assessments
+ * Added new assessment 'Word Match' to the Tools menu
+ * Added new assessment 'PMLU' to the tools menu
+ * Added Japanese (jpn) transliteration dictionary
+ * Changed background color for many panels from blue to gray
+ * Changed selection highlight colours (Mac OS X) from orange to blue
+ * Changed keystrokes for record navigation:
+	* Next record - ALT+N
+	* Previous record - ALT+P
+	* First record - ALT+SHIFT+N
+	* Last record - ALT+SHIFT+P
+ * Inter-word '(.)' pauses are now considered part of the set of aligned elements in tiers
+ * Splash screen will now stay visible until the Workspace window appears (Windows)
+
 ### Bugs
- * Fixed an issue where query form was not displayed when a script was loaded after the editor was open.
- * Phon manual is now accessible from the Help menu.
+ * Fixed an issue where query form was not displayed when a script was loaded after the editor was open
+ * Phon manual is now accessible from the Help menu
+ * Added a check to the waveform exporter so that it will not overwrite the source media file
+ * Added a warning to the waveform exporter if about to overwrite an existing file
+ * Participant age calculation will now work if age for the participant has already been specified
+ * Fixed an issue where group functions (split group, merge group, etc.) would not work properly if tier data was not committed first
+ * Session editor will now move to the next record after replacing a segment using the 'Replace current segment' mode for segmentation
+ * Fixed transliteration dictionary for Arabic
  
 ## Changes from Phon 1.6.2
 
