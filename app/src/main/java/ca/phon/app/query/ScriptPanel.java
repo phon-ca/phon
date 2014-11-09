@@ -175,7 +175,6 @@ public class ScriptPanel extends JPanel {
 	private void updateParamPanel() {
 		paramPanel.removeAll();
 		
-		script.resetContext();
 		final PhonScriptContext ctx = script.getContext();
 		ScriptParameters scriptParams = new ScriptParameters();
 		try {
