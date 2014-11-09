@@ -466,8 +466,16 @@ exports.PatternFilter = function (id) {
             }
         } else {
             while(regexMatcher.find()) {
+            	var myValue;
+            	if(obj instanceof IPATranscript) {
+            		var startIpaIdx = obj.ipaIndexOf(regexMatcher.start());
+            		var endIpaIdx = obj.ipaIndexOf(regexMatcher.end()-1);
+            		myValue = obj.subsection(startIpaIdx, endIpaIdx+1);
+            	} else {
+            		myValue = regexMatcher.group();
+            	}
                 v = {
-                    start: regexMatcher.start(), end: regexMatcher.end(), value: regexMatcher.group()
+                    start: regexMatcher.start(), end: regexMatcher.end(), value: myValue
                 };
                 retVal.push(v);
             }
