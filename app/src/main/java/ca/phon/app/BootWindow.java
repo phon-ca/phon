@@ -56,6 +56,8 @@ public class BootWindow extends Window {
 		
 		bootImage = img;
 		
+		setBackground(new Color(0,0,0,0));
+		
 		MediaTracker mt = new MediaTracker(this);
 		mt.addImage(bootImage, 0);
 		
