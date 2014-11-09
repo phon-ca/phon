@@ -419,21 +419,31 @@ exports.PatternFilter = function (id) {
         
         var strA = (caseSensitive ? obj.toString(): obj.toString().toLowerCase());
         var strB = (caseSensitive ? filter: filter.toLowerCase());
+        
         if (exactMatch == true) {
             if (strA == strB) {
                 var v = {
-                    start: 0, end: strA.length, value: obj
+                    start: 0, end: strA.length(), value: obj
                 };
                 retVal.append(v);
             }
         } else {
             var i = 0;
-            while (strA.indexOf(strB, i) >= 0) {
+            while ((i = strA.indexOf(strB, i)) >= 0) {
+            	var myValue;
+            	if(obj instanceof IPATranscript) {
+            		var startIpaIdx = obj.ipaIndexOf(i);
+            		var endIpaIdx = obj.ipaIndexOf(i+strB.length()-1);
+            		myValue = obj.subsection(startIpaIdx, endIpaIdx+1);
+            	} else {
+            		myValue = strA.substring(i, i+strB.length());
+            	}
                 var v = {
-                    start: i, end: i + strB.length, value: strA.substring(i, i + strB.length)
+                    start: i, end: i + strB.length(), value: myValue
                 };
+                
                 retVal.push(v);
-                i += strB.length;
+                i += strB.length();
             }
         }
         
