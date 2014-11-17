@@ -162,6 +162,15 @@ function checkWordMatch(recordIndex, record, obj) {
 	result.recordIndex = recordIndex;
 	result.schema = "ALIGNED";
 	
+	var orthoVal = factory.createResultValue();
+	orthoVal.tierName = "Orthography";
+	orthoVal.groupIndex = obj.group.groupIndex;
+	var startIndex = obj.getOrthographyWordLocation();
+	var length = obj.orthography.toString().length();
+	orthoVal.range = new Range(startIndex, startIndex + length, false);
+	orthoVal.data = obj.orthography;
+	result.addResultValue(orthoVal);
+	
 	var rv = factory.createResultValue();
 	rv.tierName = searchTier;
 	rv.groupIndex = obj.group.groupIndex;

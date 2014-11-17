@@ -14,11 +14,16 @@ var keySet = queryAnalysisResult.resultSetKeys;
 // use the first result as our model
 var model = new Array();
  
-var firstResult = queryAnalysisResult.getResultSet(keySet.iterator().next());
+var firstResultSet = queryAnalysisResult.getResultSet(keySet.iterator().next());
 
-var resultColumns = firstResult.metadataKeys;
+out.print("\"Session\",\"Speaker\",\"Record\",\"Group\"");
 
-out.print("\"Session\",\"Speaker\",\"Record\",\"Group\",\"IPA Target\",\"IPA Actual\"");
+for(i = 0; i < firstResultSet.getResult(0).numberOfResultValues; i++) {
+	var rv = firstResultSet.getResult(0).getResultValue(i);
+	out.print(",\"" + rv.tierName + "\"");
+}
+
+var resultColumns = firstResultSet.metadataKeys;
 for(i = 0; i < resultColumns.length; i++) {
 	var col = resultColumns[i];
 	out.print(",\"" + col + "\"");
@@ -43,8 +48,10 @@ while(sessionPathItr.hasNext()) {
 		out.print(",\"" + (speaker == null ? "Unspecified" : speaker) + "\"");
 		out.print(",\"" + (result.recordIndex+1) + "\"");
 		out.print(",\"" + (result.getResultValue(0).groupIndex+1) + "\"");
-		out.print(",\"" + result.getResultValue(0).data + "\"");
-		out.print(",\"" + result.getResultValue(1).data + "\"");
+		
+		for(k = 0; k < result.numberOfResultValues; k++) {
+			out.print(",\"" + result.getResultValue(k).data + "\"");
+		}
 		
 		for(k = 0; k < resultColumns.length; k++) {
 			var col = resultColumns[k];
