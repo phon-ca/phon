@@ -387,6 +387,7 @@ Schema for Phon sessions.
     <xs:element name="SES" type="xs:string"/>
     <xs:element name="education" type="xs:string"/>
     <xs:element name="birthday" type="xs:date"/>
+    <xs:element name="age" type="ageType"/>
     <xs:element name="syllabifier" type="xs:string"/>
     <xs:element name="dictionary" type="xs:string"/>
     <xs:complexType name="participantType" mixed="false">
@@ -398,6 +399,7 @@ Schema for Phon sessions.
             <xs:element ref="SES" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="education" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="birthday" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="age" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="language" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="syllabifier" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="dictionary" minOccurs="0" maxOccurs="1"/>
@@ -407,6 +409,13 @@ Schema for Phon sessions.
         <xs:attribute name="id" type="xs:ID" use="required"/>
 
     </xs:complexType>
+    
+    <xs:simpleType name="ageType">
+        <xs:restriction base="xs:duration">
+            <!-- Negative durations are not allowed, must start with 'P' -->
+            <xs:pattern value="^P.+"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="sexType">
         <xs:restriction base="xs:NMTOKEN">

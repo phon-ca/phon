@@ -13,6 +13,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -233,6 +234,13 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			// calculate age up to the session date
 			final Period period = new Period(bdt, sessionDate);
 			retVal.setAgeTo(period);
+		}
+		
+		final Duration ageDuration = pt.getAge();
+		if(ageDuration != null) {
+			// convert to period
+			final Period age = Period.parse(ageDuration.toString());
+			retVal.setAge(age);
 		}
 		
 		retVal.setEducation(pt.getEducation());

@@ -14,10 +14,12 @@ import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
@@ -192,6 +194,17 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(bday.toGregorianCalendar());
 				cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 				retVal.setBirthday(cal);
+			} catch (DatatypeConfigurationException e) {
+				LOGGER.log(Level.WARNING, e.toString(), e);
+			}
+		}
+		
+		final Period age = part.getAge(null);
+		if(age != null) {
+			try {
+				final DatatypeFactory df = DatatypeFactory.newInstance();
+				final Duration ageDuration = df.newDuration(true, age.getYears(), age.getMonths(), age.getDays(), 0, 0, 0);
+				retVal.setAge(ageDuration);
 			} catch (DatatypeConfigurationException e) {
 				LOGGER.log(Level.WARNING, e.toString(), e);
 			}
