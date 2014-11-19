@@ -31,6 +31,7 @@ import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -70,6 +71,7 @@ import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -82,6 +84,11 @@ import com.jgoodies.forms.layout.FormLayout;
 public class SessionInfoEditorView extends EditorView {
 
 	private static final long serialVersionUID = -3112381708875592956L;
+	
+	public final static String SHOW_CALCULATED_AGES_PROP =
+			SessionEditor.class.getName() + ".showCalculatedAges";
+	
+	public final static boolean DEFAULT_SHOW_CALCULATED_AGES = Boolean.TRUE;
 
 	private final String VIEW_TITLE = "Session Information";
 
@@ -94,6 +101,11 @@ public class SessionInfoEditorView extends EditorView {
 	 * Media field
 	 */
 	private MediaSelectionField mediaLocationField;
+	
+	/**
+	 * Checkbox for calculated ages
+	 */
+	private JCheckBox showCalculagedAgesBox;
 	
 	/**
 	 * Language
@@ -181,6 +193,14 @@ public class SessionInfoEditorView extends EditorView {
 		mediaLocationField = new MediaSelectionField(getEditor().getProject());
 		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		
+		final PhonUIAction toggleShowCalculatedAgesAct = 
+				new PhonUIAction(this, "toggleShowCalculatedAges");
+		toggleShowCalculatedAgesAct.putValue(PhonUIAction.NAME,
+				"Show calculated age if not provided");
+		toggleShowCalculatedAgesAct.putValue(PhonUIAction.SELECTED_KEY, isShowCalculatedAges());
+		showCalculagedAgesBox = new JCheckBox(toggleShowCalculatedAgesAct);
+		showCalculagedAgesBox.setOpaque(false);
+		
 		participantTable = new JXTable();
 		participantTable.setVisibleRowCount(3);
 		
@@ -190,7 +210,6 @@ public class SessionInfoEditorView extends EditorView {
 		ImageIcon deleteIcon = 
 				IconManager.getInstance().getIcon("actions/delete_user", IconSize.SMALL);
 		final PhonUIAction deleteAction = new PhonUIAction(this, "deleteParticipant");
-//		deleteAction.putValue(PhonUIAction.NAME, "Delete participant");
 		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete selected participant");
 		deleteAction.putValue(PhonUIAction.SMALL_ICON, deleteIcon);
 		participantTableActionMap.put("DELETE_PARTICIPANT", deleteAction);
@@ -220,6 +239,7 @@ public class SessionInfoEditorView extends EditorView {
 				"pref, pref, pref:grow");
 		JPanel participantPanel = new JPanel(participantLayout);
 		participantPanel.setBackground(Color.white);
+		participantPanel.add(showCalculagedAgesBox, cc.xy(1, 1));
 		participantPanel.add(new JScrollPane(participantTable), cc.xywh(1, 2, 3, 2));
 		participantPanel.add(addParticipantButton, cc.xy(3,1));
 		participantPanel.add(editParticipantButton, cc.xy(2,1));
@@ -260,6 +280,20 @@ public class SessionInfoEditorView extends EditorView {
 		add(new JScrollPane(contentPanel), BorderLayout.CENTER);
 		
 		update();
+	}
+	
+	public boolean isShowCalculatedAges() {
+		return PrefHelper.getBoolean(SHOW_CALCULATED_AGES_PROP, DEFAULT_SHOW_CALCULATED_AGES);
+	}
+	
+	public void setShowCalculatedAges(boolean showCalculatedAges) {
+		PrefHelper.getUserPreferences().putBoolean(SHOW_CALCULATED_AGES_PROP, showCalculatedAges);
+	}
+	
+	public void toggleShowCalculatedAges() {
+		boolean showCalculatedAges = showCalculagedAgesBox.isSelected();
+		setShowCalculatedAges(showCalculatedAges);
+		((ParticipantsTableModel)participantTable.getModel()).setShowCalculatedAges(showCalculatedAges);
 	}
 
 	public DatePicker createDateField() {

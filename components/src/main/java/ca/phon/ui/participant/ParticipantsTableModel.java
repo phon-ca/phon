@@ -24,11 +24,15 @@ import org.joda.time.Period;
 import ca.phon.session.AgeFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
+import ca.phon.session.io.SessionInputFactory;
+import ca.phon.util.PrefHelper;
 
 public class ParticipantsTableModel extends AbstractTableModel {
 	
 	/** The transcript */
 	private Session session;
+	
+	private boolean showCalculatedAges = true;
 	
 	private enum Columns {
 		Name,
@@ -64,6 +68,15 @@ public class ParticipantsTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 		return Columns.values()[col].getName();
 	}
+	
+	public boolean isShowCalculatedAges() {
+		return showCalculatedAges;
+	}
+	
+	public void setShowCalculatedAges(boolean showCalculatedAges) {
+		this.showCalculatedAges = showCalculatedAges;
+		fireTableDataChanged();
+	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -79,10 +92,14 @@ public class ParticipantsTableModel extends AbstractTableModel {
 							? p.getId() : p.getRole() );
 		} else if(col == Columns.Age) {
 			final Period age = p.getAge(null);
-			if(age != null && age.getYears() > 0) {
+			if(age != null) {
 				return AgeFormatter.ageToString(age);
 			} else {
-				return "Unknown";
+				if(isShowCalculatedAges() && p.getBirthDate() != null) {
+					final Period calculatedAge = p.getAge(session.getDate());
+					return AgeFormatter.ageToString(calculatedAge);
+				} else 
+					return "Unknown";
 			}
 		} else {
 			return "";
