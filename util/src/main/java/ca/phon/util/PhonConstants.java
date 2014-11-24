@@ -29,10 +29,9 @@ public class PhonConstants {
 	public static final char ellipsis = 0x2026;
 	
 	/** 'null' */
-	public static final char nullChar = 0x2205;
+	public static final char nullChar = 0x00d8;
 	
 	/** Illegal filname characters */
 	public static final char[] illegalFilenameChars = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
 
-	
 }

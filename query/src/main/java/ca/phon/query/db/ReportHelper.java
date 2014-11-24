@@ -20,7 +20,22 @@ package ca.phon.query.db;
 import ca.phon.util.PhonConstants;
 
 /**
- * Various methods aiding report generation.
+ * Various methods aiding report generation.  Results have a <i>schema<i>, the schema determines
+ * the format of the output string.  The result schema may be one of the following:
+ * 
+ * <ul>
+ * <li>'LINEAR' - result values are listed in order, spearated by ';'</li>
+ * <li>'ALIGNED' - result values are listed in order, separated by '\u2192'.  Empty values will be displayed
+ * using a 'null' character.</li>
+ * <li>'DETECTOR' - pair of aligned results, separated by '\u2026'.  Empty values will be displayed
+ * using a 'null' character.</li>
+ * <li>A custom string which will be formatted using the velocity framework.  Context variables
+ *  will be:<ul>
+ *    <li><code>result</code> of type {@link Result}</li>
+ *    <li><code>values</code> of type Array<{@link ResultValue}></li>
+ *  </ul>
+ * </li>
+ * </ul>
  * 
  */
 public class ReportHelper {
@@ -31,6 +46,8 @@ public class ReportHelper {
 		String[] rvals = new String[numVals];
 		for(int i = 0; i < numVals; i++) {
 			rvals[i] = r.getResultValue(i).getData();
+			if(rvals[i] == null || rvals[i].length() == 0)
+				rvals[i] = PhonConstants.nullChar + "";
 		}
 		return createReportString(rvals, r.getSchema());
 	}
@@ -106,7 +123,7 @@ public class ReportHelper {
 		}
 		
 		if(values.length == 1) {
-			retVal = values[0] + " " + PhonConstants.doubleArrow + " " + PhonConstants.doubleArrow;
+			retVal = values[0] + " " + PhonConstants.doubleArrow + " " + PhonConstants.nullChar;
 			startValue = 1;
 		}
 		
