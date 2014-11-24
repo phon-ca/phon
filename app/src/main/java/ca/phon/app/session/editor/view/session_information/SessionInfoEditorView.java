@@ -103,11 +103,6 @@ public class SessionInfoEditorView extends EditorView {
 	private MediaSelectionField mediaLocationField;
 	
 	/**
-	 * Checkbox for calculated ages
-	 */
-	private JCheckBox showCalculagedAgesBox;
-	
-	/**
 	 * Language
 	 */
 	private JTextField languageField;
@@ -193,13 +188,13 @@ public class SessionInfoEditorView extends EditorView {
 		mediaLocationField = new MediaSelectionField(getEditor().getProject());
 		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		
-		final PhonUIAction toggleShowCalculatedAgesAct = 
-				new PhonUIAction(this, "toggleShowCalculatedAges");
-		toggleShowCalculatedAgesAct.putValue(PhonUIAction.NAME,
-				"Show calculated age if not provided");
-		toggleShowCalculatedAgesAct.putValue(PhonUIAction.SELECTED_KEY, isShowCalculatedAges());
-		showCalculagedAgesBox = new JCheckBox(toggleShowCalculatedAgesAct);
-		showCalculagedAgesBox.setOpaque(false);
+//		final PhonUIAction toggleShowCalculatedAgesAct = 
+//				new PhonUIAction(this, "toggleShowCalculatedAges");
+//		toggleShowCalculatedAgesAct.putValue(PhonUIAction.NAME,
+//				"Show calculated age if not provided");
+//		toggleShowCalculatedAgesAct.putValue(PhonUIAction.SELECTED_KEY, isShowCalculatedAges());
+//		showCalculagedAgesBox = new JCheckBox(toggleShowCalculatedAgesAct);
+//		showCalculagedAgesBox.setOpaque(false);
 		
 		participantTable = new JXTable();
 		participantTable.setVisibleRowCount(3);
@@ -239,7 +234,6 @@ public class SessionInfoEditorView extends EditorView {
 				"pref, pref, pref:grow");
 		JPanel participantPanel = new JPanel(participantLayout);
 		participantPanel.setBackground(Color.white);
-		participantPanel.add(showCalculagedAgesBox, cc.xy(1, 1));
 		participantPanel.add(new JScrollPane(participantTable), cc.xywh(1, 2, 3, 2));
 		participantPanel.add(addParticipantButton, cc.xy(3,1));
 		participantPanel.add(editParticipantButton, cc.xy(2,1));
@@ -290,12 +284,6 @@ public class SessionInfoEditorView extends EditorView {
 		PrefHelper.getUserPreferences().putBoolean(SHOW_CALCULATED_AGES_PROP, showCalculatedAges);
 	}
 	
-	public void toggleShowCalculatedAges() {
-		boolean showCalculatedAges = showCalculagedAgesBox.isSelected();
-		setShowCalculatedAges(showCalculatedAges);
-		((ParticipantsTableModel)participantTable.getModel()).setShowCalculatedAges(showCalculatedAges);
-	}
-
 	public DatePicker createDateField() {
 		final DatePicker retVal = new DatePicker();
 		
