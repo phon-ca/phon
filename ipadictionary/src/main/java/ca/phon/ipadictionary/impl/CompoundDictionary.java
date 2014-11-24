@@ -10,6 +10,7 @@ import ca.phon.ipadictionary.spi.GenerateSuggestions;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.NameInfo;
+import ca.phon.ipadictionary.spi.OrthoKeyIterator;
 import ca.phon.ipadictionary.spi.PrefixSearch;
 import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
@@ -96,6 +97,10 @@ public class CompoundDictionary implements IPADictionarySPI,
 			final GenerateSuggestions genSuggestions = d.getExtension(GenerateSuggestions.class);
 			if(genSuggestions != null) {
 				dict.putExtension(GenerateSuggestions.class, genSuggestions);
+			}
+			final OrthoKeyIterator orthoItr = d.getExtension(OrthoKeyIterator.class);
+			if(orthoItr != null) {
+				dict.putExtension(OrthoKeyIterator.class, orthoItr);
 			}
 		}
 		
