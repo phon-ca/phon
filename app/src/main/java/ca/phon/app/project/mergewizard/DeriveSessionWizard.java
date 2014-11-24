@@ -30,6 +30,7 @@ import javax.swing.SwingUtilities;
 
 import org.joda.time.DateTime;
 
+import ca.phon.app.log.BufferPanel;
 import ca.phon.app.project.SessionMerger;
 import ca.phon.project.Project;
 import ca.phon.session.DateFormatter;
@@ -37,7 +38,6 @@ import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
@@ -49,6 +49,8 @@ import ca.phon.worker.PhonWorker;
  */
 public class DeriveSessionWizard extends WizardFrame {
 	
+	private static final long serialVersionUID = -4619604190124079327L;
+
 	private final static Logger LOGGER = Logger.getLogger(DeriveSessionWizard.class.getName());
 	
 	/*
@@ -60,9 +62,7 @@ public class DeriveSessionWizard extends WizardFrame {
 	
 	private WizardStep mergeStep;
 	
-	private WizardStep importStep;
-	
-	private PhonLoggerConsole console;
+	private BufferPanel console;
 
 	public DeriveSessionWizard(Project project) {
 		super("Phon : " + project.getName() + " : Derive Session");
@@ -84,8 +84,6 @@ public class DeriveSessionWizard extends WizardFrame {
 		step1 = new MergeSessionStep1(getProject());
 		step1.setNextStep(0);
 		addWizardStep(step1);
-		
-//		addWizardStep(new JPanel());
 	}
 
 	private WizardStep createMergeStep() {
@@ -96,7 +94,7 @@ public class DeriveSessionWizard extends WizardFrame {
 		
 		JPanel consolePanel = new JPanel(new BorderLayout());
 		
-		console = new PhonLoggerConsole();
+		console = new BufferPanel("Derive Session");
 		consolePanel.add(console, BorderLayout.CENTER);
 		
 		importPanel.add(consolePanel, BorderLayout.CENTER);
@@ -141,19 +139,15 @@ public class DeriveSessionWizard extends WizardFrame {
 				Runnable turnOffBack = new Runnable() {
 					@Override
 					public void run() {
-						console.addLogger(LOGGER);
 						btnBack.setEnabled(false);
 						btnCancel.setEnabled(false);
-						showBusyLabel(console);
 					}
 				};
 				Runnable turnOnBack = new Runnable() {
 					@Override
 					public void run() {
-						console.removeLogger(LOGGER);
 						btnBack.setEnabled(true);
 						btnCancel.setEnabled(true);
-						stopBusyLabel();
 					}
 				};
 				SwingUtilities.invokeLater(turnOffBack);
@@ -173,12 +167,9 @@ public class DeriveSessionWizard extends WizardFrame {
 	 */
 	private void doMerge() {
 		
-		long currentTime = System.currentTimeMillis();
-		
 		String corpus = step1.getMergedCorpusName();
 		String session = step1.getMergedSessionName();
 		
-//		Collator collator = CollatorFactory.defaultCollator();
 		List<SessionPath> sessions = step1.getSelectedSessions();
 		Collections.sort(sessions);
 		
@@ -208,7 +199,6 @@ public class DeriveSessionWizard extends WizardFrame {
 		try {
 			final Session mergedSession = factory.createSession(corpus, session);
 			
-//			final PhonDateFormat pdf = new PhonDateFormat(PhonDateFormat.YEAR_LONG);
 			final DateFormatter pdf = new DateFormatter();
 			// merge sessions
 			// keep track of session/media to see if we can sucessfully copy the data over
@@ -250,16 +240,6 @@ public class DeriveSessionWizard extends WizardFrame {
 				SessionMerger.mergeSession(mergedSession, t, filter);
 			}
 			
-			// setup date and media
-//			if(mergedDate != null) {
-//				try {
-//					Calendar sessionDate = (Calendar)pdf.parseObject(mergedDate);
-//					mergedSession.setDate(sessionDate);
-//				} catch (ParseException e) {
-//					LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
-//				}
-//			}
-			
 			if(mergedDate != null) {
 				final DateTime dt = DateTime.now();
 				mergedSession.setDate(dt);
@@ -277,9 +257,6 @@ public class DeriveSessionWizard extends WizardFrame {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			return;
 		}
-		
-		long endTime = System.currentTimeMillis();
-//		LOGGER.info("Task finished.  Total time " + StringUtils.msToWrittenString(endTime-currentTime));
 		
 	}
 	

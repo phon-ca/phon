@@ -86,22 +86,22 @@ public class RangeRecordFilter extends AbstractRecordFilter {
 		
 		if(rStr.matches(pointRangeEx)) {
 			// single record
-			Integer uttIdx = Integer.parseInt(rStr);
+			Integer uttIdx = Integer.parseInt(rStr)-1;
 			retVal = new Range(uttIdx, uttIdx, false);
 		} else if(rStr.matches(incRangeEx)) {
 			String v1Str = rStr.substring(0, rStr.indexOf('.'));
 			String v2Str = rStr.substring(rStr.lastIndexOf('.')+1);
 			
-			Integer v1 = Integer.parseInt(v1Str);
-			Integer v2 = Integer.parseInt(v2Str);
+			Integer v1 = Integer.parseInt(v1Str)-1;
+			Integer v2 = Integer.parseInt(v2Str)-1;
 			
 			retVal = new Range(v1, v2, false);
 		} else if(rStr.matches(exclRangeEx)) {
 			String v1Str = rStr.substring(0, rStr.indexOf('.'));
 			String v2Str = rStr.substring(rStr.lastIndexOf('.')+1);
 			
-			Integer v1 = Integer.parseInt(v1Str);
-			Integer v2 = Integer.parseInt(v2Str);
+			Integer v1 = Integer.parseInt(v1Str)-1;
+			Integer v2 = Integer.parseInt(v2Str)-1;
 			
 			retVal = new Range(v1, v2, true);
 		} else {
