@@ -1,6 +1,7 @@
 package ca.phon.query.analysis;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
@@ -9,6 +10,7 @@ import java.util.logging.Logger;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.functor.AnalysisStep;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
@@ -43,6 +45,7 @@ public class ScriptReportStep implements AnalysisStep<String, QueryAnalysisResul
 			final Scriptable scope = ctx.createImporterScope();
 			PhonScriptContext.enter();
 			ScriptableObject.putProperty(scope, "out", ctx.getStdOut());
+			ScriptableObject.putProperty(scope, "csvWriter", new CSVWriter(new OutputStreamWriter(ctx.getStdOut(), "UTF-8")));
 			ScriptableObject.putProperty(scope, "queryAnalysisResult", obj);
 			PhonScriptContext.exit();
 			
