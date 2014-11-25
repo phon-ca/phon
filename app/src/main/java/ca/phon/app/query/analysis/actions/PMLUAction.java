@@ -8,7 +8,7 @@ public class PMLUAction extends AnalysisAction {
 	
 	private final static String QUERY_SCRIPT = "ca/phon/query/script/PMLU.js";
 	
-	private final static String REPORT_SCRIPT = "ca/phon/query/analysis/simple_report.js";
+	private final static String REPORT_SCRIPT = "ca/phon/query/analysis/pmlu.js";
 	
 	private final static String TXT = "PMLU...";
 	

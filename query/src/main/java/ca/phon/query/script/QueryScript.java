@@ -135,13 +135,4 @@ public class QueryScript extends LazyQueryScript {
 		return contextRef.get();
 	}
 	
-//	@Override
-//	public List<String> scriptFolders() {
-//		final List<String> retVal = new ArrayList<String>();
-//		retVal.add("/Users/ghedlund/Documents/Phon/gitprojects/phon/query/target/classes/script");
-////		retVal.add(QueryScriptLibrary.SYSTEM_SCRIPT_FOLDER);
-////		retVal.add(QueryScriptLibrary.USER_SCRIPT_FOLDER);
-//		return retVal;
-//	}
-	
 }

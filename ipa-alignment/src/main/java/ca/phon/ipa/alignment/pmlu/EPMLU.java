@@ -85,7 +85,7 @@ public class EPMLU {
 	 * @return actualEMPLUFeatures()/targetEMPLUFeatures()
 	 */
 	public float ePWPFeatures() {
-		return (float)actualEPMLUFeatures()/(float)targetEPMLUFeatures();
+		return (targetEPMLUFeatures() > 0 ? (float)actualEPMLUFeatures()/(float)targetEPMLUFeatures() : 0);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class EPMLU {
 	 * 
 	 * @return targetEMPLUSyllables
 	 */
-	public float targetEMPLUSyllables() {
+	public float targetEPMLUSyllables() {
 		return targetEPMLUSyllables(1.0f);
 	}
 	
@@ -145,12 +145,13 @@ public class EPMLU {
 		return actualEPMLUSyllables(1.0f);
 	}
 	
-	public float ePWPSyllables(float closeSyllBonus) {
-		return actualEPMLUSyllables(closeSyllBonus)/targetEPMLUSyllables(closeSyllBonus);
+	public float ePWPSyllables(float closedSyllBonus) {
+		return ( targetEPMLUSyllables(closedSyllBonus) > 0 ?
+					actualEPMLUSyllables(closedSyllBonus)/targetEPMLUSyllables(closedSyllBonus) : 0);
 	}
 	
 	public float ePWPSyllables() {
-		return actualEPMLUSyllables(1.0f)/targetEPMLUSyllables(1.0f);
+		return ePWPSyllables(1.0f);
 	}
 	
 	public float targetEPMLU(float closedSyllBonus) {
@@ -170,7 +171,8 @@ public class EPMLU {
 	}
 	
 	public float ePWP(float closedSyllBonus) {
-		return ePWPFeatures() + ePWPSyllables(closedSyllBonus);
+		return (targetEPMLU(closedSyllBonus) > 0 ? 
+					actualEPMLU(closedSyllBonus) / targetEPMLU(closedSyllBonus) : 0);
 	}
 	
 	public float ePWP() {
