@@ -68,8 +68,8 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 	public V get(Object key) {
 		if(!(key instanceof IPATranscript))
 			throw new IllegalArgumentException("key must be of type " + IPATranscript.class.getName());
-		
-		return null;
+		final IpaTernaryTreeNode<V> node = findNode((IPATranscript)key, false);
+		return (node != null && node.isTerminated() ? node.getValue() : null);
 	}
 
 	@Override
@@ -397,5 +397,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 		}
 		
 	}
+	
+	
 
 }
