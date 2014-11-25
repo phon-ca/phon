@@ -127,12 +127,15 @@ public class QueryAnalysisWizard extends WizardFrame {
 		}
 		super.next();
 		if(getCurrentStep() == reportStep) {
+			final QueryScript queryScript = queryScriptPanel.getScript();
+			
 			final QueryAnalysisInput input = new QueryAnalysisInput();
 			input.setProject(getExtension(Project.class));
 			input.setSessions(sessionSelector.getSelectedSessions());
+			input.putExtension(QueryScript.class, queryScript);
 			
 			final QueryAnalysis queryAnalysis = 
-					new DefaultQueryAnalysis(queryScriptPanel.getScript(), reportScript);
+					new DefaultQueryAnalysis(queryScript, reportScript);
 			
 			bufferPanel.getLogBuffer().setText(new String());
 			if(!bufferPanel.isShowingBuffer()) bufferPanel.onSwapBuffer();
