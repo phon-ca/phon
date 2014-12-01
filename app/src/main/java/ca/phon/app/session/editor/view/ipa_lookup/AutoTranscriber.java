@@ -242,7 +242,19 @@ public class AutoTranscriber {
 	 * @return the undoable edit for the transcription operation
 	 */
 	public UndoableEdit transcribeSession(Session session) {
-		final CompoundEdit retVal = new CompoundEdit();
+		final CompoundEdit retVal = new CompoundEdit() {
+
+			@Override
+			public String getUndoPresentationName() {
+				return "Undo automatic transcription";
+			}
+
+			@Override
+			public String getRedoPresentationName() {
+				return "Redo automatic transcription";
+			}
+			
+		};
 		
 		for(int i = 0; i < session.getRecordCount(); i++) {
 			final Record r = session.getRecord(i);
