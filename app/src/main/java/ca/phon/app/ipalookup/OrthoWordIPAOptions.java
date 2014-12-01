@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.ipalookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;

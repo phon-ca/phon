@@ -1,8 +1,12 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
+import java.util.List;
+
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
 
+import ca.phon.app.ipalookup.OrthoLookupVisitor;
+import ca.phon.app.ipalookup.OrthoWordIPAOptions;
 import ca.phon.app.session.editor.undo.BlindTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
@@ -122,39 +126,38 @@ public class AutoTranscriber {
 			final Word word = group.getAlignedWord(i);
 			
 			final OrthoElement orthoEle = word.getOrthography();
-			final String[] ipaOpts = getDictionary().lookup(orthoEle.toString());
+			final OrthoLookupVisitor visitor = new OrthoLookupVisitor(getDictionary());
+			visitor.visit(orthoEle);
+			final OrthoWordIPAOptions ipaExt = orthoEle.getExtension(OrthoWordIPAOptions.class);
+			final List<String> ipaOpts = ipaExt.getOptions();
+			final int selectedOption = 
+					(ipaExt.getSelectedOption() >= 0 && ipaExt.getSelectedOption() < ipaOpts.size() ? 
+							ipaExt.getSelectedOption() : 0);
 			
 			final IPATranscript ipaT = word.getIPATarget();
 			final IPATranscript ipaA = word.getIPAActual();
 			
-			if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
-			if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
-			
-			if(isUnset(ipaT) || isOverwrite()) {
-				if(ipaOpts.length > 0) {
-					ipaTBuilder.append(ipaOpts[0]);
-				} else {
-					ipaTBuilder.append("*");
-				}
-			} else {
-				if(isUnset(ipaT)) {
-					ipaTBuilder.append("*");
+			if(ipaOpts != null && ipaOpts.size() > 0) {
+				if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+				if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+
+				if(isUnset(ipaT) || isOverwrite()) {
+					ipaTBuilder.append(ipaOpts.get(selectedOption));
 				} else {
 					ipaTBuilder.append(ipaT);
 				}
-			}
-			
-			if(isUnset(ipaA) || isOverwrite()) {
-				if(ipaOpts.length > 0) {
-					ipaABuilder.append(ipaOpts[0]);
-				} else {
-					ipaABuilder.append("*");
-				}
-			} else {
-				if(isUnset(ipaA)) {
-					ipaABuilder.append("*");
+				
+				if(isUnset(ipaA) || isOverwrite()) {
+					ipaABuilder.append(ipaOpts.get(selectedOption));
 				} else {
 					ipaABuilder.append(ipaA);
+				}
+			} else {
+				if(isUnset(ipaT) || isOverwrite()) {
+					ipaTBuilder.append("*");
+				}
+				if(isUnset(ipaA) || isOverwrite()) {
+					ipaABuilder.append("*");
 				}
 			}
 		}

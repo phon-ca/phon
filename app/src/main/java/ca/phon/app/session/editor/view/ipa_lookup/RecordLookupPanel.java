@@ -17,6 +17,7 @@ import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
+import ca.phon.app.ipalookup.OrthoLookupVisitor;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
@@ -165,6 +166,8 @@ public class RecordLookupPanel extends JPanel {
 			final Group g = r.getGroup(i);
 			final Orthography ortho = g.getOrthography();
 			lookupTier.addGroup(new IPATranscript());
+			final OrthoLookupVisitor orthoLookup = new OrthoLookupVisitor(getDictionary());
+			ortho.accept(orthoLookup);
 			final WordLookupVisitor visitor = new WordLookupVisitor(this);
 			ortho.accept(visitor);
 		}

@@ -138,8 +138,8 @@ public class AutoTranscriptionForm extends JPanel {
 		topPanel.add(setIPAActualBox, cc.xy(2,3));
 //		topPanel.add(new JLabel("IPA Dicitonary:"), cc.xy(1,3));
 //		topPanel.add(dictBox, cc.xy(2, 3));
-		topPanel.add(new JLabel("Syllabifier:"), cc.xy(1, 3));
-		topPanel.add(syllabifierBox, cc.xy(2, 3));
+		topPanel.add(new JLabel("Syllabifier:"), cc.xy(1, 4));
+		topPanel.add(syllabifierBox, cc.xy(2, 4));
 
 		filterPanel = new RecordFilterPanel(project, t);
 		filterPanel.setBorder(BorderFactory.createTitledBorder("Record Selection"));

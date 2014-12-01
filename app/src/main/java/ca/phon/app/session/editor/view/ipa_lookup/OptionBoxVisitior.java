@@ -9,6 +9,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import ca.phon.app.ipalookup.OrthoWordIPAOptions;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.orthography.OrthoElement;
