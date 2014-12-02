@@ -17,11 +17,14 @@
  */
 package ca.phon.media.wavdisplay;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.logging.Level;
@@ -84,9 +87,8 @@ public class TimeBar extends JComponent {
 		g.setColor(Color.black);
 		
 		Graphics2D g2 = (Graphics2D)g;
-		
-		Color markerColor = new Color(125, 125, 125, 100);
-		
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+
 		double majorTickSpacing = ((double)(size.width - 2 * WavDisplay._TIME_INSETS_) / (double)_majorTick);
 		double minorTickSpacing = majorTickSpacing / _minorTick;
 		double msPerPixel = (endMs - startMs) / (double)(size.width - 2 * WavDisplay._TIME_INSETS_);
@@ -95,8 +97,21 @@ public class TimeBar extends JComponent {
 		
 		double lineMax = lineHeight + size.height/3.0;
 		
-		double xIndex = WavDisplay._TIME_INSETS_;
-		double oldX = xIndex;
+		double rectWidth = (segStart - startMs)  / msPerPixel;
+		g2.setColor(new Color(200, 200, 200, 100));
+		Rectangle2D segStartRect = getSegStartRect();
+		segStartRect.setRect(segStartRect.getX(), lineHeight, segStartRect.getWidth(), getHeight());
+		
+		Rectangle2D segEndRect = getSegEndRect();
+		segEndRect.setRect(segEndRect.getX(), lineHeight, segEndRect.getWidth(), getHeight());
+		
+		g2.setColor(new Color(200, 200, 200, 100));
+		g2.fill(segStartRect);
+		g2.fill(segEndRect);
+		
+		Color markerColor = new Color(125, 125, 125, 100);
+		g2.setColor(Color.black);
+		double xIndex = segStartRect.getX();
 		for(int tickIndex = 0; tickIndex < _majorTick * _minorTick; tickIndex++) {
 			Line2D line = null;
 			if(tickIndex % _minorTick == 0) {
@@ -107,58 +122,27 @@ public class TimeBar extends JComponent {
 					new Line2D.Double(xIndex, lineHeight, xIndex, size.height/2.0);
 			}
 			g2.draw(line);
-			
-			oldX = xIndex;
 			xIndex += minorTickSpacing;
-			Line2D refLine = 
-				new Line2D.Double(oldX, lineHeight, xIndex, lineHeight);
-			g2.draw(refLine);
 		}
+		Line2D refLine =  
+				new Line2D.Double(segStartRect.getX(), lineHeight,segEndRect.getX() + segEndRect.getWidth() - 1, lineHeight);
+		g2.draw(refLine);
 		Line2D lastTick = 
-			new Line2D.Double(xIndex, lineHeight, xIndex, lineMax);
+			new Line2D.Double(segEndRect.getX() + segEndRect.getWidth()-1, lineHeight, segEndRect.getX() + segEndRect.getWidth()-1, lineMax);
 		g2.draw(lastTick);
 		
 		g2.setFont(_timeFont);
 		
 		g2.setColor(Color.gray);
-		// draw time values
-//		String startString = MsFormatter.msToDisplayString(startMs);
-//		Rectangle2D startStringBounds = 
-//			g2.getFontMetrics(_timeFont).getStringBounds(startString, g);
-//		float startX = 
-//			WavDisplay._TIME_INSETS_ - (float)(startStringBounds.getWidth()/2);
-//		g2.drawString(startString, startX, (float)startStringBounds.getHeight());
-//		
-//		String endString = MsFormatter.msToDisplayString(endMs);
-//		Rectangle2D endStringBounds = 
-//			g2.getFontMetrics(_timeFont).getStringBounds(endString, g);
-//		float endX = 
-//			(size.width - WavDisplay._TIME_INSETS_) - (float)(endStringBounds.getWidth()/2.0);
-//		g2.drawString(endString, endX, (float)endStringBounds.getHeight());
-		
+
 		// segment boundaries
 		if(segStart >= 0) {
-			double rectWidth = (segStart - startMs)  / msPerPixel;
-			
-			g2.setColor(new Color(200, 200, 200, 100));
-			Rectangle2D segStartRect = 
-				new Rectangle2D.Double(WavDisplay._TIME_INSETS_,
-						lineHeight, rectWidth+1, getHeight());
-			g2.fill(segStartRect);
-			
 			long endTime = segStart + segLength;
 			long endLength = endMs - endTime;
 			
 			double segStartX = rectWidth + WavDisplay._TIME_INSETS_;
 			rectWidth = endLength  / msPerPixel;
 			double xPos = (getWidth() - WavDisplay._TIME_INSETS_) - rectWidth;
-			
-//			xOff = (double)(segStart + segLength) / msPerPixel;
-//			
-			Rectangle2D segEndRect = 
-				new Rectangle2D.Double(xPos+1,
-						lineHeight, xIndex - xPos, getHeight());
-			g2.fill(segEndRect);
 			
 			// draw time values
 			String segStartString = MsFormatter.msToDisplayString(segStart);
@@ -167,7 +151,6 @@ public class TimeBar extends JComponent {
 			Color fadeColor = new Color(255, 255, 255, 180);
 			Rectangle2D segStartBounds = 
 				g2.getFontMetrics(_timeFont).getStringBounds(segStartString, g2);
-//			double segStartX = (rectWidth+WavDisplay._TIME_INSETS_)-(segStartBounds.getWidth()/2.0);
 			segStartX -= segStartBounds.getWidth()/2.0;
 			double segEndX = xPos - (segStartBounds.getWidth()/2.0);
 			double yVal = segStartBounds.getHeight();
@@ -189,20 +172,33 @@ public class TimeBar extends JComponent {
 			
 		}
 		
-		// draw selection
-//		if(_parent.get_selectionStart() > 0
-//				&& _parent.get_selectionEnd() > 0) {
-//			int selLen = Math.abs(_parent.get_selectionEnd() - _parent.get_selectionStart());
-//			int xPos = Math.min(_parent.get_selectionStart(), _parent.get_selectionEnd());
-//			
-//			Color selColor = new Color(50, 125, 200, 100);
-//			g2.setColor(selColor);
-//			
-//			//ouble rectWidth = (double)selLen / msPerPixel;
-//			Rectangle2D selRect = 
-//				new Rectangle2D.Double((double)xPos, lineHeight, (double)selLen, (double)getHeight());
-//			g2.fill(selRect);
-//		}
+		final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
+		
+		if(_parent.get_selectionStart() >= 0) {
+			double startXPos = _parent.get_selectionStart() / msPerPixel
+					+ WavDisplay._TIME_INSETS_;
+			final Line2D line = new Line2D.Double(startXPos, 0, 
+					startXPos, _parent.getHeight());
+			
+			g2.setStroke(dashed);
+			g2.setXORMode(Color.black);
+			g2.setColor(Color.white);
+			g2.draw(line);
+			g2.setPaintMode();
+		}
+		
+		if(_parent.get_selectionEnd() >= 0) {
+			double endXPos = _parent.get_selectionEnd() / msPerPixel
+					+ WavDisplay._TIME_INSETS_;
+			final Line2D line = new Line2D.Double(endXPos, 0, 
+					endXPos, _parent.getHeight());
+			
+			g2.setStroke(dashed);
+			g2.setXORMode(Color.black);
+			g2.setColor(Color.white);
+			g2.draw(line);
+			g2.setPaintMode();
+		}
 		
 		if(_parent.get_selectionStart() >= 0
 				&& _parent.get_selectionEnd() >= 0) {

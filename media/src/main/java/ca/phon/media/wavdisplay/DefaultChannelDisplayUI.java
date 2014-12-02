@@ -17,12 +17,14 @@
  */
 package ca.phon.media.wavdisplay;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.Line2D;
@@ -80,8 +82,6 @@ public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 			Graphics g = retVal.getGraphics();
 			g.setClip(0, 0, width, height);
 			
-			Rectangle clipBounds = g.getClipBounds();
-			
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			
@@ -94,11 +94,9 @@ public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 				return null;
 			} else {
 				WavHelper audioInfo = _display.getAudioInfo();
-//				audioInfo.playStream();
 
 				int samples[][] = audioInfo.getAudioSamples();
 				
-//				double xScale = audioInfo.getXScaleFactor(width);
 				double yScale = audioInfo.getYScaleFactor(height);
 				int displayWidth = width - 2 * WavDisplay._TIME_INSETS_;
 				double xIncr = (double)(displayWidth) / (double)samples[_display.getChannel()].length;
@@ -139,12 +137,6 @@ public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 					Line2D curveLine = 
 						new Line2D.Double(oldX, oldY, xIndex, y);
 					g2.draw(curveLine);
-					
-//					super.setProperty("Buffer", null);
-//					super.setProperty("Buffer", )
-//					BufferedImage tmpImage = new BufferedImage(width, height);
-//					_buffer = retVal;
-//					_display.repaint();
 					
 					xIndex += xIncr;
 					oldX = xIndex;
@@ -220,12 +212,10 @@ public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 		Graphics2D g2 = (Graphics2D)g;
 		
 		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		
 		if(_buffer == null ||
 				(_buffer.getWidth() != _display.getWidth() || _buffer.getHeight() != _display.getHeight())) {
 			g.setColor(Color.black);
-//			g.drawString("Buffering...", 0, 20);
 		} else {
 			g.drawImage(_buffer, 0, 0, _display);
 			
@@ -239,14 +229,42 @@ public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 				_display.get_parent().get_timeBar().getSegEndRect();
 			segEndRect.setRect(segEndRect.getX(), 0.0, segEndRect.getWidth(), _display.getHeight());
 			g2.fill(segEndRect);
+
+			final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
+			double msPerPixel = 
+					(_display.get_parent().get_timeBar().getEndMs() - _display.get_parent().get_timeBar().getStartMs()) / 
+					(double)(_display.getWidth() - 2 * WavDisplay._TIME_INSETS_);
+			
+			if(_display.get_parent().get_selectionStart() >= 0) {
+				double startXPos = _display.get_parent().get_selectionStart() / msPerPixel
+						+ WavDisplay._TIME_INSETS_;
+				final Line2D line = new Line2D.Double(startXPos, 0, 
+						startXPos, _display.getHeight());
+				
+				g2.setStroke(dashed);
+				g2.setXORMode(Color.black);
+				g2.setColor(Color.white);
+				g2.draw(line);
+				g2.setPaintMode();
+			}
+			
+			if(_display.get_parent().get_selectionEnd() >= 0) {
+				double endXPos = _display.get_parent().get_selectionEnd() / msPerPixel
+						+ WavDisplay._TIME_INSETS_;
+				final Line2D line = new Line2D.Double(endXPos, 0, 
+						endXPos, _display.getHeight());
+				
+				g2.setStroke(dashed);
+				g2.setXORMode(Color.black);
+				g2.setColor(Color.white);
+				g2.draw(line);
+				g2.setPaintMode();
+			}
 			
 			if(_display.get_parent().get_selectionStart() >= 0
 					&& _display.get_parent().get_selectionEnd() >= 0) {
 				Color selColor = new Color(50, 125, 200, 100);
 				g2.setColor(selColor);
-				
-				double msPerPixel = 
-					_display.getAudioInfo().timeForFile() / (_display.getWidth() - 2*WavDisplay._TIME_INSETS_);
 				
 				// convert time values to x positions
 				double startXPos = _display.get_parent().get_selectionStart() / msPerPixel;
@@ -271,12 +289,8 @@ public class DefaultChannelDisplayUI extends ChannelDisplayUI {
 				
 				g2.setColor(markerColor);
 				
-				double msPerPixel = 
-					_display.getAudioInfo().timeForFile() / (_display.getWidth() - 2 * WavDisplay._TIME_INSETS_);
 				double xPos = 
 					markerMs / msPerPixel + WavDisplay._TIME_INSETS_;
-//				int x = (int)Math.round(xPos);
-				
 				
 				Line2D markerLine = 
 					new Line2D.Double(xPos, 0.0, xPos, _display.getHeight());
