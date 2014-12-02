@@ -16,8 +16,12 @@ exports.Pcc = {
      * @param features - comma separated list of features
      * @param ignoreDiacritics
      *
-     * @return percent correct as a string with format
-     *  'numCorrect/numAttempted;numDeleted;numEpenthesized'
+     * @return {
+    		target: numTarget,
+    		correct: numCorrect,
+    		deleted: numDeleted,
+    		epen: numEpenthesized
+    	};
      */
     calc_pc_aligned: function(group, features, ignoreDiacritics) {
     	var numTarget = 0;
@@ -82,10 +86,13 @@ exports.Pcc = {
     		}
     	}
     
-    	// format PCC string
-    	// (numCorrect)/(numTarget-numDeleted);numDeleted;numEpenthesized
-    	var retVal = 
-    		numCorrect + "/" + (numTarget-numDeleted) + ";" + numDeleted + ";" + numEpenthesized;
+    	var retVal = {
+    		target: numTarget,
+    		actual: numActual,
+    		correct: numCorrect,
+    		deleted: numDeleted,
+    		epen: numEpenthesized
+    	};
     	return retVal;
     },
     
@@ -98,7 +105,11 @@ exports.Pcc = {
      * @param features
      * @param ignoreDiacritics
      *
-     * @return PCC (standard) in the format x/y
+     * @return {
+     *     target: number of elements in target,
+     *     correct: number of elements correct,
+     *     epen: number of epenthesis
+     * }
      */
     calc_pc_standard: function(group, features, ignoreDiacritics) {
         var numTarget = 0;
@@ -148,9 +159,12 @@ exports.Pcc = {
     	    numEpenthesized = numActual - numTarget;
     
     	// format PCC string
-    	// (numCorrect)/(numTarget-numDeleted);numDeleted;numEpenthesized
-    	var retVal = 
-    		numCorrect + "/" + (numTarget+numEpenthesized);
+    	var retVal = {
+    		target: numTarget,
+    		actual: numActual,
+    		correct: numCorrect,
+    		epen: numEpenthesized
+    	};
     	return retVal;
     }
 
@@ -210,24 +224,62 @@ exports.PccOptions = function(id, aligned) {
     };
     
     this.setup_pcc_aligned_metadata = function(group, metadata) {
+    	var nf = java.text.NumberFormat.getNumberInstance();
+    	nf.setMaximumFractionDigits(6);
         if(this.includePcc == true) {
             var pccAligned = Pcc.calc_pc_aligned(group, "Consonant", this.ignoreDiacritics);
-            metadata.put("APCC", pccAligned);
+            metadata.put("APCC # Target", pccAligned.target + "");
+            metadata.put("APCC # Attempted", pccAligned.actual + "");
+            metadata.put("APCC # Correct", pccAligned.correct + "");
+            metadata.put("APCC # Deleted", pccAligned.deleted + "");
+            metadata.put("APCC # Epenthesized", pccAligned.epen + "");
+            var pCorrect = (pccAligned.target > 0 ? pccAligned.correct/pccAligned.target : 0) * 100;
+            metadata.put("APCC % Correct", nf.format(pCorrect));
+            var pDeleted = (pccAligned.target > 0 ? pccAligned.deleted/pccAligned.target : 0) * 100;
+            metadata.put("APCC % Deleted", nf.format(pDeleted));
+            var pEpen = (pccAligned.target > 0 ? pccAligned.epen/pccAligned.target : 0) * 100;
+            metadata.put("APCC % Epenthesized", nf.format(pEpen));
         }
         if(this.includePvc == true) {
             var pvcAligned = Pcc.calc_pc_aligned(group, "Vowel", this.ignoreDiacritics);
-            metadata.put("APVC", pvcAligned);
+            metadata.put("APVC # Target", pvcAligned.target + "");
+            metadata.put("APVC # Attempted", pvcAligned.actual + "");
+            metadata.put("APVC # Correct", pvcAligned.correct + "");
+            metadata.put("APVC # Deleted", pvcAligned.deleted + "");
+            metadata.put("APVC # Epenthesized", pvcAligned.epen + "");
+            var pCorrect = (pvcAligned.target > 0 ? pvcAligned.correct/pvcAligned.target : 0) * 100;
+            metadata.put("APVC % Correct", nf.format(pCorrect));
+            var pDeleted = (pvcAligned.target > 0 ? pvcAligned.deleted/pvcAligned.target : 0) * 100;
+            metadata.put("APVC % Deleted", nf.format(pDeleted));
+            var pEpen = (pvcAligned.target > 0 ? pvcAligned.epen/pvcAligned.target : 0) * 100;
+            metadata.put("APVC % Epenthesized", nf.format(pEpen));
         }
     };
     
     this.setup_pcc_standard_metadata = function(group, metadata) {
+    	var nf = java.text.NumberFormat.getNumberInstance();
+    	nf.setMaximumFractionDigits(6);
         if(this.includePcc == true) {
             var pccStandard = Pcc.calc_pc_standard(group, "Consonant", this.ignoreDiacritics);
-            metadata.put("PCC", pccStandard);
+            metadata.put("PCC # Target", pccStandard.target + "");
+            metadata.put("PCC # Attempted", pccStandard.actual + "");
+            metadata.put("PCC # Correct", pccStandard.correct + "");
+            metadata.put("PCC # Epenthesized", pccStandard.epen + "");
+            var pCorrect = (pccStandard.target > 0 ? pccStandard.correct/pccStandard.target : 0) * 100;
+            metadata.put("PCC % Correct", nf.format(pCorrect));
+            var pEpen = (pccStandard.target > 0 ? pccStandard.epen/pccStandard.target : 0) * 100;
+            metadata.put("PCC % Epenthesized", nf.format(pEpen));
         }
         if(this.includePvc == true) {
             var pvcStandard = Pcc.calc_pc_standard(group, "Vowel", this.ignoreDiacritics);
-            metadata.put("PVC", pvcStandard);
+            metadata.put("PVC # Target", pvcStandard.target + "");
+            metadata.put("PVC # Attempted", pvcStandard.actual + "");
+            metadata.put("PVC # Correct", pvcStandard.correct + "");
+            metadata.put("PVC # Epenthesized", pvcStandard.epen + "");
+            var pCorrect = (pvcStandard.target > 0 ? pvcStandard.correct/pvcStandard.target : 0) * 100;
+            metadata.put("PVC % Correct", nf.format(pCorrect));
+            var pEpen = (pvcStandard.target > 0 ? pvcStandard.epen/pvcStandard.target : 0) * 100;
+            metadata.put("PVC % Epenthesized", nf.format(pEpen));
         }
     };
     
