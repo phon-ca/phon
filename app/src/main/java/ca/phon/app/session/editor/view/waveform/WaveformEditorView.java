@@ -452,6 +452,8 @@ public class WaveformEditorView extends EditorView {
 		long newStart = Math.max(0, curStart-1000);
 		long newEnd =  curEnd + 1000;
 		
+		wavDisplay.get_timeBar().setStartMs(newStart);
+		wavDisplay.get_timeBar().setEndMs(newEnd);
 		wavDisplay.load(newStart, (newEnd-newStart));
 	}
 	

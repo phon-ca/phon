@@ -88,6 +88,7 @@ public class TimeBar extends JComponent {
 		
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
 		double majorTickSpacing = ((double)(size.width - 2 * WavDisplay._TIME_INSETS_) / (double)_majorTick);
 		double minorTickSpacing = majorTickSpacing / _minorTick;
@@ -151,8 +152,8 @@ public class TimeBar extends JComponent {
 			Color fadeColor = new Color(255, 255, 255, 180);
 			Rectangle2D segStartBounds = 
 				g2.getFontMetrics(_timeFont).getStringBounds(segStartString, g2);
-			segStartX -= segStartBounds.getWidth()/2.0;
-			double segEndX = xPos - (segStartBounds.getWidth()/2.0);
+			segStartX -= segStartBounds.getWidth();
+			double segEndX = xPos;
 			double yVal = segStartBounds.getHeight();
 			g2.setColor(fadeColor);
 			
@@ -173,12 +174,23 @@ public class TimeBar extends JComponent {
 		}
 		
 		final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
-		
+		double startXPos = 0.0;
+		double endXPos = 0.0;
 		if(_parent.get_selectionStart() >= 0) {
-			double startXPos = _parent.get_selectionStart() / msPerPixel
+			startXPos = _parent.get_selectionStart() / msPerPixel
 					+ WavDisplay._TIME_INSETS_;
 			final Line2D line = new Line2D.Double(startXPos, 0, 
 					startXPos, _parent.getHeight());
+			
+			if(_parent.get_selectionEnd() < 0) {
+				final String selStartString = MsFormatter.msToDisplayString(
+						_parent.get_dipslayOffset() + (long)_parent.get_selectionStart());
+				final Rectangle2D selBounds = g2.getFontMetrics().getStringBounds(selStartString, g2);
+				final float xPos = (float)(startXPos - selBounds.getWidth());
+				final float yVal = (float)selBounds.getHeight();
+				g2.setColor(Color.black);
+				g2.drawString(selStartString, xPos, yVal);
+			}
 			
 			g2.setStroke(dashed);
 			g2.setXORMode(Color.black);
@@ -188,7 +200,7 @@ public class TimeBar extends JComponent {
 		}
 		
 		if(_parent.get_selectionEnd() >= 0) {
-			double endXPos = _parent.get_selectionEnd() / msPerPixel
+			endXPos = _parent.get_selectionEnd() / msPerPixel
 					+ WavDisplay._TIME_INSETS_;
 			final Line2D line = new Line2D.Double(endXPos, 0, 
 					endXPos, _parent.getHeight());
@@ -206,10 +218,8 @@ public class TimeBar extends JComponent {
 			g2.setColor(selColor);
 			
 			// convert time values to x positions
-			double startXPos = _parent.get_selectionStart() / msPerPixel;
-			double endXPos = _parent.get_selectionEnd() / msPerPixel;
 			double xPos = 
-				Math.min(startXPos, endXPos) + WavDisplay._TIME_INSETS_;
+				Math.min(startXPos, endXPos);
 			double rectLen = 
 				Math.abs(endXPos - startXPos);
 			
@@ -228,7 +238,24 @@ public class TimeBar extends JComponent {
 			if(durationBounds.getWidth() < selRect.getWidth()) {
 				durationTxtX = selRect.getCenterX() - durationBounds.getCenterX();
 			}
-			g2.drawString(durationTxt, (float)durationTxtX, (float)durationBounds.getHeight());
+			if(durationBounds.getWidth() < rectLen) {
+				g2.drawString(durationTxt, (float)durationTxtX, (float)durationBounds.getHeight());
+			}
+			
+			double startSelValue = Math.min(_parent.get_selectionStart(), _parent.get_selectionEnd());
+			double endSelValue = Math.max(_parent.get_selectionStart(), _parent.get_selectionEnd());
+			final String selStartString = MsFormatter.msToDisplayString(
+					_parent.get_dipslayOffset() + (long)startSelValue);
+			final Rectangle2D selBounds = g2.getFontMetrics().getStringBounds(selStartString, g2);
+			double selTxtX = xPos - selBounds.getWidth();
+			g2.drawString(selStartString, (float)selTxtX, (float)selBounds.getHeight());
+			
+			final String selEndString = MsFormatter.msToDisplayString(
+					_parent.get_dipslayOffset() + (long)endSelValue);
+			final Rectangle2D endBounds = g2.getFontMetrics().getStringBounds(selEndString, g2);
+			selTxtX = xPos + rectLen;
+			g2.drawString(selEndString, (float)selTxtX, (float)endBounds.getHeight());
+					
 		}
 		
 		// draw currentms string
