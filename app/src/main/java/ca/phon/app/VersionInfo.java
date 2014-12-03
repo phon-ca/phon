@@ -150,7 +150,7 @@ public class VersionInfo {
 	 */
 	public String getLongVersion() {
 		String retVal = 
-			getVersion() + " (" + getScRevision() + ") \"" + getCodename() + "\"";
+			getVersion() + " (" + getScRevision() + ")";
 		return retVal;
 	}
 	
