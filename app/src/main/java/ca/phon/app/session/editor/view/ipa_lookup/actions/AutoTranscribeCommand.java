@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.undo.UndoableEdit;
 
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriber;
 import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionDialog;
@@ -49,7 +51,7 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 				
 				@Override
 				public void run() {
-					final AutoTranscriber transcriber = new AutoTranscriber();
+					final AutoTranscriber transcriber = new AutoTranscriber(sessionEditor);
 					transcriber.setDictionary(getLookupView().getLookupContext().getDictionary());
 					transcriber.setOverwrite(autoTranscribeDialog.getForm().isOverwrite());
 					transcriber.setSetIPAActual(autoTranscribeDialog.getForm().isSetIPAActual());
@@ -59,6 +61,9 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 					transcriber.setTranscriber(getLookupView().getEditor().getDataModel().getTranscriber());
 					final UndoableEdit edit = transcriber.transcribeSession(sessionEditor.getSession());
 					sessionEditor.getUndoSupport().postEdit(edit);
+					
+					final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
+					sessionEditor.getEventManager().queueEvent(ee);
 				}
 			};
 			PhonWorker.getInstance().invokeLater(task);

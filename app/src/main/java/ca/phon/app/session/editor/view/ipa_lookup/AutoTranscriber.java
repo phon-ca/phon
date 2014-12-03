@@ -7,6 +7,7 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.ipalookup.OrthoLookupVisitor;
 import ca.phon.app.ipalookup.OrthoWordIPAOptions;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.BlindTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
@@ -46,8 +47,11 @@ public class AutoTranscriber {
 	
 	private Transcriber transcriber = null;
 	
-	public AutoTranscriber() {
+	private final SessionEditor editor;
+	
+	public AutoTranscriber(SessionEditor editor) {
 		super();
+		this.editor = editor;
 	}
 	
 	public void setTranscriber(Transcriber transcriber) {
@@ -108,6 +112,10 @@ public class AutoTranscriber {
 
 	private boolean isUnset(IPATranscript t) {
 		return (t == null || t.length() == 0 || t.matches("\\*+"));
+	}
+	
+	public SessionEditor getEditor() {
+		return this.editor;
 	}
 	
 	/**
@@ -193,11 +201,11 @@ public class AutoTranscriber {
 				if(getTranscriber() != null) {
 					IPATranscript grpVal = (g.getIPATarget() != null ? g.getIPATarget() : new IPATranscript());
 					targetEdit = 
-							new BlindTierEdit(null, record.getIPATarget(), i, getTranscriber(), 
+							new BlindTierEdit(getEditor(), record.getIPATarget(), i, getTranscriber(), 
 									autoTranscription.getObj1(), grpVal);
 				} else {
 					targetEdit = 
-							new TierEdit<IPATranscript>(null, record.getIPATarget(), i, 
+							new TierEdit<IPATranscript>(getEditor(), record.getIPATarget(), i, 
 									autoTranscription.getObj1());
 				}
 				targetEdit.doIt();
@@ -209,11 +217,11 @@ public class AutoTranscriber {
 				if(getTranscriber() != null) {
 					IPATranscript grpVal = (g.getIPAActual() != null ? g.getIPAActual() : new IPATranscript());
 					actualEdit = 
-							new BlindTierEdit(null, record.getIPAActual(), i, getTranscriber(),
+							new BlindTierEdit(getEditor(), record.getIPAActual(), i, getTranscriber(),
 									autoTranscription.getObj2(), grpVal);
 				} else {
 					actualEdit = 
-							new TierEdit<IPATranscript>(null, record.getIPAActual(), i, 
+							new TierEdit<IPATranscript>(getEditor(), record.getIPAActual(), i, 
 									autoTranscription.getObj2());
 				}
 				actualEdit.doIt();
@@ -224,7 +232,8 @@ public class AutoTranscriber {
 				final PhoneAligner aligner = new PhoneAligner();
 				final PhoneMap pm = aligner.calculatePhoneMap(autoTranscription.getObj1(), autoTranscription.getObj2());
 				final TierEdit<PhoneMap> alignmentEdit = 
-						new TierEdit<PhoneMap>(null, record.getPhoneAlignment(), i, pm);
+						new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), i, pm);
+				alignmentEdit.setFireHardChangeOnUndo(true);
 				alignmentEdit.doIt();
 				retVal.addEdit(alignmentEdit);
 			}
