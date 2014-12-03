@@ -1,5 +1,25 @@
 # Phon 2.0 Changes
 
+## Changes from Phon 2.0.2
+
+### General
+ * Updated Japanese transliteration dictionary
+ * Added ePMLU calculations to PMLU assessment
+ * Updated report for PMLU/ePMLU assessment so that results are grouped by target word
+ * Updated report for PCC/PVC assessment
+ * Time values for current selection in Speech Analysis are now displayed in the top bar
+
+### Praat
+ * Added DurationListing query script
+ * Pitch and intensity values for current selection are now printed on right-hand side of spectrogram view
+ 
+### Bugs
+ * Fixed the 'Show More' button in the Speech Analysis view
+ * Syllabification & Alignment is now updated during automatic transcription
+ * Inter-word pauses are now included in automatic transcription
+ * Fixed an issue where a manually entered age would not be saved for a participant.
+ * Calculated age is now displayed in the Session Information view if a birthday and session date are available for a participant.
+
 ## Changes from Phon 2.0.0
 
 ### General 
