@@ -84,7 +84,7 @@
 
     <Stage name="MaxCoda1">
         <phonex>.:C(C=\c:U:mdc("-1","true"))</phonex>
-        <group name="" mark=""/>
+        <group name="C" mark="Coda"/>
     </Stage>
 
     <Stage name="MaxOnset2">

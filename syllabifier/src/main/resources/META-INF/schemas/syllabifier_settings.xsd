@@ -3,7 +3,7 @@
     xmlns="https://www.phon.ca/ns/syllabifier" targetNamespace="https://www.phon.ca/ns/syllabifier"
     version="1.0">
     
-    <xs:import namespace="http://gedge.ca/ns/opgraph"></xs:import>
+    <xs:import namespace="http://gedge.ca/ns/opgraph" schemaLocation="./opgraph.xsd"/>
     
     <xs:complexType name="SettingsType">
         <xs:annotation>

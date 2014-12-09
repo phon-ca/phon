@@ -65,7 +65,7 @@
     
     <Stage name="MaxOnset">
         <phonex>(O=\c:U).:O:mdc("2","false")</phonex>
-        <group name="" mark=""/>
+        <group name="O" mark="Onset"/>
     </Stage>
     
     <Stage name="MarkCoda">

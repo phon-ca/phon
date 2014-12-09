@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (C) 2012 Jason Gedge <http://www.gedge.ca>
+	
+	This file is part of the OpGraph project.
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://gedge.ca/ns/opgraph"
+	targetNamespace="http://gedge.ca/ns/opgraph"
+	elementFormDefault="qualified">
+
+	<xs:annotation>
+		<xs:documentation>Specification of an operable graph.</xs:documentation>
+	</xs:annotation>
+
+	<!-- Simple type for a non-empty extension of string -->
+
+	<xs:simpleType name="nonEmptyString">
+		<xs:annotation>
+			<xs:documentation>An xs:string that has to have a length of at least 1.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- Document element type -->
+
+	<xs:complexType name="RootType">
+		<xs:annotation>
+			<xs:documentation>Document element type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="graph" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- OpGraph extensions -->
+	
+	<xs:complexType name="AbstractExtensionType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Abstract type definition for an OpGraph extension.</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	
+	<xs:complexType name="ExtensionsType">
+		<xs:annotation>
+			<xs:documentation>Type definition for a list of OpGraph extensions.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Base definition of graph -->
+
+	<xs:complexType name="GraphType">
+		<xs:annotation>
+			<xs:documentation>Type definition for graphs.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="abstract_node" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="link" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="extensions" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="id" use="required" type="nonEmptyString"/>
+	</xs:complexType>
+
+	<!-- Definition of a node -->
+
+	<xs:complexType name="AbstractNodeType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Abstract type definition for an OpGraph node.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="description" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="id" use="required" type="nonEmptyString"/>
+		<xs:attribute name="type" use="required" type="nonEmptyString"/>
+		<xs:attribute name="name" use="optional" type="nonEmptyString"/>
+		<xs:attribute name="category" use="optional" type="nonEmptyString"/>
+	</xs:complexType>
+	
+	<xs:complexType name="DefaultNodeType">
+		<xs:annotation>
+			<xs:documentation>Default type definition for a node.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="AbstractNodeType">
+				<xs:sequence>
+					<xs:element ref="input" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="output" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="extensions" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!-- Definition of a field -->
+
+	<xs:complexType name="FieldType" mixed="true">
+		<xs:annotation>
+			<xs:documentation>
+				Type definition for the field element. Textual content in this element
+				will be used as a description for the field.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="extensions" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="name" use="optional" type="nonEmptyString"/>
+		<xs:attribute name="type" use="optional" type="nonEmptyString">
+			<xs:annotation>
+				<xs:documentation>
+					If an input field, the type of input this field will accept. If
+					not specified, then the input field accepts all types. If an
+					output field, the type of output this field produces.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="optional" use="optional" type="xs:boolean"
+			default="false">
+			<xs:annotation>
+				<xs:documentation>If an input field, whether or not it is optional.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<!-- Definition of a link -->
+
+	<xs:complexType name="LinkType">
+		<xs:annotation>
+			<xs:documentation>Type definition for a link between two nodes.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			
+		</xs:sequence>
+		<xs:attribute name="source" type="nonEmptyString" use="required"/>
+		<xs:attribute name="dest" type="nonEmptyString" use="required"/>
+		<xs:attribute name="sourceField" type="nonEmptyString" use="required"/>
+		<xs:attribute name="destField" type="nonEmptyString" use="required"/>
+	</xs:complexType>
+
+	<!-- Document level elements -->
+
+	<xs:element name="opgraph" type="RootType">
+		<xs:annotation>
+			<xs:documentation>Document element</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	
+	<xs:element name="extensions" type="ExtensionsType"/>
+	<xs:element name="extension" type="AbstractExtensionType"/>
+
+	<xs:element name="graph" type="GraphType">
+		<xs:annotation>
+			<xs:documentation>Default root element for stored operable graphs.</xs:documentation>
+		</xs:annotation>
+		<xs:key name="nodeId">
+			<xs:selector xpath="./abstract_node"/>
+			<xs:field xpath="@id"/>
+		</xs:key>
+		<xs:keyref refer="nodeId" name="linkSourceRef">
+			<xs:selector xpath="./link"/>
+			<xs:field xpath="@source"/>
+		</xs:keyref>
+		<xs:keyref refer="nodeId" name="linkDestRef">
+			<xs:selector xpath="./link"/>
+			<xs:field xpath="@dest"/>
+		</xs:keyref>
+	</xs:element>
+
+	<xs:element name="abstract_node" type="AbstractNodeType"/>
+	<xs:element name="node" type="DefaultNodeType" substitutionGroup="abstract_node"/>
+	<xs:element name="link" type="LinkType"/>
+	<xs:element name="input" type="FieldType"/>
+	<xs:element name="output" type="FieldType"/>
+	<xs:element name="description" type="xs:string"/>
+</xs:schema>
