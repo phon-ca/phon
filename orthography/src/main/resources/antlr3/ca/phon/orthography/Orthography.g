@@ -23,17 +23,10 @@ import java.util.ArrayList;
 
 @members {
 
-private Orthography orthography;
-
-public void setOrthography(Orthography orthography) {
-	this.orthography = orthography;
-}
+private final OrthographyBuilder builder = new OrthographyBuilder();
 
 public Orthography getOrthography() {
-	if(this.orthography == null) {
-		this.orthography = new Orthography();
-	}
-	return this.orthography;
+	return builder.toOrthography();
 }
 
 }
@@ -111,23 +104,23 @@ punct returns [OrthoPunct punct]
 orthoElement
 	:	word
 	{
-		getOrthography().add($word.word);
+		builder.append($word.word);
 	}
 	|	wordnet
 	{
-		getOrthography().add($wordnet.wordnet);
+		builder.append($wordnet.wordnet);
 	}
 	|	comment
 	{
-		getOrthography().add($comment.comment);
+		builder.append($comment.comment);
 	}
 	|	event
 	{
-		getOrthography().add($event.event);
+		builder.append($event.event);
 	}
 	|	punct
 	{
-		getOrthography().add($punct.punct);
+		builder.append($punct.punct);
 	}
 	;
 

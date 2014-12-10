@@ -23,13 +23,12 @@ public class OrthographyFormatter implements Formatter<Orthography> {
 
 	@Override
 	public Orthography parse(String text) throws ParseException {
-		final Orthography retVal = new Orthography();
+		Orthography retVal = new Orthography();
 		final OrthoTokenSource tokenSource = new OrthoTokenSource(text);
 		final TokenStream tokenStream = new CommonTokenStream(tokenSource);
 		final OrthographyParser parser = new OrthographyParser(tokenStream);
-		parser.setOrthography(retVal);
 		try {
-			parser.orthography();
+			retVal = parser.orthography().ortho;
 		} catch (RecognitionException e) {
 			throw new ParseException(text, e.charPositionInLine);
 		}

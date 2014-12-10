@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import java.text.ParseException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,14 +14,14 @@ import org.junit.runners.JUnit4;
 public class TestOrthographyParser {
 	
 	@Test
-	public void testWordPrefixCodes() {
+	public void testWordPrefixCodes() throws ParseException {
 		final String wordData = "word";
 		
 		for(WordPrefix wp:WordPrefix.values()) {
-			final Orthography ortho = new Orthography(wp.getCode() + wordData);
-			Assert.assertEquals(1, ortho.size());
+			final Orthography ortho = Orthography.parseOrthography(wp.getCode() + wordData);
+			Assert.assertEquals(1, ortho.length());
 			
-			final OrthoElement wordEle = ortho.get(0);
+			final OrthoElement wordEle = ortho.elementAt(0);
 			Assert.assertEquals(OrthoWord.class, wordEle.getClass());
 			
 			final OrthoWord word = (OrthoWord)wordEle;
@@ -29,14 +31,14 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testWordSuffixCodes() {
+	public void testWordSuffixCodes() throws ParseException {
 		final String wordData = "word";
 		
 		for(WordSuffix ws:WordSuffix.values()) {
-			final Orthography ortho = new Orthography(wordData + "@" + ws.getCode());
-			Assert.assertEquals(1, ortho.size());
+			final Orthography ortho = Orthography.parseOrthography(wordData + "@" + ws.getCode());
+			Assert.assertEquals(1, ortho.length());
 			
-			final OrthoElement wordEle = ortho.get(0);
+			final OrthoElement wordEle = ortho.elementAt(0);
 			Assert.assertEquals(OrthoWord.class, wordEle.getClass());
 			
 			final OrthoWord word = (OrthoWord)wordEle;
@@ -46,17 +48,17 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testWordComboCodes() {
+	public void testWordComboCodes() throws ParseException {
 		final String wordData = "word";
 		
 		for(WordPrefix wp:WordPrefix.values()) {
 			for(WordSuffix ws:WordSuffix.values()) {
 				final String txt = wp.getCode() + wordData + "@" + ws.getCode();
 				
-				final Orthography ortho = new Orthography(txt);
-				Assert.assertEquals(1, ortho.size());
+				final Orthography ortho = Orthography.parseOrthography(txt);
+				Assert.assertEquals(1, ortho.length());
 				
-				final OrthoElement wordEle = ortho.get(0);
+				final OrthoElement wordEle = ortho.elementAt(0);
 				Assert.assertEquals(OrthoWord.class, wordEle.getClass());
 				
 				final OrthoWord word = (OrthoWord)wordEle;
@@ -68,14 +70,14 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testComment() {
+	public void testComment() throws ParseException {
 		final String comment = "this is a test";
 		final String txt = "word (" + comment + ") .";
 		
-		final Orthography ortho = new Orthography(txt);
-		Assert.assertEquals(3, ortho.size());
+		final Orthography ortho = Orthography.parseOrthography(txt);
+		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement commentEle = ortho.get(1);
+		final OrthoElement commentEle = ortho.elementAt(1);
 		Assert.assertEquals(OrthoComment.class, commentEle.getClass());
 		
 		final OrthoComment c = (OrthoComment)commentEle;
@@ -83,15 +85,15 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testCommentWithType() {
+	public void testCommentWithType() throws ParseException {
 		final String comment = "this is a test";
 		final String type = "test";
 		final String txt = "word (" + type + ":" + comment + ") .";
 		
-		final Orthography ortho = new Orthography(txt);
-		Assert.assertEquals(3, ortho.size());
+		final Orthography ortho = Orthography.parseOrthography(txt);
+		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement commentEle = ortho.get(1);
+		final OrthoElement commentEle = ortho.elementAt(1);
 		Assert.assertEquals(OrthoComment.class, commentEle.getClass());
 		
 		final OrthoComment c = (OrthoComment)commentEle;
@@ -99,14 +101,14 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testEvent() {
+	public void testEvent() throws ParseException {
 		final String event = "this is a test";
 		final String txt = "word *" + event + "* .";
 		
-		final Orthography ortho = new Orthography(txt);
-		Assert.assertEquals(3, ortho.size());
+		final Orthography ortho = Orthography.parseOrthography(txt);
+		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement eventEle = ortho.get(1);
+		final OrthoElement eventEle = ortho.elementAt(1);
 		Assert.assertEquals(OrthoEvent.class, eventEle.getClass());
 		
 		final OrthoEvent e = (OrthoEvent)eventEle;
@@ -114,15 +116,15 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testEventWithType() {
+	public void testEventWithType() throws ParseException {
 		final String event = "this is a test";
 		final String type = "test";
 		final String txt = "word *" + type + ":" + event + "* .";
 		
-		final Orthography ortho = new Orthography(txt);
-		Assert.assertEquals(3, ortho.size());
+		final Orthography ortho = Orthography.parseOrthography(txt);
+		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement eventEle = ortho.get(1);
+		final OrthoElement eventEle = ortho.elementAt(1);
 		Assert.assertEquals(OrthoEvent.class, eventEle.getClass());
 		
 		final OrthoEvent e = (OrthoEvent)eventEle;
@@ -130,16 +132,16 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testPunct() {
+	public void testPunct() throws ParseException {
 		final String word = "word";
 		
 		for(OrthoPunctType opt:OrthoPunctType.values()) {
 			final String testString = word + " " + opt.getChar();
 			
-			final Orthography ortho = new Orthography(testString);
-			Assert.assertEquals(2, ortho.size());
+			final Orthography ortho = Orthography.parseOrthography(testString);
+			Assert.assertEquals(2, ortho.length());
 			
-			final OrthoElement punctEle = ortho.get(1);
+			final OrthoElement punctEle = ortho.elementAt(1);
 			Assert.assertEquals(OrthoPunct.class, punctEle.getClass());
 			
 			final OrthoPunct punct = (OrthoPunct)punctEle;

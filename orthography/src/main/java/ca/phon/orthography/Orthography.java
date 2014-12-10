@@ -1,7 +1,12 @@
 package ca.phon.orthography;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -14,44 +19,48 @@ import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 
 /**
- * Container for orthographic transcriptions.
+ * Container for orthographic transcriptions.  This class is immutable after being created.
+ * To append/modify the data in the Orthography, use the {@link OrthographyBuilder} class to create
+ * a modified {@link Orthography} instance.
  */
-public class Orthography extends ArrayList<OrthoElement> implements IExtendable, Visitable<OrthoElement> {
+public class Orthography implements Iterable<OrthoElement>, Visitable<OrthoElement>, IExtendable {
 	
 	private static final long serialVersionUID = 7468757586738978448L;
 	private final ExtensionSupport extSupport = 
 			new ExtensionSupport(Orthography.class, this);
 	
+	private final OrthoElement[] elements;
+	
 	/**
 	 * Parse the given text into a new {@link Orthography} object.
 	 * 
 	 * @text
+	 *
+	 * @throws ParseException
 	 */
-	public static Orthography parseOrthography(String text) {
-		return new Orthography(text);
+	public static Orthography parseOrthography(String text) 
+		throws ParseException {
+		final OrthoTokenSource tokenSource = new OrthoTokenSource(text);
+		final TokenStream tokenStream = new CommonTokenStream(tokenSource);
+		final OrthographyParser parser = new OrthographyParser(tokenStream);
+		try {
+			return parser.orthography().ortho;
+		} catch (RecognitionException e) {
+			throw new ParseException(text, e.charPositionInLine);
+		}
 	}
 	
 	public Orthography() {
-		this("");
-	}
-	
-	public Orthography(Collection<? extends OrthoElement> orthoEles) {
-		super(orthoEles);
-	}
-	
-	public Orthography(String ortho) {
 		super();
 		
-		final OrthoTokenSource tokenSource = new OrthoTokenSource(ortho);
-		final TokenStream tokenStream = new CommonTokenStream(tokenSource);
-		final OrthographyParser parser = new OrthographyParser(tokenStream);
-		parser.setOrthography(this);
-		try {
-			parser.orthography();
-		} catch (RecognitionException e) {
-			throw new IllegalArgumentException(ortho, e);
-		}
+		elements = new OrthoElement[0];
 		
+		extSupport.initExtensions();
+	}
+	
+	public Orthography(Collection<? extends OrthoElement> elements) {
+		super();
+		this.elements = elements.toArray(new OrthoElement[0]);
 		extSupport.initExtensions();
 	}
 	
@@ -77,10 +86,17 @@ public class Orthography extends ArrayList<OrthoElement> implements IExtendable,
 
 	@Override
 	public void accept(Visitor<OrthoElement> visitor) {
-		for(int i = 0; i < size(); i++) {
-			final OrthoElement ele = get(i);
+		for(OrthoElement ele:this) {
 			visitor.visit(ele);
 		}
+	}
+	
+	public int length() {
+		return elements.length;
+	}
+	
+	public OrthoElement elementAt(int idx) {
+		return elements[idx];
 	}
 	
 	@Override
@@ -94,4 +110,14 @@ public class Orthography extends ArrayList<OrthoElement> implements IExtendable,
 		
 		return buffer.toString();
 	}
+	
+	public List<OrthoElement> toList() {
+		return Collections.unmodifiableList(Arrays.asList(elements));
+	}
+	
+	@Override
+	public Iterator<OrthoElement> iterator() {
+		return toList().iterator();
+	}
+	
 }
