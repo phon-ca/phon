@@ -468,10 +468,22 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		final OrthographyType retVal = factory.createOrthographyType();
 
 		for(Orthography ortho:orthoTier) {
-			final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor();
-			ortho.accept(visitor);
-			final GroupType gt = visitor.getGroup();
-			retVal.getWOrGOrP().add(gt);
+			final UnvalidatedValue uv = ortho.getExtension(UnvalidatedValue.class);
+			if(ortho.length() == 0 && uv != null) {
+				// stuff everything into a single word element
+				// it will be marked invalid when read again, but we should not
+				// delete user entered information
+				final GroupType gt = factory.createGroupType();
+				final WordType wt = factory.createWordType();
+				wt.setContent(uv.getValue());
+				gt.getWOrComOrE().add(wt);
+				retVal.getWOrGOrP().add(gt);
+			} else {
+				final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor();
+				ortho.accept(visitor);
+				final GroupType gt = visitor.getGroup();
+				retVal.getWOrGOrP().add(gt);
+			}
 		}
 		
 		return retVal;

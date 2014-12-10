@@ -16,6 +16,7 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.OrthographyBuilder;
 import ca.phon.session.Comment;
 import ca.phon.session.Group;
 import ca.phon.session.MediaSegment;
@@ -469,10 +470,10 @@ public class RecordImpl implements Record {
 		int retVal = group1.getAlignedWordCount();
 		
 		// orthography
-		final Orthography ortho = new Orthography();
-		ortho.addAll(group1.getOrthography());
-		ortho.addAll(group2.getOrthography());
-		group1.setOrthography(ortho);
+		final OrthographyBuilder orthoBuilder = new OrthographyBuilder();
+		orthoBuilder.append(group1.getOrthography());
+		orthoBuilder.append(group2.getOrthography());
+		group1.setOrthography(orthoBuilder.toOrthography());
 		
 		// ipa target
 		final IPATranscriptBuilder tBuilder = new IPATranscriptBuilder();
@@ -523,8 +524,8 @@ public class RecordImpl implements Record {
 		// orthography
 		final OrthoElement ele = word.getOrthography();
 		int wordIdx = group.getOrthography().indexOf(ele);
-		final Orthography ortho = new Orthography(group.getOrthography().subList(0, wordIdx));
-		final Orthography newOrtho = new Orthography(group.getOrthography().subList(wordIdx, group.getOrthography().size()));
+		final Orthography ortho = group.getOrthography().subsection(0, wordIdx);
+		final Orthography newOrtho = group.getOrthography().subsection(wordIdx, group.getOrthography().length());
 		group.setOrthography(ortho);
 		newGroup.setOrthography(newOrtho);
 		

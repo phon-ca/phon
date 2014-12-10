@@ -501,7 +501,14 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 				buffer.append(ele);
 			}
 			
-			final Orthography ortho = new Orthography(buffer.toString());
+			final String orthoTxt = buffer.toString();
+			Orthography ortho = new Orthography();
+			try {
+				ortho = Orthography.parseOrthography(orthoTxt);
+			} catch (ParseException pe) {
+				final UnvalidatedValue uv = new UnvalidatedValue(orthoTxt, pe);
+				ortho.putExtension(UnvalidatedValue.class, uv);
+			}
 			retVal.addGroup(ortho);
 		}
 		

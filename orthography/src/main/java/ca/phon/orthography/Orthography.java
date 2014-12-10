@@ -64,6 +64,12 @@ public class Orthography implements Iterable<OrthoElement>, Visitable<OrthoEleme
 		extSupport.initExtensions();
 	}
 	
+	public Orthography(OrthoElement[] eles) {
+		super();
+		this.elements = eles;
+		extSupport.initExtensions();
+	}
+	
 	@Override
 	public Set<Class<?>> getExtensions() {
 		return extSupport.getExtensions();
@@ -91,12 +97,31 @@ public class Orthography implements Iterable<OrthoElement>, Visitable<OrthoEleme
 		}
 	}
 	
+	public Orthography subsection(int start, int end) {
+		int len = end - start;
+		if(len > 0) {
+			OrthoElement[] subeles = Arrays.copyOfRange(elements, start, end);
+			return new Orthography(subeles);
+		}
+		return new Orthography();
+	}
+	
 	public int length() {
 		return elements.length;
 	}
 	
 	public OrthoElement elementAt(int idx) {
 		return elements[idx];
+	}
+	
+	public int indexOf(OrthoElement ele) {
+		for(int i = 0; i < length(); i++) {
+			final OrthoElement e = elementAt(i);
+			if(e == ele) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	@Override
