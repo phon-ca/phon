@@ -15,10 +15,14 @@ tokens {
 }
 
 @header {
-package ca.phon.orthography;
+package ca.phon.orthography.parser;
 
 import java.util.List;
 import java.util.ArrayList;
+
+import ca.phon.orthography.*;
+import ca.phon.orthography.parser.*;
+import ca.phon.orthography.parser.exceptions.*;
 }
 
 @members {
@@ -27,6 +31,10 @@ private final OrthographyBuilder builder = new OrthographyBuilder();
 
 public Orthography getOrthography() {
 	return builder.toOrthography();
+}
+
+public void reportError(RecognitionException e) {
+	throw new OrthoParserException(e);
 }
 
 }

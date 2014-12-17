@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.orthography;
+package ca.phon.orthography.parser;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -23,6 +23,10 @@ import java.util.Queue;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
+
+import ca.phon.orthography.OrthoPunctType;
+import ca.phon.orthography.WordPrefix;
+import ca.phon.orthography.WordSuffix;
 
 /**
  * Chomps the given string into tokens usable

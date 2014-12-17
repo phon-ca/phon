@@ -8,6 +8,8 @@ import org.antlr.runtime.TokenStream;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterType;
+import ca.phon.orthography.parser.OrthoTokenSource;
+import ca.phon.orthography.parser.OrthographyParser;
 
 /**
  * Orthography formatter

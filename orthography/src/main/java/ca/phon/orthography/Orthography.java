@@ -15,6 +15,8 @@ import org.antlr.runtime.TokenStream;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.orthography.parser.OrthoTokenSource;
+import ca.phon.orthography.parser.OrthographyParser;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 
