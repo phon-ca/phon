@@ -161,8 +161,6 @@ public class WavHelper {
     protected int[][] frameToSampleArray(byte[] frameContainer) {
     	int retVal[][] = new int[0][];
     	
-//    	System.out.println(format);
-    	
     	if(format.getEncoding() == Encoding.PCM_SIGNED
     			|| format.getEncoding() == Encoding.PCM_UNSIGNED) {
 	    	if(format.getSampleSizeInBits() == 8) {
@@ -363,7 +361,6 @@ public class WavHelper {
     	Clip audioClip;
 		try {
 			audioClip = AudioSystem.getClip();
-			
 		} catch (LineUnavailableException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			throw new PhonMediaException(e.toString());
