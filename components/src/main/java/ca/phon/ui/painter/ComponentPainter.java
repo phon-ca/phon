@@ -9,7 +9,7 @@ import javax.swing.JComponent;
  * setup.  Can be used by custom UI components to
  * help with painting.
  */
-public interface Painter<T extends JComponent> {
+public interface ComponentPainter<T extends JComponent> {
 
 	/**
 	 * Paint the component

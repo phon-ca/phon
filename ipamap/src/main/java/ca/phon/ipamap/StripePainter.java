@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.layout.GridCellLayout;
-import ca.phon.ui.painter.Painter;
+import ca.phon.ui.painter.ComponentPainter;
 
 /**
  * Paints stripes on IPA grid panels.
@@ -13,7 +13,7 @@ import ca.phon.ui.painter.Painter;
  * Stripes are painted on every row
  * line if the number of rows > 2.
  */
-public class StripePainter implements Painter<IPAGridPanel> {
+public class StripePainter implements ComponentPainter<IPAGridPanel> {
 
 	/**
 	 * Minimum number of rows before we use

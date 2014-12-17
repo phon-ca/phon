@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.layout.GridCellLayout;
-import ca.phon.ui.painter.Painter;
+import ca.phon.ui.painter.ComponentPainter;
 
 /**
  * Panel for IPA Grids
@@ -47,7 +47,7 @@ public class IPAGridPanel extends JPanel {
 	 * Painter
 	 * 
 	 */
-	private Painter<IPAGridPanel> painter;
+	private ComponentPainter<IPAGridPanel> painter;
 	
 	public IPAGridPanel(IpaMap parent, Grid grid) {
 		this.ipaGrid = grid;
@@ -89,11 +89,11 @@ public class IPAGridPanel extends JPanel {
 		this.parent = p;
 	}
 	
-	public void setPainter(Painter<IPAGridPanel> painter) {
+	public void setPainter(ComponentPainter<IPAGridPanel> painter) {
 		this.painter = painter;
 	}
 	
-	public Painter<IPAGridPanel> getPainter() {
+	public ComponentPainter<IPAGridPanel> getPainter() {
 		return this.painter;
 	}
 	

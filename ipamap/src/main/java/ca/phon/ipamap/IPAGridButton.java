@@ -7,7 +7,7 @@ import java.awt.RenderingHints;
 import javax.swing.JButton;
 
 import ca.phon.ui.ipamap.io.Cell;
-import ca.phon.ui.painter.Painter;
+import ca.phon.ui.painter.ComponentPainter;
 
 /**
  * Button class for the IPA map using
@@ -20,12 +20,12 @@ public class IPAGridButton extends JButton {
 	/**
 	 * bg painter
 	 */
-	private Painter<IPAGridButton> bgPainter;
+	private ComponentPainter<IPAGridButton> bgPainter;
 	
 	/**
 	 * fg painter
 	 */
-	private Painter<IPAGridButton> fgPainter;
+	private ComponentPainter<IPAGridButton> fgPainter;
 	
 	/**
 	 * parent 

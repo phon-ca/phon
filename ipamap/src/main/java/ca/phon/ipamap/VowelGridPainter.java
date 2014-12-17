@@ -10,7 +10,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 import ca.phon.ui.layout.GridCellLayout;
-import ca.phon.ui.painter.Painter;
+import ca.phon.ui.painter.ComponentPainter;
 import ca.phon.util.Tuple;
 
 /**
@@ -20,7 +20,7 @@ import ca.phon.util.Tuple;
  * NOTES: This class will need to be adjusted
  * if the layout in ipagrids.xml changes.
  */
-public class VowelGridPainter implements Painter<IPAGridPanel> {
+public class VowelGridPainter implements ComponentPainter<IPAGridPanel> {
 
 	private Point2D[] dotPts = {
 			new Point2D.Float(2.5f, 1f),

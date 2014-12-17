@@ -12,13 +12,13 @@ import javax.swing.SwingUtilities;
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.layout.GridCellLayout;
-import ca.phon.ui.painter.Painter;
+import ca.phon.ui.painter.ComponentPainter;
 
 /**
  * 
  *
  */
-public class GlyphPainter implements Painter<IPAGridPanel> {
+public class GlyphPainter implements ComponentPainter<IPAGridPanel> {
 	
 	/**
 	 * Glyph renderer component

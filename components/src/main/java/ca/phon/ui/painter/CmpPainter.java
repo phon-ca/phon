@@ -7,13 +7,13 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-public class CmpPainter<T extends JComponent> implements Painter<T> {
+public class CmpPainter<T extends JComponent> implements ComponentPainter<T> {
 
 	/**
 	 * List of painters
 	 */
-	private List<Painter<T>> painters = 
-		Collections.synchronizedList(new ArrayList<Painter<T>>());
+	private List<ComponentPainter<T>> painters = 
+		Collections.synchronizedList(new ArrayList<ComponentPainter<T>>());
 	
 	/**
 	 * Constructor
@@ -22,7 +22,7 @@ public class CmpPainter<T extends JComponent> implements Painter<T> {
 		super();
 	}
 	
-	public CmpPainter(Painter<T> ... painters) {
+	public CmpPainter(ComponentPainter<T> ... painters) {
 		for(int i = 0; i < painters.length; i++) {
 			this.painters.add(painters[i]);
 		}
@@ -31,7 +31,7 @@ public class CmpPainter<T extends JComponent> implements Painter<T> {
 	@Override
 	public void paint(Graphics2D g2d, T comp, int width, int height) {
 		//paint in order
-		for(Painter<T> painter:painters) {
+		for(ComponentPainter<T> painter:painters) {
 			painter.paint(g2d, comp, width, height);
 		}
 	}
