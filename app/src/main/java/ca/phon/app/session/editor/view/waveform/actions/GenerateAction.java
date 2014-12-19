@@ -3,7 +3,7 @@ package ca.phon.app.session.editor.view.waveform.actions;
 import java.awt.event.ActionEvent;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.waveform.WaveformEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 
 public class GenerateAction extends WaveformEditorViewAction {
 
@@ -13,7 +13,7 @@ public class GenerateAction extends WaveformEditorViewAction {
 	
 	private final static String SHORT_DESC = "Generate wav file from session media";
 
-	public GenerateAction(SessionEditor editor, WaveformEditorView view) {
+	public GenerateAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);

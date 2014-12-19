@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.waveform;
+package ca.phon.app.session.editor.view.speech_analysis;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -7,7 +7,7 @@ import javax.swing.JMenu;
  * Extension point for waveform view tiers.
  *
  */
-public interface WaveformTier {
+public interface SpeechAnalysisTier {
 	
 	/**
 	 * Get the tier component

@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.waveform.WaveformEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -20,7 +20,7 @@ public class SaveAction extends WaveformEditorViewAction {
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/filesave", IconSize.SMALL);
 	
-	public SaveAction(SessionEditor editor, WaveformEditorView view) {
+	public SaveAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);

@@ -8,15 +8,21 @@ public class SaveSegmentAction extends PCMSegmentViewAction {
 
 	private static final long serialVersionUID = -3688820556623096827L;
 
+	public static final String TXT = "Save segment...";
+	
+	public static final String DESC = "Save segment to file";
+	
 	public SaveSegmentAction(PCMSegmentView view) {
 		super(view);
-		// TODO Auto-generated constructor stub
+		
+		putValue(NAME, TXT);
+		putValue(SHORT_DESCRIPTION, DESC);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(getView().hasSegment())
+			getView().saveSegment();
 	}
 
 }

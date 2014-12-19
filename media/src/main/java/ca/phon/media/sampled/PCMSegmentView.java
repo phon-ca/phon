@@ -2,20 +2,32 @@ package ca.phon.media.sampled;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.AudioFileFormat.Type;
 import javax.sound.sampled.Mixer.Info;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
 import ca.phon.media.exceptions.PhonMediaException;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 
 /**
  * Display a window of PCM data.
@@ -126,6 +138,15 @@ public class PCMSegmentView extends JComponent {
 	 * Flag used to control repainting when adjusting values
 	 */
 	private boolean valuesAreAdjusting = false;
+	
+	public PCMSegmentView() {
+		super();
+		this.sampled = null;
+		this.windowStart = 0.0f;
+		this.windowLength = 0.0f;
+		
+		updateUI();
+	}
 	
 	public PCMSegmentView(Sampled sampled) {
 		super();
@@ -338,10 +359,15 @@ public class PCMSegmentView extends JComponent {
 		}
 	}
 	
-	private void playSection(float startTime, float length) {
+	public AudioFormat getAudioFormat() {
 		final AudioFormat format = new AudioFormat(getSampled().getSampleRate(), 
 				getSampled().getSampleSize(), getSampled().getNumberOfChannels(), 
 				getSampled().isSigned(), false);
+		return format;
+	}
+	
+	private void playSection(float startTime, float length) {
+		final AudioFormat format = getAudioFormat();
 		final byte[] audioData = getSampled().getBytes(startTime, startTime+length);
 		// playback audio using Clip
 		try {
@@ -350,6 +376,67 @@ public class PCMSegmentView extends JComponent {
 			audioClip.start();
 		} catch (LineUnavailableException e) {
 		}
+	}
+	
+	public void saveToFile(File file, float startTime, float length) 
+		throws IOException {
+		final byte[] bytes = getSampled().getBytes(startTime, startTime + length);
+		final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+		final long len = bytes.length;
+		final AudioFormat format = getAudioFormat();
+		
+		final AudioInputStream aio = new AudioInputStream(bin, format, len);
+		AudioSystem.write(aio, Type.WAVE, file);
+	}
+	
+	public void saveSegment() {
+		if(hasSegment()) {
+			saveSection(getSegmentStart(), getSegmentLength());
+		}
+	}
+	
+	public void saveSelection() {
+		if(hasSelection()) {
+			saveSection(getSelectionStart(), getSelectionLength());
+		}
+	}
+	
+	private void saveSection(float startTime, float length) {
+		final SaveDialogProperties props = new SaveDialogProperties();
+		props.setCanCreateDirectories(true);
+		props.setFileFilter(FileFilter.wavFilter);
+		props.setRunAsync(true);
+		props.setListener(new SaveDialogListener(startTime, length));
+		
+		NativeDialogs.showSaveDialog(props);
+	}
+	
+	private class SaveDialogListener implements NativeDialogListener {
+		
+		private float startTime = 0.0f;
+		
+		private float length = 0.0f;
+		
+		public SaveDialogListener(float startTime, float len) {
+			this.startTime = startTime;
+			this.length = len;
+		}
+		
+		@Override
+		public void nativeDialogEvent(NativeDialogEvent evt) {
+			if(evt.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+				final String filename = 
+						(evt.getDialogData() != null ? evt.getDialogData().toString() : null);
+				if(filename != null) {
+					try {
+						saveToFile(new File(filename), startTime, length);
+					} catch (IOException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+				}
+			}
+		}
+
 	}
 	
 	@Override

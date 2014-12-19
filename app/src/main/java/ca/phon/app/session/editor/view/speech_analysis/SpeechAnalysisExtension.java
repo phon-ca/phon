@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.waveform;
+package ca.phon.app.session.editor.view.speech_analysis;
 
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.EditorViewCategory;
@@ -12,9 +12,9 @@ import ca.phon.plugin.PhonPlugin;
  * Waveform view extension point for the {@link SessionEditor}
  *
  */
-@PhonPlugin(name=WaveformEditorView.VIEW_TITLE)
-@EditorViewInfo(name=WaveformEditorView.VIEW_TITLE, category=EditorViewCategory.MEDIA, icon="misc/oscilloscope")
-public class WaveformExtension implements IPluginExtensionPoint<EditorView> {
+@PhonPlugin(name=SpeechAnalysisEditorView.VIEW_TITLE)
+@EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_TITLE, category=EditorViewCategory.MEDIA, icon="misc/oscilloscope")
+public class SpeechAnalysisExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -31,7 +31,7 @@ public class WaveformExtension implements IPluginExtensionPoint<EditorView> {
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = (SessionEditor)args[0];
-			return new WaveformEditorView(editor);
+			return new SpeechAnalysisEditorView(editor);
 		}
 		
 	};

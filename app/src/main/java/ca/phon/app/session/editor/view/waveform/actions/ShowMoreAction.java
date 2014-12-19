@@ -3,7 +3,7 @@ package ca.phon.app.session.editor.view.waveform.actions;
 import java.awt.event.ActionEvent;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.waveform.WaveformEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 
 public class ShowMoreAction extends WaveformEditorViewAction {
 
@@ -13,7 +13,7 @@ public class ShowMoreAction extends WaveformEditorViewAction {
 	
 	private final static String SHORT_DESC = "Increase length of audio data displayed";
 
-	public ShowMoreAction(SessionEditor editor, WaveformEditorView view) {
+	public ShowMoreAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);

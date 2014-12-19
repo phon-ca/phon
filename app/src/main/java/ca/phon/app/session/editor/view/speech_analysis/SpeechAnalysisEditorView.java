@@ -15,24 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.session.editor.view.waveform;
+package ca.phon.app.session.editor.view.speech_analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,7 +34,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -66,34 +59,25 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.waveform.actions.GenerateAction;
 import ca.phon.app.session.editor.view.waveform.actions.PlayAction;
 import ca.phon.app.session.editor.view.waveform.actions.RefreshAction;
 import ca.phon.app.session.editor.view.waveform.actions.SaveAction;
 import ca.phon.app.session.editor.view.waveform.actions.ShowMoreAction;
-import ca.phon.media.exceptions.PhonMediaException;
 import ca.phon.media.exportwizard.MediaExportWizard;
 import ca.phon.media.exportwizard.MediaExportWizardProp;
+import ca.phon.media.sampled.PCMSampled;
+import ca.phon.media.sampled.PCMSegmentView;
 import ca.phon.media.util.MediaLocator;
-import ca.phon.media.wavdisplay.WavDisplay;
-import ca.phon.media.wavdisplay.WavHelper;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.MediaSegment;
-import ca.phon.session.MediaUnit;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -102,12 +86,12 @@ import ca.phon.worker.PhonTask;
  * Displays wavform and associated commands.
  *
  */
-public class WaveformEditorView extends EditorView {
+public class SpeechAnalysisEditorView extends EditorView {
 	
 	private static final long serialVersionUID = -1680881691504590317L;
 
 	private static final Logger LOGGER = Logger
-			.getLogger(WaveformEditorView.class.getName());
+			.getLogger(SpeechAnalysisEditorView.class.getName());
 
 	public static final String VIEW_TITLE = "Speech Analysis";
 
@@ -116,7 +100,7 @@ public class WaveformEditorView extends EditorView {
 	/**
 	 * Wav display
 	 */
-	private WavDisplay wavDisplay;
+	private PCMSegmentView wavDisplay;
 	
 	/* Toolbar and buttons */
 	private JToolBar toolbar;
@@ -125,7 +109,6 @@ public class WaveformEditorView extends EditorView {
 	private JButton refreshButton;
 	
 	private JButton exportButton;
-//	private JButton quickExportButton;
 	
 	private JButton showMoreButton;
 	
@@ -135,8 +118,8 @@ public class WaveformEditorView extends EditorView {
 	
 	private JComponent sizer;
 	
-	private final List<WaveformTier> pluginTiers = 
-			Collections.synchronizedList(new ArrayList<WaveformTier>());
+	private final List<SpeechAnalysisTier> pluginTiers = 
+			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
 	
 	private class HideStatusComponentTask extends PhonTask {
 		
@@ -158,7 +141,7 @@ public class WaveformEditorView extends EditorView {
 		
 	}
 	
-	public WaveformEditorView(SessionEditor editor) {
+	public SpeechAnalysisEditorView(SessionEditor editor) {
 		super(editor);
 		
 		init();
@@ -191,9 +174,9 @@ public class WaveformEditorView extends EditorView {
 		pluginTiers.clear();
 		
 		final PluginManager pluginManager = PluginManager.getInstance();
-		final List<IPluginExtensionPoint<WaveformTier>> extraTiers = 
-				pluginManager.getExtensionPoints(WaveformTier.class);
-		for(IPluginExtensionPoint<WaveformTier> extraTier:extraTiers) {
+		final List<IPluginExtensionPoint<SpeechAnalysisTier>> extraTiers = 
+				pluginManager.getExtensionPoints(SpeechAnalysisTier.class);
+		for(IPluginExtensionPoint<SpeechAnalysisTier> extraTier:extraTiers) {
 			try {
 				// ANYTHING can happen during plug-in object creation, 
 				// try to catch exceptions which the plug-in lets through
@@ -204,7 +187,7 @@ public class WaveformEditorView extends EditorView {
 		}
 	}
 	
-	public List<WaveformTier> getPluginTiers() {
+	public List<SpeechAnalysisTier> getPluginTiers() {
 		return Collections.unmodifiableList(this.pluginTiers);
 	}
 	
@@ -230,35 +213,35 @@ public class WaveformEditorView extends EditorView {
 			
 		});
 		add(msgLabel, BorderLayout.SOUTH);
-		wavDisplay = new WavDisplay();
+		wavDisplay = new PCMSegmentView();
 		
-		wavDisplay.addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if(evt.getPropertyName().equals(WavDisplay._SEGMENT_VALUE_PROP_)) {
-					long newSegStart =
-						wavDisplay.get_timeBar().getSegStart();
-					long newSegEnd = 
-						newSegStart + wavDisplay.get_timeBar().getSegLength();
-					final SessionFactory factory = SessionFactory.newFactory();
-					final MediaSegment newSegment = factory.createMediaSegment();
-					newSegment.setStartValue(newSegStart);
-					newSegment.setEndValue(newSegEnd);
-					newSegment.setUnitType(MediaUnit.Millisecond);
-					
-					final SessionEditor editor = getEditor();
-					final Record record = editor.currentRecord();
-					final Tier<MediaSegment> segmentTier = record.getSegment();
-					
-					final TierEdit<MediaSegment> segmentEdit = 
-							new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
-					segmentEdit.setFireHardChangeOnUndo(true);
-					editor.getUndoSupport().postEdit(segmentEdit);
-				}
-			}
-			
-		});
+//		wavDisplay.addPropertyChangeListener(new PropertyChangeListener() {
+//
+//			@Override
+//			public void propertyChange(PropertyChangeEvent evt) {
+//				if(evt.getPropertyName().equals(WavDisplay._SEGMENT_VALUE_PROP_)) {
+//					long newSegStart =
+//						wavDisplay.get_timeBar().getSegStart();
+//					long newSegEnd = 
+//						newSegStart + wavDisplay.get_timeBar().getSegLength();
+//					final SessionFactory factory = SessionFactory.newFactory();
+//					final MediaSegment newSegment = factory.createMediaSegment();
+//					newSegment.setStartValue(newSegStart);
+//					newSegment.setEndValue(newSegEnd);
+//					newSegment.setUnitType(MediaUnit.Millisecond);
+//					
+//					final SessionEditor editor = getEditor();
+//					final Record record = editor.currentRecord();
+//					final Tier<MediaSegment> segmentTier = record.getSegment();
+//					
+//					final TierEdit<MediaSegment> segmentEdit = 
+//							new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
+//					segmentEdit.setFireHardChangeOnUndo(true);
+//					editor.getUndoSupport().postEdit(segmentEdit);
+//				}
+//			}
+//			
+//		});
 		
 		contentPane = new JPanel(new VerticalLayout());
 		
@@ -318,15 +301,11 @@ public class WaveformEditorView extends EditorView {
 	private JPanel initPlugins() {
 		loadPlugins();
 		final JPanel retVal = new JPanel(new VerticalLayout());
-		for(WaveformTier tier:pluginTiers) {
+		for(SpeechAnalysisTier tier:pluginTiers) {
 			final JComponent comp = tier.getTierComponent();
 			retVal.add(comp);
 		}
 		return retVal;
-	}
-	
-	public WaveformViewCalculator getCalculator() {
-		return new WaveformEditorViewCalculator(wavDisplay.get_timeBar());
 	}
 	
 	@Override
@@ -339,21 +318,16 @@ public class WaveformEditorView extends EditorView {
 	}
 	
 	private void setupInputMap() {
-		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()
-				| InputEvent.SHIFT_MASK);
-		this.registerKeyboardAction(new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					wavDisplay.play();
-				} catch (PhonMediaException e1) {
-					CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
-					currentFrame.showErrorMessage(e1.getMessage());
-				}
-			}
-			
-		}, ks, JComponent.WHEN_IN_FOCUSED_WINDOW);
+//		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()
+//				| InputEvent.SHIFT_MASK);
+//		this.registerKeyboardAction(new AbstractAction() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				wavDisplay.play();
+//			}
+//			
+//		}, ks, JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 	
 	private void setupToolbar() {
@@ -392,69 +366,14 @@ public class WaveformEditorView extends EditorView {
 	
 	/* toolbar actions */
 	public void play() {
-		try {
-			wavDisplay.play();
-		} catch (PhonMediaException e) {
-			final Toast toast = ToastFactory.makeToast(e.getLocalizedMessage());
-			toast.start(playButton);
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
+		wavDisplay.play();
 	}
 	
 	public void onExport() {
-//		getModel().queueBackgroundTask(new GenerateWaveSampleTask());
-		// get audio segment/selection
-		final WavHelper audioInfo = wavDisplay.getSegmentInfo();
-		if(audioInfo == null) return;
-		
-		// setup __res/media/segments if it does not exist
-		final File projFile = new File(getEditor().getProject().getLocation());
-		final File resFile = new File(projFile, "__res");
-		final File mediaResFile = new File(resFile, "media");
-		final File segmentFile = new File(mediaResFile, "segments");
-		if(!segmentFile.exists()) {
-			segmentFile.mkdirs();
-		}
-		
-		// setup segment path
-		if(getEditor().currentRecord() == null) return;
-		
-		File selectedFile = new File(segmentFile, getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ".wav");
-		final String segPath = selectedFile.getName();
-		
-		// show save as.. dialog
-		final SaveDialogProperties props = new SaveDialogProperties();
-		props.setRunAsync(false);
-		props.setCanCreateDirectories(true);
-		props.setFileFilter(FileFilter.wavFilter);
-		props.setInitialFolder(segmentFile.getAbsolutePath());
-		props.setInitialFile(segPath);
-		props.setTitle("Save audio segment");
-		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-		
-		final String saveAs = NativeDialogs.showSaveDialog(props);
-		
-		if(saveAs != null) {
-			try {
-				audioInfo.saveToFile(saveAs);
-			} catch (IOException e) {
-				final Toast toast = ToastFactory.makeToast(e.getLocalizedMessage());
-				toast.start(exportButton);
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
-		}
 	}
 	
 	public void showMore() {
-		long curStart = wavDisplay.get_timeBar().getStartMs();
-		long curEnd = wavDisplay.get_timeBar().getEndMs();
 		
-		long newStart = Math.max(0, curStart-1000);
-		long newEnd =  curEnd + 1000;
-		
-		wavDisplay.get_timeBar().setStartMs(newStart);
-		wavDisplay.get_timeBar().setEndMs(newEnd);
-		wavDisplay.load(newStart, (newEnd-newStart));
 	}
 	
 	/**
@@ -517,7 +436,8 @@ public class WaveformEditorView extends EditorView {
 					public void windowDeactivated(WindowEvent we) {
 						File audioFile = getAudioFile();
 						if(audioFile != null) {
-							wavDisplay.loadFile(audioFile);
+							final PCMSampled sampled = new PCMSampled(audioFile);
+							wavDisplay.setSampled(sampled);
 							update();
 						} else {
 							msgLabel.setVisible(true);
@@ -530,10 +450,9 @@ public class WaveformEditorView extends EditorView {
 	}
 	
 	public void shutdown() {
-		wavDisplay.shutdown();
 	}
 	
-	public WavDisplay getWavDisplay() {
+	public PCMSegmentView getWavDisplay() {
 		return this.wavDisplay;
 	}
 	
@@ -571,50 +490,45 @@ public class WaveformEditorView extends EditorView {
 	
 	public void update() {
 		Record utt = getEditor().currentRecord();
-		if(utt != null) {
-
-			File audioFile = getAudioFile();
-			
-			if(audioFile != null && audioFile.exists()) {
-				if(!audioFile.equals(wavDisplay.getFile())) {
-					wavDisplay.loadFile(audioFile);
-				}
-				
-				final MediaSegment segment = utt.getSegment().getGroup(0);
-				
-				double length = (segment.getEndValue() - segment.getStartValue());
-				long preferredClipExtension = (long)Math.ceil(length * 0.1);
-				if(preferredClipExtension < CLIP_EXTENSION_MIN)
-					preferredClipExtension = CLIP_EXTENSION_MIN;
-				if(preferredClipExtension > CLIP_EXTENSION_MAX)
-					preferredClipExtension = CLIP_EXTENSION_MAX;
-				
-				long clipStart = Math.round(segment.getStartValue() - preferredClipExtension);
-				
-				long displayStart = 
-					Math.max(0,
-							clipStart);
-				long segLength = 
-					Math.round(segment.getEndValue() - segment.getStartValue());
-				long displayLength = 
-					segLength + (2*preferredClipExtension);
-				
-				wavDisplay.get_timeBar().setSegStart((int)segment.getStartValue());
-				wavDisplay.get_timeBar().setSegLength(segLength);
-				wavDisplay.get_timeBar().setStartMs(displayStart);
-				wavDisplay.get_timeBar().setEndMs(displayStart+displayLength);
-				wavDisplay.load(displayStart, displayLength);
-				
-				if(msgLabel.isVisible()) {
-					msgLabel.setVisible(false);
-				}
-			} else {
-				wavDisplay.clear();
-				msgLabel.setVisible(true);
-				msgLabel.setText("Audio file not found.  Click here to create.");
+		
+		if(wavDisplay.getSampled() == null) {
+			final File audioFile = getAudioFile();
+			if(audioFile != null) {
+				final PCMSampled sampled = new PCMSampled(audioFile);
+				wavDisplay.setSampled(sampled);
 			}
-		} else {
-			wavDisplay.clear();
+		}
+		
+		if(utt != null && wavDisplay.getSampled() != null) {
+			final MediaSegment segment = utt.getSegment().getGroup(0);
+			
+			double length = (segment.getEndValue() - segment.getStartValue());
+			long preferredClipExtension = (long)Math.ceil(length * 0.1);
+			if(preferredClipExtension < CLIP_EXTENSION_MIN)
+				preferredClipExtension = CLIP_EXTENSION_MIN;
+			if(preferredClipExtension > CLIP_EXTENSION_MAX)
+				preferredClipExtension = CLIP_EXTENSION_MAX;
+			
+			float clipStart =
+					(Math.round(segment.getStartValue() - preferredClipExtension)) / 1000.0f;
+			float displayStart = 
+				Math.max(wavDisplay.getSampled().getStartTime(),
+						clipStart);
+			float segStart = 
+					segment.getStartValue() / 1000.0f;
+			float segLength = 
+				(segment.getEndValue() - segment.getStartValue()) / 1000.0f;
+			float displayLength = 
+				segLength + ((2*preferredClipExtension) / 1000.0f);
+			
+			wavDisplay.setWindowStart(displayStart);
+			wavDisplay.setWindowLength(displayLength);
+			wavDisplay.setSegmentStart(segStart);
+			wavDisplay.setSegmentLength(segLength);
+			
+			if(msgLabel.isVisible()) {
+				msgLabel.setVisible(false);
+			}
 		}
 	}
 
@@ -633,8 +547,8 @@ public class WaveformEditorView extends EditorView {
 		if(lastRecord != getEditor().getCurrentRecordIndex()) {
 			update();
 			
-			wavDisplay.set_selectionStart(-1);
-			wavDisplay.set_selectionEnd(-1);
+			wavDisplay.setSelectionStart(0.0f);
+			wavDisplay.setSelectionLength(0.0f);
 		}
 		lastRecord = getEditor().getCurrentRecordIndex();
 	}
@@ -658,129 +572,6 @@ public class WaveformEditorView extends EditorView {
 		update();
 	}
 	
-	/**
-	 * Task for exporting selection to a wav file.
-	 * 
-	 */
-	private class GenerateWaveSampleTask extends PhonTask {
-
-		@Override
-		public void performTask() {
-			
-			WavHelper audioInfo = wavDisplay.getSegmentInfo();
-			if(audioInfo == null) return;
-			
-			final CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
-			currentFrame.showStatusMessage("Saving audio segment...");
-			
-			if(getEditor().currentRecord() == null) return;
-			
-			File projFile = new File(getEditor().getProject().getLocation());
-			File resFile = new File(projFile, "__res");
-			File mediaResFile = new File(resFile, "media");
-			File segmentFile = new File(mediaResFile, "segments");
-			if(!segmentFile.exists()) {
-				segmentFile.mkdirs();
-			}
-			String segmentPath = segmentFile.getAbsolutePath();
-			
-//			final PathExpander pe = new PathExpander();
-			final String mediaLocation = getEditor().getSession().getMediaLocation();
-//					pe.expandPath(getEditor().getSession().getMediaLocation());
-			
-			File mediaFile = 
-				MediaLocator.findMediaFile(mediaLocation, getEditor().getProject(), getEditor().getSession().getCorpus());
-			if(mediaFile == null)
-				mediaFile = new File(getEditor().getSession().getMediaLocation());
-			if(mediaFile != null && mediaFile.exists()) {
-				final MediaSegment m = getEditor().currentRecord().getSegment().getGroup(0);
-				long segStart = Math.round(m.getStartValue());
-				long segLen = Math.round(m.getEndValue() - m.getStartValue());
-				
-				if(segLen > 0) {
-					FileFilter[] filters = new FileFilter[1];
-					filters[0] = FileFilter.wavFilter;
-					String selectedFile = 
-						NativeDialogs.showSaveFileDialogBlocking(CommonModuleFrame.getCurrentFrame(), 
-								segmentPath, ".wav", filters, "Save segment");
-					if(selectedFile != null) {
-						try {
-							audioInfo.saveToFile(selectedFile);
-							
-//							currentFrame.showStatusMessage("Saved segment as '" + 
-//									selectedFile + "'");
-//							getModel().queueBackgroundTask(new HideStatusComponentTask(currentFrame));
-						} catch (IOException e) {
-//							currentFrame.showErrorMessage("Could not export audio segment.");
-						}
-					}  else {
-						currentFrame.hideStatusComponent(); 
-					}
-				} // if segLen
-			} // if mediafile
-		}
-	}
-	
-	private class AutoGenerateWaveSampleTask extends PhonTask {
-
-		@Override
-		public void performTask() {
-			
-			WavHelper audioInfo = wavDisplay.getSegmentInfo();
-			if(audioInfo == null) return;
-			
-			CommonModuleFrame currentFrame = CommonModuleFrame.getCurrentFrame();
-			currentFrame.showStatusMessage("Saving audio segment...");
-			
-			File projFile = new File(getEditor().getProject().getLocation());
-			File resFile = new File(projFile, "__res");
-			File mediaResFile = new File(resFile, "media");
-			File segmentFile = new File(mediaResFile, "segments");
-			if(!segmentFile.exists()) {
-				segmentFile.mkdirs();
-			}
-			String segmentPath = segmentFile.getAbsolutePath();
-			
-			if(getEditor().currentRecord() == null) return;
-			
-//			final PathExpander pe = new PathExpander();
-			final String mediaLocation = getEditor().getSession().getMediaLocation();
-			
-			File mediaFile = 
-				MediaLocator.findMediaFile(mediaLocation, getEditor().getProject(), getEditor().getSession().getCorpus());
-			if(mediaFile == null)
-				mediaFile = new File(getEditor().getSession().getMediaLocation());
-			if(mediaFile != null && mediaFile.exists()) {
-				final MediaSegment m = getEditor().currentRecord().getSegment().getGroup(0);
-				long segStart = Math.round(m.getStartValue());
-				long segLen = Math.round((long)m.getEndValue() - segStart);
-				
-				if(segLen > 0) {
-					FileFilter[] filters = new FileFilter[1];
-					filters[0] = FileFilter.wavFilter;
-					
-					File selectedFile = new File(segmentFile, getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ".wav");
-				
-					int fIdx = 0;
-					while(selectedFile.exists()) {
-						selectedFile = new File(segmentFile,
-								getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + 
-								"(" + (++fIdx) + ").wav");
-					}
-					String segPath = selectedFile.getAbsolutePath();
-					try {
-						audioInfo.saveToFile(selectedFile);
-//						currentFrame.showStatusMessage("Saved segment as '" + 
-//								segPath + "'");
-//						getModel().queueBackgroundTask(new HideStatusComponentTask(currentFrame));
-					} catch (IOException e) {
-//						currentFrame.showErrorMessage("Could not export audio segment.");
-					}
-				} // if segLen
-			} // if mediafile
-		}
-	}
-
 	@Override
 	public ImageIcon getIcon() {
 		return IconManager.getInstance().getIcon("misc/oscilloscope", IconSize.SMALL);
@@ -798,7 +589,7 @@ public class WaveformEditorView extends EditorView {
 		retVal.add(new SaveAction(getEditor(), this));
 		retVal.add(new GenerateAction(getEditor(), this));
 		
-		for(WaveformTier tier:pluginTiers) {
+		for(SpeechAnalysisTier tier:pluginTiers) {
 			tier.addMenuItems(retVal);
 		}
 		

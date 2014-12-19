@@ -41,7 +41,7 @@ import javax.swing.event.DocumentListener;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.waveform.WaveformEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.MediaSegment;
@@ -147,9 +147,9 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 				mediaPlayerEditorView.getPlayer().playSegment((long)segment.getStartValue(), 
 						(long)(segment.getEndValue()-segment.getStartValue()));
 			}
-		} else if(editor.getViewModel().isShowing(WaveformEditorView.VIEW_TITLE)) {
-			final WaveformEditorView waveformEditorView =
-					(WaveformEditorView)editor.getViewModel().getView(WaveformEditorView.VIEW_TITLE);
+		} else if(editor.getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
+			final SpeechAnalysisEditorView waveformEditorView =
+					(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
 			if(waveformEditorView != null) {
 				waveformEditorView.play();
 			}

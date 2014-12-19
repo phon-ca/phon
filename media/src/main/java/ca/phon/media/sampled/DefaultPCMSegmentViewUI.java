@@ -35,6 +35,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.PopupFactory;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import org.joda.time.Seconds;
@@ -42,9 +43,12 @@ import org.joda.time.Seconds;
 import ca.phon.media.sampled.actions.PlayAction;
 import ca.phon.media.sampled.actions.PlaySegmentAction;
 import ca.phon.media.sampled.actions.PlaySelectionAction;
+import ca.phon.media.sampled.actions.SaveSegmentAction;
+import ca.phon.media.sampled.actions.SaveSelectionAction;
 import ca.phon.media.sampled.actions.SelectMixerAction;
 import ca.phon.media.sampled.actions.SelectSegmentAction;
 import ca.phon.media.sampled.actions.ToggleChannelVisible;
+import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -128,6 +132,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 			g.setColor(bg);
 			g.fillRect(0, 0, view.getWidth(), view.getHeight());
 		}
+		
+		if(view.getSampled() == null) return;
 		
 		final Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -243,9 +249,6 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		
 		// cursor
 		if(view.getCursorPosition() >= 0) {
-			g2.setXORMode(view.getBackground());
-			g2.setColor(view.getForeground());
-			
 			g2.setStroke(dashed);
 			final Line2D cursorLine = new Line2D.Double(
 					view.getCursorPosition(), contentRect.getY(),
@@ -284,6 +287,14 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 			mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
 		}
 		menu.add(mixerMenu);
+		
+		menu.addSeparator();
+		final JMenuItem saveSegmentItem = new JMenuItem(new SaveSegmentAction(view));
+		saveSegmentItem.setEnabled(view.hasSegment());
+		menu.add(saveSegmentItem);
+		final JMenuItem saveSelectionItem = new JMenuItem(new SaveSelectionAction(view));
+		saveSelectionItem.setEnabled(view.hasSelection());
+		menu.add(saveSelectionItem);
 		
 		menu.show(view, p.x, p.y);
 	}
@@ -344,6 +355,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		
 		@Override
 		public void mousePressed(MouseEvent e) {
+			if(OSInfo.isMacOs() && e.isPopupTrigger())
+				showContextMenu(e.getPoint());
 			if(e.getButton() != MouseEvent.BUTTON1) return;
 			dragStartX = e.getX();
 			if(e.getY() > contentRect.getY()) {
@@ -360,7 +373,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			if(e.isPopupTrigger()) {
+			if(!OSInfo.isMacOs() && e.isPopupTrigger()) {
 				showContextMenu(e.getPoint());
 			} else {
 				isDraggingSelection = false;

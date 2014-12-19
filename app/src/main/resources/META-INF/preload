@@ -8,4 +8,4 @@ ca.phon.app.session.editor.view.segmentation.SegmentationEditorView
 ca.phon.app.session.editor.view.session_information.SessionInfoEditorView
 ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView
 ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView
-ca.phon.app.session.editor.view.waveform.WaveformEditorView
+ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView

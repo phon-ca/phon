@@ -560,14 +560,14 @@ public class WavHelper {
     }
     
     /**
-     * Write the loaded wavData to a new file.
-     * 
-     */
-    public void saveToFile(String file)
-    	throws IOException {
-    	saveToFile(new File(file));
-    }
-    
+	 * Write the loaded wavData to a new file.
+	 * 
+	 */
+	public void saveToFile(String file)
+		throws IOException {
+		saveToFile(new File(file));
+	}
+	
     public void saveToFile(File f)
     	throws IOException {
     	// create an audio output stream with

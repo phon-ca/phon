@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.waveform.WaveformEditorView;
-import ca.phon.app.session.editor.view.waveform.WaveformTier;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisTier;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -21,7 +21,7 @@ public class RefreshAction extends WaveformEditorViewAction {
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
 
-	public RefreshAction(SessionEditor editor, WaveformEditorView view) {
+	public RefreshAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
@@ -32,7 +32,7 @@ public class RefreshAction extends WaveformEditorViewAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		getView().update();
-		for(WaveformTier tier:getView().getPluginTiers()) {
+		for(SpeechAnalysisTier tier:getView().getPluginTiers()) {
 			tier.onRefresh();
 		}
 	}
