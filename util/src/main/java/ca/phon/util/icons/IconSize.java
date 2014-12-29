@@ -44,8 +44,32 @@ public enum IconSize {
 		else
 			return 0;
 	}
+	
 	public int getHeight() {
 		return IconSize.getHeightForSize(this);
+	}
+	
+	public static IconSize getHiDPISize(IconSize size) {
+		if(size == XXSMALL) {
+			return IconSize.SMALL;
+		} else if(size == XSMALL) {
+			return IconSize.MEDIUM;
+		} else if(size == SMALL) {
+			return IconSize.LARGE;
+		} else if(size == MEDIUM) {
+			return IconSize.LARGE;
+		} else if(size == LARGE) {
+			return IconSize.XLARGE;
+		} else if(size == XLARGE) {
+			return IconSize.XXLARGE;
+		} else {
+			// no size available
+			return size;
+		}
+	}
+	
+	public IconSize getHiDPISize() {
+		return IconSize.getHiDPISize(this);
 	}
 	
 	public static int getWidthForSize(IconSize size) {
