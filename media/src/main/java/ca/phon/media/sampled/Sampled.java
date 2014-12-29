@@ -124,6 +124,16 @@ public interface Sampled {
 	 */
 	public double[] getWindowExtrema(int channel, long firstSample, long lastSample);
 	
+	/**
+	 * Get min/max values for specified window
+	 * 
+	 * @param channel
+	 * @param firstSample
+	 * @param ladSample
+	 * @param extrema
+	 */
+	public void getWindowExtrema(int channel, long firstSample, long lastSample, double[] extrema);
+	
 	
 	/**
 	 * Get min/max values for specified time range
@@ -136,6 +146,17 @@ public interface Sampled {
 	 * @return min/max values for specified range
 	 */
 	public double[] getWindowExtrema(int channel, float startTime, float endTime);
+	
+	/**
+	 * Get min/max values for specified time range
+	 * 
+	 * @param channel
+	 * @param startTime
+	 * @param endTime
+	 * @param extrema an array of double[2] where the
+	 *  data will be stored
+	 */
+	public void getWindowExtrema(int channle, float startTime, float endTime, double[] extrema);
 	
 	/**
 	 * Return the raw byte data for the given time range

@@ -214,6 +214,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 		});
 		add(msgLabel, BorderLayout.SOUTH);
 		wavDisplay = new PCMSegmentView();
+		wavDisplay.setFocusable(true);
+		wavDisplay.setBackground(Color.white);
+		wavDisplay.setOpaque(true);
 		
 //		wavDisplay.addPropertyChangeListener(new PropertyChangeListener() {
 //

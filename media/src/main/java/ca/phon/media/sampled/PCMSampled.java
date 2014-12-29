@@ -279,29 +279,16 @@ public class PCMSampled implements Sampled {
 	@Override
 	public double[] getWindowExtrema(int channel, long firstSample,
 			long lastSample) {
-		double[] retVal = new double[] { Double.MAX_VALUE, Double.MIN_VALUE };
-		
-		for(long i = firstSample; i <= lastSample && i < getNumberOfSamples(); i++) {
-			final double value = valueForSample(channel, i);
-			retVal[0] = 
-					Math.min(retVal[0], value);
-			retVal[1] = 
-					Math.max(retVal[1], value);
-		}
-		
+		double[] retVal = new double[2];
+		getWindowExtrema(channel, firstSample, lastSample, retVal);
 		return retVal;
 	}
 
 	@Override
 	public double[] getWindowExtrema(int channel, float startTime, float endTime) {
-		long startIdx = sampleForTime(startTime);
-		long endIdx = sampleForTime(endTime);
-		if(endIdx < startIdx) {
-			long t = startIdx;
-			startIdx = endIdx;
-			endIdx = t;
-		}
-		return getWindowExtrema(channel, startIdx, endIdx);
+		double[] retVal = new double[2];
+		getWindowExtrema(channel, startTime, endTime, retVal);
+		return retVal;
 	}
 	
 	@Override
@@ -316,6 +303,54 @@ public class PCMSampled implements Sampled {
 		byteBuffer.get(buffer, 0, byteLength);
 		
 		return buffer;
+	}
+
+	@Override
+	public void getWindowExtrema(int channel, long firstSample,
+			long lastSample, double[] extrema) {
+		if(extrema == null || extrema.length != 2) {
+			throw new IllegalArgumentException("extrema must be an array of doubles with length 2");
+		}
+		checkChannelBounds(channel);
+		checkSampleBounds(firstSample, lastSample);
+		
+		for(long i = firstSample; i <= lastSample && i < getNumberOfSamples(); i++) {
+			final double value = valueForSample(channel, i);
+			extrema[0] = (i == firstSample ? value :
+					Math.min(extrema[0], value));
+			extrema[1] = (i == firstSample ? value: 
+					Math.max(extrema[1], value));
+		}
+	}
+
+	@Override
+	public void getWindowExtrema(int channel, float startTime, float endTime,
+			double[] extrema) {
+		checkTimeBounds(startTime, endTime);
+		long startIdx = sampleForTime(startTime);
+		long endIdx = sampleForTime(endTime);
+		getWindowExtrema(channel, startIdx, endIdx, extrema);
+	}
+	
+	private void checkChannelBounds(int channel) {
+		if(channel < 0 || channel >= getNumberOfChannels()) {
+			throw new ArrayIndexOutOfBoundsException(channel);
+		}
+	}
+	
+	private void checkSampleBounds(long firstSample, long lastSample) {
+		if(firstSample < 0 || firstSample > getNumberOfSamples()) {
+			throw new ArrayIndexOutOfBoundsException((int)firstSample);
+		}
+		if(lastSample < firstSample || lastSample > getNumberOfSamples()) {
+			throw new ArrayIndexOutOfBoundsException((int)lastSample);
+		}
+	}
+	
+	private void checkTimeBounds(float startTime, float endTime) {
+		long startIdx = sampleForTime(startTime);
+		long endIdx = sampleForTime(endTime);
+		checkSampleBounds(startIdx, endIdx);
 	}
 
 }

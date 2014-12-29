@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.PopupMenu;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.Toolkit;
@@ -73,10 +74,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		super();
 		this.view = view;
 		
-		
 		final ImageIcon magnifyIcon = IconManager.getInstance().getIcon("actions/magnifier", IconSize.LARGE);
 		magnifyCursor = Toolkit.getDefaultToolkit().createCustomCursor(magnifyIcon.getImage(), new Point(0,0), "magnify");
-		
 		
 		install(view);
 	}
@@ -97,6 +96,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		view.addPropertyChangeListener(PCMSegmentView.CURSOR_LOCATION_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.CHANNEL_VISIBLITY_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.CHANNEL_COLOR_PROP, propListener);
+		view.addPropertyChangeListener(PCMSegmentView.PLAYBACK_MARKER_PROP, propListener);
 		
 		view.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 	}
@@ -248,13 +248,22 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		}
 		
 		// cursor
-		if(view.getCursorPosition() >= 0) {
+		if(!view.isPlaying() && view.getCursorPosition() >= 0) {
 			g2.setStroke(dashed);
 			final Line2D cursorLine = new Line2D.Double(
 					view.getCursorPosition(), contentRect.getY(),
 					view.getCursorPosition(), contentRect.getY() + contentRect.getHeight());
 			g2.draw(cursorLine);
-			g2.setPaintMode();
+		}
+		
+		if(view.isPlaying() && view.getPlaybackMarker() > view.getWindowStart()
+				&& view.getPlaybackMarker() < (view.getWindowStart() + view.getWindowLength())) {
+			g2.setStroke(dashed);
+			double playbackPos = view.modelToView(view.getPlaybackMarker());
+			final Line2D playbackLine = new Line2D.Double(
+					playbackPos, contentRect.getY(),
+					playbackPos, contentRect.getY() + contentRect.getHeight());
+			g2.draw(playbackLine);
 		}
 		
 	}
@@ -304,7 +313,27 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(!view.isValuesAdjusting()) {
-				view.repaint();
+				if(evt.getPropertyName().equals(PCMSegmentView.CURSOR_LOCATION_PROP)) {
+					final int oldVal = (Integer)evt.getOldValue();
+					final int newVal = (Integer)evt.getNewValue();
+					
+					final int x = Math.min(oldVal, newVal);
+					final int xmax = Math.max(oldVal, newVal);
+					final Rectangle clipRect = 
+							new Rectangle(x-2, 0, xmax-x+4, view.getHeight());
+					view.repaint(clipRect);
+				} else if(evt.getPropertyName().equals(PCMSegmentView.PLAYBACK_MARKER_PROP)) {
+					final float oldVal = (Float)evt.getOldValue();
+					final float newVal = (Float)evt.getNewValue();
+					
+					final double oldX = view.modelToView(oldVal);
+					final double newX = view.modelToView(newVal);
+					final Rectangle clipRect = 
+							new Rectangle((int)oldX, 0, (int)newX, view.getHeight());
+					view.repaint(clipRect);
+				} else {
+					view.repaint();
+				}
 			}
 		}
 		
@@ -362,7 +391,9 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 			if(e.getY() > contentRect.getY()) {
 				final int x = e.getX();
 				final float time = view.viewToModel(x);
+				view.setValuesAdusting(true);
 				view.setSelectionStart(time);
+				view.setValuesAdusting(false);
 				view.setSelectionLength(0.0f);
 				view.setCursorPosition(-1);
 				isDraggingSelection = true;
@@ -394,7 +425,9 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 						Math.max(time, dragStartTime);
 				final float len = endValue - startValue;
 				
+				view.setValuesAdusting(true);
 				view.setSelectionStart(startValue);
+				view.setValuesAdusting(false);
 				view.setSelectionLength(len);
 			} else if(isDraggingPosition) {
 				final int x = e.getX();
@@ -416,8 +449,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 				final float zoomAmount = 0.25f * numTicks;
 				float windowLength = view.getWindowLength() + zoomAmount;
 				
-				if(windowLength < 0.5f) {
-					windowLength = 0.5f;
+				if(windowLength < 0.1f) {
+					windowLength = 0.1f;
 				} else if(windowLength > view.getSampled().getLength()) {
 					windowLength = view.getSampled().getLength();
 				}

@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,10 +15,14 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.AudioFileFormat.Type;
 import javax.sound.sampled.Mixer.Info;
 import javax.swing.JComponent;
+import javax.swing.SwingWorker;
 import javax.swing.plaf.ComponentUI;
 
 import ca.phon.media.exceptions.PhonMediaException;
@@ -101,6 +106,18 @@ public class PCMSegmentView extends JComponent {
 	 */
 	private Color selectionColor = new Color(50, 125, 200, 100);
 	public static final String SELECTION_COLOR_PROP = "selectionColor";
+	
+	/**
+	 * Are we playing audio?
+	 */
+	private boolean playing = false;
+	public static final String PLAYING_PROP = "playing";
+	
+	/**
+	 * Location (in seconds) of the playback marker
+	 */
+	private float playbackMarker = 0.0f;
+	public static final String PLAYBACK_MARKER_PROP = "playbackMarker";
 
 	/**
 	 * Channel color map
@@ -294,6 +311,16 @@ public class PCMSegmentView extends JComponent {
 		super.firePropertyChange(CURSOR_LOCATION_PROP, oldVal, position);
 	}
 	
+	public boolean isPlaying() {
+		return this.playing;
+	}
+	
+	public void setPlaying(boolean playing) {
+		boolean oldVal = this.playing;
+		this.playing = playing;
+		super.firePropertyChange(PLAYING_PROP, oldVal, playing);
+	}
+	
 	public boolean isValuesAdjusting() {
 		return this.valuesAreAdjusting;
 	}
@@ -311,6 +338,16 @@ public class PCMSegmentView extends JComponent {
 	
 	public void setMixerInfo(Info info) {
 		this.mixerInfo = info;
+	}
+	
+	public float getPlaybackMarker() {
+		return this.playbackMarker;
+	}
+	
+	public void setPlaybackMarker(float playbackMarker) {
+		float oldVal = this.playbackMarker;
+		this.playbackMarker = playbackMarker;
+		super.firePropertyChange(PLAYBACK_MARKER_PROP, oldVal, playbackMarker);
 	}
 	
 	/**
@@ -367,15 +404,66 @@ public class PCMSegmentView extends JComponent {
 	}
 	
 	private void playSection(float startTime, float length) {
+		if(isPlaying()) return;
+		
 		final AudioFormat format = getAudioFormat();
 		final byte[] audioData = getSampled().getBytes(startTime, startTime+length);
 		// playback audio using Clip
 		try {
 			final Clip audioClip = AudioSystem.getClip(getMixerInfo());
 			audioClip.open(format, audioData, 0, audioData.length);
+			final LineListener lineListener = new LineListener() {
+				
+				@Override
+				public void update(LineEvent event) {
+					if(event.getType() == LineEvent.Type.START) {
+						setPlaying(true);
+						final PlaybackMarkerTask task = new PlaybackMarkerTask(audioClip);
+						task.execute();
+					} else if(event.getType() == LineEvent.Type.STOP) {
+						setPlaying(false);
+						
+						event.getLine().close();
+					}
+				}
+				
+			};
+			audioClip.addLineListener(lineListener);
 			audioClip.start();
+			
 		} catch (LineUnavailableException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
+	}
+	
+	private class PlaybackMarkerTask extends SwingWorker<Float, Float> {
+		
+		private final Clip clip;
+		
+		public PlaybackMarkerTask(Clip clip) {
+			this.clip = clip;
+		}
+
+		@Override
+		protected Float doInBackground() throws Exception {
+			while(isPlaying() && clip.isOpen()) {
+				final long linePos = clip.getMicrosecondPosition();
+				final float lineMs = linePos / 1000.0f / 1000.0f;
+				
+				final float startTime = 
+						(hasSelection() ? getSelectionStart() : getSegmentStart());
+				final float currentTime = startTime + lineMs;
+				publish(currentTime);
+			}
+			return 0.0f;
+		}
+
+		@Override
+		protected void process(List<Float> chunks) {
+			// only use the last value
+			setPlaybackMarker(chunks.get(chunks.size()-1));
+		}
+		
 	}
 	
 	public void saveToFile(File file, float startTime, float length) 

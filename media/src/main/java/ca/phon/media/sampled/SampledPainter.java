@@ -6,13 +6,14 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import ca.phon.ui.painter.Painter;
+import ca.phon.ui.painter.BufferedPainter;
 
-public class SampledPainter implements Painter<Sampled> {
+public class SampledPainter extends BufferedPainter<Sampled> {
 
 	/**
 	 * Paint color
@@ -23,12 +24,12 @@ public class SampledPainter implements Painter<Sampled> {
 	 * Determines number of bars to paint.  This is the x unit increment
 	 * for each bar.
 	 */
-	private float xIncr = 0.25f;
+	private float xIncr = 1.0f;
 	
 	/**
 	 * Size of bars
 	 */
-	private float barSize = 0.5f;
+	private float barSize = 1.0f;
 	
 	/**
 	 * Channel to paint
@@ -42,16 +43,10 @@ public class SampledPainter implements Painter<Sampled> {
 	
 	private float windowLength;
 	
-	/**
-	 * Cached extrema values
-	 */
-	private double[][] extremaCache;
-	
 	private double maxValue;
 	
 	public SampledPainter() {
-		super();
-		this.foregroundColor = Color.black;
+		this(0);
 	}
 	
 	public SampledPainter(int channel) {
@@ -62,6 +57,11 @@ public class SampledPainter implements Painter<Sampled> {
 		super();
 		this.foregroundColor = color;
 		this.channel = channel;
+		
+		// by default, only repaint when width changes.  Scale height changes.
+		setResizeMode(ResizeMode.REPAINT_ON_RESIZE_X);
+		
+		addPropertyChangeListener(repaintListener);
 	}
 	
 	public float getWindowStart() {
@@ -71,9 +71,7 @@ public class SampledPainter implements Painter<Sampled> {
 	public void setWindowStart(float windowStart) {
 		float oldVal = getWindowStart();
 		this.windowStart = windowStart;
-		if(oldVal != windowStart) {
-			extremaCache = null;
-		}
+		firePropertyChange("windowStart", oldVal, windowStart);
 	}
 
 	public float getWindowLength() {
@@ -83,9 +81,7 @@ public class SampledPainter implements Painter<Sampled> {
 	public void setWindowLength(float windowLength) {
 		float oldVal = getWindowLength();
 		this.windowLength = windowLength;
-		if(oldVal != windowLength) {
-			extremaCache = null;
-		}
+		firePropertyChange("windowLength", oldVal, windowLength);
 	}
 
 	public Color getForegroundColor() {
@@ -103,9 +99,7 @@ public class SampledPainter implements Painter<Sampled> {
 	public void setxIncr(float xIncr) {
 		float oldVal = getxIncr();
 		this.xIncr = xIncr;
-		if(oldVal != xIncr) {
-			extremaCache = null;
-		}
+		firePropertyChange("xIncr", oldVal, xIncr);
 	}
 
 	public float getBarSize() {
@@ -123,64 +117,75 @@ public class SampledPainter implements Painter<Sampled> {
 	public void setChannel(int channel) {
 		int oldVal = getChannel();
 		this.channel = channel;
-		if(oldVal != channel) {
-			extremaCache = null;
-		}
-	}
-	
-	public double[][] getExtremaCache() {
-		return this.extremaCache;
+		firePropertyChange("channel", oldVal, channel);
 	}
 
 	private Dimension prevSize = new Dimension(0, 0);
 	@Override
-	public void paint(Sampled obj, Graphics2D g2, Rectangle2D bounds) {
+	public void paintBuffer(Sampled obj, Graphics2D g2, Rectangle2D bounds) {
 		final double width = bounds.getWidth();
 		final double height = bounds.getHeight();
 		final double halfHeight = height / 2.0;
-		final double refY = bounds.getY() + halfHeight;
-		final Dimension currDimension = new Dimension((int)width, (int)height);
 		
 		final float startTime = getWindowStart();
 		final float endTime = startTime + getWindowLength();
 		final float length = getWindowLength();
 		final float secondsPerPixel = (float)(length / width);
 		
-		final Stroke oldStroke = g2.getStroke();
 		final Stroke stroke = new BasicStroke(getBarSize(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 		g2.setStroke(stroke);
 		
-		final Color oldColor = g2.getColor();
+		double extrema[] = new double[2];
+		final Line2D line = new Line2D.Double();
+		
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, 
+				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, 
+				RenderingHints.VALUE_STROKE_PURE);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		g2.setColor(getForegroundColor());
 		
-		double[][] extrema = getExtremaCache();
-		boolean calculateExtrema = false;
-		if(extrema == null || prevSize == null || !prevSize.equals(currDimension)) {
-			calculateExtrema = true;
-			extremaCache = new double[(int)(bounds.getWidth() * (1/getxIncr()))][];
-			final double[] windowExtrema = obj.getWindowExtrema(getChannel(), startTime, endTime);
-			maxValue = Math.max(Math.abs(windowExtrema[0]), Math.abs(windowExtrema[1]));
-		}
-		prevSize = currDimension;
+		obj.getWindowExtrema(getChannel(), startTime, endTime, extrema);
+		maxValue = Math.max(Math.abs(extrema[0]), Math.abs(extrema[1]));
 		final double unitPerPixel = maxValue / halfHeight;
-		int idx = 0;
-		for(double x = bounds.getX(); x < bounds.getX() + width; x += getxIncr()) {
-			float time = startTime + (float)((x - bounds.getX()) * secondsPerPixel);
+		
+		double ymindiff, ymaxdiff = 0.0;
+		float time = 0.0f;
+		double ymin, ymax = halfHeight;
+		
+		for(double x = 0.0; x < width; x += getxIncr()) {
+			time = startTime + (float)(x * secondsPerPixel);
 			
-			double[] sliceExtrema = 
-					(calculateExtrema ? obj.getWindowExtrema(getChannel(), time, time + secondsPerPixel) : extremaCache[idx]);
-			if(calculateExtrema) {
-				extremaCache[idx] = sliceExtrema;
+			
+			obj.getWindowExtrema(getChannel(), time, time + secondsPerPixel, extrema);
+			
+			ymindiff = Math.abs(extrema[0]) / unitPerPixel;
+			ymaxdiff = Math.abs(extrema[1]) / unitPerPixel;
+			
+			ymin = halfHeight;
+			if(extrema[0] < 0) {
+				ymin += ymindiff;
+			} else {
+				ymin -= ymindiff;
 			}
-			idx++;
-			double ymin = refY - (sliceExtrema[0] / unitPerPixel);
-			double ymax = refY - (sliceExtrema[1] / unitPerPixel);
 			
-			final Line2D line = new Line2D.Double(x, ymin, x, ymax);
+			ymax = halfHeight;
+			if(extrema[1] < 0) {
+				ymax += ymaxdiff;
+			} else {
+				ymax -= ymaxdiff;
+			}
+			
+			line.setLine(x, ymin, x, ymax);
 			g2.draw(line);
 		}
-		
-		g2.setStroke(oldStroke);
-		g2.setColor(oldColor);
 	}
+	
+	private final PropertyChangeListener repaintListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			setRepaintBuffer(true);
+		}
+	};
 }
