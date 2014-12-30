@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -114,10 +115,22 @@ public class PCMSegmentView extends JComponent {
 	public static final String PLAYING_PROP = "playing";
 	
 	/**
+	 * Loop playback
+	 */
+	private boolean loop = false;
+	public static final String LOOP_PROP = "loop";
+	
+	/**
 	 * Location (in seconds) of the playback marker
 	 */
 	private float playbackMarker = 0.0f;
 	public static final String PLAYBACK_MARKER_PROP = "playbackMarker";
+	
+	/**
+	 * Playback marker task
+	 */
+	private AtomicReference<PlaybackMarkerTask> playbackTaskRef = 
+			new AtomicReference<PCMSegmentView.PlaybackMarkerTask>();
 
 	/**
 	 * Channel color map
@@ -321,6 +334,14 @@ public class PCMSegmentView extends JComponent {
 		super.firePropertyChange(PLAYING_PROP, oldVal, playing);
 	}
 	
+	private PlaybackMarkerTask getPlaybackTask() {
+		return playbackTaskRef.get();
+	}
+	
+	private void setPlaybackTask(PlaybackMarkerTask playbackTask) {
+		playbackTaskRef.set(playbackTask);
+	}
+	
 	public boolean isValuesAdjusting() {
 		return this.valuesAreAdjusting;
 	}
@@ -396,6 +417,24 @@ public class PCMSegmentView extends JComponent {
 		}
 	}
 	
+	public void stop() {
+		final PlaybackMarkerTask task = getPlaybackTask();
+		
+		if(task != null && task.clip != null && task.clip.isActive()) {
+			task.clip.stop();
+		}
+	}
+	
+	public boolean isLoop() {
+		return this.loop;
+	}
+	
+	public void setLoop(boolean loop) {
+		boolean oldVal = this.loop;
+		this.loop = loop;
+		super.firePropertyChange(LOOP_PROP, oldVal, loop);
+	}
+	
 	public AudioFormat getAudioFormat() {
 		final AudioFormat format = new AudioFormat(getSampled().getSampleRate(), 
 				getSampled().getSampleSize(), getSampled().getNumberOfChannels(), 
@@ -419,17 +458,22 @@ public class PCMSegmentView extends JComponent {
 					if(event.getType() == LineEvent.Type.START) {
 						setPlaying(true);
 						final PlaybackMarkerTask task = new PlaybackMarkerTask(audioClip);
+						setPlaybackTask(task);
 						task.execute();
 					} else if(event.getType() == LineEvent.Type.STOP) {
 						setPlaying(false);
-						
+						setPlaybackTask(null);
 						event.getLine().close();
 					}
 				}
 				
 			};
 			audioClip.addLineListener(lineListener);
-			audioClip.start();
+			
+			if(isLoop())
+				audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+			else
+				audioClip.start();
 			
 		} catch (LineUnavailableException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -447,13 +491,15 @@ public class PCMSegmentView extends JComponent {
 		@Override
 		protected Float doInBackground() throws Exception {
 			while(isPlaying() && clip.isOpen()) {
-				final long linePos = clip.getMicrosecondPosition();
-				final float lineMs = linePos / 1000.0f / 1000.0f;
+				final long clipPos = clip.getMicrosecondPosition() % clip.getMicrosecondLength();
+				final float lineMs = clipPos / 1000.0f / 1000.0f;
 				
 				final float startTime = 
 						(hasSelection() ? getSelectionStart() : getSegmentStart());
 				final float currentTime = startTime + lineMs;
 				publish(currentTime);
+				
+				try { Thread.sleep(10); } catch(Exception e) {}
 			}
 			return 0.0f;
 		}

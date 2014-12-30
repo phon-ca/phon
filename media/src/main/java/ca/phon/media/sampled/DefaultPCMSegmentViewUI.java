@@ -48,7 +48,9 @@ import ca.phon.media.sampled.actions.SaveSegmentAction;
 import ca.phon.media.sampled.actions.SaveSelectionAction;
 import ca.phon.media.sampled.actions.SelectMixerAction;
 import ca.phon.media.sampled.actions.SelectSegmentAction;
+import ca.phon.media.sampled.actions.StopAction;
 import ca.phon.media.sampled.actions.ToggleChannelVisible;
+import ca.phon.media.sampled.actions.ToggleLoop;
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -111,6 +113,9 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		
 		inputMap.put(PlayAction.KS, PlayAction.TXT);
 		actionMap.put(PlayAction.TXT, new PlayAction(view));
+		
+		inputMap.put(StopAction.KS, StopAction.TXT);
+		actionMap.put(StopAction.TXT, new StopAction(view));
 		
 		view.setActionMap(actionMap);
 		view.setInputMap(JComponent.WHEN_FOCUSED, inputMap);
@@ -285,18 +290,28 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		}
 
 		menu.addSeparator();
-		menu.add(new PlaySegmentAction(view));
-		menu.add(new PlaySelectionAction(view));
-		// output device selection
-		final JMenu mixerMenu = new JMenu("Output Device");
-		final Info[] mixers = AudioSystem.getMixerInfo();
-		for(Info mixerInfo:mixers) {
-			final SelectMixerAction mixerAct = new SelectMixerAction(view, mixerInfo);
-			mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
-					view.getMixerInfo() == mixerInfo);
-			mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
+		if(!view.isPlaying()) {
+			final JMenuItem playSegmentItem = new JMenuItem(new PlaySegmentAction(view));
+			playSegmentItem.setEnabled(view.hasSegment());
+			menu.add(playSegmentItem);
+			final JMenuItem playSelectionItem = new JMenuItem(new PlaySelectionAction(view));
+			playSelectionItem.setEnabled(view.hasSelection());
+			menu.add(playSelectionItem);
+			final JCheckBoxMenuItem loopItem = new JCheckBoxMenuItem(new ToggleLoop(view));
+			menu.add(loopItem);
+			// output device selection
+			final JMenu mixerMenu = new JMenu("Output Device");
+			final Info[] mixers = AudioSystem.getMixerInfo();
+			for(Info mixerInfo:mixers) {
+				final SelectMixerAction mixerAct = new SelectMixerAction(view, mixerInfo);
+				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
+						view.getMixerInfo() == mixerInfo);
+				mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
+			}
+			menu.add(mixerMenu);
+		} else {
+			menu.add(new StopAction(view));
 		}
-		menu.add(mixerMenu);
 		
 		menu.addSeparator();
 		final JMenuItem saveSegmentItem = new JMenuItem(new SaveSegmentAction(view));
