@@ -32,13 +32,13 @@ public class SelectSegmentAction extends PCMSegmentViewAction {
 		if(selectionStart > 0 && selectionLength > 0) {
 			// turn off UI updates
 			view.setValuesAdusting(true);
-			view.setSegmentStart(selectionStart);
-			view.setSegmentLength(selectionLength);
 			view.setSelectionStart(0.0f);
+			view.setSelectionLength(0.0f);
+			view.setSegmentStart(selectionStart);
 			
 			// turn on UI updates for last change
 			view.setValuesAdusting(false);
-			view.setSelectionLength(0.0f);
+			view.setSegmentLength(selectionLength);
 		}
 	}
 

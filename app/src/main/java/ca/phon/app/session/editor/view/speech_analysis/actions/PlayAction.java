@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.waveform.actions;
+package ca.phon.app.session.editor.view.speech_analysis.actions;
 
 import java.awt.event.ActionEvent;
 
@@ -9,7 +9,7 @@ import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-public class PlayAction extends WaveformEditorViewAction {
+public class PlayAction extends SpeechAnalysisEditorViewAction {
 
 	private static final long serialVersionUID = 3972276703916486391L;
 	

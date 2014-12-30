@@ -91,6 +91,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		
 		view.addPropertyChangeListener(PCMSegmentView.SEGMENT_START_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.SELECTION_LENGTH_PROP, propListener);
+		view.addPropertyChangeListener(PCMSegmentView.SEGMENT_LENGTH_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.WINDOW_START_PROT, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.WINDOW_LENGTH_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.CURSOR_LOCATION_PROP, propListener);
@@ -384,6 +385,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		
 		@Override
 		public void mousePressed(MouseEvent e) {
+			view.requestFocus();
 			if(OSInfo.isMacOs() && e.isPopupTrigger())
 				showContextMenu(e.getPoint());
 			if(e.getButton() != MouseEvent.BUTTON1) return;

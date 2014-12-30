@@ -26,6 +26,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,11 +61,12 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.waveform.actions.GenerateAction;
-import ca.phon.app.session.editor.view.waveform.actions.PlayAction;
-import ca.phon.app.session.editor.view.waveform.actions.RefreshAction;
-import ca.phon.app.session.editor.view.waveform.actions.SaveAction;
-import ca.phon.app.session.editor.view.waveform.actions.ShowMoreAction;
+import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.speech_analysis.actions.GenerateAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.PlayAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.ShowMoreAction;
 import ca.phon.media.exportwizard.MediaExportWizard;
 import ca.phon.media.exportwizard.MediaExportWizardProp;
 import ca.phon.media.sampled.PCMSampled;
@@ -72,9 +75,12 @@ import ca.phon.media.util.MediaLocator;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaUnit;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -217,34 +223,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		wavDisplay.setFocusable(true);
 		wavDisplay.setBackground(Color.white);
 		wavDisplay.setOpaque(true);
-		
-//		wavDisplay.addPropertyChangeListener(new PropertyChangeListener() {
-//
-//			@Override
-//			public void propertyChange(PropertyChangeEvent evt) {
-//				if(evt.getPropertyName().equals(WavDisplay._SEGMENT_VALUE_PROP_)) {
-//					long newSegStart =
-//						wavDisplay.get_timeBar().getSegStart();
-//					long newSegEnd = 
-//						newSegStart + wavDisplay.get_timeBar().getSegLength();
-//					final SessionFactory factory = SessionFactory.newFactory();
-//					final MediaSegment newSegment = factory.createMediaSegment();
-//					newSegment.setStartValue(newSegStart);
-//					newSegment.setEndValue(newSegEnd);
-//					newSegment.setUnitType(MediaUnit.Millisecond);
-//					
-//					final SessionEditor editor = getEditor();
-//					final Record record = editor.currentRecord();
-//					final Tier<MediaSegment> segmentTier = record.getSegment();
-//					
-//					final TierEdit<MediaSegment> segmentEdit = 
-//							new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
-//					segmentEdit.setFireHardChangeOnUndo(true);
-//					editor.getUndoSupport().postEdit(segmentEdit);
-//				}
-//			}
-//			
-//		});
+		wavDisplay.addPropertyChangeListener(PCMSegmentView.SEGMENT_LENGTH_PROP, segmentListener);
 		
 		contentPane = new JPanel(new VerticalLayout());
 		
@@ -342,7 +321,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		playButton = new JButton(playAct);
 		playButton.setFocusable(false);
 		
-		final RefreshAction refreshAct = new RefreshAction(getEditor(), this);
+		final ResetAction refreshAct = new ResetAction(getEditor(), this);
 		refreshButton = new JButton(refreshAct);
 		refreshButton.setFocusable(false);
 		
@@ -494,6 +473,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public void update() {
 		Record utt = getEditor().currentRecord();
 		
+		wavDisplay.setValuesAdusting(true);
 		if(wavDisplay.getSampled() == null) {
 			final File audioFile = getAudioFile();
 			if(audioFile != null) {
@@ -533,6 +513,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 				msgLabel.setVisible(false);
 			}
 		}
+		
+		wavDisplay.setValuesAdusting(false);
+		wavDisplay.repaint();
 	}
 
 	/** Editor events */
@@ -586,7 +569,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		retVal.add(new PlayAction(getEditor(), this));
 		retVal.addSeparator();
-		retVal.add(new RefreshAction(getEditor(), this));
+		retVal.add(new ResetAction(getEditor(), this));
 		retVal.add(new ShowMoreAction(getEditor(), this));
 		retVal.addSeparator();
 		retVal.add(new SaveAction(getEditor(), this));
@@ -604,5 +587,35 @@ public class SpeechAnalysisEditorView extends EditorView {
 		return DockPosition.CENTER;
 	}
 	
+	private final PropertyChangeListener segmentListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			// don't update while adjusting values
+			if(getWavDisplay().isValuesAdjusting()) return;
+			
+			final float segmentStart = getWavDisplay().getSegmentStart();
+			final float segmentEnd = getWavDisplay().getSegmentStart() + getWavDisplay().getSegmentLength();
+			
+			final long newSegStart = Math.round(segmentStart * 1000.0f);
+			final long newSegEnd = Math.round(segmentEnd * 1000.0f);
+			
+			final SessionFactory factory = SessionFactory.newFactory();
+			final MediaSegment newSegment = factory.createMediaSegment();
+			newSegment.setStartValue(newSegStart);
+			newSegment.setEndValue(newSegEnd);
+			newSegment.setUnitType(MediaUnit.Millisecond);
+			
+			final SessionEditor editor = getEditor();
+			final Record record = editor.currentRecord();
+			final Tier<MediaSegment> segmentTier = record.getSegment();
+			
+			final TierEdit<MediaSegment> segmentEdit = 
+					new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
+			segmentEdit.setFireHardChangeOnUndo(true);
+			editor.getUndoSupport().postEdit(segmentEdit);
+		}
+		
+	};
 	
 }

@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.waveform.actions;
+package ca.phon.app.session.editor.view.speech_analysis.actions;
 
 import java.awt.event.ActionEvent;
 
@@ -10,7 +10,7 @@ import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisTier;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-public class RefreshAction extends WaveformEditorViewAction {
+public class ResetAction extends SpeechAnalysisEditorViewAction {
 
 	private static final long serialVersionUID = 2541481642552447379L;
 	
@@ -21,7 +21,7 @@ public class RefreshAction extends WaveformEditorViewAction {
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
 
-	public RefreshAction(SessionEditor editor, SpeechAnalysisEditorView view) {
+	public ResetAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
