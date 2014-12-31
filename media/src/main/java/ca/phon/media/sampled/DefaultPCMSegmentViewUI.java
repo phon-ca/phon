@@ -3,6 +3,7 @@ package ca.phon.media.sampled;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -61,6 +62,10 @@ import ca.phon.util.icons.IconSize;
  *
  */
 public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
+	
+	private final static int DEFAULT_CHANNEL_HEIGHT = 100;
+	
+	private final static int DEFAULT_PIXEL_PER_SEC = 100;
 	
 	private PCMSegmentView view;
 	
@@ -129,6 +134,27 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		return bounds.getHeight() + 
 				 2 * (1 + 2); // border plus spacing
 	}
+	
+	@Override
+	public Dimension getPreferredSize(JComponent c) {
+		Dimension retVal = new Dimension();
+		
+		double timeBarHeight = calculateTimeBarHeight(view.getGraphics());
+		double channels = 
+				numberOfVisibleChannels() * DEFAULT_CHANNEL_HEIGHT;
+		
+		retVal.setSize(DEFAULT_PIXEL_PER_SEC * view.getWindowLength(), timeBarHeight + channels);
+		
+		return retVal;
+	}
+	
+	public int numberOfVisibleChannels() {
+		int numVisibleChannels = view.getSampled().getNumberOfChannels();
+		for(int i = 0; i < view.getSampled().getNumberOfChannels(); i++) {
+			if(!view.isChannelVisible(Channel.values()[i])) --numVisibleChannels;
+		}
+		return numVisibleChannels;
+	}
 
 	@Override
 	public void paint(Graphics g, JComponent c) {
@@ -163,10 +189,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		g2.draw(topLine);
 		g2.draw(btmLine);
 
-		int numVisibleChannels = view.getSampled().getNumberOfChannels();
-		for(int i = 0; i < view.getSampled().getNumberOfChannels(); i++) {
-			if(!view.isChannelVisible(Channel.values()[i])) --numVisibleChannels;
-		}
+		int numVisibleChannels = numberOfVisibleChannels();
 		
 		// draw excluded ranges
 		final double pixelsPerSecond = (double)view.getWidth() / (double)view.getWindowLength();

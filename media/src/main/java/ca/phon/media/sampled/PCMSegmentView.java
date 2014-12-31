@@ -1,6 +1,7 @@
 package ca.phon.media.sampled;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.File;
