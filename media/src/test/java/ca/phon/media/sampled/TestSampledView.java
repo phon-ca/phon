@@ -27,8 +27,9 @@ public class TestSampledView {
 				view.setSelectionLength(1.5f);
 				
 				view.setBackground(Color.black);
-				view.setForeground(Color.white);
-				view.setChannelColor(Channel.LEFT, Color.decode("#FFFF00"));
+				view.setForeground(Color.decode("#FFFF66"));
+				view.setSelectionColor(Color.decode("#4D4DFF"));
+				view.setChannelColor(Channel.LEFT, Color.decode("#83F52C"));
 				view.setChannelColor(Channel.RIGHT, Color.decode("#FF0066"));
 
 				final JFrame f = new JFrame("Test");
