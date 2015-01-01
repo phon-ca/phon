@@ -53,6 +53,8 @@ import ca.phon.media.sampled.actions.StopAction;
 import ca.phon.media.sampled.actions.ToggleChannelVisible;
 import ca.phon.media.sampled.actions.ToggleLoop;
 import ca.phon.ui.nativedialogs.OSInfo;
+import ca.phon.util.MsFormat;
+import ca.phon.util.MsFormatter;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -184,6 +186,9 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		final Line2D btmLine = new Line2D.Double(timeBarRect.getX(), timeBarRect.getY() + timeBarRect.getHeight(),
 				timeBarRect.getX() + timeBarRect.getWidth(), timeBarRect.getY() + timeBarRect.getHeight());
 		
+		final FontMetrics fm = g2.getFontMetrics(view.getFont());
+		g2.setFont(view.getFont());
+		
 		final Color borderColor = view.getForeground();
 		g2.setColor(borderColor);
 		g2.draw(topLine);
@@ -197,6 +202,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		final float segLen = view.getSegmentLength();
 		final float segEnd = segStart + segLen;
 		
+		final Stroke origStroke = g2.getStroke();
 		final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
 		g2.setStroke(dashed);
 		if(segStart > 0 && segLen > 0) {
@@ -234,8 +240,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		}
 		
 		// draw selection
-		if(view.getSelectionStart() > 0.0f &&
-				view.getSelectionLength() > 0.0f) {
+		if(view.hasSelection()) {
 			final double startX = view.modelToView(view.getSelectionStart());
 			final double endX = view.modelToView(view.getSelectionStart() + view.getSelectionLength());
 			
@@ -295,6 +300,86 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 			g2.draw(playbackLine);
 		}
 		
+		// draw segement time value
+		final double txtBaseY = timeBarHeight - 2;
+
+		final String startTimeTxt = MsFormatter.msToDisplayString(
+				Math.round(view.getSegmentStart() * 1000.0f));
+		final Rectangle2D startTimeRect = fm.getStringBounds(startTimeTxt, g2);
+		final double startTimeX = view.modelToView(view.getSegmentStart()) - startTimeRect.getCenterX();
+		startTimeRect.setRect(startTimeX, txtBaseY - startTimeRect.getHeight(), 
+				startTimeRect.getWidth(), startTimeRect.getHeight());
+		
+		final String endTimeTxt = MsFormatter.msToDisplayString(
+				Math.round((view.getSegmentStart() + view.getSegmentLength()) * 1000.0f));
+		final Rectangle2D endTimeRect = fm.getStringBounds(endTimeTxt, g2);
+		final double endTimeX = view.modelToView(view.getSegmentStart() + view.getSegmentLength())
+				- endTimeRect.getCenterX();
+		endTimeRect.setRect(endTimeX, txtBaseY - endTimeRect.getHeight(),
+				endTimeRect.getWidth(), endTimeRect.getHeight());
+
+		final String selStartTxt = MsFormatter.msToDisplayString(
+				Math.round(view.getSelectionStart() * 1000.0f));
+		final Rectangle2D selStartRect = fm.getStringBounds(selStartTxt, g2);
+		final double selTimeX = view.modelToView(view.getSelectionStart()) - selStartRect.getCenterX();
+		selStartRect.setRect(selTimeX, txtBaseY - selStartRect.getHeight(), 
+				selStartRect.getWidth(), selStartRect.getHeight());
+		
+		final String selEndTxt = MsFormatter.msToDisplayString(
+				Math.round((view.getSelectionStart() + view.getSelectionLength()) * 1000.0f));
+		final Rectangle2D selEndRect = fm.getStringBounds(selEndTxt, g2);
+		final double selEndX = view.modelToView(view.getSelectionStart() + view.getSelectionLength())
+				- selEndRect.getCenterX();
+		selEndRect.setRect(selEndX, txtBaseY - selEndRect.getHeight(),
+				selEndRect.getWidth(), selEndRect.getHeight());
+		
+		final Rectangle2D selRect = new Rectangle2D.Double();
+		Rectangle2D.Double.union(selStartRect, selEndRect, selRect);
+		
+		final String lengthTxt = MsFormatter.msToDisplayString(
+				Math.round(view.getSelectionLength() * 1000.0f));
+		final Rectangle2D lengthRect = fm.getStringBounds(lengthTxt, g2);
+		final double lengthX = selRect.getCenterX() - lengthRect.getCenterX();
+		lengthRect.setRect(lengthX, txtBaseY- lengthRect.getHeight(),
+				lengthRect.getWidth(), lengthRect.getHeight());
+		
+		final String cursorTxt = MsFormatter.msToDisplayString(
+				view.getCursorPosition() > 0 ? 
+				Math.round(view.viewToModel(view.getCursorPosition()) * 1000.0f)
+				: 0L);
+		boolean drawCursor = view.getCursorPosition() > 0;
+		final Rectangle2D cursorRect = fm.getStringBounds(cursorTxt, g2);
+		final double cursorX = view.getCursorPosition() - cursorRect.getCenterX();
+		cursorRect.setRect(cursorX, txtBaseY-cursorRect.getHeight(),
+				cursorRect.getWidth(), cursorRect.getHeight());
+		
+		g2.setColor(view.getForeground());
+		
+		boolean drawStartTime = true;
+		if(view.hasSelection() && startTimeRect.intersects(selRect))
+			drawStartTime = false;
+		if(drawStartTime) {
+			g2.drawString(startTimeTxt, (float)startTimeX, (float)(txtBaseY - fm.getDescent()));
+		}
+
+		boolean drawEndTime = true;
+		if(view.hasSelection() && endTimeRect.intersects(selRect))
+			drawEndTime = false;
+		if(drawEndTime)
+			g2.drawString(endTimeTxt, (float)endTimeX, (float)(txtBaseY - fm.getDescent()));
+		
+		if(view.hasSelection()) {
+			g2.drawString(selStartTxt, (float)selTimeX, (float)(txtBaseY - fm.getDescent()));
+			g2.drawString(selEndTxt, (float)selEndX, (float)(txtBaseY - fm.getDescent()));
+			if(!lengthRect.intersects(selStartRect) && !lengthRect.intersects(selEndRect)) {
+				g2.setColor(view.getSelectionColor());
+				g2.drawString(lengthTxt, (float)lengthX, (float)(txtBaseY - fm.getDescent()));
+			}
+		}
+		
+		g2.setColor(view.getForeground());
+		if(drawCursor)
+			g2.drawString(cursorTxt, (float)cursorX, (float)(txtBaseY-fm.getDescent()));
 	}
 	
 	private void showContextMenu(Point p) {
@@ -356,8 +441,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 					final int oldVal = (Integer)evt.getOldValue();
 					final int newVal = (Integer)evt.getNewValue();
 					
-					final int x = Math.min(oldVal, newVal);
-					final int xmax = Math.max(oldVal, newVal);
+					final int x = Math.min(oldVal, newVal) - 31;
+					final int xmax = Math.max(oldVal, newVal) + 31;
 					final Rectangle clipRect = 
 							new Rectangle(x-2, 0, xmax-x+4, view.getHeight());
 					view.repaint(clipRect);
