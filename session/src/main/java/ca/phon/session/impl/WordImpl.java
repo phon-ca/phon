@@ -109,8 +109,8 @@ public class WordImpl implements Word {
 
 	@Override
 	public IPATranscript getIPAActual() {
-		final IPATranscript ipaTarget = getGroup().getIPAActual();
-		final List<IPATranscript> wordList = ipaTarget.words();
+		final IPATranscript ipaActual = getGroup().getIPAActual();
+		final List<IPATranscript> wordList = ipaActual.words();
 		
 		if(wordIndex >= 0 && wordIndex < wordList.size()) {
 			return wordList.get(wordIndex);

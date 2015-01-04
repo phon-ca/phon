@@ -51,14 +51,14 @@ public class GroupImpl implements Group {
 	public IPATranscript getIPATarget() {
 		return 
 				(record.getIPATarget().numberOfGroups() > groupIndex ?  record.getIPATarget().getGroup(groupIndex)
-						: null);
+						: new IPATranscript());
 	}
 
 	@Override
 	public IPATranscript getIPAActual() {
 		return 
 				(record.getIPAActual().numberOfGroups() > groupIndex ? record.getIPAActual().getGroup(groupIndex)
-						: null);
+						: new IPATranscript());
 	}
 	
 	@Override
