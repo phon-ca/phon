@@ -14,9 +14,9 @@ public class ResetAction extends SpeechAnalysisEditorViewAction {
 
 	private static final long serialVersionUID = 2541481642552447379L;
 	
-	private final static String CMD_NAME = "Refresh";
+	private final static String CMD_NAME = "Reset";
 	
-	private final static String SHORT_DESC = "Refresh display";
+	private final static String SHORT_DESC = "Fit segement to view";
 	
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
@@ -33,7 +33,7 @@ public class ResetAction extends SpeechAnalysisEditorViewAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		getView().update();
 		for(SpeechAnalysisTier tier:getView().getPluginTiers()) {
-			tier.onRefresh();
+			tier.onRefresh(); 
 		}
 	}
 

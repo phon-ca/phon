@@ -411,6 +411,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 			final JMenu mixerMenu = new JMenu("Output Device");
 			final Info[] mixers = AudioSystem.getMixerInfo();
 			for(Info mixerInfo:mixers) {
+				// if we have no source lines, we can't use this device
+				if(AudioSystem.getMixer(mixerInfo).getSourceLineInfo().length == 0) continue;
 				final SelectMixerAction mixerAct = new SelectMixerAction(view, mixerInfo);
 				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
 						view.getMixerInfo() == mixerInfo);

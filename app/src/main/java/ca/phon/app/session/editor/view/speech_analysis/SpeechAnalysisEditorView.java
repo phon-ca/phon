@@ -36,14 +36,18 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Mixer.Info;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -66,11 +70,16 @@ import ca.phon.app.session.editor.view.speech_analysis.actions.GenerateAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.PlayAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
-import ca.phon.app.session.editor.view.speech_analysis.actions.ShowMoreAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.ZoomAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.StopAction;
 import ca.phon.media.exportwizard.MediaExportWizard;
 import ca.phon.media.exportwizard.MediaExportWizardProp;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.PCMSegmentView;
+import ca.phon.media.sampled.actions.PlaySegmentAction;
+import ca.phon.media.sampled.actions.PlaySelectionAction;
+import ca.phon.media.sampled.actions.SelectMixerAction;
+import ca.phon.media.sampled.actions.ToggleLoop;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -117,6 +126,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JButton exportButton;
 	
 	private JButton showMoreButton;
+	private JButton zoomOutButton;
 	
 	private JButton generateButton;
 	
@@ -224,6 +234,19 @@ public class SpeechAnalysisEditorView extends EditorView {
 		wavDisplay.setBackground(Color.white);
 		wavDisplay.setOpaque(true);
 		wavDisplay.addPropertyChangeListener(PCMSegmentView.SEGMENT_LENGTH_PROP, segmentListener);
+		wavDisplay.addPropertyChangeListener(PCMSegmentView.PLAYING_PROP, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if(wavDisplay.isPlaying()) {
+					// setup stop button
+					playButton.setAction(new StopAction(getEditor(), SpeechAnalysisEditorView.this));
+				} else {
+					playButton.setAction(new PlayAction(getEditor(), SpeechAnalysisEditorView.this));
+				}
+			}
+			
+		});
 		
 		contentPane = new JPanel(new VerticalLayout());
 		
@@ -325,12 +348,17 @@ public class SpeechAnalysisEditorView extends EditorView {
 		refreshButton = new JButton(refreshAct);
 		refreshButton.setFocusable(false);
 		
+		final ZoomAction showMoreAct = new ZoomAction(getEditor(), this);
+		showMoreButton = new JButton(showMoreAct);
+		
+		final ZoomAction zoomOutAct = new ZoomAction(getEditor(), this, false);
+		zoomOutButton = new JButton(zoomOutAct);
+		zoomOutButton.setFocusable(false);
+		
 		final SaveAction exportAct = new SaveAction(getEditor(), this);
 		exportButton = new JButton(exportAct);
 		exportButton.setFocusable(false);
 		
-		final ShowMoreAction showMoreAct = new ShowMoreAction(getEditor(), this);
-		showMoreButton = new JButton(showMoreAct);
 		
 		final GenerateAction generateAct = new GenerateAction(getEditor(), this);
 		generateButton = new JButton(generateAct);
@@ -339,6 +367,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		toolbar.addSeparator();
 		toolbar.add(refreshButton);
 		toolbar.add(showMoreButton);
+		toolbar.add(zoomOutButton);
 		toolbar.addSeparator();
 		toolbar.add(exportButton);
 		toolbar.add(generateButton);
@@ -567,10 +596,30 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
 		
-		retVal.add(new PlayAction(getEditor(), this));
+		if(getWavDisplay().isPlaying()) {
+			retVal.add(new StopAction(getEditor(), this));
+		} else {
+			retVal.add(new PlayAction(getEditor(), this));
+			final JCheckBoxMenuItem loopItem = new JCheckBoxMenuItem(new ToggleLoop(getWavDisplay()));
+			retVal.add(loopItem);
+		
+			// output device selection
+			final JMenu mixerMenu = new JMenu("Output Device");
+			final Info[] mixers = AudioSystem.getMixerInfo();
+			for(Info mixerInfo:mixers) {
+				// if we have no source lines, we can't use this device
+				if(AudioSystem.getMixer(mixerInfo).getSourceLineInfo().length == 0) continue;
+				final SelectMixerAction mixerAct = new SelectMixerAction(getWavDisplay(), mixerInfo);
+				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
+						getWavDisplay().getMixerInfo() == mixerInfo);
+				mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
+			}
+			retVal.add(mixerMenu);
+		}
 		retVal.addSeparator();
 		retVal.add(new ResetAction(getEditor(), this));
-		retVal.add(new ShowMoreAction(getEditor(), this));
+		retVal.add(new ZoomAction(getEditor(), this));
+		retVal.add(new ZoomAction(getEditor(), this, false));
 		retVal.addSeparator();
 		retVal.add(new SaveAction(getEditor(), this));
 		retVal.add(new GenerateAction(getEditor(), this));
