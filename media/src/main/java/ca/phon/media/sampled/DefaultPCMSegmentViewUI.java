@@ -568,6 +568,10 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 				dragStartX = x;
 				
 				float newStart = view.getWindowStart() + change;
+				if((newStart + view.getWindowLength()) > (view.getSampled().getStartTime() + view.getSampled().getLength())) {
+					newStart = (view.getSampled().getStartTime()
+							 + view.getSampled().getLength()) - view.getWindowLength();
+				}
 				if(newStart < view.getSampled().getStartTime()) newStart = view.getSampled().getStartTime();
 				view.setWindowStart(newStart);
 			}
@@ -586,6 +590,17 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 				} else if(windowLength > view.getSampled().getLength()) {
 					windowLength = view.getSampled().getLength();
 				}
+				
+				if((view.getWindowStart()+windowLength) > (view.getSampled().getStartTime() + view.getSampled().getLength())) {
+					float newStart = (view.getSampled().getStartTime()+view.getSampled().getLength()) - windowLength;
+					
+					if(newStart < view.getSampled().getStartTime()) {
+						newStart = view.getSampled().getStartTime();
+						windowLength = view.getSampled().getLength();
+					}
+					view.setWindowStart(newStart);
+				}
+				
 				view.setWindowLength(windowLength);
 			}
 		}
