@@ -443,7 +443,7 @@ public class PCMSegmentView extends JComponent {
 		return format;
 	}
 	
-	private void playSection(float startTime, float length) {
+	private void playSection(final float startTime, float length) {
 		if(isPlaying()) return;
 		
 		final AudioFormat format = getAudioFormat();
@@ -458,7 +458,7 @@ public class PCMSegmentView extends JComponent {
 				public void update(LineEvent event) {
 					if(event.getType() == LineEvent.Type.START) {
 						setPlaying(true);
-						final PlaybackMarkerTask task = new PlaybackMarkerTask(audioClip);
+						final PlaybackMarkerTask task = new PlaybackMarkerTask(audioClip, startTime);
 						setPlaybackTask(task);
 						task.execute();
 					} else if(event.getType() == LineEvent.Type.STOP) {
@@ -485,8 +485,11 @@ public class PCMSegmentView extends JComponent {
 		
 		private final Clip clip;
 		
-		public PlaybackMarkerTask(Clip clip) {
+		private final float startTime;
+		
+		public PlaybackMarkerTask(Clip clip, float startTime) {
 			this.clip = clip;
+			this.startTime = startTime;
 		}
 
 		@Override
@@ -495,8 +498,6 @@ public class PCMSegmentView extends JComponent {
 				final long clipPos = clip.getMicrosecondPosition() % clip.getMicrosecondLength();
 				final float lineMs = clipPos / 1000.0f / 1000.0f;
 				
-				final float startTime = 
-						(hasSelection() ? getSelectionStart() : getSegmentStart());
 				final float currentTime = startTime + lineMs;
 				publish(currentTime);
 				
