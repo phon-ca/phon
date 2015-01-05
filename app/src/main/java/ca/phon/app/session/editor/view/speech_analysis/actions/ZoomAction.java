@@ -43,8 +43,11 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 		final PCMSegmentView wavDisplay = getView().getWavDisplay();
 		float currentWindow = wavDisplay.getWindowLength();
 		if(zoomIn) {
-			if(currentWindow > 0.2f) {
+			if(currentWindow > 0.1f) {
 				currentWindow -= 0.1f;
+			}
+			if(currentWindow < 0.1f) {
+				currentWindow = 0.1f;
 			}
 		} else {
 			if(currentWindow < wavDisplay.getSampled().getLength()) {

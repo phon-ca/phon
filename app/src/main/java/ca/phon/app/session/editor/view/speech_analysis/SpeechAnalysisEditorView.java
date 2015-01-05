@@ -535,6 +535,16 @@ public class SpeechAnalysisEditorView extends EditorView {
 			float displayLength = 
 				segLength + ((2*preferredClipExtension) / 1000.0f);
 			
+			
+			if((displayStart + displayLength) > wavDisplay.getSampled().getLength()) {
+				displayStart = wavDisplay.getSampled().getLength() - displayLength;
+				
+				if(displayStart < wavDisplay.getSampled().getStartTime()) {
+					displayStart = wavDisplay.getSampled().getStartTime();
+					displayLength = wavDisplay.getSampled().getLength();
+				}
+			}
+			
 			wavDisplay.setWindowStart(displayStart);
 			wavDisplay.setWindowLength(displayLength);
 			wavDisplay.setSegmentStart(segStart);
