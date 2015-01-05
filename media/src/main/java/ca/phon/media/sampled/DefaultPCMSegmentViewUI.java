@@ -128,10 +128,14 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		view.setInputMap(JComponent.WHEN_FOCUSED, inputMap);
 	}
 	
-	private double calculateTimeBarHeight(Graphics g) {
+	private Rectangle2D calculateTimeRect(Graphics g) {
 		final FontMetrics fm = g.getFontMetrics(view.getFont());
 		final String testString = "000:00.000";
-		final Rectangle2D bounds = fm.getStringBounds(testString, g);
+		return fm.getStringBounds(testString, g);
+	}
+	
+	private double calculateTimeBarHeight(Graphics g) {
+		final Rectangle2D bounds = calculateTimeRect(g);
 		
 		return bounds.getHeight() + 
 				 2 * (1 + 2); // border plus spacing
@@ -442,11 +446,12 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 				if(evt.getPropertyName().equals(PCMSegmentView.CURSOR_LOCATION_PROP)) {
 					final int oldVal = (Integer)evt.getOldValue();
 					final int newVal = (Integer)evt.getNewValue();
+					final Rectangle2D txtRect = calculateTimeRect(view.getGraphics());
 					
-					final int x = Math.min(oldVal, newVal) - 31;
-					final int xmax = Math.max(oldVal, newVal) + 31;
+					final double x = Math.min(oldVal, newVal) - (txtRect.getWidth()/2.0) - 2;
+					final double xmax = Math.max(oldVal, newVal) + (txtRect.getWidth()/2.0) + 2;
 					final Rectangle clipRect = 
-							new Rectangle(x-2, 0, xmax-x+4, view.getHeight());
+							new Rectangle((int)Math.round(x), 0, (int)Math.round(xmax-x), view.getHeight());
 					view.repaint(clipRect);
 				} else if(evt.getPropertyName().equals(PCMSegmentView.PLAYBACK_MARKER_PROP)) {
 					final float oldVal = (Float)evt.getOldValue();

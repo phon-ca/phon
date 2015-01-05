@@ -91,6 +91,7 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.icons.IconManager;
@@ -233,6 +234,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		wavDisplay.setFocusable(true);
 		wavDisplay.setBackground(Color.white);
 		wavDisplay.setOpaque(true);
+		wavDisplay.setFont(FontPreferences.getMonospaceFont());
 		wavDisplay.addPropertyChangeListener(PCMSegmentView.SEGMENT_LENGTH_PROP, segmentListener);
 		wavDisplay.addPropertyChangeListener(PCMSegmentView.PLAYING_PROP, new PropertyChangeListener() {
 			
