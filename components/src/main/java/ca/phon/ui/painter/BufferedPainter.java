@@ -51,6 +51,8 @@ public abstract class BufferedPainter<T> implements Painter<T> {
 	 */
 	private final AtomicReference<Dimension> prevSizeRef = new AtomicReference<Dimension>(new Dimension());
 	
+	private final AtomicReference<BufferedImage> scaledRef = new AtomicReference<BufferedImage>();
+	
 	/**
 	 * Property support
 	 */
@@ -140,14 +142,48 @@ public abstract class BufferedPainter<T> implements Painter<T> {
 			
 			if(getResizeMode() != ResizeMode.REPAINT_ON_RESIZE
 					&& (imgHeight != surfaceHeight || imgWidth != surfaceWidth)) {
-				// scale image
-				g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-				double xScale = (double)surfaceWidth / (double)imgWidth;
-				double yScale = (double)surfaceHeight / (double)imgHeight;
-				op.scale(xScale, yScale);
+				g2.drawImage(getScaledImage(bounds), op, (ImageObserver)null);
+			} else {
+				g2.drawImage(img, op, (ImageObserver) null);
 			}
-			g2.drawImage(img, op, (ImageObserver) null);
 		}
+	}
+	
+	private BufferedImage getScaledImage(Rectangle2D bounds) {
+		final BufferedImage img = getBufferdImage();
+		if(img == null) return null;
+		
+		BufferedImage scaled = scaledRef.get();
+		boolean rescale = false;
+		if(scaled != null) {
+			// check bounds
+			if(scaled.getWidth() != bounds.getWidth() || 
+					scaled.getHeight() != bounds.getHeight())
+				rescale = true;
+		} else {
+			rescale = true;
+		}
+		
+		if(rescale) {
+			int imgHeight = img.getHeight();
+			int imgWidth = img.getWidth();
+			int surfaceHeight = (int)bounds.getHeight();
+			int surfaceWidth = (int)bounds.getWidth();
+			
+			scaled = new BufferedImage((int)bounds.getWidth(), (int)bounds.getHeight(), 
+					BufferedImage.TYPE_4BYTE_ABGR);
+			final Graphics2D g2 = scaled.createGraphics();
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			final AffineTransform op = new AffineTransform();
+			double xScale = (double)surfaceWidth / (double)imgWidth;
+			double yScale = (double)surfaceHeight / (double)imgHeight;
+			op.scale(xScale, yScale);
+			g2.drawImage(img, op, (ImageObserver) null);
+			
+			scaledRef.set(scaled);
+		}
+		
+		return scaled;
 	}
 
 	/*
