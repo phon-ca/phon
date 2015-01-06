@@ -140,38 +140,38 @@ while(keyItr.hasNext()) {
 	csvWriter.writeNext(line);
 	
 	line = new Array();
-	if(wordList.size() > 1) {
-		if(includePMLU) {
-			// print average
-			var avgPMLU = sumPMLU/wordList.size();
-			var avgPWP = avgPMLU/targetPMLU;
-			
-			line.push("");
-			line.push("Average");
-			line.push("");
-			line.push(avgPMLU);
-			line.push(avgPWP);
-		}
-		
-		if(includeEPMLU) {
-			line.push("");
-			line.push("");
-			line.push("");
-		
-			var avgEPMLUF = sumEPMLUF/wordList.size();
-			var avgEPMLUS = sumEPMLUS/wordList.size();
-			var avgEPMLU = avgEPMLUF + avgEPMLUS;
-			var avgEPWP = avgEPMLU/(targetEPMLUF+targetEPMLUS);
-			
-			line.push(nf.format(avgEPMLUF));
-			line.push(nf.format(avgEPMLUS));
-			line.push(nf.format(avgEPMLU));
-			line.push(nf.format(avgEPWP));
-		}		
-		
-		csvWriter.writeNext(line);
-		line = new Array();
-	}
+//	if(wordList.size() > 1) {
+//		if(includePMLU) {
+//			// print average
+//			var avgPMLU = sumPMLU/wordList.size();
+//			var avgPWP = avgPMLU/targetPMLU;
+//			
+//			line.push("");
+//			line.push("Average");
+//			line.push("");
+//			line.push(avgPMLU);
+//			line.push(avgPWP);
+//		}
+//		
+//		if(includeEPMLU) {
+//			line.push("");
+//			line.push("");
+//			line.push("");
+//		
+//			var avgEPMLUF = sumEPMLUF/wordList.size();
+//			var avgEPMLUS = sumEPMLUS/wordList.size();
+//			var avgEPMLU = avgEPMLUF + avgEPMLUS;
+//			var avgEPWP = avgEPMLU/(targetEPMLUF+targetEPMLUS);
+//			
+//			line.push(nf.format(avgEPMLUF));
+//			line.push(nf.format(avgEPMLUS));
+//			line.push(nf.format(avgEPMLU));
+//			line.push(nf.format(avgEPWP));
+//		}		
+//		
+//		csvWriter.writeNext(line);
+//		line = new Array();
+//	}
 	
 	csvWriter.flush();
 }
