@@ -2,7 +2,7 @@ ca.phon.app.PreloaderStartupHook
 # StartupHook
 ca.phon.app.autosave.AutosaveStartupHook
 # Theme
-#ca.phon.app.ThemeHook
+ca.phon.app.ThemeHook
 # Fonts
 ca.phon.app.fonts.FontLoaderStartupHook
 # VLC

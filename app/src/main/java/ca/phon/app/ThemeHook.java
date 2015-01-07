@@ -40,12 +40,15 @@ public class ThemeHook implements PhonStartupHook,
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
-					// keep mac OS X menu bars
+					// don't change theme on mac
 					if (OSInfo.isMacOs()) {
-						final String[] uiKeys = new String[] { "MenuBarUI" };
-						for (String key : uiKeys) {
-							uiMap.put(key, UIManager.get(key));
-						}
+						return;
+						// code below used when changing theme on mac to keep
+						// system window menu
+//						final String[] uiKeys = new String[] { "MenuBarUI" };
+//						for (String key : uiKeys) {
+//							uiMap.put(key, UIManager.get(key));
+//						}
 					}
 					
 					try {
