@@ -119,7 +119,8 @@ public abstract class BufferedPainter<T> implements Painter<T> {
 		setPrevSize(newBounds);
 		
 		BufferedImage img = getBufferdImage();
-		if(img == null || isRepaintBuffer()) {
+		if((img == null || isRepaintBuffer())
+				&& (newBounds.getWidth() > 0 && newBounds.getHeight() > 0)) {
 			final BufferedImage buffer = new BufferedImage((int)newBounds.getWidth(), (int)newBounds.getHeight(), 
 					BufferedImage.TYPE_4BYTE_ABGR);
 			final Graphics2D bufferG2 = (Graphics2D)buffer.createGraphics();
