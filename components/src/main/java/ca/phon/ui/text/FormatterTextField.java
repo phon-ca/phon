@@ -1,5 +1,6 @@
 package ca.phon.ui.text;
 
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,8 +45,10 @@ public class FormatterTextField<T> extends PromptedTextField {
 	
 	public boolean validateText() {
 		final T value = getValue();
-		if(value == null) {
-			// indicate error
+		if(value == null && getState() == FieldState.INPUT) {
+			setForeground(Color.red);
+		} else {
+			setForeground(getState().getColor());
 		}
 		return value != null;
 	}

@@ -2,6 +2,7 @@ package ca.phon.ui.participant;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -163,6 +164,23 @@ public class ParticipantPanel extends JPanel {
 		final DateFormatter bdayFormatter = new DateFormatter();
 		bdayField = new FormatterTextField<DateTime>(bdayFormatter);
 		bdayField.setPrompt("YYYY-MM-DD");
+		bdayField.setToolTipText("Enter date in format YYYY-MM-DD");
+		bdayField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(bdayField.getText().length() > 0 &&
+						!bdayField.validateText()) {
+					Toolkit.getDefaultToolkit().beep();
+					bdayField.requestFocus();
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+			}
+			
+		});
 		final PhonUIAction showCalendarAct = new PhonUIAction(this, "onShowCalendar");
 		showCalendarAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show calendar");
 		showCalendarAct.putValue(PhonUIAction.SMALL_ICON, calendarIcon);
@@ -170,7 +188,23 @@ public class ParticipantPanel extends JPanel {
 		
 		ageField = FormatterTextField.createTextField(Period.class);
 		ageField.setPrompt("YY;MM.DD");
-		ageField.setFont(FontPreferences.getMonospaceFont());
+		ageField.setToolTipText("Enter age in format YY;MM.YY");
+		ageField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(ageField.getText().length() > 0 &&
+						!ageField.validateText()) {
+					Toolkit.getDefaultToolkit().beep();
+					bdayField.requestFocus();
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+			}
+			
+		});
 		
 		// setup info
 		
