@@ -155,9 +155,12 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 	}
 	
 	public int numberOfVisibleChannels() {
-		int numVisibleChannels = view.getSampled().getNumberOfChannels();
-		for(int i = 0; i < view.getSampled().getNumberOfChannels(); i++) {
-			if(!view.isChannelVisible(Channel.values()[i])) --numVisibleChannels;
+		int numVisibleChannels = 0;
+		if(view.getSampled() != null) {
+			view.getSampled().getNumberOfChannels();
+			for(int i = 0; i < view.getSampled().getNumberOfChannels(); i++) {
+				if(!view.isChannelVisible(Channel.values()[i])) --numVisibleChannels;
+			}
 		}
 		return numVisibleChannels;
 	}
