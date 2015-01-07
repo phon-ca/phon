@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -41,6 +42,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.MouseInputAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
@@ -188,14 +190,6 @@ public class SessionInfoEditorView extends EditorView {
 		mediaLocationField = new MediaSelectionField(getEditor().getProject());
 		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		
-//		final PhonUIAction toggleShowCalculatedAgesAct = 
-//				new PhonUIAction(this, "toggleShowCalculatedAges");
-//		toggleShowCalculatedAgesAct.putValue(PhonUIAction.NAME,
-//				"Show calculated age if not provided");
-//		toggleShowCalculatedAgesAct.putValue(PhonUIAction.SELECTED_KEY, isShowCalculatedAges());
-//		showCalculagedAgesBox = new JCheckBox(toggleShowCalculatedAgesAct);
-//		showCalculagedAgesBox.setOpaque(false);
-		
 		participantTable = new JXTable();
 		participantTable.setVisibleRowCount(3);
 		
@@ -238,6 +232,17 @@ public class SessionInfoEditorView extends EditorView {
 		participantPanel.add(addParticipantButton, cc.xy(3,1));
 		participantPanel.add(editParticipantButton, cc.xy(2,1));
 		participantPanel.add(removeParticipantButton, cc.xy(4, 2));
+		participantTable.addMouseListener(new MouseInputAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(arg0.getClickCount() == 2 && arg0.getButton() == MouseEvent.BUTTON1) {
+					editParticipantAct.actionPerformed(
+							new ActionEvent(arg0.getSource(), arg0.getID(), "edit"));
+				}
+			}
+			
+		});
 		
 		languageField = new JTextField();
 		languageField.getDocument().addDocumentListener(languageFieldListener);
