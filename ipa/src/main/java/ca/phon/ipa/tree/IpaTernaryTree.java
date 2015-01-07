@@ -75,6 +75,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 	@Override
 	public V put(IPATranscript key, V value) {
 		final IpaTernaryTreeNode<V> node = findNode(key, true);
+		if(node == null) return null;
 		return node.setValue(value);
 	}
 

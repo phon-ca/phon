@@ -17,6 +17,7 @@
  */
 package ca.phon.query.report.datasource;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,6 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import ca.phon.ipa.AlignmentMarker;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IntonationGroup;
+import ca.phon.ipa.IntonationGroupType;
+import ca.phon.ipa.Linker;
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.query.db.ReportHelper;
@@ -213,21 +219,12 @@ public class InventoryDataSource implements TableDataSource {
 	 * String helper methods
 	 */
 	private String stripDiacritics(String txt) {
-		String retVal = new String();
-		
-		for(char c:txt.toCharArray()) {
-			
-			// keep ligatures
-			if(c == 0x0361 || c == 0xf176) continue;
-			
-			FeatureSet fs = FeatureMatrix.getInstance().getFeatureSet(c);
-			if(fs != null) {
-				if(!fs.hasFeature("Diacritic")) {
-					retVal += c;
-				}
-			}
+		String retVal = txt;
+		try {
+			final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+			retVal = ipa.stripDiacritics().toString();
+		} catch (ParseException e) {
 		}
-		
 		return retVal;
 	}
 

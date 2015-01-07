@@ -394,6 +394,17 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return filter.getIPATranscript();
 	}
 	
+	/**
+	 * Remove diacritics from phones and compound phones.
+	 * 
+	 * @return transcript with filtered diacritics
+	 */
+	public IPATranscript stripDiacritics() {
+		final DiacriticFilter filter = new DiacriticFilter();
+		accept(filter);
+		return filter.getIPATranscript();
+	}
+	
 	private List<IPATranscript> syllList = null;
 	/**
 	 * Break the transcript into syllables.
@@ -655,16 +666,6 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		@Visits
 		public void visitCompoundPhone(CompoundPhone phone) {
 			builder.append(phone);
-		}
-		
-		@Visits
-		public void visitAlignmentMaker(AlignmentMarker alignmentMarker) {
-			builder.append(alignmentMarker);
-		}
-		
-		@Visits
-		public void visitWordBoundary(WordBoundary wordBoundary) {
-			builder.append(wordBoundary);
 		}
 		
 		public IPATranscript getIPATranscript() {

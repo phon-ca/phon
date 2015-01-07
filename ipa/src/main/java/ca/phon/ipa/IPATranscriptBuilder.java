@@ -70,6 +70,28 @@ public class IPATranscriptBuilder {
 		return this;
 	}
 	
+	public IPATranscriptBuilder makeCompoundPhone(Character lig) {
+		if(size() < 2) {
+			throw new IllegalStateException("No previous phone");
+		}
+		final IPAElement prevEle = buffer.get(buffer.size()-1);
+		if(!(prevEle instanceof Phone)) {
+			throw new IllegalStateException("Previous element not a phone");
+		}
+		final IPAElement phone = buffer.get(buffer.size()-2);
+		if(!(phone instanceof Phone)) {
+			throw new IllegalStateException("Element must be a phone.");
+		}
+		
+		final Phone prevPhone = (Phone)prevEle;
+		final CompoundPhone newPhone = factory.createCompoundPhone(prevPhone, (Phone)phone, lig);
+		buffer.remove(phone);
+		buffer.remove(prevPhone);
+		buffer.add(newPhone);
+
+		return this;
+	}
+	
 	/**
 	 * Append all elements
 	 * 
