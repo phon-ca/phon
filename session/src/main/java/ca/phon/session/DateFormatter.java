@@ -57,13 +57,11 @@ public class DateFormatter implements Formatter<DateTime> {
 
 	@Override
 	public String format(DateTime obj) {
-		// TODO Auto-generated method stub
-		return null;
+		return DateFormatter.dateTimeToString(obj);
 	}
 
 	@Override
 	public DateTime parse(String text) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		return DateFormatter.stringToDateTime(text);
 	}
 }

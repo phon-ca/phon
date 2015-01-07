@@ -67,7 +67,12 @@ public class FormatterTextField<T> extends PromptedTextField {
 			setText("");
 			super.setState(FieldState.PROMPT);
 		} else {
-			setText(formatter.format(val));
+			try {
+				final String s = formatter.format(val);
+				setText(s);
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 		}
 	}
 	

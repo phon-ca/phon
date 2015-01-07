@@ -76,6 +76,12 @@ public class PromptedTextField extends JTextField {
 	 */
 	private String prompt = "";
 	
+	
+	/**
+	 * Should we keep prompt text when we get focus?
+	 */
+	private boolean keepPrompt = false;
+	
 	/**
 	 * Constructor
 	 */
@@ -90,6 +96,13 @@ public class PromptedTextField extends JTextField {
 		addFocusListener(focusStateListener);
 	}
 	
+	public boolean isKeepPrompt() {
+		return this.keepPrompt;
+	}
+	
+	public void setKeepPrompt(boolean keepPrompt) {
+		this.keepPrompt = keepPrompt;
+	}
 	
 	public String getPrompt() {
 		return this.prompt;
@@ -160,18 +173,24 @@ public class PromptedTextField extends JTextField {
 		}
 	}
 	
+	private void _setText(String text) {
+		super.setText(text);
+	}
 
 	/**
 	 * State change on focus
 	 * 
 	 */
-	private static FocusListener focusStateListener = new FocusListener() {
+	private FocusListener focusStateListener = new FocusListener() {
 
 		@Override
 		public void focusGained(FocusEvent arg0) {
 			PromptedTextField sf = (PromptedTextField)arg0.getSource();
 			if(sf.fieldState == FieldState.PROMPT) {
 				sf.setState(FieldState.INPUT);
+				if(isKeepPrompt()) {
+					_setText(prompt);
+				}
 			}
 		}
 
@@ -180,6 +199,11 @@ public class PromptedTextField extends JTextField {
 			PromptedTextField sf = (PromptedTextField)arg0.getSource();
 			if(sf.getText().length()==0) {
 				sf.setState(FieldState.PROMPT);
+			} else {
+				if(sf.getText().equals(prompt) && isKeepPrompt()) {
+					sf.setText("");
+					sf.setState(FieldState.PROMPT);
+				}
 			}
 		}
 	};

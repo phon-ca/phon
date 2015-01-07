@@ -19,14 +19,21 @@
 package ca.phon.session;
 
 public enum Sex {
-	MALE("M"),
-	FEMALE("F"),
-	UNSPECIFIED("U");
+	MALE("M", "Male"),
+	FEMALE("F", "Female"),
+	UNSPECIFIED("U", "Unspecified");
 	
 	String val;
 	
-	private Sex(String v) {
+	String text;
+	
+	private Sex(String v, String text) {
 		this.val = v;
+		this.text = text;
+	}
+	
+	public String getText() {
+		return this.text;
 	}
 	
 	@Override

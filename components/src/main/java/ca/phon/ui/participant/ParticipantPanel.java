@@ -1,7 +1,11 @@
 package ca.phon.ui.participant;
 
+import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -10,24 +14,41 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.JWindow;
+import javax.swing.ListCellRenderer;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.event.DateSelectionEvent;
+import org.jdesktop.swingx.event.DateSelectionListener;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
 import ca.phon.functor.Functor;
+import ca.phon.session.AgeFormatter;
+import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.SessionFactory;
@@ -35,6 +56,7 @@ import ca.phon.session.Sex;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.text.DatePicker;
@@ -61,9 +83,7 @@ public class ParticipantPanel extends JPanel {
 	private JCheckBox assignIdBox;
 	private JTextField idField;
 	
-	private JRadioButton maleBtn;
-	private JRadioButton femaleBtn;
-	private JRadioButton unspecifiedBtn;
+	private JComboBox sexBox;
 	
 	private JTextField nameField;
 	private JTextField groupField;
@@ -71,13 +91,11 @@ public class ParticipantPanel extends JPanel {
 	private JTextField educationField;
 	private JTextField languageField;
 	
-	private JCheckBox bdayUnspecifiedBox;
-	private DatePicker bdayField;
-	private JButton calcBdayBtn;
+	private FormatterTextField<DateTime> bdayField;
+	private JButton calendarButton;
 	
-	private JCheckBox ageUnspecifiedBox;
 	private FormatterTextField<Period> ageField;
-	private JButton calcAgeBtn;
+//	private JButton calcAgeBtn;
 	
 	private DateTime sessionDate;
 	
@@ -108,18 +126,25 @@ public class ParticipantPanel extends JPanel {
 		idField = new JTextField();
 		idField.setEnabled(false);
 		
-		final ButtonGroup btnGrp = new ButtonGroup();
-		maleBtn = new JRadioButton("Male");
-		btnGrp.add(maleBtn);
-		femaleBtn = new JRadioButton("Female");
-		btnGrp.add(femaleBtn);
-		unspecifiedBtn = new JRadioButton("Unspecified");
-		btnGrp.add(unspecifiedBtn);
-		unspecifiedBtn.setSelected(true);
-		final JPanel sexPanel = new JPanel(new HorizontalLayout());
-		sexPanel.add(unspecifiedBtn);
-		sexPanel.add(maleBtn);
-		sexPanel.add(femaleBtn);
+		sexBox = new JComboBox(Sex.values());
+		sexBox.setSelectedItem(
+				(participant.getSex() != null ? participant.getSex() : Sex.UNSPECIFIED));
+		sexBox.setRenderer(new DefaultListCellRenderer() {
+
+			@Override
+			public Component getListCellRendererComponent(JList list,
+					Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+						cellHasFocus);
+				final Sex sex = (Sex)value;
+				
+				retVal.setText(sex.getText());
+				
+				return retVal;
+			}
+			
+		});
 		
 		final PhonUIAction anonymizeAct = new PhonUIAction(this, "onAnonymize");
 		anonymizeAct.putValue(PhonUIAction.NAME, "Anonymize");
@@ -132,30 +157,20 @@ public class ParticipantPanel extends JPanel {
 		educationField = new JTextField();
 		languageField = new JTextField();
 		
-		final ImageIcon calcIcon = 
-				IconManager.getInstance().getIcon("apps/accessories-calculator", IconSize.SMALL);
+		final ImageIcon calendarIcon = 
+				IconManager.getInstance().getIcon("apps/office-calendar", IconSize.SMALL);
 		
-		bdayUnspecifiedBox = new JCheckBox("Unspecified birthday");
-		bdayUnspecifiedBox.setSelected(true);
-		bdayField = new DatePicker();
-		bdayField.setEnabled(false);
-		final PhonUIAction calcBdayAct = new PhonUIAction(this, "onCalculateBirthday");
-		calcBdayAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Calculate birthday from age");
-		calcBdayAct.putValue(PhonUIAction.SMALL_ICON, calcIcon);
-		calcBdayBtn = new JButton(calcBdayAct);
-		calcBdayAct.setEnabled(false);
+		final DateFormatter bdayFormatter = new DateFormatter();
+		bdayField = new FormatterTextField<DateTime>(bdayFormatter);
+		bdayField.setPrompt("YYYY-MM-DD");
+		final PhonUIAction showCalendarAct = new PhonUIAction(this, "onShowCalendar");
+		showCalendarAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show calendar");
+		showCalendarAct.putValue(PhonUIAction.SMALL_ICON, calendarIcon);
+		calendarButton = new JButton(showCalendarAct);
 		
-		ageUnspecifiedBox = new JCheckBox("Unspecified age");
-		ageUnspecifiedBox.setSelected(true);
 		ageField = FormatterTextField.createTextField(Period.class);
 		ageField.setPrompt("YY;MM.DD");
-		ageField.setEnabled(false);
 		ageField.setFont(FontPreferences.getMonospaceFont());
-		final PhonUIAction calcAgeAct = new PhonUIAction(this, "onCalculateAge");
-		calcAgeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Calculate age from birthday");
-		calcAgeAct.putValue(PhonUIAction.SMALL_ICON, calcIcon);
-		calcAgeBtn = new JButton(calcAgeAct);
-		calcAgeBtn.setEnabled(false);
 		
 		// setup info
 		
@@ -176,21 +191,11 @@ public class ParticipantPanel extends JPanel {
 		if(participant.getEducation() != null)
 			educationField.setText(participant.getEducation());
 		
-		unspecifiedBtn.setSelected(participant.getSex() == Sex.UNSPECIFIED);
-		femaleBtn.setSelected(participant.getSex() == Sex.FEMALE);
-		maleBtn.setSelected(participant.getSex() == Sex.MALE);
-		
 		if(participant.getBirthDate() != null) {
-			bdayUnspecifiedBox.setSelected(false);
-			bdayField.setEnabled(true);
-			calcBdayBtn.setEnabled(true);
-			bdayField.setDate(participant.getBirthDate().toDate());
+			bdayField.setValue(participant.getBirthDate());
 		}
 		
 		if(participant.getAge(null) != null) {
-			ageUnspecifiedBox.setSelected(false);
-			ageField.setEnabled(true);
-			calcAgeBtn.setEnabled(true);
 			ageField.setValue(participant.getAge(null));
 		}
 		
@@ -281,20 +286,12 @@ public class ParticipantPanel extends JPanel {
 			
 			@Override
 			public Void op(Participant obj) {
-				if(unspecifiedBtn.isSelected())
-					participant.setSex(Sex.UNSPECIFIED);
-				else if(maleBtn.isSelected())
-					participant.setSex(Sex.MALE);
-				else if(femaleBtn.isSelected())
-					participant.setSex(Sex.FEMALE);
+				participant.setSex((Sex)sexBox.getSelectedItem());
 				return null;
 			}
 			
 		};
-		final ItemUpdater sexListener = new ItemUpdater(sexUpdater);
-		unspecifiedBtn.addItemListener(sexListener);
-		maleBtn.addItemListener(sexListener);
-		femaleBtn.addItemListener(sexListener);
+		sexBox.addItemListener(new ItemUpdater(sexUpdater));
 		
 		final Functor<Void, Participant> assignIdFunctor = new Functor<Void, Participant>() {
 			
@@ -316,64 +313,41 @@ public class ParticipantPanel extends JPanel {
 			
 			@Override
 			public Void op(Participant obj) {
-				final DateTime bday = new DateTime(bdayField.getDate());
+				final DateTime bday = bdayField.getValue();
 				participant.setBirthDate(bday);
-				return null;
-			}
-			
-		};
-		bdayField.addActionListener(new ActionUpdater(bdayUpdater));
-		
-		final Functor<Void, Participant> bdayUnspecifiedUpdater = new Functor<Void, Participant>() {
-
-			@Override
-			public Void op(Participant obj) {
-				if(bdayUnspecifiedBox.isSelected()) {
-					participant.setBirthDate(null);
-					bdayField.setEnabled(false);
-					calcBdayBtn.setEnabled(false);
-					bdayField.setDate(null);
-				} else {
-					bdayField.setEnabled(true);
-					calcBdayBtn.setEnabled(true);
-					bdayUpdater.op(obj);
+				if(participant.getAge(null) == null) {
+					if(sessionDate != null
+						&& sessionDate.isAfter(participant.getBirthDate())) {
+						final Period age = participant.getAge(sessionDate);
+						ageField.setPrompt(AgeFormatter.ageToString(age));
+						ageField.setKeepPrompt(true);
+					} else {
+						ageField.setPrompt("YY:MM.DD");
+						ageField.setKeepPrompt(false);
+					}
 				}
 				return null;
 			}
 			
 		};
-		bdayUnspecifiedBox.addItemListener(new ItemUpdater(bdayUnspecifiedUpdater));
+		bdayField.getDocument().addDocumentListener(new TextFieldUpdater(bdayUpdater));
+		bdayField.addActionListener(new ActionUpdater(bdayUpdater));
 		
 		final Functor<Void, Participant> ageUpdater = new Functor<Void, Participant>() {
 			
 			@Override
 			public Void op(Participant obj) {
-				final Period p = ageField.getValue();
-				participant.setAge(p);
-				return null;
-			}
-			
-		};
-		ageField.getDocument().addDocumentListener(new TextFieldUpdater(ageUpdater));
-		
-		final Functor<Void, Participant> ageUnspecifiedUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				if(ageUnspecifiedBox.isSelected()) {
+				if(ageField.getText().trim().length() == 0) {
 					participant.setAge(null);
-					ageField.setEnabled(false);
-					calcAgeBtn.setEnabled(false);
-					ageField.setValue(null);
 				} else {
-					ageField.setEnabled(true);
-					calcAgeBtn.setEnabled(true);
+					final Period p = ageField.getValue();
+					participant.setAge(p);
 				}
 				return null;
 			}
 			
 		};
-		ageUnspecifiedBox.addItemListener(new ItemUpdater(ageUnspecifiedUpdater));
+		ageField.getDocument().addDocumentListener(new TextFieldUpdater(ageUpdater));
 		
 		// ensure a role is selected!
 		if(participant.getRole() == null) {
@@ -400,15 +374,12 @@ public class ParticipantPanel extends JPanel {
 		optional.add(new JLabel("Name"), cc.xy(1, 1));
 		optional.add(nameField, cc.xyw(3, 1, 3));
 		optional.add(new JLabel("Sex"), cc.xy(1, 2));
-		optional.add(sexPanel, cc.xyw(3, 2, 3));
+		optional.add(sexBox, cc.xyw(3, 2, 3));
 		optional.add(new JLabel("Birthday"), cc.xy(1, 3));
-		optional.add(bdayUnspecifiedBox, cc.xyw(3, 3, 3));
-		optional.add(bdayField, cc.xyw(3, 4, 2));
-		optional.add(calcBdayBtn, cc.xy(5, 4));
+		optional.add(bdayField, cc.xyw(3, 3, 2));
+		optional.add(calendarButton, cc.xy(5, 3));
 		optional.add(new JLabel("Age"), cc.xy(1, 5));
-		optional.add(ageUnspecifiedBox, cc.xyw(3, 5, 2));
-		optional.add(ageField, cc.xyw(3, 6, 2));
-		optional.add(calcAgeBtn, cc.xy(5, 6));
+		optional.add(ageField, cc.xyw(3, 5, 3));
 		optional.add(new JLabel("Language"), cc.xy(1, 7));
 		optional.add(languageField, cc.xyw(3, 7, 3));
 		optional.add(new JLabel("Group"), cc.xy(1, 8));
@@ -417,11 +388,12 @@ public class ParticipantPanel extends JPanel {
 		optional.add(educationField, cc.xyw(3, 9, 3));
 		optional.add(new JLabel("SES"), cc.xy(1, 10));
 		optional.add(sesField, cc.xyw(3, 10, 3));
-		optional.add(anonymizeBtn, cc.xyw(4, 11, 2));
 		
-		setLayout(new VerticalLayout());
+		setLayout(new VerticalLayout(5));
 		add(required);
 		add(optional);
+		add(ButtonBarBuilder.buildOkBar(anonymizeBtn));
+		add(new JSeparator(SwingConstants.HORIZONTAL));
 	}
 	
 	public void setOtherParticipants(List<Participant> parts) {
@@ -440,6 +412,14 @@ public class ParticipantPanel extends JPanel {
 	
 	public void setSessionDate(DateTime sessionDate) {
 		this.sessionDate = sessionDate;
+		
+		if(sessionDate != null && participant.getAge(null) == null
+				&& participant.getBirthDate() != null 
+				&& participant.getBirthDate().isBefore(sessionDate)) {
+			final Period age = participant.getAge(sessionDate);
+			ageField.setPrompt(AgeFormatter.ageToString(age));
+			ageField.setKeepPrompt(true);
+		}
 	}
 	
 	public String getRoleId() {
@@ -462,21 +442,29 @@ public class ParticipantPanel extends JPanel {
 		return id;
 	}
 	
-	public void onCalculateBirthday() {
-		final Period age = participant.getAge(null);
-		if(age != null && sessionDate != null) {
-			final DateTime bday = sessionDate.minus(age);
-			bdayField.setDate(bday.toDate());
-			participant.setBirthDate(bday);
+	public void onShowCalendar() {
+		final JXMonthView monthView =
+				(participant.getBirthDate() != null ? new JXMonthView(participant.getBirthDate().toDate()) : new JXMonthView());
+		monthView.setTraversable(true);
+		monthView.setBorder(BorderFactory.createEtchedBorder());
+		if(participant.getBirthDate() != null) {
+			monthView.setSelectionDate(participant.getBirthDate().toDate());
 		}
-	}
-	
-	public void onCalculateAge() {
-		final DateTime bday = participant.getBirthDate();
-		if(bday != null && sessionDate != null) {
-			final Period age = new Period(bday, sessionDate, PeriodType.yearMonthDay());
-			ageField.setValue(age);
+		if(sessionDate != null) {
+			monthView.setFlaggedDates(sessionDate.toDate());
 		}
+		
+		monthView.getSelectionModel().addDateSelectionListener(new DateSelectionListener() {
+			
+			@Override
+			public void valueChanged(DateSelectionEvent ev) {
+				bdayField.setValue(new DateTime(monthView.getSelectionDate()));
+				
+			}
+		});
+		final JPopupMenu popup = new JPopupMenu();
+		popup.add(monthView);
+		popup.show(calendarButton, 0, calendarButton.getHeight());
 	}
 	
 	public void onAnonymize() {
@@ -493,9 +481,9 @@ public class ParticipantPanel extends JPanel {
 		
 		idField.setText(getRoleId());
 		nameField.setText("");
-		unspecifiedBtn.setSelected(true);
-		bdayUnspecifiedBox.setSelected(true);
-		ageUnspecifiedBox.setSelected(true);
+		bdayField.setText("");
+		sexBox.setSelectedItem(Sex.UNSPECIFIED);
+		ageField.setText("");
 		languageField.setText("");
 		groupField.setText("");
 		educationField.setText("");
