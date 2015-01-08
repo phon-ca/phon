@@ -255,7 +255,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		contentPane.add(wavDisplay);
 		
 		sizer = new JSeparator(SwingConstants.HORIZONTAL);
-		
+		sizer.setOpaque(true);
 		sizer.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 		sizer.setPreferredSize(new Dimension(0, 5));
 		sizer.addMouseMotionListener(new MouseAdapter() {
