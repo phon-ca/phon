@@ -62,6 +62,7 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FormatterTextField;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -151,11 +152,17 @@ public class ParticipantPanel extends JPanel {
 		anonymizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove all optional information");
 		anonymizeBtn = new JButton(anonymizeAct);
 		
+		int defCols = 20;
 		nameField = new JTextField();
+		nameField.setColumns(defCols);
 		groupField = new JTextField();
+		groupField.setColumns(defCols);
 		sesField = new JTextField();
+		sesField.setColumns(defCols);
 		educationField = new JTextField();
+		educationField.setColumns(defCols);
 		languageField = new JTextField();
+		languageField.setColumns(defCols);
 		
 		bdayField = new DatePicker();
 		ageField = FormatterTextField.createTextField(Period.class);
@@ -167,6 +174,7 @@ public class ParticipantPanel extends JPanel {
 			public void focusLost(FocusEvent arg0) {
 				if(ageField.getText().length() > 0 &&
 						!ageField.validateText()) {
+					ToastFactory.makeToast("Age format: " + AgeFormatter.AGE_FORMAT).start(ageField);
 					Toolkit.getDefaultToolkit().beep();
 					bdayField.requestFocus();
 				}
@@ -362,37 +370,38 @@ public class ParticipantPanel extends JPanel {
 		
 		final CellConstraints cc = new CellConstraints();
 		final FormLayout reqLayout = new FormLayout(
-				"right:60px, 3dlu, fill:pref:grow",
+				"right:pref, 3dlu, fill:pref:grow",
 				"pref, pref, pref");
 		final JPanel required = new JPanel(reqLayout);
 		required.setBorder(BorderFactory.createTitledBorder("Required Information"));
-		required.add(new JLabel("Role:"), cc.xy(1,1));
+		required.add(new JLabel("Role"), cc.xy(1,1));
 		required.add(roleBox, cc.xy(3,1));
 		required.add(assignIdBox, cc.xy(3,2));
-		required.add(new JLabel("Id:"), cc.xy(1, 3));
+		required.add(new JLabel("Id"), cc.xy(1, 3));
 		required.add(idField, cc.xy(3, 3));
 		
 		final FormLayout optLayout = new FormLayout(
-				"right:60px, 3dlu, fill:pref:grow, 50px, pref",
-				"pref, pref, pref, pref, pref, pref, pref, pref, pref, pref, pref");
+				"right:pref, 3dlu, fill:pref:grow, 5dlu, right:pref, 3dlu, fill:pref:grow",
+				"pref, pref, pref, pref");
 		final JPanel optional = new JPanel(optLayout);
 		optional.setBorder(BorderFactory.createTitledBorder("Optional Information"));
 		optional.add(new JLabel("Name"), cc.xy(1, 1));
-		optional.add(nameField, cc.xyw(3, 1, 3));
+		optional.add(nameField, cc.xy(3, 1));
 		optional.add(new JLabel("Sex"), cc.xy(1, 2));
-		optional.add(sexBox, cc.xyw(3, 2, 3));
+		optional.add(sexBox, cc.xy(3, 2));
 		optional.add(new JLabel("Birthday (" + DateFormatter.DATETIME_FORMAT + ")"), cc.xy(1, 3));
-		optional.add(bdayField, cc.xyw(3, 3, 3));
-		optional.add(new JLabel("Age (" + AgeFormatter.AGE_FORMAT + ")"), cc.xy(1, 5));
-		optional.add(ageField, cc.xyw(3, 5, 3));
-		optional.add(new JLabel("Language"), cc.xy(1, 7));
-		optional.add(languageField, cc.xyw(3, 7, 3));
-		optional.add(new JLabel("Group"), cc.xy(1, 8));
-		optional.add(groupField, cc.xyw(3, 8, 3));
-		optional.add(new JLabel("Education"), cc.xy(1, 9));
-		optional.add(educationField, cc.xyw(3, 9, 3));
-		optional.add(new JLabel("SES"), cc.xy(1, 10));
-		optional.add(sesField, cc.xyw(3, 10, 3));
+		optional.add(bdayField, cc.xy(3, 3));
+		optional.add(new JLabel("Age (" + AgeFormatter.AGE_FORMAT + ")"), cc.xy(1, 4));
+		optional.add(ageField, cc.xy(3, 4));
+		
+		optional.add(new JLabel("Language"), cc.xy(5, 1));
+		optional.add(languageField, cc.xy(7, 1));
+		optional.add(new JLabel("Group"), cc.xy(5, 2));
+		optional.add(groupField, cc.xy(7, 2));
+		optional.add(new JLabel("Education"), cc.xy(5, 3));
+		optional.add(educationField, cc.xy(7, 3));
+		optional.add(new JLabel("SES"), cc.xy(5, 4));
+		optional.add(sesField, cc.xy(7, 4));
 		
 		setLayout(new VerticalLayout(5));
 		add(required);
