@@ -35,6 +35,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.JTextComponent;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
@@ -398,7 +399,16 @@ public class RecordDataEditorView extends EditorView {
 				getEditor().getSelectionModel().getSelectionsForGroup(recordIndex,
 						tierName, groupIndex);
 		final Highlighter hl = new GroupFieldHighlighter();
+		final Highlighter origHighlighter = textComp.getHighlighter();
 		textComp.setHighlighter(hl);
+		if(origHighlighter != null && origHighlighter.getHighlights().length > 0) {
+			for(Highlight hilight:origHighlighter.getHighlights())
+				try {
+					hl.addHighlight(hilight.getStartOffset(), hilight.getEndOffset(), hilight.getPainter());
+				} catch (BadLocationException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+		}
 		for(SessionEditorSelection selection:selections) {
 			final Range r = selection.getGroupRange();
 			try {
