@@ -510,6 +510,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 			if(audioFile != null) {
 				final PCMSampled sampled = new PCMSampled(audioFile);
 				wavDisplay.setSampled(sampled);
+				invalidate();
+				revalidate();
 			}
 		}
 		
@@ -534,7 +536,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 				(segment.getEndValue() - segment.getStartValue()) / 1000.0f;
 			float displayLength = 
 				segLength + ((2*preferredClipExtension) / 1000.0f);
-			
+			if(segLength == 0.0f) {
+				// using a default display length of 3.0 seconds (or length of sampled)
+				displayLength = Math.min(3.0f, wavDisplay.getSampled().getLength());
+			}
 			
 			if((displayStart + displayLength) > wavDisplay.getSampled().getLength()) {
 				displayStart = wavDisplay.getSampled().getLength() - displayLength;
