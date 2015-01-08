@@ -49,6 +49,7 @@ import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.actions.ExportAction;
 import ca.phon.app.session.editor.view.media_player.actions.GoToAction;
@@ -240,8 +241,10 @@ public class MediaPlayerEditorView extends EditorView {
 		mediaPlayer.playSegment(startTime, length);
 	}
 
+	@RunOnEDT
 	public void doCleanup(EditorEvent ee) {
 		mediaPlayer.stop();
+		remove(mediaPlayer);
 	}
 	
 	// called when the docking window containing this component is closed

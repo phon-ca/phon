@@ -197,6 +197,26 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		return generateTitle();
 	}
 	
+	@RunOnEDT
+	private void _dispose() {
+		setVisible(false);
+		super.dispose();
+	}
+	
+	@Override
+	public void dispose() {
+		getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, new EditorAction() {
+			
+			@Override
+			public void eventOccured(EditorEvent ee) {
+				_dispose();
+			}
+		});
+		// send out closing event
+		final EditorEvent ee = new EditorEvent(EditorEventType.EDITOR_CLOSING, this);
+		getEventManager().queueEvent(ee);
+	}
+	
 	private void init() {
 		final BorderLayout layout = new BorderLayout();
 		final Container contentPane = getContentPane();
