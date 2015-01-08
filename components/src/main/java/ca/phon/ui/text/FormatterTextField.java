@@ -9,6 +9,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import ca.phon.formatter.Formatter;
@@ -37,6 +38,14 @@ public class FormatterTextField<T> extends PromptedTextField {
 		super();
 		this.formatter = formatter;
 		getDocument().addDocumentListener(docListener);
+	}
+	
+	@Override
+	public void setDocument(Document document) {
+		if(getDocument() != null)
+			getDocument().removeDocumentListener(docListener);
+		super.setDocument(document);
+		document.addDocumentListener(docListener);
 	}
 	
 	private Formatter<T> getFormatter(Class<T> type) {
