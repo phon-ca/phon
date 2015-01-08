@@ -510,8 +510,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			if(audioFile != null) {
 				final PCMSampled sampled = new PCMSampled(audioFile);
 				wavDisplay.setSampled(sampled);
-				invalidate();
-				revalidate();
+				wavDisplay.invalidate();
 			}
 		}
 		
@@ -561,6 +560,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 		
 		wavDisplay.setValuesAdusting(false);
+		wavDisplay.validate();
 		wavDisplay.repaint();
 	}
 
