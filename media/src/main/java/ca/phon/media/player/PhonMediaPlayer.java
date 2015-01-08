@@ -100,6 +100,8 @@ public class PhonMediaPlayer extends JPanel {
 
 	/* Media player listener */
 	private final MediaPlayerListener mediaListener = new MediaPlayerListener();
+	
+	private boolean doRemoveNotify = true;
 
 	/* Icons */
 	private ImageIcon playIcn;
@@ -167,9 +169,19 @@ public class PhonMediaPlayer extends JPanel {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public void removeNotify() {
+		if(doRemoveNotify) {
+			cleanup();
+		}
+	}
+	
+	public void setDoRemoveNotify(boolean doRemoveNotify) {
+		this.doRemoveNotify = doRemoveNotify;
+	}
+	
+	public void cleanup() {
 		// clean up player
 		if(mediaPlayerComponent != null) {
 			wasPlaying = mediaPlayerComponent.getMediaPlayer().isPlaying();
@@ -182,7 +194,7 @@ public class PhonMediaPlayer extends JPanel {
 			mediaPlayerComponent = null;
 		}
 	}
-		
+	
 	/*
 	 * Load icons
 	 */

@@ -50,6 +50,7 @@ import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Language;
@@ -200,7 +201,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	@RunOnEDT
 	private void _dispose() {
 		setVisible(false);
-		super.dispose();
+		CommonModuleFrame.getOpenWindows().remove(this);
+//		super.dispose();
 	}
 	
 	@Override
@@ -211,6 +213,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			public void eventOccured(EditorEvent ee) {
 				_dispose();
 			}
+			
 		});
 		// send out closing event
 		final EditorEvent ee = new EditorEvent(EditorEventType.EDITOR_CLOSING, this);
