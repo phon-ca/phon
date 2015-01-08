@@ -16,6 +16,8 @@ import ca.phon.formatter.FormatterType;
 @FormatterType(Period.class)
 public class AgeFormatter implements Formatter<Period> {
 	
+	public final static String AGE_FORMAT = "YY;MM.DD";
+	
 	/** 
 	 * Create a new {@link PeriodFormatter}
 	 * 

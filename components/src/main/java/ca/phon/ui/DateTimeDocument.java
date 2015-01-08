@@ -88,11 +88,7 @@ public class DateTimeDocument extends PlainDocument {
 	@Override
 	public void remove(int offs, int len) 
 		throws BadLocationException {
-		// do some magic to see caret
-		if(offs > 0)
-			super.insertString(offs-1, "", null);
-			
-		return;
+		super.remove(offs, len);
 	}
 	
 	public DateTime getDateTime() {

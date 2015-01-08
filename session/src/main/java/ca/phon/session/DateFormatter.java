@@ -12,6 +12,8 @@ import ca.phon.formatter.FormatterType;
 @FormatterType(DateTime.class)
 public class DateFormatter implements Formatter<DateTime> {
 	
+	public final static String DATETIME_FORMAT = "YYYY-MM-DD";
+	
 	/**
 	 * Create a date formatter for {@link DateTime} objects.
 	 * 

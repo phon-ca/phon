@@ -64,6 +64,7 @@ import ca.phon.app.session.editor.view.session_information.actions.BrowseForMedi
 import ca.phon.app.session.editor.view.session_information.actions.DeleteParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.EditParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
+import ca.phon.functor.Functor;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
@@ -87,11 +88,6 @@ public class SessionInfoEditorView extends EditorView {
 
 	private static final long serialVersionUID = -3112381708875592956L;
 	
-	public final static String SHOW_CALCULATED_AGES_PROP =
-			SessionEditor.class.getName() + ".showCalculatedAges";
-	
-	public final static boolean DEFAULT_SHOW_CALCULATED_AGES = Boolean.TRUE;
-
 	private final String VIEW_TITLE = "Session Information";
 
 	/**
@@ -281,30 +277,39 @@ public class SessionInfoEditorView extends EditorView {
 		update();
 	}
 	
-	public boolean isShowCalculatedAges() {
-		return PrefHelper.getBoolean(SHOW_CALCULATED_AGES_PROP, DEFAULT_SHOW_CALCULATED_AGES);
-	}
-	
-	public void setShowCalculatedAges(boolean showCalculatedAges) {
-		PrefHelper.getUserPreferences().putBoolean(SHOW_CALCULATED_AGES_PROP, showCalculatedAges);
-	}
-	
 	public DatePicker createDateField() {
 		final DatePicker retVal = new DatePicker();
 		
 		final DateTime sessionDate = getEditor().getSession().getDate();
 		if(sessionDate != null)
-			retVal.setDate(sessionDate.toDate());
+			retVal.setDateTime(sessionDate);
 		
-		retVal.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				final Date selectedDate = retVal.getDate();
+		
+		
+		retVal.getTextField().getDocument().addDocumentListener(new DocumentListener() {
+
+			void update() {
+				final DateTime selectedDate = retVal.getDateTime();
 				final DateTime newDate = new DateTime(selectedDate);
 				
 				final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, getEditor().getSession().getDate());
+				edit.setSource(dateField);
 				getEditor().getUndoSupport().postEdit(edit);
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				update();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				update();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
 			}
 			
 		});
@@ -326,7 +331,7 @@ public class SessionInfoEditorView extends EditorView {
 		
 		final DateTime sessionDate = getEditor().getSession().getDate();
 		if(sessionDate != null)
-			dateField.setDate(sessionDate.toDate());
+			dateField.setDateTime(sessionDate);
 		
 		final File mediaFile = MediaLocator.findMediaFile(project,  session);
 		if(mediaFile != null) {
@@ -358,7 +363,7 @@ public class SessionInfoEditorView extends EditorView {
 		final Session session = editor.getDataModel().getSession();
 		
 		final DateTime currentDate = session.getDate();
-		final DateTime newDate = new DateTime(dateField.getDate());
+		final DateTime newDate = new DateTime(dateField);
 		
 		if(!currentDate.isEqual(newDate)) {
 			final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, currentDate);
@@ -427,7 +432,7 @@ public class SessionInfoEditorView extends EditorView {
 	public void onDateChanged(EditorEvent ee) {
 		if(ee.getSource() != dateField) {
 			final DateTime newDate = (DateTime)ee.getEventData();
-			dateField.setDate(newDate.toDate());
+			dateField.setDateTime(newDate);
 		}
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
 	}

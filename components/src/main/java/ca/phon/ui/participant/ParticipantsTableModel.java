@@ -95,7 +95,8 @@ public class ParticipantsTableModel extends AbstractTableModel {
 			if(age != null) {
 				return AgeFormatter.ageToString(age);
 			} else {
-				if(isShowCalculatedAges() && p.getBirthDate() != null) {
+				if(isShowCalculatedAges() && p.getBirthDate() != null && session.getDate() != null
+						&& p.getBirthDate().isBefore(session.getDate())) {
 					final Period calculatedAge = p.getAge(session.getDate());
 					return AgeFormatter.ageToString(calculatedAge);
 				} else 
