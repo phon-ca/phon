@@ -213,7 +213,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setupToolbar();
 		setupInputMap();
 		
-		msgLabel = new JLabel();
+		msgLabel = new JLabel("Audio file not found, click to generate");
 		msgLabel.setBackground(Color.yellow);
 		msgLabel.setVisible(false);
 		msgLabel.setOpaque(true);
@@ -510,7 +510,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 			if(audioFile != null) {
 				final PCMSampled sampled = new PCMSampled(audioFile);
 				wavDisplay.setSampled(sampled);
-				wavDisplay.invalidate();
+				msgLabel.setVisible(false);
+			} else {
+				msgLabel.setVisible(true);
 			}
 		}
 		
@@ -560,7 +562,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 		
 		wavDisplay.setValuesAdusting(false);
-		wavDisplay.validate();
 		wavDisplay.repaint();
 	}
 
@@ -589,6 +590,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public void onSessionMediaChanged(EditorEvent ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
 		
+		wavDisplay.setSampled(null);
 		update();
 	}
 	
