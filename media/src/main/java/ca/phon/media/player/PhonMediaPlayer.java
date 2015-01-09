@@ -405,12 +405,7 @@ public class PhonMediaPlayer extends JPanel {
 		if(mediaFile == null) {
 			mediaPlayer.stop();
 		} else {
-			final File f = new File(getMediaFile());
-			final URI uri = f.toURI();
-			final String asciiURI = uri.toASCIIString();
-			final String uriLoc = asciiURI.replaceFirst("file\\:", "file://");
-			
-			mediaPlayer.prepareMedia(uriLoc, ":play-and-pause");
+			mediaPlayer.prepareMedia(getMediaFile(), ":play-and-pause");
 			mediaPlayer.addMediaPlayerEventListener(mediaListener);
 			for(MediaPlayerEventListener listener:cachedListenerrs) {
 				mediaPlayer.addMediaPlayerEventListener(listener);
