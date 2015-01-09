@@ -202,6 +202,7 @@ public class CheckWizard extends WizardFrame {
 				return;
 			}
 			
+			final PhoneAligner phoneAligner = new PhoneAligner();
 			for(int i = 0; i < session.getRecordCount(); i++) {
 				
 				if(super.isShutdown()) {
@@ -215,6 +216,22 @@ public class CheckWizard extends WizardFrame {
 				resetSyllabification(ipaTarget);
 				final Tier<IPATranscript> ipaActual = record.getIPAActual();
 				resetSyllabification(ipaActual);
+				
+				if(isResetAlignment) {
+					if(ipaTarget.numberOfGroups() != ipaActual.numberOfGroups()) {
+						out.println("Alignment error in record " + (i+1));
+						continue;
+					}
+					
+					final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+					for(int j = 0; j < ipaTarget.numberOfGroups(); j++) {
+						final IPATranscript target = ipaTarget.getGroup(j);
+						final IPATranscript actual = ipaActual.getGroup(j);
+						
+						final PhoneMap pm = phoneAligner.calculatePhoneMap(target, actual);
+						alignmentTier.setGroup(j, pm);
+					}
+				}
 			}
 			
 			final Project project = getProject();
@@ -247,9 +264,11 @@ public class CheckWizard extends WizardFrame {
 		
 		private void resetSyllabification(Tier<IPATranscript> tier) {
 			for(IPATranscript ipa:tier) {
+				ipa.resetSyllabification();
 				syllabifier.syllabify(ipa.toList());
 			}
 		}
+		
 	}
 	
 	/**
