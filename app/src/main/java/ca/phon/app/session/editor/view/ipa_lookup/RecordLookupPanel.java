@@ -21,12 +21,14 @@ import ca.phon.app.ipalookup.OrthoLookupVisitor;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.BlindTierEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.IPAGroupField;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -39,6 +41,7 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
@@ -263,6 +266,7 @@ public class RecordLookupPanel extends JPanel {
 	}
 	
 	public void onSetGroup(Integer i) {
+		final Transcriber transcriber = getEditor().getDataModel().getTranscriber();
 		final Record r = getRecord();
 		if(r == null) return;
 		
@@ -289,32 +293,61 @@ public class RecordLookupPanel extends JPanel {
 		final CompoundEdit edit = new CompoundEdit();
 		IPATranscript targetIpa = (ipaTarget.numberOfGroups() > i ? ipaTarget.getGroup(i) : new IPATranscript());
 		if(ipaTargetBox.isSelected()) {
-			boolean set = (overwriteBox.isSelected() ? true : ipaTarget.getGroup(i).length() == 0);
-			if(set) {
-				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
-				ipaTargetEdit.doIt();
-				edit.addEdit(ipaTargetEdit);
-				targetIpa = ipa;
+			if(transcriber != null) {
+				boolean set = true;
+				final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
+				if(alts != null) {
+					final IPATranscript oldIpa = alts.get(transcriber.getUsername());
+					set = (overwriteBox.isSelected() || oldIpa == null || oldIpa.length() == 0);
+				}
+				if(set) {
+					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaTarget, i, transcriber, ipa, targetIpa);
+					blindEdit.doIt();
+					edit.addEdit(blindEdit);
+					
+				}
+			} else {
+				if(overwriteBox.isSelected() || ipaTarget.getGroup(i).length() == 0) {
+					final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
+					ipaTargetEdit.doIt();
+					edit.addEdit(ipaTargetEdit);
+					targetIpa = ipa;
+				}
 			}
 		}
 		
 		IPATranscript actualIpa = (ipaActual.numberOfGroups() > i ? ipaActual.getGroup(i) : new IPATranscript());
 		if(ipaActualBox.isSelected()) {
-			boolean set = (overwriteBox.isSelected() ? true : ipaActual.getGroup(i).length() == 0);
-			if(set) {
-				final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipaA);
-				ipaActualEdit.doIt();
-				edit.addEdit(ipaActualEdit);
-				actualIpa = ipaA;
+			if(transcriber != null) {
+				boolean set = true;
+				final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
+				if(alts != null) {
+					final IPATranscript oldIpa = alts.get(transcriber.getUsername());
+					set = (overwriteBox.isSelected() || oldIpa == null || oldIpa.length() == 0);
+				}
+				if(set) {
+					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaActual, i, transcriber, ipa, actualIpa);
+					blindEdit.doIt();
+					edit.addEdit(blindEdit);
+				}
+			} else {
+				if(overwriteBox.isSelected() || ipaActual.getGroup(i).length() == 0) {
+					final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipaA);
+					ipaActualEdit.doIt();
+					edit.addEdit(ipaActualEdit);
+					actualIpa = ipaA;
+				}
 			}
 		}
 		
-		final PhoneAligner aligner = new PhoneAligner();
-		final PhoneMap pm = aligner.calculatePhoneMap(targetIpa, actualIpa);
-		
-		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
-		pmEdit.doIt();
-		edit.addEdit(pmEdit);
+		if(transcriber == null) {
+			final PhoneAligner aligner = new PhoneAligner();
+			final PhoneMap pm = aligner.calculatePhoneMap(targetIpa, actualIpa);
+			
+			final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
+			pmEdit.doIt();
+			edit.addEdit(pmEdit);
+		}
 		
 		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
 		getEditor().getEventManager().queueEvent(ee);
