@@ -405,26 +405,15 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return filter.getIPATranscript();
 	}
 	
-	private List<IPATranscript> syllList = null;
 	/**
 	 * Break the transcript into syllables.
 	 * 
 	 * @return syllables
 	 */
 	public List<IPATranscript> syllables() {
-		if(syllList == null) {
-			final SyllableVisitor visitor = new SyllableVisitor();
-			accept(visitor);
-			syllList = Collections.unmodifiableList(visitor.getSyllables());
-		}
-		return syllList;
-	}
-	
-	/**
-	 * Rest syllable list.  Useful if changing consitutent types.
-	 */
-	public void resetSyllables() {
-		syllList = null;
+		final SyllableVisitor visitor = new SyllableVisitor();
+		accept(visitor);
+		return Collections.unmodifiableList(visitor.getSyllables());
 	}
 	
 	/**
@@ -437,7 +426,6 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		for(IPAElement ele:filter.getIPATranscript()) {
 			ele.setScType(SyllableConstituentType.UNKNOWN);
 		}
-		syllList = null;
 	}
 	
 	private List<IPATranscript> wordList = null;
