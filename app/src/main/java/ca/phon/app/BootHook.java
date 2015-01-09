@@ -30,6 +30,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 	/* 
 	 * Resource files
 	 */
+	private final static String PHON_VM_OPTIONS_FILE = "Phon.vmoptions";
 	private final static String VM_OPTIONS_FILE = "META-INF/environment/$OS/vmoptions";
 	private final static String VM_ENV_FILE = "META-INF/environment/$OS/env";
 
@@ -50,7 +51,12 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 	
 	@Override
 	public void setupVMOptions(List<String> cmd) {
-		final Enumeration<URL> optURLs = getResourceURLs(VM_OPTIONS_FILE);
+		loadFromResourcePath(cmd, PHON_VM_OPTIONS_FILE);
+		loadFromResourcePath(cmd, VM_OPTIONS_FILE);
+	}
+	
+	private void loadFromResourcePath(List<String> cmd, String path) {
+		final Enumeration<URL> optURLs = getResourceURLs(path);
 		while(optURLs.hasMoreElements()) {
 			URL url = optURLs.nextElement();
 			LOGGER.info("Loading vmoptions from URL " + url.toString());
@@ -60,6 +66,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 				final BufferedReader isr = new BufferedReader(new InputStreamReader(is));
 				String vmopt = null;
 				while((vmopt = isr.readLine()) != null) {
+					if(vmopt.startsWith("#")) continue;
 					cmd.add(vmopt);
 				}
 				isr.close();
