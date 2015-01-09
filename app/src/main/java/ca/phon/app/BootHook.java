@@ -32,11 +32,11 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 	 */
 	private final static String PHON_VM_OPTIONS_FILE = "Phon.vmoptions";
 	private final static String VM_OPTIONS_FILE = "META-INF/environment/$OS/vmoptions";
-	private final static String VM_ENV_FILE = "Phon.env";
+	private final static String VM_ENV_FILE = "META-INF/environment/$OS/env";
 
 	private Enumeration<URL> getResourceURLs(String resource) {
 		final String os =
-				(OSInfo.isWindows() ? "window" : (OSInfo.isMacOs() ? "mac" : "unix"));
+				(OSInfo.isWindows() ? "windows" : (OSInfo.isMacOs() ? "mac" : "unix"));
 		final String respath = 
 				resource.replaceAll("\\$OS", os);
 		
