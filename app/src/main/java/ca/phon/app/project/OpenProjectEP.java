@@ -53,8 +53,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	public final static String PROJECTPATH_PROPERTY = 
 		"ca.phon.modules.core.OpenProjectController.projectpath";
 	
-	public final static String PROJECT_UPGRADE_WARNING_ISSUED = 
-		"ca.phon.modules.core.OpenProjectController.upgradewarningissued";
+//	public final static String PROJECT_UPGRADE_WARNING_ISSUED = 
+//		"ca.phon.modules.core.OpenProjectController.upgradewarningissued";
 
 	private String projectpath;
 	
@@ -280,12 +280,12 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		
 		@Override
 		public void run() {
-			final boolean warningIssued = PrefHelper.getBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.FALSE);
-			if(!warningIssued) {
-				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Projects will be upgraded", 
-						"Project changes made using this version of Phon may not be compatible with previous versions of Phon.");
-				PrefHelper.getUserPreferences().putBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.TRUE);
-			}
+//			final boolean warningIssued = PrefHelper.getBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.FALSE);
+//			if(!warningIssued) {
+//				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Projects will be upgraded", 
+//						"Project changes made using this version of Phon may not be compatible with previous versions of Phon.");
+//				PrefHelper.getUserPreferences().putBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.TRUE);
+//			}
 			loadProject();
 		}
 		
