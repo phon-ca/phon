@@ -134,7 +134,6 @@ public class PrefsDialog extends JDialog {
 		PrefsDialog pd = new PrefsDialog();
 		pd.pack();
 		pd.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		pd.setModal(true);
 		pd.setVisible(true);
 		
 		return;

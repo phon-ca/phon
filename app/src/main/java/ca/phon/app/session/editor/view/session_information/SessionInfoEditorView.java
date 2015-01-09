@@ -288,7 +288,7 @@ public class SessionInfoEditorView extends EditorView {
 		
 		retVal.getTextField().getDocument().addDocumentListener(new DocumentListener() {
 
-			void update() {
+			void dateFieldUpdate() {
 				final DateTime selectedDate = retVal.getDateTime();
 				final DateTime newDate = new DateTime(selectedDate);
 				
@@ -299,12 +299,14 @@ public class SessionInfoEditorView extends EditorView {
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				update();
+				if(!dateField.isValueAdjusing())
+					dateFieldUpdate();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				update();
+				if(!dateField.isValueAdjusing())
+					dateFieldUpdate();
 			}
 
 			@Override
@@ -330,8 +332,11 @@ public class SessionInfoEditorView extends EditorView {
 		if(project == null) return;
 		
 		final DateTime sessionDate = getEditor().getSession().getDate();
-		if(sessionDate != null)
+		if(sessionDate != null) {
+			dateField.setValueIsAdjusting(true);
 			dateField.setDateTime(sessionDate);
+			dateField.setValueIsAdjusting(false);
+		}
 		
 		final File mediaFile = MediaLocator.findMediaFile(project,  session);
 		if(mediaFile != null) {

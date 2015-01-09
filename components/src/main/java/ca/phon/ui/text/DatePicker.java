@@ -43,10 +43,20 @@ public class DatePicker extends JComponent {
 	
 	private JXMonthView monthView;
 	
+	private boolean valueIsAdjusting;
+	
 	public DatePicker() {
 		super();
 		
 		init();
+	}
+
+	public boolean isValueAdjusing() {
+		return this.valueIsAdjusting;
+	}
+	
+	public void setValueIsAdjusting(boolean valueIsAdjusing) {
+		this.valueIsAdjusting = valueIsAdjusing;
 	}
 	
 	private void init() {
