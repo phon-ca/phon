@@ -2,6 +2,8 @@ package ca.phon.app.ipalookup;
 
 import java.util.Collections;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.OrthoComment;
 import ca.phon.orthography.OrthoElement;
@@ -67,7 +69,9 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 	private OrthoWordIPAOptions updateAnnotation(OrthoWord word) {
 		OrthoWordIPAOptions ext = word.getExtension(OrthoWordIPAOptions.class);
 		if(ext == null || ext.getDictLang() != dictionary.getLanguage()) {
-			String[] opts = lookup(word.getWord());
+			String text = word.getWord();
+			text = StringUtils.strip(text, "?!\".\\/");
+			String[] opts = lookup(text);
 			ext = new OrthoWordIPAOptions(opts);
 			ext.setDictLang(dictionary.getLanguage());
 			if(opts.length > 0) ext.setSelectedOption(0);
