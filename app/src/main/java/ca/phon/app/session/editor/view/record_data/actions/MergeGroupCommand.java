@@ -29,7 +29,7 @@ public class MergeGroupCommand extends RecordDataEditorViewAction {
 
 		putValue(NAME, "Merge group with next");
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
-		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.ALT_MASK));
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK | KeyEvent.ALT_MASK));
 	}
 
 	public MergeGroupCommand(RecordDataEditorView editor, Record record, int index) {

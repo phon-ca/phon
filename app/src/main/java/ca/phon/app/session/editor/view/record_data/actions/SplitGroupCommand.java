@@ -22,7 +22,7 @@ public class SplitGroupCommand extends RecordDataEditorViewAction {
 		
 		putValue(NAME, "Split group");
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
-		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.ALT_MASK));
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_MASK | KeyEvent.ALT_MASK));
 	}
 	
 	public int getWordIndex() {
