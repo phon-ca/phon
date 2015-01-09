@@ -42,7 +42,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 	public OrthoGroupField(Tier<Orthography> tier,
 			int groupIndex) {
 		super(tier, groupIndex);
-		getGroupValue().accept(new HighlightVisitor());
+		getGroupValue().accept(new HighlightVisitor(getText()));
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		if(retVal) {
 			getHighlighter().removeAllHighlights();
 			final Orthography ortho = getValidatedObject();
-			ortho.accept(new HighlightVisitor());
+			ortho.accept(new HighlightVisitor(getText()));
 		}
 		
 		return retVal;
@@ -61,10 +61,18 @@ public class OrthoGroupField extends GroupField<Orthography> {
 	public class HighlightVisitor extends VisitorAdapter<OrthoElement> {
 		
 		int currentPos = 0;
+		
+		String text;
+		
+		public HighlightVisitor(String text) {
+			this.text = text;
+		}
 
 		@Override
 		public void fallbackVisit(OrthoElement obj) {
-			currentPos += obj.text().length() + 1;
+			int objIdx = text.indexOf(obj.text(), currentPos);
+			currentPos = objIdx + obj.text().length();
+			while(currentPos < text.length() && Character.isWhitespace(text.charAt(currentPos))) currentPos++;
 		}
 		
 		@Visits
@@ -76,9 +84,10 @@ public class OrthoGroupField extends GroupField<Orthography> {
 				} catch (BadLocationException e) {
 					
 				}
-			} else if(word.getSuffix() != null) {
+			}
+			if(word.getSuffix() != null) {
 				try {
-					int i = currentPos + word.getWord().length();
+					int i = currentPos + word.getPrefix().getCode().length() + word.getWord().length();
 					getHighlighter().addHighlight(i, i+word.getSuffix().getCode().length()+1, suffixPainter);
 							
 				} catch (BadLocationException e)  {}
