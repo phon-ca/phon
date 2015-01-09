@@ -98,6 +98,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		view.addMouseMotionListener(mouseHandler);
 		view.addMouseWheelListener(mouseHandler);
 		
+		view.addPropertyChangeListener(PCMSegmentView.SAMPLED_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.SEGMENT_START_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.SELECTION_LENGTH_PROP, propListener);
 		view.addPropertyChangeListener(PCMSegmentView.SEGMENT_LENGTH_PROP, propListener);
