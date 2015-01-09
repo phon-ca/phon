@@ -203,7 +203,7 @@ public final class SyllabifierLibrary implements IExtendable {
 	 * @return default syllabifier language
 	 */
 	public Language defaultSyllabifierLanguage() {
-		String lang = PrefHelper.get(DEFAULT_SYLLABIFIER_LANG_PROP, null);
+		String lang = PrefHelper.get(DEFAULT_SYLLABIFIER_LANG_PROP, "eng");
 		Language retVal = null;
 		if(lang != null) {
 			retVal = Language.parseLanguage(lang);

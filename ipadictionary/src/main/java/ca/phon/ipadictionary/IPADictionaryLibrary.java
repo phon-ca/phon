@@ -92,7 +92,7 @@ public class IPADictionaryLibrary implements IExtendable {
 	public Language getDefaultLanguage() {
 		Language retVal = null;
 		
-		final String langPref = PrefHelper.get(DEFAULT_IPA_DICTIONARY_PROP, null);
+		final String langPref = PrefHelper.get(DEFAULT_IPA_DICTIONARY_PROP, "eng");
 		if(langPref != null) {
 			retVal = Language.parseLanguage(langPref);
 		}
