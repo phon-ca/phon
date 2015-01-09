@@ -1,5 +1,33 @@
 # Phon 2.0 Changes
 
+## Changes from Phon 2.0.3
+
+### General
+ * Attempting to add a new media folder will no longer hang the application on Mac OS X
+ * Reverted to system look and feel to fix an issue with UI flicker on Mac OS X
+ * Fixed setup of initial syllabifier and dictionary language on new installs
+ * Fixed an issue preventing VLC from loading on some Windows installs
+ * Fixed an issue preventing VLC from playing media found on Windows network shares
+ * Fixed a problem with resetting transcriptions using the Check Transcriptions tool
+ * Fixed IPA Lookup view actions for blind transcribers
+ * IPA lookup will now ignore puctuation at the beginning and end of words
+ * Changed the keystrokes for Merge and Split groups to CTRL+ALT+G and CTRL+ALT+K respectively
+ * Syllable boxes now redraw properly when modifying constituent information using the Syllabification & Alignment view
+ * Fixed syntax highlighting for Orthography
+ * Improved entry of birthday and age in participant editor
+ * Improved layout of participant editor
+ * Double clicking a participant in the session information view will open the participant editor
+ 
+### Speech Analysis
+ * Fixed rendering issues on Mac OS X
+ * Significantly improved rendering performance of the waveform display
+ * Audio output device may now be selected using the speech analysis menu
+ * Audio may now be played in a loop
+ * Display of channels in the waveform view can be toggled
+ * When the current record has no segment, the view will display the first 3 seconds of audio data
+ * Position in the audio data may be adjusted by dragging in the top portion of the waveform display
+ * Window length, or amount of audio data display, may be adjusted using the zoom in/out buttons or by using the mouse wheel while holding control.
+
 ## Changes from Phon 2.0.2
 
 ### General
