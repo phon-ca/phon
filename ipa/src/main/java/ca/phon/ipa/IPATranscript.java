@@ -421,6 +421,13 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 	
 	/**
+	 * Rest syllable list.  Useful if changing consitutent types.
+	 */
+	public void resetSyllables() {
+		syllList = null;
+	}
+	
+	/**
 	 * Reset syllabification for the transcript.
 	 * 
 	 */

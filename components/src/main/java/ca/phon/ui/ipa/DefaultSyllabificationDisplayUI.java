@@ -198,6 +198,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 	public void setScType(PhonActionEvent pae) {
 		int pIdx = display.getFocusedPhone();
+		display.getTranscript().resetSyllables();
 		display.setSyllabificationAtIndex(pIdx,
 				(SyllableConstituentType) pae.getData());
 		display.setFocusedPhone(pIdx + 1);
