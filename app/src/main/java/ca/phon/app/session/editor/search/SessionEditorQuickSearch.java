@@ -63,6 +63,7 @@ import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -300,7 +301,7 @@ public class SessionEditorQuickSearch {
 		model.setRowFilter(model.getRowFilter());
 	}
 	
-	public void saveAsCSV(JTable table) {
+	public void saveAsCSV(PhonActionEvent pae) {
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setParentWindow(getEditor());
 		props.setFileFilter(FileFilter.csvFilter);
