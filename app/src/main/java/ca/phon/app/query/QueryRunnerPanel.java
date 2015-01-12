@@ -140,6 +140,8 @@ public class QueryRunnerPanel extends JPanel {
 	/** The query */
 	private Query query;
 	
+	private boolean includeExcluded;
+	
 	/**
 	 * Query script
 	 */
@@ -154,11 +156,12 @@ public class QueryRunnerPanel extends JPanel {
 	 */
 	public final static String QUERY_SAVED_PROP = "_query_saved_";
 	
-	public QueryRunnerPanel(Project project, QueryScript script, List<SessionPath> selectedSessions) {
+	public QueryRunnerPanel(Project project, QueryScript script, List<SessionPath> selectedSessions, boolean includeExcluded) {
 		super();
 		this.project = project;
 		this.queryScript = script;
 		this.tableModel = new RunnerTableModel(selectedSessions);
+		this.includeExcluded = includeExcluded;
 		resultsTableSorter = new TableRowSorter<QueryRunnerPanel.RunnerTableModel>(tableModel);
 		
 		final UUID uuid = UUID.randomUUID();
@@ -515,6 +518,7 @@ public class QueryRunnerPanel extends JPanel {
 							project.openSession(sessionLocation.getCorpus(), sessionLocation.getSession());
 					
 					final QueryTask queryTask = new QueryTask(project, session, queryScript, ++serial);
+					queryTask.setIncludeExcludedRecords(includeExcluded);
 					queryTask.addTaskListener(queryTaskListener);
 					
 					queryTask.run();

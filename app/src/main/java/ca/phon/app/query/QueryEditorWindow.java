@@ -554,7 +554,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
         final QueryScript script = scriptEditor.getScript();
        
         final List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
-        final QueryRunnerPanel queryRunnerPanel = new QueryRunnerPanel(getProject(), script, selectedSessions);
+        final QueryRunnerPanel queryRunnerPanel = new QueryRunnerPanel(getProject(), script, selectedSessions, includeExcludedBox.isSelected());
         
         final QueryName queryName = script.getExtension(QueryName.class);
         final String name = (queryName != null ? queryName.getName() : "untitled");
