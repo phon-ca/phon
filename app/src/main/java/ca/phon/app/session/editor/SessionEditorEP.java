@@ -24,6 +24,9 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.Transcriber;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.JCrypt;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -72,6 +75,11 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			}
 	}
 
+	/**
+	 * @param project
+	 * @param session
+	 * @param blindMode
+	 */
 	public void showEditor(Project project, Session session, boolean blindMode) {
 		// look for an already open editor
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
@@ -112,6 +120,33 @@ public class SessionEditorEP implements IPluginEntryPoint {
 				session.addTranscriber(transcriber);
 			} else {
 				transcriber = session.getTranscriber(tsd.getUsername());
+				if(transcriber != null && transcriber.usePassword()) {
+					final PasswordDialog dlg = new PasswordDialog(transcriber.getUsername());
+					dlg.setModal(true);
+					dlg.pack();
+					dlg.setLocationRelativeTo(tsd);
+					dlg.setVisible(true);
+					
+					// wait
+					
+					if(dlg.wasDialogCanceled()) return; // bail if dialog was cancelled
+					
+					char salt[] = new char[2];
+					salt[0] = transcriber.getPassword().charAt(0);
+					salt[1] = transcriber.getPassword().charAt(1);
+					
+					// check password
+					final String passwd = JCrypt.crypt(dlg.getPassword(), new String(salt));
+					if(!passwd.equals(transcriber.getPassword())) {
+						final MessageDialogProperties props = new MessageDialogProperties();
+						props.setRunAsync(false);
+						props.setTitle("Incorrect password");
+						props.setMessage("Password incorrect, please try again.");
+						NativeDialogs.showMessageDialog(props);
+						
+						return;
+					}
+				}
 			}
 		}
 		
@@ -143,7 +178,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		private final String user;
 		
 		public PasswordDialog(String user) {
-			super();
+			super(CommonModuleFrame.getCurrentFrame());
 			
 			this.user = user;
 			this.wasDialogCanceled = false;
