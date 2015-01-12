@@ -17,7 +17,8 @@ public class LogManager {
 	
 	public final static String PROPERTIES_FILE_LOCATION = LogManager.class.getName() + ".logProps";
 	
-	private final static String DEFAULT_PROPERTIES_FILE = "phonlog.properties";
+	private final static String DEFAULT_PROPERTIES_FILE = 
+			"ca/phon/app/log/phonlog.properties";
 	
 	public static LogManager getInstance() {
 		return _instance;
