@@ -428,6 +428,10 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 				}
 				groupTier.setGroup(gidx++, buffer.toString());
 			}
+			// ensure the dependent tier has the correct number of groups
+			while(groupTier.numberOfGroups() < retVal.numberOfGroups()) {
+				groupTier.addGroup();
+			}
 			retVal.putTier(groupTier);
 		}
 		
