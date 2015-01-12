@@ -38,6 +38,8 @@ public class MoveTierAction extends TierManagementAction {
 			
 			final TierViewEdit edit = new TierViewEdit(getEditor(), view, newView);
 			getEditor().getUndoSupport().postEdit(edit);
+			
+			getView().getTierOrderingTable().getSelectionModel().setSelectionInterval(nextIndex, nextIndex);
 		}
 	}
 

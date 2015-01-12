@@ -264,6 +264,10 @@ public class TierOrderingEditorView extends EditorView {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, tierViewChangeAct);
 	}
 	
+	public JTable getTierOrderingTable() {
+		return this.tierOrderingTable;
+	}
+	
 	@Override
 	public String getName() {
 		return VIEW_TITLE;
@@ -360,7 +364,11 @@ public class TierOrderingEditorView extends EditorView {
 			tierOrderRef.getAndSet(tierOrder);
 			
 			// check for a current selection
+			int selectedRow = getTierOrderingTable().getSelectedRow();
 			((TierOrderingTableModel)tierOrderingTable.getModel()).setTierView(tierOrder);
+			if(selectedRow >= 0 && selectedRow < tierOrderingTable.getRowCount()) {
+				tierOrderingTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+			}
 //		}
 	}
 
