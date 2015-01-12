@@ -18,14 +18,20 @@
 package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -102,12 +108,15 @@ public class CheckWizardStep1 extends WizardStep {
 		CellConstraints cc = new CellConstraints();
 		topPanel.setLayout(topLayout);
 		
-		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
-		final List<Language> orderedSyllabifiers = new ArrayList<Language>(syllabifierLibrary.availableSyllabifierLanguages());
-	    Collections.sort(orderedSyllabifiers);
+		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
+		final Iterator<Syllabifier> syllabifiers = library.availableSyllabifiers();
+		final List<Syllabifier> orderedSyllabifiers = new ArrayList<Syllabifier>();
+		while(syllabifiers.hasNext()) orderedSyllabifiers.add(syllabifiers.next());
+		Collections.sort(orderedSyllabifiers, new SyllabifierComparator());
 	    
-	    syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new Language[0]));
+	    syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new Syllabifier[0]));
 	    syllabifierList.setEnabled(false);
+	    syllabifierList.setRenderer(new SyllabifierCellRenderer());
 	   
 	    final String preferredSyllabifier = PrefHelper.get(
 	    		PhonProperties.SYLLABIFIER_LANGUAGE,
@@ -185,8 +194,7 @@ public class CheckWizardStep1 extends WizardStep {
 	}
 	
 	public Syllabifier getSyllabifier() {
-		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
-		return library.getSyllabifierForLanguage((Language)syllabifierList.getSelectedItem());
+		return (Syllabifier)syllabifierList.getSelectedItem();
 	}
 	
 	@Override
@@ -200,5 +208,34 @@ public class CheckWizardStep1 extends WizardStep {
 		}
 		
 		return retVal;
+	}
+	
+	private class SyllabifierComparator implements Comparator<Syllabifier> {
+
+		@Override
+		public int compare(Syllabifier o1, Syllabifier o2) {
+			return o1.getLanguage().toString().compareTo(o2.getLanguage().toString());
+		}
+		
+	}
+	
+	private class SyllabifierCellRenderer extends DefaultListCellRenderer {
+
+		@Override
+		public Component getListCellRendererComponent(JList list,
+				Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+			
+			if(value != null) {
+				final Syllabifier syllabifier = (Syllabifier)value;
+				final String text = syllabifier.getName() + " (" + syllabifier.getLanguage().toString() + ")";
+				retVal.setText(text);
+			}
+			
+			return retVal;
+		}
+		
 	}
 }
