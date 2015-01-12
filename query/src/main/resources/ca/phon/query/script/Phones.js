@@ -257,7 +257,8 @@ function query_record(recordIndex, record) {
 			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
 			   		var groupEndIdx = 
 			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
-			   		var alignedIpa = alignedGroup.subsection(groupStartIdx, groupEndIdx+1);
+			   		var alignedIpa =
+			   			(alignedIpaElements.length() > 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
 			   		
     			    if(alignedFilter.isUseFilter()) {
     			    	if(!alignedFilter.check_filter(alignedIpa)) {

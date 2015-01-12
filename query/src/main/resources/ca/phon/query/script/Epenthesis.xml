@@ -256,11 +256,19 @@ function query_record(recordIndex, record) {
     			    var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
     			    
     			    // find location of aligned value in group
+    			    // find location of aligned value in group
     			    var groupStartIdx = 
     			    (alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
     			    var groupEndIdx = 
     			    (alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
-    			    var alignedIpa = alignedGroup.subsection(groupStartIdx, groupEndIdx+1);
+    			    var alignedIpa =
+    			    (alignedIpaElements.length() > 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
+    			    
+    			    if(alignedFilter.isUseFilter()) {
+	    			    if(!alignedFilter.check_filter(alignedIpa)) {
+	    			  	  continue;
+	    			    }
+    			    }
     			    
     			    var alignedRv = factory.createResultValue();
     			    alignedRv.tierName = (searchTier == &quot;IPA Target&quot; ? &quot;IPA Actual&quot; : &quot;IPA Target&quot;);

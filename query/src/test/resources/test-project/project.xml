@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<project Version="1.5" name="test-project" appid="1.5" uuid="49a81079-9ed0-4b21-8531-da572fd0c5e9">
+<project uuid="49a81079-9ed0-4b21-8531-da572fd0c5e9" appid="1.5" name="test-project" Version="1.5">
     <corpus name="corpus">
         <description></description>
         <session name="session"/>
