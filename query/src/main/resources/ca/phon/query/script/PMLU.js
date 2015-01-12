@@ -55,8 +55,8 @@ var includeEPMLU = includeEPMLUParamInfo.def;
 
 var ePMLUClosedSyllBonusParamInfo = {
 	"id": "closedSyllBonus",
-	"desc": "",
-	"title": "Closed syllable bonus",
+	"desc": "Closed syllable bonus",
+	"title": "",
 	"prompt": "Enter a number",
 	"def": "1.0"
 };

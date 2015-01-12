@@ -250,8 +250,15 @@ function query_record(recordIndex, record) {
     			    var phoneMap = group.phoneAlignment;
     			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
     			    var aligned = phoneMap.getAligned(match.value);
-			   		var alignedIpa = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
+			   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
     			    
+			   		// find location of aligned value in group
+			   		var groupStartIdx = 
+			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
+			   		var groupEndIdx = 
+			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
+			   		var alignedIpa = alignedGroup.subsection(groupStartIdx, groupEndIdx+1);
+			   		
     			    if(alignedFilter.isUseFilter()) {
     			    	if(!alignedFilter.check_filter(alignedIpa)) {
     			    		continue;
