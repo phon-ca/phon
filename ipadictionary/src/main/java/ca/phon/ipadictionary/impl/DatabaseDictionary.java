@@ -135,7 +135,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 			String qSt = "SELECT * FROM transcript WHERE orthography = ? AND langId = ?";
 			try {
 				PreparedStatement pSt = conn.prepareStatement(qSt);
-				pSt.setString(1, ortho);
+				pSt.setString(1, ortho.toLowerCase());
 				pSt.setString(2, getLanguage().toString());
 				
 				java.sql.ResultSet rs = pSt.executeQuery();
