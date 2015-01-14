@@ -8,6 +8,10 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -26,6 +30,11 @@ public class DeleteRecordAction extends SessionEditorAction {
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+	
+	public static final String CONFIRM_DELETE_RECORD_PROP =
+			DeleteRecordAction.class.getName() + ".confirm";
+	public static final boolean DEFAULT_CONFIRM_DELETE_RECORD = true;
+	private boolean confirm = PrefHelper.getBoolean(CONFIRM_DELETE_RECORD_PROP, DEFAULT_CONFIRM_DELETE_RECORD);
 
 	public DeleteRecordAction(SessionEditor editor) {
 		super(editor);
@@ -38,6 +47,18 @@ public class DeleteRecordAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
+		// display confirmation dialog
+		if(confirm) {
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setRunAsync(false);
+			props.setParentWindow(getEditor());
+			props.setTitle("Delete record");
+			props.setHeader("Confirm delete record");
+			props.setMessage("Delete record " + (getEditor().getCurrentRecordIndex()+1) + "?");
+			props.setOptions(MessageDialogProperties.okCancelOptions);
+			int retVal = NativeDialogs.showMessageDialog(props);
+			if(retVal == 1) return;
+		}
 		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor());
 		getEditor().getUndoSupport().postEdit(edit);
 	}
