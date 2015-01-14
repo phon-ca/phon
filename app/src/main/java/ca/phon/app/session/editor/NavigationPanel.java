@@ -99,21 +99,25 @@ public class NavigationPanel extends JPanel {
 		firstRecordButton = buttons.get(0);
 		firstRecordButton.setAction(firstRecordAction);
 		firstRecordButton.setText(null);
+		firstRecordButton.setFocusable(false);
 		
 		final Action lastRecordAction = new LastRecordAction(getEditor());
 		lastRecordButton = buttons.get(3);
 		lastRecordButton.setAction(lastRecordAction);
 		lastRecordButton.setText(null);
+		lastRecordButton.setFocusable(false);
 		
 		final Action prevRecordAction = new PreviousRecordAction(getEditor());
 		prevRecordButton = buttons.get(1);
 		prevRecordButton.setAction(prevRecordAction);
 		prevRecordButton.setText(null);
+		prevRecordButton.setFocusable(false);
 		
 		final Action nextRecordAction = new NextRecordAction(getEditor());
 		nextRecordButton = buttons.get(2);
 		nextRecordButton.setAction(nextRecordAction);
 		nextRecordButton.setText(null);
+		nextRecordButton.setFocusable(false);
 		
 		recordNumberField = new RecordNumberField();
 		recordNumberField.setMinNumber(1);
