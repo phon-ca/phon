@@ -525,6 +525,14 @@ public class PCMSegmentView extends JComponent {
 		AudioSystem.write(aio, Type.WAVE, file);
 	}
 	
+	public void save() {
+		if(hasSelection()) {
+			saveSelection();
+		} else if(hasSegment()) {
+			saveSegment();
+		}
+	}
+	
 	public void saveSegment() {
 		if(hasSegment()) {
 			saveSection(getSegmentStart(), getSegmentLength());

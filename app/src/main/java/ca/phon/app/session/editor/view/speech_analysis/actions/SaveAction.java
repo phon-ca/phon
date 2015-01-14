@@ -30,7 +30,7 @@ public class SaveAction extends SpeechAnalysisEditorViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		getView().onExport();
+		getView().getWavDisplay().save();
 	}
 
 }
