@@ -213,7 +213,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		final Stroke origStroke = g2.getStroke();
 		final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
 		g2.setStroke(dashed);
-		if(segStart > 0 && segLen > 0) {
+		if(view.hasSegment()) {
 			// left excluded rect
 			if(segStart > view.getWindowStart()) {
 				final double x = 0.0;

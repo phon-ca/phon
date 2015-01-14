@@ -248,7 +248,7 @@ public class PCMSegmentView extends JComponent {
 	}
 	
 	public boolean hasSegment() {
-		return (getSegmentStart() > 0.0f && getSegmentLength() > 0.0f);
+		return (getSegmentStart() >= 0.0f && getSegmentLength() > 0.0f);
 	}
 
 	public float getSelectionStart() {
@@ -272,7 +272,7 @@ public class PCMSegmentView extends JComponent {
 	}
 
 	public boolean hasSelection() {
-		return (getSelectionStart() > 0.0f && getSelectionLength() > 0.0f);
+		return (getSelectionStart() >= 0.0f && getSelectionLength() > 0.0f);
 	}
 	
 	public Color getExcludedColor() {
