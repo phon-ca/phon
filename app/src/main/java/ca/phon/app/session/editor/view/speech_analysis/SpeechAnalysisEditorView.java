@@ -498,8 +498,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 		return audioFile;
 	}
 	
-	private final static long CLIP_EXTENSION_MIN = 100L;
-	private final static long CLIP_EXTENSION_MAX = 500L;
+	private final static long CLIP_EXTENSION_MIN = 500L;
+	private final static long CLIP_EXTENSION_MAX = 1000L;
 	
 	public void update() {
 		Record utt = getEditor().currentRecord();
@@ -520,7 +520,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			final MediaSegment segment = utt.getSegment().getGroup(0);
 			
 			double length = (segment.getEndValue() - segment.getStartValue());
-			long preferredClipExtension = (long)Math.ceil(length * 0.1);
+			long preferredClipExtension = (long)Math.ceil(length * 0.4);
 			if(preferredClipExtension < CLIP_EXTENSION_MIN)
 				preferredClipExtension = CLIP_EXTENSION_MIN;
 			if(preferredClipExtension > CLIP_EXTENSION_MAX)
