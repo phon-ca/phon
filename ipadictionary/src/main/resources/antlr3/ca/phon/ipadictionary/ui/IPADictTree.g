@@ -14,6 +14,7 @@ package ca.phon.ipadictionary.ui;
 import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.cmd.*;
 import ca.phon.ipadictionary.ui.*;
+import ca.phon.ipadictionary.exceptions.*;
 }
 
 @members {
@@ -26,6 +27,12 @@ public void setLookupContext(IPALookupContext context) {
 public IPALookupContext getLookupContext() {
 	return lookupContext;
 }
+
+// die on any error
+public void reportError(RecognitionException e) {
+	throw new IPADictionaryExecption(e);
+}
+
 }
 
 /**

@@ -46,6 +46,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.ipadictionary.cmd.IPADictLexer;
 import ca.phon.ipadictionary.cmd.IPADictParser;
+import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
 import ca.phon.util.MsFormatter;
@@ -69,8 +70,8 @@ public class IPALookupPanel extends JPanel {
 	/** Our lookup context */
 	private IPALookupContext context;
 	
-	/** The execution thread */
-	private PhonWorker worker;
+//	/** The execution thread */
+//	private PhonWorker worker;
 	
 	/** Input field */
 	private JTextField inputField;
@@ -99,6 +100,7 @@ public class IPALookupPanel extends JPanel {
 				TokenStream tokens = new CommonTokenStream(lexer);
 				
 				IPADictParser parser = new IPADictParser(tokens);
+				parser.setLookupContext(getLookupContext());
 				IPADictParser.expr_return r = parser.expr();
 				
 				CommonTree t = (CommonTree)r.getTree();
@@ -114,6 +116,12 @@ public class IPALookupPanel extends JPanel {
 				super.setStatus(TaskStatus.ERROR);
 				return;
 			} catch (RecognitionException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				err = e;
+				context.fireError(e.getLocalizedMessage());
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			} catch (IPADictionaryExecption e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				err = e;
 				context.fireError(e.getLocalizedMessage());
@@ -153,7 +161,8 @@ public class IPALookupPanel extends JPanel {
 				query = "lookup \"" + query + "\"";
 			}
 			QueryTask task = new QueryTask(query);
-			worker.invokeLater(task);
+//			worker.invokeLater(task);
+			task.run();
 		}
 		
 	}
@@ -254,12 +263,16 @@ public class IPALookupPanel extends JPanel {
 		return this.context;
 	}
 	
+	public JTextPane getConsole() {
+		return this.console;
+	}
+	
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		// start our worker thread
-		worker = PhonWorker.createWorker();
-		worker.start();
+//		// start our worker thread
+//		worker = PhonWorker.createWorker();
+//		worker.start();
 		
 		console = new JTextPane();
 		console.setEditable(false);

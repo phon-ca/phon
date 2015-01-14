@@ -7,6 +7,8 @@ import java.awt.event.ItemListener;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -19,6 +21,8 @@ import javax.swing.JMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -40,6 +44,8 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 public class IPALookupView extends EditorView {
+	
+	private final static Logger LOGGER = Logger.getLogger(IPALookupView.class.getName());
 
 	private final static long serialVersionUID = 2932635326993882782L;
 
@@ -77,7 +83,7 @@ public class IPALookupView extends EditorView {
 	public IPALookupView(SessionEditor editor) {
 		super(editor);
 		
-		lookupContext = new IPALookupContext();
+		lookupContext = new IPALookupViewContext();
 		init();
 		setupEditorActions();
 	}
@@ -161,6 +167,12 @@ public class IPALookupView extends EditorView {
 			
 			@Override
 			public void errorOccured(String err) {
+				final Document doc = lookupPanel.getConsole().getDocument();
+				try {
+					doc.insertString(doc.getLength(), "S " + err, null);
+				} catch (BadLocationException e) {
+					LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+				}
 			}
 			
 			@Override
@@ -170,7 +182,7 @@ public class IPALookupView extends EditorView {
 			
 			@Override
 			public void dictionaryChanged(String newDictionary) {
-//				updateLangBox();
+				updateLangBox();
 			}
 			
 			@Override

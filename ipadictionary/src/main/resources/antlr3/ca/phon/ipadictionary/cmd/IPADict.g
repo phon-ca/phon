@@ -6,6 +6,9 @@ options {
 
 @header {
 package ca.phon.ipadictionary.cmd;
+
+import ca.phon.ipadictionary.ui.*;
+import ca.phon.ipadictionary.exceptions.*;
 }
 
 @lexer::header {
@@ -14,17 +17,19 @@ package ca.phon.ipadictionary.cmd;
 
 @members {
 
-private final static java.util.logging.Logger LOGGER = 
-	java.util.logging.Logger.getLogger("ca.phon.ipadictionary.cmd.IPADictParser");
+private IPALookupContext lookupContext;
 
-/** Override the default getErrorMessage() to 
- * also output to PhonLogger
- */
-public String getErrorMessage(RecognitionException re, String[] tokens) {
-    String retVal = super.getErrorMessage(re, tokens);
-    LOGGER.warning(input.toString() + "(" + 
-        re.line + ":" + re.c + ") " + retVal);
-    return retVal;
+public void setLookupContext(IPALookupContext context) {
+	lookupContext = context;
+}
+
+public IPALookupContext getLookupContext() {
+	return lookupContext;
+}
+
+// die on any error
+public void reportError(RecognitionException e) {
+	throw new IPADictionaryExecption(e);
 }
 
 }
@@ -50,26 +55,70 @@ expr	:	createExpr
  */
 
 createExpr	:	CREATE DICT_ID ('=' STRING)? -> ^(CREATE DICT_ID STRING?);
-
+	catch [RecognitionException re] {
+		lookupContext.printHelp("create");
+		reportError(re);
+	}
+	
 dropExpr	:	DROP DICT_ID -> ^(DROP DICT_ID);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("drop");
+		reportError(re);
+	}
 
 addExpr		:	ADDIPA STRING '=' STRING -> ^(ADDIPA STRING+);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("add");
+		reportError(re);
+	}
 
 importExpr	:	IMPORT STRING -> ^(IMPORT STRING);
-
+	catch [RecognitionException re] {
+		lookupContext.printHelp("import");
+		reportError(re);
+	}
+	
 exportExpr	:	EXPORT STRING -> ^(EXPORT STRING);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("export");
+		reportError(re);
+	}
 
 lookupExpr	:	(LOOKUP)? STRING -> ^(LOOKUP STRING);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("lookup");
+		reportError(re);
+	}
 
 removeExpr	:	REMOVE STRING '=' STRING -> ^(REMOVE STRING+);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("remove");
+		reportError(re);
+	}
 
 removeAllExpr	:	REMOVE ALL -> ^(REMOVE ALL);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("removeAll");
+		reportError(re);
+	}
 
 switchExpr	:	SWITCH DICT_ID -> ^(SWITCH DICT_ID);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("use");
+		reportError(re);
+	}
 
 listExpr	:	LIST -> LIST;
+	catch [RecognitionException re] {
+		lookupContext.printHelp("list");
+		reportError(re);
+	}
 
 helpExpr	:	HELP command? -> ^(HELP command?);
+	catch [RecognitionException re] {
+		lookupContext.printHelp("help");
+		reportError(re);
+	}
 
 
 /**
@@ -88,6 +137,7 @@ command	:	CREATE
 		;
 
 CREATE	:	'create';
+	
 
 DROP	:	'drop';
 

@@ -245,9 +245,11 @@ public class IPALookupContext {
 		final List<IPADictionary> dicts = library.dictionariesForLanguage(lang);
 		
 		final IPADictionary newDict = 
-				(dicts.size() > 0
-					?	new IPADictionary(new CompoundDictionary(dicts.toArray(new IPADictionary[0])))
-					:	dicts.get(0));
+				(dicts.size() == 0 ? null :
+					(dicts.size() > 1
+						?	new IPADictionary(new CompoundDictionary(dicts.toArray(new IPADictionary[0])))
+						:	dicts.get(0))
+				);
 		
 		if(newDict != null) {
 			dictionary = newDict;
@@ -422,8 +424,12 @@ public class IPALookupContext {
 	 * Only user-defined dictionaries can be dropped.
 	 */
 	public void dropDictionary(String lang) {
-//		IPADictionaries.dropDictionary(lang);
-//		fireDictionaryRemoved(lang);
+		if(!IPADatabaseManager.getInstance().dropDictionary(lang)) {
+			fireError("Dictionary not dropped");
+		} else {
+			fireDictionaryRemoved(lang);
+			fireMessage("Removed dictionary " + lang);
+		}
 	}
 
 	/**

@@ -548,7 +548,7 @@ public class IPADatabaseManager {
 			"(.+)";			// the transcript
 		final Pattern pattern = Pattern.compile(regex);
 		
-		// add language to langauge table
+		// add language to language table
 		try {
 			PreparedStatement pSt = 
 				conn.prepareStatement(langSt);
@@ -593,6 +593,28 @@ public class IPADatabaseManager {
 			}
 		}
 		in.close();
+	}
+
+	public boolean dropDictionary(String lang) {
+		String langSt = 
+				"DELETE FROM language WHERE langId = ?";
+		final Connection conn = getConnection();
+		
+		boolean retVal = true;
+		try {
+			PreparedStatement pSt = conn.prepareStatement(langSt);
+			pSt.setString(1, lang);
+			
+			int r = pSt.executeUpdate();
+			if(r == 0) {
+				retVal = false;
+			}
+		} catch (SQLException e) {
+			LOGGER
+				.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			retVal = false;
+		}
+		return retVal;
 	}
 
 }

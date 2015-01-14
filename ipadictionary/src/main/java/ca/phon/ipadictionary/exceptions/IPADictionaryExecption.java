@@ -5,9 +5,9 @@ package ca.phon.ipadictionary.exceptions;
  * sub-class this.
  * 
  */
-public class IPADictionaryExecption extends Exception {
-	
-	
+public class IPADictionaryExecption extends RuntimeException {
+
+	private static final long serialVersionUID = 6826688313535456691L;
 
 	public IPADictionaryExecption() {
 		super();
