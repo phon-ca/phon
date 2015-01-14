@@ -1,12 +1,15 @@
 package ca.phon.app.session.editor.view.speech_analysis.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.media.sampled.PCMSegmentView;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -23,6 +26,11 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 	
 	private final static ImageIcon ZOOMOUT_ICON =
 			IconManager.getInstance().getIcon("actions/zoom-out-3", IconSize.SMALL);
+	
+	private final static String ZOOM_AMOUNT_PROP = 
+			SpeechAnalysisEditorView.class.getName() + ".zoomAmount";
+	private final static float DEFAULT_ZOOM_AMOUNT = 0.3f;
+	private float zoomAmount = PrefHelper.getFloat(ZOOM_AMOUNT_PROP, DEFAULT_ZOOM_AMOUNT);
 	
 	private boolean zoomIn = true;
 
@@ -41,23 +49,42 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final PCMSegmentView wavDisplay = getView().getWavDisplay();
-		float currentWindow = wavDisplay.getWindowLength();
-		if(zoomIn) {
-			if(currentWindow > 0.1f) {
-				currentWindow -= 0.1f;
-			}
-			if(currentWindow < 0.1f) {
-				currentWindow = 0.1f;
-			}
-		} else {
-			if(currentWindow < wavDisplay.getSampled().getLength()) {
-				currentWindow += 0.1;
-			}
-			if(currentWindow + wavDisplay.getWindowStart() > wavDisplay.getSampled().getLength()) {
-				wavDisplay.setWindowStart(wavDisplay.getSampled().getLength() - currentWindow);
-			}
+		float start = wavDisplay.getWindowStart();
+		float len = wavDisplay.getWindowLength();
+		
+		if(len <= 1.0f && zoomIn) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
 		}
-		wavDisplay.setWindowLength(currentWindow);
+		
+		float end = start + len;
+		float endTime = wavDisplay.getSampled().getStartTime() + wavDisplay.getSampled().getLength();
+		
+		float zoomAmount = this.zoomAmount;
+		if(zoomIn) {
+			zoomAmount *= -1.0f;
+		}
+		
+		start -= zoomAmount;
+		end += zoomAmount;
+		
+		start = Math.min(Math.max(wavDisplay.getSampled().getStartTime(), start), 
+				endTime);
+		end = Math.min(endTime, Math.max(wavDisplay.getSampled().getStartTime(), end));
+		len = end - start;
+		
+		if(len < 0.1f && (endTime - start) >= 0.1f) {
+			len = 0.1f;
+		}
+		
+		if(len >= 0.1f && len < wavDisplay.getSampled().getLength()) {
+			// adjust values
+			wavDisplay.setWindowStart(start);
+			wavDisplay.setWindowLength(len);
+		} else {
+			// beep
+			Toolkit.getDefaultToolkit().beep();
+		}
 	}
 
 }
