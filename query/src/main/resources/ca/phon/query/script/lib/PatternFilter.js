@@ -115,6 +115,15 @@ exports.PatternFilter = function (id) {
         filterTypeParamInfo.def = type;
     };
     
+    /**
+     * Set pattern value
+     * 
+     * @param value
+     */
+    this.setPattern = function (pattern) {
+    	filterParamInfo.def = pattern;
+    }
+    
     /* Check filter */
     var stressPatternRegex = /^([ ABUabu12][?+*]?)+$/;
     var cvPatternRegex = /^([ ABCVGcvg][?+*]?)+$/;
@@ -337,9 +346,9 @@ exports.PatternFilter = function (id) {
         var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
         if (exactMatch == true) {
-            return matcher.matches();
+            return regexMatcher.matches();
         } else {
-            return matcher.find();
+            return regexMatcher.find();
         }
     };
     
