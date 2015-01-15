@@ -287,7 +287,7 @@ public class StressPatternCompiler {
 	}
 	
 	private void makeOneOrMore(SimpleFSA<StressMatcherType> fsa, StressMatcherType matcher) {
-		newTransition(fsa, matcher);
+//		newTransition(fsa, matcher);
 		
 		for(String finalState:fsa.getFinalStates()) {
 			FSATransition<StressMatcherType> transition = null;
