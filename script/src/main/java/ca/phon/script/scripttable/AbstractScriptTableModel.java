@@ -221,7 +221,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		final PhonScript script = getColumnScript(col);
 		final PhonScriptContext cScript = script.getContext();
 		if(cScript != null) {
-			final Context ctx = PhonScriptContext.enter();
+			final Context ctx = cScript.enter();
 			try {
 				final Scriptable parentScope = createCellScope(cScript, row, col);
 				Scriptable scope = importerScopeRef.get();
@@ -246,7 +246,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 			} catch (PhonScriptException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			} finally {
-				PhonScriptContext.exit();
+				cScript.exit();
 			}
 		}
 		
@@ -281,7 +281,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 	 * @param col
 	 */
 	protected Scriptable createCellScope(PhonScriptContext ctx, int row, int col) {
-		final Context context = PhonScriptContext.enter();
+		final Context context = ctx.enter();
 		final WrapFactory wf = context.getWrapFactory();
 		final Scriptable retVal = ctx.createBasicScope();
 
@@ -298,7 +298,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 			ScriptableObject.putProperty(retVal, key, wrappedObj);
 		}
 		
-		PhonScriptContext.exit();
+		ctx.exit();
 		
 		return retVal;
 	}

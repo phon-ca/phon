@@ -43,11 +43,11 @@ public class ScriptReportStep implements AnalysisStep<String, QueryAnalysisResul
 			
 			// create scope with default imports and require() function
 			final Scriptable scope = ctx.createImporterScope();
-			PhonScriptContext.enter();
+			ctx.enter();
 			ScriptableObject.putProperty(scope, "out", ctx.getStdOut());
 			ScriptableObject.putProperty(scope, "csvWriter", new CSVWriter(new OutputStreamWriter(ctx.getStdOut(), "UTF-8")));
 			ScriptableObject.putProperty(scope, "queryAnalysisResult", obj);
-			PhonScriptContext.exit();
+			ctx.exit();
 			
 			ctx.exec(scope);
 			

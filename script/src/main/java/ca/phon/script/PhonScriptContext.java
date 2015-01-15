@@ -68,7 +68,7 @@ public class PhonScriptContext {
 	 * Enter and return a new script context.  Every call
 	 * to this method should have a matching call to {#link {@link #exit()}
 	 */
-	public static Context enter() {
+	public Context enter() {
 		final ContextFactory factory = ContextFactory.getGlobal();
 		
 		final Context retVal = factory.enterContext();
@@ -77,7 +77,7 @@ public class PhonScriptContext {
 		return retVal;
 	}
 
-	public static void exit() {
+	public void exit() {
 		Context.exit();
 	}
 	
