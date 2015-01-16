@@ -4,20 +4,26 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.util.List;
 
+import org.mozilla.javascript.Callable;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrapFactory;
+import org.mozilla.javascript.ast.ScriptNode;
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.Require;
 import org.mozilla.javascript.commonjs.module.RequireBuilder;
 import org.mozilla.javascript.commonjs.module.provider.ModuleSourceProvider;
 import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
+import org.mozilla.javascript.tools.debugger.Main;
 
+import ca.phon.script.debug.PhonScriptDebugger;
+import ca.phon.script.debug.PhonScriptDebuggerWindow;
 import ca.phon.script.js.ExtendableWrapFactory;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
@@ -47,6 +53,10 @@ public class PhonScriptContext {
 	private PrintStream stdOutStream;
 	
 	private PrintStream stdErrStream;
+	
+	private boolean debug = false;
+	
+	private PhonScriptDebuggerWindow debugger = null;
 	
 	public void redirectStdOut(PrintStream stream) {
 		this.stdOutStream = stream;
@@ -130,6 +140,34 @@ public class PhonScriptContext {
 	public PhonScriptContext(PhonScript script) {
 		super();
 		this.script = script;
+	}
+	
+	public boolean isDebug() {
+		return this.debug;
+	}
+	
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
+	
+	public PhonScriptDebuggerWindow getDebugger() {
+		return this.debugger;
+	}
+	
+	private PhonScriptDebuggerWindow createDebugger(final ContextFactory factory) {
+		final PhonScriptDebuggerWindow retVal = 
+				new PhonScriptDebuggerWindow("Phon Script Debugger");
+		
+		retVal.attachTo(factory);
+		retVal.setExitAction(new Runnable() {
+			
+			@Override
+			public void run() {
+				retVal.detach();
+			}
+		});
+		
+		return retVal;
 	}
 	
 	/**
@@ -245,7 +283,7 @@ public class PhonScriptContext {
 		return retVal;
 	}
 	
-	public Scriptable getEvaluatedScope() 
+	public synchronized Scriptable getEvaluatedScope() 
 		throws PhonScriptException {
 		return getEvaluatedScope(null);
 	}
@@ -261,16 +299,32 @@ public class PhonScriptContext {
 	 * 
 	 * @return the evaluated scope
 	 */
-	public Scriptable getEvaluatedScope(Scriptable parentScope) 
+	public synchronized Scriptable getEvaluatedScope(Scriptable parentScope) 
 		throws PhonScriptException {
 		if(evaluatedScope == null) {
 			final Context ctx = enter();
 			
+			if(isDebug()) {
+				ctx.setOptimizationLevel(-1);
+			}
+			
 			evaluatedScope = createImporterScope();
+			
+			if(isDebug()) {
+				PhonScriptDebuggerWindow debugger = getDebugger();
+				if(debugger == null) {
+					debugger = createDebugger(ctx.getFactory());
+					this.debugger = debugger;
+					debugger.setScope(evaluatedScope);
+					debugger.setSize(500, 600);
+					debugger.setVisible(true);
+				}
+			}
+
 			if(parentScope != null)
 				evaluatedScope.setParentScope(parentScope);
 			final Script compiledScript = getCompiledScript();
-			
+
 			try {
 				compiledScript.exec(ctx, evaluatedScope);
 			} catch (Exception e) {
@@ -367,7 +421,7 @@ public class PhonScriptContext {
 		throws PhonScriptException {
 		Object retVal = null;
 		
-		enter();
+		Context ctx = enter();
 		try {
 			retVal = ScriptableObject.callMethod(scope, name, args);
 		} catch(Exception e) {
