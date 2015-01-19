@@ -55,11 +55,21 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import javax.swing.undo.UndoManager;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.tools.debugger.Main;
+
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptContext;
 import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.debug.PhonScriptDebuggerWindow;
+import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.PhonLoggerConsole;
@@ -71,6 +81,7 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -534,6 +545,54 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		return retVal;
 	}
 	
+	private void onDebugQuery() {
+		final QueryScript script = scriptEditor.getScript();
+		final QueryName queryName = script.getExtension(QueryName.class);
+		final String name = (queryName != null ? queryName.getName() : "untitled");
+		
+		final Main debugger = Main.mainEmbedded("Debugger : " + name);
+		debugger.setBreakOnEnter(false);
+		debugger.setBreakOnExceptions(true);
+		
+		PhonScriptContext scriptContext = script.getContext();
+		try {
+			final ScriptParameters scriptParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope());
+			
+			// we need to reset the context to activate debugging
+			script.resetContext();
+			scriptContext = script.getContext();
+			
+			final Context ctx = scriptContext.enter();
+			final ScriptableObject debugScope = ctx.initStandardObjects();
+			ctx.setOptimizationLevel(-1);
+			debugger.attachTo(ctx.getFactory());
+			debugger.setScope(debugScope);
+			scriptContext.exit();
+			
+			final ScriptParameters newParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope(debugScope));
+			ScriptParameters.copyParams(scriptParams, newParams);
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		debugger.setExitAction(new Runnable() {
+			
+			@Override
+			public void run() {
+				debugger.detach();
+				debugger.setVisible(false);
+			}
+			
+		});
+		// break on entering main query script
+		debugger.doBreak();
+		debugger.setSize(500, 600);
+		debugger.setVisible(true);
+		debugger.go();
+		
+		onRunQuery();
+	}
+	
 	private void onRunQuery() {
 		if(sessionSelector.getSelectedSessions().size() == 0) {
 			final Toast toast = ToastFactory.makeToast("Select sessions to search");
@@ -611,6 +670,18 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	public void setJMenuBar(JMenuBar menu) {
 		super.setJMenuBar(menu);
 		
+		JMenuItem debugItem = new JMenuItem("Debug query");
+		KeyStroke debugKs = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
+		debugItem.setAccelerator(debugKs);
+		debugItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				onDebugQuery();
+			}
+			
+		});
+		
 		JMenuItem execItem = new JMenuItem("Run query");
 		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0);
 		execItem.setAccelerator(ks);
@@ -655,6 +726,9 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		fileMenu.add(saveItem, 1);
 		fileMenu.add(saveAsItem, 2);
 		fileMenu.add(execItem, 3);
+		if(PrefHelper.getBoolean("phon.debug", false)) {
+			fileMenu.add(debugItem, 4);
+		}
 	}
 	
 	private class PipeListenerTask extends PhonTask {
