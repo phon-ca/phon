@@ -49,13 +49,43 @@ function setup_params(params) {
     filters.speaker.param_setup(params);
 }
 
+function isGroupedTier(tierName) {
+	var retVal = true;
+	
+	var systemTierType = 
+		(SystemTierType.isSystemTier(tierName) ? SystemTierType.tierFromString(tierName) : null);
+	
+	retVal = (systemTierType != null ? systemTierType.isGrouped() : false);
+	
+	if(systemTierType == null) {
+		for(var i = 0; i < session.userTierCount; i++) {
+			var userTier = session.getUserTier(i);
+			if(userTier.tierName == tierName) {
+				retVal = userTier.isGrouped();
+				break;
+			}
+		}
+	}
+	
+	return retVal;
+}
+
 function query_record(recordIndex, record) {
 	if(!filters.speaker.check_speaker(record.speaker)) return;
     
     var searchTier = filters.primary.tier;
-	var groups = filters.group.getRequestedGroups(record);
-	
-	// check aligned group for each group returned
+    var tierGrouped = isGroupedTier(searchTier);
+
+    var groups = filters.group.getRequestedGroups(record);
+    
+    if(!tierGrouped && groups.length > 0) {
+    	// take only first group
+    	var tmp = new Array();
+    	tmp.push(groups[0]);
+    	groups = tmp;
+    }
+
+    // check aligned group for each group returned
 	if(filters.alignedGroup.isUseFilter()) {
 	    groups = filters.alignedGroup.filter_groups(record, groups);
 	}
