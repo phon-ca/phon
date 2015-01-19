@@ -6,6 +6,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ca.phon.app.hooks.PhonShutdownHook;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;
@@ -34,6 +35,7 @@ public class Main {
 		startLogging();
 		startWorker();
 		runStartupHooks();
+		setupShutdownHooks();
 		startApp(args);
 	}
 	
@@ -73,6 +75,10 @@ public class Main {
 				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
 			}
 		}
+	}
+	
+	private static void setupShutdownHooks() {
+		Runtime.getRuntime().addShutdownHook(PhonShutdownThread.getInstance());
 	}
 	
 	private static void startApp(String[] args) {
