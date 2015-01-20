@@ -4,6 +4,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import ca.phon.app.session.editor.view.record_data.actions.DeleteGroupCommand;
+import ca.phon.app.session.editor.view.record_data.actions.MergeAllGroupsCommand;
 import ca.phon.app.session.editor.view.record_data.actions.MergeGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.NewGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.SplitGroupCommand;
@@ -44,6 +45,9 @@ public class RecordDataMenu extends JMenu {
 		final DeleteGroupCommand delGroupCommand = new DeleteGroupCommand(editor);
 		final JMenuItem delGroupItem = new JMenuItem(delGroupCommand);
 		add(delGroupItem);
+		
+		addSeparator();
+		add(new MergeAllGroupsCommand(editor));
 	}
 	
 }
