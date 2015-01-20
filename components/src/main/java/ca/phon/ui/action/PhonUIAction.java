@@ -195,7 +195,7 @@ public class PhonUIAction extends AbstractAction {
 				Class<?> paramType = m.getParameterTypes()[0];
 				if(paramType == PhonActionEvent.class) {
 					params = new Object[]{evt};
-				} else if(data != null && paramType.isAssignableFrom(data.getClass())) {
+				} else if(data != null) {
 					params = new Object[]{data};
 				}
 			}
@@ -262,19 +262,44 @@ public class PhonUIAction extends AbstractAction {
 			retVal = 
 					clazz.getMethod(methodId, PhonActionEvent.class);
 		} catch (NoSuchMethodException ex) {
-			try {
 				if(data != null) {
 					Class<?> dataType = data.getClass();
-					retVal = clazz.getMethod(methodId, new Class[]{dataType});
+					try {
+						retVal = clazz.getMethod(methodId, new Class[]{dataType});
+					} catch (NoSuchMethodException ex2) {
+						if(dataType == Boolean.class) {
+							dataType = boolean.class;
+						} else if(dataType == Character.class) {
+							dataType = char.class;
+						} else if(dataType == Integer.class) {
+							dataType = int.class;
+						} else if(dataType == Short.class) {
+							dataType = short.class;
+						} else if(dataType == Long.class) {
+							dataType = long.class;
+						} else if(dataType == Float.class) {
+							dataType = float.class;
+						} else if(dataType == Double.class) {
+							dataType = double.class;
+						} else if(dataType == Byte.class) {
+							dataType = byte.class;
+						}
+						
+						try {
+							retVal = clazz.getMethod(methodId, new Class[]{dataType});
+						} catch (NoSuchMethodException ex3) {
+							LOGGER.log(Level.SEVERE, ex3.getLocalizedMessage(), ex);
+						}
+					}
 				} else {
-					// now look for a method with no parameters
-					retVal = 
-							clazz.getMethod(methodId, new Class[0]);
+					try {
+						// now look for a method with no parameters
+						retVal = 
+								clazz.getMethod(methodId, new Class[0]);
+					} catch (NoSuchMethodException ex2) {
+						LOGGER.log(Level.SEVERE, ex2.getLocalizedMessage(), ex);
+					}
 				}
-			} catch (NoSuchMethodException ex1) {
-				LOGGER.severe("Could not find method '" + methodId 
-						+ "' in object '" + object.toString() + "'");
-			}
 		}
 		return retVal;
 	}
