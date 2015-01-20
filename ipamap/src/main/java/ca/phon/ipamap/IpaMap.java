@@ -60,6 +60,7 @@ import javax.swing.JSlider;
 import javax.swing.JToolTip;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -89,6 +90,7 @@ import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
 import ca.phon.ipamap.IpaMapSearchField.SearchType;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -1146,6 +1148,20 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	 * Create the context menu based on source component
 	 */
 	public void setupContextMenu(JPopupMenu menu, JComponent comp) {
+		menu.add(searchField);
+		menu.addSeparator();
+		
+		final CommonModuleFrame parentFrame = 
+				(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, comp);
+		if(parentFrame != null) {
+			final PhonUIAction toggleAlwaysOnTopAct = 
+					new PhonUIAction(parentFrame, "setAlwaysOnTop", !parentFrame.isAlwaysOnTop());
+			toggleAlwaysOnTopAct.putValue(PhonUIAction.NAME, "Always on top");
+			toggleAlwaysOnTopAct.putValue(PhonUIAction.SELECTED_KEY, parentFrame.isAlwaysOnTop());
+			final JCheckBoxMenuItem toggleAlwaysOnTopItem = new JCheckBoxMenuItem(toggleAlwaysOnTopAct);
+			menu.add(toggleAlwaysOnTopItem);
+		}
+		
 		// button options first
 		if(comp instanceof CellButton) {
 			CellButton btn = (CellButton)comp;

@@ -49,6 +49,9 @@ public class IpaMapFrame extends CommonModuleFrame {
 	private final static String WINDOW_LOCATION_PROP = 
 		IpaMapFrame.class.getName() + ".windowLocation";
 	
+	public final static String ALWAYS_ON_TOP_PROP =
+		IpaMapFrame.class.getName() + ".alwaysOnTop";	
+	
 	private static Point getSavedWindowLocation() {
 		Point p = new Point(0,0);
 		
@@ -86,8 +89,18 @@ public class IpaMapFrame extends CommonModuleFrame {
 	 */
 	public IpaMapFrame() {
 		super("IPA Chart");
-		super.setAlwaysOnTop(true);
+		super.setAlwaysOnTop(PrefHelper.getBoolean(ALWAYS_ON_TOP_PROP, true));
+		addPropertyChangeListener("alwaysOnTop", new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				PrefHelper.getUserPreferences().putBoolean(ALWAYS_ON_TOP_PROP, isAlwaysOnTop());
+			}
+			
+		});
+		
 		setFocusableWindowState(false);
+		
 		
 		init();
 	}
