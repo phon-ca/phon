@@ -124,14 +124,6 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		inputMap.put(toggleHiatusKs1, TOGGLE_HIATUS);
 		inputMap.put(toggleHiatusKs2, TOGGLE_HIATUS);
 
-		// PhonUIAction resyllabifyAct =
-		// new PhonUIAction(this, "resyllabify",
-		// Syllabifier.getDefaultLanguage());
-		// actionMap.put(RESET_SYLLABIFICATION, resyllabifyAct);
-		// KeyStroke resyllabifyKs =
-		// KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.ALT_MASK);
-		// inputMap.put(resyllabifyKs, RESET_SYLLABIFICATION);
-
 		// sc type identifiers
 		for (int scTypeIdx = 0; scTypeIdx < SyllableConstituentType.values().length; scTypeIdx++) {
 

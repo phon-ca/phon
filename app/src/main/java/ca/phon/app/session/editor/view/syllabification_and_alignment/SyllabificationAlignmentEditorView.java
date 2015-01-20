@@ -169,6 +169,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		} else {
 			retVal = new SyllabificationDisplay();
 			retVal.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, syllabificationDisplayListener);
+			retVal.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, hiatusChangeListener);
 			targetDisplays.add(retVal);
 		}
 		return retVal;
