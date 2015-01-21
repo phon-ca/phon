@@ -249,7 +249,7 @@ function query_record(recordIndex, record) {
     			if(includeAligned) {
     			    var phoneMap = group.phoneAlignment;
     			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
-    			    var aligned = phoneMap.getAligned(match.value);
+    			    var aligned = phoneMap.getAligned(match.value.audiblePhones());
 			   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
     			    
 			   		// find location of aligned value in group
