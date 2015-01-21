@@ -246,7 +246,7 @@ function query_record(recordIndex, record) {
     			rv.data = (match.value != null ? new IPATranscript(match.value) : new IPATranscript());
     			result.addResultValue(rv);
     			
-    			if(includeAligned) {
+    			if(includeAligned == true) {
     			    var phoneMap = group.phoneAlignment;
     			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
     			    var aligned = phoneMap.getAligned(match.value.audiblePhones());
