@@ -145,7 +145,7 @@ exports.SyllableFilter = function(id) {
 	 * @param obj
 	 * @return list of syllables
 	 */
-	this.getRequestedSyllables = function(ipaObj) {
+	this.getRequestedSyllables = function(ipaObj, aligned) {
 		var retVal = new java.util.ArrayList();
 		var retIdx = 0;
 		
@@ -166,10 +166,9 @@ exports.SyllableFilter = function(id) {
 			if(sIndex == 0 && syllables.size() == 1) posOk = this.sSingleton;
 			
 			var truncatedOk = true;
-//			if(this.ignoreTruncated) {
-//			    var aligned = record.getAlignedPhones(syll);
-//			    if(aligned.numberOfPhones == 0) truncatedOk = false;
-//			}
+			if(this.ignoreTruncated == true) {
+				truncatedOk = (aligned != null && aligned.length() > 0);
+			}
 			
 			if(posOk == true && stressOk == true && truncatedOk == true)
 			{

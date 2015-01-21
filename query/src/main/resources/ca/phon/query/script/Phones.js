@@ -173,6 +173,7 @@ function query_record(recordIndex, record) {
 	{
 		var group = groups[i];
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget : group.IPAActual);
+		var phoneMap = group.phoneAlignment;
 		
 		var toSearch = new Array();
 		toSearch.push(ipa);
@@ -207,7 +208,9 @@ function query_record(recordIndex, record) {
 		    var syllList = new Array();
 		    for(j = 0; j < toSearch.length; j++) {
 		        var obj = toSearch[j];
-		        var sylls = filters.syllable.getRequestedSyllables(obj);
+		        var aligned = phoneMap.getAligned(obj.audiblePhones());
+		        var sylls = filters.syllable.getRequestedSyllables(obj,
+		        	(aligned == null ? new IPATranscript() : new IPATranscript(aligned)));
 		        
 		        for(k = 0; k < sylls.length; k++) {
 		            syllList.push(sylls[k]);
@@ -247,7 +250,6 @@ function query_record(recordIndex, record) {
     			result.addResultValue(rv);
     			
     			if(includeAligned == true) {
-    			    var phoneMap = group.phoneAlignment;
     			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
     			    var aligned = phoneMap.getAligned(match.value.audiblePhones());
 			   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
