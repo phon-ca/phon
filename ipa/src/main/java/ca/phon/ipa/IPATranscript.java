@@ -406,6 +406,17 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 	
 	/**
+	 * Create a list of phones which produce a sound.
+	 * 
+	 * @return audible phones
+	 */
+	public IPATranscript audiblePhones() {
+		final AudiblePhoneVisitor visitor = new AudiblePhoneVisitor();
+		accept(visitor);
+		return new IPATranscript(visitor.getPhones());
+	}
+	
+	/**
 	 * Break the transcript into syllables.
 	 * 
 	 * @return syllables
