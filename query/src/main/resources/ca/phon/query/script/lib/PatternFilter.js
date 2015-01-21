@@ -343,7 +343,7 @@ exports.PatternFilter = function (id) {
     };
     
     var checkRegex = function (obj, filter, caseSensitive, exactMatch) {
-        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
+        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive == true? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
         if (exactMatch == true) {
             return regexMatcher.matches();
@@ -426,8 +426,8 @@ exports.PatternFilter = function (id) {
     var findPlain = function (obj, filter, caseSensitive, exactMatch) {
         var retVal = new Array();
         
-        var strA = (caseSensitive ? obj.toString(): obj.toString().toLowerCase());
-        var strB = (caseSensitive ? filter: filter.toLowerCase());
+        var strA = (caseSensitive == true ? obj.toString(): obj.toString().toLowerCase());
+        var strB = (caseSensitive == true ? filter: filter.toLowerCase());
         
         if (exactMatch == true) {
             if (strA == strB) {
@@ -460,7 +460,7 @@ exports.PatternFilter = function (id) {
     };
     
     var findRegex = function (obj, filter, caseSensitive, exactMatch) {
-        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
+        var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive == true ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
         var retVal = new Array();
         
