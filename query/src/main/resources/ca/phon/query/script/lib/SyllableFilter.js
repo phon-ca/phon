@@ -2,6 +2,8 @@
  * Code for filtering based on syllable position and stress.
  */
  
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+
 exports.SyllableFilter = function(id) {
 
     var sectionTitle = "Syllable Filter";
@@ -52,6 +54,38 @@ exports.SyllableFilter = function(id) {
 	this.sPrimary = stressParamInfo.def[0];
 	this.sSecondary = stressParamInfo.def[1];
 	this.sNone = stressParamInfo.def[2];
+	
+    var syllableTypeExprs = [ 
+    	"\\s?.:sctype(\"O|OEHS|LA\")*.:N+",
+    	"\\s?.:sctype(\"O|OEHS|LA\")*.:N+.:C+.*",
+    	"\\s?.:N+.*"
+    ];
+	
+	var anySyllableTypeParamInfo = {
+		"id": id+".anySyll",
+		"def": true,
+		"title": "Syllable type:",
+		"desc": "Any syllable",
+	};
+	var anySyllableTypeParam;
+	this.anySyll = anySyllableTypeParamInfo.def;
+	
+	var syllableTypeParamInfo = {
+		"id": [ id+".openSylls", id+".closedSylls", id+".onsetlessSylls", id+".otherSylls" ],
+		"def": [ true, true, true, true ],
+		"title": "",
+		"desc": ["Open", "Closed", "Onsetless","Other (specify below)"],
+		"numCols": 1	
+	};
+	var syllableTypeParam;
+	this.openSylls = syllableTypeParamInfo.def[0];
+	this.closedSylls = syllableTypeParamInfo.def[1];
+	this.onsetlessSylls = syllableTypeParamInfo.def[2];
+	this.otherSylls = syllableTypeParamInfo.def[3];
+	
+	// filter for other syllables
+	this.otherSyllTypePattern = new PatternFilter(id+".otherSyllTypePattern");
+	var patternFilter = this.otherSyllTypePattern;
 	
 	this.searchBySyllableEnabled = true;
 	this.searchBySyllOpt;
@@ -124,9 +158,44 @@ exports.SyllableFilter = function(id) {
 		    this.searchBySyllOpt = searchBySyllOpt;
 		}
 		
+		anySyllableTypeParam = new BooleanScriptParam(
+			anySyllableTypeParamInfo.id,
+			anySyllableTypeParamInfo.desc,
+			anySyllableTypeParamInfo.title,
+			anySyllableTypeParamInfo.def);
+		var filterTypeParamListener = new java.beans.PropertyChangeListener {
+			propertyChange: function(e) {
+				var enabled = e.source.getValue(anySyllableTypeParamInfo.id) == false;
+				syllableTypeParam.setEnabled(enabled);
+				patternFilter.setEnabled(enabled);
+			}
+		};
+		anySyllableTypeParam.addPropertyChangeListener(anySyllableTypeParamInfo.id, filterTypeParamListener);
+		
+		syllableTypeParam = new MultiboolScriptParam(
+			syllableTypeParamInfo.id,
+			syllableTypeParamInfo.def,
+			syllableTypeParamInfo.desc,
+			syllableTypeParamInfo.title,
+			syllableTypeParamInfo.numCols);
+		var syllableTypeParamListener = new java.beans.PropertyChangeListener {
+            propertyChange: function(e) {
+            	patternFilter.setEnabled(
+            		e.source.getValue(syllableTypeParamInfo.id[3]));
+            }
+        };
+        syllableTypeParam.setEnabled(this.anySyllableType == false);
+		syllableTypeParam.addPropertyChangeListener(syllableTypeParamInfo.id[3], syllableTypeParamListener);
+		
 		params.add(ignoreTruncatedOpt);
 		params.add(singletonGroupOpt);
 		params.add(posGroupOpt);
+		params.add(anySyllableTypeParam);
+		params.add(syllableTypeParam);
+		
+		this.otherSyllTypePattern.param_setup(params);
+		this.otherSyllTypePattern.setEnabled(this.anySyllableType == false);
+		
 		params.add(stressGroupOpt);
 	};
 
@@ -136,6 +205,15 @@ exports.SyllableFilter = function(id) {
 			(this.sPrimary == true && syll.syllableStress == "PrimaryStress") ||
 			(this.sSecondary == true && syll.syllableStress == "SecondaryStress");
 		return stressOk;
+	};
+	
+	this.checkType = function(syll) {
+		var typeOk = 
+			(this.openSylls == true && syll.matches(syllableTypeExprs[0])) ||
+			(this.closedSylls == true && syll.matches(syllableTypeExprs[1])) ||
+			(this.onsetlessSylls == true && syll.matches(syllableTypeExprs[2])) ||
+			(this.otherSylls == true && this.otherSyllTypePattern.isUseFilter() && this.otherSyllTypePattern.check_filter(syll));
+		return typeOk;
 	};
 	
 	/**
@@ -170,7 +248,12 @@ exports.SyllableFilter = function(id) {
 				truncatedOk = (aligned != null && aligned.length() > 0);
 			}
 			
-			if(posOk == true && stressOk == true && truncatedOk == true)
+			var typeOk = true;
+			if(this.anySyllableType == false) {
+				typeOk = this.checkType(syll);
+			}
+			
+			if(posOk == true && stressOk == true && truncatedOk == true && typeOk)
 			{
 				retVal.add(syll);
 			}
