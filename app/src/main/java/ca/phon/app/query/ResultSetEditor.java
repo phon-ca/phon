@@ -92,6 +92,7 @@ import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -546,6 +547,7 @@ public class ResultSetEditor extends ProjectFrame {
 		final ResultListingTableModel model = new ResultListingTableModel(session, resultSet, getListing());
 		resultTable = new JXTable(model);
 		resultTable.setColumnControlVisible(true);
+		resultTable.setFont(FontPreferences.getControlFont());
 		
 		final Highlighter stripeHighlighter = HighlighterFactory.createSimpleStriping();
 		resultTable.addHighlighter(stripeHighlighter);
