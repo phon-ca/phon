@@ -19,7 +19,7 @@ exports.HelpText = {
 	
 	"stressPatternHelpText": 
 	    "<html><b>1</b> = primary stress, <b>2</b> = secondary stress, <b>U</b> = no stress<br/>"
-        +"<b>B</b> = anything, <b>A</b> = anything but [space], <b>[space]</b> = word boundary<br/>"
+        +"<b>A</b> = anything but [space], <b>[space]</b> = word boundary<br/>"
 		+"<b>*</b> = zero or more, <b>+</b> = one or more, <b>?</b> = zero or one</html>",
 	
 	"plainTextHelpText": "",
