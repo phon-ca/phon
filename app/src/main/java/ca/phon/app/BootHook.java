@@ -1,6 +1,9 @@
 package ca.phon.app;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -51,8 +54,20 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 	
 	@Override
 	public void setupVMOptions(List<String> cmd) {
-		loadFromResourcePath(cmd, PHON_VM_OPTIONS_FILE);
+		loadFromFile(cmd, PHON_VM_OPTIONS_FILE);
 		loadFromResourcePath(cmd, VM_OPTIONS_FILE);
+	}
+	
+	private void loadFromFile(List<String> cmd, String path) {
+		final File file = new File(path);
+		try {
+			final FileInputStream fin = new FileInputStream(file);
+			loadFromInputStream(cmd, fin);
+		} catch (FileNotFoundException e) {
+			LOGGER.log(Level.INFO, e.getLocalizedMessage(), e);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 	}
 	
 	private void loadFromResourcePath(List<String> cmd, String path) {
@@ -63,17 +78,22 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 			
 			try {
 				final InputStream is = url.openStream();
-				final BufferedReader isr = new BufferedReader(new InputStreamReader(is));
-				String vmopt = null;
-				while((vmopt = isr.readLine()) != null) {
-					if(vmopt.startsWith("#")) continue;
-					cmd.add(vmopt);
-				}
-				isr.close();
+				loadFromInputStream(cmd, is);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
+	}
+	
+	private void loadFromInputStream(List<String> cmd, InputStream is)
+			throws IOException {
+		final BufferedReader isr = new BufferedReader(new InputStreamReader(is));
+		String vmopt = null;
+		while((vmopt = isr.readLine()) != null) {
+			if(vmopt.startsWith("#")) continue;
+			cmd.add(vmopt);
+		}
+		isr.close();
 	}
 	
 	@Override
