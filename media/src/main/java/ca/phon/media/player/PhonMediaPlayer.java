@@ -20,17 +20,20 @@ package ca.phon.media.player;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
@@ -43,24 +46,26 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.component.DirectMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
-import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sun.jna.Memory;
 
 /**
  * Media player using vlc4j (including media playback controls.)
@@ -96,13 +101,14 @@ public class PhonMediaPlayer extends JPanel {
 	private JPanel mediaControlPanel;
 
 	/* Media player */
-	private EmbeddedMediaPlayerComponent mediaPlayerComponent;
+	private PhonPlayerComponent mediaPlayerCanvas;
+	private DirectMediaPlayerComponent mediaPlayerComponent;
+	
+	private Timer mediaTimer;
 
 	/* Media player listener */
 	private final MediaPlayerListener mediaListener = new MediaPlayerListener();
 	
-	private boolean doRemoveNotify = true;
-
 	/* Icons */
 	private ImageIcon playIcn;
 	private ImageIcon pauseIcn;
@@ -142,45 +148,6 @@ public class PhonMediaPlayer extends JPanel {
 		init();
 	}
 	
-	@Override
-	public void addNotify() {
-		super.addNotify();
-		try {
-			mediaPlayerComponent = new EmbeddedMediaPlayerComponent() {
-				private static final long serialVersionUID = 1L;
-	
-				// allow media player to be shrunk
-				@Override
-				public Dimension getMinimumSize() {
-					return new Dimension(0, 0);
-				}
-			};
-			add(mediaPlayerComponent, BorderLayout.CENTER);
-			
-			loadMedia();
-					
-			if(wasPlaying) {
-				mediaPlayerComponent.getMediaPlayer().play();
-			}
-			if(lastLocation > 0) {
-				mediaPlayerComponent.getMediaPlayer().setTime(lastLocation);
-			}
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-	}
-
-	@Override
-	public void removeNotify() {
-		if(doRemoveNotify) {
-			cleanup();
-		}
-	}
-	
-	public void setDoRemoveNotify(boolean doRemoveNotify) {
-		this.doRemoveNotify = doRemoveNotify;
-	}
-	
 	public void cleanup() {
 		// clean up player
 		if(mediaPlayerComponent != null) {
@@ -189,7 +156,6 @@ public class PhonMediaPlayer extends JPanel {
 			
 			mediaPlayerComponent.getMediaPlayer().stop();
 			
-			remove(mediaPlayerComponent);
 			mediaPlayerComponent.release();
 			mediaPlayerComponent = null;
 		}
@@ -220,6 +186,12 @@ public class PhonMediaPlayer extends JPanel {
 		add(mediaControlPanel, BorderLayout.SOUTH);
 
 		addMediaMenuFilter(new MediaMenuFilter());
+		
+		mediaPlayerCanvas = new PhonPlayerComponent();
+		mediaPlayerComponent = new DirectMediaPlayerComponent(new PhonBufferFormatCallback());
+		add(mediaPlayerCanvas, BorderLayout.CENTER);
+		
+		loadMedia();
 	}
 	
 	public void addMediaMenuFilter(IMediaMenuFilter filter) {
@@ -317,7 +289,7 @@ public class PhonMediaPlayer extends JPanel {
 				@Override
 				public void stateChanged(ChangeEvent ce) {
 					JSlider slider = (JSlider)ce.getSource();
-					final EmbeddedMediaPlayer player = getMediaPlayer();
+					final MediaPlayer player = getMediaPlayer();
 					if(player == null) return;
 					player.setVolume(slider.getValue());
 				}
@@ -339,27 +311,6 @@ public class PhonMediaPlayer extends JPanel {
 		}
 		return retVal;
 	}
-//	
-//	/*
-//	 * Stored media player listeners
-//	 */
-//	private final List<VLCMediaPlayerListener> _mediaListeners =
-//		Collections.synchronizedList(new ArrayList<VLCMediaPlayerListener>());
-//	
-//	/**
-//	 * Add a new media player listener to the
-//	 * VLC media player.  Listeners added using
-//	 * this method will be automatically added to
-//	 * new players created by this object.
-//	 * 
-//	 * @param listener
-//	 */
-//	public void addMediaPlayerListener(VLCMediaPlayerListener listener) {
-//		if(!_mediaListeners.contains(listener))
-//			_mediaListeners.add(listener);
-//		if(getMediaPlayer() != null)
-//			getMediaPlayer().addMediaPlayerListener(listener);
-//	}
 	
 	/**
 	 * Return the underlying VLC media player
@@ -368,7 +319,7 @@ public class PhonMediaPlayer extends JPanel {
 	 * @return the current VLC media player - this
 	 * value can change during playback (e.g., looping)
 	 */
-	private EmbeddedMediaPlayer getMediaPlayer() {
+	private MediaPlayer getMediaPlayer() {
 		return (mediaPlayerComponent != null ? mediaPlayerComponent.getMediaPlayer() : null);
 	}
 
@@ -399,7 +350,7 @@ public class PhonMediaPlayer extends JPanel {
 	}
 	
 	public void loadMedia() {
-		final EmbeddedMediaPlayer mediaPlayer = getMediaPlayer();
+		final MediaPlayer mediaPlayer = getMediaPlayer();
 		if(mediaPlayer == null) return;
 		
 		if(mediaFile == null) {
@@ -410,12 +361,34 @@ public class PhonMediaPlayer extends JPanel {
 			for(MediaPlayerEventListener listener:cachedListenerrs) {
 				mediaPlayer.addMediaPlayerEventListener(listener);
 			}
+			
+			mediaPlayer.addMediaPlayerEventListener(loadListener);
+			mediaPlayer.play();
 		}
 	}
+	
+	private final MediaPlayerEventAdapter loadListener = new MediaPlayerEventAdapter() {
+
+		
+		
+		@Override
+		public void playing(MediaPlayer mediaPlayer) {
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					renderFrame();
+				}
+			});
+			mediaPlayer.pause();
+			mediaPlayer.removeMediaPlayerEventListener(this);
+		}
+		
+	};
 
 	/* UI actions */
 	public void toggleVolumeMute(PhonActionEvent pae) {
-		final EmbeddedMediaPlayer player = getMediaPlayer();
+		final MediaPlayer player = getMediaPlayer();
 		if(player != null) {
 			boolean isMuted = !player.isMute();
 			player.mute(isMuted);
@@ -432,7 +405,7 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	public void onVolumeBtn(PhonActionEvent pae) {
-		final EmbeddedMediaPlayer player = getMediaPlayer();
+		final MediaPlayer player = getMediaPlayer();
 		if(player == null) return;
 
 		// show volume popup
@@ -459,14 +432,10 @@ public class PhonMediaPlayer extends JPanel {
 			JSlider volumeSlider = getVolumeSlider();
 			volumeSlider.setPreferredSize(new Dimension(
 					volumeSlider.getPreferredSize().width, 100));
-//			try {
-				if(!player.isMute())
-					volumeSlider.setValue(player.getVolume());
-				else
-					volumeSlider.setEnabled(false);
-//			} catch (VLCException ex) {
-//				VLCError.logAndClear(ex);
-//			}
+			if(!player.isMute())
+				volumeSlider.setValue(player.getVolume());
+			else
+				volumeSlider.setEnabled(false);
 			
 
 			PhonUIAction muteAct = new PhonUIAction(this, "toggleVolumeMute");
@@ -495,7 +464,7 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	public void onPlayPause(PhonActionEvent pae) {
-		final EmbeddedMediaPlayer player = getMediaPlayer();
+		final MediaPlayer player = getMediaPlayer();
 		if(player != null) {
 			if(player.isPlaying()) {
 				player.pause();
@@ -530,9 +499,8 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	public void onTakeSnapshot(PhonActionEvent pae) {
-		final EmbeddedMediaPlayer player = getMediaPlayer();
-		if(player != null
-				&& player.getMediaDetails() != null) {
+		final MediaPlayer player = getMediaPlayer();
+		if(player != null) {
 			boolean isPlaying = player.isPlaying();
 
 			// if we are playing, pause while we
@@ -541,13 +509,15 @@ public class PhonMediaPlayer extends JPanel {
 				player.pause();
 			}
 
-			FileFilter[] filters = new FileFilter[1];
-			filters[0] = new FileFilter("PNG files (*.png)", "*.png");
-			String saveTo =
-					NativeDialogs.showSaveFileDialogBlocking(
-						CommonModuleFrame.getCurrentFrame(),
-						System.getProperty("user.home") + File.separator + "Desktop",
-						"png", filters, "Save snapshot");
+			final SaveDialogProperties props = new SaveDialogProperties();
+			props.setRunAsync(false);
+			props.setParentWindow(null);
+			props.setFileFilter(new FileFilter("PNG files (*.png)", "png"));
+			props.setCanCreateDirectories(true);
+			props.setInitialFolder(System.getProperty("user.home") + File.separator + "Desktop");
+			props.setPrompt("Save snapshot");
+			
+			String saveTo = NativeDialogs.showSaveDialog(props);
 
 			if(isPlaying) {
 				// start player again
@@ -569,7 +539,7 @@ public class PhonMediaPlayer extends JPanel {
 	 * @param length in ms
 	 */
 	public void playSegment(long startTime, long length) {
-		final EmbeddedMediaPlayer player = getMediaPlayer();
+		final MediaPlayer player = getMediaPlayer();
 		
 		if(player != null) {
 			long endTime = startTime + length;
@@ -598,12 +568,13 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void stateChanged(ChangeEvent ce) {
 			if(getPositionSlider().getValueIsAdjusting()) {
-				final EmbeddedMediaPlayer mediaPlayer = getMediaPlayer();
+				final MediaPlayer mediaPlayer = getMediaPlayer();
 				if(mediaPlayer == null) return;
 				int sliderPos = getPositionSlider().getValue();
 				float pos = (float)sliderPos / SLIDER_MAX;
 				if(pos < 1.0f) {
 					mediaPlayer.setPosition(pos);
+					renderFrame();
 				}
 			}
 		}
@@ -619,9 +590,6 @@ public class PhonMediaPlayer extends JPanel {
 		public JPopupMenu makeMenuChanges(JPopupMenu menu) {
 			JPopupMenu retVal = menu;
 
-//			menu.add(getLoadMediaItem());
-//			menu.addSeparator();
-//			menu.add(getToggleVideoItem());
 			menu.add(getTakeSnapshotItem());
 
 			return retVal;
@@ -694,6 +662,28 @@ public class PhonMediaPlayer extends JPanel {
 		}
 		
 	}
+	
+	protected void renderFrame() {
+		Memory[] nativeBuffers = mediaPlayerComponent.getMediaPlayer().lock();
+		if(nativeBuffers != null && nativeBuffers.length > 0) {
+			Memory nativeBuffer = nativeBuffers[0];
+			if(nativeBuffer != null) {
+				
+				int w = (int)mediaPlayerComponent.getMediaPlayer().getVideoDimension().getWidth();
+				int h = (int)mediaPlayerComponent.getMediaPlayer().getVideoDimension().getHeight();
+				
+				BufferedImage img = mediaPlayerCanvas.getBufferedImage(w, h);
+				int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+		        nativeBuffer.getByteBuffer(0L, nativeBuffer.size()).asIntBuffer().get(rgbBuffer, 0, h * w);
+
+				mediaPlayerCanvas.repaint();
+			}
+		} else {
+			mediaPlayerCanvas.setBufferedImage(null);
+			mediaPlayerCanvas.repaint();
+		}
+		mediaPlayerComponent.getMediaPlayer().unlock();
+	}
 
 	/**
 	 * Media player listener
@@ -703,20 +693,36 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void buffering(MediaPlayer mediaPlayer, float newCache) {
 			super.buffering(mediaPlayer, newCache);
-			final String logMsg = String.format("Buffering %s: %.2f%% complete", 
-					mediaPlayer.mrl(), newCache);
-			LOGGER.info(logMsg);
+			if(PrefHelper.getBoolean("phon.debug", false)) {
+				final String logMsg = String.format("Buffering %s: %.2f%% complete", 
+						mediaPlayer.mrl(), newCache);
+				LOGGER.info(logMsg);
+			}
 		}
 
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			super.playing(mediaPlayer);
+			if(mediaTimer == null) {
+				mediaTimer = new Timer(0, new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						renderFrame();
+					}
+				});
+				mediaTimer.setDelay(Math.round(1000.0f/mediaPlayer.getFps()));
+				mediaTimer.setRepeats(true);
+				mediaTimer.start();
+			}
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, pauseIcn);
 		}
 		
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			super.paused(mediaPlayer);
+			mediaTimer.stop();
+			mediaTimer = null;
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
 		}
 		
@@ -820,6 +826,9 @@ public class PhonMediaPlayer extends JPanel {
 		final float pos = getMediaPlayer().getPosition();
 		final int sliderPos = Math.round(SLIDER_MAX * pos);
 		slider.setValue(sliderPos);
+		
+		if(!getMediaPlayer().isPlaying())
+			renderFrame();
 	}
 
 	private final List<MediaPlayerEventListener> cachedListenerrs = 

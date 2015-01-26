@@ -244,7 +244,6 @@ public class MediaPlayerEditorView extends EditorView {
 	@RunOnEDT
 	public void doCleanup(EditorEvent ee) {
 		mediaPlayer.stop();
-		mediaPlayer.setDoRemoveNotify(false);
 	}
 	
 	// called when the docking window containing this component is closed
