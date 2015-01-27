@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
 
+import ca.phon.ui.nativedialogs.OSInfo;
+
 public class PhonPlayerComponent extends JComponent {
 	
 	private static final long serialVersionUID = 4196967316753261134L;
@@ -65,9 +67,14 @@ public class PhonPlayerComponent extends JComponent {
 		g.fillRect(0, 0, width, height);
 		
 		final Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-	    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		if(!OSInfo.isMacOs()) {
+			// BUG JDK/JDK-8017247
+			// https://bugs.openjdk.java.net/browse/JDK-8017247
+			// these options will result in VERY slow rendering on macosx
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
 		
 		if(bufferedImage != null) {
 			int imgWidth = bufferedImage.getWidth();
@@ -100,7 +107,10 @@ public class PhonPlayerComponent extends JComponent {
 				transform.scale(scaleX, scaleY);
 			}
 
-			g2.drawImage(bufferedImage, transform, this);
+
+			// using 'this' as an imageobserver will cause
+			// the drawing to be executed twice on macosx
+			g2.drawImage(bufferedImage, transform, null/*this*/);
 		}
 	}
 	
