@@ -653,6 +653,23 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
 			super.setCloseable(true);
 			
+			this.addCDockableStateListener(new CDockableStateListener(
+					) {
+				
+				@Override
+				public void visibilityChanged(CDockable arg0) {
+					if(!arg0.isVisible()) {
+						getView().onClose();
+					}
+				}
+				
+				@Override
+				public void extendedModeChanged(CDockable arg0, ExtendedMode arg1) {
+					
+				}
+				
+			});
+			
 			final SimpleButtonAction externalizeAct = new SimpleButtonAction();
 			externalizeAct.setText("Open view in new window");
 			externalizeAct.setIcon(IconManager.getInstance().getIcon("actions/externalize-to-window", IconSize.SMALL));
