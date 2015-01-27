@@ -243,20 +243,14 @@ public class MediaPlayerEditorView extends EditorView {
 
 	@RunOnEDT
 	public void doCleanup(EditorEvent ee) {
-		mediaPlayer.stop();
+		mediaPlayer.cleanup();
 	}
 	
 	// called when the docking window containing this component is closed
+	@Override
 	public void onClose() {
 		if(mediaPlayer.isPlaying()) {
-			mediaPlayer.cleanup();
-		}
-	}
-	
-	// called when the media player needs to pause and the media be reloaded
-	public void onWindowViewChanged() {
-		if(mediaPlayer.isPlaying()) {
-			mediaPlayer.cleanup();
+			mediaPlayer.pause();
 		}
 	}
 

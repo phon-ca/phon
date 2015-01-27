@@ -60,6 +60,7 @@ import ca.phon.app.session.editor.undo.SessionDateEdit;
 import ca.phon.app.session.editor.undo.SessionLanguageEdit;
 import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.session_information.actions.BrowseForMediaAction;
 import ca.phon.app.session.editor.view.session_information.actions.DeleteParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.EditParticipantAction;
@@ -184,6 +185,7 @@ public class SessionInfoEditorView extends EditorView {
 		dateField.setBackground(Color.white);
 		
 		mediaLocationField = new MediaSelectionField(getEditor().getProject());
+		mediaLocationField.setEditor(getEditor());
 		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		
 		participantTable = new JXTable();

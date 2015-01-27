@@ -70,6 +70,10 @@ public abstract class EditorView extends JPanel implements IExtendable {
 	 */
 	public abstract JMenu getMenu();
 	
+	public void onClose() {
+		
+	}
+	
 	/**
 	 * Gets the preferred dock position for the view
 	 * 

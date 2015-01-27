@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -35,6 +36,14 @@ public class BrowseForMediaAction extends SessionInfoAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
+		final MediaPlayerEditorView mediaPlayerView = 
+				(MediaPlayerEditorView)getEditor().getViewModel()
+				.getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(mediaPlayerView != null) {
+			if(mediaPlayerView.getPlayer() != null && mediaPlayerView.getPlayer().isPlaying())
+				mediaPlayerView.getPlayer().pause();
+		}
+		
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setRunAsync(false);
 		props.setAllowMultipleSelection(false);

@@ -59,6 +59,8 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.util.MsFormat;
+import ca.phon.util.MsFormatter;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -188,10 +190,9 @@ public class PhonMediaPlayer extends JPanel {
 		addMediaMenuFilter(new MediaMenuFilter());
 		
 		mediaPlayerCanvas = new PhonPlayerComponent();
-		mediaPlayerComponent = new DirectMediaPlayerComponent(new PhonBufferFormatCallback());
 		add(mediaPlayerCanvas, BorderLayout.CENTER);
 		
-		loadMedia();
+//		loadMedia();
 	}
 	
 	public void addMediaMenuFilter(IMediaMenuFilter filter) {
@@ -213,7 +214,9 @@ public class PhonMediaPlayer extends JPanel {
 			retVal = new JPanel();
 
 			playPauseBtn = getPlayPauseButton();
+			playPauseBtn.setEnabled(false);
 			positionSlider = getPositionSlider();
+			positionSlider.setEnabled(false);
 			volumeBtn = getVolumeButton();
 			menuBtn = getMenuButton();
 
@@ -349,18 +352,35 @@ public class PhonMediaPlayer extends JPanel {
 		loadMedia();
 	}
 	
-	public void loadMedia() {
+	public synchronized void loadMedia() {
+		if(mediaPlayerComponent != null) {
+			final MediaPlayer mediaPlayer = getMediaPlayer();
+			if(mediaPlayer != null) {
+				if(mediaPlayer.isPlaying()) {
+					mediaPlayer.pause();
+				}
+				if(mediaPlayer.isPlayable()) {
+					mediaPlayer.stop();
+				}
+				mediaPlayer.release();
+				mediaPlayerComponent.release();
+			}
+		} 
+		mediaPlayerComponent = new DirectMediaPlayerComponent(new PhonBufferFormatCallback());
+		
 		final MediaPlayer mediaPlayer = getMediaPlayer();
 		if(mediaPlayer == null) return;
 		
+		positionSlider.setValue(0);
 		if(mediaFile == null) {
-			mediaPlayer.stop();
+			playPauseBtn.setEnabled(false);
+			positionSlider.setEnabled(false);
+			mediaPlayerCanvas.setBufferedImage(null);
+			mediaPlayerCanvas.repaint();
 		} else {
+			playPauseBtn.setEnabled(true);
+			positionSlider.setEnabled(true);
 			mediaPlayer.prepareMedia(getMediaFile(), ":play-and-pause");
-			mediaPlayer.addMediaPlayerEventListener(mediaListener);
-			for(MediaPlayerEventListener listener:cachedListenerrs) {
-				mediaPlayer.addMediaPlayerEventListener(listener);
-			}
 			
 			mediaPlayer.addMediaPlayerEventListener(loadListener);
 			mediaPlayer.play();
@@ -369,19 +389,28 @@ public class PhonMediaPlayer extends JPanel {
 	
 	private final MediaPlayerEventAdapter loadListener = new MediaPlayerEventAdapter() {
 
-		
-		
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
-			SwingUtilities.invokeLater(new Runnable() {
-				
-				@Override
-				public void run() {
-					renderFrame();
-				}
-			});
 			mediaPlayer.pause();
 			mediaPlayer.removeMediaPlayerEventListener(this);
+			
+			// wait a small delay before attempting to render frame so
+			// that VLC thread has time to buffer video
+			Timer loadTimer = new Timer(2 * Math.round(1000.0f/mediaPlayer.getFps()), new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					renderFrame();
+				}
+				
+			});
+			loadTimer.setRepeats(false);
+			loadTimer.start();
+			
+			mediaPlayer.addMediaPlayerEventListener(mediaListener);
+			for(MediaPlayerEventListener listener:cachedListenerrs) {
+				mediaPlayer.addMediaPlayerEventListener(listener);
+			}
 		}
 		
 	};
@@ -663,7 +692,7 @@ public class PhonMediaPlayer extends JPanel {
 		
 	}
 	
-	protected void renderFrame() {
+	protected synchronized void renderFrame() {
 		Memory[] nativeBuffers = mediaPlayerComponent.getMediaPlayer().lock();
 		if(nativeBuffers != null && nativeBuffers.length > 0) {
 			Memory nativeBuffer = nativeBuffers[0];
@@ -680,7 +709,7 @@ public class PhonMediaPlayer extends JPanel {
 			}
 		} else {
 			mediaPlayerCanvas.setBufferedImage(null);
-			mediaPlayerCanvas.repaint();
+			mediaPlayerCanvas.repaint(Math.round(1000.0f / getMediaPlayer().getFps()));;
 		}
 		mediaPlayerComponent.getMediaPlayer().unlock();
 	}
@@ -703,13 +732,14 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			super.playing(mediaPlayer);
-			if(mediaTimer == null) {
+			if(mediaTimer == null && mediaPlayer.getVideoTrackCount() > 0) {
 				mediaTimer = new Timer(0, new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						renderFrame();
 					}
+					
 				});
 				mediaTimer.setDelay(Math.round(1000.0f/mediaPlayer.getFps()));
 				mediaTimer.setRepeats(true);
@@ -721,8 +751,15 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			super.paused(mediaPlayer);
-			mediaTimer.stop();
-			mediaTimer = null;
+			if(mediaTimer != null) {
+				mediaTimer.stop();
+				mediaTimer = null;
+			}
+			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
+		}
+		
+		@Override
+		public void stopped(MediaPlayer mediaPlayer) {
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
 		}
 		
@@ -807,6 +844,10 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	public void stop() {
+		if(mediaTimer != null) {
+			mediaTimer.stop();
+			mediaTimer = null;
+		}
 		if(getMediaPlayer() != null)
 			getMediaPlayer().stop();
 	}

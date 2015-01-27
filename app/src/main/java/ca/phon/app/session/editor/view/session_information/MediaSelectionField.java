@@ -2,6 +2,8 @@ package ca.phon.app.session.editor.view.session_information;
 
 import java.io.File;
 
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -11,6 +13,8 @@ import ca.phon.ui.text.PromptedTextField.FieldState;
 public class MediaSelectionField extends FileSelectionField {
 	
 	private static final long serialVersionUID = 5171333221664140205L;
+	
+	private SessionEditor editor;
 	
 	private Project project;
 	
@@ -26,6 +30,14 @@ public class MediaSelectionField extends FileSelectionField {
 		textField.setPrompt("Session media location");
 	}
 
+	public void setEditor(SessionEditor editor) {
+		this.editor = editor;
+	}
+	
+	public SessionEditor getEditor() {
+		return this.editor;
+	}
+	
 	public void setProject(Project project) {
 		this.project = project;
 	}
@@ -55,6 +67,20 @@ public class MediaSelectionField extends FileSelectionField {
 		}
 		super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
 		lastSelectedFile = f;
+	}
+	
+	@Override
+	public void onBrowse() {
+		if(getEditor() != null) {
+			final MediaPlayerEditorView mediaPlayerView = 
+					(MediaPlayerEditorView)getEditor().getViewModel()
+					.getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaPlayerView != null) {
+				if(mediaPlayerView.getPlayer() != null && mediaPlayerView.getPlayer().isPlaying())
+					mediaPlayerView.getPlayer().pause();
+			}
+		}
+		super.onBrowse();
 	}
 	
 	@Override

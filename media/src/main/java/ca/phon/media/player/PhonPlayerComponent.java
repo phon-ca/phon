@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -21,6 +22,10 @@ public class PhonPlayerComponent extends JComponent {
 	
 	private BufferedImage bufferedImage;
 	
+	private final Color IMG_BG = Color.BLACK;
+	
+	private final Color NO_IMG_BG = Color.DARK_GRAY;
+	
 	public PhonPlayerComponent() {
 		super();
 		setDoubleBuffered(false);
@@ -32,6 +37,7 @@ public class PhonPlayerComponent extends JComponent {
 			bufferedImage = 
 					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 					.getDefaultConfiguration().createCompatibleImage(width, height);
+			// use video memory for image
 			bufferedImage.setAccelerationPriority(1.0f);
 		}
 		return this.bufferedImage;
@@ -51,7 +57,7 @@ public class PhonPlayerComponent extends JComponent {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		g.setColor(Color.BLACK);
+		g.setColor((bufferedImage == null ? NO_IMG_BG : IMG_BG));
 		
 		int width = getWidth();
 		int height = getHeight();
@@ -59,13 +65,15 @@ public class PhonPlayerComponent extends JComponent {
 		g.fillRect(0, 0, width, height);
 		
 		final Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		if(bufferedImage != null) {
 			int imgWidth = bufferedImage.getWidth();
 			int imgHeight = bufferedImage.getHeight();
 			
 			final AffineTransform transform = new AffineTransform();
-			
 			if(getScaleMode() == ScaleMode.FIT_DISPLAY) {
 				double imageRatio = (double)imgHeight/(double)imgWidth;
 				double rectRatio = (double)height/(double)width;
@@ -91,7 +99,7 @@ public class PhonPlayerComponent extends JComponent {
 				
 				transform.scale(scaleX, scaleY);
 			}
-			
+
 			g2.drawImage(bufferedImage, transform, this);
 		}
 	}
