@@ -55,6 +55,20 @@ public class EditorEventManager {
 	public EditorEventManager(SessionEditor editor) {
 		super();
 		this.editorRef = new WeakReference<SessionEditor>(editor);
+		dispatchThread.setName("EET (" + editor.getTitle() + ")");
+	}
+	
+	/**
+	 * Shutdown the even thread.
+	 * 
+	 * 
+	 */
+	public void shutdown() {
+		eventQueue.clear();
+		dispatchTask.shutdown();
+	
+		// necessary to finish the 'take()' method of blocking queue
+		dispatchThread.interrupt();
 	}
 	
 	/**
@@ -145,7 +159,10 @@ public class EditorEventManager {
 				try {
 					event = eventQueue.take();
 				} catch (InterruptedException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					if(!isShutdown()) {
+						// an error only if we are not shutdown
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
 				}
 				
 				if(event != null) {

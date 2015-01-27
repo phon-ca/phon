@@ -42,7 +42,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	private static final Logger LOGGER = Logger
 			.getLogger(SessionEditorEP.class.getName());
 	
-	private final static String EP_NAME = "SessionEditor";
+	public final static String EP_NAME = "SessionEditor";
 
 	@Override
 	public String getName() {

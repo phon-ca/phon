@@ -15,6 +15,7 @@ import java.util.prefs.PreferenceChangeListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.UndoableEditEvent;
@@ -202,7 +203,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	private void _dispose() {
 		setVisible(false);
 		CommonModuleFrame.getOpenWindows().remove(this);
-//		super.dispose();
+		getEventManager().shutdown();
+		super.dispose();
 	}
 	
 	@Override
@@ -211,7 +213,14 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			
 			@Override
 			public void eventOccured(EditorEvent ee) {
-				_dispose();
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						_dispose();
+					}
+						
+				});
 			}
 			
 		});
