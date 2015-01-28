@@ -494,6 +494,7 @@ public class ParticipantPanel extends JPanel {
 		anonymizeDialog.add(btnPanel, BorderLayout.SOUTH);
 		
 		anonymizeDialog.pack();
+		anonymizeDialog.setLocationRelativeTo(this);
 		anonymizeDialog.setVisible(true);
 	}
 	
