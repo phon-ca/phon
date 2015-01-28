@@ -1,14 +1,12 @@
 package ca.phon.app.project;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -21,6 +19,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.session.Sex;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.participant.AnonymizeParticipantOptionsPanel;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonTask;
@@ -39,23 +38,7 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 	
 	private static final long serialVersionUID = -1433616585660247292L;
 	
-	private JCheckBox assignIDBox;
-	
-	private JCheckBox stripNameBox;
-	
-	private JCheckBox stripBirthdayBox;
-	
-	private JCheckBox stripAgeBox;
-	
-	private JCheckBox stripLangaugeBox;
-	
-	private JCheckBox stripEducationBox;
-	
-	private JCheckBox stripSESBox;
-	
-	private JCheckBox stripSexBox;
-	
-	private JCheckBox stripGroupBox;
+	private AnonymizeParticipantOptionsPanel optionsPanel;
 	
 	// UI
 	private SessionSelector sessionSelector;
@@ -86,49 +69,13 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 		final JScrollPane scroller = new JScrollPane(sessionSelector);
 		scroller.setBorder(BorderFactory.createTitledBorder("Select sessions"));
 		
-		final JPanel optsPanel = new JPanel(new GridLayout(0, 3));
-		assignIDBox = new JCheckBox("Assign ID from role");
-		assignIDBox.setSelected(true);
-		optsPanel.add(assignIDBox);
-		
-		stripNameBox = new JCheckBox("Name");
-		stripNameBox.setSelected(true);
-		optsPanel.add(stripNameBox);
-		
-		stripSexBox = new JCheckBox("Sex");
-		stripSexBox.setSelected(true);
-		optsPanel.add(stripSexBox);
-		
-		stripBirthdayBox = new JCheckBox("Birthday");
-		stripBirthdayBox.setSelected(true);
-		optsPanel.add(stripBirthdayBox);
-		
-		stripAgeBox = new JCheckBox("Age");
-		stripAgeBox.setSelected(true);
-		optsPanel.add(stripAgeBox);
-		
-		stripLangaugeBox = new JCheckBox("Language");
-		stripLangaugeBox.setSelected(true);
-		optsPanel.add(stripLangaugeBox);
-		
-		stripEducationBox = new JCheckBox("Education");
-		stripEducationBox.setSelected(true);
-		optsPanel.add(stripEducationBox);
-		
-		stripGroupBox = new JCheckBox("Group");
-		stripGroupBox.setSelected(true);
-		optsPanel.add(stripGroupBox);
-		
-		stripSESBox = new JCheckBox("SES");
-		stripSESBox.setSelected(true);
-		optsPanel.add(stripSESBox);
-		
-		optsPanel.setBorder(BorderFactory.createTitledBorder("Select information to strip"));
+		optionsPanel = new AnonymizeParticipantOptionsPanel();
+		optionsPanel.setBorder(BorderFactory.createTitledBorder("Select information to strip"));
 		
 		step1.add(header, BorderLayout.NORTH);
 		
 		final JPanel contents = new JPanel(new BorderLayout());
-		contents.add(optsPanel, BorderLayout.NORTH);
+		contents.add(optionsPanel, BorderLayout.NORTH);
 		contents.add(scroller, BorderLayout.CENTER);
 		step1.add(contents, BorderLayout.CENTER);
 		
@@ -175,14 +122,14 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 					
 					// XXX we need to ensure all records are loaded
 					// if changing id
-					if(assignIDBox.isSelected()) {
+					if(optionsPanel.isAssignId()) {
 						for(Record r:session.getRecords()) {
 							r.getSpeaker();
 						}
 					}
 					
 					for(Participant p:parts) {
-						if(assignIDBox.isSelected()) {
+						if(optionsPanel.isAssignId()) {
 							
 							
 							String id = p.getRole().getId();
@@ -198,28 +145,28 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 							p.setId(id);
 						}
 						
-						if(stripNameBox.isSelected()) {
+						if(optionsPanel.isAnonName()) {
 							p.setName(null);
 						}
-						if(stripBirthdayBox.isSelected()) {
+						if(optionsPanel.isAnonBday()) {
 							p.setBirthDate(null);
 						}
-						if(stripAgeBox.isSelected()) {
+						if(optionsPanel.isAnonAge()) {
 							p.setAge(null);
 						}
-						if(stripLangaugeBox.isSelected()) {
+						if(optionsPanel.isAnonLang()) {
 							p.setLanguage(null);
 						}
-						if(stripEducationBox.isSelected()) {
+						if(optionsPanel.isAnonEdu()) {
 							p.setEducation(null);
 						}
-						if(stripSESBox.isSelected()) {
+						if(optionsPanel.isAnonSes()) {
 							p.setSES(null);
 						}
-						if(stripSexBox.isSelected()) {
+						if(optionsPanel.isAnonSex()) {
 							p.setSex(Sex.UNSPECIFIED);
 						}
-						if(stripGroupBox.isSelected()) {
+						if(optionsPanel.isAnonGroup()) {
 							p.setGroup(null);
 						}
 					}

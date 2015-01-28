@@ -1,5 +1,6 @@
 package ca.phon.ui.participant;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -20,6 +21,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -56,6 +59,7 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.Sex;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -63,6 +67,7 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FormatterTextField;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -457,26 +462,60 @@ public class ParticipantPanel extends JPanel {
 	}
 	
 	public void onAnonymize() {
-		// show confirmation
-		final MessageDialogProperties props = new MessageDialogProperties();
-		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-		props.setRunAsync(false);
-		props.setHeader("Anonymize participant information?");
-		props.setMessage("Remove all optional information for this participant?");
-		props.setOptions(MessageDialogProperties.okCancelOptions);
+		final JDialog anonymizeDialog = new JDialog(CommonModuleFrame.getCurrentFrame());
+		anonymizeDialog.setModal(true);
 		
-		final int retVal = NativeDialogs.showMessageDialog(props);
-		if(retVal == 1) return;
+		anonymizeDialog.setLayout(new BorderLayout());
+		final DialogHeader header = new DialogHeader("Anonymize Participant", 
+				"Anonymize selected information for " + participant.toString());
+		anonymizeDialog.add(header, BorderLayout.NORTH);
 		
-		idField.setText(getRoleId());
-		nameField.setText("");
-		bdayField.getTextField().setText("");
-		sexBox.setSelectedItem(Sex.UNSPECIFIED);
-		ageField.setText("");
-		languageField.setText("");
-		groupField.setText("");
-		educationField.setText("");
-		sesField.setText("");
+		final AnonymizeParticipantOptionsPanel optionsPanel = new AnonymizeParticipantOptionsPanel();
+		optionsPanel.setBorder(BorderFactory.createTitledBorder("Select information to strip"));
+		anonymizeDialog.add(optionsPanel, BorderLayout.CENTER);
+		
+		final ActionListener closeListener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				anonymizeDialog.setVisible(false);
+			}
+		};
+		
+		final PhonUIAction okAct = new PhonUIAction(this, "doAnonymizeParticipant", optionsPanel);
+		okAct.putValue(PhonUIAction.NAME, "Ok");
+		final JButton okBtn = new JButton(okAct);
+		okBtn.addActionListener(closeListener);
+		
+		final JButton closeBtn = new JButton("Cancel");
+		closeBtn.addActionListener(closeListener);
+		
+		final JComponent btnPanel = ButtonBarBuilder.buildOkCancelBar(okBtn, closeBtn);
+		anonymizeDialog.add(btnPanel, BorderLayout.SOUTH);
+		
+		anonymizeDialog.pack();
+		anonymizeDialog.setVisible(true);
+	}
+	
+	public void doAnonymizeParticipant(AnonymizeParticipantOptionsPanel optionsPanel) {
+		if(optionsPanel.isAssignId())
+			idField.setText(getRoleId());
+		if(optionsPanel.isAnonName())
+			nameField.setText("");
+		if(optionsPanel.isAnonBday())
+			bdayField.getTextField().setText("");
+		if(optionsPanel.isAnonSex())
+			sexBox.setSelectedItem(Sex.UNSPECIFIED);
+		if(optionsPanel.isAnonAge())
+			ageField.setText("");
+		if(optionsPanel.isAnonLang())
+			languageField.setText("");
+		if(optionsPanel.isAnonGroup())
+			groupField.setText("");
+		if(optionsPanel.isAnonEdu())
+			educationField.setText("");
+		if(optionsPanel.isAnonSes())
+			sesField.setText("");
 	}
 	
 	public Participant getParticipant() {
