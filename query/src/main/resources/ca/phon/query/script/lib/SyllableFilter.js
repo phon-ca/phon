@@ -249,7 +249,7 @@ exports.SyllableFilter = function(id) {
 			}
 			
 			var typeOk = true;
-			if(this.anySyllableType == false) {
+			if(this.anySyll == false) {
 				typeOk = this.checkType(syll);
 			}
 			
