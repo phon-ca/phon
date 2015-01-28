@@ -208,7 +208,7 @@ function query_record(recordIndex, record) {
 		    var syllList = new Array();
 		    for(j = 0; j < toSearch.length; j++) {
 		        var obj = toSearch[j];
-		        var aligned = phoneMap.getAligned(obj.audiblePhones());
+		        var aligned = (phoneMap != null ? phoneMap.getAligned(obj.audiblePhones()) : new IPATranscript());
 		        var sylls = filters.syllable.getRequestedSyllables(obj,
 		        	(aligned == null ? new IPATranscript() : new IPATranscript(aligned)));
 		        
@@ -251,7 +251,7 @@ function query_record(recordIndex, record) {
     			
     			if(includeAligned == true) {
     			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
-    			    var aligned = phoneMap.getAligned(match.value.audiblePhones());
+    			    var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()) : null);
 			   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
     			    
 			   		// find location of aligned value in group
