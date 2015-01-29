@@ -184,7 +184,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	}
 
 	public void toggleHiatus(PhonActionEvent pae) {
-		int pIdx = display.getFocusedPhone();
+		int pIdx = 
+				(pae.getData() != null ? (int)pae.getData() : display.getFocusedPhone());
 		display.toggleHiatus(pIdx);
 	}
 
@@ -249,16 +250,33 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 				retVal.add(constituentItem);
 			}
+			
+			if(pIdx < display.getNumberOfDisplayedPhones()-1
+					&& phone.getScType() == SyllableConstituentType.NUCLEUS) {
+				IPAElement nextPhone = display.getPhoneAtIndex(pIdx+1);
+				
+				if(nextPhone.getScType() == SyllableConstituentType.NUCLEUS) {
+					String itemText = "<html>Toggle Hiatus with " + nextPhone.getText();
+					JMenuItem item = new JMenuItem();
+					PhonUIAction toggleHiatusAct = new PhonUIAction(this,
+							"toggleHiatus", pIdx+1);
+					toggleHiatusAct.putValue(Action.NAME, itemText);
+					item.setAction(toggleHiatusAct);
+
+					retVal.addSeparator();
+					retVal.add(item);
+				}
+			}
 
 			if (pIdx > 0
 					&& phone.getScType() == SyllableConstituentType.NUCLEUS) {
 				IPAElement prevPhone = display.getPhoneAtIndex(pIdx - 1);
 
 				if (prevPhone.getScType() == SyllableConstituentType.NUCLEUS) {
-					String itemText = "<html>Toggle <u><b>H</b></u>iatus";
+					String itemText = "<html>Toggle <u><b>H</b></u>iatus with " + prevPhone.getText();
 					JMenuItem item = new JMenuItem();
 					PhonUIAction toggleHiatusAct = new PhonUIAction(this,
-							"toggleHiatus");
+							"toggleHiatus", pIdx);
 					toggleHiatusAct.putValue(Action.NAME, itemText);
 					item.setAction(toggleHiatusAct);
 
