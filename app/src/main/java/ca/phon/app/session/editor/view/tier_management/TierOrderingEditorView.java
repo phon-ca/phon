@@ -251,9 +251,9 @@ public class TierOrderingEditorView extends EditorView {
 		add(new JScrollPane(tierOrderingTable), cc.xywh(1, 2, 5, 4));
 		add(moveUpButton, cc.xy(6, 2));
 		add(moveDownButton, cc.xy(6, 3));
-		add(editButton, cc.xy(4, 1));
+		add(editButton, cc.xy(5, 1));
 		
-		add(newTierButton, cc.xy(5, 1));
+		add(newTierButton, cc.xy(4, 1));
 		
 		add(lockAllButton, cc.xy(1, 1));
 		add(hideAllButton, cc.xy(2, 1));
@@ -388,6 +388,13 @@ public class TierOrderingEditorView extends EditorView {
 		public void mouseReleased(MouseEvent arg0) {
 			if(arg0.isPopupTrigger()) {
 				showContextMenu(arg0);
+			}
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent me) {
+			if(me.getClickCount() == 2 && me.getButton() == MouseEvent.BUTTON1) {
+				onEditTier(new PhonActionEvent(null));
 			}
 		}
 		

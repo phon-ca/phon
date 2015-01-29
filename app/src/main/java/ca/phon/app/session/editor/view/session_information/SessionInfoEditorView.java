@@ -227,8 +227,8 @@ public class SessionInfoEditorView extends EditorView {
 		JPanel participantPanel = new JPanel(participantLayout);
 		participantPanel.setBackground(Color.white);
 		participantPanel.add(new JScrollPane(participantTable), cc.xywh(1, 2, 3, 2));
-		participantPanel.add(addParticipantButton, cc.xy(3,1));
-		participantPanel.add(editParticipantButton, cc.xy(2,1));
+		participantPanel.add(addParticipantButton, cc.xy(2,1));
+		participantPanel.add(editParticipantButton, cc.xy(3,1));
 		participantPanel.add(removeParticipantButton, cc.xy(4, 2));
 		participantTable.addMouseListener(new MouseInputAdapter() {
 
