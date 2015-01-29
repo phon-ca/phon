@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <query xmlns="http://phon.ling.mun.ca/ns/query" uuid="909ea40d-9bbc-49d3-a35c-512e25295349" name="Deletions.xml" date="2014-10-15T12:24:54.362-02:30">
     <script>
-        <source>/*
+        <source><![CDATA[/*
 params =
-		{enum, searchTier, &quot;IPA Target&quot;|&quot;IPA Actual&quot;, 0, &quot;&lt;html&gt;&lt;b&gt;Search Tier&lt;/b&gt;&lt;/html&gt;&quot;}
+		{enum, searchTier, "IPA Target"|"IPA Actual", 0, "<html><b>Search Tier</b></html>"}
 	;
 */
 
-var GroupFilter = require(&quot;lib/GroupFilter&quot;).GroupFilter;
-var AlignedGroupFilter = require(&quot;lib/TierFilter&quot;).TierFilter;
-var WordFilter = require(&quot;lib/WordFilter&quot;).WordFilter;
-var AlignedWordFilter = require(&quot;lib/TierFilter&quot;).TierFilter;
-var SyllableFilter = require(&quot;lib/SyllableFilter&quot;).SyllableFilter;
-var ParticipantFilter = require(&quot;lib/ParticipantFilter&quot;).ParticipantFilter;
-var PatternFilter = require(&quot;lib/PatternFilter&quot;).PatternFilter;
-var PatternType = require(&quot;lib/PatternFilter&quot;).PatternType;
-var Pcc = require(&quot;lib/Pcc&quot;).Pcc;
-var PccOptions = require(&quot;lib/Pcc&quot;).PccOptions;
-var StressPatternOptions = require(&quot;lib/StressPattern&quot;).StressPatternOptions;
-var CvPatternOptions = require(&quot;lib/CvPattern&quot;).CvPatternOptions;
-var ResultType = require(&quot;lib/PhonScriptConstants&quot;).ResultType;
+var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+var PatternType = require("lib/PatternFilter").PatternType;
+var Pcc = require("lib/Pcc").Pcc;
+var PccOptions = require("lib/Pcc").PccOptions;
+var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
+var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
+var ResultType = require("lib/PhonScriptConstants").ResultType;
 	
 /********************************
  * Setup params
  *******************************/
 
 var filters = {
-    &quot;primary&quot;: new PatternFilter(&quot;filters.primary&quot;),
-    &quot;targetResultFilter&quot;: new PatternFilter(&quot;filters.targetResultFilter&quot;),
-    &quot;actualResultFilter&quot;: new PatternFilter(&quot;filters.actualResultFilter&quot;),
-    &quot;group&quot;: new GroupFilter(&quot;filters.group&quot;),
-    &quot;groupPattern&quot;: new PatternFilter(&quot;filters.groupPattern&quot;),
-    &quot;alignedGroup&quot;: new AlignedGroupFilter(&quot;filters.alignedGroup&quot;),
-    &quot;word&quot;: new WordFilter(&quot;filters.word&quot;),
-    &quot;wordPattern&quot;: new PatternFilter(&quot;filters.wordPattern&quot;),
-    &quot;alignedWord&quot;: new AlignedWordFilter(&quot;filters.alignedWord&quot;),
-    &quot;syllable&quot;: new SyllableFilter(&quot;filters.syllable&quot;),
-    &quot;speaker&quot;: new ParticipantFilter(&quot;filters.speaker&quot;)
+    "primary": new PatternFilter("filters.primary"),
+    "targetResultFilter": new PatternFilter("filters.targetResultFilter"),
+    "actualResultFilter": new PatternFilter("filters.actualResultFilter"),
+    "group": new GroupFilter("filters.group"),
+    "groupPattern": new PatternFilter("filters.groupPattern"),
+    "alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+    "word": new WordFilter("filters.word"),
+    "wordPattern": new PatternFilter("filters.wordPattern"),
+    "alignedWord": new AlignedWordFilter("filters.alignedWord"),
+    "syllable": new SyllableFilter("filters.syllable"),
+    "speaker": new ParticipantFilter("filters.speaker")
 };
 
 var metadataOptions = {
-    &quot;pcc_aligned&quot;: new PccOptions(&quot;metadataOptions.pcc_aligned&quot;, true),
-    &quot;pcc_standard&quot;: new PccOptions(&quot;metadataOptions.pcc_standard&quot;, false),
-    &quot;stressPattern&quot;: new StressPatternOptions(&quot;metadataOptions.stressPattern&quot;),
-    &quot;cvPattern&quot;: new CvPatternOptions(&quot;metadataOptions.cvPattern&quot;)
+    "pcc_aligned": new PccOptions("metadataOptions.pcc_aligned", true),
+    "pcc_standard": new PccOptions("metadataOptions.pcc_standard", false),
+    "stressPattern": new StressPatternOptions("metadataOptions.stressPattern"),
+    "cvPattern": new CvPatternOptions("metadataOptions.cvPattern")
 };
 
 var includeAlignedParamInfo = {
-    &quot;id&quot;: &quot;includeAligned&quot;,
-    &quot;title&quot;: &quot;&quot;,
-    &quot;desc&quot;: &quot;Include aligned phones&quot;,
-    &quot;def&quot;: true
+    "id": "includeAligned",
+    "title": "",
+    "desc": "Include aligned phones",
+    "def": true
 };
 var includeAlignedParam;
 var includeAligned = includeAlignedParamInfo.def;
@@ -62,9 +62,9 @@ function setup_params(params) {
 	filters.primary.set_required(true);
 	
 	// setup result filter section
-	var resultFilterSection = new SeparatorScriptParam(&quot;Aligned Phones&quot;, true);
-	var targetLbl = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;IPA Target Matcher&lt;/b&gt;&lt;/html&gt;&quot;);
-	var actualLbl = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;IPA Actual Matcher&lt;/b&gt;&lt;/html&gt;&quot;);
+	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
+	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
+	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
 	
 	includeAlignedParam = new BooleanScriptParam(
 	    includeAlignedParamInfo.id,
@@ -95,14 +95,14 @@ function setup_params(params) {
 	
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
-	var sep = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;Aligned Group&lt;/b&gt;&lt;/html&gt;&quot;);
+	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
 	
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
     filters.wordPattern.setEnabled(false);
-	var wordsep = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;Aligned Word&lt;/b&gt;&lt;/html&gt;&quot;);
+	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
     params.add(wordsep);
     filters.alignedWord.param_setup(params);
     var searchByWordListener = new java.beans.PropertyChangeListener {
@@ -121,22 +121,22 @@ function setup_params(params) {
 	filters.speaker.param_setup(params);
 	
 	// add metadata options
-	var metadataSep = new SeparatorScriptParam(&quot;Metadata Options&quot;, true);
+	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
 	params.add(metadataSep);
 	
-	var spLbl = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;Stress Pattern&lt;/b&gt;&lt;/html&gt;&quot;);
+	var spLbl = new LabelScriptParam("", "<html><b>Stress Pattern</b></html>");
 	params.add(spLbl);
 	metadataOptions.stressPattern.param_setup(params);
 	
-	var cvLbl = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;CGV Pattern&lt;/b&gt;&lt;/html&gt;&quot;);
+	var cvLbl = new LabelScriptParam("", "<html><b>CGV Pattern</b></html>");
 	params.add(cvLbl);
 	metadataOptions.cvPattern.param_setup(params);
 
-    var pccStandardLbl = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;PCC/PVC (standard)&lt;/b&gt;&lt;/html&gt;&quot;);
+    var pccStandardLbl = new LabelScriptParam("", "<html><b>PCC/PVC (standard)</b></html>");
     params.add(pccStandardLbl);
     metadataOptions.pcc_standard.param_setup(params);
 
-	var pccAlignedLbl = new LabelScriptParam(&quot;&quot;, &quot;&lt;html&gt;&lt;b&gt;PCC/PVC (aligned)&lt;/b&gt;&lt;/html&gt;&quot;);
+	var pccAlignedLbl = new LabelScriptParam("", "<html><b>PCC/PVC (aligned)</b></html>");
 	params.add(pccAlignedLbl);
 	metadataOptions.pcc_aligned.param_setup(params);
 }
@@ -172,10 +172,11 @@ function query_record(recordIndex, record) {
 	}
 
 	// perform searches
-	for(var i = 0; i &lt; groups.length; i++)
+	for(var i = 0; i < groups.length; i++)
 	{
 		var group = groups[i];
-		var ipa = (searchTier == &quot;IPA Target&quot; ? group.IPATarget : group.IPAActual);
+		var ipa = (searchTier == "IPA Target" ? group.IPATarget : group.IPAActual);
+		var phoneMap = group.phoneAlignment;
 		
 		var toSearch = new Array();
 		toSearch.push(ipa);
@@ -184,11 +185,11 @@ function query_record(recordIndex, record) {
 		if(filters.word.isUseFilter()) {
 		   toSearch.length = 0;
 		   var selectedWords = filters.word.getRequestedWords(group);
-		   for(j = 0; j &lt; selectedWords.length; j++) {
+		   for(j = 0; j < selectedWords.length; j++) {
 		       var word = selectedWords[j];
 		       var addWord = true;
 
-               var wordIpa = (searchTier == &quot;IPA Target&quot; ? word.IPATarget : word.IPAActual);
+               var wordIpa = (searchTier == "IPA Target" ? word.IPATarget : word.IPAActual);
                // check word pattern if necessary
 		       if(filters.wordPattern.isUseFilter()) {
 		           addWord = filters.wordPattern.check_filter(wordIpa);
@@ -208,24 +209,26 @@ function query_record(recordIndex, record) {
 		// search by syllable?
 		if(filters.syllable.isUseFilter()) {
 		    var syllList = new Array();
-		    for(j = 0; j &lt; toSearch.length; j++) {
+		    for(j = 0; j < toSearch.length; j++) {
 		        var obj = toSearch[j];
-		        var sylls = filters.syllable.getRequestedSyllables(obj);
+		        var aligned = (phoneMap != null ? phoneMap.getAligned(obj.audiblePhones()) : new IPATranscript());
+		        var sylls = filters.syllable.getRequestedSyllables(obj,
+		        	(aligned == null ? new IPATranscript() : new IPATranscript(aligned)));
 		        
-		        for(k = 0; k &lt; sylls.length; k++) {
+		        for(k = 0; k < sylls.length; k++) {
 		            syllList.push(sylls[k]);
 		        }
 		    }
 		    toSearch = syllList;
 		}
 		
-		for(j = 0; j &lt; toSearch.length; j++) {
+		for(j = 0; j < toSearch.length; j++) {
 		    var obj = toSearch[j];
 		    var matches = filters.primary.find_pattern(obj);
-		    var primaryFilter = (searchTier == &quot;IPA Target&quot; ? filters.targetResultFilter : filters.actualResultFilter);
-		    var alignedFilter = (searchTier == &quot;IPA Target&quot; ? filters.actualResultFilter : filters.targetResultFilter);
+		    var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter : filters.actualResultFilter);
+		    var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter : filters.targetResultFilter);
 		    
-		    for(k = 0; k &lt; matches.length; k++) {
+		    for(k = 0; k < matches.length; k++) {
     	        var match = matches[k];
     	        
     	        if(primaryFilter.isUseFilter()) {
@@ -240,7 +243,7 @@ function query_record(recordIndex, record) {
     			var length = match.value.toString().length();
     			
     			result.recordIndex = recordIndex;
-    			result.schema = &quot;LINEAR&quot;;
+    			result.schema = "LINEAR";
     
     			var rv = factory.createResultValue();
     			rv.tierName = searchTier;
@@ -249,31 +252,29 @@ function query_record(recordIndex, record) {
     			rv.data = (match.value != null ? new IPATranscript(match.value) : new IPATranscript());
     			result.addResultValue(rv);
     			
-    			if(includeAligned) {
-    			    var phoneMap = group.phoneAlignment;
-    			    var alignedGroup = (searchTier == &quot;IPA Target&quot; ? group.getIPAActual() : group.getIPATarget());
-    			    var aligned = phoneMap.getAligned(match.value);
-    			    var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
+    			if(includeAligned == true) {
+    			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
+    			    var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()) : null);
+			   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
     			    
-    			    // find location of aligned value in group
-    			    // find location of aligned value in group
-    			    var groupStartIdx = 
-    			    (alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
-    			    var groupEndIdx = 
-    			    (alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
-    			    var alignedIpa =
-    			    (alignedIpaElements.length() > 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
-    			    
+			   		// find location of aligned value in group
+			   		var groupStartIdx = 
+			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
+			   		var groupEndIdx = 
+			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
+			   		var alignedIpa =
+			   			(alignedIpaElements.length() > 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
+			   		
     			    if(alignedFilter.isUseFilter()) {
-	    			    if(!alignedFilter.check_filter(alignedIpa)) {
-	    			    	continue;
-	    			    }
+    			    	if(!alignedFilter.check_filter(alignedIpa)) {
+    			    		continue;
+    			    	}
     			    }
     			    
     			    var alignedRv = factory.createResultValue();
-    			    alignedRv.tierName = (searchTier == &quot;IPA Target&quot; ? &quot;IPA Actual&quot; : &quot;IPA Target&quot;);
+    			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
     			    alignedRv.groupIndex = group.groupIndex;
-    			   	if(aligned != null &amp;&amp; aligned.length &gt; 0) {
+    			   	if(aligned != null && aligned.length > 0) {
     			   		var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
     			   		var alignedLength = alignedIpa.toString().length();
     			   		
@@ -281,11 +282,11 @@ function query_record(recordIndex, record) {
     			    	alignedRv.data = alignedIpa;
     			   	} else {
     			   		alignedRv.range = new Range(0, 0, true);
-    			   		alignedRv.data = &quot;&quot;;
+    			   		alignedRv.data = "";
     			   	}
     			    
     			    result.addResultValue(alignedRv);
-    			    result.schema = &quot;ALIGNED&quot;;
+    			    result.schema = "ALIGNED";
     			    calcMetadata(record, group, result.metadata, 
     			    		(match.value == null ? null : new IPATranscript(match.value)), 
     			    		(aligned == null ? null : new IPATranscript(aligned)) );
@@ -312,16 +313,16 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
         var tsp = (ipaTVal == null ? null : ipaTVal.stressPattern);
         var asp = (ipaAVal == null ? null : ipaAVal.stressPattern)
         
-        if(tsp != null &amp;&amp; asp != null &amp;&amp; metadataOptions.stressPattern.separate == false) {
-            var sp = tsp + &quot; \u2194 &quot; + asp;
-            retVal.put(&quot;SP&quot;, sp);
+        if(tsp != null && asp != null && metadataOptions.stressPattern.separate == false) {
+            var sp = tsp + " \u2194 " + asp;
+            retVal.put("SP", sp);
         } else {
             if(tsp != null) {
-                var name = (metadataOptions.stressPattern.separate == true ? &quot;SP-T&quot; : &quot;SP&quot;);
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-T" : "SP");
                 retVal.put(name, tsp);
             }
             if(asp != null) {
-                var name = (metadataOptions.stressPattern.separate == true ? &quot;SP-A&quot; : &quot;SP&quot;);
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-A" : "SP");
                 retVal.put(name, asp);
             }
         }
@@ -331,16 +332,16 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
         var tcv = (ipaTVal == null ? null : ipaTVal.cvPattern);
         var acv = (ipaAVal == null ? null : ipaAVal.cvPattern);
         
-        if(tcv != null &amp;&amp; acv != null &amp;&amp; metadataOptions.cvPattern.separate == false) {
-            var cv = tcv + &quot; \u2194 &quot; + acv;
-            retVal.put(&quot;CGV&quot;, cv);
+        if(tcv != null && acv != null && metadataOptions.cvPattern.separate == false) {
+            var cv = tcv + " \u2194 " + acv;
+            retVal.put("CGV", cv);
         } else {
             if(tcv != null) {
-                var name = (metadataOptions.cvPattern.separate == true ? &quot;CGV-T&quot; : &quot;SP&quot;);
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-T" : "SP");
                 retVal.put(name, tcv);
             }
             if(acv != null) {
-                var name = (metadataOptions.cvPattern.separate == true ? &quot;CGV-A&quot; : &quot;SP&quot;);
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-A" : "SP");
                 retVal.put(name, acv);
             }
         }
@@ -350,7 +351,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
         metadataOptions.pcc_standard.setup_pcc_standard_metadata(group, retVal);
         metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(group, retVal);
     }
-}
+} ]]>
 </source>
         <param id="filters.actualResultFilter.caseSensitive">false</param>
         <param id="filters.actualResultFilter.exactMatch">true</param>
