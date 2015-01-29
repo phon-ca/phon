@@ -21,6 +21,15 @@ var filters = {
     "speaker": new ParticipantFilter("filters.speaker")
 };
 
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
+}
+
 function setup_params(params) {
     filters.primary.param_setup(params);
     filters.group.param_setup(params);

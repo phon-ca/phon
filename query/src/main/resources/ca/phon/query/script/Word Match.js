@@ -66,6 +66,15 @@ var mdataExactField = "Word Exact Match";
 var mdataCVField = "Word CV Match";
 var mdataStressField = "Word Stress Match";
 
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
+}
+
 function setup_params(params) {
 	var cvOptionsSep = new SeparatorScriptParam("Comparison Options", false);
 	params.add(cvOptionsSep);

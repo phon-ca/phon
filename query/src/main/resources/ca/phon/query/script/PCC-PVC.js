@@ -35,6 +35,14 @@ var filters = {
 	"speaker": new ParticipantFilter("filters.speaker")
 };
 
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
+}
 
 function setup_params(params) {
     var sep = new SeparatorScriptParam("PCC/PVC Options", false);

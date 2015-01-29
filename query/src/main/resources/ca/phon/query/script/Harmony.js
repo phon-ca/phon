@@ -34,6 +34,15 @@ var filters = {
     "speaker": new ParticipantFilter("filters.speaker")
 };
 
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
+}
+
 function setup_params(params) {
     filters.shared.setFilterTitle("Shared features:");
     filters.shared.param_setup(params);
