@@ -79,8 +79,6 @@ public class PhonMediaPlayer extends JPanel {
 	private static final Logger LOGGER = Logger
 			.getLogger(PhonMediaPlayer.class.getName());
 
-	private final static int SLIDER_MAX = 10000;
-
 	private final static int VOL_MAX = 200;
 
 	/** UI  components */
@@ -88,7 +86,7 @@ public class PhonMediaPlayer extends JPanel {
 	private JButton playPauseBtn;
 
 	/* Position slider */
-	private JSlider positionSlider;
+	private TimeSlider positionSlider;
 
 	/* Volume button */
 	private JButton volumeBtn;
@@ -217,6 +215,7 @@ public class PhonMediaPlayer extends JPanel {
 			playPauseBtn.setEnabled(false);
 			positionSlider = getPositionSlider();
 			positionSlider.setEnabled(false);
+			positionSlider.setUI(new TimeSliderUI());
 			volumeBtn = getVolumeButton();
 			menuBtn = getMenuButton();
 
@@ -253,14 +252,13 @@ public class PhonMediaPlayer extends JPanel {
 		return retVal;
 	}
 
-	public JSlider getPositionSlider() {
-		JSlider retVal = positionSlider;
+	public TimeSlider getPositionSlider() {
+		TimeSlider retVal = positionSlider;
 		if(retVal == null) {
-			retVal = new JSlider();
+			retVal = new TimeSlider();
 			retVal.setPaintLabels(false);
 			retVal.setPaintTicks(false);
 			retVal.setOrientation(SwingConstants.HORIZONTAL);
-			retVal.setMaximum(SLIDER_MAX);
 			retVal.addChangeListener(new PositionListener());
 			positionSlider = retVal;
 		}
@@ -390,7 +388,7 @@ public class PhonMediaPlayer extends JPanel {
 	private final MediaPlayerEventAdapter loadListener = new MediaPlayerEventAdapter() {
 
 		@Override
-		public void playing(MediaPlayer mediaPlayer) {
+		public void playing(final MediaPlayer mediaPlayer) {
 			mediaPlayer.pause();
 			mediaPlayer.removeMediaPlayerEventListener(this);
 			
@@ -400,6 +398,7 @@ public class PhonMediaPlayer extends JPanel {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					getPositionSlider().setMaximum((int)mediaPlayer.getLength());
 					renderFrame();
 				}
 				
@@ -600,7 +599,7 @@ public class PhonMediaPlayer extends JPanel {
 				final MediaPlayer mediaPlayer = getMediaPlayer();
 				if(mediaPlayer == null) return;
 				int sliderPos = getPositionSlider().getValue();
-				float pos = (float)sliderPos / SLIDER_MAX;
+				float pos = (float)sliderPos / getPositionSlider().getMaximum();
 				if(pos < 1.0f) {
 					mediaPlayer.setPosition(pos);
 					renderFrame();
@@ -766,7 +765,7 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void positionChanged(MediaPlayer mediaPlayer, float newPosition) {
 			super.positionChanged(mediaPlayer, newPosition);
-			int sliderLoc = Math.round(SLIDER_MAX * newPosition);
+			int sliderLoc = Math.round(getPositionSlider().getMaximum() * newPosition);
 			if(!getPositionSlider().getValueIsAdjusting())
 				getPositionSlider().setValue(sliderLoc);
 		}
@@ -865,7 +864,7 @@ public class PhonMediaPlayer extends JPanel {
 		if(getMediaPlayer() == null || slider == null || slider.getValueIsAdjusting()) return;
 		
 		final float pos = getMediaPlayer().getPosition();
-		final int sliderPos = Math.round(SLIDER_MAX * pos);
+		final int sliderPos = Math.round(slider.getMinimum() * pos);
 		slider.setValue(sliderPos);
 		
 		if(!getMediaPlayer().isPlaying())
