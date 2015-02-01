@@ -110,8 +110,8 @@
 	<properties>
 		<!-- Project settings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.sourceVersion>1.7</project.build.sourceVersion>
-		<project.build.targetVersion>1.7</project.build.targetVersion>
+		<project.build.sourceVersion>1.8</project.build.sourceVersion>
+		<project.build.targetVersion>1.8</project.build.targetVersion>
 
 		<!-- Dependency versions -->
 		<ca.hedlund.vlc4j.version>2.2</ca.hedlund.vlc4j.version>
