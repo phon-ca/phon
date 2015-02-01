@@ -864,7 +864,7 @@ public class PhonMediaPlayer extends JPanel {
 		if(getMediaPlayer() == null || slider == null || slider.getValueIsAdjusting()) return;
 		
 		final float pos = getMediaPlayer().getPosition();
-		final int sliderPos = Math.round(slider.getMinimum() * pos);
+		final int sliderPos = Math.round(slider.getMaximum() * pos);
 		slider.setValue(sliderPos);
 		
 		if(!getMediaPlayer().isPlaying())
