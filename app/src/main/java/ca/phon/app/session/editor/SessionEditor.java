@@ -213,14 +213,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			
 			@Override
 			public void eventOccured(EditorEvent ee) {
-				SwingUtilities.invokeLater(new Runnable() {
-
-					@Override
-					public void run() {
-						_dispose();
-					}
-						
-				});
+				SwingUtilities.invokeLater( () -> { _dispose(); } );
 			}
 			
 		});
