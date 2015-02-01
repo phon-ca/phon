@@ -1,6 +1,7 @@
 package ca.phon.media.player;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
@@ -55,6 +56,15 @@ public class PhonPlayerComponent extends JComponent {
 	
 	public void setScaleMode(ScaleMode scaleMode) {
 		this.scaleMode = scaleMode;
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		if(bufferedImage != null) {
+			return new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight());
+		} else {
+			return super.getPreferredSize();
+		}
 	}
 	
 	@Override
