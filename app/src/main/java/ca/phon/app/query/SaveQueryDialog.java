@@ -84,7 +84,6 @@ public class SaveQueryDialog extends JDialog {
 		this.queryScript = script;
 		
 		super.setTitle("Save query...");
-		super.setModal(true);
 		super.setResizable(false);
 
 		init();
