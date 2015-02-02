@@ -54,17 +54,18 @@ public class ResultListingFieldBuilder {
 	public final static String SPEAKER_NAME_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) name\", \"\"};\n"
-			+ "*/\n" + "\n" + "function getValue() { return (record.speaker ? record.speaker.toString() : \"\"); }\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return (record.speaker != null ? record.speaker.toString() : \"\"); }\n" + "";
 
 	public final static String SPEAKER_AGE_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) age (YY;MM.DD)\", \"\"};\n"
-			+ "*/\n" + "\n" + "function getValue() { return record.speaker.getAge(session.date); }\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return Packages.ca.phon.session.AgeFormatter.ageToString("
+					+ "(record.speaker.age == null ? record.speaker.getAge(session.date) : record.speaker.age)); }\n" + "";
 
 	public final static String SPEAKER_GENDER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output speaker (participant) gender\", \"\"};\n"
-			+ "*/\n" + "\n" + "function getValue() { return record.speaker.sex; }\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return (record.speaker != null && record.speaker.sex != null ? record.speaker.sex : \"\"); }\n" + "";
 
 	public final static String RECORD_TIER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
@@ -73,8 +74,8 @@ public class ResultListingFieldBuilder {
 			+ "			{string, tierName, \"${TIER}\", \"Tier name:\"},\n"
 			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
 			+ "*/\n" + "function getValue() { \n" + "retVal = \"\";\n"
-			+ "retVal += record.getTier(tierName).toString();\n" + "\n"
-			+ "if(removeGroupMarkers) {\n"
+			+ "retVal += (record.getTier(tierName) != null ? record.getTier(tierName).toString() : \"\");\n" + "\n"
+			+ "if(removeGroupMarkers == true) {\n"
 			+ "	retVal = retVal.replace(/\\[/g, \"\").replace(/\\]/g, \"\");\n"
 			+ "}\n return retVal; }\n" + "";
 

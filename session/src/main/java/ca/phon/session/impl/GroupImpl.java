@@ -64,6 +64,7 @@ public class GroupImpl implements Group {
 	@Override
 	public Object getTier(String name) {
 		final Tier<?> tier = record.getTier(name);
+		if(tier == null) return null;
 		int gIdx = groupIndex;
 		if(!tier.isGrouped())
 			gIdx = 0;
