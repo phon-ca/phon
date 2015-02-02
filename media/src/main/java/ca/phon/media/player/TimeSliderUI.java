@@ -165,6 +165,7 @@ public class TimeSliderUI extends SliderUI {
 				timeFrame.setFocusable(false);
 				timeFrame.setFocusableWindowState(false);
 				timeFrame.setUndecorated(true);
+				timeFrame.getRootPane().putClientProperty("Window.shadow", Boolean.FALSE);
 				
 				timeLbl = new JLabel(" 000:00.00 ");
 				timeLbl.setFont(FontPreferences.getSmallFont());
