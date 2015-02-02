@@ -40,7 +40,6 @@ public class PhonPlayerComponent extends JComponent {
 			bufferedImage = 
 					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 					.getDefaultConfiguration().createCompatibleImage(width, height);
-			// use video memory for image
 			bufferedImage.setAccelerationPriority(1.0f);
 		}
 		return this.bufferedImage;

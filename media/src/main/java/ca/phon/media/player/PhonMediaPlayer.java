@@ -54,6 +54,7 @@ import uk.co.caprica.vlcj.component.DirectMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
+import uk.co.caprica.vlcj.player.direct.format.RV32BufferFormat;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -285,16 +286,12 @@ public class PhonMediaPlayer extends JPanel {
 			retVal.setOrientation(SwingConstants.VERTICAL);
 			retVal.setMaximum(VOL_MAX);
 
-			retVal.addChangeListener(new ChangeListener() {
-
-				@Override
-				public void stateChanged(ChangeEvent ce) {
+			retVal.addChangeListener((ChangeEvent ce) -> {
 					JSlider slider = (JSlider)ce.getSource();
 					final MediaPlayer player = getMediaPlayer();
 					if(player == null) return;
 					player.setVolume(slider.getValue());
-				}
-			});
+				});
 			volumeSlider = retVal;
 		}
 		return retVal;
@@ -364,7 +361,9 @@ public class PhonMediaPlayer extends JPanel {
 				mediaPlayerComponent.release();
 			}
 		} 
-		mediaPlayerComponent = new DirectMediaPlayerComponent(new PhonBufferFormatCallback());
+		mediaPlayerComponent = new DirectMediaPlayerComponent((int sourceWidth, int sourceHeight) -> {
+			return new RV32BufferFormat(sourceWidth, sourceHeight);
+		});
 		
 		final MediaPlayer mediaPlayer = getMediaPlayer();
 		if(mediaPlayer == null) return;
@@ -392,19 +391,9 @@ public class PhonMediaPlayer extends JPanel {
 			mediaPlayer.pause();
 			mediaPlayer.removeMediaPlayerEventListener(this);
 			
-			// wait a small delay before attempting to render frame so
-			// that VLC thread has time to buffer video
-			Timer loadTimer = new Timer(2 * Math.round(1000.0f/mediaPlayer.getFps()), new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
+			SwingUtilities.invokeLater( () -> {
 					getPositionSlider().setMaximum((int)mediaPlayer.getLength());
-					renderFrame();
-				}
-				
-			});
-			loadTimer.setRepeats(false);
-			loadTimer.start();
+				});
 			
 			mediaPlayer.addMediaPlayerEventListener(mediaListener);
 			for(MediaPlayerEventListener listener:cachedListenerrs) {
@@ -602,7 +591,6 @@ public class PhonMediaPlayer extends JPanel {
 				float pos = (float)sliderPos / getPositionSlider().getMaximum();
 				if(pos < 1.0f) {
 					mediaPlayer.setPosition(pos);
-					renderFrame();
 				}
 			}
 		}
@@ -691,6 +679,18 @@ public class PhonMediaPlayer extends JPanel {
 		
 	}
 	
+	/**
+	 * Update frame using a timer.
+	 */
+	public void updateFrame() {
+		if(getMediaPlayer() == null) return;
+		Timer renderTimer = new Timer(Math.round(1000.0f/getMediaPlayer().getFps()), (ActionEvent ae) -> {
+			renderFrame();
+		});
+		renderTimer.setRepeats(false);
+		renderTimer.start();
+	}
+	
 	protected synchronized void renderFrame() {
 		Memory[] nativeBuffers = mediaPlayerComponent.getMediaPlayer().lock();
 		if(nativeBuffers != null && nativeBuffers.length > 0) {
@@ -703,16 +703,38 @@ public class PhonMediaPlayer extends JPanel {
 				BufferedImage img = mediaPlayerCanvas.getBufferedImage(w, h);
 				int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 		        nativeBuffer.getByteBuffer(0L, nativeBuffer.size()).asIntBuffer().get(rgbBuffer, 0, h * w);
+		        
+		        mediaPlayerComponent.getMediaPlayer().unlock();
 
 				mediaPlayerCanvas.repaint(Math.round(1000.0f / getMediaPlayer().getFps()));
 			}
 		} else {
+	        mediaPlayerComponent.getMediaPlayer().unlock();
+	        
 			mediaPlayerCanvas.setBufferedImage(null);
 			mediaPlayerCanvas.repaint();
 		}
-		mediaPlayerComponent.getMediaPlayer().unlock();
 	}
 
+	protected void startRenderTimer() {
+		final MediaPlayer mediaPlayer = getMediaPlayer();
+		if(mediaTimer == null && mediaPlayer.getVideoTrackCount() > 0) {
+			mediaTimer = new Timer(0, (ActionEvent e) -> {
+					renderFrame();
+				});
+			mediaTimer.setDelay(Math.round(1000.0f/mediaPlayer.getFps()));
+			mediaTimer.setRepeats(true);
+			mediaTimer.start();
+		}
+	}
+	
+	protected void stopRenderTimer() {
+		if(mediaTimer != null) {
+			mediaTimer.stop();
+			mediaTimer = null;
+		}
+	}
+	
 	/**
 	 * Media player listener
 	 */
@@ -721,6 +743,11 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void buffering(MediaPlayer mediaPlayer, float newCache) {
 			super.buffering(mediaPlayer, newCache);
+			
+			if(newCache >= 100.0f) {
+				startRenderTimer();
+			}
+			
 			if(PrefHelper.getBoolean("phon.debug", false)) {
 				final String logMsg = String.format("Buffering %s: %.2f%% complete", 
 						mediaPlayer.mrl(), newCache);
@@ -731,34 +758,20 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			super.playing(mediaPlayer);
-			if(mediaTimer == null && mediaPlayer.getVideoTrackCount() > 0) {
-				mediaTimer = new Timer(0, new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						renderFrame();
-					}
-					
-				});
-				mediaTimer.setDelay(Math.round(1000.0f/mediaPlayer.getFps()));
-				mediaTimer.setRepeats(true);
-				mediaTimer.start();
-			}
+			startRenderTimer();
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, pauseIcn);
 		}
 		
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			super.paused(mediaPlayer);
-			if(mediaTimer != null) {
-				mediaTimer.stop();
-				mediaTimer = null;
-			}
+			stopRenderTimer();
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
 		}
 		
 		@Override
 		public void stopped(MediaPlayer mediaPlayer) {
+			stopRenderTimer();
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
 		}
 		
@@ -866,11 +879,8 @@ public class PhonMediaPlayer extends JPanel {
 		final float pos = getMediaPlayer().getPosition();
 		final int sliderPos = Math.round(slider.getMaximum() * pos);
 		slider.setValue(sliderPos);
-		
-		if(!getMediaPlayer().isPlaying())
-			renderFrame();
 	}
-
+	
 	private final List<MediaPlayerEventListener> cachedListenerrs = 
 			new ArrayList<MediaPlayerEventListener>();
 	public void addMediaPlayerListener(MediaPlayerEventListener listener) {
