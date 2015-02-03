@@ -70,6 +70,7 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -488,6 +489,8 @@ public class ReportEditor extends JPanel implements SectionListener {
 				reportTreeModel = new ReportTreeModel(design);
 				reportTree.setModel(reportTreeModel);
 			} catch (IOException e) {
+				ToastFactory.makeToast(e.getLocalizedMessage()).start(openButton);
+				
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
