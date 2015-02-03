@@ -35,12 +35,14 @@ public class PhonPlayerComponent extends JComponent {
 	}
 	
 	public BufferedImage getBufferedImage(int width, int height) {
-		if(bufferedImage == null || 
+		if(bufferedImage == null ||
 				bufferedImage.getWidth() != width || bufferedImage.getHeight() != height) {
-			bufferedImage = 
-					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-					.getDefaultConfiguration().createCompatibleImage(width, height);
-			bufferedImage.setAccelerationPriority(1.0f);
+			if(width >= 0 && height >= 0) {
+				bufferedImage = 
+						GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+						.getDefaultConfiguration().createCompatibleImage(width, height);
+				bufferedImage.setAccelerationPriority(1.0f);
+			}
 		}
 		return this.bufferedImage;
 	}

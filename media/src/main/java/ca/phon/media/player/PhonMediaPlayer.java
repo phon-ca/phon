@@ -701,9 +701,11 @@ public class PhonMediaPlayer extends JPanel {
 				int h = (int)mediaPlayerComponent.getMediaPlayer().getVideoDimension().getHeight();
 				
 				BufferedImage img = mediaPlayerCanvas.getBufferedImage(w, h);
-				int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
-		        nativeBuffer.getByteBuffer(0L, nativeBuffer.size()).asIntBuffer().get(rgbBuffer, 0, h * w);
-		        
+				if(img != null) {
+					int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+			        nativeBuffer.getByteBuffer(0L, nativeBuffer.size()).asIntBuffer().get(rgbBuffer, 0, h * w);
+				}
+				
 		        mediaPlayerComponent.getMediaPlayer().unlock();
 
 				mediaPlayerCanvas.repaint(Math.round(1000.0f / getMediaPlayer().getFps()));
