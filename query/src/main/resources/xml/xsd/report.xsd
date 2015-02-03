@@ -34,8 +34,10 @@
                 <xs:sequence>
                     <xs:element ref="report-section" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
+                <xs:attribute name="version" type="xs:string" default="1.6"/>
             </xs:extension>
         </xs:complexContent>
+        
     </xs:complexType>
 
     <xs:complexType name="group" mixed="false">

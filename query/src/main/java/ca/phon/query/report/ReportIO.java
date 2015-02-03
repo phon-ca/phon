@@ -35,12 +35,16 @@ import javax.xml.stream.XMLStreamReader;
 
 import ca.phon.query.report.io.ObjectFactory;
 import ca.phon.query.report.io.ReportDesign;
+import ca.phon.util.VersionInfo;
 
 /**
  * Methods for reading/writing report designs.
  *
  */
 public class ReportIO {
+	
+	// internal control for report versions.
+	private final static String REPORT_VERSION = "2.0";
 	
 	/**
 	 * Read in a report from the given path
@@ -82,6 +86,10 @@ public class ReportIO {
 			final JAXBElement<ReportDesign> designEle =
 					unmarshaller.unmarshal(reader, ReportDesign.class);
 			retVal = designEle.getValue();
+			
+			if(!retVal.getVersion().equals(REPORT_VERSION)) {
+				throw new IOException("Report version " + retVal.getVersion() + " no longer supported.  Must be " + REPORT_VERSION);
+			}
 		} catch (JAXBException e) {
 			throw new IOException(e);
 		} catch (XMLStreamException e) {
@@ -122,6 +130,8 @@ public class ReportIO {
 	 */
 	public static void writeDesign(ReportDesign design, OutputStream os) throws IOException {
 		try {
+			design.setVersion(REPORT_VERSION);
+			
 			ObjectFactory factory = new ObjectFactory();
 			JAXBContext context = JAXBContext.newInstance(factory.getClass());
 			Marshaller marshaller = context.createMarshaller();
