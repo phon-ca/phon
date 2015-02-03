@@ -112,7 +112,7 @@ public class ResultListingFieldBuilder {
 			+ "			retVal += (retVal.length > 0 ? \",\" : \"\")\n"
 			+ "				   + key + \"=\" + val;\n" + "		}\n" + "	}\n" + "} else {\n"
 			+ "	val = metadata.get(fieldName);\n" + "	if(val)\n"
-			+ "		retVal = val + \"\";\n" + "	else\n" + "		retVal = \"blah\";\n"
+			+ "		retVal = val + \"\";\n" + "	else\n" + "		retVal = \"\";\n"
 			+ "}\n return retVal; }\n" + "";
 
 	public final static String SYLLABIFICATION_SCRIPT = "/*\n"
@@ -138,28 +138,17 @@ public class ResultListingFieldBuilder {
 			+ "		{separator, \"Options\", false},\n"
 			+ "			{bool, includeConstituentType, false, \"Include syllable constituent\", \"Syllabification:\"},\n"
 			+ "			{bool, removeGroupMarkers, false, \"Remove group markers (i.e., '[' and ']')\", \"Group markers:\"};\n"
-			+ "*/\n" + "function getValue() { \n" + "var retVal = \"\";\n" + "\n"
-			+ "for(grpIdx = 0; grpIdx < record.numberOfGroups; grpIdx++)\n"
-			+ "{\n" + "	alignmentChar = \"\\u2194\";\n"
-			+ "	ipaGrp = record.getGroup(\"IPA Target\", grpIdx);\n" + "\n"
-			+ "	retVal += (grpIdx > 0 ? \" \" : \"\");\n"
-			+ "	if(!removeGroupMarkers) retVal += \"[\";\n" + "\n"
-			+ "	// print alignment by groups\n"
-			+ "	alignment = record.getAlignmentData(ipaGrp);\n"
-			+ "	if(!alignment) continue;\n"
-			+ "	alignmentLength = alignment[0].length;\n" + "\n"
-			+ "	for(aIdx = 0; aIdx < alignmentLength; aIdx++)\n" + "	{\n"
-			+ "		topPhone = alignment[0][aIdx];\n"
-			+ "		btmPhone = alignment[1][aIdx];\n" + "\n"
-			+ "		retVal += (aIdx > 0 ? \";\" : \"\");\n"
-			+ "		retVal += (topPhone ? topPhone : \"_\");\n"
-			+ "		if(topPhone && includeConstituentType)\n"
-			+ "			retVal += \":\" + topPhone.scType.identifier;\n"
-			+ "		retVal += alignmentChar;\n"
-			+ "		retVal += (btmPhone ? btmPhone : \"_\");\n"
-			+ "		if(btmPhone && includeConstituentType)\n"
-			+ "			retVal += \":\" + btmPhone.scType.identifier;\n" + "	}\n"
-			+ "\n" + "	if(!removeGroupMarkers) retVal += \"]\";\n" + "}\n return retVal; }\n";
+			+ "*/\n" + "function getValue() { \n" + "retVal = \"\";\n"
+			+ "tier = record.getPhoneAlignment();\n"
+			+ "if(tier != null) {\n"
+			+ "\tfor(gIdx = 0; gIdx < tier.numberOfGroups(); gIdx++) {\n"
+			+ "\t\tretVal += (gIdx > 0 ? ' ' : '');\n"
+			+ "\t\tretVal += (removeGroupMarkers != true ? '[' : '');\n"
+			+ "\t\tretVal += tier.getGroup(gIdx).toString(includeConstituentType.booleanValue());\n"
+			+ "\t\tretVal += (removeGroupMarkers != true ? ']' : '');\n"
+			+ "\t}\n} return retVal; }\n" + "";
+			;
+			;
 	
 	/**
 	 * Returns fields: 'record #', 'Speaker' and 'Result'

@@ -26,6 +26,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.AudiblePhoneVisitor;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.util.PhonConstants;
 
 /**
  * 
@@ -98,5 +99,43 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		return extSupport.removeExtension(cap);
 	}
 	
+	@Override
+	public String toString() {
+		return toString(false);
+	}
+	
+	public String toString(boolean includeScType) {
+		final IPAElement[] topEles = getTopElements();
+		final IPAElement[] btmEles = getBottomElements();
+		final Integer[] topAlign = getTopAlignment();
+		final Integer[] btmAlign = getBottomAlignment();
+		
+		if(btmAlign.length != getAlignmentLength() || topAlign.length != getAlignmentLength()) return "";
+		
+		final StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < getAlignmentLength(); i++) {
+			final int topEleIdx = (topAlign[i] == null ? -1 : topAlign[i]);
+			final int btmEleIdx = (btmAlign[i] == null ? -1 : btmAlign[i]);
+			
+			final IPAElement topEle = 
+					(topEleIdx >= 0 && topEleIdx < topEles.length ? topEles[topEleIdx] : null);
+			final IPAElement btmEle = 
+					(btmEleIdx >= 0 && btmEleIdx < btmEles.length ? btmEles[btmEleIdx] : null);
+			
+			if(i > 0)
+				sb.append(',');
+			sb.append( (topEle != null ? topEle.getText() : PhonConstants.nullChar) );
+			if(includeScType && topEle != null) {
+				sb.append(":").append(topEle.getScType().getIdentifier());
+			}
+			sb.append(PhonConstants.doubleArrow);
+			sb.append( (btmEle != null ? btmEle.getText() : PhonConstants.nullChar) );
+			if(includeScType && btmEle != null) {
+				sb.append(":").append(btmEle.getScType().getIdentifier());
+			}
+		}
+		
+		return sb.toString();
+	}
 	
 }
