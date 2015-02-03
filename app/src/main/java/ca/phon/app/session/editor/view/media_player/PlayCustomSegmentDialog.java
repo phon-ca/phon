@@ -1,19 +1,26 @@
 package ca.phon.app.session.editor.view.media_player;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.media.player.PhonMediaPlayer;
@@ -22,11 +29,16 @@ import ca.phon.session.Record;
 import ca.phon.session.SegmentCalculator;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
-import ca.phon.ui.JRangeSlider;
+import ca.phon.ui.AbstractVerifier;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.VerifierListener;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.text.MediaSegmentField;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.MsFormatter;
+import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -56,11 +68,11 @@ public class PlayCustomSegmentDialog extends JDialog {
 	private ButtonGroup btnGrp;
 	private JRadioButton currentSegmentBtn;
 	private JRadioButton contiguousSegmentBtn;
-	private JRadioButton periodBtn;
+//	private JRadioButton periodBtn;
 	private JRadioButton recordRangeBtn;
 	private JRadioButton segmentTimeBtn;
 	
-	private JRangeSlider recordRange;
+	private JTextField rangeField;
 	private MediaSegmentField segmentField;
 	
 	private JButton playBtn;
@@ -97,17 +109,18 @@ public class PlayCustomSegmentDialog extends JDialog {
 		contiguousSegmentBtn.addActionListener(radioListener);
 		btnGrp.add(contiguousSegmentBtn);
 		
-		periodBtn = new JRadioButton("Adjacency sequence");
-		periodBtn.addActionListener(radioListener);
-		btnGrp.add(periodBtn);
+//		periodBtn = new JRadioButton("Adjacency sequence");
+//		periodBtn.addActionListener(radioListener);
+//		btnGrp.add(periodBtn);
 		
 		recordRangeBtn = new JRadioButton("Record range");
 		recordRangeBtn.addActionListener(radioListener);
 		btnGrp.add(recordRangeBtn);
-		recordRange = new JRangeSlider(1, session.getRecordCount(), editor.getCurrentRecordIndex()+1, 0);
-		recordRange.setEnabled(false);
-		recordRange.setPaintSlidingLabel(true);
-		recordRange.addChangeListener(rangeListener);
+		rangeField = new JTextField();
+		rangeField.setText( (editor.getCurrentRecordIndex()+1) + ".." + (editor.getCurrentRecordIndex()+1) );
+		rangeField.setInputVerifier(new RangeVerifier());
+		rangeField.setEnabled(false);
+		rangeField.getDocument().addDocumentListener(rangeListener);
 		
 		segmentTimeBtn = new JRadioButton("Specific range");
 		segmentTimeBtn.addActionListener(radioListener);
@@ -121,9 +134,9 @@ public class PlayCustomSegmentDialog extends JDialog {
 		add(header, cc.xyw(1, 1, 2));
 		add(currentSegmentBtn, cc.xyw(1, 2, 2));
 		add(contiguousSegmentBtn, cc.xyw(1, 3, 2));
-		add(periodBtn, cc.xyw(1, 4, 2));
+//		add(periodBtn, cc.xyw(1, 4, 2));
 		add(recordRangeBtn, cc.xyw(1, 5, 2));
-		add(recordRange, cc.xy(2, 6));
+		add(rangeField, cc.xy(2, 6));
 		add(segmentTimeBtn, cc.xyw(1, 7, 2));
 		add(segmentField, cc.xy(2, 8));
 		
@@ -169,20 +182,21 @@ public class PlayCustomSegmentDialog extends JDialog {
 			}
 		} else if(contiguousSegmentBtn.isSelected()) {
 			retVal = SegmentCalculator.contiguousSegment(editor.getSession(), editor.getCurrentRecordIndex());
-		} else if(periodBtn.isSelected()) {
-			retVal = SegmentCalculator.conversationPeriod(editor.getSession(), editor.getCurrentRecordIndex());
 		} else if(recordRangeBtn.isSelected()) {
-			final int startIndex = recordRange.getStart()-1;
-			final int endIndex = startIndex + recordRange.getLength();
-			
-			final Record startRecord = editor.getSession().getRecord(startIndex);
-			final MediaSegment startMedia = startRecord.getSegment().getGroup(0);
-			final Record endRecord = editor.getSession().getRecord(endIndex);
-			final MediaSegment endMedia = endRecord.getSegment().getGroup(0);
-			
-			if(startMedia != null && endMedia != null) {
-				retVal.setStartValue(startMedia.getStartValue());
-				retVal.setEndValue(endMedia.getEndValue());
+			try {
+				final Range range = Range.fromString("(" + rangeField.getText() + ")");
+				
+				final Record startRecord = editor.getSession().getRecord(range.getFirst()-1);
+				final MediaSegment startMedia = startRecord.getSegment().getGroup(0);
+				final Record endRecord = editor.getSession().getRecord(range.getLast()-1);
+				final MediaSegment endMedia = endRecord.getSegment().getGroup(0);
+				
+				if(startMedia != null && endMedia != null) {
+					retVal.setStartValue(startMedia.getStartValue());
+					retVal.setEndValue(endMedia.getEndValue());
+				}
+			} catch (Exception pe) {
+				return retVal;
 			}
 		} else if(segmentTimeBtn.isSelected()) {
 			final String times[] = segmentField.getText().split("-");
@@ -224,7 +238,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			final boolean enableRange = recordRangeBtn.isSelected();
-			recordRange.setEnabled(enableRange);
+			rangeField.setEnabled(enableRange);
 			
 			final boolean enableTimes = segmentTimeBtn.isSelected();
 			segmentField.setEnabled(enableTimes);
@@ -237,12 +251,117 @@ public class PlayCustomSegmentDialog extends JDialog {
 	/*
 	 * Record range listener
 	 */
-	private final ChangeListener rangeListener = new ChangeListener() {
+	private final DocumentListener rangeListener = new DocumentListener() {
 		
 		@Override
-		public void stateChanged(ChangeEvent arg0) {
+		public void removeUpdate(DocumentEvent e) {
 			updateSegmentTimes();
 		}
 		
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updateSegmentTimes();
+		}
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 	};
+	
+	/**
+	 * Range field validator
+	 */
+	private class RangeVerifier extends AbstractVerifier implements VerifierListener {
+		
+		/** Error message */
+		private String err = "";
+		
+		/** Range regex */
+		private String rangeRegex = "([0-9]+)(?:\\.\\.([0-9]+))?";
+		
+		public RangeVerifier() {
+			this.addVerificationListener(this);
+		}
+
+		@Override
+		public boolean verification(JComponent c) {
+			boolean retVal = true;
+			
+			Pattern p = Pattern.compile(rangeRegex);
+			if(c == rangeField) {
+				
+				// don't validate if we are not enabled
+				if(!rangeField.isEnabled()) return true;
+				
+				String rangeString = rangeField.getText();
+				String[] ranges = rangeString.split(",");
+				
+				for(String range:ranges) {
+					range = StringUtils.strip(range);
+					Matcher m = p.matcher(range);
+					
+					if(m.matches()) {
+						
+						// make sure range is valid
+						if(m.group(2) == null) {
+							String idxStr = m.group(1);
+							Integer idx = Integer.parseInt(idxStr);
+							if(idx < 0 || idx > editorRef.get().getSession().getRecordCount()) {
+								err = "Record out of bounds '" + idx + "'";
+								retVal = false;
+								break;
+							}
+						} else {
+							String firstStr = m.group(1);
+							String secStr = m.group(2);
+							
+							Integer first = Integer.parseInt(firstStr);
+							Integer second = Integer.parseInt(secStr);
+							if(first > second) {
+								err = "Invalid range  '" + range + "'";
+								retVal = false;
+								break;
+							} else if(
+									first > editorRef.get().getSession().getRecordCount() || second > editorRef.get().getSession().getRecordCount()) {
+								err = "Range out of bounds '" + range + "'";
+								retVal = false;
+								break;
+							}
+						}
+						
+					} else {
+						err = "Invalid range string '" + range + "'";
+						retVal = false;
+						break;
+					}
+					
+				}
+			} else {
+				retVal = false;
+			}
+			
+			return retVal;
+		}
+
+		@Override
+		public void verificationFailed(JComponent comp) {
+			final Toast toast = ToastFactory.makeToast(err);
+			toast.setMessageBackground(PhonGuiConstants.PHON_ORANGE);
+			toast.start(comp);
+		}
+
+		@Override
+		public void verificationPassed(JComponent comp) {
+			comp.setBackground(Color.white);
+		}
+
+		@Override
+		public void verificationReset(JComponent comp) {
+			comp.setBackground(Color.white);
+		}
+		
+	}
+	
 }

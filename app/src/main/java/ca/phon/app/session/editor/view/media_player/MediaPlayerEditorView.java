@@ -453,30 +453,42 @@ public class MediaPlayerEditorView extends EditorView {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		final Record utt = editor.currentRecord();
-		final MediaSegment media = utt.getSegment().getGroup(0);
+
+		final Participant speaker = utt.getSpeaker();
+		if(speaker == null) return;
 		
-		if(media == null) return;
+		Record firstRecord = utt;
+		Record lastRecord = utt;
 		
-		final long startTime = (long)media.getStartValue();
-		long endTime = (long)media.getEndValue();
-		
-		final boolean contiguous = Boolean.valueOf("" + pae.getData());
-		
-		if(contiguous) {
-			final Participant speaker = utt.getSpeaker();
+		// if contiguous
+		if(pae.getData() != null && pae.getData() instanceof Boolean && ((Boolean)pae.getData()).booleanValue()) {
+			for(int rIdx = editor.getCurrentRecordIndex()-1; rIdx >= 0; rIdx--) {
+				if(session.getRecord(rIdx).getSpeaker() == speaker) {
+					firstRecord = session.getRecord(rIdx);
+				} else {
+					break;
+				}
+			}
 			
-			for(int i = editor.getCurrentRecordIndex(); i < session.getRecordCount(); i++) {
-				final Record u = session.getRecord(i);
-				if(u.getSpeaker() == null && speaker != null) break;
-				if(u.getSpeaker() != null)
-					if(!u.getSpeaker().getId().equals(speaker.getId())) break;
-				final MediaSegment m = u.getSegment().getGroup(0);
-				if(m == null) break;
-				endTime = (long)m.getEndValue();
+			for(int rIdx = editor.getCurrentRecordIndex()+1; rIdx < session.getRecordCount(); rIdx++) {
+				if(session.getRecord(rIdx).getSpeaker() == speaker) {
+					lastRecord = session.getRecord(rIdx);
+				} else {
+					break;
+				}
 			}
 		}
 		
-		mediaPlayer.playSegment(startTime, (endTime-startTime));
+		final MediaSegment firstSegment = firstRecord.getSegment().getGroup(0);
+		final MediaSegment lastSegment = lastRecord.getSegment().getGroup(0);
+		
+		if(firstSegment != null && lastSegment != null) {
+			final long startTime = (long)firstSegment.getStartValue();
+			final long endTime = (long)lastSegment.getEndValue();
+			
+			mediaPlayer.playSegment(startTime, (endTime-startTime));
+		}
+		
 	}
 	
 	public void onPlayConvPeriod() {
@@ -547,8 +559,8 @@ public class MediaPlayerEditorView extends EditorView {
 			final JMenuItem playContiguousItem = new JMenuItem(new PlaySpeechTurnAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playContiguousItem);
 			
-			final JMenuItem playConvPeriodItem = new JMenuItem(new PlayAdjacencySequenceAction(getEditor(), MediaPlayerEditorView.this));
-			menu.add(playConvPeriodItem);
+//			final JMenuItem playConvPeriodItem = new JMenuItem(new PlayAdjacencySequenceAction(getEditor(), MediaPlayerEditorView.this));
+//			menu.add(playConvPeriodItem);
 		}
 
 		private void setupGotoItems(JPopupMenu menu) {

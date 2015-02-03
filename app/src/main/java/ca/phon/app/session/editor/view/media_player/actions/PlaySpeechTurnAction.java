@@ -14,7 +14,7 @@ public class PlaySpeechTurnAction extends MediaPlayerAction {
 
 	private static final long serialVersionUID = -8003381993326033725L;
 	
-	private final static String CMD_NAME = "Play current speech turn";
+	private final static String CMD_NAME = "Play current speaker turn";
 	
 	private final static String SHORT_DESC = "";
 	
@@ -35,7 +35,9 @@ public class PlaySpeechTurnAction extends MediaPlayerAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final MediaPlayerEditorView view = getMediaPlayerView();
-		view.onPlaySpeakerSegment(new PhonActionEvent(e));
+		final PhonActionEvent pae = new PhonActionEvent(e);
+		pae.setData(Boolean.TRUE);
+		view.onPlaySpeakerSegment(pae);
 	}
 
 }
