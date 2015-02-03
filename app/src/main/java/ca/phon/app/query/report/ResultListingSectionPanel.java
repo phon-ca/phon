@@ -183,13 +183,6 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 			}
 		}
 		
-//		for(ResultListingField field:getSection().getField()) {
-//			QueryScript qs = new QueryScript(field.getFieldValue().getScript());
-//			ScriptPanel scriptPanel = new ScriptPanel(qs);
-//			scriptPanel.addPropertyChangeListener(new ScriptPanelListener(field));
-//			scriptPanels.put(field, scriptPanel);
-//		}
-		
 		init();
 	}
 	

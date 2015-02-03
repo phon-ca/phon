@@ -21,6 +21,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -185,6 +187,9 @@ public class ScriptPanel extends JPanel {
 		
 		final ParamPanelFactory factory = new ParamPanelFactory();
 		scriptParams.accept(factory);
+		scriptParams.forEach( (ScriptParam param) -> {
+			param.addPropertyChangeListener(paramListener);
+		});
 		
 		final JPanel form = factory.getForm();
 		JScrollPane formScroller = new JScrollPane(form);
@@ -273,10 +278,6 @@ public class ScriptPanel extends JPanel {
 	 */
 	public void showForm() {
 		// update script params
-//		for(ScriptParam param:script.getScriptParams()) 
-//			param.removeListener(paramListener);
-//		script.updateScriptParams();
-		// swap editor with updated param panel
 		remove(scriptPanel);
 		add(paramPanel, BorderLayout.CENTER);
 		updateParamPanel();
@@ -312,41 +313,10 @@ public class ScriptPanel extends JPanel {
 		showForm();
 	}
 	
-//	public void onCancelEdit(PhonActionEvent pae) {
-//		String origScript = script.getScript(false);
-//		String newScript = scriptEditor.getText();
-//		if(!origScript.equals(newScript)) {
-//			int retVal = 
-//				NativeDialogs.showOkCancelDialogBlocking(
-//						CommonModuleFrame.getCurrentFrame(), "", 
-//						"Cancel editing", "Discard changes to script?");
-//			if(retVal == NativeDialogEvent.CANCEL_OPTION) {
-//				return;
-//			}
-//		}
-//		
-//		scriptEditor.setText(script.getScript(false));
-//		
-//		// swap editor with updated param panel
-//		remove(scriptPanel);
-//		add(paramPanel, BorderLayout.CENTER);
-//		updateParamPanel();
-//		revalidate();
-//	}
-	
-//	/**
-//	 * Listener for all params
-//	 */
-//	private ParamListener paramListener = new ParamListener() {
-//
-//		@Override
-//		public void onParamValueChanged(String paramid, Object oldvalue,
-//				Object newvalue) {
-//			String paramPropName = PARAM_PREFIX + "_" + paramid;
-//			firePropertyChange(paramPropName, oldvalue, newvalue);
-//		}
-//		
-//	};
+	private PropertyChangeListener paramListener = (PropertyChangeEvent evt) -> {
+		String paramPropName = PARAM_PREFIX + "_" + evt.getPropertyName();
+		firePropertyChange(paramPropName, evt.getOldValue(), evt.getNewValue());
+	};
 	
 	/**
 	 * Listener for script document changes
