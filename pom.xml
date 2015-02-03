@@ -127,7 +127,7 @@
 		<joda-time.joda-time.version>2.1</joda-time.joda-time.version>
 		<junit.junit.version>4.8.2</junit.junit.version>
 		<net.sf.opencsv.opencsv.version>2.3</net.sf.opencsv.opencsv.version>
-		<org.antlr.antlr.version>3.4</org.antlr.antlr.version>
+		<org.antlr.antlr.version>3.5.2</org.antlr.antlr.version>
 		<org.apache.commons.commons-lang3.version>3.1</org.apache.commons.commons-lang3.version>
 		<org.apache.commons.commons-io.version>1.3.2</org.apache.commons.commons-io.version>
 		<org.apache.commons.commons-collections4.version>4.0</org.apache.commons.commons-collections4.version>
@@ -145,7 +145,7 @@
 		<com.github.insubstantial.substance.version>7.2.1</com.github.insubstantial.substance.version>
 
 		<!-- Plugin versions -->
-		<org.antlr.antlr3-maven-plugin.version>3.1.3-1</org.antlr.antlr3-maven-plugin.version>
+		<org.antlr.antlr3-maven-plugin.version>3.5.2</org.antlr.antlr3-maven-plugin.version>
 		<org.apache.maven.plugins.maven-compiler-plugin.version>3.1</org.apache.maven.plugins.maven-compiler-plugin.version>
 		<org.apache.maven.plugins.maven-javadoc-plugin.version>2.8.1</org.apache.maven.plugins.maven-javadoc-plugin.version>
 		<org.apache.maven.plugins.maven-shade-plugin.version>2.2</org.apache.maven.plugins.maven-shade-plugin.version>

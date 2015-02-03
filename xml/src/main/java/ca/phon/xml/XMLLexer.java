@@ -191,13 +191,13 @@ public class XMLLexer implements TokenSource {
 			try {
 				retVal = tokenQueue.dequeue();
 			} catch (EmptyQueueException e) {
-				retVal = CommonToken.EOF_TOKEN;
+				retVal = new CommonToken(CommonToken.EOF);
 			}
 		} else {
 			pullTokens();
 			if(tokenQueue.isEmpty()) {
 				// at end of document
-				retVal = CommonToken.EOF_TOKEN;
+				retVal = new CommonToken(CommonToken.EOF);
 			} else {
 				retVal = nextToken();
 			}

@@ -120,7 +120,7 @@ public class IPALexer implements TokenSource {
 		}
 		
 		if(retVal == null) {
-			retVal = Token.EOF_TOKEN;
+			retVal = new CommonToken(CommonToken.EOF);
 		}
 		
 		return retVal;

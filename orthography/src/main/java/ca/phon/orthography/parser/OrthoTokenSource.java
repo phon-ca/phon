@@ -121,7 +121,7 @@ public class OrthoTokenSource implements TokenSource {
 		if(retVal != null) 
 			retVal.setTokenIndex(tokenIndex++);
 		else
-			retVal = CommonToken.EOF_TOKEN;
+			retVal = new CommonToken(CommonToken.EOF);
 		
 		return retVal;
 	}
