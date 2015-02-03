@@ -39,7 +39,7 @@ public class ResultListingFieldBuilder {
 	public final static String SESSION_DATE_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output session date (YYYY-MM-DD)\", \"\"};\n"
-			+ "*/\n" + "\n" + "function getValue() { return session.date; }\n" + "";
+			+ "*/\n" + "\n" + "function getValue() { return (session.date != null ? Packages.ca.phon.session.DateFormatter.dateTimeToString(session.date) : \"\"); }\n" + "";
 
 	public final static String SESSION_MEDIA_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
