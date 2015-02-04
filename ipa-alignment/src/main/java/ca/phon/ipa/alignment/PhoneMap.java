@@ -39,6 +39,10 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(PhoneMap.class, this);
 	
+	public PhoneMap() {
+		this(new IPATranscript(), new IPATranscript());
+	}
+	
 	/**
 	 * Constructor
 	 */
