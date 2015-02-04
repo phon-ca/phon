@@ -335,7 +335,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	@Override
 	public String[] lookup(String orthography) 
 		throws IPADictionaryExecption {
-		
+		orthography = StringUtils.strip(orthography, "?!\"'.\\/@&$()^%#*");
 		TernaryTree<List<String>> db;
 		try {
 			db = lazyLoadDb();

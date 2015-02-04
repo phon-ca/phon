@@ -70,7 +70,7 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 		OrthoWordIPAOptions ext = word.getExtension(OrthoWordIPAOptions.class);
 		if(ext == null || ext.getDictLang() != dictionary.getLanguage()) {
 			String text = word.getWord();
-			text = StringUtils.strip(text, "?!\".\\/");
+			
 			String[] opts = lookup(text);
 			ext = new OrthoWordIPAOptions(opts);
 			ext.setDictLang(dictionary.getLanguage());

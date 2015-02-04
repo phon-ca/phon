@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
@@ -132,6 +134,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 		List<String> retVal = new ArrayList<String>();
 		
 		if(conn != null) {
+			ortho = StringUtils.strip(ortho, "?!\"'.\\/@&$()^%#*");
 			String qSt = "SELECT * FROM transcript WHERE orthography = ? AND langId = ?";
 			try {
 				PreparedStatement pSt = conn.prepareStatement(qSt);
