@@ -22,9 +22,15 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -47,10 +53,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -74,6 +82,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXPanel;
@@ -664,11 +673,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	private JLabel infoLabel;
 	
 	/**
-	 * Search field
-	 */
-	private IpaMapSearchField searchField;
-	
-	/**
 	 * Status panel
 	 */
 	private JXStatusBar statusBar;
@@ -745,50 +749,13 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		searchPanel = getGridPanel(emptyGrid);
 		searchToggleButton = getToggleButton(emptyGrid, searchPanel);
 		
-		searchField = new IpaMapSearchField();
-		searchField.setPrompt("Search Glyphs");
-		searchField.setFont(getFont().deriveFont(12.0f));
-		searchField.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				if(searchField.getState() == FieldState.INPUT)
-					updateSearchPanel(searchField.getSearchType(), searchField.getText());
-				else
-					updateSearchPanel(searchField.getSearchType(), "");
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				if(searchField.getState() == FieldState.INPUT)
-					updateSearchPanel(searchField.getSearchType(), searchField.getText());
-				else
-					updateSearchPanel(searchField.getSearchType(), "");
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-				
-			}
-		});
-		
-		searchField.addPropertyChangeListener(new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent arg0) {
-				if(arg0.getPropertyName().equals(IpaMapSearchField.SEARCH_TYPE_PROP)) {
-					if(searchField.getText().length() > 0) {
-						updateSearchPanel(searchField.getSearchType(), searchField.getText());
-					}
-				}
-			}
-		});
-		
+		final JButton searchButton = new JButton("Search");
+		searchButton.addActionListener( this::showSearchFrame );
 		
 		JPanel searchSection = new JPanel(new VerticalLayout(0));
+		searchSection.add(searchButton);
 		searchSection.add(searchToggleButton);
 		searchContainer = searchSection;
-		searchContainer.setVisible(false);
 		
 		// static content
 		final JPanel centerPanel = new JPanel(new VerticalLayout(0));
@@ -857,6 +824,111 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		topPanel.add(favSection);
 		add(topPanel, BorderLayout.NORTH);
 		
+	}
+	
+	private IpaMapSearchField createSearchField() {
+		final IpaMapSearchField searchField = new IpaMapSearchField();
+		searchField.setPrompt("Search Glyphs");
+		searchField.setFont(getFont().deriveFont(12.0f));
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				if(searchField.getState() == FieldState.INPUT)
+					updateSearchPanel(searchField.getSearchType(), searchField.getText());
+				else
+					updateSearchPanel(searchField.getSearchType(), "");
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				if(searchField.getState() == FieldState.INPUT)
+					updateSearchPanel(searchField.getSearchType(), searchField.getText());
+				else
+					updateSearchPanel(searchField.getSearchType(), "");
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				
+			}
+		});
+		
+		searchField.addPropertyChangeListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if(arg0.getPropertyName().equals(IpaMapSearchField.SEARCH_TYPE_PROP)) {
+					if(searchField.getText().length() > 0) {
+						updateSearchPanel(searchField.getSearchType(), searchField.getText());
+					}
+				}
+			}
+		});
+		return searchField;
+	}
+	
+	private JFrame searchFrame = null;
+	private IpaMapSearchField searchField = null;
+	public void showSearchFrame(ActionEvent ae) {
+		if(searchFrame == null) {
+			searchFrame = new JFrame("IPA Map : Search");
+			searchFrame.setAlwaysOnTop(true);
+			searchFrame.setUndecorated(true);
+			searchFrame.getRootPane().putClientProperty("Window.shadow", Boolean.FALSE);
+			
+			searchField = createSearchField();
+			searchFrame.add(searchField);
+			
+			searchField.getTextField().addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+						searchFrame.setVisible(false);
+					}
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+				
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+						searchFrame.setVisible(false);
+					}
+				}
+			});
+			searchField.getEndButton().addActionListener( evt -> {
+				searchFrame.setVisible(false);
+			});
+			
+			searchFrame.addWindowFocusListener(new WindowFocusListener() {
+				
+				@Override
+				public void windowLostFocus(WindowEvent e) {
+					searchFrame.setVisible(false);
+				}
+				
+				@Override
+				public void windowGainedFocus(WindowEvent e) {
+					
+				}
+			});
+			
+		}
+		
+		final JComponent source = (JComponent)ae.getSource();
+		searchFrame.setSize(source.getWidth(), source.getHeight());
+		
+		Point sourcePt = ((JComponent)ae.getSource()).getLocationOnScreen();
+		searchFrame.setLocation(sourcePt.x, sourcePt.y);
+		searchFrame.setVisible(true);
+		
+		searchFrame.requestFocus();
+		searchField.getTextField().requestFocus();
 	}
 	
 	public float getScale() {
@@ -1012,16 +1084,11 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			prefHeight += statusBar.getPreferredSize().height;
 		}
 		
-		if(searchField != null) {
-			prefHeight += searchField.getPreferredSize().height;
-		}
-		
 		if(prefHeight > 0) 
 			prefSize.height = prefHeight + /* some extra space */ (6 * getCellDimension().height);
 		
 		return prefSize;
 	}
-	
 	
 	private JXCollapsiblePane getGridPanel(Grid grid) {
 		Font tFont = getFont();
@@ -1148,9 +1215,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	 * Create the context menu based on source component
 	 */
 	public void setupContextMenu(JPopupMenu menu, JComponent comp) {
-		menu.add(searchField);
-		menu.addSeparator();
-		
 		final CommonModuleFrame parentFrame = 
 				(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, comp);
 		if(parentFrame != null) {
@@ -1456,9 +1520,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		
 		searchContainer.add(searchToggleButton);
 		searchContainer.add(searchPanel);
-		
-		boolean visible = searchResults.size() > 0;
-		searchContainer.setVisible(visible);
 		
 		searchContainer.validate();
 		

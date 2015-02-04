@@ -97,7 +97,7 @@ public class SearchField extends JPanel {
 	}
 	
 	private BufferedImage clearIcn = null;
-	private BufferedImage createClearIcon() {
+	public BufferedImage createClearIcon() {
 		if(clearIcn == null) {
 			clearIcn = new BufferedImage(IconSize.SMALL.getWidth(), IconSize.SMALL.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
@@ -122,7 +122,7 @@ public class SearchField extends JPanel {
 	}
 	
 	private BufferedImage searchIcn = null;
-	private BufferedImage createSearchIcon() {
+	public BufferedImage createSearchIcon() {
 		if(searchIcn == null) {
 		BufferedImage retVal = new BufferedImage(IconSize.SMALL.getWidth()+8, IconSize.SMALL.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
@@ -231,6 +231,14 @@ public class SearchField extends JPanel {
 		setupPopupMenu(menu);
 		
 		menu.show(ctxButton, 0, ctxButton.getHeight());
+	}
+	
+	public JButton getContextButton() {
+		return this.ctxButton;
+	}
+	
+	public JButton getEndButton() {
+		return this.endButton;
 	}
 	
 	public String getPrompt() {
