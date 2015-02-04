@@ -44,7 +44,7 @@ import ca.phon.util.PrefHelper;
 public class BasicSyllabifier implements Syllabifier, IExtendable {
 	
 	public final static String TRACK_STAGES_PROP = BasicSyllabifier.class.getName() + ".trackStages";
-	private final boolean trackStages = PrefHelper.getBoolean(TRACK_STAGES_PROP, Boolean.FALSE);
+	private final boolean trackStages = PrefHelper.getBoolean(TRACK_STAGES_PROP, PrefHelper.getBoolean("phon.debug", Boolean.FALSE));
 	
 	@Extension(IPAElement.class)
 	public static class SyllabifierStageResults {
