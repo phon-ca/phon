@@ -10,6 +10,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.joda.time.Period;
+
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
@@ -148,11 +150,18 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 						if(optionsPanel.isAnonName()) {
 							p.setName(null);
 						}
+						
+						final Period calculatedAge = 
+								(session.getDate() != null && p.getBirthDate() != null ? p.getAge(session.getDate()) : null);
 						if(optionsPanel.isAnonBday()) {
 							p.setBirthDate(null);
 						}
 						if(optionsPanel.isAnonAge()) {
 							p.setAge(null);
+						} else {
+							if(calculatedAge != null && p.getAge(null) == null) {
+								p.setAge(calculatedAge);
+							}
 						}
 						if(optionsPanel.isAnonLang()) {
 							p.setLanguage(null);

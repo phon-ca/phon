@@ -503,12 +503,21 @@ public class ParticipantPanel extends JPanel {
 			idField.setText(getRoleId());
 		if(optionsPanel.isAnonName())
 			nameField.setText("");
+		
+		final String ageTxt = ageField.getPrompt();
 		if(optionsPanel.isAnonBday())
 			bdayField.getTextField().setText("");
-		if(optionsPanel.isAnonSex())
-			sexBox.setSelectedItem(Sex.UNSPECIFIED);
+		
 		if(optionsPanel.isAnonAge())
 			ageField.setText("");
+		else {
+			if(participant.getAge(null) == null && ageTxt.matches("[0-9]+;[0-9]{1,2}\\.[0-9]{1,2}")) {
+				ageField.setText(ageTxt);
+			}
+		}
+			
+		if(optionsPanel.isAnonSex())
+			sexBox.setSelectedItem(Sex.UNSPECIFIED);
 		if(optionsPanel.isAnonLang())
 			languageField.setText("");
 		if(optionsPanel.isAnonGroup())
