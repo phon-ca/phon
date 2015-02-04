@@ -85,36 +85,38 @@ public class TimeSliderUI extends SliderUI {
 		int min = slider.getMinimum();
 		int max = slider.getMaximum();
 		
+		if(slider.isEnabled()) {
 		// fill
-		double percentComplete = 
-				(double)(val - min) / (double)(max - min);
-
-		final Rectangle2D fillRect = 
-				new Rectangle2D.Double(rect.getX(), rect.getY(), rect.getWidth() * percentComplete, rect.getHeight());
-		final RoundRectangle2D fillRoundedRect = new RoundRectangle2D.Double(
-				fillRect.getX(), fillRect.getY(), fillRect.getWidth() + h/2.0, fillRect.getHeight(), 
-				h, h);
-		final Area fillArea = new Area(fillRoundedRect);
-		fillArea.intersect(new Area(roundRect));
-		
-		gp = new GradientPaint(0.0f, 0.0f, PhonGuiConstants.PHON_VIEW_TITLE_COLOR, 0.0f, h,
-				PhonGuiConstants.PHON_VIEW_TITLE_COLOR.darker());
-		g2.setPaint(gp);
-		g2.fill(fillArea);
-		
-		// thumb
-		double thumbWidth = rect.getHeight()-1;
-		final Rectangle2D thumbRect = 
-				new Rectangle2D.Double(fillRect.getMaxX()-thumbWidth/2.0, 0.0,
-						thumbWidth, thumbWidth);
-		final Ellipse2D thumbCircle = new Ellipse2D.Double(thumbRect.getX(), thumbRect.getY(), 
-				thumbRect.getWidth(), thumbRect.getHeight());
-		
-		gp = new GradientPaint(0.0f, 0.0f, Color.lightGray, 0.0f, h, Color.gray);
-		g2.setPaint(gp);
-		g2.fill(thumbCircle);
-		g2.setColor(Color.DARK_GRAY);
-		g2.draw(thumbCircle);
+			double percentComplete = 
+					(double)(val - min) / (double)(max - min);
+	
+			final Rectangle2D fillRect = 
+					new Rectangle2D.Double(rect.getX(), rect.getY(), rect.getWidth() * percentComplete, rect.getHeight());
+			final RoundRectangle2D fillRoundedRect = new RoundRectangle2D.Double(
+					fillRect.getX(), fillRect.getY(), fillRect.getWidth() + h/2.0, fillRect.getHeight(), 
+					h, h);
+			final Area fillArea = new Area(fillRoundedRect);
+			fillArea.intersect(new Area(roundRect));
+			
+			gp = new GradientPaint(0.0f, 0.0f, PhonGuiConstants.PHON_VIEW_TITLE_COLOR, 0.0f, h,
+					PhonGuiConstants.PHON_VIEW_TITLE_COLOR.darker());
+			g2.setPaint(gp);
+			g2.fill(fillArea);
+			
+			// thumb
+			double thumbWidth = rect.getHeight()-1;
+			final Rectangle2D thumbRect = 
+					new Rectangle2D.Double(fillRect.getMaxX()-thumbWidth/2.0, 0.0,
+							thumbWidth, thumbWidth);
+			final Ellipse2D thumbCircle = new Ellipse2D.Double(thumbRect.getX(), thumbRect.getY(), 
+					thumbRect.getWidth(), thumbRect.getHeight());
+			
+			gp = new GradientPaint(0.0f, 0.0f, Color.lightGray, 0.0f, h, Color.gray);
+			g2.setPaint(gp);
+			g2.fill(thumbCircle);
+			g2.setColor(Color.DARK_GRAY);
+			g2.draw(thumbCircle);
+		}
 	}
 	
 	protected Rectangle2D getTrackRect() {
@@ -143,6 +145,7 @@ public class TimeSliderUI extends SliderUI {
 		
 		@Override
 		public void mousePressed(MouseEvent me) {
+			if(!slider.isEnabled()) return;
 			slider.setValueIsAdjusting(true);
 			slider.setValue((int)posToTime(me.getX()));
 			slider.setValueIsAdjusting(false);
@@ -152,6 +155,7 @@ public class TimeSliderUI extends SliderUI {
 		
 		@Override
 		public void mouseReleased(MouseEvent me) {
+			if(!slider.isEnabled()) return;
 			if(dragging) {
 				dragging = false;
 			}
@@ -159,6 +163,7 @@ public class TimeSliderUI extends SliderUI {
 		
 		@Override
 		public void mouseEntered(MouseEvent e) {
+			if(!slider.isEnabled()) return;
 			slider.repaint();
 			if(timeFrame == null || !timeFrame.isVisible()) {
 				timeFrame = new JFrame();
@@ -178,6 +183,7 @@ public class TimeSliderUI extends SliderUI {
 
 		@Override
 		public void mouseExited(MouseEvent e) {
+			if(!slider.isEnabled()) return;
 			if(timeFrame != null) {
 				timeFrame.setVisible(false);
 			}
@@ -185,6 +191,7 @@ public class TimeSliderUI extends SliderUI {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			if(!slider.isEnabled()) return;
 			if(timeFrame != null) {
 				Point p = e.getPoint();
 				

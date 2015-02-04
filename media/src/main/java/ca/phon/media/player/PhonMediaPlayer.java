@@ -257,6 +257,7 @@ public class PhonMediaPlayer extends JPanel {
 		TimeSlider retVal = positionSlider;
 		if(retVal == null) {
 			retVal = new TimeSlider();
+			retVal.setValue(0);
 			retVal.setPaintLabels(false);
 			retVal.setPaintTicks(false);
 			retVal.setOrientation(SwingConstants.HORIZONTAL);
