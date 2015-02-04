@@ -56,32 +56,24 @@ exports.SyllableFilter = function(id) {
 	this.sNone = stressParamInfo.def[2];
 	
     var syllableTypeExprs = [ 
-    	"\\s?.:sctype(\"O|OEHS|LA\")*.:N+",
-    	"\\s?.:sctype(\"O|OEHS|LA\")*.:N+.:C+.*",
-    	"\\s?.:N+.*"
+        ".*", // any
+    	"\\s?.:sctype(\"O|OEHS|LA\")*.:N+", // open
+    	"\\s?.:sctype(\"O|OEHS|LA\")*.:N+.:C+.*", // closed
+    	"\\s?.:N+.*", // onset-less
+    	"\\s?.:N+", // open and onset-less
+    	"\\s?.:N+.:C+.*", // closed and onset-less
     ];
 	
-	var anySyllableTypeParamInfo = {
-		"id": id+".anySyll",
-		"def": true,
-		"title": "Syllable type:",
-		"desc": "Any syllable",
-	};
-	var anySyllableTypeParam;
-	this.anySyll = anySyllableTypeParamInfo.def;
-	
-	var syllableTypeParamInfo = {
-		"id": [ id+".openSylls", id+".closedSylls", id+".onsetlessSylls", id+".otherSylls" ],
-		"def": [ true, true, true, true ],
-		"title": "",
-		"desc": ["Open", "Closed", "Onsetless","Other (specify below)"],
-		"numCols": 1	
-	};
-	var syllableTypeParam;
-	this.openSylls = syllableTypeParamInfo.def[0];
-	this.closedSylls = syllableTypeParamInfo.def[1];
-	this.onsetlessSylls = syllableTypeParamInfo.def[2];
-	this.otherSylls = syllableTypeParamInfo.def[3];
+    var syllableTypeParamInfo = {
+        "id": id + ".syllableType",
+        "title": "Syllable type:",
+        "desc":[ "Any syllable", "Open", "Closed", "Onsetless", "Open and onsetless", "Closed and onsetless", "Other (specify below)"],
+        "def": 0
+    };
+    var syllableTypeParam;
+    this.syllableType = {
+        "index": 0, "toString": "Any syllable"
+    };
 	
 	// filter for other syllables
 	this.otherSyllTypePattern = new PatternFilter(id+".otherSyllTypePattern");
@@ -158,45 +150,31 @@ exports.SyllableFilter = function(id) {
 		    this.searchBySyllOpt = searchBySyllOpt;
 		}
 		
-		anySyllableTypeParam = new BooleanScriptParam(
-			anySyllableTypeParamInfo.id,
-			anySyllableTypeParamInfo.desc,
-			anySyllableTypeParamInfo.title,
-			anySyllableTypeParamInfo.def);
-		var filterTypeParamListener = new java.beans.PropertyChangeListener {
-			propertyChange: function(e) {
-				var enabled = e.source.getValue(anySyllableTypeParamInfo.id) == false;
-				syllableTypeParam.setEnabled(enabled);
-				patternFilter.setEnabled(enabled);
-			}
-		};
-		anySyllableTypeParam.addPropertyChangeListener(anySyllableTypeParamInfo.id, filterTypeParamListener);
-		
-		syllableTypeParam = new MultiboolScriptParam(
+		syllableTypeParam = new EnumScriptParam(
 			syllableTypeParamInfo.id,
-			syllableTypeParamInfo.def,
-			syllableTypeParamInfo.desc,
 			syllableTypeParamInfo.title,
-			syllableTypeParamInfo.numCols);
-		var syllableTypeParamListener = new java.beans.PropertyChangeListener {
-            propertyChange: function(e) {
-            	patternFilter.setEnabled(
-            		e.source.getValue(syllableTypeParamInfo.id[3]));
-            }
-        };
-        syllableTypeParam.setEnabled(this.anySyllableType == false);
-		syllableTypeParam.addPropertyChangeListener(syllableTypeParamInfo.id[3], syllableTypeParamListener);
+			syllableTypeParamInfo.def,
+			syllableTypeParamInfo.desc
+		);
 		
 		params.add(ignoreTruncatedOpt);
 		params.add(singletonGroupOpt);
 		params.add(posGroupOpt);
-		params.add(anySyllableTypeParam);
-		params.add(syllableTypeParam);
-		
-		this.otherSyllTypePattern.param_setup(params);
-		this.otherSyllTypePattern.setEnabled(this.anySyllableType == false);
-		
 		params.add(stressGroupOpt);
+		
+		var syllTypeListener = new java.beans.PropertyChangeListener {
+			propertyChange: function(e) {
+				var selected = e.source.getValue(e.source.paramId).index;
+				
+				patternFilter.setEnabled(selected == 6);
+			}
+		};
+		syllableTypeParam.addPropertyChangeListener(syllTypeListener);
+		
+		params.add(syllableTypeParam);
+		this.otherSyllTypePattern.param_setup(params);
+		this.otherSyllTypePattern.setEnabled(false);
+		
 	};
 
 	this.checkStress = function(syll) {
@@ -208,12 +186,26 @@ exports.SyllableFilter = function(id) {
 	};
 	
 	this.checkType = function(syll) {
-		var typeOk = 
-			(this.openSylls == true && syll.matches(syllableTypeExprs[0])) ||
-			(this.closedSylls == true && syll.matches(syllableTypeExprs[1])) ||
-			(this.onsetlessSylls == true && syll.matches(syllableTypeExprs[2])) ||
-			(this.otherSylls == true && this.otherSyllTypePattern.isUseFilter() && this.otherSyllTypePattern.check_filter(syll));
-		return typeOk;
+		var selectedType = this.syllableType.index;
+		var retVal = true;
+		switch(selectedType) {
+		case 0: // any
+			break;
+			
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			retVal = syll.matches(syllableTypeExprs[selectedType]);
+			break;
+			
+		case 6:
+			retVal = (this.otherSyllTypePattern.isUseFilter() && this.otherSyllTypePattern.check_filter(syll));
+			break;
+		}
+		
+		return retVal;
 	};
 	
 	/**
@@ -248,10 +240,7 @@ exports.SyllableFilter = function(id) {
 				truncatedOk = (aligned != null && aligned.length() > 0);
 			}
 			
-			var typeOk = true;
-			if(this.anySyll == false) {
-				typeOk = this.checkType(syll);
-			}
+			var typeOk = this.checkType(syll);
 			
 			if(posOk == true && stressOk == true && truncatedOk == true && typeOk)
 			{
