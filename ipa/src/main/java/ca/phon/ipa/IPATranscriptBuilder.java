@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ca.phon.extensions.UnvalidatedValue;
+
 /**
  * Class for building {@link IPATranscript}s.
  */
@@ -23,6 +25,12 @@ public class IPATranscriptBuilder {
 	 */
 	private final List<IPAElement> buffer = new ArrayList<IPAElement>();
 	
+	/**
+	 * Cached UnvalidatedValue, if an error occurs while building the transcript
+	 * this will be added to the returned (empty) transcript as an extension
+	 */
+	private UnvalidatedValue unvalidatedValue = null;
+	
 	public IPATranscriptBuilder() {
 		
 	}
@@ -35,7 +43,11 @@ public class IPATranscriptBuilder {
 	 * @return builder
 	 */
 	public IPATranscriptBuilder append(IPAElement ipaElement) {
-		buffer.add(ipaElement);
+		if(unvalidatedValue != null) {
+			unvalidatedValue.setValue(unvalidatedValue.getValue() + ipaElement.toString());
+		} else {
+			buffer.add(ipaElement);
+		}
 		return this;
 	}
 	
@@ -100,11 +112,9 @@ public class IPATranscriptBuilder {
 	 * @return builder
 	 */
 	public IPATranscriptBuilder append(Collection<? extends IPAElement> eleList) {
-		buffer.addAll(eleList);
+		eleList.forEach( this::append );
 		return this;
 	}
-	
-	
 	
 	/**
 	 * Append the given string to the transcript.
@@ -115,11 +125,19 @@ public class IPATranscriptBuilder {
 	 * @return builder
 	 */
 	public IPATranscriptBuilder append(String ipa) {
+		if(unvalidatedValue != null) {
+			unvalidatedValue.setValue(unvalidatedValue.getValue() + ipa);
+		}
 		try {
 			final IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
 			append(transcript);
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			
+			// keep as an unvalidated value
+			final IPATranscript transcript = toIPATranscript();
+			final ParseException pe = new ParseException(e.getMessage(), transcript.toList().size()+e.getErrorOffset());
+			unvalidatedValue = new UnvalidatedValue(transcript.toString() + ipa, pe);
 		}
 		return this;
 	}
@@ -213,7 +231,13 @@ public class IPATranscriptBuilder {
 	 * @return ipa
 	 */
 	public IPATranscript toIPATranscript() {
-		return new IPATranscript(buffer);
+		if(unvalidatedValue != null) {
+			final IPATranscript retVal = new IPATranscript();
+			retVal.putExtension(UnvalidatedValue.class, unvalidatedValue);
+			return retVal; 
+		} else {
+			return new IPATranscript(buffer);
+		}
 	}
 	
 	/**
