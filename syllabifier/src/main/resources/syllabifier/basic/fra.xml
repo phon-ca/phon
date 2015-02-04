@@ -69,13 +69,14 @@
     <Stage name="MarkOnset">
         <phonex>(O=\c:U).:N</phonex>
         <phonex>\b\s?(O=\g:N).:N</phonex>
+        <phonex>.:N(O=\g:N).:N</phonex>
         
         <group name="O" mark="Onset"/>
     </Stage>
     
     <Stage name="MaxOnset">
-        <phonex>(O=\c:U)\c:O:mdc("2","false")</phonex>
-        <phonex>\b\s?(O=\c:U)\c:O:mdc("1","false")</phonex>
+        <phonex>(O={c, -strident}:U)\c:O:mdc("2","false")</phonex>
+        <phonex>\b\s?(O={c, -strident}:U)\c:O:mdc("1","false")</phonex>
         <phonex>\b\s?(O=\c:U){fri}:O:mdc("0","true")</phonex>
         <group name="O" mark="Onset"/>
     </Stage>
@@ -88,6 +89,7 @@
     
     <Stage name="MarkLA">
         <phonex>\b\s?(LA={strident}).:O</phonex>
+        <phonex>.:C(LA={strident}).:O</phonex>
         
         <group name="LA" mark="Left Appendix"/>
     </Stage>
