@@ -352,6 +352,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		final ZoomAction showMoreAct = new ZoomAction(getEditor(), this);
 		showMoreButton = new JButton(showMoreAct);
+		showMoreButton.setFocusable(false);
 		
 		final ZoomAction zoomOutAct = new ZoomAction(getEditor(), this, false);
 		zoomOutButton = new JButton(zoomOutAct);
@@ -361,9 +362,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 		exportButton = new JButton(exportAct);
 		exportButton.setFocusable(false);
 		
-		
 		final GenerateAction generateAct = new GenerateAction(getEditor(), this);
 		generateButton = new JButton(generateAct);
+		generateButton.setFocusable(false);
 		
 		toolbar.add(playButton);
 		toolbar.addSeparator();
