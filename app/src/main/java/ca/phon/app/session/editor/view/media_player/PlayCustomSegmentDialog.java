@@ -122,7 +122,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 		rangeField.setEnabled(false);
 		rangeField.getDocument().addDocumentListener(rangeListener);
 		
-		segmentTimeBtn = new JRadioButton("Specific range");
+		segmentTimeBtn = new JRadioButton("Time range");
 		segmentTimeBtn.addActionListener(radioListener);
 		btnGrp.add(segmentTimeBtn);
 		segmentField = new MediaSegmentField();
