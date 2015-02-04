@@ -38,5 +38,10 @@ public class OrthoWordnet extends AbstractOrthoElement {
 	public String text() {
 		return word1.toString() + marker.getMarker() + word2.toString();
 	}
+	
+	@Override
+	public String toString() {
+		return text();
+	}
 
 }

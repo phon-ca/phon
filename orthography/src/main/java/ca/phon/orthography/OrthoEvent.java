@@ -47,5 +47,11 @@ public class OrthoEvent extends AbstractOrthoElement {
 	public String text() {
 		return ("*" + (this.type == null ? "" : this.type + ":") + this.data + "*");
 	}
+	
+	@Override
+	public String toString() {
+		return text();
+	}
+	
 
 }
