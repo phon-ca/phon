@@ -37,11 +37,11 @@ import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoManager;
 
 import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
-import ca.phon.session.UnvalidatedValue;
 import ca.phon.ui.action.PhonUIAction;
 
 /**

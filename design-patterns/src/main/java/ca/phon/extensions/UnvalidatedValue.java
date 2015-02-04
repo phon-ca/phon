@@ -1,4 +1,4 @@
-package ca.phon.session;
+package ca.phon.extensions;
 
 import java.text.ParseException;
 

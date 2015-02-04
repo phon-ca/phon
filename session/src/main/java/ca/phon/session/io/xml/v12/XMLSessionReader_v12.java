@@ -25,6 +25,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
@@ -47,7 +48,6 @@ import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
-import ca.phon.session.UnvalidatedValue;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.syllable.SyllabificationInfo;

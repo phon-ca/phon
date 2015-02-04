@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
-import ca.phon.session.UnvalidatedValue;
 
 public class TierImpl<T> implements Tier<T> {
 	

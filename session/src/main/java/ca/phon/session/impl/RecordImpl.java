@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -25,7 +26,6 @@ import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
-import ca.phon.session.UnvalidatedValue;
 import ca.phon.session.Word;
 
 /**

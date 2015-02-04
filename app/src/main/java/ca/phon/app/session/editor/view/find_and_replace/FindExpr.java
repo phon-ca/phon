@@ -8,13 +8,13 @@ import java.util.regex.Pattern;
 
 import ca.phon.app.session.editor.search.SearchType;
 import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
-import ca.phon.session.UnvalidatedValue;
 import ca.phon.util.Range;
 
 public class FindExpr {

@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -37,7 +38,6 @@ import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
-import ca.phon.session.UnvalidatedValue;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.xml.annotation.XMLSerial;
