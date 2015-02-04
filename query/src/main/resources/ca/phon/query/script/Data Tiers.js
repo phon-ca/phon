@@ -122,10 +122,19 @@ function query_record(recordIndex, record) {
 				        result.recordIndex = recordIndex;
 				        result.schema = "LINEAR";
 				        
+				        var startIdx = v.start;
+				        var endIdx = v.end;
+				        
+				        if(v.value instanceof IPATranscript) {
+				        	// we need to convert phone to string range
+				        	startIdx = word.getTier(searchTier).stringIndexOf(v.value);
+				        	endIdx = startIdx + v.value.toString().length();
+				        }
+				        
 				        var rv = factory.createResultValue();
 				        rv.tierName = searchTier;
 				        rv.groupIndex = group.groupIndex;
-				        rv.range = new Range(v.start, v.end, false);
+				        rv.range = new Range(startIdx, endIdx, false);
 				        rv.data = v.value;
 				        result.addResultValue(rv);
 				        
@@ -143,10 +152,19 @@ function query_record(recordIndex, record) {
 		        result.recordIndex = recordIndex;
 		        result.schema = "LINEAR";
 		        
+		        var startIdx = v.start;
+		        var endIdx = v.end;
+		        
+		        if(v.value instanceof IPATranscript) {
+		        	// we need to convert phone to string range
+		        	startIdx = group.getTier(searchTier).stringIndexOf(v.value);
+		        	endIdx = startIdx + v.value.toString().length();
+		        }
+		        
 		        var rv = factory.createResultValue();
 		        rv.tierName = searchTier;
 		        rv.groupIndex = group.groupIndex;
-		        rv.range = new Range(v.start, v.end, false);
+		        rv.range = new Range(startIdx, endIdx, false);
 		        rv.data = v.value;
 		        result.addResultValue(rv);
 		        
