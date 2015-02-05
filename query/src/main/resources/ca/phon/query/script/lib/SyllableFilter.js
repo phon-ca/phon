@@ -122,6 +122,13 @@ exports.SyllableFilter = function(id) {
 			stressParamInfo.desc,
 			stressParamInfo.title,
 			stressParamInfo.numCols);
+		
+		syllableTypeParam = new EnumScriptParam(
+				syllableTypeParamInfo.id,
+				syllableTypeParamInfo.title,
+				syllableTypeParamInfo.def,
+				syllableTypeParamInfo.desc
+		);
 			
 		if(this.searchBySyllableEnabled == true) {
 			var searchBySyllOpt = new BooleanScriptParam(
@@ -138,6 +145,9 @@ exports.SyllableFilter = function(id) {
                     singletonGroupOpt.setEnabled(enabled);
                     posGroupOpt.setEnabled(enabled);
                     stressGroupOpt.setEnabled(enabled);
+                    syllableTypeParam.setEnabled(enabled);
+                    
+                    patternFilter.setEnabled(enabled && syllableTypeParam.getValue(syllableTypeParamInfo.id).index == 6);
                 }    
             };
             var enabled = searchBySyllOpt.getValue(searchBySyllOpt.paramId) == true;
@@ -146,16 +156,9 @@ exports.SyllableFilter = function(id) {
             posGroupOpt.setEnabled(enabled);
             stressGroupOpt.setEnabled(enabled);
             searchBySyllOpt.addPropertyChangeListener(searchBySyllOpt.paramId, searchBySyllListener);
-            
+            syllableTypeParam.setEnabled(enabled);
 		    this.searchBySyllOpt = searchBySyllOpt;
 		}
-		
-		syllableTypeParam = new EnumScriptParam(
-			syllableTypeParamInfo.id,
-			syllableTypeParamInfo.title,
-			syllableTypeParamInfo.def,
-			syllableTypeParamInfo.desc
-		);
 		
 		params.add(ignoreTruncatedOpt);
 		params.add(singletonGroupOpt);
