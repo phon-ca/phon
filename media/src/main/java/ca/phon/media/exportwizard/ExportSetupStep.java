@@ -467,7 +467,6 @@ public class ExportSetupStep extends WizardStep {
 
 	public void onShowSaveDialog(PhonActionEvent pae) {
 		final SaveDialogProperties props = new SaveDialogProperties();
-		props.setFileFilter(FileFilter.allFilesFilter);
 		props.setMessage("Save as");
 		props.setCanCreateDirectories(true);
 		
@@ -475,7 +474,7 @@ public class ExportSetupStep extends WizardStep {
 				NativeDialogs.showSaveDialog(props);
 		if(selectedFile != null) {
 //			final String selectedFile = selectedFiles.get(0);
-			inputFileLabel.setFile(new File(selectedFile));
+			outputFileLabel.setFile(new File(selectedFile));
 		}
 	}
 	
