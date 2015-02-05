@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
+import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.undo.UndoManager;
@@ -745,19 +746,38 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 		@Override
 		public void set(String id, Color value, DockColor uiValue) {
-			if("title.active.text".equals(id)) {
-				uiValue.set(Color.white);
-			} else if("title.flap.active.text".equals(id)) {
-				uiValue.set(Color.white);
-			} else if("title.active.left".equals(id)) {
-				uiValue.set(PhonGuiConstants.PHON_VIEW_TITLE_COLOR);
-			} else if("title.active.right".equals(id)) {
-				uiValue.set(new Color(0.9f, 0.9f, 0.9f));
-			} else {
-				uiValue.set(value);
+			switch(id) {
+			case "title.flap.active.text":
+			case "title.active.text":
+				uiValue.set(UIManager.getColor("activeCaptionText"));
+				break;
+				
+			case "title.flap.inactive.text":
+			case "title.inactive.text":
+				uiValue.set(UIManager.getColor("inactiveCaptionText"));
+				break;
+				
+			case "title.flap.active.left":
+			case "title.active.left":
+				uiValue.set(UIManager.getColor("activeCaption"));
+				break;
+				
+			case "title.flap.active.right":
+			case "title.active.right":
+				uiValue.set(UIManager.getColor("control"));
+				break;
+				
+			case "title.flap.inactive.left":
+			case "title.inactive.left":
+				uiValue.set(UIManager.getColor("control"));
+				break;
+				
+			case "title.flap.inactive.right":
+			case "title.inactive.right":
+				uiValue.set(UIManager.getColor("control"));
+				break;
 			}
 		}
-		
 	}
 
 	@Override

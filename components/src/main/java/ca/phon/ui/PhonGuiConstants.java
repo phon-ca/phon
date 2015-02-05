@@ -18,26 +18,33 @@
 package ca.phon.ui;
 
 import java.awt.Color;
+import java.awt.SystemColor;
+
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 
 /**
  * List of constants for the phon GUI.
  * @author ghedlund
  *
+ * @deprecated
  */
 public class PhonGuiConstants {
 	/** The default transcript font */
 	public static final String DEFAULT_TRANSCRIPT_FONT = "Charis SIL-PLAIN-14";
 
 	/** Some default colors */
-	public static final Color PHON_SELECTED = Color.LIGHT_GRAY;
+	public static final Color PHON_SELECTED = UIManager.getColor("textHighlight");
 	public static final Color PHON_BACKGROUND = Color.WHITE;
 	public static final Color PHON_SHADED = new Color(243, 202, 79, 50);
 	public static final Color PHON_FOCUS = new Color(56, 117, 215);
 	public static final Color PHON_ORANGE = new Color(243, 202, 79);
+	
 	public static final Color PHON_TIER_FOCUS_BACKGROUND = Color.decode("0xffff99");
 	
-	public static final Color PHON_UI_STRIP_COLOR = new Color(240, 240, 240);
+	public static final Color PHON_UI_STRIP_COLOR = (Color)UIManager.getDefaults().getColor("control");
+			//new Color(240, 240, 240);
 	
-	public static final Color PHON_VIEW_TITLE_COLOR = new Color(125, 149, 169);
+	public static final Color PHON_VIEW_TITLE_COLOR = SystemColor.activeCaption;
 
 }
