@@ -42,7 +42,7 @@ public class PhonGuiConstants {
 	
 	public static final Color PHON_TIER_FOCUS_BACKGROUND = Color.decode("0xffff99");
 	
-	public static final Color PHON_UI_STRIP_COLOR = (Color)UIManager.getDefaults().getColor("control");
+	public static final Color PHON_UI_STRIP_COLOR = Color.decode("0xF0F8FF");
 			//new Color(240, 240, 240);
 	
 	public static final Color PHON_VIEW_TITLE_COLOR = SystemColor.activeCaption;

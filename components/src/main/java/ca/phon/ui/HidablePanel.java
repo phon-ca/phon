@@ -27,6 +27,7 @@ import java.util.prefs.Preferences;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.UIManager;
 
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.painter.CompoundPainter;
@@ -122,7 +123,7 @@ public class HidablePanel extends MultiActionButton {
 		onHideAct.putValue(Action.LARGE_ICON_KEY, hideIcn);
 		super.addAction(onHideAct);
 
-		MattePainter matte = new MattePainter(PhonGuiConstants.PHON_UI_STRIP_COLOR);
+		MattePainter matte = new MattePainter(UIManager.getColor("control"));
 		RectanglePainter rectPainter = new RectanglePainter(1, 1, 1, 1);
 		rectPainter.setFillPaint(PhonGuiConstants.PHON_SHADED);
 		CompoundPainter<JXLabel> cmpPainter = new CompoundPainter<JXLabel>(matte, rectPainter);

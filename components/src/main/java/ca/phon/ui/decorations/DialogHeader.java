@@ -27,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.painter.CompoundPainter;
@@ -90,7 +91,7 @@ public class DialogHeader extends JXHeader {
 		GlossPainter gloss = new GlossPainter();
 		IconPainter icon = new IconPainter();
 		
-		GradientPaint gp = new GradientPaint(new Point(0, 0), Color.white, new Point(200, 100), PhonGuiConstants.PHON_UI_STRIP_COLOR);
+		GradientPaint gp = new GradientPaint(new Point(0, 0), Color.white, new Point(200, 100), UIManager.getColor("control"));
 		MattePainter mp = new MattePainter(gp);
 		
 		PinstripePainter pinstripe = new PinstripePainter(new Color(240, 240, 240), 45.0, 0.5, 5.0);

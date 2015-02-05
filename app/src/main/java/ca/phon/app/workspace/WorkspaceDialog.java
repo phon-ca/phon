@@ -49,6 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -685,7 +686,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 
 			
 			GradientPaint gp = new GradientPaint(new Point(0,0), Color.white, 
-					new Point(arg2, arg3), PhonGuiConstants.PHON_UI_STRIP_COLOR);
+					new Point(arg2, arg3), UIManager.getColor("control"));
 			MattePainter gpPainter = new MattePainter(gp);
 			
 			gpPainter.paint(arg0, arg1, arg2, arg3);
