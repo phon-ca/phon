@@ -764,7 +764,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				
 			case "title.flap.active.right":
 			case "title.active.right":
-				uiValue.set(UIManager.getColor("control"));
+				uiValue.set(UIManager.getColor("activeCaption"));
 				break;
 				
 			case "title.flap.inactive.left":

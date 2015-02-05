@@ -975,7 +975,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			
 			@Override
 			public void paint(Graphics2D g, JXButton object, int width, int height) {
-				MattePainter mp = new MattePainter(UIManager.getColor("inactiveCaption"));
+				MattePainter mp = new MattePainter(UIManager.getColor("Button.background"));
 				mp.paint(g, object, width, height);
 			}
 		});
