@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.Toolkit;
@@ -67,6 +68,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JToolTip;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
@@ -129,7 +131,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * set as a floating point value between 0 and 1.
  * 
  */
-public class IpaMap extends JPanel implements ClipboardOwner {
+public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	
 	private static final long serialVersionUID = 1758355523938039972L;
 
@@ -2063,6 +2065,49 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 
 	@Override
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		int prefWidth = 0;
+		int prefHeight = 0;
+		// add size of first 3 grid panels
+		if(gridPanels.size() >= 3) {
+			for(int i = 0; i < 3; i++) {
+				JXCollapsiblePane gridPanel = gridPanels.get(i);
+				boolean wasCollapsed = gridPanel.isCollapsed();
+				gridPanel.setCollapsed(false);
+				prefHeight += gridPanel.getPreferredSize().height;
+				gridPanel.setCollapsed(wasCollapsed);
+				prefHeight += toggleButtons.get(i).getPreferredSize().height;
+				prefWidth = (int)Math.max(prefWidth, gridPanel.getPreferredSize().getWidth());
+			}
+			
+		}
+		
+		return new Dimension(prefWidth, prefHeight);
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect,
+			int orientation, int direction) {
+		return (int)getCellDimension().getHeight();
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect,
+			int orientation, int direction) {
+		return getScrollableUnitIncrement(visibleRect, orientation, direction) * 3;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return true;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
 	}
 	
 }
