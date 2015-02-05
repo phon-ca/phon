@@ -752,6 +752,8 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 		searchToggleButton = getToggleButton(emptyGrid, searchPanel);
 		
 		final JButton searchButton = new JButton("Search");
+		searchButton.putClientProperty("JComponent.sizeVariant", "small");
+		
 		searchButton.addActionListener( this::showSearchFrame );
 		
 		JPanel searchSection = new JPanel(new VerticalLayout(0));
@@ -969,6 +971,13 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 				
 				return retVal;
 			}
+
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(0, 20);
+			}
+			
+			
 		};
 		
 		btn.setHorizontalAlignment(SwingConstants.LEFT);
@@ -985,6 +994,8 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btn.setBorderPainted(false);
 		btn.setFocusable(false);
+		
+		btn.putClientProperty("JComponent.sizeVariant", "small");
 
 		btn.revalidate();
 		
