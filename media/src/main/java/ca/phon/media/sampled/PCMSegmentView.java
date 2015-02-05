@@ -521,7 +521,7 @@ public class PCMSegmentView extends JComponent {
 		final long len = bytes.length;
 		final AudioFormat format = getAudioFormat();
 		
-		final AudioInputStream aio = new AudioInputStream(bin, format, len);
+		final AudioInputStream aio = new AudioInputStream(bin, format, (len/format.getFrameSize()));
 		AudioSystem.write(aio, Type.WAVE, file);
 	}
 	
