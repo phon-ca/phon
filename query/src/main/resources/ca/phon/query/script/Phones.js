@@ -208,9 +208,8 @@ function query_record(recordIndex, record) {
 		    var syllList = new Array();
 		    for(j = 0; j < toSearch.length; j++) {
 		        var obj = toSearch[j];
-		        var aligned = (phoneMap != null ? phoneMap.getAligned(obj.audiblePhones()) : new IPATranscript());
-		        var sylls = filters.syllable.getRequestedSyllables(obj,
-		        	(aligned == null ? new IPATranscript() : new IPATranscript(aligned)));
+		        var aligned = (phoneMap != null ? phoneMap : new Packages.ca.phon.ipa.alignment.PhoneMap());
+		        var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
 		        
 		        for(k = 0; k < sylls.length; k++) {
 		            syllList.push(sylls[k]);

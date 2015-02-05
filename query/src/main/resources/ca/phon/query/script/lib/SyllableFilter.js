@@ -237,7 +237,7 @@ exports.SyllableFilter = function(id) {
 			
 			var truncatedOk = true;
 			if(this.ignoreTruncated == true) {
-				truncatedOk = (aligned != null && aligned.length() > 0);
+				truncatedOk = (aligned != null && aligned.getAligned(syll.audiblePhones()).length > 0);
 			}
 			
 			var typeOk = this.checkType(syll);
