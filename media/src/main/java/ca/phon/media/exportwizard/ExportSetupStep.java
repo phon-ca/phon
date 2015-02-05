@@ -456,6 +456,7 @@ public class ExportSetupStep extends WizardStep {
 		props.setAllowMultipleSelection(false);
 		props.setCanChooseDirectories(false);
 		props.setCanChooseFiles(true);
+		props.setRunAsync(false);
 		
 		final List<String> selectedFiles = 
 				NativeDialogs.showOpenDialog(props);
@@ -469,6 +470,7 @@ public class ExportSetupStep extends WizardStep {
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setMessage("Save as");
 		props.setCanCreateDirectories(true);
+		props.setRunAsync(false);
 		
 		final String selectedFile = 
 				NativeDialogs.showSaveDialog(props);
