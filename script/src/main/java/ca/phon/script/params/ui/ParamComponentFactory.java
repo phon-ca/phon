@@ -1,6 +1,8 @@
 package ca.phon.script.params.ui;
 
+import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
@@ -29,6 +31,7 @@ import ca.phon.script.params.MultiboolScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.SeparatorScriptParam;
 import ca.phon.script.params.StringScriptParam;
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 
@@ -204,15 +207,21 @@ public class ParamComponentFactory {
 				
 				return retVal;
 			}
+			
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(0, 20);
+			}
 		};
 		
 		btn.setHorizontalAlignment(SwingConstants.LEFT);
-		
+		btn.putClientProperty("JComponent.sizeVariant", "small");
+		btn.setBorderPainted(false);
 		btn.setBackgroundPainter(new Painter<JXButton>() {
 			
 			@Override
 			public void paint(Graphics2D g, JXButton object, int width, int height) {
-				MattePainter mp = new MattePainter(ca.phon.ui.PhonGuiConstants.PHON_SELECTED);
+				MattePainter mp = new MattePainter(Color.lightGray);
 				mp.paint(g, object, width, height);
 			}
 		});
