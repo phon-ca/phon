@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
@@ -28,6 +29,7 @@ import ca.phon.app.session.editor.view.common.TierDataConstraint;
 import ca.phon.app.session.editor.view.common.TierDataLayout;
 import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
@@ -278,6 +280,11 @@ public class RecordLookupPanel extends JPanel {
 		
 		final IPATranscript ipa = lookupTier.getGroup(i);
 		final IPATranscript ipaA = (new IPATranscriptBuilder()).append(ipa.toString()).toIPATranscript();
+		if(ipa.getExtension(UnvalidatedValue.class) != null) {
+			final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
+			final UnvalidatedValue uv2 = new UnvalidatedValue(uv.getValue(), new ParseException(uv.getParseError().getMessage(), uv.getParseError().getErrorOffset()));
+			ipaA.putExtension(UnvalidatedValue.class, uv2);
+		}
 		
 		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
 		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);

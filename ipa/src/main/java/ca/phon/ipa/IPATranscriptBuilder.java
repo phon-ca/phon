@@ -127,6 +127,7 @@ public class IPATranscriptBuilder {
 	public IPATranscriptBuilder append(String ipa) {
 		if(unvalidatedValue != null) {
 			unvalidatedValue.setValue(unvalidatedValue.getValue() + ipa);
+			return this;
 		}
 		try {
 			final IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
@@ -150,8 +151,17 @@ public class IPATranscriptBuilder {
 	 * @return builder
 	 */
 	public IPATranscriptBuilder append(IPATranscript ipa) {
-		for(IPAElement ele:ipa) {
-			append(ele);
+		if(ipa.getExtension(UnvalidatedValue.class) != null) {
+			final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
+			final String current = toIPATranscript().toString();
+			final String unvalidated = current + uv.getValue();
+			final int newIdx = current.length() + uv.getParseError().getErrorOffset();
+			final ParseException pe = new ParseException(uv.getParseError().getMessage(), newIdx);
+			unvalidatedValue = new UnvalidatedValue(unvalidated, pe);
+		} else {
+			for(IPAElement ele:ipa) {
+				append(ele);
+			}
 		}
 		return this;
 	}
