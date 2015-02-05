@@ -180,7 +180,7 @@ public class FindExpr {
 		}
 		lastMatcher = regexPattern.matcher(txt);
 		
-		if(lastMatcher.find(charIdx)) {
+		if(charIdx < txt.length() && lastMatcher.find(charIdx)) {
 			return new Range(lastMatcher.start(), lastMatcher.end(), false);
 		}
 		return null;
