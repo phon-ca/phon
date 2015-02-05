@@ -461,8 +461,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 					final float oldVal = (Float)evt.getOldValue();
 					final float newVal = (Float)evt.getNewValue();
 					
-					final double oldX = view.modelToView(oldVal);
-					final double newX = view.modelToView(newVal);
+					final double oldX = Math.max(0, view.modelToView(oldVal) - 1);
+					final double newX = Math.min(view.getWidth(), view.modelToView(newVal)+1);
 					final Rectangle clipRect = 
 							new Rectangle((int)oldX, 0, (int)newX, view.getHeight());
 					view.repaint(clipRect);
