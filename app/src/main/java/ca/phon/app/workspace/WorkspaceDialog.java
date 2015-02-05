@@ -62,6 +62,7 @@ import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
@@ -725,10 +726,13 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		// if we are the only window open exit the application
-		if(!OSInfo.isMacOs()) {
-			if(CommonModuleFrame.getOpenWindows().size() == 0)
-			{
-				System.exit(0);
+		if(CommonModuleFrame.getOpenWindows().size() == 0)
+		{
+			try {
+				PluginEntryPointRunner.executePlugin("Exit");
+			} catch (PluginException e1) {
+				LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+				System.exit(1);
 			}
 		}
 	}

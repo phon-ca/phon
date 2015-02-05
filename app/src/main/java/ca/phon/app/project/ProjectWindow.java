@@ -1038,13 +1038,17 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		// open the open-project window on Windows if no other project window
 		// is open
-		if(!otherProjectsOpen && !OSInfo.isMacOs()) {
+		if(!otherProjectsOpen) {
 //			ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
 //				"ca.phon.modules.core.OpenProjectController");
 //			LoadModule lm = new LoadModule(mi, new HashMap<String, Object>());
 //			lm.start();
-			// quit
-			System.exit(0);
+			try {
+				PluginEntryPointRunner.executePlugin("Exit");
+			} catch (PluginException e1) {
+				LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+				System.exit(1);
+			}
 		}
 	}
 
