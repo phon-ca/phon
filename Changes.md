@@ -1,5 +1,70 @@
 # Phon 2.0 Changes
 
+## Changes from Phon 2.0.4
+
+### General
+ * Updated to Java 1.8.0_31 (JRE provided with installers.)
+ * Improved support for HiDPI (e.g., Apple Retina) displays.
+ * Added transliteration dictionary for Slovak.
+ * Logging behaviour can now be modified using a property file.  The location of the file is specified using the property 'phonlog.properties' and must follow the specification outlined at http://docs.oracle.com/cd/E19717-01/819-7753/gcblo/index.html.
+
+### IPA Map
+ * Added search button to IPA Map.
+ * The 'Always on Top' behaviour can now be modified.
+
+### Session Editor
+ * Added a new command to the Record Data view for merging all groups in the current record.
+ * A dialog allowing selection of optional fields to anonymize is now displayed when using the Anonymize function in the Participant editor.
+ * Calculated age is now retained if Age is not selected to be cleared when using the Anonymize participant function.
+ * New lightweight video player replaces VLC opengl renderer in Media Player view.
+ * Changed UI for position slider in Media Player view.
+ * Default value for segmentation window is now 0.
+ * Speech analysis view initially displays more time on each side of the current segment.
+ * Zoom-in/out buttons in Speech Analysis view will keep current mid-point 'centered' in the view.
+ * Navigation buttons in Session Editor no long keep focus when clicked.
+ * Added confirmation dialog when deleting records in the Session Editor.
+ * Improved error reporting when using the IPA lookup console in IPA Lookup view.
+
+### Queries
+ * Added new filters for syllable type to the Phones.js query.
+ * Improved context menu items for 'Toggle Hiatus' with adjacent nuclei in Syllabication & Alignment view.
+ * Reversed order of add/edit participant/tier buttons in Session Information and Tier Management views.
+ * Added debugger for Phon queries (only available when property 'phon.debug' is 'true'.)
+
+### UI
+ * Changed some UI colours to match system theme colours.
+ * Double-clicking a result in Check Transcriptions will navigate to the relevant record.
+
+### Bug Fixes
+ * Mac OS X dialogs now display as sheets where appropriate and will no longer compete for modality with Java dialogs.
+ * Updated French syllabifiers.
+ * Fixed modifying IPA for a group when no data has been entered for all previous groups in the same tier.
+ * Fixed result highlighting for searches involving syllable patterns.
+ * Fixed result highlighting for aligned searches in IPA transcripts which included combining diacritics.
+ * Fixed option for including excluded records in queries.
+ * Fixed case sensitive options for PatternFilter.js.
+ * Fixed option to exclude aligned values in Phones.js.
+ * Fixed filter for truncated syllables in queries.
+ * Fixed null pointer exception when using regular expressions with PatternFilter.js in queries.
+ * Fixed an issue with using the '+' (one or more) quantifier in Stress Pattern matchers.
+ * Fixed alignment behaviour between grouped and non-grouped tiers in queries.
+ * Fixed an issue when using the 'Find Next' button in the Find & Replace view if the language is regex and the last match was at the end of a group.
+ * Fixed retention of result listing parameters in report editor.
+ * Fixed column scripts for result listings in report editor.  Older reports will no longer open.
+ * Blind transcriber password check now works correctly.
+ * Fixed calculation of the 'chksize' header value when saving segments using Speech Analysis view.
+ * Syllabifier names are now displayed correctly in combo boxes.
+ * Orthography -> IPA lookups are now case insensitive.
+ * Fixed save button in Speech Analysis view.
+ * Segments which start at 0.0s will now be rendered correctly in the Speech Analysis view.
+ * Fixed command for dropping user-defined IPA dictionary in IPA Lookup view.
+ * Fixed the 'Toggle Hiatus' action in the Syllablcation & Alignment view for IPA Target transcripts.
+ * Fixed font used in result set table.
+ * Window/context menus will no longer disappear behind the media player.
+ * Retain selection of tier when using the tier movement buttons in the Tier Management view.
+ * Fixed highlighting suffix codes in Orthography tier.
+ * Generating a TextGrid using the Praat menu of the Speech Analysis view will now generate a TextGrid  for the current (instead of previous) record.
+ 
 ## Changes from Phon 2.0.3
 
 ### General
