@@ -177,6 +177,8 @@ public class TimeSliderUI extends SliderUI {
 				
 				timeFrame.add(timeLbl);
 				timeFrame.pack();
+				
+				mouseMoved(e);
 			}
 			timeFrame.setVisible(true);
 		}
