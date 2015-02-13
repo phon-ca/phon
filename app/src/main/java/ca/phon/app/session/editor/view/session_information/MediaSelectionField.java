@@ -26,7 +26,6 @@ public class MediaSelectionField extends FileSelectionField {
 	public MediaSelectionField(Project project) {
 		super();
 		this.project = project;
-		setFileFilter(FileFilter.mediaFilter);
 		textField.setPrompt("Session media location");
 	}
 
