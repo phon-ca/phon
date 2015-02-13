@@ -610,8 +610,9 @@ public class QueryEditorWindow extends CommonModuleFrame {
         PhonLoggerConsole errDisplay = new PhonLoggerConsole();
         errDisplay.addLogger(LOGGER);
         
-        final QueryScript script = scriptEditor.getScript();
-       
+        final QueryScript editorScript = scriptEditor.getScript();
+        final QueryScript script = (QueryScript)editorScript.clone();
+        
         final List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
         final QueryRunnerPanel queryRunnerPanel = new QueryRunnerPanel(getProject(), script, selectedSessions, includeExcludedBox.isSelected());
         

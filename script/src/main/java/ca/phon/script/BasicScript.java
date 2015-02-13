@@ -10,8 +10,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.extensions.ExtensionSupport;
+import ca.phon.script.params.ScriptParameters;
 
 /**
  * Basic phon script in memory.  This script stores the script
@@ -19,7 +22,9 @@ import ca.phon.extensions.ExtensionSupport;
  * to be immutable, however sub-classes may alter the internal script
  * using the provided buffer.
  */
-public class BasicScript implements PhonScript {
+public class BasicScript implements PhonScript, Cloneable {
+	
+	private final static Logger LOGGER = Logger.getLogger(BasicScript.class.getName());
 	
 	/*
 	 * Script stored in a buffer.  Sub-classes have
@@ -154,6 +159,32 @@ public class BasicScript implements PhonScript {
 	
 	public boolean removeRequirePath(URI uri) {
 		return requirePaths.remove(uri);
+	}
+	
+	@Override
+	public Object clone() {
+		final BasicScript retVal = new BasicScript(getScript());
+		
+		try {
+			final ScriptParameters myParams = getContext().getScriptParameters(getContext().getEvaluatedScope());
+			final ScriptParameters clonedParams = 
+					retVal.getContext().getScriptParameters(retVal.getContext().getEvaluatedScope());
+			
+			ScriptParameters.copyParams(myParams, clonedParams);
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	
+		retVal.pkgImports.clear();
+		retVal.pkgImports.addAll(pkgImports);
+		
+		retVal.classImports.clear();
+		retVal.classImports.addAll(classImports);
+		
+		retVal.requirePaths.clear();
+		retVal.requirePaths.addAll(requirePaths);
+		
+		return retVal;
 	}
 	
 }

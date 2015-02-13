@@ -27,7 +27,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.plugin.PluginManager;
+import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParameters;
 
 /**
  * Holds the text for a query script.
@@ -133,6 +136,31 @@ public class QueryScript extends LazyQueryScript {
 			contextRef.getAndSet(context);
 		}
 		return contextRef.get();
+	}
+	
+	@Override
+	public Object clone() {
+		final QueryScript retVal = new QueryScript(getScript());
+		
+		try {
+			final ScriptParameters myParams = getContext().getScriptParameters(getContext().getEvaluatedScope());
+			final ScriptParameters clonedParams = 
+					retVal.getContext().getScriptParameters(retVal.getContext().getEvaluatedScope());
+			
+			ScriptParameters.copyParams(myParams, clonedParams);
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		final QueryName myName = getExtension(QueryName.class);
+		if(myName != null) {
+			final QueryName name = new QueryName(myName.getName());
+			name.setLocation(myName.getLocation());
+			name.setCategory(myName.getCategory());
+			retVal.putExtension(QueryName.class, myName);
+		}
+	
+		return retVal;
 	}
 	
 }
