@@ -37,7 +37,7 @@ public class PhonPlayerComponent extends JComponent {
 	public BufferedImage getBufferedImage(int width, int height) {
 		if(bufferedImage == null ||
 				bufferedImage.getWidth() != width || bufferedImage.getHeight() != height) {
-			if(width >= 0 && height >= 0) {
+			if(width > 0 && height > 0) {
 				bufferedImage = 
 						GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 						.getDefaultConfiguration().createCompatibleImage(width, height);

@@ -29,6 +29,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -94,6 +95,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -450,9 +452,14 @@ public class SpeechAnalysisEditorView extends EditorView {
 					public void windowDeactivated(WindowEvent we) {
 						File audioFile = getAudioFile();
 						if(audioFile != null) {
-							final PCMSampled sampled = new PCMSampled(audioFile);
-							wavDisplay.setSampled(sampled);
-							update();
+							try {
+								final PCMSampled sampled = new PCMSampled(audioFile);
+								wavDisplay.setSampled(sampled);
+								update();
+							} catch (IOException e) {
+								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+								ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
+							}
 						} else {
 							msgLabel.setVisible(true);
 						}
@@ -509,9 +516,14 @@ public class SpeechAnalysisEditorView extends EditorView {
 		if(wavDisplay.getSampled() == null) {
 			final File audioFile = getAudioFile();
 			if(audioFile != null) {
-				final PCMSampled sampled = new PCMSampled(audioFile);
-				wavDisplay.setSampled(sampled);
-				msgLabel.setVisible(false);
+				try {
+					final PCMSampled sampled = new PCMSampled(audioFile);
+					wavDisplay.setSampled(sampled);
+					msgLabel.setVisible(false);
+				} catch (IOException e) {
+					ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
 			} else {
 				msgLabel.setVisible(true);
 			}

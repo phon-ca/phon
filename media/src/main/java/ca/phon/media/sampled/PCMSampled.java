@@ -10,6 +10,9 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -19,25 +22,31 @@ import javax.sound.sampled.AudioFormat.Encoding;
 
 public class PCMSampled implements Sampled {
 	
+	private final static Logger LOGGER = Logger.getLogger(PCMSampled.class.getName());
+	
 	/**
 	 * Audio format
 	 */
 	private AudioFileFormat audioFileFormat;
 	
 	/**
-	 * Byte buffer
+	 * Random access file
 	 */
-	private ByteBuffer byteBuffer;
+	private RandomAccessFile raf;
+	
+	private int dataOffset = -1;
+	
+	private long length = 0L;
 	
 	private float startTime = 0.0f;
 	
-	public PCMSampled(File file) {
+	public PCMSampled(File file) throws IOException {
 		super();
 		
 		try {
 			mapFile(file);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new IOException(e);
 		}
 	}
 	
@@ -56,28 +65,23 @@ public class PCMSampled implements Sampled {
 		}
 		is.close();
 
-		final RandomAccessFile raf = new RandomAccessFile(file, "r");
-		final FileChannel fc = raf.getChannel();
-		final long len = raf.length() - offset;
-		MappedByteBuffer byteBuffer = fc.map(MapMode.READ_ONLY, offset, len);
-		if(!byteBuffer.isLoaded()) {
-			byteBuffer.load();
-		}
-		this.byteBuffer = byteBuffer;
+		raf = new RandomAccessFile(file, "r");
+		dataOffset = offset+1;
+		length = raf.length() - offset;
 	}
 	
-	public PCMSampled(AudioFileFormat format, ByteBuffer buffer) {
-		this.audioFileFormat = format;
-		this.byteBuffer = buffer;
-	}
+//	public PCMSampled(AudioFileFormat format, RandomAccessFile raf) {
+//		this.audioFileFormat = format;
+//		this.raf = raf;
+//	}
 
 	public AudioFileFormat getAudioFileFormat() {
 		return this.audioFileFormat;
 	}
 	
-	public ByteBuffer getByteBuffer() {
-		return this.byteBuffer;
-	}
+//	public ByteBuffer getByteBuffer() {
+//		return this.byteBuffer;
+//	}
 	
 	@Override
 	public int getNumberOfChannels() {
@@ -165,16 +169,27 @@ public class PCMSampled implements Sampled {
 		return retVal;
 	}
 	
+	protected byte[] getBytes(int byteOffset, int len) {
+		byte[] retVal = new byte[len];
+		
+		try {
+			raf.seek(byteOffset);
+			raf.read(retVal, 0, len);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return retVal;
+	}
+	
 	protected int get8bitSample(int byteOffset) {
-		final byte low = byteBuffer.get(byteOffset);
-		final int sample = (low & 0x00ff);
+		final byte[] low = getBytes(byteOffset, 1);
+		final int sample = (low[0] & 0x00ff);
 		return sample;
 	}
 	
 	protected int get12bitSample(int byteOffset) {
-		byte sampleBytes[] = new byte[2];
-		byteBuffer.position(byteOffset);
-		byteBuffer.get(sampleBytes, 0, 2);
+		byte sampleBytes[] = getBytes(byteOffset, 2);
 		
 		byte low = sampleBytes[0];
 		byte high = sampleBytes[1];
@@ -184,9 +199,7 @@ public class PCMSampled implements Sampled {
 	}
 	
 	protected int get16bitSample(int byteOffset) {
-		byte sampleBytes[] = new byte[2];
-		byteBuffer.position(byteOffset);
-		byteBuffer.get(sampleBytes, 0, 2);
+		byte sampleBytes[] = getBytes(byteOffset, 2);
 		
 		byte low = sampleBytes[0];
 		byte high = sampleBytes[1];
@@ -196,9 +209,7 @@ public class PCMSampled implements Sampled {
 	}
 
 	protected int get24bitSample(int byteOffset) {
-		byte sampleBytes[] = new byte[3];
-		byteBuffer.position(byteOffset);
-		byteBuffer.get(sampleBytes, 0, 3);
+		byte sampleBytes[] = getBytes(byteOffset, 3);
 		
 		byte low = sampleBytes[0];
 		byte mid = sampleBytes[1];
@@ -209,9 +220,7 @@ public class PCMSampled implements Sampled {
 	}
 	
 	protected int get32bitSample(int byteOffset) {
-		byte sampleBytes[] = new byte[4];
-		byteBuffer.position(byteOffset);
-		byteBuffer.get(sampleBytes, 0, 4);
+		byte sampleBytes[] = getBytes(byteOffset, 4);
 		
 		byte low = sampleBytes[0];
 		byte lowmid = sampleBytes[1];
@@ -299,8 +308,13 @@ public class PCMSampled implements Sampled {
 		int offset = byteOffsetForFrame(startIdx);
 		int byteLength = (int)((endIdx-startIdx) * getAudioFileFormat().getFormat().getFrameSize());
 		byte[] buffer = new byte[byteLength];
-		byteBuffer.position(offset);
-		byteBuffer.get(buffer, 0, byteLength);
+		
+		try {
+			raf.seek(offset);
+			raf.read(buffer, 0, byteLength);
+		} catch(IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 		
 		return buffer;
 	}

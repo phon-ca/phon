@@ -2,13 +2,14 @@ package ca.phon.media.sampled;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class TestSampledView {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		final PCMSampled model = 
 				new PCMSampled(new File("src/test/resources/DemoVideo.wav"));
 		
