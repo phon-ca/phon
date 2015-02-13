@@ -30,6 +30,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -425,6 +426,13 @@ public class IPADatabaseManager {
 		for(Language lang:currentLangs) if(lang.toString().equals(langId)) alreadyExists = true;
 		if(alreadyExists)
 			throw new IllegalArgumentException("Language with id '" + langId + "' already exists.");
+		
+		// check language id
+		try {
+			Language.parseLanguage(langId);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Unable to parse language id", e);
+		}
 		
 		// add a new database entry for this language
 		Connection conn = getConnection();
