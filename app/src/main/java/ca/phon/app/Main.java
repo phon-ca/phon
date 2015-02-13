@@ -1,5 +1,6 @@
 package ca.phon.app;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -34,9 +35,20 @@ public class Main {
 	public static void main(String[] args) {
 		startLogging();
 		startWorker();
+		initPlugins();
 		runStartupHooks();
 		setupShutdownHooks();
 		startApp(args);
+	}
+	
+	private static void initPlugins() {
+		// init plug-ins
+		final PluginManager pluginManager = PluginManager.getInstance();
+		pluginManager.scanPluginFolder();
+		
+		final String userPluginFolder = 
+				PrefHelper.getUserDataFolder() + File.separator + PluginManager.PLUGIN_FOLDER;
+		pluginManager.scanPluginFolder(new File(userPluginFolder));
 	}
 	
 	private static void startLogging() {
@@ -82,7 +94,6 @@ public class Main {
 	}
 	
 	private static void startApp(String[] args) {
-		// start initial entry point
 		LOGGER.info("Starting " + initialEntryPoint);
 		final PluginEntryPointRunner entryPtRunner =
 				new PluginEntryPointRunner(initialEntryPoint);

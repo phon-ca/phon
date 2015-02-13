@@ -46,7 +46,7 @@ public class PluginManager extends URLClassLoader {
 	/**
 	 * Plugin folder
 	 */
-	private final static String PLUGIN_FOLDER = "plugins";
+	public final static String PLUGIN_FOLDER = "plugins";
 	
 	/**
 	 * Singleton instance
@@ -89,10 +89,7 @@ public class PluginManager extends URLClassLoader {
 	 */
 	public void addFile (String path) 
 		throws MalformedURLException {
-		// add jar to classpath
-		String urlPath = "jar:file://" + path + "!/";
-		LOGGER.info("Adding " + urlPath + " to dynamic classpath");
-		addURL (new URL (urlPath));
+		addURL( (new File(path)).toURI().toURL() );
 	}
 	
 	private void scanFolderForJars(File dir, boolean recursive) {
