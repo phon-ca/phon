@@ -9,6 +9,7 @@ import ca.phon.ipadictionary.impl.CompoundDictionary;
 import ca.phon.ipadictionary.impl.DatabaseDictionary;
 import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.ipadictionary.impl.ImmutablePlainTextDictionary;
+import ca.phon.plugin.PluginManager;
 import ca.phon.util.Language;
 import ca.phon.util.resources.ClassLoaderHandler;
 
@@ -20,7 +21,7 @@ public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary>
 	private Set<Language> dbDicts = null;
 	
 	public DefaultDictionaryProvider() {
-		super();
+		super(PluginManager.getInstance());
 		loadResourceFile(DICT_LIST);
 	}
 	

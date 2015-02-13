@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import ca.phon.ipadictionary.impl.TransliterationDictionary;
+import ca.phon.plugin.PluginManager;
 import ca.phon.util.resources.ClassLoaderHandler;
 
 /**
@@ -16,7 +17,7 @@ public class TransliterationDictionaryProvider extends ClassLoaderHandler<IPADic
 	private final static String DICT_LIST = "META-INF/dict/transdicts.list";
 	
 	public TransliterationDictionaryProvider() {
-		super();
+		super(PluginManager.getInstance());
 		loadResourceFile(DICT_LIST);
 	}
 	

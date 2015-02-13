@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.plugin.PluginManager;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
@@ -50,7 +51,7 @@ public class IPADictionaryLibrary implements IExtendable {
 		// add the default dictionary handler
 //		getLoader().addHandler(new DefaultDictionaryProvider());
 		final ServiceLoader<DictionaryProvider> providers = 
-				ServiceLoader.load(DictionaryProvider.class);
+				ServiceLoader.load(DictionaryProvider.class, PluginManager.getInstance());
 		for(DictionaryProvider provider:providers) {
 			resLoader.addHandler(provider);
 		}
