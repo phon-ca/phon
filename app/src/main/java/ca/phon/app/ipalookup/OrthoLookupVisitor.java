@@ -1,6 +1,9 @@
 package ca.phon.app.ipalookup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,6 +48,24 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 		visitWord(word1);
 		final OrthoWord word2 = wordnet.getWord2();
 		visitWord(word2);
+		
+		// create option combos
+		final OrthoWordIPAOptions word1Ext = word1.getExtension(OrthoWordIPAOptions.class);
+		final List<String> word1Opts = (word1Ext.getOptions().size() > 0 ? word1Ext.getOptions() : Arrays.asList(new String[]{"*"}));
+		final OrthoWordIPAOptions word2Ext = word2.getExtension(OrthoWordIPAOptions.class);
+		final List<String> word2Opts = (word2Ext.getOptions().size() > 0 ? word2Ext.getOptions() : Arrays.asList(new String[]{"*"}));
+		
+		final List<String> wordnetOpts = new ArrayList<String>();
+		for(String word1Opt:word1Opts) {
+			for(String word2Opt:word2Opts) {
+				wordnetOpts.add(
+						word1Opt + wordnet.getMarker().getMarker() + word2Opt);
+			}
+		}
+		final OrthoWordIPAOptions wordnetExt = new OrthoWordIPAOptions();
+		wordnetExt.setDictLang(dictionary.getLanguage());
+		wordnetExt.setOptions(wordnetOpts);
+		wordnet.putExtension(OrthoWordIPAOptions.class, wordnetExt);
 	}
 	
 	private String[] lookup(String ortho) {
