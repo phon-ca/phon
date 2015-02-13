@@ -65,6 +65,7 @@ import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -138,6 +139,7 @@ public class SessionEditorQuickSearch {
 		table = createTable();
 		table.setModel(filterTableModel);
 		table.setFocusable(false);
+		table.setFont(FontPreferences.getControlFont());
 		
 		searchField = new SessionEditorQuickSearchField(getEditor().getSession(), table);
 		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.INCLUDE_EXCLUDED_PROP, new PropertyChangeListener() {
