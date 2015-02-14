@@ -20,7 +20,6 @@ package ca.phon.ui;
 import java.awt.Color;
 import java.awt.SystemColor;
 
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
 /**

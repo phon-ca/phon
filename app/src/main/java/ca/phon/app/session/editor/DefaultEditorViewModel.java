@@ -85,7 +85,6 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
-import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;

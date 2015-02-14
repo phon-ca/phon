@@ -23,8 +23,6 @@ import javax.swing.JLabel;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ca.phon.util.PhonConstants;
-
 /**
  * Displays a file path as just the name or a shortened
  * string.

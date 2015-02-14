@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
-import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXList;

@@ -81,7 +81,6 @@ import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;

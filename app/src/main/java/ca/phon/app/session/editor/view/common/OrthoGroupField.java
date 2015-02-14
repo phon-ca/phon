@@ -1,18 +1,10 @@
 package ca.phon.app.session.editor.view.common;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.Highlighter.HighlightPainter;
-import javax.swing.text.JTextComponent;
 
 import ca.phon.orthography.OrthoComment;
 import ca.phon.orthography.OrthoElement;
@@ -20,7 +12,6 @@ import ca.phon.orthography.OrthoEvent;
 import ca.phon.orthography.OrthoWord;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Tier;
-import ca.phon.util.Range;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

@@ -24,8 +24,6 @@ import org.joda.time.Period;
 import ca.phon.session.AgeFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
-import ca.phon.session.io.SessionInputFactory;
-import ca.phon.util.PrefHelper;
 
 public class ParticipantsTableModel extends AbstractTableModel {
 	

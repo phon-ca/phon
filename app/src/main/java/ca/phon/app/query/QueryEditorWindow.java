@@ -56,7 +56,6 @@ import javax.swing.text.StyledDocument;
 import javax.swing.undo.UndoManager;
 
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.tools.debugger.Main;
 
@@ -64,11 +63,9 @@ import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptContext;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.debug.PhonScriptDebuggerWindow;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;

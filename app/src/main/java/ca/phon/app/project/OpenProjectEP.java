@@ -40,7 +40,6 @@ import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.PrefHelper;
 
 @PhonPlugin(name="default")
 public class OpenProjectEP implements IPluginEntryPoint {

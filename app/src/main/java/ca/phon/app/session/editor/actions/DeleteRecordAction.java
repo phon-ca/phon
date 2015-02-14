@@ -8,7 +8,6 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PrefHelper;

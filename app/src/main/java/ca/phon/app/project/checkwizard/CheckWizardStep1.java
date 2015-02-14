@@ -48,7 +48,6 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 
 import com.jgoodies.forms.layout.CellConstraints;

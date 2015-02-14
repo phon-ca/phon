@@ -1,7 +1,6 @@
 package ca.phon.orthography;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

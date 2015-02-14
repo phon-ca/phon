@@ -35,7 +35,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import ca.phon.query.report.io.ObjectFactory;
 import ca.phon.query.report.io.ReportDesign;
-import ca.phon.util.VersionInfo;
 
 /**
  * Methods for reading/writing report designs.

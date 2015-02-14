@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.view.speech_analysis.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 

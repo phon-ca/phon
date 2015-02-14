@@ -7,7 +7,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ca.phon.app.hooks.PhonShutdownHook;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;

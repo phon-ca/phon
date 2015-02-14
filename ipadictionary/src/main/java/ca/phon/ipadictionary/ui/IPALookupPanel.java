@@ -51,7 +51,6 @@ import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
 import ca.phon.util.MsFormatter;
 import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
 
 /**
  * UI for IPA Lookups

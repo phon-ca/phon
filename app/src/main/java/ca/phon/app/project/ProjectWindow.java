@@ -69,7 +69,6 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.CollatorFactory;
-import ca.phon.util.OSInfo;
 import ca.phon.worker.PhonWorker;
 import ca.phon.workspace.Workspace;
 

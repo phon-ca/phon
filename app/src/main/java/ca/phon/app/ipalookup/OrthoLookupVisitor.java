@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.OrthoComment;
 import ca.phon.orthography.OrthoElement;

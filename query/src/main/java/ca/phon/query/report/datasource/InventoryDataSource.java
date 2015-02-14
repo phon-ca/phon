@@ -25,13 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ca.phon.ipa.AlignmentMarker;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IntonationGroup;
-import ca.phon.ipa.IntonationGroupType;
-import ca.phon.ipa.Linker;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
 import ca.phon.query.db.ReportHelper;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;

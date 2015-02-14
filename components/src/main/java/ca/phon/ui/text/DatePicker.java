@@ -10,8 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXMonthView;
@@ -20,7 +18,6 @@ import org.jdesktop.swingx.event.DateSelectionListener;
 import org.joda.time.DateTime;
 
 import ca.phon.session.DateFormatter;
-import ca.phon.ui.DateTimeDocument;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.ui.toast.ToastFactory;

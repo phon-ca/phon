@@ -27,7 +27,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.plugin.PluginManager;
-import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
