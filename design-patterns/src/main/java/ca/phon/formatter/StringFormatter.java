@@ -9,7 +9,7 @@ import java.text.ParseException;
  * 
  */
 @FormatterType(String.class)
-public class StringFormatter implements Formatter {
+public class StringFormatter implements Formatter<Object> {
 
 	@Override
 	public String format(Object obj) {

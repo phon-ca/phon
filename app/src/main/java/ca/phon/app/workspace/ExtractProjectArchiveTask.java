@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -190,11 +191,7 @@ public class ExtractProjectArchiveTask extends PhonTask {
 		ZippedProjectType projType = ZippedProjectType.NOT_A_PROJECT;
 		String projRoot = null;
 		
-		boolean projectXMLInRoot = false;
-		
-		try {
-			ZipFile zip = new ZipFile(archive);
-			
+		try(ZipFile zip = new ZipFile(archive)) {
 			ZipEntry entry = null;
 			Enumeration<? extends ZipEntry> entries = zip.entries();
 			while(entries.hasMoreElements()) {
@@ -236,69 +233,71 @@ public class ExtractProjectArchiveTask extends PhonTask {
 
 		BufferedOutputStream out = null;
 		BufferedInputStream in = null;
-		ZipFile zip = new ZipFile(archive);
-
-		// create output directory if it does not exist
-		if(destDir.exists() && !destDir.isDirectory()) {
-			throw new IOException("'" + destDir.getAbsolutePath() + "' is not a directory.");
-		}
-
-		if(!destDir.exists()) {
-			setProperty(STATUS_PROP, "Creating output directory");
-			destDir.mkdirs();
-		}
-
-		Tuple<ZippedProjectType, String> zipDetect = getZipDetect();
-		ZipEntry entry = null;
-		Enumeration<? extends ZipEntry> entries = zip.entries();
-		while(entries.hasMoreElements()) {
-			
-			if(isShutdown()) {
-				return;
+		
+		try(ZipFile zip = new ZipFile(archive)) {
+			// create output directory if it does not exist
+			if(destDir.exists() && !destDir.isDirectory()) {
+				throw new IOException("'" + destDir.getAbsolutePath() + "' is not a directory.");
 			}
-			
-			entry = entries.nextElement();
-			
-			String entryName = entry.getName();
-			File outFile = null;
-			if(zipDetect.getObj1() == ZippedProjectType.PROJECT_BASE_INCLUDED) {
-				// dest dir has already b
-				outFile = new File(destDir, entryName.replaceFirst(zipDetect.getObj2(), ""));
-			} else {
-				outFile = new File(destDir, entryName);
+	
+			if(!destDir.exists()) {
+				setProperty(STATUS_PROP, "Creating output directory");
+				destDir.mkdirs();
 			}
-
-			if(entry.isDirectory()) {
-//				File outDir = new File(destDir, entry.getName());
-				if(!outFile.exists())
-					outFile.mkdirs();
-			} else {
-				LOGGER.info("Extracting: " + entry);
-				setProperty(STATUS_PROP, "Extracting: " + entry);
-
-				in = new BufferedInputStream(zip.getInputStream(entry));
-				int count = -1;
-				byte data[] = new byte[ZIP_BUFFER];
-//				File outputFile = new File(destDir, entry.getName());
-
-				if(outFile.exists()) {
-					LOGGER.warning("Overwriting file '" + outFile.getAbsolutePath() + "'");
+	
+			Tuple<ZippedProjectType, String> zipDetect = getZipDetect();
+			ZipEntry entry = null;
+			Enumeration<? extends ZipEntry> entries = zip.entries();
+			while(entries.hasMoreElements()) {
+				
+				if(isShutdown()) {
+					return;
 				}
-
-				File parentFile = outFile.getParentFile();
-
-				if(!parentFile.exists())
-					parentFile.mkdirs();
-
-				FileOutputStream fos = new FileOutputStream(outFile);
-				out = new BufferedOutputStream(fos, ZIP_BUFFER);
-				while((count = in.read(data, 0, ZIP_BUFFER)) != -1) {
-					out.write(data, 0, count);
+				
+				entry = entries.nextElement();
+				
+				String entryName = entry.getName();
+				File outFile = null;
+				if(zipDetect.getObj1() == ZippedProjectType.PROJECT_BASE_INCLUDED) {
+					// dest dir has already b
+					outFile = new File(destDir, entryName.replaceFirst(zipDetect.getObj2(), ""));
+				} else {
+					outFile = new File(destDir, entryName);
 				}
-				out.flush();
-				out.close();
-				in.close();
+	
+				if(entry.isDirectory()) {
+					if(!outFile.exists())
+						outFile.mkdirs();
+				} else {
+					LOGGER.info("Extracting: " + entry);
+					setProperty(STATUS_PROP, "Extracting: " + entry);
+	
+					in = new BufferedInputStream(zip.getInputStream(entry));
+					int count = -1;
+					byte data[] = new byte[ZIP_BUFFER];
+	
+					if(outFile.exists()) {
+						LOGGER.warning("Overwriting file '" + outFile.getAbsolutePath() + "'");
+					}
+	
+					File parentFile = outFile.getParentFile();
+	
+					if(!parentFile.exists())
+						parentFile.mkdirs();
+	
+					FileOutputStream fos = new FileOutputStream(outFile);
+					out = new BufferedOutputStream(fos, ZIP_BUFFER);
+					while((count = in.read(data, 0, ZIP_BUFFER)) != -1) {
+						out.write(data, 0, count);
+					}
+					out.flush();
+					out.close();
+					in.close();
+				}
 			}
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			throw e;
 		}
 		
 		setProperty(STATUS_PROP, "Finished");

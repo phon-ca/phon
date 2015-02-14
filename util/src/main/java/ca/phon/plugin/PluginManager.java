@@ -253,6 +253,7 @@ public class PluginManager extends URLClassLoader {
 	 * @return the list of loaded extension points for the
 	 * given class
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> List<IPluginExtensionPoint<T>> getExtensionPoints(Class<T> clazz) {
 		List<IPluginExtensionPoint<T>> retVal = 
 			new ArrayList<IPluginExtensionPoint<T>>();

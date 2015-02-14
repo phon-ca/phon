@@ -118,6 +118,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 			}
 			scanner.nextLine();
 		}
+		scanner.close();
 	}
 	
 	/**
@@ -167,6 +168,8 @@ public class SonorityNode extends OpNode implements NodeSettings {
 	 * Settings panel
 	 */
 	private class Settings extends JPanel {
+		private static final long serialVersionUID = 1010275554148171791L;
+
 		/**
 		 * Text field
 		 */
