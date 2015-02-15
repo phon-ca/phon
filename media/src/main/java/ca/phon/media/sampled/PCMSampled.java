@@ -60,7 +60,7 @@ public class PCMSampled implements Sampled {
 		is.close();
 
 		raf = new RandomAccessFile(file, "r");
-		dataOffset = offset+1;
+		dataOffset = offset+4;
 		length = raf.length() - offset;
 	}
 	
@@ -299,7 +299,7 @@ public class PCMSampled implements Sampled {
 	}
 	
 	protected int byteOffsetForFrame(long frame) {
-		return (int)(frame * getAudioFileFormat().getFormat().getFrameSize());
+		return dataOffset + (int)(frame * getAudioFileFormat().getFormat().getFrameSize());
 	}
 
 	@Override
