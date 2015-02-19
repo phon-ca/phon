@@ -17,6 +17,14 @@ import javax.swing.MenuElement;
  */
 public interface EditorViewModel {
 	
+	
+	/**
+	 * Remove all view references and cleanup resources.
+	 * 
+	 * 
+	 */
+	public void cleanup();
+	
 	/**
 	 * Get the view root for the editor.  This is the component
 	 * that will be displayed in the root pane of the editor

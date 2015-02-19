@@ -69,6 +69,9 @@ public class EditorEventManager {
 	
 		// necessary to finish the 'take()' method of blocking queue
 		dispatchThread.interrupt();
+		
+		actionMap.clear();
+		eventQueue.clear();
 	}
 	
 	/**

@@ -310,6 +310,22 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	}
 
 	@Override
+	public void cleanup() {
+		
+		for(int i = 0; i < dockControl.getCDockableCount(); i++) {
+			final CDockable dockable = dockControl.getCDockable(i);
+			dockable.removeCDockableLocationListener(dockableLocationListener);
+			dockControl.removeDockable((SingleCDockable)dockable);
+		}
+		
+		dockControl.getController().kill();
+		dockControl = null;
+		
+		registeredViews.clear();
+		dockables.clear();
+	}
+	
+	@Override
 	public void showView(String viewName) {
 		if(isShowing(viewName)) return;
 		
@@ -512,6 +528,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	@Override
 	public void savePerspective(RecordEditorPerspective editorPerspective) {
+		if(dockControl == null) return;
 		final CPerspective perspective = dockControl.getPerspectives().getPerspective(true);
 		if(perspective != null) {
 			try {

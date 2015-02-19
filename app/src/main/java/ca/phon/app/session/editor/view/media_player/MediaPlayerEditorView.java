@@ -252,6 +252,8 @@ public class MediaPlayerEditorView extends EditorView {
 		if(mediaPlayer.isPlaying()) {
 			mediaPlayer.pause();
 		}
+		mediaPlayer.cleanup();
+		mediaPlayer = null;
 	}
 
 	/**

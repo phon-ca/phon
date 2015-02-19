@@ -105,6 +105,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		final CommonModuleFrame frame = (CommonModuleFrame)owner;
 		if(!(frame instanceof WorkspaceDialog)) {
 			final JMenu queryMenu  = new JMenu("Query");
+			final QueryMenuListener queryMenuListener = new QueryMenuListener();
 			queryMenu.addMenuListener(queryMenuListener);
 			
 			final MenuEvent me = new MenuEvent(queryMenu);
@@ -189,10 +190,5 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		
 		menu.add(workspaceMenu);
 	}
-	
-	/**
-	 * Query menu generator
-	 */
-	private final MenuListener queryMenuListener = new QueryMenuListener();
 	
 }

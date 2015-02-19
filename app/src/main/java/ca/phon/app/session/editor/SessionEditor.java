@@ -203,7 +203,17 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	private void _dispose() {
 		setVisible(false);
 		CommonModuleFrame.getOpenWindows().remove(this);
+		setJMenuBar(null);
 		getEventManager().shutdown();
+		getViewModel().cleanup();
+		
+		eventManagerRef.set(null);
+		viewModelRef.set(null);
+		selectionModelRef.set(null);
+		dataModelRef.set(null);
+		
+		System.gc();
+		
 		super.dispose();
 	}
 	
@@ -276,7 +286,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	@Override
 	public void setJMenuBar(JMenuBar menuBar) {
-		setupMenu(menuBar);
+		if(menuBar != null)
+			setupMenu(menuBar);
 		super.setJMenuBar(menuBar);
 	}
 	
@@ -404,7 +415,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	public Session getSession() {
 		final EditorDataModel dataModel = getDataModel();
-		return dataModel.getSession();
+		return (dataModel != null ? dataModel.getSession() : null);
 	}
 	
 	/*
