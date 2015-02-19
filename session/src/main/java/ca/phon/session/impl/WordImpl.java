@@ -75,6 +75,7 @@ public class WordImpl implements Word {
 				for(int i = 0; i < idx; i++) {
 					retVal += (i > 0 ? 1 : 0) + getGroup().getOrthography().elementAt(i).toString().length();
 				}
+				if(idx > 0) retVal++;
 			}
 		}
 		
