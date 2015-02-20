@@ -7,13 +7,14 @@
  * Enable aligned phone filters even if not including aligned phone data in result for Phones.js query.
  * Fixed an issue on Mac OS X where loading a large wav file in Speech Analysis would cause a significant
  lag on first load.
- * Disabled file filter on media selection field for Mac OS X.\
+ * Disabled file filter on media selection field for Mac OS X.
  * IPA dictionary console will no longer allow invalid dictionary ids when creating dictionaries.
  * Allow multiple instances of a query to run in parallel.
 
 ### CSV Import/Export
  * Fixed participant creation during CSV import.
  * Added options for selecting text and field delimiters during import.
+ * CSV import will now import unvalidated orthography and IPA transcriptions correctly.
 
 ## Changes from Phon 2.0.4
 
