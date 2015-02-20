@@ -376,6 +376,9 @@ public class RecordDataEditorView extends EditorView {
 			toFocus.requestFocusInWindow();
 		}
 		
+		// update location
+		
+		
 		updating = false;
 		revalidate();
 	}
@@ -707,7 +710,7 @@ public class RecordDataEditorView extends EditorView {
 		return sessionLoc;
 	}
 	
-	private void fireSessionLocationChanged() {
+	public void fireSessionLocationChanged() {
 		final EditorEvent ee = new EditorEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, this,
 				getSessionLocation());
 		getEditor().getEventManager().queueEvent(ee);
@@ -736,6 +739,12 @@ public class RecordDataEditorView extends EditorView {
 	
 	@RunOnEDT
 	public void onGroupsChange(EditorEvent event) {
+		final SessionLocation location = getSessionLocation();
+		if(location.getRecordLocation().getGroupLocation().getGroupIndex() >= getEditor().currentRecord().numberOfGroups()) {
+			currentGroupIndex.set(getEditor().currentRecord().numberOfGroups()-1);
+			currentCharIndex.set(0);
+			fireSessionLocationChanged();
+		}
 		update();
 		repaint();
 	}
