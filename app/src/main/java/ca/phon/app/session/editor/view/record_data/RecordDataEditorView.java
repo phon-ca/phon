@@ -740,7 +740,8 @@ public class RecordDataEditorView extends EditorView {
 	@RunOnEDT
 	public void onGroupsChange(EditorEvent event) {
 		final SessionLocation location = getSessionLocation();
-		if(location.getRecordLocation().getGroupLocation().getGroupIndex() >= getEditor().currentRecord().numberOfGroups()) {
+		if(location != null &&
+				location.getRecordLocation().getGroupLocation().getGroupIndex() >= getEditor().currentRecord().numberOfGroups()) {
 			currentGroupIndex.set(getEditor().currentRecord().numberOfGroups()-1);
 			currentCharIndex.set(0);
 			fireSessionLocationChanged();
