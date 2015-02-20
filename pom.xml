@@ -150,7 +150,7 @@
 		<org.apache.maven.plugins.maven-javadoc-plugin.version>2.8.1</org.apache.maven.plugins.maven-javadoc-plugin.version>
 		<org.apache.maven.plugins.maven-shade-plugin.version>2.2</org.apache.maven.plugins.maven-shade-plugin.version>
 		<org.apache.maven.plugins.maven-surefire-plugin.version>2.16</org.apache.maven.plugins.maven-surefire-plugin.version>
-		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.8.3</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
+		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.10.0</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
 		<org.apache.maven.plugins.maven-dependency-plugin.version>2.8</org.apache.maven.plugins.maven-dependency-plugin.version>
 	</properties>
 
