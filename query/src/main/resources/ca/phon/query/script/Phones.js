@@ -78,18 +78,6 @@ function setup_params(params) {
 	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
 	filters.actualResultFilter.param_setup(params);
 	
-	var includeAlignedListener = new java.beans.PropertyChangeListener() {
-	    propertyChange: function(e) {
-	        var enabled = e.source.getValue(e.source.paramId);
-	        filters.targetResultFilter.setEnabled(enabled);
-	        filters.actualResultFilter.setEnabled(enabled);
-	    }  
-	};
-	includeAlignedParam.addPropertyChangeListener(includeAlignedParamInfo.id, includeAlignedListener);
-	var alignedEnabled = includeAlignedParamInfo.def;
-    filters.targetResultFilter.setEnabled(alignedEnabled);
-	filters.actualResultFilter.setEnabled(alignedEnabled);
-	
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
@@ -248,25 +236,25 @@ function query_record(recordIndex, record) {
     			rv.data = (match.value != null ? new IPATranscript(match.value) : new IPATranscript());
     			result.addResultValue(rv);
     			
-    			if(includeAligned == true) {
-    			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
-    			    var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()) : null);
-			   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
+			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
+			    var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()) : null);
+		   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
+			    
+		   		// find location of aligned value in group
+		   		var groupStartIdx = 
+		   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
+		   		var groupEndIdx = 
+		   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
+		   		var alignedIpa =
+		   			(alignedIpaElements.length() > 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
+		   		
+			    if(alignedFilter.isUseFilter()) {
+			    	if(!alignedFilter.check_filter(alignedIpa)) {
+			    		continue;
+			    	}
+			    }
     			    
-			   		// find location of aligned value in group
-			   		var groupStartIdx = 
-			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
-			   		var groupEndIdx = 
-			   			(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
-			   		var alignedIpa =
-			   			(alignedIpaElements.length() > 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
-			   		
-    			    if(alignedFilter.isUseFilter()) {
-    			    	if(!alignedFilter.check_filter(alignedIpa)) {
-    			    		continue;
-    			    	}
-    			    }
-    			    
+			    if(includeAligned == true) {
     			    var alignedRv = factory.createResultValue();
     			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
     			    alignedRv.groupIndex = group.groupIndex;
