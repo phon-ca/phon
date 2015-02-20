@@ -190,16 +190,38 @@ public class RecordImpl implements Record {
 
 	@Override
 	public Group addGroup(int idx) {
+		if(orthography.numberOfGroups() < idx)
+			while(orthography.numberOfGroups() < idx) {
+				orthography.addGroup(new Orthography());
+			}
 		orthography.addGroup(idx, new Orthography());
-		ipaTarget.addGroup(idx, new IPATranscript());
-		ipaActual.addGroup(idx, new IPATranscript());
-		alignment.addGroup(idx, new PhoneMap(ipaTarget.getGroup(idx), ipaActual.getGroup(idx)));
 		
+		if(ipaTarget.numberOfGroups() < idx)
+			while(ipaTarget.numberOfGroups() < idx) {
+				ipaTarget.addGroup(new IPATranscript());
+			}
+		ipaTarget.addGroup(idx, new IPATranscript());
+		
+		if(ipaActual.numberOfGroups() < idx)
+			while(ipaActual.numberOfGroups() < idx) {
+				ipaActual.addGroup(new IPATranscript());
+			}
+		ipaActual.addGroup(idx, new IPATranscript());
+		
+		if(alignment.numberOfGroups() < idx)
+			while(alignment.numberOfGroups() < idx) {
+				alignment.addGroup(new PhoneMap(ipaTarget.getGroup(alignment.numberOfGroups()), ipaActual.getGroup(alignment.numberOfGroups())));
+			}
+		alignment.addGroup(idx, new PhoneMap(ipaTarget.getGroup(idx), ipaActual.getGroup(idx)));
 		for(String tierName:getExtraTierNames()) {
 			final Tier<String> tier = getTier(tierName, String.class);
-			if(tier.isGrouped())
+			if(tier.isGrouped()) {
+				if(tier.numberOfGroups() < idx)
+					while(tier.numberOfGroups() < idx) {
+						tier.addGroup("");
+					}
 				tier.addGroup(idx, "");
-			else if(tier.numberOfGroups() == 0)
+			} else if(tier.numberOfGroups() == 0)
 				tier.addGroup();
 		}
 		
