@@ -90,7 +90,7 @@ public class CorpusListModel implements ListModel {
 		try {
 //			ArrayList<String> corpora = project.getCorpora();
 			Collator collator = CollatorFactory.defaultCollator();
-			List<String> corpora = getCorpora();
+			List<String> corpora = new ArrayList<String>(getCorpora());
 			Collections.sort(corpora, collator);
 			return corpora.get(index);
 		} catch (ArrayIndexOutOfBoundsException e) {
