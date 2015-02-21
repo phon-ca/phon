@@ -12,6 +12,7 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.text.TableSearchField;
 
 /**
@@ -37,6 +38,7 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 	public SessionEditorQuickSearchField(Session session, JTable table) {
 		super(table);
 		this.session = session;
+		getTextField().setFont(FontPreferences.getUIIpaFont());
 	}
 	
 	@Override

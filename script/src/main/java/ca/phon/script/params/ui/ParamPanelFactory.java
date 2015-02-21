@@ -17,6 +17,7 @@ import ca.phon.script.params.MultiboolScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.SeparatorScriptParam;
 import ca.phon.script.params.StringScriptParam;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -120,6 +121,7 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	public void visitStringScriptParam(StringScriptParam param) {
 		final JLabel paramLabel = factory.createParamLabel(param);
 		final PromptedTextField textField = factory.createStringScriptParamComponent(param);
+		textField.setFont(FontPreferences.getUIIpaFont());
 		final JPanel panel = createComponentPanel(paramLabel, textField);
 		currentContainer.add(panel);
 	}

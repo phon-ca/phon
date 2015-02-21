@@ -547,7 +547,7 @@ public class ResultSetEditor extends ProjectFrame {
 		final ResultListingTableModel model = new ResultListingTableModel(session, resultSet, getListing());
 		resultTable = new JXTable(model);
 		resultTable.setColumnControlVisible(true);
-		resultTable.setFont(FontPreferences.getControlFont());
+		resultTable.setFont(FontPreferences.getUIIpaFont());
 		
 		final Highlighter stripeHighlighter = HighlighterFactory.createSimpleStriping();
 		resultTable.addHighlighter(stripeHighlighter);

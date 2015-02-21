@@ -66,7 +66,7 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		uiIpaFontBtn = new FontSelectionButton();
 		uiIpaFontBtn.setFontProp(FontPreferences.UI_IPA_FONT);
 		uiIpaFontBtn.setDefaultVal(FontPreferences.DEFAULT_UI_IPA_FONT);
-		uiIpaFontBtn.setTopLabelText("<html><b>UI Font</b> &#8226; Font used for UI components which display IPA text</html>");
+		uiIpaFontBtn.setTopLabelText("<html><b>UI Font</b> &#8226; Font used for UI controls which display IPA text</html>");
 		uiIpaFontBtn.setSelectedFont(FontPreferences.getUIIpaFont());
 		
 		final JPanel tierFontsPanel = new JPanel(new VerticalLayout());
