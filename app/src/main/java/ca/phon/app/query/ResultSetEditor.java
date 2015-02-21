@@ -578,6 +578,7 @@ public class ResultSetEditor extends ProjectFrame {
 		};
 		tableSearchField.setColumns(20);
 		tableSearchField.setPrompt("Filter results");
+		tableSearchField.getTextField().setFont(FontPreferences.getUIIpaFont());
 		tableSearchField.addKeyListener(new KeyListener() {
 			
 			@Override
