@@ -3,11 +3,15 @@ package ca.phon.app.session.editor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.FocusManager;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -16,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
@@ -159,8 +164,26 @@ public class SessionEditorEP implements IPluginEntryPoint {
 				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
 		editor.getViewModel().applyPerspective(perspective);
 		
-//		editor.pack();
-//		editor.cascadeWindow(CommonModuleFrame.getCurrentFrame());
+		editor.addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
+					editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
+				} else {
+					for(String viewName:editor.getViewModel().getViewNames()) {
+						if(editor.getViewModel().isShowing(viewName)) {
+							editor.getViewModel().getView(viewName).requestFocus();
+							break;
+						}
+					}
+				}
+				e.getWindow().removeWindowListener(this);
+			}
+			
+		});
+		
+		// positioning is handled by applyPerspective
 		editor.setVisible(true);
 	}
 	
