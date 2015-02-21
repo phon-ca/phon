@@ -118,6 +118,9 @@ public class TableSearchField extends SearchField {
 			menu.addSeparator();
 		}
 		
+		// add type options
+		
+		
 		// add case sensitivity
 		final PhonUIAction csAction = new PhonUIAction("Case sensitive", this, "toggleCaseSensitive");
 		final JCheckBoxMenuItem csItem = new JCheckBoxMenuItem(csAction);
@@ -178,10 +181,16 @@ public class TableSearchField extends SearchField {
 				final String expr = filterMatcher.group(2);
 				
 				ColumnFilter colFilter = null;
-				try {
-					final PhonexPattern pattern = PhonexPattern.compile(expr);
-					colFilter = new PhonexColumnFilter(columns, pattern);
-				} catch (PhonexPatternException e) {
+				
+				if(expr.startsWith("#")) {
+					try {
+						final PhonexPattern pattern = PhonexPattern.compile(expr.substring(1));
+						colFilter = new PhonexColumnFilter(columns, pattern);
+					} catch (PhonexPatternException e) {
+					}
+				}
+				
+				if(colFilter == null) {
 					try {
 						final Pattern pattern = Pattern.compile(expr, (!isCaseSensitive() ? Pattern.CASE_INSENSITIVE : 0));
 						
