@@ -32,6 +32,8 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 	
 	private FontSelectionButton tierFontBtn;
 	
+	private FontSelectionButton uiIpaFontBtn;
+	
 	private FontSelectionButton controlFontBtn;
 	
 	private FontSelectionButton menuFontBtn;
@@ -61,9 +63,16 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		tierFontBtn.setTopLabelText("<html><b>Tier font</b> &#8226; Default font for tiers</html>");
 		tierFontBtn.setSelectedFont(FontPreferences.getTierFont());
 		
+		uiIpaFontBtn = new FontSelectionButton();
+		uiIpaFontBtn.setFontProp(FontPreferences.UI_IPA_FONT);
+		uiIpaFontBtn.setDefaultVal(FontPreferences.DEFAULT_UI_IPA_FONT);
+		uiIpaFontBtn.setTopLabelText("<html><b>UI Font</b> &#8226; Font used for UI components which display IPA text</html>");
+		uiIpaFontBtn.setSelectedFont(FontPreferences.getUIIpaFont());
+		
 		final JPanel tierFontsPanel = new JPanel(new VerticalLayout());
 		tierFontsPanel.add(tierFontBtn);
-		tierFontsPanel.setBorder(BorderFactory.createTitledBorder("Tiers"));
+		tierFontsPanel.add(uiIpaFontBtn);
+		tierFontsPanel.setBorder(BorderFactory.createTitledBorder("IPA Fonts"));
 		
 		final Hashtable<Integer, JLabel> hashTbl = new Hashtable<Integer, JLabel>();
 		hashTbl.put(0, new JLabel("Default"));

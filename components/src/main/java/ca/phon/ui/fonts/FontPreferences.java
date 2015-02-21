@@ -27,6 +27,21 @@ public class FontPreferences {
 	}
 	
 	/**
+	 * UI-IPA font
+	 */
+	public static final String UI_IPA_FONT = FontPreferences.class.getName() + ".uiIpaFont";
+	
+	public static final String DEFAULT_UI_IPA_FONT = "Charis SIL Compact-PLAIN-12";
+	
+	public static Font getUIIpaFont() {
+		return PrefHelper.getFont(UI_IPA_FONT, Font.decode(DEFAULT_UI_IPA_FONT));
+	}
+	
+	public static void setUIIpaFont(Font font) {
+		PrefHelper.getUserPreferences().put(UI_IPA_FONT, fontToString(font));
+	}
+	
+	/**
 	 * Control font - used for all dialog controls
 	 */
 	public final static String CONTROL_FONT = FontPreferences.class.getName() + ".controlFont";
