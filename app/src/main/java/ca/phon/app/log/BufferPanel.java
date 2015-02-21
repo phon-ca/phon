@@ -47,7 +47,6 @@ import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
@@ -145,7 +144,6 @@ public class BufferPanel extends JPanel {
 		dataTable = new JXTable();
 		dataTable.setColumnControlVisible(true);
 		dataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		dataTable.setFont(FontPreferences.getTierFont());
 		
 		init();
 	}

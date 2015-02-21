@@ -128,7 +128,6 @@ public class SessionEditorQuickSearch {
 		table.getSelectionModel().addListSelectionListener(new SessionTableListener(table));
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addHighlighter(HighlighterFactory.createSimpleStriping(PhonGuiConstants.PHON_UI_STRIP_COLOR));
-		table.setFont(FontPreferences.getTierFont());
 		
 		return table;
 	}
@@ -140,7 +139,7 @@ public class SessionEditorQuickSearch {
 		table = createTable();
 		table.setModel(filterTableModel);
 		table.setFocusable(false);
-		table.setFont(FontPreferences.getTierFont());
+		table.setFont(FontPreferences.getControlFont());
 		
 		searchField = new SessionEditorQuickSearchField(getEditor().getSession(), table);
 		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.INCLUDE_EXCLUDED_PROP, new PropertyChangeListener() {
