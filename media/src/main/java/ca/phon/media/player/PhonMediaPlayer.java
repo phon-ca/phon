@@ -689,18 +689,22 @@ public class PhonMediaPlayer extends JPanel {
 	}
 	
 	protected synchronized void renderFrame() {
+		if(mediaPlayerComponent == null || mediaPlayerComponent.getMediaPlayer() == null) return;
 		Memory[] nativeBuffers = mediaPlayerComponent.getMediaPlayer().lock();
 		if(nativeBuffers != null && nativeBuffers.length > 0) {
 			Memory nativeBuffer = nativeBuffers[0];
 			if(nativeBuffer != null) {
 				
-				int w = (int)mediaPlayerComponent.getMediaPlayer().getVideoDimension().getWidth();
-				int h = (int)mediaPlayerComponent.getMediaPlayer().getVideoDimension().getHeight();
-				
-				BufferedImage img = mediaPlayerCanvas.getBufferedImage(w, h);
-				if(img != null) {
-					int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
-			        nativeBuffer.getByteBuffer(0L, nativeBuffer.size()).asIntBuffer().get(rgbBuffer, 0, h * w);
+				final Dimension videoDimension = mediaPlayerComponent.getMediaPlayer().getVideoDimension();
+				if(videoDimension != null) {
+					int w = (int)videoDimension.getWidth();
+					int h = (int)videoDimension.getHeight();
+					
+					BufferedImage img = mediaPlayerCanvas.getBufferedImage(w, h);
+					if(img != null) {
+						int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+				        nativeBuffer.getByteBuffer(0L, nativeBuffer.size()).asIntBuffer().get(rgbBuffer, 0, h * w);
+					}
 				}
 				
 		        mediaPlayerComponent.getMediaPlayer().unlock();
