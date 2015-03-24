@@ -9,3 +9,4 @@ ipadictionary/src/main/resources/META-INF/dict
 .Changes.md.html
 app/derby.log
 Thumbs.db
+ipadictionary/derby.log
