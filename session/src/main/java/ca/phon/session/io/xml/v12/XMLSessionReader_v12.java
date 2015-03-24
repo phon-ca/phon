@@ -136,7 +136,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			if(headerData.getLanguage().size() > 0) {
 				String langs = "";
 				for(String lang:headerData.getLanguage()) {
-					langs += (langs.length() > 0 ? ", " : "") + lang;
+					langs += (langs.length() > 0 ? " " : "") + lang;
 				}
 				retVal.setLanguage(langs);
 			}

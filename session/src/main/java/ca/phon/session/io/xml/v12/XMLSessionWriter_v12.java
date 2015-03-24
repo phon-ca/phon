@@ -89,13 +89,12 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		}
 		final String lang = session.getLanguage();
 		if(lang != null && lang.length() > 0) {
-			final String langs[] = lang.split(",");
+			final String langs[] = lang.split("\\p{Space}");
 			for(String l:langs) {
 				headerData.getLanguage().add(l);
 			}
 		}
 		retVal.setHeader(headerData);
-		
 
 		final TranscriptType transcript = factory.createTranscriptType();
 		// commets

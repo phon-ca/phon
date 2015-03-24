@@ -67,7 +67,9 @@ public class FormatterTextField<T> extends PromptedTextField {
 		
 		try {
 			retVal = formatter.parse(getText());
+			setToolTipText(null);
 		} catch (Exception e) {
+			setToolTipText(e.getMessage());
 			LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 		}
 		

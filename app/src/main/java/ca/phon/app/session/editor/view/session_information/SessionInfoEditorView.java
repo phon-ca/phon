@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
@@ -69,7 +70,9 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FileSelectionField;
+import ca.phon.ui.text.LanguageField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.util.Language;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -98,7 +101,7 @@ public class SessionInfoEditorView extends EditorView {
 	/**
 	 * Language
 	 */
-	private JTextField languageField;
+	private LanguageField languageField;
 	
 	private TierDataLayoutPanel contentPanel;
 
@@ -236,7 +239,7 @@ public class SessionInfoEditorView extends EditorView {
 			
 		});
 		
-		languageField = new JTextField();
+		languageField = new LanguageField();
 		languageField.getDocument().addDocumentListener(languageFieldListener);
 		
 		int rowIdx = 0;

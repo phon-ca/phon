@@ -1,6 +1,8 @@
 package ca.phon.util;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a language.
@@ -54,6 +56,14 @@ public class Language implements Comparable<Language> {
 			if(split.length > 0) {
 				final LanguageParser parser = LanguageParser.getInstance();
 				primaryLanguage = parser.getEntryById(split[0]);
+				
+				if(primaryLanguage == null) {
+					final Map<String, String> langProps = new HashMap<>();
+					langProps.put(LanguageEntry.ID_639_3, split[0]);
+					langProps.put(LanguageEntry.ID_639_2B, split[0].substring(0, 2));
+					langProps.put(LanguageEntry.REF_NAME, "");
+					primaryLanguage = new LanguageEntry(langProps);
+				}
 				
 				userIDs = new String[split.length - 1];
 				for(int i = 1; i < split.length; i++) userIDs[i-1] = split[i];

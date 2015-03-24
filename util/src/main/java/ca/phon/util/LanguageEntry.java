@@ -18,6 +18,7 @@
 package ca.phon.util;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * An entry in the ISO-639-3 code set.  May also
@@ -83,6 +84,12 @@ public class LanguageEntry {
 		addProperty(TYPE, fields[5]);
 		addProperty(REF_NAME, fields[6]);
 		addProperty(USER_ID, "");
+	}
+	
+	public LanguageEntry(Map<String, String> props) {
+		for(String key:props.keySet()) {
+			addProperty(key, props.get(key));
+		}
 	}
 	
 	private Hashtable<String, String> props = new Hashtable<String, String>();

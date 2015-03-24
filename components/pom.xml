@@ -17,6 +17,10 @@
   		<groupId>org.swinglabs.swingx</groupId>
   		<artifactId>swingx-all</artifactId>
   	</dependency>
+  	<dependency>
+  		<groupId>ca.hedlund</groupId>
+  		<artifactId>tst</artifactId>
+  	</dependency>
     <dependency>
       <groupId>com.jgoodies</groupId>
       <artifactId>jgoodies-forms</artifactId>
