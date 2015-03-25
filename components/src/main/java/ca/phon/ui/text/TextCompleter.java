@@ -1,5 +1,6 @@
 package ca.phon.ui.text;
 
+import java.awt.BorderLayout;
 import java.awt.IllegalComponentStateException;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
@@ -52,7 +53,8 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 		listScroller = new JScrollPane(completionList);
 		
 		completionWindow = new JWindow();
-		completionWindow.add(listScroller);
+		completionWindow.getContentPane().setLayout(new BorderLayout());
+		completionWindow.getContentPane().add(listScroller, BorderLayout.CENTER);
 	}
 	
 	public void install(JTextComponent textComponent) {
@@ -116,16 +118,18 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 			completionWindow.setVisible(false);
 			return;
 		}
-		try {
-			Point pos = textComponent.getLocationOnScreen();
-			int popX = pos.x;
-			int popY = pos.y + textComponent.getHeight();
-			
-			completionWindow.setLocation(popX, popY);
-			completionWindow.pack();
-			completionWindow.setVisible(true);
-		} catch (IllegalComponentStateException e) {
-			// happens when component is not yet visible, ignore
+		if(!completionWindow.isVisible()) {
+			try {
+				Point pos = textComponent.getLocationOnScreen();
+				int popX = pos.x;
+				int popY = pos.y + textComponent.getHeight();
+				
+				completionWindow.setLocation(popX, popY);
+				completionWindow.pack();
+				completionWindow.setVisible(true);
+			} catch (IllegalComponentStateException e) {
+				// happens when component is not yet visible, ignore
+			}
 		}
 	}
 	
