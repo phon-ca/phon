@@ -11,6 +11,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.BlindTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -204,9 +205,16 @@ public class AutoTranscriber {
 							new BlindTierEdit(getEditor(), record.getIPATarget(), i, getTranscriber(), 
 									autoTranscription.getObj1(), grpVal);
 				} else {
+					IPATranscript currentValue = record.getIPATarget().getGroup(i);
+					IPATranscript newValue = autoTranscription.getObj1();
+					
+					AlternativeTranscript alts = 
+							(currentValue != null ? currentValue.getExtension(AlternativeTranscript.class) : null);
+					if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
+					
 					targetEdit = 
 							new TierEdit<IPATranscript>(getEditor(), record.getIPATarget(), i, 
-									autoTranscription.getObj1());
+									newValue);
 				}
 				targetEdit.doIt();
 				retVal.addEdit(targetEdit);
@@ -220,9 +228,16 @@ public class AutoTranscriber {
 							new BlindTierEdit(getEditor(), record.getIPAActual(), i, getTranscriber(),
 									autoTranscription.getObj2(), grpVal);
 				} else {
+					IPATranscript currentValue = record.getIPAActual().getGroup(i);
+					IPATranscript newValue = autoTranscription.getObj2();
+					
+					AlternativeTranscript alts =
+							(currentValue != null ? currentValue.getExtension(AlternativeTranscript.class) : null);
+					if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
+					
 					actualEdit = 
 							new TierEdit<IPATranscript>(getEditor(), record.getIPAActual(), i, 
-									autoTranscription.getObj2());
+									newValue);
 				}
 				actualEdit.doIt();
 				retVal.addEdit(actualEdit);

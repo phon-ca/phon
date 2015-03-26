@@ -315,6 +315,9 @@ public class RecordLookupPanel extends JPanel {
 				}
 			} else {
 				if(overwriteBox.isSelected() || ipaTarget.getGroup(i).length() == 0) {
+					final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
+					if(alts != null) ipa.putExtension(AlternativeTranscript.class, alts);
+					
 					final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
 					ipaTargetEdit.doIt();
 					edit.addEdit(ipaTargetEdit);
@@ -339,6 +342,9 @@ public class RecordLookupPanel extends JPanel {
 				}
 			} else {
 				if(overwriteBox.isSelected() || ipaActual.getGroup(i).length() == 0) {
+					final AlternativeTranscript alts = actualIpa.getExtension(AlternativeTranscript.class);
+					if(alts != null) ipaA.putExtension(AlternativeTranscript.class, alts);
+					
 					final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipaA);
 					ipaActualEdit.doIt();
 					edit.addEdit(ipaActualEdit);
