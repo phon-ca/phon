@@ -2,6 +2,7 @@ package ca.phon.ui.text;
 
 import java.awt.IllegalComponentStateException;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -123,6 +124,13 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 			
 			completionWindow.setLocation(popX, popY);
 			completionWindow.pack();
+
+			final Rectangle bounds = completionWindow.getBounds();
+			if(bounds.width > textComponent.getWidth()) {
+				bounds.width = textComponent.getWidth();
+				completionWindow.setBounds(bounds);
+			}
+			
 			completionWindow.setVisible(true);
 		} catch (IllegalComponentStateException e) {
 			// happens when component is not yet visible, ignore

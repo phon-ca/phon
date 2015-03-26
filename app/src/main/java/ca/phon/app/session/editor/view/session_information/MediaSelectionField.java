@@ -1,13 +1,18 @@
 package ca.phon.app.session.editor.view.session_information;
 
 import java.io.File;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.FileSelectionField;
+import ca.phon.ui.text.TextCompleter;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 
 public class MediaSelectionField extends FileSelectionField {
@@ -21,12 +26,31 @@ public class MediaSelectionField extends FileSelectionField {
 	public MediaSelectionField() {
 		super();
 		setFileFilter(FileFilter.mediaFilter);
+		setupTextCompleter();
 	}
 
 	public MediaSelectionField(Project project) {
 		super();
 		this.project = project;
 		textField.setPrompt("Session media location");
+		setupTextCompleter();
+	}
+	
+	private void setupTextCompleter() {
+		final DefaultTextCompleterModel completerModel = new DefaultTextCompleterModel();
+		
+		final List<String> mediaIncludePaths = ( project != null ? 
+				MediaLocator.getMediaIncludePaths(project) : MediaLocator.getMediaIncludePaths());
+		for(String path:mediaIncludePaths) {
+			final File mediaFolder = new File(path);
+			for(File file:mediaFolder.listFiles()) {
+				if(getFileFilter() != null && !getFileFilter().accept(mediaFolder)) continue;
+				final String name = file.getName();
+				completerModel.addCompletion(name, "<html>" + name + " <i>(" + file.getAbsolutePath() + ")</i></html>");
+			}
+		}
+		final TextCompleter completer = new TextCompleter(completerModel);
+		completer.install(super.getTextField());
 	}
 
 	public void setEditor(SessionEditor editor) {

@@ -45,7 +45,7 @@ public class LanguageField extends FormatterTextField<List<Language>> {
 		for(Language lang:languages) {
 			if(sb.length() > 0)
 				sb.append(", ");
-			sb.append(lang.toString()).append("(").append(lang.getPrimaryLanguage().getName()).append(")");
+			sb.append(lang.toString()).append(" (").append(lang.getPrimaryLanguage().getName()).append(")");
 		}
 		if(sb.length() > 0) {
 			setToolTipText(sb.toString());
