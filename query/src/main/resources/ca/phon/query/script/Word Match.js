@@ -160,8 +160,8 @@ function query_record(recordIndex, record)
 }
 
 function checkWordMatch(recordIndex, record, obj) {
-	var word = obj.IPATarget;
-	var aligned = obj.IPAActual;
+	var word = (obj.IPATarget != null ? obj.IPATarget : new IPATranscript());
+	var aligned = (obj.IPAActual != null ? obj.IPAActual : new IPATranscript());
 	
 	if((aligned ==  null || aligned.length() == 0) && ignoreTruncated == true) {
 		return;
