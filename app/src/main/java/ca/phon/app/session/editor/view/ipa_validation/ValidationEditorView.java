@@ -217,30 +217,26 @@ public class ValidationEditorView extends EditorView {
 			final ButtonGroup btnGrp = new ButtonGroup();
 			j = row;
 			for(Transcriber t:transcribers) {
-				final IPATranscript opt = (alts != null && alts.containsKey(t.getUsername()) ? alts.get(t.getUsername()) : null);
-				if(opt == null) {
-					final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, ++j);
-					panel.add(new JLabel(), tdc);
-				} else {
-					final SelectIPAData selectData = new SelectIPAData();
-					selectData.tier = tier;
-					selectData.candidateTier = candidateTier;
-					selectData.group = i;
-					selectData.transcriber = t.getUsername();
-					
-					final PhonUIAction optAct = new PhonUIAction(this, "onSelectIPA", selectData);
-					optAct.putValue(PhonUIAction.NAME, opt.toString());
-					if(alts.getSelected() != null && alts.getSelected().equals(t.getUsername())) {
-						optAct.putValue(PhonUIAction.SELECTED_KEY, true);
-					}
-					
-					final JRadioButton optBtn = new JRadioButton(optAct);
-					optBtn.setFont(FontPreferences.getTierFont());
-					optBtn.setOpaque(false);
-					btnGrp.add(optBtn);
-					final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, ++j);
-					panel.add(optBtn, tdc);
+				final IPATranscript opt = (alts != null && alts.containsKey(t.getUsername()) ? alts.get(t.getUsername()) : new IPATranscript());
+				
+				final SelectIPAData selectData = new SelectIPAData();
+				selectData.tier = tier;
+				selectData.candidateTier = candidateTier;
+				selectData.group = i;
+				selectData.transcriber = t.getUsername();
+				
+				final PhonUIAction optAct = new PhonUIAction(this, "onSelectIPA", selectData);
+				optAct.putValue(PhonUIAction.NAME, opt.toString());
+				if(alts.getSelected() != null && alts.getSelected().equals(t.getUsername())) {
+					optAct.putValue(PhonUIAction.SELECTED_KEY, true);
 				}
+				
+				final JRadioButton optBtn = new JRadioButton(optAct);
+				optBtn.setFont(FontPreferences.getTierFont());
+				optBtn.setOpaque(false);
+				btnGrp.add(optBtn);
+				final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, ++j);
+				panel.add(optBtn, tdc);
 			}
 		}
 		panel.revalidate();
