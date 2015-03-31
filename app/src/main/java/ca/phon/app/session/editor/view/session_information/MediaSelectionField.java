@@ -3,8 +3,6 @@ package ca.phon.app.session.editor.view.session_information;
 import java.io.File;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.util.MediaLocator;
@@ -12,8 +10,8 @@ import ca.phon.project.Project;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.FileSelectionField;
-import ca.phon.ui.text.TextCompleter;
 import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.ui.text.TextCompleter;
 
 public class MediaSelectionField extends FileSelectionField {
 	

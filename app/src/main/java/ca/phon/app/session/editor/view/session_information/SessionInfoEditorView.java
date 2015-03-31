@@ -25,7 +25,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.List;
 
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
@@ -35,7 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
@@ -72,7 +70,6 @@ import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.LanguageField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
-import ca.phon.util.Language;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

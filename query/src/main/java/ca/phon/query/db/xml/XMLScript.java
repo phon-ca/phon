@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.hamcrest.core.IsSame;
-
 import ca.phon.query.db.Script;
 import ca.phon.query.db.xml.io.query.ParamType;
 import ca.phon.query.db.xml.io.query.ScriptType;
