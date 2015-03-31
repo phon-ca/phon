@@ -341,14 +341,18 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		// ipa target/actual
 		for(IpaTierType ipaTt:rt.getIpaTier()) {
 			final Tier<IPATranscript> ipaTranscript = copyTranscript(factory, ipaTt);
-			// ensure correct number of groups
-			while(ipaTranscript.numberOfGroups() < retVal.numberOfGroups()) ipaTranscript.addGroup();
 			if(ipaTt.getForm() == PhoTypeType.ACTUAL) {
 				retVal.setIPAActual(ipaTranscript);
 			} else {
 				retVal.setIPATarget(ipaTranscript);
 			}
 		}
+		
+		Tier<IPATranscript> ipaTargetTier = retVal.getIPATarget();
+		while(ipaTargetTier.numberOfGroups() < retVal.numberOfGroups()) ipaTargetTier.addGroup();
+		
+		Tier<IPATranscript> ipaActualTier = retVal.getIPAActual();
+		while(ipaActualTier.numberOfGroups() < retVal.numberOfGroups()) ipaActualTier.addGroup();
 		
 		// blind transcriptions
 		for(BlindTierType btt:rt.getBlindTranscription()) {
