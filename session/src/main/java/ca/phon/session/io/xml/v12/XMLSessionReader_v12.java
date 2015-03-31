@@ -341,6 +341,8 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		// ipa target/actual
 		for(IpaTierType ipaTt:rt.getIpaTier()) {
 			final Tier<IPATranscript> ipaTranscript = copyTranscript(factory, ipaTt);
+			// ensure correct number of groups
+			while(ipaTranscript.numberOfGroups() < retVal.numberOfGroups()) ipaTranscript.addGroup();
 			if(ipaTt.getForm() == PhoTypeType.ACTUAL) {
 				retVal.setIPAActual(ipaTranscript);
 			} else {
@@ -405,6 +407,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		// alignment
 		for(AlignmentTierType att:rt.getAlignment()) {
 			final Tier<PhoneMap> alignment = copyAlignment(factory, retVal, att);
+			while(alignment.numberOfGroups() < retVal.numberOfGroups()) alignment.addGroup();
 			retVal.setPhoneAlignment(alignment);
 			break; // only processing the first alignment element (which should be the only one)
 		}

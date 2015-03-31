@@ -146,20 +146,23 @@ public class RecordImpl implements Record {
 
 	@Override
 	public void removeGroup(int idx) {
-		if(idx >= 0 && idx < numberOfGroups()) {
-			orthography.removeGroup(idx);
-			ipaActual.removeGroup(idx);
-			ipaTarget.removeGroup(idx);
-			alignment.removeGroup(idx);
-			
-			for(String tierName:getExtraTierNames()) {
-				final Tier<?> tier = getTier(tierName);
-				if(tier.isGrouped() && idx < tier.numberOfGroups()) {
-					tier.removeGroup(idx);
-				}
-			}
-		} else {
+		if(idx < 0 && idx >= numberOfGroups()) 
 			throw new IndexOutOfBoundsException("Invalid group index " + idx);
+		
+		if(idx < orthography.numberOfGroups())
+			orthography.removeGroup(idx);
+		if(idx < ipaActual.numberOfGroups())
+			ipaActual.removeGroup(idx);
+		if(idx < ipaTarget.numberOfGroups())
+			ipaTarget.removeGroup(idx);
+		if(idx < alignment.numberOfGroups())
+			alignment.removeGroup(idx);
+		
+		for(String tierName:getExtraTierNames()) {
+			final Tier<?> tier = getTier(tierName);
+			if(tier.isGrouped() && idx < tier.numberOfGroups()) {
+				tier.removeGroup(idx);
+			}
 		}
 	}
 

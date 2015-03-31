@@ -41,6 +41,12 @@ public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 		super.undo();
 		
 		for(String key:oldGroupData.keySet()) {
+			
+			final Tier<?> tier = record.getTier(key);
+			if(tier != null) {
+				while(tier.numberOfGroups() < groupIndex) tier.addGroup();
+			}
+			
 			if(SystemTierType.tierFromString(key) == SystemTierType.Orthography)
 				record.getOrthography().addGroup(groupIndex, (Orthography)oldGroupData.get(key));
 			else if(SystemTierType.tierFromString(key) == SystemTierType.IPATarget)
@@ -60,15 +66,20 @@ public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 	@Override
 	public void doIt() {
 		oldGroupData.clear();
-		oldGroupData.put(SystemTierType.Orthography.getName(), record.getOrthography().getGroup(groupIndex));
-		oldGroupData.put(SystemTierType.IPATarget.getName(), record.getIPATarget().getGroup(groupIndex));
-		oldGroupData.put(SystemTierType.IPAActual.getName(), record.getIPAActual().getGroup(groupIndex));
-		oldGroupData.put(SystemTierType.SyllableAlignment.getName(), record.getPhoneAlignment().getGroup(groupIndex));
+		oldGroupData.put(SystemTierType.Orthography.getName(), 
+				(groupIndex < record.getOrthography().numberOfGroups() ? record.getOrthography().getGroup(groupIndex) : new Orthography()));
+		oldGroupData.put(SystemTierType.IPATarget.getName(), 
+				(groupIndex < record.getIPATarget().numberOfGroups() ? record.getIPATarget().getGroup(groupIndex) : new IPATranscript()));
+		oldGroupData.put(SystemTierType.IPAActual.getName(), 
+				(groupIndex < record.getIPAActual().numberOfGroups() ? record.getIPAActual().getGroup(groupIndex) : new IPATranscript()));
+		oldGroupData.put(SystemTierType.SyllableAlignment.getName(), 
+				(groupIndex < record.getPhoneAlignment().numberOfGroups() ? record.getPhoneAlignment().getGroup(groupIndex) : new PhoneMap()));
 		
 		for(String tierName:record.getExtraTierNames()) {
 			final Tier<String> extraTier = record.getTier(tierName, String.class);
 			if(extraTier.isGrouped())
-				oldGroupData.put(tierName, extraTier.getGroup(groupIndex));
+				oldGroupData.put(tierName, 
+						(groupIndex < extraTier.numberOfGroups() ? extraTier.getGroup(groupIndex) : new String()));
 		}
 		
 		record.removeGroup(groupIndex);	
