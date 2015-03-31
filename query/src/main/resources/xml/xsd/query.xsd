@@ -43,31 +43,39 @@
         <xs:attribute name="starred" type="xs:boolean" default="false"/>
         <xs:attribute name="date" type="xs:dateTime"/>
     </xs:complexType>
-    
+
     <!-- Root level elements for JAXB fragmented processing -->
-    
+
     <xs:element name="tag" type="nonEmptyString"/>
     <xs:element name="script" type="ScriptType"/>
     <xs:element name="comments" type="xs:string" default=""/>
-    
+
     <!-- Root level elements for JAXB fragmented processing -->
-    
+
     <xs:element name="source" type="xs:string" default=""/>
+    <xs:element name="url" type="ScriptURLType"/>
     <xs:element name="output" type="xs:string" default=""/>
     <xs:element name="param" type="ParamType"/>
-    
+
     <!-- Definition of a script and its parameters -->
-    
+
     <xs:complexType name="ScriptType">
         <xs:annotation>
             <xs:documentation>Type definition for the script element.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="source" minOccurs="1" maxOccurs="1">
-                <xs:annotation>
-                    <xs:documentation>Source for query script</xs:documentation>
-                </xs:annotation>
-            </xs:element>
+            <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element ref="source">
+                    <xs:annotation>
+                        <xs:documentation>Source for query script</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element ref="url">
+                    <xs:annotation>
+                        <xs:documentation>URL for query script</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
             <xs:element ref="output" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation>Console output for query</xs:documentation>
@@ -93,22 +101,67 @@
         </xs:simpleContent>
     </xs:complexType>
 
+    <xs:complexType name="ScriptURLType">
+        <xs:annotation>
+            <xs:documentation>Link to query script</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="rel" type="scriptRelType" default="absolute"/>
+        <xs:attribute name="ref" type="xs:anyURI" use="required"/>
+    </xs:complexType>
+
     <!-- Simple type for a non-empty extension of string -->
 
     <xs:simpleType name="nonEmptyString">
         <xs:annotation>
-            <xs:documentation>An xs:string that has to have a length of at least 1.</xs:documentation>
+            <xs:documentation>An xs:string that has to have a length of at least
+                1.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:minLength value="1"/>
         </xs:restriction>
     </xs:simpleType>
 
+    <!-- Simple type for script location -->
+    <xs:simpleType name="scriptRelType">
+        <xs:annotation>
+            <xs:documentation>A URL to the script.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="absolute">
+                <xs:annotation>
+                    <xs:documentation>URL is absolute</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="stock">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to stock query scripts</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="user">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to user query script folder</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="project">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to project query script
+                        folder</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="plugins">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to plugin query scripts</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
     <!-- Simple type for a uuid -->
-    
+
     <xs:simpleType name="uuid">
         <xs:annotation>
-            <xs:documentation>An xs:string that is restricted to a uuid, which is 32 hexidecimal digits in the form xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</xs:documentation>
+            <xs:documentation>An xs:string that is restricted to a uuid, which is 32 hexidecimal
+                digits in the form xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:pattern
@@ -116,12 +169,13 @@
             />
         </xs:restriction>
     </xs:simpleType>
-    
+
     <!-- Simple type for a MIME-type -->
-    
+
     <xs:simpleType name="mimeType">
         <xs:annotation>
-            <xs:documentation>An xs:string that is restricted to a MIME-type string</xs:documentation>
+            <xs:documentation>An xs:string that is restricted to a MIME-type
+                string</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:pattern value="[-+a-zA-Z0-9]+/[-+a-zA-Z0-9]+"/>

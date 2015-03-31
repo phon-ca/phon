@@ -18,20 +18,39 @@
 
 package ca.phon.query.db.xml;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.hamcrest.core.IsSame;
 
 import ca.phon.query.db.Script;
 import ca.phon.query.db.xml.io.query.ParamType;
 import ca.phon.query.db.xml.io.query.ScriptType;
+import ca.phon.query.db.xml.io.query.ScriptURLType;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.util.resources.ResourceLoader;
 
 
 /**
  * An XML-based implementation of {@link Script}.
  */
 public class XMLScript implements Script, JAXBWrapper<ScriptType> {
+	private final static Logger LOGGER = Logger.getLogger(XMLScript.class.getName());
+	
 	/** JAXB object */
 	ScriptType script;
+	
+	private String cachedSource;
 	
 	/**
 	 * Default constructor.
@@ -45,8 +64,6 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 	 */
 	XMLScript(ScriptType script) {
 		this.script = script;
-		if(this.script.getSource() == null)
-			this.script.setSource("");
 	}
 	
 	/**
@@ -60,7 +77,66 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 	
 	@Override
 	public String getSource() {
-		return script.getSource();
+		String retVal = null;
+		if(script.isSetSource()) {
+			retVal = script.getSource();
+		} else if(script.isSetUrl()) {
+			if(cachedSource == null) {
+				try {
+					cachedSource = readFromUrl(script.getUrl());
+				} catch (IOException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+			}
+			retVal = cachedSource;
+		}
+		return retVal;
+	}
+	
+	private String readFromUrl(ScriptURLType url) throws IOException {
+		final QueryScriptLibrary scriptLibrary = new QueryScriptLibrary();
+		ResourceLoader<QueryScript> scriptLoader = null;
+		switch(url.getRel()) {
+		case ABSOLUTE:
+			StringBuilder sb = new StringBuilder();
+			try {
+				final URI uri = new URI(url.getRef());
+				final URL scriptUrl = uri.toURL();
+				
+				final BufferedReader reader = new BufferedReader(new InputStreamReader(scriptUrl.openStream()));
+				String line = null;
+				while((line = reader.readLine()) != null) {
+					sb.append(line).append("\n");
+				}
+				reader.close();
+			} catch (URISyntaxException e) {
+				throw new IOException(e);
+			}
+			return sb.toString();
+			
+		case STOCK:
+			scriptLoader = scriptLibrary.stockScriptFiles();
+			break;
+			
+		case USER:
+			scriptLoader = scriptLibrary.userScriptFiles();
+			break;
+			
+		case PROJECT:
+		case PLUGINS:
+		default:
+				break;
+		}
+		
+		if(scriptLoader != null) {
+			for(QueryScript script:scriptLoader) {
+				final QueryName qn = script.getExtension(QueryName.class);
+				if(qn != null && qn.getName().equals(url.getRef())) {
+					return script.getScript();
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -96,4 +172,5 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 	public void setMimeType(String mimeType) {
 		script.setMimetype(mimeType);
 	}
+	
 }

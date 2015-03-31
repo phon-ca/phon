@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -127,12 +129,16 @@ public class QueryScriptLibrary implements IExtendable {
 		} else if(file.endsWith(".xml")) {
 			final QueryScript qs = script;
 			
+			final QueryName qn = qs.getExtension(QueryName.class);
+			
 			final QueryManager qm = QueryManager.getSharedInstance();
 			final QueryFactory qf = qm.createQueryFactory();
 			final Query q = qm.createQueryFactory().createQuery();
 			
 			q.setName((new File(file)).getName());
 			final Script s = qf.createScript();
+		
+			// TODO save links to scripts instead of the script source
 			s.setSource(qs.getScript());
 
 			final Map<String, String> paramMap = new TreeMap<String, String>();

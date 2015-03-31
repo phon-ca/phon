@@ -38,7 +38,7 @@ public interface Script {
 	 * @param source  the source code
 	 */
 	public abstract void setSource(String source);
-
+	
 	/**
 	 * Gets the parameters used in this script.
 	 *  
