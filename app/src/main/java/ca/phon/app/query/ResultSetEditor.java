@@ -647,8 +647,10 @@ public class ResultSetEditor extends ProjectFrame {
 	@Override
 	public void close() {
 		if(getEditor() != null) {
-			getEditor().getSelectionModel().clear();
-			getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+			if(getEditor().getSelectionModel() != null) 
+				getEditor().getSelectionModel().clear();
+			if(getEditor().getEventManager() != null)
+				getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
 		}
 		super.close();
 	}
