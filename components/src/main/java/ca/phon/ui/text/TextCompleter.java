@@ -113,7 +113,7 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 	}
 	
 	protected void showPopup() {
-		if(completionListModel.size() <= 1) {
+		if(completionListModel.size() == 0) {
 			completionWindow.setVisible(false);
 			return;
 		}
