@@ -402,7 +402,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	}
 	
 	@Override
-	public void applyPerspective(RecordEditorPerspective editorPerspective) {
+	public void setupWindows(RecordEditorPerspective editorPerspective) {
 		final AccessoryWindow[] windows = accessoryWindows.toArray(new AccessoryWindow[0]);
 		for(AccessoryWindow window:windows) {
 			window.setVisible(false);
@@ -411,14 +411,9 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			window.dispose();
 		}
 		
-		CPerspective perspective = null;
-		try {
-			final InputStream is = editorPerspective.getLocation().openStream();
-			
-			boolean boundsSet = false;
+		try(InputStream is = editorPerspective.getLocation().openStream()) {
 			if(is != null) {
 				final XElement xele = XIO.readUTF(is);
-				perspective = dockControl.getPerspectives().readXML( xele );
 				
 				final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 				
@@ -458,7 +453,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 						if(!getEditor().isVisible())
 							getEditor().cascadeWindow(CommonModuleFrame.getCurrentFrame());
 					}
-					boundsSet = true;
 				}
 				
 				final XElement windowsEle = xele.getElement("windows");
@@ -507,20 +501,32 @@ public class DefaultEditorViewModel implements EditorViewModel {
 					}
 				}
 			}
+		} catch (IOException e) {
+			
+		}
+	}
+	
+	public void loadPerspective(RecordEditorPerspective editorPerspective) {
+		setupWindows(editorPerspective);
+		applyPerspective(editorPerspective);
+	}
+	
+	@Override
+	public void applyPerspective(RecordEditorPerspective editorPerspective) {
+		CPerspective perspective = null;
+		try(InputStream is = editorPerspective.getLocation().openStream()) {
+			if(is != null) {
+				final XElement xele = XIO.readUTF(is);
+				perspective = dockControl.getPerspectives().readXML( xele );
+			}
 			dockControl.getPerspectives().setPerspective( editorPerspective.getName(), perspective);
 			perspective.storeLocations();
 			dockControl.load(editorPerspective.getName());
-			if(!boundsSet) {
-				getEditor().pack();
-				getEditor().centerWindow();
-			}
-			
+
 			getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
 			for(AccessoryWindow accWin:accessoryWindows) {
 				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
 			}
-			
-			is.close();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
@@ -922,11 +928,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		for(RecordEditorPerspective editorPerspective:RecordEditorPerspective.availablePerspectives()) {
 			
-			final PhonUIAction showPerspectiveAct = new PhonUIAction(this, "applyPerspective", editorPerspective);
+			final PhonUIAction showPerspectiveAct = new PhonUIAction(this, "loadPerspective", editorPerspective);
 			showPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
 			showPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Load perspective: " + editorPerspective.getName());
 			final JMenuItem showPerspectiveItem = new JMenuItem(showPerspectiveAct);
-			
 			
 			if(menu.getComponent() instanceof JMenu) {
 				final JMenu m = (JMenu)menu;

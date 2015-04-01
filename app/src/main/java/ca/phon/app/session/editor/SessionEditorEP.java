@@ -154,17 +154,18 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		}
 		
 		final SessionEditor editor = new SessionEditor(project, session, transcriber);
-		editor.pack();
+
+		// load editor perspective
+		final RecordEditorPerspective prevPerspective = 
+				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
+		final RecordEditorPerspective perspective = 
+				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
+		editor.getViewModel().setupWindows(perspective);
 		
 		editor.addWindowListener(new WindowAdapter() {
-			
+
 			@Override
 			public void windowOpened(WindowEvent e) {
-				// load editor perspective
-				final RecordEditorPerspective prevPerspective = 
-						RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
-				final RecordEditorPerspective perspective = 
-						(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
 				editor.getViewModel().applyPerspective(perspective);
 				
 				if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {

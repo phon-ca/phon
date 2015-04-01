@@ -22,6 +22,7 @@ public class CorpusTemplateEditor extends SessionEditor {
 		final URL perspectiveURL = getClass().getResource(PERSPECTIVE_FILE);
 		if(perspectiveURL != null) {
 			final RecordEditorPerspective perspective = new RecordEditorPerspective(PERSPECTIVE_NAME, perspectiveURL);
+			getViewModel().setupWindows(perspective);
 			getViewModel().applyPerspective(perspective);
 		}
 		

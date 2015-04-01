@@ -112,6 +112,13 @@ public interface EditorViewModel {
 	public void hideView(String viewName);
 	
 	/**
+	 * Setup windows using the given perspective
+	 * 
+	 * @param editorPerspective
+	 */
+	public void setupWindows(RecordEditorPerspective editorPerspective);
+	
+	/**
 	 * Setup views based on the given perspective 
 	 * 
 	 * @param editorPerspective
