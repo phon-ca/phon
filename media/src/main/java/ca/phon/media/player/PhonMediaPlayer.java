@@ -344,7 +344,7 @@ public class PhonMediaPlayer extends JPanel {
 		loadMedia();
 	}
 	
-	public synchronized void loadMedia() {
+	public void loadMedia() {
 		if(mediaPlayerComponent != null) {
 			final MediaPlayer mediaPlayer = getMediaPlayer();
 			if(mediaPlayer != null) {
@@ -688,7 +688,7 @@ public class PhonMediaPlayer extends JPanel {
 		renderTimer.start();
 	}
 	
-	protected synchronized void renderFrame() {
+	protected void renderFrame() {
 		if(mediaPlayerComponent == null || mediaPlayerComponent.getMediaPlayer() == null) return;
 		Memory[] nativeBuffers = mediaPlayerComponent.getMediaPlayer().lock();
 		if(nativeBuffers != null && nativeBuffers.length > 0) {
