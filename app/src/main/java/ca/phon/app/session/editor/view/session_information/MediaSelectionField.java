@@ -2,7 +2,16 @@ package ca.phon.app.session.editor.view.session_information;
 
 import java.awt.dnd.DropTarget;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.common.MediaFileDropListener;
@@ -14,14 +23,19 @@ import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.ui.text.TextCompleter;
+import ca.phon.worker.PhonWorker;
 
 public class MediaSelectionField extends FileSelectionField {
+	
+	private final static Logger LOGGER = Logger.getLogger(MediaSelectionField.class.getName());
 	
 	private static final long serialVersionUID = 5171333221664140205L;
 	
 	private SessionEditor editor;
 	
 	private Project project;
+	
+	private final DefaultTextCompleterModel completerModel = new DefaultTextCompleterModel();
 	
 	public MediaSelectionField() {
 		super();
@@ -35,26 +49,38 @@ public class MediaSelectionField extends FileSelectionField {
 		super();
 		this.project = project;
 		textField.setPrompt("Session media location");
-		setupTextCompleter();
+		PhonWorker.getInstance().invokeLater( () -> {setupTextCompleter(); } );
 		
 		new DropTarget(this, new MediaFileDropListener());
 	}
 	
+	protected void addTextCompletion(Path mediaFile) {
+		final File file = mediaFile.toFile();
+		if(getFileFilter() != null && !getFileFilter().accept(file)) return;
+		try {
+			if(Files.isHidden(mediaFile)) return;
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			return;
+		}
+		final String name = mediaFile.getFileName().toString();
+		completerModel.addCompletion(name, "<html>" + name + " <i>(" + mediaFile.toString() + ")</i></html>");
+	}
+	
 	private void setupTextCompleter() {
-		final DefaultTextCompleterModel completerModel = new DefaultTextCompleterModel();
-		
 		final List<String> mediaIncludePaths = ( project != null ? 
 				MediaLocator.getMediaIncludePaths(project) : MediaLocator.getMediaIncludePaths());
 		for(String path:mediaIncludePaths) {
-			final File mediaFolder = new File(path);
-			for(File file:mediaFolder.listFiles()) {
-				if(getFileFilter() != null && !getFileFilter().accept(mediaFolder)) continue;
-				final String name = file.getName();
-				completerModel.addCompletion(name, "<html>" + name + " <i>(" + file.getAbsolutePath() + ")</i></html>");
+			final Path mediaFolder = Paths.get(path);
+			if(!Files.exists(mediaFolder)) continue;
+			try(DirectoryStream<Path> dirStream = Files.newDirectoryStream(mediaFolder)) {
+				dirStream.forEach( this::addTextCompletion );
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 		final TextCompleter completer = new TextCompleter(completerModel);
-		completer.install(super.getTextField());
+		SwingUtilities.invokeLater( () -> { completer.install(getTextField()); } );
 	}
 
 	public void setEditor(SessionEditor editor) {

@@ -43,6 +43,7 @@ public class MediaFileDropListener implements DropTargetListener {
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
+		System.out.println("hello world");
 		for(DataFlavor flavor:dtde.getTransferable().getTransferDataFlavors()) {
 			try {
 				System.out.println(flavor.toString());
