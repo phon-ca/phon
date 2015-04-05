@@ -1,9 +1,11 @@
 package ca.phon.app.session.editor.view.session_information;
 
+import java.awt.dnd.DropTarget;
 import java.io.File;
 import java.util.List;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.common.MediaFileDropListener;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
@@ -25,6 +27,8 @@ public class MediaSelectionField extends FileSelectionField {
 		super();
 		setFileFilter(FileFilter.mediaFilter);
 		setupTextCompleter();
+		
+		
 	}
 
 	public MediaSelectionField(Project project) {
@@ -32,6 +36,8 @@ public class MediaSelectionField extends FileSelectionField {
 		this.project = project;
 		textField.setPrompt("Session media location");
 		setupTextCompleter();
+		
+		new DropTarget(this, new MediaFileDropListener());
 	}
 	
 	private void setupTextCompleter() {
