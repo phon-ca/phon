@@ -1111,7 +1111,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				@Override
 				public void windowClosed(WindowEvent e) {
 					accessoryWindows.remove(AccessoryWindow.this);
-					dockControl.removeStationContainer(getArea());
+					if(dockControl != null)
+						dockControl.removeStationContainer(getArea());
 				}
 				
 				@Override

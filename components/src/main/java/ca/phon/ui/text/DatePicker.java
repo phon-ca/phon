@@ -126,6 +126,7 @@ public class DatePicker extends JComponent {
 				textField.setValue(new DateTime(monthView.getSelectionDate()));
 				
 			}
+			
 		});
 		final JPopupMenu popup = new JPopupMenu();
 		popup.add(monthView);
