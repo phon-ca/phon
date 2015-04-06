@@ -46,6 +46,7 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FormatterTextField;
+import ca.phon.ui.text.LanguageField;
 import ca.phon.ui.toast.ToastFactory;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -73,7 +74,7 @@ public class ParticipantPanel extends JPanel {
 	private JTextField groupField;
 	private JTextField sesField;
 	private JTextField educationField;
-	private JTextField languageField;
+	private LanguageField languageField;
 	
 	private DatePicker bdayField;
 	
@@ -143,7 +144,7 @@ public class ParticipantPanel extends JPanel {
 		sesField.setColumns(defCols);
 		educationField = new JTextField();
 		educationField.setColumns(defCols);
-		languageField = new JTextField();
+		languageField = new LanguageField();
 		languageField.setColumns(defCols);
 		
 		bdayField = new DatePicker();
