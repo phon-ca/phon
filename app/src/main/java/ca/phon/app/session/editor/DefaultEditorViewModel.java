@@ -61,6 +61,8 @@ import bibliothek.gui.dock.common.action.CloseActionFactory;
 import bibliothek.gui.dock.common.event.CDockableLocationEvent;
 import bibliothek.gui.dock.common.event.CDockableLocationListener;
 import bibliothek.gui.dock.common.event.CDockableStateListener;
+import bibliothek.gui.dock.common.event.CVetoClosingEvent;
+import bibliothek.gui.dock.common.event.CVetoClosingListener;
 import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
@@ -676,19 +678,16 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
 			super.setCloseable(true);
 			
-			this.addCDockableStateListener(new CDockableStateListener(
-					) {
+			this.addVetoClosingListener(new CVetoClosingListener() {
 				
 				@Override
-				public void visibilityChanged(CDockable arg0) {
-					if(!arg0.isVisible()) {
-						getView().onClose();
-					}
+				public void closing(CVetoClosingEvent arg0) {
+					
 				}
 				
 				@Override
-				public void extendedModeChanged(CDockable arg0, ExtendedMode arg1) {
-					
+				public void closed(CVetoClosingEvent arg0) {
+					getView().onClose();
 				}
 				
 			});

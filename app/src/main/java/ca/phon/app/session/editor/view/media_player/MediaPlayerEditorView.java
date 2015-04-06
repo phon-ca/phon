@@ -249,11 +249,9 @@ public class MediaPlayerEditorView extends EditorView {
 	// called when the docking window containing this component is closed
 	@Override
 	public void onClose() {
-		if(mediaPlayer.isPlaying()) {
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) {
 			mediaPlayer.pause();
 		}
-		mediaPlayer.cleanup();
-		mediaPlayer = null;
 	}
 
 	/**
