@@ -19,19 +19,31 @@ package ca.phon.ui.text;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.SystemColor;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.TransferHandler;
+import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.Document;
 
 import ca.phon.ui.action.PhonUIAction;
@@ -92,6 +104,8 @@ public class FileSelectionField extends JPanel {
 		init();
 		textField.getDocument().addDocumentListener(validationListener);
 		textField.addFocusListener(focusListener);
+		textField.setDragEnabled(true);
+		textField.setTransferHandler(new FileTransferHandler());
 	}
 	
 	private void init() {
@@ -360,4 +374,55 @@ public class FileSelectionField extends JPanel {
 		public void focusGained(FocusEvent arg0) {
 		}
 	};
+	
+	private class FileTransferHandler extends TransferHandler {
+
+		private static final long serialVersionUID = 6799990443658389742L;
+
+		private File draggedFile = null;
+
+		@Override
+		public boolean importData(TransferSupport support) {
+			if(draggedFile != null) {
+				setFile(draggedFile);
+				draggedFile = null;
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		@Override
+		public boolean canImport(TransferSupport support) {
+			boolean canImport = (draggedFile != null);
+			
+			if(!canImport) {
+				if(support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+					final Transferable transferrable = support.getTransferable();
+					try {
+						@SuppressWarnings("unchecked")
+						final List<File> fileList = (List<File>)transferrable.getTransferData(DataFlavor.javaFileListFlavor);
+						if(fileList.size() == 1) {
+							canImport = true;
+							final FileFilter filter = getFileFilter();
+							if(filter != null && !filter.accept(fileList.get(0)))
+								canImport = false;
+							if(canImport) {
+								draggedFile = fileList.get(0);
+							}
+						}
+					} catch (UnsupportedFlavorException|IOException e) {
+					}
+				}
+			}
+			
+			return canImport;
+		}
+
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+			return super.createTransferable(c);
+		}
+		
+	}
 }
