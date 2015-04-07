@@ -6,6 +6,7 @@ import java.awt.dnd.DragSource;
 import java.awt.dnd.DropTarget;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,7 +34,7 @@ public class MediaSelectionField extends FileSelectionField {
 	
 	private static final long serialVersionUID = 5171333221664140205L;
 	
-	private SessionEditor editor;
+	private WeakReference<SessionEditor> editorRef;
 	
 	private Project project;
 	
@@ -82,11 +83,11 @@ public class MediaSelectionField extends FileSelectionField {
 	}
 
 	public void setEditor(SessionEditor editor) {
-		this.editor = editor;
+		this.editorRef = new WeakReference<>(editor);
 	}
 	
 	public SessionEditor getEditor() {
-		return this.editor;
+		return this.editorRef.get();
 	}
 	
 	public void setProject(Project project) {

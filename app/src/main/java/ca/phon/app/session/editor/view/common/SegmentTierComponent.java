@@ -23,6 +23,7 @@ import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +65,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 	
 	private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
 	
-	private final SessionEditor editor;
+	private final WeakReference<SessionEditor> editorRef;
 
 	private Tier<MediaSegment> segmentTier;
 	
@@ -79,7 +80,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		setOpaque(false);
 		setFocusable(false);
 		
-		this.editor = editor;
+		this.editorRef = new WeakReference<SessionEditor>(editor);
 		
 		this.segmentTier = tier;
 		segmentTier.addTierListener(tierListener);
@@ -131,7 +132,12 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		segmentField.setEnabled(enabled);
 	}
 	
+	private SessionEditor getEditor() {
+		return editorRef.get();
+	}
+	
 	public void onPlaySegment() {
+		SessionEditor editor = getEditor();
 		if(editor == null) return;
 		
 		final MediaSegment segment = getGroupValue();

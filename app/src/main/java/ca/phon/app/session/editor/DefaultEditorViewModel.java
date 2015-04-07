@@ -325,6 +325,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		registeredViews.clear();
 		dockables.clear();
+		
+		windows.remove(getEditor());
 	}
 	
 	@Override

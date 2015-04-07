@@ -179,16 +179,16 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		
 		init();
 		
-		PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
-			
-			@Override
-			public void preferenceChange(PreferenceChangeEvent evt) {
-				if(evt.getKey().equals(FontPreferences.TIER_FONT)) {
-					final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
-					getEventManager().queueEvent(ee);
-				}
-			}
-		});
+//		PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+//			
+//			@Override
+//			public void preferenceChange(PreferenceChangeEvent evt) {
+//				if(evt.getKey().equals(FontPreferences.TIER_FONT)) {
+//					final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
+//					getEventManager().queueEvent(ee);
+//				}
+//			}
+//		});
 		
 		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
 		setJMenuBar(menuBar);
@@ -206,6 +206,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		setJMenuBar(null);
 		getEventManager().shutdown();
 		getViewModel().cleanup();
+		
+		undoSupport.removeUndoableEditListener(undoListener);
 		
 		eventManagerRef.set(null);
 		viewModelRef.set(null);

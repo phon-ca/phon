@@ -18,6 +18,7 @@
 package ca.phon.ui.action;
 
 import java.awt.event.ActionEvent;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -60,7 +61,7 @@ public class PhonUIAction extends AbstractAction {
 	private Class<?> clazz;
 
 	/** The delegate object (non-static method) */
-	private Object object;
+	private WeakReference<?> objectRef;
 
 	/** The method name we are looking for */
 	private String methodId;
@@ -84,7 +85,7 @@ public class PhonUIAction extends AbstractAction {
 	public PhonUIAction(Object delegate, String methodId, Object data) {
 		super();
 
-		this.object = delegate;
+		this.objectRef = new WeakReference<>(delegate);
 		this.methodId = methodId;
 		this.data = data;
 	}
@@ -98,7 +99,7 @@ public class PhonUIAction extends AbstractAction {
 			Object delegate, String methodId, Object data) {
 		super(text);
 
-		this.object = delegate;
+		this.objectRef = new WeakReference<>(delegate);
 		this.methodId = methodId;
 		this.data = data;
 	}
@@ -107,7 +108,7 @@ public class PhonUIAction extends AbstractAction {
 			Object delegate, String methodId) {
 		super(text, icon);
 
-		this.object = delegate;
+		this.objectRef = new WeakReference<>(delegate);
 		this.methodId = methodId;
 	}
 
@@ -141,8 +142,8 @@ public class PhonUIAction extends AbstractAction {
 	public boolean isStaticAction() {
 		boolean retVal = true;
 		
-		if(object != null)
-			retVal = false;
+		if(objectRef != null)
+			retVal = objectRef.get() == null;
 		
 		return retVal;
 	}
@@ -202,7 +203,7 @@ public class PhonUIAction extends AbstractAction {
 			if(isStaticAction())
 				m.invoke(null, params);
 			else
-				m.invoke(object, params);
+				m.invoke(objectRef.get(), params);
 
 		} catch (InvocationTargetException e) {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -249,7 +250,7 @@ public class PhonUIAction extends AbstractAction {
 		if(isStaticAction()) {
 			clazz = this.clazz;
 		} else {
-			clazz = this.object.getClass();
+			clazz = this.objectRef.get().getClass();
 		}
 
 		if(clazz == null) 

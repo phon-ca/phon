@@ -1,5 +1,7 @@
 package ca.phon.app.session.editor.actions;
 
+import java.lang.ref.WeakReference;
+
 import javax.swing.Action;
 
 import ca.phon.app.hooks.HookableAction;
@@ -12,15 +14,15 @@ public abstract class SessionEditorAction extends HookableAction {
 
 	private static final long serialVersionUID = -6639660567310323736L;
 
-	private final SessionEditor editor;
+	private final WeakReference<SessionEditor> editorRef;
 	
 	public SessionEditorAction(SessionEditor editor) {
 		super();
-		this.editor = editor;
+		this.editorRef = new WeakReference<SessionEditor>(editor);
 	}
 	
 	public SessionEditor getEditor() {
-		return this.editor;
+		return this.editorRef.get();
 	}
 	
 }
