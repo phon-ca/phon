@@ -10,7 +10,7 @@ exports.ParticipantFilter = function(id) {
     
     var participantRoleParamInfo = {
     	"id": id+".participantRole",
-    	"title": "Particpiant role:",
+    	"title": "Participant role:",
     	"def": 0
     };
     var participantRoleParam;
