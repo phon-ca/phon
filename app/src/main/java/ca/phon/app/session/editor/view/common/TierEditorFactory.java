@@ -1,8 +1,11 @@
 package ca.phon.app.session.editor.view.common;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.FocusManager;
 import javax.swing.InputMap;
@@ -65,6 +68,28 @@ public class TierEditorFactory {
 		return retVal;
 	}
 	
+	final String nextEditorActId = "next-editor";
+	final Action nextEditorAct = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			FocusManager.getCurrentManager().focusNextComponent();
+		}
+		
+	};
+	
+	final String prevEditorActId = "prev-editor";
+	final Action prevEditorAct = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			FocusManager.getCurrentManager().focusPreviousComponent();
+		}
+		
+	};
+	final KeyStroke nextEditorKS = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
+	final KeyStroke prevEditorKS = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_MASK);
+	
 	/**
 	 * Install tier editor action map onto given component.
 	 * 
@@ -75,15 +100,9 @@ public class TierEditorFactory {
 		final ActionMap actionMap = comp.getActionMap();
 		
 		// navigation
-		final KeyStroke nextEditorKS = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
-		final String nextEditorActId = "next-editor";
-		final PhonUIAction nextEditorAct = new PhonUIAction(FocusManager.getCurrentManager(), "focusNextComponent");
 		actionMap.put(nextEditorActId, nextEditorAct);
 		inputMap.put(nextEditorKS, nextEditorActId);
 		
-		final KeyStroke prevEditorKS = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_MASK);
-		final String prevEditorActId = "prev-editor";
-		final PhonUIAction prevEditorAct = new PhonUIAction(FocusManager.getCurrentManager(), "focusPreviousComponent");
 		actionMap.put(prevEditorActId, prevEditorAct);
 		inputMap.put(prevEditorKS, prevEditorActId);
 		
