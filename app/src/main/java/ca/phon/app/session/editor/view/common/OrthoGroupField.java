@@ -22,13 +22,17 @@ public class OrthoGroupField extends GroupField<Orthography> {
 
 	private static final long serialVersionUID = -7358501453702966912L;
 	
-	private final HighlightPainter prefixPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.decode("#FFFF00"));
+	private final HighlightPainter prefixPainter = new DefaultHighlighter.DefaultHighlightPainter(
+			new Color(255, 255, 0, 100));
 	
-	private final HighlightPainter suffixPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.decode("#36BECE"));
+	private final HighlightPainter suffixPainter = new DefaultHighlighter.DefaultHighlightPainter(
+			new Color(0x36 / 255.0f, 0xbe / 255.0f, 0xce / 255.0f, 100 / 255.0f));
 	
-	private final HighlightPainter commentPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.decode("#EEEEEE"));
+	private final HighlightPainter commentPainter = new DefaultHighlighter.DefaultHighlightPainter(
+			new Color(0xee/255.0f,0xee/255.0f,0xee/255.0f,100/255.0f));
 	
-	private final HighlightPainter eventPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.decode("#9EED00"));
+	private final HighlightPainter eventPainter = new DefaultHighlighter.DefaultHighlightPainter(
+			new Color(0x93/255.0f,0xed/255.0f,0.0f,100/255.0f));
 
 	public OrthoGroupField(Tier<Orthography> tier,
 			int groupIndex) {
