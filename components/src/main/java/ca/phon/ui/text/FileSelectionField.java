@@ -379,44 +379,50 @@ public class FileSelectionField extends JPanel {
 
 		private static final long serialVersionUID = 6799990443658389742L;
 
-		private File draggedFile = null;
-
 		@Override
-		public boolean importData(TransferSupport support) {
-			if(draggedFile != null) {
-				setFile(draggedFile);
-				draggedFile = null;
+		public boolean importData(JComponent comp, Transferable transferable) {
+			File file = null;
+			try {
+				file = getFile(transferable);
+			} catch (IOException e) {
+				return false;
+			}
+			
+			if(file != null) {
+				if(getFileFilter() != null && !getFileFilter().accept(file)) return false;
+				setFile(file);
 				return true;
 			} else {
 				return false;
 			}
 		}
-
-		@Override
-		public boolean canImport(TransferSupport support) {
-			boolean canImport = (draggedFile != null);
-			
-			if(!canImport) {
-				if(support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-					final Transferable transferrable = support.getTransferable();
-					try {
-						@SuppressWarnings("unchecked")
-						final List<File> fileList = (List<File>)transferrable.getTransferData(DataFlavor.javaFileListFlavor);
-						if(fileList.size() == 1) {
-							canImport = true;
-							final FileFilter filter = getFileFilter();
-							if(filter != null && !filter.accept(fileList.get(0)))
-								canImport = false;
-							if(canImport) {
-								draggedFile = fileList.get(0);
-							}
-						}
-					} catch (UnsupportedFlavorException|IOException e) {
+		
+		private File getFile(Transferable transferable)
+			throws IOException {
+			File retVal = null;
+			try {
+				@SuppressWarnings("unchecked")
+				final List<File> fileList = (List<File>)transferable.getTransferData(DataFlavor.javaFileListFlavor);
+				if(fileList != null && fileList.size() > 0) {
+					retVal = fileList.get(0);
+					final FileFilter filter = getFileFilter();
+					if(filter != null && filter.accept(fileList.get(0))) {
+						retVal = fileList.get(0);
 					}
 				}
+			} catch (UnsupportedFlavorException e) {
+				throw new IOException(e);
 			}
-			
-			return canImport;
+			return retVal;
+		}
+		
+		@Override
+		public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
+			boolean retVal = false;
+			for(DataFlavor f:transferFlavors) {
+				retVal |= f.isFlavorJavaFileListType();
+			}
+			return retVal;
 		}
 
 		@Override
