@@ -85,7 +85,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </Stage>
 
     <Stage name="MaxCoda">
-        <phonex>.:C(C=\c:U:mdc("-1","false"))</phonex>
+        <phonex>.:C(C=\c:U:mdc("-1","true"))</phonex>
 
         <group name="C" mark="Coda"/>
     </Stage>
@@ -97,7 +97,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </Stage>
 
     <Stage name="MarkLA">
-        <phonex>$(LA={anterior,strident,voiceless}:U)</phonex>
+        <phonex>^(LA={anterior,strident,voiceless}:U)</phonex>
         <phonex>.:sctype("Coda|SyllableStressMarker|SyllableBoundaryMarker|Nucleus")(LA={anterior,strident,voiceless}:U).:O</phonex>
 
         <group name="LA" mark="Left Appendix"/>

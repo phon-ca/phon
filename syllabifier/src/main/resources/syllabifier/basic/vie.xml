@@ -48,16 +48,18 @@
     </SonorityScale>
     
     <Stage name="MarkNuclei">
-        <phonex>(D=[{v,nonsyllabic}{v,extrashort}{v,high,lax}]\v)</phonex>
         <phonex>(N=\v)</phonex>
-        
+       <phonex>(D=\g\v)</phonex>
+       <phonex>(D=\g?\v{schwa})</phonex>
+       
         <group name="D" mark="Diphthong"/>
         <group name="N" mark="Nucleus"/>
     </Stage>
 
     <Stage name="MarkOnset">
         <phonex>(O=\c:U).:N</phonex>
-        <phonex>.:sctype("-O")?(O=\g:N).:N</phonex>
+        <phonex>.:sctype("N|C|RA")(O=\g:N).:N</phonex>
+        <phonex>\b\s?(O=\g:N).:N</phonex>
         
         <group name="O" mark="Onset"/>
     </Stage>
@@ -68,7 +70,7 @@
     </Stage>
    
     <Stage name="MarkCoda">
-        <phonex>.:N(C=\c:U)</phonex>
+        <phonex>.:N(C=[\c\g]:U)</phonex>
         <group name="C" mark="Coda"/>
     </Stage>
     
