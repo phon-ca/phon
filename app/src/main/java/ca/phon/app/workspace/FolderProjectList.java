@@ -422,7 +422,7 @@ public class FolderProjectList extends JPanel {
 							"backups" + File.separator + project.getName() + "-" + today + "(" + (fIdx++) + ").zip");
 			}
 			
-			ProjectArchiveTask task = new ProjectArchiveTask(project, destFile, false, false);
+			ProjectArchiveTask task = new ProjectArchiveTask(project, destFile, true, false);
 			task.setName("Archiving: " + project.getName());
 			task.addTaskListener(new PhonTaskListener() {
 				

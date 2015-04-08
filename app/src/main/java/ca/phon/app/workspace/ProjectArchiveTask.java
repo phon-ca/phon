@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -90,8 +91,17 @@ public class ProjectArchiveTask extends PhonTask {
 		if(includeResources) {
 			File resDir = new File(projectRoot, "__res");
 			if(resDir.exists()) {
-				List<File> resFiles = listFilesRecursive(resDir);
-				retVal.addAll(resFiles);
+				for(File resFile:resDir.listFiles()) {
+					if(resFile.isHidden()) continue;
+					if(resFile.isDirectory()) {
+						boolean includeFolder = true;
+						if(resFile.getName().equals("media")) includeFolder = includeMedia;
+						if(includeFolder)
+							retVal.addAll(listFilesRecursive(resFile));
+					} else {
+						retVal.add(resFile);
+					}
+				}
 			}
 		}
 		
