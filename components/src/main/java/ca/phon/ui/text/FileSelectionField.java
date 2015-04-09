@@ -47,6 +47,7 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.Document;
 
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
@@ -105,7 +106,7 @@ public class FileSelectionField extends JPanel {
 		textField.getDocument().addDocumentListener(validationListener);
 		textField.addFocusListener(focusListener);
 		textField.setDragEnabled(true);
-		textField.setTransferHandler(new FileTransferHandler());
+		textField.setTransferHandler(new FileSelectionTransferHandler());
 	}
 	
 	private void init() {
@@ -375,7 +376,7 @@ public class FileSelectionField extends JPanel {
 		}
 	};
 	
-	private class FileTransferHandler extends TransferHandler {
+	private class FileSelectionTransferHandler extends FileTransferHandler {
 
 		private static final long serialVersionUID = 6799990443658389742L;
 
@@ -396,31 +397,13 @@ public class FileSelectionField extends JPanel {
 				return false;
 			}
 		}
-		
-		private File getFile(Transferable transferable)
-			throws IOException {
-			File retVal = null;
-			try {
-				@SuppressWarnings("unchecked")
-				final List<File> fileList = (List<File>)transferable.getTransferData(DataFlavor.javaFileListFlavor);
-				if(fileList != null && fileList.size() > 0) {
-					retVal = fileList.get(0);
-					final FileFilter filter = getFileFilter();
-					if(filter != null && filter.accept(fileList.get(0))) {
-						retVal = fileList.get(0);
-					}
-				}
-			} catch (UnsupportedFlavorException e) {
-				throw new IOException(e);
-			}
-			return retVal;
-		}
-		
+
 		@Override
-		public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
-			boolean retVal = false;
-			for(DataFlavor f:transferFlavors) {
-				retVal |= f.isFlavorJavaFileListType();
+		public File getFile(Transferable transferable) throws IOException {
+			File retVal = super.getFile(transferable);
+			final FileFilter filter = getFileFilter();
+			if(filter != null && !filter.accept(retVal)) {
+				retVal = null;
 			}
 			return retVal;
 		}
