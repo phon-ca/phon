@@ -227,7 +227,7 @@ public class ValidationEditorView extends EditorView {
 				
 				final PhonUIAction optAct = new PhonUIAction(this, "onSelectIPA", selectData);
 				optAct.putValue(PhonUIAction.NAME, opt.toString());
-				if(alts.getSelected() != null && alts.getSelected().equals(t.getUsername())) {
+				if(alts != null && alts.getSelected() != null && alts.getSelected().equals(t.getUsername())) {
 					optAct.putValue(PhonUIAction.SELECTED_KEY, true);
 				}
 				
