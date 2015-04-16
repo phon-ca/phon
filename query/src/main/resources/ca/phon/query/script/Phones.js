@@ -172,9 +172,9 @@ function query_record(recordIndex, record) {
 		   var selectedWords = filters.word.getRequestedWords(group);
 		   for(j = 0; j < selectedWords.length; j++) {
 		       var word = selectedWords[j];
-		       var addWord = true;
 
                var wordIpa = (searchTier == "IPA Target" ? word.IPATarget : word.IPAActual);
+               var addWord = (wordIpa != null);
                // check word pattern if necessary
 		       if(filters.wordPattern.isUseFilter()) {
 		           addWord = filters.wordPattern.check_filter(wordIpa);
@@ -185,7 +185,7 @@ function query_record(recordIndex, record) {
 		           addWord = filters.alignedWord.check_word(word);
 		       }
 		       
-		       if(addWord) {
+		       if(addWord == true) {
 		           toSearch.push(wordIpa);
 		       }
 		   }
