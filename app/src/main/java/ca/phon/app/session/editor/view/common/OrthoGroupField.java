@@ -82,7 +82,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 			}
 			if(word.getSuffix() != null) {
 				try {
-					int i = currentPos + word.getWord().length();
+					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().getCode().length() : 0) + word.getWord().length();
 					getHighlighter().addHighlight(i, i+word.getSuffix().getCode().length()+1, suffixPainter);
 							
 				} catch (BadLocationException e)  {}
