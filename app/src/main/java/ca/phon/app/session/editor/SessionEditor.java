@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -53,7 +51,6 @@ import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 

@@ -17,7 +17,6 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
-import ca.phon.ui.action.PhonUIAction;
 
 /**
  * Create tier editors

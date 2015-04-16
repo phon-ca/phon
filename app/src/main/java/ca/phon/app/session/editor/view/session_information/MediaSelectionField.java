@@ -1,9 +1,5 @@
 package ca.phon.app.session.editor.view.session_information;
 
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureRecognizer;
-import java.awt.dnd.DragSource;
-import java.awt.dnd.DropTarget;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
