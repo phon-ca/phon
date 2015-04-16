@@ -41,7 +41,7 @@ import ca.phon.session.SessionPath;
 @RunWith(JUnit4.class)
 public class TestWordMatchAnalysis {
 
-	private final static String WORDMATCH_SCRIPT = "src/main/resources/ca/phon/query/script/WordMatch.js";
+	private final static String WORDMATCH_SCRIPT = "src/main/resources/ca/phon/query/script/Word Match.js";
 	
 	private final static String REPORT_SCRIPT = "src/main/resources/ca/phon/query/analysis/simple_report.js";
 	
