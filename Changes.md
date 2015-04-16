@@ -1,5 +1,23 @@
 # Phon 2.0 Changes
 
+## Changes from Phon 2.0.6
+
+### General
+ * Added drop support to file selection fields (e.g., media field in Session Information.)
+ * Added auto-complete selection for media files found in media folders setup in Preferences to the media file field in Session Information.
+ * Added auto-complete selection and validation to the language field in Session Information.
+ * Files under the __res folder (except media) are now included in project archives created in the Workspace window.
+
+### Bugs
+ * Media player controls will now continue to work when the media player is placed inside a new editor window.
+ * Fixed a memory leak related to the praat plug-in.
+ * Fixed a libpraat bug which caused Phon to crash on Mac OS X systems with French locale settings.
+ * Fixed issues with eng, vie, and nld syllabifiers.
+ * Selection highlights in Orthography now combine properly with syntax highlights.
+ * Fixed typo in Participant Filter options in query scripts.
+ * Fixed an issue with the 'Cut record' action of the Session Editor.
+ * Blind transcripts are now properly retained when using automatic transcription tools.
+ 
 ## Changes from Phon 2.0.5
 
 ### General
