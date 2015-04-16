@@ -24,7 +24,7 @@
     <SonorityScale>
         <!-- Plosive,Fricative,Affricate - 0 -->
         <SonorityClass>
-            <phonex>[{affricate}{stop,-nasal}{fricative}{-uvular,-fri}]</phonex>
+            <phonex>[{affricate}{stop,-nasal}{fricative}{uvular,-fri}]</phonex>
             <sonorityValue>0</sonorityValue>
         </SonorityClass>
         
@@ -102,7 +102,7 @@
     </Stage>
 
     <Stage name="MarkLA">
-        <phonex>\c(LA={strident,voiceless}).:O</phonex>
+        <phonex>(LA={strident,voiceless}:U).:O</phonex>
         <group name="LA" mark="Left Appendix"/>
     </Stage>
 

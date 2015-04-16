@@ -12,8 +12,8 @@ syllabifier/basic/fra-simple.xml
 syllabifier/basic/fra.xml
 syllabifier/basic/gue.xml
 syllabifier/basic/ita.xml
-#syllabifier/basic/nld-CLPF-ambi.xml
-#syllabifier/basic/nld-CLPF.xml
+syllabifier/basic/nld-CLPF-ambi.xml
+syllabifier/basic/nld-CLPF.xml
 syllabifier/basic/nld-ambi.xml
 syllabifier/basic/nld.xml
 syllabifier/basic/pol.xml
