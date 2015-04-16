@@ -106,7 +106,9 @@ public class SaveQueryDialog extends JDialog {
 	private void updateLocationFields() {
 //		final PathExpander pe = new PathExpander();
 		projSaveLocField.setText("<html><p>" + QueryScriptLibrary.projectScriptFolder(getProject()) + "</p></html>");
+		saveInProjectBtn.setToolTipText(QueryScriptLibrary.projectScriptFolder(getProject()));
 		libSaveLocField.setText("<html><p>" + PrefHelper.getUserDataFolder() + File.separator + "script" + "</p></html>");
+		saveInUserDirBtn.setToolTipText(PrefHelper.getUserDataFolder() + File.separator + "script");
 	}
 
 	private void init() {
@@ -187,10 +189,10 @@ public class SaveQueryDialog extends JDialog {
 		add(includeFormOptionsBox, cc.xy(3, 4));
 		
 		add(saveInUserDirBtn, cc.xyw(2, 5, 2));
-		add(libSaveLocField, cc.xy(3, 6));
+//		add(libSaveLocField, cc.xy(3, 6));
 		
 		add(saveInProjectBtn, cc.xyw(2, 7, 2));
-		add(projSaveLocField, cc.xy(3, 8));
+//		add(projSaveLocField, cc.xy(3, 8));
 		
 		add(saveOtherBtn, cc.xyw(2, 9, 2));
 		
