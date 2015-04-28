@@ -114,7 +114,6 @@
 		<project.build.targetVersion>1.8</project.build.targetVersion>
 
 		<!-- Dependency versions -->
-		<ca.hedlund.vlc4j.version>2.2</ca.hedlund.vlc4j.version>
 		<ca.hedlund.tst.version>0.2</ca.hedlund.tst.version>
 		<ca.gedge.opgraph.version>0.2</ca.gedge.opgraph.version>
 		<ca.phon.native-dialogs.version>6</ca.phon.native-dialogs.version>

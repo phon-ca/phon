@@ -22,6 +22,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -47,15 +49,15 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -77,6 +79,7 @@ import ca.phon.media.exportwizard.MediaExportWizard;
 import ca.phon.media.exportwizard.MediaExportWizardProp;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.PCMSegmentView;
+import ca.phon.media.sampled.Sampled;
 import ca.phon.media.sampled.actions.SelectMixerAction;
 import ca.phon.media.sampled.actions.ToggleLoop;
 import ca.phon.media.util.MediaLocator;
@@ -131,9 +134,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private JButton generateButton;
 	
-	private JLabel msgLabel;
+//	private JLabel msgLabel;
 	
 	private JComponent sizer;
+	
+	private JScrollBar horizontalScroller;
+	private boolean manualAdjustment = false;
 	
 	private final List<SpeechAnalysisTier> pluginTiers = 
 			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
@@ -213,29 +219,52 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setupToolbar();
 		setupInputMap();
 		
-		msgLabel = new JLabel("Audio file not found, click to generate");
-		msgLabel.setBackground(Color.yellow);
-		msgLabel.setVisible(false);
-		msgLabel.setOpaque(true);
-		msgLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		msgLabel.addMouseListener(new MouseInputAdapter() {
-
+//		msgLabel = new JLabel("Audio file not found, click to generate");
+//		msgLabel.setBackground(Color.yellow);
+//		msgLabel.setVisible(false);
+//		msgLabel.setOpaque(true);
+//		msgLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//		msgLabel.addMouseListener(new MouseInputAdapter() {
+//
+//			@Override
+//			public void mouseClicked(MouseEvent arg0) {
+//				if(msgLabel.getText().startsWith("Audio file not found")) {
+//					msgLabel.setVisible(false);
+//					generateAudioFile();
+//				}
+//			}
+//			
+//		});
+//		add(msgLabel, BorderLayout.SOUTH);
+		horizontalScroller = new JScrollBar(SwingConstants.HORIZONTAL);
+		add(horizontalScroller, BorderLayout.SOUTH);
+		horizontalScroller.addAdjustmentListener(new AdjustmentListener() {
+			
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(msgLabel.getText().startsWith("Audio file not found")) {
-					msgLabel.setVisible(false);
-					generateAudioFile();
+			public void adjustmentValueChanged(AdjustmentEvent e) {
+				if(!e.getValueIsAdjusting()) {
+					int val = e.getValue();
+					float time = val / 1000.0f;
+					getWavDisplay().setWindowStart(time);
 				}
 			}
 			
 		});
-		add(msgLabel, BorderLayout.SOUTH);
+		
 		wavDisplay = new PCMSegmentView();
 		wavDisplay.setFocusable(true);
 		wavDisplay.setBackground(Color.white);
 		wavDisplay.setOpaque(true);
 		wavDisplay.setFont(FontPreferences.getMonospaceFont());
 		wavDisplay.addPropertyChangeListener(PCMSegmentView.SEGMENT_LENGTH_PROP, segmentListener);
+		wavDisplay.addPropertyChangeListener(PCMSegmentView.WINDOW_LENGTH_PROP, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setupTimeScrollbar();
+			}
+			
+		});
 		wavDisplay.addPropertyChangeListener(PCMSegmentView.PLAYING_PROP, new PropertyChangeListener() {
 			
 			@Override
@@ -285,10 +314,39 @@ public class SpeechAnalysisEditorView extends EditorView {
 		final JPanel tierPanel = initPlugins();
 		contentPane.add(tierPanel);
 		
-		add(new JScrollPane(contentPane), BorderLayout.CENTER);
+		final JScrollPane scroller = new JScrollPane(contentPane);
+		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		add(scroller, BorderLayout.CENTER);
 
 		setupActions();
 		setupEditorActions();
+		setupTimeScrollbar();
+	}
+	
+	private void setupTimeScrollbar() {
+		final Sampled samples = getWavDisplay().getSampled();
+		if(samples != null) {
+			float length = samples.getLength();
+			final int numTicks = 
+					(length - getWavDisplay().getWindowLength() <= 0 ? 1 : (int)Math.ceil( (length - getWavDisplay().getWindowLength()) * 1000));
+			
+			Runnable onEDT = () -> {
+				horizontalScroller.setEnabled(true);
+				horizontalScroller.setValueIsAdjusting(true);
+				horizontalScroller.setMinimum(0);			
+				horizontalScroller.setMaximum(numTicks);
+				horizontalScroller.setUnitIncrement(100);
+				horizontalScroller.setBlockIncrement(1000);
+				horizontalScroller.setValue((int)Math.floor(getWavDisplay().getWindowStart() * 1000));
+				horizontalScroller.setValueIsAdjusting(false);
+			};
+			if(SwingUtilities.isEventDispatchThread())
+				onEDT.run();
+			else
+				SwingUtilities.invokeLater(onEDT);
+		} else {
+			horizontalScroller.setEnabled(false);
+		}
 	}
 	
 	private void setupActions() {
@@ -459,7 +517,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 								ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
 							}
 						} else {
-							msgLabel.setVisible(true);
+//							msgLabel.setVisible(true);
 						}
 					}
 
@@ -517,13 +575,13 @@ public class SpeechAnalysisEditorView extends EditorView {
 				try {
 					final PCMSampled sampled = new PCMSampled(audioFile);
 					wavDisplay.setSampled(sampled);
-					msgLabel.setVisible(false);
+//					msgLabel.setVisible(false);
 				} catch (IOException e) {
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			} else {
-				msgLabel.setVisible(true);
+//				msgLabel.setVisible(true);
 			}
 		}
 		
@@ -567,11 +625,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 			wavDisplay.setSegmentStart(segStart);
 			wavDisplay.setSegmentLength(segLength);
 			
-			if(msgLabel.isVisible()) {
-				msgLabel.setVisible(false);
-			}
+//			if(msgLabel.isVisible()) {
+//				msgLabel.setVisible(false);
+//			}
 		}
 		
+		setupTimeScrollbar();
 		wavDisplay.setValuesAdusting(false);
 		wavDisplay.repaint();
 	}
