@@ -1,5 +1,13 @@
 # Phon 2.0 Changes
 
+
+## Changes from Phon 2.0.7
+
+ * Added horizontal scroll bar to Speech Analysis view for adjusting visible section of audio samples.
+ * .lck files for Phon logs are now deleted on application close.
+ * Fixed menu entries for csv2phon and manual plug-ins
+ * Fixed an issue with exporting user-defined tiers in TextGrids when the tier had no data.
+
 ## Changes from Phon 2.0.6
 
 ### General
