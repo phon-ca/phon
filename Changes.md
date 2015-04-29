@@ -5,6 +5,7 @@
 
  * Added horizontal scroll bar to Speech Analysis view for adjusting visible section of audio samples.
  * .lck files for Phon logs are now deleted on application close.
+ * Menu items to execute PhonShell scripts located in the folders: <user_home>/Documents/Phon/PhonShell/ and <project>/__res/PhonShell have been added to the Tools.
  * Fixed menu entries for csv2phon and manual plug-ins
  * Fixed an issue with exporting user-defined tiers in TextGrids when the tier had no data.
 
