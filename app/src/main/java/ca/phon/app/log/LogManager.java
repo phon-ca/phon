@@ -61,4 +61,9 @@ public class LogManager {
 		}
 	}
 	
+	public void shutdownLogging() {
+		final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
+		manager.reset();
+	}
+	
 }

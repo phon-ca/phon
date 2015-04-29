@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.PhonShutdownHook;
+import ca.phon.app.log.LogManager;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
 import ca.phon.plugin.PluginManager;
@@ -55,6 +56,7 @@ public class PhonShutdownThread extends PhonWorker {
 		public void performTask() {
 			setStatus(TaskStatus.RUNNING);
 			
+			
 			final List<IPluginExtensionPoint<PhonShutdownHook>> shutdownHooksPts = 
 					PluginManager.getInstance().getExtensionPoints(PhonShutdownHook.class);
 			for(IPluginExtensionPoint<PhonShutdownHook> shutdownHookPt:shutdownHooksPts) {
@@ -65,6 +67,10 @@ public class PhonShutdownThread extends PhonWorker {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
+			
+			// shutdown logger
+			LogManager.getInstance().shutdownLogging();
+			
 			
 			setStatus(TaskStatus.FINISHED);
 			
