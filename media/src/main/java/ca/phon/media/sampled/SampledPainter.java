@@ -163,8 +163,11 @@ public class SampledPainter extends BufferedPainter<Sampled> {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		g2.setColor(getForegroundColor());
 		
-		obj.getWindowExtrema(getChannel(), startTime, endTime, extrema);
-		maxValue = Math.max(Math.abs(extrema[0]), Math.abs(extrema[1]));
+		maxValue = 0;
+		for(int ch = 0; ch < obj.getNumberOfChannels(); ch++) {
+			obj.getWindowExtrema(ch, startTime, endTime, extrema);
+			maxValue = Math.max(maxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
+		}
 		final double unitPerPixel = maxValue / halfHeight;
 		
 		double ymindiff, ymaxdiff = 0.0;
