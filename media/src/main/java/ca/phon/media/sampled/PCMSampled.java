@@ -418,9 +418,11 @@ public class PCMSampled implements Sampled {
 		byte[] frames = getBytes(firstSample, lastSample);
 		int frameSize = getAudioFileFormat().getFormat().getFrameSize();
 		int numFrames = frames.length / frameSize;
+		final int bytesPerSample = getAudioFileFormat().getFormat().getFrameSize() / 
+				getAudioFileFormat().getFormat().getChannels();
 		
 		for(int i = 0; i < numFrames; i++) {
-			final double value = toSample(i*frameSize, frames);
+			final double value = toSample(i*frameSize+channel*bytesPerSample, frames);
 			extrema[0] = (i == 0 ? value :
 					Math.min(extrema[0], value));
 			extrema[1] = (i == 0 ? value: 
