@@ -10,3 +10,4 @@ ipadictionary/src/main/resources/META-INF/dict
 app/derby.log
 Thumbs.db
 ipadictionary/derby.log
+app/data/bin
