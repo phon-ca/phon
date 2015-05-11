@@ -213,8 +213,21 @@ function query_record(recordIndex, record) {
 		    var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter : filters.targetResultFilter);
 		    
 		    for(k = 0; k < matches.length; k++) {
-    	        var match = matches[k];
+		    	var match = matches[k];
     	        
+		    	if(match.groups) {
+		    		var xgrp = match.groups["X"];
+		    		if(xgrp) {
+		    			var newMatch = {
+		    					start: xgrp.start,
+		    					end: xgrp.end,
+		    					value: xgrp.value,
+		    					groups: match.groups
+		    			};
+		    			match = newMatch;
+		    		}
+		    	}
+		    	
     	        if(primaryFilter.isUseFilter()) {
     	        	if(!primaryFilter.check_filter(new IPATranscript(match.value))) {
     	        		continue;
@@ -279,6 +292,17 @@ function query_record(recordIndex, record) {
     						(match.value == null ? null : new IPATranscript(match.value)), null);
     			}
     			
+			    // append named-group information (if any)
+			    if(match.groups) {
+			    	groupKeys = Object.keys(match.groups);
+			    	for(keyIdx = 0; keyIdx < groupKeys.length; keyIdx++) {
+			    		var key = groupKeys[keyIdx];
+			    		if(!/^[0-9]+$/.test(key) && key != 'X') {
+			    			result.metadata.put(key, match.groups[key].value.toString());
+			    		}
+			    	}
+			    }
+			    
     			results.addResult(result);
     	    }
 		}
