@@ -652,9 +652,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	@RunOnEDT
 	public void onSessionMediaChanged(EditorEvent ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
-		
-		wavDisplay.setSampled(null);
-		update();
+		(new ResetAction(getEditor(), this)).actionPerformed(new ActionEvent(ee.getSource(), -1, ee.getEventName()));
 	}
 	
 	@RunOnEDT
