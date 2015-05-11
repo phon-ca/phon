@@ -349,7 +349,13 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	@Override
 	public void showView(String viewName) {
-		if(isShowing(viewName)) return;
+		if(isShowing(viewName)) {
+			CDockable dockable = getViewDockable(viewName);
+			if(dockable != null) {
+				dockControl.getController().setAtLeastFocusedDockable(dockable.intern(), null);
+			}
+			return;
+		}
 		
 		SingleCDockable dockable = dockControl.getSingleDockable(viewName);
 		if(dockable == null) {
