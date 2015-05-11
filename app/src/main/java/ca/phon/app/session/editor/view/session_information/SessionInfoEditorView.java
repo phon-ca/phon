@@ -84,7 +84,7 @@ public class SessionInfoEditorView extends EditorView {
 
 	private static final long serialVersionUID = -3112381708875592956L;
 	
-	private final String VIEW_TITLE = "Session Information";
+	public static final String VIEW_TITLE = "Session Information";
 
 	/**
 	 * Date editor

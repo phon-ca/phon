@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
@@ -69,6 +70,7 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.actions.GenerateAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.PlayAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
@@ -92,14 +94,14 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.HidablePanel;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
 
 /**
  * Displays wavform and associated commands.
@@ -134,7 +136,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private JButton generateButton;
 	
-//	private JLabel msgLabel;
+	private HidablePanel messageButton = new HidablePanel(SpeechAnalysisEditorView.class.getName() + ".noAudio");
 	
 	private JComponent sizer;
 	
@@ -143,26 +145,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private final List<SpeechAnalysisTier> pluginTiers = 
 			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
-	
-	private class HideStatusComponentTask extends PhonTask {
-		
-		CommonModuleFrame frame;
-		
-		public HideStatusComponentTask(CommonModuleFrame cmf) {
-			super();
-			
-			this.frame = cmf;
-		}
-		
-		@Override
-		public void performTask() {
-			try {
-				Thread.sleep(2000);
-			} catch (Exception e) {}
-			frame.hideStatusComponent();
-		}
-		
-	}
 	
 	public SpeechAnalysisEditorView(SessionEditor editor) {
 		super(editor);
@@ -219,23 +201,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setupToolbar();
 		setupInputMap();
 		
-//		msgLabel = new JLabel("Audio file not found, click to generate");
-//		msgLabel.setBackground(Color.yellow);
-//		msgLabel.setVisible(false);
-//		msgLabel.setOpaque(true);
-//		msgLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//		msgLabel.addMouseListener(new MouseInputAdapter() {
-//
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				if(msgLabel.getText().startsWith("Audio file not found")) {
-//					msgLabel.setVisible(false);
-//					generateAudioFile();
-//				}
-//			}
-//			
-//		});
-//		add(msgLabel, BorderLayout.SOUTH);
 		horizontalScroller = new JScrollBar(SwingConstants.HORIZONTAL);
 		add(horizontalScroller, BorderLayout.SOUTH);
 		horizontalScroller.addAdjustmentListener(new AdjustmentListener() {
@@ -511,7 +476,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 							try {
 								final PCMSampled sampled = new PCMSampled(audioFile);
 								wavDisplay.setSampled(sampled);
-								update();
+								(new ResetAction(getEditor(), SpeechAnalysisEditorView.this)).actionPerformed(new ActionEvent(this, -1, "reset"));
 							} catch (IOException e) {
 								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 								ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
@@ -567,6 +532,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	public void update() {
 		Record utt = getEditor().currentRecord();
+		
+		remove(messageButton);
 		
 		wavDisplay.setValuesAdusting(true);
 		if(wavDisplay.getSampled() == null) {
@@ -624,13 +591,39 @@ public class SpeechAnalysisEditorView extends EditorView {
 			wavDisplay.setWindowLength(displayLength);
 			wavDisplay.setSegmentStart(segStart);
 			wavDisplay.setSegmentLength(segLength);
+		} else {
+			messageButton.setTopLabelText("<html><b>Unable to open audio file</b></html>");
+			// display option to generate audio file if there is session media available
+			final Session session = getEditor().getSession();
 			
-//			if(msgLabel.isVisible()) {
-//				msgLabel.setVisible(false);
-//			}
+			final File mediaFile = MediaLocator.findMediaFile(getEditor().getProject(), session);
+			if(mediaFile != null && mediaFile.exists()) {
+				// show generate audio message
+				final GenerateAction generateAct = new GenerateAction(getEditor(), this);
+				generateAct.putValue(GenerateAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
+				messageButton.setBottomLabelText("<html>Click here to extract audio from Session media.</html>");
+				
+				messageButton.setDefaultAction(generateAct);
+				messageButton.addAction(generateAct);
+			} else {
+				// no media, tell user to setup media in Session Information
+				final PhonUIAction showSessionInformationAct = new PhonUIAction(getEditor().getViewModel(), 
+						"showView", SessionInfoEditorView.VIEW_TITLE);
+				showSessionInformationAct.putValue(PhonUIAction.NAME, "Show Session Information view");
+				showSessionInformationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show Session Information view");
+				showSessionInformationAct.putValue(PhonUIAction.LARGE_ICON_KEY, IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
+				
+				messageButton.setDefaultAction(showSessionInformationAct);
+				messageButton.addAction(showSessionInformationAct);
+				
+				messageButton.setBottomLabelText("<html>No media found for Session.  Use the Session Information view to "
+						+ " setup media for Session.</html>");
+			}
+			add(messageButton, BorderLayout.SOUTH);
 		}
 		
 		setupTimeScrollbar();
+		revalidate();
 		wavDisplay.setValuesAdusting(false);
 		wavDisplay.repaint();
 	}
