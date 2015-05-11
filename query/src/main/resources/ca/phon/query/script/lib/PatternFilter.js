@@ -330,7 +330,7 @@ exports.PatternFilter = function (id) {
         }
     };
     
-    /* Check for occurances (or exact match) of entered filter */
+    /* Check for matches (or exact match) of entered filter */
     var checkPlain = function (obj, filter, caseSensitive, exactMatch) {
         var strA = (caseSensitive == true ? obj.toString(): obj.toString().toLowerCase());
         var strB = (caseSensitive == true ? filter: filter.toLowerCase());
@@ -484,8 +484,9 @@ exports.PatternFilter = function (id) {
             		myValue = regexMatcher.group();
             	}
                 v = {
-                    start: regexMatcher.start(), end: regexMatcher.end(), value: myValue
+                    start: regexMatcher.start(), end: regexMatcher.end(), value: myValue, matcher: regexMatcher
                 };
+                
                 retVal.push(v);
             }
         }
@@ -498,22 +499,40 @@ exports.PatternFilter = function (id) {
         
         if (!(obj instanceof IPATranscript)) return retVal;
         
+        var phonexPattern = PhonexPattern.compile(filter);
+        var phonexMatcher = phonexPattern.matcher(obj);
+
         if (exactMatch == true) {
-            if (obj.matches(filter)) {
+            if (phonexMatcher.matches()) {
                 v = {
-                    start: 0, end: obj.length(), value: obj
+                    start: 0, end: obj.length(), value: obj, matcher: phonexMatcher
                 };
                 retVal.push(v);
             }
         } else {
-            var phonexPattern = PhonexPattern.compile(filter);
-            var phonexMatcher = phonexPattern.matcher(obj);
-            
             while (phonexMatcher.find()) {
+            	var groupData = new Array();
+            	
+            	for(grpIdx = 1; grpIdx <= phonexMatcher.groupCount(); grpIdx++) {
+            		grpName = phonexPattern.groupName(grpIdx);
+            		if(phonexMatcher.start(grpIdx) >= 0) {
+	            		groupData[grpIdx] = {
+	            				start: phonexMatcher.start(grpIdx),
+	            				end: phonexMatcher.end(grpIdx),
+	            				value: new IPATranscript(phonexMatcher.group(grpIdx))
+	            		};
+	            		if(grpName)
+	            			groupData[grpName] = groupData[grpIdx];
+            		} else {
+            			if(grpName)
+            				groupData[grpName] = { start:-1, end:-1, value: new IPATranscript() };
+            		}
+            	}
+            	
                 v = {
-                    start: phonexMatcher.start(), end: phonexMatcher.end(), value: new IPATranscript(phonexMatcher.group())
+                    start: phonexMatcher.start(), end: phonexMatcher.end(), value: new IPATranscript(phonexMatcher.group()),
+                    	groups:groupData
                 };
-                //   java.lang.System.out.println(phonexMatcher.group());
                 retVal.push(v);
             }
         }
