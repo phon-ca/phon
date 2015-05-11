@@ -601,7 +601,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 				// show generate audio message
 				final GenerateAction generateAct = new GenerateAction(getEditor(), this);
 				generateAct.putValue(GenerateAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
-				messageButton.setBottomLabelText("<html>Click here to extract audio from Session media.</html>");
+				
+				messageButton.setTopLabelText("<html><b>No wav file available for Speech Analysis view</b></html>");
+				messageButton.setBottomLabelText("<html>Click here to extract wav from Session media.</html>");
 				
 				messageButton.setDefaultAction(generateAct);
 				messageButton.addAction(generateAct);
@@ -616,8 +618,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 				messageButton.setDefaultAction(showSessionInformationAct);
 				messageButton.addAction(showSessionInformationAct);
 				
-				messageButton.setBottomLabelText("<html>No media found for Session.  Use the Session Information view to "
-						+ " setup media for Session.</html>");
+				messageButton.setTopLabelText("<html><b>Media file not found</b></html>");
+				messageButton.setBottomLabelText("<html>Click here to set media in Session Information.</html>");
 			}
 			add(messageButton, BorderLayout.SOUTH);
 		}
