@@ -18,6 +18,7 @@
  */
 package ca.phon.phonex;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ca.phon.fsa.FSAState;
@@ -193,12 +194,14 @@ public class PhonexMatcher {
 	 */
 	public int start(int gIdx) {
 		checkLastMatch();
-		int retVal = 0;
+		int retVal = -1;
 		if(gIdx == 0) 
 			retVal = lastMatchStart;
 		else {
-			retVal =
-				(gIdx == 0 ? 0 : lastMatchState.getGroupStarts()[gIdx-1]);
+			int[] groupStarts = lastMatchState.getGroupStarts();
+			int i = gIdx -1;
+			retVal = 
+					(i < groupStarts.length ? groupStarts[i] : -1 );
 		}
 		return retVal;
 	}
@@ -321,7 +324,13 @@ public class PhonexMatcher {
 	 * @return group value for the specified group
 	 */
 	public List<IPAElement> group(int gIdx) {
-		return input.subList(start(gIdx), end(gIdx));
+		int start = start(gIdx);
+		if(start >= 0) {
+			int end = end(gIdx);
+			return input.subList(start, end);
+		} else {
+			return new ArrayList<>();
+		}
 	}
 	
 }
