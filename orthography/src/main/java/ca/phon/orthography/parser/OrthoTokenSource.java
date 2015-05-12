@@ -175,18 +175,25 @@ public class OrthoTokenSource implements TokenSource {
 		}
 		
 		final String commentText = buffer.toString();
-		if(cIndex < data.length && data[cIndex] == ')') cIndex++;
-		
-		if(type != null) {
-			CommonToken typeToken = new CommonToken(tokens.getTokenType("COMMENT_TYPE"));
-			typeToken.setText(type);
+		if(cIndex < data.length && data[cIndex] == ')') {
+			cIndex++;
+			if(type != null) {
+				CommonToken typeToken = new CommonToken(tokens.getTokenType("COMMENT_TYPE"));
+				typeToken.setText(type);
+				
+				tokenQueue.add(typeToken);
+			}
 			
-			tokenQueue.add(typeToken);
+			CommonToken commentToken = new CommonToken(tokens.getTokenType("COMMENT"));
+			commentToken.setText(commentText);
+			tokenQueue.add(commentToken);
+		} else {
+			CommonToken errToken = new CommonToken(tokens.getTokenType("ERROR"));
+			errToken.setText("Incomplete comment - insert ')'");
+			errToken.setCharPositionInLine(cIndex);
+			tokenQueue.add(errToken);
 		}
 		
-		CommonToken commentToken = new CommonToken(tokens.getTokenType("COMMENT"));
-		commentToken.setText(commentText);
-		tokenQueue.add(commentToken);
 	}
 	
 	private void readEvent() {
@@ -209,17 +216,25 @@ public class OrthoTokenSource implements TokenSource {
 			}
 		}
 		
-		if(cIndex < data.length && data[cIndex] == '*') cIndex++;
-		
-		if(type != null) {
-			CommonToken typeToken = new CommonToken(tokens.getTokenType("EVENT_TYPE"));
-			typeToken.setText(type);
-			tokenQueue.add(typeToken);
+		if(cIndex < data.length && data[cIndex] == '*') {
+			cIndex++;
+			if(type != null) {
+				CommonToken typeToken = new CommonToken(tokens.getTokenType("EVENT_TYPE"));
+				typeToken.setText(type);
+				tokenQueue.add(typeToken);
+			}
+			
+			CommonToken evtToken = new CommonToken(tokens.getTokenType("EVENT"));
+			evtToken.setText(evtBuffer.toString());
+			tokenQueue.add(evtToken);
+		} else {
+			// add error token
+			CommonToken errToken = new CommonToken(tokens.getTokenType("ERROR"));
+			errToken.setText("Incomplete event - insert '*'");
+			errToken.setCharPositionInLine(cIndex);
+			tokenQueue.add(errToken);
 		}
 		
-		CommonToken evtToken = new CommonToken(tokens.getTokenType("EVENT"));
-		evtToken.setText(evtBuffer.toString());
-		tokenQueue.add(evtToken);
 	}
 	
 	private void readWord() {

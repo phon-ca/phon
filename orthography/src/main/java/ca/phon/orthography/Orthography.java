@@ -34,6 +34,7 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.orthography.parser.OrthoTokenSource;
 import ca.phon.orthography.parser.OrthographyParser;
+import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 
@@ -66,6 +67,13 @@ public class Orthography implements Iterable<OrthoElement>, Visitable<OrthoEleme
 			return parser.orthography().ortho;
 		} catch (RecognitionException e) {
 			throw new ParseException(text, e.charPositionInLine);
+		} catch (OrthoParserException pe) {
+			if(pe.getCause() instanceof RecognitionException) {
+				RecognitionException re = (RecognitionException)pe.getCause();
+				throw new ParseException(text, re.charPositionInLine);
+			} else {
+				throw new ParseException(text, -1);
+			}
 		}
 	}
 	

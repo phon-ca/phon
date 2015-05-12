@@ -12,6 +12,7 @@ tokens {
 	COMMENT_TYPE;
 	EVENT;
 	COMMENT;
+	ERROR;
 }
 
 @header {
@@ -43,7 +44,19 @@ orthography returns [Orthography ortho]
 @after {
 	$ortho = getOrthography();
 }
-	:	orthoElement*
+	:	(orthoElement|error)*
+	;
+	
+error
+	:	ERROR
+	{
+		RecognitionException re = new RecognitionException(input);
+		re.token = $ERROR;
+		re.charPositionInLine = $ERROR.getCharPositionInLine();
+		re.line = -1;
+		re.index = $ERROR.getTokenIndex();
+		reportError(re);
+	}
 	;
 
 word returns [OrthoWord word]

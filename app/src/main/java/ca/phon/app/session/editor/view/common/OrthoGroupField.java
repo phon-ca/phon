@@ -19,11 +19,13 @@
 package ca.phon.app.session.editor.view.common;
 
 import java.awt.Color;
+import java.text.ParseException;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.orthography.OrthoComment;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.orthography.OrthoEvent;
@@ -60,15 +62,34 @@ public class OrthoGroupField extends GroupField<Orthography> {
 	
 	@Override
 	protected boolean validateText() {
-		boolean retVal = super.validateText();
+		removeAllErrorHighlights();
+		getHighlighter().removeAllHighlights();
 		
-		if(retVal) {
-			getHighlighter().removeAllHighlights();
-			final Orthography ortho = getValidatedObject();
+		boolean wasShowingErr = ((GroupFieldBorder)getBorder()).isShowWarningIcon();
+		
+		try {
+			Orthography ortho = Orthography.parseOrthography(getText());
+			setValidatedObject(ortho);
+			((GroupFieldBorder)getBorder()).setShowWarningIcon(false);
+			setToolTipText(null);
+			if(wasShowingErr) repaint();
+			
 			ortho.accept(new HighlightVisitor(getText()));
+		} catch (ParseException e) {
+			Orthography validatedOrtho = new Orthography();
+			validatedOrtho.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim()));
+			((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
+			
+			final StringBuilder sb = new StringBuilder();
+			sb.append("Error at character ").append(e.getErrorOffset()).append(": ").append(e.getLocalizedMessage());
+			setToolTipText(sb.toString());
+			
+			addErrorHighlight(e.getErrorOffset(), e.getErrorOffset()+1);
+			setValidatedObject(validatedOrtho);
+			if(!wasShowingErr) repaint();
 		}
 		
-		return retVal;
+		return true;
 	}
 	
 	public class HighlightVisitor extends VisitorAdapter<OrthoElement> {
