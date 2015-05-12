@@ -177,7 +177,7 @@ public class OrthoTokenSource implements TokenSource {
 		final String commentText = buffer.toString();
 		if(cIndex < data.length && data[cIndex] == ')') cIndex++;
 		
-		if(type == null) {
+		if(type != null) {
 			CommonToken typeToken = new CommonToken(tokens.getTokenType("COMMENT_TYPE"));
 			typeToken.setText(type);
 			
@@ -193,13 +193,19 @@ public class OrthoTokenSource implements TokenSource {
 		final StringBuffer evtBuffer = new StringBuffer();
 		String type = null;
 		
+		boolean insideElement = false;
 		while(cIndex < data.length && data[cIndex] != '*') {
 			final char c = data[cIndex++];
-			if(c == ':') {
+			if(c == ':' && !insideElement) {
 				type = evtBuffer.toString();
 				evtBuffer.setLength(0);
 			} else {
 				evtBuffer.append(c);
+				if(c == '(') {
+					insideElement = true;
+				} else if(c == ')') {
+					insideElement = false;
+				}
 			}
 		}
 		

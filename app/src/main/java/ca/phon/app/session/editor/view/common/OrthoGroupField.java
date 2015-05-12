@@ -112,7 +112,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		public void visitComment(OrthoComment comment) {
 			try {
 				int i = currentPos;
-				int j = i + comment.getData().length() + 2;
+				int j = i + comment.text().length();
 				getHighlighter().addHighlight(i, j, commentPainter);
 			} catch (BadLocationException e) {
 			}
@@ -123,7 +123,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		public void visitEvent(OrthoEvent event) {
 			try {
 				int i = currentPos;
-				int j = i + event.getData().length() + 2;
+				int j = i + event.text().length();
 				getHighlighter().addHighlight(i, j, eventPainter);
 			} catch (BadLocationException e) {
 				

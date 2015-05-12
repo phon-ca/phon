@@ -52,7 +52,8 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	@Visits
 	public void visitComment(OrthoComment comment) {
 		final CommentType ct = factory.createCommentType();
-		ct.setContent(comment.getData());
+		ct.setContent(
+				(comment.getType() != null ? comment.getType() + ":" : "") + comment.getData());
 		ct.setType(comment.getType());
 		gt.getWOrComOrE().add(ct);
 	}
@@ -60,7 +61,8 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	@Visits
 	public void visitEvent(OrthoEvent event) {
 		final EventType et = factory.createEventType();
-		et.setContent(event.getData());
+		et.setContent(
+				(event.getType() != null ? event.getType() + ":" : "") + event.getData());
 		gt.getWOrComOrE().add(et);
 	}
 
