@@ -33,6 +33,6 @@ public class PhonConstants {
 	public static final char nullChar = 0x00d8;
 	
 	/** Illegal filname characters */
-	public static final char[] illegalFilenameChars = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
+	public static final char[] illegalFilenameChars = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':', '#' };
 
 }
