@@ -36,7 +36,7 @@ import ca.phon.util.CollatorFactory;
  * project window.
  *
  */
-public class CorpusListModel implements ListModel {
+public class CorpusListModel implements ListModel<String> {
 	
 	private final static Logger LOGGER = Logger.getLogger(CorpusListModel.class.getName());
 	
@@ -57,12 +57,6 @@ public class CorpusListModel implements ListModel {
 		this.dataListeners = new ArrayList<ListDataListener>();
 		
 		this.project = project;
-		
-//		try {
-//			this.project.addProjectListener(new CorpusProjectListener());
-//		} catch (RemoteException e) {
-//			PhonLogger.warning(this.getClass(), "Could not add project listener.");
-//		}
 	}
 	
 	public List<String> getCorpora() {
@@ -87,7 +81,7 @@ public class CorpusListModel implements ListModel {
 	}
 
 	@Override
-	public Object getElementAt(int index) {
+	public String getElementAt(int index) {
 		try {
 //			ArrayList<String> corpora = project.getCorpora();
 			Collator collator = CollatorFactory.defaultCollator();
@@ -123,22 +117,5 @@ public class CorpusListModel implements ListModel {
 		}
 		fireDataChange();
 	}
-
-//	/* The project listener */
-//	private class CorpusProjectListener implements ProjectListener {
-//
-//		public void projecStructureChanged(ProjectEvent pe) throws RemoteException {
-//			if(pe.getAffectedCorpus() != null)
-//				fireDataChange();
-//		}
-//
-//		public void projectDataChanged(ProjectEvent pe) throws RemoteException {
-//			
-//		}
-//
-//		public void projectWriteLocksChanged(ProjectEvent pe) throws RemoteException {
-//			
-//		}
-//		
-//	}
+	
 }

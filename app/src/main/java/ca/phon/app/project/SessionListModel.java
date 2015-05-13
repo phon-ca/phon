@@ -36,7 +36,7 @@ import ca.phon.util.CollatorFactory;
  * project window.
  *
  */
-public class SessionListModel implements ListModel {
+public class SessionListModel implements ListModel<String> {
 	
 	private final static Logger LOGGER = Logger.getLogger(SessionListModel.class.getName());
 
@@ -73,13 +73,11 @@ public class SessionListModel implements ListModel {
 	}
 	
 	@Override
-	public Object getElementAt(int index) {
+	public String getElementAt(int index) {
 		if(corpus == null)
 			return null;
 		
 		try {
-//			ArrayList<String> transcripts = 
-//				project.getCorpusTranscripts(corpus);
 			Collator collator = CollatorFactory.defaultCollator();
 			List<String> transcripts = 
 				getSessions();

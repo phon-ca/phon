@@ -19,27 +19,19 @@
 package ca.phon.app.project;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
-import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PhonConstants;
 
 public class NewSessionDialog extends JDialog {
@@ -52,8 +44,10 @@ public class NewSessionDialog extends JDialog {
 	private JButton btnCreateSession = new JButton();
 	private JButton btnCancel = new JButton();
 
+	private boolean canceled = false;
+	
 	private Project proj;
-		
+
 	/**
 	 * Default constructor
 	 */
@@ -61,7 +55,7 @@ public class NewSessionDialog extends JDialog {
 		super();
 		this.proj = project;
 		setTitle("New Session");
-		setModal(false);
+		setModal(true);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 		newSessionPanel = new NewSessionPanel(project);
@@ -74,7 +68,10 @@ public class NewSessionDialog extends JDialog {
 	 */
 	public NewSessionDialog(Project project, String corpusName) {
 		this(project);
-		newSessionPanel.setSelectedCorpus(corpusName);
+		
+		SwingUtilities.invokeLater( () -> {
+			newSessionPanel.setSelectedCorpus(corpusName);
+		});
 	}
 	
 	private void init() {
@@ -87,101 +84,65 @@ public class NewSessionDialog extends JDialog {
 		btnCreateSession.setName("btnCreateSession");
 		btnCreateSession.setText("Ok");
 		btnCreateSession.setDefaultCapable(true);
-		btnCreateSession.addActionListener(new CreateSessionListener());
+		btnCreateSession.addActionListener( (e) -> {
+			if(validateForm()) {
+				canceled = false;
+				dispose();
+			}
+		});
 		getRootPane().setDefaultButton(btnCreateSession);
 		
 		btnCancel.setActionCommand("Cancel");
 		btnCancel.setName("btnCancel");
 		btnCancel.setText("Cancel");
-		btnCancel.addActionListener(new CancelListener());
+		btnCancel.addActionListener( (e) -> {
+			canceled = true;
+			dispose();
+		});
 		
 		add(newSessionPanel, BorderLayout.CENTER);
 		
 		JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(btnCreateSession, btnCancel);
 		add(buttonBar, BorderLayout.SOUTH);
 	}
-
-	/**
-	 * Create session button listener.
-	 */
-	private class CreateSessionListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent evt) {
-			// Ensure a non-empty corpus name (description is optional)
-			String sessionName = newSessionPanel.getSessionName().trim();
-			if (sessionName == null || sessionName.length() == 0) {
-				showMessage(
-					"New Session",
-					"You must specify a non-empty session name!");
-				return;
-			}
-
-			// make sure invalid characters are not present
-			// make sure corpus name does not contain illegal characters
-			boolean invalid = false;
-			if(sessionName.indexOf('.') >= 0) {
-				invalid = true;
-			}
-			for(char invalidChar:PhonConstants.illegalFilenameChars) {
-				if(sessionName.indexOf(invalidChar) >= 0) {
-					invalid = true;
-					break;
-				}
-			}
-			
-			if(invalid) {
-				showMessage(
-						"New Session",
-						"Session name includes illegal characters.");
-				return;
-			}
-			
-			String corpusName = (String) newSessionPanel.getSelectedCorpus();
-			try {
-				final Session session = proj.createSessionFromTemplate(corpusName, sessionName);
-				
-				NewSessionDialog.this.dispose();
-				
-				// open the session
-				HashMap<String, Object> initInfo = new HashMap<String, Object>();
-				initInfo.put("project", proj);
-				initInfo.put("corpusName", corpusName);
-				initInfo.put("session", session);
-				
-				try {
-					PluginEntryPointRunner.executePlugin("SessionEditor", initInfo);
-				} catch (PluginException e) {
-					LOGGER.log(Level.SEVERE, e.getMessage(), e);
-					
-					showMessage("Open Session", 
-							"Could not open session. Reason: " + e.getMessage());
-				}
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
-				showMessage(
-						"New Session",
-						"Could not create session. Reason: " + e.getMessage());
-			}
-		}
-	}
 	
-	private void showMessage(String msg1, String msg2) {
-		final MessageDialogProperties props = new MessageDialogProperties();
-		props.setOptions(MessageDialogProperties.okOptions);
-		props.setHeader(msg1);
-		props.setMessage(msg2);
-		props.setParentWindow(this);
+	public boolean validateForm() {
+		boolean valid = true;
+		// Ensure a non-empty corpus name (description is optional)
+		if (getSessionName() == null || getSessionName().length() == 0) {
+			ToastFactory.makeToast(
+				"You must specify a non-empty session name!").start(newSessionPanel);
+			valid = false;
+		}
+		final String sessionName = getSessionName();
 		
-		NativeDialogs.showDialog(props);
+		if(sessionName.indexOf('.') >= 0) {
+			valid = false;
+		}
+		for(char invalidChar:PhonConstants.illegalFilenameChars) {
+			if(sessionName.indexOf(invalidChar) >= 0) {
+				valid = false;
+				break;
+			}
+		}
+		
+		if(!valid) {
+			ToastFactory.makeToast(
+					"Session name includes illegal characters.").start(newSessionPanel);
+		}
+		return valid;
+	}
+
+	public String getSessionName() {
+		return newSessionPanel.getSessionName();
 	}
 	
-	/**
-	 * Cancel button listener.
-	 */
-	private class CancelListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent evt) {
-			NewSessionDialog.this.dispose();
-		}
+	public String getCorpusName() {
+		return newSessionPanel.getSelectedCorpus();
 	}
+	
+	public boolean wasCanceled() {
+		return canceled;
+	}
+	
 }

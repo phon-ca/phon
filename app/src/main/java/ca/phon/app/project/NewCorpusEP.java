@@ -41,6 +41,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
@@ -66,7 +67,8 @@ public class NewCorpusEP implements IPluginEntryPoint {
 	
 	private Project proj;
 	
-	private final static String EP_NAME = "NewCorpus";
+	public final static String EP_NAME = "NewCorpus";
+	
 	@Override
 	public String getName() {
 		return EP_NAME;
@@ -295,11 +297,20 @@ public class NewCorpusEP implements IPluginEntryPoint {
 
 	@Override
 	public void pluginStart(Map<String, Object> initInfo)  {
-		if(initInfo.get("project") == null)
+		final EntryPointArgs args = new EntryPointArgs(initInfo);
+		proj = args.getProject();
+		if(proj == null)
 			throw new IllegalArgumentException("Project property not set.");
 		
-		proj = (Project)initInfo.get("project");
-		
-		begin();
+		final String corpusName = args.getCorpus();
+		if(corpusName != null) {
+			try {
+				newCorpus(corpusName, "");
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			begin();
+		}
 	}
 }

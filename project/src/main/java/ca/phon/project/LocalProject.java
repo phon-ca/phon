@@ -884,6 +884,10 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public Session createSessionFromTemplate(String corpus, String session)
 			throws IOException {
+		if(getCorpusSessions(corpus).contains(session)) {
+			throw new IOException("Session named " + corpus + "." + session + " already exists.");
+		}
+		
 		Session template = null;
 		try {
 			template = getSessionTemplate(corpus);
@@ -894,6 +898,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		Session s = null;
 		if(template != null) {
 			s = template;
+			s.setCorpus(corpus);
 			s.setName(session);
 		} else {
 			s = factory.createSession(corpus, session);

@@ -20,10 +20,15 @@ package ca.phon.app.project;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -36,7 +41,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -47,33 +57,45 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXBusyLabel;
 
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.workspace.WorkspaceDialog;
+import ca.phon.app.workspace.WorkspaceTextStyler;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectListener;
 import ca.phon.project.ProjectRefresh;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
+import ca.phon.ui.MultiActionButton;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.CollatorFactory;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 import ca.phon.workspace.Workspace;
 
-import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -90,12 +112,18 @@ public class ProjectWindow extends CommonModuleFrame
 	private static final long serialVersionUID = -4771564010497815447L;
 	
 	/** The corpus list */
-	private JList corpusList;
+	private JPanel corpusPanel;
+	private MultiActionButton newCorpusButton;
+	private MultiActionButton createCorpusButton;
+	private JList<String> corpusList;
 	private CorpusListModel corpusModel;
 	private CorpusDetailsPane corpusDetails;
 	
 	/** The session list */
-	private JList sessionList;
+	private JPanel sessionPanel;
+	private MultiActionButton newSessionButton;
+	private MultiActionButton createSessionButton;
+	private JList<String> sessionList;
 	private SessionListModel sessionModel;
 	private SessionDetailsPane sessionDetails;
 	
@@ -134,6 +162,18 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
 		setJMenuBar(menuBar);
+	}
+	
+	public String getSelectedCorpus() {
+		return corpusList.getSelectedValue();
+	}
+	
+	public String getSelectedSessionName() {
+		return sessionList.getSelectedValue();
+	}
+	
+	public SessionPath getSelectedSessionPath() {
+		return new SessionPath(getSelectedCorpus(), getSelectedSessionName());
 	}
 	
 	/**
@@ -214,6 +254,7 @@ public class ProjectWindow extends CommonModuleFrame
 				HashMap<String, Object> initInfo = 
 					new HashMap<String, Object>();
 				initInfo.put("project", getProject());
+				initInfo.put(NewSessionEP.PROJECT_WINDOW_PROP, ProjectWindow.this);
 				
 				PluginEntryPointRunner.executePluginInBackground("NewSession", initInfo);
 			}
@@ -267,23 +308,16 @@ public class ProjectWindow extends CommonModuleFrame
 
 	private void init() {
 		/* Layout */
-		FormLayout innerLayout = new FormLayout(
-				"fill:pref:grow, 3dlu, fill:pref:grow",
-				"1dlu, pref, 3dlu, fill:pref:grow, 3dlu, fill:100px:noGrow, 5dlu");
-		getContentPane().setLayout(innerLayout);
-		
-		int colGroups[][] = {{1,3}};
-		innerLayout.setColumnGroups(colGroups);
-		
-		Dimension listSize = new Dimension(200, 300);
+		setLayout(new BorderLayout());
 		
 		/* Create components */
-		corpusList = new JList();
-		corpusList.setMinimumSize(listSize);
-		
+		newCorpusButton = createNewCorpusButton();
+		createCorpusButton = createCorpusButton();
+		corpusList = new JList<String>();
 		corpusModel = new CorpusListModel(getProject());
 		corpusList.setModel(corpusModel);
 		corpusList.setCellRenderer(new CorpusListCellRenderer());
+		corpusList.setVisibleRowCount(20);
 		corpusList.addListSelectionListener(new ListSelectionListener() {
 
 			public void valueChanged(ListSelectionEvent e) {
@@ -292,6 +326,12 @@ public class ProjectWindow extends CommonModuleFrame
 						corpusList.getSelectedValue().toString();
 					sessionModel.setCorpus(corpus);
 					corpusDetails.setCorpus(corpus);
+					
+					if(getProject().getCorpusSessions(corpus).size() == 0) {
+						onSwapNewAndCreateSession(newSessionButton);
+					} else {
+						onSwapNewAndCreateSession(createSessionButton);
+					}
 				}
 				
 			}
@@ -320,16 +360,19 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		corpusDetails = new CorpusDetailsPane(getProject());
 		corpusDetails.setWrapStyleWord(true);
+		corpusDetails.setRows(6);
 		corpusDetails.setLineWrap(true);
 		corpusDetails.setBackground(Color.white);
 		corpusDetails.setOpaque(true);
 		JScrollPane corpusDetailsScroller = new JScrollPane(corpusDetails);
 		
-		sessionList = new JList();
-		sessionList.setMinimumSize(listSize);
+		sessionList = new JList<String>();
+		newSessionButton = createNewSessionButton();
+		createSessionButton = createSessionButton();
 		sessionModel = new SessionListModel(getProject());
 		sessionList.setModel(sessionModel);
 		sessionList.setCellRenderer(new SessionListCellRenderer());
+		sessionList.setVisibleRowCount(20);
 		sessionList.addListSelectionListener(new ListSelectionListener() {
 
 			public void valueChanged(ListSelectionEvent e) {
@@ -357,32 +400,9 @@ public class ProjectWindow extends CommonModuleFrame
 					final String corpus = 
 						((SessionListModel)sessionList.getModel()).getCorpus();
 					
-//					JProgressBar openProgress = new JProgressBar();
-//					openProgress.setIndeterminate(true);
-//					openProgress.setMaximumSize(
-//							new Dimension(openProgress.getMaximumSize().width, 
-//									blindModeBox.getHeight()-10));
-//					msgLabel.add(openProgress);
-//					msgLabel.setText("Opening '" + corpus + "." + session + "'");
-					
-//					msgPanel.removeAll();
-//					msgPanel.add(openProgress);
-//					msgPanel.add(new JLabel("Opening '" + corpus + "." + session + "'"));
-//					msgPanel.revalidate();
 					msgPanel.reset();
 					msgPanel.setMessageLabel("Opening '" + corpus + "." + session + "'");
 					msgPanel.setItermediate(true);
-//					msgPanel.revalidate();
-					
-//					SwingUtilities.invokeLater(new Runnable() {
-//
-//						public void run() {
-////							msgPanel.revalidate();
-////							msgPanel.repaint();
-//							openSession(corpus, session);
-//						}
-//						
-//					});
 					Runnable th = new Runnable() {
 						public void run() {
 							openSession(corpus, session);
@@ -415,6 +435,7 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		sessionDetails = new SessionDetailsPane(getProject());
 		sessionDetails.setLineWrap(true);
+		sessionDetails.setRows(6);
 		sessionDetails.setWrapStyleWord(true);
 		sessionDetails.setBackground(Color.white);
 		sessionDetails.setOpaque(true);
@@ -428,21 +449,25 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		msgPanel = new MessagePanel();
 		
+		corpusPanel = new JPanel(new BorderLayout());
+		corpusPanel.add(newCorpusButton, BorderLayout.NORTH);
+		corpusPanel.add(corpusScroller, BorderLayout.CENTER);
+		corpusPanel.add(corpusDetailsScroller, BorderLayout.SOUTH);
 		
-		JPanel innerPanel = new JPanel(innerLayout);
+		sessionPanel = new JPanel(new BorderLayout());
+		sessionPanel.add(newSessionButton, BorderLayout.NORTH);
+		sessionPanel.add(sessionScroller, BorderLayout.CENTER);
+		sessionPanel.add(sessionDetailsScroller, BorderLayout.SOUTH);
 		
-		CellConstraints cc = new CellConstraints();
+		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setLeftComponent(corpusPanel);
+		splitPane.setRightComponent(sessionPanel);
+		splitPane.setResizeWeight(0.5);
 		
-		innerPanel.add(DefaultComponentFactory.getInstance().createSeparator("Corpus"),
-				cc.xy(1,2));
-		innerPanel.add(corpusScroller, cc.xy(1, 4));
-		innerPanel.add(corpusDetailsScroller, cc.xy(1,6));
-		
-		innerPanel.add(DefaultComponentFactory.getInstance().createSeparator("Session"),
-				cc.xy(3,2));
-		innerPanel.add(sessionScroller, cc.xy(3,4));
-		innerPanel.add(sessionDetailsScroller, cc.xy(3,6));
-		
+		// invoke later
+		SwingUtilities.invokeLater( () -> {
+			splitPane.setDividerLocation(0.5);
+		});
 		
 		// the frame layout
 		String projectName = null;
@@ -451,18 +476,312 @@ public class ProjectWindow extends CommonModuleFrame
 		DialogHeader header = new DialogHeader(projectName,
 				StringUtils.abbreviate(projectLoadPath, 80));
 		
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(header, BorderLayout.NORTH);
+		add(header, BorderLayout.NORTH);
 
+		CellConstraints cc = new CellConstraints();
 		final JPanel topPanel = new JPanel(new FormLayout("pref, fill:pref:grow, right:pref", "pref"));
 		topPanel.add(msgPanel, cc.xy(1,1));
 		topPanel.add(blindModeBox, cc.xy(3, 1));
-		final JPanel cPane = new JPanel(new BorderLayout());
-		cPane.add(topPanel, BorderLayout.NORTH);
-		cPane.add(innerPanel, BorderLayout.CENTER);
-		cPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
-		getContentPane().add(cPane, BorderLayout.CENTER);
+		add(splitPane, BorderLayout.CENTER);
+		add(topPanel, BorderLayout.SOUTH);
+		
+		// if no corpora are currently available, 'prompt' the user to create a new one
+		if(getProject().getCorpora().size() == 0) {
+			SwingUtilities.invokeLater( () -> {
+				onSwapNewAndCreateCorpus(newCorpusButton);
+			});
+		} else {
+			SwingUtilities.invokeLater( () -> {
+				corpusList.setSelectedIndex(0);
+			});
+		}
+	}
+	
+	private MultiActionButton createNewCorpusButton() {
+		MultiActionButton retVal = new MultiActionButton();
+		
+		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
+		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		
+		String s1 = "Corpus";
+		
+		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
+		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
+		retVal.getTopLabel().setIcon(newIcn);
+//		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
+		retVal.setOpaque(false);
+		
+		PhonUIAction newAct = new PhonUIAction(this, "onSwapNewAndCreateCorpus", retVal);
+		newAct.putValue(Action.LARGE_ICON_KEY, newIcnL);
+		newAct.putValue(Action.SMALL_ICON, newIcn);
+		newAct.putValue(Action.NAME, "New corpus");
+		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new corpus folder");
+		retVal.setDefaultAction(newAct);
+		
+		retVal.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		return retVal;
+	}
+	
+	private MultiActionButton createCorpusButton() {
+		MultiActionButton retVal = new MultiActionButton();
+		
+		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
+		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		
+		String s1 = "Corpus";
+		String s2 = "Enter corpus name and press enter.  Press escape to cancel.";
+		
+		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
+		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
+		retVal.getTopLabel().setIcon(newIcn);
+		retVal.setAlwaysDisplayActions(true);
+		
+		retVal.setOpaque(false);
+		
+		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
+		ImageIcon cancelIcnL = 
+				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
+		
+		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreateCorpus", retVal);
+		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");
+		btnSwapAct.putValue(Action.NAME, "Cancel create");
+		btnSwapAct.putValue(Action.SHORT_DESCRIPTION, "Cancel create");
+		btnSwapAct.putValue(Action.SMALL_ICON, cancelIcn);
+		btnSwapAct.putValue(Action.LARGE_ICON_KEY, cancelIcnL);
+		retVal.addAction(btnSwapAct);
+		
+		JPanel corpusNamePanel = new JPanel(new BorderLayout());
+		corpusNamePanel.setOpaque(false);
+		
+		final JTextField corpusNameField = new JTextField();
+		corpusNameField.setDocument(new NameDocument());
+		corpusNameField.setText("Corpus Name");
+		corpusNamePanel.add(corpusNameField, BorderLayout.CENTER);
+		
+		ActionMap actionMap = retVal.getActionMap();
+		actionMap.put(btnSwapAct.getValue(Action.ACTION_COMMAND_KEY), btnSwapAct);
+		InputMap inputMap = retVal.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+		
+		inputMap.put(ks, btnSwapAct.getValue(Action.ACTION_COMMAND_KEY));
+		
+		retVal.setActionMap(actionMap);
+		retVal.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
+		
+		PhonUIAction createNewCorpusAct = 
+			new PhonUIAction(this, "onCreateCorpus", corpusNameField);
+		createNewCorpusAct.putValue(Action.SHORT_DESCRIPTION, "Create new corpus folder");
+		createNewCorpusAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
+		
+		JButton createBtn = new JButton(createNewCorpusAct);
+		corpusNamePanel.add(createBtn, BorderLayout.EAST);
+		
+		corpusNameField.setAction(createNewCorpusAct);
+		
+		// swap bottom component in new project button
+		retVal.setBottomLabelText(WorkspaceTextStyler.toDescText(s2));
+		retVal.add(corpusNamePanel, BorderLayout.CENTER);
+//		newProjectButton.revalidate();
+		
+		retVal.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				corpusNameField.requestFocus();
+			}
+		});
+		
+		return retVal;
+	}
+	
+	public void onCreateCorpus(JTextField textField) {
+		final String corpusName = textField.getText().trim();
+		if(corpusName.length() == 0) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Corpus name cannot be empty").start(textField);
+			return;
+		}
+		
+		final EntryPointArgs initInfo = new EntryPointArgs();
+		initInfo.put(EntryPointArgs.PROJECT_OBJECT, getProject());
+		initInfo.put(EntryPointArgs.CORPUS_NAME, corpusName);
+		
+		try {
+			PluginEntryPointRunner.executePlugin(NewCorpusEP.EP_NAME, initInfo);
+			onSwapNewAndCreateCorpus(createCorpusButton);
+			corpusList.setSelectedValue(corpusName, true);
+		} catch (PluginException e) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast(e.getLocalizedMessage()).start(textField);
+		}
+	}
+	
+	public void onSwapNewAndCreateCorpus(MultiActionButton btn) {
+		if(btn == newCorpusButton) {
+			corpusPanel.remove(newCorpusButton);
+			corpusPanel.add(createCorpusButton, BorderLayout.NORTH);
+			createCorpusButton.requestFocus();
+		} else {
+			corpusPanel.remove(createCorpusButton);
+			corpusPanel.add(newCorpusButton, BorderLayout.NORTH);
+		}
+		corpusPanel.revalidate();
+		corpusPanel.repaint();
+	}
+	
+	private MultiActionButton createNewSessionButton() {
+		MultiActionButton retVal = new MultiActionButton();
+		
+		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
+		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		
+		String s1 = "Session";
+		
+		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
+		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
+		retVal.getTopLabel().setIcon(newIcn);
+//		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
+		retVal.setOpaque(false);
+		
+		PhonUIAction newAct = new PhonUIAction(this, "onSwapNewAndCreateSession", retVal);
+		newAct.putValue(Action.LARGE_ICON_KEY, newIcnL);
+		newAct.putValue(Action.SMALL_ICON, newIcn);
+		newAct.putValue(Action.NAME, "New session");
+		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new session in selected corpus");
+		retVal.setDefaultAction(newAct);
+		
+		retVal.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		return retVal;
+	}
+	
+	private MultiActionButton createSessionButton() {
+		MultiActionButton retVal = new MultiActionButton();
+		
+		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
+		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		
+		String s1 = "Session";
+		String s2 = "Enter session name and press enter.  Press escape to cancel.";
+		
+		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
+		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
+		retVal.getTopLabel().setIcon(newIcn);
+		retVal.setAlwaysDisplayActions(true);
+		
+		retVal.setOpaque(false);
+		
+		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
+		ImageIcon cancelIcnL = 
+				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
+		
+		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreateSession", retVal);
+		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");
+		btnSwapAct.putValue(Action.NAME, "Cancel create");
+		btnSwapAct.putValue(Action.SHORT_DESCRIPTION, "Cancel create");
+		btnSwapAct.putValue(Action.SMALL_ICON, cancelIcn);
+		btnSwapAct.putValue(Action.LARGE_ICON_KEY, cancelIcnL);
+		retVal.addAction(btnSwapAct);
+		
+		JPanel sessionNamePanel = new JPanel(new BorderLayout());
+		sessionNamePanel.setOpaque(false);
+		
+		final JTextField sessionNameField = new JTextField();
+		sessionNameField.setDocument(new NameDocument());
+		sessionNameField.setText("Session Name");
+		sessionNamePanel.add(sessionNameField, BorderLayout.CENTER);
+		
+		ActionMap actionMap = retVal.getActionMap();
+		actionMap.put(btnSwapAct.getValue(Action.ACTION_COMMAND_KEY), btnSwapAct);
+		InputMap inputMap = retVal.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+		
+		inputMap.put(ks, btnSwapAct.getValue(Action.ACTION_COMMAND_KEY));
+		
+		retVal.setActionMap(actionMap);
+		retVal.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
+		
+		PhonUIAction createNewSessionAct = 
+			new PhonUIAction(this, "onCreateSession", sessionNameField);
+		createNewSessionAct.putValue(Action.SHORT_DESCRIPTION, "Create new session in selected corpus");
+		createNewSessionAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
+		
+		JButton createBtn = new JButton(createNewSessionAct);
+		sessionNamePanel.add(createBtn, BorderLayout.EAST);
+		
+		sessionNameField.setAction(createNewSessionAct);
+		
+		// swap bottom component in new project button
+		retVal.setBottomLabelText(WorkspaceTextStyler.toDescText(s2));
+		retVal.add(sessionNamePanel, BorderLayout.CENTER);
+		
+		retVal.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				sessionNameField.requestFocus();
+			}
+		});
+		
+		return retVal;
+	}
+	
+	public void onSwapNewAndCreateSession(MultiActionButton btn) {
+		if(btn == newSessionButton) {
+			if(corpusList.getSelectedValue() == null) {
+				Toolkit.getDefaultToolkit().beep();
+				ToastFactory.makeToast("Please select a corpus").start(newSessionButton);
+				return;
+			}
+			sessionPanel.remove(newSessionButton);
+			sessionPanel.add(createSessionButton, BorderLayout.NORTH);
+			createSessionButton.requestFocus();
+		} else {
+			sessionPanel.remove(createSessionButton);
+			sessionPanel.add(newSessionButton, BorderLayout.NORTH);
+		}
+		sessionPanel.revalidate();
+		sessionPanel.repaint();
+	}
+	
+	public void onCreateSession(JTextField textField) {
+		final String sessionName = textField.getText().trim();
+		if(sessionName.length() == 0) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Session name cannot be empty").start(textField);
+			return;
+		}
+		
+		final EntryPointArgs args = new EntryPointArgs();
+		args.put(EntryPointArgs.PROJECT_OBJECT, getProject());
+		args.put(EntryPointArgs.CORPUS_NAME, corpusList.getSelectedValue());
+		args.put(EntryPointArgs.SESSION_NAME, sessionName);
+		
+		try {
+			PluginEntryPointRunner.executePlugin(NewSessionEP.EP_NAME, args);
+			onSwapNewAndCreateSession(createSessionButton);
+			sessionList.setSelectedValue(sessionName, true);
+		} catch (PluginException e) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast(e.getLocalizedMessage()).start(textField);
+		}
 	}
 	
 	/**
@@ -1151,6 +1470,29 @@ public class ProjectWindow extends CommonModuleFrame
 			setMessageLabel("");
 		}
 		
+	}
+	
+	public class NameDocument extends PlainDocument {
+		/**
+		 * Ensure proper project names.
+		 * 
+		 * Project name must start with a letter, and can be followed
+		 * by at most 30 letters, numbers, underscores, dashes.
+		 */
+		private String projectRegex = "[a-zA-Z0-9][- a-zA-Z_0-9]{0,29}";
+
+		@Override
+		public void insertString(int offs, String str, AttributeSet a)
+				throws BadLocationException {
+			// only allow valid inputs
+			String p1 = super.getText(0, offs);
+			String p2 = super.getText(offs, getLength()-offs);
+			String val = p1 + str + p2;
+			
+			if(val.matches(projectRegex)) {
+				super.insertString(offs, str, a);
+			}
+		}
 	}
 	
 }

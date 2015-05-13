@@ -240,7 +240,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
 		
 		String s1 = "Create Project";
-		String s2 = "Enter project name and press enter to create a new project.  Press escape to cancel.";
+		String s2 = "Enter project name and press enter.  Press escape to cancel.";
 		
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
