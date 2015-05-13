@@ -27,15 +27,16 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class TestOrthographyParserErrors {
 
-	@Test
-	public void testUnfinishedComment() {
+	@Test(expected=ParseException.class)
+	public void testUnfinishedComment() throws ParseException {
 		final String text = "hello (world";
-		try {
-			Orthography.parseOrthography(text);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		Orthography.parseOrthography(text);
 	}
 	
+	@Test(expected=ParseException.class)
+	public void testUnfinishedEvent() throws ParseException {
+		final String text = "hello *world";
+		Orthography.parseOrthography(text);
+	}
 	
 }
