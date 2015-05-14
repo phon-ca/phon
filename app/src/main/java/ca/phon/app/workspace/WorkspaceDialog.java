@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -237,7 +236,6 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		MultiActionButton retVal = new MultiActionButton();
 		
 		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
 		
 		String s1 = "Create Project";
 		String s2 = "Enter project name and press enter.  Press escape to cancel.";
@@ -253,8 +251,8 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		retVal.setOpaque(false);
 		
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
-		ImageIcon cancelIcnL = 
-				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
+		ImageIcon cancelIcnL = cancelIcn;
+//				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
 		
 		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreate", retVal);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_PROJECT");

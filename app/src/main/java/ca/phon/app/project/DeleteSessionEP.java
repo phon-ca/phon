@@ -314,7 +314,7 @@ public class DeleteSessionEP implements IPluginEntryPoint {
 			
 		});
 		props.setMessage("Are you sure you want to delete this session? This action is not undoable.");
-		props.setHeader("Delete Session");
+		props.setHeader("Delete Session: " + sessionName);
 		props.setOptions(MessageDialogProperties.yesNoOptions);
 		NativeDialogs.showMessageDialog(props);
 	}

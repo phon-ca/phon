@@ -28,7 +28,7 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 public class CorpusListCellRenderer extends DefaultListCellRenderer {
-
+	
 	@Override
 	public Component getListCellRendererComponent(
 			JList list, Object value, int index, 
@@ -38,7 +38,7 @@ public class CorpusListCellRenderer extends DefaultListCellRenderer {
 		
 		if(isSelected) {
 			comp.setIcon(
-					IconManager.getInstance().getIcon("categories/applications-other", IconSize.SMALL));
+					IconManager.getInstance().getIcon("places/folder", IconSize.SMALL));
 		} else {
 			comp.setIcon(
 					IconManager.getInstance().getIcon("blank", IconSize.SMALL));

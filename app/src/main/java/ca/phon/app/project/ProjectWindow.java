@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -501,35 +500,69 @@ public class ProjectWindow extends CommonModuleFrame
 	private MultiActionButton createNewCorpusButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		ImageIcon folderNewIcn = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
+		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/list-add", IconSize.MEDIUM);
+		ImageIcon removeIcnL = IconManager.getInstance().getIcon("actions/list-remove", IconSize.MEDIUM);
+		ImageIcon renameIcnL = IconManager.getInstance().getIcon("actions/edit-rename", IconSize.MEDIUM);
 		
 		String s1 = "Corpus";
 		
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
-		retVal.getTopLabel().setIcon(newIcn);
+		retVal.getTopLabel().setIcon(folderNewIcn);
 //		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
 		retVal.setOpaque(false);
 		
 		PhonUIAction newAct = new PhonUIAction(this, "onSwapNewAndCreateCorpus", retVal);
 		newAct.putValue(Action.LARGE_ICON_KEY, newIcnL);
-		newAct.putValue(Action.SMALL_ICON, newIcn);
+		newAct.putValue(Action.SMALL_ICON, folderNewIcn);
 		newAct.putValue(Action.NAME, "New corpus");
 		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new corpus folder");
-		retVal.setDefaultAction(newAct);
 		
+		PhonUIAction deleteCurrentAct = new PhonUIAction(this, "onDeleteCorpus");
+		deleteCurrentAct.putValue(Action.LARGE_ICON_KEY, removeIcnL);
+		deleteCurrentAct.putValue(Action.NAME, "Delete corpus");
+		deleteCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Delete selected corpus");
+		
+		PhonUIAction renameCurrentAct = new PhonUIAction(this, "onRenameCorpus");
+		renameCurrentAct.putValue(Action.LARGE_ICON_KEY, renameIcnL);
+		renameCurrentAct.putValue(Action.NAME, "Rename corpus");
+		renameCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Rename selected corpus");
+		
+		retVal.setDisplayDefaultAction(true);
+		retVal.addAction(deleteCurrentAct);
+		retVal.addAction(renameCurrentAct);
+		
+		retVal.setDefaultAction(newAct);
+				
 		retVal.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		return retVal;
 	}
 	
+	public void onDeleteCorpus() {
+		if(getSelectedCorpus() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a corpus").start(corpusList);
+			return;
+		}
+		deleteCorpus(getSelectedCorpus());
+	}
+	
+	public void onRenameCorpus() {
+		if(getSelectedCorpus() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a corpus").start(corpusList);
+			return;
+		}
+		renameCorpus(getSelectedCorpus());
+	}
+	
 	private MultiActionButton createCorpusButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		ImageIcon newIcn = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
 		
 		String s1 = "Corpus";
 		String s2 = "Enter corpus name and press enter.  Press escape to cancel.";
@@ -543,8 +576,8 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.setOpaque(false);
 		
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
-		ImageIcon cancelIcnL = 
-				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
+		ImageIcon cancelIcnL = cancelIcn;
+//				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
 		
 		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreateCorpus", retVal);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");
@@ -642,8 +675,11 @@ public class ProjectWindow extends CommonModuleFrame
 	private MultiActionButton createNewSessionButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		ImageIcon newIcn = IconManager.getInstance().getIcon("mimetypes/text-xml", IconSize.SMALL);
+		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/list-add", IconSize.MEDIUM);
+		ImageIcon removeIcnL = IconManager.getInstance().getIcon("actions/list-remove", IconSize.MEDIUM);
+		ImageIcon renameIcnL = IconManager.getInstance().getIcon("actions/edit-rename", IconSize.MEDIUM);
+		ImageIcon openIcnL = IconManager.getInstance().getIcon("actions/view", IconSize.MEDIUM);
 		
 		String s1 = "Session";
 		
@@ -661,16 +697,77 @@ public class ProjectWindow extends CommonModuleFrame
 		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new session in selected corpus");
 		retVal.setDefaultAction(newAct);
 		
+		PhonUIAction deleteCurrentAct = new PhonUIAction(this, "onDeleteSession");
+		deleteCurrentAct.putValue(Action.LARGE_ICON_KEY, removeIcnL);
+		deleteCurrentAct.putValue(Action.NAME, "Delete session");
+		deleteCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Delete selected session");
+		
+		PhonUIAction renameCurrentAct = new PhonUIAction(this, "onRenameSession");
+		renameCurrentAct.putValue(Action.LARGE_ICON_KEY, renameIcnL);
+		renameCurrentAct.putValue(Action.NAME, "Rename session");
+		renameCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Rename selected session");
+		
+		PhonUIAction openCurrentAct = new PhonUIAction(this, "onOpenSession");
+		openCurrentAct.putValue(Action.LARGE_ICON_KEY, openIcnL);
+		openCurrentAct.putValue(Action.NAME, "Open session");
+		openCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Open selected session");
+		
+		retVal.setDisplayDefaultAction(true);
+		retVal.addAction(deleteCurrentAct);
+		retVal.addAction(renameCurrentAct);
+		retVal.addAction(openCurrentAct);
+		
 		retVal.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		return retVal;
 	}
 	
+	public void onDeleteSession() {
+		if(getSelectedCorpus() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a corpus").start(corpusList);
+			return;
+		}
+		if(getSelectedSessionName() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a session").start(sessionList);
+			return;
+		}
+		deleteSession(getSelectedCorpus(), getSelectedSessionName());
+	}
+	
+	public void onRenameSession() {
+		if(getSelectedCorpus() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a corpus").start(corpusList);
+			return;
+		}
+		if(getSelectedSessionName() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a session").start(sessionList);
+			return;
+		}
+		renameSession(getSelectedCorpus(), getSelectedSessionName());
+	}
+	
+	public void onOpenSession() {
+		if(getSelectedCorpus() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a corpus").start(corpusList);
+			return;
+		}
+		if(getSelectedSessionName() == null) {
+			Toolkit.getDefaultToolkit().beep();
+			ToastFactory.makeToast("Please select a session").start(sessionList);
+			return;
+		}
+		openSession(getSelectedCorpus(), getSelectedSessionName());
+	}
+	
 	private MultiActionButton createSessionButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		ImageIcon newIcn = IconManager.getInstance().getIcon("mimetypes/text-xml", IconSize.SMALL);
 		
 		String s1 = "Session";
 		String s2 = "Enter session name and press enter.  Press escape to cancel.";
@@ -684,8 +781,8 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.setOpaque(false);
 		
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
-		ImageIcon cancelIcnL = 
-				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
+		ImageIcon cancelIcnL = cancelIcn;
+//				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
 		
 		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreateSession", retVal);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");

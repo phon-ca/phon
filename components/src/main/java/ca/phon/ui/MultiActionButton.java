@@ -47,6 +47,9 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+
 /**
  * A 'on click' button which includes the following features:
  * 
@@ -69,6 +72,11 @@ public class MultiActionButton extends JXPanel implements Scrollable {
 	private boolean alwaysDisplayActions = false;
 	
 	private boolean displayActions = false;
+	
+	/**
+	 * Display default action in list
+	 */
+	private boolean displayDefaultAction = false;
 	
 	/** Actions */
 	private List<Action> otherActions = new ArrayList<Action>();
@@ -207,6 +215,14 @@ public class MultiActionButton extends JXPanel implements Scrollable {
 		this.alwaysDisplayActions = v;
 	}
 	
+	public boolean isDisplayDefaultAction() {
+		return this.displayDefaultAction;
+	}
+	
+	public void setDisplayDefaultAction(boolean displayDefaultAction) {
+		this.displayDefaultAction = displayDefaultAction;
+	}
+	
 	/**
 	 * General mouse handler
 	 */
@@ -323,15 +339,35 @@ public class MultiActionButton extends JXPanel implements Scrollable {
 		
 		@Override
 		public void paint(Graphics2D g, JXPanel object, int width, int height) {
-			if(alwaysDisplayActions || displayActions) {
-				// paint buttons in upper-right hand corner
-				// use clipbounds so that actions are always visible
-				int rIdx =
+			// paint buttons in upper-right hand corner
+			// use clipbounds so that actions are always visible
+			int rIdx =
 					object.getVisibleRect().x + object.getVisibleRect().width;
-				int btnSpace = 5;
+			int btnSpace = 5;
+			if(isDisplayDefaultAction()) {
+				ImageIcon icn = (ImageIcon)defaultAction.getValue(Action.LARGE_ICON_KEY);
+				if(icn == null) {
+					icn = IconManager.getInstance().getIcon("blank", IconSize.LARGE);
+				}
+				// define bounding rect
+				Rectangle2D.Double rect2D = new Rectangle2D.Double();
+				rect2D.x = rIdx - icn.getIconWidth() - btnSpace;
+				rect2D.y = btnSpace;
+				rect2D.width = icn.getIconWidth();
+				rect2D.height = icn.getIconHeight();
+				
+				actionShapes.put(defaultAction, rect2D);
+				
+				g.drawImage(icn.getImage(), (int)rect2D.x, (int)rect2D.y, object);
+				rIdx -= (rect2D.width + btnSpace);
+			}
+			if(alwaysDisplayActions || displayActions) {
 
 				for(Action act:otherActions) {
 					ImageIcon icn = (ImageIcon)act.getValue(Action.LARGE_ICON_KEY);
+					if(icn == null) {
+						icn = IconManager.getInstance().getIcon("blank", IconSize.LARGE);
+					}
 					
 					// define bounding rect
 					Rectangle2D.Double rect2D = new Rectangle2D.Double();

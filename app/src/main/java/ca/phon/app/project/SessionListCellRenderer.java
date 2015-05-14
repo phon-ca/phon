@@ -43,7 +43,7 @@ public class SessionListCellRenderer extends DefaultListCellRenderer {
 //				IconManager.getInstance().getIcon("animations/process-working", IconSize.SMALL);
 //				icon.setImageObserver(list);
 			comp.setIcon(
-					IconManager.getInstance().getIcon("categories/applications-other", IconSize.SMALL));
+					IconManager.getInstance().getIcon("mimetypes/text-xml", IconSize.SMALL));
 //					icon );
 		} else {
 			comp.setIcon(
