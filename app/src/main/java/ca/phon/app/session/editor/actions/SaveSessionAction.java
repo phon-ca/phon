@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
@@ -67,11 +66,6 @@ public class SaveSessionAction extends SessionEditorAction {
 			getEditor().saveData();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			
-			// show error
-			JOptionPane.showMessageDialog(getEditor(), 
-					e.getLocalizedMessage() + (e.getCause() != null ? " - " + e.getCause().getLocalizedMessage() : ""), 
-					"Unable to save Session!", JOptionPane.ERROR_MESSAGE, null);
 		}
 	}
 
