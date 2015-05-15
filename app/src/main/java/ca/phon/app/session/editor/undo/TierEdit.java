@@ -124,8 +124,9 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	@Override
 	public void undo() {
 		super.undo();
-		
-		tier.setGroup(groupIndex, getOldValue());
+
+		final T oldVal = getOldValue();
+		tier.setGroup(groupIndex, oldVal);
 		
 		if(getEditor() != null) {
 			queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());

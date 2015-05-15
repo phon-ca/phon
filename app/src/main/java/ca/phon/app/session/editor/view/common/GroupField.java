@@ -31,6 +31,7 @@ import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +61,7 @@ import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 
 /**
@@ -182,6 +184,13 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		am.put(redoKey, redoAct);
 		im.put(redoKs, redoKey);
 		
+		final KeyStroke saveKs =
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final PhonUIAction saveAct = new PhonUIAction(this, "onSave");
+		final String saveKey = "_custom_save_";
+		am.put(saveKey, saveAct);
+		im.put(saveKs, saveKey);
+		
 		setActionMap(am);
 		setInputMap(WHEN_FOCUSED, im);
 	}
@@ -195,11 +204,65 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	}
 	
 	public void onUndo() {
-		undoManager.undo();
+		if(undoManager.canUndo() && hasChanges) {
+			undoManager.undo();
+		} else {
+			// HACK need to call parent frames undo if we have no changes
+			CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+			if(cmf == null) return;
+			
+			final UndoManager cmfUndoManager = cmf.getExtension(UndoManager.class);
+			if(cmfUndoManager != null && cmfUndoManager.canUndo()) {
+				 cmfUndoManager.undo();
+				 
+				 // reset this flag - otherwise the group undo manager 
+				 // will attempt to undo with 'nothing' as last value
+				 hasChanges = false;
+			}
+		}
 	}
 	
 	public void onRedo() {
-		undoManager.redo();
+		if(undoManager.canRedo())
+			undoManager.redo();
+		else {
+			// HACK need to call parent frames undo if we have no changes
+			CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+			if(cmf == null) return;
+			
+			final UndoManager cmfUndoManager = cmf.getExtension(UndoManager.class);
+			if(cmfUndoManager != null && cmfUndoManager.canRedo()) {
+				 cmfUndoManager.redo();
+				 
+				 // reset flag
+				 hasChanges = false;
+			}
+		}
+	}
+	
+	public void onSave() {
+		if(hasChanges) {
+			undoManager.discardAllEdits();
+			if(validateText()) {
+				update();
+				for(TierEditorListener listener:getTierEditorListeners()) {
+					listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+				}
+				hasChanges = false;
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+				requestFocus();
+			}
+		}
+		
+		// HACK call save on parent frame (if any)
+		CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+		if(cmf == null) return;
+		try {
+			cmf.saveData();
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 	}
 	
 	@Override
@@ -319,6 +382,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			} catch (BadLocationException e) {}
 		} else {
 			if(hasChanges) {
+				undoManager.discardAllEdits();
 				if(validateText()) {
 					update();
 					for(TierEditorListener listener:getTierEditorListeners()) {
@@ -390,8 +454,8 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		
 		@Override
 		public void focusLost(FocusEvent e) {
+			undoManager.discardAllEdits();
 			if(validateText()) {
-				undoManager.discardAllEdits();
 				if(hasChanges) {
 					update();
 					for(TierEditorListener listener:getTierEditorListeners()) {
