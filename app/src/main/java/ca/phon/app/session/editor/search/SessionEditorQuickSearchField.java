@@ -47,6 +47,8 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 	
 	public final static String SEARCH_TYPE_PROP = "search_type";
 	
+	public final static String CASE_SENSITIVE_PROP = "case_sensitive";
+	
 	private boolean includeExcludedRecords = false;
 
 	private SearchType searchType = SearchType.PLAIN;
@@ -136,7 +138,9 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 	
 	@Override
 	public void toggleCaseSensitive() {
-		caseSensitive = !caseSensitive;
+		final boolean oldVal = isCaseSensitive();
+		this.caseSensitive = !this.caseSensitive;
+		super.firePropertyChange(CASE_SENSITIVE_PROP, oldVal, this.caseSensitive);
 	}
 
 	private class RecordRowFilter extends RowFilter<TableModel, Integer> {

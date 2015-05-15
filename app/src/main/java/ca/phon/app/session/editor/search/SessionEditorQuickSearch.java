@@ -26,7 +26,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -143,20 +142,10 @@ public class SessionEditorQuickSearch {
 		table.setFocusable(false);
 		
 		searchField = new SessionEditorQuickSearchField(getEditor().getSession(), table);
-		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.INCLUDE_EXCLUDED_PROP, new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent arg0) {
-				updateFilter();
-			}
-		});
-		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.SEARCH_TYPE_PROP, new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent arg0) {
-				updateFilter();
-			}
-		});
+		PropertyChangeListener updateFilterListener = (e) -> { updateFilter(); };
+		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.INCLUDE_EXCLUDED_PROP, updateFilterListener);
+		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.SEARCH_TYPE_PROP, updateFilterListener);
+		searchField.addPropertyChangeListener(SessionEditorQuickSearchField.CASE_SENSITIVE_PROP, updateFilterListener);
 		
 		searchField.setColumnLabel("tier");
 		searchField.setColumns(20);
