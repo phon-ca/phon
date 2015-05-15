@@ -44,14 +44,17 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 	
 	private SearchType searchType = SearchType.PLAIN;
 	
+	private boolean caseSensitive = false;
+	
 	public SessionRowFilter() {
 		
 	}
 	
-	public SessionRowFilter(String filter, SearchType searchType) {
+	public SessionRowFilter(String filter, SearchType searchType, boolean caseSensitive) {
 		super();
 		parseFilter(filter);
 		this.searchType = searchType;
+		this.caseSensitive = caseSensitive;
 	}
 	
 	public void parseFilter(String filter) {
@@ -190,14 +193,17 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 			if(retVal) break;
 			if(searchType == SearchType.REGEX) {
 				try {
-					final Pattern pattern = Pattern.compile(expr);
+					final Pattern pattern = Pattern.compile(expr, (caseSensitive ? 0 : Pattern.CASE_INSENSITIVE));
 					final Matcher matcher = pattern.matcher(grp);
 					retVal = matcher.find();
 				} catch (PatternSyntaxException e) {
 					
 				}
 			} else if(searchType == SearchType.PLAIN) {
-				retVal = grp.contains(expr);
+				String grpVal = (caseSensitive ? grp.toString() : grp.toString().toLowerCase());
+				String exprVal = (caseSensitive ? expr : expr.toString().toLowerCase());
+				
+				retVal = grpVal.contains(exprVal);
 			}
 		}
 		
