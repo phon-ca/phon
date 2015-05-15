@@ -23,6 +23,7 @@ import java.awt.Container;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -69,6 +70,9 @@ import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MenuManager;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 
@@ -566,28 +570,50 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		return this.isModified();
 	}
 	
+	private static String humanReadableByteCount(long bytes, boolean si) {
+	    int unit = si ? 1000 : 1024;
+	    if (bytes < unit) return bytes + " B";
+	    int exp = (int) (Math.log(bytes) / Math.log(unit));
+	    String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+	    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+	}
+	
 	@Override
 	public boolean saveData() 
 			throws IOException {
 		final Project project = getProject();
 		final Session session = getSession();
 		
-		final UUID writeLock = project.getSessionWriteLock(session);
-		if(writeLock != null) {
-			try {
-				project.saveSession(session, writeLock);
-			} catch (IOException e) {
-				throw e;
-			} finally {
-				project.releaseSessionWriteLock(session, writeLock);
-			}
+		UUID writeLock = null;
+		try {
+			LOGGER.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
+			writeLock = project.getSessionWriteLock(session);
+			project.saveSession(session, writeLock);
 			
+			final File sessionFile = 
+					new File(new File(project.getLocation(), session.getCorpus()), session.getName() + ".xml");
+
+			final String msg = "Save finished, wrote " + humanReadableByteCount(sessionFile.length(), true) + " to disk.";
+			LOGGER.info(msg);
+			
+			// show a short messgae next to the save button to indicate save completed
+			ToastFactory.makeToast(msg).start(getToolbar());
 			setModified(false);
-			
 			return true;
+		} catch (IOException e) {
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setRunAsync(false);
+			props.setTitle("Save failed");
+			props.setMessage(e.getLocalizedMessage());
+			props.setHeader("Unable to save session");
+			props.setOptions(MessageDialogProperties.okOptions);
+			NativeDialogs.showMessageDialog(props);
+			
+			throw e;
+		} finally {
+			if(writeLock != null) 
+				project.releaseSessionWriteLock(session, writeLock);
 		}
-				
-		return false;
 	}
 
 	@Override
