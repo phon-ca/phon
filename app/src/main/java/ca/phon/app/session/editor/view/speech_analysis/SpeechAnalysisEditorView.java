@@ -100,6 +100,7 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -115,6 +116,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 			.getLogger(SpeechAnalysisEditorView.class.getName());
 
 	public static final String VIEW_TITLE = "Speech Analysis";
+	
+	public static final int MAX_TIER_HEIGHT = Integer.MAX_VALUE;
 
 	private JPanel contentPane;
 	
@@ -136,9 +139,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private JButton generateButton;
 	
-	private HidablePanel messageButton = new HidablePanel(SpeechAnalysisEditorView.class.getName() + ".noAudio");
+	private HidablePanel messageButton = new HidablePanel("SpeechAnalysisView.noAudio");
 	
+	private final static String WAV_DISPLAY_HEIGHT = "SpeechAnalysisView.wavDisplayHeight";
 	private JComponent sizer;
+	private int wavDisplayHeight = 
+			PrefHelper.getInt(WAV_DISPLAY_HEIGHT, -1);
 	
 	private JScrollBar horizontalScroller;
 	private boolean manualAdjustment = false;
@@ -243,6 +249,15 @@ public class SpeechAnalysisEditorView extends EditorView {
 			}
 			
 		});
+			Dimension prefSize = wavDisplay.getPreferredSize();
+			
+			if(wavDisplayHeight < 0) wavDisplayHeight = prefSize.height;
+			
+			prefSize.height = wavDisplayHeight;
+			if(prefSize.height < 0) prefSize.height = 0;
+			if(prefSize.height > MAX_TIER_HEIGHT) prefSize.height = MAX_TIER_HEIGHT;
+			
+			wavDisplay.setPreferredSize(prefSize);
 		
 		contentPane = new JPanel(new VerticalLayout());
 		
@@ -256,9 +271,16 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				final Dimension currentSize = wavDisplay.getSize();
-				final Dimension prefSize = wavDisplay.getPreferredSize();
+				Dimension currentSize = wavDisplay.getSize();
+				Dimension prefSize = wavDisplay.getPreferredSize();
+				
 				prefSize.height = currentSize.height + e.getY();
+				if(prefSize.height < 0) prefSize.height = 0;
+				if(prefSize.height > MAX_TIER_HEIGHT) prefSize.height = MAX_TIER_HEIGHT;
+				wavDisplayHeight = prefSize.height;
+				
+				PrefHelper.getUserPreferences().putInt(WAV_DISPLAY_HEIGHT, wavDisplayHeight);
+				
 				wavDisplay.setPreferredSize(prefSize);
 				contentPane.invalidate();
 				contentPane.revalidate();
@@ -593,6 +615,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 			wavDisplay.setSegmentLength(segLength);
 		} else {
 			messageButton.setTopLabelText("<html><b>Unable to open audio file</b></html>");
+			messageButton.clearActions();
+			
 			// display option to generate audio file if there is session media available
 			final Session session = getEditor().getSession();
 			

@@ -159,6 +159,11 @@ public class MultiActionButton extends JXPanel implements Scrollable {
 		revalidate();
 	}
 	
+	public void clearActions() {
+		otherActions.clear();
+		revalidate();
+	}
+	
 	protected JXButton getActionButton(Action act) {
 		JXButton retVal = new JXButton();
 		

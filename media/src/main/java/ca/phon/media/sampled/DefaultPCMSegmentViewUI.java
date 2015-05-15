@@ -75,9 +75,11 @@ import ca.phon.util.icons.IconSize;
  */
 public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 	
-	private final static int DEFAULT_CHANNEL_HEIGHT = 100;
+	private final static int DEFAULT_CHANNEL_HEIGHT = 60;
 	
 	private final static int DEFAULT_PIXEL_PER_SEC = 100;
+	
+	private final static int DEFAULT_TIMEBAR_HEIGHT = 30;
 	
 	private PCMSegmentView view;
 	
@@ -140,9 +142,13 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 	}
 	
 	private Rectangle2D calculateTimeRect(Graphics g) {
-		final FontMetrics fm = g.getFontMetrics(view.getFont());
-		final String testString = "000:00.000";
-		return fm.getStringBounds(testString, g);
+		if(g == null) {
+			return new Rectangle2D.Double(0, 0, 0, DEFAULT_TIMEBAR_HEIGHT);
+		} else {
+			final FontMetrics fm = g.getFontMetrics(view.getFont());
+			final String testString = "000:00.000";
+			return fm.getStringBounds(testString, g);
+		}
 	}
 	
 	private double calculateTimeBarHeight(Graphics g) {

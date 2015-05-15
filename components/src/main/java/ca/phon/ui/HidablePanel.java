@@ -57,6 +57,8 @@ public class HidablePanel extends MultiActionButton {
 	 */
 	private final static String PANEL_PROPS = "hidden_panels";
 	
+	private Action hideAct;
+	
 	private static Preferences getPanelPrefs() {
 		final Preferences userPrefs = PrefHelper.getUserPreferences();
 		return userPrefs.node(PANEL_PROPS);
@@ -93,36 +95,22 @@ public class HidablePanel extends MultiActionButton {
 		init();
 	}
 	
+	@Override
+	public void clearActions() {
+		super.clearActions();
+		addAction(hideAct);
+	}
+	
 	private void init() {
 		setOpaque(false);
 		
-//		label = new JLabel("Hide");
-//		label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//		label.setFont(label.getFont().deriveFont(10.0f));
-//		
-//		label.addMouseListener(new MouseInputAdapter() {
-//
-//			@Override
-//			public void mousePressed(MouseEvent arg0) {
-//				hideComponent();
-//			}
-//			
-//		});
-		
-//		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//		topPanel.setOpaque(false);
-//		topPanel.add(label);
-//		
-//		setLayout(new BorderLayout());
-//		
-//		add(topPanel, BorderLayout.NORTH);
-		PhonUIAction onHideAct = new PhonUIAction(this, "onHide");
+		hideAct = new PhonUIAction(this, "onHide");
 		ImageIcon hideIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.XSMALL);
-		onHideAct.putValue(Action.SHORT_DESCRIPTION, "Hide and don't show again");
-		onHideAct.putValue(Action.NAME, "Hide message");
-		onHideAct.putValue(Action.SMALL_ICON, hideIcn);
-		onHideAct.putValue(Action.LARGE_ICON_KEY, hideIcn);
-		super.addAction(onHideAct);
+		hideAct.putValue(Action.SHORT_DESCRIPTION, "Hide and don't show again");
+		hideAct.putValue(Action.NAME, "Hide message");
+		hideAct.putValue(Action.SMALL_ICON, hideIcn);
+		hideAct.putValue(Action.LARGE_ICON_KEY, hideIcn);
+		super.addAction(hideAct);
 
 		MattePainter matte = new MattePainter(UIManager.getColor("control"));
 		RectanglePainter rectPainter = new RectanglePainter(1, 1, 1, 1);
