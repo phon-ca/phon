@@ -20,6 +20,7 @@ package ca.phon.app.session;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -31,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,6 +51,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 import org.joda.time.DateTime;
 
+import ca.phon.app.query.ResultSetEditor;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
@@ -64,11 +67,14 @@ import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.ui.AbstractVerifier;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.VerifierListener;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Tuple;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -163,6 +169,7 @@ public class RecordFilterPanel extends JPanel {
 		searchTbl = new JXTable(new SearchTableModel());
 		searchTbl.setVisibleRowCount(4);
 		searchTbl.setEnabled(false);
+		searchTbl.getColumn(0).setCellRenderer(new QueryNameCellRenderer());
 		searchTbl.getColumn(1).setCellRenderer(new DateCellRenderer());
 		searchTbl.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		searchTbl.getSelectionModel().addListSelectionListener(new SearchListener());
@@ -278,8 +285,27 @@ public class RecordFilterPanel extends JPanel {
 		
 		List<FilterPanelCellValue> searches;
 		
+		List<Integer> openQueryRows = new ArrayList<>();
+		
 		public SearchTableModel() {
 			searches = new ArrayList<RecordFilterPanel.FilterPanelCellValue>();
+			
+			int rowIdx = 0;
+			// report any currently open result sets
+			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+				if(cmf instanceof ResultSetEditor) {
+					ResultSetEditor editor = (ResultSetEditor)cmf;
+					// check session
+					final Session editorSession = editor.getSession();
+					if(editorSession != null && editorSession.getCorpus().equals(t.getCorpus()) 
+							&& editorSession.getName().equals(t.getName())) {
+						// add result set to list
+						searches.add(new FilterPanelCellValue(editor.getQuery(), editor.getResultSet()));
+						openQueryRows.add(rowIdx);
+					}
+				}
+			}
+			
 			final ResultSetManager rsManager = QueryManager.getSharedInstance().createResultSetManager();
 			for(Query q:rsManager.getQueries(project)) {
 				for(ResultSet rs:rsManager.getResultSetsForQuery(project, q)) {
@@ -288,6 +314,10 @@ public class RecordFilterPanel extends JPanel {
 					}
 				}
 			}
+		}
+		
+		public boolean isOpenQuery(int row) {
+			return openQueryRows.contains(row);
 		}
 
 		@Override
@@ -502,6 +532,38 @@ public class RecordFilterPanel extends JPanel {
 			return retVal;
 		}
 		
+	}
+	
+	
+	/**
+	 * Query name formatter.  Displays a star next to starred queries and will show
+	 * open queries in italics
+	 */
+	private class QueryNameCellRenderer extends DefaultTableCellRenderer {
+		
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			JLabel retVal = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			SearchTableModel tblModel = (SearchTableModel)table.getModel();
+			FilterPanelCellValue cellVal = tblModel.searches.get(row);
+			
+			if(cellVal.getQuery().isStarred()) {
+				final ImageIcon icon = IconManager.getInstance()
+						.getIcon("misc/metal-star-on", IconSize.SMALL);
+				retVal.setIcon(icon);
+			} else {
+				retVal.setIcon(null);
+			}
+			
+			if(tblModel.isOpenQuery(row)) {
+				retVal.setFont(retVal.getFont().deriveFont(Font.ITALIC));
+			}
+			
+			return retVal;
+		}
 	}
 	
 	/**

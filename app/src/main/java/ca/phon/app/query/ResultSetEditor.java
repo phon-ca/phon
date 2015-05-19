@@ -177,6 +177,7 @@ public class ResultSetEditor extends ProjectFrame {
 		
 		try {
 			this.session = project.openSession(rs.getCorpus(), rs.getSession());
+			putExtension(Session.class, this.session);
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
@@ -623,6 +624,10 @@ public class ResultSetEditor extends ProjectFrame {
 	
 	public void setTempProject(Project project) {
 		this.tempProject = project;
+	}
+	
+	public Session getSession() {
+		return this.session;
 	}
 	
 	public Query getQuery() {
