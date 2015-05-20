@@ -167,4 +167,16 @@ public class TestOrthographyParser {
 		}
 	}
 	
+	@Test
+	public void testWordnets() throws ParseException {
+		final String[] wordnets = new String[]{ "one+two", "one+two+three", "a~b~c", "yo~ma+ma" };
+		for(String wd:wordnets) {
+			final Orthography ortho = Orthography.parseOrthography(wd);
+			
+			Assert.assertEquals(1, ortho.length());
+			Assert.assertEquals(wd, ortho.toString());
+			Assert.assertEquals(OrthoWordnet.class, ortho.elementAt(0).getClass());
+		}
+	}
+	
 }

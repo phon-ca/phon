@@ -21,7 +21,7 @@ package ca.phon.orthography;
 /**
  * Two words joined by a marker.
  */
-public class OrthoWordnet extends AbstractOrthoElement {
+public class OrthoWordnet extends OrthoWord {
 	
 	private final OrthoWord word1;
 	
@@ -34,7 +34,7 @@ public class OrthoWordnet extends AbstractOrthoElement {
 	}
 	
 	public OrthoWordnet(OrthoWord word1, OrthoWord word2, OrthoWordnetMarker marker) {
-		super();
+		super("");
 		this.word1 = word1;
 		this.word2 = word2;
 		this.marker = marker;

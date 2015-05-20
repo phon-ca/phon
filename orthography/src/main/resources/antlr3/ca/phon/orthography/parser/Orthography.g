@@ -77,14 +77,28 @@ word returns [OrthoWord word]
 	}
 	;
 	
-wordnet returns [OrthoWordnet wordnet]
-	:	w1=word WORDNET_MARKER w2=word
+wordnet returns [OrthoWordnet wdnet]
+scope {
+	List<OrthoWord> words;
+	List<OrthoWordnetMarker> markers;
+}
+@init {
+	$wordnet::words = new ArrayList<OrthoWord>();
+	$wordnet::markers = new ArrayList<OrthoWordnetMarker>();
+}
+	:	w1=word (mk=WORDNET_MARKER { $wordnet::markers.add(OrthoWordnetMarker.fromMarker($mk.text.charAt(0))); } w2=word { $wordnet::words.add($w2.word); } )+
 	{
 		final OrthoWord word1 = $w1.word;
-		final OrthoWord word2 = $w2.word;
-		final OrthoWordnetMarker marker = OrthoWordnetMarker.fromMarker($WORDNET_MARKER.text.charAt(0));
+		final OrthoWord word2 = $wordnet::words.get(0);
+		final OrthoWordnetMarker marker = $wordnet::markers.get(0);
 		
-		$wordnet = new OrthoWordnet(word1, word2, marker); 
+		$wdnet = new OrthoWordnet(word1, word2, marker); 
+		for(int wordIdx = 1; wordIdx < $wordnet::words.size(); wordIdx++) {
+			OrthoWord nextWord = $wordnet::words.get(wordIdx);
+			OrthoWordnetMarker nextMarker = $wordnet::markers.get(wordIdx);
+			
+			$wdnet = new OrthoWordnet($wdnet, nextWord, nextMarker);
+		}
 	}
 	;
 	
@@ -129,7 +143,7 @@ orthoElement
 	}
 	|	wordnet
 	{
-		builder.append($wordnet.wordnet);
+		builder.append($wordnet.wdnet);
 	}
 	|	comment
 	{
