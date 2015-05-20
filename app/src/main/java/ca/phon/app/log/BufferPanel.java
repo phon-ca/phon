@@ -63,6 +63,7 @@ import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -396,33 +397,40 @@ public class BufferPanel extends JPanel {
 			// load session
 			SessionEditor editor = null;
 			// get values for each column
-			if(sessionColumn >= 0) {
+			
+			SessionPath sp = new SessionPath();
+			
+			if(sessionColumn >= 0 && primarySession == null) {
 				String sessionTxt = tblModel.getValueAt(row, sessionColumn).toString();
 				if(sessionTxt == null || sessionTxt.length() == 0 || sessionTxt.indexOf('.') < 0) return null;
 				String[] sessionPath = sessionTxt.split("\\.");
 				if(sessionPath.length != 2) return null;
-				
-				// load session editor (if necessary)
-				final EntryPointArgs epArgs = new EntryPointArgs();
-				epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
-				epArgs.put(EntryPointArgs.CORPUS_NAME, sessionPath[0]);
-				epArgs.put(EntryPointArgs.SESSION_NAME, sessionPath[1]);
-				try {
-					PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
-				} catch (PluginException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					return null;
-				}
-				
-				// find session editor
-				for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
-					if(openWindow instanceof SessionEditor) {
-						final SessionEditor currentEditor = (SessionEditor)openWindow;
-						if(currentEditor.getSession().getCorpus().equals(sessionPath[0])
-								&& currentEditor.getSession().getName().equals(sessionPath[1])) {
-							editor = (SessionEditor)openWindow;
-							break;
-						}
+				sp.setCorpus(sessionPath[0]);
+				sp.setSession(sessionPath[1]);
+			} else if(primarySession != null) {
+				sp.setCorpus(primarySession.getCorpus());
+				sp.setSession(primarySession.getName());
+			}
+			// load session editor (if necessary)
+			final EntryPointArgs epArgs = new EntryPointArgs();
+			epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
+			epArgs.put(EntryPointArgs.CORPUS_NAME, sp.getCorpus());
+			epArgs.put(EntryPointArgs.SESSION_NAME, sp.getSession());
+			try {
+				PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
+			} catch (PluginException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				return null;
+			}
+			
+			// find session editor
+			for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
+				if(openWindow instanceof SessionEditor) {
+					final SessionEditor currentEditor = (SessionEditor)openWindow;
+					if(currentEditor.getSession().getCorpus().equals(sp.getCorpus())
+							&& currentEditor.getSession().getName().equals(sp.getSession())) {
+						editor = (SessionEditor)openWindow;
+						break;
 					}
 				}
 			}
@@ -436,8 +444,7 @@ public class BufferPanel extends JPanel {
 			editor.setCurrentRecordIndex(recordNum);
 			
 			if(tierColumn >= 0 && groupColumn >= 0) {
-				// attempt to setup highlighting
-				
+				// TODO attempt to setup highlighting
 			}
 			
 			return null;
