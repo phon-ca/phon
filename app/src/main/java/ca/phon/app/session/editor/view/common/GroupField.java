@@ -55,6 +55,7 @@ import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoManager;
 
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
@@ -129,13 +130,21 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		setBackground(new Color(255,255,255,0));
 		setOpaque(false);
 		_init();
+		hasChanges = false;
 		tier.addTierListener(tierListener);
 		addFocusListener(focusListener);
 		
 		getDocument().addDocumentListener(docListener);
 		getDocument().addUndoableEditListener(undoManager);
-//		getDocument().putProperty("i18n", Boolean.TRUE);
-		
+		getDocument().addUndoableEditListener( (e) -> {
+			if(hasChanges && hasFocus()) {
+				CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+				if(cmf != null && cmf instanceof SessionEditor) {
+					SessionEditor editor = (SessionEditor)cmf;
+					editor.setModified(true);
+				}
+			}
+		});
 		errHighlighter.install(this);
 	}
 	
