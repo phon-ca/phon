@@ -265,7 +265,11 @@ public class FindManager {
 				String searchTier = searchTiers.get(tierIdx);
 
 				final Tier<?> tier = currentUtt.getTier(searchTier);
-				if(tier == null) continue;
+				if(tier == null) {
+					tierIdx++;
+					grpIdx = 0;
+					continue;
+				}
 				
 				for(int i = grpIdx; i < tier.numberOfGroups(); i++) {
 					Range charRange = null;
