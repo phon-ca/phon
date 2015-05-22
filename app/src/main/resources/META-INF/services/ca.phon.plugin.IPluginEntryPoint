@@ -53,3 +53,5 @@ ca.phon.app.project.ExportSessionEP
 ca.phon.app.project.AnonymizeParticipantInfoEP
 # About Phon
 ca.phon.app.about.AboutDialogEP
+# Log Viewer
+ca.phon.app.log.LogViewerEP

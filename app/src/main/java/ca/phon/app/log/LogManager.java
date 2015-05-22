@@ -18,8 +18,12 @@
  */
 package ca.phon.app.log;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import ca.phon.util.PrefHelper;
 
@@ -37,6 +41,12 @@ public class LogManager {
 	
 	private final static String DEFAULT_PROPERTIES_FILE = 
 			"ca/phon/app/log/phonlog.properties";
+	
+	public final static String LOG_FILE = 
+			PrefHelper.getUserDataFolder() + File.separator + "phon.log.0";
+	
+	public final static String PREV_LOG_FILE =
+			PrefHelper.getUserDataFolder() + File.separator + "phon.log.1";
 	
 	public static LogManager getInstance() {
 		return _instance;
@@ -64,6 +74,28 @@ public class LogManager {
 	public void shutdownLogging() {
 		final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
 		manager.reset();
+	}
+	
+	public String readLogFile() throws IOException {
+		return readFile(LOG_FILE);
+	}
+	
+	public String readPreviousLogFile() throws IOException {
+		return readFile(PREV_LOG_FILE);
+	}
+	
+	private String readFile(String filename) throws IOException {
+		final StringBuffer buffer = new StringBuffer();
+		
+		final BufferedReader reader = 
+				new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+		String line = null;
+		while((line = reader.readLine()) != null) {
+			buffer.append(line).append('\n');
+		}
+		reader.close();
+		
+		return buffer.toString();
 	}
 	
 }

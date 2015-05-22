@@ -173,6 +173,13 @@ public class BufferPanel extends JPanel {
 		return showingBuffer;
 	}
 	
+	public void clear() {
+		getLogBuffer().setText("");
+		if(!isShowingBuffer()) {
+			onSwapBuffer();
+		}
+	}
+	
 	private void init() {
 		setLayout(new BorderLayout());
 		

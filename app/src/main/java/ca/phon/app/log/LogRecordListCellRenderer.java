@@ -41,9 +41,9 @@ public class LogRecordListCellRenderer extends DefaultListCellRenderer {
 	 * Icons
 	 */
 	enum LogRecordIcon {
-		INFO(""),
-		WARNING(""),
-		SEVERE("");
+		INFO("blank"),
+		WARNING("status/dialog-warning"),
+		SEVERE("status/dialog-error");
 		
 		private String iconName;
 		

@@ -31,6 +31,7 @@ import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
 import ca.phon.app.menu.help.HelpCommand;
+import ca.phon.app.menu.help.LogCommand;
 import ca.phon.app.menu.query.QueryMenuListener;
 import ca.phon.app.menu.tools.BasicSyllabifierTestCommand;
 import ca.phon.app.menu.tools.IpaMapCommand;
@@ -167,6 +168,9 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 */
 	protected void addHelpMenu(Window owner, JMenuBar menu) {
 		JMenu helpMenu = new JMenu("Help");
+		
+		final JMenuItem logItem = new JMenuItem(new LogCommand());
+		helpMenu.add(logItem);
 		
 		// about
 		final JMenuItem aboutItem = new JMenuItem(new HelpCommand());
