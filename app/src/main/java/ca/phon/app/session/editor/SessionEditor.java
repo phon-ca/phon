@@ -593,7 +593,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			final File sessionFile = 
 					new File(new File(project.getLocation(), session.getCorpus()), session.getName() + ".xml");
 
-			final String msg = "Save finished, wrote " + humanReadableByteCount(sessionFile.length(), true) + " to disk.";
+			final String msg = "Save finished.  " + humanReadableByteCount(sessionFile.length(), true) + " written to disk.";
 			LOGGER.info(msg);
 			
 			// show a short messgae next to the save button to indicate save completed
