@@ -2010,24 +2010,9 @@
             </value>
         </from>
         <to>
-            <image>ɾ</image>
+            <image>ʀ</image>
             <value>
-                <codepoint>0x027e</codepoint>
-            </value>
-        </to>
-    </mapping>
-    <mapping>
-        <from>
-            <image>rr</image>
-            <value>
-                <codepoint>0x72</codepoint>
-                <codepoint>0x72</codepoint>
-            </value>
-        </from>
-        <to>
-            <image>r</image>
-            <value>
-                <codepoint>0x0072</codepoint>
+                <codepoint>0x0280</codepoint>
             </value>
         </to>
     </mapping>
