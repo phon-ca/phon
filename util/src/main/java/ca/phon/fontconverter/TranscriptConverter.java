@@ -18,10 +18,12 @@
  */
 package ca.phon.fontconverter;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
@@ -32,6 +34,8 @@ import ca.phon.fontconverter.io.ConversionTable;
 import ca.phon.fontconverter.io.MappingType;
 import ca.phon.fontconverter.io.TokenType;
 import ca.phon.fontconverter.io.UnicodeSequenceType;
+import ca.phon.util.resources.ClassLoaderHandler;
+import ca.phon.util.resources.ResourceLoader;
 import de.susebox.jtopas.StandardTokenizer;
 import de.susebox.jtopas.StandardTokenizerProperties;
 import de.susebox.jtopas.StringSource;
@@ -47,87 +51,54 @@ import de.susebox.jtopas.TokenizerProperties;
  */
 public class TranscriptConverter {
 	
+	private final String name;
+	
 	/** The tokenizer */
 	private final Tokenizer tokenizer;
 	
-	/** The static instances */
-	private static Hashtable<String, TranscriptConverter> _instances = 
-		new Hashtable<String, TranscriptConverter>();
+	private static ResourceLoader<TranscriptConverter> loader;
 	
-	private final static File convDir = new File("data/conv");
-	
-	private static Hashtable<String, File> converters = null;
-	
-	/** 
-	 * Get an instance of a converter given the file path.
-	 */
-	public static TranscriptConverter getInstanceOf(File file) {
-		if(_instances.get(file) == null) {
-			Tokenizer tokenizer = getTokenizerFromFile(file);
-			_instances.put(file.getAbsolutePath(), new TranscriptConverter(tokenizer));
-		}
-		
-		return _instances.get(file.getAbsolutePath());
-	}
+	private final static String CONV_LIST = "data/conv/conv.list";
 	
 	/**
 	 * Get an instance of a converter given the font name
 	 */
 	public static TranscriptConverter getInstanceOf(String name) {
-		if(converters == null) {
-			// create list of converters
-			getAvailableConverterNames();
+		if(loader == null) {
+			loader = new ResourceLoader<>();
+			final TranscriptConverterHandler handler = new TranscriptConverterHandler();
+			handler.loadResourceFile(CONV_LIST);
+			loader.addHandler(handler);
 		}
 		
-		if(converters.get(name) != null) {
-			return getInstanceOf(converters.get(name));
-		} else {
-			return null;
+		TranscriptConverter retVal = null;
+		for(TranscriptConverter tc:loader) {
+			if(tc.getName().equals(name)) {
+				retVal = tc;
+				break;
+			}
 		}
+		return retVal;
 	}
 	
 	public static Collection<String> getAvailableConverterNames() {
-		if(converters == null) {
-			converters = new Hashtable<String, File>();
+		final List<String> retVal = new ArrayList<>();
+		for(TranscriptConverter converter:loader) {
+			retVal.add(converter.getName());
 		}
-		converters.clear();
-		
-		if(!convDir.isDirectory())
-			return new ArrayList<String>();
-		
-		Unmarshaller unmarshaller = null;
-		try {
-			JAXBContext context = JAXBContext.newInstance("ca.phon.util.transconv.io");
-			unmarshaller = context.createUnmarshaller();
-		} catch (JAXBException jaxbEx) {
-			Logger.getLogger(TranscriptConverter.class.getName()).warning(jaxbEx.getMessage());
-		}
-		
-		for(String f:convDir.list()) {
-			if(f.endsWith(".xml")) {
-				try {
-					ConversionTable convTbl = 
-						(ConversionTable)unmarshaller.unmarshal(new File(convDir.getAbsolutePath() + File.separator + f));
-					converters.put(convTbl.getFontName(), new File(convDir.getAbsolutePath() + File.separator + f));
-				} catch (JAXBException jaxbEx) {
-					Logger.getLogger(TranscriptConverter.class.getName()).warning(jaxbEx.getMessage());
-				}
-			}
-		}
-		return converters.keySet();
+		return retVal;
 	}
 	
-	private static Tokenizer getTokenizerFromFile(File file) {
-		
+	private static TranscriptConverter loadConverterFromURL(URL url) throws IOException {
 		TokenizerProperties props = new StandardTokenizerProperties();
 		props.setSeparators("#");
 		props.removeWhitespaces(" ");
 		
-		try {
+		try(InputStream is = url.openStream()) {
 			// create the unmarshaller
 			JAXBContext jaxbContext = JAXBContext.newInstance("ca.phon.util.transconv.io");
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			ConversionTable convTbl = (ConversionTable)unmarshaller.unmarshal(file);
+			ConversionTable convTbl = (ConversionTable)unmarshaller.unmarshal(is);
 			
 			for(MappingType mapping:convTbl.getMapping()) {
 				TokenType from = mapping.getFrom();
@@ -138,11 +109,12 @@ public class TranscriptConverter {
 				
 				props.addSpecialSequence(tokenString, toString);
 			}
+			final StandardTokenizer tokenizer = new StandardTokenizer(props);
+			return new TranscriptConverter(convTbl.getFontName(), tokenizer);
 		} catch (JAXBException jaxbEx) {
 			Logger.getLogger(TranscriptConverter.class.getName()).warning(jaxbEx.getMessage());
+			throw new IOException(jaxbEx);
 		}
-		
-		return new StandardTokenizer(props);
 	}
 	
 	private static String stringFromUnicodeSequence(UnicodeSequenceType seq) {
@@ -157,11 +129,20 @@ public class TranscriptConverter {
 	}
 	
 	/** Constructor - hidden */
-	protected TranscriptConverter(Tokenizer tokenizer) {
+	protected TranscriptConverter(String name, Tokenizer tokenizer) {
 		super();
+		this.name = name;
 		this.tokenizer = tokenizer;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public Tokenizer getTokenizer() {
+		return tokenizer;
+	}
+
 	/**
 	 * Convert the transcript
 	 */
@@ -184,5 +165,20 @@ public class TranscriptConverter {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Handler for loading transcript converters
+	 */
+	private static class TranscriptConverterHandler extends ClassLoaderHandler<TranscriptConverter> {
+		
+		public TranscriptConverterHandler() {
+		}
+
+		@Override
+		public TranscriptConverter loadFromURL(URL url) throws IOException {
+			return loadConverterFromURL(url);
+		}
+		
 	}
 }
