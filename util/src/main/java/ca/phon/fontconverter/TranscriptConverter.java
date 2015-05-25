@@ -56,21 +56,19 @@ public class TranscriptConverter {
 	/** The tokenizer */
 	private final Tokenizer tokenizer;
 	
-	private static ResourceLoader<TranscriptConverter> loader;
-	
 	private final static String CONV_LIST = "data/conv/conv.list";
+	private static ResourceLoader<TranscriptConverter> loader;
+	static {
+		loader = new ResourceLoader<>();
+		final TranscriptConverterHandler handler = new TranscriptConverterHandler();
+		handler.loadResourceFile(CONV_LIST);
+		loader.addHandler(handler);
+	}
 	
 	/**
 	 * Get an instance of a converter given the font name
 	 */
 	public static TranscriptConverter getInstanceOf(String name) {
-		if(loader == null) {
-			loader = new ResourceLoader<>();
-			final TranscriptConverterHandler handler = new TranscriptConverterHandler();
-			handler.loadResourceFile(CONV_LIST);
-			loader.addHandler(handler);
-		}
-		
 		TranscriptConverter retVal = null;
 		for(TranscriptConverter tc:loader) {
 			if(tc.getName().equals(name)) {
@@ -96,7 +94,7 @@ public class TranscriptConverter {
 		
 		try(InputStream is = url.openStream()) {
 			// create the unmarshaller
-			JAXBContext jaxbContext = JAXBContext.newInstance("ca.phon.util.transconv.io");
+			JAXBContext jaxbContext = JAXBContext.newInstance("ca.phon.fontconverter.io");
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			ConversionTable convTbl = (ConversionTable)unmarshaller.unmarshal(is);
 			
