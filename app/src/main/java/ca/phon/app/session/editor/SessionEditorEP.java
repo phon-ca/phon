@@ -80,7 +80,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		final Project project = epArgs.getProject();
 		
 		String corpusName = epArgs.getCorpus();
-		String sessionLoc = epArgs.get(EntryPointArgs.SESSION_NAME).toString();
+		String sessionLoc = (String)epArgs.get(EntryPointArgs.SESSION_NAME);
 		String sessionName = sessionLoc;
 		if(corpusName == null && sessionLoc != null) {
 			int firstDot = sessionLoc.indexOf('.');
