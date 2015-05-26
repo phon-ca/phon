@@ -18,6 +18,7 @@
  */
 package ca.phon.app.project;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -130,21 +131,27 @@ public class CopySessionEP implements IPluginEntryPoint {
 		
 		project1 = args.getProject();
 		corpus1 = args.getCorpus();
-		session = args.getSession().getName();
+		try {
+			session = args.getSession().getName();
+
+			if(initInfo.get("destproject") != null)
+				project2 = (Project)args.get("destproject");
+			
+			if(initInfo.get("destcorpus") != null)
+				corpus2 = (String)initInfo.get("destcorpus");
+			
+			if(initInfo.get("overwrite") != null)
+				force = (Boolean)initInfo.get("overwrite");
+			
+			if(initInfo.get("move") != null)
+				move = (Boolean)initInfo.get("move");
+			
+			begin();
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 		
-		if(initInfo.get("destproject") != null)
-			project2 = (Project)args.get("destproject");
-		
-		if(initInfo.get("destcorpus") != null)
-			corpus2 = (String)initInfo.get("destcorpus");
-		
-		if(initInfo.get("overwrite") != null)
-			force = (Boolean)initInfo.get("overwrite");
-		
-		if(initInfo.get("move") != null)
-			move = (Boolean)initInfo.get("move");
-		
-		begin();
 	}
 	
 	private void begin() {

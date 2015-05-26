@@ -22,7 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -155,16 +154,13 @@ public class AutosaveManager {
 					if(editor.isModified()) {
 						final Project project = editor.getProject();
 						final Session session = editor.getSession();
+						final Autosaves autosaves = project.getExtension(Autosaves.class);
 						
 						LOGGER.info("Autosaving session '" + 
 								session.getCorpus() + "." + session.getName() + "'...");
 						
 						try {
-							final UUID writeLock = project.getSessionWriteLock(session.getCorpus(), 
-									AUTOSAVE_PREFIX + session.getName());
-							project.saveSession(session.getCorpus(), AUTOSAVE_PREFIX + session.getName(), 
-									session, writeLock);
-							project.releaseSessionWriteLock(session.getCorpus(), AUTOSAVE_PREFIX + session.getName(), writeLock);
+							autosaves.createAutosave(session);
 						} catch (IOException e1) {
 							LOGGER.log(Level.SEVERE,
 									e1.getLocalizedMessage(), e1);

@@ -19,12 +19,15 @@
 package ca.phon.app.session.editor;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
+import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.IPluginEntryPoint;
@@ -74,14 +78,61 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	public void pluginStart(Map<String, Object> args) {
 		final EntryPointArgs epArgs = new EntryPointArgs(args);
 		final Project project = epArgs.getProject();
-		final Session session = epArgs.getSession();
+		
+		String corpusName = epArgs.getCorpus();
+		String sessionLoc = epArgs.get(EntryPointArgs.SESSION_NAME).toString();
+		String sessionName = sessionLoc;
+		if(corpusName == null && sessionLoc != null) {
+			int firstDot = sessionLoc.indexOf('.');
+			if(firstDot > 0) {
+				corpusName = sessionLoc.substring(0, firstDot);
+				sessionName = sessionLoc.substring(firstDot+1);
+			}
+		}
+		
+		final AtomicReference<Session> sessionRef = new AtomicReference<>();
+		try {
+			sessionRef.set(epArgs.getSession());
+		} catch (IOException e1) {
+			Toolkit.getDefaultToolkit().beep();
+			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			props.setRunAsync(false);
+			props.setTitle("Unable to open session");
+			props.setHeader("Unabel to open session");
+			props.setOptions(MessageDialogProperties.okCancelOptions);
+			
+			// unable to open, check autosave!
+			final Autosaves autosaves = project.getExtension(Autosaves.class);
+			if(autosaves != null && autosaves.hasAutosave(corpusName, sessionName)) {
+				// ask to open autosave file
+				props.setMessage("An autosave file was found for this session, open autosave file?");
+				int retVal = NativeDialogs.showMessageDialog(props);
+				if(retVal == 1) return;
+				
+				try {
+					final Session autosaveSession = autosaves.openAutosave(corpusName, sessionName);
+					sessionRef.set(autosaveSession);
+				} catch (IOException e2) {
+					LOGGER.log(Level.SEVERE, e2.getLocalizedMessage(), e2);
+				}
+			} else {
+				props.setMessage(e1.getLocalizedMessage());
+				props.setOptions(MessageDialogProperties.okOptions);
+				NativeDialogs.showMessageDialog(props);
+				
+				return;
+			}
+		}
+		
 		// Are we in blind mode?
 		final boolean blindMode = 
 				(args.get("blindmode") != null ? (Boolean)args.get("blindmode") : false);
 		
 		final Runnable onEdt = new Runnable() {
 			public void run() {
-				showEditor(project, session, blindMode);
+				showEditor(project, sessionRef.get(), blindMode);
 			}
 		};
 		if(SwingUtilities.isEventDispatchThread())

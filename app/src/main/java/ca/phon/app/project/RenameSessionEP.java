@@ -21,6 +21,7 @@ package ca.phon.app.project;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -369,27 +370,33 @@ public class RenameSessionEP implements IPluginEntryPoint {
 		project = args.getProject();
 		
 		final String corpusName = args.getCorpus();
-		final String oldName = args.getSession().getName();
+	
+		try {
+			String oldName = args.getSession().getName();
+			if(args.get("newSession") == null) {
+				final Runnable onEDT = new Runnable() {
+					
+					@Override
+					public void run() {
+						JDialog dlg =
+								(corpusName == null || oldName == null ? new RenameSessionDialog() : new RenameSessionDialog(corpusName, oldName));		
+						dlg.setModal(true);
+						dlg.setVisible(true);
+					}
+				};
+				if(SwingUtilities.isEventDispatchThread())
+					onEDT.run();
+				else
+					SwingUtilities.invokeLater(onEDT);
+			} else {
+				String newSession = initInfo.get("newSession").toString();
+				renameSession(corpusName, oldName, newSession);
+			}		
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 		
-		if(args.get("newSession") == null) {
-			final Runnable onEDT = new Runnable() {
-				
-				@Override
-				public void run() {
-					JDialog dlg =
-							(corpusName == null || oldName == null ? new RenameSessionDialog() : new RenameSessionDialog(corpusName, oldName));		
-					dlg.setModal(true);
-					dlg.setVisible(true);
-				}
-			};
-			if(SwingUtilities.isEventDispatchThread())
-				onEDT.run();
-			else
-				SwingUtilities.invokeLater(onEDT);
-		} else {
-			String newSession = initInfo.get("newSession").toString();
-			renameSession(corpusName, oldName, newSession);
-		}		
 	}
 
 }

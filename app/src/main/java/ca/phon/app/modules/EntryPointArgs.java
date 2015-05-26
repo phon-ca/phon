@@ -175,7 +175,7 @@ public class EntryPointArgs extends HashMap<String, Object> {
 	 * 
 	 * @return session or <code>null</code> if not specified
 	 */
-	public Session getSession() {
+	public Session getSession() throws IOException {
 		Session retVal = null;
 		
 		final Object sessionObj = get(SESSION_OBJECT);
@@ -197,12 +197,13 @@ public class EntryPointArgs extends HashMap<String, Object> {
 					}
 				}
 				if(corpus != null && session != null) {
-					try {
-						retVal = project.openSession(corpus, session);
-					} catch (IOException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					}
+					retVal = project.openSession(corpus, session);
+				} else {
+					throw new IOException("Session location not specified.  Corpus: " + corpus
+							+ ", Session: " + session);
 				}
+			} else {
+				throw new IOException("Project not specified");
 			}
 		}
 		
