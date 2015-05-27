@@ -53,7 +53,9 @@
 ### Other
 
  * Added IPA transcript conversion for SILDoulosIPA93
+ * Added IPA transcript conversion for Germain-SAMPA
  * Added new window for displaying logs for the current and previous execution of Phon.  Window is available from the Help menu.
+ * Changed name of application logs to phon0.log and phon1.log for current and previous logs respectively.
 
 ### Bugs
 
