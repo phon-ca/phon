@@ -38,6 +38,8 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 	// the insertion point
 	private final int index;
 	
+	private boolean fireEvent = true;
+	
 	public AddRecordEdit(SessionEditor editor) {
 		this(editor, null, -1);
 	}
@@ -50,6 +52,14 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 		super(editor);
 		this.record = record;
 		this.index = index;
+	}
+
+	public void setFireEvent(boolean fireEvent) {
+		this.fireEvent = fireEvent;
+	}
+	
+	public boolean isFireEvent() {
+		return this.fireEvent;
 	}
 	
 	@Override
@@ -70,7 +80,8 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 		final Session session = editor.getSession();
 		
 		session.removeRecord(record);
-		queueEvent(EditorEventType.RECORD_DELETED_EVT, editor.getUndoSupport(), record);
+		if(isFireEvent())
+			queueEvent(EditorEventType.RECORD_DELETED_EVT, editor.getUndoSupport(), record);
 	}
 	
 	@Override
@@ -90,7 +101,9 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 			session.addRecord(record);
 		else
 			session.addRecord(index, record);
-		queueEvent(EditorEventType.RECORD_ADDED_EVT, getSource(), record);
+		
+		if(isFireEvent())
+			queueEvent(EditorEventType.RECORD_ADDED_EVT, getSource(), record);
 	}
 
 }
