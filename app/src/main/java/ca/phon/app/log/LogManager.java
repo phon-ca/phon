@@ -43,10 +43,10 @@ public class LogManager {
 			"ca/phon/app/log/phonlog.properties";
 	
 	public final static String LOG_FILE = 
-			PrefHelper.getUserDataFolder() + File.separator + "phon.log.0";
+			PrefHelper.getUserDataFolder() + File.separator + "phon0.log";
 	
 	public final static String PREV_LOG_FILE =
-			PrefHelper.getUserDataFolder() + File.separator + "phon.log.1";
+			PrefHelper.getUserDataFolder() + File.separator + "phon1.log";
 	
 	public static LogManager getInstance() {
 		return _instance;
