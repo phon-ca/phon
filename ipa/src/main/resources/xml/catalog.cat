@@ -1,3 +1,2 @@
-SYSTEM "http://phon.ling.mun.ca/ns/features" "xml/xsd/features.xsd"
-SYSTEM "http://phon.ling.mun.ca/ns/ipa" "xml/xsd/ipa.xsd"
-SYSTEM "http://phon.ling.mun.ca/ns/syllabifier" "xml/xsd/syllabifier.xsd"
+SYSTEM "https://phon.ca/ns/features" "xml/xsd/features.xsd"
+SYSTEM "https://phon.ca/ns/ipa" "xml/xsd/ipa.xsd"
