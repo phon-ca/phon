@@ -155,7 +155,10 @@ public class AutoTranscriber {
 			final OrthoElement orthoEle = word.getOrthography();
 			final OrthoLookupVisitor visitor = new OrthoLookupVisitor(getDictionary());
 			visitor.visit(orthoEle);
-			final OrthoWordIPAOptions ipaExt = orthoEle.getExtension(OrthoWordIPAOptions.class);
+			final OrthoWordIPAOptions ipaExt =
+					orthoEle.getExtension(OrthoWordIPAOptions.class);
+			if(ipaExt == null) continue;
+			
 			final List<String> ipaOpts = ipaExt.getOptions();
 			final int selectedOption = 
 					(ipaExt.getSelectedOption() >= 0 && ipaExt.getSelectedOption() < ipaOpts.size() ? 
@@ -223,7 +226,9 @@ public class AutoTranscriber {
 							new BlindTierEdit(getEditor(), record.getIPATarget(), i, getTranscriber(), 
 									autoTranscription.getObj1(), grpVal);
 				} else {
-					IPATranscript currentValue = record.getIPATarget().getGroup(i);
+					IPATranscript currentValue = 
+							(record.getIPATarget().numberOfGroups() > i ? 
+									record.getIPATarget().getGroup(i) : new IPATranscript());
 					IPATranscript newValue = autoTranscription.getObj1();
 					
 					AlternativeTranscript alts = 
@@ -246,7 +251,9 @@ public class AutoTranscriber {
 							new BlindTierEdit(getEditor(), record.getIPAActual(), i, getTranscriber(),
 									autoTranscription.getObj2(), grpVal);
 				} else {
-					IPATranscript currentValue = record.getIPAActual().getGroup(i);
+					IPATranscript currentValue = 
+							(record.getIPAActual().numberOfGroups() > i ?
+									record.getIPAActual().getGroup(i) : new IPATranscript());
 					IPATranscript newValue = autoTranscription.getObj2();
 					
 					AlternativeTranscript alts =
