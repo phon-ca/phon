@@ -39,6 +39,7 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 
@@ -53,9 +54,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	public final static String PROJECTPATH_PROPERTY = 
 		"ca.phon.modules.core.OpenProjectController.projectpath";
 	
-//	public final static String PROJECT_UPGRADE_WARNING_ISSUED = 
-//		"ca.phon.modules.core.OpenProjectController.upgradewarningissued";
-
 	private String projectpath;
 	
 	@Override
@@ -88,15 +86,20 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	
 	//	 load the project
     private boolean loadLocalProject() {
+    	final MessageDialogProperties props = new MessageDialogProperties();
+    	props.setTitle("Open Project");
+    	props.setHeader("Could not open project");
+    	props.setRunAsync(false);
+    	props.setOptions(MessageDialogProperties.okOptions);
+    	props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+    	
     	try{
 			File myFile = new File(projectpath);
 			
 			// file does not exist, return
 			if(!myFile.exists()) {
-				NativeDialogs.showMessageDialogBlocking(
-						CommonModuleFrame.getCurrentFrame(), "",
-						"Project not found",
-						"Could not find a project at '" + projectpath + "'");
+				props.setMessage("Could not find a project at '" + projectpath + "'");
+				NativeDialogs.showMessageDialog(props);
 				return false;
 			}
 			
@@ -132,10 +135,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 					myFile = extractDir;
 					
 				} else {
-					NativeDialogs.showMessageDialogBlocking(
-							CommonModuleFrame.getCurrentFrame(), "",
-							"Failed to Open Project",
-							"Could not open project, see log for details.");
+					props.setMessage("Could not open project, see log for details.");
+					NativeDialogs.showMessageDialog(props);
 					return false;
 				}
 			}
@@ -168,21 +169,9 @@ public class OpenProjectEP implements IPluginEntryPoint {
 					initInfo.put("oldProjectPath", myFile.getAbsolutePath());
 					
 					PluginEntryPointRunner.executePluginOnNewThread("ConvertProject", initInfo);
-					
-//					ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.project.ConvertProjectController");
-//					LoadModule lm = new LoadModule(mi, initInfo);
-//					lm.start();
 				}
 				return true;
 			}
-			
-//			PhonEnvironment.getInstance().setCurrentProject(proj);
-			
-//			UserPrefManager.updateRecentProjects(proj.getLocation());
-//			
-//			ProjectRMIServer rmiServer = ProjectRMIServer.getInstance();
-//			rmiServer.startServer();
-//			rmiServer.registerProject(proj);
 			
 			ProjectWindow pwindow = new ProjectWindow(proj, proj.getLocation());
     		pwindow.pack();
@@ -194,8 +183,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 			// catch anything and report
 			LOGGER.severe(e.getMessage());
 			e.printStackTrace();
-			NativeDialogs.showMessageDialogBlocking(null, "", "Could not open project", 
-					e.getMessage());
+			props.setMessage(e.getLocalizedMessage());
+			NativeDialogs.showMessageDialog(props);
 		}
 		
 		return false;
@@ -210,12 +199,14 @@ public class OpenProjectEP implements IPluginEntryPoint {
 
 		BufferedOutputStream out = null;
 		BufferedInputStream in = null;
-		ZipFile zip = new ZipFile(zipFile);
-
+		
+		
 		// create output directory if it does not exist
 		if(destDir.exists() && !destDir.isDirectory()) {
 			throw new IOException("'" + destDir.getAbsolutePath() + "' is not a directory.");
 		}
+		
+		ZipFile zip = new ZipFile(zipFile);
 
 		if(!destDir.exists()) {
 			destDir.mkdirs();
@@ -257,6 +248,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				in.close();
 			}
 		}
+		zip.close();
 	}
 
 	@Override
@@ -280,12 +272,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		
 		@Override
 		public void run() {
-//			final boolean warningIssued = PrefHelper.getBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.FALSE);
-//			if(!warningIssued) {
-//				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Projects will be upgraded", 
-//						"Project changes made using this version of Phon may not be compatible with previous versions of Phon.");
-//				PrefHelper.getUserPreferences().putBoolean(PROJECT_UPGRADE_WARNING_ISSUED, Boolean.TRUE);
-//			}
 			loadProject();
 		}
 		
