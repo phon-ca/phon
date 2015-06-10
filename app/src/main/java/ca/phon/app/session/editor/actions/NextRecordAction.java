@@ -42,8 +42,8 @@ public class NextRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-next";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_N, (OSInfo.isMacOs() ? KeyEvent.CTRL_MASK : KeyEvent.ALT_MASK) );
-	
+			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0);
+					
 	public NextRecordAction(SessionEditor editor) {
 		super(editor);
 		

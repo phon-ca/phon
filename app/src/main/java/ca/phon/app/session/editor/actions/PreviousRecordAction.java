@@ -42,7 +42,7 @@ public class PreviousRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-previous";
 	
 	private final static KeyStroke KS =
-			KeyStroke.getKeyStroke(KeyEvent.VK_P, (OSInfo.isMacOs() ? KeyEvent.CTRL_MASK : KeyEvent.ALT_MASK) );
+			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
 	
 	public PreviousRecordAction(SessionEditor editor) {
 		super(editor);

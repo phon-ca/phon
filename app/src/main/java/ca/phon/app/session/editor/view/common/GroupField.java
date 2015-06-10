@@ -56,6 +56,8 @@ import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoManager;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.NextRecordAction;
+import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
@@ -63,6 +65,7 @@ import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 
 /**
@@ -200,6 +203,20 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		am.put(saveKey, saveAct);
 		im.put(saveKs, saveKey);
 		
+		final KeyStroke nextRecordKS = 
+				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0);
+		final String nextRecordKey = "_next_record_";
+		final PhonUIAction nextRecordAct = new PhonUIAction(this, "onNextRecord");
+		am.put(nextRecordKey, nextRecordAct);
+		im.put(nextRecordKS, nextRecordKey);
+		
+		final KeyStroke prevRecordKS =
+				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
+		final String prevRecordKey = "_prev_record_";
+		final PhonUIAction prevRecordAct = new PhonUIAction(this, "onPrevRecord");
+		am.put(prevRecordKey, prevRecordAct);
+		im.put(prevRecordKS, prevRecordKey);
+		
 		setActionMap(am);
 		setInputMap(WHEN_FOCUSED, im);
 	}
@@ -271,6 +288,26 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			cmf.saveData();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	public void onNextRecord(PhonActionEvent pae) {
+		// only does something when the parent frame is a session editor
+		CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+		if(cmf != null && cmf instanceof SessionEditor) {
+			final SessionEditor editor = (SessionEditor)cmf;
+			final NextRecordAction act = new NextRecordAction(editor);
+			act.actionPerformed(pae.getActionEvent());
+		}
+	}
+	
+	public void onPrevRecord(PhonActionEvent pae) {
+		// only does something when the parent frame is a session editor
+		CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+		if(cmf != null && cmf instanceof SessionEditor) {
+			final SessionEditor editor = (SessionEditor)cmf;
+			final PreviousRecordAction act = new PreviousRecordAction(editor);
+			act.actionPerformed(pae.getActionEvent());
 		}
 	}
 	
