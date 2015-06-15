@@ -1,0 +1,80 @@
+package ca.phon.app.project.git.actions;
+
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.actions.ProjectWindowAction;
+import ca.phon.app.project.git.ProjectGitController;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.worker.PhonWorker;
+
+/**
+ * Initialize new repository for project.  Will also setup default
+ * .gitignore file, add all files to the index, and finally commit
+ * all changes.
+ */
+public class InitAction extends ProjectWindowAction {
+	
+	private static final long serialVersionUID = 7839341789844508097L;
+
+	private final static Logger LOGGER =
+			Logger.getLogger(InitAction.class.getName());
+
+	public InitAction(ProjectWindow projectWindow) {
+		super(projectWindow);
+		
+		putValue(NAME, "Initialize Git Repository");
+		putValue(SHORT_DESCRIPTION, "Initialize a new git repository for the project");
+	}
+	
+	@Override
+	public void hookableActionPerformed(ActionEvent ae) {
+		final ProjectGitController gitController = new ProjectGitController(getWindow().getProject());
+
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setParentWindow(getWindow());
+		props.setTitle("Initialize Git Repository");
+		props.setHeader("Initialize Git Repository");
+		props.setRunAsync(true);
+		props.setOptions(MessageDialogProperties.okOptions);
+		
+		Runnable doInit = () -> {
+			final String msg = 
+					"Initializing git repository for project at " 
+							+ gitController.getRepositoryFolder() +"...";
+			getWindow().getStatusPanel().setIndeterminate(true);
+			getWindow().getStatusPanel().setMessageLabel(msg);
+			if(!gitController.hasGitFolder()) {
+				LOGGER.info(msg);
+				try(Git git = gitController.init()) {
+					LOGGER.info("Setting up default .gitignore");
+					gitController.setupDefaultGitIgnore();
+					LOGGER.info("Adding all files to index");
+					gitController.addToIndex(".");
+					LOGGER.info("Creating initial commit");
+					gitController.commitAllChanges("Initial commit");
+					
+					props.setMessage("Initialized new git repository at " 
+							+ git.getRepository().getDirectory().getAbsolutePath());
+				} catch (IOException | GitAPIException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					props.setMessage(e.getLocalizedMessage());
+				}
+			} else {
+				props.setMessage(".git folder already exists");
+			}
+			getWindow().getStatusPanel().setIndeterminate(false);
+			getWindow().getStatusPanel().setMessageLabel("");
+			NativeDialogs.showMessageDialog(props);
+		};
+		PhonWorker.getInstance().invokeLater(doInit);
+	}
+
+}

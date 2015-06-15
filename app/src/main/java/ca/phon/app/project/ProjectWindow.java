@@ -62,6 +62,8 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -72,6 +74,18 @@ import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.actions.AnonymizeAction;
+import ca.phon.app.project.actions.CheckTranscriptionsAction;
+import ca.phon.app.project.actions.DeriveSessionAction;
+import ca.phon.app.project.actions.NewCorpusAction;
+import ca.phon.app.project.actions.NewSessionAction;
+import ca.phon.app.project.actions.RefreshAction;
+import ca.phon.app.project.git.ProjectGitController;
+import ca.phon.app.project.git.actions.CommitAction;
+import ca.phon.app.project.git.actions.InitAction;
+import ca.phon.app.project.git.actions.PullAction;
+import ca.phon.app.project.git.actions.PushAction;
+import ca.phon.app.project.git.actions.StatusAction;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.app.workspace.WorkspaceTextStyler;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -130,7 +144,7 @@ public class ProjectWindow extends CommonModuleFrame
 	private JCheckBox blindModeBox;
 	
 	/** Label for messages */
-	private MessagePanel msgPanel;
+	private StatusPanel msgPanel;
 	
 	/** Project path (used to load the project) */
 	private String projectLoadPath = new String();
@@ -214,95 +228,69 @@ public class ProjectWindow extends CommonModuleFrame
 		}
 		
 		// refresh lists 
-		JMenuItem refreshItem = new JMenuItem("Refresh");
-		KeyStroke refreshKs = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
-		refreshItem.setAccelerator(refreshKs);
-		refreshItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				refreshProject();
-			}
-			
-		});
+		final RefreshAction refreshItem = new RefreshAction(this);
 		projectMenu.add(refreshItem);
 		projectMenu.addSeparator();
 		
 		// create corpus item
-		JMenuItem newCorpusItem = new JMenuItem("New Corpus...");
-		newCorpusItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				final Project pfe = getExtension(Project.class);
-				if(pfe != null) {
-					HashMap<String, Object> initInfo = 
-							new HashMap<String, Object>();
-					initInfo.put("project", pfe);
-					PluginEntryPointRunner.executePluginInBackground("NewCorpus", initInfo);
-				}
-			}
-			
-		});
+		final NewCorpusAction newCorpusItem = new NewCorpusAction(this);
 		projectMenu.add(newCorpusItem);
 		
 		//		 create corpus item
-		JMenuItem newSessionItem = new JMenuItem("New Session...");
-		newSessionItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = 
-					new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				initInfo.put(NewSessionEP.PROJECT_WINDOW_PROP, ProjectWindow.this);
-				
-				PluginEntryPointRunner.executePluginInBackground("NewSession", initInfo);
-			}
-			
-		});
+		final NewSessionAction newSessionItem = new NewSessionAction(this);
 		projectMenu.add(newSessionItem);
 		
 		projectMenu.addSeparator();
 		
-		JMenuItem anonymizeParticipantInfoItem = new JMenuItem("Anonymize Participant Information...");
-		anonymizeParticipantInfoItem.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				
-				PluginEntryPointRunner.executePluginInBackground(AnonymizeParticipantInfoEP.EP_NAME, initInfo);
-			}
-		});
+		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
 		projectMenu.add(anonymizeParticipantInfoItem);
 		
-		JMenuItem repairItem = new JMenuItem("Check Transcriptions...");
-		repairItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				
-				PluginEntryPointRunner.executePluginInBackground("CheckIPA", initInfo);
-			}
-			
-		});
+		final CheckTranscriptionsAction repairItem = new CheckTranscriptionsAction(this);
 		projectMenu.add(repairItem);
 		
 		// merge/split sessions
-		JMenuItem deriveItem = new JMenuItem("Derive Session...");
-		deriveItem.addActionListener(new ActionListener() {
-
+		final DeriveSessionAction deriveItem = new DeriveSessionAction(this);
+		projectMenu.add(deriveItem);
+		
+		final JMenu teamMenu = new JMenu("Team");
+		teamMenu.addMenuListener(new MenuListener() {
+			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				HashMap<String, Object> initInfo = new HashMap<String, Object>();
-				initInfo.put("project", getProject());
-				
-				PluginEntryPointRunner.executePluginInBackground("DeriveSession", initInfo);
+			public void menuSelected(MenuEvent e) {
+				teamMenu.removeAll();
+				if(getProject() != null) {
+					final ProjectGitController gitController = new ProjectGitController(getProject());
+					if(gitController.hasGitFolder()) {
+						teamMenu.add(new StatusAction(ProjectWindow.this));
+						
+						teamMenu.addSeparator();
+						teamMenu.add(new CommitAction(ProjectWindow.this));
+						
+						teamMenu.addSeparator();
+						
+						teamMenu.add(new PullAction(ProjectWindow.this));
+						teamMenu.add(new PushAction(ProjectWindow.this));
+						
+					} else {
+						final InitAction initRepoAct =
+								new InitAction(ProjectWindow.this);
+						teamMenu.add(initRepoAct);
+					}
+				}
 			}
 			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				
+			}
 		});
-		projectMenu.add(deriveItem);
+		projectMenu.addSeparator();
+		projectMenu.add(teamMenu);
 	}
 
 	private void init() {
@@ -401,11 +389,11 @@ public class ProjectWindow extends CommonModuleFrame
 					
 					msgPanel.reset();
 					msgPanel.setMessageLabel("Opening '" + corpus + "." + session + "'");
-					msgPanel.setItermediate(true);
+					msgPanel.setIndeterminate(true);
 					Runnable th = new Runnable() {
 						public void run() {
 							openSession(corpus, session);
-							msgPanel.setItermediate(false);
+							msgPanel.setIndeterminate(false);
 						}
 					};
 					PhonWorker.getInstance().invokeLater(th);
@@ -446,7 +434,7 @@ public class ProjectWindow extends CommonModuleFrame
 		blindModeBox = new JCheckBox("Blind transcription");
 		blindModeBox.setSelected(false);
 		
-		msgPanel = new MessagePanel();
+		msgPanel = new StatusPanel();
 		
 		corpusPanel = new JPanel(new BorderLayout());
 		corpusPanel.add(newCorpusButton, BorderLayout.NORTH);
@@ -1510,7 +1498,7 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionList.repaint();
 	}
 	
-	public MessagePanel getMessagePanel() {
+	public StatusPanel getStatusPanel() {
 		return msgPanel;
 	}
 	
@@ -1523,11 +1511,13 @@ public class ProjectWindow extends CommonModuleFrame
 		}
 	}
 	
-	private class MessagePanel extends JComponent {
-		private JLabel msgLabel = new JLabel("");
-		private JXBusyLabel progressBar = new JXBusyLabel(new Dimension(16, 16));
+	public class StatusPanel extends JComponent {
 		
-		public MessagePanel() {
+		private JLabel msgLabel = new JLabel("");
+		private JXBusyLabel progressBar = 
+				new JXBusyLabel(new Dimension(16, 16));
+		
+		public StatusPanel() {
 			super();
 			init();
 		}
@@ -1539,7 +1529,7 @@ public class ProjectWindow extends CommonModuleFrame
 			add(msgLabel);
 		}
 		
-		public void setItermediate(final boolean v) {
+		public void setIndeterminate(final boolean v) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				public void run() {
@@ -1563,7 +1553,7 @@ public class ProjectWindow extends CommonModuleFrame
 		}
 		
 		public void reset() {
-			setItermediate(false);
+			setIndeterminate(false);
 			setMessageLabel("");
 		}
 		
