@@ -61,6 +61,14 @@ public class AnalysisAction extends HookableAction {
 		this.reportScript = loadReportScript(reportScript);
 	}
 	
+	public QueryScript getQueryScript() {
+		return this.queryScript;
+	}
+	
+	public PhonScript getReportScript() {
+		return this.reportScript;
+	}
+	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final Project project = projectFrame.getExtension(Project.class);

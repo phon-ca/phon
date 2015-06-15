@@ -26,6 +26,8 @@ import javax.swing.JMenuItem;
 
 import ca.phon.app.query.analysis.actions.PCCAction;
 import ca.phon.app.query.analysis.actions.PMLUAction;
+import ca.phon.app.query.analysis.actions.PhoneAccuracyAction;
+import ca.phon.app.query.analysis.actions.PhoneInventoryAction;
 import ca.phon.app.query.analysis.actions.WordMatchAction;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -66,6 +68,9 @@ public class AnalysisMenuFilter implements IPluginMenuFilter, IPluginExtensionPo
 		headerItm.setEnabled(false);
 		
 		toolsMenu.add(headerItm);
+		toolsMenu.add(new PhoneInventoryAction((CommonModuleFrame)owner));
+		toolsMenu.add(new PhoneAccuracyAction((CommonModuleFrame)owner));
+		
 		toolsMenu.add(new WordMatchAction((CommonModuleFrame)owner));
 		
 		toolsMenu.add(new PCCAction((CommonModuleFrame)owner));
