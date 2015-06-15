@@ -52,6 +52,7 @@ public class PhoneInventoryAction extends AnalysisAction {
 			final ScriptParameters params 
 				= script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
 			params.setParamValue("filters.primary.filter", "\\w");
+			params.setParamValue("includeAligned", Boolean.FALSE);
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
