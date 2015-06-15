@@ -172,6 +172,16 @@ public class IpaTernaryTreeNode<V> {
 		return builder.reverse().toIPATranscript();
 	}
 	
+	public void acceptVisitMiddle(IpaTernaryTreeNodeVisitor<V> visitor) {
+		if(getLeft() != null)
+			getLeft().acceptVisitMiddle(visitor);
+		visitor.visit(this);
+		if(getCenter() != null)
+			getCenter().acceptVisitMiddle(visitor);
+		if(getRight() != null)
+			getRight().acceptVisitMiddle(visitor);
+	}
+	
 	public void acceptVisitLast(IpaTernaryTreeNodeVisitor<V> visitor) {
 		if(getLeft() != null) 
 			getLeft().acceptVisitLast(visitor);

@@ -123,7 +123,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 		lock.lock();
 		final IpaTernaryTreeNode<V> root = getRoot();
 		if(root != null)
-			root.acceptVisitLast(visitor);
+			root.acceptVisitMiddle(visitor);
 		lock.unlock();
 		return visitor.keySet;
 	}
@@ -134,7 +134,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 		lock.lock();
 		final IpaTernaryTreeNode<V> root = getRoot();
 		if(root != null)
-			root.acceptVisitLast(visitor);
+			root.acceptVisitMiddle(visitor);
 		lock.unlock();
 		return visitor.values;
 	}
@@ -145,7 +145,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 		lock.lock();
 		final IpaTernaryTreeNode<V> root = getRoot();
 		if(root != null)
-			root.acceptVisitLast(visitor);
+			root.acceptVisitMiddle(visitor);
 		lock.unlock();
 		return visitor.values;
 	}
@@ -158,7 +158,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 			if(node.isTerminated())
 				visitor.keySet.add(node.getPrefix());
 			if(node.getCenter() != null)
-				node.getCenter().acceptVisitLast(visitor);
+				node.getCenter().acceptVisitMiddle(visitor);
 		}
 		lock.unlock();
 		return visitor.keySet;
@@ -172,7 +172,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 			if(node.isTerminated())
 				visitor.values.add(node.getValue());
 			if(node.getCenter() != null)
-				node.getCenter().acceptVisitLast(visitor);
+				node.getCenter().acceptVisitMiddle(visitor);
 		}
 		lock.unlock();
 		return visitor.values;
@@ -186,7 +186,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 			if(node.isTerminated())
 				visitor.values.add(new Entry(node.getPrefix(), node.getValue()));
 			if(node.getCenter() != null) {
-				node.getCenter().acceptVisitLast(visitor);
+				node.getCenter().acceptVisitMiddle(visitor);
 			}
 		}
 		lock.unlock();
