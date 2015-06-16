@@ -18,7 +18,12 @@
  */
 package ca.phon.app.project;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ca.phon.session.Participant;
+import ca.phon.session.ParticipantRole;
+import ca.phon.session.Participants;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
@@ -31,6 +36,9 @@ import ca.phon.session.TierDescription;
  */
 public class SessionMerger {
 	
+	private Map<Participant, Participant> participantMap = 
+			new HashMap<>();
+	
 	/**
 	 * Merge the given sessions using the given
 	 * utterance filters.
@@ -39,8 +47,9 @@ public class SessionMerger {
 	 * @param src
 	 * @param filter
 	 */
-	public static void mergeSession(Session dest, Session src,
+	public void mergeSession(Session dest, Session src,
 			RecordFilter filter) {
+		participantMap.clear();
 		// add participants first
 		addParticipants(dest, src);
 		
@@ -54,7 +63,7 @@ public class SessionMerger {
 	 * Merge dependent tiers.
 	 * 
 	 */
-	public static void mergeDependentTiers(Session dest, Session src) {
+	public void mergeDependentTiers(Session dest, Session src) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		for(int i = 0; i < src.getUserTierCount(); i++) {
 			final TierDescription tierDesc = src.getUserTier(i);
@@ -83,18 +92,18 @@ public class SessionMerger {
 	 * @param src
 	 * @param filter
 	 */
-	private static void addRecordsFromSession(Session dest, 
+	private void addRecordsFromSession(Session dest, 
 			Session src, RecordFilter filter) {
 		for(int i = 0; i < src.getRecordCount(); i++) {
 			final Record r = src.getRecord(i);
 			if(filter.checkRecord(r)) {
+				r.setSpeaker(participantMap.get(r.getSpeaker()));
 				dest.addRecord(r);
 			}
 		}
 	}
 	
-	private static int partIdx = 0;
-	private static void addParticipants(Session dest, Session src) {
+	private void addParticipants(Session dest, Session src) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		// add each participant to the 
 		// new transcript.  Make sure not
@@ -108,12 +117,27 @@ public class SessionMerger {
 				final Participant dp = dest.getParticipant(j);
 				if(dp.toString().equalsIgnoreCase(speakerName)) {
 					destPart = dp;
+					participantMap.put(srcPart, destPart);
 					break;
 				}
 			}
 			
 			if(destPart == null) {
-				dest.addParticipant(srcPart);
+				String role = srcPart.getRole().getId();
+				// ensure unique ids for participants
+				Map<ParticipantRole, Integer> roleCount = dest.getParticipants().getRoleCount();
+				if(roleCount.get(srcPart.getRole()) != null
+						&& roleCount.get(srcPart.getRole()) > 0) {
+					int cnt = roleCount.get(srcPart.getRole());
+					role = srcPart.getRole().getId().substring(0, 2) + cnt;
+				}
+				
+				destPart = factory.createParticipant();
+				Participants.copyParticipantInfo(srcPart, destPart);
+				destPart.setId(role);
+				
+				participantMap.put(srcPart, destPart);
+				dest.addParticipant(destPart);
 			}
 		}
 		

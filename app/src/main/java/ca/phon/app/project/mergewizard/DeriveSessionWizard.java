@@ -238,7 +238,8 @@ public class DeriveSessionWizard extends WizardFrame {
 				}
 				
 				// merge this session info
-				SessionMerger.mergeSession(mergedSession, t, filter);
+				final SessionMerger merger = new SessionMerger();
+				merger.mergeSession(mergedSession, t, filter);
 			}
 			
 			if(mergedDate != null) {
