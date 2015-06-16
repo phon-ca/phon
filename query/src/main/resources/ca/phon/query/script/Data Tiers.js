@@ -69,7 +69,7 @@ function isGroupedTier(tierName) {
 	if(systemTierType == null) {
 		for(var i = 0; i < session.userTierCount; i++) {
 			var userTier = session.getUserTier(i);
-			if(userTier.tierName == tierName) {
+			if(userTier.name == tierName) {
 				retVal = userTier.isGrouped();
 				break;
 			}
