@@ -10,6 +10,7 @@ exports.HelpText = {
 	"phonexHelpText": 
 	    "<html><b>.</b> = any phone, <b>\\c or {c}</b> = consonant, <b>\\v or {v}</b> = vowel<br/>" 
 	    +"<b>.:o</b> = in onset, <b>[\\c\\v]</b> = consonant or vowel, <b>'[bp]'</b> = b or p (regex)<br/>" 
+	    +"<b>^</b> = beginning of input, <b>$</b> = end of input<br/>" 
 	    +"<b>*</b> = zero or more, <b>+</b> = one or more, <b>?</b> = zero or one</html>",
 	
 	"cvPatternHelpText": 
