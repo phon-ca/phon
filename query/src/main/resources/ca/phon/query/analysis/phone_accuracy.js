@@ -16,7 +16,8 @@ importPackage(Packages.ca.phon.query.analysis)
 
 var project = queryAnalysisResult.input.project;
 
-var ipaTree = new IpaTernaryTree(FeatureComparator.createPlaceComparator());
+var comparator = new CompoundFeatureComparator(FeatureComparator.createPlaceComparator());
+var ipaTree = new IpaTernaryTree(comparator);
 
 var keySet = queryAnalysisResult.resultSetKeys;
 var sessionPathItr = keySet.iterator();

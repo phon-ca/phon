@@ -14,7 +14,8 @@ importPackage(Packages.ca.phon.query)
 importPackage(Packages.ca.phon.query.db)
 importPackage(Packages.ca.phon.query.analysis)
 
-var ipaTree = new IpaTernaryTree(FeatureComparator.createPlaceComparator());
+var comparator = new CompoundFeatureComparator(FeatureComparator.createPlaceComparator());
+var ipaTree = new IpaTernaryTree(comparator);
 
 var nf = java.text.NumberFormat.getNumberInstance();
 nf.setMaximumFractionDigits(6);

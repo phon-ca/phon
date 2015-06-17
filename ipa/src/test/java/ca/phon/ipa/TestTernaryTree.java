@@ -24,12 +24,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import ca.phon.ipa.features.CompoundFeatureComparator;
+import ca.phon.ipa.features.FeatureComparator;
 import ca.phon.ipa.tree.IpaTernaryTree;
 
 @RunWith(JUnit4.class)
@@ -39,9 +42,11 @@ public class TestTernaryTree {
 
 	@Test
 	public void testTreeOrdering() throws IOException, ParseException {
-		final ca.phon.ipa.features.FeatureComparator comparator = ca.phon.ipa.features.FeatureComparator.createPlaceComparator();
+		final Comparator<IPAElement> comparator = 
+				new CompoundFeatureComparator(FeatureComparator.createPlaceComparator());
 		
-		final IpaTernaryTree<List<IPATranscript>> tree = new IpaTernaryTree<List<IPATranscript>>(comparator);
+		final IpaTernaryTree<List<IPATranscript>> tree = 
+				new IpaTernaryTree<List<IPATranscript>>(comparator);
 		
 		final InputStream is = getClass().getResourceAsStream(IPA_FILE);
 		final BufferedReader in = new BufferedReader(new InputStreamReader(is, "UTF-8"));

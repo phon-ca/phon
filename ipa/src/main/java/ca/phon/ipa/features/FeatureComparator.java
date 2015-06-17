@@ -39,6 +39,34 @@ public class FeatureComparator implements Comparator<IPAElement> {
 	private final List<FeatureSet> featureSetOrdering = 
 			Collections.synchronizedList(new ArrayList<FeatureSet>());
 	
+	// XXX Unsure about this comparator
+	public static FeatureComparator createContinuancyComparator() {
+		final FeatureSet[] featureSets = new FeatureSet[3];
+		featureSets[0] = FeatureSet.fromArray(new String[]{"Stop"});
+		featureSets[1] = FeatureSet.fromArray(new String[]{"Fricative"});
+		featureSets[2] = FeatureSet.fromArray(new String[]{"Approximant"});
+		return new FeatureComparator(featureSets);
+	}
+	
+	public static FeatureComparator createMannerComparator() {
+		final FeatureSet[] featureSets = new FeatureSet[7];
+		featureSets[0] = FeatureSet.fromArray(new String[]{"Stop"});
+		featureSets[1] = FeatureSet.fromArray(new String[]{"Fricative"});
+		featureSets[2] = FeatureSet.fromArray(new String[]{"Affricate"});
+		featureSets[3] = FeatureSet.fromArray(new String[]{"Nasal"});
+		featureSets[4] = FeatureSet.fromArray(new String[]{"Lateral"});
+		featureSets[5] = FeatureSet.fromArray(new String[]{"Rhotic"});
+		featureSets[6] = FeatureSet.fromArray(new String[]{"Vowel"});
+		return new FeatureComparator(featureSets);
+	}
+	
+	public static FeatureComparator createVoicingComparator() {
+		final FeatureSet[] featureSets = new FeatureSet[2];
+		featureSets[0] = FeatureSet.fromArray(new String[]{"Voiced"});
+		featureSets[1] = FeatureSet.fromArray(new String[]{"Voiceless"});
+		return new FeatureComparator(featureSets);
+	}
+	
 	public static FeatureComparator createPlaceComparator() {
 		final FeatureSet[] featureSets = new FeatureSet[7];
 		featureSets[0] = FeatureSet.fromArray(new String[]{"Labial"});
@@ -72,12 +100,7 @@ public class FeatureComparator implements Comparator<IPAElement> {
 		final int i1 = primaryOrder(o1);
 		final int i2 = primaryOrder(o2);
 		
-		if(i1 == i2) {
-			// same group, order by string value
-			return o1.toString().compareTo(o2.toString());
-		} else {
-			return ((Integer)i1).compareTo(i2);
-		}
+		return ((Integer)i1).compareTo(i2);
 	}
 	
 	private int primaryOrder(IPAElement ele) {
