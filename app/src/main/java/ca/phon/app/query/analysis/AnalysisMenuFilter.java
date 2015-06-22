@@ -24,6 +24,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import ca.phon.app.query.analysis.actions.AnalysisEditorAction;
 import ca.phon.app.query.analysis.actions.PCCAction;
 import ca.phon.app.query.analysis.actions.PMLUAction;
 import ca.phon.app.query.analysis.actions.PhoneAccuracyAction;
@@ -76,6 +77,9 @@ public class AnalysisMenuFilter implements IPluginMenuFilter, IPluginExtensionPo
 		toolsMenu.add(new PCCAction((CommonModuleFrame)owner));
 		
 		toolsMenu.add(new PMLUAction((CommonModuleFrame)owner));
+		
+		toolsMenu.addSeparator();
+		toolsMenu.add(new AnalysisEditorAction((CommonModuleFrame)owner));
 	}
 	
 	private final IPluginExtensionFactory<IPluginMenuFilter> factory =  new IPluginExtensionFactory<IPluginMenuFilter>() {

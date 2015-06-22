@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Phon - An open source tool for research in phonology.
+    Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+    This file specifies the xml file format for a Phon query. A query contains
+    a set of results and information common to all results. 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://phon.ling.mun.ca/ns/query"
+    targetNamespace="http://phon.ling.mun.ca/ns/query" elementFormDefault="unqualified">
+
+    <xs:element name="query" type="QueryType">
+        <xs:annotation>
+            <xs:documentation>Default root element for stored queries.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="QueryType">
+        <xs:annotation>
+            <xs:documentation>Type definition for the query element.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="tag" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="script" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="comments" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="uuid" type="uuid" use="required"/>
+        <xs:attribute name="name" type="nonEmptyString"/>
+        <xs:attribute name="starred" type="xs:boolean" default="false"/>
+        <xs:attribute name="date" type="xs:dateTime"/>
+    </xs:complexType>
+
+    <!-- Root level elements for JAXB fragmented processing -->
+
+    <xs:element name="tag" type="nonEmptyString"/>
+    <xs:element name="script" type="ScriptType"/>
+    <xs:element name="comments" type="xs:string" default=""/>
+
+    <!-- Root level elements for JAXB fragmented processing -->
+
+    <xs:element name="source" type="xs:string" default=""/>
+    <xs:element name="url" type="ScriptURLType"/>
+    <xs:element name="output" type="xs:string" default=""/>
+    <xs:element name="param" type="ParamType"/>
+
+    <!-- Definition of a script and its parameters -->
+
+    <xs:complexType name="ScriptType">
+        <xs:annotation>
+            <xs:documentation>Type definition for the script element.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element ref="source">
+                    <xs:annotation>
+                        <xs:documentation>Source for query script</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element ref="url">
+                    <xs:annotation>
+                        <xs:documentation>URL for query script</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+            <xs:element ref="output" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Console output for query</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="param" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Script input parameters</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="mimetype" type="mimeType" default="text/javascript"/>
+    </xs:complexType>
+
+    <xs:complexType name="ParamType">
+        <xs:annotation>
+            <xs:documentation>Type definition for the param element.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="nonEmptyString" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ScriptURLType">
+        <xs:annotation>
+            <xs:documentation>Link to query script</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="rel" type="scriptRelType" default="absolute"/>
+        <xs:attribute name="ref" type="xs:anyURI" use="required"/>
+    </xs:complexType>
+
+    <!-- Simple type for a non-empty extension of string -->
+
+    <xs:simpleType name="nonEmptyString">
+        <xs:annotation>
+            <xs:documentation>An xs:string that has to have a length of at least
+                1.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Simple type for script location -->
+    <xs:simpleType name="scriptRelType">
+        <xs:annotation>
+            <xs:documentation>A URL to the script.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="absolute">
+                <xs:annotation>
+                    <xs:documentation>URL is absolute</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="stock">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to stock query scripts</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="user">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to user query script folder</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="project">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to project query script
+                        folder</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="plugins">
+                <xs:annotation>
+                    <xs:documentation>URL is relative to plugin query scripts</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Simple type for a uuid -->
+
+    <xs:simpleType name="uuid">
+        <xs:annotation>
+            <xs:documentation>An xs:string that is restricted to a uuid, which is 32 hexidecimal
+                digits in the form xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern
+                value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Simple type for a MIME-type -->
+
+    <xs:simpleType name="mimeType">
+        <xs:annotation>
+            <xs:documentation>An xs:string that is restricted to a MIME-type
+                string</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[-+a-zA-Z0-9]+/[-+a-zA-Z0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

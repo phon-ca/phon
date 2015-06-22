@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="https://phon.ca/ns/opgraph_query"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:og="http://gedge.ca/ns/opgraph" 
+    xmlns:qry="http://phon.ling.mun.ca/ns/query"
+    xsi:schemaLocation="http://gedge.ca/ns/opgraph https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd 
+    http://phon.ling.mun.ca/ns/query https://raw.githubusercontent.com/ghedlund/phon/master/query/src/main/resources/xml/xsd/query.xsd"
+    
+    targetNamespace="https://phon.ca/ns/opgraph_query"
+    elementFormDefault="qualified">
+    
+    <xs:import namespace="http://gedge.ca/ns/opgraph"/>
+    <xs:import namespace="http://phon.ling.mun.ca/ns/query"/>
+    
+    <xs:complexType name="QueryType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Extension of opgraph node type to include query xml</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="og:AbstractNodeType">
+                <xs:sequence>
+                    <xs:element ref="qry:query" minOccurs="0" maxOccurs="1"/>
+                    <xs:element ref="og:extensions" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="queryNode" type="QueryType" substitutionGroup="og:abstract_node"/>
+    
+</xs:schema>
