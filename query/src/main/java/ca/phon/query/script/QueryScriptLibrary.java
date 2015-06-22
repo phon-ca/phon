@@ -23,10 +23,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,6 +97,43 @@ public class QueryScriptLibrary implements IExtendable {
 		for(IPluginExtensionPoint<QueryScriptHandler> queryScriptHandler:queryScriptHandlers) {
 			pluginScriptLoader.addHandler(queryScriptHandler.getFactory().createObject());
 		}
+	}
+	
+
+	/**
+	 * Find scripts with given name in stock and user script locations.
+	 * 
+	 * @param name name of script (without extension)
+	 * @return
+	 */
+	public List<QueryScript> findScriptsWithName(final String name) {
+		return findScriptsWithName(name, null);
+	}
+	
+	/**
+	 * Find scripts with given name in all script locations.  Project is optioal.
+	 * 
+	 * @param name name of script (without extension)
+	 * @param project may be <code>null</code>
+	 * @return
+	 */
+	public List<QueryScript> findScriptsWithName(final String name, Project project) {
+		final List<QueryScript> retVal = new ArrayList<>();
+		
+		Consumer<QueryScript> search = (QueryScript qs) -> {
+			final QueryName qn = qs.getExtension(QueryName.class);
+			if(qn != null && qn.getName().equals(name)) {
+				retVal.add(qs);
+			}
+		};
+		
+		stockScriptFiles().forEach(search);
+		userScriptFiles().forEach(search);
+		if(project != null) {
+			projectScriptFiles(project).forEach(search);
+		}
+		
+		return retVal;
 	}
 	
 	public ResourceLoader<QueryScript> stockScriptFiles() {

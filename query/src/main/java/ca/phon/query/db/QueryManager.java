@@ -79,7 +79,7 @@ public abstract class QueryManager {
 	 */
 	public abstract void saveQuery(Query query, String path)
 		throws IOException;
-	
+		
 	/**
 	 * Load query from given path.
 	 * 
