@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://phon.ling.mun.ca/ns/report"
+    targetNamespace="http://phon.ling.mun.ca/ns/report">
+
+    <!-- Element declarations -->
+    <xs:element name="report-section" type="section"/>
+    <xs:element name="group-report-section" type="section"/>
+    <xs:element name="report-design" type="reportDesign"/>
+    <xs:element name="group" type="group" substitutionGroup="report-section"/>
+    <xs:element name="params" type="paramSection" substitutionGroup="report-section"/>
+    <xs:element name="summary" type="summarySection" substitutionGroup="report-section"/>
+    <xs:element name="comment" type="commentSection" substitutionGroup="report-section"/>
+    <xs:element name="aggregateInventory" type="aggregrateInventory" substitutionGroup="report-section"/>
+    <xs:element name="inventory" type="inventorySection" substitutionGroup="group-report-section"/>
+    <xs:element name="result-listing" type="resultListing" substitutionGroup="group-report-section"/>
+    <xs:element name="group-comment" type="commentSection" substitutionGroup="group-report-section"/>
+
+    <xs:element name="value" type="xs:string"/>
+    <xs:element name="metakey" type="xs:string"/>
+    <xs:element name="format" type="xs:string"/>
+    <xs:element name="paramName" type="xs:string"/>
+    <xs:element name="tierName" type="xs:string"/>
+    <xs:element name="field" type="resultListingField"/>
+    <xs:element name="field-value" type="scriptContainer"/>
+    <xs:element name="expr" type="xs:string"/>
+
+    <!-- Report type -->
+    <xs:complexType name="reportDesign">
+        <xs:annotation>
+            <xs:documentation>Report settings.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="section">
+                <xs:sequence>
+                    <xs:element ref="report-section" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="version" type="xs:string" default="1.6"/>
+            </xs:extension>
+        </xs:complexContent>
+        
+    </xs:complexType>
+
+    <xs:complexType name="group" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="section">
+                <xs:sequence>
+                    <xs:element ref="group-report-section" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="printSessionHeader" type="xs:boolean" default="true"/>
+                <xs:attribute name="printParticipantInformation" type="xs:boolean" default="true"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- 
+		Use a base class for all sections so we
+		can include a name attribute and make recursive
+		document processing easy.
+	-->
+    <xs:complexType name="section" mixed="false">
+        <xs:attribute name="name" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:simpleType name="inventory">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="result"/>
+            <xs:enumeration value="metadata"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="resultListing" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="section">
+                <xs:sequence>
+                    <xs:element ref="field" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="format" type="resultListingFormatType" default="table"/>
+                <xs:attribute name="includeExcluded" type="xs:boolean" default="false"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:simpleType name="resultListingFormatType">
+        <xs:restriction base="xs:string">
+            <!-- results are listed in a table with each field becomming a column -->
+            <xs:enumeration value="table"/>
+            <!-- results are listing with one field per line, results are separated by a space -->
+            <xs:enumeration value="list"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="resultListingField">
+        <xs:sequence>
+            <xs:element ref="field-value" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="title" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <!--
+        Script container
+    -->
+    <xs:complexType name="scriptContainer">
+        <xs:sequence>
+            <xs:element name="param" type="scriptParameter" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="script" type="xs:string" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="lang" type="xs:string" default="ecmascript"/>
+    </xs:complexType>
+    
+    <xs:complexType name="scriptParameter" mixed="true">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="inventorySection" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="section">
+                <xs:attribute name="includeResultValue" default="true" type="xs:boolean"/>
+                <xs:attribute name="includeMetadata" default="false" type="xs:boolean"/>
+                <xs:attribute name="ignoreDiacritics" default="false" type="xs:boolean"/>
+                <xs:attribute name="caseSensitive" default="true" type="xs:boolean"/>
+                <xs:attribute name="groupByFormat" default="false" type="xs:boolean"/>
+                <xs:attribute name="includeExcluded" default="false" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="paramSection" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="section">
+                <xs:sequence>
+                    <!-- 
+                        If the parameter list is empty - all parameters are printed.
+                    -->
+                    <xs:element ref="paramName" maxOccurs="unbounded" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="commentSection" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="section">
+                <xs:sequence>
+                    <xs:element ref="value"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="summarySection" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="section">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+        Aggregrate inventory
+    -->
+    <xs:complexType name="aggregrateInventory" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="inventorySection">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

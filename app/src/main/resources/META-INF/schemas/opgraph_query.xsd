@@ -4,14 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:og="http://gedge.ca/ns/opgraph" 
     xmlns:qry="http://phon.ling.mun.ca/ns/query"
-    xsi:schemaLocation="http://gedge.ca/ns/opgraph https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd 
-    http://phon.ling.mun.ca/ns/query https://raw.githubusercontent.com/ghedlund/phon/master/query/src/main/resources/xml/xsd/query.xsd"
+    xmlns:rpt="http://phon.ling.mun.ca/ns/report"
     
     targetNamespace="https://phon.ca/ns/opgraph_query"
     elementFormDefault="qualified">
     
     <xs:import namespace="http://gedge.ca/ns/opgraph"/>
     <xs:import namespace="http://phon.ling.mun.ca/ns/query"/>
+    <xs:import namespace="http://phon.ling.mun.ca/ns/report"/>
     
     <xs:complexType name="QueryType" mixed="false">
         <xs:annotation>
@@ -28,5 +28,21 @@
     </xs:complexType>
     
     <xs:element name="queryNode" type="QueryType" substitutionGroup="og:abstract_node"/>
+    
+    <xs:complexType name="ReportDesignType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Extension of opgraph node type to include report design xml</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="og:AbstractNodeType">
+                <xs:sequence>
+                    <xs:element ref="rpt:report-design" minOccurs="0" maxOccurs="1"/>
+                    <xs:element ref="og:extensions" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="reportDesignNode" type="ReportDesignType" substitutionGroup="og:abstract_node"/>
     
 </xs:schema>

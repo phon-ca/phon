@@ -1,1 +1,3 @@
 ca.phon.app.query.opgraph.SessionSelectorNode
+ca.phon.app.query.opgraph.ReportDesignNode
+ca.phon.app.query.opgraph.PrintBufferNode

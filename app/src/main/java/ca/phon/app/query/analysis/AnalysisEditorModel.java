@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpLink;
-import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.dag.CycleDetectedException;
 import ca.gedge.opgraph.dag.VertexNotFoundException;
@@ -52,20 +51,12 @@ public class AnalysisEditorModel extends GraphEditorModel {
 		return this.project;
 	}
 	
-	private void setupProcessingContext() {
-		final Processor processor = new Processor(getDocument().getGraph());
-		processor.getContext().put("_project", getProject());
-		
-		getDocument().setProcessingContext(processor);
-	}
-	
 	private void setupDefaultGraph() {
 		final OpGraph retVal = getDocument().getGraph();
 		
 		// project node
 		final ObjectNode projectNode = new ObjectNode(Project.class);
-		projectNode.setName("Project : " + project.getName());
-		projectNode.setValue(project);
+		projectNode.setContextKey("_project");
 		retVal.add(projectNode);
 		
 		// session selection

@@ -25,8 +25,8 @@ public class AnalysisGraphStartCommandHook implements CommandHook {
 				Processor context = document.getProcessingContext();
 				if(context == null) {
 					context = new Processor(document.getGraph());
-					context.getContext().put("_project", model.getProject());
 					document.setProcessingContext(context);
+					context.getContext().put("_project", model.getProject());
 				}
 
 				if(context.hasNext()) {

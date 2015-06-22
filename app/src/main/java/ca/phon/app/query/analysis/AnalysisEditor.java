@@ -78,7 +78,7 @@ public class AnalysisEditor extends CommonModuleFrame {
 	
 	public AnalysisEditor(Project project) {
 		super();
-		setTitle("Analysis Editor");
+		super.setWindowName("Analysis Editor");
 		
 		putExtension(Project.class, project);
 		
