@@ -19,7 +19,6 @@
 package ca.phon.syllabifier.editor.hooks;
 
 import java.awt.event.ActionEvent;
-import java.util.logging.Logger;
 
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.commands.CommandHook;
@@ -36,9 +35,6 @@ import ca.phon.syllabifier.editor.SyllabifierGraphEditorModel;
 @Hook(command=StopCommand.class)
 public class StopCommandHook implements CommandHook {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(StopCommandHook.class.getName());
-	
 	@Override
 	public boolean startCommand(HookableCommand command, ActionEvent evt) {
 		return false;
@@ -51,8 +47,6 @@ public class StopCommandHook implements CommandHook {
 			final SyllabifierGraphEditorModel syllabifierEditorModel = 
 					(SyllabifierGraphEditorModel)editorModel;
 			syllabifierEditorModel.getSyllabificationDisplay().setTranscript(new IPATranscript());
-		} else {
-			LOGGER.severe("Editor model is of incorrect type!");
 		}
 	}
 

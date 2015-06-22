@@ -41,7 +41,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.MouseInputAdapter;
 
 import bibliothek.gui.dock.common.CControl;
-import bibliothek.gui.dock.common.CWorkingArea;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
@@ -231,17 +230,16 @@ public class SyllabifierEditor extends JFrame {
 		defaultPerspective.getContentArea().getWest().add(
 				dockables.get(DockableView.SETTINGS));
 		
-		// setup default normalized layout
-		final CGridPerspective defCenter = defaultPerspective.getContentArea().getCenter();
-		final CWorkingArea canvasArea = (CWorkingArea)dockControl.getStation("work");
-		final CWorkingPerspective canvas = canvasArea.createPerspective();
-		defCenter.gridAdd( 0,   0,  800, 600, canvas );
-		canvas.gridAdd( 0, 0, 600, 600, dockables.get(DockableView.CANVAS));
-		canvas.gridAdd( 600, 0, 200, 200, dockables.get(DockableView.INSPECTOR));
-		canvas.gridAdd( 600, 200, 200, 200, dockables.get(DockableView.DEFAULTS));
-		canvas.gridAdd( 600, 400, 200, 200, dockables.get(DockableView.DEBUG));
-		defaultPerspective.storeLocations();
+		final CGridPerspective center = defaultPerspective.getContentArea().getCenter();
+		final CWorkingPerspective workPerspective = (CWorkingPerspective)defaultPerspective.getStation("work");
+		workPerspective.gridAdd( 0, 0, 600, 600, dockables.get(DockableView.CANVAS));
+		workPerspective.gridAdd( 600, 0, 200, 200, dockables.get(DockableView.INSPECTOR));
+		workPerspective.gridAdd( 600, 200, 200, 200, dockables.get(DockableView.DEFAULTS));
+		workPerspective.gridAdd( 600, 400, 200, 200, dockables.get(DockableView.DEBUG));
 		
+		center.gridAdd(0, 0, 600, 800, workPerspective);
+		
+		defaultPerspective.storeLocations();
 		defaultPerspective.shrink();
 		perspectives.setPerspective(defaultPerspective, true);
 	}
@@ -333,10 +331,6 @@ public class SyllabifierEditor extends JFrame {
 					cPanel.add(canvasScroller, BorderLayout.CENTER);
 					comp = cPanel;
 					break;
-					
-//				case CONSOLE:
-//					comp = graphEditor.getConsolePanel();
-//					break;
 					
 				case DEBUG:
 					comp = graphEditor.getDebugInfoPanel();
