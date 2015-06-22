@@ -13,7 +13,6 @@ import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.dag.CycleDetectedException;
 import ca.gedge.opgraph.dag.VertexNotFoundException;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
-import ca.gedge.opgraph.library.NodeData;
 import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.query.opgraph.QueryNode;
 import ca.phon.app.query.opgraph.QueryNodeData;
@@ -116,9 +115,6 @@ public class AnalysisEditorModel extends GraphEditorModel {
 				
 				final QueryNodeData nodeData = new QueryNodeData(script, queryNodeClassURI, name, "", "Query", instantiator);
 				super.getNodeLibrary().getLibrary().put(nodeData);
-			}
-			for(NodeData data:getNodeLibrary().getLibrary()){
-				System.out.println(data.category + " " + data.name);
 			}
 		} catch (URISyntaxException e) {
 			
