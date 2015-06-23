@@ -1,11 +1,13 @@
 package ca.phon.app.query.opgraph;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
@@ -21,6 +23,8 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
 @OpNodeInfo(
 	category="Project",
@@ -61,10 +65,28 @@ public class SessionSelectorNode extends OpNode implements NodeSettings {
 			final SessionSelector selector = new SessionSelector(project);
 			final JScrollPane scroller = new JScrollPane(selector);
 			
-			JOptionPane.showMessageDialog(CommonModuleFrame.getCurrentFrame(), scroller, 
-					"Select sessions", JOptionPane.OK_OPTION);
-			context.put(projectOutputField, project);
-			context.put(sessionOutputField, selector.getSelectedSessions());
+			
+			final DialogHeader header = new DialogHeader("Select Sessions", "");
+			
+			final JDialog selectorDialog = new JDialog();
+			selectorDialog.setModal(true);
+			selectorDialog.setTitle("Select Sessions");
+			selectorDialog.setLayout(new BorderLayout());
+			selectorDialog.add(header, BorderLayout.NORTH);
+			selectorDialog.add(scroller, BorderLayout.CENTER);
+			
+			final JButton okButton = new JButton("Ok");
+			okButton.addActionListener((e) -> { 
+				selectorDialog.setVisible(false); 
+				context.put(projectOutputField, project);
+				context.put(sessionOutputField, selector.getSelectedSessions());
+			});
+			selectorDialog.add(ButtonBarBuilder.buildOkBar(okButton), BorderLayout.SOUTH);
+			selectorDialog.getRootPane().setDefaultButton(okButton);
+			
+			selectorDialog.setSize(500, 600);
+			selectorDialog.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+			selectorDialog.setVisible(true);
 		};
 		if(SwingUtilities.isEventDispatchThread())
 			onEDT.run();

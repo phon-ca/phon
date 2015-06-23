@@ -132,7 +132,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 		int serial = 0;
 		for(RecordContainer rc:recordContainers) {
 			try {
-				QueryTask task = new QueryTask(project, rc.getSession(), queryScript, ++serial);
+				QueryTask task = new QueryTask(project, rc.getSession(), rc.idxIterator(), queryScript, ++serial);
 				task.run();
 				results[serial-1] = task.getResultSet();
 			} catch (Exception e) {

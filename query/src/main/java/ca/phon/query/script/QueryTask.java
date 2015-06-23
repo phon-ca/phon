@@ -18,6 +18,7 @@
  */
 package ca.phon.query.script;
 
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ import ca.phon.query.script.QueryScript.QueryFunction;
 import ca.phon.script.PhonScriptException;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.util.Range;
 import ca.phon.worker.PhonTask;
 
 /**
@@ -49,6 +51,8 @@ public class QueryTask extends PhonTask {
 	
 	private final int serial;
 	
+	private Iterator<Integer> recordIterable;
+	
 	// include excluded records?
 	private boolean includeExcludedRecords = false;
 	
@@ -63,6 +67,15 @@ public class QueryTask extends PhonTask {
 		this.session = session;
 		this.queryScript = queryScript;
 		this.serial = serial;
+	}
+	
+	public QueryTask(Project project, Session session, Iterator<Integer> recordIterable, QueryScript queryScript, int serial) {
+		super();
+		this.project = project;
+		this.session = session;
+		this.queryScript = queryScript;
+		this.serial = serial;
+		this.recordIterable = recordIterable;
 	}
 	
 	public Project getProject() {
@@ -126,7 +139,8 @@ public class QueryTask extends PhonTask {
 		final ResultSet rs = createResultSet();
 		
 		final Session session = getSession();
-		final int totalRecords = session.getRecordCount();
+		final int totalRecords = 
+				session.getRecordCount();
 		
 		// setup script
 		final QueryScriptContext ctx = getQueryScript().getQueryContext();
@@ -156,8 +170,11 @@ public class QueryTask extends PhonTask {
 			ctx.callBeginSearch(scope, session);
 		}
 		
+		Iterator<Integer> recordItr = 
+				(this.recordIterable == null ? (new Range(0, totalRecords, true)).iterator() : recordIterable);
 		// call query record for each record in session
-		for(int i = 0; i < totalRecords; i++) {
+		while(recordItr.hasNext()) {
+			int i = recordItr.next();
 			final int progress = Math.round(((float)(i+1)/(float)totalRecords) * 100.0f);
 			setProperty(PROGRESS_PROP, progress);
 			

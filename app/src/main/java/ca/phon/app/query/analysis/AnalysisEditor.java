@@ -2,6 +2,8 @@ package ca.phon.app.query.analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -86,6 +88,8 @@ public class AnalysisEditor extends CommonModuleFrame {
 		dockControl = new CControl(this);
 		setupLayout();
 		setupDockingPerspective();
+		
+		addWindowFocusListener(focusListener);
 	}
 	
 	@Override
@@ -144,6 +148,19 @@ public class AnalysisEditor extends CommonModuleFrame {
 		 }
 		 return retVal;
 	}
+	
+	private final WindowFocusListener focusListener = new WindowFocusListener() {
+		
+		@Override
+		public void windowLostFocus(WindowEvent e) {
+			
+		}
+		
+		@Override
+		public void windowGainedFocus(WindowEvent e) {
+			GraphEditorModel.setActiveEditorModel(model);
+		}
+	};
 	
 	private class DockableViewFilter implements Filter<String> {
 
