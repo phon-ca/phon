@@ -2,8 +2,10 @@ package ca.phon.app.query.analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -25,6 +27,7 @@ import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.MenuProvider;
+import ca.gedge.opgraph.app.commands.core.SaveCommand;
 import ca.gedge.opgraph.app.components.PathAddressableMenu;
 import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
 import ca.phon.project.Project;
@@ -80,7 +83,7 @@ public class AnalysisEditor extends CommonModuleFrame {
 	
 	public AnalysisEditor(Project project) {
 		super();
-		super.setWindowName("Analysis Editor");
+		super.setWindowName("Analysis Editor : Untitled");
 		
 		putExtension(Project.class, project);
 		
@@ -96,9 +99,17 @@ public class AnalysisEditor extends CommonModuleFrame {
 	public void setJMenuBar(JMenuBar menuBar) {
 		super.setJMenuBar(menuBar);
 		this.menuBar = menuBar;
-		
 	}
-	
+
+	@Override
+	public boolean saveData() throws IOException {
+		final ActionEvent ae = new ActionEvent(this, -1, "save");
+		GraphEditorModel.setActiveEditorModel(model);
+		final SaveCommand saveCommand = new SaveCommand();
+		saveCommand.actionPerformed(ae);
+		return true;
+	}
+
 	private void setupLayout() {
 		setLayout(new BorderLayout());
 		

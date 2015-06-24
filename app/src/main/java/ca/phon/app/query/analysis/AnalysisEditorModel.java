@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,24 +102,24 @@ public class AnalysisEditorModel extends GraphEditorModel {
 	}
 	
 	private void addQueryNodes() {
-		final QueryScriptLibrary library = new QueryScriptLibrary();
-		try {
-			final ResourceLoader<QueryScript> stockScriptLoader = library.stockScriptFiles();
-			final Iterator<QueryScript> stockScriptItr = stockScriptLoader.iterator();
-			while(stockScriptItr.hasNext()) {
-				final QueryScript script = stockScriptItr.next();
-				
-				final QueryName qn = script.getExtension(QueryName.class);
-				final String name = (qn != null ? qn.getName() : "<unknown>");
+		Consumer<QueryScript> addToLibrary = (QueryScript script) -> {
+			final QueryName qn = script.getExtension(QueryName.class);
+			final String name = (qn != null ? qn.getName() : "<unknown>");
+			try {
 				final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), qn.getName());
 				final QueryNodeInstantiator instantiator = new QueryNodeInstantiator();
 				
 				final QueryNodeData nodeData = new QueryNodeData(script, queryNodeClassURI, name, "", "Query", instantiator);
 				super.getNodeLibrary().getLibrary().put(nodeData);
+			} catch (URISyntaxException e) {
+				
 			}
-		} catch (URISyntaxException e) {
-			
-		}
+		};
+		
+		final QueryScriptLibrary library = new QueryScriptLibrary();
+		library.stockScriptFiles().forEach(addToLibrary);
+		library.userScriptFiles().forEach(addToLibrary);
+		library.pluginScriptFiles(getProject()).forEach(addToLibrary);
 	}
 	
 	private void addReportNodes() {
