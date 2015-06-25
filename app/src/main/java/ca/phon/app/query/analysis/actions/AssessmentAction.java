@@ -26,7 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.query.analysis.QueryAnalysisWizard;
+import ca.phon.app.query.analysis.QueryAssessmentWizard;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
@@ -34,10 +34,10 @@ import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.ui.CommonModuleFrame;
 
-public class AnalysisAction extends HookableAction {
+public class AssessmentAction extends HookableAction {
 	
 	private static final Logger LOGGER = Logger
-			.getLogger(AnalysisAction.class.getName());
+			.getLogger(AssessmentAction.class.getName());
 
 	private static final long serialVersionUID = -3097792087697477945L;
 	
@@ -47,14 +47,14 @@ public class AnalysisAction extends HookableAction {
 	
 	private CommonModuleFrame projectFrame;
 	
-	public AnalysisAction(CommonModuleFrame projectFrame, QueryScript queryScript, PhonScript reportScript) {
+	public AssessmentAction(CommonModuleFrame projectFrame, QueryScript queryScript, PhonScript reportScript) {
 		super();
 		this.projectFrame = projectFrame;
 		this.queryScript = queryScript;
 		this.reportScript = reportScript;
 	}
 	
-	public AnalysisAction(CommonModuleFrame projectFrame, String queryScript, String reportScript) {
+	public AssessmentAction(CommonModuleFrame projectFrame, String queryScript, String reportScript) {
 		super();
 		this.projectFrame = projectFrame;
 		this.queryScript = loadQueryScript(queryScript);
@@ -77,7 +77,7 @@ public class AnalysisAction extends HookableAction {
 		final QueryName queryName = queryScript.getExtension(QueryName.class);
 		final String title = (queryName != null ? queryName.getName() : "");
 		
-		final QueryAnalysisWizard wizard = new QueryAnalysisWizard(title, project, 
+		final QueryAssessmentWizard wizard = new QueryAssessmentWizard(title, project, 
 				queryScript, reportScript);
 		wizard.pack();
 		wizard.centerWindow();

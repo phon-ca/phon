@@ -24,7 +24,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import ca.phon.app.query.analysis.actions.AnalysisEditorAction;
+import ca.phon.app.query.analysis.actions.AssessmentEditorAction;
 import ca.phon.app.query.analysis.actions.PCCAction;
 import ca.phon.app.query.analysis.actions.PMLUAction;
 import ca.phon.app.query.analysis.actions.PhoneAccuracyAction;
@@ -38,7 +38,7 @@ import ca.phon.ui.CommonModuleFrame;
 /**
  * Add canned analysis menu items to windows.
  */
-public class AnalysisMenuFilter implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {
+public class AssessmentMenuFilter implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -79,14 +79,14 @@ public class AnalysisMenuFilter implements IPluginMenuFilter, IPluginExtensionPo
 		toolsMenu.add(new PMLUAction((CommonModuleFrame)owner));
 		
 		toolsMenu.addSeparator();
-		toolsMenu.add(new AnalysisEditorAction((CommonModuleFrame)owner));
+		toolsMenu.add(new AssessmentEditorAction((CommonModuleFrame)owner));
 	}
 	
 	private final IPluginExtensionFactory<IPluginMenuFilter> factory =  new IPluginExtensionFactory<IPluginMenuFilter>() {
 		
 		@Override
 		public IPluginMenuFilter createObject(Object... args) {
-			return AnalysisMenuFilter.this;
+			return AssessmentMenuFilter.this;
 		}
 		
 	};

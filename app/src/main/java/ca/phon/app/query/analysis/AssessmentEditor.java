@@ -39,13 +39,13 @@ import ca.phon.ui.CommonModuleFrame;
  * and reporting.
  *
  */
-public class AnalysisEditor extends CommonModuleFrame {
+public class AssessmentEditor extends CommonModuleFrame {
 
 	private static final long serialVersionUID = -2020857319722692172L;
 
-	private final Logger LOGGER = Logger.getLogger(AnalysisEditor.class.getName());
+	private final Logger LOGGER = Logger.getLogger(AssessmentEditor.class.getName());
 	
-	private AnalysisEditorModel model;
+	private AssessmentEditorModel model;
 	
 	private JMenuBar menuBar;
 	
@@ -81,13 +81,13 @@ public class AnalysisEditor extends CommonModuleFrame {
 		}
 	}
 	
-	public AnalysisEditor(Project project) {
+	public AssessmentEditor(Project project) {
 		super();
 		super.setWindowName("Analysis Editor : Untitled");
 		
 		putExtension(Project.class, project);
 		
-		model = new AnalysisEditorModel(project);
+		model = new AssessmentEditorModel(project);
 		dockControl = new CControl(this);
 		setupLayout();
 		setupDockingPerspective();

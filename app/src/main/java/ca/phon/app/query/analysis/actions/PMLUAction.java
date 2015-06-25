@@ -20,7 +20,7 @@ package ca.phon.app.query.analysis.actions;
 
 import ca.phon.ui.CommonModuleFrame;
 
-public class PMLUAction extends AnalysisAction {
+public class PMLUAction extends AssessmentAction {
 
 	private static final long serialVersionUID = -2704840851738827770L;
 	

@@ -44,7 +44,7 @@ import ca.phon.worker.PhonWorker;
 /**
  * 
  */
-public class QueryAnalysisWizard extends WizardFrame {
+public class QueryAssessmentWizard extends WizardFrame {
 
 	private static final long serialVersionUID = -3844044272954427293L;
 	
@@ -60,7 +60,7 @@ public class QueryAnalysisWizard extends WizardFrame {
 	
 	private PhonScript reportScript;
 	
-	public QueryAnalysisWizard(String title, Project project,
+	public QueryAssessmentWizard(String title, Project project,
 			QueryScript queryScript, PhonScript reportScript) {
 		super(title);
 		this.queryScript = queryScript;

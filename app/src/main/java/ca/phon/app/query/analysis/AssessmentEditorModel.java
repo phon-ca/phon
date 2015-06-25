@@ -30,13 +30,13 @@ import ca.phon.util.resources.ResourceLoader;
 /**
  * 
  */
-public class AnalysisEditorModel extends GraphEditorModel {
+public class AssessmentEditorModel extends GraphEditorModel {
 	
-	private final static Logger LOGGER = Logger.getLogger(AnalysisEditorModel.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(AssessmentEditorModel.class.getName());
 	
 	private final Project project;
 	
-	public AnalysisEditorModel(Project project) {
+	public AssessmentEditorModel(Project project) {
 		super();
 		
 		this.project = project;

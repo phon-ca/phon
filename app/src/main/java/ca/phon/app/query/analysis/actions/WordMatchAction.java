@@ -20,7 +20,7 @@ package ca.phon.app.query.analysis.actions;
 
 import ca.phon.ui.CommonModuleFrame;
 
-public class WordMatchAction extends AnalysisAction {
+public class WordMatchAction extends AssessmentAction {
 
 	private static final long serialVersionUID = -5997676379072566324L;
 

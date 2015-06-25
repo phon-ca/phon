@@ -26,7 +26,7 @@ import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.ui.CommonModuleFrame;
 
-public class PhoneAccuracyAction extends AnalysisAction {
+public class PhoneAccuracyAction extends AssessmentAction {
 
 	private static final long serialVersionUID = 160534063316471612L;
 

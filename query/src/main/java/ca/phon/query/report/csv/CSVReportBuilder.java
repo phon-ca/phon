@@ -183,26 +183,15 @@ public class CSVReportBuilder extends ReportBuilder {
 			}
 			Section section = sectionEle.getValue();
 			
-//			if(isIndentContent())
-//				prevIndentLevel();
-			
 			if(isPrintSectionNames()) {
 				// output newline then a single line with the section name
 				writer.writeNext(new String[0]);
 				writer.writeNext(new String[]{ section.getName() });
-				
-//				if(isIndentContent())
-//					nextIndentLevel();
 			}
 			
 			CSVSectionWriter sectionWriter = null;
 			
 			if(section instanceof AggregrateInventory) {
-				AggregrateInventory invData = (AggregrateInventory)section;
-//				List<Search> searches = new ArrayList<Search>();
-//				for(long sid:invData.getSid()) {
-//					searches.add(new Search(sid));
-//				}
 				InventoryDataSource invDs = 
 					new InventoryDataSource(resultSets, (AggregrateInventory)section);
 				sectionWriter = new CSVTableDataSourceWriter(this, invDs);
@@ -217,9 +206,6 @@ public class CSVReportBuilder extends ReportBuilder {
 				sectionWriter = new CSVCommentWriter(commentSection);
 			} else if (section instanceof Group) {
 				Group group = (Group)section;
-				
-//				if(isIndentContent())
-//					nextIndentLevel();
 				
 				for(ResultSet resultSet:resultSets) {
 					if(isBuildCanceled()) {
@@ -244,7 +230,6 @@ public class CSVReportBuilder extends ReportBuilder {
 							for(int i = 0; i < getIndentLevel(); i++) groupTitleLine.add("");
 							groupTitleLine.add(groupSection.getName());
 							writer.writeNext(groupTitleLine.toArray(new String[0]));
-	//						writer.writeNext(new String[0]);
 							
 							if(isIndentContent()) nextIndentLevel();
 						}
@@ -288,9 +273,6 @@ public class CSVReportBuilder extends ReportBuilder {
 							.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
- 
-//			if(isPrintSectionNames() && isIndentContent())
-//				prevIndentLevel();
 		}
 		
 		// flush and close writer
@@ -312,15 +294,12 @@ public class CSVReportBuilder extends ReportBuilder {
 		for(int i = 0; i < getIndentLevel(); i++) sessionNameLine.add("");
 		sessionNameLine.add("Session:");
 		sessionNameLine.add(resultSet.getSessionPath());
-//		String[] sessionNameLine = { "Session:", sessionPath };
 		writer.writeNext(sessionNameLine.toArray(new String[0]));
-//		writer.writeNext(new String[0]);
 		
 		if(group.isPrintParticipantInformation()) {
 			try {
 				Session t = project.openSession(resultSet.getCorpus(), resultSet.getSession());
 				
-//				String participantTitleLine[] = { "Participants:" };
 				List<String> participantTitleLine = new ArrayList<String>();
 				for(int i = 0; i < getIndentLevel(); i++) participantTitleLine.add("");
 				participantTitleLine.add("Participants");
@@ -340,12 +319,10 @@ public class CSVReportBuilder extends ReportBuilder {
 					
 					String name = 
 						(participant.getName() != null ? participant.getName() : "");
-//					PhonDurationFormat pdf = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
 					String age = 
 						AgeFormatter.ageToString(participant.getAge(t.getDate()));
 					String sex = 
 						(participant.getSex() == Sex.MALE ? "M" : "F");
-//					PhonDateFormat pdtf =  new PhonDateFormat(PhonDateFormat.YEAR_LONG);
 					String birthday = 
 						DateFormatter.dateTimeToString(participant.getBirthDate());
 					

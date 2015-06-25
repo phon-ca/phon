@@ -9,16 +9,16 @@ import ca.gedge.opgraph.app.commands.CommandHook;
 import ca.gedge.opgraph.app.commands.Hook;
 import ca.gedge.opgraph.app.commands.HookableCommand;
 import ca.gedge.opgraph.app.commands.debug.RunCommand;
-import ca.phon.app.query.analysis.AnalysisEditorModel;
+import ca.phon.app.query.analysis.AssessmentEditorModel;
 
 @Hook(command=RunCommand.class)
-public class AnalysisGraphStartCommandHook implements CommandHook {
+public class AssessmentGraphStartCommandHook implements CommandHook {
 
 	@Override
 	public boolean startCommand(HookableCommand command, ActionEvent evt) {
 		final GraphEditorModel activeModel = GraphEditorModel.getActiveEditorModel();
-		if(activeModel instanceof AnalysisEditorModel) {
-			final AnalysisEditorModel model = (AnalysisEditorModel)activeModel;
+		if(activeModel instanceof AssessmentEditorModel) {
+			final AssessmentEditorModel model = (AssessmentEditorModel)activeModel;
 		
 			final GraphDocument document = model.getDocument();
 			if(document != null) {
