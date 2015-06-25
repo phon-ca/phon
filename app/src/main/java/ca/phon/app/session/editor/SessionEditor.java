@@ -159,6 +159,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	public SessionEditor(Project project, Session session, Transcriber transcriber) {
 		super(project);
+		putExtension(Session.class, session);
 		
 		this.dataModelRef = 
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));

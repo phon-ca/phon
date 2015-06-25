@@ -94,6 +94,7 @@ public abstract class FolderHandler<T> extends FileHandler<T> {
 	 * Scan folder for files.
 	 */
 	private void scanFolder() {
+		if(!folder.exists() || !folder.isDirectory()) return;
 		if(!getRecursive()) {
 			File[] fileList = new File[0];
 			if(getFileFilter() != null) {

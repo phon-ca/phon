@@ -22,14 +22,11 @@ import java.awt.Window;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
+import ca.phon.app.query.analysis.actions.AssessmentAction;
 import ca.phon.app.query.analysis.actions.AssessmentEditorAction;
-import ca.phon.app.query.analysis.actions.PCCAction;
-import ca.phon.app.query.analysis.actions.PMLUAction;
-import ca.phon.app.query.analysis.actions.PhoneAccuracyAction;
-import ca.phon.app.query.analysis.actions.PhoneInventoryAction;
-import ca.phon.app.query.analysis.actions.WordMatchAction;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.IPluginMenuFilter;
@@ -52,34 +49,53 @@ public class AssessmentMenuFilter implements IPluginMenuFilter, IPluginExtension
 
 	@Override
 	public void filterWindowMenu(Window owner, JMenuBar menu) {
-		JMenu toolsMenu = null;
+		int menuIdx = -1;
 		for(int i = 0; i < menu.getMenuCount(); i++) {
 			final JMenu m = menu.getMenu(i);
-			if(m.getText().equals("Tools")) {
-				toolsMenu = m;
+			if(m.getText().equals("Query")) {
+				menuIdx = i;
 				break;
 			}
 		}
-		if(toolsMenu == null) return;
+		if(menuIdx < 0) return;
 		
 		if(!(owner instanceof CommonModuleFrame)) return;
+
+		final JMenu assessmentMenu = new JMenu("Assessments");
+		assessmentMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				setupAssessmentMenu((CommonModuleFrame)owner, assessmentMenu);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				
+			}
+		});
+		menu.add(assessmentMenu, menuIdx);
+	}
+	
+	private void setupAssessmentMenu(CommonModuleFrame owner, JMenu menu) {
+		menu.removeAll();
 		
-		toolsMenu.addSeparator();
-		final JMenuItem headerItm = new JMenuItem("-- Assessments --");
-		headerItm.setEnabled(false);
+		menu.add(new AssessmentEditorAction(owner));
+		menu.addSeparator();
+
+		final JMenu userAssessmentItem = new JMenu("-- User Assessments --");
+		userAssessmentItem.setEnabled(false);
+		menu.add(userAssessmentItem);
 		
-		toolsMenu.add(headerItm);
-		toolsMenu.add(new PhoneInventoryAction((CommonModuleFrame)owner));
-		toolsMenu.add(new PhoneAccuracyAction((CommonModuleFrame)owner));
-		
-		toolsMenu.add(new WordMatchAction((CommonModuleFrame)owner));
-		
-		toolsMenu.add(new PCCAction((CommonModuleFrame)owner));
-		
-		toolsMenu.add(new PMLUAction((CommonModuleFrame)owner));
-		
-		toolsMenu.addSeparator();
-		toolsMenu.add(new AssessmentEditorAction((CommonModuleFrame)owner));
+		final AssessmentLibrary library = new AssessmentLibrary();
+		for(Assessment assessment:library.userAssessments()) {
+			menu.add(new AssessmentAction(owner, assessment));
+		}
 	}
 	
 	private final IPluginExtensionFactory<IPluginMenuFilter> factory =  new IPluginExtensionFactory<IPluginMenuFilter>() {
@@ -90,6 +106,5 @@ public class AssessmentMenuFilter implements IPluginMenuFilter, IPluginExtension
 		}
 		
 	};
-
 
 }

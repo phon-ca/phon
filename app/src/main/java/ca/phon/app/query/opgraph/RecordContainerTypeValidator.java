@@ -16,9 +16,9 @@ public class RecordContainerTypeValidator implements TypeValidator {
 		
 		boolean allowed = false;
 		// allow single sessions or result sets
-		if(clazz == Session.class || clazz == ResultSet.class
-				|| clazz == Session[].class || clazz == ResultSet[].class
-				|| clazz == SessionPath.class || clazz == SessionPath[].class) {
+		if(Session.class.isAssignableFrom(clazz) || ResultSet.class.isAssignableFrom(clazz)
+				|| Session[].class.isAssignableFrom(clazz) || ResultSet[].class.isAssignableFrom(clazz)
+				|| SessionPath.class.isAssignableFrom(clazz) || SessionPath[].class.isAssignableFrom(clazz)) {
 			allowed = true;
 		} else if(Collection.class.isAssignableFrom(clazz)) {
 			Collection<?> collection = (Collection<?>)arg0;
@@ -34,9 +34,9 @@ public class RecordContainerTypeValidator implements TypeValidator {
 	@Override
 	public boolean isAcceptable(Class<?> clazz) {
 		boolean retVal = false;
-		if(clazz == Session.class || clazz == ResultSet.class
-				|| clazz == Session[].class || clazz == ResultSet[].class
-				|| clazz == SessionPath.class || clazz == SessionPath[].class
+		if(Session.class.isAssignableFrom(clazz) || ResultSet.class.isAssignableFrom(clazz)
+				|| Session[].class.isAssignableFrom(clazz) || ResultSet[].class.isAssignableFrom(clazz)
+				|| SessionPath.class.isAssignableFrom(clazz) || SessionPath[].class.isAssignableFrom(clazz)
 				|| Collection.class.isAssignableFrom(clazz)) {
 			retVal = true;
 		}
