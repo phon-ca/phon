@@ -19,7 +19,7 @@ public class AssessmentEditorAction extends HookableAction {
 	public AssessmentEditorAction(CommonModuleFrame owner) {
 		this.owner = owner;
 		
-		putValue(NAME, "Analysis Editor...");
+		putValue(NAME, "Assessment Editor...");
 		putValue(SHORT_DESCRIPTION, "Display analysis editor");
 	}
 	

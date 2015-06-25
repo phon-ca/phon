@@ -83,7 +83,7 @@ public class AssessmentEditor extends CommonModuleFrame {
 	
 	public AssessmentEditor(Project project) {
 		super();
-		super.setWindowName("Analysis Editor : Untitled");
+		super.setWindowName("Assessment Editor : Untitled");
 		
 		putExtension(Project.class, project);
 		

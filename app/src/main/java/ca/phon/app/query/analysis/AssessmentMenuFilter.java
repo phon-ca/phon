@@ -53,7 +53,7 @@ public class AssessmentMenuFilter implements IPluginMenuFilter, IPluginExtension
 		for(int i = 0; i < menu.getMenuCount(); i++) {
 			final JMenu m = menu.getMenu(i);
 			if(m.getText().equals("Query")) {
-				menuIdx = i;
+				menuIdx = i+1;
 				break;
 			}
 		}
