@@ -557,6 +557,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		Record utt = getEditor().currentRecord();
 		
 		remove(messageButton);
+		add(horizontalScroller, BorderLayout.SOUTH);
 		
 		wavDisplay.setValuesAdusting(true);
 		if(wavDisplay.getSampled() == null) {
