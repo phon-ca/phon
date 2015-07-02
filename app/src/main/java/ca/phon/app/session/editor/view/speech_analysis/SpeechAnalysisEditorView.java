@@ -142,9 +142,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private HidablePanel messageButton = new HidablePanel("SpeechAnalysisView.noAudio");
 	
 	private final static String WAV_DISPLAY_HEIGHT = "SpeechAnalysisView.wavDisplayHeight";
+	private final int DEFAULT_WAV_DISPLAY_HEIGHT = 100;
 	private JComponent sizer;
 	private int wavDisplayHeight = 
-			PrefHelper.getInt(WAV_DISPLAY_HEIGHT, -1);
+			PrefHelper.getInt(WAV_DISPLAY_HEIGHT, DEFAULT_WAV_DISPLAY_HEIGHT);
 	
 	private JScrollBar horizontalScroller;
 	private boolean manualAdjustment = false;

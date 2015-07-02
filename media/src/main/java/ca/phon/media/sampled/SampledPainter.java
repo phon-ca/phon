@@ -77,7 +77,7 @@ public class SampledPainter extends BufferedPainter<Sampled> {
 		this.channel = channel;
 		
 		// by default, only repaint when width changes.  Scale height changes.
-		setResizeMode(ResizeMode.REPAINT_ON_RESIZE_X);
+		setResizeMode(ResizeMode.REPAINT_ON_RESIZE);
 		
 		addPropertyChangeListener(repaintListener);
 	}
