@@ -1,5 +1,26 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.0
+
+### General Changes
+ * Added basic git commands for Phon projects under the Project -> Team menu in the Project Manager window.
+ * Set default wav display height to 100px.
+ 
+### Praat Plug-in
+ * Modified Formant Listing query so that all formants for an interval are printed in a single row.
+ * Default value for Max formants in Formant Listing query is now 4.
+
+### Bugs
+ * Fixed an issue where keystrokes for segmentation would not work for newly added participants.
+ * Fixed a bug where data for blind-transcribers would not be saved if the data was not committed using the enter key or focus change.
+ * Ensure that horizontal scrollbar for Speech Analysis view is visible.
+ * Wav display will now revalidate on x or y size changes.
+ * Fixed participant assignment for records during Merge Session operations.
+ * Fixed an bug when querying grouped, user-defined tiers which have been left empty for a record.
+ * Fixed sorting order when sorting lists of ipa strings using ternary tries.
+ * Fixed keystrokes for record navigation while focused in a tier field.
+ * Keystrokes for next/previous record has been changed back to PgDown/PgUp.
+  
 ## Changes from Phon 2.0.8
 
 ### Project Window
