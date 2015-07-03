@@ -65,6 +65,7 @@ import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
+import ca.phon.ui.MenuManager;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.DatePicker;
@@ -418,6 +419,10 @@ public class SessionInfoEditorView extends EditorView {
 	@RunOnEDT
 	public void onParticipantListChanged(EditorEvent ee) {
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
+		
+		// setup menu for editor so that new participant actions for
+		// segmentation are available
+		getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
 	}
 	
 	@RunOnEDT
