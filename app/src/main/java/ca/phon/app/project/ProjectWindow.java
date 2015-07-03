@@ -85,7 +85,6 @@ import ca.phon.app.project.git.actions.CommitAction;
 import ca.phon.app.project.git.actions.InitAction;
 import ca.phon.app.project.git.actions.PullAction;
 import ca.phon.app.project.git.actions.PushAction;
-import ca.phon.app.project.git.actions.StatusAction;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.app.workspace.WorkspaceTextStyler;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -261,9 +260,6 @@ public class ProjectWindow extends CommonModuleFrame
 				if(getProject() != null) {
 					final ProjectGitController gitController = new ProjectGitController(getProject());
 					if(gitController.hasGitFolder()) {
-						teamMenu.add(new StatusAction(ProjectWindow.this));
-						
-						teamMenu.addSeparator();
 						teamMenu.add(new CommitAction(ProjectWindow.this));
 						
 						teamMenu.addSeparator();
