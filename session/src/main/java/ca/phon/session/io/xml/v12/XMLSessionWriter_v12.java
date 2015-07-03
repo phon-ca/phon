@@ -405,14 +405,14 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		
 		for(String trId:hasActualData.keySet()) {
 			if(hasActualData.get(trId)) {
-				final BlindTierType btt = targetBlindTiers.get(trId);
+				final BlindTierType btt = actualBlindTiers.get(trId);
 				retVal.getBlindTranscription().add(btt);
 			}
 		}
 		
 		for(String trId:hasTargetData.keySet()) {
 			if(hasTargetData.get(trId)) {
-				final BlindTierType btt = actualBlindTiers.get(trId);
+				final BlindTierType btt = targetBlindTiers.get(trId);
 				retVal.getBlindTranscription().add(btt);
 			}
 		}
