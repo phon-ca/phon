@@ -34,6 +34,7 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.util.PrefHelper;
 
 /**
  * Add canned analysis menu items to windows.
@@ -78,8 +79,10 @@ public class AssessmentMenuFilter implements IPluginMenuFilter, IPluginExtension
 		
 		toolsMenu.add(new PMLUAction((CommonModuleFrame)owner));
 		
-		toolsMenu.addSeparator();
-		toolsMenu.add(new AssessmentEditorAction((CommonModuleFrame)owner));
+		if(PrefHelper.getBoolean("phon.debug", Boolean.FALSE)) {
+			toolsMenu.addSeparator();
+			toolsMenu.add(new AssessmentEditorAction((CommonModuleFrame)owner));
+		}
 	}
 	
 	private final IPluginExtensionFactory<IPluginMenuFilter> factory =  new IPluginExtensionFactory<IPluginMenuFilter>() {
