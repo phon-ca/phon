@@ -9,6 +9,7 @@
 ### Praat Plug-in
  * Modified Formant Listing query so that all formants for an interval are printed in a single row.
  * Default value for Max formants in Formant Listing query is now 4.
+ * Entire sound file is now avilable in Praat TextGrid editor when using the 'Edit TextGrid in Praat...' command.
 
 ### Bugs
  * Fixed an issue where keystrokes for segmentation would not work for newly added participants.
@@ -20,6 +21,8 @@
  * Fixed sorting order when sorting lists of ipa strings using ternary tries.
  * Fixed keystrokes for record navigation while focused in a tier field.
  * Keystrokes for next/previous record has been changed back to PgDown/PgUp.
+ * Wav display is now repainted correctly when session media changes.
+ * Record numbers are now printed without a decimal place in the result set navigator.
   
 ## Changes from Phon 2.0.8
 
