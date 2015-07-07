@@ -482,6 +482,9 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 					final Rectangle clipRect = 
 							new Rectangle((int)oldX, 0, (int)newX, view.getHeight());
 					view.repaint(clipRect);
+				} else if(evt.getPropertyName().equals(PCMSegmentView.SAMPLED_PROP)) {
+					channelPainters.clear();
+					view.repaint();
 				} else {
 					view.repaint();
 				}
