@@ -50,7 +50,7 @@ public class ResultListingFieldBuilder {
 	public final static String RECORD_NUMBER_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
 			+ "		{label, \"Output record number\", \"\"};\n" + "*/\n" + "\n" 
-			+ "function getValue() { return recordIndex.intValue() + 1; }\n" + "";
+			+ "function getValue() { rnum = recordIndex.intValue() + 1; return \"\" + rnum; }\n" + "";
 
 	public final static String SPEAKER_NAME_SCRIPT = "/*\n"
 			+ "params = {separator, \"Information\", false},\n"
