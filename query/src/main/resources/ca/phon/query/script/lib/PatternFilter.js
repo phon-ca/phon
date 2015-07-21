@@ -392,7 +392,12 @@ exports.PatternFilter = function (id) {
     this.check_filter = function (obj) {
         var retVal = true;
         
-        if (obj == null) return false;
+        if (obj == null) {
+        	if(this.filterType.index == 2)
+        		obj = new IPATranscript();
+        	else
+        		obj = new String();
+        }
         
         switch (this.filterType.index) {
             case 0:
