@@ -14,6 +14,11 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>phon-components</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>phon-ipa</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -27,6 +32,10 @@
       <artifactId>phon-workspace</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+		<groupId>org.dockingframes</groupId>
+		<artifactId>docking-frames-common</artifactId>
+	</dependency>
     <dependency>
       <groupId>ca.gedge.opgraph</groupId>
       <artifactId>opgraph-core</artifactId>
