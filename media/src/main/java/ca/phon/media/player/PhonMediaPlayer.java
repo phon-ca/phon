@@ -187,8 +187,6 @@ public class PhonMediaPlayer extends JPanel {
 		
 		mediaPlayerCanvas = new PhonPlayerComponent();
 		add(mediaPlayerCanvas, BorderLayout.CENTER);
-		
-//		loadMedia();
 	}
 	
 	public void addMediaMenuFilter(IMediaMenuFilter filter) {

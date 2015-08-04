@@ -29,7 +29,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,8 +61,8 @@ import ca.phon.app.session.editor.view.media_player.actions.PlaySpeechTurnAction
 import ca.phon.app.session.editor.view.media_player.actions.TakeSnapshotAction;
 import ca.phon.app.session.editor.view.media_player.actions.ToggleAdjustVideoAction;
 import ca.phon.media.VLCHelper;
-import ca.phon.media.exportwizard.MediaExportWizard;
-import ca.phon.media.exportwizard.MediaExportWizardProp;
+import ca.phon.media.export.VLCMediaExporter;
+import ca.phon.media.export.VLCMediaExporter.Preset;
 import ca.phon.media.player.IMediaMenuFilter;
 import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.media.util.MediaLocator;
@@ -73,7 +72,6 @@ import ca.phon.session.Record;
 import ca.phon.session.SegmentCalculator;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
-import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.MsFormatter;
@@ -259,14 +257,8 @@ public class MediaPlayerEditorView extends EditorView {
 	 *  Menu actions
 	 */
 	public void onExportMedia(PhonActionEvent pae) {
-		// show the export wizard
-		// setup export for segment if one is found for the current record
-		HashMap<MediaExportWizardProp, Object> wizardProps =
-				new HashMap<MediaExportWizardProp, Object>();
 		String mediaFilePath = getMediaFilePath();
 		if(mediaFilePath != null) {
-			wizardProps.put(MediaExportWizardProp.INPUT_FILE, mediaFilePath);
-			
 			File f = new File(mediaFilePath);
 			String name = f.getName();
 			int extDotIdx = name.lastIndexOf(".");
@@ -282,56 +274,20 @@ public class MediaPlayerEditorView extends EditorView {
 			if(!segmentFile.exists()) {
 				segmentFile.mkdirs();
 			}
-			String segmentPath = segmentFile.getAbsolutePath();
 			
 			File outputFile = new File(segmentFile, 
 					getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ext);
-			
-//			String outputFilePath = 
-//					System.getProperty("user.home")
-//					+ File.separator + 
-//					"Desktop" + File.separator +
-//					"phon_export" + ext;
-//			File outputFile = new File(outputFilePath);
-			int fIdx = 0;
+						int fIdx = 0;
 			while(outputFile.exists()) {
-//				outputFilePath = 
-//						System.getProperty("user.home")
-//					+ File.separator + 
-//					"Desktop" + File.separator +
-//					"phon_export" + (++fIdx) + ext;
-//				outputFile = new File(outputFilePath);
 				outputFile = new File(segmentFile, 
 						getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) +
 						"(" + (++fIdx) + ")" + ext);
 			}
-			String outputFilePath = outputFile.getAbsolutePath();
-			wizardProps.put(MediaExportWizardProp.OUTPUT_FILE, outputFilePath);
+			
+			final VLCMediaExporter exporter =
+					new VLCMediaExporter(new File(mediaFilePath), outputFile, Preset.H264_HIGH);
+			
 		}
-		
-//		wizardProps.put(MediaExportWizardProp.OUTPUT_FILE, "/Users/ghedlund/Desktop/test.mov");
-		wizardProps.put(MediaExportWizardProp.ALLOW_PARTIAL_EXTRACT, Boolean.TRUE);
-
-		final Record utt = getEditor().currentRecord();
-		final Tier<MediaSegment> segmentTier = utt.getSegment();
-		final MediaSegment recordMedia = segmentTier.getGroup(0);
-		if(recordMedia != null) {
-			long startTime = (long)recordMedia.getStartValue();
-			long endTime = (long)recordMedia.getEndValue();
-			long dur = endTime - startTime;
-
-			if(dur > 0L) {
-				wizardProps.put(MediaExportWizardProp.IS_PARTICAL_EXTRACT, Boolean.TRUE);
-				wizardProps.put(MediaExportWizardProp.PARTIAL_EXTRACT_SEGMENT_START, startTime);
-				wizardProps.put(MediaExportWizardProp.PARTIAL_EXTRACT_SEGMENT_DURATION, dur);
-			}
-		}
-
-		MediaExportWizard wizard = new MediaExportWizard(wizardProps);
-		wizard.setSize(500, 550);
-//		wizard.centerWindow();
-		wizard.setLocationByPlatform(true);
-		wizard.setVisible(true);
 	}
 
 	// popup frame for time selection

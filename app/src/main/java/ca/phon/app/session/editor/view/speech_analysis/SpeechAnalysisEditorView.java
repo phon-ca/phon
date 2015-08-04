@@ -28,15 +28,12 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,6 +57,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
@@ -77,8 +75,8 @@ import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.StopAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ZoomAction;
-import ca.phon.media.exportwizard.MediaExportWizard;
-import ca.phon.media.exportwizard.MediaExportWizardProp;
+import ca.phon.media.export.VLCMediaExporter;
+import ca.phon.media.export.VLCWavExporter;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.PCMSegmentView;
 import ca.phon.media.sampled.Sampled;
@@ -103,6 +101,10 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Displays wavform and associated commands.
@@ -138,6 +140,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JButton zoomOutButton;
 	
 	private JButton generateButton;
+	
+	private JXBusyLabel busyLabel;
 	
 	private HidablePanel messageButton = new HidablePanel("SpeechAnalysisView.noAudio");
 	
@@ -412,6 +416,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 		generateButton = new JButton(generateAct);
 		generateButton.setFocusable(false);
 		
+		busyLabel = new JXBusyLabel(new Dimension(16,16));
+		busyLabel.setBusy(false);
+		busyLabel.setVisible(false);
+		
 		toolbar.add(playButton);
 		toolbar.addSeparator();
 		toolbar.add(refreshButton);
@@ -475,41 +483,57 @@ public class SpeechAnalysisEditorView extends EditorView {
 				File parentFile = movFile.getParentFile();
 				File resFile = new File(parentFile, audioFileName);
 				
-				// show ffmpeg export wizard
-				HashMap<MediaExportWizardProp, Object>
-						wizardProps = new HashMap<MediaExportWizardProp, Object>();
-				wizardProps.put(MediaExportWizardProp.INPUT_FILE, movFile.getAbsolutePath());
-				wizardProps.put(MediaExportWizardProp.OUTPUT_FILE, resFile.getAbsolutePath());
-				wizardProps.put(MediaExportWizardProp.ALLOW_PARTIAL_EXTRACT, Boolean.FALSE);
-				wizardProps.put(MediaExportWizardProp.ENCODE_VIDEO, Boolean.FALSE);
-				wizardProps.put(MediaExportWizardProp.AUDIO_CODEC, "wav");
-				wizardProps.put(MediaExportWizardProp.OTHER_ARGS, "-async 1");
-
-				MediaExportWizard wizard = new MediaExportWizard(wizardProps);
-				wizard.setSize(500, 550);
-				wizard.setLocationByPlatform(true);
-				wizard.setVisible(true);
-
-				wizard.addWindowListener(new WindowAdapter() {
-
+				if(resFile.exists()) {
+					// ask to overwrite
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setParentWindow(getEditor());
+					props.setTitle("Generate Wav");
+					props.setHeader("Overwrite file?");
+					props.setMessage("Wav file already exists, overwrite?");
+					props.setRunAsync(false);
+					props.setOptions(MessageDialogProperties.yesNoOptions);
+					int retVal = NativeDialogs.showMessageDialog(props);
+					if(retVal != 0) return;
+				}
+				
+				final VLCWavExporter exporter = new VLCWavExporter(movFile, resFile);
+				exporter.addTaskListener(new PhonTaskListener() {
+					
 					@Override
-					public void windowDeactivated(WindowEvent we) {
-						File audioFile = getAudioFile();
-						if(audioFile != null) {
-							try {
-								final PCMSampled sampled = new PCMSampled(audioFile);
-								wavDisplay.setSampled(sampled);
-								(new ResetAction(getEditor(), SpeechAnalysisEditorView.this)).actionPerformed(new ActionEvent(this, -1, "reset"));
-							} catch (IOException e) {
-								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-								ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
+					public void statusChanged(PhonTask task, TaskStatus oldStatus,
+							TaskStatus newStatus) {
+						if(newStatus == TaskStatus.FINISHED) {
+							File audioFile = getAudioFile();
+							if(audioFile != null) {
+								try {
+									final PCMSampled sampled = new PCMSampled(audioFile);
+									wavDisplay.setSampled(sampled);
+									(new ResetAction(getEditor(), SpeechAnalysisEditorView.this)).actionPerformed(new ActionEvent(this, -1, "reset"));
+								} catch (IOException e) {
+									LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+									ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
+								}
 							}
-						} else {
-//							msgLabel.setVisible(true);
 						}
 					}
-
+					
+					@Override
+					public void propertyChanged(PhonTask task, String property,
+							Object oldValue, Object newValue) {
+						if(VLCMediaExporter.PROGRESS_PROP.equals(property)) {
+							if((float)newValue < 1.0f && !busyLabel.isBusy()) {
+								busyLabel.setBusy(true);
+								busyLabel.setVisible(true);
+							} else if((float)newValue == 1.0f) {
+								busyLabel.setBusy(false);
+								busyLabel.setVisible(false);
+							}
+							busyLabel.setToolTipText("Generating wav: " + ((float)newValue)*100 + "%");
+						}
+					}
+					
 				});
+				PhonWorker.getInstance().invokeLater(exporter);
 			}
 		}
 	}
