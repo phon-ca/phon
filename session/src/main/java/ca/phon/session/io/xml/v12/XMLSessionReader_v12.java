@@ -672,8 +672,10 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			
 			for(int i = 0; i < at.getPhomap().size(); i++) {
 				final MappingType mt = at.getPhomap().get(i);
-				alignmentData[0][i] = mt.getValue().get(0);
-				alignmentData[1][i] = mt.getValue().get(1);
+				alignmentData[0][i] = 
+						(mt.getValue().size() > 0 ? mt.getValue().get(0) : null);
+				alignmentData[1][i] = 
+						(mt.getValue().size() > 1 ? mt.getValue().get(1) : null);
 			}
 			pm.setTopAlignment(alignmentData[0]);
 			pm.setBottomAlignment(alignmentData[1]);
