@@ -22,15 +22,24 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JWindow;
 import javax.swing.Popup;
 import javax.swing.SwingUtilities;
+
+import ca.phon.util.OSInfo;
 
 /**
  * <p>A message to the user that is displayed in an 
@@ -49,6 +58,8 @@ import javax.swing.SwingUtilities;
  * </p>
  */
 public final class Toast {
+	
+	private final Logger LOGGER = Logger.getLogger(Toast.class.getName());
 	
 	private String messageTxt;
 	
@@ -253,5 +264,61 @@ public final class Toast {
 			task.run();
 		else
 			SwingUtilities.invokeLater(task); 
+	}
+	
+	public void displayNotification() {
+		displayNotification("Phon");
+	}
+	
+	public void displayNotification(String title) {
+		displayNotification(title, "");
+	}
+	
+	/**
+	 * Display message as a system notification.  On Mac OS X and Windows
+	 * this will display a new system-level notification.
+	 * 
+	 * @param title
+	 * @param subtitle
+	 * 
+	 */
+	public void displayNotification(String title, String subtitle) {
+		if(OSInfo.isMacOs()) {
+			displayMacOSNotification(title, subtitle);
+		}
+	}
+	
+	/**
+	 * Use AppleScript to display system notification.
+	 */
+	private void displayMacOSNotification(String title, String subtitle) {
+		final StringBuffer src = new StringBuffer();
+		
+		src.append("display notification")
+		   .append(" \"").append(messageTxt).append("\"");
+		if(title != null && title.length() > 0)
+			src.append(" with title ").append("\"").append(title).append("\"");
+		if(subtitle != null && subtitle.length() > 0)
+		    src.append(" subtitle ").append("\"").append(subtitle).append("\"");
+		final Runtime rt = Runtime.getRuntime();
+		final String[] cmd = new String[]{ "/usr/bin/osascript", "-e", src.toString() };
+		try {
+			rt.exec(cmd);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		/*
+		 * XXX Make this work through the java scripting engine 
+		 */
+//		final ScriptEngineManager manager = new ScriptEngineManager();
+//		final ScriptEngine appleScriptEngine = manager.getEngineByName("AppleScript");
+//		if(appleScriptEngine != null) {
+//			try {
+//				appleScriptEngine.eval(src.toString());
+//			} catch (ScriptException e) {
+//				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+//			}
+//		}
 	}
 }
