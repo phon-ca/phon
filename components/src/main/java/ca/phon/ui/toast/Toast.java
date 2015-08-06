@@ -40,6 +40,7 @@ import javax.swing.Popup;
 import javax.swing.SwingUtilities;
 
 import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 
 /**
  * <p>A message to the user that is displayed in an 
@@ -300,25 +301,35 @@ public final class Toast {
 			src.append(" with title ").append("\"").append(title).append("\"");
 		if(subtitle != null && subtitle.length() > 0)
 		    src.append(" subtitle ").append("\"").append(subtitle).append("\"");
-		final Runtime rt = Runtime.getRuntime();
-		final String[] cmd = new String[]{ "/usr/bin/osascript", "-e", src.toString() };
-		try {
-			rt.exec(cmd);
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
 		
 		/*
-		 * XXX Make this work through the java scripting engine 
+		 * If not running from an application package, we need to use the
+		 * osascript binary to display the notification.
+		 * 
+		 * Assume we are running in 'development' mode when phon.debug=true
 		 */
-//		final ScriptEngineManager manager = new ScriptEngineManager();
-//		final ScriptEngine appleScriptEngine = manager.getEngineByName("AppleScript");
-//		if(appleScriptEngine != null) {
-//			try {
-//				appleScriptEngine.eval(src.toString());
-//			} catch (ScriptException e) {
-//				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//			}
-//		}
+		if(PrefHelper.getBoolean("phon.debug", false)) {
+			final Runtime rt = Runtime.getRuntime();
+			final String[] cmd = new String[]{ "/usr/bin/osascript", "-e", src.toString() };
+			try {
+				rt.exec(cmd);
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		} else {
+			/*
+			 * Use scripting engine so that the notification has the proper icon
+			 * and application name
+			 */
+			final ScriptEngineManager manager = new ScriptEngineManager();
+			final ScriptEngine appleScriptEngine = manager.getEngineByName("AppleScript");
+			if(appleScriptEngine != null) {
+				try {
+					appleScriptEngine.eval(src.toString());
+				} catch (ScriptException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+			}
+		}
 	}
 }
