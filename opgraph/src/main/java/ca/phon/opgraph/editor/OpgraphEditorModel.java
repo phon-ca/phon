@@ -11,11 +11,35 @@ import javax.swing.JPanel;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphEditorModel;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 
 /**
  * Base model for the opgraph editor.
  */
-public class OpgraphEditorModel extends GraphEditorModel {
+public abstract class OpgraphEditorModel extends GraphEditorModel {
+	
+	/**
+	 * Return a list of available models types.  Each model should 
+	 * be a subclass of {@link OpgraphEditorModel}.  Each subclass
+	 * should implement both the default constructor and the {@link OpGraph}
+	 * constructor as well as handle both cases in the {@link IPluginExtensionFactory}
+	 * implementation.
+	 * 
+	 * @return list of available editor model types
+	 */
+	public static List<Class<? extends OpgraphEditorModel>> availableModelTypes() {
+		final List<IPluginExtensionPoint<OpgraphEditorModel>> extPts = 
+				PluginManager.getInstance().getExtensionPoints(OpgraphEditorModel.class);
+		
+		List<Class<? extends OpgraphEditorModel>> retVal = new ArrayList<>();
+		for(IPluginExtensionPoint<OpgraphEditorModel> extPt:extPts) {
+			retVal.add(extPt.getFactory().createObject().getClass());
+		}
+		
+		return retVal;
+	}
 	
 	private Map<String, JComponent> viewMap;
 	

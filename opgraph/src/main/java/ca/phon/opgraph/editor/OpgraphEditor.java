@@ -19,10 +19,8 @@ import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphEditorModel;
-import ca.gedge.opgraph.app.MenuProvider;
-import ca.gedge.opgraph.app.components.PathAddressableMenu;
-import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.menu.MenuBuilder;
 
 /**
  * Generic opgragh editor.
@@ -44,7 +42,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 	private JMenuBar menuBar;
 
 	public OpgraphEditor() {
-		this(new OpgraphEditorModel());
+		this(new DefaultOpgraphEditorModel());
 	}
 	
 	public OpgraphEditor(OpgraphEditorModel model) {
@@ -80,13 +78,8 @@ public class OpgraphEditor extends CommonModuleFrame {
 	}
 	
 	protected void setupMenu() {
-		GraphEditorModel.setActiveEditorModel(model);
-		this.menuBar.removeAll();
-		final PathAddressableMenu pmenu = 
-				new PathAddressableMenuImpl(this.menuBar);
-		for(MenuProvider menuProvider:model.getMenuProviders()) {
-			menuProvider.installItems(model, pmenu);
-		}
+		final MenuBuilder menuBuilder = new MenuBuilder(this.menuBar);
+		
 	}
 	
 	protected void setupDefaultPerspective() {
@@ -97,16 +90,16 @@ public class OpgraphEditor extends CommonModuleFrame {
 		final CControlPerspective perspectives = dockControl.getPerspectives();
 		final CPerspective defaultPerspective = perspectives.createEmptyPerspective();
 		
-		defaultPerspective.getContentArea().getWest().add(
-				new SingleCDockablePerspective("Library"));
-		
 		final CWorkingPerspective workPerspective = (CWorkingPerspective)defaultPerspective.getStation("work");
-		workPerspective.gridAdd( 0, 0, 600, 600, new SingleCDockablePerspective("Canvas"));
-		workPerspective.gridAdd( 600, 0, 200, 200, new SingleCDockablePerspective("Settings"));
-		workPerspective.gridAdd( 600, 200, 200, 200, new SingleCDockablePerspective("Defaults"));
+		workPerspective.gridAdd( 0, 0, 200, 200, new SingleCDockablePerspective("Library") );
+		workPerspective.gridAdd( 0, 200, 200, 200, new SingleCDockablePerspective("Console") );
+		workPerspective.gridAdd( 0, 200, 200, 200, new SingleCDockablePerspective("Debug") );
+		workPerspective.gridAdd( 200, 0, 600, 600, new SingleCDockablePerspective("Canvas") );
+		workPerspective.gridAdd( 800, 0, 200, 200, new SingleCDockablePerspective("Settings") );
+		workPerspective.gridAdd( 800, 200, 200, 200, new SingleCDockablePerspective("Defaults") );
 		
 		final CGridPerspective center = defaultPerspective.getContentArea().getCenter();
-		center.gridAdd(0, 0, 600, 800, workPerspective);
+		center.gridAdd( 0, 0, 600, 800, workPerspective );
 		
 		defaultPerspective.storeLocations();
 		defaultPerspective.shrink();
