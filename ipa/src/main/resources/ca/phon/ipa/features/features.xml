@@ -16,6 +16,7 @@
    <feature name="glide">
       <synonym>g</synonym>
    </feature>
+   <feature name="cover"/>
    <feature name="schwa">
       <synonym>sch</synonym>
    </feature>
@@ -460,9 +461,9 @@
    <feature_set char="&#x2194;">diacritic </feature_set>
    <!--Consonants-->
    <!-- X -->
-   <feature_set char="&#x58;">unintelligible </feature_set>
+   <feature_set char="&#x58;">unintelligible cover </feature_set>
    <!--C-->
-   <feature_set char="&#x43;">consonant </feature_set>
+   <feature_set char="&#x43;">consonant cover </feature_set>
    <!--b-->
    <feature_set char="&#x62;">consonant labial bilabial obstruent stop voiced </feature_set>
    <!--c-->
@@ -768,7 +769,7 @@
 
    <!--Vowels-->
    <!--V-->
-   <feature_set char="&#x56;">vowel </feature_set>
+   <feature_set char="&#x56;">vowel cover </feature_set>
    <!--a-->
    <feature_set char="&#x61;">vowel low lax central </feature_set>
    <!--e-->
@@ -1205,11 +1206,11 @@
    <!--falling rising-->
    <feature_set char="&#x1dc9;">diacritic tonefallingrising </feature_set>
    <!--*-->
-   <feature_set char="&#x2a;">unintelligible </feature_set>
+   <feature_set char="&#x2a;">unintelligible cover </feature_set>
    <!--. syllable boundary-->
    <feature_set char="&#x2e;">diacritic </feature_set>
    <!--G-->
-   <feature_set char="&#x47;">glide </feature_set>
+   <feature_set char="&#x47;">glide cover </feature_set>
    <!--ᶑ-->
    <feature_set char="&#x1d91;">consonant alveolar lingual coronal implosive posterior retroflex
       voiced </feature_set>
