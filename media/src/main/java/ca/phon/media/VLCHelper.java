@@ -41,7 +41,7 @@ public class VLCHelper {
 	 */
 	public final static String VLC_LOCATION = VLCHelper.class.getName() + ".vlcLocation";
 	
-	private final static String VLC_LOCATION_WIN = System.getenv("%PROGRAMFILES%") + "\\VideoLAN\\VLC";
+	private final static String VLC_LOCATION_WIN = System.getenv("ProgramFiles") + "\\VideoLAN\\VLC";
 	
 	private final static String VLC_LOCATION_MAC = "/Applications/VLC.app/Contents/MacOS/lib";
 	
