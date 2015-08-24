@@ -29,9 +29,13 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -40,6 +44,8 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEditSupport;
 
+import org.jdesktop.swingx.JXStatusBar;
+import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
 import ca.phon.app.project.ProjectFrame;
@@ -69,7 +75,7 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.MenuManager;
+import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
@@ -153,6 +159,22 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * Toolbar
 	 */
 	private SessionEditorToolbar toolbar;
+	
+	/**
+	 * Status bar
+	 * 
+	 */
+	private JXStatusBar statusBar;
+	
+	/**
+	 * Status bar progress
+	 */
+	private JLabel progressLabel;
+	private JProgressBar progressBar;
+	
+	private JLabel sessionPathLabel;
+	private JLabel currentViewLabel;
+	private JLabel transcriberLabel;
 	
 	/**
 	 * Constructor
@@ -267,6 +289,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final SessionEditorToolbar tb = getToolbar();
 		add(tb, BorderLayout.NORTH);
 		
+		// status bar
+		final JXStatusBar sb = (JXStatusBar) getStatusBar();
+		add(sb, BorderLayout.SOUTH);
+		
 		// setup content/dock area
 		final Container dock = viewModel.getRoot();
 		contentPane.add(dock, BorderLayout.CENTER);
@@ -298,6 +324,30 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			this.toolbar = new SessionEditorToolbar(this);
 		}
 		return this.toolbar;
+	}
+	
+	/**
+	 * Get the editor status bar
+	 * 
+	 * @return statusBar
+	 */
+	public JComponent getStatusBar() {
+		if(this.statusBar == null) {
+			this.statusBar = new JXStatusBar();
+			
+			sessionPathLabel = new JLabel(getSession().getCorpus() + "/" + getSession().getName());
+			statusBar.add(sessionPathLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
+			
+			progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+			progressBar.setIndeterminate(false);
+			progressBar.setValue(0);
+			
+			progressLabel = new JLabel();
+			
+			statusBar.add(progressLabel, new JXStatusBar.Constraint(200));
+			statusBar.add(progressBar, new JXStatusBar.Constraint(100));
+		}
+		return this.statusBar;
 	}
 	
 	/*---- Menu Setup ------------------------------*/
