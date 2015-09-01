@@ -1,5 +1,11 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.1
+
+### General Changes
+ * Now using VLC instead of ffmpeg for media exports
+ * 
+
 ## Changes from Phon 2.1.0
 
 ### General Changes
