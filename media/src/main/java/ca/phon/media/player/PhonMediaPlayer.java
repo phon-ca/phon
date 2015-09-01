@@ -373,7 +373,7 @@ public class PhonMediaPlayer extends JPanel {
 		} else {
 			playPauseBtn.setEnabled(true);
 			positionSlider.setEnabled(true);
-			mediaPlayer.prepareMedia(getMediaFile(), ":play-and-pause");
+			mediaPlayer.prepareMedia(getMediaFile(), ":play-and-pause", ":no-video-title-show");
 			
 			mediaPlayer.addMediaPlayerEventListener(loadListener);
 			mediaPlayer.play();
@@ -688,7 +688,9 @@ public class PhonMediaPlayer extends JPanel {
 	}
 	
 	protected void renderFrame() {
-		if(mediaPlayerComponent == null || mediaPlayerComponent.getMediaPlayer() == null) return;
+		if(mediaPlayerComponent == null || mediaPlayerComponent.getMediaPlayer() == null) {
+			return;
+		}
 		Memory[] nativeBuffers = mediaPlayerComponent.getMediaPlayer().lock();
 		if(nativeBuffers != null && nativeBuffers.length > 0) {
 			Memory nativeBuffer = nativeBuffers[0];
@@ -708,7 +710,7 @@ public class PhonMediaPlayer extends JPanel {
 				
 		        mediaPlayerComponent.getMediaPlayer().unlock();
 
-				mediaPlayerCanvas.repaint(Math.round(1000.0f / getMediaPlayer().getFps()));
+				mediaPlayerCanvas.repaint(mediaTimer.getDelay());
 			}
 		} else {
 	        mediaPlayerComponent.getMediaPlayer().unlock();
@@ -721,10 +723,15 @@ public class PhonMediaPlayer extends JPanel {
 	protected void startRenderTimer() {
 		final MediaPlayer mediaPlayer = getMediaPlayer();
 		if(mediaTimer == null && mediaPlayer.getVideoTrackCount() > 0) {
-			mediaTimer = new Timer(0, (ActionEvent e) -> {
+			mediaTimer = new Timer(0, (e) -> {
 					renderFrame();
 				});
-			mediaTimer.setDelay(Math.round(1000.0f/mediaPlayer.getFps()));
+			float mediaFps = mediaPlayer.getFps();
+			float delay = 
+					(mediaFps > 0 && Float.isFinite(mediaFps) && !Float.isNaN(mediaFps) 
+							? 1000.0f/mediaPlayer.getFps()
+							: 1000.0f/29.97f);
+			mediaTimer.setDelay(Math.round(delay));
 			mediaTimer.setRepeats(true);
 			mediaTimer.start();
 		}

@@ -22,8 +22,10 @@ package ca.phon.media;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import uk.co.caprica.vlcj.Info;
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
+import uk.co.caprica.vlcj.version.LibVlcVersion;
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
@@ -78,6 +80,10 @@ public class VLCHelper {
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
 				Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 				isLoaded = true;
+				
+				// print info to logger
+				LOGGER.info("Using vlc4j " + Info.getInstance().version());
+				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " at " + vlcLocation);
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				if(showError)
