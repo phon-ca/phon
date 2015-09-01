@@ -81,6 +81,10 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Queue;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonTask.TaskStatus;
 
 /**
  * <p>Main UI for the application.  This window provides the interface for
@@ -171,6 +175,41 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	private JLabel progressLabel;
 	private JProgressBar progressBar;
+	
+	private final PhonTaskListener taskListener = new PhonTaskListener() {
+		
+		@Override
+		public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
+			if(newStatus == TaskStatus.RUNNING) {
+				progressLabel.setText(task.getName());
+				progressBar.setIndeterminate(true);
+			} else if(newStatus == TaskStatus.ERROR) {
+				progressLabel.setText(task.getException().getLocalizedMessage());
+				progressBar.setIndeterminate(false);
+				progressBar.setValue(0);
+				task.removeTaskListener(this);
+			} else if(newStatus == TaskStatus.FINISHED) {
+				progressLabel.setText("");
+				progressBar.setIndeterminate(false);
+				progressBar.setValue(0);
+				task.removeTaskListener(this);
+			}
+		}
+		
+		@Override
+		public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
+			if(PhonTask.PROGRESS_PROP.equals(property)) {
+				final float percentComplete = (Float)newValue;
+				if(percentComplete < 0) {
+					progressBar.setIndeterminate(true);
+				} else {
+					progressBar.setIndeterminate(false);
+					progressBar.setValue(Math.round(percentComplete*progressBar.getMaximum()));
+				}
+			}
+		}
+		
+	};
 	
 	private JLabel sessionPathLabel;
 	private JLabel currentViewLabel;
@@ -342,12 +381,22 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			progressBar.setIndeterminate(false);
 			progressBar.setValue(0);
 			
-			progressLabel = new JLabel();
+			progressLabel = new JLabel() {
+				@Override
+				public void setText(String txt) {
+					super.setText(txt);
+					super.setToolTipText(txt);
+				}
+			};
 			
 			statusBar.add(progressLabel, new JXStatusBar.Constraint(200));
 			statusBar.add(progressBar, new JXStatusBar.Constraint(100));
 		}
 		return this.statusBar;
+	}
+	
+	public void watchTask(PhonTask task) {
+		task.addTaskListener(taskListener);
 	}
 	
 	/*---- Menu Setup ------------------------------*/
