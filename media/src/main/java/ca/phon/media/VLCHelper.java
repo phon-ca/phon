@@ -82,7 +82,7 @@ public class VLCHelper {
 				isLoaded = true;
 				
 				// print info to logger
-				LOGGER.info("Using vlc4j " + Info.getInstance().version());
+				LOGGER.info("Using vlcj " + Info.getInstance().version());
 				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " at " + vlcLocation);
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);

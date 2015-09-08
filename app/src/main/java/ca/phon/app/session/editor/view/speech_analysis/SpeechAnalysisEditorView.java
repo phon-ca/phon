@@ -20,11 +20,8 @@ package ca.phon.app.session.editor.view.speech_analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -51,13 +48,12 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
@@ -75,7 +71,6 @@ import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.StopAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ZoomAction;
-import ca.phon.media.export.VLCMediaExporter;
 import ca.phon.media.export.VLCWavExporter;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.PCMSegmentView;
@@ -153,7 +148,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			PrefHelper.getInt(WAV_DISPLAY_HEIGHT, DEFAULT_WAV_DISPLAY_HEIGHT);
 	
 	private JScrollBar horizontalScroller;
-	private boolean manualAdjustment = false;
+	private volatile boolean isDragging = false;
 	
 	private final List<SpeechAnalysisTier> pluginTiers = 
 			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
@@ -214,8 +209,23 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setupInputMap();
 		
 		horizontalScroller = new JScrollBar(SwingConstants.HORIZONTAL);
+		horizontalScroller.addMouseListener(new MouseInputAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				isDragging = true;
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				isDragging = false;
+			}
+			
+			
+			
+		});
 		horizontalScroller.addAdjustmentListener( (e) -> {
-			if(!e.getValueIsAdjusting()) {
+			if(!e.getValueIsAdjusting() || isDragging) {
 				int val = e.getValue();
 				float time = val / 1000.0f;
 				getWavDisplay().setWindowStart(time);
@@ -260,7 +270,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		contentPane.add(wavDisplay);
 		
 		sizer = new SpeechAnalysisDivider();
-		sizer.setOpaque(true);
 		sizer.addMouseMotionListener(new MouseAdapter() {
 
 			@Override

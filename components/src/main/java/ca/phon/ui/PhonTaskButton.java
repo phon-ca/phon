@@ -19,24 +19,16 @@
 package ca.phon.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.painter.MattePainter;
-import org.jdesktop.swingx.painter.Painter;
 
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -45,7 +37,6 @@ import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
-import ca.phon.worker.PhonWorker;
 
 /**
  * Button for watching phon tasks.
@@ -53,13 +44,10 @@ import ca.phon.worker.PhonWorker;
  */
 public class PhonTaskButton extends MultiActionButton {
 	
-	private final static Logger LOGGER = Logger.getLogger(PhonTaskButton.class.getName());
-	
+	private static final long serialVersionUID = 7756765374858429477L;
+
 	/** Busy label */
 	private JXBusyLabel busyLabel;
-//	
-//	/** Logger console */
-//	private PhonLoggerConsole console;
 	
 	/** Task */
 	private PhonTask task;
@@ -85,9 +73,7 @@ public class PhonTaskButton extends MultiActionButton {
 	
 	private void init() {
 		super.removeAll();
-		
-		super.setBackgroundPainter(new BgPainter());
-		
+
 		FlowLayout topLayout = new FlowLayout(FlowLayout.LEFT);
 		int hgap = topLayout.getHgap();
 		topLayout.setHgap(0);
@@ -107,18 +93,8 @@ public class PhonTaskButton extends MultiActionButton {
 		topPanel.add(Box.createHorizontalStrut(hgap));
 		topPanel.add(super.getTopLabel());
 		
-//		console = new PhonLoggerConsole();
-//		console.setVisible(false);
-		
 		add(topPanel, BorderLayout.NORTH);
-//		add(busyLabel, BorderLayout.WEST);
-//		add(console, BorderLayout.CENTER);
 		add(getBottomLabel(), BorderLayout.SOUTH);
-		
-//		PhonUIAction defAction = new PhonUIAction(this, "onToggleConsole");
-//		defAction.putValue(PhonUIAction.NAME, "More info");
-//		defAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle console");
-//		setDefaultAction(defAction);
 		
 		ImageIcon cancelIcn = 
 			IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
@@ -137,7 +113,6 @@ public class PhonTaskButton extends MultiActionButton {
 	 * UI Actions
 	 */
 	public void onToggleConsole(PhonActionEvent pae) {
-//		console.setVisible(!console.isVisible());
 		revalidate();
 	}
 	
@@ -153,13 +128,8 @@ public class PhonTaskButton extends MultiActionButton {
 				TaskStatus newStatus) {
 			if(newStatus == TaskStatus.RUNNING) {
 				busyLabel.setBusy(true);
-				
-//				console.addReportThread(Thread.currentThread());
-//				console.startLogging();
 			} else {
 				busyLabel.setBusy(false);
-//				console.stopLogging();
-//				console.removeReportThread(Thread.currentThread());
 			}
 		}
 
@@ -173,51 +143,4 @@ public class PhonTaskButton extends MultiActionButton {
 		
 	}
 	
-	private class BgPainter implements Painter<PhonTaskButton> {
-
-		@Override
-		public void paint(Graphics2D g, PhonTaskButton ptb, int width,
-				int height) {
-			
-			GradientPaint gp = new GradientPaint(new Point(0,0), Color.white, 
-					new Point(width, height), PhonGuiConstants.PHON_UI_STRIP_COLOR);
-			MattePainter gpPainter = new MattePainter(gp);
-
-			gpPainter.paint(g, ptb, width, height);
-			
-		}
-		
-	}
-	
-	public static void main(String[] args) throws Exception {
-		PhonTask task = new PhonTask("Long Task") {
-			
-
-			@Override
-			public void performTask() {
-				long iteration  = 0L;
-				while(true) {
-					if(isShutdown()) break;
-					setProperty(STATUS_PROP, "Loop #" + iteration++);
-					LOGGER.info("Loop #" + iteration);
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {}
-					
-				
-				}
-			}
-			
-		};
-		PhonWorker.getInstance().invokeLater(task);
-		
-		PhonTaskButton ptb = new PhonTaskButton(task);
-		
-		JFrame f = new JFrame("Test");
-		f.add(ptb);
-		f.pack();
-		f.setVisible(true);
-		
-		PhonWorker.getInstance().start();
-	}
 }

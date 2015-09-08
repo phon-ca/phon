@@ -197,7 +197,6 @@ public class VLCMediaExporter extends PhonTask {
 			throw new PhonMediaException(e);
 		} finally {
 			factory.release();
-			player.release();
 		}
 	}
 	

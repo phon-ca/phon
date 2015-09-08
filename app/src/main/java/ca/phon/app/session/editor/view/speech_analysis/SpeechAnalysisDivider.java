@@ -11,12 +11,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.BevelBorder;
 
+import ca.phon.ui.PhonGuiConstants;
+
 /**
  * 
  */
 public class SpeechAnalysisDivider extends JComponent {
 
 	private static final long serialVersionUID = 6318352291908350196L;
+	
+	private final static String DEFAULT_BG = "#eeeeee";
 	
 	private final static int DEFAULT_HEIGHT = 8;
 	
@@ -31,6 +35,8 @@ public class SpeechAnalysisDivider extends JComponent {
 		
 		this.height = height;
 		
+		setOpaque(true);
+		setBackground(Color.decode(DEFAULT_BG));
 		setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 	}
