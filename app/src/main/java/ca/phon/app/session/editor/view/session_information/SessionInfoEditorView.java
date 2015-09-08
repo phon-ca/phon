@@ -20,6 +20,7 @@ package ca.phon.app.session.editor.view.session_information;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -178,10 +179,12 @@ public class SessionInfoEditorView extends EditorView {
 		contentPanel = new TierDataLayoutPanel();
 		
 		dateField = createDateField();
+		dateField.getTextField().setColumns(10);
 		dateField.setBackground(Color.white);
 		
 		mediaLocationField = new MediaSelectionField(getEditor().getProject());
 		mediaLocationField.setEditor(getEditor());
+		mediaLocationField.getTextField().setColumns(10);
 		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		
 		participantTable = new JXTable();
@@ -282,8 +285,6 @@ public class SessionInfoEditorView extends EditorView {
 		if(sessionDate != null)
 			retVal.setDateTime(sessionDate);
 		
-		
-		
 		retVal.getTextField().getDocument().addDocumentListener(new DocumentListener() {
 
 			void dateFieldUpdate() {
@@ -313,7 +314,6 @@ public class SessionInfoEditorView extends EditorView {
 			}
 			
 		});
-		
 		return retVal;
 	}
 	
