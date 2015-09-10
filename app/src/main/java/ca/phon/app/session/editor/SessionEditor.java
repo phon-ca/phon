@@ -46,6 +46,9 @@ import javax.swing.undo.UndoableEditSupport;
 
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
 import ca.phon.app.project.ProjectFrame;
@@ -81,7 +84,6 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.Queue;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonTask.TaskStatus;
@@ -644,6 +646,18 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	public void onModifiedChanged(EditorEvent eee) {
 		final String title = generateTitle();
 		setTitle(title);
+		
+		final DateTimeFormatter format = DateTimeFormat.forPattern("k:ma");
+		
+		final StringBuffer sb = new StringBuffer();
+		sb.append(getSession().getCorpus()).append(".").append(getSession().getName());
+		if(isModified())
+			sb.append(" (modified)");
+		else if(lastSaveTime != null) {
+			sb.append(" Last Save:").append(format.print(lastSaveTime));
+			sb.append(" Size:").append(humanReadableByteCount(lastSaveSize, true));
+		}
+		sessionPathLabel.setText(sb.toString());
 	}
 	
 	@RunOnEDT
@@ -678,6 +692,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
 	}
 	
+	private DateTime lastSaveTime = null;
+	private long lastSaveSize = 0L;
+	
 	@Override
 	public boolean saveData() 
 			throws IOException {
@@ -693,6 +710,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			final File sessionFile = 
 					new File(new File(project.getLocation(), session.getCorpus()), session.getName() + ".xml");
 
+			lastSaveSize = sessionFile.length();
+			lastSaveTime = DateTime.now();
+			
 			final String msg = "Save finished.  " + humanReadableByteCount(sessionFile.length(), true) + " written to disk.";
 			LOGGER.info(msg);
 			
