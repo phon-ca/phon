@@ -44,7 +44,7 @@ public class VLCHelper {
 	 */
 	public final static String VLC_LOCATION = VLCHelper.class.getName() + ".vlcLocation";
 	
-	public final static String VLC_PLUGIN_PATH = VLCHelper.class.getName() + "vlcPluginPath";
+	public final static String VLC_PLUGIN_PATH = VLCHelper.class.getName() + ".vlcPluginPath";
 	
 	private final static String VLC_LOCATION_WIN = System.getenv("ProgramFiles") + "\\VideoLAN\\VLC";
 	
