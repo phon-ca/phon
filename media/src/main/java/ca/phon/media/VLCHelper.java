@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import uk.co.caprica.vlcj.Info;
+import uk.co.caprica.vlcj.binding.LibC;
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.version.LibVlcVersion;
@@ -42,6 +43,8 @@ public class VLCHelper {
 	 * Property for the user-set location of VLC
 	 */
 	public final static String VLC_LOCATION = VLCHelper.class.getName() + ".vlcLocation";
+	
+	public final static String VLC_PLUGIN_PATH = VLCHelper.class.getName() + "vlcPluginPath";
 	
 	private final static String VLC_LOCATION_WIN = System.getenv("ProgramFiles") + "\\VideoLAN\\VLC";
 	
@@ -78,12 +81,18 @@ public class VLCHelper {
 				}
 				final String vlcLocation = PrefHelper.get(VLC_LOCATION, vlcLocationDefault);
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
+				
+				final String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, null);
+				if(vlcPluginPath != null) {
+					LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1);
+				}
+				
 				Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 				isLoaded = true;
 				
 				// print info to logger
 				LOGGER.info("Using vlcj " + Info.getInstance().version());
-				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " at " + vlcLocation);
+				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion());
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				if(showError)

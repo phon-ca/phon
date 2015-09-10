@@ -340,7 +340,7 @@ public class PhonMediaPlayer extends JPanel {
 	
 	public void loadMedia(String loc) {
 		setMediaFile(loc);
-		loadMedia();
+//		loadMedia();
 	}
 	
 	public void loadMedia() {
