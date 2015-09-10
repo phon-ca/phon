@@ -564,11 +564,11 @@ public class FindAndReplaceEditorView extends EditorView {
 		
 		
 		final CompoundEdit edit = new CompoundEdit();
-		int occurences = 0;
+		int occurrences = 0;
 		
 		SessionRange currentRange = null;
 		while((currentRange = findManager.findNext()) != null) {
-			++occurences;
+			++occurrences;
 			
 			final Record r = session.getRecord(currentRange.getRecordIndex());
 			final Tier<?> tier = r.getTier(currentRange.getRecordRange().getTier());
@@ -585,7 +585,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		}
 		edit.end();
 		
-		if(occurences > 0) {
+		if(occurrences > 0) {
 			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFICATION_EVENT, this);
 			getEditor().getEventManager().queueEvent(ee);
 			final EditorEvent refresh = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
@@ -595,7 +595,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		}
 		
 		final String message = 
-				"Replaced " + occurences + " occurences with " + replaceExpr;
+				"Replaced " + occurrences + " occurrences with " + replaceExpr;
 		final Toast toast = ToastFactory.makeToast(message);
 		toast.start(replaceAllBtn);
 	}
