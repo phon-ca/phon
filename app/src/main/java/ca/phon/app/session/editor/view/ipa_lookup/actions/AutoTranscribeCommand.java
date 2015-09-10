@@ -30,6 +30,7 @@ import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionDialog;
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.session.Session;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
 
 /**
@@ -65,10 +66,13 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 		
 		if(!autoTranscribeDialog.wasCanceled()) {
 			// perform auto transcription
-			final Runnable task = new Runnable() {
+			final PhonTask task = new PhonTask() {
 				
 				@Override
-				public void run() {
+				public void performTask() {
+					setStatus(TaskStatus.RUNNING);
+					setProperty(PhonTask.PROGRESS_PROP, -1f);
+					
 					final AutoTranscriber transcriber = new AutoTranscriber(sessionEditor);
 					transcriber.setDictionary(getLookupView().getLookupContext().getDictionary());
 					transcriber.setOverwrite(autoTranscribeDialog.getForm().isOverwrite());
@@ -82,8 +86,11 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 					
 					final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
 					sessionEditor.getEventManager().queueEvent(ee);
+					
+					setStatus(TaskStatus.FINISHED);
 				}
 			};
+			getLookupView().getEditor().watchTask(task);
 			PhonWorker.getInstance().invokeLater(task);
 		}
 	}
