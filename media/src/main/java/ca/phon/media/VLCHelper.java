@@ -21,6 +21,8 @@ package ca.phon.media;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import uk.co.caprica.vlcj.Info;
 import uk.co.caprica.vlcj.binding.LibC;
@@ -49,7 +51,11 @@ public class VLCHelper {
 	
 	private final static String VLC_LOCATION_WIN = System.getenv("ProgramFiles") + "\\VideoLAN\\VLC";
 	
+	private final static String VLC_PLUGIN_PATH_WIN = VLC_LOCATION_WIN + "\\plugins";
+	
 	private final static String VLC_LOCATION_MAC = "/Applications/VLC.app/Contents/MacOS/lib";
+	
+	private final static String VLC_PLUGIN_PATH_MAC = "/Applications/VLC.app/Contents/MacOS/plugins";
 	
 	private final static Logger LOGGER = Logger.getLogger(VLCHelper.class
 			.getName());
@@ -71,11 +77,14 @@ public class VLCHelper {
 		if(!isLoaded) {
 			try {
 				String vlcLocationDefault = new String();
+				String vlcPluginPathDefault = null;
 				// attempt to load native libraries
 				if(OSInfo.isMacOs()) {
 					vlcLocationDefault = VLC_LOCATION_MAC;
+					vlcPluginPathDefault = VLC_PLUGIN_PATH_MAC;
 				} else if (OSInfo.isWindows()) {
 					vlcLocationDefault = VLC_LOCATION_WIN;
+					vlcPluginPathDefault = VLC_PLUGIN_PATH_WIN;
 				} else if (OSInfo.isNix()) {
 					// libvlc should be in /usr/lib and already included in LD_LIBRARY_PATH
 					// on most systems
@@ -83,7 +92,7 @@ public class VLCHelper {
 				final String vlcLocation = PrefHelper.get(VLC_LOCATION, vlcLocationDefault);
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
 				
-				final String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, null);
+				final String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, vlcPluginPathDefault);
 				if(vlcPluginPath != null) {
 					LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1);
 				}
@@ -94,7 +103,7 @@ public class VLCHelper {
 				// print info to logger
 				
 				LOGGER.info("Using vlcj " + Info.getInstance().version());
-				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " " + lib.toString());
+				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " at " + getLibraryPath(lib));
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				if(showError)
@@ -103,6 +112,19 @@ public class VLCHelper {
 		}
 
 		return isLoaded;
+	}
+	
+	private static String getLibraryPath(Object lib) {
+		String txt = lib.toString();
+		// find path enclosed in '<>'
+		final Pattern pattern = Pattern.compile("\\<([^@]+)@[0-9a-fA-F]+\\>");
+		final Matcher matcher = pattern.matcher(txt);
+		
+		String retVal = "unknown";
+		if(matcher.find()) {
+			retVal = matcher.group(1);
+		}
+		return retVal;
 	}
 	
 }
