@@ -90,7 +90,7 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 					setStatus(TaskStatus.FINISHED);
 				}
 			};
-			getLookupView().getEditor().watchTask(task);
+			getLookupView().getEditor().getStatusBar().watchTask(task);
 			PhonWorker.getInstance().invokeLater(task);
 		}
 	}

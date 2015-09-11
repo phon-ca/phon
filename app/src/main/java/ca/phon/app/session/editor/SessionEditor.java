@@ -170,52 +170,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * Status bar
 	 * 
 	 */
-	private JXStatusBar statusBar;
-	
-	/**
-	 * Status bar progress
-	 */
-	private JLabel progressLabel;
-	private JProgressBar progressBar;
-	
-	private final PhonTaskListener taskListener = new PhonTaskListener() {
-		
-		@Override
-		public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
-			if(newStatus == TaskStatus.RUNNING) {
-				progressLabel.setText(task.getName());
-				progressBar.setIndeterminate(true);
-			} else if(newStatus == TaskStatus.ERROR) {
-				progressLabel.setText(task.getException().getLocalizedMessage());
-				progressBar.setIndeterminate(false);
-				progressBar.setValue(0);
-				task.removeTaskListener(this);
-			} else if(newStatus == TaskStatus.FINISHED) {
-				progressLabel.setText("");
-				progressBar.setIndeterminate(false);
-				progressBar.setValue(0);
-				task.removeTaskListener(this);
-			}
-		}
-		
-		@Override
-		public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
-			if(PhonTask.PROGRESS_PROP.equals(property)) {
-				final float percentComplete = (Float)newValue;
-				if(percentComplete < 0) {
-					progressBar.setIndeterminate(true);
-				} else {
-					progressBar.setIndeterminate(false);
-					progressBar.setValue(Math.round(percentComplete*progressBar.getMaximum()));
-				}
-			}
-		}
-		
-	};
-	
-	private JLabel sessionPathLabel;
-	private JLabel currentViewLabel;
-	private JLabel transcriberLabel;
+	private SessionEditorStatusBar statusBar;
 	
 	/**
 	 * Constructor
@@ -372,33 +327,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * 
 	 * @return statusBar
 	 */
-	public JComponent getStatusBar() {
+	public SessionEditorStatusBar getStatusBar() {
 		if(this.statusBar == null) {
-			this.statusBar = new JXStatusBar();
-			
-			sessionPathLabel = new JLabel(getSession().getCorpus() + "/" + getSession().getName());
-			statusBar.add(sessionPathLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
-			
-			progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
-			progressBar.setIndeterminate(false);
-			progressBar.setValue(0);
-			
-			progressLabel = new JLabel() {
-				@Override
-				public void setText(String txt) {
-					super.setText(txt);
-					super.setToolTipText(txt);
-				}
-			};
-			
-			statusBar.add(progressLabel, new JXStatusBar.Constraint(200));
-			statusBar.add(progressBar, new JXStatusBar.Constraint(100));
+			this.statusBar = new SessionEditorStatusBar(this);
 		}
 		return this.statusBar;
-	}
-	
-	public void watchTask(PhonTask task) {
-		task.addTaskListener(taskListener);
 	}
 	
 	/*---- Menu Setup ------------------------------*/
@@ -657,7 +590,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			sb.append(" Last Save:").append(format.print(lastSaveTime));
 			sb.append(" Size:").append(humanReadableByteCount(lastSaveSize, true));
 		}
-		sessionPathLabel.setText(sb.toString());
+		getStatusBar().getStatusLabel().setText(sb.toString());
 	}
 	
 	@RunOnEDT

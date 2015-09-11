@@ -532,7 +532,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 				
 				btmPanel.add(taskBtn, null, 0);
 				
-				getEditor().watchTask(exporter);
+				getEditor().getStatusBar().watchTask(exporter);
 				PhonWorker.getInstance().invokeLater(exporter);
 			}
 		}
