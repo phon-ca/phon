@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import uk.co.caprica.vlcj.Info;
 import uk.co.caprica.vlcj.binding.LibC;
 import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.binding.LibVlcFactory;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.version.LibVlcVersion;
 import ca.phon.ui.nativedialogs.OSInfo;
@@ -87,12 +88,13 @@ public class VLCHelper {
 					LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1);
 				}
 				
-				Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
+				Object lib = Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 				isLoaded = true;
 				
 				// print info to logger
+				
 				LOGGER.info("Using vlcj " + Info.getInstance().version());
-				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion());
+				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " " + lib.toString());
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				if(showError)
