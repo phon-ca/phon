@@ -791,6 +791,23 @@ public class LocalProject implements Project, ProjectRefresh {
 		}
 		return new DateTime(modTime);
 	}
+	
+	@Override
+	public long getSessionByteSize(Session session) {
+		return getSessionByteSize(session.getCorpus(), session.getName());
+	}
+
+	@Override
+	public long getSessionByteSize(String corpus, String session) {
+		long size = 0L;
+	
+		final File sessionFile = getSessionFile(corpus, session);
+		if(sessionFile.exists() && sessionFile.canRead()) {
+			size = sessionFile.length();
+		}
+		
+		return size;
+	}
 
 	@Override
 	public int numberOfRecordsInSession(String corpus, String session)

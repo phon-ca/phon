@@ -362,6 +362,25 @@ public interface Project extends IExtendable {
 	public DateTime getSessionModificationTime(String corpus, String session);
 	
 	/**
+	 * Returns the size on disk for the given session.
+	 * 
+	 * @param session
+	 * 
+	 * @return session size in bytes
+	 */
+	public long getSessionByteSize(Session session);
+	
+	/**
+	 * Returns the size on disk for the given session.
+	 * 
+	 * @param corpus
+	 * @param session
+	 * 
+	 * @return session size in bytes
+	 */
+	public long getSessionByteSize(String corpus, String session);
+	
+	/**
 	 * Get an input stream for the specified project resource.
 	 * The resource name should be a relative path including filename.
 	 * E.g., 'ca.phon.myplugin/module/corpus/session.dat'
