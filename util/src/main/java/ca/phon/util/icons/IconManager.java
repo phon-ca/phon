@@ -18,13 +18,22 @@
  */
 package ca.phon.util.icons;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 
 import ca.phon.util.StackTraceInfo;
@@ -72,66 +81,52 @@ public class IconManager {
 			tuple.size = size;
 			
 			retVal = loadedIcons.get(tuple);
-//
-//			if(retVal == null) {
-//				// look for the icon in any size and scale
-//				for(IconSize testSize:IconSize.values()) {
-//					tuple = new IconTuple();
-//					tuple.iconName = iconName;
-//					tuple.size = testSize;
-//
-//					ImageIcon icn =
-//							loadedIcons.get(tuple);
-//
-//					if(icn != null) {
-//						Image scaledImg =
-//								icn.getImage().getScaledInstance(size.getWidth(), size.getHeight(), Image.SCALE_SMOOTH);
-//						ImageIcon scaledIcn =
-//								new ImageIcon(scaledImg);
-//
-//						IconTuple t = new IconTuple();
-//						t.iconName = iconName;
-//						t.size = size;
-//
-//						loadedIcons.put(t, scaledIcn);
-//
-//						retVal = scaledIcn;
-//						break;
-//					}
-//				}
-//			}
 		}
 		return retVal;
 	}
 	
-//	public ImageIcon getIcon(String iconName, int width, int height) {
-//		IconSize sizeToLoad = null;
-//		// determine the best size of icon to load
-//		if((width <= IconSize.getWidthForSize(IconSize.SMALL) ||
-//				height <= IconSize.getWidthForSize(IconSize.SMALL))) {
-//			sizeToLoad = IconSize.SMALL;
-//		} else if( (width <= IconSize.getWidthForSize(IconSize.LARGE) ||
-//				height <= IconSize.getHeightForSize(IconSize.LARGE))) {
-//			sizeToLoad = IconSize.MEDIUM;
-//		} else if( (width >= IconSize.getWidthForSize(IconSize.LARGE) ||
-//				height >= IconSize.getHeightForSize(IconSize.LARGE))) {
-//			sizeToLoad = IconSize.LARGE;
-//		}
-//		
-//		if(sizeToLoad == null) sizeToLoad = IconSize.LARGE;
-//		
-//		if(loadIcon(iconName, sizeToLoad)) {
-//			// create the scaled instance
-//			IconTuple tuple = new IconTuple();
-//			tuple.iconName = iconName;
-//			tuple.size = sizeToLoad;
-//			
-//			Image icon = loadedIcons.get(tuple);
-//			icon = icon.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//			return new ImageIcon(icon);
-//		}
-//		return null;
-//	}
+	public ImageIcon getGrayedIcon(String iconName, IconSize size) {
+		final ImageIcon icon = getIcon(iconName, size);
+		if(icon == null) return null;
+		
+		final int w = icon.getIconWidth();
+		final int h = icon.getIconHeight();
+		
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		BufferedImage img = gc.createCompatibleImage(w, h, Transparency.TRANSLUCENT);
+		Graphics2D g2d = img.createGraphics();
+		g2d.setColor(Color.decode("#00f0f0f0"));
+		g2d.fillRect(0, 0, w, h);
+		icon.paintIcon(null, g2d, 0, 0);
+		
+		BufferedImage gray = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+		ColorConvertOp op = new ColorConvertOp(
+				img.getColorModel().getColorSpace(),
+				gray.getColorModel().getColorSpace(), null);
+		op.filter(img, gray);
+		
+		return new ImageIcon(gray);
+	}
+	
+	public ImageIcon getDisabledIcon(String iconName, IconSize size) {
+		final ImageIcon icon = getIcon(iconName, size);
+		if(icon == null) return null;
+		
+		final int w = icon.getIconWidth();
+		final int h = icon.getIconHeight();
+		
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		BufferedImage img = gc.createCompatibleImage(w, h, Transparency.TRANSLUCENT);
+		Graphics2D g2d = img.createGraphics();
+		icon.paintIcon(null, g2d, 0, 0);
+		Image gray = GrayFilter.createDisabledImage(img);
+		
+		return new ImageIcon(gray);
+	}
 	
 	/**
 	 * Load an icon from our classpath
@@ -164,7 +159,6 @@ public class IconManager {
 		}
 		
 		if(found) {
-//			PhonLogger.info("Loading icon from cp");
 			ImageIcon iconImage = null;
 			iconImage = new ImageIcon(iconURL);
 			
