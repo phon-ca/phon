@@ -223,7 +223,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		}
 		
 		final SessionEditor editor = new SessionEditor(project, session, transcriber);
-
+		
 		// load editor perspective
 		final RecordEditorPerspective prevPerspective = 
 				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);

@@ -82,6 +82,7 @@ import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.ByteSize;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonTask;
@@ -579,18 +580,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	public void onModifiedChanged(EditorEvent eee) {
 		final String title = generateTitle();
 		setTitle(title);
-		
-		final DateTimeFormatter format = DateTimeFormat.forPattern("k:ma");
-		
-		final StringBuffer sb = new StringBuffer();
-		sb.append(getSession().getCorpus()).append(".").append(getSession().getName());
-		if(isModified())
-			sb.append(" (modified)");
-		else if(lastSaveTime != null) {
-			sb.append(" Last Save:").append(format.print(lastSaveTime));
-			sb.append(" Size:").append(humanReadableByteCount(lastSaveSize, true));
-		}
-		getStatusBar().getStatusLabel().setText(sb.toString());
 	}
 	
 	@RunOnEDT
@@ -617,17 +606,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		return this.isModified();
 	}
 	
-	private static String humanReadableByteCount(long bytes, boolean si) {
-	    int unit = si ? 1000 : 1024;
-	    if (bytes < unit) return bytes + " B";
-	    int exp = (int) (Math.log(bytes) / Math.log(unit));
-	    String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
-	    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
-	}
-	
-	private DateTime lastSaveTime = null;
-	private long lastSaveSize = 0L;
-	
 	@Override
 	public boolean saveData() 
 			throws IOException {
@@ -640,13 +618,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			writeLock = project.getSessionWriteLock(session);
 			project.saveSession(session, writeLock);
 			
-			final File sessionFile = 
-					new File(new File(project.getLocation(), session.getCorpus()), session.getName() + ".xml");
-
-			lastSaveSize = sessionFile.length();
-			lastSaveTime = DateTime.now();
+			final long byteSize = project.getSessionByteSize(session);
 			
-			final String msg = "Save finished.  " + humanReadableByteCount(sessionFile.length(), true) + " written to disk.";
+			final String msg = "Save finished.  " + 
+					ByteSize.humanReadableByteCount(byteSize, true) + " written to disk.";
 			LOGGER.info(msg);
 			
 			// show a short messgae next to the save button to indicate save completed
