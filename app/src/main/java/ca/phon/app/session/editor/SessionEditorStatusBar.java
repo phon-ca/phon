@@ -35,6 +35,7 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.ByteSize;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -125,7 +126,10 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
 		progressBar.setIndeterminate(false);
 		progressBar.setValue(0);
-		progressBar.setSize(80, 8);
+		if(OSInfo.isMacOs()) {
+			// XXX make progress bar height smaller on mac
+			progressBar.setSize(80, 8);
+		}
 		pbar.add(progressBar, (new CellConstraints()).xy(1, 1));
 		
 		progressLabel = new JLabel() {
