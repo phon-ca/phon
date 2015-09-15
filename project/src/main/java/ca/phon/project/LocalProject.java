@@ -865,6 +865,23 @@ public class LocalProject implements Project, ProjectRefresh {
 	public String getLocation() {
 		return projectFolder.getAbsolutePath();
 	}
+	
+	@Override
+	public String getCorpusPath(String corpus) {
+		final File corpusFolder = getCorpusFolder(corpus);
+		return (corpusFolder == null ? corpus : corpusFolder.getAbsolutePath());
+	}
+
+	@Override
+	public String getSessionPath(Session session) {
+		return getSessionPath(session.getCorpus(), session.getName());
+	}
+
+	@Override
+	public String getSessionPath(String corpus, String session) {
+		final File sessionFile = getSessionFile(corpus, session);
+		return (sessionFile == null ? corpus + File.separator + session : sessionFile.getAbsolutePath());
+	}
 
 	@Override
 	public Session getSessionTemplate(String corpus) throws IOException {

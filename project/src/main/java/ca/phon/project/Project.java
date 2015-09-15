@@ -201,6 +201,13 @@ public interface Project extends IExtendable {
 	public List<String> getCorpusSessions(String corpus);
 	
 	/**
+	 * Return the path to the given corpus.
+	 * 
+	 * @param corpus
+	 */
+	public String getCorpusPath(String corpus);
+	
+	/**
 	 * Returns the number of records in a session w/o opening
 	 * the session. This method is faster than using
 	 * openSession(corpus, session).numberOfRecords()
@@ -225,6 +232,25 @@ public interface Project extends IExtendable {
 	 */
 	public Session openSession(String corpus, String session)
 		throws IOException;
+	
+	/**
+	 * Get path to the given session.
+	 * 
+	 * @param session
+	 * 
+	 * @return path to given session
+	 */
+	public String getSessionPath(Session session);
+	
+	/**
+	 * Get path to the given session.
+	 * 
+	 * @param corpus
+	 * @param session
+	 * 
+	 * @return path to given session
+	 */
+	public String getSessionPath(String corpus, String session);
 	
 	/**
 	 * Get a write lock for a session.  Before writing a write lock
