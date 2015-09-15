@@ -51,7 +51,6 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.media_player.actions.ExportAction;
 import ca.phon.app.session.editor.view.media_player.actions.GoToAction;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
 import ca.phon.app.session.editor.view.media_player.actions.PlayAdjacencySequenceAction;
@@ -79,6 +78,7 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Panel for embedded media player for editor.
@@ -256,39 +256,40 @@ public class MediaPlayerEditorView extends EditorView {
 	/**
 	 *  Menu actions
 	 */
-	public void onExportMedia(PhonActionEvent pae) {
-		String mediaFilePath = getMediaFilePath();
-		if(mediaFilePath != null) {
-			File f = new File(mediaFilePath);
-			String name = f.getName();
-			int extDotIdx = name.lastIndexOf(".");
-			String ext = "";
-			if(extDotIdx > 0) {
-				ext = name.substring(extDotIdx);
-			}
-			
-			File projFile = new File(getEditor().getProject().getLocation());
-			File resFile = new File(projFile, "__res");
-			File mediaResFile = new File(resFile, "media");
-			File segmentFile = new File(mediaResFile, "segments");
-			if(!segmentFile.exists()) {
-				segmentFile.mkdirs();
-			}
-			
-			File outputFile = new File(segmentFile, 
-					getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ext);
-						int fIdx = 0;
-			while(outputFile.exists()) {
-				outputFile = new File(segmentFile, 
-						getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) +
-						"(" + (++fIdx) + ")" + ext);
-			}
-			
-			final VLCMediaExporter exporter =
-					new VLCMediaExporter(new File(mediaFilePath), outputFile, Preset.H264_HIGH);
-			
-		}
-	}
+//	public void onExportMedia(PhonActionEvent pae) {
+//		String mediaFilePath = getMediaFilePath();
+//		if(mediaFilePath != null) {
+//			File f = new File(mediaFilePath);
+//			String name = f.getName();
+//			int extDotIdx = name.lastIndexOf(".");
+//			String ext = "";
+//			if(extDotIdx > 0) {
+//				ext = name.substring(extDotIdx);
+//			}
+//			
+//			File projFile = new File(getEditor().getProject().getLocation());
+//			File resFile = new File(projFile, "__res");
+//			File mediaResFile = new File(resFile, "media");
+//			File segmentFile = new File(mediaResFile, "segments");
+//			if(!segmentFile.exists()) {
+//				segmentFile.mkdirs();
+//			}
+//			
+//			File outputFile = new File(segmentFile, 
+//					getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ext);
+//						int fIdx = 0;
+//			while(outputFile.exists()) {
+//				outputFile = new File(segmentFile, 
+//						getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) +
+//						"(" + (++fIdx) + ")" + ext);
+//			}
+//			
+//			final VLCMediaExporter exporter =
+//					new VLCMediaExporter(new File(mediaFilePath), outputFile, Preset.H264_HIGH);
+//			getEditor().getStatusBar().watchTask(exporter);
+//			PhonWorker.getInstance().invokeLater(exporter);
+//		}
+//	}
 
 	// popup frame for time selection
 	private JFrame timeSelectionPopup = null;
@@ -487,10 +488,6 @@ public class MediaPlayerEditorView extends EditorView {
 		@Override
 		public JPopupMenu makeMenuChanges(JPopupMenu menu) {
 			JPopupMenu retVal = menu;
-
-			menu.add(getMediaExportItem());
-
-			menu.addSeparator();
 			
 			setupPlaytoItems(menu);
 			
@@ -498,11 +495,6 @@ public class MediaPlayerEditorView extends EditorView {
 			
 			setupGotoItems(menu);
 
-			return retVal;
-		}
-
-		private JMenuItem getMediaExportItem() {
-			JMenuItem retVal = new JMenuItem(new ExportAction(getEditor(), MediaPlayerEditorView.this));
 			return retVal;
 		}
 		
@@ -557,7 +549,6 @@ public class MediaPlayerEditorView extends EditorView {
 		final JMenu menu = new JMenu();
 		
 		menu.add(new TakeSnapshotAction(getEditor(), this));
-		menu.add(new ExportAction(getEditor(), this));
 		menu.addSeparator();
 		menu.add(new PlayCustomSegmentAction(getEditor(), this));
 		menu.add(new PlaySegmentAction(getEditor(), this));
