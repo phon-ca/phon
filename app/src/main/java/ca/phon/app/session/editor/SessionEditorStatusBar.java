@@ -202,7 +202,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 			buf.append("*modified* ");
 		}
 		
-		final DateTimeFormatter formatter = DateTimeFormat.forPattern("K:ma");
+		final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd@K:ma");
 		buf.append("Last save:");
 		buf.append(formatter.print(project.getSessionModificationTime(session)));
 		
