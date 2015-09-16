@@ -2,9 +2,26 @@
 
 ## Changes from Phon 2.1.1
 
-### General Changes
- * Now using VLC instead of ffmpeg for media exports
- * 
+### General
+ * Update to Java 8u60.
+ * Fixed an issue with flat tier sizing when data spans multiple lines in Record Data view.
+ * New status bar for Session Editor which includes:
+   * Modification status
+   * Session corpus/name with link to corpus folder
+   * Progress indicator
+
+### Media
+ * Removed ffmpeg dependency.
+ * Updated to VLC 2.2.1.
+ * Now using VLC instead of ffmpeg for media exports.
+ * Removed deprecated 'Export media' function from Media Player view menu.
+ * Improved user feedback when exporting wav data for session media.
+ * Speech analysis start time will now scroll as the horizontal scrollbar is dragged.
+ * Improved look and feel of tier separators in Speech Analysis view.
+ 
+### Praat Plug-in
+ * Update to jpraat 0.12 (Praat version 5.4.15)
+ * Improved form and behaviour of Generating Records from TextGrid function.
 
 ## Changes from Phon 2.1.0
 
