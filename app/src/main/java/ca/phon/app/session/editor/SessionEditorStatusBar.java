@@ -145,7 +145,8 @@ public class SessionEditorStatusBar extends JXStatusBar {
 				getEditor().getSession().getName());
 		sessionPathLabel.setFont(FontPreferences.getSmallFont());
 		sessionPathLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		sessionPathLabel.setToolTipText(getEditor().getProject().getSessionPath(getEditor().getSession()));
+		sessionPathLabel.setToolTipText(
+				getEditor().getProject().getSessionPath(getEditor().getSession()) + " (click to show corpus folder)");
 		sessionPathLabel.addMouseListener(new MouseInputAdapter() {
 
 			@Override
