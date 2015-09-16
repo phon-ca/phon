@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.math.genetics.GeneticAlgorithm;
+import org.apache.derby.catalog.GetProcedureColumns;
+
 /**
  * Layout tier groups so that they are vertically aligned.
  * Full/flat tiers fill the remainder of the component or
@@ -190,6 +193,13 @@ public class AlignGroupsLayoutProvider implements TierDataLayoutProvider {
 		for(TierDataConstraint tdc:componentMap.keySet()) {
 			if(tdc.getRowIndex() == row) {
 				final Component comp = componentMap.get(tdc);
+				
+				// XXX fix flat tier height by setting width.  This is necessary for JTextArea calculations
+				if(tdc.getColumnIndex() == TierDataConstraint.FLAT_TIER_COLUMN) {
+					int width = parent.getWidth() - layout.getHorizontalGap() - layout.getTierLabelWidth();
+					comp.setSize(new Dimension(width, comp.getPreferredSize().height));
+				}
+				
 				height = Math.max(height, comp.getPreferredSize().height);
 			}
 		}
