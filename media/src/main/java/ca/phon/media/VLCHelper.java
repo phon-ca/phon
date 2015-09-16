@@ -93,7 +93,8 @@ public class VLCHelper {
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
 				
 				final String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, vlcPluginPathDefault);
-				if(vlcPluginPath != null) {
+
+				if(vlcPluginPath != null && !OSInfo.isWindows()) {
 					LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1);
 				}
 				
