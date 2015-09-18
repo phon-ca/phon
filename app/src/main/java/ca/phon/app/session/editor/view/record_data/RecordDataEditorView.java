@@ -28,7 +28,12 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -64,6 +69,8 @@ import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.EditorSelectionModel;
+import ca.phon.app.session.editor.EditorSelectionModelListener;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RecordNumberField;
 import ca.phon.app.session.editor.RunOnEDT;
@@ -174,6 +181,8 @@ public class RecordDataEditorView extends EditorView {
 	
 	private final AtomicInteger currentCharIndex = new AtomicInteger(-1);
 	
+	private final Map<String, List<TierEditor>> editorMap = new LinkedHashMap<>();
+	
 	public RecordDataEditorView(SessionEditor editor) {
 		super(editor);
 		init();
@@ -242,6 +251,7 @@ public class RecordDataEditorView extends EditorView {
 		update();
 		updateStatus();
 		setupEditorActions();
+		getEditor().getSelectionModel().addSelectionModelListener(selectionListener); 
 	}
 	
 	private void setupEditorActions() {
@@ -279,6 +289,9 @@ public class RecordDataEditorView extends EditorView {
 	 */
 	private void update() {
 		updating = true;
+		
+		editorMap.clear();
+		
 		contentPane.removeAll();
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
@@ -337,6 +350,8 @@ public class RecordDataEditorView extends EditorView {
 				record.putTier(tier);
 			}
 			if(isGrouped) {
+				List<TierEditor> editors = new ArrayList<>();
+				editorMap.put(tier.getName(), editors);
 				for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
 					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, gIdx);
 					tierEditor.addTierEditorListener(tierEditorListener);
@@ -345,7 +360,7 @@ public class RecordDataEditorView extends EditorView {
 						tierComp.setFont(tierFont);
 					tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, gIdx));
 					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
-					
+
 					if(tierComp instanceof JTextComponent) {
 						final JTextComponent textComp = (JTextComponent)tierComp;
 						addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, gIdx);
@@ -361,6 +376,7 @@ public class RecordDataEditorView extends EditorView {
 					if(toFocus == null) {
 						toFocus = (JComponent)tierComp;
 					}
+					editors.add(tierEditor);
 				}
 			} else {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
@@ -386,11 +402,12 @@ public class RecordDataEditorView extends EditorView {
 				if(toFocus == null) {
 					toFocus = (JComponent)tierComp;
 				}
+				editorMap.put(tierName, Collections.singletonList(tierEditor));
 			}
 			row++;
 		}
 		
-		if(hasFocus() && toFocus != null) {
+		if(isFocusOwner() && toFocus != null) {
 			toFocus.requestFocusInWindow();
 		}
 		
@@ -415,6 +432,57 @@ public class RecordDataEditorView extends EditorView {
 		}
 	}
 	
+	/*
+	 * Session selections
+	 */
+	private final EditorSelectionModelListener selectionListener =  new EditorSelectionModelListener() {
+		
+		@Override
+		public void selectionsCleared(EditorSelectionModel model) {
+			for(String tierName:editorMap.keySet()) {
+				final List<TierEditor> editors = editorMap.get(tierName);
+				for(TierEditor editor:editors) {
+					final JComponent tierComp = editor.getEditorComponent();
+					if(tierComp instanceof JTextComponent) {
+						// clear highlights
+						final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
+						hl.removeAllHighlights();
+					}
+				}
+			}
+		}
+		
+		@Override
+		public void selectionSet(EditorSelectionModel model,
+				SessionEditorSelection selection) {
+			selectionsCleared(model);
+			selectionAdded(model, selection);
+		}
+		
+		@Override
+		public void selectionAdded(EditorSelectionModel model,
+				SessionEditorSelection selection) {
+			if(selection.getRecordIndex() == getEditor().getCurrentRecordIndex()) {
+				final List<TierEditor> editors = editorMap.get(selection.getTierName());
+				if(editors != null && editors.size() > selection.getGroupIndex()) {
+					final TierEditor editor = editors.get(selection.getGroupIndex());
+					final JComponent tierComp = editor.getEditorComponent();
+					if(tierComp instanceof JTextComponent) {
+						final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
+						final Range r = selection.getGroupRange();
+						try {
+							hl.addHighlight(r.getFirst(), r.getLast(), 
+									new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
+						} catch (BadLocationException e) {
+							LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+						}
+					}
+				}
+			}
+		}
+		
+	};
+	
 	private void addSelectionHighlights(JTextComponent textComp, int recordIndex, String tierName, int groupIndex) {
 		final List<SessionEditorSelection> selections = 
 				getEditor().getSelectionModel().getSelectionsForGroup(recordIndex,
@@ -427,7 +495,7 @@ public class RecordDataEditorView extends EditorView {
 				try {
 					hl.addHighlight(hilight.getStartOffset(), hilight.getEndOffset(), hilight.getPainter());
 				} catch (BadLocationException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 				}
 		}
 		for(SessionEditorSelection selection:selections) {
@@ -436,7 +504,7 @@ public class RecordDataEditorView extends EditorView {
 				hl.addHighlight(r.getFirst(), r.getLast(), 
 						new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
 			} catch (BadLocationException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 			}
 		}
 	}

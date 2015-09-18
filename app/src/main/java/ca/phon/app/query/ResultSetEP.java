@@ -121,7 +121,6 @@ public class ResultSetEP implements IPluginEntryPoint {
 			window.setVisible(true);
 		}
 		
-		
 	}
 	
 	private void openSession(Project project, ResultSet rs) {

@@ -754,7 +754,6 @@ public class ResultSetEditor extends ProjectFrame {
 		
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			// TODO
 			if(!e.getValueIsAdjusting() && getEditor() != null) {
 				final int rowIdx = resultTable.getSelectedRow();
 				if(rowIdx < 0) return;
@@ -771,7 +770,8 @@ public class ResultSetEditor extends ProjectFrame {
 										rv.getGroupIndex(), range);
 						selectionModel.addSelection(selection);
 					}
-					getEditor().setCurrentRecordIndex(r.getRecordIndex());
+					if(getEditor().getCurrentRecordIndex() != r.getRecordIndex()) 
+						getEditor().setCurrentRecordIndex(r.getRecordIndex());
 				} else {
 					getEditor().getSelectionModel().clear();
 				}
