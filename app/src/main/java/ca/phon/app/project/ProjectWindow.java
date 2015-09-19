@@ -24,6 +24,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -34,6 +36,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +94,7 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectListener;
+import ca.phon.project.ProjectPath;
 import ca.phon.project.ProjectRefresh;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
@@ -180,8 +184,16 @@ public class ProjectWindow extends CommonModuleFrame
 		return corpusList.getSelectedValue();
 	}
 	
+	public List<String> getSelectedCorpora() {
+		return corpusList.getSelectedValuesList();
+	}
+	
 	public String getSelectedSessionName() {
 		return sessionList.getSelectedValue();
+	}
+	
+	public List<String> getSelectedSessionNames() {
+		return sessionList.getSelectedValuesList();
 	}
 	
 	public SessionPath getSelectedSessionPath() {
@@ -305,8 +317,7 @@ public class ProjectWindow extends CommonModuleFrame
 
 			public void valueChanged(ListSelectionEvent e) {
 				if(corpusList.getSelectedValue() != null) {
-					String corpus = 
-						corpusList.getSelectedValue().toString();
+					String corpus = getSelectedCorpus();
 					sessionModel.setCorpus(corpus);
 					corpusDetails.setCorpus(corpus);
 					
@@ -339,6 +350,17 @@ public class ProjectWindow extends CommonModuleFrame
 					showCorpusListContextMenu(e.getPoint());
 				}
 			}
+		});
+		
+		final DragSource corpusDragSource = new DragSource();
+		corpusDragSource.createDefaultDragGestureRecognizer(corpusList, DnDConstants.ACTION_COPY_OR_MOVE, (event) -> {
+			final List<ProjectPath> paths = new ArrayList<>();
+			for(String corpus:getSelectedCorpora()) {
+				final ProjectPath corpusPath = new ProjectPath(getProject(), corpus, null);
+				paths.add(corpusPath);
+			}
+			final ProjectPathTransferable transferable = new ProjectPathTransferable(paths);
+			event.startDrag(DragSource.DefaultCopyDrop, transferable);
 		});
 		
 		corpusDetails = new CorpusDetailsPane(getProject());
@@ -414,6 +436,19 @@ public class ProjectWindow extends CommonModuleFrame
 					showSessionListContextMenu(e.getPoint());
 				}
 			}
+		});
+		
+		final DragSource sessionDragSource = new DragSource();
+		sessionDragSource.createDefaultDragGestureRecognizer(sessionList, DnDConstants.ACTION_COPY_OR_MOVE, (event) -> {
+			final List<ProjectPath> paths = new ArrayList<>();
+			final String corpus = getSelectedCorpus();
+			if(corpus == null) return;
+			for(String session:getSelectedSessionNames()) {
+				final ProjectPath sessionPath = new ProjectPath(getProject(), corpus, session);
+				paths.add(sessionPath);
+			}
+			final ProjectPathTransferable transferable = new ProjectPathTransferable(paths);
+			event.startDrag(DragSource.DefaultCopyDrop, transferable);
 		});
 		
 		sessionDetails = new SessionDetailsPane(getProject());
