@@ -180,6 +180,22 @@ public class ProjectWindow extends CommonModuleFrame
 		setJMenuBar(menuBar);
 	}
 	
+	public MultiActionButton getCorpusButton() {
+		return this.createCorpusButton;
+	}
+	
+	public JList<String> getCorpusList() {
+		return this.corpusList;
+	}
+	
+	public MultiActionButton getSessionButton() {
+		return this.createSessionButton;
+	}
+	
+	public JList<String> getSessionList() {
+		return this.sessionList;
+	}
+	
 	public String getSelectedCorpus() {
 		return corpusList.getSelectedValue();
 	}
@@ -208,8 +224,9 @@ public class ProjectWindow extends CommonModuleFrame
 		return getExtension(Project.class);
 	}
 	
+	@Deprecated
 	public boolean isRemoteProject() {
-		return this.projectLoadPath.startsWith("rmi://");
+		return false;
 	}
 	
 	@Override
@@ -305,9 +322,12 @@ public class ProjectWindow extends CommonModuleFrame
 		/* Layout */
 		setLayout(new BorderLayout());
 		
+		final ProjectDataTransferHandler transferHandler = new ProjectDataTransferHandler(this);
+		
 		/* Create components */
 		newCorpusButton = createNewCorpusButton();
 		createCorpusButton = createCorpusButton();
+		
 		corpusList = new JList<String>();
 		corpusModel = new CorpusListModel(getProject());
 		corpusList.setModel(corpusModel);
@@ -316,9 +336,10 @@ public class ProjectWindow extends CommonModuleFrame
 		corpusList.addListSelectionListener(new ListSelectionListener() {
 
 			public void valueChanged(ListSelectionEvent e) {
-				if(corpusList.getSelectedValue() != null) {
+				if(getSelectedCorpus() != null) {
 					String corpus = getSelectedCorpus();
 					sessionModel.setCorpus(corpus);
+					sessionList.clearSelection();
 					corpusDetails.setCorpus(corpus);
 					
 					if(getProject().getCorpusSessions(corpus).size() == 0) {
@@ -327,7 +348,6 @@ public class ProjectWindow extends CommonModuleFrame
 						onSwapNewAndCreateSession(createSessionButton);
 					}
 				}
-				
 			}
 			
 		});
@@ -363,6 +383,9 @@ public class ProjectWindow extends CommonModuleFrame
 			event.startDrag(DragSource.DefaultCopyDrop, transferable);
 		});
 		
+		corpusList.setDragEnabled(true);
+		corpusList.setTransferHandler(transferHandler);
+		
 		corpusDetails = new CorpusDetailsPane(getProject());
 		corpusDetails.setWrapStyleWord(true);
 		corpusDetails.setRows(6);
@@ -382,8 +405,8 @@ public class ProjectWindow extends CommonModuleFrame
 
 			public void valueChanged(ListSelectionEvent e) {
 				if(sessionList.getSelectedValue() != null && !e.getValueIsAdjusting()) {
-					String corpus = sessionModel.getCorpus();
-					String session = sessionList.getSelectedValue().toString();
+					String corpus = getSelectedCorpus();
+					String session = getSelectedSessionName();
 					
 					sessionDetails.setSession(corpus, session);
 				}
@@ -437,6 +460,9 @@ public class ProjectWindow extends CommonModuleFrame
 				}
 			}
 		});
+		
+		sessionList.setDragEnabled(true);
+		sessionList.setTransferHandler(transferHandler);
 		
 		final DragSource sessionDragSource = new DragSource();
 		sessionDragSource.createDefaultDragGestureRecognizer(sessionList, DnDConstants.ACTION_COPY_OR_MOVE, (event) -> {
