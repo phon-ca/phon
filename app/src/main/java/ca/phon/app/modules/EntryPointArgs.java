@@ -31,6 +31,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -146,7 +147,7 @@ public class EntryPointArgs extends HashMap<String, Object> {
 		}
 		
 		if(projectFile != null) {
-			final ProjectFactory factory = new ProjectFactory();
+			final ProjectFactory factory = new DesktopProjectFactory();
 			try {
 				retVal = factory.openProject(projectFile);
 			} catch (IOException e) {

@@ -31,6 +31,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import ca.phon.project.DefaultProjectFactory;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -62,7 +63,7 @@ public class TestPhonesQuery extends TestQuery {
 	public static Collection<Object[]> testData() {
 		final Collection<Object[]> retVal = new ArrayList<Object[]>();
 		
-		final ProjectFactory factory = new ProjectFactory();
+		final ProjectFactory factory = new DefaultProjectFactory();
 		try {
 			final Project project = factory.openProject(new File(TEST_PROJECT));
 			final Session session = project.openSession(TEST_CORPUS, TEST_SESSION);

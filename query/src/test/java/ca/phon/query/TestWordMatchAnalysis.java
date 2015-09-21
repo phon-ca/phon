@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import ca.phon.project.DefaultProjectFactory;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -58,7 +59,7 @@ public class TestWordMatchAnalysis {
 		final ScriptReportStep reportStep = new ScriptReportStep(rs);
 		final QueryAnalysis qa = new QueryAnalysis(queryStep, reportStep);
 		
-		final Project project = (new ProjectFactory()).openProject(new File(TEST_PROJECT));
+		final Project project = (new DefaultProjectFactory()).openProject(new File(TEST_PROJECT));
 		final SessionPath sp = new SessionPath(TEST_CORPUS, TEST_SESSION);
 		final SessionPath[] selectedSessions = new SessionPath[]{ sp };
 		

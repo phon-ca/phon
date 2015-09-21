@@ -117,7 +117,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 * 
 	 * @param url
 	 */
-	LocalProject(File projectFolder) 
+	protected LocalProject(File projectFolder) 
 			throws ProjectConfigurationException {
 		super();
 		this.projectFolder = projectFolder;
@@ -175,7 +175,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 * 
 	 * @throws IOException
 	 */
-	private void saveProjectData() 
+	protected void saveProjectData() 
 		throws IOException {
 		final ObjectFactory factory = new ObjectFactory();
 		try {
@@ -270,7 +270,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 * @return the corpus xml object or <code>null</code> if 
 	 *  not found
 	 */
-	private CorpusType getCorpusInfo(String corpus) {
+	protected CorpusType getCorpusInfo(String corpus) {
 		final ProjectType projectData = getProjectData();
 		for(CorpusType ct:projectData.getCorpus()) {
 			if(ct.getName().equals(corpus)) {
@@ -288,7 +288,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 * @return the session xml object or <code>null</code> if
 	 *  not found
 	 */
-	private SessionType getSessionInfo(String corpus, String session) {
+	protected SessionType getSessionInfo(String corpus, String session) {
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null) {
 			for(SessionType st:ct.getSession()) {
@@ -300,7 +300,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		return null;
 	}
 	
-	private ProjectType getProjectData() {
+	protected ProjectType getProjectData() {
 		return this.projectData;
 	}
 	
@@ -573,7 +573,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 * 
 	 * @throws IOException if the write lock is not valid
 	 */
-	private void checkSessionWriteLock(String corpus, String session, UUID writeLock)
+	protected void checkSessionWriteLock(String corpus, String session, UUID writeLock)
 		throws IOException {
 		final String sessionLoc = sessionProjectPath(corpus, session);
 		final UUID uuid = sessionLocks.get(sessionLoc);

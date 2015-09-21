@@ -26,6 +26,10 @@ public class NewSessionAction extends ProjectWindowAction {
 		this(projectWindow, null, null);
 	}
 	
+	public NewSessionAction(ProjectWindow projectWindow, String corpus) {
+		this(projectWindow, corpus, null);
+	}
+	
 	public NewSessionAction(ProjectWindow projectWindow, String corpus, String sessionName) {
 		super(projectWindow);
 		

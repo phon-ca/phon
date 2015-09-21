@@ -68,6 +68,7 @@ import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
+import ca.phon.project.DefaultProjectFactory;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.query.db.Query;
@@ -171,7 +172,7 @@ public class QueryRunnerPanel extends JPanel {
 			final String tmpProjectFolder =
 					tmpFolder + File.separator + "phon-" + Long.toHexString(uuid.getLeastSignificantBits());
 //			tempProjectFile.mkdirs();
-			final ProjectFactory factory = new ProjectFactory();
+			final ProjectFactory factory = new DefaultProjectFactory();
 			tempProject = factory.createProject(new File(tmpProjectFolder));
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);

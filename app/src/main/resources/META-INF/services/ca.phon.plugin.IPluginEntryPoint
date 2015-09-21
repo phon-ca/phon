@@ -15,8 +15,6 @@ ca.phon.app.prefs.PreferencesEP
 # Tools/Language Codes
 ca.phon.app.help.LanguageCodeEP
 ## Project actions
-# Delete corpus
-ca.phon.app.project.DeleteCorpusEP
 # Rename corpus
 ca.phon.app.project.RenameCorpusEP
 # Archive Project
@@ -35,8 +33,6 @@ ca.phon.app.corpus.CorpusTemplateEP
 ca.phon.app.project.CopySessionEP
 # Rename session
 ca.phon.app.project.RenameSessionEP
-# Delete session
-ca.phon.app.project.DeleteSessionEP
 # Duplicate session
 ca.phon.app.project.DuplicateSessionEP
 # Export session

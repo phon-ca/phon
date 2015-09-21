@@ -61,6 +61,7 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
+import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -468,7 +469,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		
 		// create a new project at the given location
 		try {
-			final ProjectFactory factory = new ProjectFactory();
+			final ProjectFactory factory = new DesktopProjectFactory();
 			Project newProject = factory.createProject(projectFile);
 			newProject.setName(projectName);
 			

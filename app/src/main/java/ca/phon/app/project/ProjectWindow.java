@@ -80,6 +80,8 @@ import org.jdesktop.swingx.JXBusyLabel;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.actions.AnonymizeAction;
 import ca.phon.app.project.actions.CheckTranscriptionsAction;
+import ca.phon.app.project.actions.DeleteCorpusAction;
+import ca.phon.app.project.actions.DeleteSessionAction;
 import ca.phon.app.project.actions.DeriveSessionAction;
 import ca.phon.app.project.actions.NewCorpusAction;
 import ca.phon.app.project.actions.NewSessionAction;
@@ -562,10 +564,8 @@ public class ProjectWindow extends CommonModuleFrame
 		newAct.putValue(Action.NAME, "New corpus");
 		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new corpus folder");
 		
-		PhonUIAction deleteCurrentAct = new PhonUIAction(this, "onDeleteCorpus");
+		DeleteCorpusAction deleteCurrentAct = new DeleteCorpusAction(this);
 		deleteCurrentAct.putValue(Action.LARGE_ICON_KEY, removeIcnL);
-		deleteCurrentAct.putValue(Action.NAME, "Delete corpus");
-		deleteCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Delete selected corpus");
 		
 		PhonUIAction renameCurrentAct = new PhonUIAction(this, "onRenameCorpus");
 		renameCurrentAct.putValue(Action.LARGE_ICON_KEY, renameIcnL);
@@ -734,10 +734,8 @@ public class ProjectWindow extends CommonModuleFrame
 		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new session in selected corpus");
 		retVal.setDefaultAction(newAct);
 		
-		PhonUIAction deleteCurrentAct = new PhonUIAction(this, "onDeleteSession");
+		DeleteSessionAction deleteCurrentAct = new DeleteSessionAction(this);
 		deleteCurrentAct.putValue(Action.LARGE_ICON_KEY, removeIcnL);
-		deleteCurrentAct.putValue(Action.NAME, "Delete session");
-		deleteCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Delete selected session");
 		
 		PhonUIAction renameCurrentAct = new PhonUIAction(this, "onRenameSession");
 		renameCurrentAct.putValue(Action.LARGE_ICON_KEY, renameIcnL);

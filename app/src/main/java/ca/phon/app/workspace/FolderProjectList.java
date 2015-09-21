@@ -54,6 +54,7 @@ import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXRadioGroup;
 import org.joda.time.DateTime;
 
+import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
@@ -405,7 +406,7 @@ public class FolderProjectList extends JPanel {
 	 */
 	public void onArchiveProject(PhonActionEvent pae) {
 		final LocalProjectButton btn = (LocalProjectButton)pae.getData();
-		final ProjectFactory factory = new ProjectFactory();
+		final ProjectFactory factory = new DesktopProjectFactory();
 		try {
 			final Project project = factory.openProject(btn.getProjectFile());
 			final String today = DateFormatter.dateTimeToString(DateTime.now());

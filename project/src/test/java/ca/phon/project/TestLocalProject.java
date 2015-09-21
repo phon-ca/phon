@@ -44,7 +44,7 @@ public class TestLocalProject {
 	 */
 	@Test
 	public void testProjectInfo() throws IOException, ProjectConfigurationException {
-		final ProjectFactory projectFactory = new ProjectFactory();
+		final ProjectFactory projectFactory = new DefaultProjectFactory();
 		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
 		
 		Assert.assertNotNull(project);
@@ -54,7 +54,7 @@ public class TestLocalProject {
 
 	@Test
 	public void testCorpusList() throws IOException, ProjectConfigurationException {
-		final ProjectFactory projectFactory = new ProjectFactory();
+		final ProjectFactory projectFactory = new DefaultProjectFactory();
 		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
 		
 		Assert.assertNotNull(project);
@@ -63,7 +63,7 @@ public class TestLocalProject {
 	
 	@Test
 	public void testSessionList() throws IOException, ProjectConfigurationException {
-		final ProjectFactory projectFactory = new ProjectFactory();
+		final ProjectFactory projectFactory = new DefaultProjectFactory();
 		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
 		
 		Assert.assertNotNull(project);

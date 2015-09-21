@@ -153,7 +153,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 					return true; // file was actually found, so return true
 			}
 			
-			final ProjectFactory factory = new ProjectFactory();
+			final ProjectFactory factory = new DesktopProjectFactory();
 			final Project proj = factory.openProject(myFile);
 			
 			// check project version and see if an update is needed

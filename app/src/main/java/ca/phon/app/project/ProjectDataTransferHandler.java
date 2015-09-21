@@ -124,10 +124,10 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 			}
 			dstProjectPath.setCorpus(dstCorpus);
 			String dstSessionName = projectPath.getSession();
-			int idx = 1;
+			int idx = 0;
 			while(dstProjectPath.getProject().getCorpusSessions(
 					dstProjectPath.getCorpus()).contains(dstSessionName)) {
-				dstSessionName = projectPath.getSession() + " (" + idx + ")";
+				dstSessionName = projectPath.getSession() + " (" + (++idx) + ")";
 			}
 			dstProjectPath.setSession(dstSessionName);
 			

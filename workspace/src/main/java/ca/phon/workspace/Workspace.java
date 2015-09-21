@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ca.phon.project.DefaultProjectFactory;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -120,7 +121,7 @@ public class Workspace {
 		// scan workspace folder for projects
 		final File workspaceFolder = getWorkspaceFolder();
 		
-		final ProjectFactory pf = new ProjectFactory();
+		final ProjectFactory pf = new DefaultProjectFactory();
 		for(File workspaceFile:workspaceFolder.listFiles()) {
 			if(workspaceFile.isDirectory() 
 					&& !workspaceFile.isHidden()

@@ -20,7 +20,7 @@ public class DeriveSessionAction extends ProjectWindowAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final DeriveSessionWizard wizard = new DeriveSessionWizard(getWindow().getProject());
-		wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
+		wizard.setParentFrame(getWindow());
 		wizard.setSize(600, 500);
 		wizard.setLocationByPlatform(true);
 		wizard.setVisible(true);
