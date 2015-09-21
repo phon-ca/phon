@@ -54,7 +54,7 @@ public class NewSessionDialog extends JDialog {
 	public NewSessionDialog(Project project) {
 		super();
 		this.proj = project;
-		setTitle("New Session");
+		setTitle(project.getName() + " : New Session");
 		setModal(true);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());

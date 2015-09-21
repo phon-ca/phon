@@ -4,6 +4,9 @@ import java.lang.ref.WeakReference;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.project.ProjectWindow;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 
 public abstract class ProjectWindowAction extends HookableAction {
 
@@ -18,6 +21,16 @@ public abstract class ProjectWindowAction extends HookableAction {
 	
 	public ProjectWindow getWindow() {
 		return this.projectWindowRef.get();
+	}
+
+	protected void showMessage(String msg1, String msg2) {
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setOptions(MessageDialogProperties.okOptions);
+		props.setHeader(msg1);
+		props.setMessage(msg2);
+		props.setParentWindow(getWindow());
+		
+		NativeDialogs.showDialog(props);
 	}
 	
 }

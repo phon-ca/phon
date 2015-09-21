@@ -100,6 +100,7 @@ import ca.phon.project.ProjectRefresh;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MultiActionButton;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.fonts.FontPreferences;
@@ -223,11 +224,6 @@ public class ProjectWindow extends CommonModuleFrame
 	 */
 	public Project getProject() {
 		return getExtension(Project.class);
-	}
-	
-	@Deprecated
-	public boolean isRemoteProject() {
-		return false;
 	}
 	
 	@Override
@@ -683,7 +679,8 @@ public class ProjectWindow extends CommonModuleFrame
 		return retVal;
 	}
 	
-	public void onCreateCorpus(JTextField textField) {
+	public void onCreateCorpus(PhonActionEvent pae) {
+		final JTextField textField = (JTextField)pae.getData();
 		final String corpusName = textField.getText().trim();
 		if(corpusName.length() == 0) {
 			Toolkit.getDefaultToolkit().beep();
@@ -691,13 +688,11 @@ public class ProjectWindow extends CommonModuleFrame
 			return;
 		}
 
-		try {
-			getProject().addCorpus(corpusName, "");
+		final NewCorpusAction newCorpusAct = new NewCorpusAction(this, corpusName);
+		newCorpusAct.actionPerformed(pae.getActionEvent());
+		if(newCorpusAct.isCorpusCreated()) {
 			onSwapNewAndCreateCorpus(createCorpusButton);
 			corpusList.setSelectedValue(corpusName, true);
-		} catch (IOException e) {
-			Toolkit.getDefaultToolkit().beep();
-			ToastFactory.makeToast(e.getLocalizedMessage()).start(textField);
 		}
 	}
 	
@@ -900,7 +895,8 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionPanel.repaint();
 	}
 	
-	public void onCreateSession(JTextField textField) {
+	public void onCreateSession(PhonActionEvent pae) {
+		final JTextField textField = (JTextField)pae.getData();
 		final String sessionName = textField.getText().trim();
 		if(sessionName.length() == 0) {
 			Toolkit.getDefaultToolkit().beep();
@@ -908,18 +904,11 @@ public class ProjectWindow extends CommonModuleFrame
 			return;
 		}
 		
-		final EntryPointArgs args = new EntryPointArgs();
-		args.put(EntryPointArgs.PROJECT_OBJECT, getProject());
-		args.put(EntryPointArgs.CORPUS_NAME, corpusList.getSelectedValue());
-		args.put(EntryPointArgs.SESSION_NAME, sessionName);
-		
-		try {
-			PluginEntryPointRunner.executePlugin(NewSessionEP.EP_NAME, args);
+		final NewSessionAction newSessionAct = new NewSessionAction(this, getSelectedCorpus(), sessionName);
+		newSessionAct.actionPerformed(pae.getActionEvent());
+		if(newSessionAct.isSessionCreated()) {
 			onSwapNewAndCreateSession(createSessionButton);
 			sessionList.setSelectedValue(sessionName, true);
-		} catch (PluginException e) {
-			Toolkit.getDefaultToolkit().beep();
-			ToastFactory.makeToast(e.getLocalizedMessage()).start(textField);
 		}
 	}
 	
