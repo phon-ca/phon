@@ -34,6 +34,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -689,16 +690,12 @@ public class ProjectWindow extends CommonModuleFrame
 			ToastFactory.makeToast("Corpus name cannot be empty").start(textField);
 			return;
 		}
-		
-		final EntryPointArgs initInfo = new EntryPointArgs();
-		initInfo.put(EntryPointArgs.PROJECT_OBJECT, getProject());
-		initInfo.put(EntryPointArgs.CORPUS_NAME, corpusName);
-		
+
 		try {
-			PluginEntryPointRunner.executePlugin(NewCorpusEP.EP_NAME, initInfo);
+			getProject().addCorpus(corpusName, "");
 			onSwapNewAndCreateCorpus(createCorpusButton);
 			corpusList.setSelectedValue(corpusName, true);
-		} catch (PluginException e) {
+		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(textField);
 		}

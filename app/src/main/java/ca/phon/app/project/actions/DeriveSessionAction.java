@@ -1,10 +1,10 @@
 package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
 
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.app.project.mergewizard.DeriveSessionWizard;
+import ca.phon.ui.CommonModuleFrame;
 
 public class DeriveSessionAction extends ProjectWindowAction {
 
@@ -19,10 +19,11 @@ public class DeriveSessionAction extends ProjectWindowAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getWindow().getProject());
-		
-		PluginEntryPointRunner.executePluginInBackground("DeriveSession", initInfo);
+		final DeriveSessionWizard wizard = new DeriveSessionWizard(getWindow().getProject());
+		wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
+		wizard.setSize(600, 500);
+		wizard.setLocationByPlatform(true);
+		wizard.setVisible(true);
 	}
 
 }

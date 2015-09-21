@@ -1,10 +1,9 @@
 package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
 
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.app.project.checkwizard.CheckWizard;
 
 public class CheckTranscriptionsAction extends ProjectWindowAction {
 	
@@ -19,10 +18,10 @@ public class CheckTranscriptionsAction extends ProjectWindowAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getWindow().getProject());
-		
-		PluginEntryPointRunner.executePluginInBackground("CheckIPA", initInfo);
+		final CheckWizard cw = new CheckWizard(getWindow().getProject());
+		cw.setSize(600, 500);
+		cw.setLocationByPlatform(true);
+		cw.setVisible(true);
 	}
 
 }

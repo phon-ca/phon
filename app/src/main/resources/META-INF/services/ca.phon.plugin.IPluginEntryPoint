@@ -15,18 +15,12 @@ ca.phon.app.prefs.PreferencesEP
 # Tools/Language Codes
 ca.phon.app.help.LanguageCodeEP
 ## Project actions
-# New corpus
-ca.phon.app.project.NewCorpusEP
 # Delete corpus
 ca.phon.app.project.DeleteCorpusEP
 # Rename corpus
 ca.phon.app.project.RenameCorpusEP
 # New session
 ca.phon.app.project.NewSessionEP
-# Check Session
-ca.phon.app.project.CheckIPAEP
-# Derive Session
-ca.phon.app.project.DeriveSessionEP
 # Archive Project
 ca.phon.app.project.ProjectArchiveEP
 # View Result Set
