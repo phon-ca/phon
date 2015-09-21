@@ -1,11 +1,9 @@
 package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
 
-import ca.phon.app.project.AnonymizeParticipantInfoEP;
+import ca.phon.app.project.AnonymizeParticipantInfoWizard;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.plugin.PluginEntryPointRunner;
 
 public class AnonymizeAction extends ProjectWindowAction {
 
@@ -20,10 +18,10 @@ public class AnonymizeAction extends ProjectWindowAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getWindow().getProject());
-		
-		PluginEntryPointRunner.executePluginInBackground(AnonymizeParticipantInfoEP.EP_NAME, initInfo);
+		final AnonymizeParticipantInfoWizard wizard = new AnonymizeParticipantInfoWizard(getWindow().getProject());
+		wizard.setSize(500, 600);
+		wizard.centerWindow();
+		wizard.showWizard();
 	}
 
 }
