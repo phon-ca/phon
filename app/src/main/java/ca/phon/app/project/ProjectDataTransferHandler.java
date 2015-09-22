@@ -90,11 +90,10 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 					? window.getCorpusList().getModel().getElementAt(dropLocation.getIndex())
 							: "");
 			// import corpus including all sessions
-			// don't continue if dropped on self
-			if(projectPath.getProject() == dstProjectPath.getProject()
-					&& dropCorpus.equals(projectPath.getCorpus())) return false;
-			int idx = 1;
-			String dupCorpusName = projectPath.getCorpus() + " (1)";
+			// don't continue if dropped in same project
+			if(projectPath.getProject() == dstProjectPath.getProject()) return false;
+			int idx = 0;
+			String dupCorpusName = projectPath.getCorpus();
 			while(dstProjectPath.getProject().getCorpora().contains(dupCorpusName)) {
 				dupCorpusName = projectPath.getCorpus() + " (" + (++idx) + ")";
 			}
@@ -120,12 +119,9 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 				dstCorpus = window.getSelectedCorpus();
 				if(dstCorpus == null) return false;
 				
-				String dropSession = (dropLocation.getIndex() >= 0
-						? window.getSessionList().getModel().getElementAt(dropLocation.getIndex()) 
-						: "");
 				// don't continue if dropped on self
 				if(projectPath.getProject() == dstProjectPath.getProject()
-						&& dropSession.equals(projectPath.getSession())) return false;
+						&& projectPath.getCorpus().equals(dstCorpus)) return false;
 			}
 			dstProjectPath.setCorpus(dstCorpus);
 			String dstSessionName = projectPath.getSession();

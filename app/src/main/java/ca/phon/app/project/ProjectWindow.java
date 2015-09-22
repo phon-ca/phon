@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -83,6 +84,8 @@ import ca.phon.app.project.actions.CheckTranscriptionsAction;
 import ca.phon.app.project.actions.DeleteCorpusAction;
 import ca.phon.app.project.actions.DeleteSessionAction;
 import ca.phon.app.project.actions.DeriveSessionAction;
+import ca.phon.app.project.actions.DuplicateCorpusAction;
+import ca.phon.app.project.actions.DuplicateSessionAction;
 import ca.phon.app.project.actions.NewCorpusAction;
 import ca.phon.app.project.actions.NewSessionAction;
 import ca.phon.app.project.actions.RefreshAction;
@@ -360,6 +363,11 @@ public class ProjectWindow extends CommonModuleFrame
 			
 			public void doPopup(MouseEvent e) {
 				if(e.isPopupTrigger()) {
+					int clickedIdx = corpusList.locationToIndex(e.getPoint());
+					if(clickedIdx >= 0 && 
+							Arrays.binarySearch(corpusList.getSelectedIndices(), clickedIdx) < 0) {
+						corpusList.setSelectedIndex(clickedIdx);
+					}
 					showCorpusListContextMenu(e.getPoint());
 				}
 			}
@@ -443,6 +451,11 @@ public class ProjectWindow extends CommonModuleFrame
 			
 			public void doPopup(MouseEvent e) {
 				if(e.isPopupTrigger()) {
+					int clickedIdx = sessionList.locationToIndex(e.getPoint());
+					if(clickedIdx >= 0 && 
+							Arrays.binarySearch(sessionList.getSelectedIndices(), clickedIdx) < 0) {
+						sessionList.setSelectedIndex(clickedIdx);
+					}
 					showSessionListContextMenu(e.getPoint());
 				}
 			}
@@ -891,21 +904,6 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 	
 	/**
-	 * Run the export session controller
-	 * 
-	 * @param corpus
-	 * @param session
-	 */
-	private void saveSessionAs(String corpus, String session) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-		initInfo.put("sessionName", session);
-		
-		PluginEntryPointRunner.executePluginInBackground("ExportSession", initInfo);
-	}
-	
-	/**
 	 * Run the rename session controller
 	 * 
 	 * @param corpus
@@ -921,21 +919,6 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 	
 	/**
-	 * Run the duplicate session controller
-	 * 
-	 * @param corpus
-	 * @param session
-	 */
-	private void duplicateSession(String corpus, String session) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-		initInfo.put("sessionName", session);
-		
-		PluginEntryPointRunner.executePluginInBackground("DuplicateSession", initInfo);
-	}
-
-	/**
 	 * Return the corpus template controller
 	 *
 	 * @para corpus
@@ -948,19 +931,6 @@ public class ProjectWindow extends CommonModuleFrame
 		PluginEntryPointRunner.executePluginInBackground("CorpusTemplate", initInfo);
 	}
 			
-	/**
-	 * Runs the new session controller
-	 * 
-	 * @param corpus
-	 */
-	private void createNewSession(String corpus) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-		
-		PluginEntryPointRunner.executePluginInBackground("NewSession", initInfo);
-	}
-	
 	/**
 	 * Run the rename corpus controller
 	 */
@@ -993,6 +963,9 @@ public class ProjectWindow extends CommonModuleFrame
 		contextMenu.add(newSessionItem);
 		
 		contextMenu.addSeparator();
+		
+		JMenuItem dupItem = new JMenuItem(new DuplicateCorpusAction(this));
+		contextMenu.add(dupItem);
 		
 		// rename
 		JMenuItem renameItem = new JMenuItem("Rename Corpus");
@@ -1071,27 +1044,8 @@ public class ProjectWindow extends CommonModuleFrame
 		JMenuItem deleteItem = new JMenuItem(new DeleteSessionAction(this));
 		contextMenu.add(deleteItem);
 		
-		JMenuItem duplicateItem = new JMenuItem("Duplicate Session");
-		duplicateItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				duplicateSession(corpus, session);
-			}
-			
-		});
+		JMenuItem duplicateItem = new JMenuItem(new DuplicateSessionAction(this));
 		contextMenu.add(duplicateItem);
-		
-		JMenuItem saveAsItem = new JMenuItem("Save As");
-		saveAsItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				saveSessionAs(corpus, session);
-			}
-			
-		});
-		contextMenu.add(saveAsItem);
-		contextMenu.addSeparator();
 		
 		contextMenu.show(sessionList, clickPoint.x, clickPoint.y);
 	}
