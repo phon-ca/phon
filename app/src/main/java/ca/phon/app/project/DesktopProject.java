@@ -87,6 +87,11 @@ public class DesktopProject extends LocalProject {
 		FileUtils fileUtils = FileUtils.getInstance();
 		if(fileUtils.hasTrash()) {
 			fileUtils.moveToTrash(files);
+		} else {
+			// delete
+			for(File file:files) {
+				org.apache.commons.io.FileUtils.forceDelete(file);
+			}
 		}
 	}
 

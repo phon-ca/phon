@@ -65,6 +65,7 @@ public class DeleteSessionAction extends ProjectWindowAction {
 					showMessage("Delete Session", e.getLocalizedMessage());
 				}
 			}
+			getWindow().getSessionList().clearSelection();
 		}
 	}
 

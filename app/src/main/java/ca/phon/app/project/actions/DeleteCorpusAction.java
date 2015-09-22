@@ -14,6 +14,7 @@ import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.OSInfo;
 
 /**
  * Delete corpus/corpora which are currently selected
@@ -46,8 +47,9 @@ public class DeleteCorpusAction extends ProjectWindowAction {
 		} else {
 			props.setHeader("Delete corpus: " + corpora.get(0));
 		}
-		props.setMessage("All sessions in" +
-				(corpora.size() > 1 ? " these corpora" : " this corpus") + " will also be deleted! This action cannot be undone.");
+		props.setMessage("Move" +
+				(corpora.size() > 1 ? " corpora" : " this corpus") + " to " +
+				(OSInfo.isWindows() ? "Recycle Bin" : "Trash") + "?");
 		props.setOptions(MessageDialogProperties.okCancelOptions);
 		int retVal = NativeDialogs.showMessageDialog(props);
 		
@@ -62,6 +64,7 @@ public class DeleteCorpusAction extends ProjectWindowAction {
 					showMessage("Delete Corpus", e.getLocalizedMessage());
 				}
 			}
+			getWindow().getCorpusList().clearSelection();
 		}
 	}
 

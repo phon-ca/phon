@@ -332,23 +332,19 @@ public class ProjectWindow extends CommonModuleFrame
 		corpusList.setModel(corpusModel);
 		corpusList.setCellRenderer(new CorpusListCellRenderer());
 		corpusList.setVisibleRowCount(20);
-		corpusList.addListSelectionListener(new ListSelectionListener() {
-
-			public void valueChanged(ListSelectionEvent e) {
-				if(getSelectedCorpus() != null) {
-					String corpus = getSelectedCorpus();
-					sessionModel.setCorpus(corpus);
-					sessionList.clearSelection();
-					corpusDetails.setCorpus(corpus);
-					
-					if(getProject().getCorpusSessions(corpus).size() == 0) {
-						onSwapNewAndCreateSession(newSessionButton);
-					} else {
-						onSwapNewAndCreateSession(createSessionButton);
-					}
+		corpusList.addListSelectionListener( e -> {
+			if(getSelectedCorpus() != null) {
+				String corpus = getSelectedCorpus();
+				sessionModel.setCorpus(corpus);
+				sessionList.clearSelection();
+				corpusDetails.setCorpus(corpus);
+				
+				if(getProject().getCorpusSessions(corpus).size() == 0) {
+					onSwapNewAndCreateSession(newSessionButton);
+				} else {
+					onSwapNewAndCreateSession(createSessionButton);
 				}
 			}
-			
 		});
 		corpusList.addMouseListener(new MouseInputAdapter() {
 			
@@ -372,7 +368,7 @@ public class ProjectWindow extends CommonModuleFrame
 		});
 		
 		final DragSource corpusDragSource = new DragSource();
-		corpusDragSource.createDefaultDragGestureRecognizer(corpusList, DnDConstants.ACTION_COPY_OR_MOVE, (event) -> {
+		corpusDragSource.createDefaultDragGestureRecognizer(corpusList, DnDConstants.ACTION_COPY, (event) -> {
 			final List<ProjectPath> paths = new ArrayList<>();
 			for(String corpus:getSelectedCorpora()) {
 				final ProjectPath corpusPath = new ProjectPath(getProject(), corpus, null);
@@ -400,17 +396,13 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionList.setModel(sessionModel);
 		sessionList.setCellRenderer(new SessionListCellRenderer());
 		sessionList.setVisibleRowCount(20);
-		sessionList.addListSelectionListener(new ListSelectionListener() {
-
-			public void valueChanged(ListSelectionEvent e) {
-				if(sessionList.getSelectedValue() != null && !e.getValueIsAdjusting()) {
-					String corpus = getSelectedCorpus();
-					String session = getSelectedSessionName();
-					
-					sessionDetails.setSession(corpus, session);
-				}
+		sessionList.addListSelectionListener( e -> {
+			if(sessionList.getSelectedValue() != null && !e.getValueIsAdjusting()) {
+				String corpus = getSelectedCorpus();
+				String session = getSelectedSessionName();
+				
+				sessionDetails.setSession(corpus, session);
 			}
-			
 		});
 		sessionList.addMouseListener(new MouseInputAdapter() {
 			@Override
@@ -464,7 +456,7 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionList.setTransferHandler(transferHandler);
 		
 		final DragSource sessionDragSource = new DragSource();
-		sessionDragSource.createDefaultDragGestureRecognizer(sessionList, DnDConstants.ACTION_COPY_OR_MOVE, (event) -> {
+		sessionDragSource.createDefaultDragGestureRecognizer(sessionList, DnDConstants.ACTION_COPY, (event) -> {
 			final List<ProjectPath> paths = new ArrayList<>();
 			final String corpus = getSelectedCorpus();
 			if(corpus == null) return;
@@ -555,7 +547,6 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setIcon(folderNewIcn);
-//		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
 		retVal.setOpaque(false);
 		
 		PhonUIAction newAct = new PhonUIAction(this, "onSwapNewAndCreateCorpus", retVal);
@@ -581,15 +572,6 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		return retVal;
-	}
-	
-	public void onDeleteCorpus() {
-		if(getSelectedCorpus() == null) {
-			Toolkit.getDefaultToolkit().beep();
-			ToastFactory.makeToast("Please select a corpus").start(corpusList);
-			return;
-		}
-		deleteCorpus(getSelectedCorpus());
 	}
 	
 	public void onRenameCorpus() {
@@ -619,7 +601,6 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		ImageIcon cancelIcnL = cancelIcn;
-//				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
 		
 		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreateCorpus", retVal);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");
@@ -660,7 +641,6 @@ public class ProjectWindow extends CommonModuleFrame
 		// swap bottom component in new project button
 		retVal.setBottomLabelText(WorkspaceTextStyler.toDescText(s2));
 		retVal.add(corpusNamePanel, BorderLayout.CENTER);
-//		newProjectButton.revalidate();
 		
 		retVal.addFocusListener(new FocusListener() {
 			
@@ -724,7 +704,6 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setIcon(newIcn);
-//		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
 		retVal.setOpaque(false);
 		
 		PhonUIAction newAct = new PhonUIAction(this, "onSwapNewAndCreateSession", retVal);
@@ -755,20 +734,6 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		return retVal;
-	}
-	
-	public void onDeleteSession() {
-		if(getSelectedCorpus() == null) {
-			Toolkit.getDefaultToolkit().beep();
-			ToastFactory.makeToast("Please select a corpus").start(corpusList);
-			return;
-		}
-		if(getSelectedSessionName() == null) {
-			Toolkit.getDefaultToolkit().beep();
-			ToastFactory.makeToast("Please select a session").start(sessionList);
-			return;
-		}
-		deleteSession(getSelectedCorpus(), getSelectedSessionName());
 	}
 	
 	public void onRenameSession() {
@@ -817,7 +782,6 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		ImageIcon cancelIcnL = cancelIcn;
-//				new ImageIcon(cancelIcn.getImage().getScaledInstance(IconSize.MEDIUM.getWidth(), IconSize.MEDIUM.getHeight(), Image.SCALE_SMOOTH));
 		
 		PhonUIAction btnSwapAct = new PhonUIAction(this, "onSwapNewAndCreateSession", retVal);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");
@@ -998,21 +962,6 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 	
 	/**
-	 * Run the delete session controller
-	 * 
-	 * @param corpus
-	 * @param session
-	 */
-	private void deleteSession(String corpus, String session) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-		initInfo.put("sessionName", session);
-		
-		PluginEntryPointRunner.executePluginInBackground("DeleteSession", initInfo);
-	}
-	
-	/**
 	 * Run the export session controller
 	 * 
 	 * @param corpus
@@ -1081,19 +1030,6 @@ public class ProjectWindow extends CommonModuleFrame
 		initInfo.put("corpusName", corpus);
 		
 		PluginEntryPointRunner.executePluginInBackground("NewSession", initInfo);
-	}
-	
-	/**
-	 * Run the delete corpus controller
-	 * 
-	 * @param corpus
-	 */
-	private void deleteCorpus(String corpus) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-		
-		PluginEntryPointRunner.executePluginInBackground("DeleteCorpus", initInfo);
 	}
 	
 	/**
@@ -1172,14 +1108,7 @@ public class ProjectWindow extends CommonModuleFrame
 		contextMenu.add(renameItem);
 		
 		// delete
-		JMenuItem deleteItem = new JMenuItem("Delete Corpus");
-		deleteItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				deleteCorpus(corpus);
-			}
-			
-		});
+		JMenuItem deleteItem = new JMenuItem(new DeleteCorpusAction(this));
 		contextMenu.add(deleteItem);
 
 		contextMenu.addSeparator();
@@ -1241,14 +1170,7 @@ public class ProjectWindow extends CommonModuleFrame
 		contextMenu.add(renameItem);
 		
 		// delete item
-		JMenuItem deleteItem = new JMenuItem("Delete Session");
-		deleteItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				deleteSession(corpus, session);
-			}
-			
-		});
+		JMenuItem deleteItem = new JMenuItem(new DeleteSessionAction(this));
 		contextMenu.add(deleteItem);
 		
 		JMenuItem duplicateItem = new JMenuItem("Duplicate Session");
