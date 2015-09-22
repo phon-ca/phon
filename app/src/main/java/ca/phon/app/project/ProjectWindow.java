@@ -360,8 +360,6 @@ public class ProjectWindow extends CommonModuleFrame
 			
 			public void doPopup(MouseEvent e) {
 				if(e.isPopupTrigger()) {
-					if(corpusList.locationToIndex(e.getPoint()) >= 0)
-						corpusList.setSelectedIndex(corpusList.locationToIndex(e.getPoint()));
 					showCorpusListContextMenu(e.getPoint());
 				}
 			}
@@ -445,8 +443,6 @@ public class ProjectWindow extends CommonModuleFrame
 			
 			public void doPopup(MouseEvent e) {
 				if(e.isPopupTrigger()) {
-					if(sessionList.locationToIndex(e.getPoint()) >= 0)
-						sessionList.setSelectedIndex(sessionList.locationToIndex(e.getPoint()));
 					showSessionListContextMenu(e.getPoint());
 				}
 			}
@@ -646,8 +642,6 @@ public class ProjectWindow extends CommonModuleFrame
 			
 			@Override
 			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -897,71 +891,6 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 	
 	/**
-	 * Runs the copy controller.
-	 * 
-	 * @param proj1
-	 * @param corpus
-	 * @param session
-	 * @param proj2
-	 * @param destCorpus
-	 * @param force
-	 * @param move
-	 */
-	private void copySession(
-			Project proj1, String corpus, String session,
-			Project proj2, String destCorpus,
-			boolean force, boolean move) {
-		
-		try {
-			List<String> proj2Sessions = 
-				proj2.getCorpusSessions(destCorpus);
-			if(proj2Sessions.contains(session)) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm");
-				
-				String proj1LastModified = 
-					sdf.format(proj1.getSessionModificationTime(corpus, session).toDate());
-				
-				String proj2LastModified = 
-					sdf.format(proj2.getSessionModificationTime(corpus, session).toDate());
-				
-				String msg = 
-					"Replace '" + corpus + "." + session + "' modified " + proj2LastModified + 
-					" with file modified on " + proj1LastModified + "?";
-				
-				final MessageDialogProperties props = new MessageDialogProperties();
-				props.setParentWindow(this);
-				props.setRunAsync(false);
-				props.setTitle("Session Already Exists");
-				props.setHeader("Session Already Exists");
-				props.setMessage(msg);
-				props.setOptions(MessageDialogProperties.yesNoOptions);
-				
-				int result = 
-					NativeDialogs.showMessageDialog(props);
-				
-				if(result != 0) {
-					return;
-				}
-				
-			}
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			ToastFactory.makeToast(e.getLocalizedMessage()).start(this.getRootPane());
-		}
-		
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-			initInfo.put("project", proj1);
-			initInfo.put("corpusName", corpus);
-			initInfo.put("sessionName", session);
-			initInfo.put("destproject", proj2);
-			initInfo.put("destcorpus", destCorpus);
-			initInfo.put("overwrite", true);
-			initInfo.put("move", move);
-		
-		PluginEntryPointRunner.executePluginInBackground("CopySession", initInfo);
-	}
-	
-	/**
 	 * Run the export session controller
 	 * 
 	 * @param corpus
@@ -1043,30 +972,6 @@ public class ProjectWindow extends CommonModuleFrame
 		PluginEntryPointRunner.executePluginInBackground("RenameCorpus", initInfo);
 	}
 	
-//	/**
-//	 * Run the copy corpus controller
-//	 * 
-//	 * @param proj1
-//	 * @param corpus
-//	 * @param proj2
-//	 * @param force
-//	 * @param move
-//	 */
-//	private void copyCorpus(IPhonProject proj1, String corpus,
-//			IPhonProject proj2, boolean force, boolean move) {
-//		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-//		initInfo.put("project", proj1);
-//		initInfo.put("corpus", corpus);
-//		initInfo.put("destproject", proj2);
-//		initInfo.put("force", force);
-//		initInfo.put("move", move);
-//		
-//		ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.module.core.CopyCorpusController");
-//		LoadModule lm = new LoadModule(mi, initInfo);
-//		lm.start();
-//	}
-	
 	/** 
 	 * Displays the corpus list menu
 	 * 
@@ -1084,14 +989,7 @@ public class ProjectWindow extends CommonModuleFrame
 		JPopupMenu contextMenu = new JPopupMenu();
 		
 		// new session item
-		JMenuItem newSessionItem = new JMenuItem("New Session");
-		newSessionItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				createNewSession(corpus);
-			}
-			
-		});
+		JMenuItem newSessionItem = new JMenuItem(new NewSessionAction(this));
 		contextMenu.add(newSessionItem);
 		
 		contextMenu.addSeparator();
@@ -1194,176 +1092,6 @@ public class ProjectWindow extends CommonModuleFrame
 		});
 		contextMenu.add(saveAsItem);
 		contextMenu.addSeparator();
-		
-		JMenu moveToMenu = new JMenu("Move Session To");
-		JMenu copyToMenu = new JMenu("Copy Session To");
-		
-		final String corpusListMsg = "<html><b>This project:</b></html>";
-		moveToMenu.add(corpusListMsg).setEnabled(false);
-		copyToMenu.add(corpusListMsg).setEnabled(false);
-		
-		List<String> projectCorpora = null;
-		
-		Collator collator = CollatorFactory.defaultCollator();
-		projectCorpora = getProject().getCorpora();
-		Collections.sort(projectCorpora, collator);
-
-		// corpora in this project
-		for(int i = 0; i < projectCorpora.size(); i++) {
-			final String thisCorpus = projectCorpora.get(i);
-			
-			if(thisCorpus.equals(corpus))
-				continue;
-			
-			JMenuItem currentCopyItem = new JMenuItem(thisCorpus);
-			currentCopyItem.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					copySession(
-							getProject(), corpus, session,
-							getProject(), thisCorpus, false, false);
-				}
-				
-			});
-			copyToMenu.add(currentCopyItem);
-			
-			JMenuItem currentMoveItem = new JMenuItem(thisCorpus);
-			currentMoveItem.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					copySession(
-							getProject(), corpus, session,
-							getProject(), thisCorpus, false, true);
-				}
-				
-			});
-			moveToMenu.add(currentMoveItem);
-		}
-		
-		final String openProjectsMsg = "<html><b>Open project:</b></html>";
-		boolean openProjectMsgAdded = false;
-		
-		List<CommonModuleFrame> openWindows = CommonModuleFrame.getOpenWindows();
-		for(int i = 0; i < openWindows.size(); i++) {
-			final CommonModuleFrame cmf = openWindows.get(i);
-			if(!(cmf instanceof ProjectWindow)) {
-				continue;
-			}
-			final ProjectWindow projWindow = ProjectWindow.class.cast(cmf);
-			final Project proj = projWindow.getProject();
-			if(proj == null) continue;
-			
-			if(proj != getProject()) {
-				if(!openProjectMsgAdded) {
-					copyToMenu.add(openProjectsMsg).setEnabled(false);
-					moveToMenu.add(openProjectsMsg).setEnabled(false);
-					openProjectMsgAdded = true;
-				}
-				List<String> projCorpora = null;
-				String projName = new String();
-				projCorpora = 
-					proj.getCorpora();
-				Collections.sort(projCorpora, collator);
-				projName = proj.getName();
-				
-				JMenu projMoveToMenu = new JMenu(projName);
-				JMenu projCopyToMenu = new JMenu(projName);
-				for(int j = 0; j < projCorpora.size(); j++) {
-					final String projCorpus = 
-						projCorpora.get(j);
-					
-					JMenuItem projMoveToItem = 
-						new JMenuItem(projCorpus);
-					projMoveToItem.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent e) {
-							copySession(
-									getProject(), corpus, session,
-									proj, projCorpus, false, true);
-						}
-						
-					});
-					projMoveToMenu.add(projMoveToItem);
-					
-					JMenuItem projCopyToItem = 
-						new JMenuItem(projCorpus);
-					projCopyToItem.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent e) {
-							copySession(
-									getProject(), corpus, session,
-									proj, projCorpus, false, false);
-						}
-						
-					});
-					projCopyToMenu.add(projCopyToItem);
-				}
-				
-				copyToMenu.add(projCopyToMenu);
-				moveToMenu.add(projMoveToMenu);
-			}
-		}
-		
-		final String workspaceMsg = "<html><b>Workspace project:</b></html>";
-		boolean workspaceMsgAdded = false;
-		
-		// workspace projects
-		final List<Project> workspaceProjects = Workspace.userWorkspace().getProjects();
-		for(final Project p:workspaceProjects) {
-			if(p.getLocation().equals(getProject().getLocation())) {
-				continue;
-			}
-			if(!workspaceMsgAdded) {
-				copyToMenu.add(workspaceMsg).setEnabled(false);
-				moveToMenu.add(workspaceMsg).setEnabled(false);
-				workspaceMsgAdded = true;
-			}
-			List<String> projCorpora = null;
-			String projName = new String();
-			projCorpora = 
-				p.getCorpora();
-			Collections.sort(projCorpora, collator);
-			projName = p.getName();
-			
-			JMenu projMoveToMenu = new JMenu(projName);
-			JMenu projCopyToMenu = new JMenu(projName);
-			for(int j = 0; j < projCorpora.size(); j++) {
-				final String projCorpus = 
-					projCorpora.get(j);
-				
-				JMenuItem projMoveToItem = 
-					new JMenuItem(projCorpus);
-				projMoveToItem.addActionListener(new ActionListener() {
-
-					public void actionPerformed(ActionEvent e) {
-						copySession(
-								getProject(), corpus, session,
-								p, projCorpus, false, true);
-					}
-					
-				});
-				projMoveToMenu.add(projMoveToItem);
-				
-				JMenuItem projCopyToItem = 
-					new JMenuItem(projCorpus);
-				projCopyToItem.addActionListener(new ActionListener() {
-
-					public void actionPerformed(ActionEvent e) {
-						copySession(
-								getProject(), corpus, session,
-								p, projCorpus, false, false);
-					}
-					
-				});
-				projCopyToMenu.add(projCopyToItem);
-			}
-			
-			copyToMenu.add(projCopyToMenu);
-			moveToMenu.add(projMoveToMenu);
-		}
-		
-		contextMenu.add(copyToMenu);
-		contextMenu.add(moveToMenu);
 		
 		contextMenu.show(sessionList, clickPoint.x, clickPoint.y);
 	}
