@@ -20,6 +20,7 @@ package ca.phon.app.log;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -29,6 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,6 +77,8 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.OpenFileLauncher;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -108,7 +113,14 @@ public class BufferPanel extends JPanel {
 	
 	private JCheckBox firstRowAsHeaderBox;
 	
+	private JCheckBox openFileAfterSavingBox;
+	
 	private JXBusyLabel busyLabel = new JXBusyLabel(new Dimension(16, 16));
+	
+	public final static String OPEN_AFTER_SAVING_PROP = BufferPanel.class.getName() + ".openFileAfterSaving";
+	
+	private boolean openFileAfterSaving = 
+			PrefHelper.getBoolean(OPEN_AFTER_SAVING_PROP, Boolean.TRUE);
 	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 	
@@ -184,7 +196,7 @@ public class BufferPanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		final FormLayout topLayout = new FormLayout(
-				"pref, pref, fill:pref:grow, pref, 3dlu, right:pref", "pref");
+				"pref, pref,3dlu, pref, fill:pref:grow, pref, 3dlu, right:pref", "pref");
 		final CellConstraints cc = new CellConstraints();
 		final JPanel topPanel = new JPanel(topLayout);
 		
@@ -193,6 +205,13 @@ public class BufferPanel extends JPanel {
 		saveAct.putValue(PhonUIAction.SMALL_ICON, 
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
 		saveButton = new JButton(saveAct);
+		
+		openFileAfterSavingBox = new JCheckBox("Open after saving");
+		openFileAfterSavingBox.setSelected(openFileAfterSaving);
+		openFileAfterSavingBox.addChangeListener( e -> {
+			BufferPanel.this.openFileAfterSaving = openFileAfterSavingBox.isSelected();
+			PrefHelper.getUserPreferences().putBoolean(OPEN_AFTER_SAVING_PROP, BufferPanel.this.openFileAfterSaving);
+		});
 		
 		final PhonUIAction firstRowAsHeaderAct = new PhonUIAction(this, "onToggleFirstRowAsHeader");
 		firstRowAsHeaderAct.putValue(PhonUIAction.NAME, "Use first row as column header");
@@ -203,10 +222,11 @@ public class BufferPanel extends JPanel {
 		
 		buttons = new BufferPanelButtons(this);
 		
-		topPanel.add(firstRowAsHeaderBox, cc.xy(2, 1));
+		topPanel.add(firstRowAsHeaderBox, cc.xy(4, 1));
 		topPanel.add(saveButton, cc.xy(1,1));
-		topPanel.add(busyLabel, cc.xy(4, 1));
-		topPanel.add(buttons, cc.xy(6, 1));
+		topPanel.add(openFileAfterSavingBox, cc.xy(2, 1));
+		topPanel.add(busyLabel, cc.xy(6, 1));
+		topPanel.add(buttons, cc.xy(7, 1));
 		
 		add(topPanel, BorderLayout.NORTH);
 		
@@ -324,6 +344,15 @@ public class BufferPanel extends JPanel {
 				} catch (IOException e) {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
+				}
+			}
+			
+			if(openFileAfterSaving) {
+				try {
+					OpenFileLauncher.openURL(new File(saveAs).toURI().toURL());
+				} catch (MalformedURLException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					Toolkit.getDefaultToolkit().beep();
 				}
 			}
 		}
