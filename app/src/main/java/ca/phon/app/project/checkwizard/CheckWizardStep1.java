@@ -98,7 +98,7 @@ public class CheckWizardStep1 extends WizardStep {
 		setLayout(new BorderLayout());
 		
 		header = new DialogHeader("Check Transcriptions", 
-				"Select sessions and operations    to perform.");
+				"Select sessions and operations to perform.");
 		add(header, BorderLayout.NORTH);
 		
 		JPanel topPanel = new JPanel();
