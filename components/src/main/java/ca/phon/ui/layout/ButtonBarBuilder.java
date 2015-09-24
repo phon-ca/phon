@@ -26,10 +26,10 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import ca.phon.util.OSInfo;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import ca.phon.util.OSInfo;
 
 /**
  * Utility class for building dialog button bars.  The layout

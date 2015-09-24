@@ -11,8 +11,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.BevelBorder;
 
-import ca.phon.ui.PhonGuiConstants;
-
 /**
  * 
  */

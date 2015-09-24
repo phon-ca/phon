@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.app.project.mergewizard.DeriveSessionWizard;
-import ca.phon.ui.CommonModuleFrame;
 
 public class DeriveSessionAction extends ProjectWindowAction {
 

@@ -27,9 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.commons.math.genetics.GeneticAlgorithm;
-import org.apache.derby.catalog.GetProcedureColumns;
-
 /**
  * Layout tier groups so that they are vertically aligned.
  * Full/flat tiers fill the remainder of the component or

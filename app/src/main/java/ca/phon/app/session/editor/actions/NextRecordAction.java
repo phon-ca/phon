@@ -24,7 +24,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

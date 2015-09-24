@@ -27,20 +27,14 @@ import java.awt.Toolkit;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.text.Collator;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,8 +59,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.MouseInputAdapter;
@@ -78,7 +70,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXBusyLabel;
 
-import ca.phon.app.modules.EntryPointArgs;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.project.actions.AnonymizeAction;
 import ca.phon.app.project.actions.CheckTranscriptionsAction;
 import ca.phon.app.project.actions.DeleteCorpusAction;
@@ -88,7 +82,11 @@ import ca.phon.app.project.actions.DuplicateCorpusAction;
 import ca.phon.app.project.actions.DuplicateSessionAction;
 import ca.phon.app.project.actions.NewCorpusAction;
 import ca.phon.app.project.actions.NewSessionAction;
+import ca.phon.app.project.actions.OpenCorpusTemplateAction;
+import ca.phon.app.project.actions.OpenSessionAction;
 import ca.phon.app.project.actions.RefreshAction;
+import ca.phon.app.project.actions.RenameCorpusAction;
+import ca.phon.app.project.actions.RenameSessionAction;
 import ca.phon.app.project.git.ProjectGitController;
 import ca.phon.app.project.git.actions.CommitAction;
 import ca.phon.app.project.git.actions.InitAction;
@@ -110,17 +108,9 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuManager;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.CollatorFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonWorker;
-import ca.phon.workspace.Workspace;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 
 /**
@@ -221,6 +211,10 @@ public class ProjectWindow extends CommonModuleFrame
 	
 	public SessionPath getSelectedSessionPath() {
 		return new SessionPath(getSelectedCorpus(), getSelectedSessionName());
+	}
+	
+	public boolean isBlindMode() {
+		return blindModeBox.isSelected();
 	}
 	
 	/**
@@ -428,15 +422,15 @@ public class ProjectWindow extends CommonModuleFrame
 					msgPanel.reset();
 					msgPanel.setMessageLabel("Opening '" + corpus + "." + session + "'");
 					msgPanel.setIndeterminate(true);
-					Runnable th = new Runnable() {
-						public void run() {
-							openSession(corpus, session);
-							msgPanel.setIndeterminate(false);
-						}
-					};
-					PhonWorker.getInstance().invokeLater(th);
+					msgPanel.repaint();
 					
-				} 
+					SwingUtilities.invokeLater(() -> {
+						final ActionEvent ae = new ActionEvent(sessionList, -1, "openSession");
+						(new OpenSessionAction(ProjectWindow.this, corpus, session)).actionPerformed(ae);
+						
+						msgPanel.setIndeterminate(false);
+					});
+				}
 			}
 			
 			@Override
@@ -583,13 +577,13 @@ public class ProjectWindow extends CommonModuleFrame
 		return retVal;
 	}
 	
-	public void onRenameCorpus() {
+	public void onRenameCorpus(PhonActionEvent pae) {
 		if(getSelectedCorpus() == null) {
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast("Please select a corpus").start(corpusList);
 			return;
 		}
-		renameCorpus(getSelectedCorpus());
+		(new RenameCorpusAction(this)).actionPerformed(pae.getActionEvent());
 	}
 	
 	private MultiActionButton createCorpusButton() {
@@ -743,7 +737,7 @@ public class ProjectWindow extends CommonModuleFrame
 		return retVal;
 	}
 	
-	public void onRenameSession() {
+	public void onRenameSession(PhonActionEvent pae) {
 		if(getSelectedCorpus() == null) {
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast("Please select a corpus").start(corpusList);
@@ -754,10 +748,10 @@ public class ProjectWindow extends CommonModuleFrame
 			ToastFactory.makeToast("Please select a session").start(sessionList);
 			return;
 		}
-		renameSession(getSelectedCorpus(), getSelectedSessionName());
+		(new RenameSessionAction(this)).actionPerformed(pae.getActionEvent());
 	}
 	
-	public void onOpenSession() {
+	public void onOpenSession(PhonActionEvent pae) {
 		if(getSelectedCorpus() == null) {
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast("Please select a corpus").start(corpusList);
@@ -768,7 +762,8 @@ public class ProjectWindow extends CommonModuleFrame
 			ToastFactory.makeToast("Please select a session").start(sessionList);
 			return;
 		}
-		openSession(getSelectedCorpus(), getSelectedSessionName());
+		(new OpenSessionAction(this, getSelectedCorpus(), getSelectedSessionName()))
+			.actionPerformed(pae.getActionEvent());
 	}
 	
 	private MultiActionButton createSessionButton() {
@@ -881,118 +876,48 @@ public class ProjectWindow extends CommonModuleFrame
 		}
 	}
 	
-	/**
-	 * Opens a session.  If the 'Multi-blind' mode box is 
-	 * checked, the user will have to create/choose a set
-	 * of personalized transcripts for the session.  Some operations
-	 * such as alignment and validation are unvavaible in this mode.
-	 * 
-	 * @param corpus
-	 * @param session
-	 */
-	private void openSession(String corpus, String session) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("sessionName", corpus + "." + session);
-		initInfo.put("blindmode", blindModeBox.isSelected());
-		
-		try {
-			PluginEntryPointRunner.executePlugin("SessionEditor", initInfo);
-		} catch (PluginException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-	}
-	
-	/**
-	 * Run the rename session controller
-	 * 
-	 * @param corpus
-	 * @param session
-	 */
-	private void renameSession(String corpus, String session) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-		initInfo.put("sessionName", session);
-		
-		PluginEntryPointRunner.executePluginInBackground("RenameSession", initInfo);
-	}
-	
-	/**
-	 * Return the corpus template controller
-	 *
-	 * @para corpus
-	 */
-	private void openCorpusTemplate(String corpus) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-
-		PluginEntryPointRunner.executePluginInBackground("CorpusTemplate", initInfo);
-	}
-			
-	/**
-	 * Run the rename corpus controller
-	 */
-	private void renameCorpus(String corpus) {
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("project", getProject());
-		initInfo.put("corpusName", corpus);
-		
-		PluginEntryPointRunner.executePluginInBackground("RenameCorpus", initInfo);
-	}
-	
 	/** 
 	 * Displays the corpus list menu
 	 * 
 	 * @param clickPoint
 	 */
 	private void showCorpusListContextMenu(Point clickPoint) {
-		int selectedCorpusIndex = 
-			corpusList.locationToIndex(clickPoint);
-		if(selectedCorpusIndex < 0)
-			return;
-		
-		final String corpus = corpusList.getModel().getElementAt(
-				selectedCorpusIndex).toString();
+		List<String> corpora = getSelectedCorpora();
 		
 		JPopupMenu contextMenu = new JPopupMenu();
-		
-		// new session item
-		JMenuItem newSessionItem = new JMenuItem(new NewSessionAction(this));
-		contextMenu.add(newSessionItem);
-		
-		contextMenu.addSeparator();
+
+		if(corpora.size() == 1) {
+			// new session item
+			JMenuItem newSessionItem = new JMenuItem(new NewSessionAction(this));
+			contextMenu.add(newSessionItem);
+			
+			contextMenu.addSeparator();
+			
+			JMenuItem templateItem = new JMenuItem(new OpenCorpusTemplateAction(this));
+			contextMenu.add(templateItem);
+			
+			contextMenu.addSeparator();
+		}
 		
 		JMenuItem dupItem = new JMenuItem(new DuplicateCorpusAction(this));
+		if(corpora.size() > 1) {
+			dupItem.setText("Duplicate Corpora");
+		}
 		contextMenu.add(dupItem);
 		
-		// rename
-		JMenuItem renameItem = new JMenuItem("Rename Corpus");
-		renameItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				renameCorpus(corpus);
-			}
-			
-		});
-		contextMenu.add(renameItem);
+		if(corpora.size() == 1) {
+			// rename
+			JMenuItem renameItem = new JMenuItem(new RenameCorpusAction(this));
+			contextMenu.add(renameItem);
+		}
 		
 		// delete
 		JMenuItem deleteItem = new JMenuItem(new DeleteCorpusAction(this));
+		if(corpora.size() > 1) {
+			deleteItem.setText("Delete Corpora");
+		}
 		contextMenu.add(deleteItem);
 
-		contextMenu.addSeparator();
-
-		JMenuItem templateItem = new JMenuItem("Edit corpus template...");
-		templateItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent ae) {
-				openCorpusTemplate(corpus);
-			}
-		});
-		contextMenu.add(templateItem);
-		
 		contextMenu.show(corpusList, clickPoint.x, clickPoint.y);
 	}
 	
@@ -1002,50 +927,36 @@ public class ProjectWindow extends CommonModuleFrame
 	 * @param clickPoint
 	 */
 	private void showSessionListContextMenu(Point clickPoint) {
-		int selectedSessionIndex = 
-			sessionList.locationToIndex(clickPoint);
-		if(selectedSessionIndex < 0)
-			return;
-		
-		final String corpus = corpusList.getSelectedValue().toString();
-		if(sessionList.getModel().getElementAt(selectedSessionIndex) == null)
-			return;
-		
-		final String session = 
-			sessionList.getModel().getElementAt(selectedSessionIndex).toString();
+		List<String> selectedSessions = getSelectedSessionNames();
 		
 		JPopupMenu contextMenu = new JPopupMenu();
 		
-		// open item
-		JMenuItem openItem = new JMenuItem("Open Session");
-		openItem.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				openSession(corpus, session);
-			}
+		if(selectedSessions.size() == 1) {
+			// open item
+			JMenuItem openItem = new JMenuItem(new OpenSessionAction(this));
+			contextMenu.add(openItem);
 			
-		});
-		contextMenu.add(openItem);
-		
-		contextMenu.addSeparator();
+			contextMenu.addSeparator();
+		}
 		
 		// rename item
-		JMenuItem renameItem = new JMenuItem("Rename Session");
-		renameItem.addActionListener(new ActionListener() {
+		JMenuItem duplicateItem = new JMenuItem(new DuplicateSessionAction(this));
+		if(selectedSessions.size() > 1) {
+			duplicateItem.setText("Duplicate Sessions");
+		}
+		contextMenu.add(duplicateItem);
 
-			public void actionPerformed(ActionEvent e) {
-				renameSession(corpus, session);
-			}
-			
-		});
-		contextMenu.add(renameItem);
+		if(selectedSessions.size() == 1) {
+			JMenuItem renameItem = new JMenuItem(new RenameSessionAction(this));
+			contextMenu.add(renameItem);
+		}
 		
 		// delete item
 		JMenuItem deleteItem = new JMenuItem(new DeleteSessionAction(this));
+		if(selectedSessions.size() > 1) {
+			deleteItem.setText("Delete Sessions");
+		}
 		contextMenu.add(deleteItem);
-		
-		JMenuItem duplicateItem = new JMenuItem(new DuplicateSessionAction(this));
-		contextMenu.add(duplicateItem);
 		
 		contextMenu.show(sessionList, clickPoint.x, clickPoint.y);
 	}
@@ -1067,31 +978,11 @@ public class ProjectWindow extends CommonModuleFrame
 				otherProjectsOpen = true;
 			else if(f instanceof WorkspaceDialog)
 				otherProjectsOpen = true; // also don't close if workspace window is still open
-			
-//			if(f.getProject() == project) {
-//				PhonQuitEvent pqe = new PhonQuitEvent();
-//				pqe.setIssuingFrame(this);
-//				pqe.setChildFrame(f);
-//				f.sendEvent(pqe);
-//			}
 		}
-		
-//		// close the project file!
-//		try {
-//			getProject().close();
-//		} catch (RemoteException e1) {
-//			LOGGER.warning(e1.getMessage());
-//		} catch (IOException e1) {
-//			LOGGER.warning(e1.getMessage());
-//		}
 		
 		// open the open-project window on Windows if no other project window
 		// is open
 		if(!otherProjectsOpen) {
-//			ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-//				"ca.phon.modules.core.OpenProjectController");
-//			LoadModule lm = new LoadModule(mi, new HashMap<String, Object>());
-//			lm.start();
 			try {
 				PluginEntryPointRunner.executePlugin("Exit");
 			} catch (PluginException e1) {

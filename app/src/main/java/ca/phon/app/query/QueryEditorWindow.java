@@ -60,6 +60,9 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.tools.debugger.Main;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
@@ -84,9 +87,6 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Editor for query scripts.  Includes tabs for viewing the query form

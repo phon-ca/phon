@@ -2,7 +2,6 @@ package ca.phon.app.query.analysis;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -25,7 +24,6 @@ import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
-import ca.phon.util.resources.ResourceLoader;
 
 /**
  * 

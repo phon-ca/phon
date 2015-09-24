@@ -57,6 +57,9 @@ import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -77,9 +80,6 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Display information about a given query.

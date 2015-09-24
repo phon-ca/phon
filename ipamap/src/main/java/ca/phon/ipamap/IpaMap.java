@@ -109,6 +109,9 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.ipa.features.Feature;
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
@@ -130,9 +133,6 @@ import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Displays a sectioned list of 

@@ -27,10 +27,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import ca.phon.query.report.io.InventorySection;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import ca.phon.query.report.io.InventorySection;
 
 /**
  * Inventory section panel

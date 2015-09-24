@@ -15,8 +15,6 @@ ca.phon.app.prefs.PreferencesEP
 # Tools/Language Codes
 ca.phon.app.help.LanguageCodeEP
 ## Project actions
-# Rename corpus
-ca.phon.app.project.RenameCorpusEP
 # Archive Project
 ca.phon.app.project.ProjectArchiveEP
 # View Result Set
@@ -29,8 +27,6 @@ ca.phon.app.query.QueryEditorEP
 ca.phon.app.query.QueryHistoryEP
 # Session template
 ca.phon.app.corpus.CorpusTemplateEP
-# Rename session
-ca.phon.app.project.RenameSessionEP
 # About Phon
 ca.phon.app.about.AboutDialogEP
 # Log Viewer

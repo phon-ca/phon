@@ -38,14 +38,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.log.actions.CloseAllBuffersAction;
 import ca.phon.app.log.actions.CloseCurrentBufferAction;
 import ca.phon.app.log.actions.SaveCurrentBufferAction;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class BufferWindow extends CommonModuleFrame {
 

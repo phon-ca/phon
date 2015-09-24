@@ -44,6 +44,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.syllabifier.Syllabifier;
@@ -51,9 +54,6 @@ import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Panel for editing session editor prefs.

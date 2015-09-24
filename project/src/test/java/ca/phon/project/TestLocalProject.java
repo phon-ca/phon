@@ -22,13 +22,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import ca.phon.project.exceptions.ProjectConfigurationException;
+import junit.framework.Assert;
 
 /**
  * Tests for the LocalProject implementation.

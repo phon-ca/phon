@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -32,6 +30,7 @@ import ca.phon.script.scripttable.AbstractScriptTableModel;
 import ca.phon.script.scripttable.ListScriptTableModel;
 import ca.phon.script.scripttable.ScriptTableModel;
 import ca.phon.util.Tuple;
+import junit.framework.Assert;
 
 /**
  * Run test on {@link AbstractScriptTableModel}

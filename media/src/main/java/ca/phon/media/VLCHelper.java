@@ -24,18 +24,17 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import uk.co.caprica.vlcj.Info;
-import uk.co.caprica.vlcj.binding.LibC;
-import uk.co.caprica.vlcj.binding.LibVlc;
-import uk.co.caprica.vlcj.binding.LibVlcFactory;
-import uk.co.caprica.vlcj.runtime.RuntimeUtil;
-import uk.co.caprica.vlcj.version.LibVlcVersion;
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
+
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
-
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
+import uk.co.caprica.vlcj.Info;
+import uk.co.caprica.vlcj.binding.LibC;
+import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
+import uk.co.caprica.vlcj.version.LibVlcVersion;
 
 /**
  * Helper methods for using vlc4j

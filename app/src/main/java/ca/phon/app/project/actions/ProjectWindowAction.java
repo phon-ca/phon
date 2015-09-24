@@ -4,7 +4,6 @@ import java.lang.ref.WeakReference;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 

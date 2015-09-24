@@ -522,8 +522,8 @@ public class LocalProject implements Project, ProjectRefresh {
 			throw new IOException("No session reader available for " + uri.toASCIIString());
 		}
 		
-		try {
-			final Session retVal = reader.readSession(uri.toURL().openStream());
+		try(InputStream in = uri.toURL().openStream()) {
+			final Session retVal = reader.readSession(in);
 			
 			// make sure corpus and session match the expected values, these
 			// can change if the session file has been manually moved
@@ -638,6 +638,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		
 		final FileOutputStream fOut  = new FileOutputStream(sessionFile);
 		writer.writeSession(session, fOut);
+		fOut.close();
 		
 		if(created) {
 			final ObjectFactory xmlFactory = new ObjectFactory();

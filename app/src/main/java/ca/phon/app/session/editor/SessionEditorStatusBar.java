@@ -2,23 +2,13 @@ package ca.phon.app.session.editor;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.Transparency;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -29,9 +19,6 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
-import org.jdesktop.swingx.plaf.metal.MetalStatusBarUI;
-import org.jdesktop.swingx.plaf.windows.WindowsClassicStatusBarUI;
-import org.jdesktop.swingx.plaf.windows.WindowsStatusBarUI;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -47,8 +34,8 @@ import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 	

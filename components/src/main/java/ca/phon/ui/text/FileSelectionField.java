@@ -38,6 +38,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -46,9 +49,6 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Special text field for selecting file/folders.

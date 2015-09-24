@@ -28,7 +28,6 @@ import org.junit.runners.JUnit4;
 
 import ca.phon.project.DefaultProjectFactory;
 import ca.phon.project.Project;
-import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.query.analysis.QueryAnalysis;
 import ca.phon.query.analysis.QueryAnalysisInput;

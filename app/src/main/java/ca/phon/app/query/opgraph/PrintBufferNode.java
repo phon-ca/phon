@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpNode;
@@ -21,9 +24,6 @@ import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferWindow;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 @OpNodeInfo(
 		name="Print to Buffer",

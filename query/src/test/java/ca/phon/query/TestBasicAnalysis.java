@@ -24,8 +24,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -33,7 +31,6 @@ import org.mozilla.javascript.Scriptable;
 
 import ca.phon.project.DefaultProjectFactory;
 import ca.phon.project.Project;
-import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.query.analysis.DefaultQueryAnalysis;
 import ca.phon.query.analysis.QueryAnalysis;
@@ -48,6 +45,7 @@ import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.SessionPath;
+import junit.framework.Assert;
 
 @RunWith(JUnit4.class)
 public class TestBasicAnalysis {

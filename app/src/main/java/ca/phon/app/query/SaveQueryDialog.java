@@ -40,6 +40,9 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
@@ -53,9 +56,6 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Dialog for saving canned queries.

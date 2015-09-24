@@ -65,6 +65,9 @@ import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.decorator.Highlighter;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.query.report.InventorySectionPanel;
 import ca.phon.app.query.report.ResultListingSectionPanel;
@@ -104,9 +107,6 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * An viewer/editor window for result sets.  For

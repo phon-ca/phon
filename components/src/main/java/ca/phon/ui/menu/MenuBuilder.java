@@ -1,6 +1,5 @@
 package ca.phon.ui.menu;
 
-import java.awt.MenuContainer;
 import java.lang.ref.WeakReference;
 
 import javax.swing.Action;

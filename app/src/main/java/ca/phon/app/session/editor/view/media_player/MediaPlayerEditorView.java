@@ -60,8 +60,6 @@ import ca.phon.app.session.editor.view.media_player.actions.PlaySpeechTurnAction
 import ca.phon.app.session.editor.view.media_player.actions.TakeSnapshotAction;
 import ca.phon.app.session.editor.view.media_player.actions.ToggleAdjustVideoAction;
 import ca.phon.media.VLCHelper;
-import ca.phon.media.export.VLCMediaExporter;
-import ca.phon.media.export.VLCMediaExporter.Preset;
 import ca.phon.media.player.IMediaMenuFilter;
 import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.media.util.MediaLocator;
@@ -78,7 +76,6 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonWorker;
 
 /**
  * Panel for embedded media player for editor.

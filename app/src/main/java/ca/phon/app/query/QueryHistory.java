@@ -59,6 +59,9 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.joda.time.DateTime;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -77,9 +80,6 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.text.TableSearchField;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Shows the query history for a given project.

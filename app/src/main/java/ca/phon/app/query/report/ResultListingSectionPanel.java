@@ -79,6 +79,9 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jdesktop.swingx.JXList;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.query.report.io.ObjectFactory;
 import ca.phon.query.report.io.ResultListing;
@@ -96,9 +99,6 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Section panel for customizable result listings.

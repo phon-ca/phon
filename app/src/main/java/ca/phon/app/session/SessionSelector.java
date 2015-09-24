@@ -18,8 +18,6 @@
  */
 package ca.phon.app.session;
 
-import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
-
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +32,7 @@ import ca.phon.ui.CheckedTreeNode;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
 
 /**
  * Displays an interface for selection one or more

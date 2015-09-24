@@ -26,6 +26,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.SessionFactory;
@@ -36,9 +39,6 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Displays a UI for editing tier name,

@@ -7,8 +7,6 @@ import java.util.logging.Logger;
 
 import ca.phon.app.project.NewCorpusDialog;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
 
 public class NewCorpusAction extends ProjectWindowAction {
 	

@@ -21,10 +21,10 @@ package ca.phon.app.theme;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.FontUIResource;
 
-import ca.phon.ui.fonts.FontPreferences;
-
 import com.jgoodies.looks.FontPolicy;
 import com.jgoodies.looks.FontSet;
+
+import ca.phon.ui.fonts.FontPreferences;
 
 public class PhonWindowsFontPolicy implements FontPolicy {
 

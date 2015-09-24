@@ -23,19 +23,14 @@ import java.awt.Container;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JProgressBar;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -45,10 +40,6 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEditSupport;
 
 import org.jdesktop.swingx.JXStatusBar;
-import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
 import ca.phon.app.project.ProjectFrame;
@@ -85,9 +76,6 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.ByteSize;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTaskListener;
-import ca.phon.worker.PhonTask.TaskStatus;
 
 /**
  * <p>Main UI for the application.  This window provides the interface for

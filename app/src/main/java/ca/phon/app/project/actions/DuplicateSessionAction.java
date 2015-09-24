@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
+import ca.phon.util.CollatorFactory;
 
 /**
  * Duplicate sessions selected in project window.  Session names
@@ -63,9 +65,11 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 		if(sessionNames.size() > 0) {
 			int indices[] = new int[dupSessionNames.size()];
 			getWindow().refreshProject();
+			List<String> sessions = project.getCorpusSessions(getWindow().getSelectedCorpus());
+			Collections.sort(sessions, CollatorFactory.defaultCollator());
 			for(int i = 0; i < dupSessionNames.size(); i++) {
 				String sessionName = dupSessionNames.get(i);
-				indices[i] = project.getCorpusSessions(corpus).indexOf(sessionName);
+				indices[i] = sessions.indexOf(sessionName);
 			}
 			getWindow().getSessionList().setSelectedIndices(indices);
 		}

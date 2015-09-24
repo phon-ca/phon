@@ -1,0 +1,121 @@
+package ca.phon.app.project.actions;
+
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.RenameSessionDialog;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.CollatorFactory;
+
+public class RenameSessionAction extends ProjectWindowAction {
+	
+	private final static Logger LOGGER = Logger.getLogger(RenameSessionAction.class.getName());
+
+	private static final long serialVersionUID = 2062009179431805213L;
+
+	public RenameSessionAction(ProjectWindow projectWindow) {
+		super(projectWindow);
+		
+		putValue(NAME, "Rename Session");
+		putValue(SHORT_DESCRIPTION, "Rename selected session");
+	}
+
+	@Override
+	public void hookableActionPerformed(ActionEvent ae) {
+		final Project project = getWindow().getProject();
+		final String selectedCorpus = getWindow().getSelectedCorpus();
+		final String selectedSession = getWindow().getSelectedSessionName();
+		
+		if(selectedCorpus == null || selectedSession == null) {
+			ToastFactory.makeToast("Please select a session").start(getWindow().getSessionList());
+			return;
+		}
+		
+		final RenameSessionDialog dialog = new RenameSessionDialog(project, selectedCorpus, selectedSession);
+		dialog.setModal(true);
+		dialog.pack();
+		dialog.setLocationRelativeTo(getWindow());
+		dialog.setVisible(true);
+		
+		if(!dialog.wasCanceled()) {
+			final String corpusName = dialog.getCorpus();
+			final String sessionName = dialog.getSessionName();
+			final String newSessionName = dialog.getNewSessionName();
+			
+			if (newSessionName == null || newSessionName.length() == 0) {
+				showMessage("Rename Session", "You must specify a non-empty session name.");
+				return;
+			}
+
+			// Run through the sessions to see if the corpus specified exists, and
+			// and also make sure that the new name isn't the name of an existing
+			// corpus
+			if (project.getCorpusSessions(corpusName).contains(newSessionName)) {
+				showMessage("Rename Session", "A session with that name already exists.");
+				return;
+			}
+			
+			// Transfer XML data to the new session name
+			Session session = null;
+			try {
+				session = project.openSession(corpusName, sessionName);
+				session.setName(newSessionName);
+			} catch(Exception e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				showMessage("Rename Session", e.getLocalizedMessage());
+				return;
+			}
+			
+			UUID writeLock = null;
+			try {
+				writeLock = project.getSessionWriteLock(corpusName, newSessionName);
+				project.saveSession(corpusName, newSessionName, session, writeLock);
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				showMessage("Rename Session", e.getLocalizedMessage());
+			} finally {
+				if(writeLock != null) {
+					try {
+						project.releaseSessionWriteLock(corpusName, newSessionName, writeLock);
+					} catch (IOException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+					writeLock = null;
+				}
+			}
+			
+			try {
+				writeLock = project.getSessionWriteLock(corpusName, sessionName);
+				project.removeSession(corpusName, sessionName, writeLock);
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				showMessage("Rename Session", e.getLocalizedMessage());
+			} finally {
+				if(writeLock != null) {
+					try {
+						project.releaseSessionWriteLock(corpusName, sessionName, writeLock);
+					} catch (IOException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+				}
+			}
+			
+			// select new session
+			final List<String> sessionNames = project.getCorpusSessions(corpusName);
+			Collections.sort(sessionNames, CollatorFactory.defaultCollator());
+			int idx = sessionNames.indexOf(newSessionName);
+			if(idx >= 0) {
+				getWindow().getSessionList().setSelectedIndex(idx);
+			}
+		}
+	}
+
+}

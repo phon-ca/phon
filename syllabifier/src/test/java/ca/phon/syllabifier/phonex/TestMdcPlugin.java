@@ -18,8 +18,6 @@
  */
 package ca.phon.syllabifier.phonex;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -27,6 +25,7 @@ import org.junit.runners.JUnit4;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
+import junit.framework.Assert;
 
 /**
  * Test sonority distance phonex plug-ins.

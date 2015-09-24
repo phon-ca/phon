@@ -25,11 +25,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatterBuilder;
 
@@ -40,6 +35,10 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.util.PrefHelper;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
 
 public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPluginExtensionPoint<ActionHook<SaveSessionAction>> {
 
