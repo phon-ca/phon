@@ -160,6 +160,7 @@ public class CheckWizardStep1 extends WizardStep {
 		
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		sessionSelector = new SessionSelector(project);
+		sessionSelector.setVisibleRowCount(20);
 		centerPanel.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
 		
 		centerPanel.setBorder(BorderFactory.createTitledBorder("Select sessions"));

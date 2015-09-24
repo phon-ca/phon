@@ -19,8 +19,8 @@ public class CheckTranscriptionsAction extends ProjectWindowAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final CheckWizard cw = new CheckWizard(getWindow().getProject());
-		cw.setSize(600, 500);
-		cw.setLocationByPlatform(true);
+		cw.pack();
+		cw.setLocationRelativeTo(getWindow());
 		cw.setVisible(true);
 	}
 
