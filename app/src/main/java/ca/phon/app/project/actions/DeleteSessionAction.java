@@ -41,11 +41,11 @@ public class DeleteSessionAction extends ProjectWindowAction {
 		if(sessionNames.size() > 1) {
 			props.setHeader("Delete selected sessions?");
 			props.setMessage("Move selected sessions to " + 
-					(OSInfo.isWindows() ? " Recycle Bin" : " Trash") + "?");
+					(OSInfo.isWindows() ? "Recycle Bin" : "Trash") + "?");
 		} else {
 			props.setHeader("Delete session: " + sessionNames.get(0));
 			props.setMessage("Move session to " + 
-					(OSInfo.isWindows() ? " Recycle Bin" : " Trash") + "?");
+					(OSInfo.isWindows() ? "Recycle Bin" : "Trash") + "?");
 		}
 		
 		props.setOptions(MessageDialogProperties.okCancelOptions);
