@@ -5,6 +5,7 @@
 ### General
  * Update to Java 8u60.
  * Fixed an issue with flat tier sizing when data spans multiple lines in Record Data view.
+ * Improved performance of updating query result highlights in session editor when using the Result Set Editor.
  * New status bar for Session Editor which includes:
    * Modification status
    * Session corpus/name with link to corpus folder
