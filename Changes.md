@@ -10,6 +10,16 @@
    * Session corpus/name with link to corpus folder
    * Progress indicator
 
+### Project Window
+ * Deleted corpora/sessions are now moved to Recycle Bin/Trash when deleted (if available.)
+ * The following Drag & Drop operations are now supported in the Project Window:
+  * Copy corpora to another project
+  * Drag corpus folders to another application (i.e., Explorer/Finder, mail applications, etc.)
+  * Copy sessions to another corpus/project
+  * Drag session files to another application (i.e., Explorer/Finder, mail applications, etc.)
+ * Delete/Duplicate corpus/session operations may now apply to more than one selected item.
+ * Updated context menus for corpus/session lists in Project Window.
+
 ### Media
  * Removed ffmpeg dependency.
  * Updated to VLC 2.2.1.
