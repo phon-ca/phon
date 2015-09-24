@@ -47,10 +47,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class DialogHeader extends JXHeader {
 	private ImageIcon icon;
-//	JLabel lblHeader;
-//	JLabel lblDesc;
-	
-	private final int ICON_SIZE = 64;
+
 	private final int VERTICAL_PADDING = 10;
 	
 	/**
@@ -66,26 +63,6 @@ public class DialogHeader extends JXHeader {
 		
 		super.setTitleFont(getTitleFont().deriveFont(Font.BOLD, 16.0f));
 		
-//		super.setIcon(IconManager.getInstance().getIcon("apps/database-phon", IconSize.LARGE));
-//		setLayout(new FormLayout("10px,PREF:GROW", "PREF,TOP:PREF:GROW"));
-//		setBorder(BorderFactory.createEtchedBorder());
-//		setBackground(Color.WHITE);
-//		setOpaque(false);
-//		
-//		// Create the header label
-//		lblHeader = new JLabel("<HTML><H2>" + header + "</H2></HTML>");
-//		lblHeader.setHorizontalTextPosition(JLabel.LEFT);
-//		lblHeader.setOpaque(false);
-//		
-//		// Create the header label
-//		lblDesc = new JLabel(description);
-//		lblHeader.setHorizontalTextPosition(JLabel.LEFT);
-//		lblHeader.setOpaque(false);
-//
-//		CellConstraints cc = new CellConstraints();
-//		add(lblHeader, cc.xy(2, 1));
-//		add(lblDesc, cc.xy(2, 2));
-//		
 		icon = IconManager.getInstance().getIcon("apps/database-phon", IconSize.XXLARGE);
 		
 		GlossPainter gloss = new GlossPainter();
@@ -99,17 +76,6 @@ public class DialogHeader extends JXHeader {
 		CompoundPainter<DialogHeader> cmpPainter = new CompoundPainter<DialogHeader>(mp, pinstripe, icon, gloss);
 		setBackgroundPainter(cmpPainter);
 	}
-	
-//	/*
-//	 * JComponent overrides
-//	 */
-//	public Dimension getPreferredSize() {
-//		int labelWidth1 = lblHeader.getPreferredSize().width;
-//		int labelWidth2 = lblDesc.getPreferredSize().width;
-//		return new Dimension(
-//			ICON_SIZE * 2 + Math.max(labelWidth1, labelWidth2),
-//			super.getPreferredSize().height + VERTICAL_PADDING * 2);
-//	}
 	
 	@Override
 	public Dimension getMinimumSize() {
@@ -140,19 +106,11 @@ public class DialogHeader extends JXHeader {
 
 		@Override
 		public void paint(Graphics2D g2d, JXHeader header, int width, int height) {
-//			Graphics2D g2d = (Graphics2D)g;
 			Composite originalComposite = g2d.getComposite();
-			
-			// Clear the background
-//			g2d.setColor(getBackground());
-//			g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
 			
 			// Calculate icon positions and draw the icon
 			int w = icon.getIconWidth();
 			int h = icon.getIconHeight();
-			
-			//int x1 = getWidth() - ICON_SIZE - VERTICAL_PADDING;
-			//int y1 = (getHeight() - ICON_SIZE) / 2;
 			
 			int x2 = VERTICAL_PADDING * 2;
 			int y2 = (getHeight() - h * 2) / 2;
@@ -166,71 +124,8 @@ public class DialogHeader extends JXHeader {
 				null);
 			
 			g2d.setComposite(originalComposite);
-			/*g2d.drawImage(
-				icon.getImage(),
-				x1, y1, x1 + ICON_SIZE - 1, y1 + ICON_SIZE - 1,
-				0, 0, w - 1, h - 1,
-				null);*/
-			
-			// Draw text
-			/*FontMetrics fm = g2d.getFontMetrics();
-			Rectangle2D str_bounds = fm.getStringBounds(getText(), g);
-			int str_h = (int)str_bounds.getHeight();
-			
-			g2d.setColor(getForeground());
-			g2d.drawString(
-				getText(),
-				VERTICAL_PADDING,
-				(getHeight() + str_h) / 2);*/
-			
 		}
 		
 	}
 	
-//	public void paint(Graphics g) {
-//		Graphics2D g2d = (Graphics2D)g;
-//		Composite originalComposite = g2d.getComposite();
-//		
-//		// Clear the background
-//		g2d.setColor(getBackground());
-//		g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
-//		
-//		// Calculate icon positions and draw the icon
-//		int w = icon.getIconWidth();
-//		int h = icon.getIconHeight();
-//		
-//		//int x1 = getWidth() - ICON_SIZE - VERTICAL_PADDING;
-//		//int y1 = (getHeight() - ICON_SIZE) / 2;
-//		
-//		int x2 = VERTICAL_PADDING * 2;
-//		int y2 = (getHeight() - h * 2) / 2;
-//		
-//		g2d.setComposite(
-//			AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.15f));
-//		g2d.drawImage(
-//			icon.getImage(),
-//			x2, y2, x2 + w * 2 - 1, y2 + h * 2 - 1,
-//			0, 0, w - 1, h - 1,
-//			null);
-//		
-//		g2d.setComposite(originalComposite);
-//		/*g2d.drawImage(
-//			icon.getImage(),
-//			x1, y1, x1 + ICON_SIZE - 1, y1 + ICON_SIZE - 1,
-//			0, 0, w - 1, h - 1,
-//			null);*/
-//		
-//		// Draw text
-//		/*FontMetrics fm = g2d.getFontMetrics();
-//		Rectangle2D str_bounds = fm.getStringBounds(getText(), g);
-//		int str_h = (int)str_bounds.getHeight();
-//		
-//		g2d.setColor(getForeground());
-//		g2d.drawString(
-//			getText(),
-//			VERTICAL_PADDING,
-//			(getHeight() + str_h) / 2);*/
-//		
-//		super.paint(g);
-//	}
 }
