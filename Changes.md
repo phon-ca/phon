@@ -15,8 +15,10 @@
  * The following Drag & Drop operations are now supported in the Project Window:
   * Copy corpora to another project
   * Drag corpus folders to another application (i.e., Explorer/Finder, mail applications, etc.)
+  * Copy folders (corpora) into project by dropping onto the corpus list.
   * Copy sessions to another corpus/project
   * Drag session files to another application (i.e., Explorer/Finder, mail applications, etc.)
+  * Copy xml files (sessions) into project by dropping onto the session list.
  * Delete/Duplicate corpus/session operations may now apply to more than one selected item.
  * Updated context menus for corpus/session lists in Project Window.
 
