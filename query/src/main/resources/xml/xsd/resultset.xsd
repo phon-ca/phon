@@ -96,8 +96,8 @@
         <xs:annotation>
             <xs:documentation>Type definition for the range element.</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="start_index" type="unsignedJavaInt" use="required"/>
-        <xs:attribute name="end_index" type="unsignedJavaInt" use="required"/>
+        <xs:attribute name="start_index" type="charIndex" use="required"/>
+        <xs:attribute name="end_index" type="charIndex" use="required"/>
         <xs:attribute name="excludes_end" type="xs:boolean" default="false"/>
     </xs:complexType>
 
@@ -154,7 +154,16 @@
                 int.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:int">
-            <xs:minInclusive value="0"/>
+            <xs:minInclusive value="-1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="charIndex">
+        <xs:annotation>
+            <xs:documentation>Index to character position within a group.  Allows for -1 for null result values.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="-1"/>
         </xs:restriction>
     </xs:simpleType>
 

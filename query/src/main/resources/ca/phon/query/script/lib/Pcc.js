@@ -30,8 +30,8 @@ exports.Pcc = {
     	var numEpenthesized = 0;
     	var numCorrect = 0;
     	
-    	var targetGroup = group.getIPATarget();
-        var actualGroup = group.getIPAActual();
+    	var targetGroup = (group.getIPATarget() == null ? new IPATranscript() : group.getIPATarget());
+        var actualGroup = (group.getIPAActual() == null ? new IPATranscript() : group.getIPAActual());
         var alignment = group.getPhoneAlignment();
     
         var featureSet = FeatureSet.fromArray(features.split(","));
@@ -119,8 +119,9 @@ exports.Pcc = {
     	var numEpenthesized = 0;
     	var numProduced = 0;
     	
-    	var targetGroup = group.getIPATarget();
-        var actualGroup = group.getIPAActual();
+    	var targetGroup = (group.getIPATarget() == null ? new IPATranscript() : group.getIPATarget());
+    	var actualGroup = (group.getIPAActual() == null ? new IPATranscript() : group.getIPAActual());
+        
         var alignment = group.getPhoneAlignment();
     
         var featureSet = FeatureSet.fromArray(features.split(","));
