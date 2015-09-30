@@ -154,8 +154,8 @@ public class WordImpl implements Word {
 	
 	@Override
 	public PhoneMap getPhoneAlignment() {
-		final IPATranscript ipaT = getIPATarget();
-		final IPATranscript ipaA = getIPAActual();
+		final IPATranscript ipaT = (getIPATarget() == null ? new IPATranscript() : getIPATarget());
+		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
 		
 		final PhoneMap retVal = new PhoneMap(ipaT, ipaA);
 		final IPATranscript filteredT = ipaT.removePunctuation();
@@ -199,6 +199,9 @@ public class WordImpl implements Word {
 			
 			retVal.setTopAlignment(topElements);
 			retVal.setBottomAlignment(btmElements);
+		} else {
+			retVal.setTopAlignment(new Integer[0]);
+			retVal.setBottomAlignment(new Integer[0]);
 		}
 		
 		return retVal;

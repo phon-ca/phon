@@ -116,7 +116,8 @@ public class GroupImpl implements Group {
 	@Override
 	public PhoneMap getPhoneAlignment() {
 		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
-		return (alignmentTier.numberOfGroups() > groupIndex ? alignmentTier.getGroup(groupIndex) : null);
+		return (alignmentTier != null && 
+				alignmentTier.numberOfGroups() > groupIndex ? alignmentTier.getGroup(groupIndex) : null);
 	}
 
 	@Override
@@ -127,7 +128,8 @@ public class GroupImpl implements Group {
 	@Override
 	public String getNotes() {
 		return 
-				(record.getNotes().numberOfGroups() > 0 ? record.getNotes().getGroup(0) : null);
+				(record.getNotes() != null && 
+					record.getNotes().numberOfGroups() > 0 ? record.getNotes().getGroup(0) : null);
 	}
 
 	@Override
