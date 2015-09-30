@@ -18,6 +18,8 @@
  */
 package ca.phon.app.query;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -111,7 +113,10 @@ public class ResultSetEP implements IPluginEntryPoint {
 			window = new ResultSetEditor(project, query, resultSet);
 			if(tempProject != null)
 				window.setTempProject(tempProject);
+			
+			window.setPreferredSize(new Dimension(500, 600));
 			window.pack();
+
 			// setup location next to editor if attached
 			if(window.getEditor() != null) {
 				window.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, window.getEditor());

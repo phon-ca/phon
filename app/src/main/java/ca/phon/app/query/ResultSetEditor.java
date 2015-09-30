@@ -49,6 +49,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
@@ -240,7 +241,8 @@ public class ResultSetEditor extends ProjectFrame {
 		topPanel.add(showExcludedBox, cc.xy(1, 1));
 		topPanel.add(tableSearchField, cc.xy(2, 1));
 
-		final JScrollPane tblScroller = new JScrollPane(resultTable);
+		final JScrollPane tblScroller = new JScrollPane(resultTable, 
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		resultsPanel.add(topPanel, BorderLayout.NORTH);
 		resultsPanel.add(tblScroller, BorderLayout.CENTER);
@@ -566,7 +568,7 @@ public class ResultSetEditor extends ProjectFrame {
 		
 		resultTable.setActionMap(actionMap);
 		resultTable.setInputMap(JComponent.WHEN_FOCUSED, inputMap);
-		
+		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resultTable.getSelectionModel().addListSelectionListener(tableSelectionListener);
 		
 		// search field

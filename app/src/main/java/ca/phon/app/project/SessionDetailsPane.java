@@ -22,13 +22,18 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import ca.phon.project.Project;
+import ca.phon.worker.PhonWorker;
 
 public class SessionDetailsPane extends JTextArea {
 	
@@ -36,9 +41,6 @@ public class SessionDetailsPane extends JTextArea {
 
 	/** The project */
 	private final Project project;
-	
-	/** The document */
-	private final SessionDetailsDocument document;
 	
 	/**
 	 * Constructor
@@ -50,92 +52,30 @@ public class SessionDetailsPane extends JTextArea {
 		this.project = project;
 		
 		this.setEditable(false);
-		
-		this.document = new SessionDetailsDocument();
-		this.setDocument(document);
-		
 	}
 	
 	public void setSession(String corpus, String session) {
-		document.setSession(corpus, session);
+		updateText(corpus, session);
 	}
-
 	
-	private class SessionDetailsDocument 
-		extends DefaultStyledDocument {
-		/** The corpus */
-		private String corpus;
-		
-		/** The sessin */
-		private String session;
-		
-		/** Constructor */
-		public SessionDetailsDocument() {
-			super();
-			
-			this.corpus = null;
-			
-			createStyles();
-		}
-		
-		private void createStyles() {
-			Style def = StyleContext.getDefaultStyleContext().
-				getStyle(StyleContext.DEFAULT_STYLE);
-			
-			Style corpusName = addStyle("SessionName", def);
-			StyleConstants.setBold(corpusName, true);
-			StyleConstants.setFontSize(corpusName, 14);
-			
-			Style normal = addStyle("Normal", def);
-		}
-		
-		public void updateDocument() {
+	public void updateText(final String corpus, final String session) {
+		final StringBuffer sb = new StringBuffer();
+		final Runnable onEDT = () -> {
+			setText(sb.toString());
+		};
+		final Runnable inBg = () -> {
 			try {
-				super.remove(0, getLength());
-			} catch (BadLocationException e) {}
-			if(corpus == null || session == null) {
-				return;
-			}
-			
-			try {
-//				super.insertString(getLength(), session + "\n\n", getStyle("SessionName"));
+				int numRecords = project.numberOfRecordsInSession(corpus, session);
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd@K:ma");
 				
-//				SystemProperties validationData = 
-//					project.getSessionValidationData();
-			
-				
-//				String numRecordsProp = 
-//					corpus + "." + session + ".numrecords";
-				
-				String numRecordsString = 
-					"Number of records: " + 
-					(project.numberOfRecordsInSession(corpus, session));
-				
-				super.insertString(getLength(), numRecordsString + "\n\n", getStyle("Normal"));
-				
-//				String lastModifiedProp = 
-//					corpus + "." + session + ".modified";
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm");
-				
-				
-				String lastModifiedString =
-					"Last modified: " + 
-					(sdf.format(project.getSessionModificationTime(corpus, session).toDate()));
-				
-				super.insertString(getLength(), lastModifiedString, getStyle("Normal"));
-				
-			} catch (BadLocationException e) {
-				
+				sb.append("Number of records: ").append(numRecords).append("\n\n");
+				sb.append("Last modified: ").append(formatter.print(project.getSessionModificationTime(corpus, session)));
 			} catch (IOException e) {
 				
 			}
-			
-		}
-		
-		public void setSession(String corpus, String session) {
-			this.corpus = corpus;
-			this.session = session;
-			updateDocument();
-		}
+			SwingUtilities.invokeLater(onEDT);
+		};
+		PhonWorker.getInstance().invokeLater(inBg);
 	}
+	
 }
