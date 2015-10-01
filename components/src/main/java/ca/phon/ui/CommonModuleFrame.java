@@ -144,7 +144,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 			@Override
 			public void windowActivated(WindowEvent arg0) {
-				//CommonModuleFrame.windowActivated(CommonModuleFrame.this);
 			}
 
 			@Override
@@ -155,8 +154,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				// remove from the active list
-				//removeWindowFromActiveList();
 				((CommonModuleFrame)arg0.getWindow()).close();
 			}
 
@@ -167,19 +164,14 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 			@Override
 			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void windowOpened(WindowEvent arg0) {
-				//CommonModuleFrame.newWindowCreated(CommonModuleFrame.this);
 			}
 			
 		});
@@ -289,8 +281,10 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 				@Override
 				public void windowClosed(WindowEvent e) {
-					if(e.getWindow() == parentFrame)
+					if(e.getWindow() == parentFrame) {
 						close();
+						parentFrame.removeWindowListener(parentFrameListener);
+					}
 				}
 
 				@Override

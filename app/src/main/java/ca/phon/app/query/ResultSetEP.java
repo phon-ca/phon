@@ -19,12 +19,17 @@
 package ca.phon.app.query;
 
 import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.FocusManager;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.IPluginEntryPoint;
@@ -55,77 +60,86 @@ public class ResultSetEP implements IPluginEntryPoint {
 
 	@Override
 	public void pluginStart(Map<String, Object> initInfo) {
-		Project project = null;
-		Project tempProject = null;
-		Query query = null;
-		ResultSet resultSet = null;
-		boolean openSession = true;
+		final AtomicReference<Project> projectRef = new AtomicReference<>();
+		final AtomicReference<Project> tempProjectRef = new AtomicReference<>();
+		final AtomicReference<Query> queryRef = new AtomicReference<>();
+		final AtomicReference<ResultSet> resultSetRef = new AtomicReference<>();
+		final AtomicReference<Boolean> openSessionRef = new AtomicReference<>(Boolean.TRUE);
 		
 		// check args
 		if(initInfo.get("project") == null) {
 			throw new IllegalArgumentException("project must be given");
 		} else {
-			project = (Project)initInfo.get("project");
+			projectRef.set((Project)initInfo.get("project"));
 		}
 		
 		if(initInfo.get("tempProject") != null) {
-			tempProject = (Project)initInfo.get("tempProject");
+			tempProjectRef.set((Project)initInfo.get("tempProject"));
 		}
 		
 		// query is optional
-		query = (Query)initInfo.get("query");
+		queryRef.set((Query)initInfo.get("query"));
 		
 		if(initInfo.get("resultset") == null) {
 			throw new IllegalArgumentException("resultset must be given");
 		} else {
-			resultSet = (ResultSet)initInfo.get("resultset");
+			resultSetRef.set((ResultSet)initInfo.get("resultset"));
 		}
 		
 		if(initInfo.get("opensession") != null) {
-			openSession = Boolean.parseBoolean(initInfo.get("opensession").toString());
+			openSessionRef.set(Boolean.parseBoolean(initInfo.get("opensession").toString()));
 		}
 		
 		// look for an existing window
-		ResultSetEditor window = null;
+		final AtomicReference<ResultSetEditor> windowRef = new AtomicReference<>();
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 			if(cmf instanceof ResultSetEditor) {
 				final ResultSetEditor rsViewer = (ResultSetEditor)cmf;
-				final boolean sameProject = (rsViewer.getProject() == project);
+				final boolean sameProject = (rsViewer.getProject() == projectRef.get());
 				final boolean sameQuery = 
-						sameProject && (query.getUUID().equals(rsViewer.getQuery().getUUID()));
+						sameProject && (queryRef.get().getUUID().equals(rsViewer.getQuery().getUUID()));
 				final boolean sameResultSet = 
-						sameQuery && (resultSet.getSessionPath().equals(rsViewer.getResultSet().getSessionPath()));
+						sameQuery && (resultSetRef.get().getSessionPath().equals(rsViewer.getResultSet().getSessionPath()));
 				if(sameResultSet) {
-					window = rsViewer;
+					windowRef.set(rsViewer);
 					break;
 				}
 			}
 		}
 		
-		if(openSession) {
-			openSession(project, resultSet);
-		}
-		
-		if(window != null) {
-			window.toFront();
-			window.requestFocus();
-		} else {
-			window = new ResultSetEditor(project, query, resultSet);
-			if(tempProject != null)
-				window.setTempProject(tempProject);
-			
-			window.setPreferredSize(new Dimension(500, 600));
-			window.pack();
-
-			// setup location next to editor if attached
-			if(window.getEditor() != null) {
-				window.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, window.getEditor());
-			} else {
-				window.setLocationByPlatform(true);
+		final Runnable onEDT = () -> {
+			if(openSessionRef.get()) {
+				openSession(projectRef.get(), resultSetRef.get());
 			}
-			window.setVisible(true);
-		}
-		
+			
+			ResultSetEditor window = windowRef.get();
+			if(window != null) {
+				window.toFront();
+				window.requestFocus();
+			} else {
+				window = new ResultSetEditor(projectRef.get(), queryRef.get(), resultSetRef.get());
+				if(tempProjectRef.get() != null)
+					window.setTempProject(tempProjectRef.get());
+				
+				window.setPreferredSize(new Dimension(500, 600));
+				window.pack();
+	
+				// setup location next to editor if attached
+				if(window.getEditor() != null) {
+					window.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, window.getEditor());
+				} else {
+					window.setLocationByPlatform(true);
+				}
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().clearFocusOwner();
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
+				window.setVisible(true);
+				window.getTable().grabFocus();
+			}
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			SwingUtilities.invokeLater(onEDT);
 	}
 	
 	private void openSession(Project project, ResultSet rs) {
@@ -133,6 +147,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 		epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
 		epArgs.put(EntryPointArgs.CORPUS_NAME, rs.getCorpus());
 		epArgs.put(EntryPointArgs.SESSION_NAME, rs.getSession());
+		epArgs.put("grabFocus", Boolean.FALSE);
 		
 		try {
 			PluginEntryPointRunner.executePlugin("SessionEditor", epArgs);

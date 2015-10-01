@@ -130,9 +130,12 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		final boolean blindMode = 
 				(args.get("blindmode") != null ? (Boolean)args.get("blindmode") : false);
 		
+		final boolean grabFocus =
+				(args.get("grabFocus") != null ? (Boolean)args.get("grabFocus") : true);
+		
 		final Runnable onEdt = new Runnable() {
 			public void run() {
-				showEditor(project, sessionRef.get(), blindMode);
+				showEditor(project, sessionRef.get(), blindMode, grabFocus);
 			}
 		};
 		if(SwingUtilities.isEventDispatchThread())
@@ -152,7 +155,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	 * @param session
 	 * @param blindMode
 	 */
-	public void showEditor(Project project, Session session, boolean blindMode) {
+	public void showEditor(Project project, Session session, boolean blindMode, boolean grabFocus) {
 		// look for an already open editor
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 			if(cmf instanceof SessionEditor) {
@@ -237,13 +240,16 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			public void windowOpened(WindowEvent e) {
 				editor.getViewModel().applyPerspective(perspective);
 				
-				if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
-					editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
-				} else {
-					for(String viewName:editor.getViewModel().getViewNames()) {
-						if(editor.getViewModel().isShowing(viewName)) {
-							editor.getViewModel().getView(viewName).requestFocus();
-							break;
+				if(grabFocus) {
+					// XXX this code causes issues with result set editor focus in macosx
+					if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
+						editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
+					} else {
+						for(String viewName:editor.getViewModel().getViewNames()) {
+							if(editor.getViewModel().isShowing(viewName)) {
+								editor.getViewModel().getView(viewName).requestFocus();
+								break;
+							}
 						}
 					}
 				}
