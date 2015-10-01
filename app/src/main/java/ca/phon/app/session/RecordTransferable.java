@@ -90,7 +90,8 @@ public class RecordTransferable implements Transferable {
 			final String[] uuidLine = {"UUID", record.getUuid().toString()};
 			writer.writeNext(uuidLine);
 			
-			final String[] speakerLine = {"Speaker", record.getSpeaker().getName()};
+			final String[] speakerLine = {"Speaker", 
+					(record.getSpeaker() != null ? record.getSpeaker().getName() : "")};
 			writer.writeNext(speakerLine);
 			
 			final List<String> row = new ArrayList<String>();
