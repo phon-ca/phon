@@ -5,6 +5,220 @@
 		<window uid="124b0816-2337-4045-bd07-2940178f8604" x="594" y="22" width="816" height="719"/>
 	</windows>
 	<stations>
+		<element name="124b0816-2337-4045-bd07-2940178f8604 center">
+			<layout factory="predefined" placeholder="dock.single.\124b0816\-2337\-4045\-bd07\-2940178f8604\ center">
+				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 center"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>124b0816-2337-4045-bd07-2940178f8604 center</id>
+					<root>true</root>
+					<content delegate="SplitDockStationFactory">
+						<fullscreen-action>false</fullscreen-action>
+						<leaf id="0" nodeId="1413327661046">
+							<placeholders>
+								<placeholder>dock.single.Speech\ Analysis</placeholder>
+							</placeholders>
+						</leaf>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.center</type>
+				</layout>
+			</adjacent>
+			<children ignore="false">
+				<child>
+					<layout factory="predefined" placeholder="dock.single.Speech\ Analysis">
+						<replacement id="dockablesingle Speech Analysis"/>
+						<delegate id="delegate_ccontrol backup factory id">
+							<id>Speech Analysis</id>
+							<area/>
+						</delegate>
+					</layout>
+					<children ignore="false"/>
+				</child>
+			</children>
+		</element>
+		<element name="root west">
+			<layout factory="predefined">
+				<replacement id="rootroot west"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>root west</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="external">
+			<layout factory="predefined">
+				<replacement id="rootexternal"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>external</id>
+					<root>true</root>
+					<content delegate="screen dock">
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CExternalizeArea</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="124b0816-2337-4045-bd07-2940178f8604 east">
+			<layout factory="predefined">
+				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 east"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>124b0816-2337-4045-bd07-2940178f8604 east</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="root north">
+			<layout factory="predefined">
+				<replacement id="rootroot north"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>root north</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="root south">
+			<layout factory="predefined">
+				<replacement id="rootroot south"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>root south</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+							<entry>
+								<key shared="false">
+									<placeholder>dock.single.Session\ Information</placeholder>
+								</key>
+							</entry>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="124b0816-2337-4045-bd07-2940178f8604 south">
+			<layout factory="predefined">
+				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 south"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>124b0816-2337-4045-bd07-2940178f8604 south</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="124b0816-2337-4045-bd07-2940178f8604 west">
+			<layout factory="predefined">
+				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 west"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>124b0816-2337-4045-bd07-2940178f8604 west</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
+		<element name="124b0816-2337-4045-bd07-2940178f8604 north">
+			<layout factory="predefined">
+				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 north"/>
+				<delegate id="delegate_CommonDockStationFactory">
+					<id>124b0816-2337-4045-bd07-2940178f8604 north</id>
+					<root>true</root>
+					<content delegate="flap dock">
+						<window auto="true" direction="SOUTH"/>
+						<placeholders>
+							<version>0</version>
+							<format>dock.PlaceholderList</format>
+						</placeholders>
+					</content>
+				</delegate>
+			</layout>
+			<adjacent>
+				<layout factory="dock.RootStationAdjacentFactory">
+					<type>dock.CContentArea.minimize</type>
+				</layout>
+			</adjacent>
+			<children ignore="false"/>
+		</element>
 		<element name="root center">
 			<layout factory="predefined" placeholder="dock.single.root\ center">
 				<replacement id="rootroot center"/>
@@ -103,26 +317,35 @@
 							<format>dock.PlaceholderList</format>
 							<entry>
 								<key shared="false">
+									<placeholder>dock.single.Session\ Information</placeholder>
+								</key>
+								<item key="convert" type="b">true</item>
+								<item key="convert-keys" type="a">
+									<item type="s">index</item>
+									<item type="s">id</item>
+									<item type="s">placeholder</item>
+								</item>
+								<item key="dock.index" type="i">0</item>
+								<item key="dock.id" type="i">0</item>
+								<item key="dock.placeholder" type="s">dock.single.Session\ Information</item>
+							</entry>
+							<entry>
+								<key shared="false">
 									<placeholder>dock.single.Segmentation</placeholder>
 								</key>
 								<item key="convert" type="b">true</item>
 								<item key="convert-keys" type="a">
-									<item type="s">id</item>
 									<item type="s">index</item>
+									<item type="s">id</item>
 									<item type="s">placeholder</item>
 								</item>
-								<item key="dock.id" type="i">0</item>
-								<item key="dock.index" type="i">0</item>
+								<item key="dock.index" type="i">1</item>
+								<item key="dock.id" type="i">1</item>
 								<item key="dock.placeholder" type="s">dock.single.Segmentation</item>
 							</entry>
 							<entry>
 								<key shared="false">
 									<placeholder>dock.single.Speech\ Analysis</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Session\ Information</placeholder>
 								</key>
 							</entry>
 							<entry>
@@ -136,12 +359,12 @@
 								</key>
 								<item key="convert" type="b">true</item>
 								<item key="convert-keys" type="a">
-									<item type="s">id</item>
 									<item type="s">index</item>
+									<item type="s">id</item>
 									<item type="s">placeholder</item>
 								</item>
-								<item key="dock.id" type="i">1</item>
-								<item key="dock.index" type="i">1</item>
+								<item key="dock.index" type="i">2</item>
+								<item key="dock.id" type="i">2</item>
 								<item key="dock.placeholder" type="s">dock.single.Tier\ Management</item>
 							</entry>
 							<entry>
@@ -152,6 +375,16 @@
 						</placeholders>
 					</layout>
 					<children ignore="false">
+						<child>
+							<layout factory="predefined" placeholder="dock.single.Session\ Information">
+								<replacement id="dockablesingle Session Information"/>
+								<delegate id="delegate_ccontrol backup factory id">
+									<id>Session Information</id>
+									<area/>
+								</delegate>
+							</layout>
+							<children ignore="false"/>
+						</child>
 						<child>
 							<layout factory="predefined" placeholder="dock.single.Segmentation">
 								<replacement id="dockablesingle Segmentation"/>
@@ -186,242 +419,6 @@
 				</child>
 			</children>
 		</element>
-		<element name="external">
-			<layout factory="predefined">
-				<replacement id="rootexternal"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>external</id>
-					<root>true</root>
-					<content delegate="screen dock">
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CExternalizeArea</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="root south">
-			<layout factory="predefined">
-				<replacement id="rootroot south"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>root south</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Session\ Information</placeholder>
-								</key>
-								<item key="convert" type="b">true</item>
-								<item key="convert-keys" type="a">
-									<item type="s">id</item>
-									<item type="s">index</item>
-									<item type="s">hold</item>
-									<item type="s">size</item>
-								</item>
-								<item key="dock.id" type="i">0</item>
-								<item key="dock.index" type="i">0</item>
-								<item key="dock.hold" type="b">false</item>
-								<item key="dock.size" type="i">400</item>
-							</entry>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false">
-				<child>
-					<layout factory="predefined" placeholder="dock.single.Session\ Information">
-						<replacement id="dockablesingle Session Information"/>
-						<delegate id="delegate_ccontrol backup factory id">
-							<id>Session Information</id>
-							<area/>
-						</delegate>
-					</layout>
-					<children ignore="false"/>
-				</child>
-			</children>
-		</element>
-		<element name="root north">
-			<layout factory="predefined">
-				<replacement id="rootroot north"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>root north</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="124b0816-2337-4045-bd07-2940178f8604 north">
-			<layout factory="predefined">
-				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 north"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>124b0816-2337-4045-bd07-2940178f8604 north</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="124b0816-2337-4045-bd07-2940178f8604 south">
-			<layout factory="predefined">
-				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 south"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>124b0816-2337-4045-bd07-2940178f8604 south</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="124b0816-2337-4045-bd07-2940178f8604 east">
-			<layout factory="predefined">
-				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 east"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>124b0816-2337-4045-bd07-2940178f8604 east</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="124b0816-2337-4045-bd07-2940178f8604 west">
-			<layout factory="predefined">
-				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 west"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>124b0816-2337-4045-bd07-2940178f8604 west</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="root west">
-			<layout factory="predefined">
-				<replacement id="rootroot west"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>root west</id>
-					<root>true</root>
-					<content delegate="flap dock">
-						<window auto="true" direction="SOUTH"/>
-						<placeholders>
-							<version>0</version>
-							<format>dock.PlaceholderList</format>
-						</placeholders>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.minimize</type>
-				</layout>
-			</adjacent>
-			<children ignore="false"/>
-		</element>
-		<element name="124b0816-2337-4045-bd07-2940178f8604 center">
-			<layout factory="predefined" placeholder="dock.single.\124b0816\-2337\-4045\-bd07\-2940178f8604\ center">
-				<replacement id="root124b0816-2337-4045-bd07-2940178f8604 center"/>
-				<delegate id="delegate_CommonDockStationFactory">
-					<id>124b0816-2337-4045-bd07-2940178f8604 center</id>
-					<root>true</root>
-					<content delegate="SplitDockStationFactory">
-						<fullscreen-action>false</fullscreen-action>
-						<leaf id="0" nodeId="1413327661046">
-							<placeholders>
-								<placeholder>dock.single.Speech\ Analysis</placeholder>
-							</placeholders>
-						</leaf>
-					</content>
-				</delegate>
-			</layout>
-			<adjacent>
-				<layout factory="dock.RootStationAdjacentFactory">
-					<type>dock.CContentArea.center</type>
-				</layout>
-			</adjacent>
-			<children ignore="false">
-				<child>
-					<layout factory="predefined" placeholder="dock.single.Speech\ Analysis">
-						<replacement id="dockablesingle Speech Analysis"/>
-						<delegate id="delegate_ccontrol backup factory id">
-							<id>Speech Analysis</id>
-							<area/>
-						</delegate>
-					</layout>
-					<children ignore="false"/>
-				</child>
-			</children>
-		</element>
 		<element name="root east">
 			<layout factory="predefined">
 				<replacement id="rootroot east"/>
@@ -446,6 +443,22 @@
 		</element>
 	</stations>
 	<invisible>
+		<dockable key="single Session Information">
+			<location root="root center" mode="dock.mode.normal">
+				<property factory="SplitDockPlaceholderProperty">
+					<placeholder>dock.single.Session\ Information</placeholder>
+					<backup-path>
+						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+						<leaf id="1411988523869"/>
+					</backup-path>
+				</property>
+				<property factory="StackDockPropertyFactory">
+					<index>0</index>
+					<placeholder>dock.single.Session\ Information</placeholder>
+				</property>
+			</location>
+		</dockable>
 		<dockable key="single Media Player">
 			<location root="root center" mode="dock.mode.normal">
 				<property factory="SplitDockPlaceholderProperty">
@@ -469,55 +482,13 @@
 				</property>
 			</location>
 		</dockable>
-		<dockable key="single Tier Management">
-			<location root="root center" mode="dock.mode.normal">
+		<dockable key="single Speech Analysis">
+			<location root="124b0816-2337-4045-bd07-2940178f8604 center" mode="dock.mode.normal">
 				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Tier\ Management</placeholder>
+					<placeholder>dock.single.Speech\ Analysis</placeholder>
 					<backup-path>
-						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-						<leaf id="1411988523869"/>
+						<leaf id="1413327661046"/>
 					</backup-path>
-				</property>
-				<property factory="StackDockPropertyFactory">
-					<index>1</index>
-					<placeholder>dock.single.Tier\ Management</placeholder>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Segmentation">
-			<location root="root center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Segmentation</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-						<leaf id="1411988523869"/>
-					</backup-path>
-				</property>
-				<property factory="StackDockPropertyFactory">
-					<index>0</index>
-					<placeholder>dock.single.Segmentation</placeholder>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Find &amp; Replace">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Find\ \&amp;\ Replace">
-					<replacement id="dockablesingle Find &amp; Replace"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Find &amp; Replace</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
-			<location root="root north" mode="dock.mode.minimized">
-				<property factory="flap dock">
-					<index>0</index>
-					<holding>true</holding>
-					<size>299</size>
-					<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
 				</property>
 			</location>
 		</dockable>
@@ -546,29 +517,110 @@
 				</property>
 			</location>
 		</dockable>
-		<dockable key="single Speech Analysis">
-			<location root="124b0816-2337-4045-bd07-2940178f8604 center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Speech\ Analysis</placeholder>
-					<backup-path>
-						<leaf id="1413327661046"/>
-					</backup-path>
+		<dockable key="single Find &amp; Replace">
+			<content>
+				<layout factory="predefined" placeholder="dock.single.Find\ \&amp;\ Replace">
+					<replacement id="dockablesingle Find &amp; Replace"/>
+					<delegate id="delegate_ccontrol backup factory id">
+						<id>Find &amp; Replace</id>
+						<area/>
+					</delegate>
+				</layout>
+				<children ignore="false"/>
+			</content>
+			<location root="root north" mode="dock.mode.minimized">
+				<property factory="flap dock">
+					<index>0</index>
+					<holding>true</holding>
+					<size>299</size>
+					<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
 				</property>
 			</location>
 		</dockable>
-		<dockable key="single Session Information">
-			<location root="root south" mode="dock.mode.minimized">
-				<property factory="flap dock">
-					<index>0</index>
-					<holding>false</holding>
-					<size>400</size>
-					<placeholder>dock.single.Session\ Information</placeholder>
+		<dockable key="single IPA Lookup">
+			<content>
+				<layout factory="predefined" placeholder="dock.single.IPA\ Lookup">
+					<replacement id="dockablesingle IPA Lookup"/>
+					<delegate id="delegate_ccontrol backup factory id">
+						<id>IPA Lookup</id>
+						<area/>
+					</delegate>
+				</layout>
+				<children ignore="false"/>
+			</content>
+			<location root="root center" mode="dock.mode.normal">
+				<property factory="SplitDockPlaceholderProperty">
+					<placeholder>dock.single.IPA\ Lookup</placeholder>
+					<backup-path>
+						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+						<leaf id="1411988523869"/>
+					</backup-path>
+				</property>
+				<property factory="StackDockPropertyFactory">
+					<index>1</index>
+					<placeholder>dock.single.IPA\ Lookup</placeholder>
+				</property>
+			</location>
+		</dockable>
+		<dockable key="single Tier Management">
+			<location root="root center" mode="dock.mode.normal">
+				<property factory="SplitDockPlaceholderProperty">
+					<placeholder>dock.single.Tier\ Management</placeholder>
+					<backup-path>
+						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+						<leaf id="1411988523869"/>
+					</backup-path>
+				</property>
+				<property factory="StackDockPropertyFactory">
+					<index>2</index>
+					<placeholder>dock.single.Tier\ Management</placeholder>
+				</property>
+			</location>
+		</dockable>
+		<dockable key="single Segmentation">
+			<location root="root center" mode="dock.mode.normal">
+				<property factory="SplitDockPlaceholderProperty">
+					<placeholder>dock.single.Segmentation</placeholder>
+					<backup-path>
+						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+						<leaf id="1411988523869"/>
+					</backup-path>
+				</property>
+				<property factory="StackDockPropertyFactory">
+					<index>1</index>
+					<placeholder>dock.single.Segmentation</placeholder>
 				</property>
 			</location>
 		</dockable>
 	</invisible>
 	<modes>
 		<dockables>
+			<entry id="single 124b0816-2337-4045-bd07-2940178f8604 center">
+				<history/>
+				<properties/>
+			</entry>
+			<entry id="single Speech Analysis" current="dock.mode.normal">
+				<history>
+					<mode>dock.mode.normal</mode>
+				</history>
+				<properties>
+					<property id="dock.mode.normal">
+						<mode>dock.mode.normal</mode>
+						<root>124b0816-2337-4045-bd07-2940178f8604 center</root>
+						<location>
+							<property factory="SplitDockPlaceholderProperty">
+								<placeholder>dock.single.Speech\ Analysis</placeholder>
+								<backup-path>
+									<leaf id="1413327661046"/>
+								</backup-path>
+							</property>
+						</location>
+					</property>
+				</properties>
+			</entry>
 			<entry id="single root center">
 				<history/>
 				<properties/>
@@ -594,6 +646,44 @@
 					</property>
 				</properties>
 			</entry>
+			<entry id="single Session Information" current="dock.mode.normal">
+				<history>
+					<mode>dock.mode.minimized</mode>
+					<mode>dock.mode.normal</mode>
+				</history>
+				<properties>
+					<property id="dock.mode.minimized">
+						<mode>dock.mode.minimized</mode>
+						<root>root south</root>
+						<location>
+							<property factory="flap dock">
+								<index>0</index>
+								<holding>false</holding>
+								<size>400</size>
+								<placeholder>dock.single.Session\ Information</placeholder>
+							</property>
+						</location>
+					</property>
+					<property id="dock.mode.normal">
+						<mode>dock.mode.normal</mode>
+						<root>root center</root>
+						<location>
+							<property factory="SplitDockPlaceholderProperty">
+								<placeholder>dock.single.Session\ Information</placeholder>
+								<backup-path>
+									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+									<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+									<leaf id="1411988523869"/>
+								</backup-path>
+							</property>
+							<property factory="StackDockPropertyFactory">
+								<index>0</index>
+								<placeholder>dock.single.Session\ Information</placeholder>
+							</property>
+						</location>
+					</property>
+				</properties>
+			</entry>
 			<entry id="single Segmentation" current="dock.mode.normal">
 				<history>
 					<mode>dock.mode.normal</mode>
@@ -612,7 +702,7 @@
 								</backup-path>
 							</property>
 							<property factory="StackDockPropertyFactory">
-								<index>0</index>
+								<index>1</index>
 								<placeholder>dock.single.Segmentation</placeholder>
 							</property>
 						</location>
@@ -626,24 +716,6 @@
 					<mode>dock.mode.normal</mode>
 				</history>
 				<properties>
-					<property id="dock.mode.normal">
-						<mode>dock.mode.normal</mode>
-						<root>root center</root>
-						<location>
-							<property factory="SplitDockPlaceholderProperty">
-								<placeholder>dock.single.Tier\ Management</placeholder>
-								<backup-path>
-									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-									<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-									<leaf id="1411988523869"/>
-								</backup-path>
-							</property>
-							<property factory="StackDockPropertyFactory">
-								<index>1</index>
-								<placeholder>dock.single.Tier\ Management</placeholder>
-							</property>
-						</location>
-					</property>
 					<property id="dock.mode.maximized">
 						<mode>dock.mode.maximized</mode>
 						<root>ccontrol center</root>
@@ -659,6 +731,24 @@
 								<index>0</index>
 								<holding>false</holding>
 								<size>400</size>
+								<placeholder>dock.single.Tier\ Management</placeholder>
+							</property>
+						</location>
+					</property>
+					<property id="dock.mode.normal">
+						<mode>dock.mode.normal</mode>
+						<root>root center</root>
+						<location>
+							<property factory="SplitDockPlaceholderProperty">
+								<placeholder>dock.single.Tier\ Management</placeholder>
+								<backup-path>
+									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+									<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+									<leaf id="1411988523869"/>
+								</backup-path>
+							</property>
+							<property factory="StackDockPropertyFactory">
+								<index>2</index>
 								<placeholder>dock.single.Tier\ Management</placeholder>
 							</property>
 						</location>
@@ -679,68 +769,6 @@
 								<backup-path>
 									<node location="BOTTOM" size="0.5596774193548387" id="1411988523871"/>
 									<leaf id="1411986763765"/>
-								</backup-path>
-							</property>
-						</location>
-					</property>
-				</properties>
-			</entry>
-			<entry id="single Session Information" current="dock.mode.minimized">
-				<history>
-					<mode>dock.mode.normal</mode>
-					<mode>dock.mode.minimized</mode>
-				</history>
-				<properties>
-					<property id="dock.mode.normal">
-						<mode>dock.mode.normal</mode>
-						<root>root center</root>
-						<location>
-							<property factory="SplitDockPlaceholderProperty">
-								<placeholder>dock.single.Session\ Information</placeholder>
-								<backup-path>
-									<node location="TOP" size="0.0" id="1412771624605"/>
-									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-									<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-									<leaf id="1411988523869"/>
-								</backup-path>
-							</property>
-							<property factory="StackDockPropertyFactory">
-								<index>0</index>
-								<placeholder>dock.single.Session\ Information</placeholder>
-							</property>
-						</location>
-					</property>
-					<property id="dock.mode.minimized">
-						<mode>dock.mode.minimized</mode>
-						<root>root south</root>
-						<location>
-							<property factory="flap dock">
-								<index>0</index>
-								<holding>false</holding>
-								<size>400</size>
-								<placeholder>dock.single.Session\ Information</placeholder>
-							</property>
-						</location>
-					</property>
-				</properties>
-			</entry>
-			<entry id="single 124b0816-2337-4045-bd07-2940178f8604 center">
-				<history/>
-				<properties/>
-			</entry>
-			<entry id="single Speech Analysis" current="dock.mode.normal">
-				<history>
-					<mode>dock.mode.normal</mode>
-				</history>
-				<properties>
-					<property id="dock.mode.normal">
-						<mode>dock.mode.normal</mode>
-						<root>124b0816-2337-4045-bd07-2940178f8604 center</root>
-						<location>
-							<property factory="SplitDockPlaceholderProperty">
-								<placeholder>dock.single.Speech\ Analysis</placeholder>
-								<backup-path>
-									<leaf id="1413327661046"/>
 								</backup-path>
 							</property>
 						</location>
