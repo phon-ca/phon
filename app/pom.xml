@@ -139,10 +139,6 @@
 		    <artifactId>org.eclipse.jgit.ui</artifactId>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.renjin</groupId>
-			<artifactId>renjin-script-engine</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>

@@ -139,7 +139,6 @@
 		<com.jgoodies.jgoodies-looks.version>2.5.3</com.jgoodies.jgoodies-looks.version>
 		<net.lingala.zip4j.version>1.3.2</net.lingala.zip4j.version>
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
-		<org.renjin.renjin-script-engine.version>0.7.0-RC7</org.renjin.renjin-script-engine.version>
 
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools>2.1</org.apache.velocity.velocity-tools>
@@ -397,11 +396,6 @@
 				<version>${net.lingala.zip4j.version}</version>
 			</dependency>
 			
-			<dependency>
-				<groupId>org.renjin</groupId>
-				<artifactId>renjin-script-engine</artifactId>
-				<version>${org.renjin.renjin-script-engine.version}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
