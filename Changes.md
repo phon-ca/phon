@@ -42,6 +42,9 @@
 ### Praat Plug-in
 * Update to jpraat 0.12 (Praat version 5.4.15)
 * Improved form and behaviour of Generating Records from TextGrid function.
+* There are now two methods for opening TextGrids in Praat
+  * Open TextGrid in Praat - full audio: This will load the entire audio file in memory, not recommended for large sound files.
+  * Open TextGrid in Praat - segment only: This will load the segment for the current record in memory, recommended unless you need to work with more than one record at a time.
 
 ### Api
 * Added new functions to ca.phon.project.Project allowing for easier access to underlying paths to corpora/sessions.
