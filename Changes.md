@@ -3,38 +3,49 @@
 ## Changes from Phon 2.1.1
 
 ### General
- * Update to Java 8u60.
- * Fixed an issue with flat tier sizing when data spans multiple lines in Record Data view.
- * Improved performance of updating query result highlights in session editor when using the Result Set Editor.
- * New status bar for Session Editor which includes:
-   * Modification status
-   * Session corpus/name with link to corpus folder
-   * Progress indicator
+* Update to Java 8u60.
+* Fixed an issue with flat tier sizing when data spans multiple lines in Record Data view.
+* Improved performance of updating query result highlights in session editor when using the Result Set Editor.
+* New status bar for Session Editor which includes:
+  * Modification status
+  * Session corpus/name with link to corpus folder
+  * Progress indicator
+* Fixed memory leak when using the Result Set editor with an attached Session editor.
+* Result set editor now opens with consistent size regardless of result set schema.
+* Fixed an issue with keyboard focus on macosx when using the Result Set editor with an attached Session editor.
+* PCC-PVC query now properly ignores diacritics.
+* Improved performance of highlighting query results when using the Result Set editor.
+* Added new feature 'cover' to symbols 'C', 'V', 'G', and '*'
+* Fixed issues when opening older Phon session files with invalid alignments.
 
 ### Project Window
- * Deleted corpora/sessions are now moved to Recycle Bin/Trash when deleted (if available.)
- * The following Drag & Drop operations are now supported in the Project Window:
+* Deleted corpora/sessions are now moved to Recycle Bin/Trash when deleted (if available.)
+* The following Drag & Drop operations are now supported in the Project Window:
   * Copy corpora to another project
   * Drag corpus folders to another application (i.e., Explorer/Finder, mail applications, etc.)
   * Copy folders (corpora) into project by dropping onto the corpus list.
   * Copy sessions to another corpus/project
   * Drag session files to another application (i.e., Explorer/Finder, mail applications, etc.)
   * Copy xml files (sessions) into project by dropping onto the session list.
- * Delete/Duplicate corpus/session operations may now apply to more than one selected item.
- * Updated context menus for corpus/session lists in Project Window.
+* Delete/Duplicate corpus/session operations may now apply to more than one selected item.
+* Updated context menus for corpus/session lists in Project Window.
 
 ### Media
- * Removed ffmpeg dependency.
- * Updated to VLC 2.2.1.
- * Now using VLC instead of ffmpeg for media exports.
- * Removed deprecated 'Export media' function from Media Player view menu.
- * Improved user feedback when exporting wav data for session media.
- * Speech analysis start time will now scroll as the horizontal scrollbar is dragged.
- * Improved look and feel of tier separators in Speech Analysis view.
+* Removed ffmpeg dependency.
+* Updated to VLC 2.2.1.
+* Now using VLC instead of ffmpeg for media exports.
+* Removed deprecated 'Export media' function from Media Player view menu.
+* Improved user feedback when exporting wav data for session media.
+* Speech analysis start time will now scroll as the horizontal scrollbar is dragged.
+* Improved look and feel of tier separators in Speech Analysis view.
  
 ### Praat Plug-in
- * Update to jpraat 0.12 (Praat version 5.4.15)
- * Improved form and behaviour of Generating Records from TextGrid function.
+* Update to jpraat 0.12 (Praat version 5.4.15)
+* Improved form and behaviour of Generating Records from TextGrid function.
+
+### Api
+* Added new functions to ca.phon.project.Project allowing for easier access to underlying paths to corpora/sessions.
+* Fixed an issue with ca.phon.session.impl.WordImpl when requesting ipa transcripts in tiers with no data.
 
 ## Changes from Phon 2.1.0
 
