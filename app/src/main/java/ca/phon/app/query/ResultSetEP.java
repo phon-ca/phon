@@ -19,15 +19,12 @@
 package ca.phon.app.query;
 
 import java.awt.Dimension;
-import java.awt.FocusTraversalPolicy;
 import java.awt.KeyboardFocusManager;
-import java.awt.Toolkit;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.FocusManager;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
