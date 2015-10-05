@@ -1,5 +1,6 @@
 package ca.phon.ui.menu;
 
+import java.awt.MenuContainer;
 import java.lang.ref.WeakReference;
 
 import javax.swing.Action;
@@ -79,9 +80,24 @@ public final class MenuBuilder {
 	 */
 	public JMenu getMenu(String path, boolean createMenu) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
+		final String name = path.substring(deepest.getObj1().length());
 		
+		JMenu retVal = null;
+		if(name.indexOf('/') >= 0 && createMenu) {
+			// create menu for each subpath
+			final String[] subpaths = name.split("/");
+			String curpath = deepest.getObj1();
+			for(String subpath:subpaths) {
+				curpath += "/" + subpath;
+				retVal = addMenu(curpath, subpath);
+			}
+		} else {
+			if(deepest.getObj2() instanceof JMenu) {
+				retVal = (JMenu)deepest.getObj2();
+			}
+		}
 		
-		return null;
+		return retVal;
 	}
 	
 	public JMenu addMenu(String path, String text) {
