@@ -49,7 +49,5 @@ public class StopCommandHook implements CommandHook {
 			syllabifierEditorModel.getSyllabificationDisplay().setTranscript(new IPATranscript());
 		}
 	}
-
-	
 	
 }

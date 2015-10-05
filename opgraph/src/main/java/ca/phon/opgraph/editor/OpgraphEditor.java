@@ -19,6 +19,8 @@ import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphEditorModel;
+import ca.phon.opgraph.editor.actions.file.NewAction;
+import ca.phon.opgraph.editor.actions.file.OpenAction;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuBuilder;
 
@@ -79,7 +81,10 @@ public class OpgraphEditor extends CommonModuleFrame {
 	
 	protected void setupMenu() {
 		final MenuBuilder menuBuilder = new MenuBuilder(this.menuBar);
-		
+	
+		menuBuilder.addMenu("Graph", "Graph");
+		menuBuilder.addMenuItem("Graph/New", new NewAction(this));
+		menuBuilder.addMenuItem("Graph/Open", new OpenAction(this));
 	}
 	
 	protected void setupDefaultPerspective() {
