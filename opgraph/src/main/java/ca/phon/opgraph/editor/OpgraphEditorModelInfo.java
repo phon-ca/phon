@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ModelInfo {
+public @interface OpgraphEditorModelInfo {
 
 	public String name();
 	

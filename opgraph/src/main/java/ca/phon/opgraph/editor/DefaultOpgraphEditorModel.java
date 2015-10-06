@@ -2,7 +2,7 @@ package ca.phon.opgraph.editor;
 
 import ca.gedge.opgraph.OpGraph;
 
-@ModelInfo(name="General", description="Empty graph with default context")
+@OpgraphEditorModelInfo(name="General", description="Empty graph with default context")
 public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 
 	public DefaultOpgraphEditorModel() {

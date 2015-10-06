@@ -16,12 +16,12 @@ import ca.gedge.opgraph.io.OpGraphSerializerFactory;
  */
 public class OpgraphIO {
 
-	public OpGraph read(File file) throws IOException {
+	public static OpGraph read(File file) throws IOException {
 		final OpGraphSerializer serializer = OpGraphSerializerFactory.getDefaultSerializer();
 		return serializer.read(new FileInputStream(file));
 	}
 	
-	public void write(OpGraph graph, File file) throws IOException {
+	public static void write(OpGraph graph, File file) throws IOException {
 		final OpGraphSerializer serializer = OpGraphSerializerFactory.getDefaultSerializer();
 		serializer.write(graph, new FileOutputStream(file));
 	}
