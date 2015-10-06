@@ -70,13 +70,15 @@ public class ThemeHook implements PhonStartupHook,
 					}
 					
 					try {
-						final String uiClassName = PrefHelper.get(
+						 String uiClassName = PrefHelper.get(
 								PhonProperties.UI_THEME,
 								OSInfo.isNix() ? PhonSubstanceLookAndFeel.class.getName()
 										: PhonWindowsLookAndFeel.class.getName()
 								);
-						if(uiClassName != null)
+						if(uiClassName != null) {
+							LOGGER.info("Installing L&F " + uiClassName);
 							UIManager.setLookAndFeel(uiClassName);
+						}
 					} catch (UnsupportedLookAndFeelException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					} catch (ClassNotFoundException e) {
