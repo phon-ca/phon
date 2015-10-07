@@ -1,7 +1,11 @@
 package ca.phon.opgraph.editor.actions.file;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.List;
+
+import javax.swing.KeyStroke;
 
 import ca.phon.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.opgraph.editor.OpgraphEditor;
@@ -18,9 +22,12 @@ public class NewAction extends OpgraphEditorAction {
 
 	private static final long serialVersionUID = -6534242210546640918L;
 	
-	private final static String TXT = "New...";
+	public final static String TXT = "New...";
 	
-	private final static String DESC = "New graph";
+	public final static String DESC = "New graph";
+	
+	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_N,
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 	
 	private final Class<? extends OpgraphEditorModel> modelType;
 	
@@ -33,6 +40,7 @@ public class NewAction extends OpgraphEditorAction {
 		this.modelType = modelType;
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
+		putValue(ACCELERATOR_KEY, KS);
 	}
 
 	@Override

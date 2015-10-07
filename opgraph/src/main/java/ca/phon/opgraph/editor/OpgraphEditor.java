@@ -5,12 +5,11 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
-import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
@@ -28,6 +27,7 @@ import ca.phon.opgraph.OpgraphIO;
 import ca.phon.opgraph.editor.actions.file.NewAction;
 import ca.phon.opgraph.editor.actions.file.OpenAction;
 import ca.phon.opgraph.editor.actions.file.SaveAction;
+import ca.phon.opgraph.editor.actions.file.SaveAsAction;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -85,6 +85,8 @@ public class OpgraphEditor extends CommonModuleFrame {
 		if(this.model != null)
 			this.model.getDocument().getUndoSupport().removeUndoableEditListener(undoListener);
 		this.model = model;
+		// set undo manager for edit menu commands
+		putExtension(UndoManager.class, this.model.getDocument().getUndoManager());
 		this.model.getDocument().getUndoSupport().addUndoableEditListener(undoListener);
 		if(dockControl != null)
 			resetView();
@@ -124,22 +126,28 @@ public class OpgraphEditor extends CommonModuleFrame {
 		setWindowName(sb.toString());
 	}
 	
+	public boolean chooseFile() {
+		final SaveDialogProperties props = new SaveDialogProperties();
+		props.setParentWindow(this);
+		props.setCanCreateDirectories(true);
+		props.setFileFilter(new OpgraphFileFilter());
+		props.setRunAsync(false);
+		props.setTitle("Save graph");
+		
+		final String saveAs = NativeDialogs.showSaveDialog(props);
+		if(saveAs != null) {
+			setCurrentFile(new File(saveAs));
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	@Override
 	public boolean saveData() throws IOException {
 		if(!hasUnsavedChanges()) return true;
 		if(getCurrentFile() == null) {
-			final SaveDialogProperties props = new SaveDialogProperties();
-			props.setParentWindow(this);
-			props.setCanCreateDirectories(true);
-			props.setFileFilter(new OpgraphFileFilter());
-			props.setRunAsync(false);
-			props.setTitle("Save graph");
-			
-			final String saveAs = NativeDialogs.showSaveDialog(props);
-			if(saveAs == null) {
-				return false;
-			}
-			setCurrentFile(new File(saveAs));
+			if(!chooseFile()) return false;
 		}
 		OpgraphIO.write(getModel().getDocument().getGraph(), getCurrentFile());
 		getModel().getDocument().markAsUnmodified();
@@ -168,7 +176,8 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addMenuItem("File@New...", new OpenAction(this));
 		menuBuilder.addSeparator("File@Open...", "sep1");
 		menuBuilder.addMenuItem("File@sep1", new SaveAction(this));
-		menuBuilder.addSeparator("File@Save", "sep2");
+		menuBuilder.addMenuItem("File@Save", new SaveAsAction(this));
+		menuBuilder.addSeparator("File@Save as...", "sep2");
 		
 		menuBuilder.addMenu(".@Edit", "Graph");
 	}

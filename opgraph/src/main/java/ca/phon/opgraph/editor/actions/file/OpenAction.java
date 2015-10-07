@@ -1,11 +1,15 @@
 package ca.phon.opgraph.editor.actions.file;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.KeyStroke;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.opgraph.OpgraphIO;
@@ -14,10 +18,7 @@ import ca.phon.opgraph.editor.OpgraphEditorModel;
 import ca.phon.opgraph.editor.OpgraphEditorModelFactory;
 import ca.phon.opgraph.editor.OpgraphFileFilter;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
@@ -27,15 +28,19 @@ public class OpenAction extends OpgraphEditorAction {
 
 	private static final long serialVersionUID = 1416397464535529114L;
 	
-	private final static String TXT = "Open...";
+	public final static String TXT = "Open...";
 	
-	private final static String DESC = "Open graph";
+	public final static String DESC = "Open graph";
+	
+	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_O,
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 
 	public OpenAction(OpgraphEditor editor) {
 		super(editor);
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
+		putValue(ACCELERATOR_KEY, KS);
 	}
 
 	@Override
