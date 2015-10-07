@@ -6,8 +6,12 @@ import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 
@@ -33,6 +37,8 @@ import ca.phon.opgraph.editor.actions.graph.AutoLayoutAction;
 import ca.phon.opgraph.editor.actions.graph.DeleteAction;
 import ca.phon.opgraph.editor.actions.graph.DuplicateAction;
 import ca.phon.opgraph.editor.actions.graph.MoveNodeAction;
+import ca.phon.opgraph.editor.actions.view.ResetViewAction;
+import ca.phon.opgraph.editor.actions.view.ToggleViewAction;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
@@ -121,6 +127,18 @@ public class OpgraphEditor extends CommonModuleFrame {
 		updateTitle();
 	}
 	
+	public boolean isViewVisible(String viewName) {
+		return true;
+	}
+	
+	public void showView(String viewName) {
+		
+	}
+	
+	public void hideView(String viewName) {
+		
+	}
+	
 	protected void updateTitle() {
 		final StringBuffer sb = new StringBuffer();
 		sb.append(WINDOW_TITLE);
@@ -198,6 +216,32 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, -GridLayer.DEFAULT_GRID_SPACING / 2));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, GridLayer.DEFAULT_GRID_SPACING/2, 0));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, -GridLayer.DEFAULT_GRID_SPACING / 2, 0));
+		
+		final JMenu viewMenu = menuBuilder.addMenu(".@Graph", "View");
+		viewMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				viewMenu.removeAll();
+				
+				viewMenu.add(new ResetViewAction(OpgraphEditor.this));
+				viewMenu.addSeparator();
+				
+				for(String viewName:getModel().getAvailableViewNames()) {
+					final ToggleViewAction viewAct = new ToggleViewAction(OpgraphEditor.this, viewName);
+					viewAct.putValue(ToggleViewAction.SELECTED_KEY, isViewVisible(viewName));
+					viewMenu.add(new JCheckBoxMenuItem(viewAct));
+				}
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+		});
 	}
 	
 	protected void setupDefaultPerspective() {
