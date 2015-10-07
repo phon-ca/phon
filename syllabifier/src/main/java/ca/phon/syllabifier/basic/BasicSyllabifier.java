@@ -30,6 +30,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.basic.io.SonorityValues;
 import ca.phon.syllabifier.basic.io.StageType;
 import ca.phon.syllabifier.basic.io.SyllabifierDef;
 import ca.phon.util.Language;
@@ -76,6 +77,14 @@ public class BasicSyllabifier implements Syllabifier, IExtendable {
 			final SyllabifierStage stage = new Stage(st);
 			stages.add(stage);
 		}
+	}
+	
+	public SyllabifierDef getDefinition() {
+		return def;
+	}
+	
+	public SonorityValues getSonorityScale() {
+		return def.getSonorityScale();
 	}
 
 	@Override
