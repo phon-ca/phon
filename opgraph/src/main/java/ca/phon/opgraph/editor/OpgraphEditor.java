@@ -23,13 +23,19 @@ import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphEditorModel;
+import ca.gedge.opgraph.app.components.canvas.GridLayer;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.opgraph.editor.actions.file.NewAction;
 import ca.phon.opgraph.editor.actions.file.OpenAction;
 import ca.phon.opgraph.editor.actions.file.SaveAction;
 import ca.phon.opgraph.editor.actions.file.SaveAsAction;
+import ca.phon.opgraph.editor.actions.graph.AutoLayoutAction;
+import ca.phon.opgraph.editor.actions.graph.DeleteAction;
+import ca.phon.opgraph.editor.actions.graph.DuplicateAction;
+import ca.phon.opgraph.editor.actions.graph.MoveNodeAction;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
 
@@ -61,6 +67,10 @@ public class OpgraphEditor extends CommonModuleFrame {
 	public OpgraphEditor(OpgraphEditorModel model) {
 		super();
 		setModel(model);
+		
+		// rebuild menu so edit undo/redo commands work properly
+		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
+		setJMenuBar(menuBar);
 		
 		initDockingView();
 		addWindowFocusListener(focusListener);
@@ -180,6 +190,14 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addSeparator("File@Save as...", "sep2");
 		
 		menuBuilder.addMenu(".@Edit", "Graph");
+		menuBuilder.addMenuItem("Graph", new DeleteAction(this));
+		menuBuilder.addMenuItem("Graph", new DuplicateAction(this));
+		menuBuilder.addSeparator("Graph", "sep1");
+		menuBuilder.addMenuItem("Graph", new AutoLayoutAction(this));
+		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, GridLayer.DEFAULT_GRID_SPACING / 2));
+		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, -GridLayer.DEFAULT_GRID_SPACING / 2));
+		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, GridLayer.DEFAULT_GRID_SPACING/2, 0));
+		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, -GridLayer.DEFAULT_GRID_SPACING / 2, 0));
 	}
 	
 	protected void setupDefaultPerspective() {
