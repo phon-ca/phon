@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphEditorModel;
@@ -36,7 +37,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 		viewMap = new TreeMap<>();
 		final JPanel canvasPanel = new JPanel(new BorderLayout());
 		canvasPanel.add(getBreadcrumb(), BorderLayout.NORTH);
-		canvasPanel.add(getCanvas(), BorderLayout.CENTER);
+		canvasPanel.add(new JScrollPane(getCanvas()), BorderLayout.CENTER);
 		viewMap.put("Canvas", canvasPanel);
 		viewMap.put("Console", getConsolePanel());
 		viewMap.put("Debug", getDebugInfoPanel());
