@@ -30,6 +30,11 @@ import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.components.canvas.GridLayer;
 import ca.phon.opgraph.OpgraphIO;
+import ca.phon.opgraph.editor.actions.debug.StartAction;
+import ca.phon.opgraph.editor.actions.debug.StepAction;
+import ca.phon.opgraph.editor.actions.debug.StepIntoAction;
+import ca.phon.opgraph.editor.actions.debug.StepOutOfAction;
+import ca.phon.opgraph.editor.actions.debug.StopAction;
 import ca.phon.opgraph.editor.actions.file.NewAction;
 import ca.phon.opgraph.editor.actions.file.OpenAction;
 import ca.phon.opgraph.editor.actions.file.SaveAction;
@@ -250,6 +255,14 @@ public class OpgraphEditor extends CommonModuleFrame {
 			public void menuCanceled(MenuEvent e) {
 			}
 		});
+		
+		menuBuilder.addMenu(".@Graph", "Debug");
+		menuBuilder.addMenuItem("Debug", new StartAction(this));
+		menuBuilder.addMenuItem("Debug", new StopAction(this));
+		menuBuilder.addSeparator("Debug", "sep1");
+		menuBuilder.addMenuItem("Debug", new StepAction(this));
+		menuBuilder.addMenuItem("Debug", new StepIntoAction(this));
+		menuBuilder.addMenuItem("Debug", new StepOutOfAction(this));
 	}
 	
 	protected void setupDefaultPerspective() {
