@@ -10,6 +10,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.SwingConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.UndoableEditListener;
@@ -33,6 +34,7 @@ import ca.phon.opgraph.editor.actions.file.NewAction;
 import ca.phon.opgraph.editor.actions.file.OpenAction;
 import ca.phon.opgraph.editor.actions.file.SaveAction;
 import ca.phon.opgraph.editor.actions.file.SaveAsAction;
+import ca.phon.opgraph.editor.actions.graph.AlignNodesAction;
 import ca.phon.opgraph.editor.actions.graph.AutoLayoutAction;
 import ca.phon.opgraph.editor.actions.graph.DeleteAction;
 import ca.phon.opgraph.editor.actions.graph.DuplicateAction;
@@ -212,10 +214,16 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addMenuItem("Graph", new DuplicateAction(this));
 		menuBuilder.addSeparator("Graph", "sep1");
 		menuBuilder.addMenuItem("Graph", new AutoLayoutAction(this));
+		menuBuilder.addSeparator("Graph", "sep2");
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, GridLayer.DEFAULT_GRID_SPACING / 2));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, -GridLayer.DEFAULT_GRID_SPACING / 2));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, GridLayer.DEFAULT_GRID_SPACING/2, 0));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, -GridLayer.DEFAULT_GRID_SPACING / 2, 0));
+		menuBuilder.addSeparator("Graph", "sep3");
+		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.TOP));
+		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.BOTTOM));
+		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.LEFT));
+		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.RIGHT));
 		
 		final JMenu viewMenu = menuBuilder.addMenu(".@Graph", "View");
 		viewMenu.addMenuListener(new MenuListener() {
