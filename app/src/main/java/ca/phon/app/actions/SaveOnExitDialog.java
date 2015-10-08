@@ -185,10 +185,16 @@ public class SaveOnExitDialog extends JDialog {
 			
 			if(parent == _root) {
 				List<Project> projects = getProjects();
-				retVal = projects.get(index);
+				
+				if(index < projects.size())
+					retVal = projects.get(index);
+				else if(index == projects.size() && getStrayEditors().size() > 0)
+					retVal = "Other";
 			} else if (parent instanceof Project) {
 				List<CommonModuleFrame> editors = getEditors((Project)parent);
 				retVal = editors.get(index);
+			} else if(parent.toString().equals("Other")) {
+				retVal = getStrayEditors().get(index);
 			}
 			
 			return retVal;
@@ -201,9 +207,16 @@ public class SaveOnExitDialog extends JDialog {
 			if(parent == _root) {
 				List<Project> projects = getProjects();
 				retVal = projects.size();
+				
+				List<CommonModuleFrame> strayEditors = getStrayEditors();
+				if(strayEditors.size() > 0) {
+					++retVal;
+				}
 			} else if (parent instanceof Project) {
 				List<CommonModuleFrame> editors = getEditors((Project)parent);
 				retVal = editors.size();
+			} else if(parent.toString().equals("Other")) {
+				retVal = getStrayEditors().size();
 			}
 			
 			return retVal;
@@ -216,11 +229,15 @@ public class SaveOnExitDialog extends JDialog {
 			if(parent == _root) {
 				List<Project> projects = getProjects();
 				
-				for(int i = 0; i < projects.size(); i++) {
-					Project p = projects.get(i);
-					if(p == child) {
-						retVal = i;
-						break;
+				if(child.toString().equals("Other")) {
+					return projects.size();
+				} else {
+					for(int i = 0; i < projects.size(); i++) {
+						Project p = projects.get(i);
+						if(p == child) {
+							retVal = i;
+							break;
+						}
 					}
 				}
 			} else if (parent instanceof Project) {
@@ -228,6 +245,16 @@ public class SaveOnExitDialog extends JDialog {
 				
 				for(int i = 0; i < editors.size(); i++) {
 					CommonModuleFrame editor = editors.get(i);
+					if(editor == child) {
+						retVal = i;
+						break;
+					}
+				}
+			} else if(parent.toString().equals("Other")) {
+				List<CommonModuleFrame> strayEditors = getStrayEditors();
+				
+				for(int i = 0; i < strayEditors.size(); i++) {
+					CommonModuleFrame editor = strayEditors.get(i);
 					if(editor == child) {
 						retVal = i;
 						break;
@@ -263,6 +290,19 @@ public class SaveOnExitDialog extends JDialog {
 				final Project pfe = editor.getExtension(Project.class);
 				if(pfe != null && !retVal.contains(pfe)) {
 					retVal.add(pfe);
+				}
+			}
+			
+			return retVal;
+		}
+		
+		private List<CommonModuleFrame> getStrayEditors() {
+			List<CommonModuleFrame> retVal = new ArrayList<>();
+			
+			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+				final Project pfe = cmf.getExtension(Project.class);
+				if(pfe == null && cmf.hasUnsavedChanges()) {
+					retVal.add(cmf);
 				}
 			}
 			
