@@ -61,7 +61,7 @@ public class SessionSelectorNode extends OpNode implements NodeSettings {
 		final Project project = 
 				(Project)(context.get(projectField) != null ? context.get(projectField)
 						: context.get("_project"));
-		if(project == null) throw new ProcessingException("No project available");
+		if(project == null) throw new ProcessingException(null, "No project available");
 		
 		final Session session = (Session)context.get("_session");
 		context.put(projectOutputField, project);
@@ -101,7 +101,7 @@ public class SessionSelectorNode extends OpNode implements NodeSettings {
 				try {
 					SwingUtilities.invokeAndWait(onEDT);
 				} catch (InvocationTargetException | InterruptedException e) {
-					throw new ProcessingException(e);
+					throw new ProcessingException(null, e);
 				}
 		}
 	}

@@ -60,7 +60,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final Object data = context.get(dataField);
-		if(data == null) throw new ProcessingException("Data cannot be null");
+		if(data == null) throw new ProcessingException(null, "Data cannot be null");
 		
 		final String bufferName = getBufferName();
 		final boolean append = isAppendToBuffer();
@@ -105,7 +105,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 			try {
 				SwingUtilities.invokeAndWait(onEDT);
 			} catch (InvocationTargetException | InterruptedException e) {
-				throw new ProcessingException(e);
+				throw new ProcessingException(null, e);
 			}
 		}
 	}

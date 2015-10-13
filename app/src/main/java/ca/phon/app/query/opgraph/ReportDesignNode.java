@@ -71,14 +71,14 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final Project project = (Project)context.get(projectInputField);
-		if(project == null) throw new ProcessingException("Project cannot be null");
+		if(project == null) throw new ProcessingException(null, "Project cannot be null");
 		
 		final Query query = (Query)context.get(queryInputField);
-		if(query == null) throw new ProcessingException("Query cannot be null");
+		if(query == null) throw new ProcessingException(null, "Query cannot be null");
 		
 		final ResultSet[] resultSets = (ResultSet[])context.get(resultSetsField);
 		if(resultSets == null || resultSets.length == 0)
-			throw new ProcessingException("No result sets given");
+			throw new ProcessingException(null, "No result sets given");
 		
 		final ReportBuilder builder = ReportBuilderFactory.getInstance().getBuilder("CSV");
 		try {
@@ -87,7 +87,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 			
 			context.put(reportField, new String(bout.toByteArray(), "UTF-8"));
 		} catch (ReportBuilderException | UnsupportedEncodingException e) {
-			throw new ProcessingException(e);
+			throw new ProcessingException(null, e);
 		}
 		
 		context.put(projectOutputField, project);

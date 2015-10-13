@@ -80,14 +80,14 @@ public class QueryNode extends OpNode implements NodeSettings {
 	@Override
 	public void operate(OpContext opCtx) throws ProcessingException {
 		final Project project = (Project)opCtx.get(projectInputField);
-		if(project == null) throw new ProcessingException("No project available");
+		if(project == null) throw new ProcessingException(null, "No project available");
 		
 		final Object inputObj = opCtx.get(inputField);
-		if(inputObj == null) throw new ProcessingException("No session information given");
+		if(inputObj == null) throw new ProcessingException(null, "No session information given");
 		
 		// ensure query form validates (if available)
 		if(scriptPanel != null && !scriptPanel.checkParams()) {
-			throw new ProcessingException("Invalid query settings");
+			throw new ProcessingException(null, "Invalid query settings");
 		}
 		
 		final QueryManager qm = QueryManager.getInstance();
@@ -101,7 +101,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 		try {
 			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
 		} catch (PhonScriptException e) {
-			throw new ProcessingException(e);
+			throw new ProcessingException(null, e);
 		}
 		
 		final Script qScript = query.getScript();
@@ -136,7 +136,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 				task.run();
 				results[serial-1] = task.getResultSet();
 			} catch (Exception e) {
-				throw new ProcessingException(e);
+				throw new ProcessingException(null, e);
 			}
 		}
 		

@@ -8,6 +8,8 @@ import javax.swing.KeyStroke;
 
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphDocument;
+import ca.gedge.opgraph.exceptions.BreakpointEncountered;
+import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.util.icons.IconManager;
@@ -44,10 +46,16 @@ public class StartAction extends OpgraphEditorAction {
 				context = new Processor(document.getGraph());
 				document.setProcessingContext(context);
 			}
+			context.getContext().setDebug(true);
 
 			if(context.hasNext()) {
-				context.stepAll();
-				document.updateDebugState(context);
+				try {
+					context.stepAll();
+					document.updateDebugState(context);
+				} catch (ProcessingException pe) {
+					document.updateDebugState(
+							(pe.getContext() != null ? pe.getContext() : context));
+				} 
 			}
 		}
 	}
