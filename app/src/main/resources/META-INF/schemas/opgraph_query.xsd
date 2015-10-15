@@ -9,9 +9,12 @@
     targetNamespace="https://phon.ca/ns/opgraph_query"
     elementFormDefault="qualified">
     
-    <xs:import namespace="http://gedge.ca/ns/opgraph"/>
-    <xs:import namespace="http://phon.ling.mun.ca/ns/query"/>
-    <xs:import namespace="http://phon.ling.mun.ca/ns/report"/>
+    <xs:import namespace="http://gedge.ca/ns/opgraph" 
+        schemaLocation="https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd"/>
+    <xs:import namespace="http://phon.ling.mun.ca/ns/query"
+        schemaLocation="../../../../../../query/src/main/resources/xml/xsd/query.xsd"/>
+    <xs:import namespace="http://phon.ling.mun.ca/ns/report"
+        schemaLocation="../../../../../../query/src/main/resources/xml/xsd/report.xsd"/>
     
     <xs:complexType name="QueryType" mixed="false">
         <xs:annotation>
