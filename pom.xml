@@ -124,8 +124,8 @@
 		<ca.phon.native-dialogs.version>6</ca.phon.native-dialogs.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
 		<com.fifesoft.rsyntaxtextarea.version>2.0.2</com.fifesoft.rsyntaxtextarea.version>
-		<com.jgoodies.jgoodies-common.version>1.7.0</com.jgoodies.jgoodies-common.version>
-		<com.jgoodies.jgoodies-forms.version>1.7.2</com.jgoodies.jgoodies-forms.version>
+		<com.jgoodies.jgoodies-common.version>1.8.1</com.jgoodies.jgoodies-common.version>
+		<com.jgoodies.jgoodies-forms.version>1.9.0</com.jgoodies.jgoodies-forms.version>
 		<de.susebox.jtopas.version>0.8</de.susebox.jtopas.version>
 		<it.cnr.imaa.essi.lablib-checkboxtree.version>3.0.2</it.cnr.imaa.essi.lablib-checkboxtree.version>
 		<joda-time.joda-time.version>2.1</joda-time.joda-time.version>
