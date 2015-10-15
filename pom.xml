@@ -172,7 +172,6 @@
 		<module>orthography</module>
 		<module>syllabifier</module>
 		<module>syllabifier-opgraph</module>
-		<module>syllabifier-editor</module>
 		<module>alignment</module>
 		<module>session</module>
 		<module>project</module>
