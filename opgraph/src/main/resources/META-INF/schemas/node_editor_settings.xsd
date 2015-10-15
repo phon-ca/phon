@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:og="http://gedge.ca/ns/opgraph"
+    xmlns="https://www.phon.ca/ns/node_editor" targetNamespace="https://www.phon.ca/ns/node_editor"
+    version="1.0">
+    
+    <xs:import namespace="http://gedge.ca/ns/opgraph" 
+        schemaLocation="https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd"/>
+    
+    <xs:complexType name="SettingsType">
+        <xs:annotation>
+            <xs:documentation>Type definition for node editor settings.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="og:AbstractExtensionType">
+                <xs:attribute name="type" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="settings" type="SettingsType" substitutionGroup="og:extension"/>
+    
+</xs:schema>

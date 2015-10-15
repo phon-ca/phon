@@ -72,13 +72,13 @@ public class OpgraphEditorModelFactory {
 		final Map<Class<? extends OpgraphEditorModel>, IPluginExtensionFactory<? extends OpgraphEditorModel>> factoryMap = 
 				availableFactories();
 		
-		final NodeSettings graphSettings = graph.getExtension(NodeSettings.class);
+		final NodeEditorSettings editorSettings = graph.getExtension(NodeEditorSettings.class);
 		String modelClassname = DefaultOpgraphEditorModel.class.getName();
-		if(graphSettings != null && graphSettings.getSettings().contains(MODEL_TYPE_KEY)) {
-			modelClassname = graphSettings.getSettings().getProperty(MODEL_TYPE_KEY, modelClassname);
+		if(editorSettings != null) {
+			modelClassname = editorSettings.getModelType();
 		}
 		Class<?> modelClass = Class.forName(modelClassname);
-		if(modelClass != null && modelClass.isAssignableFrom(OpgraphEditorModel.class)) {
+		if(modelClass != null && OpgraphEditorModel.class.isAssignableFrom(modelClass)) {
 			@SuppressWarnings("unchecked")
 			Class<? extends OpgraphEditorModel> clazz = (Class<? extends OpgraphEditorModel>)modelClass;
 			final IPluginExtensionFactory<? extends OpgraphEditorModel> factory = factoryMap.get(clazz);

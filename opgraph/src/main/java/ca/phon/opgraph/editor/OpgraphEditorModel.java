@@ -159,6 +159,10 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 	 * @return <code>true</code> if document (graph) is valid, <code>false</code> otherwise
 	 */
 	public boolean validate() {
+		final NodeEditorSettings settings = new NodeEditorSettings();
+		settings.setModelType(getClass().getName());
+		getDocument().getGraph().putExtension(NodeEditorSettings.class, settings);
+		
 		return true;
 	}
 	
