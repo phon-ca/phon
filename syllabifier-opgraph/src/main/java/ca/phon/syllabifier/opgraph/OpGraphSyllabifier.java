@@ -37,6 +37,9 @@ import ca.phon.util.Language;
  * Syllabifier implementation using operable graphs.
  */
 public final class OpGraphSyllabifier implements Syllabifier {
+	
+	public final static String IPA_CONTEXT_KEY = "_ipa";
+	
 	/**
 	 * graph
 	 */
@@ -75,6 +78,10 @@ public final class OpGraphSyllabifier implements Syllabifier {
 		}
 		
 		return retVal;
+	}
+	
+	public OpGraph getGraph() {
+		return this.graph;
 	}
 
 	@Override

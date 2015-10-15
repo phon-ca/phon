@@ -55,7 +55,8 @@ public class SyllabifierConverter {
 		graph.putExtension(SyllabifierSettings.class, settings);
 		
 		// add IPASourceNode
-		final IPASourceNode sourceNode = new IPASourceNode();
+		final ObjectNode sourceNode = new ObjectNode(IPATranscript.class);
+		sourceNode.setContextKey(OpGraphSyllabifier.IPA_CONTEXT_KEY);
 		graph.add(sourceNode);
 		
 		// setup sonority scale
@@ -69,7 +70,7 @@ public class SyllabifierConverter {
 		graph.add(sonorityNode);
 		
 		try {
-			final OpLink link = new OpLink(sourceNode, sourceNode.getOutputFieldWithKey("ipa"),
+			final OpLink link = new OpLink(sourceNode, sourceNode.getOutputFieldWithKey("obj"),
 					sonorityNode, sonorityNode.getInputFieldWithKey("ipa"));
 			graph.add(link);
 		} catch (ItemMissingException | CycleDetectedException | VertexNotFoundException e) {
@@ -173,8 +174,6 @@ public class SyllabifierConverter {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
-		
-		
 		
 		return graph;
 	}

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.syllabifier.editor;
+package ca.phon.syllabifier.opgraph.editor;
 
 import java.util.logging.Logger;
 
@@ -55,7 +55,7 @@ public class SyllabifierSettingsPanel extends JPanel {
 	}
 	
 	private void init() {
-		final FormLayout layout = new FormLayout("right:pref, fill:pref:grow", 
+		final FormLayout layout = new FormLayout("right:pref, 3dlu, fill:pref:grow", 
 				"pref, 3dlu, pref");
 		setLayout(layout);
 		
@@ -63,11 +63,11 @@ public class SyllabifierSettingsPanel extends JPanel {
 		
 		add(new JLabel("Syllabifier name:"), cc.xy(1,1));
 		nameField = new JTextField();
-		add(nameField, cc.xy(2,1));
+		add(nameField, cc.xy(3,1));
 		
 		add(new JLabel("Syllabifier language:"), cc.xy(1,3));
 		languageField = new JTextField();
-		add(languageField, cc.xy(2,3));
+		add(languageField, cc.xy(3,3));
 	}
 	
 	public String getSyllabifierName() {

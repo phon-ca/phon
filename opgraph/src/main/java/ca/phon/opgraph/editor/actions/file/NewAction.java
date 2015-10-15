@@ -3,14 +3,13 @@ package ca.phon.opgraph.editor.actions.file;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.KeyStroke;
 
-import ca.phon.opgraph.editor.DefaultOpgraphEditorModel;
+import ca.phon.opgraph.editor.NewDialogPanel;
+import ca.phon.opgraph.editor.NewGraphDialog;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.OpgraphEditorModel;
-import ca.phon.opgraph.editor.OpgraphEditorModelFactory;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -29,15 +28,8 @@ public class NewAction extends OpgraphEditorAction {
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_N,
 			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 	
-	private final Class<? extends OpgraphEditorModel> modelType;
-	
 	public NewAction(OpgraphEditor editor) {
-		this(editor, DefaultOpgraphEditorModel.class);
-	}
-	
-	public NewAction(OpgraphEditor editor, Class<? extends OpgraphEditorModel> modelType) {
 		super(editor);
-		this.modelType = modelType;
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
 		putValue(ACCELERATOR_KEY, KS);
@@ -63,9 +55,17 @@ public class NewAction extends OpgraphEditorAction {
 				return;
 			}
 		}
-		final OpgraphEditorModelFactory factory = new OpgraphEditorModelFactory();
-		final OpgraphEditorModel model = factory.fromType(modelType);
-		getEditor().setModel(model);
+		
+		final NewGraphDialog newDlg = new NewGraphDialog(getEditor());
+		newDlg.pack();
+		newDlg.setVisible(true);
+		if(!newDlg.wasCanceled()) {
+			final NewDialogPanel selectedPanel = newDlg.getSelectedPanel();
+			if(selectedPanel != null) {
+				final OpgraphEditorModel model = selectedPanel.createModel();
+				getEditor().setModel(model);
+			}
+		}
 	}
 
 }

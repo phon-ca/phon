@@ -1,6 +1,7 @@
 package ca.phon.opgraph.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
@@ -181,6 +182,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 	@Override
 	public boolean saveData() throws IOException {
 		if(!hasUnsavedChanges()) return true;
+		if(!getModel().validate()) return false;
 		if(getCurrentFile() == null) {
 			if(!chooseFile()) return false;
 		}
@@ -270,12 +272,14 @@ public class OpgraphEditor extends CommonModuleFrame {
 		final CPerspective defaultPerspective = perspectives.createEmptyPerspective();
 		
 		final CWorkingPerspective workPerspective = (CWorkingPerspective)defaultPerspective.getStation("work");
-		workPerspective.gridAdd( 0, 0, 200, 200, new SingleCDockablePerspective("Library") );
-		workPerspective.gridAdd( 0, 200, 200, 200, new SingleCDockablePerspective("Console") );
-		workPerspective.gridAdd( 0, 200, 200, 200, new SingleCDockablePerspective("Debug") );
-		workPerspective.gridAdd( 200, 0, 600, 600, new SingleCDockablePerspective("Canvas") );
-		workPerspective.gridAdd( 800, 0, 200, 200, new SingleCDockablePerspective("Settings") );
-		workPerspective.gridAdd( 800, 200, 200, 200, new SingleCDockablePerspective("Defaults") );
+		
+		for(String viewName:getModel().getAvailableViewNames()) {
+			final Rectangle bounds = getModel().getInitialViewBounds(viewName);
+			if(getModel().isViewVisibleByDefault(viewName)) {
+				workPerspective.gridAdd(bounds.x, bounds.y, bounds.width, bounds.height, 
+						new SingleCDockablePerspective(viewName));
+			}
+		}
 		
 		final CGridPerspective center = defaultPerspective.getContentArea().getCenter();
 		center.gridAdd( 0, 0, 600, 800, workPerspective );

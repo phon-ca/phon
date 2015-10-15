@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.components.ContextViewerPanel;
+import ca.phon.syllabifier.opgraph.editor.SyllabifierSettingsPanel;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 
 public class SyllabifierGraphEditorModel extends GraphEditorModel {

@@ -26,7 +26,7 @@ import ca.gedge.opgraph.app.commands.Hook;
 import ca.gedge.opgraph.app.commands.HookableCommand;
 import ca.gedge.opgraph.app.commands.core.SaveCommand;
 import ca.phon.syllabifier.editor.SyllabifierGraphEditorModel;
-import ca.phon.syllabifier.editor.SyllabifierSettingsPanel;
+import ca.phon.syllabifier.opgraph.editor.SyllabifierSettingsPanel;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 
 @Hook(command=SaveCommand.class)

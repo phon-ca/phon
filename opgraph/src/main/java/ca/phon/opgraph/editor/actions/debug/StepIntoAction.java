@@ -45,6 +45,9 @@ public class StepIntoAction extends OpgraphEditorAction {
 			if(context == null) {
 				context = new Processor(document.getGraph());
 				document.setProcessingContext(context);
+				
+				context.getContext().setDebug(true);
+				getEditor().getModel().setupContext(context.getContext());
 			}
 
 			if(context.hasNext()) {
