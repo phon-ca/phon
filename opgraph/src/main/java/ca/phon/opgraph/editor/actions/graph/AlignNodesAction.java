@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
@@ -12,6 +13,8 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.edits.graph.AlignNodesEdit;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class AlignNodesAction extends OpgraphEditorAction {
 
@@ -26,6 +29,7 @@ public class AlignNodesAction extends OpgraphEditorAction {
 		
 		putValue(NAME, getName());
 		putValue(ACCELERATOR_KEY, getKeystroke());
+		putValue(SMALL_ICON, getIcon());
 	}
 	
 	public KeyStroke getKeystroke() {
@@ -48,6 +52,28 @@ public class AlignNodesAction extends OpgraphEditorAction {
 			break;
 		}
 		return KeyStroke.getKeyStroke(key, KeyEvent.ALT_MASK);
+	}
+	
+	public ImageIcon getIcon() {
+		ImageIcon retVal = null;
+		switch(side) {
+		case SwingConstants.TOP:
+			retVal = IconManager.getInstance().getIcon("actions/align-vertical-top-2", IconSize.SMALL);
+			break;
+			
+		case SwingConstants.BOTTOM:
+			retVal = IconManager.getInstance().getIcon("actions/align-vertical-bottom-2", IconSize.SMALL);
+			break;
+			
+		case SwingConstants.LEFT:
+			retVal = IconManager.getInstance().getIcon("actions/align-horizontal-left", IconSize.SMALL);
+			break;
+			
+		case SwingConstants.RIGHT:
+			retVal = IconManager.getInstance().getIcon("actions/align-horizontal-right-2", IconSize.SMALL);
+			break;
+		}
+		return retVal;
 	}
 	
 	public String getName() {
