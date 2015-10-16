@@ -5,11 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.app.AutoLayoutManager;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.edits.graph.AutoLayoutEdit;
 import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
@@ -37,7 +38,11 @@ public class AutoLayoutAction extends OpgraphEditorAction {
 	public void hookableActionPerformed(ActionEvent arg0) {
 		final GraphDocument document = getEditor().getModel().getDocument();
 		if(document != null) {
-			document.getUndoSupport().postEdit(new AutoLayoutEdit(document.getGraph()));
+			final AutoLayoutManager layoutManager = new AutoLayoutManager();
+			final JComponent canvasView = getEditor().getModel().getView("Canvas");
+			layoutManager.setPreferredWidth(canvasView.getSize().width);
+			layoutManager.layoutGraph(document.getGraph());
+			document.getUndoSupport().postEdit(layoutManager.getUndoableEdit());
 		}
 	}
 

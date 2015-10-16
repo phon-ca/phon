@@ -5,17 +5,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import ca.phon.opgraph.editor.NewDialogPanel;
 import ca.phon.opgraph.editor.NewGraphDialog;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.OpgraphEditorModel;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.editor.actions.graph.AutoLayoutAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 
 /**
- * 
+ * Show new graph dialog for the node editor
  */
 public class NewAction extends OpgraphEditorAction {
 
@@ -58,12 +60,16 @@ public class NewAction extends OpgraphEditorAction {
 		
 		final NewGraphDialog newDlg = new NewGraphDialog(getEditor());
 		newDlg.pack();
+		newDlg.setResizable(false);
+		newDlg.setLocationRelativeTo(getEditor());
 		newDlg.setVisible(true);
 		if(!newDlg.wasCanceled()) {
 			final NewDialogPanel selectedPanel = newDlg.getSelectedPanel();
 			if(selectedPanel != null) {
 				final OpgraphEditorModel model = selectedPanel.createModel();
 				getEditor().setModel(model);
+				
+				SwingUtilities.invokeLater(() -> (new AutoLayoutAction(getEditor())).actionPerformed(arg0));
 			}
 		}
 	}
