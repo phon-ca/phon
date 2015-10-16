@@ -3,8 +3,12 @@ package ca.phon.syllabifier.opgraph.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.IOException;
 import java.net.URL;
@@ -84,22 +88,43 @@ public class OpGraphSyllabifierNewDialogPanel extends NewDialogPanel {
 		if(bgImg == null) {
 			final URL imgURL = getClass().getClassLoader().getResource(IMG_PATH);
 			try {
-				bgImg = ImageIO.read(imgURL);
+				Image img = ImageIO.read(imgURL);
+				
+				final BufferedImage bimg = new BufferedImage(getWidth(), getHeight(), 
+						BufferedImage.TYPE_4BYTE_ABGR);
+				final Graphics2D g2d = bimg.createGraphics();
+				
+				g2d.drawImage(img, 0, 0, this);
+				
+				final GradientPaint paint = new GradientPaint(0, 0, new Color(255, 255, 255, 200), 
+						getWidth()/2, getHeight()/2, getBackground());
+				g2d.setPaint(paint);
+				g2d.fillRect(0, 0, getWidth(), getHeight());
+				
+				bgImg = bimg;
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 		return bgImg;
 	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		final Image bgimg = getBgImage();
+		g.drawImage(bgimg, 0, 0, this);
+	}
 
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		setBackground(Color.white);
 		setOpaque(true);
 		
-		titleLabel = new JLabel("<html><b>New Syllabifier</b></html>");
-		titleLabel.setFont(FontPreferences.getTitleFont());
+		titleLabel = new JLabel("New Syllabifier");
+		titleLabel.setOpaque(false);
+		titleLabel.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		add(titleLabel, BorderLayout.NORTH);
 		
 		JPanel centerPanel = new JPanel(new VerticalLayout());
@@ -110,7 +135,9 @@ public class OpGraphSyllabifierNewDialogPanel extends NewDialogPanel {
 		
 		final ButtonGroup btnGrp = new ButtonGroup();
 		emptySyllabifierBtn = new JRadioButton("Start with empty syllabifier");
+		emptySyllabifierBtn.setOpaque(false);
 		fromSyllabifierBtn = new JRadioButton("Start with existing syllabifier");
+		fromSyllabifierBtn.setOpaque(false);
 		btnGrp.add(emptySyllabifierBtn);
 		btnGrp.add(fromSyllabifierBtn);
 		emptySyllabifierBtn.setSelected(true);
@@ -122,6 +149,7 @@ public class OpGraphSyllabifierNewDialogPanel extends NewDialogPanel {
 		
 		centerPanel.add(emptySyllabifierBtn);
 		centerPanel.add(fromSyllabifierBtn);
+		centerPanel.setOpaque(false);
 		
 		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
 		final Language syllLangPref = syllabifierLibrary.defaultSyllabifierLanguage();

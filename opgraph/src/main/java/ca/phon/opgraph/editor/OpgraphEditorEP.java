@@ -20,6 +20,8 @@ public class OpgraphEditorEP implements IPluginEntryPoint {
 		final Runnable onEDT = () -> {
 			final OpgraphEditor editor = new OpgraphEditor();
 			editor.pack();
+			editor.setSize(1064, 768);
+			editor.setLocationByPlatform(true);
 			editor.setVisible(true);
 		};
 		if(SwingUtilities.isEventDispatchThread())
