@@ -44,11 +44,11 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			canvasPanel.add(getBreadcrumb(), BorderLayout.NORTH);
 			canvasPanel.add(new JScrollPane(getCanvas()), BorderLayout.CENTER);
 			viewMap.put("Canvas", canvasPanel);
-			viewMap.put("Console", getConsolePanel());
-			viewMap.put("Debug", getDebugInfoPanel());
-			viewMap.put("Defaults", getNodeDefaults());
+			viewMap.put("Console", new JScrollPane(getConsolePanel()));
+			viewMap.put("Debug", new JScrollPane(getDebugInfoPanel()));
+			viewMap.put("Defaults", new JScrollPane(getNodeDefaults()));
 			viewMap.put("Library", getNodeLibrary());
-			viewMap.put("Settings", getNodeSettings());
+			viewMap.put("Settings", new JScrollPane(getNodeSettings()));
 		}
 		return this.viewMap;
 	}

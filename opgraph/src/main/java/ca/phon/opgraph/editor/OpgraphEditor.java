@@ -7,10 +7,12 @@ import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -44,6 +46,8 @@ import ca.phon.opgraph.editor.actions.graph.AlignNodesAction;
 import ca.phon.opgraph.editor.actions.graph.AutoLayoutAction;
 import ca.phon.opgraph.editor.actions.graph.DeleteAction;
 import ca.phon.opgraph.editor.actions.graph.DuplicateAction;
+import ca.phon.opgraph.editor.actions.graph.ExpandMacroAction;
+import ca.phon.opgraph.editor.actions.graph.MergeNodesAction;
 import ca.phon.opgraph.editor.actions.graph.MoveNodeAction;
 import ca.phon.opgraph.editor.actions.view.ResetViewAction;
 import ca.phon.opgraph.editor.actions.view.ToggleViewAction;
@@ -73,6 +77,8 @@ public class OpgraphEditor extends CommonModuleFrame {
 	private OpgraphEditorModel model;
 	
 	private JMenuBar menuBar;
+	
+	private JToolBar toolBar;
 
 	public OpgraphEditor() {
 		this(new DefaultOpgraphEditorModel());
@@ -194,6 +200,11 @@ public class OpgraphEditor extends CommonModuleFrame {
 
 	protected void initDockingView() {
 		setLayout(new BorderLayout());
+		
+		toolBar = new JToolBar();
+		setupToolbar();
+		add(toolBar, BorderLayout.NORTH);
+		
 		dockControl = new CControl(this);
 		
 		dockControl.addSingleDockableFactory(new DockableViewFilter(), 
@@ -204,6 +215,29 @@ public class OpgraphEditor extends CommonModuleFrame {
 			
 		setupDefaultPerspective();
 		setupMenu();
+	}
+	
+	protected void setupToolbar() {
+		toolBar.removeAll();
+
+		toolBar.add(new SaveAction(this));
+		
+		toolBar.addSeparator();
+		toolBar.add(new MergeNodesAction(this));
+		toolBar.add(new ExpandMacroAction(this));
+		
+		toolBar.addSeparator();
+		toolBar.add(new AlignNodesAction(this, SwingConstants.TOP));
+		toolBar.add(new AlignNodesAction(this, SwingConstants.BOTTOM));
+		toolBar.add(new AlignNodesAction(this, SwingConstants.LEFT));
+		toolBar.add(new AlignNodesAction(this, SwingConstants.RIGHT));
+		
+		toolBar.addSeparator();
+		toolBar.add(new StartAction(this));
+		toolBar.add(new StopAction(this));
+		toolBar.add(new StepAction(this));
+		toolBar.add(new StepIntoAction(this));
+		toolBar.add(new StepOutOfAction(this));
 	}
 	
 	protected void setupMenu() {
@@ -220,13 +254,16 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addMenuItem("Graph", new DeleteAction(this));
 		menuBuilder.addMenuItem("Graph", new DuplicateAction(this));
 		menuBuilder.addSeparator("Graph", "sep1");
-		menuBuilder.addMenuItem("Graph", new AutoLayoutAction(this));
+		menuBuilder.addMenuItem("Graph", new MergeNodesAction(this));
+		menuBuilder.addMenuItem("Graph", new ExpandMacroAction(this));
 		menuBuilder.addSeparator("Graph", "sep2");
+		menuBuilder.addMenuItem("Graph", new AutoLayoutAction(this));
+		menuBuilder.addSeparator("Graph", "sep3");
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, GridLayer.DEFAULT_GRID_SPACING / 2));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, -GridLayer.DEFAULT_GRID_SPACING / 2));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, GridLayer.DEFAULT_GRID_SPACING/2, 0));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, -GridLayer.DEFAULT_GRID_SPACING / 2, 0));
-		menuBuilder.addSeparator("Graph", "sep3");
+		menuBuilder.addSeparator("Graph", "sep4");
 		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.TOP));
 		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.BOTTOM));
 		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.LEFT));

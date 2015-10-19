@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
@@ -14,6 +15,8 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class AutoLayoutAction extends OpgraphEditorAction {
 
@@ -25,6 +28,9 @@ public class AutoLayoutAction extends OpgraphEditorAction {
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_L, 
 			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+	
+	public final static ImageIcon ICON = 
+			IconManager.getInstance().getIcon("actions/distribute-horizontal-margin", IconSize.SMALL);
 
 	public AutoLayoutAction(OpgraphEditor editor) {
 		super(editor);
@@ -32,6 +38,7 @@ public class AutoLayoutAction extends OpgraphEditorAction {
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
 		putValue(ACCELERATOR_KEY, KS);
+		putValue(SMALL_ICON, ICON);
 	}
 
 	@Override

@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class SaveAsAction extends OpgraphEditorAction {
 	
@@ -25,6 +28,9 @@ public class SaveAsAction extends OpgraphEditorAction {
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_S,
 			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+	
+	public final static ImageIcon ICON = 
+			IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
 
 	public SaveAsAction(OpgraphEditor editor) {
 		super(editor);
@@ -32,6 +38,7 @@ public class SaveAsAction extends OpgraphEditorAction {
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
 		putValue(ACCELERATOR_KEY, KS);
+		putValue(SMALL_ICON, ICON);
 	}
 
 	@Override
