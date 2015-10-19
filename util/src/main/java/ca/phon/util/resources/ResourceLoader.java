@@ -75,7 +75,9 @@ public final class ResourceLoader<T> implements Iterable<T> {
 		public LazyIterator() {
 			iterators = new ArrayList<Iterator<T>>();
 			for(ResourceHandler<T> handler:handlers) {
-				iterators.add(handler.iterator());
+				final Iterator<T> itr = handler.iterator();
+				if(itr.hasNext())
+					iterators.add(handler.iterator());
 			}
 		}
 

@@ -41,8 +41,6 @@ import ca.phon.util.resources.ClassLoaderHandler;
  */
 public class BasicSyllabifierClassLoaderProvider extends ClassLoaderHandler<Syllabifier> implements SyllabifierProvider {
 	
-	private final static Logger LOGGER = Logger.getLogger(BasicSyllabifierClassLoaderProvider.class.getName());
-
 	private final static String LIST = "syllabifier/basic.list";
 	
 	public BasicSyllabifierClassLoaderProvider() {
@@ -53,20 +51,7 @@ public class BasicSyllabifierClassLoaderProvider extends ClassLoaderHandler<Syll
 	@Override
 	public Syllabifier loadFromURL(URL url) throws IOException {
 		final InputStream is = url.openStream();
-		
-		
-		try {
-			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
-			final Unmarshaller unmarshaller = context.createUnmarshaller();
-			
-			final JAXBElement<SyllabifierDef> jaxbEle = 
-					unmarshaller.unmarshal(new StreamSource(is), SyllabifierDef.class);
-			return new BasicSyllabifier(jaxbEle.getValue());
-		} catch (JAXBException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-		}
-		
-		return null;
+		return (new BasicSyllabifierIO()).readFromStream(is);
 	}
 	
 }
