@@ -1,6 +1,7 @@
 package ca.phon.syllabifier.opgraph.editor;
 
 import java.awt.BorderLayout;
+import java.io.File;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -30,6 +31,7 @@ import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.util.PrefHelper;
 
 /**
  * Editor model for syllabifiers implemented with opgraph.
@@ -147,6 +149,11 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 		getDocument().getGraph().putExtension(SyllabifierSettings.class, settings);
 		
 		return retVal;
+	}
+
+	@Override
+	public String getDefaultFolder() {
+		return PrefHelper.getUserDataFolder() + File.separator + "syllabifier";
 	}
 	
 }

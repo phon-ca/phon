@@ -71,6 +71,7 @@ public class OpenAction extends OpgraphEditorAction {
 		props.setTitle("Open Graph");
 		props.setRunAsync(false);
 		props.setFileFilter(new OpgraphFileFilter());
+		props.setInitialFolder(getEditor().getModel().getDefaultFolder());
 		
 		final List<String> savePath = NativeDialogs.showOpenDialog(props);
 		if(savePath.size() > 0) {

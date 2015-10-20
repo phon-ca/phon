@@ -2,6 +2,7 @@ package ca.phon.opgraph.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.util.PrefHelper;
 
 /**
  * Base model for the opgraph editor.
@@ -51,6 +53,15 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			viewMap.put("Settings", new JScrollPane(getNodeSettings()));
 		}
 		return this.viewMap;
+	}
+	
+	/**
+	 * Get the default folder when displaying the open/save dialog.
+	 * 
+	 * @return folder path
+	 */
+	public String getDefaultFolder() {
+		return PrefHelper.getUserDataFolder() + File.separator + "macros";
 	}
 	
 	/**

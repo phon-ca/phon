@@ -176,6 +176,17 @@ public class OpgraphEditor extends CommonModuleFrame {
 		props.setRunAsync(false);
 		props.setTitle("Save graph");
 		
+		if(getCurrentFile() != null) {
+			final File parentFolder = getCurrentFile().getParentFile();
+			final String name = getCurrentFile().getName();
+			
+			props.setInitialFolder(parentFolder.getAbsolutePath());
+			props.setInitialFile(name);
+		} else {
+			props.setInitialFolder(getModel().getDefaultFolder());
+			props.setInitialFile("Untitled.xml");
+		}
+		
 		final String saveAs = NativeDialogs.showSaveDialog(props);
 		if(saveAs != null) {
 			setCurrentFile(new File(saveAs));
@@ -363,12 +374,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 			return retVal;
 		}
 		
-	}
-	
-	public static void main(String[] args) {
-		OpgraphEditor editor = new OpgraphEditor();
-		editor.pack();
-		editor.setVisible(true);
 	}
 	
 }
