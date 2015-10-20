@@ -85,6 +85,16 @@ public final class SyllabifierLibrary implements IExtendable {
 	}
 	
 	/**
+	 * Reload syllabifier definitions.
+	 */
+	public void reloadDefinitions() {
+		if(availableSyllabifiers != null)
+			availableSyllabifiers.clear();
+		availableSyllabifiers = null;
+		availableSyllabifiers();
+	}
+	
+	/**
 	 * Return an Iterator for the available syllabifiers.
 	 * 
 	 * @return iterator for the available syllabifiers
@@ -95,7 +105,9 @@ public final class SyllabifierLibrary implements IExtendable {
 			availableSyllabifiers = new ArrayList<Syllabifier>();
 			final Iterator<Syllabifier> itr = getLoader().iterator();
 			while(itr.hasNext()) {
-				availableSyllabifiers.add(itr.next());
+				final Syllabifier syllabifier = itr.next();
+				if(syllabifier != null)
+					availableSyllabifiers.add(syllabifier);
 			}
 		}
 		return Collections.unmodifiableList(availableSyllabifiers).iterator();
