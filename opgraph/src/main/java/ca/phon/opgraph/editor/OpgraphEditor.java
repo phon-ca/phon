@@ -45,6 +45,7 @@ import ca.phon.opgraph.editor.actions.file.SaveAsAction;
 import ca.phon.opgraph.editor.actions.graph.AlignNodesAction;
 import ca.phon.opgraph.editor.actions.graph.AutoLayoutAction;
 import ca.phon.opgraph.editor.actions.graph.DeleteAction;
+import ca.phon.opgraph.editor.actions.graph.DistributeNodesAction;
 import ca.phon.opgraph.editor.actions.graph.DuplicateAction;
 import ca.phon.opgraph.editor.actions.graph.ExpandMacroAction;
 import ca.phon.opgraph.editor.actions.graph.MergeNodesAction;
@@ -198,7 +199,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 	
 	@Override
 	public boolean saveData() throws IOException {
-		if(!hasUnsavedChanges()) return true;
 		if(!getModel().validate()) return false;
 		if(getCurrentFile() == null) {
 			if(!chooseFile()) return false;
@@ -238,6 +238,9 @@ public class OpgraphEditor extends CommonModuleFrame {
 		toolBar.add(new ExpandMacroAction(this));
 		
 		toolBar.addSeparator();
+		toolBar.add(new DistributeNodesAction(this, SwingConstants.HORIZONTAL));
+		toolBar.add(new DistributeNodesAction(this, SwingConstants.VERTICAL));
+		toolBar.addSeparator();
 		toolBar.add(new AlignNodesAction(this, SwingConstants.TOP));
 		toolBar.add(new AlignNodesAction(this, SwingConstants.BOTTOM));
 		toolBar.add(new AlignNodesAction(this, SwingConstants.LEFT));
@@ -275,6 +278,9 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, GridLayer.DEFAULT_GRID_SPACING/2, 0));
 		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, -GridLayer.DEFAULT_GRID_SPACING / 2, 0));
 		menuBuilder.addSeparator("Graph", "sep4");
+		menuBuilder.addMenuItem("Graph", new DistributeNodesAction(this, SwingConstants.HORIZONTAL));
+		menuBuilder.addMenuItem("Graph", new DistributeNodesAction(this, SwingConstants.VERTICAL));
+		menuBuilder.addSeparator("Graph", "sep5");
 		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.TOP));
 		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.BOTTOM));
 		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.LEFT));
