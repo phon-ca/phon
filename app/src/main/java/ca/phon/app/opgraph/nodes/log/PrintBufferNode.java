@@ -1,4 +1,4 @@
-package ca.phon.app.query.opgraph;
+package ca.phon.app.opgraph.nodes.log;
 
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;

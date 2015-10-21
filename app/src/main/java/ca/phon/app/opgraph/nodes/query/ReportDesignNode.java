@@ -1,4 +1,4 @@
-package ca.phon.app.query.opgraph;
+package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
 import java.io.ByteArrayOutputStream;

@@ -1,4 +1,4 @@
-package ca.phon.app.query.opgraph;
+package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
 import java.io.ByteArrayOutputStream;
@@ -18,6 +18,8 @@ import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.nodes.RecordContainer;
+import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;

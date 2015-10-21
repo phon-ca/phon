@@ -1,4 +1,4 @@
-package ca.phon.app.query.opgraph;
+package ca.phon.app.opgraph.nodes;
 
 import java.util.ArrayList;
 import java.util.Iterator;

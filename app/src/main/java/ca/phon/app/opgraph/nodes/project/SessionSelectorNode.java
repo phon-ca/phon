@@ -1,4 +1,4 @@
-package ca.phon.app.query.opgraph;
+package ca.phon.app.opgraph.nodes.project;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

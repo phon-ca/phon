@@ -1,4 +1,4 @@
-package ca.phon.app.query.opgraph;
+package ca.phon.app.opgraph.nodes.query;
 
 import ca.gedge.opgraph.library.instantiators.Instantiator;
 import ca.phon.query.script.QueryName;
