@@ -46,22 +46,36 @@ public class SessionSelector extends CheckboxTree {
 	/** The project */
 	private Project project;
 	
-	/** GUI */
-	private CheckedTreeNode rootNode;
+	public SessionSelector() {
+		this(null);
+	}
 	
 	/** Constructor */
 	public SessionSelector(Project project) {
-		super(new CheckedTreeNode(project.getName()));
+		super(new CheckedTreeNode());
 	
-		rootNode = (CheckedTreeNode)super.getModel().getRoot();
-		
 		this.project = project;
 		
 		init();
 	}
 	
+	public Project getProject() {
+		return this.project;
+	}
+	
+	public void setProject(Project project) {
+		final Project oldProject = this.project;
+		this.project = project;
+		super.firePropertyChange("project", oldProject, project);
+		
+		init();
+	}
+	
 	private void init() {
-		createTree();
+		if(project != null) {
+			((CheckedTreeNode)getModel().getRoot()).setUserObject(project.getName());
+			createTree();
+		}
 		
 		super.expandRow(0);
 	}
@@ -80,7 +94,7 @@ public class SessionSelector extends CheckboxTree {
 				CheckedTreeNode sessionNode = new CheckedTreeNode(session);
 				corpusNode.add(sessionNode);
 			}
-			rootNode.add(corpusNode);
+			((CheckedTreeNode)getModel().getRoot()).add(corpusNode);
 		}
 		
 		final CheckboxTree projectTree = this;
