@@ -972,4 +972,9 @@ public class LocalProject implements Project, ProjectRefresh {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 }
