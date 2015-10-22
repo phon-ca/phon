@@ -24,7 +24,7 @@ public class StopAction extends OpgraphEditorAction {
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0);
 	
 	public final static ImageIcon ICON = 
-			IconManager.getInstance().getIcon("actions/process-stop-7", IconSize.SMALL);
+			IconManager.getInstance().getIcon("actions/media-playback-stop-7", IconSize.SMALL);
 	
 	public StopAction(OpgraphEditor editor) {
 		super(editor);

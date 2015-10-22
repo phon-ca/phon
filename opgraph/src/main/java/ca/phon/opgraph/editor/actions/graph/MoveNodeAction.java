@@ -3,6 +3,7 @@ package ca.phon.opgraph.editor.actions.graph;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import ca.gedge.opgraph.OpNode;
@@ -10,6 +11,8 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.edits.graph.MoveNodesEdit;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class MoveNodeAction extends OpgraphEditorAction {
 
@@ -42,6 +45,36 @@ public class MoveNodeAction extends OpgraphEditorAction {
 		else if(yDelta == 0 && xDelta < 0)
 			ret = "Left";
 		return ret;
+	}
+	
+	public static ImageIcon getIcon(int xDelta, int yDelta) {
+		String iconName = null;
+		switch(getMoveString(xDelta, yDelta)) {
+		case "Down":
+			iconName = "actions/draw-arrow-down";
+			break;
+			
+		case "Up":
+			iconName = "actions/draw-arrow-up";
+			break;
+			
+		case "Right":
+			iconName = "actions/draw-arrow-forward";
+			break;
+			
+		case "Left":
+			iconName = "actions/draw-arrow-back";
+			break;
+			
+		default:
+			break;
+		}
+		
+		if(iconName != null) {
+			return IconManager.getInstance().getIcon(iconName, IconSize.SMALL);
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -101,6 +134,7 @@ public class MoveNodeAction extends OpgraphEditorAction {
 		else
 			putValue(NAME, "Move " + suffix);
 
+		putValue(SMALL_ICON, getIcon(deltaX, deltaY));
 	}
 
 	@Override

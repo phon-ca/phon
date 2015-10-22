@@ -26,7 +26,7 @@ public class StartAction extends OpgraphEditorAction {
 	public static final KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0);
 	
 	public static final ImageIcon ICON = 
-			IconManager.getInstance().getIcon("actions/system-run-5", IconSize.SMALL);
+			IconManager.getInstance().getIcon("actions/media-playback-start-7", IconSize.SMALL);
 	
 	public StartAction(OpgraphEditor editor) {
 		super(editor);
