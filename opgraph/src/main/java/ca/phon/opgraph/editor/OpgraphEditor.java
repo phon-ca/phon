@@ -266,7 +266,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 		
 		menuBuilder.addMenu(".@Edit", "Graph");
 		menuBuilder.addMenuItem("Graph", new DeleteAction(this));
-		menuBuilder.addMenuItem("Graph", new DuplicateAction(this));
 		menuBuilder.addSeparator("Graph", "sep1");
 		menuBuilder.addMenuItem("Graph", new MergeNodesAction(this));
 		menuBuilder.addMenuItem("Graph", new ExpandMacroAction(this));
