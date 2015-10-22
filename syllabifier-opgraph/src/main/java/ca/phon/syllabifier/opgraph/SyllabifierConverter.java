@@ -7,6 +7,7 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpLink;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.app.AutoLayoutManager;
 import ca.gedge.opgraph.dag.CycleDetectedException;
 import ca.gedge.opgraph.dag.VertexNotFoundException;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
@@ -45,6 +46,7 @@ public class SyllabifierConverter {
 	
 	public OpGraph syllabifierToGraph(BasicSyllabifier syllabifier) {
 		final OpGraph graph = new OpGraph();
+		final AutoLayoutManager layoutManager = new AutoLayoutManager();
 		
 		// setup settings
 		final Language lang = syllabifier.getLanguage();
@@ -93,11 +95,12 @@ public class SyllabifierConverter {
 			OutputField lastStageOutput = stageSourceNode.getOutputFieldWithKey("obj");
 			
 			// create a new PhonexFind node for each expression
+			int idx = 0;
 			for(String phonex:st.getPhonex()) {
 				final PhonexPattern pattern = PhonexPattern.compile(phonex);
 				
 				final PhonexFindNode phonexNode = new PhonexFindNode();
-				phonexNode.setName(phonex);
+				phonexNode.setName("Phonex #" + (++idx));
 				phonexNode.setPhonex(phonex);
 				
 				final OpGraph phonexGraph = phonexNode.getGraph();
@@ -144,11 +147,13 @@ public class SyllabifierConverter {
 							} catch (CycleDetectedException | VertexNotFoundException | ItemMissingException e) {
 								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 							}
+							layoutManager.layoutGraph(itrGraph);
 						}
 					}
 				}
 				
 				// add stage link
+				layoutManager.layoutGraph(phonexGraph);
 				stageGraph.add(phonexNode);
 				try {
 					final OpLink stageLink = new OpLink(lastStageNode, lastStageOutput,
@@ -163,6 +168,7 @@ public class SyllabifierConverter {
 			}
 			stageNode.publish("ipa", lastStageNode, lastStageOutput);
 			
+			layoutManager.layoutGraph(stageGraph);
 			graph.add(stageNode);
 			try {
 				final OpLink stageLink = new OpLink(lastNode, lastOutput, stageNode, stageNode.getInputFieldWithKey("ipa"));
@@ -174,6 +180,7 @@ public class SyllabifierConverter {
 			}
 		}
 		
+		layoutManager.layoutGraph(graph);
 		return graph;
 	}
 	
