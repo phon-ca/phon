@@ -1,6 +1,7 @@
 package ca.phon.syllabifier.opgraph.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.Map;
 
@@ -13,8 +14,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.jdesktop.swingx.VerticalLayout;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -22,11 +21,9 @@ import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.components.ContextViewerPanel;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.opgraph.editor.OpgraphEditorModel;
-import ca.phon.opgraph.editor.OpgraphEditorModelFactory;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.ui.fonts.FontPreferences;
@@ -45,12 +42,10 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 	private JPanel syllabifierPanel;
 	
 	private SyllabifierSettingsPanel settingsPanel;
-
+	
 	private JTextField ipaField;
 	
 	private SyllabificationDisplay syllabificationDisplay;
-	
-	private ContextViewerPanel customDebugPanel;
 	
 	public OpGraphSyllabifierEditorModel() {
 		this(new OpGraph());
@@ -67,7 +62,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 		syllabificationDisplay.setTranscript(transcript);
 	}
 	
-	public JPanel getSyllabifierPanel() {
+	protected JPanel getDebugSettings() {
 		if(syllabifierPanel == null) {
 			syllabifierPanel = new JPanel();
 			
@@ -96,12 +91,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 				syllabificationDisplay.revalidate();
 			});
 			
-			settingsPanel = new SyllabifierSettingsPanel();
-			final SyllabifierSettings settings = getDocument().getGraph().getExtension(SyllabifierSettings.class);
-			if(settings != null) {
-				settingsPanel.loadSettings(settings);
-			}
-			settingsPanel.setBorder(BorderFactory.createTitledBorder("Syllabifier Settings"));
+			
 			
 			final FormLayout layout = new FormLayout(
 					"right:pref, 3dlu, fill:pref:grow", "pref, 3dlu, pref, pref");
@@ -114,10 +104,20 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 			ipaPanel.setBorder(BorderFactory.createTitledBorder("Debug Settings"));
 			
 			syllabifierPanel.setLayout(new BorderLayout());
-			syllabifierPanel.add(settingsPanel, BorderLayout.NORTH);
 			syllabifierPanel.add(new JScrollPane(ipaPanel), BorderLayout.CENTER);
 		}
 		return syllabifierPanel;
+	}
+	
+	protected SyllabifierSettingsPanel getSyllabifierSettings() {
+		if(settingsPanel == null) {
+			settingsPanel = new SyllabifierSettingsPanel();
+			final SyllabifierSettings settings = getDocument().getGraph().getExtension(SyllabifierSettings.class);
+			if(settings != null) {
+				settingsPanel.loadSettings(settings);
+			}
+		}
+		return settingsPanel;
 	}
 	
 	@Override
@@ -129,14 +129,15 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 	@Override
 	protected Map<String, JComponent> getViewMap() {
 		final Map<String, JComponent> retVal = super.getViewMap();
-		retVal.put("Syllabifier", getSyllabifierPanel());
+		retVal.put("Syllabifier", getSyllabifierSettings());
+		retVal.put("Debug Settings", getDebugSettings());
 		return retVal;
 	}
 	
 	@Override
 	public boolean isViewVisibleByDefault(String viewName) {
 		boolean retVal = super.isViewVisibleByDefault(viewName);
-		if(viewName.equals("Syllabifier")) retVal = true;
+		if(viewName.equals("Syllabifier") || viewName.equals("Debug Settings")) retVal = true;
 		return retVal;
 	}
 
@@ -148,6 +149,49 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 		final SyllabifierSettings settings = settingsPanel.getSyllabifierSettings();
 		getDocument().getGraph().putExtension(SyllabifierSettings.class, settings);
 		
+		return retVal;
+	}
+
+	@Override
+	public Rectangle getInitialViewBounds(String viewName) {
+		Rectangle retVal = new Rectangle();
+		switch(viewName) {
+		case "Canvas":
+			retVal.setBounds(200, 0, 600, 400);
+			break;
+			
+		case "Debug Settings":
+			retVal.setBounds(200, 400, 600, 200);
+			break;
+			
+		case "Syllabifier":
+			retVal.setBounds(0, 0, 200, 100);
+			break;
+			
+		case "Console":
+			retVal.setBounds(0, 200, 200, 200);
+			break;
+			
+		case "Debug":
+			retVal.setBounds(200, 400, 600, 200);
+			break;
+			
+		case "Defaults":
+			retVal.setBounds(800, 200, 200, 200);
+			break;
+			
+		case "Library":
+			retVal.setBounds(0, 100, 200, 500);
+			break;
+			
+		case "Settings":
+			retVal.setBounds(800, 0, 200, 200);
+			break;
+			
+		default:
+			retVal.setBounds(0, 0, 200, 200);
+			break;
+		}
 		return retVal;
 	}
 
