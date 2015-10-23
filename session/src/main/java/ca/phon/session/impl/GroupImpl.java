@@ -24,6 +24,7 @@ import ca.phon.orthography.OrthoWordExtractor;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.Word;
 
@@ -155,10 +156,36 @@ public class GroupImpl implements Group {
 	
 	@Override
 	public int getAlignedWordCount() {
-		final Orthography ortho = getOrthography();
-		final OrthoWordExtractor extractor = new OrthoWordExtractor();
-		ortho.accept(extractor);
-		return extractor.getWordList().size();
+		int retVal = getWordCount(SystemTierType.Orthography.getName());
+		retVal = Math.max(retVal, getWordCount(SystemTierType.IPATarget.getName()));
+		retVal = Math.max(retVal, getWordCount(SystemTierType.IPAActual.getName()));
+		
+		for(String tierName:record.getExtraTierNames()) {
+			final Tier<String> tier = record.getTier(tierName, String.class);
+			if(tier.isGrouped())
+				retVal = Math.max(retVal, getWordCount(tierName));
+		}
+		
+		return retVal;
+	}
+	
+	@Override
+	public int getWordCount(String tierName) {
+		final Object obj = getTier(tierName);
+		
+		int retVal = 0;
+		if(obj instanceof Orthography) {
+			final Orthography ortho = (Orthography)obj;
+			final OrthoWordExtractor extractor = new OrthoWordExtractor();
+			ortho.accept(extractor);
+			retVal = extractor.getWordList().size();
+		} else if(obj instanceof IPATranscript) {
+			retVal = ((IPATranscript)obj).words().size();
+		} else if(obj instanceof String) {
+			retVal = obj.toString().split("\\p{Space}").length;
+		}
+		
+		return retVal;
 	}
 
 }

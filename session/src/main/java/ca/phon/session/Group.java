@@ -117,4 +117,13 @@ public interface Group {
 	 */
 	public int getAlignedWordCount();
 	
+	/**
+	 * Get the word count for the specified tier
+	 * 
+	 * @param tierName
+	 * @return the number of words in the tier, or 0 if the tier
+	 *  is empty or not a grouped tier
+	 */
+	public int getWordCount(String tierName);
+	
 }
