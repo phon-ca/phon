@@ -106,12 +106,14 @@ exports.WordFilter = function(id) {
 	 *   word: obj 
 	 * }
 	 */
-	this.getRequestedWords = function(group) {
+	this.getRequestedWords = function(group, tierName) {
 		var retVal = new java.util.ArrayList();
 		var retIdx = 0;
 		
+		tierName = tierName || (searchTier || "Orthography");
+		
 		var words = new Array();
-		var wordCount = group.alignedWordCount;
+		var wordCount = group.getWordCount(tierName);
 		for(var wIndex = 0; wIndex < wordCount; wIndex++)
 		{
 			var word = group.getAlignedWord(wIndex);

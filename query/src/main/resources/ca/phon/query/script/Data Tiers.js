@@ -103,7 +103,7 @@ function query_record(recordIndex, record) {
 		var group = groups[gIdx];
 		
 		if(filters.word.isUseFilter()) {
-			var words = filters.word.getRequestedWords(group);
+			var words = filters.word.getRequestedWords(group, searchTier);
 			
 			for(var wIdx = 0; wIdx < words.length; wIdx++) {
 				var word = words[wIdx];

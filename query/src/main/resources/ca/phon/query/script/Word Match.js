@@ -145,7 +145,7 @@ function query_record(recordIndex, record)
 	
 	for(var gIdx = 0; gIdx < searchObjects.length; gIdx++) {
 		var group = searchObjects[gIdx];
-		var words = filters.word.getRequestedWords(group);
+		var words = filters.word.getRequestedWords(group, "IPA Target");
 		
 		for(var wIdx = 0; wIdx < words.length; wIdx++) {
 			var word = words[wIdx];

@@ -169,7 +169,7 @@ function query_record(recordIndex, record) {
 		// search by word?
 		if(filters.word.isUseFilter()) {
 		   toSearch.length = 0;
-		   var selectedWords = filters.word.getRequestedWords(group);
+		   var selectedWords = filters.word.getRequestedWords(group, searchTier);
 		   for(j = 0; j < selectedWords.length; j++) {
 		       var word = selectedWords[j];
 

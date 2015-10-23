@@ -64,7 +64,7 @@ function query_record(recordIndex, record) {
 	var searchTier = "IPA Target";
     if(!filters.speaker.check_speaker(record.speaker)) return;
     
-	var searchObjects = filters.group.getRequestedGroups(record);
+	var searchObjects = filters.group.getRequestedGroups(record, searchTier);
 	
 	// check aligned group for each group returned
 	if(filters.alignedGroup.isUseFilter()) {
