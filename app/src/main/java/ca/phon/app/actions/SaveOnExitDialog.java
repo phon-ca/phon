@@ -350,6 +350,7 @@ public class SaveOnExitDialog extends JDialog {
 	}
 	
 	public QuitOption showDialog() {
+		pack();
 		// center dialog on screen
 		Dimension size = new Dimension(450, 400);
 		Dimension ss = 

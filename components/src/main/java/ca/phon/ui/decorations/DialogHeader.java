@@ -77,16 +77,6 @@ public class DialogHeader extends JXHeader {
 		setBackgroundPainter(cmpPainter);
 	}
 	
-	@Override
-	public Dimension getMinimumSize() {
-		return getPreferredSize();
-	}
-	
-	@Override
-	public Dimension getMaximumSize() {
-		return getPreferredSize();
-	}
-	
 	public void setHeaderText(String txt) {
 		super.setTitle(txt);
 	}
