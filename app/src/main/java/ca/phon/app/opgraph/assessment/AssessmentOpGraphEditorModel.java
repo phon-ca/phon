@@ -2,7 +2,10 @@ package ca.phon.app.opgraph.assessment;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -13,9 +16,15 @@ import javax.swing.border.CompoundBorder;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.nodes.query.QueryNode;
+import ca.phon.app.opgraph.nodes.query.QueryNodeData;
+import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.workspace.Workspace;
 
 public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
@@ -32,6 +41,8 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 
 	public AssessmentOpGraphEditorModel(OpGraph opgraph) {
 		super(opgraph);
+		
+		addQueryNodes();
 	}
 	
 	@Override
@@ -100,6 +111,26 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 			break;
 		}
 		return retVal;
+	}
+	
+	private void addQueryNodes() {
+		Consumer<QueryScript> addToLibrary = (QueryScript script) -> {
+			final QueryName qn = script.getExtension(QueryName.class);
+			final String name = (qn != null ? qn.getName() : "<unknown>");
+			try {
+				final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), qn.getName());
+				final QueryNodeInstantiator instantiator = new QueryNodeInstantiator();
+				
+				final QueryNodeData nodeData = new QueryNodeData(script, queryNodeClassURI, name, "", "Query", instantiator);
+				getNodeLibrary().getLibrary().put(nodeData);
+			} catch (URISyntaxException e) {
+				
+			}
+		};
+		
+		final QueryScriptLibrary library = new QueryScriptLibrary();
+		library.stockScriptFiles().forEach(addToLibrary);
+		library.userScriptFiles().forEach(addToLibrary);
 	}
 
 	@Override
