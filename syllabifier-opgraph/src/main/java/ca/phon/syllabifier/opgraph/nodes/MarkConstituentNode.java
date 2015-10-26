@@ -19,6 +19,7 @@ import ca.phon.opgraph.nodes.phonex.PhonexSettingsPanel;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 
 @OpNodeInfo(
@@ -64,6 +65,12 @@ public class MarkConstituentNode extends OpNode implements PhonexNode {
 							SyllableConstituentType.fromString(grpName);
 					final List<IPAElement> grp = matcher.group(i);
 					grp.forEach( (e) -> e.setScType(scType) );
+					
+					if(grpName.equalsIgnoreCase("D")) {
+						grp.forEach( (e) -> {
+							e.getExtension(SyllabificationInfo.class).setDiphthongMember(true);
+						});
+					}
 				}
 			}
 		}
