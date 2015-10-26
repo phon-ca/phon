@@ -31,6 +31,7 @@ import ca.phon.syllabifier.basic.io.StageType;
 import ca.phon.syllabifier.basic.io.SyllabifierDef;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.syllabifier.opgraph.nodes.IPASourceNode;
+import ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode;
 import ca.phon.syllabifier.opgraph.nodes.SonorityNode;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
@@ -87,85 +88,34 @@ public class SyllabifierConverter {
 			stageNode.setName(st.getName());
 			final OpGraph stageGraph = stageNode.getGraph();
 			
-			final ObjectNode stageSourceNode = new ObjectNode(IPATranscript.class);
-			stageSourceNode.setName("IPA Transcript");
-			stageGraph.add(stageSourceNode);
-			stageNode.publish("ipa", stageSourceNode, stageSourceNode.getInputFieldWithKey("obj"));
-			OpNode lastStageNode = stageSourceNode;
-			OutputField lastStageOutput = stageSourceNode.getOutputFieldWithKey("obj");
+			OpNode lastStageNode = null;
+			OutputField lastStageOutput = null;
 			
-			// create a new PhonexFind node for each expression
+			// create a new MarkConstituentNode for each expression
 			int idx = 0;
 			for(String phonex:st.getPhonex()) {
-				final PhonexPattern pattern = PhonexPattern.compile(phonex);
-				
-				final PhonexFindNode phonexNode = new PhonexFindNode();
-				phonexNode.setName("Phonex #" + (++idx));
+				final MarkConstituentNode phonexNode = new MarkConstituentNode();
 				phonexNode.setPhonex(phonex);
 				
-				final OpGraph phonexGraph = phonexNode.getGraph();
-				for(MarkGroup mg:st.getGroup()) {
-					final String groupName = mg.getName();
-					final ConstituentType markType = mg.getMark();
-					final SyllableConstituentType markAs = SyllableConstituentType.fromString(markType.name());
-					
-					if(pattern.groupIndex(groupName) > 0) {
-						// find group node in graph
-						final OpNode phonexGroupNode = phonexGraph.getNodesByName(groupName).get(0);
-						if(phonexGroupNode != null) {
-							final IterableClassNode itrNode = new IterableClassNode(IPATranscript.class);
-							final OpGraph itrGraph = itrNode.getGraph();
-							phonexNode.getGraph().add(itrNode);
-							
-							final OpNode eleNode = itrGraph.getNodesByName("IPAElement").get(0);
-							if(eleNode != null) {
-								// add static field and attach to correct input
-								final StaticFieldNode staticFieldNode = new StaticFieldNode();
-								staticFieldNode.setDeclaredClass(SyllableConstituentType.class);
-								try {
-									staticFieldNode.setClassMember(SyllableConstituentType.class.getField(markAs.toString()));
-								} catch (NoSuchFieldException | SecurityException e) {
-									LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-								}
-								
-								itrGraph.add(staticFieldNode);
-								// add link
-								try {
-									final OpLink itrLink = new OpLink(staticFieldNode, "value", eleNode, "scType");
-									itrGraph.add(itrLink);
-								} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
-									LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-								}
-								
-							}
-							
-							// link group to itrNode
-							try {
-								final OpLink itrLink = new OpLink(phonexGroupNode, "ipa", 
-										itrNode, "obj");
-								phonexGraph.add(itrLink);
-							} catch (CycleDetectedException | VertexNotFoundException | ItemMissingException e) {
-								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-							}
-							layoutManager.layoutGraph(itrGraph);
-						}
+				phonexNode.setName("Phonex #" + (idx+1));
+				
+				stageGraph.add(phonexNode);
+				if((idx++) == 0) {
+					stageNode.publish("ipa", phonexNode, phonexNode.getInputFieldWithKey("ipa"));
+				} else {
+					try {
+						final OpLink link = new OpLink(lastStageNode, lastStageOutput, 
+								phonexNode, phonexNode.getInputFieldWithKey("ipa"));
+						stageGraph.add(link);
+					} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					}
 				}
 				
-				// add stage link
-				layoutManager.layoutGraph(phonexGraph);
-				stageGraph.add(phonexNode);
-				try {
-					final OpLink stageLink = new OpLink(lastStageNode, lastStageOutput,
-							phonexNode, phonexNode.getInputFieldWithKey("ipa"));
-					stageGraph.add(stageLink);
-					
-					lastStageNode = phonexNode;
-					lastStageOutput = phonexNode.getOutputFieldWithKey("ipa out");
-				} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
+				lastStageNode = phonexNode;
+				lastStageOutput = phonexNode.getOutputFieldWithKey("ipa out");
 			}
+			
 			stageNode.publish("ipa", lastStageNode, lastStageOutput);
 			
 			layoutManager.layoutGraph(stageGraph);
