@@ -97,7 +97,7 @@ public class SyllabifierConverter {
 				final MarkConstituentNode phonexNode = new MarkConstituentNode();
 				phonexNode.setPhonex(phonex);
 				
-				phonexNode.setName("Phonex #" + (idx+1));
+				phonexNode.setName(st.getName() + " #" + (idx+1));
 				
 				stageGraph.add(phonexNode);
 				if((idx++) == 0) {
