@@ -225,7 +225,7 @@ public class BufferPanel extends JPanel {
 		topPanel.add(saveButton, cc.xy(1,1));
 		topPanel.add(openFileAfterSavingBox, cc.xy(2, 1));
 		topPanel.add(busyLabel, cc.xy(6, 1));
-		topPanel.add(buttons, cc.xy(7, 1));
+		topPanel.add(buttons, cc.xy(8, 1));
 		
 		add(topPanel, BorderLayout.NORTH);
 		
