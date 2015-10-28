@@ -43,14 +43,15 @@ public class InventoryNode extends OpNode implements NodeSettings {
 		final ObjectFactory factory = new ObjectFactory();
 		inventorySection = factory.createInventorySection();
 		
-//		putField(projectInputField);
 		putField(resultSetInput);
 		putField(tableOutput);
+		
+		putExtension(NodeSettings.class, this);
 	}
 
 	@Override
 	public Component getComponent(GraphDocument document) {
-		if(inventorySectionPanel != null) {
+		if(inventorySectionPanel == null) {
 			inventorySectionPanel = new InventorySectionPanel(inventorySection);
 		}
 		return inventorySectionPanel;
@@ -59,7 +60,6 @@ public class InventoryNode extends OpNode implements NodeSettings {
 	@Override
 	public Properties getSettings() {
 		final Properties props = new Properties();
-		props.put("name", inventorySection.getName());
 		props.put("caseSensitive", inventorySection.isCaseSensitive());
 		props.put("groupByFormat", inventorySection.isGroupByFormat());
 		props.put("ignoreDiacritics", inventorySection.isIgnoreDiacritics());
@@ -71,7 +71,6 @@ public class InventoryNode extends OpNode implements NodeSettings {
 
 	@Override
 	public void loadSettings(Properties properties) {
-		inventorySection.setName(properties.getProperty("name"));
 		inventorySection.setCaseSensitive(
 				Boolean.parseBoolean(properties.getProperty("caseSensitive", "false")));
 		inventorySection.setGroupByFormat(
