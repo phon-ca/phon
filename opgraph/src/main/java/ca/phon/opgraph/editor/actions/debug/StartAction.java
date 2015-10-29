@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphDocument;
@@ -14,6 +15,7 @@ import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 public class StartAction extends OpgraphEditorAction {
 
@@ -40,26 +42,27 @@ public class StartAction extends OpgraphEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent arg0) {
 		final GraphDocument document = getEditor().getModel().getDocument();
-		if(document != null) {
-			Processor context = document.getProcessingContext();
-			if(context == null) {
-				context = new Processor(document.getGraph());
+		Runnable inBg = () -> {
+			if(document != null) {
+				final Processor context = 
+						(document.getProcessingContext() == null ? new Processor(document.getGraph()) : document.getProcessingContext());
 				document.setProcessingContext(context);
-
+				
 				context.getContext().setDebug(true);
 				getEditor().getModel().setupContext(context.getContext());
+				
+				if(context.hasNext()) {
+					try {
+						context.stepAll();
+						SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
+					} catch (ProcessingException pe) {
+						document.updateDebugState(
+								(pe.getContext() != null ? pe.getContext() : context));
+					} 
+				}
 			}
-			
-			if(context.hasNext()) {
-				try {
-					context.stepAll();
-					document.updateDebugState(context);
-				} catch (ProcessingException pe) {
-					document.updateDebugState(
-							(pe.getContext() != null ? pe.getContext() : context));
-				} 
-			}
-		}
+		};
+		PhonWorker.getInstance().invokeLater(inBg);
 	}
 
 }
