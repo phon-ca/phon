@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ca.gedge.opgraph.InputField;
@@ -70,14 +72,16 @@ public class ResultsToTableNode extends OpNode {
 		final Set<String> tierNames = new LinkedHashSet<>();
 		// assuming all results come from the same query, the tiers should be the
 		// same in every result value
-		final ResultSet firstNonEmptyResultSet = 
-				Arrays.asList(results).stream().filter((rs) -> rs.numberOfResults(true) > 0).findFirst().get();
-		final Result firstResult = firstNonEmptyResultSet.getResult(0);
-		for(ResultValue rv:firstResult) {
-			tierNames.add(rv.getTierName());
-		}
-		columnNames.addAll(tierNames);
-		
+		Arrays.asList(results).stream()
+			.filter((rs) -> rs.numberOfResults(true) > 0)
+			.findFirst()
+			.ifPresent( firstNonEmptyResultSet -> {
+				final Result firstResult = firstNonEmptyResultSet.getResult(0);
+				for(ResultValue rv:firstResult) {
+					tierNames.add(rv.getTierName());
+				}
+				columnNames.addAll(tierNames);
+			});
 		Set<String> metadataKeys = new LinkedHashSet<>();
 		for(ResultSet rs:results) {
 			metadataKeys.addAll(Arrays.asList(rs.getMetadataKeys()));
