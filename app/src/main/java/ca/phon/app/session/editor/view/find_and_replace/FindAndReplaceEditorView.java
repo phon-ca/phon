@@ -72,6 +72,8 @@ import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAction;
 import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAllAction;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.GroupLocation;
 import ca.phon.session.Record;
 import ca.phon.session.RecordLocation;
@@ -79,14 +81,18 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionLocation;
 import ca.phon.session.SessionRange;
+import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.Language;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -528,20 +534,59 @@ public class FindAndReplaceEditorView extends EditorView {
 				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
 				
 				// re-syllabify if an IPA tier
-				
-				
 				final SessionRange sr = findManager.getMatchedRange();
 				
-				getEditor().getSelectionModel().clear();
+				final Record record = getEditor().getSession().getRecord(sr.getRecordIndex());
 				
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				final TierEdit<?> tierEdit = new TierEdit(getEditor(), 
 						getEditor().currentRecord().getTier(sr.getRecordRange().getTier()),
 						sr.getRecordRange().getGroupRange().getGroupIndex(), newVal);
-				getEditor().getUndoSupport().postEdit(tierEdit);
+				
+				if(newVal instanceof IPATranscript) {
+					final IPATranscript ipa = (IPATranscript)newVal;
+					final Syllabifier syllabifier = getSyllabifier(sr.getRecordRange().getTier());
+					if(syllabifier != null) {
+						syllabifier.syllabify(ipa.toList());
+					}
+					
+					// update alignment
+					
+					final CompoundEdit edit = new CompoundEdit();
+					final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
+							record.getIPATarget().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()),
+							record.getIPAActual().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()));
+					final TierEdit<PhoneMap> alignmentEdit = 
+							new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), 
+									sr.getRecordRange().getGroupRange().getGroupIndex(), pm);
+					tierEdit.doIt();
+					edit.addEdit(tierEdit);
+					alignmentEdit.doIt();
+					edit.addEdit(alignmentEdit);
+					edit.end();
+					getEditor().getUndoSupport().postEdit(edit);
+				} else {
+					getEditor().getUndoSupport().postEdit(tierEdit);
+				}
+				
+				getEditor().getSelectionModel().clear();
+				
 				
 			}
 		}
+	}
+	
+	private Syllabifier getSyllabifier(String tier) {
+		Syllabifier retVal = SyllabifierLibrary.getInstance().defaultSyllabifier();
+		final Session session = getEditor().getSession();
+		final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
+		if(info != null) {
+			final Language lang = info.getSyllabifierLanguageForTier(tier);
+			if(lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
+				retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
+			}
+		}
+		return retVal;
 	}
 	
 	public void replaceAll() {
@@ -575,13 +620,33 @@ public class FindAndReplaceEditorView extends EditorView {
 			
 			final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
 			
-			// passing 'null' as session editor will suppress excessive editor repainting,
-			// tell editor about changes in a single update afterwards
+			// re-syllabify if an IPA tier
 			@SuppressWarnings({ "unchecked", "rawtypes" })
-			final TierEdit<?> tierEdit = new TierEdit(null, tier, 
+			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier,
 					currentRange.getRecordRange().getGroupRange().getGroupIndex(), newVal);
 			tierEdit.doIt();
 			edit.addEdit(tierEdit);
+			
+			if(newVal instanceof IPATranscript) {
+				final IPATranscript ipa = (IPATranscript)newVal;
+				final Syllabifier syllabifier = getSyllabifier(currentRange.getRecordRange().getTier());
+				if(syllabifier != null) {
+					syllabifier.syllabify(ipa.toList());
+				}
+				
+				// update alignment
+				
+				final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
+						r.getIPATarget().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()),
+						r.getIPAActual().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()));
+				final TierEdit<PhoneMap> alignmentEdit = 
+						new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignment(), 
+								currentRange.getRecordRange().getGroupRange().getGroupIndex(), pm);
+				alignmentEdit.doIt();
+
+				edit.addEdit(alignmentEdit);
+				edit.end();
+			}
 		}
 		edit.end();
 		
