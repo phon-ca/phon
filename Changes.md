@@ -10,6 +10,8 @@
 * Changed icons for Save/Save As actions.
 * Fixed an issue with record selection when selecting values in a sorted buffer table.
 * Updated French and Spanish IPA dictionaries.
+* Syllabification and alignment is now updated when using Find & Replace.
+* Fixed an issue with phone focus in Syllabification & Alignment when moving to a record with a shorter transcription.
 
 ## Changes from Phon 2.1.1
 
