@@ -526,7 +526,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 			g2d.draw(syllArea);
 		}
 
-		if (display.hasFocus() && display.getNumberOfDisplayedPhones() > 0) {
+		if (display.hasFocus() && display.getNumberOfDisplayedPhones() > 0
+				&& display.getFocusedPhone() < display.getNumberOfDisplayedPhones()) {
 
 			Area phoneArea = phoneAreas.get(display.getFocusedPhone());
 
