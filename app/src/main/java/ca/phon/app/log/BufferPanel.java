@@ -390,6 +390,9 @@ public class BufferPanel extends JPanel {
 			if(tblModel == null) return null;
 			if(row < 0 || row >= tblModel.getRowCount()) return null;
 			
+			// fix row number if sorted
+			row = tbl.convertRowIndexToModel(row);
+			
 			// get project reference from parent window
 			final CommonModuleFrame cmf = 
 					(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, BufferPanel.this);
