@@ -1,5 +1,16 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.2
+
+### General
+* Revert to Java 8u31 to fix issues with rendering on Windows 10.
+* Fixed header size in Exit dialog on mac.
+* Improved behaviour of word alignment filter in queries.
+* Fixed an issue with opening TextGrid files in Praat.
+* Changed icons for Save/Save As actions.
+* Fixed an issue with record selection when selecting values in a sorted buffer table.
+* Updated French and Spanish IPA dictionaries.
+
 ## Changes from Phon 2.1.1
 
 ### General
