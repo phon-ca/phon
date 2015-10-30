@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphDocument;
@@ -13,6 +14,7 @@ import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 public class StepAction extends OpgraphEditorAction {
 
@@ -40,21 +42,25 @@ public class StepAction extends OpgraphEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent arg0) {
 		final GraphDocument document = getEditor().getModel().getDocument();
-		if(document != null) {
-			Processor context = document.getProcessingContext();
-			if(context == null) {
-				context = new Processor(document.getGraph());
+		Runnable inBg = () -> {
+			if(document != null) {
+				final Processor context =
+						(document.getProcessingContext() != null 
+							? document.getProcessingContext() 
+							: new Processor(document.getGraph()));
 				document.setProcessingContext(context);
 				
 				context.getContext().setDebug(true);
 				getEditor().getModel().setupContext(context.getContext());
+	
+				if(context.hasNext()) {
+					context.step();
+					
+					SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
+				}
 			}
-
-			if(context.hasNext()) {
-				context.step();
-				document.updateDebugState(context);
-			}
-		}
+		};
+		PhonWorker.getInstance().invokeLater(inBg);
 	}
 
 }
