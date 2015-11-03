@@ -11,11 +11,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
@@ -30,14 +27,8 @@ import ca.phon.query.report.datasource.TableDataSource;
 		description="Aggregated inventory of query results",
 		category="Report"
 )		
-public class InventoryNode extends OpNode implements NodeSettings {
-	
-	private InputField tableInput = new InputField("table", "Input table of values", false,
-			true, TableDataSource.class);
-	
-	private OutputField tableOutput = new OutputField("table", "Inventory as table with session names as columns",
-			true, TableDataSource.class);
-	
+public class InventoryNode extends TableOpNode implements NodeSettings {
+
 	private InventorySettingsPanel settingsPanel = null;
 	
 	private String groupBy = "Session";
@@ -50,9 +41,6 @@ public class InventoryNode extends OpNode implements NodeSettings {
 	
 	public InventoryNode() {
 		super();
-		
-		putField(tableInput);
-		putField(tableOutput);
 		
 		putExtension(NodeSettings.class, this);
 	}
@@ -151,34 +139,6 @@ public class InventoryNode extends OpNode implements NodeSettings {
 			}
 		} else {
 			retVal.add(new GroupKey("Total"));
-		}
-		
-		return retVal;
-	}
-	
-	private int[] getColumnIndices(TableDataSource table, String columns) {
-		if(columns == null || columns.trim().length() == 0) return new int[0];
-		
-		String[] cols = columns.trim().split(";");
-		int[] retVal = new int[cols.length];
-	
-		for(int i = 0; i < cols.length; i++) {
-			int cIdx = -1;
-			for(int j = 0; j < table.getColumnCount(); j++) {
-				if(table.getColumnTitle(j).equalsIgnoreCase(cols[i])) {
-					cIdx = j;
-					break;
-				}
-			}
-			if(cIdx < 0) {
-				// attempt to parse as integer
-				if(cols[i].matches("[0-9]+")) {
-					cIdx = Integer.parseInt(cols[i]);
-					if(cIdx >= table.getColumnCount())
-						cIdx = -1;
-				}
-			}
-			retVal[i] = cIdx;
 		}
 		
 		return retVal;
