@@ -1,5 +1,6 @@
 ca.phon.app.opgraph.nodes.project.SessionSelectorNode
 ca.phon.app.opgraph.nodes.query.ReportDesignNode
+ca.phon.app.opgraph.nodes.query.ExtractColumnsNode
 ca.phon.app.opgraph.nodes.query.InventoryNode
 ca.phon.app.opgraph.nodes.query.ResultsToTableNode
 ca.phon.app.opgraph.nodes.log.PrintBufferNode
