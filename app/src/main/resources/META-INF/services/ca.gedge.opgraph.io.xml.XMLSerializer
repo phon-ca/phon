@@ -1,2 +1,3 @@
 ca.phon.app.opgraph.nodes.query.QueryNodeXMLSerializer
 ca.phon.app.opgraph.nodes.query.ReportDesignNodeXMLSerializer
+ca.phon.app.opgraph.nodes.query.SortNodeSettingsXMLSerializer

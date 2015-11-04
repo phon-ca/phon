@@ -48,4 +48,63 @@
     
     <xs:element name="reportDesignNode" type="ReportDesignType" substitutionGroup="og:abstract_node"/>
     
+    <!-- SortNodeSettings -->
+    <xs:complexType name="SortNodeSettingsType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Storage for sort node.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="groupBy" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sortBy" type="SortByType" minOccurs="1" maxOccurs="3"/>
+        </xs:sequence>
+    </xs:complexType>
+      
+    <xs:complexType name="SortByType" mixed="false" abstract="true">
+        <xs:annotation>
+            <xs:documentation>Column sorting options</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" type="sortType" use="required"/>
+        <xs:attribute name="column" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="PlainSortBy" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="SortByType">
+                <xs:attribute name="order" type="sortOrderType" default="ascending"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IPASortBy" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="SortByType">
+                <xs:sequence>
+                    <xs:element name="order" type="featureOrderType" minOccurs="1" maxOccurs="3"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+   
+    <xs:simpleType name="sortType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="plain"/>
+            <xs:enumeration value="ipa"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="sortOrderType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ascending"/>
+            <xs:enumeration value="descending"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="featureOrderType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="place"/>
+            <xs:enumeration value="manner"/>
+            <xs:enumeration value="voicing"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
 </xs:schema>
