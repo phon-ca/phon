@@ -22,6 +22,7 @@ import ca.phon.app.autosave.AutosaveManager;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.workspace.Workspace;
 
 /**
@@ -74,5 +75,10 @@ public class PhonProperties {
 	 * UI Theme
 	 */
 	public final static String UI_THEME = "ca.phon.app.ui.theme";
+	
+	/**
+	 * Enable fullscreen on mac
+	 */
+	public final static String MACOS_ENABLE_FULLSCREEN = CommonModuleFrame.MACOS_ENABLE_FULLSCREEN;
 	
 }
