@@ -7,7 +7,7 @@
     xmlns:rpt="http://phon.ling.mun.ca/ns/report"
     
     targetNamespace="https://phon.ca/ns/opgraph_query"
-    elementFormDefault="qualified">
+    elementFormDefault="unqualified">
     
     <xs:import namespace="http://gedge.ca/ns/opgraph" 
         schemaLocation="https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd"/>
@@ -53,36 +53,27 @@
         <xs:annotation>
             <xs:documentation>Storage for sort node.</xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="groupBy" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="sortBy" type="SortByType" minOccurs="1" maxOccurs="3"/>
-        </xs:sequence>
-    </xs:complexType>
-      
-    <xs:complexType name="SortByType" mixed="false" abstract="true">
-        <xs:annotation>
-            <xs:documentation>Column sorting options</xs:documentation>
-        </xs:annotation>
-        <xs:attribute name="type" type="sortType" use="required"/>
-        <xs:attribute name="column" type="xs:string" use="required"/>
-    </xs:complexType>
-    
-    <xs:complexType name="PlainSortBy" mixed="false">
-        <xs:complexContent>
-            <xs:extension base="SortByType">
-                <xs:attribute name="order" type="sortOrderType" default="ascending"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    <xs:complexType name="IPASortBy" mixed="false">
-        <xs:complexContent>
-            <xs:extension base="SortByType">
+        <xs:complexContent mixed="false">
+            <xs:extension base="og:AbstractExtensionType">
                 <xs:sequence>
-                    <xs:element name="order" type="featureOrderType" minOccurs="1" maxOccurs="3"/>
+                    <xs:element ref="groupBy" minOccurs="0" maxOccurs="1"/>
+                    <xs:element ref="sortBy" minOccurs="1" maxOccurs="3"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
+    </xs:complexType>
+    
+      
+    <xs:complexType name="SortByType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Column sorting options</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="featureOrder" minOccurs="0" maxOccurs="3"/>
+        </xs:sequence>
+        <xs:attribute name="type" type="sortType" use="required"/>
+        <xs:attribute name="column" type="xs:string" use="required"/>
+        <xs:attribute name="order" type="sortOrderType" use="optional"/>
     </xs:complexType>
    
     <xs:simpleType name="sortType">
@@ -107,4 +98,8 @@
         </xs:restriction>
     </xs:simpleType>
     
+    <xs:element name="sortoptions" type="SortNodeSettingsType" substitutionGroup="og:extension"/>
+    <xs:element name="groupBy" type="SortByType"/>
+    <xs:element name="sortBy" type="SortByType"/>
+    <xs:element name="featureOrder" type="featureOrderType"/>
 </xs:schema>

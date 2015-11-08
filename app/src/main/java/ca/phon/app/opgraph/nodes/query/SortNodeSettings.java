@@ -46,30 +46,32 @@ public class SortNodeSettings {
 	/*
 	 * Grouping column
 	 */
-	private String groupBy;
+	private SortColumn groupBy;
 
 	private final List<SortColumn> sorting = new ArrayList<>();
 	
 	public SortNodeSettings() {
 		super();
+		
+		setGroupBy(new SortColumn());
+		sorting.add(new SortColumn());
 	}
 	
-	public String getGroupBy() {
+	public SortColumn getGroupBy() {
 		return this.groupBy;
 	}
 	
-	public void setGroupBy(String groupBy) {
+	public void setGroupBy(SortColumn groupBy) {
 		this.groupBy = groupBy;
 	}
 	
 	public List<SortColumn> getSorting() {
 		return this.sorting;
 	}
-		
-	public static abstract class SortColumn {
-		private String column;
 
-		public abstract SortType getType();
+	public static class SortColumn {
+		private String column;
+		private SortType type = SortType.PLAIN;
 		
 		public String getColumn() {
 			return this.column;
@@ -78,9 +80,16 @@ public class SortNodeSettings {
 		public void setColumn(String column) {
 			this.column = column;
 		}
-	}
-	
-	public static class PlainSortColumn extends SortColumn {
+		
+		public SortType getType() {
+			return type;
+		}
+		
+		public void setType(SortType type) {
+			this.type = type;
+		}
+
+		/* Plain Text options */
 		private SortOrder order = SortOrder.ASCENDING;
 		
 		public SortOrder getOrder() {
@@ -91,24 +100,17 @@ public class SortNodeSettings {
 			this.order = order;
 		}
 		
-		public SortType getType() {
-			return SortType.PLAIN;
+		/* IPA options */
+		private FeatureFamily[] featureOrder = new FeatureFamily[] { FeatureFamily.PLACE, FeatureFamily.VOICING };
+		
+		public FeatureFamily[] getFeatureOrder() {
+			return featureOrder;
 		}
+		
+		public void setFeatureOrder(FeatureFamily[] order) {
+			this.featureOrder = order;
+		}
+		
 	}
 
-	public static class IPASortColumn extends SortColumn {
-		private FeatureFamily[] order = new FeatureFamily[] { FeatureFamily.PLACE, FeatureFamily.VOICING };
-		
-		public FeatureFamily[] getOrder() {
-			return order;
-		}
-		
-		public void setOrder(FeatureFamily[] order) {
-			this.order = order;
-		}
-		
-		public SortType getType() {
-			return SortType.IPA;
-		}
-	}
 }
