@@ -32,6 +32,7 @@ public class CompoundFeatureComparator extends CompoundComparator<IPAElement> {
 		
 		if(retVal == 0) {
 			retVal = o1.toString().compareTo(o2.toString());
+			retVal = (retVal > 0 ? 1 : (retVal < 0 ? -1 : 0));
 		}
 		
 		return retVal;
