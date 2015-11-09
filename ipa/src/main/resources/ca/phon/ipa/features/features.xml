@@ -2,6 +2,7 @@
 <feature_matrix xmlns="https://phon.ca/ns/features"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="https://phon.ca/ns/features ../../../../xml/xsd/features.xsd">
+   <feature name="null"/>
    <feature name="diacritic"/>
    <feature name="unintelligible"/>
    <feature name="unreleased">
@@ -460,6 +461,8 @@
 
    <feature_set char="&#x2194;">diacritic </feature_set>
    <!--Consonants-->
+   <!-- Ø -->
+   <feature_set char="&#xd8;">null </feature_set>
    <!-- X -->
    <feature_set char="&#x58;">unintelligible cover </feature_set>
    <!--C-->

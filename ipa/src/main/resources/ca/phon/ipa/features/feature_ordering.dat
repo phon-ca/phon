@@ -1,0 +1,119 @@
+{prstress}
+{secstress}
+{null}
+{c, cover}
+{obs, stop, -lateral, voiceless, labial}
+{obs, stop, -lateral, voiced, labial}
+{obs, stop, -lateral, voiceless, cor, dental}
+{obs, stop, -lateral, voiced, cor, dental}
+{obs, stop, -lateral, voiceless, alveolar}
+{obs, stop, -lateral, voiced, alveolar}
+{obs, stop, -lateral, voiceless, alveopalatal}
+{obs, stop, -lateral, voiced, alveopalatal}
+{obs, stop, -lateral, voiceless, posterior}
+{obs, stop, -lateral, voiced, posterior}
+{obs, stop, -lateral, voiceless, velar}
+{obs, stop, -lateral, voiced, velar}
+{obs, stop, -lateral, voiceless, uvular}
+{obs, stop, -lateral, voiced, uvular}
+{obs, stop, -lateral, voiceless, pharyngeal}
+{obs, stop, -lateral, voiced, pharyngeal}
+{obs, stop, -lateral, voiceless, laryngeal}
+{obs, stop, -lateral, voiced, laryngeal}
+{obs, fri, -lateral, voiceless, labial}
+{obs, fri, -lateral, voiced, labial}
+{obs, fri, -lateral, voiceless, cor, dental}
+{obs, fri, -lateral, voiced, cor, dental}
+{obs, fri, -lateral, voiceless, alveolar}
+{obs, fri, -lateral, voiced, alveolar}
+{obs, fri, -lateral, voiceless, alveopalatal}
+{obs, fri, -lateral, voiced, alveopalatal}
+{obs, fri, -lateral, voiceless, posterior}
+{obs, fri, -lateral, voiced, posterior}
+{obs, fri, -lateral, voiceless, velar}
+{obs, fri, -lateral, voiced, velar}
+{obs, fri, -lateral, voiceless, uvular}
+{obs, fri, -lateral, voiced, uvular}
+{obs, fri, -lateral, voiceless, pharyngeal}
+{obs, fri, -lateral, voiced, pharyngeal}
+{obs, fri, -lateral, voiceless, laryngeal}
+{obs, fri, -lateral, voiced, laryngeal}
+{obs, aff, -lateral, voiceless, labial}
+{obs, aff, -lateral, voiced, labial}
+{obs, aff, -lateral, voiceless, cor, dental}
+{obs, aff, -lateral, voiced, cor, dental}
+{obs, aff, -lateral, voiceless, alveolar}
+{obs, aff, -lateral, voiced, alveolar}
+{obs, aff, -lateral, voiceless, alveopalatal}
+{obs, aff, -lateral, voiced, alveopalatal}
+{obs, aff, -lateral, voiceless, posterior}
+{obs, aff, -lateral, voiced, posterior}
+{obs, aff, -lateral, voiceless, velar}
+{obs, aff, -lateral, voiced, velar}
+{obs, aff, -lateral, voiceless, uvular}
+{obs, aff, -lateral, voiced, uvular}
+{obs, aff, -lateral, voiceless, pharyngeal}
+{obs, aff, -lateral, voiced, pharyngeal}
+{obs, aff, -lateral, voiceless, laryngeal}
+{obs, aff, -lateral, voiced, laryngeal}
+{nasal, labial}
+{nasal, cor, dental}
+{nasal, alveolar}
+{nasal, alveopalatal}
+{nasal, posterior}
+{nasal, velar}
+{nasal, uvular}
+{lateral, voiceless, labial}
+{lateral, voiced, labial}
+{lateral, voiceless, cor, dental}
+{lateral, voiced, cor, dental}
+{lateral, voiceless, alveolar}
+{lateral, voiced, alveolar}
+{lateral, voiceless, alveopalatal}
+{lateral, voiced, alveopalatal}
+{lateral, voiceless, posterior}
+{lateral, voiced, posterior}
+{lateral, voiceless, velar}
+{lateral, voiced, velar}
+{lateral, voiceless, uvular}
+{lateral, voiced, uvular}
+{lateral, voiceless, pharyngeal}
+{lateral, voiced, pharyngeal}
+{lateral, voiceless, laryngeal}
+{lateral, voiced, laryngeal}
+{rhotic, labial}
+{rhotic, cor, dental}
+{rhotic, alveolar}
+{rhotic, alveopalatal}
+{rhotic, posterior}
+{rhotic, velar}
+{rhotic, uvular}
+{g, cover}
+{glide, labial}
+{glide, cor, dental}
+{glide, alveolar}
+{glide, alveopalatal}
+{glide, posterior}
+{glide, velar}
+{glide, uvular}
+{v, cover}
+{v, high, front, -round}
+{v, high, front, round}
+{v, high, central, -round}
+{v, high, central, round}
+{v, high, back, -round}
+{v, high, back, round}
+{v, mid, front, -round}
+{v, mid, front, round}
+{v, mid, central, -round}
+{v, mid, central, round}
+{v, mid, back, -round}
+{v, mid, back, round}
+{v, low, front, -round}
+{v, low, front, round}
+{v, low, central, -round}
+{v, low, central, round}
+{v, low, back, -round}
+{v, low, back, round}
+{cover}
+{diacritic}
