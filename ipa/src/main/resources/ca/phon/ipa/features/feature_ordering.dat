@@ -1,3 +1,6 @@
+{prstress}
+{secstress}
+{null}
 {c, cover}
 {obs, stop, -lateral, voiceless, labial}
 {obs, stop, -lateral, voiced, labial}
@@ -112,3 +115,5 @@
 {v, low, central, round}
 {v, low, back, -round}
 {v, low, back, round}
+{cover}
+{diacritic}
