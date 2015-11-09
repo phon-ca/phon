@@ -63,15 +63,6 @@ public class SortNodeSettingsPanel extends JPanel {
 	private void init() {
 		setLayout(new VerticalLayout());
 		
-		SortColumn groupByColumn = getSettings().getGroupBy();
-		if(groupByColumn == null) {
-			groupByColumn = new SortColumn();
-			getSettings().setGroupBy(groupByColumn);
-		}
-		final SortColumnPanel groupByPanel = new SortColumnPanel(groupByColumn);
-		groupByPanel.setBorder(BorderFactory.createTitledBorder("Group by (optional)"));
-		add(groupByPanel);
-		
 		sortByPanel = new JPanel(new VerticalLayout());
 		
 		final ImageIcon icon = IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
@@ -80,12 +71,11 @@ public class SortNodeSettingsPanel extends JPanel {
 		onAddAction.putValue(Action.SHORT_DESCRIPTION, "Add column to sort");
 		onAddAction.putValue(Action.SMALL_ICON, icon);
 		addSortButton = new JButton(onAddAction);
-		addSortButton.setVisible(settings.getSorting().size() < 3);
 		
 		int scIdx = 0;
 		for(SortColumn sc:settings.getSorting()) {
 			final SortColumnPanel scPanel = new SortColumnPanel(sc);
-			if(scIdx > 0 && scIdx < 2) {
+			if(scIdx > 0) {
 				final JComponent sep = createSeparator(scPanel);
 				sortByPanel.add(sep);
 			}
@@ -101,14 +91,12 @@ public class SortNodeSettingsPanel extends JPanel {
 	}
 	
 	public void onAddColumn() {
-		if(settings.getSorting().size() == 3) return;
 		final SortColumn sc = new SortColumn();
 		settings.getSorting().add(sc);
 		final SortColumnPanel scPanel = new SortColumnPanel(sc);
 		final JComponent sep = createSeparator(scPanel);
 		sortByPanel.add(sep);
 		sortByPanel.add(scPanel);
-		addSortButton.setVisible(settings.getSorting().size() < 3);
 		revalidate();
 	}
 	
@@ -117,7 +105,6 @@ public class SortNodeSettingsPanel extends JPanel {
 		if(scPanel.getSeparator() != null)
 			sortByPanel.remove(scPanel.getSeparator());
 		settings.getSorting().remove(scPanel.getSortColumn());
-		addSortButton.setVisible(settings.getSorting().size() < 3);
 		revalidate();
 	}
 
@@ -184,15 +171,9 @@ public class SortNodeSettingsPanel extends JPanel {
 		private JComboBox<SortType> typeBox = createSortTypeBox();
 		
 		// plain text options
-		private JPanel plainTextOptions = new JPanel();
+		private JPanel orderOptions = new JPanel();
 		private JRadioButton ascendingBox = new JRadioButton("Ascending");
 		private JRadioButton descendingBox = new JRadioButton("Descending");
-		
-		// feature options
-		private JPanel featureOptions = new JPanel();
-		private JComboBox<FeatureFamily> feature1Box = createFeatureBox();
-		private JComboBox<FeatureFamily> feature2Box = createFeatureBox();
-		private JComboBox<FeatureFamily> feature3Box = createFeatureBox();
 		
 		private final SortColumn sortColumn;
 		
@@ -248,8 +229,6 @@ public class SortNodeSettingsPanel extends JPanel {
 			add(new JLabel("Sort type:"), gbc);
 			
 			typeBox.addItemListener( (e) -> {
-				plainTextOptions.setVisible(typeBox.getSelectedItem() == SortType.PLAIN);
-				featureOptions.setVisible(typeBox.getSelectedItem() == SortType.IPA);
 				sortColumn.setType((SortType)typeBox.getSelectedItem());
 			});
 			typeBox.setSelectedItem(sortColumn.getType());
@@ -262,7 +241,7 @@ public class SortNodeSettingsPanel extends JPanel {
 			grp.add(descendingBox);
 			ascendingBox.setSelected(sortColumn.getOrder() == SortOrder.ASCENDING);
 			descendingBox.setSelected(sortColumn.getOrder() == SortOrder.DESCENDING);
-			plainTextOptions.setLayout(new HorizontalLayout());
+			orderOptions.setLayout(new HorizontalLayout());
 			
 			final ChangeListener l = (e) -> {
 				if(ascendingBox.isSelected())
@@ -270,44 +249,15 @@ public class SortNodeSettingsPanel extends JPanel {
 				else
 					sortColumn.setOrder(SortOrder.DESCENDING);
 			};
-			plainTextOptions.add(ascendingBox);
-			plainTextOptions.add(descendingBox);
+			orderOptions.add(ascendingBox);
+			orderOptions.add(descendingBox);
 			ascendingBox.addChangeListener(l);
 			descendingBox.addChangeListener(l);
 			
 			gbc.gridx = 1;
 			gbc.gridy++;
 			gbc.insets = new Insets(0, 0, 0, 0);
-			add(plainTextOptions, gbc);
-			
-			featureOptions.setLayout(new VerticalLayout());
-			featureOptions.add(feature1Box);
-			featureOptions.add(feature2Box);
-			featureOptions.add(feature3Box);
-			
-			feature1Box.addItemListener( (e) -> {
-				feature2Box.setEnabled(feature1Box.getSelectedItem() != null);
-				feature3Box.setEnabled(feature1Box.getSelectedItem() != null 
-						&& feature2Box.getSelectedItem() != null);
-			});
-			feature2Box.addItemListener( (e) -> {
-				feature3Box.setEnabled(feature2Box.getSelectedItem() != null);
-			});
-			
-			feature1Box.addItemListener(this::updateFeatureOrder);
-			feature2Box.addItemListener(this::updateFeatureOrder);
-			feature3Box.addItemListener(this::updateFeatureOrder);
-			
-			feature2Box.setEnabled(false);
-			feature3Box.setEnabled(false);
-
-			final JComboBox<?>[] featureBoxes = new JComboBox[] { feature1Box, feature2Box, feature3Box };
-			final FeatureFamily[] featureOrder = sortColumn.getFeatureOrder();
-			for(int i = 0; i < featureOrder.length; i++) {
-				featureBoxes[i].setSelectedItem(featureOrder[i]);
-			}
-			gbc.gridy++;
-			add(featureOptions, gbc);
+			add(orderOptions, gbc);
 			
 			add(new JSeparator(SwingConstants.HORIZONTAL));
 		}
@@ -326,28 +276,6 @@ public class SortNodeSettingsPanel extends JPanel {
 		
 		public void updateColumn() {
 			sortColumn.setColumn(columnField.getText().trim());
-		}
-		
-		public void updateFeatureOrder(ItemEvent e) {
-			int featureOrderLength = 0;
-			if(feature1Box.getSelectedItem() != null) {
-				featureOrderLength++;
-				
-				if(feature2Box.getSelectedItem() != null) {
-					featureOrderLength++;
-					
-					if(feature3Box.getSelectedItem() != null) {
-						featureOrderLength++;
-					}
-				}
-			}
-			
-			final FeatureFamily[] tempOrder = new FeatureFamily[3];
-			tempOrder[0] = (FeatureFamily)feature1Box.getSelectedItem();
-			tempOrder[1] = (FeatureFamily)feature2Box.getSelectedItem();
-			tempOrder[2] = (FeatureFamily)feature3Box.getSelectedItem();
-			final FeatureFamily[] finalOrder = Arrays.copyOf(tempOrder, featureOrderLength);
-			sortColumn.setFeatureOrder(finalOrder);
 		}
 	}
 }
