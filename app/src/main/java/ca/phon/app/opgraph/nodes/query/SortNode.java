@@ -17,6 +17,7 @@ import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.FeatureFamily;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
+import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
@@ -110,6 +111,12 @@ public class SortNode extends TableOpNode implements NodeSettings {
 					}
 					
 				}
+				
+				// reverse if necessary
+				if(sc.getOrder() == SortOrder.DESCENDING) {
+					retVal *= -1;
+				}
+				
 				// only continue if necessary
 				if(retVal != 0) break;
 			}
