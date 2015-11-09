@@ -98,37 +98,13 @@ public class SortNode extends TableOpNode implements NodeSettings {
 				if(sc.getType() == SortType.PLAIN) {
 					retVal = v1Txt.compareTo(v2Txt);
 				} else if(sc.getType() == SortType.IPA) {
-					List<Comparator<IPAElement>> comparatorOrder =
-							new ArrayList<Comparator<IPAElement>>();
-					for(FeatureFamily family:sc.getFeatureOrder()) {
-						switch(family) {
-						case MANNER:
-							comparatorOrder.add(FeatureComparator.createMannerComparator());
-							break;
-							
-						case PLACE:
-							comparatorOrder.add(FeatureComparator.createPlaceComparator());
-							break;
-							
-						case VOICING:
-							comparatorOrder.add(FeatureComparator.createVoicingComparator());
-							break;
-						
-						default:
-							break;
-						}
-					}
-					
 					try {
 						IPATranscript v1ipa = 
 								(v1 != null && v1 instanceof IPATranscript ? (IPATranscript)v1 : IPATranscript.parseIPATranscript(v1Txt));
 						IPATranscript v2ipa = 
 								(v2 != null && v2 instanceof IPATranscript ? (IPATranscript)v2 : IPATranscript.parseIPATranscript(v2Txt));
-						
-						@SuppressWarnings("unchecked")
-						final Comparator<IPAElement> comparator = 
-								new CompoundFeatureComparator(comparatorOrder.toArray(new Comparator[0]));
-						retVal = v1ipa.compareTo(v2ipa, comparator);
+					
+						retVal = v1ipa.compareTo(v2ipa);
 					} catch (java.text.ParseException pe) {
 						throw new ProcessingException(null, pe);
 					}
