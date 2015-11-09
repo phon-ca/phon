@@ -42,27 +42,13 @@ public class SortNodeSettings {
 			return retVal;
 		}
 	};
-	
-	/*
-	 * Grouping column
-	 */
-	private SortColumn groupBy;
 
 	private final List<SortColumn> sorting = new ArrayList<>();
 	
 	public SortNodeSettings() {
 		super();
 		
-		setGroupBy(new SortColumn());
 		sorting.add(new SortColumn());
-	}
-	
-	public SortColumn getGroupBy() {
-		return this.groupBy;
-	}
-	
-	public void setGroupBy(SortColumn groupBy) {
-		this.groupBy = groupBy;
 	}
 	
 	public List<SortColumn> getSorting() {
@@ -101,7 +87,7 @@ public class SortNodeSettings {
 		}
 		
 		/* IPA options */
-		private FeatureFamily[] featureOrder = new FeatureFamily[] { FeatureFamily.PLACE, FeatureFamily.VOICING };
+		private FeatureFamily[] featureOrder = new FeatureFamily[] { FeatureFamily.MANNER, FeatureFamily.PLACE, FeatureFamily.VOICING };
 		
 		public FeatureFamily[] getFeatureOrder() {
 			return featureOrder;

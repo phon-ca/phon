@@ -47,14 +47,6 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 		final Element settingsEle = 
 				doc.createElementNS(NAMESPACE, PREFIX + ":" + QNAME.getLocalPart());
 		
-		if(settings.getGroupBy() != null && settings.getGroupBy().getColumn() != null &&
-				settings.getGroupBy().getColumn().trim().length() > 0) {
-			final Element groupByEle = 
-					doc.createElementNS(NAMESPACE, PREFIX + ":groupBy");
-			writeSortColumn(doc, groupByEle, settings.getGroupBy());
-			settingsEle.appendChild(groupByEle);
-		}
-		
 		for(SortColumn sc:settings.getSorting()) {
 			final Element scEle = doc.createElementNS(NAMESPACE, PREFIX + ":sortBy");
 			writeSortColumn(doc, scEle, sc);
@@ -66,16 +58,7 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 	private void writeSortColumn(Document doc, Element scEle, SortColumn sc) {
 		scEle.setAttribute("column", sc.getColumn());
 		scEle.setAttribute("type", sc.getType().toString().toLowerCase());
-		if(sc.getType() == SortType.PLAIN) {
-			scEle.setAttribute("order", 
-					sc.getOrder().toString().toLowerCase());
-		} else if(sc.getType() == SortType.IPA) {
-			for(FeatureFamily family:sc.getFeatureOrder()) {
-				final Element orderEle = doc.createElementNS(NAMESPACE, PREFIX + ":featureOrder");
-				orderEle.setTextContent(family.toString().toLowerCase());
-				scEle.appendChild(orderEle);
-			}
-		}
+		scEle.setAttribute("order", sc.getOrder().toString().toLowerCase());
 	}
 
 	@Override
@@ -89,11 +72,7 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 		NodeList childNodes = elem.getChildNodes();
 		for(int i = 0; i < childNodes.getLength(); i++) {
 			final Node childNode = childNodes.item(i);
-			if(childNode.getNamespaceURI() != null && childNode.getNamespaceURI().equals(NAMESPACE) 
-					&& childNode.getLocalName().equals("groupBy")) {
-				final SortColumn groupBy = readSortColumn(childNode);
-				retVal.setGroupBy(groupBy);
-			} else if(childNode.getNamespaceURI() != null && childNode.getNamespaceURI().equals(NAMESPACE)
+			if(childNode.getNamespaceURI() != null && childNode.getNamespaceURI().equals(NAMESPACE)
 					&& childNode.getLocalName().equals("sortBy")) {
 				final SortColumn sortBy = readSortColumn(childNode);
 				retVal.getSorting().add(sortBy);
@@ -112,32 +91,19 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 	private SortColumn readSortColumn(Node sortColumnNode) {
 		SortColumn retVal = new SortColumn();
 		final NamedNodeMap attrs = sortColumnNode.getAttributes();
+		retVal.setColumn(attrs.getNamedItem("column").getNodeValue());
+		
 		final String type = 
 				attrs.getNamedItem("type").getNodeValue();
-		if(SortType.PLAIN.toString().equalsIgnoreCase(type)) {
-			retVal.setColumn(attrs.getNamedItem("column").getNodeValue());
-			retVal.setType(SortType.PLAIN);
-			if(attrs.getNamedItem("order") != null) {
-				final SortOrder order = 
-						SortOrder.fromString(attrs.getNamedItem("order").getNodeValue());
-				retVal.setOrder(order);
-			}
-		} else if(SortType.IPA.toString().equalsIgnoreCase(type)) {
-			retVal.setColumn(attrs.getNamedItem("column").getNodeValue());
-			retVal.setType(SortType.IPA);
-			NodeList orderList = sortColumnNode.getChildNodes();
-			List<FeatureFamily> order = new ArrayList<>();
-			for(int j = 0; j < orderList.getLength(); j++) {
-				final Node orderNode = orderList.item(j);
-				if(orderNode.getNamespaceURI() != null && orderNode.getNamespaceURI().equals(NAMESPACE)
-						&& orderNode.getLocalName().equals("featureOrder")) {
-					final FeatureFamily family = 
-							FeatureFamily.fromString(orderNode.getTextContent());
-					order.add(family);
-				}
-			}
-			retVal.setFeatureOrder(order.toArray(new FeatureFamily[0]));
+		final SortType sortType = SortType.valueOf(SortType.class, type.toUpperCase());
+		retVal.setType(sortType);
+		
+		if(attrs.getNamedItem("order") != null) {
+			final SortOrder order = 
+					SortOrder.fromString(attrs.getNamedItem("order").getNodeValue());
+			retVal.setOrder(order);
 		}
+		
 		return retVal;
 	}
 

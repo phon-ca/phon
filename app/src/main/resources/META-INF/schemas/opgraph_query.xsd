@@ -56,8 +56,7 @@
         <xs:complexContent mixed="false">
             <xs:extension base="og:AbstractExtensionType">
                 <xs:sequence>
-                    <xs:element ref="groupBy" minOccurs="0" maxOccurs="1"/>
-                    <xs:element ref="sortBy" minOccurs="1" maxOccurs="3"/>
+                    <xs:element ref="sortBy" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -68,12 +67,9 @@
         <xs:annotation>
             <xs:documentation>Column sorting options</xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element ref="featureOrder" minOccurs="0" maxOccurs="3"/>
-        </xs:sequence>
         <xs:attribute name="type" type="sortType" use="required"/>
         <xs:attribute name="column" type="xs:string" use="required"/>
-        <xs:attribute name="order" type="sortOrderType" use="optional"/>
+        <xs:attribute name="order" type="sortOrderType" default="ascending"/>
     </xs:complexType>
    
     <xs:simpleType name="sortType">
@@ -90,16 +86,6 @@
         </xs:restriction>
     </xs:simpleType>
     
-    <xs:simpleType name="featureOrderType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="place"/>
-            <xs:enumeration value="manner"/>
-            <xs:enumeration value="voicing"/>
-        </xs:restriction>
-    </xs:simpleType>
-    
     <xs:element name="sortoptions" type="SortNodeSettingsType" substitutionGroup="og:extension"/>
-    <xs:element name="groupBy" type="SortByType"/>
     <xs:element name="sortBy" type="SortByType"/>
-    <xs:element name="featureOrder" type="featureOrderType"/>
 </xs:schema>
