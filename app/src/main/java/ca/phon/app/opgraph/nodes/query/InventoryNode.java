@@ -201,7 +201,21 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		return (isCaseSensitive() ? o1Txt.equals(o2Txt) : o1Txt.equalsIgnoreCase(o2Txt));
 	}
 	
-	private class GroupKey {
+	private String objToString(Object val) {
+		String retVal = (val != null ? val.toString() : "");
+		if(isIgnoreDiacritics()) {
+			try {
+				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
+					IPATranscript.parseIPATranscript(retVal));
+				retVal = transcript.removePunctuation().stripDiacritics().toString();
+			} catch (ParseException e) {
+				
+			}
+		}
+		return retVal;
+	}
+	
+	private class GroupKey implements Comparable<GroupKey> {
 		Object key;
 		
 		public GroupKey(Object key) {
@@ -216,12 +230,17 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		
 		@Override
 		public String toString() {
-			return (key != null ? key.toString() : "");
+			return objToString(key);
 		}
 		
 		@Override
 		public int hashCode() {
 			return toString().hashCode();
+		}
+		
+		@Override
+		public int compareTo(GroupKey k2) {
+			return toString().compareTo(k2.toString());
 		}
 		
 	}
@@ -253,7 +272,12 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		
 		@Override
 		public String toString() {
-			return Arrays.deepToString(rowVals);
+			StringBuffer sb = new StringBuffer();
+			for(Object rowVal:rowVals) {
+				sb.append((sb.length() > 0 ? "," : ""));
+				sb.append(objToString(rowVal));
+			}
+			return sb.toString();
 		}
 		
 		@Override
