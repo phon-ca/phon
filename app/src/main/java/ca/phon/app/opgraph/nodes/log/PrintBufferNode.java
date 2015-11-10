@@ -4,14 +4,7 @@ import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
@@ -36,24 +29,19 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 	private InputField dataField =
 			new InputField("data", "Data to print", false, true, Object.class);
 	
+	private InputField bufferNameField = 
+			new InputField("buffer", "Buffer name", true, true, String.class);
 	
-	private final static String APPEND_TO_BUFFER_PROP = "appendToBuffer";
-	
-	private boolean appendToBuffer = true;
-	
-	private JCheckBox appendToBufferBox;
-	
-	private final static String BUFFER_NAME_PROP = "bufferName";
-	
-	private String bufferName = "default";
-	
-	private JTextField bufferNameField;
+	private InputField appendField = 
+			new InputField("append", "Append to buffer", true, true, Boolean.class);
 	
 	public PrintBufferNode() {
 		super();
 		
 		putField(dataField);
-
+		putField(bufferNameField);
+		putField(appendField);
+		
 		putExtension(NodeSettings.class, this);
 	}
 
@@ -62,8 +50,8 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		final Object data = context.get(dataField);
 		if(data == null) throw new ProcessingException(null, "Data cannot be null");
 		
-		final String bufferName = getBufferName();
-		final boolean append = isAppendToBuffer();
+		final String bufferName = getBufferName(context);
+		final boolean append = isAppendToBuffer(context);
 		
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Runnable onEDT = () -> {
@@ -110,59 +98,27 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		}
 	}
 
-	private JPanel createSettingsPanel() {
-		final FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, fill:pref:grow",
-				"pref, pref");
-		final CellConstraints cc = new CellConstraints();
-		final JPanel panel = new JPanel(layout);
-	
-		final String currentName = getBufferName();
-		bufferNameField = new JTextField();
-		bufferNameField.setText(currentName);
-		
-		final boolean currentAppend = isAppendToBuffer();
-		appendToBufferBox = new JCheckBox("Append");
-		appendToBufferBox.setSelected(currentAppend);
-		
-		panel.add(new JLabel("Buffer Name"), cc.xy(1,1));
-		panel.add(bufferNameField, cc.xy(3, 1));
-		panel.add(appendToBufferBox, cc.xy(3, 2));
-		
-		return panel;
+	public String getBufferName(OpContext ctx) {
+		return (ctx.containsKey(bufferNameField) ? ctx.get(bufferNameField).toString() : "default");
 	}
 	
-	public String getBufferName() {
-		return (bufferNameField != null ? bufferNameField.getText() : bufferName);
+	public boolean isAppendToBuffer(OpContext ctx) {
+		return (ctx.containsKey(appendField) ? (Boolean)ctx.get(appendField) : false);
 	}
-	
-	public boolean isAppendToBuffer() {
-		return (appendToBufferBox != null ? appendToBufferBox.isSelected() : appendToBuffer);
-	}
-	
+
 	@Override
 	public Component getComponent(GraphDocument document) {
-		return createSettingsPanel();
+		return null;
 	}
 
 	@Override
 	public Properties getSettings() {
-		final Properties props = new Properties();
-		
-		props.put(APPEND_TO_BUFFER_PROP, isAppendToBuffer());
-		props.put(BUFFER_NAME_PROP, getBufferName());
-		
-		return props;
+		return new Properties();
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
-		if(properties.containsKey(APPEND_TO_BUFFER_PROP)) {
-			appendToBuffer = Boolean.parseBoolean(properties.getProperty(APPEND_TO_BUFFER_PROP));
-		}
-		if(properties.containsKey(BUFFER_NAME_PROP)) {
-			bufferName = properties.getProperty(BUFFER_NAME_PROP);
-		}
+		
 	}
-
+	
 }
