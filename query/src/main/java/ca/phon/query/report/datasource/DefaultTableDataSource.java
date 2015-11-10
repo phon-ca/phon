@@ -122,42 +122,4 @@ public class DefaultTableDataSource implements TableDataSource {
 		columnNames[col] = title;
 	}
 	
-	@Override
-	public String toString() {
-		final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		final PrintWriter writer = new PrintWriter(bout);
-		
-		try (final CSVWriter csvWriter = new CSVWriter(writer)) {
-			String[] row = new String[getColumnCount()];
-			for(int i = 0; i < getColumnCount(); i++)
-				row[i] = getColumnTitle(i);
-			csvWriter.writeNext(row);
-			
-			for(Object[] rowVals:rowData) {
-				for(int i = 0; i < getColumnCount(); i++) {
-					Object val = rowVals[i];
-					
-					if(val == null) {
-						row[i] = "";
-					} else {
-						@SuppressWarnings("unchecked")
-						final Formatter<Object> formatter = 
-								(Formatter<Object>)FormatterFactory.createFormatter(val.getClass());
-						row[i] = (formatter != null ? formatter.format(val) : val.toString());
-					}
-				}
-				csvWriter.writeNext(row);
-			}
-		} catch (IOException e) {
-			
-		}
-		
-		String retVal = new String();
-		try {
-			retVal = bout.toString("UTF-8");
-		} catch (UnsupportedEncodingException e) {}
-		return retVal;
-		
-	}
-
 }
