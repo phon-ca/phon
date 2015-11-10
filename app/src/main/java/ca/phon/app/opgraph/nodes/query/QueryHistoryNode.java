@@ -80,7 +80,7 @@ public class QueryHistoryNode extends OpNode {
 			
 			
 			context.put(projectOutput, project);
-			context.put(queryField, selectedQuery);
+			context.put(queryField, selectedQuery.get());
 			context.put(outputField, resultSets.toArray(new ResultSet[0]));
 		} else {
 			throw new ProcessingException(null, "Unable to find query with id " + queryId + " in project " + project.getName());
