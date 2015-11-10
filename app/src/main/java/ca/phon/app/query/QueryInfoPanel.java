@@ -38,6 +38,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -60,6 +61,7 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -77,6 +79,7 @@ import ca.phon.session.DateFormatter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.StarBox;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -314,19 +317,11 @@ public class QueryInfoPanel extends JPanel {
 	}
 	
 	public void onReport() {
-		// open report wizard
-		// get project from parent frame
-		final CommonModuleFrame parentFrame = 
-			(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, this);
-		final Project project = parentFrame.getExtension(Project.class);
-		
-		if(parentFrame != null && project != null) {
-			ReportWizard wizard = new ReportWizard(project, query);
-			wizard.setParentFrame(parentFrame);
-			wizard.pack();
-			wizard.setLocationByPlatform(true);
-			wizard.setVisible(true);
-		}
+		if(project == null || query == null) return;
+		final JMenu menu = new JMenu();
+		final ReportLibrary library = new ReportLibrary();
+		library.setupMenu(project, query.getUUID().toString(), menu);
+		menu.getPopupMenu().show(reportButton, 0, reportButton.getHeight());
 	}
 	
 	public void onOpenQuery() {

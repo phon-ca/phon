@@ -42,7 +42,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -67,6 +69,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
+import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -210,16 +213,15 @@ public class QueryRunnerPanel extends JPanel {
 			IconManager.getInstance().getIcon("mimetypes/x-office-spreadsheet", IconSize.SMALL);
 		reportButton.setIcon(ssIcon);
 		reportButton.setEnabled(false);
-		reportButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				generateReport();
-			}
-			
-		});
-		reportButton.setEnabled(false);
 		reportButton.setVisible(true);
+		reportButton.addActionListener( (e) -> {
+			// show menu
+			final JMenu menu = new JMenu();
+			final ReportLibrary library = new ReportLibrary();
+			library.setupMenu(project, query.getUUID().toString(), menu);
+			
+			menu.getPopupMenu().show(reportButton, 0, reportButton.getHeight());
+		});
 		
 		hideRowsBox = new JCheckBox("Hide empty results");
 		hideRowsBox.setEnabled(false);
