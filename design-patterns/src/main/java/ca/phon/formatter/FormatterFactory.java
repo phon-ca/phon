@@ -44,7 +44,7 @@ public class FormatterFactory {
 			final Formatter<?> formatter = formatterItr.next();
 			final FormatterType formatterType = formatter.getClass().getAnnotation(FormatterType.class);
 			if(formatterType != null) {
-				if(formatterType.value() == type) {
+				if(formatterType.value().isAssignableFrom(type)) {
 					retVal = (Formatter<T>) formatter;
 					break;
 				}
