@@ -28,10 +28,6 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class ReportLibrary {
 	
-	
-	public final static String DEFAULT_USER_REPORT_FOLDER = 
-			PrefHelper.getUserDataFolder() + File.separator + "reports";
-	
 	private final static String PROJECT_REPORT_FOLDER = "__res/reports";
 	
 	/**
@@ -42,6 +38,7 @@ public class ReportLibrary {
 	public ReportLibrary() {
 		super();
 		loader.addHandler(new StockReportHandler());
+		loader.addHandler(new UserReportHandler());
 	}
 	
 	public List<URL> getAvailableReports() {
@@ -57,13 +54,49 @@ public class ReportLibrary {
 		return retVal;
 	}
 	
+	public ResourceLoader<URL> getStockGraphs() {
+		final ResourceLoader<URL> retVal = new ResourceLoader<>();
+		retVal.addHandler(new StockReportHandler());
+		return retVal;
+	}
+	
+	public ResourceLoader<URL> getUserGraphs() {
+		final ResourceLoader<URL> retVal = new ResourceLoader<>();
+		retVal.addHandler(new UserReportHandler());
+		return retVal;
+	}
+	
+	public ResourceLoader<URL> getProjectGraphs(Project project) {
+		final ResourceLoader<URL> retVal = new ResourceLoader<>();
+		retVal.addHandler(new UserReportHandler(new File(project.getLocation(), PROJECT_REPORT_FOLDER)));
+		return retVal;
+	}
+	
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 		
-		for(URL reportURL:getAvailableReports()) {
+		for(URL reportURL:getStockGraphs()) {
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
 			builder.addMenuItem(".", act);
 		}
+		
+		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
+		if(userGraphIterator.hasNext()) builder.addSeparator(".", "user");
+		while(userGraphIterator.hasNext()) {
+			final URL reportURL = userGraphIterator.next();
+			final ReportAction act = new ReportAction(project, queryId, reportURL);
+			builder.addMenuItem(".", act);
+		}
+		
+		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
+		if(projectGraphIterator.hasNext()) builder.addSeparator(".", "project");
+		while(projectGraphIterator.hasNext()) {
+			final URL reportURL = projectGraphIterator.next();
+			final ReportAction act = new ReportAction(project, queryId, reportURL);
+			builder.addMenuItem(".", act);
+		}
+		
+		
 		builder.addSeparator(".", "editor");
 		builder.addMenuItem(".@editor", new ReportEditorAction());
 	}
