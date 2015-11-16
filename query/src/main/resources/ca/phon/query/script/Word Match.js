@@ -10,6 +10,7 @@ params = {label, "", "Whole-word comparison of IPA Actual vs. IPA Target forms."
 */
 
 importClass(Packages.ca.phon.syllable.SyllableConstituentType)
+importClass(Packages.ca.phon.orthography.Orthography)
 
 var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -162,6 +163,7 @@ function query_record(recordIndex, record)
 function checkWordMatch(recordIndex, record, obj) {
 	var word = (obj.IPATarget != null ? obj.IPATarget : new IPATranscript());
 	var aligned = (obj.IPAActual != null ? obj.IPAActual : new IPATranscript());
+	var ortho = (obj.orthography != null ? obj.orthography : new Orthography());
 	
 	if((aligned ==  null || aligned.length() == 0) && ignoreTruncated == true) {
 		return;
@@ -175,9 +177,9 @@ function checkWordMatch(recordIndex, record, obj) {
 	orthoVal.tierName = "Orthography";
 	orthoVal.groupIndex = obj.group.groupIndex;
 	var startIndex = obj.getOrthographyWordLocation();
-	var length = obj.orthography.toString().length();
+	var length = ortho.toString().length();
 	orthoVal.range = new Range(startIndex, startIndex + length, false);
-	orthoVal.data = obj.orthography;
+	orthoVal.data = ortho;
 	result.addResultValue(orthoVal);
 	
 	var rv = factory.createResultValue();
