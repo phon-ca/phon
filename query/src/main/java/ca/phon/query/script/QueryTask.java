@@ -175,17 +175,22 @@ public class QueryTask extends PhonTask {
 		// call query record for each record in session
 		while(recordItr.hasNext()) {
 			int i = recordItr.next();
-			final int progress = Math.round(((float)(i+1)/(float)totalRecords) * 100.0f);
-			setProperty(PROGRESS_PROP, progress);
-			
-			final Record record = session.getRecord(i);
-			
-			boolean includeRecord = !record.isExcludeFromSearches();
-			if(!includeRecord && isIncludeExcludedRecords())
-				includeRecord = true;
-			
-			if(includeRecord)
-				ctx.callQueryRecord(scope, i, record);
+			try {
+				final int progress = Math.round(((float)(i+1)/(float)totalRecords) * 100.0f);
+				setProperty(PROGRESS_PROP, progress);
+				
+				final Record record = session.getRecord(i);
+				
+				boolean includeRecord = !record.isExcludeFromSearches();
+				if(!includeRecord && isIncludeExcludedRecords())
+					includeRecord = true;
+				
+				if(includeRecord)
+					ctx.callQueryRecord(scope, i, record);
+			} catch (Exception e) {
+				// wrap script exceptions
+				throw new PhonScriptException("Error at " + session.getCorpus() + "." + session.getName() + "#" + i, e);
+			}
 		}
 		
 		// call end_query
