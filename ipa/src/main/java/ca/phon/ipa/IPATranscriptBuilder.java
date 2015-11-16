@@ -269,6 +269,16 @@ public class IPATranscriptBuilder {
 	}
 	
 	/**
+	 * Return the last element in the buffer or <code>null</code> if
+	 * buffer is empty.
+	 * 
+	 * @return last element in buffer
+	 */
+	public IPAElement last() {
+		return (buffer.size() > 0 ? buffer.get(buffer.size()-1) : null);
+	}
+	
+	/**
 	 * Reverse elements in this builder.
 	 * 
 	 * 

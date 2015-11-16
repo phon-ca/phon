@@ -66,8 +66,28 @@ scope {
 	$transcription::builder = new IPATranscriptBuilder();
 }
 	:	w1=word {if($w1.w != null) { $transcription::builder.append($w1.w);} else { if(input.get(input.index()).getType() != EOF) return transcription(); } } 
-		( (word_boundary {$transcription::builder.append($word_boundary.wordBoundary);})+
-		w2=word? {if($w2.w != null) { $transcription::builder.append($w2.w);} } )*
+		( (word_boundary 
+			{ 
+				if($transcription::builder.last() instanceof WordBoundary) {
+					IPAParserException pe = new IPAParserException("Extra space");
+					int idx = input.LT(1).getCharPositionInLine();
+					if(idx < 0) {
+						// end of string
+						idx = input.toString().length();
+					}
+					pe.setPositionInLine(idx);
+					throw pe;
+				} else { 
+					$transcription::builder.append($word_boundary.wordBoundary);
+				}
+			})+
+		  w2=word? 
+		  	{
+		  		if($w2.w != null && $w2.w.length() > 0) { 
+		  			$transcription::builder.append($w2.w);
+		  		} 
+		  	} 
+		)*
 	{
 		if(input.LA(1) != Token.EOF) {
 	  		IPAParserException ipae = new IPAParserException("Failed to process all text");
@@ -83,6 +103,7 @@ scope {
 			ipae.setPositionInLine(input.LT(1).getCharPositionInLine());
 			throw ipae;
 		}
+		
 		$transcript = $transcription::builder.toIPATranscript();
 	}
 	;
@@ -145,6 +166,18 @@ scope {
 			hle.setPositionInLine(idx);
 			throw hle;
 		}
+		if($word::builder.last() instanceof SyllableBoundary 
+			|| $word::builder.last() instanceof StressMarker
+			|| $word::builder.last() instanceof IntonationGroup) {
+			final IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
+			int idx = input.LT(1).getCharPositionInLine();
+			if(idx < 0) {
+				// end of string
+				idx = input.toString().length();
+			}
+			pe.setPositionInLine(idx);
+			throw pe;
+		}
 		$w = $word::builder.toIPATranscript();
 	}
 	|	p=pause
@@ -177,6 +210,13 @@ scope {
 word_element returns [IPAElement p]
 	:	stress
 	{
+		if($word::builder.last() instanceof SyllableBoundary 
+			|| $word::builder.last() instanceof StressMarker
+			|| $word::builder.last() instanceof IntonationGroup) {
+			IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
+			pe.setPositionInLine(input.LT(1).getCharPositionInLine());
+			throw pe;
+		}
 		$p = $stress.stressMarker;
 	}
 	|	phone
@@ -185,6 +225,13 @@ word_element returns [IPAElement p]
 	}
 	|	syllable_boundary
 	{
+		if($word::builder.last() instanceof SyllableBoundary 
+			|| $word::builder.last() instanceof StressMarker
+			|| $word::builder.last() instanceof IntonationGroup) {
+			IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
+			pe.setPositionInLine(input.LT(1).getCharPositionInLine());
+			throw pe;
+		}
 		$p = $syllable_boundary.syllableBoundary;
 	}
 	|	word_net_marker
