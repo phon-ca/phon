@@ -94,7 +94,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 				throw new ParseException(transcript, re.charPositionInLine);
 			} catch (IPAParserException e) {
 				final ParseException pe = new ParseException(e.getLocalizedMessage(), e.getPositionInLine());
-//				pe.addSuppressed(e);
+				pe.addSuppressed(e);
 				throw pe;
 			}
 		}
