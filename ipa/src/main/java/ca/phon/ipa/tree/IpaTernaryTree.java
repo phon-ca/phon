@@ -50,6 +50,10 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 	
 	private Comparator<IPAElement> comparator;
 	
+	public IpaTernaryTree() {
+		;
+	}
+	
 	public IpaTernaryTree(Comparator<IPAElement> comparator) {
 		super();
 		this.comparator = comparator;

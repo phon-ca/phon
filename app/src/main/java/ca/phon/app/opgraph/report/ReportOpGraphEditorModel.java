@@ -2,6 +2,7 @@ package ca.phon.app.opgraph.report;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
+import java.io.File;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -18,6 +19,7 @@ import ca.phon.app.opgraph.assessment.AssessmentOpGraphEditorModel;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
+import ca.phon.util.PrefHelper;
 import ca.phon.workspace.Workspace;
 
 public class ReportOpGraphEditorModel extends AssessmentOpGraphEditorModel {
@@ -75,6 +77,11 @@ public class ReportOpGraphEditorModel extends AssessmentOpGraphEditorModel {
 				context.put("_queryId", selectedQuery.getUUID().toString());
 			}
 		}
+	}
+
+	@Override
+	public String getDefaultFolder() {
+		return PrefHelper.getUserDataFolder() + File.separator + "reports";
 	}
 	
 }
