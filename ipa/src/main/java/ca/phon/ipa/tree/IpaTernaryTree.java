@@ -29,6 +29,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.features.CompoundFeatureComparator;
+import ca.phon.ipa.features.FeatureComparator;
 import ca.phon.ipa.tree.IpaTernaryTreeNode.Position;
 
 /**
@@ -51,7 +53,7 @@ public class IpaTernaryTree<V> implements Map<IPATranscript, V> {
 	private Comparator<IPAElement> comparator;
 	
 	public IpaTernaryTree() {
-		;
+		this(new CompoundFeatureComparator(FeatureComparator.defaultComparator()));
 	}
 	
 	public IpaTernaryTree(Comparator<IPAElement> comparator) {
