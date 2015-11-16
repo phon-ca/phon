@@ -638,7 +638,8 @@ public class QueryRunnerPanel extends JPanel {
 			} else {
 				// update results row
 				tableModel.setValueAt(queryTask.getProperty(PhonTask.PROGRESS_PROP), rowIdx, 2);
-				tableModel.setValueAt(queryTask.getResultSet().size(), rowIdx, 3);
+				int size = (queryTask.getResultSet() != null ? queryTask.getResultSet().size() : 0);
+				tableModel.setValueAt(size, rowIdx, 3);
 			}
 		}
 

@@ -190,24 +190,26 @@ function query_record(recordIndex, record)
 	    	nf.setMaximumFractionDigits(6);
 	    	
 	        var pm = (word.phoneAlignment != null ? word.phoneAlignment : new PhoneMap(ipaT, ipaA));
-	        if(includePMLU == true) {
-	        	result.metadata.put("target PMLU", nf.format(pm.PMLU.targetPMLU()));
-	        	result.metadata.put("actual PMLU", nf.format(pm.PMLU.actualPMLU()));
-	        	result.metadata.put("PWP", nf.format(pm.PMLU.PWP()));
+	        if(includePMLU == true && pm.PMLU|0 != 0) {
+	        	var pmlu = pm.PMLU;
+	        	result.metadata.put("target PMLU", nf.format(pmlu.targetPMLU()));
+	        	result.metadata.put("actual PMLU", nf.format(pmlu.actualPMLU()));
+	        	result.metadata.put("PWP", nf.format(pmlu.PWP()));
 	        }
 	        
-	        if(includeEPMLU == true) {
-	        	result.metadata.put("target ePMLU-Features", nf.format(pm.EPMLU.targetEPMLUFeatures()));
-	        	result.metadata.put("actual ePMLU-Features", nf.format(pm.EPMLU.actualEPMLUFeatures()));
-	        	result.metadata.put("ePWP-Features", nf.format(pm.EPMLU.ePWPFeatures()));
+	        if(includeEPMLU == true && pm.EPMLU|0 != 0) {
+	        	var emplu = pm.EPMLU;
+	        	result.metadata.put("target ePMLU-Features", nf.format(emplu.targetEPMLUFeatures()));
+	        	result.metadata.put("actual ePMLU-Features", nf.format(emplu.actualEPMLUFeatures()));
+	        	result.metadata.put("ePWP-Features", nf.format(emplu.ePWPFeatures()));
 	        	
-	        	result.metadata.put("target ePMLU-Syllables", nf.format(pm.EPMLU.targetEPMLUSyllables(closedSyllBonus)));
-	        	result.metadata.put("actual ePMLU-Syllables", nf.format(pm.EPMLU.actualEPMLUSyllables(closedSyllBonus)));
-	        	result.metadata.put("ePWP-Syllables", nf.format(pm.EPMLU.ePWPSyllables(closedSyllBonus)));
+	        	result.metadata.put("target ePMLU-Syllables", nf.format(emplu.targetEPMLUSyllables(closedSyllBonus)));
+	        	result.metadata.put("actual ePMLU-Syllables", nf.format(emplu.actualEPMLUSyllables(closedSyllBonus)));
+	        	result.metadata.put("ePWP-Syllables", nf.format(emplu.ePWPSyllables(closedSyllBonus)));
 	        	
-	        	result.metadata.put("target ePMLU", nf.format(pm.EPMLU.targetEPMLU(closedSyllBonus)));
-	        	result.metadata.put("actual ePMLU", nf.format(pm.EPMLU.actualEPMLU(closedSyllBonus)));
-	        	result.metadata.put("ePWP", nf.format(pm.EPMLU.ePWP(closedSyllBonus)));
+	        	result.metadata.put("target ePMLU", nf.format(emplu.targetEPMLU(closedSyllBonus)));
+	        	result.metadata.put("actual ePMLU", nf.format(emplu.actualEPMLU(closedSyllBonus)));
+	        	result.metadata.put("ePWP", nf.format(emplu.ePWP(closedSyllBonus)));
 	        }
 	        
 	        results.addResult(result);
