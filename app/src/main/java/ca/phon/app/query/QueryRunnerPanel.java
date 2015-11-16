@@ -44,7 +44,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -71,7 +70,6 @@ import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
-import ca.phon.app.query.report.ReportWizard;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.DefaultProjectFactory;
@@ -92,7 +90,6 @@ import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -101,7 +98,9 @@ import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonWorker;
 
 public class QueryRunnerPanel extends JPanel {
-	
+
+	private static final long serialVersionUID = 1427147887370979071L;
+
 	private final static Logger LOGGER = Logger.getLogger(QueryRunnerPanel.class.getName());
 	
 	/* UI Elements */
@@ -249,7 +248,6 @@ public class QueryRunnerPanel extends JPanel {
 		String labelText = "Completed: 0/" + tableModel.getRowCount();
 		completedLabel = new JLabel(labelText);
 
-//		topPanel.add(cancelButton, cc.xy(6,1));
 		topPanel.add(completedLabel, cc.xy(3,1));
 		topPanel.add(busyLabel, cc.xy(1, 1));
 		topPanel.add(openEditorBox, cc.xy(4, 1));
@@ -261,11 +259,9 @@ public class QueryRunnerPanel extends JPanel {
 		resultsTable = new JXTable(tableModel);
 		resultsTable.addHighlighter(HighlighterFactory.createSimpleStriping());
 		resultsTable.setRowSorter(resultsTableSorter);
-//		resultsTable.setRowSorter(queryTaskTableSorter);
 		
 		resultsTable.getColumn(1).setCellRenderer(statusCellRenderer);
 		resultsTable.getColumn(2).setCellRenderer(progressCellRenderer);
-//		resultsTable.getColumn(3).setCellRenderer(srRenderer);
 		
 		resultsTable.setColumnControlVisible(true);
 		resultsTable.setVisibleRowCount(15);
@@ -326,21 +322,6 @@ public class QueryRunnerPanel extends JPanel {
 		queryDialog.setLocationRelativeTo(this);
 		if(queryDialog.showModal() == ReturnStatus.OK)
 			saveQuery();
-	}
-	
-	private void generateReport() {
-		final CommonModuleFrame parentFrame = CommonModuleFrame.getCurrentFrame();
-		
-		ReportWizard wizard = null;
-		if(loadFromTemp) {
-			wizard = new ReportWizard(getProject(), tempProject, query);
-		} else {
-			wizard = new ReportWizard(getProject(), query);
-		}
-		wizard.setParentFrame(parentFrame);
-		wizard.pack();
-		wizard.setLocationByPlatform(true);
-		wizard.setVisible(true);
 	}
 	
 	/**
@@ -827,11 +808,6 @@ public class QueryRunnerPanel extends JPanel {
 			};
 			SwingUtilities.invokeLater(toRun);
 		}
-
-//		@Override
-//		public boolean isCellEditable(int row, int col) {
-//			return col != 0;
-//		}
 		
 	}
 	
