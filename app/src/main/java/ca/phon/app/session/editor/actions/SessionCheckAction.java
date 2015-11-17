@@ -1,6 +1,9 @@
 package ca.phon.app.session.editor.actions;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -8,13 +11,18 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JLabel;
+import javax.swing.event.MouseInputAdapter;
+
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorStatusBar;
 import ca.phon.session.Session;
 import ca.phon.session.check.SessionValidator;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
 
 public class SessionCheckAction extends SessionEditorAction {
@@ -26,9 +34,19 @@ public class SessionCheckAction extends SessionEditorAction {
 	public static final String TXT = "Check Session";
 	
 	public static final String DESC = "Perform session checks.";
+	
+	// if silent, a message is shown on the status bar showing the number
+	// of validation events detected
+	private boolean silent = false;
 
 	public SessionCheckAction(SessionEditor editor) {
+		this(editor, false);
+	}
+	
+	public SessionCheckAction(SessionEditor editor, boolean silent) {
 		super(editor);
+		
+		this.silent = silent;
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
@@ -39,10 +57,7 @@ public class SessionCheckAction extends SessionEditorAction {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		
-		final BufferWindow bufferWindow = BufferWindow.getInstance();
-		bufferWindow.showWindow();
-		
-		final BufferPanel bufferPanel = bufferWindow.createBuffer(
+		final BufferPanel bufferPanel = new BufferPanel(
 				session.getCorpus() + "." + session.getName() + ":" + TXT);
 		bufferPanel.getLogBuffer().setText("");
 	
@@ -80,27 +95,67 @@ public class SessionCheckAction extends SessionEditorAction {
 			}
 		});
 		
-		final Runnable inBg = () -> {
-			validator.validate(session);
-			try {
-				out.flush();
-				out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
-				out.flush();
-				out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
-				out.flush();
+		if(!silent) {
+			showBuffer(bufferPanel);
+		}
+		final PhonTask inBg = new PhonTask() {
+
+			@Override
+			public void performTask() {
+				setStatus(TaskStatus.RUNNING);
 				
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			} finally {
+				validator.validate(session);
 				try {
-					csvWriter.close();
-					out.close();
+					out.flush();
+					out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
+					out.flush();
+					out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+					out.flush();
+					
 				} catch (IOException e) {
-					LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				} finally {
+					try {
+						csvWriter.close();
+						out.close();
+					} catch (IOException e) {
+						LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+					}
 				}
+				
+				// setup status bar message
+				setupStatusBar(validator, bufferPanel);
+				
+				setStatus(TaskStatus.FINISHED);
 			}
+			
 		};
+		getEditor().getStatusBar().watchTask(inBg);
 		PhonWorker.getInstance().invokeLater(inBg);
+	}
+	
+	public void setupStatusBar(SessionValidator validator, BufferPanel bufferPanel) {
+		final SessionEditorStatusBar statusBar = getEditor().getStatusBar();
+		
+		final JLabel lbl = statusBar.getSessionPathLabel();
+		if(validator.getValidationEvents().size() > 0) {
+			lbl.setText("<html><u>" +
+					validator.getValidationEvents().size() + " warnings</u></html>");
+			lbl.setToolTipText("Show warnings");
+			lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			lbl.addMouseListener(new MouseInputAdapter() {
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					showBuffer(bufferPanel);
+				}
+
+			});
+		}
+	}
+	
+	public void showBuffer(BufferPanel bufferPanel) {
+		getEditor().getViewModel().showDynamicFloatingDockable(bufferPanel.getBufferName(), bufferPanel, 0, 0, 500, 600);
 	}
 
 }
