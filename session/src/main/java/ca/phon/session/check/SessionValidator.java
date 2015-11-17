@@ -1,4 +1,4 @@
-package ca.phon.session;
+package ca.phon.session.check;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +8,7 @@ import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.Session;
 
 /**
  * Session validator with plug-in support.  This class maintains the

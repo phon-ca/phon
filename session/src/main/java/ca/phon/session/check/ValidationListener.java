@@ -1,4 +1,4 @@
-package ca.phon.session;
+package ca.phon.session.check;
 
 /**
  * Listener for session validation events.

@@ -14,7 +14,7 @@ import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Session;
-import ca.phon.session.SessionValidator;
+import ca.phon.session.check.SessionValidator;
 import ca.phon.worker.PhonWorker;
 
 public class SessionCheckAction extends SessionEditorAction {

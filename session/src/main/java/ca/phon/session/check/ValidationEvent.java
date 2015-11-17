@@ -1,9 +1,10 @@
-package ca.phon.session;
+package ca.phon.session.check;
 
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.Session;
 
 public class ValidationEvent implements IExtendable {
 	
