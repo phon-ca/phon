@@ -9,7 +9,6 @@ import javax.swing.SwingUtilities;
 
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.exceptions.BreakpointEncountered;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,10 +15,6 @@ import javax.swing.JScrollPane;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphEditorModel;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
 import ca.phon.util.PrefHelper;
 
 /**

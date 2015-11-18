@@ -12,28 +12,16 @@ import ca.gedge.opgraph.dag.CycleDetectedException;
 import ca.gedge.opgraph.dag.VertexNotFoundException;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.nodes.general.MacroNode;
-import ca.gedge.opgraph.nodes.iteration.ForEachNode;
-import ca.gedge.opgraph.nodes.reflect.IterableClassNode;
 import ca.gedge.opgraph.nodes.reflect.ObjectNode;
-import ca.gedge.opgraph.nodes.reflect.StaticFieldNode;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.opgraph.nodes.phonex.PhonexFindNode;
-import ca.phon.phonex.PhonexPattern;
 import ca.phon.syllabifier.basic.BasicSyllabifier;
-import ca.phon.syllabifier.basic.SonorityScale;
-import ca.phon.syllabifier.basic.SyllabifierStage;
-import ca.phon.syllabifier.basic.io.ConstituentType;
-import ca.phon.syllabifier.basic.io.MarkGroup;
 import ca.phon.syllabifier.basic.io.SonorityValues;
 import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;
 import ca.phon.syllabifier.basic.io.StageType;
 import ca.phon.syllabifier.basic.io.SyllabifierDef;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
-import ca.phon.syllabifier.opgraph.nodes.IPASourceNode;
 import ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode;
 import ca.phon.syllabifier.opgraph.nodes.SonorityNode;
-import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
 
 /**

@@ -1,6 +1,5 @@
 package ca.phon.opgraph.editor;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;

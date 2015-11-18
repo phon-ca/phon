@@ -46,7 +46,6 @@ import ca.phon.stresspattern.StressMatcherType;
 import ca.phon.stresspattern.StressPattern;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.syllable.SyllableStress;
 import ca.phon.syllable.SyllableVisitor;
 import ca.phon.util.Range;
 import ca.phon.visitor.Visitable;

@@ -20,7 +20,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.components.ContextViewerPanel;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.opgraph.editor.OpgraphEditorModel;

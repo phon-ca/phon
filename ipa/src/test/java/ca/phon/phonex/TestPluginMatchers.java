@@ -19,7 +19,6 @@
 package ca.phon.phonex;
 
 import java.text.ParseException;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

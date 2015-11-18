@@ -1,8 +1,6 @@
 package ca.phon.ui.menu;
 
 import java.awt.Component;
-import java.awt.MenuComponent;
-import java.awt.MenuContainer;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;

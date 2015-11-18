@@ -18,9 +18,6 @@
  */
 package ca.phon.query.db;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.Orthography;
 import ca.phon.util.PhonConstants;
 
 /**

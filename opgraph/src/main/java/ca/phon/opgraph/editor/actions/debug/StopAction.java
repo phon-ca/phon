@@ -1,6 +1,5 @@
 package ca.phon.opgraph.editor.actions.debug;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 

@@ -1,6 +1,5 @@
 package ca.phon.opgraph.editor.actions.graph;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;

@@ -7,7 +7,6 @@ import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -46,7 +45,6 @@ import ca.phon.opgraph.editor.actions.graph.AlignNodesAction;
 import ca.phon.opgraph.editor.actions.graph.AutoLayoutAction;
 import ca.phon.opgraph.editor.actions.graph.DeleteAction;
 import ca.phon.opgraph.editor.actions.graph.DistributeNodesAction;
-import ca.phon.opgraph.editor.actions.graph.DuplicateAction;
 import ca.phon.opgraph.editor.actions.graph.ExpandMacroAction;
 import ca.phon.opgraph.editor.actions.graph.MergeNodesAction;
 import ca.phon.opgraph.editor.actions.graph.MoveNodeAction;

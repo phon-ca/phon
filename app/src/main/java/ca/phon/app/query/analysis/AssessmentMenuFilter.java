@@ -33,7 +33,6 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.PrefHelper;
 
 /**
  * Add canned analysis menu items to windows.

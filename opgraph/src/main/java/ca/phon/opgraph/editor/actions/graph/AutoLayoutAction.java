@@ -3,16 +3,13 @@ package ca.phon.opgraph.editor.actions.graph;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Collection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.AutoLayoutManager;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.util.icons.IconManager;

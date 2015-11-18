@@ -21,19 +21,9 @@ package ca.phon.syllabifier.basic;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierProvider;
-import ca.phon.syllabifier.basic.io.ObjectFactory;
-import ca.phon.syllabifier.basic.io.SyllabifierDef;
 import ca.phon.util.resources.ClassLoaderHandler;
 
 /**

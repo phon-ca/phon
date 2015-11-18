@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -18,7 +17,6 @@ import javax.swing.event.MouseInputAdapter;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorStatusBar;

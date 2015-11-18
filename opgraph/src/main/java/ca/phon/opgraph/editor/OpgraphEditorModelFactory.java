@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;

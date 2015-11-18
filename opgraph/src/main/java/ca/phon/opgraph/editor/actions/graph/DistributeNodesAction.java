@@ -11,7 +11,6 @@ import javax.swing.SwingConstants;
 
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.edits.graph.AlignNodesEdit;
 import ca.gedge.opgraph.app.edits.graph.DistributeNodesEdit;
 import ca.phon.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.editor.actions.OpgraphEditorAction;

@@ -20,7 +20,6 @@ import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.edits.graph.AddLinkEdit;
 import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
-import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
 import ca.gedge.opgraph.app.extensions.NodeMetadata;
 import ca.gedge.opgraph.app.util.GraphUtils;
 import ca.gedge.opgraph.dag.CycleDetectedException;
