@@ -17,6 +17,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
+import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 import org.joda.time.format.DateTimeFormat;
@@ -92,6 +93,8 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	
 	private ImageIcon unmodifiedIcon;
 	
+	private JPanel extrasPanel;
+	
 	private final WeakReference<SessionEditor> editorRef;
 	
 	public SessionEditorStatusBar(SessionEditor editor) {
@@ -165,6 +168,10 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		
 		add(sessionPathLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
 		
+		extrasPanel = new JPanel(new HorizontalLayout());
+		extrasPanel.setOpaque(false);
+		add(extrasPanel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
+		
 		JComponent pbar = new JPanel(new FormLayout("pref", 
 				(OSInfo.isMacOs() ? "10px" : "pref")));
 		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
@@ -176,7 +183,8 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		progressLabel.setFont(FontPreferences.getSmallFont());
 		
 		add(progressLabel, new JXStatusBar.Constraint(200));
-		add(pbar, new JXStatusBar.Constraint(100));
+		add(pbar, new JXStatusBar.Constraint(120));
+		add(new JLabel(), new JXStatusBar.Constraint(5));
 	}
 	
 	private String getStatusTooltipText() {
@@ -202,6 +210,10 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	
 	public void watchTask(PhonTask task) {
 		task.addTaskListener(taskListener);
+	}
+	
+	public JPanel getExtrasPanel() {
+		return this.extrasPanel;
 	}
 	
 	public JLabel getStatusLabel() {

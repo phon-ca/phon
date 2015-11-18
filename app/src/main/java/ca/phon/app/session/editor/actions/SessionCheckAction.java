@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.actions;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.event.MouseInputAdapter;
 
@@ -22,6 +24,8 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorStatusBar;
 import ca.phon.session.Session;
 import ca.phon.session.check.SessionValidator;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
 
@@ -69,6 +73,8 @@ public class SessionCheckAction extends SessionEditorAction {
 		csvWriter.writeNext(cols);
 		
 		try {
+			out.flush();
+			out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUFFER_CODE);
 			out.flush();
 			out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
 			out.flush();
@@ -137,7 +143,11 @@ public class SessionCheckAction extends SessionEditorAction {
 	public void setupStatusBar(SessionValidator validator, BufferPanel bufferPanel) {
 		final SessionEditorStatusBar statusBar = getEditor().getStatusBar();
 		
-		final JLabel lbl = statusBar.getSessionPathLabel();
+		final ImageIcon icn = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+		
+		final JLabel lbl = new JLabel();
+		lbl.setForeground(Color.orange);
+		lbl.setIcon(icn);
 		if(validator.getValidationEvents().size() > 0) {
 			lbl.setText("<html><u>" +
 					validator.getValidationEvents().size() + " warnings</u></html>");
@@ -151,6 +161,9 @@ public class SessionCheckAction extends SessionEditorAction {
 				}
 
 			});
+			statusBar.getExtrasPanel().add(lbl);
+		} else {
+			statusBar.getExtrasPanel().removeAll();
 		}
 	}
 	
