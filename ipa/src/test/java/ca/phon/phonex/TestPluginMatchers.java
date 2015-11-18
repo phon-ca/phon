@@ -18,6 +18,9 @@
  */
 package ca.phon.phonex;
 
+import java.text.ParseException;
+import java.util.regex.Pattern;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -39,7 +42,7 @@ public class TestPluginMatchers {
 	}
 
 	@Test
-	public void testAnyDiacriticMatcher() throws Exception {
+	public void testAnyDiacriticMatcher() throws ParseException {
 		final String text = "stʰuːdbʷ";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 	
@@ -69,7 +72,7 @@ public class TestPluginMatchers {
 	}
 	
 	@Test
-	public void testScTypeMatcher() throws Exception {
+	public void testScTypeMatcher() throws ParseException {
 		final String text = "s:Ltʰ:Ouː:Nd:Cbʷ:Rd:E";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
@@ -120,12 +123,60 @@ public class TestPluginMatchers {
 		Assert.assertEquals(5, ipa.indexOf(".:sctype(\"OEHS\")"));
 	}
 	
-	
-	
-//	@Test(expected=PhonexPluginException.class)
-//	public void testInvalidScType() throws Exception {
-//		final IPATranscript ipa = new IPATranscript();
-//		ipa.indexOf("\\c:Z");
-//	}
+	@Test
+	public void testStressMatcher() throws ParseException {
+		final String txt = "ˌ:Sh:Oa:Dɪ:Dp:Oə:Nˈ:Sk:Oɑ:Nn:Cd:Oɹ:Oiː:Næ:Nk:C";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		
+		final IPATranscript[] unstressed = new IPATranscript[] {
+			ipa.subsection(4, 6),
+			ipa.subsection(10, ipa.length())
+		};
+		final IPATranscript primaryStressed = ipa.subsection(6, 10);
+		final IPATranscript secondaryStressed = ipa.subsection(0, 4);
+		final IPATranscript[] stressed = new IPATranscript[] { secondaryStressed, primaryStressed };
+		
+		// test no stress
+		PhonexPattern pattern = PhonexPattern.compile(".!U+");
+		PhonexMatcher matcher = pattern.matcher(ipa);
+		int numUnstressedFound = 0;
+		while(matcher.find()) {
+			Assert.assertEquals(true, numUnstressedFound < unstressed.length);
+			Assert.assertEquals(unstressed[numUnstressedFound++], new IPATranscript(matcher.group()));
+		}
+		Assert.assertEquals(unstressed.length, numUnstressedFound);
+		
+		// test primary stress
+		pattern = PhonexPattern.compile(".!1+");
+		matcher = pattern.matcher(ipa);
+		Assert.assertEquals(true, matcher.find());
+		Assert.assertEquals(primaryStressed, new IPATranscript(matcher.group()));
+		
+		// test secondary stress
+		pattern = PhonexPattern.compile(".:stress(\"2\")+");
+		matcher = pattern.matcher(ipa);
+		Assert.assertEquals(true, matcher.find());
+		Assert.assertEquals(secondaryStressed, new IPATranscript(matcher.group()));
+		
+		// test multiple stress
+		pattern = PhonexPattern.compile(".:stress(\"1|2\")+");
+		matcher = pattern.matcher(ipa);
+		int numStressedFound = 0;
+		while(matcher.find()) {
+			Assert.assertEquals(true, numStressedFound < unstressed.length);
+			Assert.assertEquals(stressed[numStressedFound++], new IPATranscript(matcher.group()));
+		}
+		Assert.assertEquals(stressed.length, numStressedFound);
+		
+		// test any stress
+		pattern = PhonexPattern.compile(".!S+");
+		matcher = pattern.matcher(ipa);
+		numStressedFound = 0;
+		while(matcher.find()) {
+			Assert.assertEquals(true, numStressedFound < unstressed.length);
+			Assert.assertEquals(stressed[numStressedFound++], new IPATranscript(matcher.group()));
+		}
+		Assert.assertEquals(stressed.length, numStressedFound);
+	}
 	
 }

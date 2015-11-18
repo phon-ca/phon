@@ -22,6 +22,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.StressMarker;
+import ca.phon.ipa.StressType;
 
 /**
  * Adds syllabification information to Phones.
@@ -37,6 +40,28 @@ import ca.phon.ipa.IPAElement;
  */
 @Extension(IPAElement.class)
 public class SyllabificationInfo {
+	
+	/**
+	 * Assign stress and tonal information to individual {@link IPAElement}s.
+	 * 
+	 * @param phones
+	 */
+	public static void setupSyllabificationInfo(IPATranscript ipa) {
+		setupStressInfo(ipa);
+	}
+	
+	private static void setupStressInfo(IPATranscript ipa) {
+		ipa.syllables().parallelStream().forEach( (syll) -> {
+			if(syll.length() > 0 && syll.elementAt(0).getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
+				final StressMarker marker = (StressMarker)syll.elementAt(0);
+				syll.forEach( (ele) -> {
+					final SyllabificationInfo info = ele.getExtension(SyllabificationInfo.class);
+					info.setStress( (marker.getType() == StressType.PRIMARY ? SyllableStress.PrimaryStress
+							: SyllableStress.SecondaryStress) );
+				});
+			}
+		});
+	}
 	
 	/**
 	 * Property name for constituent type changes

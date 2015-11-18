@@ -200,8 +200,8 @@ boundary_matchers
 	;
 	
 stress_type
-	:	NUMBER
-	->	^(STRESS[$NUMBER.text])
+	:	INT
+	->	^(STRESS[$INT.text])
 	|	LETTER
 	->	^(STRESS[$LETTER.text])
 	;

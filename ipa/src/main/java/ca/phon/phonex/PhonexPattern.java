@@ -30,6 +30,8 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.antlr.runtime.tree.RewriteEarlyExitException;
 
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.syllable.SyllabificationInfo;
 
 /**
  * <p>A compiled representation of a phonex expression.</p>
@@ -121,6 +123,8 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	public PhonexMatcher matcher(Iterable<IPAElement> input) {
 		List<IPAElement> tape = new ArrayList<IPAElement>();
 		for(IPAElement p:input) tape.add(p);
+		
+		SyllabificationInfo.setupSyllabificationInfo(new IPATranscript(tape));
 		
 		return new PhonexMatcher(this, tape);
 	}

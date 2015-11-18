@@ -46,6 +46,7 @@ import ca.phon.stresspattern.StressMatcherType;
 import ca.phon.stresspattern.StressPattern;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.SyllableStress;
 import ca.phon.syllable.SyllableVisitor;
 import ca.phon.util.Range;
 import ca.phon.visitor.Visitable;
@@ -741,6 +742,12 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		};
 		accept(visitor);
 		return buffer.toString();
+	}
+	
+	@Override
+	public boolean equals(Object ipa) {
+		if(!(ipa instanceof IPATranscript)) return false;
+		return toString(true).equals(((IPATranscript)ipa).toString(true));
 	}
 	
 	/**
