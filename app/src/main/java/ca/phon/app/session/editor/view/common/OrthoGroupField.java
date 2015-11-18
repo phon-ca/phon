@@ -77,7 +77,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 			ortho.accept(new HighlightVisitor(getText()));
 		} catch (ParseException e) {
 			Orthography validatedOrtho = new Orthography();
-			validatedOrtho.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim()));
+			validatedOrtho.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim(), e));
 			((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
 			
 			final StringBuilder sb = new StringBuilder();

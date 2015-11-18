@@ -168,7 +168,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			if(wasShowingErr) repaint();
 		} catch (final ParseException e) {
 			IPATranscript validatedIPA = new IPATranscript();
-			validatedIPA.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim()));
+			validatedIPA.putExtension(UnvalidatedValue.class, new UnvalidatedValue(getText().trim(), e));
 			((GroupFieldBorder)getBorder()).setShowWarningIcon(true);
 			
 			final StringBuilder sb = new StringBuilder();
