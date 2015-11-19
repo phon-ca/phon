@@ -1,5 +1,22 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.3
+
+### General
+* Added new command 'Check Session' to the Session Editor which will check the IPA
+transcriptions in the current session.
+* Check Session will automatically run when the Session Editor is open. A message will
+be displayed in the status bar if any warnings are found.
+* Added new :tone() phonex plug-in for matching numbered tone diacritics for all syllable
+elements.
+
+### Bug Fixes
+* Fixed an issue with opening the Rename Corpus/Session dialogs in the project manager.
+* Fixed a problem with the boolean check for ignoreDiaciritcs in the PCC javascript library.
+* Fixed an issue with stress detection across all syllable elements when using the :stress()
+phonex plug-in.
+* Fixed an issue with the PMLU script which caused it to fail randomly.
+
 ## Changes from Phon 2.1.2
 
 ### General
