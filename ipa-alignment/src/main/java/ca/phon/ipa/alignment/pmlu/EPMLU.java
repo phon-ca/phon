@@ -35,14 +35,14 @@ import ca.phon.phonex.PhonexPattern;
 @Extension(PhoneMap.class)
 public class EPMLU {
 	
-	private final WeakReference<PhoneMap> phoneMapRef;
+	private final PhoneMap phoneMapRef;
 	
 	public EPMLU(PhoneMap pm) {
-		this.phoneMapRef = new WeakReference<PhoneMap>(pm);
+		this.phoneMapRef = pm;
 	}
 	
 	public PhoneMap getPhoneMap() {
-		return phoneMapRef.get();
+		return phoneMapRef;
 	}
 
 	/**
@@ -116,7 +116,8 @@ public class EPMLU {
 	 */
 	public float targetEPMLUSyllables(float closedSyllBonus) {
 		final PhoneMap pm = getPhoneMap();
-		final IPATranscript t = pm.getTargetRep();
+		final IPATranscript t = 
+				(pm.getTargetRep() != null ? pm.getTargetRep() : new IPATranscript());
 		
 		float pmlu = 0.0f;
 		for(IPATranscript syll:t.syllables()) {
@@ -147,7 +148,8 @@ public class EPMLU {
 	 */
 	public float actualEPMLUSyllables(float closedSyllBonus) {
 		final PhoneMap pm = getPhoneMap();
-		final IPATranscript t = pm.getActualRep();
+		final IPATranscript t = 
+				(pm.getActualRep() != null ? pm.getActualRep() : new IPATranscript());
 		
 		float pmlu = 0.0f;
 		for(IPATranscript syll:t.syllables()) {

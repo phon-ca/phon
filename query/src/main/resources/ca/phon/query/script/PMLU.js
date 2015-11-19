@@ -190,14 +190,14 @@ function query_record(recordIndex, record)
 	    	nf.setMaximumFractionDigits(6);
 	    	
 	        var pm = (word.phoneAlignment != null ? word.phoneAlignment : new PhoneMap(ipaT, ipaA));
-	        if(includePMLU == true && pm.PMLU|0 != 0) {
+	        if(includePMLU == true) {
 	        	var pmlu = pm.PMLU;
 	        	result.metadata.put("target PMLU", nf.format(pmlu.targetPMLU()));
 	        	result.metadata.put("actual PMLU", nf.format(pmlu.actualPMLU()));
 	        	result.metadata.put("PWP", nf.format(pmlu.PWP()));
 	        }
 	        
-	        if(includeEPMLU == true && pm.EPMLU|0 != 0) {
+	        if(includeEPMLU == true) {
 	        	var emplu = pm.EPMLU;
 	        	result.metadata.put("target ePMLU-Features", nf.format(emplu.targetEPMLUFeatures()));
 	        	result.metadata.put("actual ePMLU-Features", nf.format(emplu.actualEPMLUFeatures()));
