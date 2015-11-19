@@ -1,7 +1,9 @@
 package ca.phon.app.session.editor.actions;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -12,12 +14,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogBuffer;
+import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorStatusBar;
 import ca.phon.session.Session;
@@ -59,8 +64,10 @@ public class SessionCheckAction extends SessionEditorAction {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		
-		final BufferPanel bufferPanel = new BufferPanel(
-				session.getCorpus() + "." + session.getName() + ":" + TXT);
+		final JComponent checkView = editor.getViewModel().getDynamicView(TXT);
+		
+		final BufferPanel bufferPanel = (checkView != null ? 
+				(BufferPanel)checkView : new BufferPanel(TXT));
 		bufferPanel.getLogBuffer().setText("");
 	
 		final String[] cols = new String[] { "Session", "Record #", "Group", "Tier", "Message" };
@@ -115,6 +122,8 @@ public class SessionCheckAction extends SessionEditorAction {
 					out.flush();
 					out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
 					out.flush();
+					out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
+					out.flush();
 					
 				} catch (IOException e) {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -141,32 +150,51 @@ public class SessionCheckAction extends SessionEditorAction {
 	public void setupStatusBar(SessionValidator validator, BufferPanel bufferPanel) {
 		final SessionEditorStatusBar statusBar = getEditor().getStatusBar();
 		
-		final ImageIcon icn = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+		JLabel lbl = null;
+		for(Component comp:statusBar.getExtrasPanel().getComponents()) {
+			if(comp.getName() != null && comp.getName().equals(TXT)) {
+				lbl = (JLabel)comp;
+				break;
+			}
+		}
 		
-		final JLabel lbl = new JLabel();
-		lbl.setForeground(Color.orange);
-		lbl.setIcon(icn);
-		if(validator.getValidationEvents().size() > 0) {
-			lbl.setText("<html><u>" +
-					validator.getValidationEvents().size() + " warnings</u></html>");
-			lbl.setToolTipText("Show warnings");
-			lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			lbl.addMouseListener(new MouseInputAdapter() {
-
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					showBuffer(bufferPanel);
-				}
-
-			});
-			statusBar.getExtrasPanel().add(lbl);
+		if(lbl == null) {
+			lbl = new JLabel();
+			lbl.setName(TXT);
+			final ImageIcon icn = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+			lbl.setIcon(icn);
+			if(validator.getValidationEvents().size() > 0) {
+				lbl.setText("<html><u>" +
+						validator.getValidationEvents().size() + " warning" + 
+						(validator.getValidationEvents().size() == 1 ? "" : "s") + "</u></html>");
+				lbl.setToolTipText("Show warnings");
+				lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				lbl.addMouseListener(new MouseInputAdapter() {
+	
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						showBuffer(bufferPanel);
+					}
+	
+				});
+				statusBar.getExtrasPanel().add(lbl);
+			}
 		} else {
-			statusBar.getExtrasPanel().removeAll();
+			if(validator.getValidationEvents().size() == 0)
+				statusBar.getExtrasPanel().remove(lbl);
+			else {
+				lbl.setText("<html><u>" +
+						validator.getValidationEvents().size() + " warning" + 
+						(validator.getValidationEvents().size() == 1 ? "" : "s") + "</u></html>");
+			}
 		}
 	}
 	
 	public void showBuffer(BufferPanel bufferPanel) {
-		getEditor().getViewModel().showDynamicFloatingDockable(bufferPanel.getBufferName(), bufferPanel, 0, 0, 500, 600);
+		if(getEditor().getViewModel().isShowing(TXT)) return;
+		Point lblLocation = getEditor().getStatusBar().getExtrasPanel().getLocationOnScreen();
+		getEditor().getViewModel().showDynamicFloatingDockable(bufferPanel.getBufferName(), bufferPanel,
+				lblLocation.x, lblLocation.y - 400, 500, 400);
 	}
 
 }
