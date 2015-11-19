@@ -56,8 +56,22 @@ public interface EditorViewModel {
 	 * Get the view specified by the given name.
 	 * 
 	 * @param viewName
+	 * @return specified editor view or <code>null</code> if
+	 *  view was not found
 	 */
 	public EditorView getView(String viewName);
+	
+	/**
+	 * Get dynamic view component with the given name. This
+	 * method is used for getting references to components
+	 * displayed with the {@link #showDynamicFloatingDockable(String, JComponent, int, int, int, int)} 
+	 * method.
+	 * 
+	 * @param viewName
+	 * @return specified view component or <code>null</code> if
+	 *  view was not found
+	 */
+	public JComponent getDynamicView(String viewName);
 	
 	/**
 	 * Get the icon associated with the view.  This information

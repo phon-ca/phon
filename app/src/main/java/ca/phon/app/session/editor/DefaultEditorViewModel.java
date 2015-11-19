@@ -142,6 +142,9 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	private final Map<String, EditorView> registeredViews =
 			Collections.synchronizedMap(new HashMap<String, EditorView>());
 	
+	private final Map<String, JComponent> dynamicViews =
+			Collections.synchronizedMap(new HashMap<>());
+	
 	/**
 	 * View names by category
 	 */
@@ -271,6 +274,15 @@ public class DefaultEditorViewModel implements EditorViewModel {
 					break;
 				}
 			}
+		}
+		return retVal;
+	}
+	
+	@Override
+	public JComponent getDynamicView(String viewName) {
+		JComponent retVal = null;
+		if(dynamicViews.containsKey(viewName)) {
+			retVal = dynamicViews.get(viewName);
 		}
 		return retVal;
 	}
@@ -406,6 +418,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		
 		dockControl.addDockable(dockable);
 		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
+		dynamicViews.put(title, comp);
 	}
 	
 	/**
@@ -683,6 +696,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				public void visibilityChanged(CDockable arg0) {
 					if(!arg0.isVisible()) {
 						dockControl.removeDockable(retVal);
+						dynamicViews.remove(title);
 					}
 				}
 				
