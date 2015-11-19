@@ -177,5 +177,40 @@ public class TestPluginMatchers {
 		}
 		Assert.assertEquals(stressed.length, numStressedFound);
 	}
+
+	@Test
+	public void testToneMatcher() throws ParseException {
+		String txt = "t:Oo:Nm¹:Cn:Oo:Nm:Ct:Oɛ:Np⁵:C";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		final IPATranscript tone1 = ipa.subsection(0, 3);
+		final IPATranscript tone2 = ipa.subsection(6, ipa.length());
+		final IPATranscript[] allTones = {
+				tone1, tone2
+		};
+		
+		// tone1
+		PhonexPattern pattern = PhonexPattern.compile(".:tone(\"1\")+");
+		PhonexMatcher matcher = pattern.matcher(ipa);
+		Assert.assertEquals(true, matcher.find());
+		Assert.assertEquals(tone1, new IPATranscript(matcher.group()));
+		
+		// tone5
+		pattern = PhonexPattern.compile(".:tone(\"5\")+");
+		matcher = pattern.matcher(ipa);
+		Assert.assertEquals(true, matcher.find());
+		Assert.assertEquals(tone2, new IPATranscript(matcher.group()));
+		
+		// any tone
+		pattern = PhonexPattern.compile(".:tone(\"*\")+");
+		matcher = pattern.matcher(ipa);
+		
+		int numFound = 0;
+		while(matcher.find()) {
+			Assert.assertEquals(true, numFound < allTones.length);
+			Assert.assertEquals(allTones[numFound++], new IPATranscript(matcher.group()));
+		}
+		Assert.assertEquals(allTones.length, numFound);
+	}
 	
 }

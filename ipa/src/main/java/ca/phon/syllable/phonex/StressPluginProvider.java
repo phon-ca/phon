@@ -33,6 +33,7 @@ import ca.phon.syllable.SyllableStress;
  *	<li>U - No Stress</li>
  *  <li>1 - Primary Stress</li>
  *  <li>2 - Secondary Stress</li>
+ *  <li>S - Any Stress</li>
  * </ul>
  * 
  * E.g., Search for unstressed consonants</br>
