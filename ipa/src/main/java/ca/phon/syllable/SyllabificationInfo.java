@@ -18,6 +18,7 @@
  */
 package ca.phon.syllable;
 
+import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.Extension;
@@ -25,6 +26,7 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.StressMarker;
 import ca.phon.ipa.StressType;
+import ca.phon.ipa.features.FeatureSet;
 
 /**
  * Adds syllabification information to Phones.
@@ -47,7 +49,13 @@ public class SyllabificationInfo {
 	 * @param phones
 	 */
 	public static void setupSyllabificationInfo(IPATranscript ipa) {
-		setupStressInfo(ipa);
+		if(ipa.getExtension(InfoFlag.class) == null) {
+			setupStressInfo(ipa);
+			setupToneInfo(ipa);
+			InfoFlag flag = new InfoFlag();
+			flag.complete = true;
+			ipa.putExtension(InfoFlag.class, flag);
+		}
 	}
 	
 	private static void setupStressInfo(IPATranscript ipa) {
@@ -61,6 +69,28 @@ public class SyllabificationInfo {
 				});
 			}
 		});
+	}
+	
+	private static void setupToneInfo(IPATranscript ipa) {
+		final FeatureSet allToneFeatures = FeatureSet.fromArray(new String[] { "tone1", "tone2",
+				"tone3", "tone4", "tone5", "tone6", "tone7", "tone8", "tone9" });
+		ipa.syllables().parallelStream().forEach( (syll) -> {
+			FeatureSet toneFeatures = new FeatureSet();
+			syll.forEach( (ele) -> {
+				toneFeatures.union(
+						FeatureSet.intersect(allToneFeatures, ele.getFeatureSet()));
+			});
+			if(toneFeatures.size() > 0) {
+				syll.forEach( (ele) -> {
+					final SyllabificationInfo info = ele.getExtension(SyllabificationInfo.class);
+					info.setToneFeatures(toneFeatures);
+				});
+			}
+		});
+	}
+	
+	private static class InfoFlag  {
+		private boolean complete = false;
 	}
 	
 	/**
@@ -94,6 +124,11 @@ public class SyllabificationInfo {
 	 * part of the same syllable.
 	 */
 	private boolean isDipththongMember = false;
+	
+	/**
+	 * Tone features for syllable
+	 */
+	private FeatureSet toneFeatures = new FeatureSet();
 	
 	/**
 	 * weak reference to parent
@@ -132,7 +167,7 @@ public class SyllabificationInfo {
 	}
 	
 	/**
-	 * Set constituen type
+	 * Set constituent type
 	 * 
 	 * @param scType
 	 */
@@ -140,6 +175,14 @@ public class SyllabificationInfo {
 		final SyllableConstituentType oldType = this.scType;
 		this.scType = scType;
 		getPhone().firePropertyChange(PHONE_SCTYPE, oldType, this.scType);
+	}
+	
+	public FeatureSet getToneFeatures() {
+		return this.toneFeatures;
+	}
+	
+	public void setToneFeatures(FeatureSet toneFeatures) {
+		this.toneFeatures = toneFeatures;
 	}
 	
 	/**
