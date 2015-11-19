@@ -88,6 +88,7 @@ while(keyItr.hasNext()) {
 	var wordList = ipaTree.get(target);
 	for(i = 0; i < wordList.size(); i++) {
 		var word = wordList.get(i);
+		if(word == null) continue;
 		var alignment = word.getPhoneAlignment();
 		var pmlu = alignment.PMLU;
 		var epmlu = alignment.EPMLU;

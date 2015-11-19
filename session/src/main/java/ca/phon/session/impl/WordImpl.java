@@ -20,6 +20,7 @@ package ca.phon.session.impl;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.alignment.AlignmentMap;
 import ca.phon.ipa.IPAElement;
@@ -36,7 +37,7 @@ import ca.phon.session.Word;
 public class WordImpl implements Word {
 	
 	// record
-	private final WeakReference<Record> recordRef;
+	private final AtomicReference<Record> recordRef;
 	
 	// group
 	private final int groupIndex;
@@ -46,7 +47,7 @@ public class WordImpl implements Word {
 	
 	public WordImpl(Record record, int groupIndex, int wordIndex) {
 		super();
-		this.recordRef = new WeakReference<Record>(record);
+		this.recordRef = new AtomicReference<Record>(record);
 		this.groupIndex = groupIndex;
 		this.wordIndex = wordIndex;
 	}
@@ -68,7 +69,8 @@ public class WordImpl implements Word {
 
 	@Override
 	public OrthoElement getOrthography() {
-		final Orthography ortho = getGroup().getOrthography();
+		final Orthography ortho = 
+				(getGroup().getOrthography() == null ? new Orthography() : getGroup().getOrthography());
 		final OrthoWordExtractor extractor = new OrthoWordExtractor();
 		ortho.accept(extractor);
 		
@@ -102,7 +104,8 @@ public class WordImpl implements Word {
 
 	@Override
 	public IPATranscript getIPATarget() {
-		final IPATranscript ipaTarget = getGroup().getIPATarget();
+		final IPATranscript ipaTarget = 
+				(getGroup().getIPATarget() == null ? new IPATranscript() : getGroup().getIPATarget());
 		final List<IPATranscript> wordList = ipaTarget.words();
 		
 		if(wordIndex >= 0 && wordIndex < wordList.size()) {
@@ -128,7 +131,8 @@ public class WordImpl implements Word {
 
 	@Override
 	public IPATranscript getIPAActual() {
-		final IPATranscript ipaActual = getGroup().getIPAActual();
+		final IPATranscript ipaActual = 
+				(getGroup().getIPAActual() == null ? new IPATranscript() : getGroup().getIPAActual());
 		final List<IPATranscript> wordList = ipaActual.words();
 		
 		if(wordIndex >= 0 && wordIndex < wordList.size()) {
@@ -162,6 +166,7 @@ public class WordImpl implements Word {
 		final IPATranscript filteredA = ipaA.removePunctuation();
 		
 		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
+		if(grpAlignment == null) new PhoneMap();
 		
 		final int ipaTAlignStart =
 				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(0)) : -1);
