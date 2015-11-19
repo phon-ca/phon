@@ -167,8 +167,7 @@ scope {
 			throw hle;
 		}
 		if($word::builder.last() instanceof SyllableBoundary 
-			|| $word::builder.last() instanceof StressMarker
-			|| $word::builder.last() instanceof IntonationGroup) {
+			|| $word::builder.last() instanceof StressMarker) {
 			final IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
 			int idx = input.LT(1).getCharPositionInLine();
 			if(idx < 0) {
@@ -211,8 +210,7 @@ word_element returns [IPAElement p]
 	:	stress
 	{
 		if($word::builder.last() instanceof SyllableBoundary 
-			|| $word::builder.last() instanceof StressMarker
-			|| $word::builder.last() instanceof IntonationGroup) {
+			|| $word::builder.last() instanceof StressMarker) {
 			IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
 			pe.setPositionInLine(input.LT(1).getCharPositionInLine());
 			throw pe;
@@ -226,8 +224,7 @@ word_element returns [IPAElement p]
 	|	syllable_boundary
 	{
 		if($word::builder.last() instanceof SyllableBoundary 
-			|| $word::builder.last() instanceof StressMarker
-			|| $word::builder.last() instanceof IntonationGroup) {
+			|| $word::builder.last() instanceof StressMarker) {
 			IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
 			pe.setPositionInLine(input.LT(1).getCharPositionInLine());
 			throw pe;
