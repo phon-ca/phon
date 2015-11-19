@@ -175,7 +175,8 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			sb.append("Error at character ").append(e.getErrorOffset()).append(": ").append(e.getLocalizedMessage());
 			setToolTipText(sb.toString());
 			
-			addErrorHighlight(e.getErrorOffset(), e.getErrorOffset()+1);
+			addErrorHighlight(Math.max(0, Math.min(e.getErrorOffset(), getText().length())), 
+					Math.min(e.getErrorOffset()+1, getText().length()));
 			setValidatedObject(validatedIPA);
 			if(!wasShowingErr) repaint();
 		}
