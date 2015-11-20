@@ -18,6 +18,7 @@
  */
 package ca.phon.ipadictionary.impl;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -52,7 +53,7 @@ public class CompoundDictionary implements IPADictionarySPI,
 	
 	@Override
 	public String[] lookup(String orthography) throws IPADictionaryExecption {
-		Set<String> allTranscripts = new TreeSet<String>();
+		Set<String> allTranscripts = new LinkedHashSet<String>();
 		
 		for(IPADictionary dict:dicts) {
 			for(String s:dict.lookup(orthography)) {
@@ -112,10 +113,10 @@ public class CompoundDictionary implements IPADictionarySPI,
 			if(removeEntry != null) {
 				dict.putExtension(RemoveEntry.class, removeEntry);
 			}
-			final GenerateSuggestions genSuggestions = d.getExtension(GenerateSuggestions.class);
-			if(genSuggestions != null) {
-				dict.putExtension(GenerateSuggestions.class, genSuggestions);
-			}
+//			final GenerateSuggestions genSuggestions = d.getExtension(GenerateSuggestions.class);
+//			if(genSuggestions != null) {
+//				dict.putExtension(GenerateSuggestions.class, genSuggestions);
+//			}
 			final OrthoKeyIterator orthoItr = d.getExtension(OrthoKeyIterator.class);
 			if(orthoItr != null) {
 				dict.putExtension(OrthoKeyIterator.class, orthoItr);
