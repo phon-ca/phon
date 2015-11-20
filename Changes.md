@@ -16,6 +16,7 @@ elements.
 * Fixed an issue with stress detection across all syllable elements when using the :stress()
 phonex plug-in.
 * Fixed an issue with the PMLU script which caused it to fail randomly.
+* Fixed an issue with French IPA contraction rules.
 
 ## Changes from Phon 2.1.2
 
