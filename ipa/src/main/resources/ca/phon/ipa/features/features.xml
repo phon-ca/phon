@@ -530,7 +530,7 @@
    <!--ɸ-->
    <feature_set char="&#x192;">consonant labial bilabial obstruent fricative continuant voiceless </feature_set>
    <!--ƙ (obsolete)-->
-   <feature_set char="&#x199;">consonant dorsal velar lingual obstruent implosive ingressive stop
+   <feature_set char="&#x199;">consonant dorsal velar lingual obstruent implosive stop
       voiceless </feature_set>
    <!--ƛ-->
    <feature_set char="&#x19b;">consonant coronal alveolar anterior lingual lateral obstruent
@@ -548,12 +548,12 @@
       obstruent stop voiceless </feature_set>
    <!--ƭ (obsolete)-->
    <feature_set char="&#x1ad;">consonant coronal alveolar anterior lingual obstruent implosive
-      ingressive stop voiceless </feature_set>
+      stop voiceless </feature_set>
    <!--ƪ-->
    <feature_set char="&#x1b9;">consonant guttural pharyngeal obstruent fricative continuant voiced </feature_set>
    <!--ƺ-->
-   <feature_set char="&#x1ba;">consonant labial alveopalatal coronal lingual posterior distributed
-      obstruent fricative continuant voiced </feature_set>
+   <feature_set char="&#x1ba;">consonant alveopalatal coronal lingual posterior distributed
+      obstruent palatal strident fricative continuant voiced </feature_set>
    <!--ǀ-->
    <feature_set char="&#x1c0;">consonant coronal dental anterior lingual obstruent click ingressive
       stop voiceless </feature_set>
@@ -567,7 +567,7 @@
    <feature_set char="&#x1c3;">consonant coronal alveolar lingual obstruent click ingressive stop
       voiceless </feature_set>
    <!--ȴ-->
-   <feature_set char="&#x234;">consonant coronal alveopalatal posterior lingual palatal lateral
+   <feature_set char="&#x234;">consonant coronal approximant posterior lingual palatal lateral
       sonorant liquid continuant voiced </feature_set>
    <!--ȵ-->
    <feature_set char="&#x235;">consonant coronal alveopalatal posterior lingual sonorant nasal stop
@@ -576,7 +576,7 @@
    <feature_set char="&#x236;">consonant coronal alveopalatal posterior lingual obstruent stop
       voiceless </feature_set>
    <!--ɓ-->
-   <feature_set char="&#x253;">consonant labial bilabial obstruent implosive ingressive stop voiced </feature_set>
+   <feature_set char="&#x253;">consonant labial bilabial obstruent implosive stop voiced </feature_set>
    <!--ɕ-->
    <feature_set char="&#x255;">consonant coronal palatal posterior lingual laminal distributed
       obstruent fricative strident continuant voiceless </feature_set>
@@ -584,11 +584,11 @@
    <feature_set char="&#x256;">consonant coronal retroflex posterior lingual obstruent stop voiced </feature_set>
    <!--ɗ-->
    <feature_set char="&#x257;">consonant coronal alveolar anterior lingual obstruent implosive
-      ingressive stop voiced </feature_set>
+      stop voiced </feature_set>
    <!--ɟ-->
    <feature_set char="&#x25f;">consonant coronal palatal posterior lingual obstruent stop voiced </feature_set>
    <!--ɠ-->
-   <feature_set char="&#x260;">consonant dorsal velar lingual obstruent implosive ingressive stop
+   <feature_set char="&#x260;">consonant dorsal velar lingual obstruent implosive stop
       voiced </feature_set>
    <!--ɡ-->
    <feature_set char="&#x261;">consonant dorsal velar lingual obstruent stop voiced </feature_set>
@@ -641,7 +641,7 @@
    <feature_set char="&#x27b;">consonant coronal retroflex posterior lingual rhotic sonorant
       approximant liquid continuant voiced </feature_set>
    <!--ɼ ??-->
-   <feature_set char="&#x27c;">consonant coronal alveolar lingual sonorant approximant trill
+   <feature_set char="&#x27c;">consonant coronal alveolar lingual sonorant approximant rhotic trill
       continuant voiced </feature_set>
    <!--ɽ-->
    <feature_set char="&#x27d;">consonant coronal retroflex posterior lingual rhotic sonorant
@@ -663,7 +663,7 @@
       obstruent fricative strident continuant voiceless </feature_set>
    <!--ʄ-->
    <feature_set char="&#x284;">consonant coronal palatal posterior lingual obstruent implosive
-      ingressive stop voiced </feature_set>
+      stop voiced </feature_set>
    <!--ʆ-->
    <feature_set char="&#x286;">consonant coronal palatal posterior lingual alveopalatal distributed
       obstruent fricative strident continuant voiceless </feature_set>
@@ -709,7 +709,7 @@
    <feature_set char="&#x299;">consonant labial bilabial sonorant approximant trill continuant
       voiced </feature_set>
    <!--ʛ-->
-   <feature_set char="&#x29b;">consonant dorsal uvular lingual obstruent implosive ingressive stop
+   <feature_set char="&#x29b;">consonant dorsal uvular lingual obstruent implosive stop
       voiced </feature_set>
    <!--ʜ-->
    <feature_set char="&#x29c;">consonant guttural epiglottal obstruent fricative continuant
@@ -787,7 +787,7 @@
    <!--ø-->
    <feature_set char="&#xf8;">vowel mid round tense atr front </feature_set>
    <!--ı-->
-   <feature_set char="&#x131;">vowel high tense atr back </feature_set>
+   <feature_set char="&#x131;">vowel high tense atr front </feature_set>
    <!--œ-->
    <feature_set char="&#x153;">vowel mid round lax rtr front </feature_set>
    <!--ɐ-->
@@ -827,7 +827,7 @@
    <!--ɶ-->
    <feature_set char="&#x276;">vowel low round lax front </feature_set>
    <!--ɷ-->
-   <feature_set char="&#x277;">vowel high lax rtr back </feature_set>
+   <feature_set char="&#x277;">vowel high lax rtr back round </feature_set>
    <!--ʉ-->
    <feature_set char="&#x289;">vowel high round tense atr central </feature_set>
    <!--ʊ-->
@@ -857,9 +857,9 @@
    <!--¹-->
    <feature_set char="&#xb9;">diacritic tone1 </feature_set>
    <!--ʬ-->
-   <feature_set char="&#x2ac;">consonant bilabial labial percussive </feature_set>
+   <feature_set char="&#x2ac;">consonant bilabial labial stop obstruent percussive </feature_set>
    <!--ʭ-->
-   <feature_set char="&#x2ad;">consonant dental lowerdental percussive </feature_set>
+   <feature_set char="&#x2ad;">consonant dental lowerdental stop obstruent percussive </feature_set>
    <!--ʰ-->
    <feature_set char="&#x2b0;">diacritic aspirated </feature_set>
    <!--ʱ-->
@@ -1213,14 +1213,14 @@
    <feature_set char="&#x47;">glide cover </feature_set>
    <!--ᶑ-->
    <feature_set char="&#x1d91;">consonant alveolar lingual coronal implosive posterior retroflex
-      voiced </feature_set>
+      stop voiced </feature_set>
    <!--¡-->
    <feature_set char="&#xa1;">consonant subapical click ingressive coronal lingual anterior stop
       voiceless </feature_set>
    <!--⁼-->
    <feature_set char="&#x207c;">diacritic unaspirated </feature_set>
    <!--ʩ-->
-   <feature_set char="&#x2a9;">consonant fricative nasal velopharyngeal </feature_set>
+   <feature_set char="&#x2a9;">consonant obstruent fricative nasal velopharyngeal </feature_set>
    <!--◌͎-->
    <feature_set char="&#x34e;">diacritic whistled </feature_set>
    <!--◌͢ subscript combining right arrow; phone building-->
