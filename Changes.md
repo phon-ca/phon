@@ -9,6 +9,8 @@ transcriptions in the current session.
 be displayed in the status bar if any warnings are found.
 * Added new :tone() phonex plug-in for matching numbered tone diacritics for all syllable
 elements.
+* PCC/PVC query will now exclude values which bias results.
+(e.g., all-vowel words such as 'eau' in French when looking only at PCC)
 
 ### Bug Fixes
 * Fixed an issue with opening the Rename Corpus/Session dialogs in the project manager.
@@ -17,6 +19,7 @@ elements.
 phonex plug-in.
 * Fixed an issue with the PMLU script which caused it to fail randomly.
 * Fixed an issue with French IPA contraction rules.
+* Fixed feature sets for several phones.
 
 ## Changes from Phon 2.1.2
 

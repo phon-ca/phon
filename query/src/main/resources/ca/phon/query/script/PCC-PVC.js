@@ -132,6 +132,20 @@ function query_record(recordIndex, record)
 	        result.addResultValue(rva);
 		    
 		    var metadata = result.metadata;
+		    
+		    // exclude values which bias results. 
+		    // (e.g., all-vowel words such as 'eau' in French when looking only at PCC)
+		    if( (pccOptions.standard.includePcc == true || pccOptions.aligned.includePcc == true)
+		    		&& (pccOptions.standard.includePvc == false && pccOptions.aligned.includePvc == false)
+		    		&& ipaT.indexOf("\\c") < 0) {
+		    	continue;
+		    }
+		    if( (pccOptions.standard.includePcc == false && pccOptions.aligned.includePcc == false)
+		    		&& (pccOptions.standard.includePvc == true || pccOptions.aligned.includePvc == true)
+		    		&& ipaT.indexOf("\\v") < 0) {
+		    	continue;
+		    }
+		    
 		    pccOptions.standard.setup_pcc_standard_metadata(word, metadata);
 		    pccOptions.aligned.setup_pcc_aligned_metadata(word, metadata);
 		    
