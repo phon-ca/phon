@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphEditorModel;
+import ca.gedge.opgraph.library.NodeLibrary;
+import ca.phon.opgraph.editor.library.LibraryView;
 import ca.phon.util.PrefHelper;
 
 /**
@@ -44,10 +46,20 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			viewMap.put("Console", new JScrollPane(getConsolePanel()));
 			viewMap.put("Debug", new JScrollPane(getDebugInfoPanel()));
 			viewMap.put("Defaults", new JScrollPane(getNodeDefaults()));
-			viewMap.put("Library", getNodeLibrary());
+			viewMap.put("Library", getLibraryView());
 			viewMap.put("Settings", new JScrollPane(getNodeSettings()));
 		}
 		return this.viewMap;
+	}
+	
+	/**
+	 * Get custom node library view.
+	 * 
+	 * @return node library view
+	 */
+	public LibraryView getLibraryView() {
+		final NodeLibrary library = getNodeLibrary().getLibrary();
+		return new LibraryView(library);
 	}
 	
 	/**
