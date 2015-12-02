@@ -1,5 +1,15 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.4
+
+### General
+* Fixed 'ignore diaritics' option for aligned results in Aggregated Inventory reports.
+* Fixed position of 'Aligned Group Filter' options in PCC query script.
+* Fixed an issue with automatic transcription when an existing IPA transcript had more words
+than the aligned group in Orthography.
+* Fixed an issue with Find & Replace in Orthography groups which contain CHAT group 
+markers (i.e., '{', or '}'.)
+
 ## Changes from Phon 2.1.3
 
 ### General
