@@ -692,6 +692,16 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 			builder.append(phone);
 		}
 		
+		@Visits
+		public void visitWordBoundary(WordBoundary wb) {
+			builder.appendWordBoundary();
+		}
+		
+		@Visits
+		public void visitAlignmentMarker(AlignmentMarker marker) {
+			builder.append((new IPAElementFactory()).createAlignmentMarker());
+		}
+		
 		public IPATranscript getIPATranscript() {
 			return builder.toIPATranscript();
 		}
