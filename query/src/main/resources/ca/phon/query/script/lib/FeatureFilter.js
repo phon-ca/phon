@@ -1,5 +1,24 @@
 /*
- * Feature set filter
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2005 - 2015, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Dept of Linguistics, Memorial University <https://phon.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ * Feature set filter.  Will provide a textField for entering
+ * a list of features.
  */
 
 exports.FeatureFilter = function(id) {
@@ -22,13 +41,9 @@ exports.FeatureFilter = function(id) {
             "Error at index " + loc  +": " + message :
             message);
        
-       // textField.setToolTipText(msg);
-       // textField.setState("UNDEFINED");
     };
     
     var setFilterOk = function(textField) {
-        //textField.setToolTipText("");
-        //textField.setState("INPUT");
     };
     
     var checkFilter = function(filter) {
@@ -66,26 +81,6 @@ exports.FeatureFilter = function(id) {
             featureListParamInfo.title,
             featureListParamInfo.def);
         featureListParam.setPrompt(featureListParamInfo.prompt);
-//        featureListParam.getEditorComponent().setPrompt(featureListParamInfo.prompt);
-    
-//        var featureListListener = new java.awt.event.KeyListener() {
-//            keyPressed: function(e) {},
-//            
-//            keyReleased: function(e) {
-//                var txt = StringUtils.strip(e.getSource().getText());
-//                var check = checkFilter(txt);
-//                java.lang.System.out.println(check.valid + ":" + txt);
-//                if(check.valid) {
-//                    setFilterOk(e.getSource());
-//                } else {
-//                    java.lang.System.err.println(check.message);
-//                    setFilterInvalid(e.getSource(), check.message, check.loc);
-//                }
-//            },
-//            
-//            keyTyped: function(e) {}
-//        };
-//        featureListParam.getEditorComponent().addKeyListener(featureListListener);
         
         params.add(featureListParam);
     };
