@@ -214,11 +214,12 @@ public class InventoryDataSource implements TableDataSource {
 	 * String helper methods
 	 */
 	private String stripDiacritics(String txt) {
-		String retVal = txt;
+		String retVal = txt.trim();
 		try {
 			final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-			retVal = ipa.stripDiacritics().toString();
+			retVal = ipa.removePunctuation().stripDiacritics().toString();
 		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 		return retVal;
 	}
