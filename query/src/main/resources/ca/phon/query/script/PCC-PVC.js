@@ -57,6 +57,9 @@ function setup_params(params) {
 	pccOptions.aligned.param_setup(params);
 	
 	filters.group.param_setup(params);
+	var sep = new LabelScriptParam("", "Aligned Group Filter");
+	params.add(sep);
+	filters.alignedGroup.param_setup(params);
 	
 	filters.word.searchByWordEnabled = false;
 	filters.word.param_setup(params);
@@ -64,9 +67,6 @@ function setup_params(params) {
 	params.add(wordsep);
 	filters.alignedWord.param_setup(params);
 
-	var sep = new LabelScriptParam("", "Aligned Group Filter");
-	params.add(sep);
-	filters.alignedGroup.param_setup(params);
 	filters.speaker.param_setup(params);
 }
 
