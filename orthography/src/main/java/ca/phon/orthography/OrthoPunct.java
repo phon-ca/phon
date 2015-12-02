@@ -39,5 +39,10 @@ public class OrthoPunct extends AbstractOrthoElement {
 	public String text() {
 		return this.type.getChar() + "";
 	}
+	
+	@Override
+	public String toString() {
+		return text();
+	}
 
 }
