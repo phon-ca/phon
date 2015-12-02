@@ -1,6 +1,8 @@
 package ca.phon.app.opgraph.nodes.query;
 
 
+import java.util.List;
+
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.OutputField;
@@ -21,29 +23,31 @@ public abstract class TableOpNode extends OpNode {
 		putField(tableOutput);
 	}
 	
-	public int[] getColumnIndices(TableDataSource table, String columns) {
-		if(columns == null || columns.trim().length() == 0) return new int[0];
-		
-		String[] cols = columns.trim().split(";");
-		int[] retVal = new int[cols.length];
+	public int getColumnIndex(TableDataSource table, String column) {
+		column = column.trim();
+		int cIdx = -1;
+		for(int j = 0; j < table.getColumnCount(); j++) {
+			if(table.getColumnTitle(j).equalsIgnoreCase(column)) {
+				cIdx = j;
+				break;
+			}
+		}
+		if(cIdx < 0) {
+			// attempt to parse as integer
+			if(column.matches("[0-9]+")) {
+				cIdx = Integer.parseInt(column);
+				if(cIdx >= table.getColumnCount())
+					cIdx = -1;
+			}
+		}
+		return cIdx;
+	}
 	
-		for(int i = 0; i < cols.length; i++) {
-			int cIdx = -1;
-			for(int j = 0; j < table.getColumnCount(); j++) {
-				if(table.getColumnTitle(j).equalsIgnoreCase(cols[i])) {
-					cIdx = j;
-					break;
-				}
-			}
-			if(cIdx < 0) {
-				// attempt to parse as integer
-				if(cols[i].matches("[0-9]+")) {
-					cIdx = Integer.parseInt(cols[i]);
-					if(cIdx >= table.getColumnCount())
-						cIdx = -1;
-				}
-			}
-			retVal[i] = cIdx;
+	public int[] getColumnIndices(TableDataSource table, List<String> columns) {
+		int[] retVal = new int[columns.size()];
+	
+		for(int i = 0; i < columns.size(); i++) {
+			retVal[i] = getColumnIndex(table, columns.get(i));
 		}
 		
 		return retVal;

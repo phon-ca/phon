@@ -88,4 +88,26 @@
     
     <xs:element name="sortoptions" type="SortNodeSettingsType" substitutionGroup="og:extension"/>
     <xs:element name="sortBy" type="SortByType"/>
+    
+    <xs:complexType name="ColumnInfo">
+        <xs:attribute name="column" type="xs:string" use="required"/>
+        <xs:attribute name="caseSensitive" type="xs:boolean" default="false"/>
+        <xs:attribute name="ignoreDiacritics" type="xs:boolean" default="true"/>
+    </xs:complexType>
+    
+    <xs:element name="groupBy" type="ColumnInfo"/>
+    <xs:element name="column" type="ColumnInfo"/>
+    
+    <xs:complexType name="InventoryOptionsType">
+        <xs:complexContent mixed="false">
+            <xs:extension base="og:AbstractExtensionType">
+                <xs:sequence>
+                    <xs:element ref="groupBy" minOccurs="0" maxOccurs="1"/>
+                    <xs:element ref="column" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="inventoryoptions" type="InventoryOptionsType" substitutionGroup="og:extension"/>
 </xs:schema>

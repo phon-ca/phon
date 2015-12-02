@@ -21,7 +21,7 @@ import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.features.CompoundFeatureComparator;
+import ca.phon.ipa.features.CompoundIPAElementComparator;
 import ca.phon.ipa.features.FeatureComparator;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
@@ -87,10 +87,8 @@ public class SortNode extends TableOpNode implements NodeSettings {
 			int retVal = 0;
 			
 			for(SortColumn sc:getSortSettings().getSorting()) {
-				final int[] columnIndices = getColumnIndices(table, sc.getColumn());
-				if(columnIndices.length == 0 || columnIndices[0] < 0) continue;
-				
-				final int colIdx = columnIndices[0];
+				final int colIdx = getColumnIndex(table, sc.getColumn());
+				if(colIdx < 0) continue;
 				final Object v1 = row1[colIdx];
 				final Object v2 = row2[colIdx];
 				

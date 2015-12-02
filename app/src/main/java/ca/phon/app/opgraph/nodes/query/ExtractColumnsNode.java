@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JLabel;
@@ -38,8 +40,9 @@ public class ExtractColumnsNode extends TableOpNode implements NodeSettings {
 		putExtension(NodeSettings.class, this);
 	}
 	
-	public String getColumns() {
-		return (columnsField != null ? columnsField.getText() : columns);
+	public List<String> getColumns() {
+		return 
+			Arrays.asList((columnsField != null ? columnsField.getText() : columns).split(";"));
 	}
 
 	@Override
