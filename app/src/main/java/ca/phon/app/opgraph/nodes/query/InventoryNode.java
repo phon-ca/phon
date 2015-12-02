@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.ipa.IPATranscript;
@@ -31,67 +33,45 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 
 	private InventorySettingsPanel settingsPanel = null;
 	
-	private String groupBy = "Session";
-	
-	private String columns = "Result";
-	
-	private boolean caseSensitive = false;
-	
-	private boolean ignoreDiacritics = true;
-	
 	public InventoryNode() {
 		super();
 		
+		final InventorySettings settings = new InventorySettings();
+		putExtension(InventorySettings.class, settings);
 		putExtension(NodeSettings.class, this);
 	}
 
+	public InventorySettings getInventorySettings() {
+		return getExtension(InventorySettings.class);
+	}
+	
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
-			settingsPanel = new InventorySettingsPanel();
-			
-			settingsPanel.setGroupingBy(groupBy);
-			settingsPanel.setColumns(columns);
-			settingsPanel.setCaseSensitive(caseSensitive);
-			settingsPanel.setIgnoreDiacritics(ignoreDiacritics);
+			settingsPanel = new InventorySettingsPanel(getInventorySettings());
 		}
 		return settingsPanel;
-	}
-	
-	public boolean isCaseSensitive() {
-		return (settingsPanel != null ? settingsPanel.isCaseSensitive() : caseSensitive);
-	}
-	
-	public boolean isIgnoreDiacritics() {
-		return (settingsPanel != null ? settingsPanel.isIgnoreDiacritics() : ignoreDiacritics);
-	}
-	
-	public String getGroupBy() {
-		return (settingsPanel != null ? settingsPanel.getGroupingBy() : groupBy);
-	}
-	
-	public String getColumns() {
-		return (settingsPanel != null ? settingsPanel.getColumns() : columns);
 	}
 	
 	@Override
 	public Properties getSettings() {
 		final Properties props = new Properties();
-		props.put("groupBy", getGroupBy());
-		props.put("columns", getColumns());
-		props.put("caseSensitive", isCaseSensitive());
-		props.put("ignoreDiacritics", isIgnoreDiacritics());
 		return props;
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
-		groupBy = properties.getProperty("groupBy");
-		columns = properties.getProperty("columns");
-		caseSensitive = Boolean.parseBoolean(properties.getProperty("caseSensitive", "false"));
-		ignoreDiacritics = Boolean.parseBoolean(properties.getProperty("ignoreDiacritics", "true"));
 	}
-
+	
+	private String getGroupBy() {
+		return getInventorySettings().getGroupBy().getName();
+	}
+	
+	private List<String> getColumns() {
+		return getInventorySettings().getColumns().stream()
+			.map(info -> info.getName()).collect(Collectors.toList());
+	}
+	
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final TableDataSource inputTable = (TableDataSource)context.get(tableInput);
@@ -101,6 +81,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		
 		Map<InventoryRowData, Map<GroupKey, Long>> inventory = 
 				generateInventory(groupKeys, inputTable);
+		
 		
 		int[] inventoryCols = getColumnIndices(inputTable, getColumns());
 		
@@ -132,10 +113,10 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	private Set<GroupKey> collectGroupKeys(TableDataSource table) {
 		Set<GroupKey> retVal = new LinkedHashSet<>();
 		
-		int[] grouping = getColumnIndices(table, getGroupBy());
-		if(grouping.length > 0 && grouping[0] >= 0 && grouping[0] < table.getColumnCount()) {
+		int grouping = getColumnIndex(table, getGroupBy());
+		if(grouping >= 0 && grouping < table.getColumnCount()) {
 			for(int rowIdx = 0; rowIdx < table.getRowCount(); rowIdx++) {
-				retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping[0])));
+				retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping)));
 			}
 		} else {
 			retVal.add(new GroupKey("Total"));
@@ -147,12 +128,12 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	private Map<InventoryRowData, Map<GroupKey, Long>> generateInventory(Set<GroupKey> groupKeys, TableDataSource table) {
 		Map<InventoryRowData, Map<GroupKey, Long>> retVal = new LinkedHashMap<>();
 		
-		int[] groupingCols = getColumnIndices(table, getGroupBy());
+		int groupingCol = getColumnIndex(table, getGroupBy());
 		int[] inventoryCols = getColumnIndices(table, getColumns());
 		
 		for(int row = 0; row < table.getRowCount(); row++) {
-			Object grouping = (groupingCols.length > 0 && groupingCols[0] >= 0 
-					? table.getValueAt(row, groupingCols[0]) : "Total");
+			Object grouping = (groupingCol >= 0 
+					? table.getValueAt(row, groupingCol) : "Total");
 			
 			Object[] rowData = new Object[inventoryCols.length];
 			for(int ic = 0; ic < inventoryCols.length; ic++) {
@@ -176,7 +157,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		return retVal;
 	}
 	
-	private boolean checkEquals(Object o1, Object o2) {
+	private boolean checkEquals(Object o1, Object o2, boolean caseSensitive, boolean ignoreDiacritics) {
 		if(o1 == null && o2 != null) return false;
 		else if(o1 == null && o2 == o1) return true;
 		
@@ -188,7 +169,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		String o1Txt = (formatter != null ? formatter.format(o1) : o1.toString());
 		String o2Txt = (formatter != null ? formatter.format(o2) : o2.toString());
 		
-		if(isIgnoreDiacritics()) {
+		if(ignoreDiacritics) {
 			try {
 				final IPATranscript ipa = IPATranscript.parseIPATranscript(o1Txt);
 				o1Txt = ipa.removePunctuation().stripDiacritics().toString();
@@ -198,12 +179,12 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			} catch (ParseException e) {}
 		}
 		
-		return (isCaseSensitive() ? o1Txt.equals(o2Txt) : o1Txt.equalsIgnoreCase(o2Txt));
+		return (caseSensitive ? o1Txt.equals(o2Txt) : o1Txt.equalsIgnoreCase(o2Txt));
 	}
 	
-	private String objToString(Object val) {
+	private String objToString(Object val, boolean ignoreDiacritics) {
 		String retVal = (val != null ? val.toString() : "");
-		if(isIgnoreDiacritics()) {
+		if(ignoreDiacritics) {
 			try {
 				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
 					IPATranscript.parseIPATranscript(retVal));
@@ -225,12 +206,14 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		@Override
 		public boolean equals(Object o2) {
 			if(!(o2 instanceof GroupKey)) return false;
-			return checkEquals(key, ((GroupKey)o2).key);
+			return checkEquals(key, ((GroupKey)o2).key, 
+					getInventorySettings().getGroupBy().caseSensitive,
+					getInventorySettings().getGroupBy().ignoreDiacritics);
 		}
 		
 		@Override
 		public String toString() {
-			return objToString(key);
+			return objToString(key, getInventorySettings().getGroupBy().ignoreDiacritics);
 		}
 		
 		@Override
@@ -265,7 +248,8 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			for(int i = 0; i < rowVals.length; i++) {
 				Object rowVal1 = rowVals[i];
 				Object rowVal2 = otherRow.rowVals[i];
-				equals &= checkEquals(rowVal1, rowVal2);
+				final ColumnInfo info = getInventorySettings().getColumns().get(i);
+				equals &= checkEquals(rowVal1, rowVal2, info.caseSensitive, info.ignoreDiacritics);
 			}
 			return equals;
 		}
@@ -273,9 +257,11 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		@Override
 		public String toString() {
 			StringBuffer sb = new StringBuffer();
+			int i = 0;
 			for(Object rowVal:rowVals) {
 				sb.append((sb.length() > 0 ? "," : ""));
-				sb.append(objToString(rowVal));
+				final  ColumnInfo info = getInventorySettings().getColumns().get(i++);
+				sb.append(objToString(rowVal, info.ignoreDiacritics));
 			}
 			return sb.toString();
 		}
