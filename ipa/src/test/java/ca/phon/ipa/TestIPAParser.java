@@ -276,4 +276,12 @@ public class TestIPAParser {
 		}
 	}
 	
+	@Test
+	public void testPhonexReference() throws Exception {
+		final String txt = "\\2\\1";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		
+		Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(0));
+	}
+	
 }
