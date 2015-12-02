@@ -37,7 +37,7 @@ import ca.phon.cvseq.CVSeqPattern;
 import ca.phon.cvseq.CVSeqType;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.features.CompoundFeatureComparator;
+import ca.phon.ipa.features.CompoundIPAElementComparator;
 import ca.phon.ipa.features.FeatureComparator;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
@@ -770,7 +770,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	@Override
 	public int compareTo(IPATranscript o) {
 		final Comparator<IPAElement> comparator = 
-				new CompoundFeatureComparator(FeatureComparator.defaultComparator());
+				new CompoundIPAElementComparator(FeatureComparator.defaultComparator());
 		return compareTo(o, comparator);
 	}
 	

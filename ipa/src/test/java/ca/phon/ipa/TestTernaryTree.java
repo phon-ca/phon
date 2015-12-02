@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import ca.phon.ipa.features.CompoundFeatureComparator;
+import ca.phon.ipa.features.CompoundIPAElementComparator;
 import ca.phon.ipa.features.FeatureComparator;
 import ca.phon.ipa.tree.IpaTernaryTree;
 
@@ -43,7 +43,7 @@ public class TestTernaryTree {
 	@Test
 	public void testTreeOrdering() throws IOException, ParseException {
 		final Comparator<IPAElement> comparator = 
-				new CompoundFeatureComparator(FeatureComparator.createPlaceComparator());
+				new CompoundIPAElementComparator(FeatureComparator.createPlaceComparator());
 		
 		final IpaTernaryTree<List<IPATranscript>> tree = 
 				new IpaTernaryTree<List<IPATranscript>>(comparator);
