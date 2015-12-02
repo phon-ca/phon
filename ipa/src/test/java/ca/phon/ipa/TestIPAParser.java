@@ -276,4 +276,14 @@ public class TestIPAParser {
 		}
 	}
 	
+	@Test
+	public void testAlignment() throws Exception {
+		final char alignmentChar = AlignmentMarker.ALIGNMENT_CHAR;
+		final String txt = "b " + alignmentChar + " c";
+		
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		Assert.assertEquals(ipa.length(), 5);
+		Assert.assertEquals(ipa.elementAt(2).getText(), alignmentChar + "");
+	}
+	
 }

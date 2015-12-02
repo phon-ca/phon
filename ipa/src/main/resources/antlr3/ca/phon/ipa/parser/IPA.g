@@ -68,7 +68,7 @@ scope {
 	:	w1=word {if($w1.w != null) { $transcription::builder.append($w1.w);} else { if(input.get(input.index()).getType() != EOF) return transcription(); } } 
 		( (word_boundary 
 			{ 
-				if($transcription::builder.last() instanceof WordBoundary) {
+				if($word_boundary.wordBoundary instanceof WordBoundary && $transcription::builder.last() instanceof WordBoundary) {
 					IPAParserException pe = new IPAParserException("Extra space");
 					int idx = input.LT(1).getCharPositionInLine();
 					if(idx < 0) {
