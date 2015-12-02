@@ -285,13 +285,5 @@ public class TestIPAParser {
 		Assert.assertEquals(ipa.length(), 5);
 		Assert.assertEquals(ipa.elementAt(2).getText(), alignmentChar + "");
 	}
-
-	@Test
-	public void testPhonexReference() throws Exception {
-		final String txt = "\\2\\1";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-		
-		Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(0));
-	}
 	
 }
