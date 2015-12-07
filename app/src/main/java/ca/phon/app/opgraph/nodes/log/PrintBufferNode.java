@@ -82,7 +82,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 			bufferPanel.getLogBuffer().setText(bufferValue.toString());
 			
 			if(!bufferWindow.isVisible()) {
-				bufferWindow.setSize(600, 800);
+				bufferWindow.setSize(968, 600);
 				bufferWindow.centerWindow();
 				bufferWindow.setVisible(true);
 			}
