@@ -78,6 +78,8 @@ public class OpgraphEditor extends CommonModuleFrame {
 	private JMenuBar menuBar;
 	
 	private JToolBar toolBar;
+	
+	private NodeEditorStatusBar statusBar;
 
 	public OpgraphEditor() {
 		this(new DefaultOpgraphEditorModel());
@@ -152,6 +154,14 @@ public class OpgraphEditor extends CommonModuleFrame {
 		
 	}
 	
+	public JToolBar getToolBar() {
+		return this.toolBar;
+	}
+	
+	public NodeEditorStatusBar getStatusBar() {
+		return this.statusBar;
+	}
+	
 	protected void updateTitle() {
 		final StringBuffer sb = new StringBuffer();
 		sb.append(WINDOW_TITLE);
@@ -224,6 +234,12 @@ public class OpgraphEditor extends CommonModuleFrame {
 			
 		setupDefaultPerspective();
 		setupMenu();
+		setupStatusBar();
+		add(statusBar, BorderLayout.SOUTH);
+	}
+	
+	protected void setupStatusBar() {
+		statusBar = new NodeEditorStatusBar();
 	}
 	
 	protected void setupToolbar() {

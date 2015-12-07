@@ -37,8 +37,9 @@ public class StopAction extends OpgraphEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent arg0) {
 		final GraphDocument document = getEditor().getModel().getDocument();
-		if(document != null)
+		if(document != null) {
 			document.setProcessingContext(null);
+		}
 	}
 
 }

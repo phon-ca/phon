@@ -8,6 +8,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import ca.gedge.opgraph.Processor;
+import ca.gedge.opgraph.ProcessorEvent;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.editor.OpgraphEditor;
@@ -46,6 +47,20 @@ public class StartAction extends OpgraphEditorAction {
 				final Processor context = 
 						(document.getProcessingContext() == null ? new Processor(document.getGraph()) : document.getProcessingContext());
 				document.setProcessingContext(context);
+				context.addProcessorListener( (pe) -> {
+					SwingUtilities.invokeLater( () -> {
+					if(pe.getType() == ProcessorEvent.Type.BEGIN_NODE) {
+						getEditor().getStatusBar().getProgressBar().setIndeterminate(true);
+						getEditor().getStatusBar().getProgressLabel().setText(pe.getNode().getName());
+					} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
+						getEditor().getStatusBar().getProgressBar().setIndeterminate(false);
+					} else if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
+						getEditor().getStatusBar().getProgressBar().setIndeterminate(false);
+						getEditor().getStatusBar().getProgressLabel().setText("");
+						(new StopAction(getEditor())).actionPerformed(arg0);
+					}
+					});
+				});
 				
 				context.getContext().setDebug(true);
 				getEditor().getModel().setupContext(context.getContext());
@@ -57,6 +72,8 @@ public class StartAction extends OpgraphEditorAction {
 					} catch (ProcessingException pe) {
 						document.updateDebugState(
 								(pe.getContext() != null ? pe.getContext() : context));
+						// bring Debug view to front
+						getEditor().showView("Debug");
 					} 
 				}
 			}
