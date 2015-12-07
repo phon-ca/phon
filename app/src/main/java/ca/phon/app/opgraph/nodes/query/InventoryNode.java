@@ -157,45 +157,6 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		return retVal;
 	}
 	
-	private boolean checkEquals(Object o1, Object o2, boolean caseSensitive, boolean ignoreDiacritics) {
-		if(o1 == null && o2 != null) return false;
-		else if(o1 == null && o2 == o1) return true;
-		
-		final Class<?> type = o1.getClass();
-		@SuppressWarnings("unchecked")
-		final Formatter<Object> formatter = 
-				(Formatter<Object>)FormatterFactory.createFormatter(type);
-		
-		String o1Txt = (formatter != null ? formatter.format(o1) : o1.toString());
-		String o2Txt = (formatter != null ? formatter.format(o2) : o2.toString());
-		
-		if(ignoreDiacritics) {
-			try {
-				final IPATranscript ipa = IPATranscript.parseIPATranscript(o1Txt);
-				o1Txt = ipa.removePunctuation().stripDiacritics().toString();
-				
-				final IPATranscript ipa2 = IPATranscript.parseIPATranscript(o2Txt);
-				o2Txt = ipa2.removePunctuation().stripDiacritics().toString();
-			} catch (ParseException e) {}
-		}
-		
-		return (caseSensitive ? o1Txt.equals(o2Txt) : o1Txt.equalsIgnoreCase(o2Txt));
-	}
-	
-	private String objToString(Object val, boolean ignoreDiacritics) {
-		String retVal = (val != null ? val.toString() : "");
-		if(ignoreDiacritics) {
-			try {
-				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
-					IPATranscript.parseIPATranscript(retVal));
-				retVal = transcript.removePunctuation().stripDiacritics().toString();
-			} catch (ParseException e) {
-				
-			}
-		}
-		return retVal;
-	}
-	
 	private class GroupKey implements Comparable<GroupKey> {
 		Object key;
 		
@@ -206,14 +167,14 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		@Override
 		public boolean equals(Object o2) {
 			if(!(o2 instanceof GroupKey)) return false;
-			return checkEquals(key, ((GroupKey)o2).key, 
+			return TableUtils.checkEquals(key, ((GroupKey)o2).key, 
 					getInventorySettings().getGroupBy().caseSensitive,
 					getInventorySettings().getGroupBy().ignoreDiacritics);
 		}
 		
 		@Override
 		public String toString() {
-			return objToString(key, getInventorySettings().getGroupBy().ignoreDiacritics);
+			return TableUtils.objToString(key, getInventorySettings().getGroupBy().ignoreDiacritics);
 		}
 		
 		@Override
@@ -249,7 +210,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				Object rowVal1 = rowVals[i];
 				Object rowVal2 = otherRow.rowVals[i];
 				final ColumnInfo info = getInventorySettings().getColumns().get(i);
-				equals &= checkEquals(rowVal1, rowVal2, info.caseSensitive, info.ignoreDiacritics);
+				equals &= TableUtils.checkEquals(rowVal1, rowVal2, info.caseSensitive, info.ignoreDiacritics);
 			}
 			return equals;
 		}
@@ -261,7 +222,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			for(Object rowVal:rowVals) {
 				sb.append((sb.length() > 0 ? "," : ""));
 				final  ColumnInfo info = getInventorySettings().getColumns().get(i++);
-				sb.append(objToString(rowVal, info.ignoreDiacritics));
+				sb.append(TableUtils.objToString(rowVal, info.ignoreDiacritics));
 			}
 			return sb.toString();
 		}
