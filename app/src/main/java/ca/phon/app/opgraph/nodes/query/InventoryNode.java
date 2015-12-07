@@ -104,7 +104,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		}
 		
 		for(int i = 0; i < colNames.size(); i++) {
-			outputTable.setColumntTitle(i, colNames.get(i));
+			outputTable.setColumnTitle(i, colNames.get(i));
 		}
 		
 		context.put(tableOutput, outputTable);

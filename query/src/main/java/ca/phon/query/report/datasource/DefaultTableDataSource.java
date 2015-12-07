@@ -118,7 +118,7 @@ public class DefaultTableDataSource implements TableDataSource {
 		return retVal;
 	}
 	
-	public void setColumntTitle(int col, String title) {
+	public void setColumnTitle(int col, String title) {
 		columnNames[col] = title;
 	}
 	

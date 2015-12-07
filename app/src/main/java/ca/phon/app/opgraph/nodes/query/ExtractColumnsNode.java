@@ -65,7 +65,7 @@ public class ExtractColumnsNode extends TableOpNode implements NodeSettings {
 		
 		for(int i = 0; i < columnIndices.length; i++) {
 			final int colIdx = columnIndices[i];
-			outputTable.setColumntTitle(i, table.getColumnTitle(colIdx));
+			outputTable.setColumnTitle(i, table.getColumnTitle(colIdx));
 		}
 		
 		context.put(tableOutput, outputTable);

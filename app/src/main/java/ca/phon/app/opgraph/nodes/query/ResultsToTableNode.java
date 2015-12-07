@@ -133,7 +133,7 @@ public class ResultsToTableNode extends OpNode {
 		}
 		
 		for(int i = 0; i < columnNames.size(); i++) {
-			retVal.setColumntTitle(i, columnNames.get(i));
+			retVal.setColumnTitle(i, columnNames.get(i));
 		}
 		
 		return retVal;
