@@ -521,4 +521,9 @@ public class BufferPanel extends JPanel {
 		}
 		
 	}
+
+	public void setBufferName(String string) {
+		logBuffer.setBufferName(string);
+	}
+
 }

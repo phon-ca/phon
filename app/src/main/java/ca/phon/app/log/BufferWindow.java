@@ -52,19 +52,8 @@ public class BufferWindow extends CommonModuleFrame {
 	private static final long serialVersionUID = 3829673739546485612L;
 
 	private static BufferWindow _instance;
-
-	private final CardLayout buffersLayout = new CardLayout();
 	
-	private JPanel buffersPanel;
-	
-	private JComboBox buffersBox;
-	
-	private JButton closeButton;
-	
-	private JPanel topPanel;
-	
-	private final Map<String, BufferPanel> panels = 
-			Collections.synchronizedMap(new HashMap<String, BufferPanel>());
+	private MultiBufferPanel bufferPanel;
 	
 	public static BufferWindow getInstance() {
 		if(_instance == null) {
@@ -105,82 +94,36 @@ public class BufferWindow extends CommonModuleFrame {
 		final DialogHeader header = new DialogHeader("Buffers", "");
 		add(header, BorderLayout.NORTH);
 		
-		final JPanel centerPanel = new JPanel(new BorderLayout());
-		final JPanel selectionPanel = new JPanel(new FormLayout("pref, 3dlu, fill:pref:grow, 3dlu, pref", "pref"));
-		final CellConstraints cc = new CellConstraints();
-		selectionPanel.add(new JLabel("Buffer: "), cc.xy(1,1));
-		buffersBox = new JComboBox();
-		buffersBox.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				final String bufferName = e.getItem().toString();
-				selectBuffer(bufferName);
-			}
-			
-		});
-		selectionPanel.add(buffersBox, cc.xy(3, 1));
-		
-		closeButton = new JButton(new CloseCurrentBufferAction());
-		selectionPanel.add(closeButton, cc.xy(5, 1));
-		
-		centerPanel.add(selectionPanel, BorderLayout.NORTH);
-		
-		buffersPanel = new JPanel(buffersLayout);
-		centerPanel.add(buffersPanel, BorderLayout.CENTER);
-		
-		add(centerPanel, BorderLayout.CENTER);
+		bufferPanel = new MultiBufferPanel();
+		add(bufferPanel, BorderLayout.CENTER);
 	}
 	
 	public BufferPanel createBuffer(String name) {
-		int idx = 0;
-		final String prefix = name;
-		while(panels.keySet().contains(name)) {
-			name = prefix + "(" + (++idx) + ")";
-		}
-		final BufferPanel retVal = new BufferPanel(name);
-		
-		buffersPanel.add(retVal, name);
-		
-		buffersBox.addItem(name);
-		buffersBox.setSelectedItem(name);
-		
-		panels.put(name, retVal);
-		
-		selectBuffer(name);
-		return retVal;
+		return bufferPanel.createBuffer(name);
 	}
 	
 	public BufferPanel getBuffer(String name) {
-		return panels.get(name);
+		return bufferPanel.getBuffer(name);
 	}
 	
 	public void removeBuffer(String name) {
-		final BufferPanel panel = panels.remove(name);
-		if(panel != null) {
-			buffersBox.removeItem(name);
-			buffersPanel.remove(panel);
-		}
+		bufferPanel.removeBuffer(name);
 	}
 	
 	public Collection<String> getBufferNames() {
-		return panels.keySet();
+		return bufferPanel.getBufferNames();
 	}
 	
 	public void selectBuffer(String name) {
-		buffersLayout.show(buffersPanel, name);
+		bufferPanel.selectBuffer(name);
 	}
 	
 	public BufferPanel getCurrentBuffer() {
-		return (buffersBox.getSelectedItem() != null 
-				? panels.get(buffersBox.getSelectedItem().toString()) : null);
+		return bufferPanel.getCurrentBuffer();
 	}
 	
 	public void closeAllBuffers() {
-		final String[] bufferNames = panels.keySet().toArray(new String[0]);
-		for(String buffer:bufferNames) {
-			removeBuffer(buffer);
-		}
+		bufferPanel.closeAllBuffers();
 	}
 
 	public void closeCurrentBuffer() {
@@ -195,8 +138,8 @@ public class BufferWindow extends CommonModuleFrame {
 			
 			if(size.width > Toolkit.getDefaultToolkit().getScreenSize().width) {
 				size.width = Toolkit.getDefaultToolkit().getScreenSize().width;
-			} else if(size.width < 550) {
-				size.width = 550;
+			} else if(size.width < 968) {
+				size.width = 968;
 			}
 			size.height = 600;
 			setSize(size);
