@@ -757,6 +757,11 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 	
 	@Override
+	public int hashCode() {
+		return toString(true).hashCode();
+	}
+	
+	@Override
 	public boolean equals(Object ipa) {
 		if(!(ipa instanceof IPATranscript)) return false;
 		return toString(true).equals(((IPATranscript)ipa).toString(true));
