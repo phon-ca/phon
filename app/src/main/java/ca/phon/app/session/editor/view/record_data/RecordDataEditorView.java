@@ -295,6 +295,7 @@ public class RecordDataEditorView extends EditorView {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		final Record record = editor.getDataModel().getRecord(editor.getCurrentRecordIndex());
+		final RecordTierEditorListener tierEditorListener = new RecordTierEditorListener(record);
 
 		// update speaker and query exclusion
 		recNumField.setText("" + (editor.getCurrentRecordIndex()+1));
@@ -633,8 +634,7 @@ public class RecordDataEditorView extends EditorView {
 		return topPanel;
 	}
 	
-	private SessionEditorUndoableEdit updateRecordAlignment(int group) {
-		final Record record = getEditor().currentRecord();
+	private SessionEditorUndoableEdit updateRecordAlignment(Record record, int group) {
 		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
 		final Tier<IPATranscript> ipaActual = record.getIPAActual();
 		
@@ -648,8 +648,13 @@ public class RecordDataEditorView extends EditorView {
 		return pmEdit;
 	}
 	
-	private final TierEditorListener tierEditorListener = new TierEditorListener
-			() {
+	private class RecordTierEditorListener implements TierEditorListener {
+		
+		private final Record record;
+		
+		public RecordTierEditorListener(Record record) {
+			this.record = record;
+		}
 		
 		@Override
 		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
@@ -667,7 +672,7 @@ public class RecordDataEditorView extends EditorView {
 				tierEdit.doIt();
 				edit.addEdit(tierEdit);
 				
-				final SessionEditorUndoableEdit alignEdit = updateRecordAlignment(groupIndex);
+				final SessionEditorUndoableEdit alignEdit = updateRecordAlignment(record, groupIndex);
 				alignEdit.doIt();
 				edit.addEdit(alignEdit);
 				

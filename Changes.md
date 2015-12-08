@@ -9,6 +9,7 @@
 than the aligned group in Orthography.
 * Fixed an issue with Find & Replace in Orthography groups which contain CHAT group 
 markers (i.e., '{', or '}'.)
+* Fixed an issue where IPA alignment would not update if new/next record is pressed while editing an IPA tier.
 
 ## Changes from Phon 2.1.3
 
