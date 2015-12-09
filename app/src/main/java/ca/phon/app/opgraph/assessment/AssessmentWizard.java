@@ -2,6 +2,7 @@ package ca.phon.app.opgraph.assessment;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 
 import ca.gedge.opgraph.OpGraph;
@@ -18,13 +19,19 @@ public class AssessmentWizard extends NodeWizard {
 	
 	public AssessmentWizard(String title, Processor processor, OpGraph graph) {
 		super(title, processor, graph);
+		
+		if(processor.getContext().containsKey("_project")) {
+			setProject((Project)processor.getContext().get("_project"));
+		}
 	}
 	
 	public void setProject(Project project) {
 		this.project = project;
 		this.sessionSelector = new SessionSelector(project);
 		
-		add(new JScrollPane(sessionSelector), BorderLayout.WEST);
+		final JScrollPane scroller = new JScrollPane(sessionSelector);
+		scroller.setBorder(BorderFactory.createTitledBorder("Select sessions"));
+		add(scroller, BorderLayout.WEST);
 	}
 	
 	public Project getProject() {

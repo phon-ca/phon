@@ -20,6 +20,7 @@ import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
@@ -43,6 +44,12 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		super(opgraph);
 		
 		addQueryNodes();
+		
+		WizardExtension wizardExt = opgraph.getExtension(WizardExtension.class);
+		if(wizardExt != null || !(wizardExt instanceof AssessmentWizardExtension)) {
+			wizardExt = new AssessmentWizardExtension(opgraph);
+			opgraph.putExtension(WizardExtension.class, wizardExt);
+		}
 	}
 	
 	@Override
