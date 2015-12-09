@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.ui.decorations.DialogHeader;
@@ -33,8 +34,8 @@ public class WizardExtension implements Iterable<OpNode> {
 		this.graph = graph;
 	}
 	
-	public WizardFrame createWizard() {
-		return new NodeWizard("Node Wizard", graph);
+	public WizardFrame createWizard(Processor processor) {
+		return new NodeWizard("Node Wizard", processor, graph);
 	}
 
 	public int size() {

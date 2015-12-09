@@ -11,6 +11,7 @@ import org.jdesktop.swingx.JXBusyLabel;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.MultiBufferPanel;
@@ -22,6 +23,8 @@ import ca.phon.ui.wizard.WizardStep;
 
 public class NodeWizard extends WizardFrame {
 	
+	private final Processor processor;
+	
 	private final OpGraph graph;
 	
 	private MultiBufferPanel bufferPanel;
@@ -30,9 +33,10 @@ public class NodeWizard extends WizardFrame {
 	
 	private JLabel statusLabel;
 	
-	public NodeWizard(String title, OpGraph graph) {
+	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
 		
+		this.processor = processor;
 		this.graph = graph;
 		init();
 	}
