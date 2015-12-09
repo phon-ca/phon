@@ -128,6 +128,8 @@ public class SessionSelector extends CheckboxTree {
 			retVal.add(loc);
 		}
 		
+		Collections.sort(retVal, (sp1, sp2) -> sp1.toString().compareTo(sp2.toString()) );
+		
 		return retVal;
 	}
 }
