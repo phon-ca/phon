@@ -34,8 +34,12 @@ public class WizardExtension implements Iterable<OpNode> {
 		this.graph = graph;
 	}
 	
-	public WizardFrame createWizard(Processor processor) {
+	public NodeWizard createWizard(Processor processor) {
 		return new NodeWizard("Node Wizard", processor, graph);
+	}
+	
+	public OpGraph getGraph() {
+		return this.graph;
 	}
 
 	public int size() {

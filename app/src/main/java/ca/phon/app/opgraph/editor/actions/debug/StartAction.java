@@ -13,6 +13,9 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
@@ -65,16 +68,24 @@ public class StartAction extends OpgraphEditorAction {
 				context.getContext().setDebug(true);
 				getEditor().getModel().setupContext(context.getContext());
 				
-				if(context.hasNext()) {
-					try {
-						context.stepAll();
-						SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
-					} catch (ProcessingException pe) {
-						document.updateDebugState(
-								(pe.getContext() != null ? pe.getContext() : context));
-						// bring Debug view to front
-						getEditor().showView("Debug");
-					} 
+				final WizardExtension wizardExt = document.getGraph().getExtension(WizardExtension.class);
+				if(wizardExt != null) {
+					final NodeWizard nodeWizard = wizardExt.createWizard(context);
+					nodeWizard.pack();
+					nodeWizard.setSize(1024, 768);
+					nodeWizard.setVisible(true);
+				} else {
+					if(context.hasNext()) {
+						try {
+							context.stepAll();
+							SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
+						} catch (ProcessingException pe) {
+							document.updateDebugState(
+									(pe.getContext() != null ? pe.getContext() : context));
+							// bring Debug view to front
+							getEditor().showView("Debug");
+						} 
+					}
 				}
 			}
 		};

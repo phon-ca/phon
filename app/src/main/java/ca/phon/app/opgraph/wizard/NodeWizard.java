@@ -44,6 +44,9 @@ public class NodeWizard extends WizardFrame {
 	private void init() {
 		bufferPanel = new MultiBufferPanel();
 		
+		final DialogHeader header = new DialogHeader(super.getTitle(), "");
+		add(header, BorderLayout.NORTH);
+		
 		final WizardExtension nodeWizardList = 
 				graph.getExtension(WizardExtension.class);
 		int stepIdx = 0;
@@ -90,9 +93,6 @@ public class NodeWizard extends WizardFrame {
 				step.setLayout(new BorderLayout());
 				step.add(new JScrollPane(comp), BorderLayout.CENTER);
 				
-				final DialogHeader header = new DialogHeader("Wizard", node.getName());
-				step.add(header, BorderLayout.NORTH);
-				
 				return step;
 			} catch (NullPointerException e) {
 				// we have no document, this may cause an exception
@@ -105,11 +105,8 @@ public class NodeWizard extends WizardFrame {
 	protected WizardStep createReportStep() {
 		final WizardStep retVal = new WizardStep();
 		
-		final DialogHeader header = new DialogHeader("Wizard", "");
-
 		retVal.setLayout(new BorderLayout());
 		
-		retVal.add(header, BorderLayout.NORTH);
 		retVal.add(getBufferPanel(), BorderLayout.CENTER);
 		
 		return retVal;
