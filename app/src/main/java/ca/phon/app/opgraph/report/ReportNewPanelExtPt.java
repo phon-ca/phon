@@ -1,6 +1,6 @@
 package ca.phon.app.opgraph.report;
 
-import ca.phon.opgraph.editor.NewDialogPanel;
+import ca.phon.app.opgraph.editor.NewDialogPanel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;

@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.opgraph.editor.OpgraphEditorEP;
+import ca.phon.app.opgraph.editor.OpgraphEditorEP;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 

@@ -3,7 +3,7 @@ package ca.phon.app.opgraph.wizard;
 import javax.swing.JButton;
 import javax.swing.JList;
 
-import ca.phon.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
 
 /**
  * Provides a UI for selecting and ordering nodes in the wizard.

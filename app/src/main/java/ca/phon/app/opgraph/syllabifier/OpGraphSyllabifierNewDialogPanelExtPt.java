@@ -1,12 +1,12 @@
-package ca.phon.app.opgraph.assessment;
+package ca.phon.app.opgraph.syllabifier;
 
 import ca.phon.app.opgraph.editor.NewDialogPanel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
-@PhonPlugin(author="Greg J. Hedlund <ghedlund@mun.ca>", minPhonVersion="2.1.0", name="Assessment Opgraph Editor Model")
-public class AssessmentNewPanelExtPt implements IPluginExtensionPoint<NewDialogPanel> {
+@PhonPlugin(author="Greg J. Hedlund <ghedlund@mun.ca>", minPhonVersion="2.1.0", name="Syllabifier New Dialog Panel")
+public class OpGraphSyllabifierNewDialogPanelExtPt implements IPluginExtensionPoint<NewDialogPanel> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -16,7 +16,7 @@ public class AssessmentNewPanelExtPt implements IPluginExtensionPoint<NewDialogP
 	@Override
 	public IPluginExtensionFactory<NewDialogPanel> getFactory() {
 		final IPluginExtensionFactory<NewDialogPanel> factory = (Object ... args) -> {
-			return new AssessmentNewPanel();
+			return new OpGraphSyllabifierNewDialogPanel();
 		};
 		return factory;
 	}

@@ -1,9 +1,9 @@
 package ca.phon.app.opgraph.report;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.editor.NewDialogPanel;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.query.QueryHistoryNode;
-import ca.phon.opgraph.editor.NewDialogPanel;
-import ca.phon.opgraph.editor.OpgraphEditorModel;
 
 public class ReportNewPanel extends NewDialogPanel {
 

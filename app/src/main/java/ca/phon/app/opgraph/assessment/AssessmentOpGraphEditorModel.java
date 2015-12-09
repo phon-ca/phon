@@ -16,11 +16,11 @@ import javax.swing.border.CompoundBorder;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
 import ca.phon.app.session.SessionSelector;
-import ca.phon.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;

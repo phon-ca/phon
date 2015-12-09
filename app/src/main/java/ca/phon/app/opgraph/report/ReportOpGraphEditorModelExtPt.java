@@ -1,7 +1,7 @@
 package ca.phon.app.opgraph.report;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.phon.opgraph.editor.OpgraphEditorModel;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
