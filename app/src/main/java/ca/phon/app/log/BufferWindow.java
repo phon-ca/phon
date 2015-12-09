@@ -47,7 +47,7 @@ import ca.phon.app.log.actions.SaveCurrentBufferAction;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 
-public class BufferWindow extends CommonModuleFrame {
+public class BufferWindow extends CommonModuleFrame implements BufferPanelContainer {
 
 	private static final long serialVersionUID = 3829673739546485612L;
 

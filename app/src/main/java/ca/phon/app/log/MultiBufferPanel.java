@@ -8,12 +8,10 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -32,7 +30,7 @@ import ca.phon.util.icons.IconSize;
 /**
  * Container for multiple {@link BufferPanels} 
  */
-public class MultiBufferPanel extends JPanel {
+public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 
 	private static final long serialVersionUID = 8474621417321331439L;
 	
