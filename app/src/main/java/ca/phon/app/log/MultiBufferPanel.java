@@ -2,6 +2,9 @@ package ca.phon.app.log;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -91,12 +95,31 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		
 		cardLayout = new CardLayout();
 		bufferPanel = new JPanel(cardLayout);
+		bufferPanel.add(createNoSelectionPanel(), "no_selection");
 		
 		leftPanel.setBorder(BorderFactory.createTitledBorder("Buffer List"));
 		
 		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, bufferPanel);
 		
 		add(splitPane, BorderLayout.CENTER);
+	}
+	
+	private JPanel createNoSelectionPanel() {
+		final JPanel panel = new JPanel(new GridBagLayout());
+		final GridBagConstraints gbc = new GridBagConstraints();
+		
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		
+		final JLabel lbl = new JLabel("No buffer selected");
+		lbl.setFont(lbl.getFont().deriveFont(Font.ITALIC));
+		panel.add(lbl, gbc);
+		
+		panel.setBorder(BorderFactory.createTitledBorder(""));
+		
+		return panel;
 	}
 	
 	public BufferPanel createBuffer(String bufferName) {
@@ -189,6 +212,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			if(selectedRow >= 0) {
 				final String bufferName = bufferList.getModel().getValueAt(selectedRow, 0).toString();
 				cardLayout.show(bufferPanel, bufferName);
+			} else {
+				cardLayout.show(bufferPanel, "no_selection");
 			}
 		});
 		
