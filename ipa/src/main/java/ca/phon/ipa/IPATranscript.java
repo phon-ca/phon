@@ -50,8 +50,6 @@ import ca.phon.syllable.SyllableVisitor;
 import ca.phon.util.Range;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 
 /**
  * <p>A (somewhat) immutable representation of an IPA transcription.  While the number of elements
@@ -402,12 +400,27 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	
 	/**
 	 * Create a new transcript with all punctuation
-	 * removed.
+	 * removed (except word boundaries).
+	 * 
+	 * Same as <code>removePunctuation(false)</code>
 	 * 
 	 * @return the filtered transcript
 	 */
 	public IPATranscript removePunctuation() {
-		final PunctuationFilter filter = new PunctuationFilter();
+		return removePunctuation(false);
+	}
+	
+	/**
+	 * Create a new transcript with all punctuation
+	 * remove.  Option to ignore word boundaries
+	 * can be provided.
+	 * 
+	 * @param ignoreWordBoundaries
+	 * 
+	 * @return the filtered transcript
+	 */
+	public IPATranscript removePunctuation(boolean ignoreWordBoundaries) {
+		final PunctuationFilter filter = new PunctuationFilter(ignoreWordBoundaries);
 		accept(filter);
 		return filter.getIPATranscript();
 	}
@@ -664,49 +677,6 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return retVal;
 	}
 	
-	/**
-	 * Phone visitor for filtering punctuation in transcriptions.
-	 */
-	public class PunctuationFilter extends VisitorAdapter<IPAElement> {
-		
-		/**
-		 * filtered transcript
-		 */
-		private final IPATranscriptBuilder builder;
-		
-		public PunctuationFilter() {
-			builder = new IPATranscriptBuilder();
-		}
-
-		@Override
-		public void fallbackVisit(IPAElement obj) {
-		}
-		
-		@Visits
-		public void visitBasicPhone(Phone phone) {
-			builder.append(phone);
-		}
-		
-		@Visits
-		public void visitCompoundPhone(CompoundPhone phone) {
-			builder.append(phone);
-		}
-		
-		@Visits
-		public void visitWordBoundary(WordBoundary wb) {
-			builder.appendWordBoundary();
-		}
-		
-		@Visits
-		public void visitAlignmentMarker(AlignmentMarker marker) {
-			builder.append((new IPAElementFactory()).createAlignmentMarker());
-		}
-		
-		public IPATranscript getIPATranscript() {
-			return builder.toIPATranscript();
-		}
-	}
-
 	@Override
 	public Set<Class<?>> getExtensions() {
 		return extSupport.getExtensions();
