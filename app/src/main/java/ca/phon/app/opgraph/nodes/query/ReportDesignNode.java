@@ -2,8 +2,12 @@ package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
@@ -20,7 +24,10 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.ReportBuilder;
 import ca.phon.query.report.ReportBuilderException;
 import ca.phon.query.report.ReportBuilderFactory;
+import ca.phon.query.report.ReportIO;
+import ca.phon.query.report.io.ObjectFactory;
 import ca.phon.query.report.io.ReportDesign;
+import ca.phon.util.PrefHelper;
 
 @OpNodeInfo(
 		name="Report",
@@ -29,6 +36,10 @@ import ca.phon.query.report.io.ReportDesign;
 		showInLibrary=true
 )
 public class ReportDesignNode extends OpNode implements NodeSettings {
+	
+	private final static Logger LOGGER = Logger.getLogger(ReportDesignNode.class.getName());
+	
+	private final static String AUTOSAVE_FILENAME = "lastreport.xml";
 	
 	private InputField projectInputField = 
 			new InputField("project", "Project", false, true, Project.class);
@@ -56,7 +67,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 	
 	public ReportDesignNode(ReportDesign reportDesign) {
 		super();
-		
+
 		this.reportDesign = reportDesign;
 		
 		putField(projectInputField);

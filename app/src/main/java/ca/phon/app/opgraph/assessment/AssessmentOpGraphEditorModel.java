@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -20,6 +22,7 @@ import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
+import ca.phon.app.opgraph.wizard.NodeWizardPanel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
@@ -35,6 +38,8 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	private JComboBox<Project> projectList;
 	
 	private SessionSelector sessionSelector;
+
+	private NodeWizardPanel wizardPanel;
 	
 	public AssessmentOpGraphEditorModel() {
 		this(new OpGraph());
@@ -46,10 +51,25 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		addQueryNodes();
 		
 		WizardExtension wizardExt = opgraph.getExtension(WizardExtension.class);
-		if(wizardExt != null || !(wizardExt instanceof AssessmentWizardExtension)) {
+		if(wizardExt == null) {
 			wizardExt = new AssessmentWizardExtension(opgraph);
 			opgraph.putExtension(WizardExtension.class, wizardExt);
 		}
+	}
+	
+	public NodeWizardPanel getWizardPanel() {
+		if(wizardPanel == null) {
+			wizardPanel = new NodeWizardPanel(getDocument(),
+					getDocument().getGraph().getExtension(WizardExtension.class));
+		}
+		return wizardPanel;
+	}
+
+	@Override
+	public List<String> getAvailableViewNames() {
+		final List<String> retVal = new ArrayList<>(super.getAvailableViewNames());
+		retVal.add("Wizard");
+		return retVal;
 	}
 	
 	@Override
@@ -105,6 +125,10 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 			retVal.setBounds(800, 200, 200, 200);
 			break;
 			
+		case "Wizard":
+			retVal.setBounds(800, 200, 200, 200);
+			break;
+			
 		case "Library":
 			retVal.setBounds(0, 0, 200, 200);
 			break;
@@ -116,6 +140,15 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		default:
 			retVal.setBounds(0, 0, 200, 200);
 			break;
+		}
+		return retVal;
+	}
+	
+	@Override
+	public JComponent getView(String viewName) {
+		JComponent retVal = super.getView(viewName);
+		if(viewName.equals("Wizard")) {
+			retVal = getWizardPanel();
 		}
 		return retVal;
 	}
@@ -143,7 +176,8 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	@Override
 	public boolean isViewVisibleByDefault(String viewName) {
 		return super.isViewVisibleByDefault(viewName)
-				|| viewName.equals("Debug Settings");
+				|| viewName.equals("Debug Settings")
+				|| viewName.equals("Wizard");
 	}
 
 	@Override

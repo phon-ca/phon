@@ -26,12 +26,12 @@ public class AssessmentWizard extends NodeWizard {
 	}
 	
 	public void setProject(Project project) {
-		this.project = project;
-		this.sessionSelector = new SessionSelector(project);
-		
-		final JScrollPane scroller = new JScrollPane(sessionSelector);
-		scroller.setBorder(BorderFactory.createTitledBorder("Select sessions"));
-		add(scroller, BorderLayout.WEST);
+//		this.project = project;
+//		this.sessionSelector = new SessionSelector(project);
+//		
+//		final JScrollPane scroller = new JScrollPane(sessionSelector);
+//		scroller.setBorder(BorderFactory.createTitledBorder("Select sessions"));
+//		add(scroller, BorderLayout.WEST);
 	}
 	
 	public Project getProject() {

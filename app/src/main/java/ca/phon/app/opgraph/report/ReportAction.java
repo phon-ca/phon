@@ -9,13 +9,19 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
 
 public class ReportAction extends HookableAction {
 	
@@ -40,7 +46,7 @@ public class ReportAction extends HookableAction {
 		if(name.endsWith(".xml")) name = name.substring(0, name.length()-4);
 		if(name.endsWith(".opgraph")) name = name.substring(0, name.length()-8);
 		final File asFile = new File(name);
-		putValue(NAME, asFile.getName());
+		putValue(NAME, StringEscapeUtils.unescapeHtml4(asFile.getName()));
 		putValue(SHORT_DESCRIPTION, reportURL.getPath());
 	}
 
@@ -54,14 +60,23 @@ public class ReportAction extends HookableAction {
 			ctx.put("_project", project);
 			ctx.put("_queryId", queryId);
 			
-			final Runnable inBg = () -> {
-				try {
-					processor.stepAll();
-				} catch (ProcessingException pe) {
-					LOGGER.log(Level.SEVERE, pe.getLocalizedMessage(), pe);
-				}
-			};
-			SwingUtilities.invokeLater(inBg);
+			final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
+			if(wizardExt != null) {
+				final NodeWizard wizard = wizardExt.createWizard(processor);
+				wizard.pack();
+				wizard.setSize(1024, 768);
+				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+				wizard.setVisible(true);
+			} else {
+				final Runnable inBg = () -> {
+					try {
+						processor.stepAll();
+					} catch (ProcessingException pe) {
+						LOGGER.log(Level.SEVERE, pe.getLocalizedMessage(), pe);
+					}
+				};
+				SwingUtilities.invokeLater(inBg);
+			}
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}

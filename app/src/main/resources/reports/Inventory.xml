@@ -13,12 +13,11 @@
         </node>
         <node id="3790be87" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
             <extensions>
-                <oga:settings>
-                    <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
-                    <oga:property key="caseSensitive"><![CDATA[false]]></oga:property>
-                    <oga:property key="groupBy"><![CDATA[Session]]></oga:property>
-                    <oga:property key="columns"><![CDATA[Result]]></oga:property>
-                </oga:settings>
+                <opqry:inventoryoptions>
+                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
+                    <opqry:column caseSensitive="false" column="Result" ignoreDiacritics="true"/>
+                </opqry:inventoryoptions>
+                <oga:settings/>
                 <oga:meta x="410" y="15"/>
             </extensions>
         </node>
@@ -33,10 +32,7 @@
         </node>
         <node id="6f7c2ffa" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <extensions>
-                <oga:settings>
-                    <oga:property key="appendToBuffer"><![CDATA[true]]></oga:property>
-                    <oga:property key="bufferName"><![CDATA[default]]></oga:property>
-                </oga:settings>
+                <oga:settings/>
                 <oga:meta x="400" y="136"/>
             </extensions>
         </node>
@@ -47,6 +43,10 @@
         <link dest="6f7c2ffa" destField="data" source="b5aa672" sourceField="table"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+            <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
+                <opqry:node ref="3790be87"/>
+                <opqry:node ref="b5aa672"/>
+            </opqry:nodewizard>
         </extensions>
     </graph>
 </opgraph>

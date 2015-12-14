@@ -111,17 +111,25 @@
     
     <xs:element name="inventoryoptions" type="InventoryOptionsType" substitutionGroup="og:extension"/>
     
-    <xs:complexType name="NodeWizardType" mixed="false">
-        <xs:sequence>
-            <xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="type" type="og:nonEmptyString" use="required">
-            <xs:annotation>
-                <xs:documentation>Subclass which much have a constructor which accepts a graph as an argument.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
+    <xs:complexType name="NodeWizardType">
+        <xs:complexContent mixed="false">
+            <xs:extension base="og:AbstractExtensionType">
+                <xs:sequence>
+                    <xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="type" type="og:nonEmptyString" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Subclass which much have a constructor which accepts a graph as an argument.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     
-    <xs:element name="node" type="og:nonEmptyString"/>
-    <xs:element name="nodewizard" type="NodeWizardType"/>
+    <xs:complexType name="NodeRefType">
+        <xs:attribute name="ref" type="og:nonEmptyString" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="node" type="NodeRefType"/>
+    <xs:element name="nodewizard" type="NodeWizardType" substitutionGroup="og:extension"/>
 </xs:schema>

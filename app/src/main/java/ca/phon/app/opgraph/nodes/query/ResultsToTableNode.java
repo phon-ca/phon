@@ -109,7 +109,9 @@ public class ResultsToTableNode extends OpNode {
 						
 						final String resultTxt = 
 								(rv.getRange().getFirst() >= 0 && rv.getRange().getLast() >= rv.getRange().getFirst() ?
-								tierTxt.substring(rv.getRange().getFirst(), Math.min(rv.getRange().getLast(), tierTxt.length())) : "");
+								tierTxt.substring(
+										Math.max(0, rv.getRange().getFirst()), 
+										Math.max(0, Math.min(rv.getRange().getLast(), tierTxt.length()))) : "");
 						Object resultVal = resultTxt;
 						if(formatter != null) {
 							try {

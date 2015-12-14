@@ -12,6 +12,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.io.xml.XMLSerializer;
 import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
@@ -76,11 +77,16 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		NodeList childNodes = elem.getChildNodes();
 		for(int i = 0; i < childNodes.getLength(); i++) {
 			final Node childNode = childNodes.item(i);
-			if(childNode.getNodeName().equals("groupBy")) {
+			if(childNode.getNodeName().equals(PREFIX + ":groupBy")) {
 				retVal.setGroupBy(readColumnInfo(childNode));
-			} else {
+			} else if(childNode.getNodeName().equals(PREFIX + ":column")) {
 				retVal.getColumns().add(readColumnInfo(childNode));
 			}
+		}
+		
+		if(parent instanceof OpNode) {
+			final OpNode node = (OpNode)parent;
+			node.putExtension(InventorySettings.class, retVal);
 		}
 		
 		return retVal;

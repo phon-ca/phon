@@ -46,7 +46,7 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		for(OpNode node:nodeList) {
 			final Element nodeEle = 
 					doc.createElementNS(NAMESPACE, PREFIX + ":node");
-			nodeEle.setNodeValue(node.getId());
+			nodeEle.setAttribute("ref", node.getId());
 			settingsEle.appendChild(nodeEle);
 		}
 		
@@ -63,7 +63,7 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		WizardExtension ext = null;
 		try {
 			final Class<?> clz = Class.forName(nodeType);
-			if(WizardExtension.class.isAssignableFrom(clz))
+			if(!WizardExtension.class.isAssignableFrom(clz))
 				throw new IOException(clz.getName() + " is not a subclass of " + WizardExtension.class.getName());
 			
 			// find constructor
@@ -80,17 +80,19 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		final NodeList childNodes = elem.getChildNodes();
 		for(int i = 0; i < childNodes.getLength(); i++) {
 			final Node child = childNodes.item(i);
-			if(!child.getNodeName().equals("node"))
-				throw new IOException("Illegal child node " + child.getNodeName());
-			final String nodeId = child.getNodeValue();
-			
-			final OpNode node = graph.getNodeById(nodeId, true);
-			if(node != null) {
-				ext.addNode(node);
+			if(child.getNodeName().equals(PREFIX + ":node")) {
+				final String nodeId = child.getAttributes().getNamedItem("ref").getNodeValue();
+				
+				final OpNode node = graph.getNodeById(nodeId, true);
+				if(node != null) {
+					ext.addNode(node);
+				}
 			}
 		}
 		
-		return ext;
+		graph.putExtension(WizardExtension.class, ext);
+		
+		return null;
 	}
 
 	@Override

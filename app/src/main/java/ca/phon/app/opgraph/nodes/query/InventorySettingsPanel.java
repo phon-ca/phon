@@ -187,7 +187,9 @@ public class InventorySettingsPanel extends JPanel {
 			gbc.gridy = 0;
 			gbc.weightx = 1.0;
 			nameField = new PromptedTextField("Enter column name or number");
-			
+			if(info.getName().trim().length() > 0) {
+				nameField.setText(info.getName());
+			}
 			nameField.getDocument().addDocumentListener(new DocumentListener() {
 				
 				@Override
@@ -214,11 +216,13 @@ public class InventorySettingsPanel extends JPanel {
 			gbc.gridwidth = 1;
 			gbc.weightx = 0.0;
 			caseSensitiveBox = new JCheckBox("Case sensitive");
+			caseSensitiveBox.setSelected(info.caseSensitive);
 			caseSensitiveBox.addChangeListener( (e) -> info.setCaseSensitive(caseSensitiveBox.isSelected()) );
 			add(caseSensitiveBox, gbc);
 			
 			gbc.gridx++;
 			ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
+			ignoreDiacriticsBox.setSelected(info.ignoreDiacritics);
 			ignoreDiacriticsBox.addChangeListener( (e) -> info.setIgnoreDiacritics(ignoreDiacriticsBox.isSelected()) );
 			add(ignoreDiacriticsBox, gbc);
 		}

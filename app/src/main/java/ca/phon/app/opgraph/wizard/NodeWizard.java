@@ -2,24 +2,46 @@ package ca.phon.app.opgraph.wizard;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.PrintWriter;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+
+
+
+
+
 
 import org.jdesktop.swingx.JXBusyLabel;
+
+
+
+
+
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.Processor;
+import ca.gedge.opgraph.ProcessorEvent;
+import ca.gedge.opgraph.ProcessorListener;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.project.Project;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.worker.PhonWorker;
 
 public class NodeWizard extends WizardFrame {
 	
@@ -33,8 +55,11 @@ public class NodeWizard extends WizardFrame {
 	
 	private JLabel statusLabel;
 	
+	private WizardStep reportStep;
+	
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
+		setWindowName(title);
 		
 		this.processor = processor;
 		this.graph = graph;
@@ -47,24 +72,47 @@ public class NodeWizard extends WizardFrame {
 		final DialogHeader header = new DialogHeader(super.getTitle(), "");
 		add(header, BorderLayout.NORTH);
 		
+		final JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		busyLabel = new JXBusyLabel(new Dimension(22, 22));
+		statusLabel = new JLabel();
+		
+		statusPanel.setOpaque(false);
+		statusPanel.add(busyLabel);
+		statusPanel.add(statusLabel);
+		
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.insets = new Insets(0, 24, 5, 2);
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		gbc.gridwidth = 1;
+		
+		header.add(statusPanel, gbc);
+		
 		final WizardExtension nodeWizardList = 
 				graph.getExtension(WizardExtension.class);
 		int stepIdx = 0;
 		if(nodeWizardList != null) {
 			for(OpNode node:nodeWizardList) {
 				final WizardStep step = createStep(node);
-				step.setPrevStep(stepIdx-1);
-				step.setNextStep(stepIdx+1);
-				++stepIdx;
-				
-				addWizardStep(step);
+				if(step != null) {
+					step.setPrevStep(stepIdx-1);
+					step.setNextStep(stepIdx+1);
+					++stepIdx;
+					
+					addWizardStep(step);
+				}
 			}
 		}
 		
-		final WizardStep reportStep = createReportStep();
+		reportStep = createReportStep();
 		reportStep.setPrevStep(stepIdx-1);
 		reportStep.setNextStep(-1);
 		addWizardStep(reportStep);
+		
+		super.btnFinish.setVisible(false);
 	}
 	
 	public MultiBufferPanel getBufferPanel() {
@@ -75,8 +123,48 @@ public class NodeWizard extends WizardFrame {
 		return this.graph;
 	}
 	
+	final ProcessorListener processorListener =  (ProcessorEvent pe) -> {
+		if(pe.getType() == ProcessorEvent.Type.BEGIN_NODE) {
+			final String nodeName = pe.getNode().getName();
+			SwingUtilities.invokeLater( () -> {
+				if(!busyLabel.isBusy()) {
+					busyLabel.setBusy(true);
+				}
+				statusLabel.setText(nodeName);
+				btnBack.setEnabled(false);
+			});
+		} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
+			
+		} else if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
+			SwingUtilities.invokeLater( () -> {
+				busyLabel.setBusy(false);
+				statusLabel.setText("");
+				btnBack.setEnabled(true);
+			});
+		}
+	};
+	
 	protected void executeGraph() throws ProcessingException {
-		
+		setupContext(processor.getContext());
+		if(!processor.hasNext()) {
+			processor.reset();
+		}
+		processor.addProcessorListener(processorListener);
+		try {
+			processor.stepAll();
+		} catch (ProcessingException pe) {
+			SwingUtilities.invokeLater( () -> {
+				busyLabel.setBusy(false);
+				statusLabel.setText(pe.getLocalizedMessage());
+				
+				final BufferPanel errPanel = bufferPanel.createBuffer("Error");
+				final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
+				pe.printStackTrace(writer);
+				writer.flush();
+				writer.close();
+			});
+			throw pe;
+		}
 	}
 
 	protected void setupContext(OpContext ctx) {
@@ -107,9 +195,33 @@ public class NodeWizard extends WizardFrame {
 		
 		retVal.setLayout(new BorderLayout());
 		
+		
+		
+//		retVal.add(statusPanel, BorderLayout.NORTH);
 		retVal.add(getBufferPanel(), BorderLayout.CENTER);
 		
 		return retVal;
+	}
+	
+	@Override
+	public void gotoStep(int step) {
+		super.gotoStep(step);
+		
+		final Runnable inBg = () -> {
+			if(super.getCurrentStep() == reportStep) {
+				try {
+					executeGraph();
+				} catch (ProcessingException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		
+		final Runnable onEDT = () -> {
+			PhonWorker.getInstance().invokeLater(inBg);
+		};
+		
+		SwingUtilities.invokeLater(onEDT);
 	}
 	
 }

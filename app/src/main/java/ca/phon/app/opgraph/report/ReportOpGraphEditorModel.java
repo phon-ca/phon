@@ -1,8 +1,11 @@
 package ca.phon.app.opgraph.report;
 
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -16,6 +19,9 @@ import javax.swing.border.CompoundBorder;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.assessment.AssessmentOpGraphEditorModel;
+import ca.phon.app.opgraph.assessment.AssessmentWizardExtension;
+import ca.phon.app.opgraph.wizard.NodeWizardPanel;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -31,13 +37,28 @@ public class ReportOpGraphEditorModel extends AssessmentOpGraphEditorModel {
 	private JTable queryTable;
 	
 	public ReportOpGraphEditorModel() {
-		super();
+		this(new OpGraph());
 	}
 	
 	public ReportOpGraphEditorModel(OpGraph graph) {
 		super(graph);
+		
+		WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
+		if(wizardExt == null || (wizardExt instanceof AssessmentWizardExtension && wizardExt.size() == 0)) {
+			wizardExt = new ReportWizardExtension(graph);
+			graph.putExtension(WizardExtension.class, wizardExt);
+		}
 	}
-	
+
+	@Override
+	public Rectangle getInitialViewBounds(String viewName) {
+		Rectangle retVal = super.getInitialViewBounds(viewName);
+		if(viewName.equals("Report Wizard")) {
+			retVal = new Rectangle(0, 0, 200, 200);
+		}
+		return retVal;
+	}
+
 	@Override
 	protected JComponent getDebugSettings() {
 		if(debugSettings == null) {
