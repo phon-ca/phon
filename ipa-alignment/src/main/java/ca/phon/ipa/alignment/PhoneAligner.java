@@ -600,6 +600,8 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		IPAElement p = null;
 		if(phoneIndex < soundPhones.length)
 			p = soundPhones[phoneIndex];
+		else
+			return false;
 		
 		IPAElement i = null;
 		if(phoneIndex-1 > 0)
