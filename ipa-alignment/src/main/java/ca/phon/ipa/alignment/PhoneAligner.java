@@ -60,8 +60,8 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		final List<IPATranscript> targetSylls = targetRep.syllables();
 		final List<IPATranscript> actualSylls = actualRep.syllables();
 		
-		final IPATranscript targetPhones = targetRep.removePunctuation();
-		final IPATranscript actualPhones = actualRep.removePunctuation();
+		final IPATranscript targetPhones = targetRep.removePunctuation(true);
+		final IPATranscript actualPhones = actualRep.removePunctuation(true);
 		
 		int matrix[][];
 		int width, height, score;
@@ -600,8 +600,7 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		IPAElement p = null;
 		if(phoneIndex < soundPhones.length)
 			p = soundPhones[phoneIndex];
-		else
-			return false;
+		else return false;
 		
 		IPAElement i = null;
 		if(phoneIndex-1 > 0)

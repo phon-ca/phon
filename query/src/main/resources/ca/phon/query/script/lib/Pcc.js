@@ -49,9 +49,9 @@ exports.Pcc = {
     				var actualPhone = alignedData[0];
     				if(actualPhone != null) {
     					var targetPhoneString = 
-    						(ignoreDiacritics ? (new IPATranscript([phone])).removePunctuation().stripDiacritics().toString() : phone.toString());
+    						(ignoreDiacritics ? (new IPATranscript([phone])).removePunctuation(true).stripDiacritics().toString() : phone.toString());
     					var actualPhoneString =
-    						(ignoreDiacritics ? (new IPATranscript([actualPhone])).removePunctuation().stripDiacritics().toString() : actualPhone.toString());
+    						(ignoreDiacritics ? (new IPATranscript([actualPhone])).removePunctuation(true).stripDiacritics().toString() : actualPhone.toString());
     
     					if( targetPhoneString == actualPhoneString ) {
     						numCorrect++;
@@ -133,7 +133,7 @@ exports.Pcc = {
     		if(phone.featureSet.intersects(featureSet)) {
     			numTarget++;
                 var targetPhoneString = 
-                	(ignoreDiacritics == true ? (new IPATranscript([phone])).removePunctuation().stripDiacritics().toString() : phone.toString());
+                	(ignoreDiacritics == true ? (new IPATranscript([phone])).removePunctuation(true).stripDiacritics().toString() : phone.toString());
     		    targetVals[targetPhoneString] = 
     		        ( targetVals[targetPhoneString] ? targetVals[targetPhoneString] + 1 : 1 );
     		}
@@ -147,7 +147,7 @@ exports.Pcc = {
     		if(phone.featureSet.intersects(featureSet)) {
     		    numActual++;
                 var actualPhoneString = 
-                	(ignoreDiacritics == true ? (new IPATranscript([phone])).removePunctuation().stripDiacritics().toString() : phone.toString());
+                	(ignoreDiacritics == true ? (new IPATranscript([phone])).removePunctuation(true).stripDiacritics().toString() : phone.toString());
     			    
     			var amountInTarget = targetVals[actualPhoneString];
     			if(amountInTarget != null && amountInTarget > 0) {

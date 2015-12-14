@@ -55,7 +55,7 @@ public class PMLU {
 		final PhoneMap pm = getPhoneMap();
 		final IPATranscript target = pm.getTargetRep();
 		
-		int pmlu = target.removePunctuation().length();
+		int pmlu = target.removePunctuation(true).length();
 		final PhonexPattern pattern = PhonexPattern.compile("\\c");
 		final PhonexMatcher matcher = pattern.matcher(target);
 		while(matcher.find()) ++pmlu;
