@@ -162,8 +162,8 @@ public class WordImpl implements Word {
 		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
 		
 		final PhoneMap retVal = new PhoneMap(ipaT, ipaA);
-		final IPATranscript filteredT = ipaT.removePunctuation();
-		final IPATranscript filteredA = ipaA.removePunctuation();
+		final IPATranscript filteredT = ipaT.removePunctuation(true);
+		final IPATranscript filteredA = ipaA.removePunctuation(true);
 		
 		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
 		if(grpAlignment == null) new PhoneMap();

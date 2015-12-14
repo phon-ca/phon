@@ -595,7 +595,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		int currentX = display.getInsets().left + insetSize;
 		int pIdx = 0;
 
-		IPATranscript grpPhones = display.getTranscript().removePunctuation();
+		IPATranscript grpPhones = display.getDisplayedPhones();
 		int grpSize = widthPerPhone * grpPhones.length();
 
 		if ((currentX + grpSize) >= p.x) {

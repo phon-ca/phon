@@ -52,7 +52,7 @@ while(sessionPathItr.hasNext()) {
 		
 		var word = record.getGroup(result.getResultValue(0).groupIndex).getAlignedWord(wordIdx);
 	
-		var ipaTarget = word.getIPATarget().removePunctuation();
+		var ipaTarget = word.getIPATarget().removePunctuation(true);
 		
 		var wordList = ipaTree.get(ipaTarget);
 		if(wordList == null) {
@@ -98,7 +98,7 @@ while(keyItr.hasNext()) {
 			line.push("");
 		}
 		
-		var actual = alignment.actualRep.removePunctuation();
+		var actual = alignment.actualRep.removePunctuation(true);
 		line.push(actual)
 		
 		// print PMLU

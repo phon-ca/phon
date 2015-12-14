@@ -78,7 +78,7 @@ public class SegmentationEditorView extends EditorView {
 	
 	public enum SegmentationMode {
 		INSERT_AT_END("Insert record at end of session"),
-		INSERT_AFTER_CURRENT("Insert record after current record"),
+		INSERT_AFTER_CURRENT("Insert record after current one"),
 		REPLACE_CURRENT("Replace segment for current record");
 		
 		String val = "";

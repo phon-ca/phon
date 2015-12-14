@@ -24,12 +24,15 @@ import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.util.MsFormatter;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Simple component which displays two labels for
@@ -54,6 +57,11 @@ public class SegmentLabel extends JComponent {
 	 */
 	private volatile long currentTime = 0L;
 
+	private final ImageIcon lockedIcon = 
+			IconManager.getInstance().getIcon("actions/lock", IconSize.XSMALL);
+	private final ImageIcon unlockedIcon =
+			IconManager.getInstance().getIcon("actions/unlock", IconSize.XSMALL);
+	
 	/*
 	 * UI
 	 */
@@ -69,13 +77,19 @@ public class SegmentLabel extends JComponent {
 	private void init() {
 		setLayout(new FlowLayout(FlowLayout.LEADING));
 
+		
 		startTimeLbl = new JLabel();
+		startTimeLbl.setIcon(unlockedIcon);
+		startTimeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		startTimeLbl.setToolTipText("Click to lock start time to current time");
 		startTimeLbl.addMouseListener(new MouseInputAdapter() {
 
 			@Override
 			public void mouseClicked(MouseEvent evt) {
 				if(startLockTime >= 0) {
 					lockSegmentStartTime(-1L);
+				} else {
+					lockSegmentStartTime(getCurrentTime());
 				}
 			}
 
@@ -155,10 +169,12 @@ public class SegmentLabel extends JComponent {
 				String newTxt =
 						"<html><u>" + startTimeTxt + "</u></html>";
 				startTimeLbl.setText(newTxt);
-				startTimeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				startTimeLbl.setIcon(lockedIcon);
+				startTimeLbl.setToolTipText("Click to unlock start time");
 			} else {
 				startTimeLbl.setForeground(Color.black);
-				startTimeLbl.setCursor(Cursor.getDefaultCursor());
+				startTimeLbl.setIcon(unlockedIcon);
+				startTimeLbl.setToolTipText("Click to lock start time to current time");
 			}
 		}
 	}

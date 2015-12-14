@@ -20,14 +20,24 @@
 package ca.phon.ui.ipa;
 
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
+import ca.phon.ipa.AlignmentMarker;
+import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.Phone;
+import ca.phon.ipa.PunctuationFilter;
+import ca.phon.ipa.WordBoundary;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Tuple;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  */
@@ -48,6 +58,11 @@ public class SyllabificationDisplay extends JComponent {
 	 * Transcription
 	 */
 	private IPATranscript transcript = new IPATranscript();
+	
+	/**
+	 * Display transcription
+	 */
+	private IPATranscript displayedPhones = new IPATranscript();
 
 	/** The focused phone */
 	private int focusedPhone = -1;
@@ -103,8 +118,7 @@ public class SyllabificationDisplay extends JComponent {
 	}
 
 	public int getNumberOfDisplayedPhones() {
-		return 
-				(this.transcript == null ? 0 : this.transcript.removePunctuation().length());
+		return getDisplayedPhones().length();
 	}
 	public IPATranscript getTranscript() {
 		return this.transcript;
@@ -112,6 +126,8 @@ public class SyllabificationDisplay extends JComponent {
 
 	public void setTranscript(IPATranscript phones) {
 		this.transcript = phones;
+		displayedPhones = this.transcript.removePunctuation(true);
+		
 		repaint();
 
 		super.invalidate();
@@ -119,14 +135,14 @@ public class SyllabificationDisplay extends JComponent {
 
 	public void clear() {
 		this.transcript = new IPATranscript();
+		this.displayedPhones = new IPATranscript();
 		repaint();
 	}
 
 	public IPAElement getPhoneAtIndex(int idx) {
 		IPAElement retVal = null;
-		IPATranscript soundPhones = this.transcript.removePunctuation();
-		if(idx >= 0 && idx < soundPhones.length()) {
-			retVal = soundPhones.elementAt(idx);
+		if(idx >= 0 && idx < getDisplayedPhones().length()) {
+			retVal = getDisplayedPhones().elementAt(idx);
 		}
 		return retVal;
 	}
@@ -157,7 +173,11 @@ public class SyllabificationDisplay extends JComponent {
 	public Dimension getPreferredSize() {
 		return getUI().getPreferredSize(this);
 	}
-
+	
+	public IPATranscript getDisplayedPhones() {
+		return displayedPhones;
+	}
+	
 	/**
 	 * Syllabification change data.  Sent during syllabification events.
 	 */

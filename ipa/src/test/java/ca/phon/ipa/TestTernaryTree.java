@@ -56,7 +56,7 @@ public class TestTernaryTree {
 			
 			// parse transcript
 			final IPATranscript ipa = IPATranscript.parseIPATranscript(parts[1]);
-			final IPATranscript key = ipa.removePunctuation();
+			final IPATranscript key = ipa.removePunctuation(true);
 			List<IPATranscript> ipaList = tree.get(key);
 			if(ipaList == null) {
 				ipaList = new ArrayList<IPATranscript>();
