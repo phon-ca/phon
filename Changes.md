@@ -1,5 +1,12 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.5
+
+* IPA dictionaries will now deal with compound and hyphenated word correctly.
+* Segmentation start time may now be manually locked and now displays a lock status icon. 
+* Fixed a bug introduced in Phon 2.1.4 resulting in the in-ability to select all phones in the syllabification display.
+* Fixed a bug introduced in Phon 2.1.4 resulting in the in-ability to import CSV files.
+
 ## Changes from Phon 2.1.4
 
 ### General
