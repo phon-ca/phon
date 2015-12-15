@@ -19,6 +19,7 @@
 package ca.phon.ui.wizard;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
@@ -67,6 +68,10 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	private WizardStep currentStep;
 	
+	private CardLayout stepLayout;
+	
+	private JPanel stepPanel;
+	
 	public WizardFrame(String title) {
 		super(title);
 		
@@ -74,6 +79,12 @@ public class WizardFrame extends CommonModuleFrame {
 	}
 	
 	private void init() {
+		// step panel
+		stepLayout = new CardLayout();
+		stepPanel = new JPanel(stepLayout);
+		add(stepPanel, BorderLayout.CENTER);
+		
+		// button bar
 		ImageIcon icnBack = IconManager.getInstance().getIcon("actions/agt_back", IconSize.SMALL);
 		ImageIcon icnNext = IconManager.getInstance().getIcon("actions/agt_forward", IconSize.SMALL);
 		ImageIcon icnFinish = IconManager.getInstance().getIcon("actions/button_ok", IconSize.SMALL);
@@ -89,7 +100,6 @@ public class WizardFrame extends CommonModuleFrame {
 			}
 			
 		});
-//		btnBack.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		
 		btnNext = new JButton("Next");
 		btnNext.setIcon(icnNext);
@@ -143,6 +153,7 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	public void addWizardStep(WizardStep ws) {
 		steps.add(ws);
+		stepPanel.add(ws, Integer.toString(steps.size()-1));
 		if(steps.size() == 1)
 			gotoStep(0);
 	}
@@ -160,6 +171,7 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	public void removeWizardStep(WizardStep ws) {
 		steps.remove(ws);
+		stepPanel.remove(ws);
 	}
 	
 	public int numberOfSteps() {
@@ -173,13 +185,11 @@ public class WizardFrame extends CommonModuleFrame {
 		if(stepIndex < 0 || stepIndex >= numberOfSteps()) return;
 		
 		WizardStep ws = steps.get(stepIndex);
-		add(ws, BorderLayout.CENTER);
-		ws.repaint();
 		currentStep = ws;
-		setupButtons();
 		
-		super.invalidate();
-		super.validate();
+		stepLayout.show(stepPanel, Integer.toString(stepIndex));
+		
+		setupButtons();
 	}
 
 	protected void setupButtons() {
