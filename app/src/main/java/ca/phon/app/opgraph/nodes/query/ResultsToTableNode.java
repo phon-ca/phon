@@ -35,7 +35,7 @@ public class ResultsToTableNode extends OpNode {
 	
 	private final InputField projectInput = new InputField("project", "Project", false, true, Project.class);
 	
-	private final InputField resultSetsInput = new InputField("result set", "Query results", false, true, ResultSet[].class);
+	private final InputField resultSetsInput = new InputField("results", "Query results", false, true, ResultSet[].class);
 	
 	private final OutputField tableOutput = new OutputField("table", "Result sets as table", true, TableDataSource.class);
 

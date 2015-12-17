@@ -46,7 +46,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 	
 	private InputField projectInputField = new InputField("project", "Project", false, true, Project.class);
 	
-	private InputField inputField = new InputField("record containers", "List of record containers", false,
+	private InputField inputField = new InputField("sessions", "List of sessions or query results", false,
 			true, new RecordContainerTypeValidator());
 	
 	private OutputField projectOutputField = new OutputField("project", "Project", true, Project.class);
@@ -54,8 +54,8 @@ public class QueryNode extends OpNode implements NodeSettings {
 	private OutputField queryField = new OutputField("query",
 			"Query parameters", true, Query.class);
 
-	private OutputField outputField = new OutputField("result sets", 
-			"Result set, one per input record container", true, ResultSet[].class);
+	private OutputField outputField = new OutputField("results", 
+			"Result set, one per input session", true, ResultSet[].class);
 	
 	private OutputField scriptOutput = new OutputField("buffer",
 			"Text output from query", true, String.class);

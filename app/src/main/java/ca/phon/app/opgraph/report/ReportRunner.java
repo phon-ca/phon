@@ -1,16 +1,21 @@
 package ca.phon.app.opgraph.report;
 
+import javax.swing.SwingUtilities;
+
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
 
 /**
  * Execute an opgraph report given a project and query.
  *
  */
-public class ReportRunner {
+public class ReportRunner implements Runnable {
 	
 	private OpGraph graph;
 	
@@ -67,7 +72,19 @@ public class ReportRunner {
 		final OpContext ctx = processor.getContext();
 		ctx.put("_project", project);
 		ctx.put("_queryId", queryId);
-		processor.stepAll();
+		
+		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
+		if(wizardExt != null) {
+			SwingUtilities.invokeLater(() -> {
+				final NodeWizard wizard = wizardExt.createWizard(processor);
+				wizard.pack();
+				wizard.setSize(1024, 768);
+				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+				wizard.setVisible(true);
+			});
+		} else {
+			processor.stepAll();
+		}
 	}
 	
 }

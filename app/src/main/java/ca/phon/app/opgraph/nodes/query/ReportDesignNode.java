@@ -48,7 +48,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 			new InputField("query", "Query", false, true, Query.class);
 
 	private InputField resultSetsField =
-			new InputField("result sets", "Result sets from query", false, true, ResultSet[].class);
+			new InputField("results", "Result sets from query", false, true, ResultSet[].class);
 	
 	private OutputField projectOutputField = 
 			new OutputField("project", "Project", true, Project.class);
