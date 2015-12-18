@@ -158,12 +158,15 @@ exports.Pcc = {
     	}
     	if(numActual > numTarget)
     	    numEpenthesized = numActual - numTarget;
+    	
+    	numDeleted = (numTarget > numActual ? numTarget - numActual : 0);
     
     	// format PCC string
     	var retVal = {
     		target: numTarget,
     		actual: numActual,
     		correct: numCorrect,
+    		deleted: numDeleted,
     		epen: numEpenthesized
     	};
     	return retVal;
@@ -265,9 +268,12 @@ exports.PccOptions = function(id, aligned) {
             metadata.put("PCC # Target", pccStandard.target + "");
             metadata.put("PCC # Attempted", pccStandard.actual + "");
             metadata.put("PCC # Correct", pccStandard.correct + "");
+            metadata.put("PCC # Deleted", pccStandard.deleted + "");
             metadata.put("PCC # Epenthesized", pccStandard.epen + "");
             var pCorrect = (pccStandard.target > 0 ? pccStandard.correct/pccStandard.target : 0) * 100;
             metadata.put("PCC % Correct", nf.format(pCorrect));
+            var pDeleted = (pccStandard.target > 0 ? pccStandard.deleted/pccStandard.target : 0) * 100;
+            metadata.put("PCC % Deleted", nf.format(pDeleted));
             var pEpen = (pccStandard.target > 0 ? pccStandard.epen/pccStandard.target : 0) * 100;
             metadata.put("PCC % Epenthesized", nf.format(pEpen));
         }
@@ -276,9 +282,12 @@ exports.PccOptions = function(id, aligned) {
             metadata.put("PVC # Target", pvcStandard.target + "");
             metadata.put("PVC # Attempted", pvcStandard.actual + "");
             metadata.put("PVC # Correct", pvcStandard.correct + "");
+            metadata.put("PVC # Deleted", pvcStandard.deleted + "");
             metadata.put("PVC # Epenthesized", pvcStandard.epen + "");
             var pCorrect = (pvcStandard.target > 0 ? pvcStandard.correct/pvcStandard.target : 0) * 100;
             metadata.put("PVC % Correct", nf.format(pCorrect));
+            var pDeleted = (pvcStandard.target > 0 ? pvcStandard.deleted/pvcStandard.target : 0) * 100;
+            metadata.put("PVC % Deleted", nf.format(pDeleted));
             var pEpen = (pvcStandard.target > 0 ? pvcStandard.epen/pvcStandard.target : 0) * 100;
             metadata.put("PVC % Epenthesized", nf.format(pEpen));
         }
