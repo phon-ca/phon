@@ -1,5 +1,9 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.6
+
+* Added columns 'PCC/PVC # Deleted' and 'PCC/PVC % Deleted' to queries including PCC/PVC data.
+
 ## Changes from Phon 2.1.5
 
 * IPA dictionaries will now deal with compound and hyphenated word correctly.
