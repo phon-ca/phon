@@ -1,28 +1,22 @@
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Provides a UI for selecting and ordering nodes in the wizard.

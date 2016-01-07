@@ -2,11 +2,11 @@ package ca.phon.orthography;
 
 import java.text.ParseException;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import junit.framework.Assert;
 
 @RunWith(JUnit4.class)
 public class TestCHATCodes {

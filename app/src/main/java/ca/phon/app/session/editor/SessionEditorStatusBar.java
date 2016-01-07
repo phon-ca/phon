@@ -23,9 +23,6 @@ import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.fonts.FontPreferences;
@@ -37,6 +34,9 @@ import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 	

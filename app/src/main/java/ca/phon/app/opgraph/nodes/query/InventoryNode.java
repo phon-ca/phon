@@ -1,7 +1,6 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -18,9 +17,6 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.ipa.IPATranscript;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
 

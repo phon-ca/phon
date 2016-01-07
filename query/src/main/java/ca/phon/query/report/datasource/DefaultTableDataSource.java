@@ -1,16 +1,8 @@
 package ca.phon.query.report.datasource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
 
 /**
  * 

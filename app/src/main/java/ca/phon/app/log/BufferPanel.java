@@ -55,9 +55,6 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTable;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.SessionEditor;
@@ -80,6 +77,9 @@ import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class BufferPanel extends JPanel {
 	

@@ -1,10 +1,7 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.print.attribute.standard.MediaSize.NA;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
@@ -18,7 +15,6 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.extensions.Extendable;
 import ca.gedge.opgraph.io.xml.XMLSerializer;
 import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.FeatureFamily;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;

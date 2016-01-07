@@ -1,6 +1,5 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Point;
@@ -16,13 +15,11 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogBuffer;
-import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorStatusBar;
 import ca.phon.session.Session;

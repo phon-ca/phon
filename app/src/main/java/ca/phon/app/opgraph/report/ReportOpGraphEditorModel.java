@@ -4,9 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -20,7 +17,6 @@ import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.assessment.AssessmentOpGraphEditorModel;
 import ca.phon.app.opgraph.assessment.AssessmentWizardExtension;
-import ca.phon.app.opgraph.wizard.NodeWizardPanel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;

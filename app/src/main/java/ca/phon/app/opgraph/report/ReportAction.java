@@ -8,8 +8,6 @@ import java.net.URLDecoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.opgraph.OpgraphIO;

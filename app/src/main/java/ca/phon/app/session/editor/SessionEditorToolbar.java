@@ -26,14 +26,14 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
 import ca.phon.app.session.editor.actions.NewRecordAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 
 /**

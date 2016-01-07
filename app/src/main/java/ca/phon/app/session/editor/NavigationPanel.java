@@ -32,14 +32,14 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.ui.action.PhonUIAction;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class NavigationPanel extends JPanel {
 	

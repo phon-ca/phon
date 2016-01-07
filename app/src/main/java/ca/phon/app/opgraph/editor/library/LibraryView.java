@@ -14,11 +14,8 @@ import java.awt.dnd.DragGestureListener;
 import java.awt.dnd.DragSource;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
@@ -28,9 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,8 +33,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.text.html.ListView;
 
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
@@ -47,10 +40,8 @@ import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.gedge.opgraph.app.components.canvas.GraphCanvas;
-import ca.gedge.opgraph.app.util.ObjectSelection;
 import ca.gedge.opgraph.library.NodeData;
 import ca.gedge.opgraph.library.NodeLibrary;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.text.SearchField;
 import ca.phon.util.PrefHelper;
 

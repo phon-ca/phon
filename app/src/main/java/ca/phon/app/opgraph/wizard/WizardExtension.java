@@ -1,21 +1,12 @@
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JScrollPane;
-
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.Processor;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.wizard.WizardFrame;
-import ca.phon.ui.wizard.WizardStep;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are

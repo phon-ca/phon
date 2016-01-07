@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.AbstractListModel;
-import javax.swing.DefaultListModel;
 
 import ca.gedge.opgraph.library.NodeData;
 

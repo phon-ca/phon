@@ -1,10 +1,5 @@
 package ca.phon.app.opgraph.assessment;
 
-import java.awt.BorderLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JScrollPane;
-
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.phon.app.opgraph.wizard.NodeWizard;

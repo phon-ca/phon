@@ -2,7 +2,6 @@ package ca.phon.app.opgraph.nodes.log;
 
 import java.awt.Component;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -23,8 +22,6 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferPanelContainer;
 import ca.phon.app.log.BufferWindow;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterUtil;
 
 @OpNodeInfo(

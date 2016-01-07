@@ -1,19 +1,14 @@
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.util.Arrays;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -24,20 +19,15 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.IconifyAction;
 
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.VerticalLayout;
-
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.FeatureFamily;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;
-import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.util.icons.IconManager;

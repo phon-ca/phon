@@ -3,8 +3,6 @@ package ca.phon.app.opgraph.nodes.query;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -12,19 +10,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettingsPanel.SortColumnPanel;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;

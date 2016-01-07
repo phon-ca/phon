@@ -3,7 +3,6 @@ package ca.phon.ipa.features;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

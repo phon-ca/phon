@@ -28,14 +28,14 @@ import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ca.phon.media.exceptions.PhonMediaException;
-import ca.phon.util.PrefHelper;
-import ca.phon.worker.PhonTask;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.headless.HeadlessMediaPlayer;
+import ca.phon.media.exceptions.PhonMediaException;
+import ca.phon.util.PrefHelper;
+import ca.phon.worker.PhonTask;
 
 /**
  * Export video and/or audio with the option

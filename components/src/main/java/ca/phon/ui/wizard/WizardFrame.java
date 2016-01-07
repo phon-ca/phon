@@ -39,12 +39,12 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Frame for a wizard display.  This wizard does not block.

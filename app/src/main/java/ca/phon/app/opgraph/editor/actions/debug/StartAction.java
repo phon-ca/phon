@@ -15,7 +15,6 @@ import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;

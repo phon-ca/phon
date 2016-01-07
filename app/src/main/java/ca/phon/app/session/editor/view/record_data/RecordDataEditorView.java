@@ -64,9 +64,6 @@ import javax.swing.undo.UndoableEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -115,6 +112,9 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Editor view for tier data.

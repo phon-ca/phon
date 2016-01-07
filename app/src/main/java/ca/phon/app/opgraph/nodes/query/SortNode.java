@@ -1,9 +1,6 @@
 package ca.phon.app.opgraph.nodes.query;
 
-import groovyjarjarcommonscli.ParseException;
-
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -12,17 +9,12 @@ import java.util.Properties;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.components.NodeSettingsPanel;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.FeatureFamily;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;
-import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.features.CompoundIPAElementComparator;
-import ca.phon.ipa.features.FeatureComparator;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
 

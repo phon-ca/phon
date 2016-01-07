@@ -51,9 +51,6 @@ import org.jdesktop.swingx.VerticalLayout;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.functor.Functor;
 import ca.phon.session.AgeFormatter;
 import ca.phon.session.DateFormatter;
@@ -69,6 +66,9 @@ import ca.phon.ui.text.DatePicker;
 import ca.phon.ui.text.FormatterTextField;
 import ca.phon.ui.text.LanguageField;
 import ca.phon.ui.toast.ToastFactory;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * UI for editing participant information.

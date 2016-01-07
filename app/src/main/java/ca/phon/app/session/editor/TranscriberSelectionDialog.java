@@ -39,15 +39,15 @@ import javax.swing.JTextField;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.session.Session;
 import ca.phon.session.Transcriber;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.JCrypt;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class TranscriberSelectionDialog extends JDialog {
 	

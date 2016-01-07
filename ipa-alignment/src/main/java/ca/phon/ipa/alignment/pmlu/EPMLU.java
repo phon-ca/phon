@@ -18,8 +18,6 @@
  */
 package ca.phon.ipa.alignment.pmlu;
 
-import java.lang.ref.WeakReference;
-
 import ca.phon.extensions.Extension;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;

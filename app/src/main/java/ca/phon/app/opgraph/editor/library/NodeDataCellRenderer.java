@@ -4,23 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import sun.swing.DefaultLookup;
 import ca.gedge.opgraph.library.NodeData;
 
 public class NodeDataCellRenderer implements ListCellRenderer<NodeData> {

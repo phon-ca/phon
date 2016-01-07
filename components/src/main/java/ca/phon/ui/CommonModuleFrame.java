@@ -44,9 +44,6 @@ import javax.swing.JMenuBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ui.menu.MenuManager;
@@ -56,6 +53,9 @@ import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 
 /**

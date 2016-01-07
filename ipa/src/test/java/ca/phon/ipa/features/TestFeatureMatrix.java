@@ -22,12 +22,13 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import ca.phon.ipa.parser.IPATokens;
-import junit.framework.Assert;
 
 @RunWith(JUnit4.class)
 public class TestFeatureMatrix {

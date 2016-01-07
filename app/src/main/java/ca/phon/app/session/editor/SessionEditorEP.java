@@ -38,9 +38,6 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.actions.SessionCheckAction;
@@ -56,6 +53,9 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.JCrypt;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * SessionEditor entry point

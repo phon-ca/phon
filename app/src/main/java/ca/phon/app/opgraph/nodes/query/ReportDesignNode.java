@@ -2,11 +2,8 @@ package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.gedge.opgraph.InputField;
@@ -24,10 +21,7 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.ReportBuilder;
 import ca.phon.query.report.ReportBuilderException;
 import ca.phon.query.report.ReportBuilderFactory;
-import ca.phon.query.report.ReportIO;
-import ca.phon.query.report.io.ObjectFactory;
 import ca.phon.query.report.io.ReportDesign;
-import ca.phon.util.PrefHelper;
 
 @OpNodeInfo(
 		name="Report",

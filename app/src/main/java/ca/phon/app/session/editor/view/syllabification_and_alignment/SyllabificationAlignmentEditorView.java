@@ -38,9 +38,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -70,6 +67,9 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay.SyllabificationChangeData;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
 	

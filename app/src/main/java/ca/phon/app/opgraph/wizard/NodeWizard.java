@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.PrintWriter;
 
@@ -14,17 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-
-
-
-
-
 import org.jdesktop.swingx.JXBusyLabel;
-
-
-
-
-
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
@@ -37,7 +26,6 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
-import ca.phon.project.Project;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;

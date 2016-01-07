@@ -70,9 +70,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXBusyLabel;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.project.actions.AnonymizeAction;
 import ca.phon.app.project.actions.CheckTranscriptionsAction;
 import ca.phon.app.project.actions.DeleteCorpusAction;
@@ -111,6 +108,9 @@ import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 
 /**

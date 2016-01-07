@@ -1,20 +1,15 @@
 package ca.phon.app.opgraph.report;
 
-import java.awt.MenuContainer;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.project.Project;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.resources.ResourceHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

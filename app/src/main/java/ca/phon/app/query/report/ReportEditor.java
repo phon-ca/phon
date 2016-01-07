@@ -52,9 +52,6 @@ import javax.xml.namespace.QName;
 
 import org.jdesktop.swingx.JXTree;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.query.report.ReportIO;
 import ca.phon.query.report.io.AggregrateInventory;
 import ca.phon.query.report.io.CommentSection;
@@ -77,6 +74,9 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * A panel used for editing report templates.
