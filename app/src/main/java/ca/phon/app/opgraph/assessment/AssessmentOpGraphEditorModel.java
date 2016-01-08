@@ -161,7 +161,11 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 				final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), qn.getName());
 				final QueryNodeInstantiator instantiator = new QueryNodeInstantiator();
 				
-				final QueryNodeData nodeData = new QueryNodeData(script, queryNodeClassURI, name, "", "Query", instantiator);
+				final String description = 
+						"Add " + qn.getName() + " query to graph.";
+				
+				final QueryNodeData nodeData = new QueryNodeData(script, queryNodeClassURI,
+						name, description, "Query", instantiator);
 				getNodeLibrary().getLibrary().put(nodeData);
 			} catch (URISyntaxException e) {
 				
