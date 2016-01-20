@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXTitledSeparator;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
@@ -111,6 +114,10 @@ public class NodeWizard extends WizardFrame {
 		return this.graph;
 	}
 	
+	public WizardExtension getWizardExtension() {
+		return this.graph.getExtension(WizardExtension.class);
+	}
+	
 	final ProcessorListener processorListener =  (ProcessorEvent pe) -> {
 		if(pe.getType() == ProcessorEvent.Type.BEGIN_NODE) {
 			final String nodeName = pe.getNode().getName();
@@ -165,8 +172,19 @@ public class NodeWizard extends WizardFrame {
 			try {
 				final Component comp = settings.getComponent(null);
 				
+				final List<OpNode> nodePath = 
+						graph.getNodePath(node.getId());
+				final String path = 
+						nodePath.stream()
+							.map( n -> n.getName() )
+							.collect(Collectors.joining("/"));
+				
 				final WizardStep step = new WizardStep();
 				step.setLayout(new BorderLayout());
+				
+				final JXTitledSeparator stepTitle = 
+						new JXTitledSeparator(path);
+				step.add(stepTitle, BorderLayout.NORTH);
 				step.add(new JScrollPane(comp), BorderLayout.CENTER);
 				
 				return step;

@@ -42,10 +42,25 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 				doc.createElementNS(NAMESPACE, PREFIX + ":" + QNAME.getLocalPart());
 		settingsEle.setAttribute("type", obj.getClass().getName());
 		
+		final Element wizardInfoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
+		wizardInfoEle.setAttribute("title", nodeList.getWizardTitle());
+		final Element wizardMessageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
+		wizardMessageEle.setTextContent(nodeList.getWizardMessage());
+		wizardInfoEle.appendChild(wizardMessageEle);
+		settingsEle.appendChild(wizardInfoEle);
+		
 		for(OpNode node:nodeList) {
 			final Element nodeEle = 
 					doc.createElementNS(NAMESPACE, PREFIX + ":node");
 			nodeEle.setAttribute("ref", node.getId());
+			
+			final Element infoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
+			infoEle.setAttribute("title", nodeList.getNodeTitle(node));
+			final Element messageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
+			messageEle.setTextContent(nodeList.getNodeMessage(node));
+			infoEle.appendChild(messageEle);
+			nodeEle.appendChild(infoEle);
+			
 			settingsEle.appendChild(nodeEle);
 		}
 		
@@ -79,12 +94,43 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		final NodeList childNodes = elem.getChildNodes();
 		for(int i = 0; i < childNodes.getLength(); i++) {
 			final Node child = childNodes.item(i);
-			if(child.getNodeName().equals(PREFIX + ":node")) {
+			if(child.getNodeName().equals(PREFIX + ":info")) {
+				final Node titleAttr = child.getAttributes().getNamedItem("title");
+				if(titleAttr != null) {
+					ext.setWizardTitle(titleAttr.getNodeValue());
+				}
+				final NodeList infoNodes = child.getChildNodes();
+				for(int j = 0; j < infoNodes.getLength(); j++) {
+					final Node infoNode = infoNodes.item(j);
+					if(infoNode.getNodeName().equals(PREFIX + ":message")) {
+						ext.setWizardMessage(infoNode.getTextContent());
+					}
+				}
+			} else if(child.getNodeName().equals(PREFIX + ":node")) {
 				final String nodeId = child.getAttributes().getNamedItem("ref").getNodeValue();
 				
 				final OpNode node = graph.getNodeById(nodeId, true);
 				if(node != null) {
 					ext.addNode(node);
+					
+					final NodeList subNodes = child.getChildNodes();
+					for(int j = 0; j < subNodes.getLength(); j++) {
+						final Node subNode = subNodes.item(j);
+						if(subNode.getNodeName().equals(PREFIX + ":info")) {
+							final Node titleAttr = subNode.getAttributes().getNamedItem("title");
+							if(titleAttr != null) {
+								ext.setNodeTitle(node, titleAttr.getNodeValue());
+							}
+							
+							final NodeList infoNodes = subNode.getChildNodes();
+							for(int k = 0; k < infoNodes.getLength(); k++) {
+								final Node infoNode = infoNodes.item(k);
+								if(infoNode.getNodeName().equals(PREFIX + ":message")) {
+									ext.setNodeMessage(node, infoNode.getTextContent());
+								}
+							}
+						}
+					}
 				}
 			}
 		}

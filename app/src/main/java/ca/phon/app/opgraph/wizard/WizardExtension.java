@@ -1,8 +1,10 @@
 package ca.phon.app.opgraph.wizard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -16,7 +18,15 @@ import ca.gedge.opgraph.Processor;
  */
 public class WizardExtension implements Iterable<OpNode> {
 	
+	private String wizardTitle = new String();
+	
+	private String wizardMessage = new String();
+	
 	private final List<OpNode> wizardNodes = new ArrayList<>();
+	
+	private Map<OpNode, String> nodeTitles = new HashMap<>();
+	
+	private Map<OpNode, String> nodeMessages = new HashMap<>();
 	
 	private final OpGraph graph;
 	
@@ -48,6 +58,10 @@ public class WizardExtension implements Iterable<OpNode> {
 	public boolean addNode(OpNode e) {
 		return wizardNodes.add(e);
 	}
+	
+	public int indexOf(OpNode e) {
+		return wizardNodes.indexOf(e);
+	}
 
 	public boolean removeNode(Object o) {
 		return wizardNodes.remove(o);
@@ -69,4 +83,43 @@ public class WizardExtension implements Iterable<OpNode> {
 		return wizardNodes.remove(index);
 	}
 	
+	public void setNodeTitle(OpNode node, String title) {
+		nodeTitles.put(node, title);
+	}
+	
+	public String getNodeTitle(OpNode node) {
+		String retVal = nodeTitles.get(node);
+		if(retVal == null || retVal.length() == 0) {
+			retVal = node.getName();
+		}
+		return retVal;
+	}
+	
+	public void setNodeMessage(OpNode node, String message) {
+		nodeMessages.put(node, message);
+	}
+	
+	public String getNodeMessage(OpNode node) {
+		return nodeMessages.get(node);
+	}
+	
+	public void setWizardTitle(String title) {
+		this.wizardTitle = title;
+	}
+	
+	public String getWizardTitle() {
+		String retVal = this.wizardTitle;
+		if(retVal == null || retVal.length() == 0) {
+			retVal = "Introduction";
+		}
+		return retVal;
+	}
+	
+	public void setWizardMessage(String message) {
+		this.wizardMessage = message;
+	}
+	
+	public String getWizardMessage() {
+		return this.wizardMessage;
+	}
 }

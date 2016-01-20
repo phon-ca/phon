@@ -115,6 +115,7 @@
         <xs:complexContent mixed="false">
             <xs:extension base="og:AbstractExtensionType">
                 <xs:sequence>
+                    <xs:element ref="info" maxOccurs="1" minOccurs="0"/>
                     <xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:attribute name="type" type="og:nonEmptyString" use="required">
@@ -127,9 +128,21 @@
     </xs:complexType>
     
     <xs:complexType name="NodeRefType">
+        <xs:sequence>
+            <xs:element ref="info" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
         <xs:attribute name="ref" type="og:nonEmptyString" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="WizardInfoType">
+        <xs:sequence>
+            <xs:element ref="message" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="title" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:element name="node" type="NodeRefType"/>
     <xs:element name="nodewizard" type="NodeWizardType" substitutionGroup="og:extension"/>
+    <xs:element name="info" type="WizardInfoType"/>
+    <xs:element name="message" type="xs:string"/>
 </xs:schema>

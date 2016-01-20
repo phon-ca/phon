@@ -1,5 +1,11 @@
 package ca.phon.app.opgraph.wizard;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -8,8 +14,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import org.jdesktop.swingx.VerticalLayout;
+
+import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.GraphDocument;
+import ca.phon.app.opgraph.wizard.actions.AddNodeAction;
+import ca.phon.app.opgraph.wizard.actions.EditSettingsAction;
+import ca.phon.app.opgraph.wizard.actions.MoveNodeAction;
+import ca.phon.app.opgraph.wizard.actions.RemoveNodeAction;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.icons.IconManager;
@@ -29,11 +42,13 @@ public class NodeWizardPanel extends JPanel {
 	private GraphDocument document;
 	
 	private JTable nodeTable;
-	private NodeWizardTableModel nodeTabelModel;
+	private NodeWizardTableModel nodeTableModel;
 	
 	private JButton addToWizardButton;
 	
 	private JButton removeFromWizardButton;
+	
+	private JButton settingsButton;
 	
 	private JButton moveUpButton;
 	
@@ -48,42 +63,90 @@ public class NodeWizardPanel extends JPanel {
 	}
 	
 	private void init() {
-		setLayout(new FormLayout("fill:pref:grow, pref", "pref, fill:pref:grow"));
-		final CellConstraints cc = new CellConstraints();
+		final GridBagLayout layout = new GridBagLayout();
+		final GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(layout);
 		
-		nodeTabelModel = new NodeWizardTableModel();
-		nodeTable = new JTable(nodeTabelModel);
+		nodeTableModel = new NodeWizardTableModel();
+		nodeTable = new JTable(nodeTableModel);
 		final JScrollPane scroller = new JScrollPane(nodeTable);
 		
-		add(scroller, cc.xywh(1, 2, 2, 1));
+		settingsButton = new JButton(new EditSettingsAction(this));
+		settingsButton.setText("");
+		addToWizardButton = new JButton(new AddNodeAction(this));
+		addToWizardButton.setText("");
+		removeFromWizardButton = new JButton(new RemoveNodeAction(this));
+		removeFromWizardButton.setText("");
 		
-		final ImageIcon addIcon = IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		final PhonUIAction addAct = new PhonUIAction(this, "onAddToWizard");
-		addAct.putValue(PhonUIAction.NAME, "Add to wizard");
-		addAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add currently selected node(s) to wizard");
-		addAct.putValue(PhonUIAction.SMALL_ICON, addIcon);
-		addToWizardButton = new JButton(addAct);
+		moveUpButton = new JButton(new MoveNodeAction(this, MoveNodeAction.UP));
+		moveUpButton.setText("");
+		moveDownButton = new JButton(new MoveNodeAction(this, MoveNodeAction.DOWN));
+		moveDownButton.setText("");
 		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 0;
+		gbc.weighty = 0;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		add(settingsButton, gbc);
 		
-		final ImageIcon removeIcon = IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
-		final PhonUIAction removeAct = new PhonUIAction(this, "onRemoveFromWizard");
-		removeAct.putValue(PhonUIAction.NAME, "Remove from wizard");
-		removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove currently selected nodes from wizard");
-		removeAct.putValue(PhonUIAction.SMALL_ICON, removeIcon);
-		removeFromWizardButton = new JButton(removeAct);
-		final JComponent addRemovePanel = 
-				ButtonBarBuilder.buildOkCancelBar(removeFromWizardButton, addToWizardButton);
-		add(addRemovePanel, cc.xy(1, 1));
+		gbc.gridx = 1;
+		gbc.anchor = GridBagConstraints.EAST;
+		add(addToWizardButton, gbc);
+		
+		gbc.gridx = 2;
+		add(removeFromWizardButton, gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		gbc.anchor = GridBagConstraints.LINE_END;
+		add(moveUpButton, gbc);
+		
+		gbc.gridy = 2;
+		add(moveDownButton, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.gridheight = 3;
+		gbc.gridwidth = 3;
+		add(scroller, gbc);
 	}
 	
-	public void onAddToWizard() {
-		final OpNode node = document.getSelectionModel().getSelectedNode();
-		if(node != null) {
-			wizardExtension.addNode(node);
-			nodeTabelModel.fireTableRowsInserted(nodeTabelModel.getRowCount()-1, nodeTabelModel.getRowCount()-1);
-		}
+	public GraphDocument getDocument() {
+		return this.document;
 	}
-
+	
+	public WizardExtension getWizardExtension() {
+		return this.wizardExtension;
+	}
+	
+	/**
+	 * Returns the list of selected nodes in the table
+	 * <em>not</em> the graph document.
+	 * 
+	 * @return list of selected nodes in table
+	 */
+	public List<OpNode> getSelectedNodes() {
+		List<OpNode> retVal = new ArrayList<>();
+		
+		for(int selectedRow:nodeTable.getSelectedRows()) {
+			retVal.add(wizardExtension.getNode(selectedRow));
+		}
+		
+		return retVal;
+	}
+	
+	public void updateTable() {
+		nodeTableModel.fireTableDataChanged();
+	}
+	
 	private class NodeWizardTableModel extends AbstractTableModel {
 
 		@Override
@@ -101,9 +164,16 @@ public class NodeWizardPanel extends JPanel {
 			final OpNode node = wizardExtension.getNode(rowIndex);
 			
 			if(columnIndex == 0) {
-				return node.getName();
+				return (wizardExtension.getNodeTitle(node) != null ? 
+						wizardExtension.getNodeTitle(node) : node.getName());
 			} else if(columnIndex == 1) {
-				return node.getId();
+				final OpGraph graph = wizardExtension.getGraph();
+				final List<OpNode> nodePath = graph.getNodePath(node.getId());
+				final String path = 
+						nodePath.stream()
+							.map( n -> n.getName() )
+							.collect( Collectors.joining("/") );
+				return path;
 			}
 			
 			return "";
@@ -114,9 +184,9 @@ public class NodeWizardPanel extends JPanel {
 			String retVal = super.getColumnName(column);
 			
 			if(column == 0) {
-				retVal = "Node name";
+				retVal = "Step Title";
 			} else if (column == 1) {
-				retVal = "ID";
+				retVal = "Node";
 			}
 			
 			return retVal;
