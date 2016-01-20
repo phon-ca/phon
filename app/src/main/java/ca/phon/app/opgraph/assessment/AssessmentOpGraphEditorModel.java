@@ -48,8 +48,6 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	public AssessmentOpGraphEditorModel(OpGraph opgraph) {
 		super(opgraph);
 		
-		addQueryNodes();
-		
 		WizardExtension wizardExt = opgraph.getExtension(WizardExtension.class);
 		if(wizardExt == null) {
 			wizardExt = new AssessmentWizardExtension(opgraph);
@@ -151,30 +149,6 @@ public class AssessmentOpGraphEditorModel extends DefaultOpgraphEditorModel {
 			retVal = getWizardPanel();
 		}
 		return retVal;
-	}
-	
-	private void addQueryNodes() {
-		Consumer<QueryScript> addToLibrary = (QueryScript script) -> {
-			final QueryName qn = script.getExtension(QueryName.class);
-			final String name = (qn != null ? qn.getName() : "<unknown>");
-			try {
-				final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), qn.getName());
-				final QueryNodeInstantiator instantiator = new QueryNodeInstantiator();
-				
-				final String description = 
-						"Add " + qn.getName() + " query to graph.";
-				
-				final QueryNodeData nodeData = new QueryNodeData(script, queryNodeClassURI,
-						name, description, "Query", instantiator);
-				getNodeLibrary().getLibrary().put(nodeData);
-			} catch (URISyntaxException e) {
-				
-			}
-		};
-		
-		final QueryScriptLibrary library = new QueryScriptLibrary();
-		library.stockScriptFiles().forEach(addToLibrary);
-		library.userScriptFiles().forEach(addToLibrary);
 	}
 
 	@Override
