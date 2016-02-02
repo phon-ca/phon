@@ -18,9 +18,6 @@
  */
 package ca.phon.ipa;
 
-
-
-
 /**
  * A factory for creating various types of {@link IPAElement}
  * objects.

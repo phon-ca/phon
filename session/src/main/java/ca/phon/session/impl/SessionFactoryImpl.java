@@ -26,6 +26,7 @@ import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionMetadata;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
@@ -112,6 +113,11 @@ public class SessionFactoryImpl extends SessionFactory {
 	@Override
 	public Comment createComment() {
 		return new CommentImpl();
+	}
+
+	@Override
+	public SessionMetadata createSessionMetadata() {
+		return new SessionMetadataImpl();
 	}
 
 }

@@ -48,6 +48,17 @@ public class SessionInputFactory {
 	}
 	
 	/**
+	 * Get specified reader.
+	 * 
+	 * @param sessionIO
+	 * @return session reader or <code>null</code> if not found
+	 */
+	public SessionReader createReader(SessionIO sessionIO) {
+		return createReader(sessionIO.id(), sessionIO.version());
+	}
+	
+	
+	/**
 	 * Get the list of available session readers.
 	 * 
 	 * @return list of readers
