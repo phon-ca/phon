@@ -19,9 +19,8 @@
 
 package ca.phon.session;
 
+import java.time.LocalDate;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 import ca.phon.extensions.IExtendable;
 
@@ -38,7 +37,7 @@ public interface Session extends IExtendable {
 	public String getName();
 
 	/** Get the transcript date */
-	public DateTime getDate();
+	public LocalDate getDate();
 	
 	/** Get the language */
 	public String getLanguage();
@@ -188,7 +187,7 @@ public interface Session extends IExtendable {
 	public void setName(String name);
 	
 	/** Get the transcript date */
-	public void setDate(DateTime date);
+	public void setDate(LocalDate date);
 	
 	/** Set the language */
 	public void setLanguage(String language);

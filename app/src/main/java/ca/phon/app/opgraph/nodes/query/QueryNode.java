@@ -3,12 +3,11 @@ package ca.phon.app.opgraph.nodes.query;
 import java.awt.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import org.joda.time.DateTime;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
@@ -119,7 +118,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 		qScript.setParameters(sparams);
 		qScript.setMimeType("text/javascript");
 		
-		query.setDate(DateTime.now());
+		query.setDate(LocalDateTime.now());
 		
 		final List<RecordContainer> recordContainers =
 				RecordContainer.toRecordContainers(project, inputObj);

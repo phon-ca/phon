@@ -21,6 +21,8 @@ package ca.phon.session.io.xml.v12;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -37,8 +39,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -145,10 +145,10 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			}
 			if(headerData.getDate() != null) {
 				final XMLGregorianCalendar xmlDate = headerData.getDate();
-				final DateTime dateTime = new DateTime(
+				final LocalDate dateTime = LocalDate.of(
 						xmlDate.getYear(),
 						xmlDate.getMonth(),
-						xmlDate.getDay(), 12, 0);
+						xmlDate.getDay());
 				retVal.setDate(dateTime);
 			}
 			if(headerData.getLanguage().size() > 0) {
@@ -238,7 +238,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	}
 	
 	// participants
-	private Participant copyParticipant(SessionFactory factory, ParticipantType pt, DateTime sessionDate) {
+	private Participant copyParticipant(SessionFactory factory, ParticipantType pt, LocalDate sessionDate) {
 		final Participant retVal = factory.createParticipant();
 		
 		retVal.setId(pt.getId());
@@ -246,11 +246,11 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		final XMLGregorianCalendar bday = pt.getBirthday();
 		if(bday != null) {
-			final DateTime bdt = new DateTime(bday.getYear(), bday.getMonth(), bday.getDay(), 12, 0);
+			final LocalDate bdt = LocalDate.of(bday.getYear(), bday.getMonth(), bday.getDay());
 			retVal.setBirthDate(bdt);
 			
 			// calculate age up to the session date
-			final Period period = new Period(bdt, sessionDate);
+			final Period period = Period.between(bdt, sessionDate);
 			retVal.setAgeTo(period);
 		}
 		

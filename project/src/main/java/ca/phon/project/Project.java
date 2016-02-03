@@ -21,10 +21,9 @@ package ca.phon.project;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
-import org.joda.time.DateTime;
 
 import ca.phon.extensions.IExtendable;
 import ca.phon.session.Session;
@@ -377,7 +376,7 @@ public interface Project extends IExtendable {
 	 * 
 	 * @return session modifiation date
 	 */
-	public DateTime getSessionModificationTime(Session session);
+	public LocalDateTime getSessionModificationTime(Session session);
 	
 	/**
 	 * Returns the modification date for the specified session.
@@ -385,7 +384,7 @@ public interface Project extends IExtendable {
 	 * @param corpus
 	 * @param session
 	 */
-	public DateTime getSessionModificationTime(String corpus, String session);
+	public LocalDateTime getSessionModificationTime(String corpus, String session);
 	
 	/**
 	 * Returns the size on disk for the given session.

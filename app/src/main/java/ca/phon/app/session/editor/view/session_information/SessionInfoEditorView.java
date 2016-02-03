@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.time.LocalDate;
 
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
@@ -43,7 +44,6 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
-import org.joda.time.DateTime;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
@@ -280,15 +280,15 @@ public class SessionInfoEditorView extends EditorView {
 	public DatePicker createDateField() {
 		final DatePicker retVal = new DatePicker();
 		
-		final DateTime sessionDate = getEditor().getSession().getDate();
+		final LocalDate sessionDate = getEditor().getSession().getDate();
 		if(sessionDate != null)
 			retVal.setDateTime(sessionDate);
 		
 		retVal.getTextField().getDocument().addDocumentListener(new DocumentListener() {
 
 			void dateFieldUpdate() {
-				final DateTime selectedDate = retVal.getDateTime();
-				final DateTime newDate = new DateTime(selectedDate);
+				final LocalDate selectedDate = retVal.getDateTime();
+				final LocalDate newDate = LocalDate.from(selectedDate);
 				
 				final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, getEditor().getSession().getDate());
 				edit.setSource(dateField);
@@ -328,7 +328,7 @@ public class SessionInfoEditorView extends EditorView {
 		final Project project = editor.getExtension(Project.class);
 		if(project == null) return;
 		
-		final DateTime sessionDate = getEditor().getSession().getDate();
+		final LocalDate sessionDate = getEditor().getSession().getDate();
 		if(sessionDate != null) {
 			dateField.setValueIsAdjusting(true);
 			dateField.setDateTime(sessionDate);
@@ -364,8 +364,9 @@ public class SessionInfoEditorView extends EditorView {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getDataModel().getSession();
 		
-		final DateTime currentDate = session.getDate();
-		final DateTime newDate = new DateTime(dateField);
+		final LocalDate currentDate = session.getDate();
+		final LocalDate newDate = 
+				LocalDate.from(dateField.getDateTime());
 		
 		if(!currentDate.isEqual(newDate)) {
 			final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, currentDate);
@@ -437,7 +438,7 @@ public class SessionInfoEditorView extends EditorView {
 	@RunOnEDT
 	public void onDateChanged(EditorEvent ee) {
 		if(ee.getSource() != dateField) {
-			final DateTime newDate = (DateTime)ee.getEventData();
+			final LocalDate newDate = (LocalDate)ee.getEventData();
 			dateField.setDateTime(newDate);
 		}
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();

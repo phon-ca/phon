@@ -18,13 +18,12 @@
  */
 package ca.phon.session.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.joda.time.DateTime;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.session.Participant;
@@ -48,7 +47,7 @@ public class SessionImpl implements Session {
 	
 	private final AtomicReference<String> nameRef = new AtomicReference<String>();
 	
-	private final AtomicReference<DateTime> dateRef = new AtomicReference<DateTime>();
+	private final AtomicReference<LocalDate> dateRef = new AtomicReference<LocalDate>();
 	
 	private final AtomicReference<String> langRef = new AtomicReference<String>();
 	
@@ -93,7 +92,7 @@ public class SessionImpl implements Session {
 	}
 
 	@Override
-	public DateTime getDate() {
+	public LocalDate getDate() {
 		return dateRef.get();
 	}
 
@@ -207,7 +206,7 @@ public class SessionImpl implements Session {
 	}
 
 	@Override
-	public void setDate(DateTime date) {
+	public void setDate(LocalDate date) {
 		dateRef.getAndSet(date);
 	}
 

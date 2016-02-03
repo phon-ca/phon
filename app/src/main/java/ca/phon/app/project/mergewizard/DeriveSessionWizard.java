@@ -20,6 +20,8 @@ package ca.phon.app.project.mergewizard;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +30,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import org.joda.time.DateTime;
 
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.project.SessionMerger;
@@ -219,7 +219,7 @@ public class DeriveSessionWizard extends WizardFrame {
 					} else {
 						if(!mergedDate.equals(tDate)) {
 							LOGGER.warning("Session dates do not match, setting merged session date to today.");
-							mergedDate = pdf.format(DateTime.now());
+							mergedDate = pdf.format(LocalDate.now());
 							checkDate = false;
 						}
 					}
@@ -243,7 +243,7 @@ public class DeriveSessionWizard extends WizardFrame {
 			}
 			
 			if(mergedDate != null) {
-				final DateTime dt = DateTime.now();
+				final LocalDate dt = LocalDate.now();
 				mergedSession.setDate(dt);
 			}
 			

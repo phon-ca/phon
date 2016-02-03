@@ -19,18 +19,17 @@
 package ca.phon.session;
 
 import java.text.ParseException;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterType;
 
-@FormatterType(DateTime.class)
-public class DateFormatter implements Formatter<DateTime> {
+@FormatterType(LocalDate.class)
+public class DateFormatter implements Formatter<LocalDate> {
 	
-	public final static String DATETIME_FORMAT = "YYYY-MM-DD";
+	public final static String DATETIME_FORMAT = "yyyy-MM-dd";
 	
 	/**
 	 * Create a date formatter for {@link DateTime} objects.
@@ -38,14 +37,8 @@ public class DateFormatter implements Formatter<DateTime> {
 	 * @return formatter
 	 */
 	public static DateTimeFormatter createFormatter() {
-		final DateTimeFormatter retVal =
-				new DateTimeFormatterBuilder()
-					.appendYear(4, 4)
-					.appendLiteral("-")
-					.appendMonthOfYear(2)
-					.appendLiteral("-")
-					.appendDayOfMonth(2)
-					.toFormatter();
+		final DateTimeFormatter retVal = 
+				DateTimeFormatter.ofPattern(DATETIME_FORMAT);
 		return retVal;
 	}
 	
@@ -56,11 +49,23 @@ public class DateFormatter implements Formatter<DateTime> {
 	 * 
 	 * @return text
 	 */
-	public static String dateTimeToString(DateTime dateTime) {
+	public static String dateTimeToString(LocalDate dateTime) {
 		final DateTimeFormatter formatter = createFormatter();
-		return formatter.print(dateTime);
+		return formatter.format(dateTime);
 	}
 
+	/**
+	 * Convert {@link DateTime} objects to string
+	 * 
+	 * @param dateTime
+	 * 
+	 * @return text
+	 */
+	public static String dateTimeToString(LocalDateTime dateTime) {
+		final DateTimeFormatter formatter = createFormatter();
+		return formatter.format(dateTime);
+	}
+	
 	/**
 	 * Convert a string to a {@link DateTime} object
 	 * 
@@ -70,18 +75,18 @@ public class DateFormatter implements Formatter<DateTime> {
 	 * 
 	 * @throws IllegalArgumentException
 	 */
-	public static DateTime stringToDateTime(String text) {
+	public static LocalDate stringToDateTime(String text) {
 		final DateTimeFormatter formatter = createFormatter();
-		return formatter.parseDateTime(text);
+		return LocalDate.parse(text, formatter);
 	}
 
 	@Override
-	public String format(DateTime obj) {
+	public String format(LocalDate obj) {
 		return DateFormatter.dateTimeToString(obj);
 	}
 
 	@Override
-	public DateTime parse(String text) throws ParseException {
+	public LocalDate parse(String text) throws ParseException {
 		return DateFormatter.stringToDateTime(text);
 	}
 }

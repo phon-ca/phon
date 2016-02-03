@@ -18,10 +18,10 @@
  */
 package ca.phon.ui.participant;
 
-import javax.swing.table.AbstractTableModel;
+import java.time.LocalDate;
+import java.time.Period;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
+import javax.swing.table.AbstractTableModel;
 
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
@@ -33,12 +33,12 @@ public class ParticipantTableModel extends AbstractTableModel {
 	private Participant participant;
 	
 	/** The relative session date */
-	private DateTime sessionDate;
+	private LocalDate sessionDate;
 	
 	/** Short version ? */
 	public boolean shortVersion = true;
 	
-	public ParticipantTableModel(Participant participant, DateTime sessionDate) {
+	public ParticipantTableModel(Participant participant, LocalDate sessionDate) {
 		super();
 		
 		this.participant = participant;
@@ -77,10 +77,10 @@ public class ParticipantTableModel extends AbstractTableModel {
 					participant.getName() == null ? new String() : participant.getName());
 		} else if(field == ParticipantTableField.Age) {
 			return (
-					participant.getAge(sessionDate) == null ? new Period() : participant.getAge(sessionDate));
+					participant.getAge(sessionDate) == null ? Period.ZERO : participant.getAge(sessionDate));
 		} else if(field == ParticipantTableField.Birthday) {
 			return (
-					participant.getBirthDate() == null ? DateTime.now() : participant.getBirthDate());
+					participant.getBirthDate() == null ? LocalDate.now() : participant.getBirthDate());
 		} else if(field == ParticipantTableField.Education) {
 			return (
 					participant.getEducation() == null ? new String() : participant.getEducation());

@@ -351,12 +351,10 @@ public class QueryInfoPanel extends JPanel {
 	}
 	
 	public void updateForm() {
-		final DateFormatter dateFormatter = new DateFormatter();
-		
 		if(query != null) {
 			nameLabel.setText(query.getName());
 			uuidLabel.setText(query.getUUID().toString());
-			dateLabel.setText(dateFormatter.format(query.getDate()));
+			dateLabel.setText(DateFormatter.dateTimeToString(query.getDate()));
 			commentsArea.setText(query.getComments());
 			commentsArea.setCaretPosition(0);
 			starBox.setSelected(query.isStarred());

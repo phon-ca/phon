@@ -19,15 +19,13 @@
 package ca.phon.ui.participant;
 
 import java.awt.Component;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import ca.phon.session.AgeFormatter;
 import ca.phon.session.Sex;
@@ -37,7 +35,7 @@ public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = -7028859808797433102L;
 
 	private final DateTimeFormatter dateFormatter = 
-			DateTimeFormat.forPattern("yyyy-MM-dd");
+			DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
@@ -54,13 +52,9 @@ public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 				else
 					retVal.setText("Female");
 			} else if (row == ParticipantTableField.Birthday.ordinal()) {
-				final DateTime bday = (DateTime)value;
-				retVal.setText(dateFormatter.print(bday));
+				final LocalDate bday = (LocalDate)value;
+				retVal.setText(dateFormatter.format(bday));
 			} else if (row == ParticipantTableField.Age.ordinal()) {
-//				PhonDuration age = (PhonDuration)value;
-//				PhonDurationFormat ageFormat = new PhonDurationFormat(PhonDurationFormat.PHON_FORMAT);
-//				
-//				retVal.setText(ageFormat.format(age));
 				final Period age = (Period)value;
 				retVal.setText(AgeFormatter.ageToString(age));
 			}

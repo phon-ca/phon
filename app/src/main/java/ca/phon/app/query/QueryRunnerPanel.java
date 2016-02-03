@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,7 +61,6 @@ import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
-import org.joda.time.DateTime;
 
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferWindow;
@@ -421,13 +421,10 @@ public class QueryRunnerPanel extends JPanel {
 			qScript.setParameters(sparams);
 			qScript.setMimeType("text/javascript");
 			
-			query.setDate(DateTime.now());
+			query.setDate(LocalDateTime.now());
 			
 			final QueryName queryName = queryScript.getExtension(QueryName.class);
 			String name = (queryName != null ? queryName.getName() : "untitled");
-//			if(queryName.indexOf('.') > 0) {
-//				queryName = queryName.substring(0, queryName.lastIndexOf('.'));
-//			}
 			query.setName(name);
 			
 			try {

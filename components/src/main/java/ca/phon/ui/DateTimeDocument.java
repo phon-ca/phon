@@ -18,16 +18,14 @@
  */
 package ca.phon.ui;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 public class DateTimeDocument extends PlainDocument {
 	
@@ -39,9 +37,9 @@ public class DateTimeDocument extends PlainDocument {
 		"([0-9]{4})-([0-9]{2})-([0-9]{2})";
 	
 	final DateTimeFormatter dateFormatter = 
-			DateTimeFormat.forPattern("yyyy-MM-dd");
+			DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					
-	public DateTimeDocument(DateTime date) {
+	public DateTimeDocument(LocalDate date) {
 		super();
 		
 		setDateTime(date);
@@ -70,7 +68,7 @@ public class DateTimeDocument extends PlainDocument {
 				getText(0, offs) + val + getText(offs+numChars, getLength()-(offs+numChars));
 			
 			try {
-				dateFormatter.parseDateTime(testString);
+				dateFormatter.parse(testString);
 			} catch (Exception e) {
 //				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				return;
@@ -92,8 +90,8 @@ public class DateTimeDocument extends PlainDocument {
 		super.remove(offs, len);
 	}
 	
-	public DateTime getDateTime() {
-		DateTime retVal = DateTime.now();
+	public LocalDate getDateTime() {
+		LocalDate retVal = LocalDate.now();
 		
 		String dateText = "";
 		try {
@@ -103,7 +101,7 @@ public class DateTimeDocument extends PlainDocument {
 		}
 		
 		try {
-			retVal = dateFormatter.parseDateTime(dateText);
+			retVal = LocalDate.parse(dateText, dateFormatter);
 		} catch (Exception e) {
 			LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 		}
@@ -111,10 +109,10 @@ public class DateTimeDocument extends PlainDocument {
 		return retVal;
 	}
 	
-	public void setDateTime(DateTime date) {
+	public void setDateTime(LocalDate date) {
 		try {
 			super.remove(0, getLength());
-			final String dateText = dateFormatter.print(date);
+			final String dateText = dateFormatter.format(date);
 			super.insertString(0, dateText, null);
 		} catch (BadLocationException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);

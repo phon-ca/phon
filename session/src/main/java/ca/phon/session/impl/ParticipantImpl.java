@@ -18,11 +18,9 @@
  */
 package ca.phon.session.impl;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Set;
-
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.session.Participant;
@@ -39,7 +37,7 @@ public class ParticipantImpl implements Participant {
 	 */
 	private String id;
 	
-	private DateTime birthDate;
+	private LocalDate birthDate;
 	
 	private String name;
 	
@@ -65,15 +63,15 @@ public class ParticipantImpl implements Participant {
 	}
 
 	@Override
-	public Period getAge(DateTime fromDate) {
+	public Period getAge(LocalDate fromDate) {
 		// return forced age
 		if(age != null || fromDate == null) {
 			return age;
 		} else {
-			final DateTime start = getBirthDate();
-			final DateTime end = fromDate;
+			final LocalDate start = getBirthDate();
+			final LocalDate end = fromDate;
 			
-			final Period period = new Period(start, end, PeriodType.yearMonthDay());
+			final Period period = Period.between(start, end);
 			return period;
 		}
 	}
@@ -94,12 +92,12 @@ public class ParticipantImpl implements Participant {
 	}
 
 	@Override
-	public DateTime getBirthDate() {
+	public LocalDate getBirthDate() {
 		return this.birthDate;
 	}
 
 	@Override
-	public void setBirthDate(DateTime birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 

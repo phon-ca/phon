@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,7 +53,6 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXRadioGroup;
-import org.joda.time.DateTime;
 
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -409,7 +409,7 @@ public class FolderProjectList extends JPanel {
 		final ProjectFactory factory = new DesktopProjectFactory();
 		try {
 			final Project project = factory.openProject(btn.getProjectFile());
-			final String today = DateFormatter.dateTimeToString(DateTime.now());
+			final String today = DateFormatter.dateTimeToString(LocalDate.now());
 			
 			File backupsDir = new File(Workspace.userWorkspaceFolder(), "backups");
 			if(!backupsDir.exists()) {

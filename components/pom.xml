@@ -29,10 +29,6 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>native-dialogs</artifactId>
     </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-    </dependency>
   	<dependency>
   	    <groupId>${project.groupId}</groupId>
   		<artifactId>phon-project</artifactId>

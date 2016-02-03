@@ -29,6 +29,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -48,8 +50,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.VerticalLayout;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
 
 import ca.phon.functor.Functor;
 import ca.phon.session.AgeFormatter;
@@ -99,7 +99,7 @@ public class ParticipantPanel extends JPanel {
 	private FormatterTextField<Period> ageField;
 //	private JButton calcAgeBtn;
 	
-	private DateTime sessionDate;
+	private LocalDate sessionDate;
 	
 	private List<Participant> otherParticipants;
 	
@@ -328,7 +328,7 @@ public class ParticipantPanel extends JPanel {
 			
 			@Override
 			public Void op(Participant obj) {
-				final DateTime bday = bdayField.getDateTime();
+				final LocalDate bday = bdayField.getDateTime();
 				participant.setBirthDate(bday);
 				if(participant.getAge(null) == null) {
 					if(sessionDate != null
@@ -421,11 +421,11 @@ public class ParticipantPanel extends JPanel {
 		}
 	}
 	
-	public DateTime getSessionDate() {
+	public LocalDate getSessionDate() {
 		return this.sessionDate;
 	}
 	
-	public void setSessionDate(DateTime sessionDate) {
+	public void setSessionDate(LocalDate sessionDate) {
 		this.sessionDate = sessionDate;
 		
 		if(sessionDate != null && participant.getAge(null) == null

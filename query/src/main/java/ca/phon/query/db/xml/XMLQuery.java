@@ -19,6 +19,11 @@
 
 package ca.phon.query.db.xml;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +31,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.joda.time.DateTime;
 
 import ca.phon.query.db.Query;
 import ca.phon.query.db.Script;
@@ -103,17 +106,21 @@ public class XMLQuery implements Query, JAXBWrapper<QueryType> {
 	}
 
 	@Override
-	public DateTime getDate() {
+	public LocalDateTime getDate() {
 		final XMLGregorianCalendar xmlDate = query.getDate();
 		// ensure timezone neutral
 		xmlDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
-		return new DateTime(xmlDate.toGregorianCalendar());
+		
+		return LocalDateTime.ofInstant(xmlDate.toGregorianCalendar().toInstant(), ZoneId.systemDefault());
 	}
 
 	@Override
-	public void setDate(DateTime date) {
+	public void setDate(LocalDateTime date) {
 		try {
-			query.setDate( DatatypeFactory.newInstance().newXMLGregorianCalendar(date.toGregorianCalendar()) );
+			query.setDate(
+				DatatypeFactory.newInstance()
+					.newXMLGregorianCalendar(GregorianCalendar.from(date.atZone(ZoneId.systemDefault())))
+					);
 		} catch(DatatypeConfigurationException e) {
 		}
 	}

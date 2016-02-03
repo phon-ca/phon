@@ -20,6 +20,7 @@ package ca.phon.app.project;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.time.Period;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import org.joda.time.Period;
 
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;

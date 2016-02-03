@@ -186,8 +186,6 @@ public class EditQueryPanel extends JPanel {
 	}
 
 	private void updateForm() {
-//		final PhonDateFormat dateFormat = 
-//				new PhonDateFormat(PhonDateFormat.YEAR_LONG);
 		if(getQuery() != null) {
 			queryNameField.setText(getQuery().getName());
 			queryCommentsArea.setText(getQuery().getComments());

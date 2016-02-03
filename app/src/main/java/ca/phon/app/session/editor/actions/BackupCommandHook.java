@@ -22,6 +22,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,10 +31,6 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatterBuilder;
-
 import ca.phon.app.hooks.ActionHook;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -58,11 +56,11 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
 		// create backup zip if necessary
 		final ZipFile zipFile = new ZipFile(zipFilePath);
 		
-        final DateTime dateTime = DateTime.now();
+        final LocalDate dateTime = LocalDate.now();
         final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
-        final String dateSuffix = formatterBuilder.appendYear(4, 4).appendLiteral("-").appendMonthOfYear(2).appendLiteral("-")
-            .appendDayOfMonth(2).appendLiteral("_").appendHourOfDay(2).appendLiteral(".")
-            .appendMinuteOfHour(2).appendLiteral(".").appendSecondOfMinute(2).toFormatter().print(dateTime);
+        final String dateSuffix = formatterBuilder.appendPattern("yyyy").appendLiteral("-").appendPattern("MM").appendLiteral("-")
+            .appendPattern("dd").appendLiteral("_").appendPattern("HH").appendLiteral(".")
+            .appendPattern("mm").appendLiteral(".").appendPattern("ss").toFormatter().format(dateTime);
 
         final String zipName =
         		session.getName() + "_" + dateSuffix + ".xml";

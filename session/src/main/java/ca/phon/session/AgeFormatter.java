@@ -19,13 +19,13 @@
 package ca.phon.session;
 
 import java.text.ParseException;
-
-import org.joda.time.Period;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
+import java.time.Period;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterType;
+import ca.phon.phonex.PhonexPattern;
 
 /**
  * Create formatters for ages stored in {@link Period} objects.
@@ -36,23 +36,9 @@ public class AgeFormatter implements Formatter<Period> {
 	
 	public final static String AGE_FORMAT = "YY;MM.DD";
 	
-	/** 
-	 * Create a new {@link PeriodFormatter}
-	 * 
-	 * 
-	 */
-	public static PeriodFormatter createFormatter() {
-		final PeriodFormatter retVal = 
-				new PeriodFormatterBuilder()
-					.printZeroAlways()
-					.minimumPrintedDigits(2).appendYears()
-					.appendSeparator(";")
-					.minimumPrintedDigits(2).appendMonths()
-					.appendSeparator(".")
-					.minimumPrintedDigits(2).appendDays()
-					.toFormatter();
-		return retVal;
-	}
+	private final static String AGE_FORMATTER = "";
+	
+	private final static String AGE_REGEX = "([0-9]{1,2});([0-9]{1,2})\\.([0-9]{1,2})";
 	
 	/**
 	 * Format a {@link Period} object as an age string.
@@ -61,10 +47,8 @@ public class AgeFormatter implements Formatter<Period> {
 	 * @return age as a string
 	 */
 	public static String ageToString(Period age) {
-		final PeriodFormatter formatter = createFormatter();
-		return formatter.print(age);
+		return String.format(AGE_FORMATTER, age.getYears(), age.getMonths(), age.getDays());
 	}
-	
 	
 	/**
 	 * Return an age string as a {@link Period} object
@@ -76,8 +60,16 @@ public class AgeFormatter implements Formatter<Period> {
 	 *  correctly
 	 */
 	public static Period stringToAge(String text) {
-		final PeriodFormatter formatter = createFormatter();
-		return formatter.parsePeriod(text);
+		final Pattern pattern = Pattern.compile(AGE_REGEX);
+		final Matcher matcher = pattern.matcher(text);
+		
+		if(!matcher.matches()) throw new IllegalArgumentException(text);
+		
+		final Integer years = Integer.parseInt(matcher.group(1));
+		final Integer months = Integer.parseInt(matcher.group(2));
+		final Integer days = Integer.parseInt(matcher.group(3));
+		
+		return Period.of(years, months, days);
 	}
 
 	@Override

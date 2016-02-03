@@ -129,7 +129,6 @@
 		<com.jgoodies.jgoodies-looks.version>2.7.0</com.jgoodies.jgoodies-looks.version>
 		<de.susebox.jtopas.version>0.8</de.susebox.jtopas.version>
 		<it.cnr.imaa.essi.lablib-checkboxtree.version>3.0.2</it.cnr.imaa.essi.lablib-checkboxtree.version>
-		<joda-time.joda-time.version>2.1</joda-time.joda-time.version>
 		<junit.junit.version>4.8.2</junit.junit.version>
 		<net.sf.opencsv.opencsv.version>2.3</net.sf.opencsv.opencsv.version>
 		<org.antlr.antlr.version>3.5.2</org.antlr.antlr.version>
@@ -286,13 +285,7 @@
 				<artifactId>opencsv</artifactId>
 				<version>${net.sf.opencsv.opencsv.version}</version>
 			</dependency>
-
-			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time</artifactId>
-				<version>${joda-time.joda-time.version}</version>
-			</dependency>
-
+			
 			<dependency>
 				<groupId>com.fifesoft</groupId>
 				<artifactId>rsyntaxtextarea</artifactId>

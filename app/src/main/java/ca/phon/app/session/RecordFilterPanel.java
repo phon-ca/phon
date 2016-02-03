@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,7 +50,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
-import org.joda.time.DateTime;
 
 import ca.phon.app.query.ResultSetEditor;
 import ca.phon.project.Project;
@@ -235,7 +235,7 @@ public class RecordFilterPanel extends JPanel {
 				retVal = p.getName();
 			} else if(columnIndex == 2) {
 				if(p.getBirthDate() != null) {
-					final DateTime bDay = p.getBirthDate();
+					final LocalDate bDay = p.getBirthDate();
 					retVal = DateFormatter.dateTimeToString(bDay);
 				}
 			} 
@@ -362,7 +362,7 @@ public class RecordFilterPanel extends JPanel {
 			Class<?> retVal = String.class;
 			
 			if(col == 0) retVal = String.class;
-			else if(col == 1) retVal = DateTime.class;
+			else if(col == 1) retVal = LocalDate.class;
 			else if(col == 2) retVal = Integer.class;
 			
 			return retVal;
@@ -520,7 +520,7 @@ public class RecordFilterPanel extends JPanel {
 			JLabel retVal = (JLabel)super.getTableCellRendererComponent(table, value, 
 					isSelected, hasFocus, row, column);
 			
-			DateTime d = (DateTime)value;
+			LocalDate d = (LocalDate)value;
 			
 			String dateStr = DateFormatter.dateTimeToString(d);
 			retVal.setText(dateStr);

@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,7 +58,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -779,18 +780,18 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	@Override
-	public DateTime getSessionModificationTime(Session session) {
+	public LocalDateTime getSessionModificationTime(Session session) {
 		return getSessionModificationTime(session.getCorpus(), session.getName());
 	}
 
 	@Override
-	public DateTime getSessionModificationTime(String corpus, String session) {
+	public LocalDateTime getSessionModificationTime(String corpus, String session) {
 		final File sessionFile = getSessionFile(corpus, session);
 		long modTime = 0L;
 		if(sessionFile.exists()) {
 			modTime = sessionFile.lastModified();
 		}
-		return new DateTime(modTime);
+		return LocalDateTime.ofEpochSecond(modTime, 0, ZoneOffset.UTC);
 	}
 	
 	@Override
