@@ -120,7 +120,7 @@
 
 		<!-- Dependency versions -->
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
-		<ca.gedge.opgraph.version>0.5</ca.gedge.opgraph.version>
+		<ca.gedge.opgraph.version>0.5-SNAPSHOT</ca.gedge.opgraph.version>
 		<ca.phon.native-dialogs.version>6</ca.phon.native-dialogs.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
 		<com.fifesoft.rsyntaxtextarea.version>2.0.2</com.fifesoft.rsyntaxtextarea.version>
