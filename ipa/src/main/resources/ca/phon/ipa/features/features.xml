@@ -1263,5 +1263,15 @@
    <feature_set char="&#x1dc6;">diacritic </feature_set>
    <!--◌-->
    <feature_set char="&#x1dc7;">diacritic </feature_set>
-
+   
+   <!-- MODIFIER LETTER AFRICANIST DOWNSTEP -->
+   <feature_set char="&#xa71d;">diacritic tonedownstep</feature_set>
+   <!-- MODIFIER LETTER AFRICANIST UPSTEP -->
+   <feature_set char="&#xa71e;">diacritic toneupstep</feature_set>
+   
+   <!-- MODIFIER LETTER SMALL CAPITAL I -->
+   <feature_set char="&#x1da6;">diacritic palatal</feature_set>
+   <!-- MODIFIER LETTER SMALL UPSILON -->
+   <feature_set char="&#x1db7;">diacritic labial</feature_set>
+   
 </feature_matrix>
