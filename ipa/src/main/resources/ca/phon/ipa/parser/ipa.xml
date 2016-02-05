@@ -1537,5 +1537,25 @@
         <token>CONSONANT</token>
     </char>
     
+    <char value="&#xa71d;">
+        <name>MODIFIER LETTER AFRICANIST DOWNSTEP</name>
+        <token>SUFFIX_DIACRITIC</token>
+    </char>
+    
+    <char value="&#xa71e;">
+        <name>MODIFIER LETTER AFRICANIST UPSTEP</name>
+        <token>SUFFIX_DIACRITIC</token>
+    </char>
+    
+    <char value="&#x1da6;">
+        <name>MODIFIER LETTER SMALL CAPITAL I</name>
+        <token>SUFFIX_DIACRITIC</token>
+    </char>
+    
+    <char value="&#x1db7;">
+        <name>MODIFIER LETTER SMALL UPSILON</name>
+        <token>SUFFIX_DIACRITIC</token>
+    </char>
+    
 </ipa>
 
