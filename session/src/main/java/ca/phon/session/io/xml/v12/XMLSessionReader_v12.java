@@ -257,7 +257,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		final Duration ageDuration = pt.getAge();
 		if(ageDuration != null) {
 			// convert to period
-			final Period age = Period.parse(ageDuration.toString());
+			final Period age = Period.of(ageDuration.getYears(), ageDuration.getMonths(), ageDuration.getDays());
 			retVal.setAge(age);
 		}
 		
