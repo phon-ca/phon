@@ -51,6 +51,9 @@ public class PhonSplasher {
 	public final static String BOOT_FORK_PROPERTY =
 			PhonSplasher.class.getName() + ".fork";
 	
+	public final static String IS_FORKED_PROPERTY =
+			PhonSplasher.class.getName() + ".isForked";
+	
 	/**
 	 * Default boot class 
 	 */
@@ -77,4 +80,7 @@ public class PhonSplasher {
 			System.exit(0);
 	}
 
+	public static boolean isForked() {
+		return System.getProperty(IS_FORKED_PROPERTY, "false").equalsIgnoreCase("true");
+	}
 }

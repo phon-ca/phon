@@ -19,8 +19,11 @@
 package ca.phon.app;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,7 +76,18 @@ public class Main {
 		
 		// output some debug info in the log
 		LOGGER.info("Phon " + VersionInfo.getInstance().getLongVersion());
+		if(PhonSplasher.isForked()) {
+			LOGGER.info("Running Phon in forked process");
+		}
+		LOGGER.info("Process " + ManagementFactory.getRuntimeMXBean().getName());
+		printEnvInfo();
 		printVMInfo();
+	}
+	
+	private static void printEnvInfo() {
+		for(Entry<String, String> envEntry:System.getenv().entrySet()) {
+			System.out.println("[ENV] " + envEntry.getKey() + " = " + envEntry.getValue());
+		}
 	}
 	
 	private static void printVMInfo() {
