@@ -109,7 +109,11 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		String vmopt = null;
 		while((vmopt = isr.readLine()) != null) {
 			if(vmopt.startsWith("#")) continue;
-			cmd.add(vmopt);
+			if(vmopt.startsWith("-Dca.phon.app.PhonSplasher.fork")) {
+				cmd.add("-Dca.phon.app.PhonSplasher.isForked=true");
+			} else {
+				cmd.add(vmopt);
+			}
 		}
 		isr.close();
 	}
