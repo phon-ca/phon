@@ -1,5 +1,12 @@
 # Phon 2.1 Changes
 
+## Changes from Phon 2.1.7
+
+### General
+
+* Added new IPA glyphs previously found in the SIL PUA
+* Forcing use of bundled VLC on Windows to avoid issues with VLC plug-ins not being found under some configurations.
+
 ## Changes from Phon 2.1.6
 
 * Added columns 'PCC/PVC # Deleted' and 'PCC/PVC % Deleted' to queries including PCC/PVC data.
