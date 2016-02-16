@@ -67,12 +67,14 @@ public class ParticipantImpl implements Participant {
 		// return forced age
 		if(age != null || fromDate == null) {
 			return age;
-		} else {
+		} else if(getBirthDate() != null && fromDate != null) {
 			final LocalDate start = getBirthDate();
 			final LocalDate end = fromDate;
 			
 			final Period period = Period.between(start, end);
 			return period;
+		} else {
+			return age;
 		}
 	}
 

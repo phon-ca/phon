@@ -36,7 +36,7 @@ public class AgeFormatter implements Formatter<Period> {
 	
 	public final static String AGE_FORMAT = "YY;MM.DD";
 	
-	private final static String AGE_FORMATTER = "";
+	private final static String AGE_FORMATTER = "%02d;%02d.%02d";
 	
 	private final static String AGE_REGEX = "([0-9]{1,2});([0-9]{1,2})\\.([0-9]{1,2})";
 	

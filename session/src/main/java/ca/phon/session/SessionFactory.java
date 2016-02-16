@@ -125,6 +125,8 @@ public abstract class SessionFactory {
 		dest.setName(session.getName());
 		dest.setCorpus(session.getCorpus());
 		dest.setMediaLocation(session.getMediaLocation());
+		dest.setDate(session.getDate());
+		dest.setLanguage(session.getLanguage());
 	}
 	
 	/**
