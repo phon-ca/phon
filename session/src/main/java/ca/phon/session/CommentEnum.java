@@ -61,10 +61,20 @@ public enum CommentEnum {
 	@Deprecated
 	Media,
 
-	// gems
+	/** CHAT lazy-gem */
 	LazyGem,
+	
+	/** CHAT begin gem */
 	BeginGem,
-	EndGem
+	
+	/** CHAT end gem */
+	EndGem,
+	
+	/** CHAT Begin utterance group */
+	BeginTcu,
+	
+	/** Chat End utternace group */
+	EndTcu
 	;
 	
 	private static final String[] names = {
@@ -104,7 +114,11 @@ public enum CommentEnum {
 		// gems
 		"LazyGem",
 		"BeginGem",
-		"EndGem"
+		"EndGem",
+		
+		// record groups
+		"BeginTcu",
+		"EndTcu"
 	};
 
 	public String getTitle() {
