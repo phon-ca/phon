@@ -33,15 +33,25 @@ public class OrthoWord extends AbstractOrthoElement {
 	private final String data;
 	
 	public OrthoWord(String data) {
-		this(data, null, null);
+		super();
+		this.data = data;
+		this.prefix = null;
+		this.suffix = null;
 	}
 
-	public OrthoWord(String data, WordPrefix prefix) {
+	public OrthoWord(String data, WordPrefixType prefix) {
 		this(data, prefix, null);
 	}
 	
-	public OrthoWord(String data, WordSuffix suffix) {
+	public OrthoWord(String data, WordSuffixType suffix) {
 		this(data, null, suffix);
+	}
+	
+	public OrthoWord(String data, WordPrefixType prefix, WordSuffixType suffix) {
+		super();
+		this.prefix = new WordPrefix(prefix);
+		this.suffix = new WordSuffix(suffix);
+		this.data = data;
 	}
 	
 	public OrthoWord(String data, WordPrefix prefix, WordSuffix suffix) {
@@ -83,9 +93,9 @@ public class OrthoWord extends AbstractOrthoElement {
 	@Override
 	public String text() {
 		return (
-			(this.prefix == null ? "" : this.prefix.getCode()) + 
+			(this.prefix == null ? "" : this.prefix) + 
 			this.data + 
-			(this.suffix == null ? "" : "@" + this.suffix.getCode())
+			(this.suffix == null ? "" : this.suffix)
 		);
 	}
 	

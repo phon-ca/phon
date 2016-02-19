@@ -69,18 +69,18 @@ public class OrthographyBuilder {
 		return this;
 	}
 	
-	public OrthographyBuilder appendWord(String data, WordPrefix prefix, WordSuffix suffix) {
+	public OrthographyBuilder appendWord(String data, WordPrefixType prefix, WordSuffixType suffix) {
 		final OrthoWord word = new OrthoWord(data, prefix, suffix);
 		eleList.add(word);
 		return this;
 	}
 	
-	public OrthographyBuilder appendWord(String data, WordPrefix prefix) {
+	public OrthographyBuilder appendWord(String data, WordPrefixType prefix) {
 		appendWord(data, prefix, null);
 		return this;
 	}
 	
-	public OrthographyBuilder appendWord(String data, WordSuffix suffix) {
+	public OrthographyBuilder appendWord(String data, WordSuffixType suffix) {
 		appendWord(data, null, suffix);
 		return this;
 	}

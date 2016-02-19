@@ -114,15 +114,15 @@ public class OrthoGroupField extends GroupField<Orthography> {
 			if(word.getPrefix() != null) {
 				try {
 					getHighlighter().addHighlight(currentPos,
-							currentPos + word.getPrefix().getCode().length(), prefixPainter);
+							currentPos + word.getPrefix().toString().length(), prefixPainter);
 				} catch (BadLocationException e) {
 					
 				}
 			}
 			if(word.getSuffix() != null) {
 				try {
-					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().getCode().length() : 0) + word.getWord().length();
-					getHighlighter().addHighlight(i, i+word.getSuffix().getCode().length()+1, suffixPainter);
+					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().toString().length() : 0) + word.getWord().length();
+					getHighlighter().addHighlight(i, i+word.getSuffix().toString().length()+1, suffixPainter);
 							
 				} catch (BadLocationException e)  {}
 			}

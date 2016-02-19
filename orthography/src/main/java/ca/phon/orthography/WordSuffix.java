@@ -1,79 +1,48 @@
-/*
- * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 2015, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
- * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package ca.phon.orthography;
 
-/**
- * Word suffix codes.  Suffixes are applied to words
- * after a '@' character.
- */
-public enum WordSuffix {
-	BABBLING("b", "babbling"),
-	CHILD_INVENTED("c", "child-invented"),
-	DIALECT("d", "dialect"),
-	FAMILY_SPECIFIC("f", "family-specific"),
-	FILLED_PAUSE("fp", "filled-pause"),
-	FILLER_SYLLABLE("fs", "filler syllable"),
-	GENERIC("g", "generic"),
-	INTERJECTION("i", "interjection"),
-	KANA("k", "kana"),
-	LETTER("l", "letter"),
-	NEOLOGISM("n", "neologism"),
-	NO_VOICE("nv", "no voice"),
-	ONOMATOPOEIA("o", "onomatopoeia"),
-	PHONOLOGY_CONSISTENT("p", "phonology consistent"),
-	PROTO_MORPHEME("pm", "proto-morpheme"),
-	QUOTED_METAREFERENCE("q", "quoted metareference"),
-	SIGN_SPEECH("sas", "sign speech"),
-	SIGNING("si", "signing"),
-	TEST("t", "test"),
-	UNIBET("u", "UNIBET"),
-	WORDS_TO_BE_EXCLUDED("x", "words to be excluded"),
-	WORD_PLAY("wp", "word play");
+public class WordSuffix {
+	
+	private WordSuffixType type;
+	
+	private String formSuffix;
 	
 	private String code;
 	
-	private String displayName;
+	public WordSuffix(WordSuffixType type) {
+		this(type, null, null);
+	}
 	
-	private WordSuffix(String code, String displayName) {
+	public WordSuffix(WordSuffixType type, String formSuffix, String code) {
+		this.type = type;
+		this.formSuffix = formSuffix;
 		this.code = code;
-		this.displayName = displayName;
+	}
+
+	public WordSuffixType getType() {
+		return type;
+	}
+
+	public void setType(WordSuffixType type) {
+		this.type = type;
 	}
 
 	public String getCode() {
-		return this.code;
+		return code;
 	}
 
-	public String getDisplayName() {
-		return this.displayName;
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
-	public static WordSuffix fromCode(String code) {
-		WordSuffix retVal = null;
-		
-		for(WordSuffix v:values()) {
-			if(v.getCode().equals(code)) {
-				retVal = v;
-				break;
-			}
-		}
-		
-		return retVal;
+	@Override
+	public String toString() {
+		final StringBuffer buffer = new StringBuffer();
+		buffer.append(type.getCode());
+		if(formSuffix != null && formSuffix.length() > 0)
+			buffer.append("-").append(formSuffix);
+		if(code != null && code.length() > 0)
+			buffer.append(":").append(code);
+		return buffer.toString();
 	}
+
 }

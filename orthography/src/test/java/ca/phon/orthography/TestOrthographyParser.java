@@ -35,7 +35,7 @@ public class TestOrthographyParser {
 	public void testWordPrefixCodes() throws ParseException {
 		final String wordData = "word";
 		
-		for(WordPrefix wp:WordPrefix.values()) {
+		for(WordPrefixType wp:WordPrefixType.values()) {
 			final Orthography ortho = Orthography.parseOrthography(wp.getCode() + wordData);
 			Assert.assertEquals(1, ortho.length());
 			
@@ -43,7 +43,8 @@ public class TestOrthographyParser {
 			Assert.assertEquals(OrthoWord.class, wordEle.getClass());
 			
 			final OrthoWord word = (OrthoWord)wordEle;
-			Assert.assertEquals(wp, word.getPrefix());
+			Assert.assertNotNull(word.getPrefix());
+			Assert.assertEquals(wp, word.getPrefix().getType());
 			Assert.assertEquals(wordData, word.getWord());
 		}
 	}
@@ -52,15 +53,16 @@ public class TestOrthographyParser {
 	public void testWordSuffixCodes() throws ParseException {
 		final String wordData = "word";
 		
-		for(WordSuffix ws:WordSuffix.values()) {
-			final Orthography ortho = Orthography.parseOrthography(wordData + "@" + ws.getCode());
+		for(WordSuffixType ws:WordSuffixType.values()) {
+			final Orthography ortho = Orthography.parseOrthography(wordData + ws.getCode());
 			Assert.assertEquals(1, ortho.length());
 			
 			final OrthoElement wordEle = ortho.elementAt(0);
 			Assert.assertEquals(OrthoWord.class, wordEle.getClass());
 			
 			final OrthoWord word = (OrthoWord)wordEle;
-			Assert.assertEquals(ws, word.getSuffix());
+			Assert.assertNotNull(word.getSuffix());
+			Assert.assertEquals(ws, word.getSuffix().getType());
 			Assert.assertEquals(wordData, word.getWord());
 		}
 	}
@@ -69,9 +71,9 @@ public class TestOrthographyParser {
 	public void testWordComboCodes() throws ParseException {
 		final String wordData = "word";
 		
-		for(WordPrefix wp:WordPrefix.values()) {
-			for(WordSuffix ws:WordSuffix.values()) {
-				final String txt = wp.getCode() + wordData + "@" + ws.getCode();
+		for(WordPrefixType wp:WordPrefixType.values()) {
+			for(WordSuffixType ws:WordSuffixType.values()) {
+				final String txt = wp.getCode() + wordData + ws.getCode();
 				
 				final Orthography ortho = Orthography.parseOrthography(txt);
 				Assert.assertEquals(1, ortho.length());
@@ -80,8 +82,8 @@ public class TestOrthographyParser {
 				Assert.assertEquals(OrthoWord.class, wordEle.getClass());
 				
 				final OrthoWord word = (OrthoWord)wordEle;
-				Assert.assertEquals(wp, word.getPrefix());
-				Assert.assertEquals(ws, word.getSuffix());
+				Assert.assertEquals(wp, word.getPrefix().getType());
+				Assert.assertEquals(ws, word.getSuffix().getType());
 				Assert.assertEquals(wordData, word.getWord());
 			}
 		}
