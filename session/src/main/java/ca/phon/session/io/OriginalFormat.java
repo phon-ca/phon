@@ -30,6 +30,12 @@ import ca.phon.session.Session;
 public class OriginalFormat {
 
 	private SessionIO sessionIO;
+	
+	/**
+	 * Should the application issue the original format warning
+	 * when saving?  This should only be done once.
+	 */
+	private boolean issueWarning = true;
 
 	public OriginalFormat() {
 		super();
@@ -46,6 +52,14 @@ public class OriginalFormat {
 
 	public void setSessionIO(SessionIO sessionIO) {
 		this.sessionIO = sessionIO;
+	}
+	
+	public boolean isIssueWarning() {
+		return this.issueWarning;
+	}
+	
+	public void setIssueWarning(boolean issueWarning) {
+		this.issueWarning = issueWarning;
 	}
 	
 }

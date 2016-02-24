@@ -24,12 +24,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Used to create instances of session readers.
  *
  */
 public class SessionInputFactory {
+	
+	private final static Logger LOGGER = Logger.getLogger(SessionInputFactory.class.getName());
 	
 	/**
 	 * Service loader
@@ -113,7 +117,7 @@ public class SessionInputFactory {
 	 * 
 	 * @throws IOException
 	 */
-	public SessionReader createReaderForFile(File file) throws IOException {
+	public SessionReader createReaderForFile(File file) {
 		SessionReader retVal = null;
 		
 		final Iterator<SessionReader> readerItr = readerLoader.iterator();
@@ -121,9 +125,13 @@ public class SessionInputFactory {
 			final SessionReader reader = readerItr.next();
 			final SessionIO sessionIO = reader.getClass().getAnnotation(SessionIO.class);
 			if(sessionIO != null && file.getName().endsWith(sessionIO.extension())) {
-				if(reader.canRead(file)) {
-					retVal = reader;
-					break;
+				try {
+					if(reader.canRead(file)) {
+						retVal = reader;
+						break;
+					}
+				} catch (IOException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
 		}

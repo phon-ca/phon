@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +57,7 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
 		// create backup zip if necessary
 		final ZipFile zipFile = new ZipFile(zipFilePath);
 		
-        final LocalDate dateTime = LocalDate.now();
+        final LocalDateTime dateTime = LocalDateTime.now();
         final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
         final String dateSuffix = formatterBuilder.appendPattern("yyyy").appendLiteral("-").appendPattern("MM").appendLiteral("-")
             .appendPattern("dd").appendLiteral("_").appendPattern("HH").appendLiteral(".")
