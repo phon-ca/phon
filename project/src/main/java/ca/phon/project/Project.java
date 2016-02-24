@@ -27,6 +27,8 @@ import java.util.UUID;
 
 import ca.phon.extensions.IExtendable;
 import ca.phon.session.Session;
+import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.SessionWriter;
 
 /**
  * Interface for a phon project.
@@ -233,6 +235,20 @@ public interface Project extends IExtendable {
 		throws IOException;
 	
 	/**
+	 * Open specified session using the provided reader.
+	 * 
+	 * @param corpus
+	 * @param session
+	 * @param reader
+	 * 
+	 * @return the session
+	 * 
+	 * @throws IOException
+	 */
+	public Session openSession(String corpus, String session, SessionReader reader)
+		throws IOException;
+	
+	/**
 	 * Get path to the given session.
 	 * 
 	 * @param session
@@ -343,6 +359,20 @@ public interface Project extends IExtendable {
 	 */
 	public void saveSession(String corpus, String sessionName, Session session, UUID writeLock)
 		throws IOException;
+	
+	/**
+	 * Save a session writing the file using the given writer.
+	 * 
+	 * @param corpus
+	 * @param sessionName
+	 * @param session
+	 * @param writer
+	 * @param writeLock
+	 * 
+	 * @throws IOException
+	 */
+	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer, UUID writeLock)
+			throws IOException;
 	
 	/**
 	 * Remove a session from the project.  The writeLock 

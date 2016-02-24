@@ -18,6 +18,8 @@
  */
 package ca.phon.session.io;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -97,6 +99,32 @@ public class SessionInputFactory {
 			if(sessionIO != null && sessionIO.version().equals(version) && sessionIO.id().equals(id)) {
 				retVal = reader;
 				break;
+			}
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Create a new session reader for the given file.
+	 * 
+	 * @param file
+	 * @return session reader or <code>null</code> if not found
+	 * 
+	 * @throws IOException
+	 */
+	public SessionReader createReaderForFile(File file) throws IOException {
+		SessionReader retVal = null;
+		
+		final Iterator<SessionReader> readerItr = readerLoader.iterator();
+		while(readerItr.hasNext()) {
+			final SessionReader reader = readerItr.next();
+			final SessionIO sessionIO = reader.getClass().getAnnotation(SessionIO.class);
+			if(sessionIO != null && file.getName().endsWith(sessionIO.extension())) {
+				if(reader.canRead(file)) {
+					retVal = reader;
+					break;
+				}
 			}
 		}
 		

@@ -18,6 +18,8 @@
  */
 package ca.phon.session.io.xml.v12;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -35,10 +37,17 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.EventFilter;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -91,7 +100,7 @@ import ca.phon.xml.annotation.XMLSerial;
 		version="1.2",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon 1.4-1.6"
+		name="Phon 1.4-2.2"
 )
 public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session> {
 	
@@ -716,4 +725,50 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		final Document doc = documentFromStream(stream);
 		return read(doc, doc.getDocumentElement());
 	}
+
+	@Override
+	public boolean canRead(File file) throws IOException {
+		// open file and make sure the first
+		// element is 'session' with the correct version
+		boolean canRead = false;
+		
+		// use StAX to read only first element
+		// create StAX reader
+		XMLInputFactory factory = XMLInputFactory.newInstance();
+		XMLEventReader reader = null;
+		try(FileInputStream source = new FileInputStream(file)) {
+			//BufferedReader in = new BufferedReader(new InputStreamReader(source, "UTF-8"));
+			XMLEventReader xmlReader = factory.createXMLEventReader(source, "UTF-8");
+			reader = factory.createFilteredReader(xmlReader, new XMLWhitespaceFilter());
+
+			XMLEvent evt;
+			while(!(evt = reader.nextEvent()).isStartElement());
+			canRead = 
+					evt.asStartElement().getName().getLocalPart().equals("session")
+					&& evt.asStartElement().getAttributeByName(new QName("version")).getValue().equals("PB1.2");
+		} catch (XMLStreamException e) {
+			throw new IOException(e);
+		}
+		
+		return canRead;
+	}
+	
+	private class XMLWhitespaceFilter implements EventFilter {
+
+		@Override
+		public boolean accept(XMLEvent arg0) {
+			boolean retVal = true;
+			
+			
+			if(arg0.isCharacters() && 
+					StringUtils.strip(arg0.asCharacters().getData()).length() == 0) {
+				
+				retVal = false;
+			}
+			
+			return retVal;
+		}
+
+	}
+	
 }

@@ -73,6 +73,8 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierViewItem;
+import ca.phon.session.io.OriginalFormat;
+import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
@@ -509,19 +511,25 @@ public class LocalProject implements Project, ProjectRefresh {
 	private String sessionProjectPath(String corpus, String session) {
 		return corpus + "." + session;
 	}
-
+	
 	@Override
 	public Session openSession(String corpus, String session)
 			throws IOException {
 		final File sessionFile = getSessionFile(corpus, session);
 		final URI uri = sessionFile.toURI();
-		
 		final SessionInputFactory inputFactory = new SessionInputFactory();
-		// TODO use method to find which reader will work for the file
-		final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
+		final SessionReader reader = inputFactory.createReaderForFile(sessionFile);
 		if(reader == null) {
 			throw new IOException("No session reader available for " + uri.toASCIIString());
 		}
+		return openSession(corpus, session, reader);
+	}
+
+	@Override
+	public Session openSession(String corpus, String session, SessionReader reader)
+			throws IOException {
+		final File sessionFile = getSessionFile(corpus, session);
+		final URI uri = sessionFile.toURI();
 		
 		try(InputStream in = uri.toURL().openStream()) {
 			final Session retVal = reader.readSession(in);
@@ -611,10 +619,23 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public void saveSession(String corpus, String sessionName, Session session,
 			UUID writeLock) throws IOException {
-		checkSessionWriteLock(corpus, sessionName, writeLock);
-		
 		final SessionOutputFactory outputFactory = new SessionOutputFactory();
-		final SessionWriter writer = outputFactory.createWriter();
+		
+		// get default writer
+		SessionWriter writer = outputFactory.createWriter();
+		// look for an original format, if found save in the same format
+		final OriginalFormat origFormat = session.getExtension(OriginalFormat.class);
+		if(origFormat != null) {
+			writer = outputFactory.createWriter(origFormat.getSessionIO());
+		}
+
+		saveSession(corpus, sessionName, session, writer, writeLock);
+	}
+	
+	@Override
+	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer,
+			UUID writeLock) throws IOException {
+		checkSessionWriteLock(corpus, sessionName, writeLock);
 		
 		final File sessionFile = getSessionFile(corpus, sessionName);
 		final boolean created = !sessionFile.exists();
@@ -626,7 +647,8 @@ public class LocalProject implements Project, ProjectRefresh {
 		try {
 			writer.writeSession(session, bout);
 			
-			final SessionReader reader = (new SessionInputFactory()).createReader("phonbank", "1.2");
+			final SessionReader reader = (new SessionInputFactory()).createReader(
+					writer.getClass().getAnnotation(SessionIO.class));
 			final Session testSession = reader.readSession(new ByteArrayInputStream(bout.toByteArray()));
 			if(testSession.getRecordCount() != session.getRecordCount()) {
 				throw new IOException("Session serialization failed.");
