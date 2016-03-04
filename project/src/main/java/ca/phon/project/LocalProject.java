@@ -964,14 +964,6 @@ public class LocalProject implements Project, ProjectRefresh {
 			final Record r = factory.createRecord();
 			r.addGroup();
 			s.addRecord(r);
-			
-			final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
-			tierView.add(factory.createTierViewItem(SystemTierType.Orthography.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.IPATarget.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.IPAActual.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.Notes.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.Segment.getName(), true));
-			s.setTierView(tierView);
 		}
 		
 		final UUID writeLock = getSessionWriteLock(s);

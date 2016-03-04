@@ -64,6 +64,7 @@ public abstract class SessionFactory {
 
 	/**
 	 * Create a new empty session.
+	 * Tier view 
 	 * 
 	 * @return a new session object
 	 */
@@ -71,7 +72,7 @@ public abstract class SessionFactory {
 	
 	/**
 	 * Create a new session with the specified
-	 * corpus and name.
+	 * corpus and name. Also sets up initial tier view.
 	 * 
 	 * @param corpus
 	 * @param name
@@ -82,7 +83,29 @@ public abstract class SessionFactory {
 		final Session retVal = createSession();
 		retVal.setCorpus(corpus);
 		retVal.setName(name);
+		setupDefaultTierView(retVal);
+		
 		return retVal;
+	}
+	
+	/**
+	 * Setup default tier view for session.
+	 * 
+	 * @param session
+	 */
+	public void setupDefaultTierView(Session session) {
+		final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
+		tierView.add(createTierViewItem(SystemTierType.Orthography.getName(), true));
+		tierView.add(createTierViewItem(SystemTierType.IPATarget.getName(), true));
+		tierView.add(createTierViewItem(SystemTierType.IPAActual.getName(), true));
+		tierView.add(createTierViewItem(SystemTierType.Notes.getName(), true));
+		tierView.add(createTierViewItem(SystemTierType.Segment.getName(), true));
+		
+		for(TierDescription tierDesc:session.getUserTiers()) {
+			tierView.add(createTierViewItem(tierDesc.getName(), true, "default", false));
+		}
+		
+		session.setTierView(tierView);
 	}
 	
 	/**
@@ -197,6 +220,28 @@ public abstract class SessionFactory {
 			final Comment clonedC = cloneComment(c);
 			retVal.addComment(clonedC);
 		}
+	}
+	
+	/**
+	 * Copy tier information from one session to another.
+	 * 
+	 * @param session
+	 * @param dest
+	 */
+	public void copySessionTierInformation(Session session, Session dest) {
+		for(TierDescription tierDesc:session.getUserTiers()) {
+			final TierDescription tierCopy =
+					createTierDescription(tierDesc.getName(), tierDesc.isGrouped(), tierDesc.getDeclaredType());
+			dest.addUserTier(tierCopy);
+		}
+		final List<TierViewItem> tierView = session.getTierView();
+		final List<TierViewItem> newTierView = new ArrayList<>();
+		for(TierViewItem tvi:tierView) {
+			final TierViewItem tierViewCopy =
+					createTierViewItem(tvi.getTierName(), tvi.isVisible(), tvi.getTierFont(), tvi.isTierLocked());
+			newTierView.add(tierViewCopy);
+		}
+		dest.setTierView(newTierView);
 	}
 	
 	/**
