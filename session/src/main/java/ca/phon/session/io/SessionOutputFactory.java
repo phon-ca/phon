@@ -18,7 +18,9 @@
  */
 package ca.phon.session.io;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 
 /**
@@ -43,6 +45,21 @@ public class SessionOutputFactory {
 	public SessionOutputFactory(ClassLoader cl) {
 		super();
 		writerLoader = ServiceLoader.load(SessionWriter.class, cl);
+	}
+	
+	public List<SessionIO> availableSessionIOs() {
+		final List<SessionIO> retVal = new ArrayList<>();
+		
+		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
+		while(writerItr.hasNext()) {
+			final SessionWriter writer = writerItr.next();
+			final SessionIO sessionIO = writer.getClass().getAnnotation(SessionIO.class);
+			if(sessionIO != null) {
+				retVal.add(sessionIO);
+			}
+		}
+		
+		return retVal;
 	}
 	
 	/**

@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -57,6 +58,7 @@ import ca.phon.app.session.editor.actions.NewRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PasteRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
+import ca.phon.app.session.editor.actions.SaveAsAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.actions.SessionCheckAction;
 import ca.phon.app.session.editor.actions.SortRecordsAction;
@@ -364,6 +366,14 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			
 		});
 		
+		// save as.. menu
+		final JMenu saveAsMenu = new JMenu("Save as...");
+		final SessionOutputFactory factory = new SessionOutputFactory();
+		for(SessionIO sessionIO:factory.availableSessionIOs()) {
+			saveAsMenu.add(new JMenuItem(new SaveAsAction(this, sessionIO)));
+		}
+		fileMenu.add(saveAsMenu, 1);
+		fileMenu.add(new JSeparator(), 2);
 		
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");
