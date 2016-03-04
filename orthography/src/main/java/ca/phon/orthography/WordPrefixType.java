@@ -28,7 +28,7 @@ public enum WordPrefixType {
 	FRAGMENT("&", "fragment"),
 	// w attribute:untranscribed
 	UNINTELLIGIBLE("xxx", "unintelligible"),
-	UNINTELLIGIBLE_WORD_WITH_PHO("yyy", "unintelligible-word-with-pho"),
+	UNINTELLIGIBLE_WORD_WITH_PHO("yyy", "unintelligible-with-pho"),
 	UNTRANSCRIBED("www", "untranscribed");
 	
 	private String code;

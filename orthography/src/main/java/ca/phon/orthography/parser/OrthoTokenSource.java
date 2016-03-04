@@ -76,17 +76,13 @@ public class OrthoTokenSource implements TokenSource {
 				
 				// punctuation must be separated by a space
 				// check punctuation first
-				if(Character.isWhitespace(nextChar) &&
-					!Character.isWhitespace(currentChar) ) {
-					for(OrthoPunctType pt:OrthoPunctType.values()) {
-						if(pt.getChar() == currentChar) {
-							// setup PUNCT token
-							retVal = new CommonToken(tokens.getTokenType("PUNCT"));
-							retVal.setText(currentChar + "");
-							retVal.setCharPositionInLine(cIndex);
-							cIndex++;
-						}
-					}
+				final OrthoPunctType pt = OrthoPunctType.fromChar(currentChar);
+				if(pt != null) {
+					// setup PUNCT token
+					retVal = new CommonToken(tokens.getTokenType("PUNCT"));
+					retVal.setText(currentChar + "");
+					retVal.setCharPositionInLine(cIndex);
+					cIndex++;
 				}
 				
 				if(retVal == null) {

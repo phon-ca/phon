@@ -45,4 +45,10 @@ public class TestCHATCodes {
 		return Orthography.parseOrthography(str);
 	}
 	
+	@Test
+	public void testInnerGroup() throws ParseException {
+		final String testStr = "{maman (/) }";
+		Orthography orth = testString(testStr);
+	}
+	
 }
