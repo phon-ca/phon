@@ -634,9 +634,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			// only issue the format warning once...
 			if(origFormat.isIssueWarning()) {
 				final MessageDialogProperties props = new MessageDialogProperties();
-				final String[] opts = { 
+				final String[] opts = {
 						"Use original format (" + origFormat.getSessionIO().name() + ")",
-						"Use phon format"
+						"Use phon format",
+						"Cancel"
 				};
 				props.setOptions(opts);
 				props.setDefaultOption(opts[0]);
@@ -650,10 +651,13 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				if(retVal == 0) {
 					// save in original format
 					sessionWriter = outputFactory.createWriter(origFormat.getSessionIO());
-				} else {
+				} else if(retVal == 1) {
 					// change original format to new Phon's default SessionIO
 					origFormat = new OriginalFormat(sessionWriter.getClass().getAnnotation(SessionIO.class));
 					session.putExtension(OriginalFormat.class, origFormat);
+				} else {
+					// cancelled
+					return false;
 				}
 				origFormat.setIssueWarning(false);
 			} else {

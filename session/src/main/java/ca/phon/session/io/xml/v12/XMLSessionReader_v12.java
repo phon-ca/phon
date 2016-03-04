@@ -100,7 +100,7 @@ import ca.phon.xml.annotation.XMLSerial;
 		version="1.2",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon 1.4-2.2"
+		name="Phon 1.4-2.1"
 )
 public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session> {
 	

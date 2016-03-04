@@ -34,7 +34,7 @@ public class SaveAsAction extends SessionEditorAction {
 	private final static String DESC = "Save session as ";
 	
 	private final static ImageIcon ICON =
-			IconManager.getInstance().getIcon("actions/save-as", IconSize.SMALL);
+			IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
 	
 	private final SessionIO sessionIO;
 	
