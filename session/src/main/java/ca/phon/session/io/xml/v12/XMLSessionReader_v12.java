@@ -239,6 +239,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						record.addComment(comment);
 					}
 					recordComments.clear();
+					foundFirstRecord = true;
 				}
 			}
 		}

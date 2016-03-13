@@ -539,7 +539,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			if(!retVal.getCorpus().equals(corpus)) {
 				retVal.setCorpus(corpus);
 			}
-			if(!retVal.getName().equals(session)) {
+			if(retVal.getName() == null || !retVal.getName().equals(session)) {
 				retVal.setName(session);
 			}
 			

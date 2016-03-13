@@ -47,7 +47,7 @@ public enum WordSuffixType {
 	PROTO_MORPHEME("@pm", "proto-morpheme"),
 	QUOTED_METAREFERENCE("@q", "quoted metareference"),
 	SIGN_SPEECH("@sas", "sign speech"),
-	SIGNING("@si", "signing"),
+	SINGING("@si", "singing"),
 	TEST("@t", "test"),
 	UNIBET("@u", "UNIBET"),
 	WORDS_TO_BE_EXCLUDED("@x", "words to be excluded"),
