@@ -395,6 +395,10 @@ public class PhonScriptContext {
 		return retVal;
 	}
 	
+	public WrapFactory getWrapFactory() {
+		return wrapFactory;
+	}
+	
 	/**
 	 * Install these script params into the given scope
 	 * 

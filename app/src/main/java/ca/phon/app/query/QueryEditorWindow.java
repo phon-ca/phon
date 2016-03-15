@@ -259,7 +259,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		editorPanel.add(bottomPanel, BorderLayout.SOUTH);
 
 		editorTabs = new JTabbedPane();
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		final String name = (queryName != null ? queryName.getName() : "untitled");
 		editorTabs.add("Script : " + name, editorPanel);
@@ -313,7 +313,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	private void updateComponents() {
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		
 		final URL location = (queryName != null ? queryName.getLocation() : null);
@@ -343,7 +343,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	 * 
 	 */
 	public String getCurrentFile() {
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		
 		final URL url = (queryName != null ? queryName.getLocation() : null);
@@ -499,7 +499,9 @@ public class QueryEditorWindow extends CommonModuleFrame {
 //			return false;
 //		}
 		
-		final SaveQueryDialog dialog = new SaveQueryDialog(this, scriptEditor.getScript());
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
+		
+		final SaveQueryDialog dialog = new SaveQueryDialog(this, script);
 		dialog.setModal(true);
 		
 		dialog.pack();
@@ -507,7 +509,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		
 		dialog.setVisible(true);
 		
-		final QueryScript script = scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		final URL location = (queryName != null ? queryName.getLocation() : null);
 		
@@ -544,7 +545,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	private void onDebugQuery() {
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		final String name = (queryName != null ? queryName.getName() : "untitled");
 		
@@ -608,7 +609,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
         PhonLoggerConsole errDisplay = new PhonLoggerConsole();
         errDisplay.addLogger(LOGGER);
         
-        final QueryScript editorScript = scriptEditor.getScript();
+        final QueryScript editorScript = (QueryScript)scriptEditor.getScript();
         final QueryScript script = (QueryScript)editorScript.clone();
         
         final List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
@@ -775,7 +776,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	public String getScript() {
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		return script.getScript();
 	}
 	

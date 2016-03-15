@@ -174,6 +174,11 @@ public class WizardFrame extends CommonModuleFrame {
 		stepPanel.remove(ws);
 	}
 	
+	public void removeAllSteps() {
+		steps.clear();
+		stepPanel.removeAll();
+	}
+	
 	public int numberOfSteps() {
 		return steps.size();
 	}

@@ -145,7 +145,7 @@ public class QueryAssessmentWizard extends WizardFrame {
 		}
 		super.next();
 		if(getCurrentStep() == reportStep) {
-			final QueryScript queryScript = queryScriptPanel.getScript();
+			final QueryScript queryScript = (QueryScript)queryScriptPanel.getScript();
 			
 			final QueryAnalysisInput input = new QueryAnalysisInput();
 			input.setProject(getExtension(Project.class));

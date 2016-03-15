@@ -150,7 +150,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 	
 	public QueryScript getQueryScript() {
 		if(scriptPanel != null) {
-			return scriptPanel.getScript();
+			return (QueryScript)scriptPanel.getScript();
 		} else {
 			return this.queryScript;
 		}

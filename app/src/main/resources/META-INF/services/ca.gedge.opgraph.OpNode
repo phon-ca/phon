@@ -7,3 +7,4 @@ ca.phon.app.opgraph.nodes.query.ResultsToTableNode
 ca.phon.app.opgraph.nodes.query.SortNode
 ca.phon.app.opgraph.nodes.log.PrintBufferNode
 ca.phon.app.opgraph.nodes.query.IPAVariabilityNode
+ca.phon.app.opgraph.nodes.query.AddColumnNode

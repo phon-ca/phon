@@ -41,6 +41,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import ca.phon.query.script.QueryScript;
+import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
@@ -83,7 +84,7 @@ public class ScriptPanel extends JPanel {
 	/**
 	 * Script object
 	 */
-	private EditableQueryScript script;
+	private PhonScript script;
 	
 	/**
 	 * Script editor
@@ -120,7 +121,7 @@ public class ScriptPanel extends JPanel {
 	 * @param script
 	 */
 	public ScriptPanel(QueryScript script) {
-		this.script = new EditableQueryScript(script);
+		this.script = script;
 	
 		init();
 	}
@@ -159,9 +160,9 @@ public class ScriptPanel extends JPanel {
 		revalidate();
 	}
 	
-	public void setScript(QueryScript script) {
-		QueryScript oldScript = this.script;
-		this.script = new EditableQueryScript(script);
+	public void setScript(PhonScript script) {
+		PhonScript oldScript = this.script;
+		this.script = script;
 		
 		updateParamPanel();
 		scriptEditor.getDocument().removeDocumentListener(scriptDocListener);
@@ -171,7 +172,7 @@ public class ScriptPanel extends JPanel {
 		super.firePropertyChange(SCRIPT_PROP, oldScript, this.script);
 	}
 	
-	public QueryScript getScript() {
+	public PhonScript getScript() {
 		return this.script;
 	}
 	

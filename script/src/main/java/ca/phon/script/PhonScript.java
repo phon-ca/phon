@@ -34,7 +34,7 @@ import ca.phon.extensions.IExtendable;
  * script.</p>
  * 
  */
-public interface PhonScript extends IExtendable {
+public interface PhonScript extends IExtendable, Appendable, CharSequence {
 	
 	/**
 	 * Get the script text.
@@ -81,4 +81,103 @@ public interface PhonScript extends IExtendable {
 	 * @return list of javascript library folders
 	 */
 	public List<URI> getRequirePaths();
+	
+	/* Buffer delegate methods */
+	public PhonScript append(boolean arg0);
+
+	public PhonScript append(char c);
+
+	public PhonScript append(char[] str, int offset, int len);
+
+	public PhonScript append(char[] str);
+
+	public PhonScript append(CharSequence s, int start, int end);
+
+	public PhonScript append(CharSequence s);
+
+	public PhonScript append(double d);
+	
+	public PhonScript append(float f);
+
+	public PhonScript append(int i);
+
+	public PhonScript append(long lng);
+
+	public PhonScript append(Object obj);
+
+	public PhonScript append(String str);
+
+	public PhonScript append(StringBuffer sb);
+
+	public PhonScript appendCodePoint(int codePoint);
+
+	public int capacity();
+
+	public char charAt(int index);
+
+	public int codePointAt(int index);
+
+	public int codePointBefore(int index);
+
+	public int codePointCount(int beginIndex, int endIndex);
+
+	public PhonScript delete(int start, int end);
+	
+	public PhonScript deleteCharAt(int index);
+
+	public void ensureCapacity(int minimumCapacity);
+
+	public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin);
+
+	public int indexOf(String str, int fromIndex);
+
+	public int indexOf(String str);
+
+	public PhonScript insert(int offset, boolean b);
+
+	public PhonScript insert(int offset, char c);
+
+	public PhonScript insert(int index, char[] str, int offset, int len);
+
+	public PhonScript insert(int offset, char[] str);
+
+	public PhonScript insert(int dstOffset, CharSequence s, int start, int end);
+
+	public PhonScript insert(int dstOffset, CharSequence s);
+
+	public PhonScript insert(int offset, double d);
+
+	public PhonScript insert(int offset, float f);
+
+	public PhonScript insert(int offset, int i);
+
+	public PhonScript insert(int offset, long l);
+
+	public PhonScript insert(int offset, Object obj);
+
+	public PhonScript insert(int offset, String str);
+
+	public int lastIndexOf(String str, int fromIndex);
+
+	public int lastIndexOf(String str);
+
+	public int length();
+
+	public int offsetByCodePoints(int index, int codePointOffset);
+
+	public PhonScript replace(int start, int end, String str);
+
+	public PhonScript reverse();
+
+	public void setCharAt(int index, char ch);
+
+	public void setLength(int newLength);
+
+	public CharSequence subSequence(int start, int end);
+	
+	public String substring(int start, int end);
+
+	public String substring(int start);
+
+	public void trimToSize();
 }
