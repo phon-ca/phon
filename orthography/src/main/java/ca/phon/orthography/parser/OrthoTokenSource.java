@@ -156,8 +156,12 @@ public class OrthoTokenSource implements TokenSource {
 				}
 				
 			case ':':
-				type = buffer.toString();
-				buffer.setLength(0);
+				// type is defined before first ':'
+				if(type == null) {
+					type = buffer.toString();
+					buffer.setLength(0);
+				} else 
+					buffer.append(c);
 				break;
 				
 			default:
