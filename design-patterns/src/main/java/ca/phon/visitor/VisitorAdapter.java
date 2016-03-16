@@ -20,6 +20,8 @@ package ca.phon.visitor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,6 +71,7 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 	private Method findVisitMethod(Class<?> type) {
 		Method retVal = null;
 		Class<?> adapterClass = this.getClass();
+		List<Method> potentialMethods = new ArrayList<>();
 		for(Method m:adapterClass.getMethods()) {
 			// check for the visits annotation
 			Visits visits = m.getAnnotation(Visits.class);
@@ -76,11 +79,16 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 				// check type
 				Class<?>[] paramTypes = m.getParameterTypes();
 				
-				if(paramTypes.length == 1 && paramTypes[0].isAssignableFrom(type)) {
+				if(paramTypes.length == 1 && paramTypes[0] == type) {
 					retVal = m;
 					break;
+				} else if(paramTypes.length == 1 && paramTypes[0].isAssignableFrom(type)) {
+					potentialMethods.add(m);
 				}
 			}
+		}
+		if(retVal == null && potentialMethods.size() > 0) {
+			retVal = potentialMethods.get(0);
 		}
 		return retVal;
 	}
