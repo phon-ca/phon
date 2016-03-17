@@ -25,11 +25,7 @@ package ca.phon.orthography;
 public enum WordPrefixType {
 	// w attribute:type
 	OMISSION("0", "omission"),
-	FRAGMENT("&", "fragment"),
-	// w attribute:untranscribed
-	UNINTELLIGIBLE("xxx", "unintelligible"),
-	UNINTELLIGIBLE_WORD_WITH_PHO("yyy", "unintelligible-with-pho"),
-	UNTRANSCRIBED("www", "untranscribed");
+	FRAGMENT("&", "fragment");
 	
 	private String code;
 	

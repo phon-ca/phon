@@ -73,7 +73,13 @@ word returns [OrthoWord word]
 		}		
 		
 		final String data = $WORD.text;
-		$word = new OrthoWord(data, wp, ws);
+		
+		UntranscribedType untranscribed = null;
+		if(data.matches("[xyw]{3}")) {
+			untranscribed = UntranscribedType.fromCode(data);
+		}
+		
+		$word = new OrthoWord(data, wp, ws, untranscribed);
 	}
 	;
 	

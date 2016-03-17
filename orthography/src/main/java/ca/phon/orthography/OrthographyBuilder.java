@@ -69,6 +69,13 @@ public class OrthographyBuilder {
 		return this;
 	}
 	
+	public OrthographyBuilder appendWord(String data, WordPrefixType prefix, WordSuffixType suffix,
+			UntranscribedType untranscribed) {
+		final OrthoWord word = new OrthoWord(data, prefix, suffix, untranscribed);
+		eleList.add(word);
+		return this;
+	}
+	
 	public OrthographyBuilder appendWord(String data, WordPrefixType prefix, WordSuffixType suffix) {
 		final OrthoWord word = new OrthoWord(data, prefix, suffix);
 		eleList.add(word);

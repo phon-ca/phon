@@ -30,6 +30,8 @@ public class OrthoWord extends AbstractOrthoElement {
 	
 	private final WordSuffix suffix;
 	
+	private final UntranscribedType untranscribed;
+	
 	private final String data;
 	
 	public OrthoWord(String data) {
@@ -37,6 +39,15 @@ public class OrthoWord extends AbstractOrthoElement {
 		this.data = data;
 		this.prefix = null;
 		this.suffix = null;
+		this.untranscribed = null;
+	}
+	
+	public OrthoWord(String data, UntranscribedType untranscribed) {
+		super();
+		this.data = data;
+		this.prefix = null;
+		this.suffix = null;
+		this.untranscribed = untranscribed;
 	}
 
 	public OrthoWord(String data, WordPrefixType prefix) {
@@ -52,6 +63,7 @@ public class OrthoWord extends AbstractOrthoElement {
 		this.prefix = new WordPrefix(prefix);
 		this.suffix = new WordSuffix(suffix);
 		this.data = data;
+		this.untranscribed = null;
 	}
 	
 	public OrthoWord(String data, WordPrefix prefix, WordSuffix suffix) {
@@ -59,6 +71,31 @@ public class OrthoWord extends AbstractOrthoElement {
 		this.prefix = prefix;
 		this.suffix = suffix;
 		this.data = data;
+		this.untranscribed = null;
+	}
+	
+	public OrthoWord(String data, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribed) {
+		super();
+		this.prefix = prefix;
+		this.suffix = suffix;
+		this.data = data;
+		this.untranscribed = untranscribed;
+	}
+	
+	public OrthoWord(String data, WordPrefixType prefix, WordSuffixType suffix, UntranscribedType untranscribed) {
+		super();
+		this.prefix = new WordPrefix(prefix);
+		this.suffix = new WordSuffix(suffix);
+		this.data = data;
+		this.untranscribed = untranscribed;
+	}
+	
+	public boolean isUntranscribed() {
+		return this.untranscribed != null;
+	}
+	
+	public UntranscribedType getUntranscribedType() {
+		return this.untranscribed;
 	}
 	
 	/**

@@ -78,11 +78,17 @@ public class OrthoTokenSource implements TokenSource {
 				// check punctuation first
 				final OrthoPunctType pt = OrthoPunctType.fromChar(currentChar);
 				if(pt != null) {
-					// setup PUNCT token
-					retVal = new CommonToken(tokens.getTokenType("PUNCT"));
-					retVal.setText(currentChar + "");
-					retVal.setCharPositionInLine(cIndex);
-					cIndex++;
+					if(pt == OrthoPunctType.AMPERSTAND && !Character.isWhitespace(nextChar)) {
+						// word-fragment, read word
+						readWord();
+						return nextToken();
+					} else {
+						// setup PUNCT token
+						retVal = new CommonToken(tokens.getTokenType("PUNCT"));
+						retVal.setText(currentChar + "");
+						retVal.setCharPositionInLine(cIndex);
+						cIndex++;
+					}
 				}
 				
 				if(retVal == null) {
