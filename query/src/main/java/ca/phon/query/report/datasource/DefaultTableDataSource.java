@@ -68,6 +68,30 @@ public class DefaultTableDataSource implements TableDataSource {
 	public int getRowCount() {
 		return rowData.size();
 	}
+	
+	public int getColumnIndex(String columnName) {
+		int colIdx = -1;
+		for(int c = 0; c < getColumnCount(); c++) {
+			if(getColumnTitle(c).equals(columnName)) {
+				colIdx = c;
+				break;
+			}
+		}
+		return colIdx;
+	}
+	
+	public Object getValueAt(int row, String columnName) {
+		Object retVal = null;
+		
+		if(row < rowData.size()) {
+			int colIdx = getColumnIndex(columnName);
+			if(colIdx > 0 && colIdx < getColumnCount()) {
+				retVal = getValueAt(row, colIdx);
+			}
+		}
+		
+		return retVal;
+	}
 
 	@Override
 	public Object getValueAt(int row, int col) {

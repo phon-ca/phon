@@ -1,36 +1,23 @@
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.ArrayList;
+import java.awt.BorderLayout;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
-import javax.script.ScriptEngineManager;
 import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rtextarea.RTextScrollPane;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
@@ -47,28 +34,26 @@ import ca.phon.ui.text.PromptedTextField;
 		name="Add Column",
 		showInLibrary=true
 )
-public class AddColumnNode extends TableOpNode implements NodeSettings {
+public class AddColumnNode extends TableScriptNode {
 
-	private final static String DEFAULT_SCRIPT = "function getRowValue(rowData) {\n\treturn new String();\n}\n";
+	private final static String DEFAULT_SCRIPT = "/*\n" + 
+			"params = {label, \"Add a new column to the input table using javascript.\", \"<html><b>Add column to table</b></html>\"}\n" + 
+			";\n" + 
+			"*/\n" + 
+			"\n" + 
+			"function getRowValue(table, row) {\n" + 
+			"	return new String();\n" + 
+			"}\n" + 
+			"";
 	
 	// settings
 	private String columnName = "NewColumn";
 	
-	private String scriptEngineName = "Javascript";
-	
-	private PhonScript script = new BasicScript(DEFAULT_SCRIPT);
-	
-	
 	// UI
-	private JPanel settingsPanel;
 	private PromptedTextField columnNameField;
-	private JComboBox<String> scriptEngineBox;
-	private JComboBox<String> cannedScriptBox;
-	private RSyntaxTextArea scriptArea;
 	
 	public AddColumnNode() {
-		super();
-		putExtension(NodeSettings.class, this);
+		super(DEFAULT_SCRIPT);
 	}
 
 	@Override
@@ -92,7 +77,7 @@ public class AddColumnNode extends TableOpNode implements NodeSettings {
 				}
 				
 				Object newVal = scriptContext.callFunction(scope, "getRowValue", 
-						Collections.unmodifiableMap(rowData));
+						table, row);
 				if(newVal instanceof NativeJavaObject) {
 					newVal = ((NativeJavaObject)newVal).unwrap();
 				}
@@ -113,82 +98,16 @@ public class AddColumnNode extends TableOpNode implements NodeSettings {
 		
 		context.put(tableOutput, outputTable);
 	}
-
-	@Override
-	public Component getComponent(GraphDocument document) {
-		if(settingsPanel == null) {
-			settingsPanel = createSettingsPanel();
-		}
-		return settingsPanel;
-	}
 	
-	private JPanel createSettingsPanel() {
-		JPanel retVal = new JPanel();
+	@Override
+	protected JPanel createSettingsPanel() {
+		JPanel retVal = super.createSettingsPanel();
 		
 		columnNameField = new PromptedTextField("Enter new column name");
-		final ScriptEngineManager manager = new ScriptEngineManager();
-		final List<String> scriptEngineNames = 
-				manager.getEngineFactories()
-					.stream()
-					.map( (factory) -> factory.getEngineName() )
-					.collect(Collectors.toList());
-		scriptEngineBox = new JComboBox<>(scriptEngineNames.toArray(new String[0]));
-		
-		cannedScriptBox = new JComboBox<>();
-		
-		scriptArea = new RSyntaxTextArea();
-		final RTextScrollPane scroller = new RTextScrollPane(scriptArea, true);
-		
-		final GridBagLayout layout = new GridBagLayout();
-		final GridBagConstraints gbc = new GridBagConstraints();
-		retVal.setLayout(layout);
-		
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(2, 2, 5, 2);
-		
-		gbc.gridheight = 1;
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		retVal.add(new JLabel("Column name:"), gbc);
-		
-		gbc.gridx++;
-		gbc.weightx = 1.0;
-		retVal.add(columnNameField, gbc);
-		
-		gbc.gridx = 0;
-		gbc.weightx = 0;
-		gbc.gridy++;
-		retVal.add(new JLabel("Script engine:"), gbc);
-		
-		gbc.gridx++;
-		gbc.weightx = 1.0;
-		retVal.add(scriptEngineBox, gbc);
-		
-		gbc.gridx = 0;
-		gbc.weightx = 0;
-		gbc.gridy++;
-		retVal.add(new JLabel("Column type:"), gbc);
-		
-		gbc.gridx++;
-		gbc.weightx = 1.0;
-		retVal.add(cannedScriptBox, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridwidth = 2;
-		gbc.gridy++;
-		gbc.weighty = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		scroller.setBorder(
-				BorderFactory.createCompoundBorder(
-						BorderFactory.createTitledBorder("Script"), 
-						scroller.getBorder()));
-		retVal.add(scroller, gbc);
-		
 		columnNameField.setText(this.columnName);
-		scriptEngineBox.setSelectedItem(this.scriptEngineName);
-		scriptArea.setText(this.script.getScript());
+		columnNameField.setBorder(
+				BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Column name"), columnNameField.getBorder()));
+		retVal.add(columnNameField, BorderLayout.NORTH);
 		
 		return retVal;
 	}
@@ -200,54 +119,24 @@ public class AddColumnNode extends TableOpNode implements NodeSettings {
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
-	
-	public String getScriptEngineName() {
-		return (scriptEngineBox != null ? scriptEngineBox.getSelectedItem().toString() : scriptEngineName);
-	}
-	
-	public void setScriptEngineName(String scriptEngine) {
-		this.scriptEngineName = scriptEngine;
-	}
-	
-	public PhonScript getScript() {
-		return (scriptArea != null ? new BasicScript(scriptArea.getText()) : script);
-	}
-	
-	public void setScript(String script) {
-		this.script = new BasicScript(script);
-	}
-	
-	public void setScript(PhonScript script) {
-		this.script = script;
-	}
 
 	@Override
 	public Properties getSettings() {
-		final Properties retVal = new Properties();
+		final Properties retVal = super.getSettings();
 		
 		retVal.setProperty("column", getColumnName());
-		retVal.setProperty("scriptEngineName", getScriptEngineName());
-		retVal.setProperty("script", getScript().getScript());
 		
 		return retVal;
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
+		super.loadSettings(properties);
+		
 		if(properties.containsKey("column")) {
 			this.columnName = properties.getProperty("column");
 			if(columnNameField != null)
 				columnNameField.setText(properties.getProperty("column"));
-		}
-		if(properties.containsKey("scriptEngineName")) {
-			this.scriptEngineName = properties.getProperty("scriptEngineName");
-			if(scriptEngineBox != null)
-				scriptEngineBox.setSelectedItem(properties.getProperty("scriptEngineName"));
-		}
-		if(properties.containsKey("script")) {
-			this.script = new BasicScript(properties.getProperty("script"));
-			if(scriptArea != null)
-				scriptArea.setText(properties.getProperty("script"));
 		}
 	}
 

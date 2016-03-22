@@ -120,7 +120,7 @@ public class ScriptPanel extends JPanel {
 	 * 
 	 * @param script
 	 */
-	public ScriptPanel(QueryScript script) {
+	public ScriptPanel(PhonScript script) {
 		this.script = script;
 	
 		init();
