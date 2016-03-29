@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -85,9 +86,20 @@ public class NodeWizard extends WizardFrame {
 		final WizardExtension nodeWizardList = 
 				graph.getExtension(WizardExtension.class);
 		int stepIdx = 0;
+		
+		if(nodeWizardList.getWizardMessage() != null
+				&& nodeWizardList.getWizardMessage().length() > 0) {
+			final WizardStep introStep = createIntroStep(nodeWizardList.getWizardTitle(), nodeWizardList.getWizardMessage());
+			introStep.setPrevStep(stepIdx-1);
+			introStep.setNextStep(stepIdx+1);
+			++stepIdx;
+			
+			addWizardStep(introStep);
+		}
+		
 		if(nodeWizardList != null) {
 			for(OpNode node:nodeWizardList) {
-				final WizardStep step = createStep(node);
+				final WizardStep step = createStep(nodeWizardList, node);
 				if(step != null) {
 					step.setPrevStep(stepIdx-1);
 					step.setNextStep(stepIdx+1);
@@ -166,26 +178,25 @@ public class NodeWizard extends WizardFrame {
 		ctx.put(PrintBufferNode.BUFFERS_KEY, bufferPanel);
 	}
 	
-	protected WizardStep createStep(OpNode node) {
+	protected WizardStep createStep(WizardExtension ext, OpNode node) {
 		final NodeSettings settings = node.getExtension(NodeSettings.class);
 		if(settings != null) {
 			try {
 				final Component comp = settings.getComponent(null);
-				
-				final List<OpNode> nodePath = 
-						graph.getNodePath(node.getId());
-				final String path = 
-						nodePath.stream()
-							.map( n -> n.getName() )
-							.collect(Collectors.joining("/"));
-				
+			
 				final WizardStep step = new WizardStep();
 				step.setLayout(new BorderLayout());
 				
 				final JXTitledSeparator stepTitle = 
-						new JXTitledSeparator(path);
+						new JXTitledSeparator(ext.getNodeTitle(node));
 				step.add(stepTitle, BorderLayout.NORTH);
 				step.add(new JScrollPane(comp), BorderLayout.CENTER);
+				
+				if(ext.getNodeMessage(node) != null && ext.getNodeMessage(node).length() > 0) {
+					final JEditorPane editorPane = new JEditorPane("text/html", 
+							ext.getNodeMessage(node));
+					step.add(new JScrollPane(editorPane), BorderLayout.WEST);
+				}
 				
 				return step;
 			} catch (NullPointerException e) {
@@ -200,11 +211,25 @@ public class NodeWizard extends WizardFrame {
 		final WizardStep retVal = new WizardStep();
 		
 		retVal.setLayout(new BorderLayout());
-		
-		
-		
-//		retVal.add(statusPanel, BorderLayout.NORTH);
 		retVal.add(getBufferPanel(), BorderLayout.CENTER);
+		
+		return retVal;
+	}
+	
+	protected WizardStep createIntroStep(String title, String message) {
+		final WizardStep retVal = new WizardStep();
+		
+		retVal.setLayout(new BorderLayout());
+		
+		final JXTitledSeparator stepTitle = 
+				new JXTitledSeparator(title);
+		retVal.add(stepTitle, BorderLayout.NORTH);
+		
+		final JEditorPane editorPane = new JEditorPane("text/html", message);
+		editorPane.setEditable(false);
+		editorPane.setText(message);
+		
+		retVal.add(new JScrollPane(editorPane), BorderLayout.CENTER);
 		
 		return retVal;
 	}
