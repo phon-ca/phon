@@ -486,6 +486,18 @@ public class LocalProject implements Project, ProjectRefresh {
 		return retVal;
 	}
 	
+	private void setCorpusFolder(String corpus, File folder) {
+		CorpusType ct = getCorpusInfo(corpus);
+		if(ct == null) {
+			ct = (new ObjectFactory()).createCorpusType();
+			ct.setName(corpus);
+			ct.setDescription("");
+			
+			projectData.getCorpus().add(ct);
+		}
+		ct.setLoc(folder.toURI().toString());
+	}
+	
 	private File getSessionFile(String corpus, String session) {
 		File retVal = new File(getCorpusFolder(corpus), session + ".xml");
 		
@@ -894,6 +906,11 @@ public class LocalProject implements Project, ProjectRefresh {
 	public String getCorpusPath(String corpus) {
 		final File corpusFolder = getCorpusFolder(corpus);
 		return (corpusFolder == null ? corpus : corpusFolder.getAbsolutePath());
+	}
+	
+	@Override
+	public void setCorpusPath(String corpus, String path) {
+		setCorpusFolder(corpus, new File(path));
 	}
 
 	@Override

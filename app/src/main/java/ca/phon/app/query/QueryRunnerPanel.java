@@ -176,6 +176,11 @@ public class QueryRunnerPanel extends JPanel {
 //			tempProjectFile.mkdirs();
 			final ProjectFactory factory = new DefaultProjectFactory();
 			tempProject = factory.createProject(new File(tmpProjectFolder));
+			
+			for(String corpusName:project.getCorpora()) {
+				tempProject.addCorpus(corpusName, "");
+				tempProject.setCorpusPath(corpusName, project.getCorpusPath(corpusName));
+			}
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
@@ -217,7 +222,7 @@ public class QueryRunnerPanel extends JPanel {
 			// show menu
 			final JMenu menu = new JMenu();
 			final ReportLibrary library = new ReportLibrary();
-			library.setupMenu(project, query.getUUID().toString(), menu);
+			library.setupMenu(tempProject, query.getUUID().toString(), menu);
 			
 			menu.getPopupMenu().show(reportButton, 0, reportButton.getHeight());
 		});

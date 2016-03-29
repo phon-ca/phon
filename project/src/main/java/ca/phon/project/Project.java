@@ -209,6 +209,14 @@ public interface Project extends IExtendable {
 	public String getCorpusPath(String corpus);
 	
 	/**
+	 * Set path of corpus.
+	 * 
+	 * @param corpus
+	 * @param path
+	 */
+	public void setCorpusPath(String corpus, String path);
+	
+	/**
 	 * Returns the number of records in a session w/o opening
 	 * the session. This method is faster than using
 	 * openSession(corpus, session).numberOfRecords()
