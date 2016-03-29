@@ -6,6 +6,13 @@
                 <oga:meta x="15" y="15"/>
             </extensions>
         </node>
+        <opqry:reportDesignNode id="334d668e" type="ca.phon.app.opgraph.nodes.query.ReportDesignNode">
+            <rpt:report-design xmlns:ns2="http://phon.ling.mun.ca/ns/report" version="1.6"/>
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="232" y="71"/>
+            </extensions>
+        </opqry:reportDesignNode>
         <node id="2af8637b" name="Query" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
@@ -14,13 +21,6 @@
                 <oga:meta x="176" y="220"/>
             </extensions>
         </node>
-        <opqry:reportDesignNode id="334d668e" type="ca.phon.app.opgraph.nodes.query.ReportDesignNode">
-            <rpt:report-design xmlns:ns2="http://phon.ling.mun.ca/ns/report" version="1.6"/>
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="232" y="71"/>
-            </extensions>
-        </opqry:reportDesignNode>
         <node id="7ab6cf1a" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <extensions>
                 <oga:settings/>
@@ -28,14 +28,21 @@
             </extensions>
         </node>
         <link dest="334d668e" destField="project" source="58072efd" sourceField="project"/>
-        <link dest="334d668e" destField="result sets" source="58072efd" sourceField="result sets"/>
         <link dest="2af8637b" destField="obj" source="58072efd" sourceField="query"/>
         <link dest="7ab6cf1a" destField="buffer" source="2af8637b" sourceField="name"/>
         <link dest="334d668e" destField="query" source="58072efd" sourceField="query"/>
         <link dest="7ab6cf1a" destField="data" source="334d668e" sourceField="report"/>
+        <link dest="334d668e" destField="results" source="58072efd" sourceField="result sets"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:node ref="334d668e"/>
+                <opqry:info title="Introduction">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="334d668e">
+                    <opqry:info title="Report">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>

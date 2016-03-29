@@ -37,15 +37,40 @@
             </extensions>
         </node>
         <link dest="24049103" destField="project" source="3b7dacf0" sourceField="project"/>
-        <link dest="24049103" destField="result set" source="3b7dacf0" sourceField="result sets"/>
         <link dest="3790be87" destField="table" source="24049103" sourceField="table"/>
         <link dest="b5aa672" destField="table" source="3790be87" sourceField="table"/>
         <link dest="6f7c2ffa" destField="data" source="b5aa672" sourceField="table"/>
+        <link dest="24049103" destField="results" source="3b7dacf0" sourceField="result sets"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:node ref="3790be87"/>
-                <opqry:node ref="b5aa672"/>
+                <opqry:info title="Introduction">
+                    <opqry:message>&lt;html&gt;
+&lt;h1&gt;My Report&lt;/h1&gt;
+This query will do something cool!
+&lt;/html&gt;</opqry:message>
+                </opqry:info>
+                <opqry:node ref="3790be87">
+                    <opqry:info title="Inventory Options">
+                        <opqry:message>&lt;html&gt;
+&lt;h1&gt;Group By&lt;/h1&gt;
+&lt;p&gt;Enter name of grouping column&lt;/p&gt;
+
+&lt;h1&gt;Columns&lt;/h1&gt;
+&lt;p&gt;Add each column that will be part of the inventory of results.&lt;/p&gt;
+
+&lt;/html&gt;
+</opqry:message>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="b5aa672">
+                    <opqry:info title="Sort">
+                        <opqry:message>&lt;html&gt;
+&lt;h1&gt;Sorting options&lt;/h1&gt;
+
+&lt;/html&gt;</opqry:message>
+                    </opqry:info>
+                </opqry:node>
             </opqry:nodewizard>
         </extensions>
     </graph>

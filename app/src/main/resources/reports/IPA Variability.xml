@@ -30,11 +30,18 @@
         <link dest="4172dddc06ea48a3" destField="table" source="14280f0701847e5" sourceField="table"/>
         <link dest="87ea9b5646534325" destField="data" source="4172dddc06ea48a3" sourceField="table"/>
         <link dest="14280f0701847e5" destField="project" source="21367d23" sourceField="project"/>
-        <link dest="14280f0701847e5" destField="result set" source="21367d23" sourceField="result sets"/>
+        <link dest="14280f0701847e5" destField="results" source="21367d23" sourceField="result sets"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:node ref="4172dddc06ea48a3"/>
+                <opqry:info title="Introduction">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="4172dddc06ea48a3">
+                    <opqry:info title="IPA Variability">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
             </opqry:nodewizard>
         </extensions>
     </graph>

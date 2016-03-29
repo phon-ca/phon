@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app">
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
         <node id="3b7dacf0" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
@@ -13,18 +13,20 @@
         </node>
         <node id="6f7c2ffa" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <extensions>
-                <oga:settings>
-                    <oga:property key="appendToBuffer"><![CDATA[true]]></oga:property>
-                    <oga:property key="bufferName"><![CDATA[default]]></oga:property>
-                </oga:settings>
+                <oga:settings/>
                 <oga:meta x="410" y="15"/>
             </extensions>
         </node>
         <link dest="24049103" destField="project" source="3b7dacf0" sourceField="project"/>
-        <link dest="24049103" destField="result set" source="3b7dacf0" sourceField="result sets"/>
         <link dest="6f7c2ffa" destField="data" source="24049103" sourceField="table"/>
+        <link dest="24049103" destField="results" source="3b7dacf0" sourceField="result sets"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+            <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
+                <opqry:info title="Introduction">
+                    <opqry:message/>
+                </opqry:info>
+            </opqry:nodewizard>
         </extensions>
     </graph>
 </opgraph>
