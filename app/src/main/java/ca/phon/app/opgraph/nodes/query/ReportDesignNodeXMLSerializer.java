@@ -1,6 +1,11 @@
 package ca.phon.app.opgraph.nodes.query;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -9,6 +14,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,9 +28,12 @@ import ca.gedge.opgraph.extensions.Extendable;
 import ca.gedge.opgraph.io.xml.XMLSerializer;
 import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.query.report.io.ReportDesign;
+import ca.phon.util.PrefHelper;
 
 
 public class ReportDesignNodeXMLSerializer implements XMLSerializer {
+	
+	private final static Logger LOGGER = Logger.getLogger(ReportDesignNodeXMLSerializer.class.getName());
 	
 	static final String NAMESPACE = "https://phon.ca/ns/opgraph_query";
 	static final String PREFIX = "opqry";
@@ -60,18 +71,22 @@ public class ReportDesignNodeXMLSerializer implements XMLSerializer {
 		
 		final ReportDesign reportDesign = reportDesignNode.getReportDesign();
 		
-		// use jaxb to save to element
-		try {
-			QName reportDesignQName = new QName(REPORT_NAMESPACE, "report-design", REPORT_PREFIX);
-			JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.report.io");
-			Marshaller marshaller = ctx.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			JAXBElement<ReportDesign> reportDesignEle = new JAXBElement<ReportDesign>(reportDesignQName, ReportDesign.class, reportDesign);
-			marshaller.marshal(reportDesignEle, reportDesignNodeElem);
-			reportDesignNodeElem.getChildNodes().item(0).setPrefix(REPORT_PREFIX);
-		} catch (JAXBException e) {
-			throw new IOException(e);
+		if(reportDesignNode.isUseLastReport()) {
+			reportDesignNodeElem.setAttribute("useLastReport", Boolean.toString(reportDesignNode.isUseLastReport()));
+		} else {
+			// use jaxb to save to element
+			try {
+				QName reportDesignQName = new QName(REPORT_NAMESPACE, "report-design", REPORT_PREFIX);
+				JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.report.io");
+				Marshaller marshaller = ctx.createMarshaller();
+				marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+				JAXBElement<ReportDesign> reportDesignEle = new JAXBElement<ReportDesign>(reportDesignQName, ReportDesign.class, reportDesign);
+				marshaller.marshal(reportDesignEle, reportDesignNodeElem);
+				reportDesignNodeElem.getChildNodes().item(0).setPrefix(REPORT_PREFIX);
+			} catch (JAXBException e) {
+				throw new IOException(e);
+			}
 		}
 		
 		// Extensions last
@@ -92,25 +107,49 @@ public class ReportDesignNodeXMLSerializer implements XMLSerializer {
 		if(!REPORT_NODE_QNAME.equals(XMLSerializerFactory.getQName(elem)))
 			throw new IOException("Incorrect element");
 		
-		ReportDesignNode retVal = new ReportDesignNode();
 		
-		NodeList children = elem.getElementsByTagNameNS(REPORT_NAMESPACE, "report-design");
-		if(children.getLength() > 0) {
-			Node reportDesignNode = children.item(0);
-			
-			if(reportDesignNode.getNodeName().equals(REPORT_PREFIX + ":report-design")
-					&& reportDesignNode.getNamespaceURI().equals(REPORT_NAMESPACE)) {
-				try {
-					JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.report.io");
-					Unmarshaller unmarshaller = ctx.createUnmarshaller();
-					JAXBElement<ReportDesign> reportDesignTypeEle = unmarshaller.unmarshal(reportDesignNode, ReportDesign.class);
-
-					retVal = new ReportDesignNode(reportDesignTypeEle.getValue());
-				} catch (JAXBException e) {
-					throw new IOException(e);
+		boolean useLastReport = 
+				(elem.hasAttribute("useLastReport") ? Boolean.parseBoolean(elem.getAttribute("useLastReport"))
+						: false);
+		ReportDesign reportDesign = null;
+		
+		if(useLastReport) {
+			try {
+				JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.report.io");
+				Unmarshaller unmarshaller = ctx.createUnmarshaller();
+				XMLInputFactory factory = XMLInputFactory.newFactory();
+				XMLEventReader reader = factory.createXMLEventReader(
+						new FileInputStream(new File(PrefHelper.getUserDataFolder(), ReportDesignNode.AUTOSAVE_FILENAME)), "UTF-8");
+				JAXBElement<ReportDesign> reportDesignTypeEle =
+						unmarshaller.unmarshal(reader, ReportDesign.class);
+				reportDesign = reportDesignTypeEle.getValue();
+			} catch (JAXBException | XMLStreamException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		} else {
+			NodeList children = elem.getElementsByTagNameNS(REPORT_NAMESPACE, "report-design");
+			if(children.getLength() > 0) {
+				Node reportDesignNode = children.item(0);
+				
+				if(reportDesignNode.getNodeName().equals(REPORT_PREFIX + ":report-design")
+						&& reportDesignNode.getNamespaceURI().equals(REPORT_NAMESPACE)) {
+					try {
+						JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.report.io");
+						Unmarshaller unmarshaller = ctx.createUnmarshaller();
+						JAXBElement<ReportDesign> reportDesignTypeEle = unmarshaller.unmarshal(reportDesignNode, ReportDesign.class);
+						reportDesign = reportDesignTypeEle.getValue();
+					} catch (JAXBException e) {
+						throw new IOException(e);
+					}
 				}
 			}
 		}
+		
+		reportDesign.setName("Report");
+		
+		ReportDesignNode retVal = 
+				(reportDesign != null ? new ReportDesignNode(reportDesign) : new ReportDesignNode());
+		retVal.setUseLastReport(useLastReport);
 		
 		// setup id and other attributes
 		if(elem.hasAttribute("id"))

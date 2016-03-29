@@ -6,8 +6,7 @@
                 <oga:meta x="15" y="15"/>
             </extensions>
         </node>
-        <opqry:reportDesignNode id="334d668e" type="ca.phon.app.opgraph.nodes.query.ReportDesignNode">
-            <rpt:report-design xmlns:ns2="http://phon.ling.mun.ca/ns/report" version="1.6"/>
+        <opqry:reportDesignNode id="334d668e" type="ca.phon.app.opgraph.nodes.query.ReportDesignNode" useLastReport="true">
             <extensions>
                 <oga:settings/>
                 <oga:meta x="232" y="71"/>

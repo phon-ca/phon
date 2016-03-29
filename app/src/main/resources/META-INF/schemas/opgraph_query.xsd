@@ -42,6 +42,7 @@
                     <xs:element ref="rpt:report-design" minOccurs="0" maxOccurs="1"/>
                     <xs:element ref="og:extensions" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
+                <xs:attribute name="useLastReport" type="xs:boolean" default="false"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
