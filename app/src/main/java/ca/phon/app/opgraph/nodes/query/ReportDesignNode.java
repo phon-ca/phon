@@ -160,7 +160,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 		if(this.settingsPanel == null) {
 			this.settingsPanel = new JPanel(new BorderLayout());
 			
-			useLastReportBox = new JCheckBox("Save as last report");
+			useLastReportBox = new JCheckBox("Remember outline");
 			useLastReportBox.setSelected(useLastReport);
 
 			this.settingsPanel.add(useLastReportBox, BorderLayout.NORTH);
