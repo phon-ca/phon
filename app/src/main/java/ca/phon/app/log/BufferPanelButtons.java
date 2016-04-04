@@ -27,11 +27,15 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -50,6 +54,7 @@ public class BufferPanelButtons extends JComponent {
 	private ButtonGroup buttonGroup;
 	private JButton tableButton;
 	private JButton textButton;
+	private JButton htmlButton;
 	
 	private final WeakReference<BufferPanel> panelRef;
 	
@@ -67,7 +72,7 @@ public class BufferPanelButtons extends JComponent {
 	private void init() {
 		buttonGroup = new ButtonGroup();
 		final List<JButton> buttons = 
-				SegmentedButtonBuilder.createSegmentedButtons(2, buttonGroup);
+				SegmentedButtonBuilder.createSegmentedButtons(3, buttonGroup);
 		
 		final ImageIcon txtIcon = IconManager.getInstance().getIcon(TEXT_ICON, IconSize.SMALL);
 		final PhonUIAction txtAct = new PhonUIAction(this, "showText");
@@ -84,6 +89,12 @@ public class BufferPanelButtons extends JComponent {
 		tableButton = buttons.get(1);
 		tableButton.setAction(tblAct);
 		tableButton.setFocusable(false);
+		
+		final PhonUIAction htmlAct = new PhonUIAction(this, "showHTML");
+		htmlAct.putValue(PhonUIAction.NAME, "HTML");
+		htmlButton = buttons.get(2);
+		htmlButton.setAction(htmlAct);
+		htmlButton.setFocusable(false);
 		
 		final BufferPanel bufferPanel = getBufferPanel();
 		bufferPanel.addPropertyChangeListener(BufferPanel.SHOWING_BUFFER_PROP, new PropertyChangeListener() {
@@ -102,6 +113,27 @@ public class BufferPanelButtons extends JComponent {
 		setLayout(new HorizontalLayout(0));
 		add(textButton);
 		add(tableButton);
+		add(htmlButton);
+	}
+	
+	public void showHTML() {
+		final HTMLTableBufferExporter exporter = new HTMLTableBufferExporter(true);
+		try {
+			final String html = exporter.exportBuffer(getBufferPanel().getLogBuffer());
+			
+			final JFrame tempFrame = new JFrame("HTML Table");
+			final JEditorPane editorPane = new JEditorPane("text/html", html);
+			editorPane.setEditable(false);
+			editorPane.setFont(FontPreferences.getUIIpaFont());
+			tempFrame.add(new JScrollPane(editorPane));
+			
+			tempFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			tempFrame.pack();
+			tempFrame.setVisible(true);
+			
+		} catch (BufferExportException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void showText() {
