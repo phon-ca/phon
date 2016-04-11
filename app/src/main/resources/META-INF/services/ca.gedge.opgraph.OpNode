@@ -9,3 +9,4 @@ ca.phon.app.opgraph.nodes.log.PrintBufferNode
 ca.phon.app.opgraph.nodes.query.IPAVariabilityNode
 ca.phon.app.opgraph.nodes.query.AddColumnNode
 ca.phon.app.opgraph.nodes.query.RowFilterNode
+ca.phon.app.opgraph.nodes.query.TokenSummaryNode

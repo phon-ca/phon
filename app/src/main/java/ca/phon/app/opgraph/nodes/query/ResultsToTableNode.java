@@ -3,6 +3,7 @@ package ca.phon.app.opgraph.nodes.query;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -279,6 +280,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		gbc.gridy = 0;
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(2, 2, 5, 2);
 		
 		retVal.setLayout(layout);
 		

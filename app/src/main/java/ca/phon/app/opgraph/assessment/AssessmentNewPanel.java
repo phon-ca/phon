@@ -1,5 +1,7 @@
 package ca.phon.app.opgraph.assessment;
 
+import java.util.ArrayList;
+
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.opgraph.editor.NewDialogPanel;
@@ -24,7 +26,7 @@ public class AssessmentNewPanel extends NewDialogPanel {
 		projectNode.setContextKey("_project");
 		graph.add(projectNode);
 		
-		final ObjectNode sessionListNode = new ObjectNode(SessionPath[].class);
+		final ObjectNode sessionListNode = new ObjectNode(ArrayList.class);
 		sessionListNode.setContextKey("_selectedSessions");
 		sessionListNode.setName("Selected Sessions");
 		graph.add(sessionListNode);
