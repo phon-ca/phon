@@ -10,7 +10,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import org.apache.commons.lang3.Validate;
+import org.jdesktop.swingx.VerticalLayout;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
@@ -22,6 +27,7 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferPanelContainer;
 import ca.phon.app.log.BufferWindow;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.formatter.FormatterUtil;
 
 @OpNodeInfo(
@@ -44,6 +50,11 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 	
 	private InputField appendField = 
 			new InputField("append", "Append to buffer", true, true, Boolean.class);
+	
+	private boolean showTable = true;
+	
+	private JPanel settingsPanel;
+	private JCheckBox showTableBox;
 	
 	public PrintBufferNode() {
 		super();
@@ -94,6 +105,11 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 					new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8"))) {
 				out.print(dataVal);
 				out.flush();
+				
+				if(isShowTable()) {
+					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+					out.flush();
+				}
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
@@ -118,19 +134,40 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		return (ctx.containsKey(appendField) ? (Boolean)ctx.get(appendField) : false);
 	}
 
+	public boolean isShowTable() {
+		return (showTableBox != null ? showTableBox.isSelected() : this.showTable);
+	}
+	
+	public void setShowTable(boolean showTable) {
+		this.showTable = showTable;
+		if(this.showTableBox != null)
+			this.showTableBox.setSelected(showTable);
+	}
+	
 	@Override
 	public Component getComponent(GraphDocument document) {
-		return null;
+		if(settingsPanel == null) {
+			settingsPanel = new JPanel(new VerticalLayout());
+			
+			showTableBox = new JCheckBox("Show table");
+			showTableBox.setSelected(this.showTable);
+			settingsPanel.add(showTableBox);
+		}
+		return settingsPanel;
 	}
 
 	@Override
 	public Properties getSettings() {
-		return new Properties();
+		final Properties retVal = new Properties();
+		
+		retVal.setProperty("showTable", Boolean.toString(isShowTable()));
+		
+		return retVal;
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
-		
+		setShowTable(Boolean.parseBoolean(properties.getProperty("showTable", "true")));
 	}
 	
 }
