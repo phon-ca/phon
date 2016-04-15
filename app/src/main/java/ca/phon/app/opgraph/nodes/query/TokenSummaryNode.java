@@ -57,7 +57,7 @@ public class TokenSummaryNode extends TableOpNode implements NodeSettings {
 		final DefaultTableDataSource inputTable = (DefaultTableDataSource)context.get(tableInput);
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
 		
-		final String[] columns = columnNames.split(";");
+		final String[] columns = getColumnNames().split(";");
 		final Map<String, Tuple<Set<String>, Integer>> columnCounts = new LinkedHashMap<>();
 		for(String column:columns) {
 			column = column.trim();
