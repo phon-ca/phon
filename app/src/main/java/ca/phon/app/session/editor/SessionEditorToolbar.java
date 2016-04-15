@@ -19,18 +19,27 @@
 package ca.phon.app.session.editor;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
+import ca.phon.app.opgraph.assessment.AssessmentLibrary;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
 import ca.phon.app.session.editor.actions.NewRecordAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
+import ca.phon.session.SessionPath;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -67,7 +76,7 @@ public class SessionEditorToolbar extends JPanel {
 	
 	private void init() {
 		final FormLayout layout = new FormLayout(
-				"3dlu, pref, 3dlu, pref, 3dlu, pref, "
+				"3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, "
 				+ "fill:pref:grow, right:pref, 5dlu, right:pref, 3dlu",
 				"3dlu, pref");
 		setLayout(layout);
@@ -104,12 +113,30 @@ public class SessionEditorToolbar extends JPanel {
 		final JComponent btnComp = SegmentedButtonBuilder.createLayoutComponent(buttons);
 		
 		add(btnComp, cc.xy(6,2));
+		
+		final PhonUIAction assessmentMenuAction = new PhonUIAction(this, "onShowAssessmentMenu");
+		assessmentMenuAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/report", IconSize.SMALL));
+		assessmentMenuAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show assessment menu");
+		final JButton assessmentMenuBtn = new JButton(assessmentMenuAction);
+		add(assessmentMenuBtn, cc.xy(8, 2));
 
 		navigationPanel = new NavigationPanel(getEditor());
-		add(navigationPanel, cc.xy(8, 2));
+		add(navigationPanel, cc.xy(10, 2));
 		
 		quickSearch = new SessionEditorQuickSearch(getEditor());
-		add(quickSearch.getSearchField(), cc.xy(10, 2));
+		add(quickSearch.getSearchField(), cc.xy(12, 2));
+	}
+	
+	public void onShowAssessmentMenu(PhonActionEvent pae) {
+		final JButton menuBtn = (JButton)pae.getActionEvent().getSource();
+		
+		final JPopupMenu menu = new JPopupMenu();
+		final AssessmentLibrary library = new AssessmentLibrary();
+		final ArrayList<SessionPath> selectedSessions = new ArrayList<>();
+		selectedSessions.add(new SessionPath(getEditor().getSession().getCorpus(), getEditor().getSession().getName()));
+		
+		library.setupMenu(getEditor().getProject(), selectedSessions, menu);
+		menu.show(menuBtn, 0, menuBtn.getHeight());
 	}
 	
 	@RunOnEDT
