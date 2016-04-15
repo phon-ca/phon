@@ -1,4 +1,4 @@
-package ca.phon.app.opgraph.nodes.query;
+package ca.phon.query;
 
 import java.text.ParseException;
 

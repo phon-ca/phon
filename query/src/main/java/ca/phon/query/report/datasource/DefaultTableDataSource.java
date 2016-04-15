@@ -3,6 +3,9 @@ package ca.phon.query.report.datasource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import ca.phon.query.TableUtils;
 
 /**
  * 
@@ -105,6 +108,36 @@ public class DefaultTableDataSource implements TableDataSource {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Return the value at cell for given rowKey, colName.
+	 * 
+	 * This method assumes that each row begins with a unique 
+	 * key.  
+	 * 
+	 * @param rowKey
+	 * @param colName
+	 * @return cellValue at given rowKey, colName intersection.
+	 */
+	public Object getValueAt(String rowKey, String colName) {
+		return getValueAt(0, rowKey, colName);
+	}
+	
+	public Object getValueAt(String keyCol, String rowKey, String colName) {
+		return getValueAt(getColumnIndex(keyCol), rowKey, colName);
+	}
+	
+	public Object getValueAt(int keyCol, String rowKey, String colName) {
+		Optional<Object[]> row = 
+				rowData.parallelStream()
+					.filter( r -> TableUtils.objToString(r[keyCol], true).equalsIgnoreCase(rowKey) )
+					.findAny();
+		if(row.isPresent()) {
+			return row.get()[getColumnIndex(colName)];
+		} else {
+			return null;
+		}
 	}
 	
 	public void setValueAt(int row, int col, Object newVal) {
