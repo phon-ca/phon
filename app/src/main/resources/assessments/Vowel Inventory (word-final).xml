@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
+    <graph id="root">
+        <node id="398f1f7e" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="da330fc" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                </oga:settings>
+                <oga:meta x="92" y="241"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="3532dd16" name="Vowel Inventory (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="50265904">
+                <node id="517b4750" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="300" y="111"/>
+                    </extensions>
+                </node>
+                <ogcn:macro id="4c2eee8" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                    <graph id="4e1bb8ec">
+                        <node id="66031a84" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                                </oga:settings>
+                            </extensions>
+                        </node>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="328" y="338"/>
+                    </extensions>
+                </ogcn:macro>
+                <opqry:queryNode id="729477bf" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-15T08:37:05.247-02:30" name="Phones" uuid="3078b0b0-f9fe-4969-a415-465993828d3b">
+                        <script>
+                            <source>/*
+params =
+		{enum, searchTier, "IPA Target"|"IPA Actual", 0, "&lt;html&gt;&lt;b&gt;Search Tier&lt;/b&gt;&lt;/html&gt;"}
+	;
+*/
+
+var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+var PatternType = require("lib/PatternFilter").PatternType;
+var Pcc = require("lib/Pcc").Pcc;
+var PccOptions = require("lib/Pcc").PccOptions;
+var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
+var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
+var ResultType = require("lib/PhonScriptConstants").ResultType;
+	
+/********************************
+ * Setup params
+ *******************************/
+
+var filters = {
+    "primary": new PatternFilter("filters.primary"),
+    "targetResultFilter": new PatternFilter("filters.targetResultFilter"),
+    "actualResultFilter": new PatternFilter("filters.actualResultFilter"),
+    "group": new GroupFilter("filters.group"),
+    "groupPattern": new PatternFilter("filters.groupPattern"),
+    "alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+    "word": new WordFilter("filters.word"),
+    "wordPattern": new PatternFilter("filters.wordPattern"),
+    "alignedWord": new AlignedWordFilter("filters.alignedWord"),
+    "syllable": new SyllableFilter("filters.syllable"),
+    "speaker": new ParticipantFilter("filters.speaker")
+};
+
+var metadataOptions = {
+    "pcc_aligned": new PccOptions("metadataOptions.pcc_aligned", true),
+    "pcc_standard": new PccOptions("metadataOptions.pcc_standard", false),
+    "stressPattern": new StressPatternOptions("metadataOptions.stressPattern"),
+    "cvPattern": new CvPatternOptions("metadataOptions.cvPattern")
+};
+
+var includeAlignedParamInfo = {
+    "id": "includeAligned",
+    "title": "",
+    "desc": "Include aligned phones",
+    "def": true
+};
+var includeAlignedParam;
+var includeAligned = includeAlignedParamInfo.def;
+
+function setup_params(params) {
+
+	filters.primary.setSelectedPatternType(PatternType.PHONEX);
+	filters.primary.param_setup(params);
+	filters.primary.set_required(true);
+	
+	// setup result filter section
+	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
+	var targetLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;IPA Target Matcher&lt;/b&gt;&lt;/html&gt;");
+	var actualLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;IPA Actual Matcher&lt;/b&gt;&lt;/html&gt;");
+	
+	includeAlignedParam = new BooleanScriptParam(
+	    includeAlignedParamInfo.id,
+	    includeAlignedParamInfo.desc,
+	    includeAlignedParamInfo.title,
+	    includeAlignedParamInfo.def);
+    
+	params.add(resultFilterSection);
+	params.add(includeAlignedParam);
+	params.add(targetLbl);
+	filters.targetResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.targetResultFilter.param_setup(params);
+	params.add(actualLbl);
+	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.actualResultFilter.param_setup(params);
+	
+	filters.group.param_setup(params);
+	filters.groupPattern.param_setup(params);
+	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group&lt;/b&gt;&lt;/html&gt;");
+	params.add(sep);
+	filters.alignedGroup.param_setup(params);
+	
+	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+    filters.wordPattern.setEnabled(false);
+	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word&lt;/b&gt;&lt;/html&gt;");
+    params.add(wordsep);
+    filters.alignedWord.param_setup(params);
+    var searchByWordListener = new java.beans.PropertyChangeListener {
+        propertyChange: function(e) {
+            var enabled = e.source.getValue(e.source.paramId);
+            filters.wordPattern.setEnabled(enabled);
+            filters.alignedWord.setEnabled(enabled);
+        }    
+    };
+    filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
+    var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+    filters.wordPattern.setEnabled(enabled);
+    filters.alignedWord.setEnabled(enabled);
+    
+	filters.syllable.param_setup(params);
+	filters.speaker.param_setup(params);
+	
+	// add metadata options
+	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
+	params.add(metadataSep);
+	
+	var spLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Stress Pattern&lt;/b&gt;&lt;/html&gt;");
+	params.add(spLbl);
+	metadataOptions.stressPattern.param_setup(params);
+	
+	var cvLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;CGV Pattern&lt;/b&gt;&lt;/html&gt;");
+	params.add(cvLbl);
+	metadataOptions.cvPattern.param_setup(params);
+
+    var pccStandardLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (standard)&lt;/b&gt;&lt;/html&gt;");
+    params.add(pccStandardLbl);
+    metadataOptions.pcc_standard.param_setup(params);
+
+	var pccAlignedLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (aligned)&lt;/b&gt;&lt;/html&gt;");
+	params.add(pccAlignedLbl);
+	metadataOptions.pcc_aligned.param_setup(params);
+}
+
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
+}
+
+
+/********************************
+ * query_record
+ * params:
+ * 	record - the current record
+ *******************************/
+function query_record(recordIndex, record) {
+    // check participant filter
+    if(!filters.speaker.check_speaker(record.speaker)) return;
+    
+    // check group+groupPattern filters
+	var groups = filters.group.getRequestedGroups(record);
+    if(filters.groupPattern.isUseFilter()) {
+        groups = filters.groupPattern.filter_groups(groups, searchTier);
+    }
+	
+	// check aligned group for each group returned
+	if(filters.alignedGroup.isUseFilter()) {
+	    groups = filters.alignedGroup.filter_groups(record, groups);
+	}
+
+	// perform searches
+	for(var i = 0; i &lt; groups.length; i++)
+	{
+		var group = groups[i];
+		var ipa = (searchTier == "IPA Target" ? group.IPATarget : group.IPAActual);
+		var phoneMap = group.phoneAlignment;
+		
+		var toSearch = new Array();
+		toSearch.push(ipa);
+		
+		// search by word?
+		if(filters.word.isUseFilter()) {
+		   toSearch.length = 0;
+		   var selectedWords = filters.word.getRequestedWords(group, searchTier);
+		   for(j = 0; j &lt; selectedWords.length; j++) {
+		       var word = selectedWords[j];
+
+               var wordIpa = (searchTier == "IPA Target" ? word.IPATarget : word.IPAActual);
+               var addWord = (wordIpa != null);
+               // check word pattern if necessary
+		       if(filters.wordPattern.isUseFilter()) {
+		           addWord = filters.wordPattern.check_filter(wordIpa);
+		       }
+		      
+		       // check aligned word pattern if necessary
+		       if(filters.alignedWord.isUseFilter()) {
+		           addWord = filters.alignedWord.check_word(word);
+		       }
+		       
+		       if(addWord == true) {
+		           toSearch.push(wordIpa);
+		       }
+		   }
+		}
+		
+		// search by syllable?
+		if(filters.syllable.isUseFilter()) {
+		    var syllList = new Array();
+		    for(j = 0; j &lt; toSearch.length; j++) {
+		        var obj = toSearch[j];
+		        var aligned = (phoneMap != null ? phoneMap : new Packages.ca.phon.ipa.alignment.PhoneMap());
+		        var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
+		        
+		        for(k = 0; k &lt; sylls.length; k++) {
+		            syllList.push(sylls[k]);
+		        }
+		    }
+		    toSearch = syllList;
+		}
+		
+		for(j = 0; j &lt; toSearch.length; j++) {
+		    var obj = toSearch[j];
+		    var matches = filters.primary.find_pattern(obj);
+		    var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter : filters.actualResultFilter);
+		    var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter : filters.targetResultFilter);
+		    
+		    for(k = 0; k &lt; matches.length; k++) {
+		    	var match = matches[k];
+    	        
+		    	if(match.groups) {
+		    		var xgrp = match.groups["X"];
+		    		if(xgrp) {
+		    			var newMatch = {
+		    					start: xgrp.start,
+		    					end: xgrp.end,
+		    					value: xgrp.value,
+		    					groups: match.groups
+		    			};
+		    			match = newMatch;
+		    		}
+		    	}
+		    	
+    	        if(primaryFilter.isUseFilter()) {
+    	        	if(!primaryFilter.check_filter(new IPATranscript(match.value))) {
+    	        		continue;
+    	        	}
+    	        }
+    	        
+    			var result = factory.createResult();
+    			// calculate start/end positions of data in text
+    			var startIndex = ipa.stringIndexOf(match.value);
+    			var length = match.value.toString().length();
+    			
+    			result.recordIndex = recordIndex;
+    			result.schema = "LINEAR";
+    
+    			var rv = factory.createResultValue();
+    			rv.tierName = searchTier;
+    			rv.groupIndex = group.groupIndex;
+    			rv.range = new Range(startIndex, startIndex + length, false);
+    			rv.data = (match.value != null ? new IPATranscript(match.value) : new IPATranscript());
+    			result.addResultValue(rv);
+    			
+			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
+			    var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()) : null);
+		   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
+			    
+		   		// find location of aligned value in group
+		   		var groupStartIdx = 
+		   			(alignedIpaElements.length() &gt; 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
+		   		var groupEndIdx = 
+		   			(alignedIpaElements.length() &gt; 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
+		   		var alignedIpa =
+		   			(alignedIpaElements.length() &gt; 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
+		   		
+			    if(alignedFilter.isUseFilter()) {
+			    	if(!alignedFilter.check_filter(alignedIpa)) {
+			    		continue;
+			    	}
+			    }
+    			    
+			    if(includeAligned == true) {
+    			    var alignedRv = factory.createResultValue();
+    			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
+    			    alignedRv.groupIndex = group.groupIndex;
+    			   	if(aligned != null &amp;&amp; aligned.length &gt; 0) {
+    			   		var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
+    			   		var alignedLength = alignedIpa.toString().length();
+    			   		
+    			   		alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, false);
+    			    	alignedRv.data = alignedIpa;
+    			   	} else {
+    			   		alignedRv.range = new Range(0, 0, true);
+    			   		alignedRv.data = "";
+    			   	}
+    			    
+    			    result.addResultValue(alignedRv);
+    			    result.schema = "ALIGNED";
+    			    calcMetadata(record, group, result.metadata, 
+    			    		(match.value == null ? null : new IPATranscript(match.value)), 
+    			    		(aligned == null ? null : new IPATranscript(aligned)) );
+    			} else {
+    				calcMetadata(record, group, result.metadata, 
+    						(match.value == null ? null : new IPATranscript(match.value)), null);
+    			}
+    			
+			    // append named-group information (if any)
+			    if(match.groups) {
+			    	groupKeys = Object.keys(match.groups);
+			    	for(keyIdx = 0; keyIdx &lt; groupKeys.length; keyIdx++) {
+			    		var key = groupKeys[keyIdx];
+			    		if(!/^[0-9]+$/.test(key) &amp;&amp; key != 'X') {
+			    			result.metadata.put(key, match.groups[key].value.toString());
+			    		}
+			    	}
+			    }
+			    
+    			results.addResult(result);
+    	    }
+		}
+	}
+}
+
+/********************************
+ * Functions
+ *******************************/
+
+/* Generate metadata based on parmeters */
+function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
+    var retVal = metadata;
+    
+    if(metadataOptions.stressPattern.include == true) {
+        var tsp = (ipaTVal == null ? null : ipaTVal.stressPattern);
+        var asp = (ipaAVal == null ? null : ipaAVal.stressPattern)
+        
+        if(tsp != null &amp;&amp; asp != null &amp;&amp; metadataOptions.stressPattern.separate == false) {
+            var sp = tsp + " \u2194 " + asp;
+            retVal.put("SP", sp);
+        } else {
+            if(tsp != null) {
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-T" : "SP");
+                retVal.put(name, tsp);
+            }
+            if(asp != null) {
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-A" : "SP");
+                retVal.put(name, asp);
+            }
+        }
+    }
+    
+    if(metadataOptions.cvPattern.include == true) {
+        var tcv = (ipaTVal == null ? null : ipaTVal.cvPattern);
+        var acv = (ipaAVal == null ? null : ipaAVal.cvPattern);
+        
+        if(tcv != null &amp;&amp; acv != null &amp;&amp; metadataOptions.cvPattern.separate == false) {
+            var cv = tcv + " \u2194 " + acv;
+            retVal.put("CGV", cv);
+        } else {
+            if(tcv != null) {
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-T" : "SP");
+                retVal.put(name, tcv);
+            }
+            if(acv != null) {
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-A" : "SP");
+                retVal.put(name, acv);
+            }
+        }
+    }
+    
+    if(group != null) {
+        metadataOptions.pcc_standard.setup_pcc_standard_metadata(group, retVal);
+        metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(group, retVal);
+    }
+}
+</source>
+                            <param id="filters.primary.filter">\v$</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="searchTier">IPA Target</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="763" y="72"/>
+                    </extensions>
+                </opqry:queryNode>
+                <opqry:queryNode id="1a638f63" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-15T08:37:05.252-02:30" name="Phones" uuid="493c0a7e-27b5-46e7-a5ff-d19dd0ee131c">
+                        <script>
+                            <source>/*
+params =
+		{enum, searchTier, "IPA Target"|"IPA Actual", 0, "&lt;html&gt;&lt;b&gt;Search Tier&lt;/b&gt;&lt;/html&gt;"}
+	;
+*/
+
+var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+var PatternType = require("lib/PatternFilter").PatternType;
+var Pcc = require("lib/Pcc").Pcc;
+var PccOptions = require("lib/Pcc").PccOptions;
+var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
+var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
+var ResultType = require("lib/PhonScriptConstants").ResultType;
+	
+/********************************
+ * Setup params
+ *******************************/
+
+var filters = {
+    "primary": new PatternFilter("filters.primary"),
+    "targetResultFilter": new PatternFilter("filters.targetResultFilter"),
+    "actualResultFilter": new PatternFilter("filters.actualResultFilter"),
+    "group": new GroupFilter("filters.group"),
+    "groupPattern": new PatternFilter("filters.groupPattern"),
+    "alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+    "word": new WordFilter("filters.word"),
+    "wordPattern": new PatternFilter("filters.wordPattern"),
+    "alignedWord": new AlignedWordFilter("filters.alignedWord"),
+    "syllable": new SyllableFilter("filters.syllable"),
+    "speaker": new ParticipantFilter("filters.speaker")
+};
+
+var metadataOptions = {
+    "pcc_aligned": new PccOptions("metadataOptions.pcc_aligned", true),
+    "pcc_standard": new PccOptions("metadataOptions.pcc_standard", false),
+    "stressPattern": new StressPatternOptions("metadataOptions.stressPattern"),
+    "cvPattern": new CvPatternOptions("metadataOptions.cvPattern")
+};
+
+var includeAlignedParamInfo = {
+    "id": "includeAligned",
+    "title": "",
+    "desc": "Include aligned phones",
+    "def": true
+};
+var includeAlignedParam;
+var includeAligned = includeAlignedParamInfo.def;
+
+function setup_params(params) {
+
+	filters.primary.setSelectedPatternType(PatternType.PHONEX);
+	filters.primary.param_setup(params);
+	filters.primary.set_required(true);
+	
+	// setup result filter section
+	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
+	var targetLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;IPA Target Matcher&lt;/b&gt;&lt;/html&gt;");
+	var actualLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;IPA Actual Matcher&lt;/b&gt;&lt;/html&gt;");
+	
+	includeAlignedParam = new BooleanScriptParam(
+	    includeAlignedParamInfo.id,
+	    includeAlignedParamInfo.desc,
+	    includeAlignedParamInfo.title,
+	    includeAlignedParamInfo.def);
+    
+	params.add(resultFilterSection);
+	params.add(includeAlignedParam);
+	params.add(targetLbl);
+	filters.targetResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.targetResultFilter.param_setup(params);
+	params.add(actualLbl);
+	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.actualResultFilter.param_setup(params);
+	
+	filters.group.param_setup(params);
+	filters.groupPattern.param_setup(params);
+	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group&lt;/b&gt;&lt;/html&gt;");
+	params.add(sep);
+	filters.alignedGroup.param_setup(params);
+	
+	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+    filters.wordPattern.setEnabled(false);
+	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word&lt;/b&gt;&lt;/html&gt;");
+    params.add(wordsep);
+    filters.alignedWord.param_setup(params);
+    var searchByWordListener = new java.beans.PropertyChangeListener {
+        propertyChange: function(e) {
+            var enabled = e.source.getValue(e.source.paramId);
+            filters.wordPattern.setEnabled(enabled);
+            filters.alignedWord.setEnabled(enabled);
+        }    
+    };
+    filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
+    var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+    filters.wordPattern.setEnabled(enabled);
+    filters.alignedWord.setEnabled(enabled);
+    
+	filters.syllable.param_setup(params);
+	filters.speaker.param_setup(params);
+	
+	// add metadata options
+	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
+	params.add(metadataSep);
+	
+	var spLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Stress Pattern&lt;/b&gt;&lt;/html&gt;");
+	params.add(spLbl);
+	metadataOptions.stressPattern.param_setup(params);
+	
+	var cvLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;CGV Pattern&lt;/b&gt;&lt;/html&gt;");
+	params.add(cvLbl);
+	metadataOptions.cvPattern.param_setup(params);
+
+    var pccStandardLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (standard)&lt;/b&gt;&lt;/html&gt;");
+    params.add(pccStandardLbl);
+    metadataOptions.pcc_standard.param_setup(params);
+
+	var pccAlignedLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (aligned)&lt;/b&gt;&lt;/html&gt;");
+	params.add(pccAlignedLbl);
+	metadataOptions.pcc_aligned.param_setup(params);
+}
+
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
+}
+
+
+/********************************
+ * query_record
+ * params:
+ * 	record - the current record
+ *******************************/
+function query_record(recordIndex, record) {
+    // check participant filter
+    if(!filters.speaker.check_speaker(record.speaker)) return;
+    
+    // check group+groupPattern filters
+	var groups = filters.group.getRequestedGroups(record);
+    if(filters.groupPattern.isUseFilter()) {
+        groups = filters.groupPattern.filter_groups(groups, searchTier);
+    }
+	
+	// check aligned group for each group returned
+	if(filters.alignedGroup.isUseFilter()) {
+	    groups = filters.alignedGroup.filter_groups(record, groups);
+	}
+
+	// perform searches
+	for(var i = 0; i &lt; groups.length; i++)
+	{
+		var group = groups[i];
+		var ipa = (searchTier == "IPA Target" ? group.IPATarget : group.IPAActual);
+		var phoneMap = group.phoneAlignment;
+		
+		var toSearch = new Array();
+		toSearch.push(ipa);
+		
+		// search by word?
+		if(filters.word.isUseFilter()) {
+		   toSearch.length = 0;
+		   var selectedWords = filters.word.getRequestedWords(group, searchTier);
+		   for(j = 0; j &lt; selectedWords.length; j++) {
+		       var word = selectedWords[j];
+
+               var wordIpa = (searchTier == "IPA Target" ? word.IPATarget : word.IPAActual);
+               var addWord = (wordIpa != null);
+               // check word pattern if necessary
+		       if(filters.wordPattern.isUseFilter()) {
+		           addWord = filters.wordPattern.check_filter(wordIpa);
+		       }
+		      
+		       // check aligned word pattern if necessary
+		       if(filters.alignedWord.isUseFilter()) {
+		           addWord = filters.alignedWord.check_word(word);
+		       }
+		       
+		       if(addWord == true) {
+		           toSearch.push(wordIpa);
+		       }
+		   }
+		}
+		
+		// search by syllable?
+		if(filters.syllable.isUseFilter()) {
+		    var syllList = new Array();
+		    for(j = 0; j &lt; toSearch.length; j++) {
+		        var obj = toSearch[j];
+		        var aligned = (phoneMap != null ? phoneMap : new Packages.ca.phon.ipa.alignment.PhoneMap());
+		        var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
+		        
+		        for(k = 0; k &lt; sylls.length; k++) {
+		            syllList.push(sylls[k]);
+		        }
+		    }
+		    toSearch = syllList;
+		}
+		
+		for(j = 0; j &lt; toSearch.length; j++) {
+		    var obj = toSearch[j];
+		    var matches = filters.primary.find_pattern(obj);
+		    var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter : filters.actualResultFilter);
+		    var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter : filters.targetResultFilter);
+		    
+		    for(k = 0; k &lt; matches.length; k++) {
+		    	var match = matches[k];
+    	        
+		    	if(match.groups) {
+		    		var xgrp = match.groups["X"];
+		    		if(xgrp) {
+		    			var newMatch = {
+		    					start: xgrp.start,
+		    					end: xgrp.end,
+		    					value: xgrp.value,
+		    					groups: match.groups
+		    			};
+		    			match = newMatch;
+		    		}
+		    	}
+		    	
+    	        if(primaryFilter.isUseFilter()) {
+    	        	if(!primaryFilter.check_filter(new IPATranscript(match.value))) {
+    	        		continue;
+    	        	}
+    	        }
+    	        
+    			var result = factory.createResult();
+    			// calculate start/end positions of data in text
+    			var startIndex = ipa.stringIndexOf(match.value);
+    			var length = match.value.toString().length();
+    			
+    			result.recordIndex = recordIndex;
+    			result.schema = "LINEAR";
+    
+    			var rv = factory.createResultValue();
+    			rv.tierName = searchTier;
+    			rv.groupIndex = group.groupIndex;
+    			rv.range = new Range(startIndex, startIndex + length, false);
+    			rv.data = (match.value != null ? new IPATranscript(match.value) : new IPATranscript());
+    			result.addResultValue(rv);
+    			
+			    var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual() : group.getIPATarget());
+			    var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()) : null);
+		   		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
+			    
+		   		// find location of aligned value in group
+		   		var groupStartIdx = 
+		   			(alignedIpaElements.length() &gt; 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)) : 0);
+		   		var groupEndIdx = 
+		   			(alignedIpaElements.length() &gt; 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
+		   		var alignedIpa =
+		   			(alignedIpaElements.length() &gt; 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
+		   		
+			    if(alignedFilter.isUseFilter()) {
+			    	if(!alignedFilter.check_filter(alignedIpa)) {
+			    		continue;
+			    	}
+			    }
+    			    
+			    if(includeAligned == true) {
+    			    var alignedRv = factory.createResultValue();
+    			    alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual" : "IPA Target");
+    			    alignedRv.groupIndex = group.groupIndex;
+    			   	if(aligned != null &amp;&amp; aligned.length &gt; 0) {
+    			   		var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
+    			   		var alignedLength = alignedIpa.toString().length();
+    			   		
+    			   		alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, false);
+    			    	alignedRv.data = alignedIpa;
+    			   	} else {
+    			   		alignedRv.range = new Range(0, 0, true);
+    			   		alignedRv.data = "";
+    			   	}
+    			    
+    			    result.addResultValue(alignedRv);
+    			    result.schema = "ALIGNED";
+    			    calcMetadata(record, group, result.metadata, 
+    			    		(match.value == null ? null : new IPATranscript(match.value)), 
+    			    		(aligned == null ? null : new IPATranscript(aligned)) );
+    			} else {
+    				calcMetadata(record, group, result.metadata, 
+    						(match.value == null ? null : new IPATranscript(match.value)), null);
+    			}
+    			
+			    // append named-group information (if any)
+			    if(match.groups) {
+			    	groupKeys = Object.keys(match.groups);
+			    	for(keyIdx = 0; keyIdx &lt; groupKeys.length; keyIdx++) {
+			    		var key = groupKeys[keyIdx];
+			    		if(!/^[0-9]+$/.test(key) &amp;&amp; key != 'X') {
+			    			result.metadata.put(key, match.groups[key].value.toString());
+			    		}
+			    	}
+			    }
+			    
+    			results.addResult(result);
+    	    }
+		}
+	}
+}
+
+/********************************
+ * Functions
+ *******************************/
+
+/* Generate metadata based on parmeters */
+function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
+    var retVal = metadata;
+    
+    if(metadataOptions.stressPattern.include == true) {
+        var tsp = (ipaTVal == null ? null : ipaTVal.stressPattern);
+        var asp = (ipaAVal == null ? null : ipaAVal.stressPattern)
+        
+        if(tsp != null &amp;&amp; asp != null &amp;&amp; metadataOptions.stressPattern.separate == false) {
+            var sp = tsp + " \u2194 " + asp;
+            retVal.put("SP", sp);
+        } else {
+            if(tsp != null) {
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-T" : "SP");
+                retVal.put(name, tsp);
+            }
+            if(asp != null) {
+                var name = (metadataOptions.stressPattern.separate == true ? "SP-A" : "SP");
+                retVal.put(name, asp);
+            }
+        }
+    }
+    
+    if(metadataOptions.cvPattern.include == true) {
+        var tcv = (ipaTVal == null ? null : ipaTVal.cvPattern);
+        var acv = (ipaAVal == null ? null : ipaAVal.cvPattern);
+        
+        if(tcv != null &amp;&amp; acv != null &amp;&amp; metadataOptions.cvPattern.separate == false) {
+            var cv = tcv + " \u2194 " + acv;
+            retVal.put("CGV", cv);
+        } else {
+            if(tcv != null) {
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-T" : "SP");
+                retVal.put(name, tcv);
+            }
+            if(acv != null) {
+                var name = (metadataOptions.cvPattern.separate == true ? "CGV-A" : "SP");
+                retVal.put(name, acv);
+            }
+        }
+    }
+    
+    if(group != null) {
+        metadataOptions.pcc_standard.setup_pcc_standard_metadata(group, retVal);
+        metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(group, retVal);
+    }
+}
+</source>
+                            <param id="filters.primary.filter">\v$</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="searchTier">IPA Actual</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="763" y="214"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="20d5fdd8" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="957" y="73"/>
+                    </extensions>
+                </node>
+                <node id="1694b73c" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="957" y="214"/>
+                    </extensions>
+                </node>
+                <node id="6b0129c8" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                    <extensions>
+                        <opqry:inventoryoptions>
+                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
+                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="true"/>
+                        </opqry:inventoryoptions>
+                        <oga:settings/>
+                        <oga:meta x="1132" y="73"/>
+                    </extensions>
+                </node>
+                <node id="184aae9c" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                    <extensions>
+                        <opqry:inventoryoptions>
+                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
+                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="true"/>
+                        </opqry:inventoryoptions>
+                        <oga:settings/>
+                        <oga:meta x="1132" y="214"/>
+                    </extensions>
+                </node>
+                <node id="6626b65a" type="class:ca.phon.app.opgraph.nodes.query.MergeTablesNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="keyColumnName"><![CDATA[Consonant]]></oga:property>
+                            <oga:property key="table1KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
+                            <oga:property key="table2ColumnSuffix"><![CDATA[ : IPA Actual]]></oga:property>
+                            <oga:property key="table2KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
+                            <oga:property key="table1KeyColumn"><![CDATA[IPA Target]]></oga:property>
+                            <oga:property key="table1ColumnPrefix"/>
+                            <oga:property key="table2KeyColumn"><![CDATA[IPA Actual]]></oga:property>
+                            <oga:property key="table2KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
+                            <oga:property key="table1ColumnSuffix"><![CDATA[ : IPA Target]]></oga:property>
+                            <oga:property key="interleaveColumns"><![CDATA[true]]></oga:property>
+                            <oga:property key="table2ColumnPrefix"/>
+                            <oga:property key="table1KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="1307" y="73"/>
+                    </extensions>
+                </node>
+                <node id="3add62e7" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                    <extensions>
+                        <opqry:sortoptions>
+                            <opqry:sortBy column="Consonant" order="ascending" type="ipa"/>
+                        </opqry:sortoptions>
+                        <oga:settings/>
+                        <oga:meta x="1482" y="73"/>
+                    </extensions>
+                </node>
+                <node id="1cd92e85" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="1657" y="73">
+                            <oga:default for="buffer" type="java.lang.String">Vowel Inventory (word-final)</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="1cd92e85" destField="data" source="3add62e7" sourceField="table"/>
+                <link dest="1694b73c" destField="project" source="1a638f63" sourceField="project"/>
+                <link dest="3add62e7" destField="table" source="6626b65a" sourceField="table"/>
+                <link dest="20d5fdd8" destField="project" source="729477bf" sourceField="project"/>
+                <link dest="184aae9c" destField="table" source="1694b73c" sourceField="table"/>
+                <link dest="729477bf" destField="sessions" source="4c2eee8" sourceField="obj"/>
+                <link dest="6626b65a" destField="table2" source="184aae9c" sourceField="table"/>
+                <link dest="6b0129c8" destField="table" source="20d5fdd8" sourceField="table"/>
+                <link dest="1a638f63" destField="project" source="517b4750" sourceField="obj"/>
+                <link dest="1694b73c" destField="results" source="1a638f63" sourceField="results"/>
+                <link dest="729477bf" destField="project" source="517b4750" sourceField="obj"/>
+                <link dest="1a638f63" destField="sessions" source="4c2eee8" sourceField="obj"/>
+                <link dest="20d5fdd8" destField="results" source="729477bf" sourceField="results"/>
+                <link dest="6626b65a" destField="table1" source="6b0129c8" sourceField="table"/>
+            </graph>
+            <ogcn:published_input field="obj" name="obj" ref="4c2eee8"/>
+            <ogcn:published_input field="obj" name="obj1" ref="517b4750"/>
+            <extensions>
+                <oga:meta x="260" y="15"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="3532dd16" destField="obj" source="da330fc" sourceField="obj"/>
+        <link dest="3532dd16" destField="obj1" source="398f1f7e" sourceField="obj"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.assessment.AssessmentWizardExtension">
+                <opqry:info title="Introduction">
+                    <opqry:message/>
+                </opqry:info>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.assessment.AssessmentOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>
