@@ -17,6 +17,8 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.query.TableUtils;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
 
@@ -136,6 +138,9 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				int col = inventoryCols[ic];
 				rowData[ic] = (col >= 0 ? 
 						table.getValueAt(row, inventoryCols[ic]) : "");
+				if(rowData[ic] instanceof IPATranscript && getInventorySettings().getColumns().get(ic).ignoreDiacritics) {
+					rowData[ic] = ((IPATranscript)rowData[ic]).removePunctuation().stripDiacritics();
+				}
 			}
 			
 			final GroupKey groupKey = new GroupKey(grouping);
