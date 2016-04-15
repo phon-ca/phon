@@ -25,6 +25,7 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.LevenshteinDistance;
 import ca.phon.ipa.tree.IpaTernaryTree;
+import ca.phon.query.TableUtils;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.session.SystemTierType;
