@@ -17,14 +17,19 @@ public class IPACollator extends RuleBasedCollator {
 		if(rules == null) {
 			final Set<Character> chars = new LinkedHashSet<>();
 			final Set<Character> allChars = FeatureMatrix.getInstance().getCharacterSet();
-			final FeatureSet cvSet = FeatureSet.fromArray(new String[]{"c", "v"});
 			for(Character c:allChars) {
-				if(FeatureMatrix.getInstance().getFeatureSet(c).intersect(cvSet).size() > 0) {
+				// exclude punctuation
+				if(c != 0x28 && c!= 0x29 && c != 0x7c && c != 0x20 && c != 0x2a && c != 0x2e
+						&& c != '+' && c != '-') {
 					chars.add(c);
 				}
 			}
 			final StringBuffer buffer = new StringBuffer();
-			chars.forEach( (c) -> buffer.append(" < ").append(c) );
+			chars.forEach( (c) -> {
+					if(buffer.length() > 0) buffer.append(" ");
+					buffer.append("< ");
+					buffer.append(c);
+			});
 			rules = buffer.toString();
 		}
 		return rules;
@@ -35,3 +40,4 @@ public class IPACollator extends RuleBasedCollator {
 	}
 	
 }
+

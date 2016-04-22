@@ -39,6 +39,8 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.features.CompoundIPAElementComparator;
 import ca.phon.ipa.features.FeatureComparator;
+import ca.phon.ipa.features.IPACollator;
+import ca.phon.ipa.features.IPAElementComparator;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
@@ -754,8 +756,10 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 	@Override
 	public int compareTo(IPATranscript o) {
+//		final Comparator<IPAElement> comparator = 
+//				new CompoundIPAElementComparator(FeatureComparator.defaultComparator());
 		final Comparator<IPAElement> comparator = 
-				new CompoundIPAElementComparator(FeatureComparator.defaultComparator());
+				new IPAElementComparator();
 		return compareTo(o, comparator);
 	}
 	
