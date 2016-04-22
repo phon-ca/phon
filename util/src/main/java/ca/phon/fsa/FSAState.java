@@ -42,6 +42,10 @@ public class FSAState<T> {
 	private T[] tape;
 	/** The current machine running status */
 	private RunningState runningState = RunningState.Halted;
+	/** Current look-behind offset */
+	private int lookBehindOffset = 1;
+	/** Current look-ahead offset */
+	private int lookAheadOffset = 0;
 	
 	/** Group start indicies */
 	private int[] groupStarts = new int[0];
@@ -76,6 +80,22 @@ public class FSAState<T> {
 	}
 	public void setTapeIndex(int tapeIndex) {
 		this.tapeIndex = tapeIndex;
+	}
+	
+	public int getLookAheadOffset() {
+		return this.lookAheadOffset;
+	}
+	
+	public void setLookAheadOffset(int lookAheadOffset) {
+		this.lookAheadOffset = lookAheadOffset;
+	}
+	
+	public int getLookBehindOffset() {
+		return this.lookBehindOffset;
+	}
+	
+	public void setLookBehindOffset(int lookBehindOffset) {
+		this.lookBehindOffset = lookBehindOffset;
 	}
 	
 //	@SuppressWarnings("unchecked")

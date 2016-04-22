@@ -135,9 +135,18 @@ public class PhonexMatcher {
 		boolean retVal = false;
 		
 		int currentIdx = lastMatchState.getTapeIndex();
+		
+		// check for group 'X' if found, set currentIdx to the end of this group
+		int xGrpIdx = pattern.groupIndex("X");
+		if(hasMatch() && xGrpIdx > 0) {
+			currentIdx = end(xGrpIdx);
+		}
+		
 		while(!retVal && currentIdx < input.size()) {
 			
 			lastMatchState.setTapeIndex(currentIdx);
+			lastMatchState.setLookAheadOffset(0);
+			lastMatchState.setLookBehindOffset(1);
 			
 			lastMatchState =
 					pattern.getFsa().runWithTape(input.toArray(new IPAElement[0]), lastMatchState);

@@ -35,6 +35,9 @@ public abstract class FSATransition<T> {
 	 */
 	private TransitionType type = TransitionType.NORMAL;
 	
+	/** Offset type */
+	private OffsetType offsetType = OffsetType.NORMAL;
+	
 	/** Matcher groups started by this transition */
 	private final Set<Integer> startGroups = new HashSet<Integer>();
 	
@@ -45,7 +48,7 @@ public abstract class FSATransition<T> {
 	 * Determines if the fsa will follow the transition
 	 * given the current running state.
 	 * 
-	 * @param currentState the current matchine state
+	 * @param currentState the current machine state
 	 * @return <code>true</code> if this transition
 	 *  can be followed given the current state, <code>false</code>
 	 *  otherwise
@@ -127,4 +130,12 @@ public abstract class FSATransition<T> {
 		this.type = type;
 	}
 
+	public OffsetType getOffsetType() {
+		return offsetType;
+	}
+
+	public void setOffsetType(OffsetType offsetType) {
+		this.offsetType = offsetType;
+	}
+	
 }

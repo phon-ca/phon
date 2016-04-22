@@ -66,6 +66,10 @@ group
 	->	^(GROUP["?"] NON_CAPTURING_GROUP exprele+ quantifier?)
 	|	OPEN_PAREN group_name '=' exprele+ CLOSE_PAREN quantifier?
 	->	^(GROUP[$group_name.text] exprele+ quantifier?)
+	|	OPEN_PAREN LOOK_BEHIND_GROUP exprele+ CLOSE_PAREN quantifier?
+	->	^(GROUP["?<"] NON_CAPTURING_GROUP exprele+ quantifier?)
+	|	OPEN_PAREN LOOK_AHEAD_GROUP exprele+ CLOSE_PAREN quantifier?
+	->	^(GROUP["?>"] NON_CAPTURING_GROUP exprele+ quantifier?)
 	;
 
 group_name
@@ -317,6 +321,14 @@ ZERO_OR_ONE
 	
 NON_CAPTURING_GROUP
 	:	'?='
+	;
+	
+LOOK_BEHIND_GROUP
+	:	'?<'
+	;
+	
+LOOK_AHEAD_GROUP
+	:	'?>'
 	;
 
 BOUND_START

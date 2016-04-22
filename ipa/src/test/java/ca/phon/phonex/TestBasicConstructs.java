@@ -118,4 +118,17 @@ public class TestBasicConstructs {
 		
 		Assert.assertEquals(true, ipa.matches("^$"));
 	}
+	
+	@Test
+	public void testLookBehind() throws ParseException {
+		final String text = "ˈkʀɛit͡jə";
+		final String phonex = "(?<\\w)\\c(?>\\w)";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher matcher = pattern.matcher(ipa);
+		
+		Assert.assertTrue(matcher.find());
+		Assert.assertEquals(ipa.elementAt(2), matcher.group().get(0));
+	}
 }

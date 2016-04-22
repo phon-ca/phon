@@ -213,6 +213,8 @@ public class SimpleFSA<T> {
 		cachedState.setTape(tape);
 		cachedState.setTapeIndex(machineState.getTapeIndex());
 		cachedState.setRunningState(RunningState.Running);
+		cachedState.setLookAheadOffset(machineState.getLookAheadOffset());
+		cachedState.setLookBehindOffset(machineState.getLookBehindOffset());
 		
 		// keep track of possible path choices using a stack
 		Stack<DecisionTracker> decisions =
@@ -237,6 +239,8 @@ public class SimpleFSA<T> {
 							cachedState.setTapeIndex(machineState.getTapeIndex());
 							cachedState.setGroups(Arrays.copyOf(machineState.getGroupStarts(), machineState.numberOfGroups()), 
 									Arrays.copyOf(machineState.getGroupLengths(), machineState.numberOfGroups()));
+							cachedState.setLookAheadOffset(machineState.getLookAheadOffset());
+							cachedState.setLookBehindOffset(machineState.getLookBehindOffset());
 						}
 					}
 					toFollow = backtrack(machineState, decisions);
@@ -262,7 +266,13 @@ public class SimpleFSA<T> {
 						machineState.incrementGroup(grpIdx);
 				}
 				
-				machineState.setTapeIndex(machineState.getTapeIndex()+toFollow.getMatchLength());
+				if(toFollow.getOffsetType() == OffsetType.LOOK_BEHIND) {
+					machineState.setLookBehindOffset(machineState.getLookBehindOffset()+toFollow.getMatchLength());
+				} else if(toFollow.getOffsetType() == OffsetType.LOOK_AHEAD) {
+					machineState.setLookAheadOffset(machineState.getLookAheadOffset()+toFollow.getMatchLength());
+				} else {
+					machineState.setTapeIndex(machineState.getTapeIndex()+toFollow.getMatchLength());
+				}
 				machineState.setCurrentState(nextState);
 			} else {
 				machineState.setRunningState(RunningState.Halted);
@@ -275,6 +285,8 @@ public class SimpleFSA<T> {
 			machineState.setTapeIndex(cachedState.getTapeIndex());
 			machineState.setGroups(Arrays.copyOf(cachedState.getGroupStarts(), cachedState.numberOfGroups()), 
 					Arrays.copyOf(cachedState.getGroupLengths(), cachedState.numberOfGroups()));
+			machineState.setLookAheadOffset(cachedState.getLookAheadOffset());
+			machineState.setLookBehindOffset(cachedState.getLookBehindOffset());
 		}
 		
 		return machineState;
