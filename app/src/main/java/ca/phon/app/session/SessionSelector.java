@@ -112,6 +112,24 @@ public class SessionSelector extends CheckboxTree {
 		revalidate();
 	}
 	
+	public TreePath sessionPathToTreePath(SessionPath sessionPath) {
+		final CheckedTreeNode root = (CheckedTreeNode)getModel().getRoot();
+		for(int i = 0; i < root.getChildCount(); i++) {
+			final CheckedTreeNode corpusNode = (CheckedTreeNode)root.getChildAt(i);
+			if(corpusNode.getUserObject().equals(sessionPath.getCorpus())) {
+				for(int j = 0; j < corpusNode.getChildCount(); j++) {
+					final CheckedTreeNode sessionNode = (CheckedTreeNode)corpusNode.getChildAt(j);
+					if(sessionNode.getUserObject().equals(sessionPath.getSession())) {
+						final TreePath checkPath = new TreePath(
+								new Object[]{ root, corpusNode, sessionNode });
+						return checkPath;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public List<SessionPath> getSelectedSessions() {
 		List<SessionPath> retVal = 
 			new ArrayList<SessionPath>();
@@ -132,5 +150,15 @@ public class SessionSelector extends CheckboxTree {
 		Collections.sort(retVal, (sp1, sp2) -> sp1.toString().compareTo(sp2.toString()) );
 		
 		return retVal;
+	}
+	
+	public void setSelectedSessions(List<SessionPath> selectedSessions) {
+		super.clearSelection();
+		
+		for(SessionPath sessionPath:selectedSessions) {
+			final TreePath path = sessionPathToTreePath(sessionPath);
+			getCheckingModel().addCheckingPath(path);
+			expandPath(path.getParentPath());
+		}
 	}
 }
