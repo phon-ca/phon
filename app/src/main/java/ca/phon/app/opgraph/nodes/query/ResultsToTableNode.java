@@ -157,7 +157,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 					}
 					rowData.add(ReportHelper.createReportString(rvVals, result.getSchema()));
 					
-					rowData.add(ReportHelper.createResultString(result));
+					rowData.add(result);
 					
 					// add result objects from record
 					final Record record = session.getRecord(result.getRecordIndex());
