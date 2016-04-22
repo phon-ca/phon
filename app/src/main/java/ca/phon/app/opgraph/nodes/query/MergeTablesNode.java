@@ -41,6 +41,10 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 	
 	private boolean interleaveColumns = true;
 	
+	private int table1ColumnRatio = 1;
+	
+	private int table2ColumnRatio = 1;
+	
 	private String table1KeyColumn = "";
 	private boolean table1KeyColumnCaseSensitive = false;
 	private boolean table1KeyColumnIgnoreDiacritics = true;
@@ -71,6 +75,9 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 	private PromptedTextField table2ColumnSuffixField;
 	
 	private JCheckBox interleaveColumnsBox;
+	
+	private PromptedTextField table1ColumnRatioField;
+	private PromptedTextField table2ColumnRatioField;
 	
 	public MergeTablesNode() {
 		super();
@@ -186,9 +193,38 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridwidth = 2;
+		retVal.add(new JXTitledSeparator("Column interleaving"), gbc);
+
+		++gbc.gridy;
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridwidth = 2;
 		interleaveColumnsBox = new JCheckBox("Interleave columns");
 		interleaveColumnsBox.setSelected(this.interleaveColumns);
 		retVal.add(interleaveColumnsBox, gbc);
+		
+		++gbc.gridy;
+		gbc.weightx = 0.0;
+		gbc.gridx = 0;
+		gbc.gridwidth = 1;
+		retVal.add(new JLabel("Table 1 column ratio:"), gbc);
+		
+		++gbc.gridx;
+		gbc.weightx = 1.0;
+		table1ColumnRatioField = new PromptedTextField("Enter column ratio");
+		table1ColumnRatioField.setText(Integer.toString(table1ColumnRatio));
+		retVal.add(table1ColumnRatioField, gbc);
+		
+		++gbc.gridy;
+		gbc.gridx = 0;
+		gbc.weightx = 1.0;
+		retVal.add(new JLabel("Table 2 column ratio:"), gbc);
+		
+		++gbc.gridx;
+		gbc.weightx = 1.0;
+		table2ColumnRatioField = new PromptedTextField("Enter column ratio");
+		table2ColumnRatioField.setText(Integer.toString(table2ColumnRatio));
+		retVal.add(table2ColumnRatioField, gbc);
 		
 		return retVal;
 	}
@@ -313,6 +349,26 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 			this.interleaveColumnsBox.setSelected(interleaveColumns);
 	}
 	
+	public int getTable1ColumnRatio() {
+		return (this.table1ColumnRatioField != null ? Integer.parseInt(table1ColumnRatioField.getText()) : table1ColumnRatio);
+	}
+	
+	public void setTable1ColumnRatio(int table1ColumnRatio) {
+		this.table1ColumnRatio = table1ColumnRatio;
+		if(this.table1ColumnRatioField != null)
+			this.table1ColumnRatioField.setText(Integer.toString(table1ColumnRatio));
+	}
+	
+	public int getTable2ColumnRatio() {
+		return (this.table2ColumnRatioField != null ? Integer.parseInt(table2ColumnRatioField.getText()) : table2ColumnRatio);
+	}
+	
+	public void setTable2ColumnRatio(int table2ColumnRatio) {
+		this.table2ColumnRatio = table2ColumnRatio;
+		if(this.table2ColumnRatioField != null)
+			this.table2ColumnRatioField.setText(Integer.toString(table2ColumnRatio));
+	}
+	
 	@Override
 	public Properties getSettings() {
 		Properties retVal = new Properties();
@@ -331,6 +387,8 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		
 		retVal.setProperty("keyColumnName", getKeyColumnName());
 		retVal.setProperty("interleaveColumns", Boolean.toString(isInterleaveColumns()));
+		retVal.setProperty("table1ColumnRatio", Integer.toString(getTable1ColumnRatio()));
+		retVal.setProperty("table2ColumnRatio", Integer.toString(getTable2ColumnRatio()));
 		
 		return retVal;
 	}
@@ -356,6 +414,8 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		setKeyColumnName(properties.getProperty("keyColumnName", ""));
 		
 		setInterleaveColumns(Boolean.parseBoolean(properties.getProperty("interleaveColumns", "true")));
+		setTable1ColumnRatio(Integer.parseInt(properties.getProperty("table1ColumnRatio", "1")));
+		setTable2ColumnRatio(Integer.parseInt(properties.getProperty("table2ColumnRatio", "1")));
 	}
 
 	@Override
@@ -414,15 +474,19 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 				int table1ColIdx = 0;
 				int table2ColIdx = 0;
 				while(col < numCols) {
-					if(table1ColIdx < table1Columns.size()) {
-						Object table1Val = table1.getValueAt(
-								getTable1KeyColumn(), rowKey, table1Columns.get(table1ColIdx++));
-						rowData[col++] = (table1Val != null ? table1Val : "");
+					for(int table1ColNum = 0; table1ColNum < getTable1ColumnRatio(); table1ColNum++) {
+						if(table1ColIdx < table1Columns.size()) {
+							Object table1Val = table1.getValueAt(
+									getTable1KeyColumn(), rowKey, table1Columns.get(table1ColIdx++));
+							rowData[col++] = (table1Val != null ? table1Val : "");
+						}
 					}
-					if(table2ColIdx < table2Columns.size()) {
-						Object table2Val = table2.getValueAt(
-								getTable2KeyColumn(), rowKey, table2Columns.get(table2ColIdx++));
-						rowData[col++] = (table2Val != null ? table2Val : "");
+					for(int table2ColNum = 0; table2ColNum < getTable2ColumnRatio(); table2ColNum++) {
+						if(table2ColIdx < table2Columns.size()) {
+							Object table2Val = table2.getValueAt(
+									getTable2KeyColumn(), rowKey, table2Columns.get(table2ColIdx++));
+							rowData[col++] = (table2Val != null ? table2Val : "");
+						}
 					}
 				}
 			} else {
@@ -447,17 +511,21 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 			int table1ColIdx = 0;
 			int table2ColIdx = 0;
 			while(col < numCols) {
-				if(table1ColIdx < table1Columns.size()) {
-					String table1ColName = table1Columns.get(table1ColIdx++);
-					String colName = 
-							getTable1ColumnPrefix() + table1ColName + getTable1ColumnSuffix();
-					outputTable.setColumnTitle(col++, colName);
+				for(int table1ColNum = 0; table1ColNum < getTable1ColumnRatio(); table1ColNum++) {
+					if(table1ColIdx < table1Columns.size()) {
+						String table1ColName = table1Columns.get(table1ColIdx++);
+						String colName = 
+								getTable1ColumnPrefix() + table1ColName + getTable1ColumnSuffix();
+						outputTable.setColumnTitle(col++, colName);
+					}
 				}
-				if(table2ColIdx < table2Columns.size()) {
-					String table2ColName = table2Columns.get(table2ColIdx++);
-					String colName = 
-							getTable2ColumnPrefix() + table2ColName + getTable2ColumnSuffix();
-					outputTable.setColumnTitle(col++, colName);
+				for(int table2ColNum = 0; table2ColNum < getTable2ColumnRatio(); table2ColNum++) {
+					if(table2ColIdx < table2Columns.size()) {
+						String table2ColName = table2Columns.get(table2ColIdx++);
+						String colName = 
+								getTable2ColumnPrefix() + table2ColName + getTable2ColumnSuffix();
+						outputTable.setColumnTitle(col++, colName);
+					}
 				}
 			}
 		} else {
