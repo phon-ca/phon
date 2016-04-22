@@ -20,6 +20,11 @@ public class DefaultTableDataSource implements TableDataSource {
 		super();
 	}
 	
+	public DefaultTableDataSource(DefaultTableDataSource from) {
+		super();
+		rowData.addAll(from.rowData);
+	}
+	
 	public List<Object[]> getRowData() {
 		return this.rowData;
 	}
@@ -169,6 +174,10 @@ public class DefaultTableDataSource implements TableDataSource {
 	
 	public void setColumnTitle(int col, String title) {
 		columnNames[col] = title;
+	}
+	
+	public void append(DefaultTableDataSource otherTable) {
+		rowData.addAll(otherTable.rowData);
 	}
 	
 }
