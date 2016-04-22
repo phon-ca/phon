@@ -73,6 +73,7 @@ public class AssessmentLibrary {
 		
 		for(URL reportURL:getStockGraphs()) {
 			final AssessmentAction act = new AssessmentAction(project, selectedSessions, reportURL);
+			act.setShowWizard(false);
 			builder.addMenuItem(".", act);
 		}
 		

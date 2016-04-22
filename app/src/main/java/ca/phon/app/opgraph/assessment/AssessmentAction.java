@@ -30,6 +30,8 @@ public class AssessmentAction extends HookableAction {
 	
 	private URL assessmentURL;
 	
+	private boolean showWizard = true;
+	
 	public AssessmentAction(Project project, URL assessmentURL) {
 		this(project, new ArrayList<>(), assessmentURL);
 	}
@@ -50,13 +52,21 @@ public class AssessmentAction extends HookableAction {
 		putValue(SHORT_DESCRIPTION, assessmentURL.getPath());
 	}
 	
+	public boolean isShowWizard() {
+		return showWizard;
+	}
+
+	public void setShowWizard(boolean showWizard) {
+		this.showWizard = showWizard;
+	}
+
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		try {
 			final OpGraph graph = loadAssessment();
 			
 			final AssessmentRunner assessmentRunner =
-					new AssessmentRunner(graph, project, selectedSessions);
+					new AssessmentRunner(graph, project, selectedSessions, showWizard);
 			PhonWorker.getInstance().invokeLater(assessmentRunner);
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);

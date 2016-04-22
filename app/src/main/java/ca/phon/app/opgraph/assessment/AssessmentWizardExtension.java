@@ -16,6 +16,4 @@ public class AssessmentWizardExtension extends WizardExtension {
 		return new AssessmentWizard("Assessment", processor, super.getGraph());
 	}
 
-	
-	
 }

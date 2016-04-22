@@ -22,11 +22,15 @@ public class AssessmentRunner implements Runnable {
 	
 	private List<SessionPath> selectedSessions;
 	
-	public AssessmentRunner(OpGraph graph, Project project, List<SessionPath> selectedSessions) {
+	private boolean showWizard = true;
+	
+	public AssessmentRunner(OpGraph graph, Project project, 
+			List<SessionPath> selectedSessions, boolean showWizard) {
 		super();
 		this.graph = graph;
 		this.project = project;
 		this.selectedSessions = selectedSessions;
+		this.showWizard = showWizard;
 	}
 	
 	public OpGraph getGraph() {
@@ -52,13 +56,21 @@ public class AssessmentRunner implements Runnable {
 	public void setSelectedSessions(List<SessionPath> selectedSessions) {
 		this.selectedSessions = selectedSessions;
 	}
+	
+	public boolean isShowWizard() {
+		return showWizard;
+	}
+
+	public void setShowWizard(boolean showWizard) {
+		this.showWizard = showWizard;
+	}
 
 	@Override
 	public void run() {
-		run(getGraph(), getProject(), getSelectedSessions());
+		run(getGraph(), getProject(), getSelectedSessions(), isShowWizard());
 	}
 
-	public void run(OpGraph graph, Project project, List<SessionPath> selectedSessions) 
+	public void run(OpGraph graph, Project project, List<SessionPath> selectedSessions, boolean showWizard) 
 		throws ProcessingException {
 		final Processor processor = new Processor(graph);
 		final OpContext ctx = processor.getContext();
@@ -73,6 +85,10 @@ public class AssessmentRunner implements Runnable {
 				wizard.setSize(1024, 768);
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
+				
+				if(!showWizard) {
+					wizard.gotoStep(wizard.numberOfSteps()-1);
+				}
 			});
 		} else {
 			processor.stepAll();
