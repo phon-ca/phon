@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="3532dd16" name="Cluster Inventory (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="75512358">
+            <graph id="8edc1f">
                 <node id="517b4750" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -30,7 +30,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="4c2eee8" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="72e6190d">
+                    <graph id="3ee43c3">
                         <node id="66031a84" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -48,7 +48,7 @@
                     </extensions>
                 </ogcn:macro>
                 <opqry:queryNode id="729477bf" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-15T08:42:49.047-02:30" name="Phones" uuid="3da1d4e9-2ae1-49ef-9eb8-dc1ed77f4cde">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T10:05:51.249-02:30" name="Phones" uuid="1e78c54e-2f36-4c51-b329-288caf3cc26a">
                         <script>
                             <source>/*
 params =
@@ -413,7 +413,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
     }
 }
 </source>
-                            <param id="filters.primary.filter">\w\s?(X=\c&lt;2,&gt;)\s?\w</param>
+                            <param id="filters.primary.filter">(?&lt;\s?\w)\c&lt;2,&gt;+(?&gt;\s?\w)</param>
                             <param id="filters.word.searchByWord">true</param>
                             <param id="includeAligned">false</param>
                             <param id="searchTier">IPA Target</param>
@@ -425,7 +425,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="1a638f63" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-15T08:42:49.052-02:30" name="Phones" uuid="371df475-c57a-4a05-a893-dabfa3ff6c55">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T10:05:51.262-02:30" name="Phones" uuid="54039d8c-bddc-4552-935a-95cb77f334b2">
                         <script>
                             <source>/*
 params =
@@ -790,7 +790,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
     }
 }
 </source>
-                            <param id="filters.primary.filter">\w\s?(X=\c&lt;2,&gt;)\s?\w</param>
+                            <param id="filters.primary.filter">(?&lt;\s?\w)\c&lt;2,&gt;+(?&gt;\s?\w)</param>
                             <param id="filters.word.searchByWord">true</param>
                             <param id="includeAligned">false</param>
                             <param id="searchTier">IPA Actual</param>
@@ -854,6 +854,8 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                             <oga:property key="table2KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
                             <oga:property key="table1KeyColumn"><![CDATA[IPA Target]]></oga:property>
                             <oga:property key="table1ColumnPrefix"/>
+                            <oga:property key="table1ColumnRatio"><![CDATA[1]]></oga:property>
+                            <oga:property key="table2ColumnRatio"><![CDATA[1]]></oga:property>
                             <oga:property key="table2KeyColumn"><![CDATA[IPA Actual]]></oga:property>
                             <oga:property key="table2KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
                             <oga:property key="table1ColumnSuffix"><![CDATA[ : IPA Target]]></oga:property>
