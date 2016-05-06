@@ -1,19 +1,29 @@
-assessments/Word List.xml
-assessments/IPA Variability (Word).xml
-assessments/Word Shapes (CV).xml
-assessments/Word Shapes (Syllables).xml
-assessments/Word Shapes (Stress Pattern).xml
-assessments/Consonant Inventory.xml
-assessments/Consonant Inventory (word-initial).xml
-assessments/Consonant Inventory (word-medial).xml
-assessments/Consonant Inventory (word-final).xml
-assessments/Vowel Inventory.xml
-assessments/Vowel Inventory (word-initial).xml
-assessments/Vowel Inventory (word-medial).xml
-assessments/Vowel Inventory (word-final).xml
-assessments/Cluster Inventory.xml
-assessments/Cluster Inventory (word-initial).xml
-assessments/Cluster Inventory (word-medial).xml
-assessments/Cluster Inventory (word-final).xml
-assessments/Target Consonants.xml
-assessments/Target Vowels.xml
+# Independent Analysis
+assessments/Independent Analysis/Word List.xml
+assessments/Independent Analysis/Word Shapes (CV).xml
+assessments/Independent Analysis/Word Shapes (Syllables).xml
+assessments/Independent Analysis/Word Shapes (Stress Pattern).xml
+assessments/Independent Analysis/Homophony Analysis.xml
+assessments/Independent Analysis/Consonant Inventory.xml
+assessments/Independent Analysis/Consonant Inventory (word-initial).xml
+assessments/Independent Analysis/Consonant Inventory (word-medial).xml
+assessments/Independent Analysis/Consonant Inventory (word-final).xml
+assessments/Independent Analysis/Vowel Inventory.xml
+assessments/Independent Analysis/Vowel Inventory (word-initial).xml
+assessments/Independent Analysis/Vowel Inventory (word-medial).xml
+assessments/Independent Analysis/Vowel Inventory (word-final).xml
+assessments/Independent Analysis/Cluster Inventory.xml
+assessments/Independent Analysis/Cluster Inventory (word-initial).xml
+assessments/Independent Analysis/Cluster Inventory (word-medial).xml
+assessments/Independent Analysis/Cluster Inventory (word-final).xml
+# Relational Analysis
+assessments/Relational Analysis/Target Consonants.xml
+assessments/Relational Analysis/Target Vowels.xml
+assessments/Relational Analysis/IPA Variability (Word).xml
+assessments/Relational Analysis/Word Match (CV).xml
+assessments/Relational Analysis/Word Match (Syllables).xml
+assessments/Relational Analysis/Word Match (Stress Pattern).xml
+assessments/Relational Analysis/Percent Consonants Correct (PCC).xml
+assessments/Relational Analysis/Aligned Percent Consonants Correct (aPCC).xml
+assessments/Relational Analysis/Percent Vowels Correct (PVC).xml
+assessments/Relational Analysis/Aligned Percent Vowels Correct (aPVC).xml
