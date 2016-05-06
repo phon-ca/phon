@@ -4,11 +4,15 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -34,6 +38,8 @@ import ca.phon.ui.text.PromptedTextField;
 		showInLibrary=true
 )
 public class MergeTablesNode extends TableOpNode implements NodeSettings {
+	
+	private final static Logger LOGGER = Logger.getLogger(MergeTablesNode.class.getName());
 	
 	private InputField table1Input = new InputField("table1", "Table 1", false, true, TableDataSource.class);
 	
@@ -476,15 +482,57 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 				while(col < numCols) {
 					for(int table1ColNum = 0; table1ColNum < getTable1ColumnRatio(); table1ColNum++) {
 						if(table1ColIdx < table1Columns.size()) {
+							int colIdx = table1.getColumnIndex(table1Columns.get(table1ColIdx));
 							Object table1Val = table1.getValueAt(
 									getTable1KeyColumn(), rowKey, table1Columns.get(table1ColIdx++));
+							if(table1Val == null) {
+								Class<?> colType = table1.inferColumnType(colIdx);
+								if(colType != null && colType != Object.class) {
+									try {
+										if(Number.class.isAssignableFrom(colType)) {
+											try {
+												Constructor<?> numberCtr = 
+														colType.getConstructor( String.class );
+												table1Val = numberCtr.newInstance( "0" );
+											} catch (NoSuchMethodException | InvocationTargetException e) {
+												LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+											}
+										} else {
+											table1Val = colType.newInstance();
+										}
+									} catch (InstantiationException | IllegalAccessException e) {
+										LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+									}
+								}
+							}
 							rowData[col++] = (table1Val != null ? table1Val : "");
 						}
 					}
 					for(int table2ColNum = 0; table2ColNum < getTable2ColumnRatio(); table2ColNum++) {
 						if(table2ColIdx < table2Columns.size()) {
+							int colIdx = table2.getColumnIndex(table1Columns.get(table2ColIdx));
 							Object table2Val = table2.getValueAt(
 									getTable2KeyColumn(), rowKey, table2Columns.get(table2ColIdx++));
+							if(table2Val == null) {
+								Class<?> colType = table2.inferColumnType(colIdx);
+								if(colType != null && colType != Object.class) {
+									try {
+										if(Number.class.isAssignableFrom(colType)) {
+											try {
+												Constructor<?> numberCtr = 
+														colType.getConstructor( String.class );
+												table2Val = numberCtr.newInstance( "0" );
+											} catch (NoSuchMethodException | InvocationTargetException e) {
+												LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+											}
+										} else {
+											table2Val = colType.newInstance();
+										}
+									} catch (InstantiationException | IllegalAccessException e) {
+										LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+									}
+								}
+							}
 							rowData[col++] = (table2Val != null ? table2Val : "");
 						}
 					}
