@@ -173,7 +173,32 @@ public class DefaultTableDataSource implements TableDataSource {
 	}
 	
 	public void setColumnTitle(int col, String title) {
+		if(col >= getColumnCount()) {
+			setColumnCount(col+1);
+		}
 		columnNames[col] = title;
+	}
+	
+	/**
+	 * Return the type of the first non-null value encountered
+	 * in the specified column.
+	 * 
+	 * @param col
+	 * 
+	 * @return class of the first real value in the columm
+	 */
+	public Class<?> inferColumnType(int col) {
+		Class<?> retVal = Object.class;
+		
+		for(int row = 0; row < getRowCount(); row++) {
+			Object val = getValueAt(row, col);
+			if(val != null) {
+				retVal = val.getClass();
+				break;
+			}
+		}
+		
+		return retVal;
 	}
 	
 	public void append(DefaultTableDataSource otherTable) {
