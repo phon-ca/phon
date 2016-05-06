@@ -78,7 +78,7 @@ public class TierDataLayoutButtons extends JComponent {
 	
 	private void init() {
 		buttonGroup = new ButtonGroup();
-		final List<JButton> buttons = SegmentedButtonBuilder.createSegmentedButtons(2, buttonGroup);
+		final List<JButton> buttons = (new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(2, buttonGroup);
 		
 		final ImageIcon wrapIcon = IconManager.getInstance().getIcon(WRAP_ICON, IconSize.SMALL);
 		final PhonUIAction wrapAct = new PhonUIAction(this, "wrapGroups");
@@ -102,7 +102,7 @@ public class TierDataLayoutButtons extends JComponent {
 			wrapButton.setSelected(true);
 		
 		// TODO need to setup a method that works for all platforms
-		final JComponent comp = SegmentedButtonBuilder.createLayoutComponent(buttons);
+		final JComponent comp = (new SegmentedButtonBuilder<JButton>(JButton::new)).createLayoutComponent(buttons);
 		setLayout(new BorderLayout());
 		add(comp, BorderLayout.CENTER);
 	}
