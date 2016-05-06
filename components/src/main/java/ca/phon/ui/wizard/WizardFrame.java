@@ -28,7 +28,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -40,6 +44,7 @@ import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.wizard.WizardEvent.WizardEventType;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -64,13 +69,16 @@ public class WizardFrame extends CommonModuleFrame {
 	private JXBusyLabel busyLabel;
 	
 	/** List of wizard steps */
-	private List<WizardStep> steps = new ArrayList<WizardStep>();
+	private HashMap<WizardStep, UUID> steps = new LinkedHashMap<>();
 	
 	private WizardStep currentStep;
 	
 	private CardLayout stepLayout;
 	
 	private JPanel stepPanel;
+	
+	private List<WizardListener> listeners = 
+			Collections.synchronizedList(new ArrayList<>());
 	
 	public WizardFrame(String title) {
 		super(title);
@@ -151,9 +159,37 @@ public class WizardFrame extends CommonModuleFrame {
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
 	
+	public WizardStep getWizardStep(int idx) {
+		return (new ArrayList<>(steps.keySet())).get(idx);
+	}
+	
+	public void addWizardStep(int idx, WizardStep ws) {
+		UUID uuid = UUID.randomUUID();
+		
+		LinkedHashMap<WizardStep, UUID> newSteps = new LinkedHashMap<>();
+		ArrayList<WizardStep> keys = new ArrayList<>(steps.keySet());
+		
+		for(int i = 0; i < idx; i++) {
+			newSteps.put(keys.get(i), steps.get(keys.get(i)));
+		}
+		newSteps.put(ws, uuid);
+		for(int i = idx; i < keys.size(); i++) {
+			newSteps.put(keys.get(i), steps.get(keys.get(i)));
+		}
+		steps = newSteps;
+		
+		stepPanel.add(ws, uuid.toString());
+		
+		fireWizardEvent(new WizardEvent(WizardEventType.STEP_ADDED, this, idx));
+		
+		if(steps.size() == 1)
+			gotoStep(0);
+	}
+	
 	public void addWizardStep(WizardStep ws) {
-		steps.add(ws);
-		stepPanel.add(ws, Integer.toString(steps.size()-1));
+		UUID uuid = UUID.randomUUID();
+		steps.put(ws, uuid);
+		stepPanel.add(ws, uuid.toString());
 		if(steps.size() == 1)
 			gotoStep(0);
 	}
@@ -189,12 +225,14 @@ public class WizardFrame extends CommonModuleFrame {
 		}
 		if(stepIndex < 0 || stepIndex >= numberOfSteps()) return;
 		
-		WizardStep ws = steps.get(stepIndex);
+		WizardStep ws = (new ArrayList<>(steps.keySet())).get(stepIndex);
 		currentStep = ws;
 		
-		stepLayout.show(stepPanel, Integer.toString(stepIndex));
+		stepLayout.show(stepPanel, steps.get(ws).toString());
 		
 		setupButtons();
+		
+		fireWizardEvent(WizardEvent.createGotoStepEvent(this, stepIndex));
 	}
 
 	protected void setupButtons() {
@@ -211,7 +249,7 @@ public class WizardFrame extends CommonModuleFrame {
 		else
 			btnNext.setEnabled(false);
 		
-		if(currentStep == steps.get(numberOfSteps()-1))
+		if(currentStep == (new ArrayList<>(steps.keySet()).get(numberOfSteps()-1)))
 			btnFinish.setEnabled(true);
 		else
 			btnFinish.setEnabled(false);
@@ -230,6 +268,9 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	protected void finish() {
 		if(currentStep.validateStep()) {
+			
+			fireWizardEvent(WizardEvent.createFinishedEvent(this));
+			
 			setVisible(false);
 			dispose();
 		}
@@ -292,6 +333,21 @@ public class WizardFrame extends CommonModuleFrame {
 		if(glassPane == null) return;
 		busyLabel.setBusy(false);
 		glassPane.setVisible(false);
+	}
+	
+	public void addListener(WizardListener listener) {
+		if(!listeners.contains(listener))
+			this.listeners.add(listener);
+	}
+	
+	public void removeListener(WizardListener listener) {
+		this.listeners.remove(listener);
+	}
+	
+	public void fireWizardEvent(WizardEvent event) {
+		for(WizardListener listener:listeners) {
+			listener.wizardEvent(event);
+		}
 	}
 
 }
