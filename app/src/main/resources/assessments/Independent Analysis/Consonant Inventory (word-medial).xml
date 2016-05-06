@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="3532dd16" name="Consonant Inventory (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="2bb97e25">
+            <graph id="60995b3b">
                 <node id="517b4750" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -30,7 +30,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="4c2eee8" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="1e98ae78">
+                    <graph id="d168ba3">
                         <node id="66031a84" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -48,7 +48,7 @@
                     </extensions>
                 </ogcn:macro>
                 <opqry:queryNode id="729477bf" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T10:07:13.883-02:30" name="Phones" uuid="829918da-09e9-43e3-9174-8d204c55abb7">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:05:07.804-02:30" name="Phones" uuid="c49ff627-260b-492b-b27c-8e89aa7f21fb">
                         <script>
                             <source>/*
 params =
@@ -413,7 +413,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
     }
 }
 </source>
-                            <param id="filters.primary.filter">(?&lt;\s?\w)\c(?&gt;\s?\w)</param>
+                            <param id="filters.primary.filter">(?&lt;\w\s?)\c(?&gt;\s?\w)</param>
                             <param id="filters.word.searchByWord">true</param>
                             <param id="includeAligned">false</param>
                             <param id="searchTier">IPA Target</param>
@@ -425,7 +425,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="1a638f63" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T10:07:13.897-02:30" name="Phones" uuid="2ab36c11-558d-491b-9daa-ba860e35fadc">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:05:07.810-02:30" name="Phones" uuid="9161abd4-b81e-4308-8a93-210746ce8c79">
                         <script>
                             <source>/*
 params =
@@ -790,7 +790,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
     }
 }
 </source>
-                            <param id="filters.primary.filter">(?&lt;\s?\w)\c(?&gt;\s?\w)</param>
+                            <param id="filters.primary.filter">(?&lt;\w\s?)\c(?&gt;\s?\w)</param>
                             <param id="filters.word.searchByWord">true</param>
                             <param id="includeAligned">false</param>
                             <param id="searchTier">IPA Actual</param>
@@ -910,7 +910,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
         <link dest="3532dd16" destField="obj1" source="398f1f7e" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.assessment.AssessmentWizardExtension">
-                <opqry:info title="Introduction">
+                <opqry:info title="Consonant Inventory (word-medial)">
                     <opqry:message/>
                 </opqry:info>
             </opqry:nodewizard>

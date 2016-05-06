@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="3532dd16" name="Cluster Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="66f508d8">
+            <graph id="1122a3fb">
                 <node id="517b4750" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -30,7 +30,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="4c2eee8" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="59d495bb">
+                    <graph id="464b38f9">
                         <node id="66031a84" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -48,7 +48,7 @@
                     </extensions>
                 </ogcn:macro>
                 <opqry:queryNode id="729477bf" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-15T08:40:45.135-02:30" name="Phones" uuid="8cc89062-42cb-4e32-8f45-93eb556473cf">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:04:28.151-02:30" name="Phones" uuid="58b0678b-3478-4c85-96fb-4c44d5a75b3d">
                         <script>
                             <source>/*
 params =
@@ -425,7 +425,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="1a638f63" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-15T08:40:45.140-02:30" name="Phones" uuid="7f5b8bdf-7c52-45fa-a4cf-050f8b6c3bea">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:04:28.156-02:30" name="Phones" uuid="9ae99286-aa3e-40d6-a54b-c22e5d6ae4bb">
                         <script>
                             <source>/*
 params =
@@ -854,6 +854,8 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                             <oga:property key="table2KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
                             <oga:property key="table1KeyColumn"><![CDATA[IPA Target]]></oga:property>
                             <oga:property key="table1ColumnPrefix"/>
+                            <oga:property key="table1ColumnRatio"><![CDATA[1]]></oga:property>
+                            <oga:property key="table2ColumnRatio"><![CDATA[1]]></oga:property>
                             <oga:property key="table2KeyColumn"><![CDATA[IPA Actual]]></oga:property>
                             <oga:property key="table2KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
                             <oga:property key="table1ColumnSuffix"><![CDATA[ : IPA Target]]></oga:property>
@@ -908,7 +910,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
         <link dest="3532dd16" destField="obj1" source="398f1f7e" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.assessment.AssessmentWizardExtension">
-                <opqry:info title="Introduction">
+                <opqry:info title="Cluster Inventory (All positions)">
                     <opqry:message/>
                 </opqry:info>
             </opqry:nodewizard>

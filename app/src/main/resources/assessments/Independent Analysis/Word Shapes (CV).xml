@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <opqry:queryNode id="1330154b" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-14T07:58:31.269-02:30" name="Phones" uuid="c3c0a5c0-e720-4e1d-938c-af519eeef78f">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:08:38.535-02:30" name="Phones" uuid="2679ad50-06ac-42cd-bcac-3e62c7680ce3">
                 <script>
                     <source>/*
 params =
@@ -441,12 +441,11 @@ function getRowValue(table, row) {
             </extensions>
         </node>
         <ogcn:macro id="220da972" name="Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="macro220da972">
+            <graph id="23a4e6dd">
                 <node id="5ebc9d05" name="TableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
-                            <oga:property key="contextKey"/>
                         </oga:settings>
                         <oga:meta x="15" y="15"/>
                     </extensions>
@@ -480,6 +479,8 @@ function getRowValue(table, row) {
                             <oga:property key="table2KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
                             <oga:property key="table1KeyColumn"><![CDATA[IPA Target Word Shape]]></oga:property>
                             <oga:property key="table1ColumnPrefix"/>
+                            <oga:property key="table1ColumnRatio"><![CDATA[1]]></oga:property>
+                            <oga:property key="table2ColumnRatio"><![CDATA[1]]></oga:property>
                             <oga:property key="table2KeyColumn"><![CDATA[IPA Actual Word Shape]]></oga:property>
                             <oga:property key="table2KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
                             <oga:property key="table1ColumnSuffix"><![CDATA[ : IPA Target Word Shape]]></oga:property>
@@ -522,7 +523,7 @@ function getRowValue(table, row) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="1e35b413" name="Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="macro1e35b413">
+            <graph id="b03732">
                 <node id="51981cdb" type="class:ca.phon.app.opgraph.nodes.query.TokenSummaryNode">
                     <extensions>
                         <oga:settings>
@@ -560,7 +561,7 @@ function getRowValue(table, row) {
         <link dest="1e35b413" destField="table" source="9746b93b5e02423e" sourceField="table"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.assessment.AssessmentWizardExtension">
-                <opqry:info title="Introduction">
+                <opqry:info title="Word Shapes (CV)">
                     <opqry:message/>
                 </opqry:info>
             </opqry:nodewizard>

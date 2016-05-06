@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <opqry:queryNode id="337891b0" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-14T06:18:40.644-02:30" name="Phones" uuid="bf8cb3d2-8b4d-4dda-8bc8-d61d2442c298">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:05:41.357-02:30" name="Phones" uuid="224e3091-9f51-4c45-9a7a-0c0df7956f77">
                 <script>
                     <source>/*
 params =
@@ -432,7 +432,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
         <link dest="14398ced" destField="results" source="337891b0" sourceField="results"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.assessment.AssessmentWizardExtension">
-                <opqry:info title="Introduction">
+                <opqry:info title="IPA Variability (word)">
                     <opqry:message/>
                 </opqry:info>
             </opqry:nodewizard>

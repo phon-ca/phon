@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
     <graph id="root">
-        <node id="4605081a" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="1f553055" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
@@ -10,17 +10,17 @@
                 <oga:meta x="15" y="15"/>
             </extensions>
         </node>
-        <node id="6cac912e" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="17618678" name="Selected Sessions" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                 </oga:settings>
-                <oga:meta x="93" y="242"/>
+                <oga:meta x="89" y="241"/>
             </extensions>
         </node>
-        <opqry:queryNode id="2c159046" name="Query : Word List" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:08:26.114-02:30" name="Word List" uuid="3a432e62-4387-4ef2-85da-a97741362072">
+        <opqry:queryNode id="6b669128" name="Query : Word List" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-05-05T07:25:23.357-02:30" name="Word List" uuid="30303739-1657-435b-afb3-e326bb52ece1">
                 <script>
                     <source>/*
  * Phon - An open source tool for research in phonology.
@@ -141,10 +141,10 @@ function query_record(recordIndex, record) {
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="260" y="15"/>
+                <oga:meta x="285" y="106"/>
             </extensions>
         </opqry:queryNode>
-        <node id="6328f4b1" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+        <node id="4f355b5e" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -153,49 +153,36 @@ function query_record(recordIndex, record) {
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="260" y="185"/>
+                <oga:meta x="496" y="117"/>
             </extensions>
         </node>
-        <node id="f638aed" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+        <node id="83eabaf" type="class:ca.phon.app.opgraph.nodes.query.HomophonyAnalysis">
             <extensions>
                 <oga:settings>
-                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                </oga:settings>
-                <oga:meta x="445" y="174">
-                    <oga:default for="buffer" type="java.lang.String">Word List</oga:default>
-                </oga:meta>
-            </extensions>
-        </node>
-        <node id="65b52bc3" type="class:ca.phon.app.opgraph.nodes.query.TokenSummaryNode">
-            <extensions>
-                <oga:settings>
-                    <oga:property key="caseSensitive"><![CDATA[false]]></oga:property>
                     <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
-                    <oga:property key="columnNames"><![CDATA[Orthography;IPA Target;IPA Actual]]></oga:property>
                 </oga:settings>
-                <oga:meta x="240" y="352"/>
+                <oga:meta x="297" y="264"/>
             </extensions>
         </node>
-        <node id="5cfe237d" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+        <node id="4033c1d4" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="447" y="321">
-                    <oga:default for="buffer" type="java.lang.String">Word List : Token Summary</oga:default>
+                <oga:meta x="519" y="266">
+                    <oga:default for="buffer" type="java.lang.String">Homophony Analysis</oga:default>
                 </oga:meta>
             </extensions>
         </node>
-        <link dest="2c159046" destField="project" source="4605081a" sourceField="obj"/>
-        <link dest="2c159046" destField="sessions" source="6cac912e" sourceField="obj"/>
-        <link dest="6328f4b1" destField="project" source="2c159046" sourceField="project"/>
-        <link dest="6328f4b1" destField="results" source="2c159046" sourceField="results"/>
-        <link dest="f638aed" destField="data" source="6328f4b1" sourceField="table"/>
-        <link dest="65b52bc3" destField="table" source="6328f4b1" sourceField="table"/>
-        <link dest="5cfe237d" destField="data" source="65b52bc3" sourceField="table"/>
+        <link dest="6b669128" destField="project" source="1f553055" sourceField="obj"/>
+        <link dest="6b669128" destField="sessions" source="17618678" sourceField="obj"/>
+        <link dest="4f355b5e" destField="project" source="6b669128" sourceField="project"/>
+        <link dest="4f355b5e" destField="results" source="6b669128" sourceField="results"/>
+        <link dest="83eabaf" destField="table" source="4f355b5e" sourceField="table"/>
+        <link dest="4033c1d4" destField="data" source="83eabaf" sourceField="table"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.assessment.AssessmentWizardExtension">
-                <opqry:info title="Word List (Orthography, IPA Target, IPA Actual)">
+                <opqry:info title="Introduction">
                     <opqry:message/>
                 </opqry:info>
             </opqry:nodewizard>

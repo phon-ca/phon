@@ -20,9 +20,9 @@
             </extensions>
         </node>
         <ogcn:macro id="7c246e86" name="Target Vowels : All" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="7ef8b25d">
+            <graph id="2d6267f5">
                 <opqry:queryNode id="636c5235" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T09:25:41.173-02:30" name="Phones" uuid="05358076-feaf-407c-8a8f-0d985c75fda4">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:06:04.044-02:30" name="Phones" uuid="dd8253fc-f819-4d6d-8667-5083659cc3b6">
                         <script>
                             <source>/*
 params =
@@ -430,9 +430,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="4c0f0b6e" name="Target Vowels : Initial" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="162799cf">
+            <graph id="5321fb4e">
                 <opqry:queryNode id="80eaef1a5c334033" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T09:25:41.180-02:30" name="Phones" uuid="f161cc37-b52c-464c-9247-01950cdac23c">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:06:04.050-02:30" name="Phones" uuid="04d9f060-cb8d-48d4-b3cd-3d65d65970c4">
                         <script>
                             <source>/*
 params =
@@ -840,9 +840,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="325b223a" name="Target Vowels : Medial" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4e0d4058">
+            <graph id="79647c60">
                 <opqry:queryNode id="3ea20f8030e4a2e" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T09:25:41.186-02:30" name="Phones" uuid="8f0c65b1-31ad-4ff5-9163-e7b8a8f4cdad">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:06:04.055-02:30" name="Phones" uuid="c2a3c24e-5c27-4eed-a483-0e818792c942">
                         <script>
                             <source>/*
 params =
@@ -1207,7 +1207,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
     }
 }
 </source>
-                            <param id="filters.primary.filter">(?&lt;\s?\w)\v(?&gt;\s?\w)</param>
+                            <param id="filters.primary.filter">(?&lt;\w\s?)\v(?&gt;\s?\w)</param>
                             <param id="filters.word.searchByWord">true</param>
                         </script>
                     </qry:query>
@@ -1250,9 +1250,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="420b864c" name="Target Vowels : Final" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6abe6218">
+            <graph id="43a7fa0b">
                 <opqry:queryNode id="2022ad50401549bc" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-21T09:25:41.193-02:30" name="Phones" uuid="594ef5de-f5c3-4a5b-a80d-02146bc33f92">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-04-26T09:06:04.060-02:30" name="Phones" uuid="c8e50dea-8057-4463-818d-991e958113fb">
                         <script>
                             <source>/*
 params =
@@ -1759,7 +1759,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
         <link dest="325608a438fd4a2d" destField="table2" source="325b223a" sourceField="table"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.assessment.AssessmentWizardExtension">
-                <opqry:info title="Introduction">
+                <opqry:info title="Target Vowels">
                     <opqry:message/>
                 </opqry:info>
             </opqry:nodewizard>
