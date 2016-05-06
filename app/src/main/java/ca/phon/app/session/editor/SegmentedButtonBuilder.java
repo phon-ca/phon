@@ -22,11 +22,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JToggleButton;
 
 import org.pushingpixels.substance.api.SubstanceConstants.Side;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
@@ -36,19 +39,26 @@ import org.pushingpixels.substance.api.SubstanceLookAndFeel;
  * 
  * Methods copied from Apple Technical Note TN2196
  */
-public class SegmentedButtonBuilder {
+public class SegmentedButtonBuilder<T extends AbstractButton> {
+	
+	private Supplier<T> supplier;
+	
+	public SegmentedButtonBuilder(Supplier<T> supplier) {
+		super();
+		this.supplier = supplier;
+	}
 	
 	// Create a Layout component that will ensure the buttons abut each other
-	public static JComponent createLayoutComponent(List<JButton> segmentButtons) {
+	public JComponent createLayoutComponent(List<T> segmentButtons) {
 	  Box layoutBox = Box.createHorizontalBox();
-	  for(JButton button : segmentButtons) {
+	  for(T button : segmentButtons) {
 	    layoutBox.add(button);
 	  }
 	  return layoutBox;
 	}
 
-	public static JButton createSegmentButton(String style, String position, ButtonGroup buttonGrp) {
-	  JButton button = new JButton();
+	public T createSegmentButton(String style, String position, ButtonGroup buttonGrp) {
+	  T button = supplier.get();
 	  
 	  // client properties for Mac OS X
 	  button.putClientProperty("JButton.buttonType", style);
@@ -73,9 +83,9 @@ public class SegmentedButtonBuilder {
 	}
 
 	// Bottleneck for creating the buttons for the button group
-	public static List<JButton> createSegmentButtonsWithStyle(int numButtons, ButtonGroup buttonGrp, String style){
+	public List<T> createSegmentButtonsWithStyle(int numButtons, ButtonGroup buttonGrp, String style){
 	  // Allocate a list of JButtons
-	  List<JButton> buttons = new ArrayList<JButton>();
+	  List<T> buttons = new ArrayList<>();
 	  if(numButtons == 1) {
 	    // If 1 button is requested, then it gets the "only" segment position
 	    buttons.add(createSegmentButton(style, "only", buttonGrp));
@@ -92,19 +102,19 @@ public class SegmentedButtonBuilder {
 	}
 
 	// Convenience methods that pass in the correct button style for each segmented button style
-	public static List<JButton> createSegmentedButtons(int numButtons, ButtonGroup buttonGroup) {
+	public List<T> createSegmentedButtons(int numButtons, ButtonGroup buttonGroup) {
 	  return createSegmentButtonsWithStyle(numButtons, buttonGroup, "segmented");
 	}
 
-	public static List<JButton> createSegmentedRoundRectButtons(int numButtons, ButtonGroup buttonGroup) {
+	public List<T> createSegmentedRoundRectButtons(int numButtons, ButtonGroup buttonGroup) {
 	  return createSegmentButtonsWithStyle(numButtons, buttonGroup, "segmentedRoundRect");
 	}
 
-	public static List<JButton> createSegmentedCapsuleButtons(int numButtons, ButtonGroup buttonGroup) {
+	public List<T> createSegmentedCapsuleButtons(int numButtons, ButtonGroup buttonGroup) {
 	  return createSegmentButtonsWithStyle(numButtons, buttonGroup, "segmentedCapsule");
 	}
 
-	public static List<JButton> createSegmentedTexturedButtons(int numButtons, ButtonGroup buttonGroup) {
+	public List<T> createSegmentedTexturedButtons(int numButtons, ButtonGroup buttonGroup) {
 	  return createSegmentButtonsWithStyle(numButtons, buttonGroup, "segmentedTextured");
 	}
 

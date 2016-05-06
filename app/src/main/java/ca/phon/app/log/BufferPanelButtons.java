@@ -72,7 +72,7 @@ public class BufferPanelButtons extends JComponent {
 	private void init() {
 		buttonGroup = new ButtonGroup();
 		final List<JButton> buttons = 
-				SegmentedButtonBuilder.createSegmentedButtons(3, buttonGroup);
+				(new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(3, buttonGroup);
 		
 		final ImageIcon txtIcon = IconManager.getInstance().getIcon(TEXT_ICON, IconSize.SMALL);
 		final PhonUIAction txtAct = new PhonUIAction(this, "showText");
