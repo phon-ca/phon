@@ -1,6 +1,7 @@
 package ca.phon.app.opgraph.nodes.query;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ca.gedge.opgraph.InputField;
@@ -53,12 +54,16 @@ public abstract class TableOpNode extends OpNode {
 	}
 	
 	public int[] getColumnIndices(TableDataSource table, List<String> columns) {
-		int[] retVal = new int[columns.size()];
+		List<Integer> list = new ArrayList<>();
 	
 		for(int i = 0; i < columns.size(); i++) {
-			retVal[i] = getColumnIndex(table, columns.get(i));
+			int colIdx = getColumnIndex(table, columns.get(i));
+			if(colIdx >= 0 && colIdx < table.getColumnCount())
+				list.add(colIdx);
 		}
 		
+		int retVal[] = new int[list.size()];
+		for(int i = 0 ; i < list.size(); i++) retVal[i] = list.get(i);
 		return retVal;
 	}
 	
