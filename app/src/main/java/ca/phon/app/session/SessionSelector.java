@@ -102,12 +102,14 @@ public class SessionSelector extends CheckboxTree {
 		
 		it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer
 			renderer = new it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer();
-		ImageIcon icn = IconManager.getInstance().getIcon(
-				"blank", IconSize.SMALL);
+		ImageIcon sessionIcon = IconManager.getInstance().getIcon(
+				"mimetypes/text-xml", IconSize.SMALL);
 		
-		renderer.setLeafIcon(icn);
-		renderer.setClosedIcon(icn);
-		renderer.setOpenIcon(icn);
+		final ImageIcon folderIcon = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
+		
+		renderer.setLeafIcon(sessionIcon);
+		renderer.setClosedIcon(folderIcon);
+		renderer.setOpenIcon(folderIcon);
 		projectTree.setCellRenderer(renderer);
 		revalidate();
 	}
