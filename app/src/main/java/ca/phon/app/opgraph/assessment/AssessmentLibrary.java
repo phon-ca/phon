@@ -2,15 +2,18 @@ package ca.phon.app.opgraph.assessment;
 
 import java.io.File;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JMenu;
 import javax.swing.MenuElement;
 
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -73,28 +76,53 @@ public class AssessmentLibrary {
 		
 		for(URL reportURL:getStockGraphs()) {
 			final AssessmentAction act = new AssessmentAction(project, selectedSessions, reportURL);
-			act.setShowWizard(false);
+			act.setShowWizard(selectedSessions.size() == 0);
 			builder.addMenuItem(".", act);
 		}
 		
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
-		if(userGraphIterator.hasNext()) builder.addSeparator(".", "user");
+		if(userGraphIterator.hasNext()) {
+			builder.addSeparator(".", "user");
+			// TODO add menu header
+		}
 		while(userGraphIterator.hasNext()) {
 			final URL reportURL = userGraphIterator.next();
 			final AssessmentAction act = new AssessmentAction(project, selectedSessions, reportURL);
+			act.setShowWizard(selectedSessions.size() == 0);
 			builder.addMenuItem(".", act);
 		}
 		
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
-		if(projectGraphIterator.hasNext()) builder.addSeparator(".", "project");
+		if(projectGraphIterator.hasNext()) {
+			builder.addSeparator(".", "project");
+			// TODO add menu header
+		}
 		while(projectGraphIterator.hasNext()) {
 			final URL reportURL = projectGraphIterator.next();
 			final AssessmentAction act = new AssessmentAction(project, selectedSessions, reportURL);
+			act.setShowWizard(selectedSessions.size() == 0);
 			builder.addMenuItem(".", act);
 		}
+	}
+	
+	private Tuple<String, String> URLtoName(URL assessmentURL) {
+		Tuple<String, String> retVal = new Tuple<>();
 		
-//		builder.addSeparator(".", "editor");
-//		builder.addMenuItem(".@editor", new ReportEditorAction());
+		@SuppressWarnings("deprecation")
+		String name = URLDecoder.decode(assessmentURL.getPath());
+		if(name.endsWith(".xml")) name = name.substring(0, name.length()-4);
+		if(name.endsWith(".opgraph")) name = name.substring(0, name.length()-8);
+		
+		final File asFile = new File(name);
+		if(asFile.getParentFile() != null) {
+			retVal.setObj1(asFile.getParentFile().getName());
+			retVal.setObj2(asFile.getAbsolutePath().substring(asFile.getParent().length()+1));
+		} else {
+			retVal.setObj1("");
+			retVal.setObj2(asFile.getName());
+		}
+		
+		return retVal;
 	}
 	
 }

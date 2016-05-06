@@ -1,5 +1,6 @@
 package ca.phon.app.opgraph.assessment;
 
+import java.awt.Toolkit;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
@@ -82,12 +83,15 @@ public class AssessmentRunner implements Runnable {
 			SwingUtilities.invokeLater( () -> {
 				final NodeWizard wizard = wizardExt.createWizard(processor);
 				wizard.pack();
-				wizard.setSize(1024, 768);
+				int padding = 100;
+				wizard.setSize(
+						Toolkit.getDefaultToolkit().getScreenSize().width - padding, 
+						Toolkit.getDefaultToolkit().getScreenSize().height - padding);
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
 				
 				if(!showWizard) {
-					wizard.gotoStep(wizard.numberOfSteps()-1);
+					wizard.gotoStep(1);
 				}
 			});
 		} else {

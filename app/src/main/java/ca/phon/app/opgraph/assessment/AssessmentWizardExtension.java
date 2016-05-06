@@ -13,7 +13,9 @@ public class AssessmentWizardExtension extends WizardExtension {
 
 	@Override
 	public NodeWizard createWizard(Processor processor) {
-		return new AssessmentWizard("Assessment", processor, super.getGraph());
+		
+		return new AssessmentWizard(
+				"Assessment : " + (getWizardTitle() != null ? getWizardTitle() : "Unknown"), processor, super.getGraph());
 	}
 
 }

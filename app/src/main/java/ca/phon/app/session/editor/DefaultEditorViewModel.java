@@ -326,6 +326,9 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	@Override
 	public Map<EditorViewCategory, List<String>> getViewsByCategory() {
+		if(this.dockables == null) {
+			getDockables();
+		}
 		return this.viewsByCategory;
 	}
 	

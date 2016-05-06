@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.PrintWriter;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.JXTitledSeparator;
 
 import ca.gedge.opgraph.OpContext;
@@ -47,7 +49,9 @@ public class NodeWizard extends WizardFrame {
 	
 	private JLabel statusLabel;
 	
-	private WizardStep reportStep;
+	protected WizardStep reportStep;
+	
+	boolean inInit = true;
 	
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
@@ -56,6 +60,7 @@ public class NodeWizard extends WizardFrame {
 		this.processor = processor;
 		this.graph = graph;
 		init();
+		inInit = false;
 	}
 	
 	private void init() {
@@ -115,6 +120,15 @@ public class NodeWizard extends WizardFrame {
 		reportStep.setNextStep(-1);
 		addWizardStep(reportStep);
 		
+		final WizardStepList stepList = new WizardStepList(this);
+		stepList.setMinimumSize(new Dimension(250, 20));
+		stepList.setPreferredSize(new Dimension(250, 0));
+		stepList.setMaximumSize(new Dimension(250, Integer.MAX_VALUE));
+		final JXTitledPanel panel = new JXTitledPanel("Steps");
+		panel.getContentContainer().setLayout(new BorderLayout());
+		panel.getContentContainer().add(new JScrollPane(stepList), BorderLayout.CENTER);
+		add(panel, BorderLayout.WEST);
+		
 		super.btnFinish.setVisible(false);
 	}
 	
@@ -124,6 +138,10 @@ public class NodeWizard extends WizardFrame {
 	
 	public OpGraph getGraph() {
 		return this.graph;
+	}
+	
+	public Processor getProcessor() {
+		return processor;
 	}
 	
 	public WizardExtension getWizardExtension() {
@@ -140,16 +158,31 @@ public class NodeWizard extends WizardFrame {
 				statusLabel.setText(nodeName);
 				btnBack.setEnabled(false);
 			});
+			executionStarted(pe);
 		} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
-			
 		} else if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
 			SwingUtilities.invokeLater( () -> {
 				busyLabel.setBusy(false);
 				statusLabel.setText("");
 				btnBack.setEnabled(true);
 			});
+			executionEnded(pe);
 		}
 	};
+	
+	/**
+	 * Called when the processors begins
+	 */
+	public void executionStarted(ProcessorEvent pe) {
+		
+	}
+	
+	/**
+	 * Called when the processor ends
+	 */
+	public void executionEnded(ProcessorEvent pe) {
+		
+	}
 	
 	protected void executeGraph() throws ProcessingException {
 		setupContext(processor.getContext());
@@ -185,18 +218,17 @@ public class NodeWizard extends WizardFrame {
 				final Component comp = settings.getComponent(null);
 			
 				final WizardStep step = new WizardStep();
-				step.setLayout(new BorderLayout());
+				final BorderLayout layout = new BorderLayout();
+				step.setLayout(layout);
 				
-				final JXTitledSeparator stepTitle = 
-						new JXTitledSeparator(ext.getNodeTitle(node));
-				step.add(stepTitle, BorderLayout.NORTH);
-				step.add(new JScrollPane(comp), BorderLayout.CENTER);
+				final JXTitledPanel panel = new JXTitledPanel(ext.getNodeTitle(node));
+				panel.getContentContainer().setLayout(new BorderLayout());
+				panel.getContentContainer().add(new JScrollPane(comp), BorderLayout.CENTER);
 				
-				if(ext.getNodeMessage(node) != null && ext.getNodeMessage(node).length() > 0) {
-					final JEditorPane editorPane = new JEditorPane("text/html", 
-							ext.getNodeMessage(node));
-					step.add(new JScrollPane(editorPane), BorderLayout.WEST);
-				}
+				step.add(panel, BorderLayout.CENTER);
+				
+				step.setTitle(ext.getNodeTitle(node));
+				step.putExtension(OpNode.class, node);
 				
 				return step;
 			} catch (NullPointerException e) {
@@ -209,9 +241,15 @@ public class NodeWizard extends WizardFrame {
 	
 	protected WizardStep createReportStep() {
 		final WizardStep retVal = new WizardStep();
+		retVal.setTitle("Report");
 		
 		retVal.setLayout(new BorderLayout());
-		retVal.add(getBufferPanel(), BorderLayout.CENTER);
+		
+		final JXTitledPanel panel = new JXTitledPanel("Report");
+		panel.getContentContainer().setLayout(new BorderLayout());
+		panel.getContentContainer().add(getBufferPanel(), BorderLayout.CENTER);
+		
+		retVal.add(panel, BorderLayout.CENTER);
 		
 		return retVal;
 	}
@@ -221,15 +259,16 @@ public class NodeWizard extends WizardFrame {
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final JXTitledSeparator stepTitle = 
-				new JXTitledSeparator(title);
-		retVal.add(stepTitle, BorderLayout.NORTH);
+		final JXTitledPanel stepTitle = 
+				new JXTitledPanel(title);
+		stepTitle.getContentContainer().setLayout(new BorderLayout());
 		
 		final JEditorPane editorPane = new JEditorPane("text/html", message);
 		editorPane.setEditable(false);
 		editorPane.setText(message);
 		
-		retVal.add(new JScrollPane(editorPane), BorderLayout.CENTER);
+		stepTitle.getContentContainer().add(new JScrollPane(editorPane), BorderLayout.CENTER);
+		retVal.add(stepTitle, BorderLayout.CENTER);
 		
 		return retVal;
 	}
@@ -238,21 +277,21 @@ public class NodeWizard extends WizardFrame {
 	public void gotoStep(int step) {
 		super.gotoStep(step);
 		
-		final Runnable inBg = () -> {
-			if(super.getCurrentStep() == reportStep) {
+		if(!inInit && getCurrentStep() == reportStep) {
+			final Runnable inBg = () -> {
 				try {
 					executeGraph();
 				} catch (ProcessingException e) {
 					e.printStackTrace();
 				}
-			}
-		};
-		
-		final Runnable onEDT = () -> {
-			PhonWorker.getInstance().invokeLater(inBg);
-		};
-		
-		SwingUtilities.invokeLater(onEDT);
+			};
+			
+			final Runnable onEDT = () -> {
+				PhonWorker.getInstance().invokeLater(inBg);
+			};
+			
+			SwingUtilities.invokeLater(onEDT);
+		}
 	}
 	
 }

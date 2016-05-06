@@ -17,6 +17,7 @@ import ca.phon.util.Tuple;
 
 /*
  * TODO finish javadoc
+ * TODO FIX@!!!
  */
 /**
  * <p>Helper class for building menus.  Menus items are 'addressed' using paths.  Paths are
@@ -98,10 +99,11 @@ public final class MenuBuilder {
 		final String name = path.substring(deepest.getObj1().length());
 		
 		JMenu retVal = null;
-		if(name.indexOf('/') >= 0 && createMenu) {
+		if(name.length() > 0 && createMenu) {
 			// create menu for each subpath
 			final String[] subpaths = name.split("/");
 			String curpath = deepest.getObj1();
+			if(curpath.endsWith("/")) curpath = curpath.substring(0, curpath.length()-1);
 			for(String subpath:subpaths) {
 				curpath += "/" + subpath;
 				retVal = addMenu(curpath, subpath);
@@ -262,6 +264,8 @@ public final class MenuBuilder {
 			retVal = ((JMenu)elem).getText();
 		} else if(elem instanceof JMenuItem) {
 			retVal = ((JMenuItem)elem).getText();
+		} else if(elem instanceof JPopupMenu) {
+			retVal = ((JPopupMenu)elem).getLabel();
 		}
 		if(retVal == null) {
 			if(elem == getRoot())
