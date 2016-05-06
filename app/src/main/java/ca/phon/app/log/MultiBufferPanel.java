@@ -21,8 +21,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
+import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.ByteSize;
 import ca.phon.util.icons.IconManager;
@@ -60,6 +62,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		toolbar = setupToolbar();
 		add(toolbar, BorderLayout.NORTH);
 		
+		final JButton saveAllButton = new JButton(new SaveAllBuffersAction(this));
+		
 		final ImageIcon upIcon = IconManager.getInstance().getIcon("actions/go-up", IconSize.SMALL);
 		final PhonUIAction moveUpAct = new PhonUIAction(this, "onMoveUp");
 		moveUpAct.putValue(PhonUIAction.SMALL_ICON, upIcon);
@@ -83,15 +87,16 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		final JScrollPane scroller = new JScrollPane(bufferList);
 		
 		final FormLayout layout = new FormLayout(
-				"fill:200px:grow, right:pref, pref",
+				"left:pref, fill:200px:grow, right:pref, pref",
 				"pref, pref, pref, fill:pref:grow");
 		final CellConstraints cc = new CellConstraints();
 		final JPanel leftPanel = new JPanel(layout);
 		
-		leftPanel.add(closeBtn, cc.xy(2, 1));
-		leftPanel.add(moveUpBtn, cc.xy(3, 2));
-		leftPanel.add(moveDownBtn, cc.xy(3, 3));
-		leftPanel.add(scroller, cc.xywh(1, 2, 2, 3));
+		leftPanel.add(saveAllButton, cc.xy(1, 1));
+		leftPanel.add(closeBtn, cc.xy(3, 1));
+		leftPanel.add(moveUpBtn, cc.xy(4, 2));
+		leftPanel.add(moveDownBtn, cc.xy(4, 3));
+		leftPanel.add(scroller, cc.xywh(1, 2, 3, 3));
 		
 		cardLayout = new CardLayout();
 		bufferPanel = new JPanel(cardLayout);
@@ -209,7 +214,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		
 		retVal.getSelectionModel().addListSelectionListener( (l) -> {
 			int selectedRow = bufferList.getSelectedRow();
-			if(selectedRow >= 0) {
+			if(selectedRow >= 0 && selectedRow < bufferList.getRowCount()) {
 				final String bufferName = bufferList.getModel().getValueAt(selectedRow, 0).toString();
 				cardLayout.show(bufferPanel, bufferName);
 			} else {
