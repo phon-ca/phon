@@ -159,7 +159,7 @@ public class IPAVariabilityNode extends TableOpNode implements NodeSettings {
 			outputTable.addRow(rowData);
 		}
 		
-		outputTable.setColumnTitle(0, "");
+		outputTable.setColumnTitle(0, "Session");
 		outputTable.setColumnTitle(1, "# Repeated IPA Target");
 		outputTable.setColumnTitle(2, "# All Correct");
 		outputTable.setColumnTitle(3, "# One or More Correct");
