@@ -84,22 +84,29 @@ public class SortNode extends TableOpNode implements NodeSettings {
 				final Object v1 = row1[colIdx];
 				final Object v2 = row2[colIdx];
 				
-				final String v1Txt = (v1 != null ? v1.toString() : "");
-				final String v2Txt = (v2 != null ? v2.toString() : "");
-				if(sc.getType() == SortType.PLAIN) {
-					retVal = v1Txt.compareTo(v2Txt);
-				} else if(sc.getType() == SortType.IPA) {
-					try {
-						IPATranscript v1ipa = 
-								(v1 != null && v1 instanceof IPATranscript ? (IPATranscript)v1 : IPATranscript.parseIPATranscript(v1Txt));
-						IPATranscript v2ipa = 
-								(v2 != null && v2 instanceof IPATranscript ? (IPATranscript)v2 : IPATranscript.parseIPATranscript(v2Txt));
-					
-						retVal = v1ipa.compareTo(v2ipa);
-					} catch (java.text.ParseException pe) {
-						throw new ProcessingException(null, pe);
+				// if both values are numbers, sort by number
+				if((v1 instanceof Number) && (v2 instanceof Number)) {
+					Float f1 = ((Number)v1).floatValue();
+					Float f2 = ((Number)v2).floatValue();
+					retVal = f1.compareTo(f2);
+				} else {
+					final String v1Txt = (v1 != null ? v1.toString() : "");
+					final String v2Txt = (v2 != null ? v2.toString() : "");
+					if(sc.getType() == SortType.PLAIN) {
+						retVal = v1Txt.compareTo(v2Txt);
+					} else if(sc.getType() == SortType.IPA) {
+						try {
+							IPATranscript v1ipa = 
+									(v1 != null && v1 instanceof IPATranscript ? (IPATranscript)v1 : IPATranscript.parseIPATranscript(v1Txt));
+							IPATranscript v2ipa = 
+									(v2 != null && v2 instanceof IPATranscript ? (IPATranscript)v2 : IPATranscript.parseIPATranscript(v2Txt));
+						
+							retVal = v1ipa.compareTo(v2ipa);
+						} catch (java.text.ParseException pe) {
+							throw new ProcessingException(null, pe);
+						}
+						
 					}
-					
 				}
 				
 				// reverse if necessary
