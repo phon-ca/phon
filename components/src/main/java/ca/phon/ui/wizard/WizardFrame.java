@@ -75,7 +75,7 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	private CardLayout stepLayout;
 	
-	private JPanel stepPanel;
+	protected JPanel stepPanel;
 	
 	private List<WizardListener> listeners = 
 			Collections.synchronizedList(new ArrayList<>());
@@ -192,6 +192,7 @@ public class WizardFrame extends CommonModuleFrame {
 		stepPanel.add(ws, uuid.toString());
 		if(steps.size() == 1)
 			gotoStep(0);
+		fireWizardEvent(new WizardEvent(WizardEventType.STEP_ADDED, this, steps.size()-1));
 	}
 	
 	public WizardStep addWizardStep(JComponent comp) {
