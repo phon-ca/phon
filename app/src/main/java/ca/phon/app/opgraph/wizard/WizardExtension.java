@@ -28,6 +28,10 @@ public class WizardExtension implements Iterable<OpNode> {
 	
 	private Map<OpNode, String> nodeMessages = new HashMap<>();
 	
+	private final List<OpNode> optionalNodes = new ArrayList<>();
+	
+	private final Map<OpNode, Boolean> optionalDefaults = new HashMap<>();
+	
 	private final OpGraph graph;
 	
 	public WizardExtension(OpGraph graph) {
@@ -85,6 +89,49 @@ public class WizardExtension implements Iterable<OpNode> {
 	
 	public void setNodeTitle(OpNode node, String title) {
 		nodeTitles.put(node, title);
+	}
+	
+	public OpNode getOptionalNode(int index) {
+		return optionalNodes.get(index);
+	}
+	
+	public void addOptionalNode(OpNode node) {
+		optionalNodes.add(node);
+	}
+	
+	public void addOptionalNode(int index, OpNode node) {
+		optionalNodes.add(index, node);
+	}
+	
+	public OpNode removeOptionalNode(int index) {
+		return optionalNodes.remove(index);
+	}
+	
+	public boolean removeOptionalNode(OpNode node) {
+		return optionalNodes.remove(node);
+	}
+
+	public int getOptionalNodeCount() {
+		return optionalNodes.size();
+	}
+	
+	public List<OpNode> getOptionalNodes() {
+		return optionalNodes;
+	}
+	
+	public Map<OpNode, Boolean> getOptionalNodeDefaults() {
+		return this.optionalDefaults;
+	}
+	
+	public void setOptionalNodeDefault(OpNode node, boolean enabled) {
+		this.optionalDefaults.put(node, enabled);
+	}
+	
+	public boolean getOptionalNodeDefault(OpNode node) {
+		boolean enabled = true;
+		if(this.optionalDefaults.containsKey(node))
+			enabled = this.optionalDefaults.get(node);
+		return enabled;
 	}
 	
 	public String getNodeTitle(OpNode node) {

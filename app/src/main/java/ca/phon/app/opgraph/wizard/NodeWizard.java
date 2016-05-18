@@ -1,21 +1,33 @@
 package ca.phon.app.opgraph.wizard;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTitledPanel;
@@ -32,9 +44,14 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
+import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 
 public class NodeWizard extends WizardFrame {
@@ -51,7 +68,27 @@ public class NodeWizard extends WizardFrame {
 	
 	protected WizardStep reportStep;
 	
+	protected WizardStep optionalsStep;
+	
+	private WizardOptionalsCheckboxTree optionalsTree;
+	
+	private WizardOptionsPanel optionsPanel;
+	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
+	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
+	public final static String PARTICIPANT_ROLE_GLOBAL_OPTION = "__participantRole";
+	
+	private JPanel centerPanel;
+	private CardLayout cardLayout;
+	private AbstractButton advancedSettingsButton;
+	
+	private AdvancedSettingsPanel advancedSettingsPanel;
+	
+	private final static String WIZARD_LIST = "_wizard_list_";
+	private final static String SETTINGS = "_settings_";
+	
 	boolean inInit = true;
+	
+	private volatile boolean running = false;
 	
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
@@ -102,17 +139,13 @@ public class NodeWizard extends WizardFrame {
 			addWizardStep(introStep);
 		}
 		
-		if(nodeWizardList != null) {
-			for(OpNode node:nodeWizardList) {
-				final WizardStep step = createStep(nodeWizardList, node);
-				if(step != null) {
-					step.setPrevStep(stepIdx-1);
-					step.setNextStep(stepIdx+1);
-					++stepIdx;
-					
-					addWizardStep(step);
-				}
-			}
+		if(nodeWizardList.getOptionalNodeCount() > 0) {
+			optionalsStep = createOptionalsStep();
+			optionalsStep.setPrevStep(stepIdx-1);
+			optionalsStep.setNextStep(stepIdx+1);
+			++stepIdx;
+			
+			addWizardStep(optionalsStep);
 		}
 		
 		reportStep = createReportStep();
@@ -124,10 +157,64 @@ public class NodeWizard extends WizardFrame {
 		stepList.setMinimumSize(new Dimension(250, 20));
 		stepList.setPreferredSize(new Dimension(250, 0));
 		stepList.setMaximumSize(new Dimension(250, Integer.MAX_VALUE));
+		
+		final JPanel leftPanel = new JPanel(new GridBagLayout());
+		gbc.anchor = GridBagConstraints.EAST;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.insets = new Insets(2, 2, 2, 2);
+		
 		final JXTitledPanel panel = new JXTitledPanel("Steps");
 		panel.getContentContainer().setLayout(new BorderLayout());
 		panel.getContentContainer().add(new JScrollPane(stepList), BorderLayout.CENTER);
-		add(panel, BorderLayout.WEST);
+		leftPanel.add(panel, gbc);
+		
+		++gbc.gridy;
+		gbc.weighty = 0.0;
+		optionsPanel = new WizardOptionsPanel();
+		final JXTitledPanel panel1 = new JXTitledPanel("Settings");
+		panel1.getContentContainer().setLayout(new BorderLayout());
+		panel1.getContentContainer().add(optionsPanel, BorderLayout.CENTER);
+		leftPanel.add(panel1, gbc);
+		
+		add(leftPanel, BorderLayout.WEST);
+		
+		// setup card layout
+		cardLayout = new CardLayout();
+		centerPanel = new JPanel(cardLayout);
+		centerPanel.add(stepPanel, WIZARD_LIST);
+		advancedSettingsPanel = new AdvancedSettingsPanel(nodeWizardList);
+		final JXTitledPanel advPanel = new JXTitledPanel("Advanced Settings");
+		advPanel.getContentContainer().setLayout(new BorderLayout());
+		advPanel.getContentContainer().add(advancedSettingsPanel);
+		
+		ImageIcon closeIcon = IconManager.getInstance().getIcon("misc/x-bold-white", IconSize.XSMALL);
+		JButton closeBtn = new JButton(closeIcon);
+		closeBtn.setBorderPainted(false);
+		closeBtn.setToolTipText("Close advanced settings");
+		closeBtn.addActionListener( (e) -> cardLayout.show(centerPanel, WIZARD_LIST) );
+		advPanel.setRightDecoration(closeBtn);
+		
+		centerPanel.add(advPanel, SETTINGS);
+		add(centerPanel, BorderLayout.CENTER);
+		
+		final ImageIcon icn = 
+				IconManager.getInstance().getIcon("actions/settings-white", IconSize.XSMALL);
+		advancedSettingsButton = new JButton();
+		advancedSettingsButton.setIcon(icn);
+		advancedSettingsButton.setBorderPainted(false);
+		advancedSettingsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		advancedSettingsButton.setToolTipText("Show advanced settings");
+		advancedSettingsButton.setVisible(nodeWizardList.size() > 0);
+		advancedSettingsButton.addActionListener( (e) -> {
+			cardLayout.show(centerPanel, SETTINGS);
+		});
+		panel1.setRightDecoration(advancedSettingsButton);
 		
 		super.btnFinish.setVisible(false);
 	}
@@ -174,14 +261,22 @@ public class NodeWizard extends WizardFrame {
 	 * Called when the processors begins
 	 */
 	public void executionStarted(ProcessorEvent pe) {
-		
+		running = true;
+		btnCancel.setText("Stop Analysis");
 	}
 	
 	/**
 	 * Called when the processor ends
 	 */
 	public void executionEnded(ProcessorEvent pe) {
-		
+		running = false;
+		btnCancel.setText("Close");
+	}
+	
+	public void stopExecution() {
+		if(processor != null) {
+			processor.stop();
+		}
 	}
 	
 	protected void executeGraph() throws ProcessingException {
@@ -189,6 +284,8 @@ public class NodeWizard extends WizardFrame {
 		if(!processor.hasNext()) {
 			processor.reset();
 		}
+		setupOptionals(processor.getContext());
+		setupGlobalOptions(processor.getContext());
 		processor.addProcessorListener(processorListener);
 		try {
 			processor.stepAll();
@@ -202,6 +299,8 @@ public class NodeWizard extends WizardFrame {
 				pe.printStackTrace(writer);
 				writer.flush();
 				writer.close();
+				
+				executionEnded(new ProcessorEvent());
 			});
 			throw pe;
 		}
@@ -209,6 +308,26 @@ public class NodeWizard extends WizardFrame {
 
 	protected void setupContext(OpContext ctx) {
 		ctx.put(PrintBufferNode.BUFFERS_KEY, bufferPanel);
+	}
+	
+	protected void setupOptionals(OpContext ctx) {
+		for(OpNode node:getWizardExtension().getOptionalNodes()) {
+			final TreePath nodePath = optionalsTree.getNodePath(node);
+			boolean enabled = optionalsTree.getCheckingModel().isPathChecked(nodePath);
+			
+			OpContext nodeCtx = ctx;
+			for(int i = 1; i < nodePath.getPathCount(); i++) {
+				CheckedOpNode treeNode = (CheckedOpNode)nodePath.getPathComponent(i);
+				nodeCtx = nodeCtx.getChildContext(treeNode.getNode());
+			}
+			nodeCtx.put(OpNode.ENABLED_FIELD, Boolean.valueOf(enabled));
+		}
+	}
+	
+	protected void setupGlobalOptions(OpContext ctx) {
+		ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, optionsPanel.isCaseSensitive());
+		ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, optionsPanel.isIgnoreDiacritics());
+		ctx.put(PARTICIPANT_ROLE_GLOBAL_OPTION, optionsPanel.getSelectedParticipantRole());
 	}
 	
 	protected WizardStep createStep(WizardExtension ext, OpNode node) {
@@ -254,6 +373,28 @@ public class NodeWizard extends WizardFrame {
 		return retVal;
 	}
 	
+	protected WizardStep createOptionalsStep() {
+		final WizardStep retVal = new WizardStep();
+		retVal.setTitle("Optional Analysis");
+		
+		retVal.setLayout(new BorderLayout());
+		
+		final JXTitledPanel panel = new JXTitledPanel("Optional Analysis");
+		panel.getContentContainer().setLayout(new BorderLayout());
+		
+		optionalsTree = new WizardOptionalsCheckboxTree(getWizardExtension());
+		for(OpNode optionalNode:getWizardExtension().getOptionalNodes()) {
+			if(getWizardExtension().getOptionalNodeDefault(optionalNode)) {
+				optionalsTree.checkNode(optionalNode);
+			}
+		}
+		
+		panel.getContentContainer().add(new JScrollPane(optionalsTree), BorderLayout.CENTER);
+		retVal.add(panel, BorderLayout.CENTER);
+		
+		return retVal;
+	}
+	
 	protected WizardStep createIntroStep(String title, String message) {
 		final WizardStep retVal = new WizardStep();
 		
@@ -277,7 +418,11 @@ public class NodeWizard extends WizardFrame {
 	public void gotoStep(int step) {
 		super.gotoStep(step);
 		
+		if(cardLayout != null)
+			cardLayout.show(centerPanel, WIZARD_LIST);
+		
 		if(!inInit && getCurrentStep() == reportStep) {
+
 			final Runnable inBg = () -> {
 				try {
 					executeGraph();
@@ -287,11 +432,35 @@ public class NodeWizard extends WizardFrame {
 			};
 			
 			final Runnable onEDT = () -> {
+				if(bufferPanel.getBufferNames().size() > 0) {
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setTitle("Re-run analysis");
+					props.setHeader("Re-run analysis");
+					props.setMessage("Clear results and re-run analysis.");
+					props.setOptions(MessageDialogProperties.okCancelOptions);
+					props.setRunAsync(false);
+					props.setParentWindow(this);
+		
+					int retVal = NativeDialogs.showMessageDialog(props);
+					if(retVal == 1) return;
+				}
+				
 				PhonWorker.getInstance().invokeLater(inBg);
 			};
 			
 			SwingUtilities.invokeLater(onEDT);
 		}
 	}
+
+	@Override
+	protected void cancel() {
+		if(running) {
+			stopExecution();
+		} else {
+			super.cancel();
+		}
+	}
+	
+	
 	
 }
