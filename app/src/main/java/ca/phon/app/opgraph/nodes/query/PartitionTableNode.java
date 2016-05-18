@@ -54,6 +54,8 @@ public class PartitionTableNode extends TableScriptNode {
 			scriptContext.installParams(scope);
 			
 			for(int row = 0; row < table.getRowCount(); row++) {
+				checkCanceled();
+				
 				final Map<String, Object> rowData = new LinkedHashMap<>();
 				
 				for(int col = 0; col < table.getColumnCount(); col++) {

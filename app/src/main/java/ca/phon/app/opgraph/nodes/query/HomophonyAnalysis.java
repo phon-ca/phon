@@ -23,6 +23,7 @@ import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.LevenshteinDistance;
 import ca.phon.ipa.tree.IpaTernaryTree;
@@ -43,7 +44,7 @@ public class HomophonyAnalysis extends TableOpNode implements NodeSettings {
 	
 	private JPanel settingsPanel;
 	
-	private boolean ignoreDiacritics = true;
+	private boolean ignoreDiacritics = false;
 	
 	public HomophonyAnalysis() {
 		super();
@@ -71,7 +72,13 @@ public class HomophonyAnalysis extends TableOpNode implements NodeSettings {
 		final Map<GroupKey, Map<String, Integer>> orthoTokens = new LinkedHashMap<>();
 		final Map<GroupKey, Map<IPATranscript, Integer>> ipaTargetTokens = new LinkedHashMap<>();
 		
+		boolean ignoreDiacritics = 
+				(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) ?
+						(Boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) : isIgnoreDiacritics());
+		
 		for(int row = 0; row < table.getRowCount(); row++) {
+			checkCanceled();
+			
 			final Object groupVal = 
 					(sessionIdx >= 0 ? table.getValueAt(row, sessionIdx) : "*");
 			final GroupKey groupKey = new GroupKey(groupVal);
@@ -112,6 +119,8 @@ public class HomophonyAnalysis extends TableOpNode implements NodeSettings {
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
 		
 		for(GroupKey groupKey:orthoTokens.keySet()) {
+			checkCanceled();
+			
 			final Object[] rowData = new Object[7];
 			
 			int homophonousTypes = 0;
@@ -151,6 +160,16 @@ public class HomophonyAnalysis extends TableOpNode implements NodeSettings {
 		
 		context.put(tableOutput, outputTable);
 	}
+	
+	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
+		this.ignoreDiacritics = ignoreDiacritics;
+		if(this.ignoreDiacriticsBox != null)
+			this.ignoreDiacriticsBox.setSelected(ignoreDiacritics);;
+	}
+	
+	public boolean isIgnoreDiacritics() {
+		return (this.ignoreDiacriticsBox != null ? this.ignoreDiacriticsBox.isSelected() : this.ignoreDiacritics);
+	}
 
 	@Override
 	public Component getComponent(GraphDocument document) {
@@ -185,7 +204,7 @@ public class HomophonyAnalysis extends TableOpNode implements NodeSettings {
 	@Override
 	public void loadSettings(Properties properties) {
 		if(properties.contains("ignoreDiacritics"))
-			ignoreDiacritics = Boolean.parseBoolean(properties.getProperty("ignoreDiacritics"));
+			setIgnoreDiacritics(Boolean.parseBoolean(properties.getProperty("ignoreDiacritics")));
 	}
 
 	private class GroupKey implements Comparable<GroupKey> {
@@ -200,12 +219,12 @@ public class HomophonyAnalysis extends TableOpNode implements NodeSettings {
 			if(!(o2 instanceof GroupKey)) return false;
 			return TableUtils.checkEquals(key, ((GroupKey)o2).key, 
 					false,
-					ignoreDiacritics);
+					isIgnoreDiacritics());
 		}
 		
 		@Override
 		public String toString() {
-			return TableUtils.objToString(key, ignoreDiacritics);
+			return TableUtils.objToString(key, isIgnoreDiacritics());
 		}
 		
 		@Override

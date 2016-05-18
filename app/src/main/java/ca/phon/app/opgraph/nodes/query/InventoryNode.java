@@ -17,6 +17,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.query.TableUtils;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
@@ -75,6 +76,25 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		final TableDataSource inputTable = (TableDataSource)context.get(tableInput);
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
 
+		// setup options based on global inputs
+		ColumnInfo groupBy = getInventorySettings().getGroupBy();
+		if(groupBy != null) {
+			if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+				groupBy.caseSensitive = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
+			}
+			if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+				groupBy.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
+			}
+		}
+		for(ColumnInfo info:getInventorySettings().getColumns()) {
+			if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+				info.caseSensitive = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
+			}
+			if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+				info.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
+			}
+		}
+		
 		Set<GroupKey> groupKeys = collectGroupKeys(inputTable);
 		
 		Map<InventoryRowData, Map<GroupKey, Long>> inventory = 
@@ -130,6 +150,8 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		int[] inventoryCols = getColumnIndices(table, getColumns());
 		
 		for(int row = 0; row < table.getRowCount(); row++) {
+			checkCanceled();
+			
 			Object grouping = (groupingCol >= 0 
 					? table.getValueAt(row, groupingCol) : "Total");
 			

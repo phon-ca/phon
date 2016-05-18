@@ -43,6 +43,8 @@ public class RowFilterNode extends TableScriptNode {
 			scriptContext.installParams(scope);
 			
 			for(int row = 0; row < table.getRowCount(); row++) {
+				checkCanceled();
+				
 				Object isFilterRow = scriptContext.callFunction(scope, "filterRow", 
 						table, row);
 				

@@ -19,6 +19,7 @@ import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.RecordContainer;
 import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -117,9 +118,27 @@ public class QueryNode extends OpNode implements NodeSettings {
 		}
 		qScript.setParameters(sparams);
 		qScript.setMimeType("text/javascript");
-		
 		query.setDate(LocalDateTime.now());
-		
+
+		for(ScriptParam sp:scriptParams) {
+			for(String paramId:sp.getParamIds()) {
+				if(paramId.endsWith("ignoreDiacritics")
+						&& opCtx.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+					sp.setValue(paramId, opCtx.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
+				}
+				
+				if(paramId.endsWith("caseSensitive")
+						&& opCtx.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+					sp.setValue(paramId, opCtx.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));
+				}
+				
+				if(paramId.endsWith("participantRole")
+						&& opCtx.containsKey(NodeWizard.PARTICIPANT_ROLE_GLOBAL_OPTION)) {
+					sp.setValue(paramId, opCtx.get(NodeWizard.PARTICIPANT_ROLE_GLOBAL_OPTION));
+				}
+			}
+		}
+				
 		final List<RecordContainer> recordContainers =
 				RecordContainer.toRecordContainers(project, inputObj);
 		
@@ -132,6 +151,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 		
 		int serial = 0;
 		for(RecordContainer rc:recordContainers) {
+			checkCanceled();
 			try {
 				QueryTask task = new QueryTask(project, rc.getSession(), rc.idxIterator(), queryScript, ++serial);
 				task.run();

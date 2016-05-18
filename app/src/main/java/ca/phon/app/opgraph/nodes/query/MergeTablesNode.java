@@ -457,12 +457,14 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		// collect unique row keys from both tables
 		Set<String> rowKeys = new LinkedHashSet<>();
 		for(int row = 0; row < table1.getRowCount(); row++) {
+			checkCanceled();
 			String rowKey = TableUtils.objToString(table1.getValueAt(row, table1KeyCol), getTable1KeyColumnIgnoreDiacritics());
 			if(getTable1KeyColumnCaseSensitive())
 				rowKey = rowKey.toLowerCase();
 			rowKeys.add(rowKey);
 		}
 		for(int row = 0; row < table2.getRowCount(); row++) {
+			checkCanceled();
 			String rowKey = TableUtils.objToString(table2.getValueAt(row, table1KeyCol), getTable2KeyColumnIgnoreDiacritics());
 			if(getTable2KeyColumnCaseSensitive())
 				rowKey = rowKey.toLowerCase();
@@ -472,6 +474,8 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		// create output table
 		int numCols = 1 + table1Columns.size() + table2Columns.size();
 		for(String rowKey:rowKeys) {
+			checkCanceled();
+			
 			int col = 0;
 			Object rowData[] = new Object[numCols];
 			rowData[col++] = rowKey;

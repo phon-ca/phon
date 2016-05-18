@@ -66,12 +66,19 @@ public class IPAVariabilityNode extends TableOpNode implements NodeSettings {
 		// TODO make this an option
 		int sessionIdx = super.getColumnIndex(table, "Session");
 		
+		boolean ignoreDiacritics = isIgnoreDiacritics();
+		if(context.containsKey("ignoreDiacritics")) {
+			ignoreDiacritics = (boolean)context.get("ignoreDiacritics");
+		}
+		
 		final Map<GroupKey, IpaTernaryTree<List<IPATranscript>>> tokenCounts =
 				new LinkedHashMap<>();
 		for(int row = 0; row < table.getRowCount(); row++) {
+			checkCanceled();
+			
 			final Object groupVal = 
 					(sessionIdx >= 0 ? table.getValueAt(row, sessionIdx) : "*");
-			final GroupKey groupKey = new GroupKey(groupVal);
+			final GroupKey groupKey = new GroupKey(groupVal, ignoreDiacritics);
 			IpaTernaryTree<List<IPATranscript>> tokenCount = 
 					tokenCounts.get(groupKey);
 			if(tokenCount == null) {
@@ -116,6 +123,8 @@ public class IPAVariabilityNode extends TableOpNode implements NodeSettings {
 			numRepatedWords = repeatedTokens.size();
 			
 			for(IPATranscript ipa:repeatedTokens) {
+				checkCanceled();
+				
 				int numCorrect = 0;
 				
 				final List<IPATranscript> productions = tokenCount.get(ipa);
@@ -192,6 +201,16 @@ public class IPAVariabilityNode extends TableOpNode implements NodeSettings {
 		}
 		return settingsPanel;
 	}
+	
+	public boolean isIgnoreDiacritics() {
+		return (this.ignoreDiacriticsBox != null ? this.ignoreDiacriticsBox.isSelected() : this.ignoreDiacritics);
+	}
+	
+	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
+		this.ignoreDiacritics = ignoreDiacritics;
+		if(this.ignoreDiacriticsBox != null)
+			this.ignoreDiacriticsBox.setSelected(ignoreDiacritics);
+	}
 
 	@Override
 	public Properties getSettings() {
@@ -209,8 +228,11 @@ public class IPAVariabilityNode extends TableOpNode implements NodeSettings {
 	private class GroupKey implements Comparable<GroupKey> {
 		Object key;
 		
-		public GroupKey(Object key) {
+		boolean ignoreDiacritics;
+		
+		public GroupKey(Object key, boolean ignoreDiacritics) {
 			this.key = key;
+			this.ignoreDiacritics = ignoreDiacritics;
 		}
 		
 		@Override
@@ -218,12 +240,12 @@ public class IPAVariabilityNode extends TableOpNode implements NodeSettings {
 			if(!(o2 instanceof GroupKey)) return false;
 			return TableUtils.checkEquals(key, ((GroupKey)o2).key, 
 					false,
-					ignoreDiacritics);
+					this.ignoreDiacritics);
 		}
 		
 		@Override
 		public String toString() {
-			return TableUtils.objToString(key, ignoreDiacritics);
+			return TableUtils.objToString(key, this.ignoreDiacritics);
 		}
 		
 		@Override

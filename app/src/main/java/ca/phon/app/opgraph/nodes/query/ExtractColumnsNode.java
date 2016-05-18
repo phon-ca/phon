@@ -55,6 +55,7 @@ public class ExtractColumnsNode extends TableOpNode implements NodeSettings {
 		
 		Object[] rowData = new Object[columnIndices.length];
 		for(int i = 0; i < table.getRowCount(); i++) {
+			checkCanceled();
 			for(int j = 0; j < rowData.length; j++) {
 				final int colIdx = columnIndices[j];
 				rowData[j] = 
