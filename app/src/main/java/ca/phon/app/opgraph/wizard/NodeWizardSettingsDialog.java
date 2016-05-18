@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JTabbedPane;
 
 import ca.gedge.opgraph.OpNode;
 import ca.phon.ui.action.PhonUIAction;

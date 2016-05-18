@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -106,8 +107,6 @@ public class WizardStepList extends JPanel {
 		gbc.gridy = 0;
 		gbc.insets = new Insets(5, 20, 5, 2);
 
-		final WizardExtension ext = getWizard().getGraph().getExtension(WizardExtension.class);
-		
 		for(int stepIdx = 0; stepIdx < getWizard().numberOfSteps(); stepIdx++) {
 			++gbc.gridy;
 			final WizardStep step = getWizard().getWizardStep(stepIdx);
@@ -115,18 +114,6 @@ public class WizardStepList extends JPanel {
 			stepLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			stepLbl.addMouseListener(new GotoStepListener(stepIdx));
 			add(stepLbl, gbc);
-			
-			final OpNode node = step.getExtension(OpNode.class);
-			if(ext != null && node != null && ext.getNodeMessage(node) != null) {
-				final String nodeMessage = ext.getNodeMessage(node);
-				if(nodeMessage.length() > 0) {
-					++gbc.gridy;
-					gbc.insets.left = 40;
-					final JLabel infoLabel = new JLabel(ext.getNodeMessage(node));
-					add(infoLabel, gbc);
-					gbc.insets.left = 20;
-				}
-			}
 			
 			stepLabels.put(stepIdx, stepLbl);
 		}

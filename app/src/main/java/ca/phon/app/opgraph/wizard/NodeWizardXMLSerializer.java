@@ -64,6 +64,15 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 			settingsEle.appendChild(nodeEle);
 		}
 		
+		for(OpNode node:nodeList.getOptionalNodes()) {
+			final Element nodeEle = 
+					doc.createElementNS(NAMESPACE, PREFIX + ":optionalNode");
+			nodeEle.setAttribute("ref", node.getId());
+			nodeEle.setAttribute("enabled", Boolean.toString(nodeList.getOptionalNodeDefault(node)));
+			
+			settingsEle.appendChild(nodeEle);
+		}
+		
 		parentElem.appendChild(settingsEle);
 	}
 
@@ -132,6 +141,16 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 						}
 					}
 				}
+			} else if(child.getNodeName().equals(PREFIX + ":optionalNode")) {
+				final String nodeId = child.getAttributes().getNamedItem("ref").getNodeValue();
+				final OpNode node = graph.getNodeById(nodeId, true);
+				if(child.getAttributes().getNamedItem("enabled") != null) {
+					ext.setOptionalNodeDefault(node, 
+							Boolean.parseBoolean(
+									child.getAttributes().getNamedItem("enabled").getNodeValue()));
+				}
+				if(node != null) 
+					ext.addOptionalNode(node);
 			}
 		}
 		

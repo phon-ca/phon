@@ -1,5 +1,6 @@
 package ca.phon.app.opgraph.wizard;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -11,9 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.derby.catalog.GetProcedureColumns;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.gedge.opgraph.OpGraph;
@@ -41,8 +44,15 @@ public class NodeWizardPanel extends JPanel {
 	
 	private GraphDocument document;
 	
+	private JTabbedPane tabPane;
+	
+	private JPanel nodePanel;
 	private JTable nodeTable;
 	private NodeWizardTableModel nodeTableModel;
+	
+	private JPanel optionalNodePanel;
+	private JTable optionalNodeTable;
+	private OptionalNodeTableModel optionalNodeTableModel;
 	
 	private JButton addToWizardButton;
 	
@@ -70,6 +80,18 @@ public class NodeWizardPanel extends JPanel {
 		nodeTableModel = new NodeWizardTableModel();
 		nodeTable = new JTable(nodeTableModel);
 		final JScrollPane scroller = new JScrollPane(nodeTable);
+		nodePanel = new JPanel(new BorderLayout());
+		nodePanel.add(scroller, BorderLayout.CENTER);
+		
+		optionalNodeTableModel = new OptionalNodeTableModel();
+		optionalNodeTable = new JTable(optionalNodeTableModel);
+		final JScrollPane optionalScroller = new JScrollPane(optionalNodeTable);
+		optionalNodePanel = new JPanel(new BorderLayout());
+		optionalNodePanel.add(optionalScroller, BorderLayout.CENTER);
+		
+		tabPane = new JTabbedPane();
+		tabPane.add("Wizard Nodes", nodePanel);
+		tabPane.add("Optional Nodes", optionalNodePanel);
 		
 		settingsButton = new JButton(new EditSettingsAction(this));
 		settingsButton.setText("");
@@ -116,7 +138,7 @@ public class NodeWizardPanel extends JPanel {
 		gbc.weighty = 1.0;
 		gbc.gridheight = 3;
 		gbc.gridwidth = 3;
-		add(scroller, gbc);
+		add(tabPane, gbc);
 	}
 	
 	public GraphDocument getDocument() {
@@ -136,8 +158,14 @@ public class NodeWizardPanel extends JPanel {
 	public List<OpNode> getSelectedNodes() {
 		List<OpNode> retVal = new ArrayList<>();
 		
-		for(int selectedRow:nodeTable.getSelectedRows()) {
-			retVal.add(wizardExtension.getNode(selectedRow));
+		if(getVisibleTab().equals("Wizard Nodes")) {
+			for(int selectedRow:nodeTable.getSelectedRows()) {
+				retVal.add(wizardExtension.getNode(selectedRow));
+			}
+		} else {
+			for(int selectedRow:optionalNodeTable.getSelectedRows()) {
+				retVal.add(wizardExtension.getOptionalNode(selectedRow));
+			}
 		}
 		
 		return retVal;
@@ -145,6 +173,91 @@ public class NodeWizardPanel extends JPanel {
 	
 	public void updateTable() {
 		nodeTableModel.fireTableDataChanged();
+	}
+	
+	public void updateOptionalTable() {
+		optionalNodeTableModel.fireTableDataChanged();
+	}
+	
+	public String getVisibleTab() {
+		return tabPane.getTitleAt(tabPane.getSelectedIndex());
+	}
+	
+	private class OptionalNodeTableModel extends AbstractTableModel {
+		
+		@Override
+		public int getRowCount() {
+			return wizardExtension.getOptionalNodeCount();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return 2;
+		}
+		
+		@Override
+		public String getColumnName(int column) {
+			String retVal = super.getColumnName(column);
+			
+			if(column == 0) {
+				retVal = "Node";
+			} else if (column == 1) {
+				retVal = "Enabled";
+			}
+			
+			return retVal;
+		}
+		
+		@Override
+		public Class<?> getColumnClass(int col) {
+			Class<?> retVal = Object.class;
+			
+			if(col == 0) {
+				retVal = String.class;
+			} else if(col == 1) {
+				retVal = Boolean.class;
+			}
+			
+			return retVal;
+		}
+		
+		@Override
+		public boolean isCellEditable(int row, int col) {
+			boolean retVal = false;
+			
+			if(col == 1) retVal = true;
+			
+			return retVal;
+		}
+		
+		@Override
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+			if(columnIndex == 1) {
+				wizardExtension.setOptionalNodeDefault(
+						wizardExtension.getOptionalNode(rowIndex), 
+						Boolean.parseBoolean(aValue.toString()));
+			}
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			final OpNode node = wizardExtension.getOptionalNode(rowIndex);
+			
+			if(columnIndex == 0) {
+				final OpGraph graph = wizardExtension.getGraph();
+				final List<OpNode> nodePath = graph.getNodePath(node.getId());
+				final String path = 
+						nodePath.stream()
+						.map( n -> n.getName() )
+						.collect( Collectors.joining("/") );
+				return path;
+			} else if(columnIndex == 1) {
+				return wizardExtension.getOptionalNodeDefault(node);
+			}
+			
+			return "";
+		}
+		
 	}
 	
 	private class NodeWizardTableModel extends AbstractTableModel {
