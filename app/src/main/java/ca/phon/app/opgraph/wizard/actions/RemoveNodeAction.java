@@ -7,6 +7,7 @@ import javax.swing.undo.CompoundEdit;
 
 import ca.gedge.opgraph.OpNode;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;
+import ca.phon.app.opgraph.wizard.edits.RemoveOptionalNodeEdit;
 import ca.phon.app.opgraph.wizard.edits.RemoveWizardNodeEdit;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -30,9 +31,15 @@ public class RemoveNodeAction extends WizardPanelAction {
 		
 		final CompoundEdit edit = new CompoundEdit();
 		for(OpNode node:toRemove) {
-			final RemoveWizardNodeEdit rmEdit = new RemoveWizardNodeEdit(panel, node);
-			rmEdit.doIt();
-			edit.addEdit(rmEdit);
+			if(panel.getVisibleTab().equals("Wizard Nodes")) {
+				final RemoveWizardNodeEdit rmEdit = new RemoveWizardNodeEdit(panel, node);
+				rmEdit.doIt();
+				edit.addEdit(rmEdit);
+			} else {
+				final RemoveOptionalNodeEdit rmEdit = new RemoveOptionalNodeEdit(panel, node);
+				rmEdit.doIt();
+				edit.addEdit(rmEdit);
+			}
 		}
 		edit.end();
 		

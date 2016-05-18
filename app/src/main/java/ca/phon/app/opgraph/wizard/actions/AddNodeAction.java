@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 import ca.gedge.opgraph.OpNode;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;
+import ca.phon.app.opgraph.wizard.edits.AddOptionalNodeEdit;
 import ca.phon.app.opgraph.wizard.edits.AddWizardNodeEdit;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -33,10 +34,17 @@ public class AddNodeAction extends WizardPanelAction {
 		final OpNode selectedNode =
 				panel.getDocument().getSelectionModel().getSelectedNode();
 		if(selectedNode != null) {
-			final AddWizardNodeEdit edit = 
-					new AddWizardNodeEdit(panel, selectedNode);
-			edit.doIt();
-			panel.getDocument().getUndoSupport().postEdit(edit);
+			if(panel.getVisibleTab().equals("Wizard Nodes")) {
+				final AddWizardNodeEdit edit = 
+						new AddWizardNodeEdit(panel, selectedNode);
+				edit.doIt();
+				panel.getDocument().getUndoSupport().postEdit(edit);
+			} else {
+				final AddOptionalNodeEdit edit = 
+						new AddOptionalNodeEdit(panel, selectedNode);
+				edit.doIt();
+				panel.getDocument().getUndoSupport().postEdit(edit);
+			}
 		}
 	}
 
