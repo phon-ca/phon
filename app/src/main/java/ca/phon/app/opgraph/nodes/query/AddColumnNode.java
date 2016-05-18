@@ -1,12 +1,16 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.mozilla.javascript.NativeJavaObject;
@@ -49,6 +53,10 @@ public class AddColumnNode extends TableScriptNode {
 	// settings
 	private String columnName = "NewColumn";
 	
+	private int columnIndex = -1;
+	
+	private PromptedTextField columnIndexField;
+	
 	// UI
 	private PromptedTextField columnNameField;
 	
@@ -65,15 +73,24 @@ public class AddColumnNode extends TableScriptNode {
 		
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
 		
+		int columnCount = table.getColumnCount() + 1;
+		int colIndex = (getColumnIndex() >= 0 ? getColumnIndex() : columnCount-1);
+		
 		try {
 			final Scriptable scope = scriptContext.getEvaluatedScope();
 			scriptContext.installParams(scope);
 			
 			for(int row = 0; row < table.getRowCount(); row++) {
-				final Map<String, Object> rowData = new LinkedHashMap<>();
+				checkCanceled();
 				
-				for(int col = 0; col < table.getColumnCount(); col++) {
-					rowData.put(table.getColumnTitle(col), table.getValueAt(row, col));
+				final Object[] rowData = new Object[columnCount];
+				
+				
+				for(int col = 0; col < colIndex; col++) {
+					rowData[col] = table.getValueAt(row, col);
+				}
+				for(int col = colIndex+1; (col-1) < table.getColumnCount(); col++) {
+					rowData[col] = table.getValueAt(row, col-1);
 				}
 				
 				Object newVal = scriptContext.callFunction(scope, "getRowValue", 
@@ -82,32 +99,58 @@ public class AddColumnNode extends TableScriptNode {
 					newVal = ((NativeJavaObject)newVal).unwrap();
 				}
 				
-				rowData.put(getColumnName(), (newVal != null ?
-						newVal : new String()));
+				rowData[colIndex] = (newVal != null ? newVal : new String());
 				
 				// add row to outputtable
-				outputTable.addRow(rowData.values().toArray());
+				outputTable.addRow(rowData);
 			}
 		} catch (PhonScriptException e) {
 			throw new ProcessingException(null, e);
 		}
 		
-		for(int i = 0; i < table.getColumnCount(); i++) 
-			outputTable.setColumnTitle(i, table.getColumnTitle(i));
-		outputTable.setColumnTitle(outputTable.getColumnCount()-1, getColumnName());
+		for(int col = 0; col < colIndex; col++) 
+			outputTable.setColumnTitle(col, table.getColumnTitle(col));
+		outputTable.setColumnTitle(colIndex, getColumnName());
+		for(int col = colIndex+1; (col-1) < table.getColumnCount(); col++) 
+			outputTable.setColumnTitle(col, table.getColumnTitle(col-1));
 		
 		context.put(tableOutput, outputTable);
 	}
 	
 	@Override
 	protected JPanel createSettingsPanel() {
-		JPanel retVal = super.createSettingsPanel();
+		final JPanel retVal = super.createSettingsPanel();
 		
+		final GridBagLayout layout = new GridBagLayout();
+		final JPanel settingsPanel = new JPanel(layout);
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(2, 2, 2, 2);
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		
+		settingsPanel.add(new JLabel("Column Name:"), gbc);
+		++gbc.gridx;
+		gbc.weightx = 1.0;
 		columnNameField = new PromptedTextField("Enter new column name");
 		columnNameField.setText(this.columnName);
-		columnNameField.setBorder(
-				BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Column name"), columnNameField.getBorder()));
-		retVal.add(columnNameField, BorderLayout.NORTH);
+		settingsPanel.add(columnNameField, gbc);
+		
+		++gbc.gridy;
+		gbc.gridx = 0;
+		gbc.weightx = 0.0;
+		settingsPanel.add(new JLabel("Column Index:"), gbc);
+		++gbc.gridx;
+		gbc.weightx = 1.0;
+		columnIndexField = new PromptedTextField("Enter column index (optional)");
+		if(columnIndex >= 0)
+			columnIndexField.setText(Integer.toString(columnIndex));
+		settingsPanel.add(columnIndexField, gbc);
+		
+		retVal.add(settingsPanel, BorderLayout.NORTH);
 		
 		return retVal;
 	}
@@ -119,11 +162,23 @@ public class AddColumnNode extends TableScriptNode {
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
+	
+	public int getColumnIndex() {
+		return (columnIndexField != null ? Integer.parseInt(columnIndexField.getText()) : columnIndex);
+	}
+	
+	public void setColumnIndex(int colIndex) {
+		this.columnIndex = colIndex;
+		if(columnIndexField != null) {
+			columnIndexField.setText(Integer.toString(colIndex));
+		}
+	}
 
 	@Override
 	public Properties getSettings() {
 		final Properties retVal = super.getSettings();
 		
+		retVal.setProperty("columnIndex", Integer.toString(getColumnIndex()));
 		retVal.setProperty("column", getColumnName());
 		
 		return retVal;
@@ -133,11 +188,8 @@ public class AddColumnNode extends TableScriptNode {
 	public void loadSettings(Properties properties) {
 		super.loadSettings(properties);
 		
-		if(properties.containsKey("column")) {
-			this.columnName = properties.getProperty("column");
-			if(columnNameField != null)
-				columnNameField.setText(properties.getProperty("column"));
-		}
+		setColumnName(properties.getProperty("column", "MyColumn"));
+		setColumnIndex(Integer.parseInt(properties.getProperty("columnIndex", "-1")));
 	}
 
 }
