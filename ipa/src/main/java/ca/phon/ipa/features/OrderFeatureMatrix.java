@@ -94,7 +94,8 @@ public class OrderFeatureMatrix {
 			xmlBuffer.append(c);
 			xmlBuffer.append(" (").append(code).append(")").append(" -->").append("\n");
 			
-			xmlBuffer.append("\t").append("<feature_set>");
+			xmlBuffer.append("\t").append("<feature_set char=\"&x")
+				     .append(Integer.toHexString(val)).append(";\">");
 			for(String feature:featureSet.getFeatures()) {
 				xmlBuffer.append(feature).append(" ");
 			}

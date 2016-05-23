@@ -460,729 +460,729 @@
 	</feature>
 
 	<!-- p (0x70) -->
-	<feature_set>consonant labial bilabial voiceless stop obstruent </feature_set>
+	<feature_set char="&x70;">consonant labial bilabial voiceless stop obstruent </feature_set>
 	<!-- b (0x62) -->
-	<feature_set>consonant labial bilabial voiced stop obstruent </feature_set>
+	<feature_set char="&x62;">consonant labial bilabial voiced stop obstruent </feature_set>
 	<!-- ʬ (0x2ac) -->
-	<feature_set>consonant labial bilabial stop obstruent percussive </feature_set>
+	<feature_set char="&x2ac;">consonant labial bilabial stop obstruent percussive </feature_set>
 	<!-- ƀ (0x180) -->
-	<feature_set>consonant labial bilabial voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x180;">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
 	<!-- ƥ (0x1a5) -->
-	<feature_set>consonant labial bilabial voiceless stop obstruent implosive </feature_set>
+	<feature_set char="&x1a5;">consonant labial bilabial voiceless stop obstruent implosive </feature_set>
 	<!-- ɓ (0x253) -->
-	<feature_set>consonant labial bilabial voiced stop obstruent implosive </feature_set>
+	<feature_set char="&x253;">consonant labial bilabial voiced stop obstruent implosive </feature_set>
 	<!-- t (0x74) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless stop obstruent </feature_set>
+	<feature_set char="&x74;">consonant coronal lingual anterior alveolar voiceless stop obstruent </feature_set>
 	<!-- d (0x64) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced stop obstruent </feature_set>
+	<feature_set char="&x64;">consonant coronal lingual anterior alveolar voiced stop obstruent </feature_set>
 	<!-- ʭ (0x2ad) -->
-	<feature_set>consonant dental stop obstruent lowerdental percussive </feature_set>
+	<feature_set char="&x2ad;">consonant dental stop obstruent lowerdental percussive </feature_set>
 	<!-- ƫ (0x1ab) -->
-	<feature_set>consonant palatal coronal lingual anterior posterior alveolar voiceless stop obstruent </feature_set>
+	<feature_set char="&x1ab;">consonant palatal coronal lingual anterior posterior alveolar voiceless stop obstruent </feature_set>
 	<!-- ȶ (0x236) -->
-	<feature_set>consonant coronal lingual posterior alveopalatal voiceless stop obstruent </feature_set>
+	<feature_set char="&x236;">consonant coronal lingual posterior alveopalatal voiceless stop obstruent </feature_set>
 	<!-- ʈ (0x288) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiceless stop obstruent </feature_set>
+	<feature_set char="&x288;">consonant coronal lingual posterior retroflex voiceless stop obstruent </feature_set>
 	<!-- ʇ (0x287) -->
-	<feature_set>consonant coronal lingual anterior voiceless stop obstruent click ingressive </feature_set>
+	<feature_set char="&x287;">consonant coronal lingual anterior voiceless stop obstruent click ingressive </feature_set>
 	<!-- ƭ (0x1ad) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless stop obstruent implosive </feature_set>
+	<feature_set char="&x1ad;">consonant coronal lingual anterior alveolar voiceless stop obstruent implosive </feature_set>
 	<!-- ɖ (0x256) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiced stop obstruent </feature_set>
+	<feature_set char="&x256;">consonant coronal lingual posterior retroflex voiced stop obstruent </feature_set>
 	<!-- ɗ (0x257) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced stop obstruent implosive </feature_set>
+	<feature_set char="&x257;">consonant coronal lingual anterior alveolar voiced stop obstruent implosive </feature_set>
 	<!-- ᶑ (0x1d91) -->
-	<feature_set>consonant coronal lingual posterior alveolar retroflex voiced stop implosive </feature_set>
+	<feature_set char="&x1d91;">consonant coronal lingual posterior alveolar retroflex voiced stop implosive </feature_set>
 	<!-- c (0x63) -->
-	<feature_set>consonant palatal coronal lingual posterior voiceless stop obstruent </feature_set>
+	<feature_set char="&x63;">consonant palatal coronal lingual posterior voiceless stop obstruent </feature_set>
 	<!-- ɟ (0x25f) -->
-	<feature_set>consonant palatal coronal lingual posterior voiced stop obstruent </feature_set>
+	<feature_set char="&x25f;">consonant palatal coronal lingual posterior voiced stop obstruent </feature_set>
 	<!-- ƈ (0x188) -->
-	<feature_set>consonant palatal coronal lingual posterior voiceless stop obstruent implosive </feature_set>
+	<feature_set char="&x188;">consonant palatal coronal lingual posterior voiceless stop obstruent implosive </feature_set>
 	<!-- ʄ (0x284) -->
-	<feature_set>consonant palatal coronal lingual posterior voiced stop obstruent implosive </feature_set>
+	<feature_set char="&x284;">consonant palatal coronal lingual posterior voiced stop obstruent implosive </feature_set>
 	<!-- k (0x6b) -->
-	<feature_set>consonant dorsal velar lingual voiceless stop obstruent </feature_set>
+	<feature_set char="&x6b;">consonant dorsal velar lingual voiceless stop obstruent </feature_set>
 	<!-- g (0x67) -->
-	<feature_set>consonant dorsal velar lingual voiced stop obstruent </feature_set>
+	<feature_set char="&x67;">consonant dorsal velar lingual voiced stop obstruent </feature_set>
 	<!-- ɡ (0x261) -->
-	<feature_set>consonant dorsal velar lingual voiced stop obstruent </feature_set>
+	<feature_set char="&x261;">consonant dorsal velar lingual voiced stop obstruent </feature_set>
 	<!-- ƙ (0x199) -->
-	<feature_set>consonant dorsal velar lingual voiceless stop obstruent implosive </feature_set>
+	<feature_set char="&x199;">consonant dorsal velar lingual voiceless stop obstruent implosive </feature_set>
 	<!-- ʞ (0x29e) -->
-	<feature_set>consonant dorsal velar lingual voiceless stop obstruent click ingressive </feature_set>
+	<feature_set char="&x29e;">consonant dorsal velar lingual voiceless stop obstruent click ingressive </feature_set>
 	<!-- ɠ (0x260) -->
-	<feature_set>consonant dorsal velar lingual voiced stop obstruent implosive </feature_set>
+	<feature_set char="&x260;">consonant dorsal velar lingual voiced stop obstruent implosive </feature_set>
 	<!-- q (0x71) -->
-	<feature_set>consonant dorsal uvular lingual voiceless stop obstruent </feature_set>
+	<feature_set char="&x71;">consonant dorsal uvular lingual voiceless stop obstruent </feature_set>
 	<!-- ɢ (0x262) -->
-	<feature_set>consonant dorsal uvular lingual voiced stop obstruent </feature_set>
+	<feature_set char="&x262;">consonant dorsal uvular lingual voiced stop obstruent </feature_set>
 	<!-- ʠ (0x2a0) -->
-	<feature_set>consonant dorsal uvular lingual voiceless stop obstruent implosive </feature_set>
+	<feature_set char="&x2a0;">consonant dorsal uvular lingual voiceless stop obstruent implosive </feature_set>
 	<!-- ʛ (0x29b) -->
-	<feature_set>consonant dorsal uvular lingual voiced stop obstruent implosive </feature_set>
+	<feature_set char="&x29b;">consonant dorsal uvular lingual voiced stop obstruent implosive </feature_set>
 	<!-- ʡ (0x2a1) -->
-	<feature_set>consonant guttural epiglottal voiceless stop obstruent </feature_set>
+	<feature_set char="&x2a1;">consonant guttural epiglottal voiceless stop obstruent </feature_set>
 	<!-- ʔ (0x294) -->
-	<feature_set>consonant guttural laryngeal voiceless stop obstruent </feature_set>
+	<feature_set char="&x294;">consonant guttural laryngeal voiceless stop obstruent </feature_set>
 	<!-- ʖ (0x296) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless lateral stop obstruent click ingressive </feature_set>
+	<feature_set char="&x296;">consonant coronal lingual anterior alveolar voiceless lateral stop obstruent click ingressive </feature_set>
 	<!-- ʗ (0x297) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless stop obstruent click ingressive </feature_set>
+	<feature_set char="&x297;">consonant coronal lingual anterior alveolar voiceless stop obstruent click ingressive </feature_set>
 	<!-- π (0x3c0) -->
-	<feature_set>consonant labial dental voiced stop obstruent </feature_set>
+	<feature_set char="&x3c0;">consonant labial dental voiced stop obstruent </feature_set>
 	<!-- ʘ (0x298) -->
-	<feature_set>consonant labial bilabial voiceless stop obstruent click ingressive </feature_set>
+	<feature_set char="&x298;">consonant labial bilabial voiceless stop obstruent click ingressive </feature_set>
 	<!-- ǀ (0x1c0) -->
-	<feature_set>consonant dental coronal lingual anterior voiceless stop obstruent click ingressive </feature_set>
+	<feature_set char="&x1c0;">consonant dental coronal lingual anterior voiceless stop obstruent click ingressive </feature_set>
 	<!-- ǃ (0x1c3) -->
-	<feature_set>consonant coronal lingual alveolar voiceless stop obstruent click ingressive </feature_set>
+	<feature_set char="&x1c3;">consonant coronal lingual alveolar voiceless stop obstruent click ingressive </feature_set>
 	<!-- ¡ (0xa1) -->
-	<feature_set>consonant coronal lingual anterior voiceless stop click ingressive subapical </feature_set>
+	<feature_set char="&xa1;">consonant coronal lingual anterior voiceless stop click ingressive subapical </feature_set>
 	<!-- ǁ (0x1c1) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless lateral stop obstruent click ingressive </feature_set>
+	<feature_set char="&x1c1;">consonant coronal lingual anterior alveolar voiceless lateral stop obstruent click ingressive </feature_set>
 	<!-- ǂ (0x1c2) -->
-	<feature_set>consonant coronal lingual posterior alveopalatal voiceless stop obstruent click ingressive </feature_set>
+	<feature_set char="&x1c2;">consonant coronal lingual posterior alveopalatal voiceless stop obstruent click ingressive </feature_set>
 	<!-- ◌‖ (0x2016) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2016;">diacritic </feature_set>
 	<!-- ◌| (0x7c) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x7c;">diacritic </feature_set>
 	<!-- ɸ (0x278) -->
-	<feature_set>consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x278;">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
 	<!-- β (0x3b2) -->
-	<feature_set>consonant labial bilabial voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x3b2;">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
 	<!-- f (0x66) -->
-	<feature_set>consonant labial dental voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x66;">consonant labial dental voiceless continuant obstruent fricative </feature_set>
 	<!-- ƒ (0x192) -->
-	<feature_set>consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x192;">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
 	<!-- v (0x76) -->
-	<feature_set>consonant labial dental voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x76;">consonant labial dental voiced continuant obstruent fricative </feature_set>
 	<!-- θ (0x3b8) -->
-	<feature_set>consonant dental coronal lingual anterior distributed voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x3b8;">consonant dental coronal lingual anterior distributed voiceless continuant obstruent fricative </feature_set>
 	<!-- ð (0xf0) -->
-	<feature_set>consonant dental coronal lingual anterior distributed voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&xf0;">consonant dental coronal lingual anterior distributed voiced continuant obstruent fricative </feature_set>
 	<!-- δ (0x3b4) -->
-	<feature_set>consonant dental coronal lingual anterior distributed voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x3b4;">consonant dental coronal lingual anterior distributed voiced continuant obstruent fricative </feature_set>
 	<!-- s (0x73) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x73;">consonant coronal lingual anterior alveolar voiceless continuant obstruent fricative strident </feature_set>
 	<!-- z (0x7a) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x7a;">consonant coronal lingual anterior alveolar voiced continuant obstruent fricative strident </feature_set>
 	<!-- ʑ (0x291) -->
-	<feature_set>consonant palatal laminal coronal lingual posterior distributed voiced continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x291;">consonant palatal laminal coronal lingual posterior distributed voiced continuant obstruent fricative strident </feature_set>
 	<!-- ʪ (0x2aa) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless lateral continuant obstruent fricative </feature_set>
+	<feature_set char="&x2aa;">consonant coronal lingual anterior alveolar voiceless lateral continuant obstruent fricative </feature_set>
 	<!-- ʫ (0x2ab) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced lateral continuant obstruent fricative </feature_set>
+	<feature_set char="&x2ab;">consonant coronal lingual anterior alveolar voiced lateral continuant obstruent fricative </feature_set>
 	<!-- ɬ (0x26c) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless lateral continuant obstruent fricative </feature_set>
+	<feature_set char="&x26c;">consonant coronal lingual anterior alveolar voiceless lateral continuant obstruent fricative </feature_set>
 	<!-- ɮ (0x26e) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced lateral continuant obstruent fricative </feature_set>
+	<feature_set char="&x26e;">consonant coronal lingual anterior alveolar voiced lateral continuant obstruent fricative </feature_set>
 	<!-- ʃ (0x283) -->
-	<feature_set>consonant laminal coronal lingual posterior alveopalatal distributed voiceless continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x283;">consonant laminal coronal lingual posterior alveopalatal distributed voiceless continuant obstruent fricative strident </feature_set>
 	<!-- ʆ (0x286) -->
-	<feature_set>consonant palatal coronal lingual posterior alveopalatal distributed voiceless continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x286;">consonant palatal coronal lingual posterior alveopalatal distributed voiceless continuant obstruent fricative strident </feature_set>
 	<!-- ʒ (0x292) -->
-	<feature_set>consonant laminal coronal lingual posterior alveopalatal distributed voiced continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x292;">consonant laminal coronal lingual posterior alveopalatal distributed voiced continuant obstruent fricative strident </feature_set>
 	<!-- ʓ (0x293) -->
-	<feature_set>consonant palatal coronal lingual posterior alveopalatal distributed voiced continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x293;">consonant palatal coronal lingual posterior alveopalatal distributed voiced continuant obstruent fricative strident </feature_set>
 	<!-- ƪ (0x1aa) -->
-	<feature_set>consonant coronal lingual posterior alveopalatal distributed voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x1aa;">consonant coronal lingual posterior alveopalatal distributed voiceless continuant obstruent fricative </feature_set>
 	<!-- ʂ (0x282) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiceless continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x282;">consonant coronal lingual posterior retroflex voiceless continuant obstruent fricative strident </feature_set>
 	<!-- ʐ (0x290) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiced continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x290;">consonant coronal lingual posterior retroflex voiced continuant obstruent fricative strident </feature_set>
 	<!-- ç (0xe7) -->
-	<feature_set>consonant palatal coronal lingual posterior voiceless continuant obstruent fricative strident </feature_set>
+	<feature_set char="&xe7;">consonant palatal coronal lingual posterior voiceless continuant obstruent fricative strident </feature_set>
 	<!-- ɕ (0x255) -->
-	<feature_set>consonant palatal laminal coronal lingual posterior distributed voiceless continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x255;">consonant palatal laminal coronal lingual posterior distributed voiceless continuant obstruent fricative strident </feature_set>
 	<!-- ʝ (0x29d) -->
-	<feature_set>consonant palatal coronal lingual posterior voiced continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x29d;">consonant palatal coronal lingual posterior voiced continuant obstruent fricative strident </feature_set>
 	<!-- ƺ (0x1ba) -->
-	<feature_set>consonant palatal coronal lingual posterior alveopalatal distributed voiced continuant obstruent fricative strident </feature_set>
+	<feature_set char="&x1ba;">consonant palatal coronal lingual posterior alveopalatal distributed voiced continuant obstruent fricative strident </feature_set>
 	<!-- x (0x78) -->
-	<feature_set>consonant dorsal velar lingual voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x78;">consonant dorsal velar lingual voiceless continuant obstruent fricative </feature_set>
 	<!-- ɣ (0x263) -->
-	<feature_set>consonant dorsal velar lingual voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x263;">consonant dorsal velar lingual voiced continuant obstruent fricative </feature_set>
 	<!-- ɧ (0x267) -->
-	<feature_set>consonant dorsal velar coronal lingual posterior alveopalatal voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x267;">consonant dorsal velar coronal lingual posterior alveopalatal voiceless continuant obstruent fricative </feature_set>
 	<!-- χ (0x3c7) -->
-	<feature_set>consonant dorsal uvular lingual voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x3c7;">consonant dorsal uvular lingual voiceless continuant obstruent fricative </feature_set>
 	<!-- ħ (0x127) -->
-	<feature_set>consonant guttural pharyngeal voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x127;">consonant guttural pharyngeal voiceless continuant obstruent fricative </feature_set>
 	<!-- ʕ (0x295) -->
-	<feature_set>consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x295;">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
 	<!-- ƹ (0x1b9) -->
-	<feature_set>consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x1b9;">consonant guttural pharyngeal voiced continuant obstruent fricative </feature_set>
 	<!-- ʜ (0x29c) -->
-	<feature_set>consonant guttural epiglottal voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x29c;">consonant guttural epiglottal voiceless continuant obstruent fricative </feature_set>
 	<!-- ʢ (0x2a2) -->
-	<feature_set>consonant guttural epiglottal voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x2a2;">consonant guttural epiglottal voiced continuant obstruent fricative </feature_set>
 	<!-- h (0x68) -->
-	<feature_set>consonant guttural laryngeal voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x68;">consonant guttural laryngeal voiceless continuant obstruent fricative </feature_set>
 	<!-- ɦ (0x266) -->
-	<feature_set>consonant guttural laryngeal voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&x266;">consonant guttural laryngeal voiced continuant obstruent fricative </feature_set>
 	<!-- ʩ (0x2a9) -->
-	<feature_set>consonant obstruent fricative nasal velopharyngeal </feature_set>
+	<feature_set char="&x2a9;">consonant obstruent fricative nasal velopharyngeal </feature_set>
 	<!-- ʦ (0x2a6) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless obstruent affricate strident </feature_set>
+	<feature_set char="&x2a6;">consonant coronal lingual anterior alveolar voiceless obstruent affricate strident </feature_set>
 	<!-- ʣ (0x2a3) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced obstruent affricate strident </feature_set>
+	<feature_set char="&x2a3;">consonant coronal lingual anterior alveolar voiced obstruent affricate strident </feature_set>
 	<!-- ʨ (0x2a8) -->
-	<feature_set>consonant palatal laminal coronal lingual posterior distributed voiceless obstruent affricate strident </feature_set>
+	<feature_set char="&x2a8;">consonant palatal laminal coronal lingual posterior distributed voiceless obstruent affricate strident </feature_set>
 	<!-- ʥ (0x2a5) -->
-	<feature_set>consonant palatal laminal coronal lingual posterior distributed voiced obstruent affricate strident </feature_set>
+	<feature_set char="&x2a5;">consonant palatal laminal coronal lingual posterior distributed voiced obstruent affricate strident </feature_set>
 	<!-- ʧ (0x2a7) -->
-	<feature_set>consonant laminal coronal lingual posterior alveopalatal distributed voiceless obstruent affricate strident </feature_set>
+	<feature_set char="&x2a7;">consonant laminal coronal lingual posterior alveopalatal distributed voiceless obstruent affricate strident </feature_set>
 	<!-- ʤ (0x2a4) -->
-	<feature_set>consonant laminal coronal lingual posterior alveopalatal distributed voiced obstruent affricate strident </feature_set>
+	<feature_set char="&x2a4;">consonant laminal coronal lingual posterior alveopalatal distributed voiced obstruent affricate strident </feature_set>
 	<!-- ƛ (0x19b) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiceless lateral obstruent affricate </feature_set>
+	<feature_set char="&x19b;">consonant coronal lingual anterior alveolar voiceless lateral obstruent affricate </feature_set>
 	<!-- λ (0x3bb) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced lateral obstruent affricate </feature_set>
+	<feature_set char="&x3bb;">consonant coronal lingual anterior alveolar voiced lateral obstruent affricate </feature_set>
 	<!-- m (0x6d) -->
-	<feature_set>consonant labial bilabial voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x6d;">consonant labial bilabial voiced stop sonorant nasal </feature_set>
 	<!-- ɱ (0x271) -->
-	<feature_set>consonant labial dental voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x271;">consonant labial dental voiced stop sonorant nasal </feature_set>
 	<!-- ƞ (0x19e) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x19e;">consonant coronal lingual anterior alveolar voiced stop sonorant nasal </feature_set>
 	<!-- n (0x6e) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x6e;">consonant coronal lingual anterior alveolar voiced stop sonorant nasal </feature_set>
 	<!-- ɳ (0x273) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x273;">consonant coronal lingual posterior retroflex voiced stop sonorant nasal </feature_set>
 	<!-- ɲ (0x272) -->
-	<feature_set>consonant palatal coronal lingual posterior voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x272;">consonant palatal coronal lingual posterior voiced stop sonorant nasal </feature_set>
 	<!-- ȵ (0x235) -->
-	<feature_set>consonant coronal lingual posterior alveopalatal voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x235;">consonant coronal lingual posterior alveopalatal voiced stop sonorant nasal </feature_set>
 	<!-- ŋ (0x14b) -->
-	<feature_set>consonant dorsal velar lingual voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x14b;">consonant dorsal velar lingual voiced stop sonorant nasal </feature_set>
 	<!-- ɴ (0x274) -->
-	<feature_set>consonant dorsal uvular lingual voiced stop sonorant nasal </feature_set>
+	<feature_set char="&x274;">consonant dorsal uvular lingual voiced stop sonorant nasal </feature_set>
 	<!-- l (0x6c) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced approximant liquid lateral continuant sonorant </feature_set>
+	<feature_set char="&x6c;">consonant coronal lingual anterior alveolar voiced approximant liquid lateral continuant sonorant </feature_set>
 	<!-- ɫ (0x26b) -->
-	<feature_set>consonant velar coronal lingual anterior posterior voiced approximant liquid lateral continuant sonorant </feature_set>
+	<feature_set char="&x26b;">consonant velar coronal lingual anterior posterior voiced approximant liquid lateral continuant sonorant </feature_set>
 	<!-- ɭ (0x26d) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiced approximant liquid lateral continuant sonorant </feature_set>
+	<feature_set char="&x26d;">consonant coronal lingual posterior retroflex voiced approximant liquid lateral continuant sonorant </feature_set>
 	<!-- ȴ (0x234) -->
-	<feature_set>consonant palatal coronal lingual posterior voiced approximant liquid lateral continuant sonorant </feature_set>
+	<feature_set char="&x234;">consonant palatal coronal lingual posterior voiced approximant liquid lateral continuant sonorant </feature_set>
 	<!-- ʎ (0x28e) -->
-	<feature_set>consonant palatal coronal lingual posterior voiced approximant liquid lateral continuant sonorant </feature_set>
+	<feature_set char="&x28e;">consonant palatal coronal lingual posterior voiced approximant liquid lateral continuant sonorant </feature_set>
 	<!-- ʟ (0x29f) -->
-	<feature_set>consonant dorsal velar lingual voiced approximant liquid lateral continuant sonorant </feature_set>
+	<feature_set char="&x29f;">consonant dorsal velar lingual voiced approximant liquid lateral continuant sonorant </feature_set>
 	<!-- ⱱ (0x2c71) -->
-	<feature_set>consonant labial dental lingual voiced approximant continuant sonorant flap </feature_set>
+	<feature_set char="&x2c71;">consonant labial dental lingual voiced approximant continuant sonorant flap </feature_set>
 	<!-- ʙ (0x299) -->
-	<feature_set>consonant labial bilabial voiced approximant continuant sonorant trill </feature_set>
+	<feature_set char="&x299;">consonant labial bilabial voiced approximant continuant sonorant trill </feature_set>
 	<!-- ɾ (0x27e) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced approximant liquid rhotic continuant sonorant flap </feature_set>
+	<feature_set char="&x27e;">consonant coronal lingual anterior alveolar voiced approximant liquid rhotic continuant sonorant flap </feature_set>
 	<!-- r (0x72) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced approximant liquid rhotic continuant sonorant trill </feature_set>
+	<feature_set char="&x72;">consonant coronal lingual anterior alveolar voiced approximant liquid rhotic continuant sonorant trill </feature_set>
 	<!-- ◌· (0x387) -->
-	<feature_set>diacritic halflong </feature_set>
+	<feature_set char="&x387;">diacritic halflong </feature_set>
 	<!-- ɺ (0x27a) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced approximant liquid lateral continuant sonorant flap </feature_set>
+	<feature_set char="&x27a;">consonant coronal lingual anterior alveolar voiced approximant liquid lateral continuant sonorant flap </feature_set>
 	<!-- ɼ (0x27c) -->
-	<feature_set>consonant coronal lingual alveolar voiced approximant rhotic continuant sonorant trill </feature_set>
+	<feature_set char="&x27c;">consonant coronal lingual alveolar voiced approximant rhotic continuant sonorant trill </feature_set>
 	<!-- ɹ (0x279) -->
-	<feature_set>consonant coronal lingual anterior alveolar voiced approximant liquid rhotic continuant sonorant </feature_set>
+	<feature_set char="&x279;">consonant coronal lingual anterior alveolar voiced approximant liquid rhotic continuant sonorant </feature_set>
 	<!-- ɻ (0x27b) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiced approximant liquid rhotic continuant sonorant </feature_set>
+	<feature_set char="&x27b;">consonant coronal lingual posterior retroflex voiced approximant liquid rhotic continuant sonorant </feature_set>
 	<!-- ɽ (0x27d) -->
-	<feature_set>consonant coronal lingual posterior retroflex voiced approximant liquid rhotic continuant sonorant flap </feature_set>
+	<feature_set char="&x27d;">consonant coronal lingual posterior retroflex voiced approximant liquid rhotic continuant sonorant flap </feature_set>
 	<!-- ʀ (0x280) -->
-	<feature_set>consonant dorsal uvular lingual voiced approximant liquid rhotic continuant sonorant trill </feature_set>
+	<feature_set char="&x280;">consonant dorsal uvular lingual voiced approximant liquid rhotic continuant sonorant trill </feature_set>
 	<!-- ʁ (0x281) -->
-	<feature_set>consonant dorsal uvular lingual voiced rhotic continuant obstruent fricative </feature_set>
+	<feature_set char="&x281;">consonant dorsal uvular lingual voiced rhotic continuant obstruent fricative </feature_set>
 	<!-- w (0x77) -->
-	<feature_set>consonant glide labial bilabial dorsal velar lingual voiced approximant continuant sonorant </feature_set>
+	<feature_set char="&x77;">consonant glide labial bilabial dorsal velar lingual voiced approximant continuant sonorant </feature_set>
 	<!-- ʍ (0x28d) -->
-	<feature_set>consonant labial bilabial dorsal velar lingual voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&x28d;">consonant labial bilabial dorsal velar lingual voiceless continuant obstruent fricative </feature_set>
 	<!-- ʋ (0x28b) -->
-	<feature_set>consonant glide labial dental voiced approximant continuant sonorant </feature_set>
+	<feature_set char="&x28b;">consonant glide labial dental voiced approximant continuant sonorant </feature_set>
 	<!-- j (0x6a) -->
-	<feature_set>consonant glide palatal coronal lingual posterior voiced approximant continuant sonorant </feature_set>
+	<feature_set char="&x6a;">consonant glide palatal coronal lingual posterior voiced approximant continuant sonorant </feature_set>
 	<!-- ɥ (0x265) -->
-	<feature_set>consonant glide labial bilabial palatal coronal lingual voiced approximant continuant sonorant </feature_set>
+	<feature_set char="&x265;">consonant glide labial bilabial palatal coronal lingual voiced approximant continuant sonorant </feature_set>
 	<!-- ɰ (0x270) -->
-	<feature_set>consonant glide dorsal velar lingual voiced approximant continuant sonorant </feature_set>
+	<feature_set char="&x270;">consonant glide dorsal velar lingual voiced approximant continuant sonorant </feature_set>
 	<!-- i (0x69) -->
-	<feature_set>vowel high tense atr front </feature_set>
+	<feature_set char="&x69;">vowel high tense atr front </feature_set>
 	<!-- ı (0x131) -->
-	<feature_set>vowel high tense atr front </feature_set>
+	<feature_set char="&x131;">vowel high tense atr front </feature_set>
 	<!-- y (0x79) -->
-	<feature_set>vowel round high tense atr front </feature_set>
+	<feature_set char="&x79;">vowel round high tense atr front </feature_set>
 	<!-- ɨ (0x268) -->
-	<feature_set>vowel high tense atr central </feature_set>
+	<feature_set char="&x268;">vowel high tense atr central </feature_set>
 	<!-- ʉ (0x289) -->
-	<feature_set>vowel round high tense atr central </feature_set>
+	<feature_set char="&x289;">vowel round high tense atr central </feature_set>
 	<!-- ɯ (0x26f) -->
-	<feature_set>vowel high tense atr back </feature_set>
+	<feature_set char="&x26f;">vowel high tense atr back </feature_set>
 	<!-- u (0x75) -->
-	<feature_set>vowel round high tense atr back </feature_set>
+	<feature_set char="&x75;">vowel round high tense atr back </feature_set>
 	<!-- ɪ (0x26a) -->
-	<feature_set>vowel high rtr lax front </feature_set>
+	<feature_set char="&x26a;">vowel high rtr lax front </feature_set>
 	<!-- ɩ (0x269) -->
-	<feature_set>vowel high rtr lax front </feature_set>
+	<feature_set char="&x269;">vowel high rtr lax front </feature_set>
 	<!-- ʏ (0x28f) -->
-	<feature_set>vowel round high rtr lax front </feature_set>
+	<feature_set char="&x28f;">vowel round high rtr lax front </feature_set>
 	<!-- ʊ (0x28a) -->
-	<feature_set>vowel round high rtr lax back </feature_set>
+	<feature_set char="&x28a;">vowel round high rtr lax back </feature_set>
 	<!-- ɷ (0x277) -->
-	<feature_set>vowel round high rtr lax back </feature_set>
+	<feature_set char="&x277;">vowel round high rtr lax back </feature_set>
 	<!-- ʮ (0x2ae) -->
-	<feature_set>vowel round high rtr lax back </feature_set>
+	<feature_set char="&x2ae;">vowel round high rtr lax back </feature_set>
 	<!-- e (0x65) -->
-	<feature_set>vowel mid tense atr front </feature_set>
+	<feature_set char="&x65;">vowel mid tense atr front </feature_set>
 	<!-- ø (0xf8) -->
-	<feature_set>vowel round mid tense atr front </feature_set>
+	<feature_set char="&xf8;">vowel round mid tense atr front </feature_set>
 	<!-- ɘ (0x258) -->
-	<feature_set>vowel mid tense atr central </feature_set>
+	<feature_set char="&x258;">vowel mid tense atr central </feature_set>
 	<!-- ɵ (0x275) -->
-	<feature_set>vowel round mid tense atr central </feature_set>
+	<feature_set char="&x275;">vowel round mid tense atr central </feature_set>
 	<!-- ɤ (0x264) -->
-	<feature_set>vowel mid tense atr back </feature_set>
+	<feature_set char="&x264;">vowel mid tense atr back </feature_set>
 	<!-- o (0x6f) -->
-	<feature_set>vowel round mid tense atr back </feature_set>
+	<feature_set char="&x6f;">vowel round mid tense atr back </feature_set>
 	<!-- ə (0x259) -->
-	<feature_set>vowel schwa mid rtr lax central </feature_set>
+	<feature_set char="&x259;">vowel schwa mid rtr lax central </feature_set>
 	<!-- ɛ (0x25b) -->
-	<feature_set>vowel mid rtr lax front </feature_set>
+	<feature_set char="&x25b;">vowel mid rtr lax front </feature_set>
 	<!-- œ (0x153) -->
-	<feature_set>vowel round mid rtr lax front </feature_set>
+	<feature_set char="&x153;">vowel round mid rtr lax front </feature_set>
 	<!-- ɜ (0x25c) -->
-	<feature_set>vowel mid rtr lax central </feature_set>
+	<feature_set char="&x25c;">vowel mid rtr lax central </feature_set>
 	<!-- ʚ (0x29a) -->
-	<feature_set>vowel round mid rtr lax central </feature_set>
+	<feature_set char="&x29a;">vowel round mid rtr lax central </feature_set>
 	<!-- ɞ (0x25e) -->
-	<feature_set>vowel round mid rtr lax central </feature_set>
+	<feature_set char="&x25e;">vowel round mid rtr lax central </feature_set>
 	<!-- ʌ (0x28c) -->
-	<feature_set>vowel mid rtr lax back </feature_set>
+	<feature_set char="&x28c;">vowel mid rtr lax back </feature_set>
 	<!-- ɔ (0x254) -->
-	<feature_set>vowel round mid rtr lax back </feature_set>
+	<feature_set char="&x254;">vowel round mid rtr lax back </feature_set>
 	<!-- ɚ (0x25a) -->
-	<feature_set>vowel schwa rhotic mid rtr lax central </feature_set>
+	<feature_set char="&x25a;">vowel schwa rhotic mid rtr lax central </feature_set>
 	<!-- ɝ (0x25d) -->
-	<feature_set>vowel rhotic mid rtr lax central </feature_set>
+	<feature_set char="&x25d;">vowel rhotic mid rtr lax central </feature_set>
 	<!-- æ (0xe6) -->
-	<feature_set>vowel low lax front </feature_set>
+	<feature_set char="&xe6;">vowel low lax front </feature_set>
 	<!-- a (0x61) -->
-	<feature_set>vowel low lax central </feature_set>
+	<feature_set char="&x61;">vowel low lax central </feature_set>
 	<!-- ɶ (0x276) -->
-	<feature_set>vowel round low lax front </feature_set>
+	<feature_set char="&x276;">vowel round low lax front </feature_set>
 	<!-- ɐ (0x250) -->
-	<feature_set>vowel low lax central </feature_set>
+	<feature_set char="&x250;">vowel low lax central </feature_set>
 	<!-- α (0x3b1) -->
-	<feature_set>vowel low lax central </feature_set>
+	<feature_set char="&x3b1;">vowel low lax central </feature_set>
 	<!-- ɑ (0x251) -->
-	<feature_set>vowel low lax back </feature_set>
+	<feature_set char="&x251;">vowel low lax back </feature_set>
 	<!-- ɒ (0x252) -->
-	<feature_set>vowel round low lax back </feature_set>
+	<feature_set char="&x252;">vowel round low lax back </feature_set>
 	<!-- C (0x43) -->
-	<feature_set>consonant cover </feature_set>
+	<feature_set char="&x43;">consonant cover </feature_set>
 	<!-- G (0x47) -->
-	<feature_set>glide cover </feature_set>
+	<feature_set char="&x47;">glide cover </feature_set>
 	<!-- V (0x56) -->
-	<feature_set>vowel cover </feature_set>
+	<feature_set char="&x56;">vowel cover </feature_set>
 	<!-- X (0x58) -->
-	<feature_set>unintelligible cover </feature_set>
+	<feature_set char="&x58;">unintelligible cover </feature_set>
 	<!-- Ø (0xd8) -->
-	<feature_set>null </feature_set>
+	<feature_set char="&xd8;">null </feature_set>
 	<!-- ◌( (0x28) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x28;">diacritic </feature_set>
 	<!-- ◌) (0x29) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x29;">diacritic </feature_set>
 	<!-- * (0x2a) -->
-	<feature_set>unintelligible cover </feature_set>
+	<feature_set char="&x2a;">unintelligible cover </feature_set>
 	<!-- ◌+ (0x2b) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2b;">diacritic </feature_set>
 	<!-- ◌. (0x2e) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2e;">diacritic </feature_set>
 	<!-- ◌˸ (0x2f8) -->
-	<feature_set>diacritic long </feature_set>
+	<feature_set char="&x2f8;">diacritic long </feature_set>
 	<!-- ◌̃ (0x303) -->
-	<feature_set>diacritic nasal </feature_set>
+	<feature_set char="&x303;">diacritic nasal </feature_set>
 	<!-- ◌̊ (0x30a) -->
-	<feature_set>diacritic voiceless </feature_set>
+	<feature_set char="&x30a;">diacritic voiceless </feature_set>
 	<!-- ◌̥ (0x325) -->
-	<feature_set>diacritic voiceless </feature_set>
+	<feature_set char="&x325;">diacritic voiceless </feature_set>
 	<!-- ◌ˀ (0x2c0) -->
-	<feature_set>diacritic laryngeal </feature_set>
+	<feature_set char="&x2c0;">diacritic laryngeal </feature_set>
 	<!-- ◌ˁ (0x2c1) -->
-	<feature_set>diacritic epiglottal </feature_set>
+	<feature_set char="&x2c1;">diacritic epiglottal </feature_set>
 	<!-- ◌ː (0x2d0) -->
-	<feature_set>diacritic long </feature_set>
+	<feature_set char="&x2d0;">diacritic long </feature_set>
 	<!-- ◌ˑ (0x2d1) -->
-	<feature_set>diacritic halflong </feature_set>
+	<feature_set char="&x2d1;">diacritic halflong </feature_set>
 	<!-- ◌˞ (0x2de) -->
-	<feature_set>diacritic rhotic </feature_set>
+	<feature_set char="&x2de;">diacritic rhotic </feature_set>
 	<!-- ◌ʰ (0x2b0) -->
-	<feature_set>diacritic aspirated </feature_set>
+	<feature_set char="&x2b0;">diacritic aspirated </feature_set>
 	<!-- ◌ͪ (0x36a) -->
-	<feature_set>diacritic aspirated </feature_set>
+	<feature_set char="&x36a;">diacritic aspirated </feature_set>
 	<!-- ◌ʱ (0x2b1) -->
-	<feature_set>diacritic breathyvoiced </feature_set>
+	<feature_set char="&x2b1;">diacritic breathyvoiced </feature_set>
 	<!-- ◌ʻ (0x2bb) -->
-	<feature_set>diacritic aspirated </feature_set>
+	<feature_set char="&x2bb;">diacritic aspirated </feature_set>
 	<!-- ◌ʼ (0x2bc) -->
-	<feature_set>diacritic ejective </feature_set>
+	<feature_set char="&x2bc;">diacritic ejective </feature_set>
 	<!-- ◌ʽ (0x2bd) -->
-	<feature_set>diacritic weaklyaspirated </feature_set>
+	<feature_set char="&x2bd;">diacritic weaklyaspirated </feature_set>
 	<!-- ◌ˈ (0x2c8) -->
-	<feature_set>diacritic prstress </feature_set>
+	<feature_set char="&x2c8;">diacritic prstress </feature_set>
 	<!-- ◌ˌ (0x2cc) -->
-	<feature_set>diacritic secstress </feature_set>
+	<feature_set char="&x2cc;">diacritic secstress </feature_set>
 	<!-- ◌  (0x20) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x20;">diacritic </feature_set>
 	<!-- ◌‿ (0x203f) -->
-	<feature_set>diacritic sandhi </feature_set>
+	<feature_set char="&x203f;">diacritic sandhi </feature_set>
 	<!-- ◌⁀ (0x2040) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2040;">diacritic </feature_set>
 	<!-- ◌̣ (0x323) -->
-	<feature_set>diacritic lenis </feature_set>
+	<feature_set char="&x323;">diacritic lenis </feature_set>
 	<!-- ◌̤ (0x324) -->
-	<feature_set>diacritic breathyvoiced </feature_set>
+	<feature_set char="&x324;">diacritic breathyvoiced </feature_set>
 	<!-- ◌̇ (0x307) -->
-	<feature_set>diacritic lenis </feature_set>
+	<feature_set char="&x307;">diacritic lenis </feature_set>
 	<!-- ◌̈ (0x308) -->
-	<feature_set>diacritic central </feature_set>
+	<feature_set char="&x308;">diacritic central </feature_set>
 	<!-- ◌ᵖ (0x1d56) -->
-	<feature_set>diacritic labial </feature_set>
+	<feature_set char="&x1d56;">diacritic labial </feature_set>
 	<!-- ◌ᵇ (0x1d47) -->
-	<feature_set>diacritic labial </feature_set>
+	<feature_set char="&x1d47;">diacritic labial </feature_set>
 	<!-- ◌ᵗ (0x1d57) -->
-	<feature_set>diacritic coronal </feature_set>
+	<feature_set char="&x1d57;">diacritic coronal </feature_set>
 	<!-- ◌ͭ (0x36d) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x36d;">diacritic </feature_set>
 	<!-- ◌ᵈ (0x1d48) -->
-	<feature_set>diacritic coronal </feature_set>
+	<feature_set char="&x1d48;">diacritic coronal </feature_set>
 	<!-- ◌ͩ (0x369) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x369;">diacritic </feature_set>
 	<!-- ◌ͨ (0x368) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x368;">diacritic </feature_set>
 	<!-- ◌ᵏ (0x1d4f) -->
-	<feature_set>diacritic dorsal </feature_set>
+	<feature_set char="&x1d4f;">diacritic dorsal </feature_set>
 	<!-- ◌ᵍ (0x1d4d) -->
-	<feature_set>diacritic dorsal </feature_set>
+	<feature_set char="&x1d4d;">diacritic dorsal </feature_set>
 	<!-- ◌ͮ (0x36e) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x36e;">diacritic </feature_set>
 	<!-- ◌ᶿ (0x1dbf) -->
-	<feature_set>diacritic dental coronal lingual anterior distributed voiceless continuant obstruent </feature_set>
+	<feature_set char="&x1dbf;">diacritic dental coronal lingual anterior distributed voiceless continuant obstruent </feature_set>
 	<!-- ◌ˢ (0x2e2) -->
-	<feature_set>diacritic affricate </feature_set>
+	<feature_set char="&x2e2;">diacritic affricate </feature_set>
 	<!-- ◌ᶻ (0x1dbb) -->
-	<feature_set>diacritic affricate </feature_set>
+	<feature_set char="&x1dbb;">diacritic affricate </feature_set>
 	<!-- ◌ᶴ (0x1db4) -->
-	<feature_set>diacritic affricate </feature_set>
+	<feature_set char="&x1db4;">diacritic affricate </feature_set>
 	<!-- ◌ᶾ (0x1dbe) -->
-	<feature_set>diacritic affricate </feature_set>
+	<feature_set char="&x1dbe;">diacritic affricate </feature_set>
 	<!-- ◌ˣ (0x2e3) -->
-	<feature_set>diacritic velar </feature_set>
+	<feature_set char="&x2e3;">diacritic velar </feature_set>
 	<!-- ◌ͯ (0x36f) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x36f;">diacritic </feature_set>
 	<!-- ◌ˠ (0x2e0) -->
-	<feature_set>diacritic velar </feature_set>
+	<feature_set char="&x2e0;">diacritic velar </feature_set>
 	<!-- ◌ˤ (0x2e4) -->
-	<feature_set>diacritic pharyngeal </feature_set>
+	<feature_set char="&x2e4;">diacritic pharyngeal </feature_set>
 	<!-- ◌ᵐ (0x1d50) -->
-	<feature_set>diacritic bilabial nasal </feature_set>
+	<feature_set char="&x1d50;">diacritic bilabial nasal </feature_set>
 	<!-- ◌ͫ (0x36b) -->
-	<feature_set>diacritic nasal </feature_set>
+	<feature_set char="&x36b;">diacritic nasal </feature_set>
 	<!-- ◌ᶬ (0x1dac) -->
-	<feature_set>diacritic labial dental nasal </feature_set>
+	<feature_set char="&x1dac;">diacritic labial dental nasal </feature_set>
 	<!-- ◌ⁿ (0x207f) -->
-	<feature_set>diacritic nasal </feature_set>
+	<feature_set char="&x207f;">diacritic nasal </feature_set>
 	<!-- ◌ᶯ (0x1daf) -->
-	<feature_set>diacritic retroflex nasal </feature_set>
+	<feature_set char="&x1daf;">diacritic retroflex nasal </feature_set>
 	<!-- ◌ᶮ (0x1dae) -->
-	<feature_set>diacritic palatal nasal </feature_set>
+	<feature_set char="&x1dae;">diacritic palatal nasal </feature_set>
 	<!-- ◌ᵑ (0x1d51) -->
-	<feature_set>diacritic velar nasal </feature_set>
+	<feature_set char="&x1d51;">diacritic velar nasal </feature_set>
 	<!-- ◌ᶰ (0x1db0) -->
-	<feature_set>diacritic uvular nasal </feature_set>
+	<feature_set char="&x1db0;">diacritic uvular nasal </feature_set>
 	<!-- ◌ˡ (0x2e1) -->
-	<feature_set>diacritic lateral </feature_set>
+	<feature_set char="&x2e1;">diacritic lateral </feature_set>
 	<!-- ◌ʳ (0x2b3) -->
-	<feature_set>diacritic rhotic </feature_set>
+	<feature_set char="&x2b3;">diacritic rhotic </feature_set>
 	<!-- ◌ͬ (0x36c) -->
-	<feature_set>diacritic rhotic </feature_set>
+	<feature_set char="&x36c;">diacritic rhotic </feature_set>
 	<!-- ◌ʴ (0x2b4) -->
-	<feature_set>diacritic rhotic </feature_set>
+	<feature_set char="&x2b4;">diacritic rhotic </feature_set>
 	<!-- ◌ʵ (0x2b5) -->
-	<feature_set>diacritic rhotic </feature_set>
+	<feature_set char="&x2b5;">diacritic rhotic </feature_set>
 	<!-- ◌ʶ (0x2b6) -->
-	<feature_set>diacritic rhotic </feature_set>
+	<feature_set char="&x2b6;">diacritic rhotic </feature_set>
 	<!-- ◌ʷ (0x2b7) -->
-	<feature_set>diacritic labial </feature_set>
+	<feature_set char="&x2b7;">diacritic labial </feature_set>
 	<!-- ◌ʲ (0x2b2) -->
-	<feature_set>diacritic palatal </feature_set>
+	<feature_set char="&x2b2;">diacritic palatal </feature_set>
 	<!-- ◌ͥ (0x365) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x365;">diacritic </feature_set>
 	<!-- ◌ʸ (0x2b8) -->
-	<feature_set>diacritic labial </feature_set>
+	<feature_set char="&x2b8;">diacritic labial </feature_set>
 	<!-- ◌ͧ (0x367) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x367;">diacritic </feature_set>
 	<!-- ◌ᶦ (0x1da6) -->
-	<feature_set>diacritic palatal </feature_set>
+	<feature_set char="&x1da6;">diacritic palatal </feature_set>
 	<!-- ◌ᶷ (0x1db7) -->
-	<feature_set>diacritic labial </feature_set>
+	<feature_set char="&x1db7;">diacritic labial </feature_set>
 	<!-- ◌ͤ (0x364) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x364;">diacritic </feature_set>
 	<!-- ◌ͦ (0x366) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x366;">diacritic </feature_set>
 	<!-- ◌ͣ (0x363) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x363;">diacritic </feature_set>
 	<!-- ◌ᵊ (0x1d4a) -->
-	<feature_set>diacritic schwa </feature_set>
+	<feature_set char="&x1d4a;">diacritic schwa </feature_set>
 	<!-- ◌⁼ (0x207c) -->
-	<feature_set>diacritic unaspirated </feature_set>
+	<feature_set char="&x207c;">diacritic unaspirated </feature_set>
 	<!-- ◌͜ (0x35c) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x35c;">diacritic </feature_set>
 	<!-- ◌͝ (0x35d) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x35d;">diacritic </feature_set>
 	<!-- ◌͠ (0x360) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x360;">diacritic </feature_set>
 	<!-- ◌͡ (0x361) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x361;">diacritic </feature_set>
 	<!-- ◌̽ (0x33d) -->
-	<feature_set>diacritic mid </feature_set>
+	<feature_set char="&x33d;">diacritic mid </feature_set>
 	<!-- ◌ʾ (0x2be) -->
-	<feature_set>diacritic morerounded </feature_set>
+	<feature_set char="&x2be;">diacritic morerounded </feature_set>
 	<!-- ◌ʿ (0x2bf) -->
-	<feature_set>diacritic lessrounded </feature_set>
+	<feature_set char="&x2bf;">diacritic lessrounded </feature_set>
 	<!-- ◌˹ (0x2f9) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2f9;">diacritic </feature_set>
 	<!-- ◌˺ (0x2fa) -->
-	<feature_set>diacritic unreleased </feature_set>
+	<feature_set char="&x2fa;">diacritic unreleased </feature_set>
 	<!-- ◌˻ (0x2fb) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2fb;">diacritic </feature_set>
 	<!-- ◌˼ (0x2fc) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2fc;">diacritic </feature_set>
 	<!-- ◌̚ (0x31a) -->
-	<feature_set>diacritic unreleased </feature_set>
+	<feature_set char="&x31a;">diacritic unreleased </feature_set>
 	<!-- ◌¹ (0xb9) -->
-	<feature_set>diacritic tone1 </feature_set>
+	<feature_set char="&xb9;">diacritic tone1 </feature_set>
 	<!-- ◌² (0xb2) -->
-	<feature_set>diacritic tone2 </feature_set>
+	<feature_set char="&xb2;">diacritic tone2 </feature_set>
 	<!-- ◌³ (0xb3) -->
-	<feature_set>diacritic tone3 </feature_set>
+	<feature_set char="&xb3;">diacritic tone3 </feature_set>
 	<!-- ◌⁴ (0x2074) -->
-	<feature_set>diacritic tone4 </feature_set>
+	<feature_set char="&x2074;">diacritic tone4 </feature_set>
 	<!-- ◌⁵ (0x2075) -->
-	<feature_set>diacritic tone5 </feature_set>
+	<feature_set char="&x2075;">diacritic tone5 </feature_set>
 	<!-- ◌⁶ (0x2076) -->
-	<feature_set>diacritic tone6 </feature_set>
+	<feature_set char="&x2076;">diacritic tone6 </feature_set>
 	<!-- ◌⁷ (0x2077) -->
-	<feature_set>diacritic tone7 </feature_set>
+	<feature_set char="&x2077;">diacritic tone7 </feature_set>
 	<!-- ◌⁸ (0x2078) -->
-	<feature_set>diacritic tone8 </feature_set>
+	<feature_set char="&x2078;">diacritic tone8 </feature_set>
 	<!-- ◌⁹ (0x2079) -->
-	<feature_set>diacritic tone9 </feature_set>
+	<feature_set char="&x2079;">diacritic tone9 </feature_set>
 	<!-- ◌˭ (0x2ed) -->
-	<feature_set>diacritic unaspirated </feature_set>
+	<feature_set char="&x2ed;">diacritic unaspirated </feature_set>
 	<!-- ◌↑ (0x2191) -->
-	<feature_set>diacritic egressive </feature_set>
+	<feature_set char="&x2191;">diacritic egressive </feature_set>
 	<!-- ◌↓ (0x2193) -->
-	<feature_set>diacritic ingressive </feature_set>
+	<feature_set char="&x2193;">diacritic ingressive </feature_set>
 	<!-- ◌↔ (0x2194) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2194;">diacritic </feature_set>
 	<!-- ◌↗ (0x2197) -->
-	<feature_set>diacritic toneglobalrise </feature_set>
+	<feature_set char="&x2197;">diacritic toneglobalrise </feature_set>
 	<!-- ◌↘ (0x2198) -->
-	<feature_set>diacritic toneglobalfall </feature_set>
+	<feature_set char="&x2198;">diacritic toneglobalfall </feature_set>
 	<!-- ◌ꜛ (0xa71b) -->
-	<feature_set>diacritic toneupstep </feature_set>
+	<feature_set char="&xa71b;">diacritic toneupstep </feature_set>
 	<!-- ◌ꜜ (0xa71c) -->
-	<feature_set>diacritic tonedownstep </feature_set>
+	<feature_set char="&xa71c;">diacritic tonedownstep </feature_set>
 	<!-- ◌ꜝ (0xa71d) -->
-	<feature_set>diacritic tonedownstep </feature_set>
+	<feature_set char="&xa71d;">diacritic tonedownstep </feature_set>
 	<!-- ◌ꜞ (0xa71e) -->
-	<feature_set>diacritic toneupstep </feature_set>
+	<feature_set char="&xa71e;">diacritic toneupstep </feature_set>
 	<!-- ◌˥ (0x2e5) -->
-	<feature_set>diacritic toneextrahigh </feature_set>
+	<feature_set char="&x2e5;">diacritic toneextrahigh </feature_set>
 	<!-- ◌˦ (0x2e6) -->
-	<feature_set>diacritic tonehigh </feature_set>
+	<feature_set char="&x2e6;">diacritic tonehigh </feature_set>
 	<!-- ◌˧ (0x2e7) -->
-	<feature_set>diacritic tonemid </feature_set>
+	<feature_set char="&x2e7;">diacritic tonemid </feature_set>
 	<!-- ◌˨ (0x2e8) -->
-	<feature_set>diacritic tonelow </feature_set>
+	<feature_set char="&x2e8;">diacritic tonelow </feature_set>
 	<!-- ◌˩ (0x2e9) -->
-	<feature_set>diacritic toneextralow </feature_set>
+	<feature_set char="&x2e9;">diacritic toneextralow </feature_set>
 	<!-- ◌᷄ (0x1dc4) -->
-	<feature_set>diacritic tonerising tonehigh </feature_set>
+	<feature_set char="&x1dc4;">diacritic tonerising tonehigh </feature_set>
 	<!-- ◌᷅ (0x1dc5) -->
-	<feature_set>diacritic tonelowrising </feature_set>
+	<feature_set char="&x1dc5;">diacritic tonelowrising </feature_set>
 	<!-- ◌᷆ (0x1dc6) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x1dc6;">diacritic </feature_set>
 	<!-- ◌᷇ (0x1dc7) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x1dc7;">diacritic </feature_set>
 	<!-- ◌᷈ (0x1dc8) -->
-	<feature_set>diacritic tonerisingfalling </feature_set>
+	<feature_set char="&x1dc8;">diacritic tonerisingfalling </feature_set>
 	<!-- ◌᷉ (0x1dc9) -->
-	<feature_set>diacritic tonefallingrising </feature_set>
+	<feature_set char="&x1dc9;">diacritic tonefallingrising </feature_set>
 	<!-- ◌ˆ (0x2c6) -->
-	<feature_set>diacritic tonefalling </feature_set>
+	<feature_set char="&x2c6;">diacritic tonefalling </feature_set>
 	<!-- ◌ˇ (0x2c7) -->
-	<feature_set>diacritic tonerising </feature_set>
+	<feature_set char="&x2c7;">diacritic tonerising </feature_set>
 	<!-- ◌ˉ (0x2c9) -->
-	<feature_set>diacritic tonemid </feature_set>
+	<feature_set char="&x2c9;">diacritic tonemid </feature_set>
 	<!-- ◌ˊ (0x2ca) -->
-	<feature_set>diacritic tonehigh </feature_set>
+	<feature_set char="&x2ca;">diacritic tonehigh </feature_set>
 	<!-- ◌ˋ (0x2cb) -->
-	<feature_set>diacritic toneextrahigh </feature_set>
+	<feature_set char="&x2cb;">diacritic toneextrahigh </feature_set>
 	<!-- ◌˂ (0x2c2) -->
-	<feature_set>diacritic fronted </feature_set>
+	<feature_set char="&x2c2;">diacritic fronted </feature_set>
 	<!-- ◌˃ (0x2c3) -->
-	<feature_set>diacritic backed </feature_set>
+	<feature_set char="&x2c3;">diacritic backed </feature_set>
 	<!-- ◌˄ (0x2c4) -->
-	<feature_set>diacritic raised </feature_set>
+	<feature_set char="&x2c4;">diacritic raised </feature_set>
 	<!-- ◌˅ (0x2c5) -->
-	<feature_set>diacritic lowered </feature_set>
+	<feature_set char="&x2c5;">diacritic lowered </feature_set>
 	<!-- ◌˵ (0x2f5) -->
-	<feature_set>diacritic toneextralow </feature_set>
+	<feature_set char="&x2f5;">diacritic toneextralow </feature_set>
 	<!-- ◌˶ (0x2f6) -->
-	<feature_set>diacritic toneextrahigh </feature_set>
+	<feature_set char="&x2f6;">diacritic toneextrahigh </feature_set>
 	<!-- ◌̀ (0x300) -->
-	<feature_set>diacritic tonelow </feature_set>
+	<feature_set char="&x300;">diacritic tonelow </feature_set>
 	<!-- ◌́ (0x301) -->
-	<feature_set>diacritic tonehigh </feature_set>
+	<feature_set char="&x301;">diacritic tonehigh </feature_set>
 	<!-- ◌̂ (0x302) -->
-	<feature_set>diacritic tonefalling </feature_set>
+	<feature_set char="&x302;">diacritic tonefalling </feature_set>
 	<!-- ◌̋ (0x30b) -->
-	<feature_set>diacritic toneextrahigh </feature_set>
+	<feature_set char="&x30b;">diacritic toneextrahigh </feature_set>
 	<!-- ◌̌ (0x30c) -->
-	<feature_set>diacritic tonerising </feature_set>
+	<feature_set char="&x30c;">diacritic tonerising </feature_set>
 	<!-- ◌̏ (0x30f) -->
-	<feature_set>diacritic toneextralow </feature_set>
+	<feature_set char="&x30f;">diacritic toneextralow </feature_set>
 	<!-- ◌ˬ (0x2ec) -->
-	<feature_set>diacritic voiced </feature_set>
+	<feature_set char="&x2ec;">diacritic voiced </feature_set>
 	<!-- ◌˯ (0x2ef) -->
-	<feature_set>diacritic lowered </feature_set>
+	<feature_set char="&x2ef;">diacritic lowered </feature_set>
 	<!-- ◌˰ (0x2f0) -->
-	<feature_set>diacritic raised </feature_set>
+	<feature_set char="&x2f0;">diacritic raised </feature_set>
 	<!-- ◌˱ (0x2f1) -->
-	<feature_set>diacritic fronted </feature_set>
+	<feature_set char="&x2f1;">diacritic fronted </feature_set>
 	<!-- ◌˲ (0x2f2) -->
-	<feature_set>diacritic backed </feature_set>
+	<feature_set char="&x2f2;">diacritic backed </feature_set>
 	<!-- ◌˔ (0x2d4) -->
-	<feature_set>diacritic raised </feature_set>
+	<feature_set char="&x2d4;">diacritic raised </feature_set>
 	<!-- ◌˕ (0x2d5) -->
-	<feature_set>diacritic lowered </feature_set>
+	<feature_set char="&x2d5;">diacritic lowered </feature_set>
 	<!-- ◌˖ (0x2d6) -->
-	<feature_set>diacritic advanced </feature_set>
+	<feature_set char="&x2d6;">diacritic advanced </feature_set>
 	<!-- ◌˗ (0x2d7) -->
-	<feature_set>diacritic retracted </feature_set>
+	<feature_set char="&x2d7;">diacritic retracted </feature_set>
 	<!-- ◌˜ (0x2dc) -->
-	<feature_set>diacritic nasal </feature_set>
+	<feature_set char="&x2dc;">diacritic nasal </feature_set>
 	<!-- ◌͞ (0x35e) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x35e;">diacritic </feature_set>
 	<!-- ◌͟ (0x35f) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x35f;">diacritic </feature_set>
 	<!-- ◌˽ (0x2fd) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2fd;">diacritic </feature_set>
 	<!-- ◌˾ (0x2fe) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2fe;">diacritic </feature_set>
 	<!-- ◌˿ (0x2ff) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x2ff;">diacritic </feature_set>
 	<!-- ◌͢ (0x362) -->
-	<feature_set>diacritic sliding </feature_set>
+	<feature_set char="&x362;">diacritic sliding </feature_set>
 	<!-- ◌̉ (0x309) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x309;">diacritic </feature_set>
 	<!-- ◌̄ (0x304) -->
-	<feature_set>diacritic tonemid </feature_set>
+	<feature_set char="&x304;">diacritic tonemid </feature_set>
 	<!-- ◌̆ (0x306) -->
-	<feature_set>diacritic extrashort </feature_set>
+	<feature_set char="&x306;">diacritic extrashort </feature_set>
 	<!-- ◌̑ (0x311) -->
-	<feature_set>diacritic fronted </feature_set>
+	<feature_set char="&x311;">diacritic fronted </feature_set>
 	<!-- ◌̒ (0x312) -->
-	<feature_set>diacritic aspirated </feature_set>
+	<feature_set char="&x312;">diacritic aspirated </feature_set>
 	<!-- ◌̔ (0x314) -->
-	<feature_set>diacritic weaklyaspirated </feature_set>
+	<feature_set char="&x314;">diacritic weaklyaspirated </feature_set>
 	<!-- ◌̖ (0x316) -->
-	<feature_set>diacritic tonerising </feature_set>
+	<feature_set char="&x316;">diacritic tonerising </feature_set>
 	<!-- ◌̘ (0x318) -->
-	<feature_set>diacritic atr </feature_set>
+	<feature_set char="&x318;">diacritic atr </feature_set>
 	<!-- ◌̙ (0x319) -->
-	<feature_set>diacritic rtr </feature_set>
+	<feature_set char="&x319;">diacritic rtr </feature_set>
 	<!-- ◌̜ (0x31c) -->
-	<feature_set>diacritic lessrounded </feature_set>
+	<feature_set char="&x31c;">diacritic lessrounded </feature_set>
 	<!-- ◌̝ (0x31d) -->
-	<feature_set>diacritic raised </feature_set>
+	<feature_set char="&x31d;">diacritic raised </feature_set>
 	<!-- ◌̞ (0x31e) -->
-	<feature_set>diacritic lowered </feature_set>
+	<feature_set char="&x31e;">diacritic lowered </feature_set>
 	<!-- ◌̟ (0x31f) -->
-	<feature_set>diacritic advanced </feature_set>
+	<feature_set char="&x31f;">diacritic advanced </feature_set>
 	<!-- ◌̠ (0x320) -->
-	<feature_set>diacritic retracted </feature_set>
+	<feature_set char="&x320;">diacritic retracted </feature_set>
 	<!-- ◌̐ (0x310) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x310;">diacritic </feature_set>
 	<!-- ◌̩ (0x329) -->
-	<feature_set>diacritic syllabic </feature_set>
+	<feature_set char="&x329;">diacritic syllabic </feature_set>
 	<!-- ◌̪ (0x32a) -->
-	<feature_set>diacritic dental </feature_set>
+	<feature_set char="&x32a;">diacritic dental </feature_set>
 	<!-- ◌̫ (0x32b) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x32b;">diacritic </feature_set>
 	<!-- ◌̬ (0x32c) -->
-	<feature_set>diacritic voiced </feature_set>
+	<feature_set char="&x32c;">diacritic voiced </feature_set>
 	<!-- ◌̮ (0x32e) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x32e;">diacritic </feature_set>
 	<!-- ◌̯ (0x32f) -->
-	<feature_set>diacritic nonsyllabic </feature_set>
+	<feature_set char="&x32f;">diacritic nonsyllabic </feature_set>
 	<!-- ◌̰ (0x330) -->
-	<feature_set>diacritic creakyvoiced </feature_set>
+	<feature_set char="&x330;">diacritic creakyvoiced </feature_set>
 	<!-- ◌̱ (0x331) -->
-	<feature_set>diacritic retracted </feature_set>
+	<feature_set char="&x331;">diacritic retracted </feature_set>
 	<!-- ◌̲ (0x332) -->
-	<feature_set>diacritic alveolar </feature_set>
+	<feature_set char="&x332;">diacritic alveolar </feature_set>
 	<!-- ◌̳ (0x333) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x333;">diacritic </feature_set>
 	<!-- ◌̴ (0x334) -->
-	<feature_set>diacritic pharyngeal </feature_set>
+	<feature_set char="&x334;">diacritic pharyngeal </feature_set>
 	<!-- ◌̵ (0x335) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x335;">diacritic </feature_set>
 	<!-- ◌̹ (0x339) -->
-	<feature_set>diacritic morerounded </feature_set>
+	<feature_set char="&x339;">diacritic morerounded </feature_set>
 	<!-- ◌̺ (0x33a) -->
-	<feature_set>diacritic apical </feature_set>
+	<feature_set char="&x33a;">diacritic apical </feature_set>
 	<!-- ◌̻ (0x33b) -->
-	<feature_set>diacritic laminal </feature_set>
+	<feature_set char="&x33b;">diacritic laminal </feature_set>
 	<!-- ◌̼ (0x33c) -->
-	<feature_set>diacritic labial </feature_set>
+	<feature_set char="&x33c;">diacritic labial </feature_set>
 	<!-- ◌̾ (0x33e) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x33e;">diacritic </feature_set>
 	<!-- ◌̿ (0x33f) -->
-	<feature_set>diacritic unaspirated </feature_set>
+	<feature_set char="&x33f;">diacritic unaspirated </feature_set>
 	<!-- ◌͆ (0x346) -->
-	<feature_set>diacritic lowerdental </feature_set>
+	<feature_set char="&x346;">diacritic lowerdental </feature_set>
 	<!-- ◌͇ (0x347) -->
-	<feature_set>diacritic alveolar </feature_set>
+	<feature_set char="&x347;">diacritic alveolar </feature_set>
 	<!-- ◌͈ (0x348) -->
-	<feature_set>diacritic strongarticulation </feature_set>
+	<feature_set char="&x348;">diacritic strongarticulation </feature_set>
 	<!-- ◌͉ (0x349) -->
-	<feature_set>diacritic weakarticulation </feature_set>
+	<feature_set char="&x349;">diacritic weakarticulation </feature_set>
 	<!-- ◌͊ (0x34a) -->
-	<feature_set>diacritic denasalized </feature_set>
+	<feature_set char="&x34a;">diacritic denasalized </feature_set>
 	<!-- ◌͋ (0x34b) -->
-	<feature_set>diacritic nasal </feature_set>
+	<feature_set char="&x34b;">diacritic nasal </feature_set>
 	<!-- ◌͌ (0x34c) -->
-	<feature_set>diacritic velopharyngeal </feature_set>
+	<feature_set char="&x34c;">diacritic velopharyngeal </feature_set>
 	<!-- ◌͍ (0x34d) -->
-	<feature_set>diacritic labialspread </feature_set>
+	<feature_set char="&x34d;">diacritic labialspread </feature_set>
 	<!-- ◌͎ (0x34e) -->
-	<feature_set>diacritic whistled </feature_set>
+	<feature_set char="&x34e;">diacritic whistled </feature_set>
 	<!-- ◌͐ (0x350) -->
-	<feature_set>diacritic backed </feature_set>
+	<feature_set char="&x350;">diacritic backed </feature_set>
 	<!-- ◌͑ (0x351) -->
-	<feature_set>diacritic lessrounded </feature_set>
+	<feature_set char="&x351;">diacritic lessrounded </feature_set>
 	<!-- ◌͒ (0x352) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x352;">diacritic </feature_set>
 	<!-- ◌͓ (0x353) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x353;">diacritic </feature_set>
 	<!-- ◌͔ (0x354) -->
-	<feature_set>diacritic fronted </feature_set>
+	<feature_set char="&x354;">diacritic fronted </feature_set>
 	<!-- ◌͕ (0x355) -->
-	<feature_set>diacritic backed </feature_set>
+	<feature_set char="&x355;">diacritic backed </feature_set>
 	<!-- ◌͖ (0x356) -->
-	<feature_set>diacritic </feature_set>
+	<feature_set char="&x356;">diacritic </feature_set>
 	<!-- ◌͗ (0x357) -->
-	<feature_set>diacritic morerounded </feature_set>
+	<feature_set char="&x357;">diacritic morerounded </feature_set>
 </feature_matrix>
