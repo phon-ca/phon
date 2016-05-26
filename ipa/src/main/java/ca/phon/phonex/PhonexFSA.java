@@ -101,6 +101,8 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 			retVal = groupNames[groupIndex-1];
 		}
 		
+		if(retVal == null) retVal = "";
+		
 		return retVal;
 	}
 	

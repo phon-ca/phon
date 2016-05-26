@@ -29,6 +29,7 @@ import ca.phon.app.log.BufferPanelContainer;
 import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 @OpNodeInfo(
 		name="Print to Buffer",
@@ -95,6 +96,11 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 			BufferPanel bufferPanel = bpc.getBuffer(bufferName);
 			if(bufferPanel == null) {
 				bufferPanel = bpc.createBuffer(bufferName);
+			}
+			
+			if(data instanceof DefaultTableDataSource) {
+				bufferPanel.putExtension(BirtBufferPanelExtension.class, 
+						new BirtBufferPanelExtension(bufferPanel, (DefaultTableDataSource)data));
 			}
 			
 			if(!append) {

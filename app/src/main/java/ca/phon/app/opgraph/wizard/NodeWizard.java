@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -45,7 +46,9 @@ import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
+import ca.phon.app.opgraph.wizard.actions.CreateReportAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardFrame;
@@ -98,6 +101,15 @@ public class NodeWizard extends WizardFrame {
 		this.graph = graph;
 		init();
 		inInit = false;
+	}
+	
+	@Override
+	public void setJMenuBar(JMenuBar menuBar) {
+		super.setJMenuBar(menuBar);
+		
+		final MenuBuilder builder = new MenuBuilder(menuBar);
+		builder.addSeparator("File@1", "report");
+		builder.addMenuItem("File@report", new CreateReportAction(this));
 	}
 	
 	private void init() {

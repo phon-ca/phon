@@ -139,6 +139,11 @@
 		    <artifactId>org.eclipse.jgit.ui</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.eclipse.birt.runtime</groupId>
+			<artifactId>org.eclipse.birt.runtime</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

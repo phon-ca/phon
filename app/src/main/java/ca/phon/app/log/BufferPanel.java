@@ -34,6 +34,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +60,8 @@ import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorEP;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.functor.Functor;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -81,7 +84,7 @@ import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class BufferPanel extends JPanel {
+public class BufferPanel extends JPanel implements IExtendable {
 	
 	public final static String SHOW_TABLE_CODE = "SHOW_TABLE";
 	
@@ -97,6 +100,8 @@ public class BufferPanel extends JPanel {
 			.getLogger(BufferPanel.class.getName());
 
 	private static final long serialVersionUID = -153000974506461908L;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(BufferPanel.class, this);
 
 	private JScrollPane logScroller;
 	private LogBuffer logBuffer;
@@ -178,6 +183,7 @@ public class BufferPanel extends JPanel {
 		dataTable.setFont(FontPreferences.getUIIpaFont());
 		
 		init();
+		extSupport.initExtensions();
 	}
 	
 	public boolean isShowingBuffer() {
@@ -524,6 +530,22 @@ public class BufferPanel extends JPanel {
 
 	public void setBufferName(String string) {
 		logBuffer.setBufferName(string);
+	}
+
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
 	}
 
 }

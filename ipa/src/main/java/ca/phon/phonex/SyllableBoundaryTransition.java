@@ -55,7 +55,7 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 		
 		int tapeIdx = -1;
 		if(getOffsetType() == OffsetType.NORMAL) {
-			if(currentState.getTapeIndex() >= currentState.getTape().length) return false;
+			if(currentState.getTapeIndex() >= currentState.getTape().length) return true;
 			tapeIdx = currentState.getTapeIndex();
 		} else if(getOffsetType() == OffsetType.LOOK_BEHIND) {
 			tapeIdx = currentState.getTapeIndex() - currentState.getLookBehindOffset();

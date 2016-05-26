@@ -825,7 +825,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(sessionFile.exists()) {
 			modTime = sessionFile.lastModified();
 		}
-		return LocalDateTime.ofEpochSecond(modTime, 0, ZoneOffset.UTC);
+		return LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), ZoneOffset.UTC);
 	}
 	
 	@Override

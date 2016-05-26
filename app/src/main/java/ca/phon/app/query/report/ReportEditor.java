@@ -85,7 +85,6 @@ import com.jgoodies.forms.layout.FormLayout;
 public class ReportEditor extends JPanel implements SectionListener {
 	
 	private final static Logger LOGGER = Logger.getLogger(ReportEditor.class.getName());
-	
 
 	private final QName _SECTION_QNAME = new QName("http://phon.ling.mun.ca/ns/report", "report-section");
 	
