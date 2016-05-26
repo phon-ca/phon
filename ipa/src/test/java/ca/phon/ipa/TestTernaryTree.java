@@ -31,8 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import ca.phon.ipa.features.CompoundIPAElementComparator;
-import ca.phon.ipa.features.FeatureComparator;
+import ca.phon.ipa.features.IPAElementComparator;
 import ca.phon.ipa.tree.IpaTernaryTree;
 
 @RunWith(JUnit4.class)
@@ -42,8 +41,7 @@ public class TestTernaryTree {
 
 	@Test
 	public void testTreeOrdering() throws IOException, ParseException {
-		final Comparator<IPAElement> comparator = 
-				new CompoundIPAElementComparator(FeatureComparator.createPlaceComparator());
+		final Comparator<IPAElement> comparator = new IPAElementComparator();
 		
 		final IpaTernaryTree<List<IPATranscript>> tree = 
 				new IpaTernaryTree<List<IPATranscript>>(comparator);

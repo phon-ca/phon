@@ -76,7 +76,7 @@ public class CreateReportAction extends HookableAction {
 					createHTMLReport((String)e.getDialogData());
 					showReport((String)e.getDialogData());
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					LOGGER.warning(e1.getLocalizedMessage());
 				}
 			}
 		});
@@ -95,9 +95,7 @@ public class CreateReportAction extends HookableAction {
 				writer.flush();
 				writer.close();
 			} catch (IOException e) {
-//				LOGGER
-//						.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//				ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
+				LOGGER.warning(e.getLocalizedMessage());
 			}
 		}
 	}
