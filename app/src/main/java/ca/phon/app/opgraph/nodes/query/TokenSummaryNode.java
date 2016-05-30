@@ -111,7 +111,7 @@ public class TokenSummaryNode extends TableOpNode implements NodeSettings {
 			outputTable.addRow(rowData.toArray());
 		}
 		int col = 1;
-		outputTable.setColumnTitle(0, "");
+		outputTable.setColumnTitle(0, "Item");
 		for(String columnName:columnCounts.keySet()) {
 			outputTable.setColumnTitle(col++, columnName);
 		}

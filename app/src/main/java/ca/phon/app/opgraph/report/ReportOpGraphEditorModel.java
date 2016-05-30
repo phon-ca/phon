@@ -15,8 +15,8 @@ import javax.swing.border.CompoundBorder;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
-import ca.phon.app.opgraph.assessment.AssessmentOpGraphEditorModel;
-import ca.phon.app.opgraph.assessment.AssessmentWizardExtension;
+import ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel;
+import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;
@@ -24,7 +24,7 @@ import ca.phon.query.db.Query;
 import ca.phon.util.PrefHelper;
 import ca.phon.workspace.Workspace;
 
-public class ReportOpGraphEditorModel extends AssessmentOpGraphEditorModel {
+public class ReportOpGraphEditorModel extends AnalysisOpGraphEditorModel {
 
 	private JPanel debugSettings;
 	
@@ -40,7 +40,7 @@ public class ReportOpGraphEditorModel extends AssessmentOpGraphEditorModel {
 		super(graph);
 		
 		WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
-		if(wizardExt == null || (wizardExt instanceof AssessmentWizardExtension && wizardExt.size() == 0)) {
+		if(wizardExt == null || (wizardExt instanceof AnalysisWizardExtension && wizardExt.size() == 0)) {
 			wizardExt = new ReportWizardExtension(graph);
 			graph.putExtension(WizardExtension.class, wizardExt);
 		}

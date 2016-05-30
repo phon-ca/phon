@@ -19,6 +19,7 @@
 package ca.phon.app.session;
 
 import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultTreeCheckingModel;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import ca.phon.project.Project;
@@ -75,6 +77,7 @@ public class SessionSelector extends CheckboxTree {
 	private void init() {
 		if(project != null) {
 			((CheckedTreeNode)getModel().getRoot()).setUserObject(project.getName());
+			((CheckedTreeNode)getModel().getRoot()).removeAllChildren();
 			createTree();
 		}
 		
@@ -97,6 +100,8 @@ public class SessionSelector extends CheckboxTree {
 			}
 			((CheckedTreeNode)getModel().getRoot()).add(corpusNode);
 		}
+		((DefaultTreeModel)getModel()).reload((CheckedTreeNode)getModel().getRoot());
+		
 		
 		final CheckboxTree projectTree = this;
 		
@@ -111,6 +116,7 @@ public class SessionSelector extends CheckboxTree {
 		renderer.setClosedIcon(folderIcon);
 		renderer.setOpenIcon(folderIcon);
 		projectTree.setCellRenderer(renderer);
+		
 		revalidate();
 	}
 	

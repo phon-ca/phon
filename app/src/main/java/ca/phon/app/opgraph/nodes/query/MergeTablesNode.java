@@ -429,13 +429,13 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		final DefaultTableDataSource table1 = (DefaultTableDataSource)context.get(table1Input);
 		final DefaultTableDataSource table2 = (DefaultTableDataSource)context.get(table2Input);
 		
-		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
+		DefaultTableDataSource outputTable = new DefaultTableDataSource();
 		
 		// collect unique column names from each table
 		int table1KeyCol = table1.getColumnIndex(getTable1KeyColumn());
-		if(table1KeyCol < 0) {
-			throw new ProcessingException(null, "Table 1 does not contain column " + getTable1KeyColumn());
-		}
+//		if(table1KeyCol < 0) {
+//			throw new ProcessingException(null, "Table 1 does not contain column " + getTable1KeyColumn());
+//		}
 		List<String> table1Columns = new ArrayList<>();
 		for(int col = 0; col < table1.getColumnCount(); col++) {
 			if(col != table1KeyCol) {
@@ -444,9 +444,9 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		}
 		
 		int table2KeyCol = table2.getColumnIndex(getTable2KeyColumn());
-		if(table2KeyCol < 0) {
-			throw new ProcessingException(null, "Table 2 does not contain column " + getTable2KeyColumn());
-		}
+//		if(table2KeyCol < 0) {
+//			throw new ProcessingException(null, "Table 2 does not contain column " + getTable2KeyColumn());
+//		}
 		List<String> table2Columns = new ArrayList<>();
 		for(int col = 0; col < table2.getColumnCount(); col++) {
 			if(col != table2KeyCol) {
@@ -454,142 +454,150 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 			}
 		}
 		
-		// collect unique row keys from both tables
-		Set<String> rowKeys = new LinkedHashSet<>();
-		for(int row = 0; row < table1.getRowCount(); row++) {
-			checkCanceled();
-			String rowKey = TableUtils.objToString(table1.getValueAt(row, table1KeyCol), getTable1KeyColumnIgnoreDiacritics());
-			if(getTable1KeyColumnCaseSensitive())
-				rowKey = rowKey.toLowerCase();
-			rowKeys.add(rowKey);
-		}
-		for(int row = 0; row < table2.getRowCount(); row++) {
-			checkCanceled();
-			String rowKey = TableUtils.objToString(table2.getValueAt(row, table1KeyCol), getTable2KeyColumnIgnoreDiacritics());
-			if(getTable2KeyColumnCaseSensitive())
-				rowKey = rowKey.toLowerCase();
-			rowKeys.add(rowKey);
-		}
-		
-		// create output table
-		int numCols = 1 + table1Columns.size() + table2Columns.size();
-		for(String rowKey:rowKeys) {
-			checkCanceled();
+		if(table1KeyCol < 0 && table2KeyCol < 0) {
+			outputTable = table1;
+		} else if(table1KeyCol < 0 && table2KeyCol >= 0) {
+			outputTable = table2;
+		} else if(table1KeyCol >= 0 && table2KeyCol < 0) {
+			outputTable = table1;
+		} else {
+			// collect unique row keys from both tables
+			Set<String> rowKeys = new LinkedHashSet<>();
+			for(int row = 0; row < table1.getRowCount(); row++) {
+				checkCanceled();
+				String rowKey = TableUtils.objToString(table1.getValueAt(row, table1KeyCol), getTable1KeyColumnIgnoreDiacritics());
+				if(getTable1KeyColumnCaseSensitive())
+					rowKey = rowKey.toLowerCase();
+				rowKeys.add(rowKey);
+			}
+			for(int row = 0; row < table2.getRowCount(); row++) {
+				checkCanceled();
+				String rowKey = TableUtils.objToString(table2.getValueAt(row, table1KeyCol), getTable2KeyColumnIgnoreDiacritics());
+				if(getTable2KeyColumnCaseSensitive())
+					rowKey = rowKey.toLowerCase();
+				rowKeys.add(rowKey);
+			}
 			
+			// create output table
+			int numCols = 1 + table1Columns.size() + table2Columns.size();
+			for(String rowKey:rowKeys) {
+				checkCanceled();
+				
+				int col = 0;
+				Object rowData[] = new Object[numCols];
+				rowData[col++] = rowKey;
+				
+				if(isInterleaveColumns()) {
+					int table1ColIdx = 0;
+					int table2ColIdx = 0;
+					while(col < numCols) {
+						for(int table1ColNum = 0; table1ColNum < getTable1ColumnRatio(); table1ColNum++) {
+							if(table1ColIdx < table1Columns.size()) {
+								int colIdx = table1.getColumnIndex(table1Columns.get(table1ColIdx));
+								Object table1Val = table1.getValueAt(
+										getTable1KeyColumn(), rowKey, table1Columns.get(table1ColIdx++));
+								if(table1Val == null) {
+									Class<?> colType = table1.inferColumnType(colIdx);
+									if(colType != null && colType != Object.class) {
+										try {
+											if(Number.class.isAssignableFrom(colType)) {
+												try {
+													Constructor<?> numberCtr = 
+															colType.getConstructor( String.class );
+													table1Val = numberCtr.newInstance( "0" );
+												} catch (NoSuchMethodException | InvocationTargetException e) {
+													LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+												}
+											} else {
+												table1Val = colType.newInstance();
+											}
+										} catch (InstantiationException | IllegalAccessException e) {
+											LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+										}
+									}
+								}
+								rowData[col++] = (table1Val != null ? table1Val : "");
+							}
+						}
+						for(int table2ColNum = 0; table2ColNum < getTable2ColumnRatio(); table2ColNum++) {
+							if(table2ColIdx < table2Columns.size()) {
+								int colIdx = table2.getColumnIndex(table1Columns.get(table2ColIdx));
+								Object table2Val = table2.getValueAt(
+										getTable2KeyColumn(), rowKey, table2Columns.get(table2ColIdx++));
+								if(table2Val == null) {
+									Class<?> colType = table2.inferColumnType(colIdx);
+									if(colType != null && colType != Object.class) {
+										try {
+											if(Number.class.isAssignableFrom(colType)) {
+												try {
+													Constructor<?> numberCtr = 
+															colType.getConstructor( String.class );
+													table2Val = numberCtr.newInstance( "0" );
+												} catch (NoSuchMethodException | InvocationTargetException e) {
+													LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+												}
+											} else {
+												table2Val = colType.newInstance();
+											}
+										} catch (InstantiationException | IllegalAccessException e) {
+											LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+										}
+									}
+								}
+								rowData[col++] = (table2Val != null ? table2Val : "");
+							}
+						}
+					}
+				} else {
+					for(String colName:table1Columns) {
+						Object table1Val = table1.getValueAt(
+								getTable1KeyColumn(), rowKey, colName);
+						rowData[col++] = (table1Val != null ? table1Val : "");
+					}
+					for(String colName:table2Columns) {
+						Object table2Val = table2.getValueAt(
+								getTable2KeyColumn(), rowKey, colName);
+						rowData[col++] = (table2Val != null ? table2Val : "");
+					}
+				}
+				outputTable.addRow(rowData);
+			}
+			
+			// setup column names
 			int col = 0;
-			Object rowData[] = new Object[numCols];
-			rowData[col++] = rowKey;
-			
+			outputTable.setColumnTitle(col++, getKeyColumnName());
 			if(isInterleaveColumns()) {
 				int table1ColIdx = 0;
 				int table2ColIdx = 0;
 				while(col < numCols) {
 					for(int table1ColNum = 0; table1ColNum < getTable1ColumnRatio(); table1ColNum++) {
 						if(table1ColIdx < table1Columns.size()) {
-							int colIdx = table1.getColumnIndex(table1Columns.get(table1ColIdx));
-							Object table1Val = table1.getValueAt(
-									getTable1KeyColumn(), rowKey, table1Columns.get(table1ColIdx++));
-							if(table1Val == null) {
-								Class<?> colType = table1.inferColumnType(colIdx);
-								if(colType != null && colType != Object.class) {
-									try {
-										if(Number.class.isAssignableFrom(colType)) {
-											try {
-												Constructor<?> numberCtr = 
-														colType.getConstructor( String.class );
-												table1Val = numberCtr.newInstance( "0" );
-											} catch (NoSuchMethodException | InvocationTargetException e) {
-												LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
-											}
-										} else {
-											table1Val = colType.newInstance();
-										}
-									} catch (InstantiationException | IllegalAccessException e) {
-										LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
-									}
-								}
-							}
-							rowData[col++] = (table1Val != null ? table1Val : "");
+							String table1ColName = table1Columns.get(table1ColIdx++);
+							String colName = 
+									getTable1ColumnPrefix() + table1ColName + getTable1ColumnSuffix();
+							outputTable.setColumnTitle(col++, colName);
 						}
 					}
 					for(int table2ColNum = 0; table2ColNum < getTable2ColumnRatio(); table2ColNum++) {
 						if(table2ColIdx < table2Columns.size()) {
-							int colIdx = table2.getColumnIndex(table1Columns.get(table2ColIdx));
-							Object table2Val = table2.getValueAt(
-									getTable2KeyColumn(), rowKey, table2Columns.get(table2ColIdx++));
-							if(table2Val == null) {
-								Class<?> colType = table2.inferColumnType(colIdx);
-								if(colType != null && colType != Object.class) {
-									try {
-										if(Number.class.isAssignableFrom(colType)) {
-											try {
-												Constructor<?> numberCtr = 
-														colType.getConstructor( String.class );
-												table2Val = numberCtr.newInstance( "0" );
-											} catch (NoSuchMethodException | InvocationTargetException e) {
-												LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
-											}
-										} else {
-											table2Val = colType.newInstance();
-										}
-									} catch (InstantiationException | IllegalAccessException e) {
-										LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
-									}
-								}
-							}
-							rowData[col++] = (table2Val != null ? table2Val : "");
+							String table2ColName = table2Columns.get(table2ColIdx++);
+							String colName = 
+									getTable2ColumnPrefix() + table2ColName + getTable2ColumnSuffix();
+							outputTable.setColumnTitle(col++, colName);
 						}
 					}
 				}
 			} else {
 				for(String colName:table1Columns) {
-					Object table1Val = table1.getValueAt(
-							getTable1KeyColumn(), rowKey, colName);
-					rowData[col++] = (table1Val != null ? table1Val : "");
+					String newColName = 
+							getTable1ColumnPrefix() + colName + getTable1ColumnSuffix();
+					outputTable.setColumnTitle(col++, newColName);
 				}
 				for(String colName:table2Columns) {
-					Object table2Val = table2.getValueAt(
-							getTable2KeyColumn(), rowKey, colName);
-					rowData[col++] = (table2Val != null ? table2Val : "");
+					String newColName =
+							getTable2ColumnPrefix() + colName + getTable2ColumnSuffix();
+					outputTable.setColumnTitle(col++, newColName);
 				}
-			}
-			outputTable.addRow(rowData);
-		}
-		
-		// setup column names
-		int col = 0;
-		outputTable.setColumnTitle(col++, getKeyColumnName());
-		if(isInterleaveColumns()) {
-			int table1ColIdx = 0;
-			int table2ColIdx = 0;
-			while(col < numCols) {
-				for(int table1ColNum = 0; table1ColNum < getTable1ColumnRatio(); table1ColNum++) {
-					if(table1ColIdx < table1Columns.size()) {
-						String table1ColName = table1Columns.get(table1ColIdx++);
-						String colName = 
-								getTable1ColumnPrefix() + table1ColName + getTable1ColumnSuffix();
-						outputTable.setColumnTitle(col++, colName);
-					}
-				}
-				for(int table2ColNum = 0; table2ColNum < getTable2ColumnRatio(); table2ColNum++) {
-					if(table2ColIdx < table2Columns.size()) {
-						String table2ColName = table2Columns.get(table2ColIdx++);
-						String colName = 
-								getTable2ColumnPrefix() + table2ColName + getTable2ColumnSuffix();
-						outputTable.setColumnTitle(col++, colName);
-					}
-				}
-			}
-		} else {
-			for(String colName:table1Columns) {
-				String newColName = 
-						getTable1ColumnPrefix() + colName + getTable1ColumnSuffix();
-				outputTable.setColumnTitle(col++, newColName);
-			}
-			for(String colName:table2Columns) {
-				String newColName =
-						getTable2ColumnPrefix() + colName + getTable2ColumnSuffix();
-				outputTable.setColumnTitle(col++, newColName);
 			}
 		}
 		

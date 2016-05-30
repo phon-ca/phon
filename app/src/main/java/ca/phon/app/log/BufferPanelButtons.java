@@ -54,7 +54,6 @@ public class BufferPanelButtons extends JComponent {
 	private ButtonGroup buttonGroup;
 	private JButton tableButton;
 	private JButton textButton;
-	private JButton htmlButton;
 	
 	private final WeakReference<BufferPanel> panelRef;
 	
@@ -72,7 +71,7 @@ public class BufferPanelButtons extends JComponent {
 	private void init() {
 		buttonGroup = new ButtonGroup();
 		final List<JButton> buttons = 
-				(new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(3, buttonGroup);
+				(new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(2, buttonGroup);
 		
 		final ImageIcon txtIcon = IconManager.getInstance().getIcon(TEXT_ICON, IconSize.SMALL);
 		final PhonUIAction txtAct = new PhonUIAction(this, "showText");
@@ -89,12 +88,6 @@ public class BufferPanelButtons extends JComponent {
 		tableButton = buttons.get(1);
 		tableButton.setAction(tblAct);
 		tableButton.setFocusable(false);
-		
-		final PhonUIAction htmlAct = new PhonUIAction(this, "showHTML");
-		htmlAct.putValue(PhonUIAction.NAME, "HTML");
-		htmlButton = buttons.get(2);
-		htmlButton.setAction(htmlAct);
-		htmlButton.setFocusable(false);
 		
 		final BufferPanel bufferPanel = getBufferPanel();
 		bufferPanel.addPropertyChangeListener(BufferPanel.SHOWING_BUFFER_PROP, new PropertyChangeListener() {
@@ -113,7 +106,6 @@ public class BufferPanelButtons extends JComponent {
 		setLayout(new HorizontalLayout(0));
 		add(textButton);
 		add(tableButton);
-		add(htmlButton);
 	}
 	
 	public void showHTML() {

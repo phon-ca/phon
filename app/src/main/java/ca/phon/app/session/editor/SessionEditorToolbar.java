@@ -34,7 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
 
-import ca.phon.app.opgraph.assessment.AssessmentLibrary;
+import ca.phon.app.opgraph.analysis.AnalysisLibrary;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
 import ca.phon.app.session.editor.actions.NewRecordAction;
@@ -182,7 +182,7 @@ public class SessionEditorToolbar extends JPanel {
 		final JButton menuBtn = (JButton)pae.getActionEvent().getSource();
 		
 		final JPopupMenu menu = new JPopupMenu();
-		final AssessmentLibrary library = new AssessmentLibrary();
+		final AnalysisLibrary library = new AnalysisLibrary();
 		final ArrayList<SessionPath> selectedSessions = new ArrayList<>();
 		selectedSessions.add(new SessionPath(getEditor().getSession().getCorpus(), getEditor().getSession().getName()));
 		

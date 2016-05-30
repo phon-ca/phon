@@ -45,7 +45,24 @@ public class OpenAction extends OpgraphEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent arg0) {
-		if(getEditor().hasUnsavedChanges()) {
+		boolean useCurrentWindow = true;
+		if(getEditor().getCurrentFile() != null
+				|| getEditor().hasUnsavedChanges()) {
+			// ask to use new window
+			final String opts[] = new String[] { "Use current window", "Use new window" };
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setParentWindow(getEditor());
+			props.setOptions(opts);
+			props.setTitle("Choose window");
+			props.setHeader(props.getTitle());
+			props.setMessage("Use current window for new document?");
+			props.setRunAsync(false);
+			
+			final int ret = NativeDialogs.showMessageDialog(props);
+			useCurrentWindow = (ret == 0);
+		}
+		
+		if(useCurrentWindow && getEditor().hasUnsavedChanges()) {
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setParentWindow(getEditor());
 			props.setOptions(MessageDialogProperties.yesNoCancelOptions);
@@ -80,8 +97,20 @@ public class OpenAction extends OpgraphEditorAction {
 				final OpGraph graph = OpgraphIO.read(saveFile);
 				final OpgraphEditorModelFactory factory = new OpgraphEditorModelFactory();
 				final OpgraphEditorModel model = factory.fromGraph(graph);
-				getEditor().setModel(model);
-				getEditor().setCurrentFile(saveFile);
+				
+				if(useCurrentWindow) {
+					getEditor().setModel(model);
+					getEditor().setCurrentFile(saveFile);
+				} else {
+					final OpgraphEditor editor = new OpgraphEditor(model);
+					editor.setCurrentFile(saveFile);
+					editor.pack();
+					editor.setSize(1064, 768);
+					editor.setLocationByPlatform(true);
+					editor.setVisible(true);
+				}
+				
+				
 			} catch (IOException | ClassNotFoundException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}

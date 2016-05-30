@@ -24,8 +24,11 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import ca.phon.util.OSInfo;
 
 public class IpaMapRobot implements IpaMapListener {
 	
@@ -54,12 +57,12 @@ public class IpaMapRobot implements IpaMapListener {
 	}
 	
 	private void sendPasteCommand() {
-//		final int ctrlKey =
-//				OSInfo.isMacOs() ? KeyEvent.VK_META : KeyEvent.VK_CONTROL;
-//		robot.keyPress(ctrlKey);
-//		robot.keyPress(KeyEvent.VK_V);
-//		robot.keyRelease(KeyEvent.VK_V);
-//		robot.keyRelease(ctrlKey);
+		final int ctrlKey =
+				OSInfo.isMacOs() ? KeyEvent.VK_META : KeyEvent.VK_CONTROL;
+		robot.keyPress(ctrlKey);
+		robot.keyPress(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_V);
+		robot.keyRelease(ctrlKey);
 	}
 
 	public class IpaTransferrable implements Transferable {
