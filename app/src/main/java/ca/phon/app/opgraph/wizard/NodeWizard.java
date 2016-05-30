@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
@@ -110,6 +111,33 @@ public class NodeWizard extends WizardFrame {
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "report");
 		builder.addMenuItem("File@report", new CreateReportAction(this));
+	}
+	
+	@Override
+	public void close() {
+		boolean okToClose = true;
+
+		if(running) {
+			// ask to cancel current analysis
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setRunAsync(false);
+			props.setTitle("Close Window");
+			props.setHeader(props.getTitle());
+			props.setMessage("Cancel current analysis and close window?");
+			props.setOptions(MessageDialogProperties.yesNoOptions);
+			props.setParentWindow(this);
+			
+			okToClose = (NativeDialogs.showMessageDialog(props) == 0);
+		} else if(hasUnsavedChanges()) {
+			// TODO ask to save changes
+		}
+		
+		if(okToClose) {
+			if(running) {
+				stopExecution();
+			}
+			super.close();
+		}
 	}
 	
 	private void init() {
@@ -291,7 +319,7 @@ public class NodeWizard extends WizardFrame {
 		}
 	}
 	
-	protected void executeGraph() throws ProcessingException {
+	public void executeGraph() throws ProcessingException {
 		setupContext(processor.getContext());
 		if(!processor.hasNext()) {
 			processor.reset();
@@ -316,6 +344,10 @@ public class NodeWizard extends WizardFrame {
 			});
 			throw pe;
 		}
+	}
+	
+	public WizardOptionalsCheckboxTree getOptionalsTree() {
+		return this.optionalsTree;
 	}
 
 	protected void setupContext(OpContext ctx) {

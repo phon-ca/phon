@@ -112,6 +112,7 @@ public class OpenAction extends OpgraphEditorAction {
 				
 				
 			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}

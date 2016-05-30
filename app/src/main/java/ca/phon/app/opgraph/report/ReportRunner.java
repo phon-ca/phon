@@ -1,5 +1,7 @@
 package ca.phon.app.opgraph.report;
 
+import java.awt.Toolkit;
+
 import javax.swing.SwingUtilities;
 
 import ca.gedge.opgraph.OpContext;
@@ -78,9 +80,17 @@ public class ReportRunner implements Runnable {
 			SwingUtilities.invokeLater(() -> {
 				final NodeWizard wizard = wizardExt.createWizard(processor);
 				wizard.pack();
-				wizard.setSize(1024, 768);
+				int padding = 100;
+				wizard.setSize(
+						Toolkit.getDefaultToolkit().getScreenSize().width - padding, 
+						Toolkit.getDefaultToolkit().getScreenSize().height - padding);
+				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
+				
+				if(wizard.numberOfSteps() == 1) {
+					wizard.executeGraph();
+				}
 			});
 		} else {
 			processor.stepAll();

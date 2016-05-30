@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
@@ -23,6 +25,7 @@ import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardStep;
@@ -52,6 +55,16 @@ public class AnalysisWizard extends NodeWizard {
 		addSessionSelectionStep();
 		
 		getRootPane().setDefaultButton(btnNext);
+	}
+	
+	@Override
+	public void setJMenuBar(JMenuBar menuBar) {
+		super.setJMenuBar(menuBar);
+		
+		// TODO add save action
+		final MenuBuilder builder = new MenuBuilder(menuBar);
+		builder.addSeparator("File@1", "save");
+		builder.addMenuItem("File@save", new SaveAnalysisAction(this));
 	}
 	
 	private void addSessionSelectionStep() {

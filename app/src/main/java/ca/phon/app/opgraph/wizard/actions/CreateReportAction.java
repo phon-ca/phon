@@ -42,7 +42,7 @@ public class CreateReportAction extends HookableAction {
 	
 	private static final long serialVersionUID = 9222399609937613349L;
 
-	private final static String TXT = "Create report";
+	private final static String TXT = "Printable report...";
 	
 	private final static String DESC = "Create printable HTML report of results";
 	
@@ -69,6 +69,7 @@ public class CreateReportAction extends HookableAction {
 		props.setCanChooseFiles(false);
 		props.setCanCreateDirectories(true);
 		props.setAllowMultipleSelection(false);
+		props.setParentWindow(wizard);
 		props.setListener( (e) -> {
 			if(e.getDialogData() != null) {
 				try {

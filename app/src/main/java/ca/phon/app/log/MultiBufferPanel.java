@@ -109,6 +109,10 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		add(splitPane, BorderLayout.CENTER);
 	}
 	
+	public JToolBar getToolbar() {
+		return this.toolbar;
+	}
+	
 	private JPanel createNoSelectionPanel() {
 		final JPanel panel = new JPanel(new GridBagLayout());
 		final GridBagConstraints gbc = new GridBagConstraints();

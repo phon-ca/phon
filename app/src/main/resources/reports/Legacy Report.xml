@@ -22,7 +22,9 @@
         </node>
         <node id="7ab6cf1a" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <extensions>
-                <oga:settings/>
+                <oga:settings>
+                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                </oga:settings>
                 <oga:meta x="479" y="148"/>
             </extensions>
         </node>
@@ -34,7 +36,7 @@
         <link dest="334d668e" destField="results" source="58072efd" sourceField="result sets"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info title="Introduction">
+                <opqry:info title="Legacy Report">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="334d668e">

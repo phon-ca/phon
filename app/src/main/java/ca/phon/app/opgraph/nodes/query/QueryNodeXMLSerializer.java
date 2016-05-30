@@ -107,7 +107,7 @@ public class QueryNodeXMLSerializer implements XMLSerializer {
 		// use jaxb to save to element
 		try {
 			QName queryQName = new QName(QUERY_NAMESPACE, "query", QUERY_PREFIX);
-			JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.db.xml.io.query");
+			JAXBContext ctx = JAXBContext.newInstance(ca.phon.query.db.xml.io.query.ObjectFactory.class);
 			Marshaller marshaller = ctx.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

@@ -22,16 +22,29 @@
             <extensions>
                 <opqry:inventoryoptions>
                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                    <opqry:column caseSensitive="false" column="Result" ignoreDiacritics="true"/>
+                    <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="true"/>
+                    <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="true"/>
                 </opqry:inventoryoptions>
                 <oga:settings/>
                 <oga:meta x="410" y="15"/>
             </extensions>
         </node>
+        <node id="50f011e9" type="class:ca.phon.app.opgraph.nodes.query.PhoneVariability">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>
+                    <oga:property key="includePlace"><![CDATA[true]]></oga:property>
+                    <oga:property key="useFeatureVariability"><![CDATA[false]]></oga:property>
+                    <oga:property key="includeManner"><![CDATA[true]]></oga:property>
+                </oga:settings>
+                <oga:meta x="33" y="140"/>
+            </extensions>
+        </node>
         <node id="b5aa672" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
             <extensions>
                 <opqry:sortoptions>
-                    <opqry:sortBy column="Result" order="ascending" type="plain"/>
+                    <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
+                    <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
                 </opqry:sortoptions>
                 <oga:settings/>
                 <oga:meta x="225" y="136"/>
@@ -43,15 +56,16 @@
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="400" y="136">
-                    <oga:default for="buffer" type="java.lang.String">Inventory</oga:default>
+                    <oga:default for="buffer" type="java.lang.String">Phone Variability</oga:default>
                 </oga:meta>
             </extensions>
         </node>
         <link dest="24049103" destField="project" source="3b7dacf0" sourceField="project"/>
         <link dest="3790be87" destField="table" source="24049103" sourceField="table"/>
-        <link dest="b5aa672" destField="table" source="3790be87" sourceField="table"/>
         <link dest="6f7c2ffa" destField="data" source="b5aa672" sourceField="table"/>
         <link dest="24049103" destField="results" source="3b7dacf0" sourceField="result sets"/>
+        <link dest="50f011e9" destField="table" source="3790be87" sourceField="table"/>
+        <link dest="b5aa672" destField="table" source="50f011e9" sourceField="table"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
@@ -60,6 +74,11 @@
                 </opqry:info>
                 <opqry:node ref="3790be87">
                     <opqry:info title="Inventory Options">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="50f011e9">
+                    <opqry:info title="Phone Variability">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
