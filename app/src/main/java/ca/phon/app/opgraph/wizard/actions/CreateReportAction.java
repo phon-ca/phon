@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.birt.report.engine.api.EngineException;
@@ -18,7 +19,6 @@ import org.eclipse.birt.report.model.api.OdaDataSourceHandle;
 import org.eclipse.birt.report.model.api.ReportDesignHandle;
 import org.eclipse.birt.report.model.api.activity.SemanticException;
 import org.eclipse.birt.report.model.elements.ReportDesign;
-import org.eclipse.datatools.connectivity.oda.util.logging.Level;
 
 import ca.phon.app.VersionInfo;
 import ca.phon.app.hooks.HookableAction;
@@ -77,7 +77,7 @@ public class CreateReportAction extends HookableAction {
 					createHTMLReport((String)e.getDialogData());
 					showReport((String)e.getDialogData());
 				} catch (Exception e1) {
-					LOGGER.warning(e1.getLocalizedMessage());
+					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
 				}
 			}
 		});
@@ -96,7 +96,7 @@ public class CreateReportAction extends HookableAction {
 				writer.flush();
 				writer.close();
 			} catch (IOException e) {
-				LOGGER.warning(e.getLocalizedMessage());
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 	}
