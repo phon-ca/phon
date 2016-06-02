@@ -122,7 +122,7 @@ public class PhoneVariability extends TableOpNode implements NodeSettings {
 			}
 		}
 		
-		int delCost = deletionCost();
+		int dimensions = numDimensions();
 		for(IPAElement ele:totals.keySet()) {
 			checkCanceled();
 			
@@ -133,8 +133,9 @@ public class PhoneVariability extends TableOpNode implements NodeSettings {
 			long costs[] = subCosts.get(ele);
 			
 			for(int col = 0; col < numInventoryCols; col++) {
-				rowData[col+1] = 
-						(float)(costs[col])/(float)(sums[col]*delCost);
+				rowData[col+1] = (sums[col] > 0 
+						?	(float)(costs[col])/(float)(sums[col]*dimensions)
+						:	0);
 			}
 			outputTable.addRow(rowData);
 		}
@@ -148,16 +149,29 @@ public class PhoneVariability extends TableOpNode implements NodeSettings {
 		context.put(tableOutput, outputTable);
 	}
 	
-	protected int deletionCost() {
+	protected int numDimensions() {
+		int retVal = 0;
 		if(isUseFeatureVariability()) {
-			int cost = 1;
-			if(isIncludePlace()) ++cost;
-			if(isIncludeManner()) ++cost;
-			if(isIncludeVoicing()) ++cost;
-			return cost;
+			if(isIncludePlace()) ++retVal;
+			if(isIncludeManner()) ++retVal;
+			if(isIncludeVoicing()) ++retVal;
 		} else {
-			return 2;
+			retVal = 1;
 		}
+		return retVal;
+	}
+	
+	protected int deletionCost() {
+//		if(isUseFeatureVariability()) {
+//			int cost = 1;
+//			if(isIncludePlace()) ++cost;
+//			if(isIncludeManner()) ++cost;
+//			if(isIncludeVoicing()) ++cost;
+//			return cost;
+//		} else {
+//			return 2;
+//		}
+		return 0;
 	}
 	
 	/**
@@ -199,8 +213,8 @@ public class PhoneVariability extends TableOpNode implements NodeSettings {
 				}
 			}
 			if(isIncludeVoicing()) {
-				FeatureSet modelVoicing = model.getFeatureSet().getPlace();
-				FeatureSet actualVoicing = actual.getFeatureSet().getPlace();
+				FeatureSet modelVoicing = model.getFeatureSet().getVoicing();
+				FeatureSet actualVoicing = actual.getFeatureSet().getVoicing();
 				
 				FeatureSet intersection = FeatureSet.intersect(modelVoicing, actualVoicing);
 				if(!intersection.equals(modelVoicing)) {
