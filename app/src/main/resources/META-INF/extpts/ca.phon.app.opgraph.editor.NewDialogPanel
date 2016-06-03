@@ -1,4 +1,4 @@
 ca.phon.app.opgraph.editor.EmptyNewDialogPanelExtPt
-ca.phon.app.opgraph.assessment.AssessmentNewPanelExtPt
+ca.phon.app.opgraph.analysis.AnalysisNewPanelExtPt
 ca.phon.app.opgraph.report.ReportNewPanelExtPt
 ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierNewDialogPanelExtPt
