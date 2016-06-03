@@ -404,11 +404,11 @@ public class NodeWizard extends WizardFrame {
 	
 	protected WizardStep createReportStep() {
 		final WizardStep retVal = new WizardStep();
-		retVal.setTitle("Report");
+		retVal.setTitle("Generate report");
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final JXTitledPanel panel = new JXTitledPanel("Report");
+		final JXTitledPanel panel = new JXTitledPanel("Generate report");
 		panel.getContentContainer().setLayout(new BorderLayout());
 		panel.getContentContainer().add(getBufferPanel(), BorderLayout.CENTER);
 		
@@ -419,11 +419,11 @@ public class NodeWizard extends WizardFrame {
 	
 	protected WizardStep createOptionalsStep() {
 		final WizardStep retVal = new WizardStep();
-		retVal.setTitle("Optional Analysis");
+		retVal.setTitle("Select analyses");
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final JXTitledPanel panel = new JXTitledPanel("Optional Analysis");
+		final JXTitledPanel panel = new JXTitledPanel("Select analyses");
 		panel.getContentContainer().setLayout(new BorderLayout());
 		
 		optionalsTree = new WizardOptionalsCheckboxTree(getWizardExtension());
