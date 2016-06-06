@@ -1,33 +1,20 @@
 package ca.phon.app.opgraph.analysis;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXTitledPanel;
-import org.jdesktop.swingx.JXTitledSeparator;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
-import ca.gedge.opgraph.ProcessorEvent;
-import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardStep;
 
 public class AnalysisWizard extends NodeWizard {
@@ -61,7 +48,6 @@ public class AnalysisWizard extends NodeWizard {
 	public void setJMenuBar(JMenuBar menuBar) {
 		super.setJMenuBar(menuBar);
 		
-		// TODO add save action
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "save");
 		builder.addMenuItem("File@save", new SaveAnalysisAction(this));
@@ -98,6 +84,7 @@ public class AnalysisWizard extends NodeWizard {
 	
 	public void setProject(Project project) {
 		this.project = project;
+		putExtension(Project.class, project);
 		this.sessionSelector.setProject(project);
 		this.sessionSelector.revalidate();
 	}
@@ -110,29 +97,6 @@ public class AnalysisWizard extends NodeWizard {
 		return this.sessionSelector;
 	}
 	
-//	@Override
-//	public void executionEnded(ProcessorEvent pe) {
-//		super.executionEnded(pe);
-//		
-//		// ask to save buffers
-//		if(getBufferPanel().getBufferNames().size() > 0) {
-//			final MessageDialogProperties props = new MessageDialogProperties();
-//			props.setParentWindow(this);
-//			props.setTitle("Save Assessment");
-//			props.setHeader("Save Assessment");
-//			props.setMessage("Save all buffers to a folder on disk?");
-//			props.setOptions(MessageDialogProperties.yesNoOptions);
-//			props.setRunAsync(false);
-//			
-//			int ret = NativeDialogs.showMessageDialog(props);
-//			if(ret == 0) {
-//				SwingUtilities.invokeLater( () -> 
-//					(new SaveAllBuffersAction(getBufferPanel()))
-//						.actionPerformed(new ActionEvent(AssessmentWizard.this, 0, "save all")) );
-//			}
-//		}
-//	}
-
 	@Override
 	public void gotoStep(int stepIdx) {
 		if(getWizardStep(stepIdx) == reportStep && sessionSelector != null) {

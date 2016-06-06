@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -23,12 +24,14 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXBusyLabel;
@@ -48,6 +51,7 @@ import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.opgraph.wizard.actions.CreateReportAction;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -123,13 +127,26 @@ public class NodeWizard extends WizardFrame {
 			props.setRunAsync(false);
 			props.setTitle("Close Window");
 			props.setHeader(props.getTitle());
-			props.setMessage("Cancel current analysis and close window?");
+			props.setMessage("Cancel running analyses and close window?");
 			props.setOptions(MessageDialogProperties.yesNoOptions);
 			props.setParentWindow(this);
 			
 			okToClose = (NativeDialogs.showMessageDialog(props) == 0);
 		} else if(hasUnsavedChanges()) {
-			// TODO ask to save changes
+			MessageDialogProperties props = new MessageDialogProperties();
+			props.setRunAsync(false);
+			props.setTitle("Close Window");
+			props.setHeader(props.getTitle());
+			props.setMessage("Save results before closing window?");
+			final String[] opts = { "Close without saving", "Save and close", "Cancel" };
+			props.setOptions(opts);
+			props.setParentWindow(this);
+			
+			int retVal = NativeDialogs.showMessageDialog(props);
+			if(retVal == 1) {
+				// run save results
+				
+			}
 		}
 		
 		if(okToClose) {
@@ -427,6 +444,7 @@ public class NodeWizard extends WizardFrame {
 		panel.getContentContainer().setLayout(new BorderLayout());
 		
 		optionalsTree = new WizardOptionalsCheckboxTree(getWizardExtension());
+		optionalsTree.addMouseListener(new OptionalsContextHandler());
 		for(OpNode optionalNode:getWizardExtension().getOptionalNodes()) {
 			if(getWizardExtension().getOptionalNodeDefault(optionalNode)) {
 				optionalsTree.checkNode(optionalNode);
@@ -505,6 +523,52 @@ public class NodeWizard extends WizardFrame {
 		}
 	}
 	
-	
+	private class OptionalsContextHandler extends MouseInputAdapter {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+		
+		private void showContextMenu(MouseEvent e) {
+			int row = optionalsTree.getRowForLocation(e.getX(), e.getY());
+			if(row < 0) return;
+			final JPopupMenu menu = new JPopupMenu();
+			final MenuBuilder menuBuilder = new MenuBuilder(menu);
+			
+			final TreePath path = optionalsTree.getPathForRow(row);
+			if(!(path.getLastPathComponent() instanceof CheckedOpNode)) return;
+			final CheckedOpNode node = (CheckedOpNode)path.getLastPathComponent();
+			final OpNode opNode = node.getNode();
+			
+			final PhonUIAction checkNodeAction = 
+					new PhonUIAction(optionalsTree, 
+							(optionalsTree.isPathChecked(path) ? "removeCheckingPath" : "addCheckingPath"), 
+							path);
+			String name = (optionalsTree.isPathChecked(path) ? "Uncheck " : "Check ") +  opNode.getName();
+			checkNodeAction.putValue(PhonUIAction.NAME, name);
+			menuBuilder.addMenuItem(".", checkNodeAction);
+			
+			final PhonUIAction showOptionsAction = 
+					new PhonUIAction(NodeWizard.this, "showAdvancedSettings", path);
+			showOptionsAction.putValue(PhonUIAction.NAME, "Show settings");
+			showOptionsAction.putValue(PhonUIAction.SMALL_ICON,
+					IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
+			menuBuilder.addMenuItem(".", showOptionsAction);
+			
+			menu.show(optionalsTree, e.getX(), e.getY());
+		}
+		
+		
+	}
 	
 }

@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +20,6 @@ import org.eclipse.birt.report.model.api.ElementFactory;
 import org.eclipse.birt.report.model.api.OdaDataSourceHandle;
 import org.eclipse.birt.report.model.api.ReportDesignHandle;
 import org.eclipse.birt.report.model.api.activity.SemanticException;
-import org.eclipse.birt.report.model.elements.ReportDesign;
 
 import ca.phon.app.VersionInfo;
 import ca.phon.app.hooks.HookableAction;
@@ -29,12 +30,11 @@ import ca.phon.app.opgraph.nodes.log.BirtBufferPanelExtension;
 import ca.phon.app.opgraph.nodes.log.BirtDesignEngine;
 import ca.phon.app.opgraph.nodes.log.BirtReportEngine;
 import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.opgraph.wizard.NodeWizardPanel;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.project.Project;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OpenFileLauncher;
+import ca.phon.util.PrefHelper;
 
 public class CreateReportAction extends HookableAction {
 	
@@ -48,6 +48,11 @@ public class CreateReportAction extends HookableAction {
 	
 	private final static String MASTER_REPORT = "birt/master.rptdesign";
 	
+	private final static String USER_REPORT_FOLDER = PrefHelper.getUserDataFolder() + 
+			File.separator + "reports";
+	
+	private final static String DEFAULT_REPORT_FOLDER = "__res/reports";
+	
 	private NodeWizard wizard;
 	
 	public CreateReportAction(NodeWizard wizard) {
@@ -57,6 +62,19 @@ public class CreateReportAction extends HookableAction {
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
+	}
+	
+	public String getReportFolder() {
+		LocalDateTime date = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+		String initialFolder = USER_REPORT_FOLDER;
+		final Project project = wizard.getExtension(Project.class);
+		if(project != null) {
+			initialFolder = project.getLocation() + File.separator + DEFAULT_REPORT_FOLDER;
+		}
+		initialFolder += File.separator + wizard.getWizardExtension().getWizardTitle() 
+				+ " (" + date.format(formatter) + ")";
+		return initialFolder;
 	}
 
 	@Override
@@ -70,6 +88,14 @@ public class CreateReportAction extends HookableAction {
 		props.setCanCreateDirectories(true);
 		props.setAllowMultipleSelection(false);
 		props.setParentWindow(wizard);
+		
+		final String folderPath = getReportFolder();
+		final File folder = new File(folderPath);
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		props.setInitialFolder(folderPath);
+		
 		props.setListener( (e) -> {
 			if(e.getDialogData() != null) {
 				try {
