@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="202870d8" name="Word Match" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="1588d51c">
+            <graph id="27d32e7">
                 <node id="883bf8c4a0d04976" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -40,9 +40,9 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="dfcddbc6284e4e5b" name="Word Match (CV)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="44064db7">
+                    <graph id="8882bd3">
                         <opqry:queryNode id="2b7bfe59bce74be7" name="Query : Word List" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.950-02:30" name="Word List" uuid="b7d65346-55b6-420c-aabf-2418fc41cba1">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.284-02:30" name="Word List" uuid="00df615e-2b3d-41d5-911e-598285cdfa29">
                                 <script>
                                     <source>/*
  * Phon - An open source tool for research in phonology.
@@ -229,7 +229,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <ogcn:macro id="807ff47842e4fc5" name="Word CVG Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="25862488">
+                            <graph id="70c5d43d">
                                 <node id="e8ec1a34ffea4520" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
@@ -270,7 +270,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="a80d96aa822a4c17" name="Word CVG Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="5c2cdb63">
+                            <graph id="40ad1a5b">
                                 <node id="7d0cab15ee1d4ce3" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
@@ -325,9 +325,9 @@ function getRowValue(table, row) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="43fa1bb7029645bd" name="Word Match (Stress Pattern)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="a8a1c00">
+                    <graph id="2b3a70c4">
                         <opqry:queryNode id="48dd97a00f9a42eb" name="Query : Word List" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.955-02:30" name="Word List" uuid="34ea099c-fd73-45e2-832a-2cc7f12fdd27">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.301-02:30" name="Word List" uuid="cf16cc06-ee25-40f0-8c89-f33ff9370cdd">
                                 <script>
                                     <source>/*
  * Phon - An open source tool for research in phonology.
@@ -511,7 +511,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <ogcn:macro id="ecc33211145f422b" name="Word Stress Pattern Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="100c0fa3">
+                            <graph id="15f22c9d">
                                 <node id="9b7c8316529c4a04" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
@@ -552,7 +552,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="777a530163a84b80" name="Word Stress Pattern Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="501d7e60">
+                            <graph id="6eed429e">
                                 <node id="93713d07c6934ed0" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
@@ -607,9 +607,9 @@ function getRowValue(table, row) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="352e52775a6343d7" name="Word Match (Syllables)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="633cbb7">
+                    <graph id="271ea4c0">
                         <opqry:queryNode id="8d4b15e07fc146f6" name="Query : Word List" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.961-02:30" name="Word List" uuid="e68db10e-a0bc-4559-b766-e5d6038d5a6d">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.309-02:30" name="Word List" uuid="a8a50264-5232-4b7e-aa09-1e27a7e36e22">
                                 <script>
                                     <source>/*
  * Phon - An open source tool for research in phonology.
@@ -793,7 +793,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <ogcn:macro id="cd062e8499834fc3" name="Word Syllable Count Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="3bd9189">
+                            <graph id="4b66e2e4">
                                 <node id="20621ddaa619422e" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
@@ -834,7 +834,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="3fe57a2f6225403e" name="Word Syllable Count Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="65d11aaa">
+                            <graph id="6288eb0d">
                                 <node id="a1825d1a9657412d" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
@@ -902,7 +902,7 @@ function getRowValue(table, row) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="31863b1" name="Transcript Variability" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="44d3205b">
+            <graph id="996df6e">
                 <node id="50f43413ea8e42b6" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -922,9 +922,9 @@ function getRowValue(table, row) {
                     </extensions>
                 </node>
                 <ogcn:macro id="a181dea9f56c4bfd" name="Transcript Variability (word)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="25b4adf6">
+                    <graph id="3e4f4c8e">
                         <opqry:queryNode id="3ef13c9986924fab" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.967-02:30" name="Phones" uuid="6640ef4c-0416-426d-b15c-44706164b38b">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.317-02:30" name="Phones" uuid="ec9a9753-b0fd-469a-9523-8487b1bc7144">
                                 <script>
                                     <source>/*
 params =
@@ -1342,9 +1342,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="5867e099310440c4" name="Transcript Variability (syllable)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="584a6f9e">
+                    <graph id="c76e549">
                         <opqry:queryNode id="1143f23b8eb14560" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.972-02:30" name="Phones" uuid="935cc481-0821-44b3-ade9-71a0f751ecf6">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.324-02:30" name="Phones" uuid="5994a00e-8bb9-4a97-8d5c-4f10b2b0528b">
                                 <script>
                                     <source>/*
 params =
@@ -1763,9 +1763,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="dbd9b852928d4940" name="Transcript Variability (syllable-stressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="18211a1">
+                    <graph id="34284329">
                         <opqry:queryNode id="153e3c241a8b4054" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.977-02:30" name="Phones" uuid="fe42847d-afe1-4e5d-9e79-1ccea8721e9f">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.333-02:30" name="Phones" uuid="effa851a-8f98-4801-b102-ed8cd7933ead">
                                 <script>
                                     <source>/*
 params =
@@ -2185,9 +2185,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="64feca2fc59a4647" name="Transcript Variability (syllable-unstressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="15c33f64">
+                    <graph id="6f961371">
                         <opqry:queryNode id="ba2a3a6b44254a59" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.982-02:30" name="Phones" uuid="ad7cd3ed-74a0-4487-9207-7a34b4f143bd">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.340-02:30" name="Phones" uuid="9a706d49-f978-4553-9c28-5a21555f575a">
                                 <script>
                                     <source>/*
 params =
@@ -2621,8 +2621,8 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                 <oga:meta x="395" y="21"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="5a3c8c49" name="Phone Variability" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="149e9851">
+        <ogcn:macro id="5a3c8c49" name="Phone Dispersion" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="263b6913">
                 <node id="5d979942d8b44c5e" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -2641,10 +2641,10 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                         <oga:meta x="91" y="252"/>
                     </extensions>
                 </node>
-                <ogcn:macro id="e28a8e017b46477e" name="Phone Variability (global)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="31783146">
+                <ogcn:macro id="e28a8e017b46477e" name="Phone Dispersion (global)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                    <graph id="82d5e36">
                         <opqry:queryNode id="420c933f3b6d48a8" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.987-02:30" name="Phones" uuid="b8ebbe25-1e2d-4b6e-bc1d-2379f69ee505">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.346-02:30" name="Phones" uuid="e7f6b23a-667a-4484-a459-8a6655a74c8b">
                                 <script>
                                     <source>/*
 params =
@@ -3059,7 +3059,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="531" y="359">
-                                    <oga:default for="buffer" type="java.lang.String">Phone Variability (global)</oga:default>
+                                    <oga:default for="buffer" type="java.lang.String">Phone Dispersion (global)</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -3075,10 +3075,10 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                         <oga:meta x="315" y="40"/>
                     </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="a978b99e04e64d86" name="Phone Variability (feature)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="24dfa369">
+                <ogcn:macro id="a978b99e04e64d86" name="Phone Dispersion (feature)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                    <graph id="36277ea8">
                         <opqry:queryNode id="571cdbc2cb614f39" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.992-02:30" name="Phones" uuid="7a59a3e2-3265-460e-bc42-34c3e3555f68">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.353-02:30" name="Phones" uuid="b900256a-3776-4ce4-a753-68a3325bb75b">
                                 <script>
                                     <source>/*
 params =
@@ -3493,7 +3493,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="531" y="361">
-                                    <oga:default for="buffer" type="java.lang.String">Phone Variability (feature)</oga:default>
+                                    <oga:default for="buffer" type="java.lang.String">Phone Dispersion (feature)</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -3521,7 +3521,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="195d046d" name="Phone Accuracy" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="21efa1df">
+            <graph id="632f09d">
                 <node id="11ece30ab49f4d8e" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -3541,9 +3541,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </node>
                 <ogcn:macro id="f0dbf4f0b40840a7" name="Phone Accuracy (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4c2c6494">
+                    <graph id="36a097db">
                         <opqry:queryNode id="323b22203cea4ead" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:02.997-02:30" name="Phones" uuid="732c3d4a-f2fc-4307-9a37-a30335be1cab">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.359-02:30" name="Phones" uuid="9242faa4-c5fb-4de2-803c-67775af690f1">
                                 <script>
                                     <source>/*
 params =
@@ -3962,9 +3962,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="5abfa045d4c848b2" name="Phone Accuracy (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="66062237">
+                    <graph id="7b9bca4c">
                         <opqry:queryNode id="109b595efe514823" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.001-02:30" name="Phones" uuid="8c75b5af-e9cd-4b9e-98c1-9f7b5edd1285">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.365-02:30" name="Phones" uuid="e52b7618-a6f5-4215-9d7e-454a36f28830">
                                 <script>
                                     <source>/*
 params =
@@ -4383,9 +4383,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="d8cfea31af434bab" name="Phone Accuracy (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3f20e06d">
+                    <graph id="63d91a34">
                         <opqry:queryNode id="592bd82582044560" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.006-02:30" name="Phones" uuid="9201ac1f-dbff-47b7-86ee-ced7c0596382">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.370-02:30" name="Phones" uuid="8184f638-d94a-4cab-96ac-1f04f21e2ee0">
                                 <script>
                                     <source>/*
 params =
@@ -4804,9 +4804,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="742e611052ab4b71" name="Phone Accuracy (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5bcb292e">
+                    <graph id="46d207a1">
                         <opqry:queryNode id="bf46fe9709fd421d" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.012-02:30" name="Phones" uuid="8d2073f0-8109-457f-afc4-eb11535c72d6">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.376-02:30" name="Phones" uuid="13e7ee34-3800-4ac3-a2ae-5bdea8027495">
                                 <script>
                                     <source>/*
 params =
@@ -5243,7 +5243,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="640fdcea993743a6" name="Place Accuracy" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="7881d7c2">
+            <graph id="29f63f78">
                 <node id="ce151d9e21dd47b5" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -5263,9 +5263,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </node>
                 <ogcn:macro id="6ed0ee8cf3f1444c" name="Place Accuracy (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3ded2d10">
+                    <graph id="69c9dfd7">
                         <opqry:queryNode id="3d874309e48a4450" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.018-02:30" name="Phones" uuid="206c3ece-e6cd-42e1-b041-52c856cc5828">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.382-02:30" name="Phones" uuid="3afbdb70-1a4b-4e73-b346-ac1904a5d134">
                                 <script>
                                     <source>/*
 params =
@@ -5685,9 +5685,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="c9d5482c7db149bc" name="Place Accuracy (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="62461c26">
+                    <graph id="57e0d908">
                         <opqry:queryNode id="b2f97151e56f40c6" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.023-02:30" name="Phones" uuid="b49dc538-063a-459d-aa52-794670c89f18">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.387-02:30" name="Phones" uuid="a4bfdf7d-06e7-49f0-94fa-671a8203f578">
                                 <script>
                                     <source>/*
 params =
@@ -6107,9 +6107,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="bd7162b561034ae3" name="Place Accuracy (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="10a83f37">
+                    <graph id="106a58ed">
                         <opqry:queryNode id="98e9639766bc4105" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.028-02:30" name="Phones" uuid="ff6a88ab-7e50-44d7-b40a-c97dc9b5eb0b">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.393-02:30" name="Phones" uuid="3556bc14-24f7-4204-bb56-fd773d0eab79">
                                 <script>
                                     <source>/*
 params =
@@ -6529,9 +6529,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="fdd98b90764f4cfb" name="Place Accuracy (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="285f3145">
+                    <graph id="1a2ad9ed">
                         <opqry:queryNode id="7a01fd16ea354e12" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.034-02:30" name="Phones" uuid="c2f23564-8400-48e6-b8db-44886aba6737">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.399-02:30" name="Phones" uuid="b3a1599f-1067-4b21-b09d-66ee09875a18">
                                 <script>
                                     <source>/*
 params =
@@ -6969,7 +6969,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="6c85879a863a4240" name="Manner Accuracy" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6ac3ffaf">
+            <graph id="5789284a">
                 <node id="23a36d9cbcda46f9" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -6989,9 +6989,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </node>
                 <ogcn:macro id="1249607b56f4472f" name="Manner Accuracy (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6c0e954e">
+                    <graph id="51ea414a">
                         <opqry:queryNode id="b210d34ee0e41dd" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.039-02:30" name="Phones" uuid="a22d5e3c-d427-4fe9-9669-47ff92c24729">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.405-02:30" name="Phones" uuid="66361679-2d8a-45fb-8800-f7fc852339c9">
                                 <script>
                                     <source>/*
 params =
@@ -7411,9 +7411,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="1914eeedc2544191" name="Manner Accuracy (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="2469b4ac">
+                    <graph id="56d868c8">
                         <opqry:queryNode id="a572461dd6cf4c2c" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.044-02:30" name="Phones" uuid="a3891425-f42b-424f-8b33-8a3541d91e63">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.411-02:30" name="Phones" uuid="61091fb4-516a-4eea-bc64-e2381743c547">
                                 <script>
                                     <source>/*
 params =
@@ -7833,9 +7833,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="f1f34c0a8d5f4c78" name="Manner Accuracy (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="419acf9e">
+                    <graph id="dc88a16">
                         <opqry:queryNode id="3b56f60c35b34291" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.049-02:30" name="Phones" uuid="1aa5e2f8-77c7-42d1-8d52-f0c703a16581">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.416-02:30" name="Phones" uuid="80b722e3-e430-47e4-bcca-7b7f14e11026">
                                 <script>
                                     <source>/*
 params =
@@ -8255,9 +8255,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="8579a9b5b33a4189" name="Manner Accuracy (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="16af932d">
+                    <graph id="7e6169b8">
                         <opqry:queryNode id="28fa9f0898f0472f" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.054-02:30" name="Phones" uuid="621b1ec3-08c7-4f72-8e61-d0cf777ba349">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.421-02:30" name="Phones" uuid="177a4f22-644a-404a-ba22-02bab93db95b">
                                 <script>
                                     <source>/*
 params =
@@ -8695,7 +8695,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="955a114" name="Target Consonants" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="50c0b732">
+            <graph id="5deaa88e">
                 <node id="61d704794e654dad" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -8715,9 +8715,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </node>
                 <ogcn:macro id="7a1473143fe44086" name="Target Consonants" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7f4df3ae">
+                    <graph id="fea4b35">
                         <opqry:queryNode id="685805f318804f7b" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.059-02:30" name="Phones" uuid="f5ede228-13c8-4967-a51c-14e209cab922">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.427-02:30" name="Phones" uuid="5e231050-9f4a-4bad-ae2a-343074b96874">
                                 <script>
                                     <source>/*
 params =
@@ -9147,9 +9147,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="778801049f5940a9" name="Target Consonants (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7085a023">
+                    <graph id="4d6ce600">
                         <opqry:queryNode id="5c7c141a391f40cd" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.064-02:30" name="Phones" uuid="ebc2d8ab-fd97-45f8-b967-7723e929d2df">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.434-02:30" name="Phones" uuid="a85489fa-681b-45f8-b67f-68bd78efa848">
                                 <script>
                                     <source>/*
 params =
@@ -9577,9 +9577,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="3f9a4c82c2ce4f01" name="Target Consonants (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="cfc8c03">
+                    <graph id="3de56610">
                         <opqry:queryNode id="bd2193b702284136" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.069-02:30" name="Phones" uuid="c68409ff-eec4-4a22-af91-b5f65544b61f">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.439-02:30" name="Phones" uuid="0f80e0f3-4dbd-4b95-a551-56fd72d713cc">
                                 <script>
                                     <source>/*
 params =
@@ -10007,9 +10007,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="b38d2d93e71f4cd4" name="Target Consonants (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5c536ff9">
+                    <graph id="d91780f">
                         <opqry:queryNode id="754f638f2115492e" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.075-02:30" name="Phones" uuid="1e2eb8fc-4e6e-495f-8c48-3f2973d730a9">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.445-02:30" name="Phones" uuid="6aa919d2-3fda-438f-ba37-7d0248fd2875">
                                 <script>
                                     <source>/*
 params =
@@ -10452,7 +10452,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="c8f18f80486f4a91" name="Target Vowels" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="bd3320a">
+            <graph id="64862c71">
                 <node id="f8259f1b749b44d9" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -10472,9 +10472,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </node>
                 <ogcn:macro id="e0b1058b9c0141a2" name="Target Vowels" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="e9bed2f">
+                    <graph id="6fd872f3">
                         <opqry:queryNode id="1aa97e98a2fe47dc" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.080-02:30" name="Phones" uuid="c0f8246a-3460-4b28-9621-530c40d78c48">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.450-02:30" name="Phones" uuid="6559d139-2269-41db-83d1-2b63148f3c15">
                                 <script>
                                     <source>/*
 params =
@@ -10904,9 +10904,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="b4509700928748a2" name="Target Vowels (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6ff7e236">
+                    <graph id="54472ef5">
                         <opqry:queryNode id="a5b37000ead34dce" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.085-02:30" name="Phones" uuid="0ff38634-d25c-446c-8e61-7aaf963c8407">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.456-02:30" name="Phones" uuid="a7507df0-dd03-47d4-878b-d1a3edbedf19">
                                 <script>
                                     <source>/*
 params =
@@ -11334,9 +11334,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="a4f19cab59594a20" name="Target Vowels (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="58274ea">
+                    <graph id="3597243">
                         <opqry:queryNode id="d43626f0c10f49cf" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.090-02:30" name="Phones" uuid="f524a2da-b348-44e9-a489-43a729bdfb61">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.461-02:30" name="Phones" uuid="20fe0a74-2454-4a4e-990a-3eb891d56e24">
                                 <script>
                                     <source>/*
 params =
@@ -11764,9 +11764,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="a186081d79ba447a" name="Target Vowels (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="ecf39d0">
+                    <graph id="41856a68">
                         <opqry:queryNode id="a96e997ea6bb4885" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.095-02:30" name="Phones" uuid="fb1a50c7-5754-4d89-a4a7-8ef6dcf9a829">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.466-02:30" name="Phones" uuid="a267379e-f6c9-497e-98c6-a6b0b4f95dee">
                                 <script>
                                     <source>/*
 params =
@@ -12209,7 +12209,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="4e79bfff" name="PCC+PVC" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="49f9c57e">
+            <graph id="1c518273">
                 <node id="cd396e1117244899" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -12229,9 +12229,9 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                     </extensions>
                 </node>
                 <ogcn:macro id="50e315edb9184352" name="PCC" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="70f246c8">
+                    <graph id="6fba58ba">
                         <opqry:queryNode id="a63155a40ab24560" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.100-02:30" name="PCC-PVC" uuid="39e85ee9-b0c5-41a4-ad59-58c80582f1c5">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.472-02:30" name="PCC-PVC" uuid="a652ab76-db96-4bf2-8efe-1fa2742b3d0a">
                                 <script>
                                     <source>/*
 params = {separator, "Information", false},
@@ -12432,9 +12432,9 @@ function query_record(recordIndex, record)
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="58a7a0ffb19048c2" name="PCC (aligned)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6b5c4dd5">
+                    <graph id="2185145e">
                         <opqry:queryNode id="eb388c03bf854d94" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.105-02:30" name="PCC-PVC" uuid="7a30774e-f0c7-4da1-9518-191b94a981f4">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.478-02:30" name="PCC-PVC" uuid="3b5d896c-da2c-49a4-9bab-3159db0e54d9">
                                 <script>
                                     <source>/*
 params = {separator, "Information", false},
@@ -12635,9 +12635,9 @@ function query_record(recordIndex, record)
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="ac657982633e4fb2" name="PVC" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="92f83a">
+                    <graph id="6bd31d55">
                         <opqry:queryNode id="ee43c3504c904196" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.110-02:30" name="PCC-PVC" uuid="3c309083-f6c0-4eb6-9f26-973e258ac48b">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.483-02:30" name="PCC-PVC" uuid="6aa52770-0873-4716-b21b-e01aba79507c">
                                 <script>
                                     <source>/*
 params = {separator, "Information", false},
@@ -12838,9 +12838,9 @@ function query_record(recordIndex, record)
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="8e6cc14a1c054893" name="PVC (aligned)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="441f3588">
+                    <graph id="3e75c4ea">
                         <opqry:queryNode id="31c07e3435194fff" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.116-02:30" name="PCC-PVC" uuid="529526c6-20e5-4f4d-9c50-488f162c7444">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.489-02:30" name="PCC-PVC" uuid="946129d5-0066-4d39-9ab5-d020f689d5fd">
                                 <script>
                                     <source>/*
 params = {separator, "Information", false},
@@ -13056,7 +13056,7 @@ function query_record(recordIndex, record)
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="1f7d354b" name="PMLU" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="3af5a2c2">
+            <graph id="14bf1a65">
                 <node id="301c709061234719" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -13076,9 +13076,9 @@ function query_record(recordIndex, record)
                     </extensions>
                 </node>
                 <ogcn:macro id="71e4f2c8" name="PMLU" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="475ca964">
+                    <graph id="34a02d66">
                         <opqry:queryNode id="20e6443a" name="Query : PMLU" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.123-02:30" name="PMLU" uuid="64e5333e-f398-4efe-aaa6-fc03e1ed0695">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.495-02:30" name="PMLU" uuid="1bb11ec3-2706-4f25-a59f-5a7ea35d604d">
                                 <script>
                                     <source>/**
  * PMLU.js
@@ -13340,9 +13340,9 @@ function query_record(recordIndex, record)
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="66f92e1e66104355" name="ePMLU" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4594dc4f">
+                    <graph id="21df8171">
                         <opqry:queryNode id="987b9d751ad6446f" name="Query : PMLU" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:52:03.127-02:30" name="PMLU" uuid="021e6418-81cf-4a31-8058-673c78186f4c">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-06-06T15:58:44.500-02:30" name="PMLU" uuid="93b8845d-77fb-4216-9e31-a0e051645077">
                                 <script>
                                     <source>/**
  * PMLU.js
