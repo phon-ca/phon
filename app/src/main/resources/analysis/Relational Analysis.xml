@@ -3042,7 +3042,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                                 <oga:meta x="343" y="259"/>
                             </extensions>
                         </node>
-                        <node id="55955985e4c8432f" type="class:ca.phon.app.opgraph.nodes.query.PhoneVariability">
+                        <node id="55955985e4c8432f" type="class:ca.phon.app.opgraph.nodes.query.PhoneDispersion">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>
@@ -3476,7 +3476,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
                                 <oga:meta x="343" y="259"/>
                             </extensions>
                         </node>
-                        <node id="e3c5a0071fc14a89" type="class:ca.phon.app.opgraph.nodes.query.PhoneVariability">
+                        <node id="e3c5a0071fc14a89" type="class:ca.phon.app.opgraph.nodes.query.PhoneDispersion">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>

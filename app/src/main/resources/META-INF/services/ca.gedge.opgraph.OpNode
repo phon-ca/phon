@@ -15,4 +15,4 @@ ca.phon.app.opgraph.nodes.query.PartitionTableNode
 ca.phon.app.opgraph.nodes.query.MergeTablesNode
 ca.phon.app.opgraph.nodes.query.AppendTableNode
 ca.phon.app.opgraph.nodes.query.PhoneAccuracy
-ca.phon.app.opgraph.nodes.query.PhoneVariability
+ca.phon.app.opgraph.nodes.query.PhoneDispersion

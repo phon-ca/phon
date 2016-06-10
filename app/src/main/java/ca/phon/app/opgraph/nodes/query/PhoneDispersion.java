@@ -29,12 +29,12 @@ import ca.phon.ipa.features.IPAElementComparator;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 @OpNodeInfo(
-		name="Phone Variability",
-		description="Calculate global or feature variability for a given aligned phone inventory",
+		name="Phone Dispersion",
+		description="Calculate global or feature dispersion for a given aligned phone inventory",
 		category="Report",
 		showInLibrary=true
 )
-public class PhoneVariability extends TableOpNode implements NodeSettings {
+public class PhoneDispersion extends TableOpNode implements NodeSettings {
 	
 	private JPanel settingsPanel;
 	
@@ -54,7 +54,7 @@ public class PhoneVariability extends TableOpNode implements NodeSettings {
 	
 	private boolean includeVoicing = true;
 	
-	public PhoneVariability() {
+	public PhoneDispersion() {
 		super();
 		
 		putExtension(NodeSettings.class, this);
@@ -71,18 +71,18 @@ public class PhoneVariability extends TableOpNode implements NodeSettings {
 		// check for required columns
 		int ipaTargetColIdx = inputTable.getColumnIndex("IPA Target");
 		if(ipaTargetColIdx < 0) {
-			throw new ProcessingException(null, "Phone Variability requires an IPA Target column");
+			throw new ProcessingException(null, "Phone Dispersion requires an IPA Target column");
 		}
 		
 		int ipaActualColIdx = inputTable.getColumnIndex("IPA Actual");
 		if(ipaActualColIdx < 0) {
-			throw new ProcessingException(null, "Phone Variability requires an IPA Acutal column");
+			throw new ProcessingException(null, "Phone Dispersion requires an IPA Acutal column");
 		}
 		
 		// all columns after IPA Actual should have Integer types
 		for(int col = ipaActualColIdx+1; col < inputTable.getColumnCount(); col++) {
 			if(inputTable.inferColumnType(col).isAssignableFrom(Number.class)) {
-				throw new ProcessingException(null, "Phone Variability requires an inventory table as input");
+				throw new ProcessingException(null, "Phone Dispersion requires an inventory table as input");
 			}
 		}
 		
@@ -253,11 +253,11 @@ public class PhoneVariability extends TableOpNode implements NodeSettings {
 		gbc.gridy = 0;
 		gbc.weightx = 1.0;
 		
-		retVal.add(new JXTitledSeparator("Phone Variability Options"), gbc);
+		retVal.add(new JXTitledSeparator("Phone Dispersion Options"), gbc);
 		
 		typeButtonGroup = new ButtonGroup();
-		globalVariabilityButton = new JRadioButton("Global Variability");
-		featureVariabilityButton = new JRadioButton("Feature Variability");
+		globalVariabilityButton = new JRadioButton("Global Dispersion");
+		featureVariabilityButton = new JRadioButton("Feature Dispersion");
 		globalVariabilityButton.setSelected(!useFeatureVariability);
 		featureVariabilityButton.setSelected(useFeatureVariability);
 		typeButtonGroup.add(globalVariabilityButton);
