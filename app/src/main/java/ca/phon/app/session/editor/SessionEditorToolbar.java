@@ -122,9 +122,18 @@ public class SessionEditorToolbar extends JPanel {
 		gbc.insets = new Insets(2, 5, 2, 2);
 		add(btnComp, gbc);
 		
+		final PhonUIAction showViewLayoutMenuAction = new PhonUIAction(this, "onShowViewLayoutMenu");
+		showViewLayoutMenuAction.putValue(PhonUIAction.NAME, "Layout");
+		showViewLayoutMenuAction.putValue(PhonUIAction.SMALL_ICON, 
+				IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL));
+		final JButton viewLayoutBtn = new JButton(showViewLayoutMenuAction);
+		++gbc.gridx;
+		add(viewLayoutBtn, gbc);
+		
 		final PhonUIAction assessmentMenuAction = new PhonUIAction(this, "onShowAssessmentMenu");
+		assessmentMenuAction.putValue(PhonUIAction.NAME, "Analysis");
 		assessmentMenuAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/report", IconSize.SMALL));
-		assessmentMenuAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show assessment menu");
+		assessmentMenuAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show analysis menu");
 		final JButton assessmentMenuBtn = new JButton(assessmentMenuAction);
 		++gbc.gridx;
 		add(assessmentMenuBtn, gbc);
@@ -187,6 +196,15 @@ public class SessionEditorToolbar extends JPanel {
 		selectedSessions.add(new SessionPath(getEditor().getSession().getCorpus(), getEditor().getSession().getName()));
 		
 		library.setupMenu(getEditor().getProject(), selectedSessions, menu);
+		menu.show(menuBtn, 0, menuBtn.getHeight());
+	}
+	
+	public void onShowViewLayoutMenu(PhonActionEvent pae) {
+		final JButton menuBtn = (JButton)pae.getActionEvent().getSource();
+		
+		final JPopupMenu menu = new JPopupMenu();
+		getEditor().getViewModel().setupLayoutMenu(menu);
+		
 		menu.show(menuBtn, 0, menuBtn.getHeight());
 	}
 	

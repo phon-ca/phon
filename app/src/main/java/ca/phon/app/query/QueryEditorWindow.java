@@ -645,6 +645,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		final int idx = editorTabs.indexOfComponent(panel);
 		if(idx > 0) {
 			if(panel.isRunning()) {
+				// XXX causing thread lock on EDT - use non-block dialog or background thread
 				int result = 
 						NativeDialogs.showOkCancelDialogBlocking(QueryEditorWindow.this, null, "Cancel Query", "Stop query?");
 				if(result == 0) {

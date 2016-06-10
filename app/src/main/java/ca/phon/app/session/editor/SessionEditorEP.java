@@ -101,7 +101,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			props.setRunAsync(false);
 			props.setTitle("Unable to open session");
-			props.setHeader("Unabel to open session");
+			props.setHeader("Unable to open session");
 			props.setOptions(MessageDialogProperties.okCancelOptions);
 			
 			// unable to open, check autosave!

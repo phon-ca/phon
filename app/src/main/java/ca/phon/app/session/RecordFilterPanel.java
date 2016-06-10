@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -520,7 +521,7 @@ public class RecordFilterPanel extends JPanel {
 			JLabel retVal = (JLabel)super.getTableCellRendererComponent(table, value, 
 					isSelected, hasFocus, row, column);
 			
-			LocalDate d = (LocalDate)value;
+			LocalDateTime d = (LocalDateTime)value;
 			
 			String dateStr = DateFormatter.dateTimeToString(d);
 			retVal.setText(dateStr);

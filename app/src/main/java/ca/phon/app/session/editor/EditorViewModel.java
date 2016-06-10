@@ -185,5 +185,13 @@ public interface EditorViewModel {
 	 * @param menuElement
 	 */
 	public void setupPerspectiveMenu(MenuElement menuElement);
+	
+	/**
+	 * Setup layout menu.
+	 * 
+	 * @param menuElement
+	 */
+	public void setupLayoutMenu(MenuElement menuElement);
+	
 
 }
