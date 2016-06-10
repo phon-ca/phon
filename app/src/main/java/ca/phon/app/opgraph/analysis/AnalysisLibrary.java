@@ -1,5 +1,6 @@
 package ca.phon.app.opgraph.analysis;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -8,10 +9,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import org.antlr.stringtemplate.language.ActionEvaluator;
+
+import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
@@ -83,7 +90,6 @@ public class AnalysisLibrary {
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
 		if(userGraphIterator.hasNext()) {
 			builder.addSeparator(".", "user");
-			// TODO add menu header
 		}
 		while(userGraphIterator.hasNext()) {
 			final URL reportURL = userGraphIterator.next();
@@ -103,6 +109,25 @@ public class AnalysisLibrary {
 			act.setShowWizard(selectedSessions.size() == 0);
 			builder.addMenuItem(".", act);
 		}
+		
+		builder.addSeparator(".", "editor");
+		final PhonUIAction showEditorAct = new PhonUIAction(AnalysisLibrary.class, "showEditor");
+		showEditorAct.putValue(PhonUIAction.NAME, "Analysis Editor...");
+		showEditorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open analysis editor");
+		builder.addMenuItem(".@editor", showEditorAct);
+	}
+	
+	public static void showEditor() {
+		final AnalysisOpGraphEditorModel editorModel = new AnalysisOpGraphEditorModel();
+		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
+		
+		((AnalysisOpGraphEditorModel)editor.getModel()).getSessionSelector().setProject(
+				CommonModuleFrame.getCurrentFrame().getExtension(Project.class));
+		
+		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+		editor.pack();
+		editor.setSize(1024, 768);
+		editor.setVisible(true);
 	}
 	
 	private Tuple<String, String> URLtoName(URL assessmentURL) {

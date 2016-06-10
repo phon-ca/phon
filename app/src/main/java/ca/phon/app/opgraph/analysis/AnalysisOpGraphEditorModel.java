@@ -55,6 +55,10 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		}
 	}
 	
+	public SessionSelector getSessionSelector() {
+		return this.sessionSelector;
+	}
+	
 	public NodeWizardPanel getWizardPanel() {
 		if(wizardPanel == null) {
 			wizardPanel = new NodeWizardPanel(getDocument(),
