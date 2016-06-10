@@ -123,7 +123,6 @@ public class SessionEditorToolbar extends JPanel {
 		add(btnComp, gbc);
 		
 		final PhonUIAction showViewLayoutMenuAction = new PhonUIAction(this, "onShowViewLayoutMenu");
-		showViewLayoutMenuAction.putValue(PhonUIAction.NAME, "Layout");
 		showViewLayoutMenuAction.putValue(PhonUIAction.SMALL_ICON, 
 				IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL));
 		final JButton viewLayoutBtn = new JButton(showViewLayoutMenuAction);
@@ -131,7 +130,6 @@ public class SessionEditorToolbar extends JPanel {
 		add(viewLayoutBtn, gbc);
 		
 		final PhonUIAction assessmentMenuAction = new PhonUIAction(this, "onShowAssessmentMenu");
-		assessmentMenuAction.putValue(PhonUIAction.NAME, "Analysis");
 		assessmentMenuAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/report", IconSize.SMALL));
 		assessmentMenuAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show analysis menu");
 		final JButton assessmentMenuBtn = new JButton(assessmentMenuAction);
