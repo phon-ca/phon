@@ -132,24 +132,24 @@
 	</feature>
 	<feature name="voiceless">
 		<synonym>vcl</synonym>
-		<primary_family>manner</primary_family>
+		<primary_family>voicing</primary_family>
 		<secondary_family>voicing</secondary_family>
 	</feature>
 	<feature name="voiced">
 		<synonym>vcd</synonym>
-		<primary_family>manner</primary_family>
+		<primary_family>voicing</primary_family>
 		<secondary_family>voicing</secondary_family>
 	</feature>
 	<feature name="aspirated">
-		<primary_family>manner</primary_family>
+		<primary_family>voicing</primary_family>
 		<secondary_family>voicing</secondary_family>
 	</feature>
 	<feature name="weaklyaspirated">
-		<primary_family>manner</primary_family>
+		<primary_family>voicing</primary_family>
 		<secondary_family>voicing</secondary_family>
 	</feature>
 	<feature name="unaspirated">
-		<primary_family>manner</primary_family>
+		<primary_family>voicing</primary_family>
 		<secondary_family>voicing</secondary_family>
 	</feature>
 	<feature name="approximant">
