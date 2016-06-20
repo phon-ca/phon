@@ -36,7 +36,7 @@ public class VersionInfo {
 	/**
 	 * Properties file 
 	 */
-	private final static String VERSION_PROP_FILE = "/build.properties";
+	private final static String VERSION_PROP_FILE = "phon.build.properties";
 	
 	/**
 	 * Major version prop name
@@ -79,11 +79,11 @@ public class VersionInfo {
 			_instance.versionProps = new Properties();
 			
 			try {
-				InputStream is = VersionInfo.class.getResourceAsStream(VERSION_PROP_FILE);
+				InputStream is = VersionInfo.class.getClassLoader().getResourceAsStream(VERSION_PROP_FILE);
 				if(is == null) {
-					_instance.versionProps.put(MAJOR_VERSION, "1");
-					_instance.versionProps.put(BUILD_MINOR, "7");
-					_instance.versionProps.put(BUILD_REVISION, "0");
+					_instance.versionProps.put(MAJOR_VERSION, "2");
+					_instance.versionProps.put(BUILD_MINOR, "2");
+					_instance.versionProps.put(BUILD_REVISION, ".0");
 					_instance.versionProps.put(BUILD_SCREVISION, "XXXXXXXXXXXX");
 				} else {
 					_instance.versionProps.load(is);
