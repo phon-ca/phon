@@ -71,7 +71,7 @@ public class QueryScriptLibrary implements IExtendable {
 	private final ResourceLoader<QueryScript> pluginScriptLoader = new ResourceLoader<QueryScript>();
 	
 	public static String projectScriptFolder(Project project) {
-		return project.getLocation() + File.separator + "__res" + File.separator + "script";
+		return project.getResourceLocation() + File.separator + "script";
 	}
 	
 	/**

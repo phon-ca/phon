@@ -71,7 +71,7 @@ public class MediaLocator {
 		List<String> retVal = new ArrayList<String>(getMediaIncludePaths());
 		
 		if(project != null) {
-			final File projectResFolder = new File(project.getLocation(), "__res" + File.separator + "media");
+			final File projectResFolder = new File(project.getResourceLocation(), "media");
 			retVal.add(projectResFolder.getAbsolutePath());
 		}
 		
@@ -198,7 +198,7 @@ public class MediaLocator {
 			 
 			 if(project != null) {
 				 // check resources
-				 File resFile = new File(project.getLocation(), "__res");
+				 File resFile = new File(project.getResourceLocation());
 				 File resMediaFile = new File(resFile, "media");
 				 mediaPaths.add(0, resMediaFile.getAbsolutePath());
 			 }

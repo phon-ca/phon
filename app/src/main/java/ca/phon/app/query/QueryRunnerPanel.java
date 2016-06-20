@@ -181,6 +181,7 @@ public class QueryRunnerPanel extends JPanel {
 				tempProject.addCorpus(corpusName, "");
 				tempProject.setCorpusPath(corpusName, project.getCorpusPath(corpusName));
 			}
+			tempProject.setRecourceLocation(project.getResourceLocation());
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}

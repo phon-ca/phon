@@ -34,7 +34,7 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class AnalysisLibrary {
 	
-	private final static String PROJECT_ANALYSIS_FOLDER = "__res/analysis";
+	private final static String PROJECT_ANALYSIS_FOLDER = "analysis";
 	
 	/**
 	 * Report loader
@@ -74,7 +74,7 @@ public class AnalysisLibrary {
 	
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserAnalysisHandler(new File(project.getLocation(), PROJECT_ANALYSIS_FOLDER)));
+		retVal.addHandler(new UserAnalysisHandler(new File(project.getResourceLocation(), PROJECT_ANALYSIS_FOLDER)));
 		return retVal;
 	}
 	

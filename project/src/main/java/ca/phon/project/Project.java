@@ -444,6 +444,20 @@ public interface Project extends IExtendable {
 	public long getSessionByteSize(String corpus, String session);
 	
 	/**
+	 * Get the location of the project resources folder.
+	 * 
+	 * @return location of the resources folder (default: <code>project_folder/__res</code>)
+	 */
+	public String getResourceLocation();
+	
+	/**
+	 * Set the location of the project resources folder.
+	 * 
+	 * @param folder
+	 */
+	public void setRecourceLocation(String location);
+	
+	/**
 	 * Get an input stream for the specified project resource.
 	 * The resource name should be a relative path including filename.
 	 * E.g., 'ca.phon.myplugin/module/corpus/session.dat'

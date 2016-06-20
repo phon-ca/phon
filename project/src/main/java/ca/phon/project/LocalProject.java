@@ -110,6 +110,8 @@ public class LocalProject implements Project, ProjectRefresh {
 	
 	private final List<ProjectListener> projectListeners = 
 			Collections.synchronizedList(new ArrayList<ProjectListener>());
+	
+	private String resourceLocation = null;
 
 	/**
 	 * Extension support
@@ -732,7 +734,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public InputStream getResourceInputStream(String resourceName)
 			throws IOException {
-		final File resFolder = new File(getLocation(), "__res");
+		final File resFolder = new File(getResourceLocation());
 		final File resFile = new File(resFolder, resourceName);
 		
 		return new FileInputStream(resFile);
@@ -741,7 +743,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public OutputStream getResourceOutputStream(String resourceName)
 			throws IOException {
-		final File resFolder = new File(getLocation(), "__res");
+		final File resFolder = new File(getResourceLocation());
 		final File resFile = new File(resFolder, resourceName);
 		
 		// make parent folders as necessary
@@ -1007,6 +1009,20 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public String getResourceLocation() {
+		String retVal = this.resourceLocation;
+		if(retVal == null) {
+			retVal = (new File(getLocation(), "__res")).getAbsolutePath();
+		}
+		return retVal;
+	}
+
+	@Override
+	public void setRecourceLocation(String location) {
+		this.resourceLocation = location;
 	}
 	
 }

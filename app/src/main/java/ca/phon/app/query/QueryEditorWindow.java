@@ -366,7 +366,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			parentFolder = f.getParentFile();
 		} else {
 			parentFolder = new File(
-					getProject().getLocation(), "__res" + File.separator + "script");
+					getProject().getResourceLocation(), "script");
 		}
 		
 		return parentFolder.getAbsolutePath();

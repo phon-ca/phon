@@ -51,7 +51,7 @@ public class CreateReportAction extends HookableAction {
 	private final static String USER_REPORT_FOLDER = PrefHelper.getUserDataFolder() + 
 			File.separator + "reports";
 	
-	private final static String DEFAULT_REPORT_FOLDER = "__res/reports";
+	private final static String DEFAULT_REPORT_FOLDER = "reports";
 	
 	private NodeWizard wizard;
 	
@@ -70,7 +70,7 @@ public class CreateReportAction extends HookableAction {
 		String initialFolder = USER_REPORT_FOLDER;
 		final Project project = wizard.getExtension(Project.class);
 		if(project != null) {
-			initialFolder = project.getLocation() + File.separator + DEFAULT_REPORT_FOLDER;
+			initialFolder = project.getResourceLocation() + File.separator + DEFAULT_REPORT_FOLDER;
 		}
 		initialFolder += File.separator + wizard.getWizardExtension().getWizardTitle() 
 				+ " (" + date.format(formatter) + ")";

@@ -23,7 +23,7 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class ReportLibrary {
 	
-	private final static String PROJECT_REPORT_FOLDER = "__res/reports";
+	private final static String PROJECT_REPORT_FOLDER = "reports";
 	
 	/**
 	 * Report loader
@@ -63,7 +63,7 @@ public class ReportLibrary {
 	
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserReportHandler(new File(project.getLocation(), PROJECT_REPORT_FOLDER)));
+		retVal.addHandler(new UserReportHandler(new File(project.getResourceLocation(), PROJECT_REPORT_FOLDER)));
 		return retVal;
 	}
 	
