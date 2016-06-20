@@ -89,7 +89,7 @@ public class ProjectArchiveTask extends PhonTask {
 		}
 		
 		if(includeResources) {
-			File resDir = new File(projectRoot, "__res");
+			File resDir = new File(project.getResourceLocation());
 			if(resDir.exists()) {
 				for(File resFile:resDir.listFiles()) {
 					if(resFile.isHidden()) continue;
