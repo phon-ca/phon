@@ -134,6 +134,7 @@
             <xs:element ref="info" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="ref" type="og:nonEmptyString" use="required"/>
+        <xs:attribute name="showAsStep" type="xs:boolean" default="false" use="optional"/>
     </xs:complexType>
     
     <xs:complexType name="OptionalNodeType">

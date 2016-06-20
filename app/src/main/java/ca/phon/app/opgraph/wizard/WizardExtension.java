@@ -9,6 +9,7 @@ import java.util.Map;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.Processor;
+import ca.phon.ui.text.FormatterTextField.FormatterDocument;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are
@@ -27,6 +28,8 @@ public class WizardExtension implements Iterable<OpNode> {
 	private Map<OpNode, String> nodeTitles = new HashMap<>();
 	
 	private Map<OpNode, String> nodeMessages = new HashMap<>();
+	
+	private Map<OpNode, Boolean> forcedNodes = new HashMap<>();
 	
 	private final List<OpNode> optionalNodes = new ArrayList<>();
 	
@@ -77,6 +80,17 @@ public class WizardExtension implements Iterable<OpNode> {
 
 	public OpNode getNode(int index) {
 		return wizardNodes.get(index);
+	}
+	
+	public void setNodeForced(OpNode node, boolean forced) {
+		forcedNodes.put(node, forced);
+	}
+	
+	public boolean isNodeForced(OpNode node) {
+		boolean retVal = false;
+		if(forcedNodes.containsKey(node))
+			retVal = forcedNodes.get(node);
+		return retVal;
 	}
 
 	public void addNode(int index, OpNode element) {
