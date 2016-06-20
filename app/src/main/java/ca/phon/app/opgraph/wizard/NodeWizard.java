@@ -80,7 +80,7 @@ public class NodeWizard extends WizardFrame {
 	
 	private WizardOptionalsCheckboxTree optionalsTree;
 	
-	private WizardOptionsPanel optionsPanel;
+	private WizardGlobalOptionsPanel optionsPanel;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
 	public final static String PARTICIPANT_ROLE_GLOBAL_OPTION = "__participantRole";
@@ -205,6 +205,15 @@ public class NodeWizard extends WizardFrame {
 			addWizardStep(optionalsStep);
 		}
 		
+		for(OpNode node:nodeWizardList) {
+			if(nodeWizardList.isNodeForced(node)) {
+				final WizardStep step = createStep(nodeWizardList, node);
+				step.setPrevStep(stepIdx-1);
+				step.setNextStep(stepIdx+1);
+				addWizardStep(step);
+			}
+		}
+		
 		reportStep = createReportStep();
 		reportStep.setPrevStep(stepIdx-1);
 		reportStep.setNextStep(-1);
@@ -233,7 +242,7 @@ public class NodeWizard extends WizardFrame {
 		
 		++gbc.gridy;
 		gbc.weighty = 0.0;
-		optionsPanel = new WizardOptionsPanel();
+		optionsPanel = new WizardGlobalOptionsPanel();
 		final JXTitledPanel panel1 = new JXTitledPanel("Settings");
 		panel1.getContentContainer().setLayout(new BorderLayout());
 		panel1.getContentContainer().add(optionsPanel, BorderLayout.CENTER);
@@ -389,6 +398,10 @@ public class NodeWizard extends WizardFrame {
 		ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, optionsPanel.isCaseSensitive());
 		ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, optionsPanel.isIgnoreDiacritics());
 		ctx.put(PARTICIPANT_ROLE_GLOBAL_OPTION, optionsPanel.getSelectedParticipantRole());
+		
+		for(WizardGlobalOption pluginGlobalOption:optionsPanel.getPluginGlobalOptions()) {
+			ctx.put(pluginGlobalOption.getName(), pluginGlobalOption.getValue());
+		}
 	}
 	
 	protected WizardStep createStep(WizardExtension ext, OpNode node) {

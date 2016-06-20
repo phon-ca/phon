@@ -3,6 +3,8 @@ package ca.phon.app.opgraph.wizard;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -13,6 +15,8 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXLabel;
 
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.ParticipantRole;
 import ca.phon.util.PrefHelper;
 
@@ -22,16 +26,16 @@ import ca.phon.util.PrefHelper;
  * content area.
  * 
  */
-public class WizardOptionsPanel extends JPanel {
+public class WizardGlobalOptionsPanel extends JPanel {
 	
 	private final static String CASE_SENSITIVE_PROP = 
-			WizardOptionsPanel.class.getName() + ".caseSensitive";
+			WizardGlobalOptionsPanel.class.getName() + ".caseSensitive";
 	
 	private final static String IGNORE_DIACRITICS_PROP =
-			WizardOptionsPanel.class.getName() + ".ignoreDiacritics";
+			WizardGlobalOptionsPanel.class.getName() + ".ignoreDiacritics";
 	
 	private final static String PARTICIPANT_ROLE_PROP =
-			WizardOptionsPanel.class.getName() + ".participantRole";
+			WizardGlobalOptionsPanel.class.getName() + ".participantRole";
 	
 	private JCheckBox caseSensitiveBox;
 	
@@ -39,7 +43,9 @@ public class WizardOptionsPanel extends JPanel {
 	
 	private JComboBox<ParticipantRole> participantRoleBox;
 	
-	public WizardOptionsPanel() {
+	private List<WizardGlobalOption> pluginGlobalOptions = new ArrayList<>();
+	
+	public WizardGlobalOptionsPanel() {
 		super();
 		
 		init();
@@ -81,6 +87,20 @@ public class WizardOptionsPanel extends JPanel {
 		participantRoleBox.setSelectedItem(selectedRole);
 		participantRoleBox.setRenderer(new ParticipantCellRenderer());
 		add(participantRoleBox, gbc);
+		
+		// add global options
+		final List<IPluginExtensionPoint<WizardGlobalOption>> pluginOptions =
+				PluginManager.getInstance().getExtensionPoints(WizardGlobalOption.class);
+		for(IPluginExtensionPoint<WizardGlobalOption> extPt:pluginOptions) {
+			final WizardGlobalOption globalOption = extPt.getFactory().createObject();
+			
+			++gbc.gridy;
+			gbc.gridx = 0;
+			gbc.weightx = 1.0;
+			gbc.gridwidth = 2;
+			add(globalOption.getGlobalOptionsComponent(), gbc);
+			this.pluginGlobalOptions.add(globalOption);
+		}
 	}
 	
 	public ParticipantRole getSelectedParticipantRole() {
@@ -93,6 +113,10 @@ public class WizardOptionsPanel extends JPanel {
 	
 	public boolean isIgnoreDiacritics() {
 		return this.ignoreDiacriticsBox.isSelected();
+	}
+	
+	public List<WizardGlobalOption> getPluginGlobalOptions() {
+		return this.pluginGlobalOptions;
 	}
 	
 	private class ParticipantCellRenderer extends DefaultListCellRenderer {

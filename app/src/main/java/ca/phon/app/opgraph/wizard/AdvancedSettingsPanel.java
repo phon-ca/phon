@@ -20,7 +20,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.JXTree;
 
 import ca.gedge.opgraph.OpGraph;
@@ -96,6 +95,7 @@ public class AdvancedSettingsPanel extends JPanel {
 	private void addWizardSettings() {
 		final OpGraph graph = getWizardExtension().getGraph();
 		for(OpNode node:getWizardExtension()) {
+			if(getWizardExtension().isNodeForced(node)) continue;
 			final NodeSettings settings = node.getExtension(NodeSettings.class);
 			if(settings != null) {
 				try {
@@ -167,6 +167,8 @@ public class AdvancedSettingsPanel extends JPanel {
 		private void createTree() {
 			final OpGraph graph = getWizardExtension().getGraph();
 			for(OpNode node:getWizardExtension()) {
+				// don't add nodes that are already steps
+				if(getWizardExtension().isNodeForced(node)) continue;
 				final List<OpNode> nodePath = graph.getNodePath(node.getId());
 				
 				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)getRoot();

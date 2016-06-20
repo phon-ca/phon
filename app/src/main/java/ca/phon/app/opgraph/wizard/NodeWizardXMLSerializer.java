@@ -53,6 +53,9 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 			final Element nodeEle = 
 					doc.createElementNS(NAMESPACE, PREFIX + ":node");
 			nodeEle.setAttribute("ref", node.getId());
+			if(nodeList.isNodeForced(node)) {
+				nodeEle.setAttribute("showAsStep", Boolean.toString(nodeList.isNodeForced(node)));
+			}
 			
 			final Element infoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
 			infoEle.setAttribute("title", nodeList.getNodeTitle(node));
@@ -121,6 +124,8 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 				final OpNode node = graph.getNodeById(nodeId, true);
 				if(node != null) {
 					ext.addNode(node);
+					final boolean isForced = Boolean.parseBoolean(child.getAttributes().getNamedItem("showAsStep").getNodeValue());
+					ext.setNodeForced(node, isForced);
 					
 					final NodeList subNodes = child.getChildNodes();
 					for(int j = 0; j < subNodes.getLength(); j++) {

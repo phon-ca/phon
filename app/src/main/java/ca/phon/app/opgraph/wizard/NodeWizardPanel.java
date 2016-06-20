@@ -269,7 +269,16 @@ public class NodeWizardPanel extends JPanel {
 
 		@Override
 		public int getColumnCount() {
-			return 2;
+			return 3;
+		}
+		
+		@Override
+		public Class<?> getColumnClass(int col) {
+			Class<?> retVal = String.class;
+			
+			if(col == 2) retVal = Boolean.class;
+			
+			return retVal;
 		}
 
 		@Override
@@ -287,9 +296,24 @@ public class NodeWizardPanel extends JPanel {
 							.map( n -> n.getName() )
 							.collect( Collectors.joining("/") );
 				return path;
+			} else if(columnIndex == 2){
+				return wizardExtension.isNodeForced(node);
 			}
 			
 			return "";
+		}
+		
+		@Override
+		public boolean isCellEditable(int row, int col) {
+			return (col == 2);
+		}
+		
+		@Override
+		public void setValueAt(Object val, int row, int col) {
+			if(col == 2) {
+				final OpNode node = wizardExtension.getNode(row);
+				wizardExtension.setNodeForced(node, (Boolean)val);
+			}
 		}
 
 		@Override
@@ -300,6 +324,8 @@ public class NodeWizardPanel extends JPanel {
 				retVal = "Step Title";
 			} else if (column == 1) {
 				retVal = "Node";
+			} else if (column == 2) {
+				retVal = "Required";
 			}
 			
 			return retVal;
