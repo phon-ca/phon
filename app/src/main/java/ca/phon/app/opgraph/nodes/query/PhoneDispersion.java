@@ -43,6 +43,8 @@ public class PhoneDispersion extends TableOpNode implements NodeSettings {
 	private JRadioButton featureVariabilityButton;
 
 	private JCheckBox placeBox;
+	private JRadioButton majorPlaceBox;
+	private JRadioButton allPlaceBox;
 	private JCheckBox mannerBox;
 	private JCheckBox voicingBox;
 	
@@ -50,9 +52,14 @@ public class PhoneDispersion extends TableOpNode implements NodeSettings {
 	
 	private boolean includePlace = true;
 	
+	private boolean useMajorPlace = true;
+	
 	private boolean includeManner = true;
 	
 	private boolean includeVoicing = true;
+	
+	private final FeatureSet MAJOR_PLACE =
+			FeatureSet.fromArray(new String[]{"Labial", "Coronal", "Dorsal", "Guttural"});
 	
 	public PhoneDispersion() {
 		super();
@@ -195,8 +202,14 @@ public class PhoneDispersion extends TableOpNode implements NodeSettings {
 		
 		if(isUseFeatureVariability()) {
 			if(isIncludePlace()) {
-				FeatureSet modelPlace = model.getFeatureSet().getPlace();
-				FeatureSet actualPlace = actual.getFeatureSet().getPlace();
+				FeatureSet modelPlace = 
+						(isUseMajorPlace() 
+							? FeatureSet.intersect(model.getFeatureSet(), MAJOR_PLACE)
+							: model.getFeatureSet().getPlace());
+				FeatureSet actualPlace = 
+						(isUseMajorPlace()
+							? FeatureSet.intersect(actual.getFeatureSet(), MAJOR_PLACE)
+							: actual.getFeatureSet().getPlace());
 				
 				FeatureSet intersection = FeatureSet.intersect(modelPlace, actualPlace);
 				if(!intersection.equals(modelPlace)) {
@@ -325,6 +338,16 @@ public class PhoneDispersion extends TableOpNode implements NodeSettings {
 			this.placeBox.setSelected(includePlace);
 	}
 	
+	public boolean isUseMajorPlace() {
+		return (this.majorPlaceBox != null ? this.majorPlaceBox.isSelected() : this.useMajorPlace);
+	}
+	
+	public void setUseMajorPlace(boolean useMajorPlace) {
+		this.useMajorPlace = useMajorPlace;
+		if(this.majorPlaceBox != null)
+			this.majorPlaceBox.setSelected(useMajorPlace);
+	}
+	
 	public boolean isIncludeManner() {
 		return (this.mannerBox != null ? this.mannerBox.isSelected() : this.includeManner);
 	}
@@ -351,6 +374,7 @@ public class PhoneDispersion extends TableOpNode implements NodeSettings {
 		
 		props.setProperty("useFeatureVariability", Boolean.toString(isUseFeatureVariability()));
 		props.setProperty("includePlace", Boolean.toString(isIncludePlace()));
+		props.setProperty("useMajorPlace", Boolean.toString(isUseMajorPlace()));
 		props.setProperty("includeManner", Boolean.toString(isIncludeManner()));
 		props.setProperty("includeVoicing", Boolean.toString(isIncludeVoicing()));
 		
@@ -363,6 +387,8 @@ public class PhoneDispersion extends TableOpNode implements NodeSettings {
 				Boolean.parseBoolean(properties.getProperty("useFeatureVariability", "false")));
 		setIncludePlace(
 				Boolean.parseBoolean(properties.getProperty("includePlace", "true")));
+		setUseMajorPlace(
+				Boolean.parseBoolean(properties.getProperty("useMajorPlace", "true")));
 		setIncludeManner(
 				Boolean.parseBoolean(properties.getProperty("includeManner", "true")));
 		setIncludeVoicing(

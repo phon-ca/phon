@@ -56,7 +56,7 @@
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="400" y="136">
-                    <oga:default for="buffer" type="java.lang.String">Phone Variability</oga:default>
+                    <oga:default for="buffer" type="java.lang.String">Phone Dispersion</oga:default>
                 </oga:meta>
             </extensions>
         </node>
@@ -78,7 +78,7 @@
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="50f011e9">
-                    <opqry:info title="Phone Variability">
+                    <opqry:info title="Phone Dispersion">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
