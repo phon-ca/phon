@@ -121,10 +121,9 @@ public class TestBasicConstructs {
 	
 	@Test
 	public void testLookAheadBehind() throws ParseException {
-		final String text = "ˈkʀɛit͡jə";
+		final String text = "ˈkʀət͡jə";
 		final String phonex = "(?<\\w)\\c(?>\\w)";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
-		
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final PhonexMatcher matcher = pattern.matcher(ipa);
 		
@@ -134,8 +133,8 @@ public class TestBasicConstructs {
 	
 	@Test
 	public void testLookBehindWithBoundary() throws ParseException {
-		final String text = "ˈk:oʀ:oɛ:di:dt͡j:oə:n";
-		final String phonex = "(?<^\\s?\\c:L*)\\c:o(?>\\w:sctype(\"-O\"))";
+		final String text = "ˈk:oʀ:oi:di:dt͡j:oi:n";
+		final String phonex = "^(?<\\s?\\c:L*)\\c:o(?>\\w:sctype(\"-O\"))";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);

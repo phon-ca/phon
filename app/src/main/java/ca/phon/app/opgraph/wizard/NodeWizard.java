@@ -211,6 +211,7 @@ public class NodeWizard extends WizardFrame {
 				step.setPrevStep(stepIdx-1);
 				step.setNextStep(stepIdx+1);
 				addWizardStep(step);
+				++stepIdx;
 			}
 		}
 		
