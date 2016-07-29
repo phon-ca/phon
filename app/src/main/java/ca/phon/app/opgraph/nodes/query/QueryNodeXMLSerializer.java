@@ -77,11 +77,11 @@ public class QueryNodeXMLSerializer implements XMLSerializer {
 		// create a query object
 		final QueryManager qm = QueryManager.getSharedInstance();
 		final QueryFactory qf = qm.createQueryFactory();
-		final Query q = qm.createQueryFactory().createQuery();
 		
+		final Query q = qm.createQueryFactory().createQuery();
 		q.setName(qn.getName());
+		
 		final Script s = qf.createScript();
-	
 		s.setSource(queryScript.getScript());
 
 		final Map<String, String> paramMap = new TreeMap<String, String>();

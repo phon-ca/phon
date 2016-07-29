@@ -21,18 +21,16 @@ package ca.phon.app.prefs;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -44,6 +42,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.syllabifier.Syllabifier;
@@ -51,9 +52,6 @@ import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Panel for editing session editor prefs.
@@ -63,16 +61,13 @@ public class EditorPrefsPanel extends PrefsPanel {
 	
 	private static final long serialVersionUID = 5933816135903983293L;
 
-	private final static Logger LOGGER = Logger
-			.getLogger(EditorPrefsPanel.class.getName());
-	
 	/*
 	 * UI
 	 */
-	private JComboBox cmbDictionaryLanguage;
-	private JComboBox cmbSyllabifierLanguage;
+	private JComboBox<Language> cmbDictionaryLanguage;
+	private JComboBox<Syllabifier> cmbSyllabifierLanguage;
 
-	private JComboBox autosaveBox;
+	private JComboBox<Integer> autosaveBox;
 	private final Integer[] autosaveTimes = { 0, 5, 10, 15, 20, 30 }; // minutes
 	
 	private JCheckBox backupWhenSaveBox;
@@ -93,7 +88,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		final Language dictLang = Language.parseLanguage(dictLangPref);
 		Language langs[] = dictLibrary.availableLanguages().toArray(new Language[0]);
 		Arrays.sort(langs, new LanguageComparator());
-		cmbDictionaryLanguage = new JComboBox(langs);
+		cmbDictionaryLanguage = new JComboBox<>(langs);
 		cmbDictionaryLanguage.setSelectedItem(dictLang);
 		cmbDictionaryLanguage.addItemListener(new DictionaryLanguageListener());
 		cmbDictionaryLanguage.setRenderer(new LanguageCellRenderer());
@@ -117,7 +112,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		}
 		Collections.sort(sortedSyllabifiers, new SyllabifierComparator());
 	
-		cmbSyllabifierLanguage = new JComboBox(sortedSyllabifiers.toArray(new Syllabifier[0]));
+		cmbSyllabifierLanguage = new JComboBox<>(sortedSyllabifiers.toArray(new Syllabifier[0]));
 		cmbSyllabifierLanguage.setRenderer(new SyllabifierCellRenderer());
 		if(defSyllabifier != null)
 			cmbSyllabifierLanguage.setSelectedItem(defSyllabifier);
@@ -127,9 +122,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		jpanel2.setBorder(new TitledBorder("Syllabifier Language"));
 		jpanel2.add(cmbSyllabifierLanguage);
 		
-		Charset cs = Charset.forName("UTF-8");
-		
-		autosaveBox = new JComboBox(autosaveTimes);
+		autosaveBox = new JComboBox<>(autosaveTimes);
 		
 		final Integer autosavePref = PrefHelper.getInt(PhonProperties.AUTOSAVE_INTERVAL, PhonProperties.DEFAULT_AUTOSAVE_INTERVAL);
 		autosaveBox.setSelectedItem((autosavePref/60));
@@ -167,34 +160,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 		setLayout(new BorderLayout());
 		JScrollPane innerScroller = new JScrollPane(innerPanel);
 		add(innerScroller, BorderLayout.CENTER);
-	}
-	
-	/**
-	 * Converts the specified font into a string that can be used by
-	 * Font.decode.
-	 * @param font  the Font to convert to a String
-	 * @return      a String
-	 */
-	private String fontToString(Font font) {
-		StringBuilder ret = new StringBuilder();
-		ret.append(font.getFamily());
-		ret.append("-");
-		
-		if(font.isBold()) {
-			if(font.isItalic())
-				ret.append("BOLDITALIC");
-			else
-				ret.append("BOLD");
-		} else if(font.isItalic()) {
-			ret.append("ITALIC");
-		} else {
-			ret.append("PLAIN");
-		}
-		ret.append("-");
-		
-		ret.append(font.getSize());
-		
-		return ret.toString();
 	}
 	
 	public void toggleBackupWhenSave() {
@@ -243,28 +208,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 		}
 	}
 	
-//	private class LanguageCellRenderer extends DefaultListCellRenderer {
-//
-//		@Override
-//		public Component getListCellRendererComponent(JList arg0,
-//				Object arg1, int arg2, boolean arg3, boolean arg4) {
-//			JLabel retVal = 
-//				(JLabel)super.getListCellRendererComponent(arg0, arg1, arg2, arg3, arg4);
-//			
-//			String langId = arg1.toString();
-//			if(langId.indexOf('-') > 0) {
-//				langId = langId.split("-")[0];
-//			}
-//			Language le = LanguageParser.getInstance().getEntryById(langId);
-//			if(le != null) {
-//				retVal.setText(le.getName() + " (" + arg1.toString() + ")");
-//			}
-//			
-//			return retVal;
-//		}
-//		
-//	}
-	
 	private class SyllabifierLanguageListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
@@ -279,7 +222,16 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 		@Override
 		public int compare(Language o1, Language o2) {
-			return o1.toString().compareTo(o2.toString());
+			int retVal = 
+					o1.getPrimaryLanguage().getName().compareTo(o2.getPrimaryLanguage().getName());
+			if(retVal == 0) {
+				final String id1Str = 
+						Arrays.stream(o1.getUserIDs()).collect(Collectors.joining("-"));
+				final String id2Str =
+						Arrays.stream(o2.getUserIDs()).collect(Collectors.joining("-"));
+				retVal = id1Str.compareTo(id2Str);
+			}
+			return retVal;
 		}
 		
 	}
