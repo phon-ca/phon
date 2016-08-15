@@ -25,8 +25,11 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Script;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.query.db.ScriptURL;
 import ca.phon.query.db.xml.XMLQuery;
 import ca.phon.query.db.xml.io.query.QueryType;
+import ca.phon.query.db.xml.io.query.ScriptURLType;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
@@ -82,7 +85,13 @@ public class QueryNodeXMLSerializer implements XMLSerializer {
 		q.setName(qn.getName());
 		
 		final Script s = qf.createScript();
-		s.setSource(queryScript.getScript());
+		final ScriptLibrary scriptLibrary = qn.getScriptLibrary();
+		if(scriptLibrary == null) {
+			// embed script
+			s.setSource(queryScript.getScript());
+		} else {
+			s.setUrl(new ScriptURL(qn.getName(), scriptLibrary));
+		}
 
 		final Map<String, String> paramMap = new TreeMap<String, String>();
 		try {
@@ -155,6 +164,10 @@ public class QueryNodeXMLSerializer implements XMLSerializer {
 					final QueryScript queryScript = new QueryScript(query.getScript().getSource());
 					final QueryName queryName = new QueryName(query.getName());
 					queryScript.putExtension(QueryName.class, queryName);
+					
+					if(query.getScript().getUrl() != null) {
+						queryName.setScriptLibrary(query.getScript().getUrl().getLibrary());
+					}
 					
 					// setup saved parameters
 					ScriptParameters params = queryScript.getContext().getScriptParameters(

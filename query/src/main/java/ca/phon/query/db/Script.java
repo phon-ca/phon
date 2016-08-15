@@ -41,6 +41,21 @@ public interface Script {
 	public abstract void setSource(String source);
 	
 	/**
+	 * Set url for script.  This may be used as an alternative to setSource
+	 * 
+	 * @param url
+	 * @param library may be <code>null</code>
+	 */
+	public abstract void setUrl(ScriptURL scriptUrl);
+	
+	/**
+	 * Get url for script.  May be <code>null</code>
+	 * 
+	 * @return url
+	 */
+	public abstract ScriptURL getUrl();
+	
+	/**
 	 * Gets the parameters used in this script.
 	 *  
 	 * @return the map containing parameters (key = param name, value = param value)

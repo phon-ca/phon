@@ -21,6 +21,7 @@ package ca.phon.query.script;
 import java.io.IOException;
 import java.net.URL;
 
+import ca.phon.query.db.ScriptLibrary;
 import ca.phon.util.resources.ClassLoaderHandler;
 
 public class SystemQueryScriptHandler extends ClassLoaderHandler<QueryScript>{
@@ -34,7 +35,12 @@ public class SystemQueryScriptHandler extends ClassLoaderHandler<QueryScript>{
 	
 	@Override
 	public QueryScript loadFromURL(URL url) throws IOException {
-		return new QueryScript(url);
+		QueryScript retVal = new QueryScript(url);
+		
+		final QueryName qn = retVal.getExtension(QueryName.class);
+		qn.setScriptLibrary(ScriptLibrary.STOCK);
+		
+		return retVal;
 	}
 
 }

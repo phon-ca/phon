@@ -31,7 +31,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.query.db.Script;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.query.db.ScriptURL;
+import ca.phon.query.db.xml.io.query.ObjectFactory;
 import ca.phon.query.db.xml.io.query.ParamType;
+import ca.phon.query.db.xml.io.query.ScriptRelType;
 import ca.phon.query.db.xml.io.query.ScriptType;
 import ca.phon.query.db.xml.io.query.ScriptURLType;
 import ca.phon.query.script.QueryName;
@@ -136,6 +140,68 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public void setUrl(ScriptURL url) {
+		final ScriptURLType scriptUrl = (new ObjectFactory()).createScriptURLType();
+		scriptUrl.setRef(url.getPath());
+		switch(url.getLibrary()) {
+		case STOCK:
+			scriptUrl.setRel(ScriptRelType.STOCK);
+			break;
+			
+		case USER:
+			scriptUrl.setRel(ScriptRelType.USER);
+			break;
+			
+		case PROJECT:
+			scriptUrl.setRel(ScriptRelType.PROJECT);
+			break;
+			
+		case PLUGINS:
+			scriptUrl.setRel(ScriptRelType.PLUGINS);
+			break;
+			
+		default:
+			scriptUrl.setRel(ScriptRelType.ABSOLUTE);
+		}
+		script.setUrl(scriptUrl);
+	}
+	
+	@Override
+	public ScriptURL getUrl() {
+		if(script.isSetUrl()) {
+			final ScriptURL retVal = new ScriptURL();
+			retVal.setPath(script.getUrl().getRef());
+			switch(script.getUrl().getRel()) {
+			case ABSOLUTE:
+				retVal.setLibrary(ScriptLibrary.OTHER);
+				break;
+				
+			case PLUGINS:
+				retVal.setLibrary(ScriptLibrary.PLUGINS);
+				break;
+				
+			case PROJECT:
+				retVal.setLibrary(ScriptLibrary.PROJECT);
+				break;
+				
+			case STOCK:
+				retVal.setLibrary(ScriptLibrary.STOCK);
+				break;
+				
+			case USER:
+				retVal.setLibrary(ScriptLibrary.USER);
+				break;
+				
+			default:
+				break;
+			}
+			return retVal;
+		} else {
+			return null;
+		}
 	}
 
 	@Override

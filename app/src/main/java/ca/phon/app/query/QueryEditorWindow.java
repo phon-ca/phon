@@ -418,35 +418,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-//		if(f.getName().endsWith(".js")) {
-//			try {
-//				queryScript.readFromFile(f);
-//			} catch (IOException e) {
-//				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//			}
-//		} else if (f.getName().endsWith(".xml")) {
-//			// load 'query' description including parameter settings
-//			final QueryManager qm = QueryManager.getSharedInstance();
-//			final QueryFactory qf = qm.createQueryFactory();
-//			try {
-//				final Query q = qm.loadQuery(file);
-//				
-//				queryScript.setScript(q.getScript().getSource());
-//				queryScript.setLocation(file);
-//				
-//				ScriptParam[] params = queryScript.getScriptParams();
-//				for(ScriptParam sp:params) {
-//					for(String id:sp.getParamIds()) {
-//						Object v = q.getScript().getParameters().get(id);
-//						if(v != null) {
-//							sp.setValue(id, v);
-//						}
-//					}
-//				}
-//			} catch (IOException e) {
-//				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//			}
-//		}
 
 		setModified(false);
 		updateComponents();
