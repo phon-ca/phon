@@ -26,6 +26,7 @@ public abstract class ProjectWindowAction extends HookableAction {
 		final MessageDialogProperties props = new MessageDialogProperties();
 		props.setOptions(MessageDialogProperties.okOptions);
 		props.setHeader(msg1);
+		props.setTitle(msg1);
 		props.setMessage(msg2);
 		props.setParentWindow(getWindow());
 		

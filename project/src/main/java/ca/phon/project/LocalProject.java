@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,7 +58,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -72,6 +73,8 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierViewItem;
+import ca.phon.session.io.OriginalFormat;
+import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
@@ -107,6 +110,8 @@ public class LocalProject implements Project, ProjectRefresh {
 	
 	private final List<ProjectListener> projectListeners = 
 			Collections.synchronizedList(new ArrayList<ProjectListener>());
+	
+	private String resourceLocation = null;
 
 	/**
 	 * Extension support
@@ -483,6 +488,18 @@ public class LocalProject implements Project, ProjectRefresh {
 		return retVal;
 	}
 	
+	private void setCorpusFolder(String corpus, File folder) {
+		CorpusType ct = getCorpusInfo(corpus);
+		if(ct == null) {
+			ct = (new ObjectFactory()).createCorpusType();
+			ct.setName(corpus);
+			ct.setDescription("");
+			
+			projectData.getCorpus().add(ct);
+		}
+		ct.setLoc(folder.toURI().toString());
+	}
+	
 	private File getSessionFile(String corpus, String session) {
 		File retVal = new File(getCorpusFolder(corpus), session + ".xml");
 		
@@ -508,19 +525,25 @@ public class LocalProject implements Project, ProjectRefresh {
 	private String sessionProjectPath(String corpus, String session) {
 		return corpus + "." + session;
 	}
-
+	
 	@Override
 	public Session openSession(String corpus, String session)
 			throws IOException {
 		final File sessionFile = getSessionFile(corpus, session);
 		final URI uri = sessionFile.toURI();
-		
 		final SessionInputFactory inputFactory = new SessionInputFactory();
-		// TODO use method to find which reader will work for the file
-		final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
+		final SessionReader reader = inputFactory.createReaderForFile(sessionFile);
 		if(reader == null) {
 			throw new IOException("No session reader available for " + uri.toASCIIString());
 		}
+		return openSession(corpus, session, reader);
+	}
+
+	@Override
+	public Session openSession(String corpus, String session, SessionReader reader)
+			throws IOException {
+		final File sessionFile = getSessionFile(corpus, session);
+		final URI uri = sessionFile.toURI();
 		
 		try(InputStream in = uri.toURL().openStream()) {
 			final Session retVal = reader.readSession(in);
@@ -530,7 +553,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			if(!retVal.getCorpus().equals(corpus)) {
 				retVal.setCorpus(corpus);
 			}
-			if(!retVal.getName().equals(session)) {
+			if(retVal.getName() == null || !retVal.getName().equals(session)) {
 				retVal.setName(session);
 			}
 			
@@ -610,10 +633,23 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public void saveSession(String corpus, String sessionName, Session session,
 			UUID writeLock) throws IOException {
-		checkSessionWriteLock(corpus, sessionName, writeLock);
-		
 		final SessionOutputFactory outputFactory = new SessionOutputFactory();
-		final SessionWriter writer = outputFactory.createWriter();
+		
+		// get default writer
+		SessionWriter writer = outputFactory.createWriter();
+		// look for an original format, if found save in the same format
+		final OriginalFormat origFormat = session.getExtension(OriginalFormat.class);
+		if(origFormat != null) {
+			writer = outputFactory.createWriter(origFormat.getSessionIO());
+		}
+
+		saveSession(corpus, sessionName, session, writer, writeLock);
+	}
+	
+	@Override
+	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer,
+			UUID writeLock) throws IOException {
+		checkSessionWriteLock(corpus, sessionName, writeLock);
 		
 		final File sessionFile = getSessionFile(corpus, sessionName);
 		final boolean created = !sessionFile.exists();
@@ -625,7 +661,8 @@ public class LocalProject implements Project, ProjectRefresh {
 		try {
 			writer.writeSession(session, bout);
 			
-			final SessionReader reader = (new SessionInputFactory()).createReader("phonbank", "1.2");
+			final SessionReader reader = (new SessionInputFactory()).createReader(
+					writer.getClass().getAnnotation(SessionIO.class));
 			final Session testSession = reader.readSession(new ByteArrayInputStream(bout.toByteArray()));
 			if(testSession.getRecordCount() != session.getRecordCount()) {
 				throw new IOException("Session serialization failed.");
@@ -697,7 +734,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public InputStream getResourceInputStream(String resourceName)
 			throws IOException {
-		final File resFolder = new File(getLocation(), "__res");
+		final File resFolder = new File(getResourceLocation());
 		final File resFile = new File(resFolder, resourceName);
 		
 		return new FileInputStream(resFile);
@@ -706,7 +743,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public OutputStream getResourceOutputStream(String resourceName)
 			throws IOException {
-		final File resFolder = new File(getLocation(), "__res");
+		final File resFolder = new File(getResourceLocation());
 		final File resFile = new File(resFolder, resourceName);
 		
 		// make parent folders as necessary
@@ -779,18 +816,18 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	@Override
-	public DateTime getSessionModificationTime(Session session) {
+	public LocalDateTime getSessionModificationTime(Session session) {
 		return getSessionModificationTime(session.getCorpus(), session.getName());
 	}
 
 	@Override
-	public DateTime getSessionModificationTime(String corpus, String session) {
+	public LocalDateTime getSessionModificationTime(String corpus, String session) {
 		final File sessionFile = getSessionFile(corpus, session);
 		long modTime = 0L;
 		if(sessionFile.exists()) {
 			modTime = sessionFile.lastModified();
 		}
-		return new DateTime(modTime);
+		return LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), ZoneOffset.UTC);
 	}
 	
 	@Override
@@ -872,6 +909,11 @@ public class LocalProject implements Project, ProjectRefresh {
 		final File corpusFolder = getCorpusFolder(corpus);
 		return (corpusFolder == null ? corpus : corpusFolder.getAbsolutePath());
 	}
+	
+	@Override
+	public void setCorpusPath(String corpus, String path) {
+		setCorpusFolder(corpus, new File(path));
+	}
 
 	@Override
 	public String getSessionPath(Session session) {
@@ -941,14 +983,6 @@ public class LocalProject implements Project, ProjectRefresh {
 			final Record r = factory.createRecord();
 			r.addGroup();
 			s.addRecord(r);
-			
-			final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
-			tierView.add(factory.createTierViewItem(SystemTierType.Orthography.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.IPATarget.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.IPAActual.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.Notes.getName(), true));
-			tierView.add(factory.createTierViewItem(SystemTierType.Segment.getName(), true));
-			s.setTierView(tierView);
 		}
 		
 		final UUID writeLock = getSessionWriteLock(s);
@@ -975,6 +1009,20 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public String getResourceLocation() {
+		String retVal = this.resourceLocation;
+		if(retVal == null) {
+			retVal = (new File(getLocation(), "__res")).getAbsolutePath();
+		}
+		return retVal;
+	}
+
+	@Override
+	public void setRecourceLocation(String location) {
+		this.resourceLocation = location;
 	}
 	
 }

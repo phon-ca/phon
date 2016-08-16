@@ -18,12 +18,16 @@
  */
 package ca.phon.app.session;
 
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultTreeCheckingModel;
+
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import ca.phon.project.Project;
@@ -32,7 +36,6 @@ import ca.phon.ui.CheckedTreeNode;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
 
 /**
  * Displays an interface for selection one or more
@@ -74,6 +77,7 @@ public class SessionSelector extends CheckboxTree {
 	private void init() {
 		if(project != null) {
 			((CheckedTreeNode)getModel().getRoot()).setUserObject(project.getName());
+			((CheckedTreeNode)getModel().getRoot()).removeAllChildren();
 			createTree();
 		}
 		
@@ -96,19 +100,42 @@ public class SessionSelector extends CheckboxTree {
 			}
 			((CheckedTreeNode)getModel().getRoot()).add(corpusNode);
 		}
+		((DefaultTreeModel)getModel()).reload((CheckedTreeNode)getModel().getRoot());
+		
 		
 		final CheckboxTree projectTree = this;
 		
 		it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer
 			renderer = new it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer();
-		ImageIcon icn = IconManager.getInstance().getIcon(
-				"blank", IconSize.SMALL);
+		ImageIcon sessionIcon = IconManager.getInstance().getIcon(
+				"mimetypes/text-xml", IconSize.SMALL);
 		
-		renderer.setLeafIcon(icn);
-		renderer.setClosedIcon(icn);
-		renderer.setOpenIcon(icn);
+		final ImageIcon folderIcon = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
+		
+		renderer.setLeafIcon(sessionIcon);
+		renderer.setClosedIcon(folderIcon);
+		renderer.setOpenIcon(folderIcon);
 		projectTree.setCellRenderer(renderer);
+		
 		revalidate();
+	}
+	
+	public TreePath sessionPathToTreePath(SessionPath sessionPath) {
+		final CheckedTreeNode root = (CheckedTreeNode)getModel().getRoot();
+		for(int i = 0; i < root.getChildCount(); i++) {
+			final CheckedTreeNode corpusNode = (CheckedTreeNode)root.getChildAt(i);
+			if(corpusNode.getUserObject().equals(sessionPath.getCorpus())) {
+				for(int j = 0; j < corpusNode.getChildCount(); j++) {
+					final CheckedTreeNode sessionNode = (CheckedTreeNode)corpusNode.getChildAt(j);
+					if(sessionNode.getUserObject().equals(sessionPath.getSession())) {
+						final TreePath checkPath = new TreePath(
+								new Object[]{ root, corpusNode, sessionNode });
+						return checkPath;
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	public List<SessionPath> getSelectedSessions() {
@@ -128,6 +155,18 @@ public class SessionSelector extends CheckboxTree {
 			retVal.add(loc);
 		}
 		
+		Collections.sort(retVal, (sp1, sp2) -> sp1.toString().compareTo(sp2.toString()) );
+		
 		return retVal;
+	}
+	
+	public void setSelectedSessions(List<SessionPath> selectedSessions) {
+		super.clearSelection();
+		
+		for(SessionPath sessionPath:selectedSessions) {
+			final TreePath path = sessionPathToTreePath(sessionPath);
+			getCheckingModel().addCheckingPath(path);
+			expandPath(path.getParentPath());
+		}
 	}
 }

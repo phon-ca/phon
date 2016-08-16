@@ -115,6 +115,18 @@ function query_record(recordIndex, record) {
 				if(checkWord == true) {
 					var vals = filters.primary.patternFilter.find_pattern(word.getTier(searchTier));
 					
+					// get start index of word
+					var wordOffset = 0;
+					if(searchTier == "Orthography") {
+						wordOffset = word.getOrthographyWordLocation();
+					} else if(searchTier == "IPA Target") {
+						wordOffset = word.getIPATargetWordLocation();
+					} else if(searchTier == "IPA Actual") {
+						wordOffset = word.getIPAActualWordLocation();
+					} else {
+						wordOffset = word.getTierWordLocation(searchTier);
+					}
+					
 					for(var i = 0; i < vals.length; i++) {
 						var v = vals[i];
 						
@@ -122,8 +134,8 @@ function query_record(recordIndex, record) {
 				        result.recordIndex = recordIndex;
 				        result.schema = "LINEAR";
 				        
-				        var startIdx = v.start;
-				        var endIdx = v.end;
+				        var startIdx = wordOffset + v.start;
+				        var endIdx = wordOffset + v.end;
 				        
 				        if(v.value instanceof IPATranscript) {
 				        	// we need to convert phone to string range

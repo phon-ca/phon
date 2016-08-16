@@ -20,89 +20,105 @@
 package ca.phon.session;
 
 public enum CommentEnum {
-	/*
-	 * <xs:enumeration value="Activities"/>
-          <xs:enumeration value="Bck"/>
-          <xs:enumeration value="Coder"/>
-          <xs:enumeration value="Coding"/>
-          <xs:enumeration value="Date"/>
-          <xs:enumeration value="Education"/>
-          <xs:enumeration value="Exceptions"/>
-          <xs:enumeration value="Generic"/>
-          <!-- Added 3-31-05 -->
-          <xs:enumeration value="Code"/>
-          <xs:enumeration value="New Language"/>
-          <xs:enumeration value="Location"/>
-          <xs:enumeration value="New Episode"/>
-          <xs:enumeration value="Page"/>
-          <xs:enumeration value="Pause"/>
-          <xs:enumeration value="Room Layout"/>
-          <xs:enumeration value="Script"/>
-          <xs:enumeration value="Situation"/>
-          <!--
-              <xs:enumeration value="Stim"/>
--->
-          <xs:enumeration value="Tape Location"/>
-          <xs:enumeration value="Time Duration"/>
-          <xs:enumeration value="Time Start"/>
-          <!--
-              <xs:enumeration value="Transcriber"/>
--->
-          <xs:enumeration value="Warning"/>
-          <!-- MUN 7 Mar 2005: Added 'Media' as a comment type -->
-          <xs:enumeration value="Media"/>
-	 */
+	// from https://talkbank.org/software/talkbank.xsd
+	// see commentTypeType
 	Activities,
 	Bck,
-	Coder,
-	Coding,
 	Date,
-	Education,
 	Exceptions,
+	InteractionType,
+	Number,
+	RecordingQuality,
+	Transcription,
+	Blank,
+	T,
 	Generic,
-	Code,
 	NewLanguage,
 	Location,
 	NewEpisode,
-	Page,
-	Pause,
 	RoomLayout,
-	Script,
 	Situation,
 	TapeLocation,
 	TimeDuration,
 	TimeStart,
+	Transcriber,
 	Warning,
+	Page,
+	EndTurn,
+	
+	@Deprecated
+	Coder,
+	@Deprecated
+	Coding,
+	@Deprecated
+	Education,
+	@Deprecated
+	Code,
+	@Deprecated
+	Pause,
+	@Deprecated
+	Script,
+	@Deprecated
 	Media,
 
-	// gems
-	LazyGem
+	/** CHAT lazy-gem */
+	LazyGem,
+	
+	/** CHAT begin gem */
+	BeginGem,
+	
+	/** CHAT end gem */
+	EndGem,
+	
+	/** CHAT Begin utterance group */
+	BeginTcu,
+	
+	/** Chat End utternace group */
+	EndTcu
 	;
 	
 	private static final String[] names = {
 		"Activities",
 		"Bck",
-		"Coder",
-		"Coding",
 		"Date",
-		"Education",
 		"Exceptions",
+		"Interaction Type",
+		"Number",
+		"Recording Quality",
+		"Transcription",
+		"Blank",
+		"T",
 		"Generic",
-		"Code",
 		"New Language",
 		"Location",
 		"New Episode",
-		"Page",
-		"Pause",
 		"Room Layout",
-		"Script",
 		"Situation",
 		"Tape Location",
 		"Time Duration",
 		"Time Start",
+		"Transcriber",
 		"Warning",
+		"Page",
+		"End Turn",
+		
+		// deprecated
+		"Coder",
+		"Coding",
+		"Education",
+		"Code",
+		"Pause",
+		"Script",
 		"Media",
-		"LazyGem"
+		
+		// gems
+		"LazyGem",
+		"BeginGem",
+		"EndGem",
+		
+		// record groups
+		"BeginTcu",
+		"EndTcu"
 	};
 
 	public String getTitle() {

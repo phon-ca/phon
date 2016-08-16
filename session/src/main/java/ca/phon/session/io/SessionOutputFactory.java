@@ -18,7 +18,9 @@
  */
 package ca.phon.session.io;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 
 /**
@@ -45,6 +47,21 @@ public class SessionOutputFactory {
 		writerLoader = ServiceLoader.load(SessionWriter.class, cl);
 	}
 	
+	public List<SessionIO> availableSessionIOs() {
+		final List<SessionIO> retVal = new ArrayList<>();
+		
+		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
+		while(writerItr.hasNext()) {
+			final SessionWriter writer = writerItr.next();
+			final SessionIO sessionIO = writer.getClass().getAnnotation(SessionIO.class);
+			if(sessionIO != null) {
+				retVal.add(sessionIO);
+			}
+		}
+		
+		return retVal;
+	}
+	
 	/**
 	 * Create a new session writer
 	 * 
@@ -69,19 +86,39 @@ public class SessionOutputFactory {
 	 * @return a new {@link SessionWriter} or <code>null</code>
 	 *  if a writer for the version is not found
 	 */
-	public SessionWriter createWriter(String version) {
+	public SessionWriter createWriter(String id, String version) {
 		SessionWriter retVal = null;
 		
 		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
 		while(writerItr.hasNext()) {
 			final SessionWriter writer = writerItr.next();
 			final SessionIO sessionIO = writer.getClass().getAnnotation(SessionIO.class);
-			if(sessionIO != null && sessionIO.version().equals(version)) {
+			if(sessionIO != null && sessionIO.id().equals(id) && sessionIO.version().equals(version)) {
 				retVal = writer;
 				break;
 			}
 		}
 		
+		return retVal;
+	}
+	
+	/**
+	 * Create a new session writer given the SessionIO annotation.
+	 * 
+	 * @param sessionIO
+	 * @return a new {@link SessionWriter} or <code>null</code> if not found
+	 */
+	public SessionWriter createWriter(SessionIO sessionIO) {
+		SessionWriter retVal = null;
+		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
+		while(writerItr.hasNext()) {
+			final SessionWriter writer = writerItr.next();
+			final SessionIO sIO = writer.getClass().getAnnotation(SessionIO.class);
+			if(sessionIO != null && sessionIO.id().equals(sIO.id()) && sessionIO.version().equals(sIO.version())) {
+				retVal = writer;
+				break;
+			}
+		}
 		return retVal;
 	}
 }

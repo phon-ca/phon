@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
+    <graph id="root">
+        <node id="21367d23" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+            <extensions>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="58b853f2" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                </oga:settings>
+                <oga:meta x="62" y="141"/>
+            </extensions>
+        </node>
+        <node id="4172dddc06ea48a3" type="class:ca.phon.app.opgraph.nodes.query.IPAVariabilityNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
+                </oga:settings>
+                <oga:meta x="250" y="171"/>
+            </extensions>
+        </node>
+        <node id="87ea9b5646534325" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                </oga:settings>
+                <oga:meta x="446" y="169">
+                    <oga:default for="buffer" type="java.lang.String">Variability</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
+        <link dest="87ea9b5646534325" destField="data" source="4172dddc06ea48a3" sourceField="table"/>
+        <link dest="58b853f2" destField="results" source="21367d23" sourceField="result sets"/>
+        <link dest="58b853f2" destField="project" source="21367d23" sourceField="project"/>
+        <link dest="4172dddc06ea48a3" destField="table" source="58b853f2" sourceField="table"/>
+        <extensions>
+            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+            <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
+                <opqry:info title="Transcript Variability">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="4172dddc06ea48a3">
+                    <opqry:info title="IPA Variability">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+            </opqry:nodewizard>
+        </extensions>
+    </graph>
+</opgraph>

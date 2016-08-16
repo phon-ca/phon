@@ -27,7 +27,9 @@ import org.antlr.runtime.TokenSource;
 
 import ca.phon.orthography.OrthoPunctType;
 import ca.phon.orthography.WordPrefix;
+import ca.phon.orthography.WordPrefixType;
 import ca.phon.orthography.WordSuffix;
+import ca.phon.orthography.WordSuffixType;
 
 /**
  * Chomps the given string into tokens usable
@@ -74,16 +76,18 @@ public class OrthoTokenSource implements TokenSource {
 				
 				// punctuation must be separated by a space
 				// check punctuation first
-				if(Character.isWhitespace(nextChar) &&
-					!Character.isWhitespace(currentChar) ) {
-					for(OrthoPunctType pt:OrthoPunctType.values()) {
-						if(pt.getChar() == currentChar) {
-							// setup PUNCT token
-							retVal = new CommonToken(tokens.getTokenType("PUNCT"));
-							retVal.setText(currentChar + "");
-							retVal.setCharPositionInLine(cIndex);
-							cIndex++;
-						}
+				final OrthoPunctType pt = OrthoPunctType.fromChar(currentChar);
+				if(pt != null) {
+					if(pt == OrthoPunctType.AMPERSTAND && !Character.isWhitespace(nextChar)) {
+						// word-fragment, read word
+						readWord();
+						return nextToken();
+					} else {
+						// setup PUNCT token
+						retVal = new CommonToken(tokens.getTokenType("PUNCT"));
+						retVal.setText(currentChar + "");
+						retVal.setCharPositionInLine(cIndex);
+						cIndex++;
 					}
 				}
 				
@@ -158,8 +162,12 @@ public class OrthoTokenSource implements TokenSource {
 				}
 				
 			case ':':
-				type = buffer.toString();
-				buffer.setLength(0);
+				// type is defined before first ':'
+				if(type == null) {
+					type = buffer.toString();
+					buffer.setLength(0);
+				} else 
+					buffer.append(c);
 				break;
 				
 			default:
@@ -249,32 +257,48 @@ public class OrthoTokenSource implements TokenSource {
 		}
 		
 		// check for word prefix codes
-		WordPrefix wp = null;
-		for(WordPrefix prefix:WordPrefix.values()) {
+		WordPrefixType wpt = null;
+		for(WordPrefixType prefix:WordPrefixType.values()) {
 			if(buffer.toString().startsWith(prefix.getCode())) {
-				wp = prefix;
-				buffer.delete(0, wp.getCode().length());
+				wpt = prefix;
+				buffer.delete(0, wpt.getCode().length());
 				break;
 			}
 		}
 		
 		// check for word suffix
-		WordSuffix ws = null;
+		WordSuffixType wst = null;
+		String formSuffix = null;
+		String code = null;
 		final int wsIdx = buffer.lastIndexOf("@");
 		if(buffer.indexOf("@") > 0) {
-			final String suffixVal = buffer.substring(wsIdx+1);
-			ws = WordSuffix.fromCode(suffixVal);
-			if(ws != null) {
+			String suffixVal = buffer.substring(wsIdx);
+			if(suffixVal.indexOf('-') > 0) {
+				formSuffix = suffixVal.substring(suffixVal.indexOf('-')+1);
+				suffixVal = suffixVal.substring(0, suffixVal.indexOf('-'));
+			}
+			if(suffixVal.indexOf(':') > 0) {
+				code = suffixVal.substring(suffixVal.indexOf(':')+1);
+				suffixVal = suffixVal.substring(0, suffixVal.indexOf(':'));
+			}
+			wst = WordSuffixType.fromCode(suffixVal);
+			if(wst != null) {
 				buffer.delete(wsIdx, buffer.length());
 			}
+		}
+		
+		// separated-prefix
+		if(buffer.toString().endsWith("#")) {
+			wst = WordSuffixType.SEPARATED_PREFIX;
+			buffer.delete(buffer.length()-1, buffer.length());
 		}
 		
 		final String word = buffer.toString();
 		
 		// setup tokens
-		if(wp != null) {
-			CommonToken wpToken = new CommonToken(tokens.getTokenType("WORD_PREFIX"));
-			wpToken.setText(wp.getCode());
+		if(wpt != null) {
+			WordPrefix wordPrefix = new WordPrefix(wpt);
+			CommonToken wpToken = new WordPrefixToken(wordPrefix);
 			tokenQueue.add(wpToken);
 		}
 		
@@ -282,10 +306,39 @@ public class OrthoTokenSource implements TokenSource {
 		wordToken.setText(word);
 		tokenQueue.add(wordToken);
 		
-		if(ws != null) {
-			CommonToken wsToken = new CommonToken(tokens.getTokenType("WORD_SUFFIX"));
-			wsToken.setText(ws.getCode());
+		if(wst != null) {
+			WordSuffix wordSuffix = new WordSuffix(wst, formSuffix, code);
+			CommonToken wsToken = new WordSuffixToken(wordSuffix);
 			tokenQueue.add(wsToken);
+		}
+	}
+	
+	public static class WordPrefixToken extends CommonToken {
+
+		WordPrefix prefix;
+		
+		public WordPrefixToken(WordPrefix prefix) {
+			super((new OrthoTokens()).getTokenType("WORD_PREFIX"));
+			this.prefix = prefix;
+		}
+		
+		public WordPrefix getWordPrefix() {
+			return this.prefix;
+		}
+		
+	}
+	
+	public static class WordSuffixToken extends CommonToken {
+
+		WordSuffix suffix;
+		
+		public WordSuffixToken(WordSuffix suffix) {
+			super((new OrthoTokens()).getTokenType("WORD_SUFFIX"));
+			this.suffix = suffix;
+		}
+		
+		public WordSuffix getWordSuffix() {
+			return this.suffix;
 		}
 	}
 }

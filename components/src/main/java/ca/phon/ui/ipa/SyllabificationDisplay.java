@@ -20,24 +20,14 @@
 package ca.phon.ui.ipa;
 
 import java.awt.Dimension;
-import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
-import ca.phon.ipa.AlignmentMarker;
-import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.Phone;
-import ca.phon.ipa.PunctuationFilter;
-import ca.phon.ipa.WordBoundary;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Tuple;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 
 /**
  */

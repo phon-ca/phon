@@ -122,13 +122,13 @@ public class ResultSetListingManager {
 	 */
 	public String getPathForResultListing(Project project, Query query, ResultSet resultSet) {
 		final String projectLocation = 
-				project.getLocation();
+				project.getResourceLocation();
 		final String queryid = query.getUUID().toString();
 		final String rsName = resultSet.getSessionPath();
 		
 		final String sc = File.separator;
 		
-		return projectLocation + sc + "__res" + sc + RESOURCE_FOLDER + sc 
+		return projectLocation + sc + RESOURCE_FOLDER + sc 
 				+ queryid + sc + rsName + ".xml";
 	}
 	

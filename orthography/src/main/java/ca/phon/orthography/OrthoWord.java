@@ -30,18 +30,40 @@ public class OrthoWord extends AbstractOrthoElement {
 	
 	private final WordSuffix suffix;
 	
+	private final UntranscribedType untranscribed;
+	
 	private final String data;
 	
 	public OrthoWord(String data) {
-		this(data, null, null);
+		super();
+		this.data = data;
+		this.prefix = null;
+		this.suffix = null;
+		this.untranscribed = null;
+	}
+	
+	public OrthoWord(String data, UntranscribedType untranscribed) {
+		super();
+		this.data = data;
+		this.prefix = null;
+		this.suffix = null;
+		this.untranscribed = untranscribed;
 	}
 
-	public OrthoWord(String data, WordPrefix prefix) {
+	public OrthoWord(String data, WordPrefixType prefix) {
 		this(data, prefix, null);
 	}
 	
-	public OrthoWord(String data, WordSuffix suffix) {
+	public OrthoWord(String data, WordSuffixType suffix) {
 		this(data, null, suffix);
+	}
+	
+	public OrthoWord(String data, WordPrefixType prefix, WordSuffixType suffix) {
+		super();
+		this.prefix = new WordPrefix(prefix);
+		this.suffix = new WordSuffix(suffix);
+		this.data = data;
+		this.untranscribed = null;
 	}
 	
 	public OrthoWord(String data, WordPrefix prefix, WordSuffix suffix) {
@@ -49,6 +71,31 @@ public class OrthoWord extends AbstractOrthoElement {
 		this.prefix = prefix;
 		this.suffix = suffix;
 		this.data = data;
+		this.untranscribed = null;
+	}
+	
+	public OrthoWord(String data, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribed) {
+		super();
+		this.prefix = prefix;
+		this.suffix = suffix;
+		this.data = data;
+		this.untranscribed = untranscribed;
+	}
+	
+	public OrthoWord(String data, WordPrefixType prefix, WordSuffixType suffix, UntranscribedType untranscribed) {
+		super();
+		this.prefix = new WordPrefix(prefix);
+		this.suffix = new WordSuffix(suffix);
+		this.data = data;
+		this.untranscribed = untranscribed;
+	}
+	
+	public boolean isUntranscribed() {
+		return this.untranscribed != null;
+	}
+	
+	public UntranscribedType getUntranscribedType() {
+		return this.untranscribed;
 	}
 	
 	/**
@@ -83,9 +130,9 @@ public class OrthoWord extends AbstractOrthoElement {
 	@Override
 	public String text() {
 		return (
-			(this.prefix == null ? "" : this.prefix.getCode()) + 
+			(this.prefix == null ? "" : this.prefix) + 
 			this.data + 
-			(this.suffix == null ? "" : "@" + this.suffix.getCode())
+			(this.suffix == null ? "" : this.suffix)
 		);
 	}
 	

@@ -1,9 +1,22 @@
 package ca.phon.app.opgraph.nodes.query;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
@@ -21,6 +34,7 @@ import ca.phon.query.report.ReportBuilder;
 import ca.phon.query.report.ReportBuilderException;
 import ca.phon.query.report.ReportBuilderFactory;
 import ca.phon.query.report.io.ReportDesign;
+import ca.phon.util.PrefHelper;
 
 @OpNodeInfo(
 		name="Report",
@@ -30,6 +44,10 @@ import ca.phon.query.report.io.ReportDesign;
 )
 public class ReportDesignNode extends OpNode implements NodeSettings {
 	
+	private final static Logger LOGGER = Logger.getLogger(ReportDesignNode.class.getName());
+	
+	public final static String AUTOSAVE_FILENAME = "lastreport.xml";
+	
 	private InputField projectInputField = 
 			new InputField("project", "Project", false, true, Project.class);
 	
@@ -37,7 +55,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 			new InputField("query", "Query", false, true, Query.class);
 
 	private InputField resultSetsField =
-			new InputField("result sets", "Result sets from query", false, true, ResultSet[].class);
+			new InputField("results", "Result sets from query", false, true, ResultSet[].class);
 	
 	private OutputField projectOutputField = 
 			new OutputField("project", "Project", true, Project.class);
@@ -48,7 +66,18 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 	
 	private ReportDesign reportDesign;
 	
+	/**
+	 * If <code>true</code> the report created using this node will be
+	 * saved as the 'last report.'  The 'last report' will also be loaded
+	 * with this node
+	 */
+	private boolean useLastReport = false;
+	
 	private ReportEditor reportEditor;
+	
+	private JCheckBox useLastReportBox;
+	
+	private JPanel settingsPanel;
 	
 	public ReportDesignNode() {
 		this(new ReportDesign());
@@ -56,7 +85,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 	
 	public ReportDesignNode(ReportDesign reportDesign) {
 		super();
-		
+
 		this.reportDesign = reportDesign;
 		
 		putField(projectInputField);
@@ -91,6 +120,34 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 		}
 		
 		context.put(projectOutputField, project);
+		
+		if(isUseLastReport()) {
+			// save report
+			// use jaxb to save to element
+			try {
+				JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.report.io");
+				Marshaller marshaller = ctx.createMarshaller();
+				marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+				
+				QName reportDesignQName = new QName("http://phon.ling.mun.ca/ns/report", "report-design");
+				JAXBElement<ReportDesign> reportDesignEle = 
+						new JAXBElement<ReportDesign>(reportDesignQName, ReportDesign.class, reportDesign);
+				marshaller.marshal(reportDesignEle, new File(PrefHelper.getUserDataFolder(), AUTOSAVE_FILENAME));
+			} catch (JAXBException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+	}
+	
+	public boolean isUseLastReport() {
+		return (this.useLastReportBox != null ? this.useLastReportBox.isSelected() : this.useLastReport);
+	}
+	
+	public void setUseLastReport(boolean useLastReport) {
+		this.useLastReport = useLastReport;
+		if(this.useLastReportBox != null)
+			this.useLastReportBox.setSelected(this.useLastReport);
 	}
 	
 	public ReportDesign getReportDesign() {
@@ -100,11 +157,20 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 
 	@Override
 	public Component getComponent(GraphDocument document) {
-		if(this.reportEditor == null) {
+		if(this.settingsPanel == null) {
+			this.settingsPanel = new JPanel(new BorderLayout());
+			
+			useLastReportBox = new JCheckBox("Remember outline");
+			useLastReportBox.setSelected(useLastReport);
+
+			this.settingsPanel.add(useLastReportBox, BorderLayout.NORTH);
+			
 			this.reportEditor = 
 					(this.reportDesign == null ? new ReportEditor() : new ReportEditor(reportDesign));
+			
+			this.settingsPanel.add(this.reportEditor, BorderLayout.CENTER);
 		}
-		return this.reportEditor;
+		return this.settingsPanel;
 	}
 
 	@Override

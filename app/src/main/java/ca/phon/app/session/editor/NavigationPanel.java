@@ -32,14 +32,14 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.ui.action.PhonUIAction;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class NavigationPanel extends JPanel {
 	
@@ -94,7 +94,7 @@ public class NavigationPanel extends JPanel {
 	
 	private void init() {
 		final ButtonGroup btnGroup = new ButtonGroup();
-		final List<JButton> buttons = SegmentedButtonBuilder.createSegmentedButtons(4, btnGroup);
+		final List<JButton> buttons = (new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(4, btnGroup);
 		
 		final Action firstRecordAction = new FirstRecordAction(getEditor());
 		firstRecordButton = buttons.get(0);
@@ -179,7 +179,7 @@ public class NavigationPanel extends JPanel {
 		
 		CellConstraints cc = new CellConstraints();
 		
-		final JComponent btnComp = SegmentedButtonBuilder.createLayoutComponent(buttons);
+		final JComponent btnComp = (new SegmentedButtonBuilder<JButton>(JButton::new)).createLayoutComponent(buttons);
 		
 		JLabel rl = new JLabel(" Record: ");
 		add(rl, cc.xy(1, 1));

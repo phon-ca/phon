@@ -18,19 +18,28 @@
  */
 package ca.phon.ui.wizard;
 
+import java.util.Set;
+
 import javax.swing.JComponent;
+
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 
 /**
  * A single step in a wizard.
  *
  */
-public class WizardStep extends JComponent {
+public class WizardStep extends JComponent implements IExtendable {
 	
 	private static final long serialVersionUID = 759706453682993593L;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(WizardStep.class, this);
 	
 	/* Natigation */
 	private int prevStep = -1;
 	private int nextStep = -1;
+	
+	private String title = "";
 
 	public int getNextStep() {
 		return nextStep;
@@ -50,6 +59,30 @@ public class WizardStep extends JComponent {
 	
 	public boolean validateStep() {
 		return true;
+	}
+	
+	public String getTitle() {
+		return this.title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
 	}
 	
 }

@@ -549,4 +549,9 @@ public class FeatureMatrix {
 		}
 		return result;
 	}
+	
+	public Feature[] getFeatureData() {
+		return this.featureData;
+	}
+	
 }

@@ -60,9 +60,6 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.tools.debugger.Main;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
@@ -87,6 +84,9 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Editor for query scripts.  Includes tabs for viewing the query form
@@ -259,7 +259,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		editorPanel.add(bottomPanel, BorderLayout.SOUTH);
 
 		editorTabs = new JTabbedPane();
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		final String name = (queryName != null ? queryName.getName() : "untitled");
 		editorTabs.add("Script : " + name, editorPanel);
@@ -313,7 +313,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	private void updateComponents() {
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		
 		final URL location = (queryName != null ? queryName.getLocation() : null);
@@ -343,7 +343,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	 * 
 	 */
 	public String getCurrentFile() {
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		
 		final URL url = (queryName != null ? queryName.getLocation() : null);
@@ -366,7 +366,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			parentFolder = f.getParentFile();
 		} else {
 			parentFolder = new File(
-					getProject().getLocation(), "__res" + File.separator + "script");
+					getProject().getResourceLocation(), "script");
 		}
 		
 		return parentFolder.getAbsolutePath();
@@ -418,35 +418,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-//		if(f.getName().endsWith(".js")) {
-//			try {
-//				queryScript.readFromFile(f);
-//			} catch (IOException e) {
-//				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//			}
-//		} else if (f.getName().endsWith(".xml")) {
-//			// load 'query' description including parameter settings
-//			final QueryManager qm = QueryManager.getSharedInstance();
-//			final QueryFactory qf = qm.createQueryFactory();
-//			try {
-//				final Query q = qm.loadQuery(file);
-//				
-//				queryScript.setScript(q.getScript().getSource());
-//				queryScript.setLocation(file);
-//				
-//				ScriptParam[] params = queryScript.getScriptParams();
-//				for(ScriptParam sp:params) {
-//					for(String id:sp.getParamIds()) {
-//						Object v = q.getScript().getParameters().get(id);
-//						if(v != null) {
-//							sp.setValue(id, v);
-//						}
-//					}
-//				}
-//			} catch (IOException e) {
-//				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//			}
-//		}
 
 		setModified(false);
 		updateComponents();
@@ -499,7 +470,9 @@ public class QueryEditorWindow extends CommonModuleFrame {
 //			return false;
 //		}
 		
-		final SaveQueryDialog dialog = new SaveQueryDialog(this, scriptEditor.getScript());
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
+		
+		final SaveQueryDialog dialog = new SaveQueryDialog(this, script);
 		dialog.setModal(true);
 		
 		dialog.pack();
@@ -507,7 +480,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		
 		dialog.setVisible(true);
 		
-		final QueryScript script = scriptEditor.getScript();
 		final QueryName queryName = script.getExtension(QueryName.class);
 		final URL location = (queryName != null ? queryName.getLocation() : null);
 		
@@ -544,51 +516,51 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	private void onDebugQuery() {
-		final QueryScript script = scriptEditor.getScript();
-		final QueryName queryName = script.getExtension(QueryName.class);
-		final String name = (queryName != null ? queryName.getName() : "untitled");
-		
-		final Main debugger = Main.mainEmbedded("Debugger : " + name);
-		debugger.setBreakOnEnter(false);
-		debugger.setBreakOnExceptions(true);
-		
-		PhonScriptContext scriptContext = script.getContext();
-		try {
-			final ScriptParameters scriptParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope());
-			
-			// we need to reset the context to activate debugging
-			script.resetContext();
-			scriptContext = script.getContext();
-			
-			final Context ctx = scriptContext.enter();
-			final ScriptableObject debugScope = ctx.initStandardObjects();
-			ctx.setOptimizationLevel(-1);
-			debugger.attachTo(ctx.getFactory());
-			debugger.setScope(debugScope);
-			scriptContext.exit();
-			
-			final ScriptParameters newParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope(debugScope));
-			ScriptParameters.copyParams(scriptParams, newParams);
-		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-		
-		debugger.setExitAction(new Runnable() {
-			
-			@Override
-			public void run() {
-				debugger.detach();
-				debugger.setVisible(false);
-			}
-			
-		});
-		// break on entering main query script
-		debugger.doBreak();
-		debugger.setSize(500, 600);
-		debugger.setVisible(true);
-		debugger.go();
-		
-		onRunQuery();
+//		final QueryScript script = (QueryScript)scriptEditor.getScript();
+//		final QueryName queryName = script.getExtension(QueryName.class);
+//		final String name = (queryName != null ? queryName.getName() : "untitled");
+//		
+//		final Main debugger = Main.mainEmbedded("Debugger : " + name);
+//		debugger.setBreakOnEnter(false);
+//		debugger.setBreakOnExceptions(true);
+//		
+//		PhonScriptContext scriptContext = script.getContext();
+//		try {
+//			final ScriptParameters scriptParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope());
+//			
+//			// we need to reset the context to activate debugging
+//			script.resetContext();
+//			scriptContext = script.getContext();
+//			
+//			final Context ctx = scriptContext.enter();
+//			final ScriptableObject debugScope = ctx.initStandardObjects();
+//			ctx.setOptimizationLevel(-1);
+//			debugger.attachTo(ctx.getFactory());
+//			debugger.setScope(debugScope);
+//			scriptContext.exit();
+//			
+//			final ScriptParameters newParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope(debugScope));
+//			ScriptParameters.copyParams(scriptParams, newParams);
+//		} catch (PhonScriptException e) {
+//			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+//		}
+//		
+//		debugger.setExitAction(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				debugger.detach();
+//				debugger.setVisible(false);
+//			}
+//			
+//		});
+//		// break on entering main query script
+//		debugger.doBreak();
+//		debugger.setSize(500, 600);
+//		debugger.setVisible(true);
+//		debugger.go();
+//		
+//		onRunQuery();
 	}
 	
 	private void onRunQuery() {
@@ -608,7 +580,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
         PhonLoggerConsole errDisplay = new PhonLoggerConsole();
         errDisplay.addLogger(LOGGER);
         
-        final QueryScript editorScript = scriptEditor.getScript();
+        final QueryScript editorScript = (QueryScript)scriptEditor.getScript();
         final QueryScript script = (QueryScript)editorScript.clone();
         
         final List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
@@ -644,6 +616,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		final int idx = editorTabs.indexOfComponent(panel);
 		if(idx > 0) {
 			if(panel.isRunning()) {
+				// XXX causing thread lock on EDT - use non-block dialog or background thread
 				int result = 
 						NativeDialogs.showOkCancelDialogBlocking(QueryEditorWindow.this, null, "Cancel Query", "Stop query?");
 				if(result == 0) {
@@ -775,7 +748,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	public String getScript() {
-		final QueryScript script = scriptEditor.getScript();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		return script.getScript();
 	}
 	

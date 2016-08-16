@@ -326,6 +326,9 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	
 	@Override
 	public Map<EditorViewCategory, List<String>> getViewsByCategory() {
+		if(this.dockables == null) {
+			getDockables();
+		}
 		return this.viewsByCategory;
 	}
 	
@@ -954,11 +957,12 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	}
 	
 	/**
-	 * Adds a menu item for all available editor perspecitves.
+	 * Adds a menu item for all available editor perspectives.
 	 * 
 	 * @param menu
 	 */
-	private void setupLayoutMenu(MenuElement menu) {
+	@Override
+	public void setupLayoutMenu(MenuElement menu) {
 		if(menu.getComponent() instanceof JMenu) {
 			((JMenu)menu).removeAll();
 		} else if(menu.getComponent() instanceof JPopupMenu) {

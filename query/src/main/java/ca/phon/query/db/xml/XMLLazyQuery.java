@@ -21,12 +21,11 @@ package ca.phon.query.db.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.joda.time.DateTime;
 
 import ca.phon.query.db.Script;
 
@@ -87,13 +86,13 @@ public class XMLLazyQuery extends XMLQuery {
 	}
 
 	@Override
-	public DateTime getDate() {
+	public LocalDateTime getDate() {
 		loadData();
 		return super.getDate();
 	}
 
 	@Override
-	public void setDate(DateTime date) {
+	public void setDate(LocalDateTime date) {
 		loadData();
 		super.setDate(date);
 	}

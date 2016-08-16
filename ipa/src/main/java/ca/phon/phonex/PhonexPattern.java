@@ -182,7 +182,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 */
 	public int groupIndex(String groupName) {
 		for(int i = 1; i <= numberOfGroups(); i++) {
-			if(groupName(i).equals(groupName)) return i;
+			if(groupName(i) != null && groupName(i).equals(groupName)) return i;
 		}
 		return -1;
 	}

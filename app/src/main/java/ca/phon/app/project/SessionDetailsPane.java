@@ -19,12 +19,10 @@
 package ca.phon.app.project;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import ca.phon.project.Project;
 import ca.phon.worker.PhonWorker;
@@ -60,10 +58,10 @@ public class SessionDetailsPane extends JTextArea {
 		final Runnable inBg = () -> {
 			try {
 				int numRecords = project.numberOfRecordsInSession(corpus, session);
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd@K:ma");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@K:ma");
 				
 				sb.append("Number of records: ").append(numRecords).append("\n\n");
-				sb.append("Last modified: ").append(formatter.print(project.getSessionModificationTime(corpus, session)));
+				sb.append("Last modified: ").append(formatter.format(project.getSessionModificationTime(corpus, session)));
 			} catch (IOException e) {
 				
 			}

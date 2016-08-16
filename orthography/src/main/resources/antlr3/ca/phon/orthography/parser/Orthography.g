@@ -64,16 +64,22 @@ word returns [OrthoWord word]
 	{
 		WordPrefix wp = null;
 		if($WORD_PREFIX != null) {
-			wp = WordPrefix.fromCode($WORD_PREFIX.text);
+			wp = ((OrthoTokenSource.WordPrefixToken)$WORD_PREFIX).getWordPrefix();
 		}
 		
 		WordSuffix ws = null;
 		if($WORD_SUFFIX != null) {
-			ws = WordSuffix.fromCode($WORD_SUFFIX.text);
+			ws = ((OrthoTokenSource.WordSuffixToken)$WORD_SUFFIX).getWordSuffix();
 		}		
 		
 		final String data = $WORD.text;
-		$word = new OrthoWord(data, wp, ws);
+		
+		UntranscribedType untranscribed = null;
+		if(data.matches("[xyw]{3}")) {
+			untranscribed = UntranscribedType.fromCode(data);
+		}
+		
+		$word = new OrthoWord(data, wp, ws, untranscribed);
 	}
 	;
 	

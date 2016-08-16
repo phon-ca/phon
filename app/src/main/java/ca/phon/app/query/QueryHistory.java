@@ -28,6 +28,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -57,10 +58,6 @@ import javax.swing.table.TableRowSorter;
 
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
-import org.joda.time.DateTime;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.query.EditQueryDialog.ReturnStatus;
 import ca.phon.project.Project;
@@ -80,6 +77,9 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.text.TableSearchField;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Shows the query history for a given project.
@@ -461,7 +461,7 @@ public class QueryHistory extends CommonModuleFrame {
 			
 			if(value instanceof GregorianCalendar) {
 				final DateFormatter pdf = new DateFormatter();
-				retVal.setText(pdf.format((DateTime)value));
+				retVal.setText(pdf.format((LocalDate)value));
 			}
 			
 			return retVal;

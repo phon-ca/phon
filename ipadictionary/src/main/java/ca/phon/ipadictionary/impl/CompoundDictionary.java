@@ -27,11 +27,9 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.phon.ipadictionary.ContractionRule;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.AddEntry;
-import ca.phon.ipadictionary.spi.GenerateSuggestions;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.NameInfo;

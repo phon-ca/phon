@@ -3,9 +3,9 @@ package ca.phon.app.autosave;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
-
-import org.joda.time.DateTime;
 
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -80,7 +80,7 @@ public class Autosaves {
 		project.releaseSessionWriteLock(corpus, autosaveName, writeLock);
 	}
 	
-	public DateTime getAutosaveDateTime(Session session) {
+	public LocalDateTime getAutosaveDateTime(Session session) {
 		return getAutosaveDateTime(session.getCorpus(), session.getName());
 	}
 	
@@ -92,13 +92,13 @@ public class Autosaves {
 	 * 
 	 * @return session modification date, <code>null</code> if autosave does not exist
 	 */
-	public DateTime getAutosaveDateTime(String corpus, String session) {
+	public LocalDateTime getAutosaveDateTime(String corpus, String session) {
 		if(!hasAutosave(corpus, session)) return null;
 		
 		final File autosaveFile = new File(getAutosavePath(corpus, session));
 		final long autosaveModified = autosaveFile.lastModified();
 		
-		final DateTime retVal = new DateTime(autosaveModified);
+		final LocalDateTime retVal = LocalDateTime.ofEpochSecond(autosaveModified, 0, ZoneOffset.UTC);
 		return retVal;
 	}
 	

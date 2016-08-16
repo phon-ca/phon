@@ -40,6 +40,7 @@ public enum SyllableStress {
 	
 	private SyllableStress(String s, char ipa) {
 		idString = s;
+		this.ipa = ipa;
 	}
 	
 	public String getId() {

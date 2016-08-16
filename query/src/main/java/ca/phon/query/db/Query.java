@@ -19,10 +19,10 @@
 
 package ca.phon.query.db;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
-import org.joda.time.DateTime;
 
 /**
  * Interface for a Phon query. 
@@ -61,14 +61,14 @@ public interface Query {
 	 * 
 	 * @return the date
 	 */
-	public abstract DateTime getDate();
+	public abstract LocalDateTime getDate();
 	
 	/**
 	 * Sets the date of creation of this query.
 	 * 
 	 * @param date  the date
 	 */
-	public abstract void setDate(DateTime date);
+	public abstract void setDate(LocalDateTime date);
 
 	/**
 	 * Gets whether or not this query is starred.

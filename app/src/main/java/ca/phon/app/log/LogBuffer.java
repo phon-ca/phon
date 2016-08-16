@@ -56,7 +56,7 @@ public class LogBuffer extends RSyntaxTextArea {
 	
 	private final DocumentOutputStream stdErrStream;
 	
-	private final String name;
+	private String name;
 	
 	private final String encoding = "UTF-8";
 	
@@ -196,6 +196,10 @@ public class LogBuffer extends RSyntaxTextArea {
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		super.paintComponent(g2);
+	}
+
+	public void setBufferName(String string) {
+		this.name = string;
 	}
 	
 }

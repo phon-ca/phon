@@ -47,6 +47,7 @@ import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
@@ -88,9 +89,9 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		this.groupIndex = groupIndex;
 		
 		segmentField = new SegmentField();
-		segmentField.setBorder(new GroupFieldBorder());
 		
 		updateText();
+		validateText();
 		segmentField.getDocument().addDocumentListener(docListener);
 		
 		// validate text when 'enter' is pressed
@@ -119,6 +120,10 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		add(segmentField);
 		add(new JSeparator());
 		add(playButton);
+	}
+	
+	public GroupFieldBorder getGroupFieldBorder() {
+		return (GroupFieldBorder)segmentField.getBorder();
 	}
 	
 	@Override
@@ -185,8 +190,26 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 			} else {
 				retVal = false;
 			}
+			getGroupFieldBorder().setShowWarningIcon(false);
+			segmentField.setToolTipText(null);
 		} catch (ParseException e) {
+			getGroupFieldBorder().setShowWarningIcon(true);
+			segmentField.setToolTipText(e.getLocalizedMessage());
 			retVal = false;
+		}
+		
+		// check if segment overlaps with previous record
+		MediaSegment validated = getValidatedObject();
+		if(getEditor().getCurrentRecordIndex() > 0) {
+			Record prevRecord = getEditor().getSession().getRecord(getEditor().getCurrentRecordIndex()-1);
+			MediaSegment prevSegment = prevRecord.getSegment().getGroup(0);
+			if(prevSegment != null) {
+				if(prevSegment.getEndValue() > validated.getStartValue()) {
+					// XXX Border does not update properly while typing
+					getGroupFieldBorder().setShowWarningIcon(true);
+					segmentField.setToolTipText("Segment overlaps with previous record");
+				}
+			}
 		}
 		
 		return retVal;

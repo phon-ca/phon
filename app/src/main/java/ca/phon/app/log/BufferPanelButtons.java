@@ -27,11 +27,15 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -67,7 +71,7 @@ public class BufferPanelButtons extends JComponent {
 	private void init() {
 		buttonGroup = new ButtonGroup();
 		final List<JButton> buttons = 
-				SegmentedButtonBuilder.createSegmentedButtons(2, buttonGroup);
+				(new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(2, buttonGroup);
 		
 		final ImageIcon txtIcon = IconManager.getInstance().getIcon(TEXT_ICON, IconSize.SMALL);
 		final PhonUIAction txtAct = new PhonUIAction(this, "showText");
@@ -102,6 +106,26 @@ public class BufferPanelButtons extends JComponent {
 		setLayout(new HorizontalLayout(0));
 		add(textButton);
 		add(tableButton);
+	}
+	
+	public void showHTML() {
+		final HTMLTableBufferExporter exporter = new HTMLTableBufferExporter(true);
+		try {
+			final String html = exporter.exportBuffer(getBufferPanel().getLogBuffer());
+			
+			final JFrame tempFrame = new JFrame("HTML Table");
+			final JEditorPane editorPane = new JEditorPane("text/html", html);
+			editorPane.setEditable(false);
+			editorPane.setFont(FontPreferences.getUIIpaFont());
+			tempFrame.add(new JScrollPane(editorPane));
+			
+			tempFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			tempFrame.pack();
+			tempFrame.setVisible(true);
+			
+		} catch (BufferExportException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void showText() {

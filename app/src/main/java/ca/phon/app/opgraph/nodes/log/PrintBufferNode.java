@@ -1,17 +1,21 @@
 package ca.phon.app.opgraph.nodes.log;
 
 import java.awt.Component;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import org.apache.commons.lang3.Validate;
+import org.jdesktop.swingx.VerticalLayout;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
@@ -21,9 +25,11 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferPanelContainer;
 import ca.phon.app.log.BufferWindow;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
+import ca.phon.app.log.LogBuffer;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 @OpNodeInfo(
 		name="Print to Buffer",
@@ -33,27 +39,31 @@ import ca.phon.formatter.FormatterFactory;
 )
 public class PrintBufferNode extends OpNode implements NodeSettings {
 	
+	private final static Logger LOGGER = Logger.getLogger(PrintBufferNode.class.getName());
+	
+	public static final String BUFFERS_KEY = "_buffers";
+	
 	private InputField dataField =
 			new InputField("data", "Data to print", false, true, Object.class);
 	
+	private InputField bufferNameField = 
+			new InputField("buffer", "Buffer name", true, true, String.class);
 	
-	private final static String APPEND_TO_BUFFER_PROP = "appendToBuffer";
+	private InputField appendField = 
+			new InputField("append", "Append to buffer", true, true, Boolean.class);
 	
-	private boolean appendToBuffer = true;
+	private boolean showTable = true;
 	
-	private JCheckBox appendToBufferBox;
-	
-	private final static String BUFFER_NAME_PROP = "bufferName";
-	
-	private String bufferName = "default";
-	
-	private JTextField bufferNameField;
+	private JPanel settingsPanel;
+	private JCheckBox showTableBox;
 	
 	public PrintBufferNode() {
 		super();
 		
 		putField(dataField);
-
+		putField(bufferNameField);
+		putField(appendField);
+		
 		putExtension(NodeSettings.class, this);
 	}
 
@@ -62,42 +72,54 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		final Object data = context.get(dataField);
 		if(data == null) throw new ProcessingException(null, "Data cannot be null");
 		
-		final String bufferName = getBufferName();
-		final boolean append = isAppendToBuffer();
+		final String bufferName = getBufferName(context);
+		final boolean append = isAppendToBuffer(context);
+
+		final String dataVal = FormatterUtil.format(data);
 		
-		@SuppressWarnings({ "unchecked", "rawtypes" })
+		final AtomicReference<BufferPanelContainer> bufferPanelContainerRef =
+				new AtomicReference<BufferPanelContainer>((BufferPanelContainer)context.get(BUFFERS_KEY));
+
 		Runnable onEDT = () -> {
-			final BufferWindow bufferWindow = BufferWindow.getInstance();
+			if(bufferPanelContainerRef.get() == null) {
+				final BufferWindow bufferWindow = BufferWindow.getInstance();
+				if(!bufferWindow.isVisible()) {
+					bufferWindow.setSize(968, 600);
+					bufferWindow.centerWindow();
+					bufferWindow.setVisible(true);
+				}
+				bufferPanelContainerRef.set(bufferWindow);
+			}
 			
-			BufferPanel bufferPanel = bufferWindow.getBuffer(bufferName);
+			final BufferPanelContainer bpc = bufferPanelContainerRef.get();
+			
+			BufferPanel bufferPanel = bpc.getBuffer(bufferName);
 			if(bufferPanel == null) {
-				bufferPanel = bufferWindow.createBuffer(bufferName);
+				bufferPanel = bpc.createBuffer(bufferName);
+			}
+			
+			if(data instanceof DefaultTableDataSource) {
+				bufferPanel.putExtension(BirtBufferPanelExtension.class, 
+						new BirtBufferPanelExtension(bufferPanel, (DefaultTableDataSource)data));
 			}
 			
 			if(!append) {
 				bufferPanel.getLogBuffer().setText("");
 			}
-
-			StringBuffer bufferValue = new StringBuffer(bufferPanel.getLogBuffer().getText());
 			
-			if(data instanceof String) {
-				bufferValue.append((String)data);
-			} else {
-				final Formatter formatter = FormatterFactory.createFormatter(data.getClass());
-				if(formatter == null) {
-					bufferValue.append(data.toString());
-				} else {
-					bufferValue.append(formatter.format(data));
+			try (final PrintWriter out = new PrintWriter(
+					new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8"))) {
+				out.print(dataVal);
+				out.flush();
+				
+				if(isShowTable()) {
+					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+					out.flush();
 				}
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 			
-			bufferPanel.getLogBuffer().setText(bufferValue.toString());
-			
-			if(!bufferWindow.isVisible()) {
-				bufferWindow.setSize(600, 800);
-				bufferWindow.centerWindow();
-				bufferWindow.setVisible(true);
-			}
 		};
 		if(SwingUtilities.isEventDispatchThread())
 			onEDT.run();
@@ -110,59 +132,48 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		}
 	}
 
-	private JPanel createSettingsPanel() {
-		final FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, fill:pref:grow",
-				"pref, pref");
-		final CellConstraints cc = new CellConstraints();
-		final JPanel panel = new JPanel(layout);
-	
-		final String currentName = getBufferName();
-		bufferNameField = new JTextField();
-		bufferNameField.setText(currentName);
-		
-		final boolean currentAppend = isAppendToBuffer();
-		appendToBufferBox = new JCheckBox("Append");
-		appendToBufferBox.setSelected(currentAppend);
-		
-		panel.add(new JLabel("Buffer Name"), cc.xy(1,1));
-		panel.add(bufferNameField, cc.xy(3, 1));
-		panel.add(appendToBufferBox, cc.xy(3, 2));
-		
-		return panel;
+	public String getBufferName(OpContext ctx) {
+		return (ctx.containsKey(bufferNameField) ? ctx.get(bufferNameField).toString() : "default");
 	}
 	
-	public String getBufferName() {
-		return (bufferNameField != null ? bufferNameField.getText() : bufferName);
+	public boolean isAppendToBuffer(OpContext ctx) {
+		return (ctx.containsKey(appendField) ? (Boolean)ctx.get(appendField) : false);
+	}
+
+	public boolean isShowTable() {
+		return (showTableBox != null ? showTableBox.isSelected() : this.showTable);
 	}
 	
-	public boolean isAppendToBuffer() {
-		return (appendToBufferBox != null ? appendToBufferBox.isSelected() : appendToBuffer);
+	public void setShowTable(boolean showTable) {
+		this.showTable = showTable;
+		if(this.showTableBox != null)
+			this.showTableBox.setSelected(showTable);
 	}
 	
 	@Override
 	public Component getComponent(GraphDocument document) {
-		return createSettingsPanel();
+		if(settingsPanel == null) {
+			settingsPanel = new JPanel(new VerticalLayout());
+			
+			showTableBox = new JCheckBox("Show table");
+			showTableBox.setSelected(this.showTable);
+			settingsPanel.add(showTableBox);
+		}
+		return settingsPanel;
 	}
 
 	@Override
 	public Properties getSettings() {
-		final Properties props = new Properties();
+		final Properties retVal = new Properties();
 		
-		props.put(APPEND_TO_BUFFER_PROP, isAppendToBuffer());
-		props.put(BUFFER_NAME_PROP, getBufferName());
+		retVal.setProperty("showTable", Boolean.toString(isShowTable()));
 		
-		return props;
+		return retVal;
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
-		if(properties.containsKey(APPEND_TO_BUFFER_PROP)) {
-			appendToBuffer = Boolean.parseBoolean(properties.getProperty(APPEND_TO_BUFFER_PROP));
-		}
-		if(properties.containsKey(BUFFER_NAME_PROP)) {
-			bufferName = properties.getProperty(BUFFER_NAME_PROP);
-		}
+		setShowTable(Boolean.parseBoolean(properties.getProperty("showTable", "true")));
 	}
-
+	
 }

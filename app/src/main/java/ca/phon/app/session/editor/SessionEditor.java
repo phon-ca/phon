@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -57,6 +58,7 @@ import ca.phon.app.session.editor.actions.NewRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PasteRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
+import ca.phon.app.session.editor.actions.SaveAsAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.actions.SessionCheckAction;
 import ca.phon.app.session.editor.actions.SortRecordsAction;
@@ -68,6 +70,10 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
+import ca.phon.session.io.OriginalFormat;
+import ca.phon.session.io.SessionIO;
+import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.io.SessionWriter;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuManager;
@@ -360,6 +366,14 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			
 		});
 		
+		// save as.. menu
+		final JMenu saveAsMenu = new JMenu("Save as...");
+		final SessionOutputFactory factory = new SessionOutputFactory();
+		for(SessionIO sessionIO:factory.availableSessionIOs()) {
+			saveAsMenu.add(new JMenuItem(new SaveAsAction(this, sessionIO)));
+		}
+		fileMenu.add(saveAsMenu, 1);
+		fileMenu.add(new JSeparator(), 2);
 		
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");
@@ -604,11 +618,58 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final Project project = getProject();
 		final Session session = getSession();
 		
+		/*
+		 * Check for an OriginalFormat extension, if found and not in Phon format
+		 * ask if the users wishes to save in the original format or Phon's format.
+		 */
+		final SessionOutputFactory outputFactory = new SessionOutputFactory();
+		
+		// get default session writer
+		SessionWriter sessionWriter = outputFactory.createWriter();
+		OriginalFormat origFormat = session.getExtension(OriginalFormat.class);
+		
+		// check for non-native format
+		if(origFormat != null && !origFormat.getSessionIO().group().equals("ca.phon")) {
+			
+			// only issue the format warning once...
+			if(origFormat.isIssueWarning()) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				final String[] opts = {
+						"Use original format (" + origFormat.getSessionIO().name() + ")",
+						"Use phon format",
+						"Cancel"
+				};
+				props.setOptions(opts);
+				props.setDefaultOption(opts[0]);
+				props.setHeader("Save session");
+				props.setMessage("Use original format or save in Phon format? Some information such as tier font and ordering may not be saved if using the original format.");
+				props.setRunAsync(false);
+				props.setParentWindow(this);
+				props.setTitle(props.getHeader());
+				
+				int retVal = NativeDialogs.showMessageDialog(props);
+				if(retVal == 0) {
+					// save in original format
+					sessionWriter = outputFactory.createWriter(origFormat.getSessionIO());
+				} else if(retVal == 1) {
+					// change original format to new Phon's default SessionIO
+					origFormat = new OriginalFormat(sessionWriter.getClass().getAnnotation(SessionIO.class));
+					session.putExtension(OriginalFormat.class, origFormat);
+				} else {
+					// cancelled
+					return false;
+				}
+				origFormat.setIssueWarning(false);
+			} else {
+				sessionWriter = outputFactory.createWriter(origFormat.getSessionIO());
+			}
+		}
+		
 		UUID writeLock = null;
 		try {
 			LOGGER.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
 			writeLock = project.getSessionWriteLock(session);
-			project.saveSession(session, writeLock);
+			project.saveSession(session.getCorpus(), session.getName(), session, sessionWriter, writeLock);
 			
 			final long byteSize = project.getSessionByteSize(session);
 			

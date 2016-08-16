@@ -19,10 +19,13 @@
 package ca.phon.app.session.editor.view.common;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Shape;
 import java.text.ParseException;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import ca.phon.extensions.UnvalidatedValue;
@@ -53,6 +56,8 @@ public class OrthoGroupField extends GroupField<Orthography> {
 	
 	private final HighlightPainter eventPainter = new DefaultHighlighter.DefaultHighlightPainter(
 			new Color(0x93/255.0f,0xed/255.0f,0.0f,100/255.0f));
+	
+	private final HighlightPainter untranscribedPainter = commentPainter;
 
 	public OrthoGroupField(Tier<Orthography> tier,
 			int groupIndex) {
@@ -114,17 +119,23 @@ public class OrthoGroupField extends GroupField<Orthography> {
 			if(word.getPrefix() != null) {
 				try {
 					getHighlighter().addHighlight(currentPos,
-							currentPos + word.getPrefix().getCode().length(), prefixPainter);
+							currentPos + word.getPrefix().toString().length(), prefixPainter);
 				} catch (BadLocationException e) {
 					
 				}
 			}
 			if(word.getSuffix() != null) {
 				try {
-					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().getCode().length() : 0) + word.getWord().length();
-					getHighlighter().addHighlight(i, i+word.getSuffix().getCode().length()+1, suffixPainter);
+					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().toString().length() : 0) + word.getWord().length();
+					getHighlighter().addHighlight(i, i+word.getSuffix().toString().length()+1, suffixPainter);
 							
 				} catch (BadLocationException e)  {}
+			}
+			if(word.isUntranscribed()) {
+				try {
+					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().toString().length() : 0);
+					getHighlighter().addHighlight(i, i+word.getWord().length(), untranscribedPainter);
+				} catch (BadLocationException e) {}
 			}
 			fallbackVisit(word);
 		}

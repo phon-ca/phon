@@ -109,6 +109,7 @@ public class QueryScript extends LazyQueryScript {
 			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
 		}
 		
+		super.addPackageImport("Packages.ca.phon.orthography");
 		super.addPackageImport("Packages.ca.phon.ipa");
 		super.addPackageImport("Packages.ca.phon.ipa.features");
 		super.addPackageImport("Packages.ca.phon.phonex");

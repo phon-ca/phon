@@ -579,7 +579,7 @@
         <link dest="7c87d159" destField="ipa" source="67767e7084b3434a" sourceField="ipa out"/>
         <link dest="4ab4fb86" destField="ipa" source="7c87d159" sourceField="ipa out"/>
         <extensions>
-            <nes:settings type="ca.phon.syllabifier.opgraph.editor.OpGraphSyllabifierEditorModel"/>
+            <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
             <ops:settings lang="jbe" name="Berber"/>
         </extensions>
     </graph>

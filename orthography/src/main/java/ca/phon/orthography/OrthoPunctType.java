@@ -35,7 +35,9 @@ public enum OrthoPunctType {
 	OPEN_BRACE('{'),
 	CLOSE_BRACE('}'),
 	FORWARD_SLASH('/'),
-	BACK_SLASH('\\');
+	BACK_SLASH('\\'),
+	DOUBLE_COMMA('\u201e'),
+	DOUBLE_DAGGER('\u2021');
 	
 	private final char punctChar;
 	

@@ -7,7 +7,7 @@
     xmlns:rpt="http://phon.ling.mun.ca/ns/report"
     
     targetNamespace="https://phon.ca/ns/opgraph_query"
-    elementFormDefault="qualified">
+    elementFormDefault="unqualified">
     
     <xs:import namespace="http://gedge.ca/ns/opgraph" 
         schemaLocation="https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd"/>
@@ -42,10 +42,116 @@
                     <xs:element ref="rpt:report-design" minOccurs="0" maxOccurs="1"/>
                     <xs:element ref="og:extensions" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
+                <xs:attribute name="useLastReport" type="xs:boolean" default="false"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     
     <xs:element name="reportDesignNode" type="ReportDesignType" substitutionGroup="og:abstract_node"/>
     
+    <!-- SortNodeSettings -->
+    <xs:complexType name="SortNodeSettingsType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Storage for sort node.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent mixed="false">
+            <xs:extension base="og:AbstractExtensionType">
+                <xs:sequence>
+                    <xs:element ref="sortBy" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+      
+    <xs:complexType name="SortByType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>Column sorting options</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" type="sortType" use="required"/>
+        <xs:attribute name="column" type="xs:string" use="required"/>
+        <xs:attribute name="order" type="sortOrderType" default="ascending"/>
+    </xs:complexType>
+   
+    <xs:simpleType name="sortType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="plain"/>
+            <xs:enumeration value="ipa"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="sortOrderType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ascending"/>
+            <xs:enumeration value="descending"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:element name="sortoptions" type="SortNodeSettingsType" substitutionGroup="og:extension"/>
+    <xs:element name="sortBy" type="SortByType"/>
+    
+    <xs:complexType name="ColumnInfo">
+        <xs:attribute name="column" type="xs:string" use="required"/>
+        <xs:attribute name="caseSensitive" type="xs:boolean" default="false"/>
+        <xs:attribute name="ignoreDiacritics" type="xs:boolean" default="true"/>
+    </xs:complexType>
+    
+    <xs:element name="groupBy" type="ColumnInfo"/>
+    <xs:element name="column" type="ColumnInfo"/>
+    
+    <xs:complexType name="InventoryOptionsType">
+        <xs:complexContent mixed="false">
+            <xs:extension base="og:AbstractExtensionType">
+                <xs:sequence>
+                    <xs:element ref="groupBy" minOccurs="0" maxOccurs="1"/>
+                    <xs:element ref="column" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="inventoryoptions" type="InventoryOptionsType" substitutionGroup="og:extension"/>
+    
+    <xs:complexType name="NodeWizardType">
+        <xs:complexContent mixed="false">
+            <xs:extension base="og:AbstractExtensionType">
+                <xs:sequence>
+                    <xs:element ref="info" maxOccurs="1" minOccurs="0"/>
+                    <xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="optionalNode" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="type" type="og:nonEmptyString" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Subclass which much have a constructor which accepts a graph as an argument.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="NodeRefType">
+        <xs:sequence>
+            <xs:element ref="info" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="ref" type="og:nonEmptyString" use="required"/>
+        <xs:attribute name="showAsStep" type="xs:boolean" default="false" use="optional"/>
+    </xs:complexType>
+    
+    <xs:complexType name="OptionalNodeType">
+        <xs:attribute name="ref" type="og:nonEmptyString" use="required"/>
+        <xs:attribute name="enabled" type="xs:boolean" default="true"/>
+    </xs:complexType>
+    
+    <xs:complexType name="WizardInfoType">
+        <xs:sequence>
+            <xs:element ref="message" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="title" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="node" type="NodeRefType"/>
+    <xs:element name="optionalNode" type="OptionalNodeType"/>
+    <xs:element name="nodewizard" type="NodeWizardType" substitutionGroup="og:extension"/>
+    <xs:element name="info" type="WizardInfoType"/>
+    <xs:element name="message" type="xs:string"/>
 </xs:schema>

@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,11 +21,6 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -37,6 +33,9 @@ import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 	
@@ -198,9 +197,9 @@ public class SessionEditorStatusBar extends JXStatusBar {
 			buf.append("*modified* ");
 		}
 		
-		final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd@K:ma");
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@K:ma");
 		buf.append("Last save:");
-		buf.append(formatter.print(project.getSessionModificationTime(session)));
+		buf.append(formatter.format(project.getSessionModificationTime(session)));
 		
 		buf.append(" Size:");
 		buf.append(ByteSize.humanReadableByteCount(project.getSessionByteSize(session), true));

@@ -21,14 +21,13 @@ package ca.phon.ui.participant;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-
-import org.joda.time.DateTime;
 
 import ca.phon.session.Participant;
 import ca.phon.ui.decorations.DialogHeader;
@@ -46,13 +45,13 @@ public class ParticipantEditor extends JDialog {
 	
 	/** The participant */
 	private Participant participant;
-	private DateTime sessionDate;
+	private LocalDate sessionDate;
 	
 	private boolean wasCanceled = false;
 	
 	public static boolean editParticipant(JFrame parent, Participant part,
 			List<Participant> otherParts) {
-		ParticipantEditor editor = new ParticipantEditor(parent, part, DateTime.now(), otherParts);
+		ParticipantEditor editor = new ParticipantEditor(parent, part, LocalDate.now(), otherParts);
 		editor.pack();
 		editor.setLocationRelativeTo(parent);
 		editor.setVisible(true);
@@ -60,7 +59,7 @@ public class ParticipantEditor extends JDialog {
 		return editor.wasCanceled;
 	}
 	
-	public static boolean editParticipant(JFrame parent, Participant part, DateTime sessionDate,
+	public static boolean editParticipant(JFrame parent, Participant part, LocalDate sessionDate,
 			List<Participant> otherParts) {
 		ParticipantEditor editor = new ParticipantEditor(parent, part, sessionDate, otherParts);
 		editor.pack();
@@ -75,7 +74,7 @@ public class ParticipantEditor extends JDialog {
 	}
 	
 	/** Consctructor */
-	protected ParticipantEditor(JFrame parent, Participant participant, DateTime sessionDate, List<Participant> otherParts) {
+	protected ParticipantEditor(JFrame parent, Participant participant, LocalDate sessionDate, List<Participant> otherParts) {
 		super(parent, "Edit Participant", true);
 		
 		this.participant = participant;

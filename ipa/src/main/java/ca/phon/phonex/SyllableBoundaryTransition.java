@@ -21,6 +21,7 @@ package ca.phon.phonex;
 import java.util.List;
 
 import ca.phon.fsa.FSAState;
+import ca.phon.fsa.OffsetType;
 import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
@@ -52,13 +53,25 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 		final IPATranscript transcript = new IPATranscript(currentState.getTape());
 		final List<IPATranscript> sylls = transcript.syllables();
 		
+		int tapeIdx = -1;
+		if(getOffsetType() == OffsetType.NORMAL) {
+			if(currentState.getTapeIndex() >= currentState.getTape().length) return true;
+			tapeIdx = currentState.getTapeIndex();
+		} else if(getOffsetType() == OffsetType.LOOK_BEHIND) {
+			tapeIdx = currentState.getTapeIndex() - currentState.getLookBehindOffset();
+			if(tapeIdx < 0) return false;
+		} else if(getOffsetType() == OffsetType.LOOK_AHEAD) {
+			tapeIdx = currentState.getTapeIndex() + currentState.getLookAheadOffset();
+			if(tapeIdx >= currentState.getTape().length) return false;
+		}
+		
 		// edges
-		if(currentState.getTapeIndex() == 0 ||
-				currentState.getTapeIndex() == currentState.getTape().length) {
+		if(tapeIdx == 0 ||
+				tapeIdx == currentState.getTape().length) {
 			retVal = true;
 			matchLength = 0;
 		} else {
-			final IPAElement p = currentState.getTape()[currentState.getTapeIndex()];
+			final IPAElement p = currentState.getTape()[tapeIdx];
 		// punctuation
 			final PunctuationTest test = new PunctuationTest();
 			p.accept(test);

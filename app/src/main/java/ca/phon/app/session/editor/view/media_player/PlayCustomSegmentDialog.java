@@ -40,9 +40,6 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.session.MediaSegment;
@@ -62,6 +59,9 @@ import ca.phon.util.MsFormatter;
 import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Dialog to play custom segments.

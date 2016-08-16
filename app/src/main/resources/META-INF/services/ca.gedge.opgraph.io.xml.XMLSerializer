@@ -1,2 +1,6 @@
+ca.phon.app.opgraph.nodes.query.InventorySettingsXMLSerializer
 ca.phon.app.opgraph.nodes.query.QueryNodeXMLSerializer
 ca.phon.app.opgraph.nodes.query.ReportDesignNodeXMLSerializer
+ca.phon.app.opgraph.nodes.query.SortNodeSettingsXMLSerializer
+ca.phon.app.opgraph.editor.NodeEditorSettingsSerializer
+ca.phon.app.opgraph.wizard.NodeWizardXMLSerializer

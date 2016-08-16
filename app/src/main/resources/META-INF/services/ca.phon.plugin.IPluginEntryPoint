@@ -31,3 +31,5 @@ ca.phon.app.corpus.CorpusTemplateEP
 ca.phon.app.about.AboutDialogEP
 # Log Viewer
 ca.phon.app.log.LogViewerEP
+# Node editor
+ca.phon.app.opgraph.editor.OpgraphEditorEP

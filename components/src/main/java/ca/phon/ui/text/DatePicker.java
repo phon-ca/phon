@@ -22,6 +22,9 @@ import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -33,7 +36,6 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.event.DateSelectionEvent;
 import org.jdesktop.swingx.event.DateSelectionListener;
-import org.joda.time.DateTime;
 
 import ca.phon.session.DateFormatter;
 import ca.phon.ui.action.PhonUIAction;
@@ -52,7 +54,7 @@ public class DatePicker extends JComponent {
 	
 	public static final String DATETIME_PROP = "dateTime";
 	
-	private FormatterTextField<DateTime> textField;
+	private FormatterTextField<LocalDate> textField;
 	
 	private JButton monthViewButton;
 	
@@ -75,7 +77,7 @@ public class DatePicker extends JComponent {
 	}
 	
 	private void init() {
-		textField = new FormatterTextField<DateTime>(new DateFormatter());
+		textField = new FormatterTextField<LocalDate>(new DateFormatter());
 		textField.setPrompt("YYYY-MM-DD");
 		textField.setToolTipText("Enter date in format YYYY-MM-DD");
 		textField.addFocusListener(new FocusListener() {
@@ -111,11 +113,11 @@ public class DatePicker extends JComponent {
 		add(monthViewButton, BorderLayout.EAST);
 	}
 	
-	public DateTime getDateTime() {
+	public LocalDate getDateTime() {
 		return textField.getValue();
 	}
 	
-	public void setDateTime(DateTime dateTime) {
+	public void setDateTime(LocalDate dateTime) {
 		textField.setValue(dateTime);
 	}
 	
@@ -123,7 +125,7 @@ public class DatePicker extends JComponent {
 		return this.monthView;
 	}
 	
-	public FormatterTextField<DateTime> getTextField() {
+	public FormatterTextField<LocalDate> getTextField() {
 		return this.textField;
 	}
 	
@@ -133,16 +135,16 @@ public class DatePicker extends JComponent {
 		monthView.setBorder(BorderFactory.createEtchedBorder());
 		
 		if(textField.getValue() != null) {
-			monthView.setFirstDisplayedDay(textField.getValue().toDate());
-			monthView.setSelectionDate(textField.getValue().toDate());
+			final Date date = Date.from(textField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+			monthView.setFirstDisplayedDay(date);
+			monthView.setSelectionDate(date);
 		}
 		
 		monthView.getSelectionModel().addDateSelectionListener(new DateSelectionListener() {
 			
 			@Override
 			public void valueChanged(DateSelectionEvent ev) {
-				textField.setValue(new DateTime(monthView.getSelectionDate()));
-				
+				textField.setValue(LocalDate.from(monthView.getSelectionDate().toInstant()));
 			}
 			
 		});

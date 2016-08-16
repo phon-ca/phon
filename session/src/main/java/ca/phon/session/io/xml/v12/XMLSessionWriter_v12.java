@@ -20,6 +20,10 @@ package ca.phon.session.io.xml.v12;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -36,8 +40,6 @@ import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.AlternativeTranscript;
@@ -71,7 +73,7 @@ import ca.phon.xml.annotation.XMLSerial;
 		version="1.2",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon 1.4-1.6"
+		name="Phon 1.4-2.1"
 )
 public class XMLSessionWriter_v12 implements SessionWriter {
 	
@@ -96,10 +98,11 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		if(session.getMediaLocation() != null && session.getMediaLocation().length() > 0) {
 			headerData.setMedia(session.getMediaLocation());
 		}
-		final DateTime date = (session.getDate() == null ? DateTime.now() : session.getDate());
+		final LocalDate date = (session.getDate() == null ? LocalDate.now() : session.getDate());
 		try {
 			final DatatypeFactory df = DatatypeFactory.newInstance();
-			final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(date.toGregorianCalendar());
+			final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(
+					GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault())));
 			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 			headerData.setDate(cal);
 		} catch (DatatypeConfigurationException e) {
@@ -204,11 +207,12 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		
 		retVal.setName(part.getName());
 		
-		final DateTime bday = part.getBirthDate();
+		final LocalDate bday = part.getBirthDate();
 		if(bday != null) {
 			try {
 				final DatatypeFactory df = DatatypeFactory.newInstance();
-				final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(bday.toGregorianCalendar());
+				final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(
+						GregorianCalendar.from(bday.atStartOfDay(ZoneId.systemDefault())));
 				cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 				retVal.setBirthday(cal);
 			} catch (DatatypeConfigurationException e) {

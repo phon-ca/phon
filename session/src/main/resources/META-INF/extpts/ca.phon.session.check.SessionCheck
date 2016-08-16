@@ -1,1 +1,2 @@
 ca.phon.session.check.CheckTranscripts
+ca.phon.session.check.OverlappingSegmentsCheck

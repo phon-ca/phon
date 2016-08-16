@@ -27,6 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import ca.phon.app.menu.analysis.AnalysisMenuListener;
 import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
@@ -43,6 +44,7 @@ import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.plugin.IPluginMenuFilter;
+import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.PrefHelper;
 
@@ -61,6 +63,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		addEditMenu(owner, menu);
 		addWorkspaceMenu(owner, menu);
 		addQueryMenu(owner, menu);
+		addAnalysisMenu(owner, menu);
 		addToolsMenu(owner, menu);
 		addPluginMenu(owner, menu);
 		addWindowMenu(owner, menu);
@@ -114,6 +117,25 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 			queryMenuListener.menuSelected(me);
 			
 			menu.add(queryMenu);
+		}
+	}
+	
+	/**
+	 * Add 'Assessment' menu
+	 */
+	protected void addAnalysisMenu(Window owner, JMenuBar menu) {
+		if(!(owner instanceof CommonModuleFrame)) return;
+		final CommonModuleFrame frame = (CommonModuleFrame)owner;
+		final Project project = frame.getExtension(Project.class);
+		if(project != null) {
+			final JMenu assessmentMenu = new JMenu("Analysis");
+			final AnalysisMenuListener assessmentMenuListener = new AnalysisMenuListener();
+			assessmentMenu.addMenuListener(assessmentMenuListener);
+			
+			final MenuEvent me = new MenuEvent(assessmentMenu);
+			assessmentMenuListener.menuSelected(me);
+			
+			menu.add(assessmentMenu);
 		}
 	}
 	

@@ -34,7 +34,7 @@ import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 
 /**
- * Defers loadsing of the query script until data is needed.
+ * Defers loading of the query script until data is needed.
  * 
  */
 public class LazyQueryScript extends BasicScript {

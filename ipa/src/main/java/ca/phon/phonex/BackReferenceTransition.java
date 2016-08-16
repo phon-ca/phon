@@ -19,6 +19,7 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.FSAState;
+import ca.phon.fsa.OffsetType;
 import ca.phon.ipa.IPAElement;
 
 public class BackReferenceTransition extends PhonexTransition {
@@ -64,7 +65,25 @@ public class BackReferenceTransition extends PhonexTransition {
 					break;
 				}
 	
-				IPAElement tapePhone = currentState.getTape()[pIdx+i];
+				IPAElement tapePhone = null;
+				
+				if(getOffsetType() == OffsetType.NORMAL) {
+					tapePhone = currentState.getTape()[pIdx+i];
+				} else if(getOffsetType() == OffsetType.LOOK_BEHIND) {
+					int tapeIdx = currentState.getTapeIndex() - currentState.getLookBehindOffset();
+					if(tapeIdx < 0) {
+						retVal = false;
+						break;
+					}
+					tapePhone = currentState.getTape()[tapeIdx];
+				} else if(getOffsetType() == OffsetType.LOOK_AHEAD) {
+					int tapeIdx = currentState.getTapeIndex() + currentState.getLookAheadOffset();
+					if(tapeIdx >= currentState.getTape().length) {
+						retVal = false;
+						break;
+					}
+					tapePhone = currentState.getTape()[tapeIdx];
+				}
 				
 				retVal &= tapePhone.getText().equals(groupPhone.getText());
 				

@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ import ca.phon.cvseq.CVSeqPattern;
 import ca.phon.cvseq.CVSeqType;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.ipa.features.IPAElementComparator;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
@@ -59,7 +61,7 @@ import ca.phon.visitor.Visitor;
  * <p>Objects of this type should be created using either the {@link IPATranscript#parseIPATranscript(String)}
  * static method or {@link IPATranscriptBuilder}.</p>
  */
-public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAElement>, IExtendable {
+public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAElement>, IExtendable, Comparable<IPATranscript> {
 	
 	/** Static logger */
 	private final static Logger LOGGER = Logger.getLogger(IPATranscript.class
@@ -91,7 +93,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 			} catch (RecognitionException re) {
 				throw new ParseException(transcript, re.charPositionInLine);
 			} catch (IPAParserException e) {
-				final ParseException pe = new ParseException(e.getLocalizedMessage(), e.getPositionInLine());
+				final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
 				pe.addSuppressed(e);
 				throw pe;
 			}
@@ -724,6 +726,11 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 	
 	@Override
+	public int hashCode() {
+		return toString(true).hashCode();
+	}
+	
+	@Override
 	public boolean equals(Object ipa) {
 		if(!(ipa instanceof IPATranscript)) return false;
 		return toString(true).equals(((IPATranscript)ipa).toString(true));
@@ -742,6 +749,33 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	@Override
 	public Iterator<IPAElement> iterator() {
 		return toList().iterator();
+	}
+
+	@Override
+	public int compareTo(IPATranscript o) {
+//		final Comparator<IPAElement> comparator = 
+//				new CompoundIPAElementComparator(FeatureComparator.defaultComparator());
+		final Comparator<IPAElement> comparator = 
+				new IPAElementComparator();
+		return compareTo(o, comparator);
+	}
+	
+	public int compareTo(IPATranscript ipa, Comparator<IPAElement> comparator) {
+		int retVal = 0;
+		
+		final int maxCompareLength = Math.min(length(), ipa.length());
+		for(int i = 0; i < maxCompareLength; i++) {
+			final IPAElement e1 = elementAt(i);
+			final IPAElement e2 = ipa.elementAt(i);
+			retVal = comparator.compare(e1, e2);
+			if(retVal != 0) break;
+		}
+		
+		if(retVal == 0) {
+			retVal = ((Integer)length()).compareTo(ipa.length());
+		}
+		
+		return retVal;
 	}
 	
 }

@@ -20,8 +20,8 @@
 
 package ca.phon.session;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
+import java.time.LocalDate;
+import java.time.Period;
 
 import ca.phon.extensions.IExtendable;
 
@@ -34,7 +34,7 @@ public interface Participant extends IExtendable {
 	/**
 	 * @return Returns the age.
 	 */
-	public abstract Period getAge(DateTime fromDate);
+	public abstract Period getAge(LocalDate fromDate);
 
 	/**
 	 * @return Returns the ageTo.
@@ -44,7 +44,7 @@ public interface Participant extends IExtendable {
 	/**
 	 * @return Returns the birthDate.
 	 */
-	public abstract DateTime getBirthDate();
+	public abstract LocalDate getBirthDate();
 
 	/**
 	 * @return Returns the education.
@@ -99,7 +99,7 @@ public interface Participant extends IExtendable {
 	/**
 	 * @param birthDate The birthDate to set.
 	 */
-	public abstract void setBirthDate(DateTime birthDate);
+	public abstract void setBirthDate(LocalDate birthDate);
 	
 	/**
 	 * @param education The education to set.

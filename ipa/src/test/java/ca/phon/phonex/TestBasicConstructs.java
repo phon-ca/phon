@@ -20,6 +20,8 @@ package ca.phon.phonex;
 
 import java.text.ParseException;
 
+import junit.framework.Assert;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +30,6 @@ import org.junit.runners.JUnit4;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
-import junit.framework.Assert;
 
 /**
  * Test basic phonex constructs
@@ -117,4 +118,32 @@ public class TestBasicConstructs {
 		
 		Assert.assertEquals(true, ipa.matches("^$"));
 	}
+	
+	@Test
+	public void testLookAheadBehind() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final String phonex = "(?<\\w)\\c(?>\\w)";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher matcher = pattern.matcher(ipa);
+		
+		Assert.assertTrue(matcher.find());
+		Assert.assertEquals(ipa.elementAt(2), matcher.group().get(0));
+	}
+	
+	@Test
+	public void testLookBehindWithBoundary() throws ParseException {
+		final String text = "ˈk:oʀ:oi:di:dt͡j:oi:n";
+		final String phonex = "^(?<\\s?\\c:L*)\\c:o(?>\\w:sctype(\"-O\"))";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		System.out.println(pattern.getFsa().getDotText());
+		
+		final PhonexMatcher matcher = pattern.matcher(ipa);
+		
+		Assert.assertTrue(matcher.find());
+		Assert.assertEquals(ipa.elementAt(2), matcher.group().get(0));
+	}
+	
 }

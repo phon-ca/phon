@@ -1,16 +1,11 @@
 package ca.phon.query.report.datasource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
+import ca.phon.query.TableUtils;
 
 /**
  * 
@@ -23,6 +18,11 @@ public class DefaultTableDataSource implements TableDataSource {
 	
 	public DefaultTableDataSource() {
 		super();
+	}
+	
+	public DefaultTableDataSource(DefaultTableDataSource from) {
+		super();
+		rowData.addAll(from.rowData);
 	}
 	
 	public List<Object[]> getRowData() {
@@ -76,6 +76,30 @@ public class DefaultTableDataSource implements TableDataSource {
 	public int getRowCount() {
 		return rowData.size();
 	}
+	
+	public int getColumnIndex(String columnName) {
+		int colIdx = -1;
+		for(int c = 0; c < getColumnCount(); c++) {
+			if(getColumnTitle(c).equals(columnName)) {
+				colIdx = c;
+				break;
+			}
+		}
+		return colIdx;
+	}
+	
+	public Object getValueAt(int row, String columnName) {
+		Object retVal = null;
+		
+		if(row < rowData.size()) {
+			int colIdx = getColumnIndex(columnName);
+			if(colIdx > 0 && colIdx < getColumnCount()) {
+				retVal = getValueAt(row, colIdx);
+			}
+		}
+		
+		return retVal;
+	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
@@ -89,6 +113,36 @@ public class DefaultTableDataSource implements TableDataSource {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Return the value at cell for given rowKey, colName.
+	 * 
+	 * This method assumes that each row begins with a unique 
+	 * key.  
+	 * 
+	 * @param rowKey
+	 * @param colName
+	 * @return cellValue at given rowKey, colName intersection.
+	 */
+	public Object getValueAt(String rowKey, String colName) {
+		return getValueAt(0, rowKey, colName);
+	}
+	
+	public Object getValueAt(String keyCol, String rowKey, String colName) {
+		return getValueAt(getColumnIndex(keyCol), rowKey, colName);
+	}
+	
+	public Object getValueAt(int keyCol, String rowKey, String colName) {
+		Optional<Object[]> row = 
+				rowData.parallelStream()
+					.filter( r -> TableUtils.objToString(r[keyCol], true).equalsIgnoreCase(rowKey) )
+					.findAny();
+		if(row.isPresent()) {
+			return row.get()[getColumnIndex(colName)];
+		} else {
+			return null;
+		}
 	}
 	
 	public void setValueAt(int row, int col, Object newVal) {
@@ -118,46 +172,37 @@ public class DefaultTableDataSource implements TableDataSource {
 		return retVal;
 	}
 	
-	public void setColumntTitle(int col, String title) {
+	public void setColumnTitle(int col, String title) {
+		if(col >= getColumnCount()) {
+			setColumnCount(col+1);
+		}
 		columnNames[col] = title;
 	}
 	
-	@Override
-	public String toString() {
-		final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		final PrintWriter writer = new PrintWriter(bout);
+	/**
+	 * Return the type of the first non-null value encountered
+	 * in the specified column.
+	 * 
+	 * @param col
+	 * 
+	 * @return class of the first real value in the columm
+	 */
+	public Class<?> inferColumnType(int col) {
+		Class<?> retVal = Object.class;
 		
-		try (final CSVWriter csvWriter = new CSVWriter(writer)) {
-			String[] row = new String[getColumnCount()];
-			for(int i = 0; i < getColumnCount(); i++)
-				row[i] = getColumnTitle(i);
-			csvWriter.writeNext(row);
-			
-			for(Object[] rowVals:rowData) {
-				for(int i = 0; i < getColumnCount(); i++) {
-					Object val = rowVals[i];
-					
-					if(val == null) {
-						row[i] = "";
-					} else {
-						@SuppressWarnings("unchecked")
-						final Formatter<Object> formatter = 
-								(Formatter<Object>)FormatterFactory.createFormatter(val.getClass());
-						row[i] = (formatter != null ? formatter.format(val) : val.toString());
-					}
-				}
-				csvWriter.writeNext(row);
+		for(int row = 0; row < getRowCount(); row++) {
+			Object val = getValueAt(row, col);
+			if(val != null) {
+				retVal = val.getClass();
+				break;
 			}
-		} catch (IOException e) {
-			
 		}
 		
-		String retVal = new String();
-		try {
-			retVal = bout.toString("UTF-8");
-		} catch (UnsupportedEncodingException e) {}
 		return retVal;
-		
 	}
-
+	
+	public void append(DefaultTableDataSource otherTable) {
+		rowData.addAll(otherTable.rowData);
+	}
+	
 }

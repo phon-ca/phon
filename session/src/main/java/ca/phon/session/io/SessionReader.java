@@ -18,6 +18,7 @@
  */
 package ca.phon.session.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,6 +32,21 @@ import ca.phon.session.Session;
  *
  */
 public interface SessionReader {
+	
+	/**
+	 * Check to see if this reader can open
+	 * the given file.
+	 * 
+	 * @param file
+	 * 
+	 * @return <code>true</code> if this reader can open
+	 *  the given file, <code>false</code> otherwise
+	 * 
+	 * @throws IOException if an error occurs when attempting
+	 *  to open a file
+	 */
+	public boolean canRead(File file) throws IOException;
+	
 	
 	/**
 	 * Create session from given input stream

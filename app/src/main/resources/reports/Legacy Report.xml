@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:rpt="http://phon.ling.mun.ca/ns/report">
+    <graph id="root">
+        <node id="58072efd" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+            <extensions>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <opqry:reportDesignNode id="334d668e" type="ca.phon.app.opgraph.nodes.query.ReportDesignNode" useLastReport="true">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="232" y="71"/>
+            </extensions>
+        </opqry:reportDesignNode>
+        <node id="2af8637b" name="Query" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.db.Query]]></oga:property>
+                </oga:settings>
+                <oga:meta x="176" y="220"/>
+            </extensions>
+        </node>
+        <node id="7ab6cf1a" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                </oga:settings>
+                <oga:meta x="479" y="148"/>
+            </extensions>
+        </node>
+        <link dest="334d668e" destField="project" source="58072efd" sourceField="project"/>
+        <link dest="2af8637b" destField="obj" source="58072efd" sourceField="query"/>
+        <link dest="7ab6cf1a" destField="buffer" source="2af8637b" sourceField="name"/>
+        <link dest="334d668e" destField="query" source="58072efd" sourceField="query"/>
+        <link dest="7ab6cf1a" destField="data" source="334d668e" sourceField="report"/>
+        <link dest="334d668e" destField="results" source="58072efd" sourceField="result sets"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
+                <opqry:info title="Legacy Report">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="334d668e">
+                    <opqry:info title="Report">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>

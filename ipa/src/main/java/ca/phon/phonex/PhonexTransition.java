@@ -23,6 +23,7 @@ import java.util.List;
 
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSATransition;
+import ca.phon.fsa.OffsetType;
 import ca.phon.fsa.TransitionType;
 import ca.phon.ipa.IPAElement;
 
@@ -108,10 +109,18 @@ public class PhonexTransition extends FSATransition<IPAElement> implements Clone
 	
 	@Override
 	public boolean follow(FSAState<IPAElement> currentState) {
-		if(currentState.getTapeIndex() >= 
-				currentState.getTape().length)
-			return false;
-		IPAElement obj = currentState.getTape()[currentState.getTapeIndex()];
+		int tapeIdx = -1;
+		if(getOffsetType() == OffsetType.NORMAL) {
+			if(currentState.getTapeIndex() >= currentState.getTape().length) return false;
+			tapeIdx = currentState.getTapeIndex();
+		} else if(getOffsetType() == OffsetType.LOOK_BEHIND) {
+			tapeIdx = currentState.getTapeIndex() - currentState.getLookBehindOffset();
+			if(tapeIdx < 0) return false;
+		} else if(getOffsetType() == OffsetType.LOOK_AHEAD) {
+			tapeIdx = currentState.getTapeIndex() + currentState.getLookAheadOffset();
+			if(tapeIdx >= currentState.getTape().length) return false;
+		}
+		IPAElement obj = currentState.getTape()[tapeIdx];
 		boolean retVal = 
 				baseMatcher.matches(obj);
 		
@@ -131,6 +140,9 @@ public class PhonexTransition extends FSATransition<IPAElement> implements Clone
 		if(getType() != TransitionType.NORMAL) {
 			retVal += " (" + getType() + ")";
 		}
+		if(getOffsetType() != OffsetType.NORMAL) {
+			retVal += " (" + getOffsetType() + ")";
+		}
 		return retVal;
 	}
 	
@@ -141,6 +153,8 @@ public class PhonexTransition extends FSATransition<IPAElement> implements Clone
 		retVal.setToState(getToState());
 		retVal.getInitGroups().addAll(getInitGroups());
 		retVal.getMatcherGroups().addAll(getMatcherGroups());
+		retVal.setType(getType());
+		retVal.setOffsetType(getOffsetType());
 		return retVal;
 	}
 }

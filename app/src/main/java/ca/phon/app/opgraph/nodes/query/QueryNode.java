@@ -3,12 +3,11 @@ package ca.phon.app.opgraph.nodes.query;
 import java.awt.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import org.joda.time.DateTime;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
@@ -20,6 +19,7 @@ import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.RecordContainer;
 import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -46,7 +46,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 	
 	private InputField projectInputField = new InputField("project", "Project", false, true, Project.class);
 	
-	private InputField inputField = new InputField("record containers", "List of record containers", false,
+	private InputField inputField = new InputField("sessions", "List of sessions or query results", false,
 			true, new RecordContainerTypeValidator());
 	
 	private OutputField projectOutputField = new OutputField("project", "Project", true, Project.class);
@@ -54,8 +54,8 @@ public class QueryNode extends OpNode implements NodeSettings {
 	private OutputField queryField = new OutputField("query",
 			"Query parameters", true, Query.class);
 
-	private OutputField outputField = new OutputField("result sets", 
-			"Result set, one per input record container", true, ResultSet[].class);
+	private OutputField outputField = new OutputField("results", 
+			"Result set, one per input session", true, ResultSet[].class);
 	
 	private OutputField scriptOutput = new OutputField("buffer",
 			"Text output from query", true, String.class);
@@ -118,9 +118,27 @@ public class QueryNode extends OpNode implements NodeSettings {
 		}
 		qScript.setParameters(sparams);
 		qScript.setMimeType("text/javascript");
-		
-		query.setDate(DateTime.now());
-		
+		query.setDate(LocalDateTime.now());
+
+		for(ScriptParam sp:scriptParams) {
+			for(String paramId:sp.getParamIds()) {
+				if(paramId.endsWith("ignoreDiacritics")
+						&& opCtx.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+					sp.setValue(paramId, opCtx.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
+				}
+				
+				if(paramId.endsWith("caseSensitive")
+						&& opCtx.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+					sp.setValue(paramId, opCtx.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));
+				}
+				
+				if(paramId.endsWith("participantRole")
+						&& opCtx.containsKey(NodeWizard.PARTICIPANT_ROLE_GLOBAL_OPTION)) {
+					sp.setValue(paramId, opCtx.get(NodeWizard.PARTICIPANT_ROLE_GLOBAL_OPTION));
+				}
+			}
+		}
+				
 		final List<RecordContainer> recordContainers =
 				RecordContainer.toRecordContainers(project, inputObj);
 		
@@ -133,6 +151,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 		
 		int serial = 0;
 		for(RecordContainer rc:recordContainers) {
+			checkCanceled();
 			try {
 				QueryTask task = new QueryTask(project, rc.getSession(), rc.idxIterator(), queryScript, ++serial);
 				task.run();
@@ -151,7 +170,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 	
 	public QueryScript getQueryScript() {
 		if(scriptPanel != null) {
-			return scriptPanel.getScript();
+			return (QueryScript)scriptPanel.getScript();
 		} else {
 			return this.queryScript;
 		}

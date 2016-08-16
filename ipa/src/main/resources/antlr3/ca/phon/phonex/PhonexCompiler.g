@@ -76,13 +76,13 @@ exprele	:	matcher
 group
 @init {
 	boolean nonCapturing = (input.LA(3) == NON_CAPTURING_GROUP);
-	if(!nonCapturing) {
+	//if(!nonCapturing) {
 		fsaStack.push(new PhonexFSA());
 		groupStack.push(groupIndex++);
-	}
+	//}
 }
 @after {
-	if(!nonCapturing)
+//	if(!nonCapturing)
 		groupStack.pop();
 }
 	:	^(GROUP NON_CAPTURING_GROUP? exprele+ q=quantifier?)
@@ -100,6 +100,14 @@ group
 		}
 		if(q != null) {
 			grpFsa.applyQuantifier(q);
+		}
+
+		// look-ahead/behind
+		if(nonCapturing && groupName != null) {
+			final OffsetType offsetType = 
+				(groupName.endsWith(">") ? OffsetType.LOOK_AHEAD :
+					(groupName.endsWith("<") ? OffsetType.LOOK_BEHIND : OffsetType.NORMAL));
+			grpFsa.getTransitions().forEach( (t) -> t.setOffsetType(offsetType) );
 		}
 		
 		// if the expression starts with a group
@@ -132,6 +140,7 @@ group
 			
 			primaryFSA.setGroupName(groupIndex, groupName);
 		}
+		
 	}
 	;
 

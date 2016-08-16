@@ -18,7 +18,6 @@
  */
 package ca.phon.syllable;
 
-import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.Extension;

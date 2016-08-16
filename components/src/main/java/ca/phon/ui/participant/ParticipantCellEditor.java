@@ -19,6 +19,7 @@
 package ca.phon.ui.participant;
 
 import java.awt.Component;
+import java.time.LocalDate;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
@@ -26,8 +27,6 @@ import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-
-import org.joda.time.DateTime;
 
 import ca.phon.session.Sex;
 import ca.phon.ui.DateTimeDocument;
@@ -50,7 +49,7 @@ public class ParticipantCellEditor extends DefaultCellEditor {
 		if(row == ParticipantTableField.Sex.ordinal()) {
 			textField.setDocument(new SexDocument((Sex)value));
 		} else if(row == ParticipantTableField.Birthday.ordinal()) {
-			textField.setDocument(new DateTimeDocument((DateTime)value));
+			textField.setDocument(new DateTimeDocument((LocalDate)value));
 			textField.setCaretPosition(0);
 		}
 		else{

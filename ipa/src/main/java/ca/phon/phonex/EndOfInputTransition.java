@@ -19,6 +19,8 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.FSAState;
+import ca.phon.fsa.OffsetType;
+import ca.phon.fsa.TransitionType;
 import ca.phon.ipa.IPAElement;
 
 /**
@@ -32,7 +34,12 @@ public class EndOfInputTransition extends PhonexTransition {
 	
 	@Override
 	public boolean follow(FSAState<IPAElement> currentState) {
-		return currentState.getTapeIndex() == currentState.getTape().length;
+		if(getOffsetType() == OffsetType.LOOK_AHEAD) {
+			return (currentState.getTapeIndex() + currentState.getLookAheadOffset() >= 
+					currentState.getTape().length);
+		} else {
+			return currentState.getTapeIndex() == currentState.getTape().length;
+		}
 	}
 
 	@Override

@@ -44,17 +44,18 @@ import javax.swing.JMenuBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 
 /**
@@ -65,6 +66,13 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	private static final long serialVersionUID = 2112769368100535156L;
 	
 	private static final Logger LOGGER = Logger.getLogger(CommonModuleFrame.class.getName());
+	
+	/**
+	 * Property to enable fullscreen on macos 
+	 */
+	public static final String MACOS_ENABLE_FULLSCREEN = "macos.enableFullscreen";
+	
+	public static final boolean DEFAULT_MACOS_ENABLE_FULLSCREEN = true;
 	
 	/** The list of open module frames */
 	private static ArrayList<CommonModuleFrame> openFrames = 
@@ -176,8 +184,8 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			
 		});
 		
-		// set window icon
 		if(!OSInfo.isMacOs()) {
+			// set window icon
 			ImageIcon icon = 
 				IconManager.getInstance().getIcon("apps/database-phon", IconSize.SMALL);
 			ImageIcon largeIcon =
@@ -188,6 +196,10 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			if(icon != null) {
 				super.setIconImages(Arrays.asList(icons));
 			}
+		} else {
+			// fullscreen support
+			getRootPane().putClientProperty("apple.awt.fullscreenable", 
+					PrefHelper.getBoolean(MACOS_ENABLE_FULLSCREEN, DEFAULT_MACOS_ENABLE_FULLSCREEN));
 		}
 		
 		newWindowCreated(this);

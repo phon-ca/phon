@@ -18,9 +18,9 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import javax.swing.undo.CannotUndoException;
+import java.time.LocalDate;
 
-import org.joda.time.DateTime;
+import javax.swing.undo.CannotUndoException;
 
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
@@ -30,21 +30,21 @@ public class SessionDateEdit extends SessionEditorUndoableEdit {
 	
 	private static final long serialVersionUID = 126365404901461662L;
 
-	private final DateTime newDate;
+	private final LocalDate newDate;
 	
-	private final DateTime prevDate;
+	private final LocalDate prevDate;
 	
-	public SessionDateEdit(SessionEditor editor, DateTime newDate, DateTime prevDate) {
+	public SessionDateEdit(SessionEditor editor, LocalDate newDate, LocalDate prevDate) {
 		super(editor);
 		this.newDate = newDate;
 		this.prevDate = prevDate;
 	}
 	
-	public DateTime getNewDate() {
+	public LocalDate getNewDate() {
 		return this.newDate;
 	}
 	
-	public DateTime getPrevDate() {
+	public LocalDate getPrevDate() {
 		return this.prevDate;
 	}
 	

@@ -19,6 +19,7 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.FSAState;
+import ca.phon.fsa.OffsetType;
 import ca.phon.ipa.IPAElement;
 
 /**
@@ -41,12 +42,24 @@ public class WordBoundaryTransition extends PhonexTransition {
 	public boolean follow(FSAState<IPAElement> currentState) {
 		boolean retVal = false;
 		
-		if(currentState.getTapeIndex() == 0 && currentState.getCurrentState().equals("q0") ||
+		int tapeIdx = -1;
+		if(getOffsetType() == OffsetType.NORMAL) {
+			if(currentState.getTapeIndex() >= currentState.getTape().length) return false;
+			tapeIdx = currentState.getTapeIndex();
+		} else if(getOffsetType() == OffsetType.LOOK_BEHIND) {
+			tapeIdx = currentState.getTapeIndex() - currentState.getLookBehindOffset();
+			if(tapeIdx < 0) return false;
+		} else if(getOffsetType() == OffsetType.LOOK_AHEAD) {
+			tapeIdx = currentState.getTapeIndex() + currentState.getLookAheadOffset();
+			if(tapeIdx >= currentState.getTape().length) return false;
+		}
+		
+		if(tapeIdx == 0 && currentState.getCurrentState().equals("q0") ||
 				currentState.getTapeIndex() == currentState.getTape().length) {
 			retVal = true;
 			matchLength = 0;
 		} else {
-			IPAElement p = currentState.getTape()[currentState.getTapeIndex()];
+			IPAElement p = currentState.getTape()[tapeIdx];
 			if(p.getText().equals(" ")) {
 				retVal = true;
 				matchLength = 1;

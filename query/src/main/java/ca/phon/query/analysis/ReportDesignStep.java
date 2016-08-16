@@ -20,10 +20,10 @@ package ca.phon.query.analysis;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.joda.time.DateTime;
 
 import ca.phon.functor.AnalysisStep;
 import ca.phon.query.db.Query;
@@ -53,7 +53,7 @@ public class ReportDesignStep implements AnalysisStep<String, QueryAnalysisResul
 		
 		final QueryFactory qf = QueryManager.getSharedInstance().createQueryFactory();
 		final Query q = qf.createQuery();
-		q.setDate(DateTime.now());
+		q.setDate(LocalDateTime.now());
 		q.setName("internal");
 		
 		final ResultSet[] resultSets = new ResultSet[obj.getQueryResults().keySet().size()];

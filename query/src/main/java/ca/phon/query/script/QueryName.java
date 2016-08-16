@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.extensions.Extension;
+import ca.phon.query.db.ScriptLibrary;
 
 /**
  * Extension for {@link QueryScript} objects which provides
@@ -39,6 +40,8 @@ public class QueryName {
 	private String name;
 	
 	private URL location;
+	
+	private ScriptLibrary scriptLibrary;
 	
 	private String category;
 	
@@ -89,6 +92,14 @@ public class QueryName {
 	
 	public String getCategory() {
 		return (this.category != null ? this.category : "default");
+	}
+	
+	public ScriptLibrary getScriptLibrary() {
+		return this.scriptLibrary;
+	}
+	
+	public void setScriptLibrary(ScriptLibrary scriptLibrary) {
+		this.scriptLibrary = scriptLibrary;
 	}
 	
 }

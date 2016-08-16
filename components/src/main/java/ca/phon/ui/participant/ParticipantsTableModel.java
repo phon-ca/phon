@@ -18,9 +18,9 @@
  */
 package ca.phon.ui.participant;
 
-import javax.swing.table.AbstractTableModel;
+import java.time.Period;
 
-import org.joda.time.Period;
+import javax.swing.table.AbstractTableModel;
 
 import ca.phon.session.AgeFormatter;
 import ca.phon.session.Participant;

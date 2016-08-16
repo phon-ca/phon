@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
+import ca.phon.query.db.ScriptLibrary;
 import ca.phon.util.resources.FolderHandler;
 
 public class UserFolderScriptHandler extends FolderHandler<QueryScript> {
@@ -34,7 +35,12 @@ public class UserFolderScriptHandler extends FolderHandler<QueryScript> {
 	
 	@Override
 	public QueryScript loadFromFile(File f) throws IOException {
-		return new QueryScript(f.toURI().toURL());
+		QueryScript retVal = new QueryScript(f.toURI().toURL());
+		
+		final QueryName qn = retVal.getExtension(QueryName.class);
+		qn.setScriptLibrary(ScriptLibrary.USER);
+		
+		return retVal;
 	}
 
 	private final FileFilter scriptFilter = new FileFilter() {

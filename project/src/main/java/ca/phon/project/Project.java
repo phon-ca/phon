@@ -21,13 +21,14 @@ package ca.phon.project;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
-
 import ca.phon.extensions.IExtendable;
 import ca.phon.session.Session;
+import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.SessionWriter;
 
 /**
  * Interface for a phon project.
@@ -208,6 +209,14 @@ public interface Project extends IExtendable {
 	public String getCorpusPath(String corpus);
 	
 	/**
+	 * Set path of corpus.
+	 * 
+	 * @param corpus
+	 * @param path
+	 */
+	public void setCorpusPath(String corpus, String path);
+	
+	/**
 	 * Returns the number of records in a session w/o opening
 	 * the session. This method is faster than using
 	 * openSession(corpus, session).numberOfRecords()
@@ -231,6 +240,20 @@ public interface Project extends IExtendable {
 	 * @throws IOException
 	 */
 	public Session openSession(String corpus, String session)
+		throws IOException;
+	
+	/**
+	 * Open specified session using the provided reader.
+	 * 
+	 * @param corpus
+	 * @param session
+	 * @param reader
+	 * 
+	 * @return the session
+	 * 
+	 * @throws IOException
+	 */
+	public Session openSession(String corpus, String session, SessionReader reader)
 		throws IOException;
 	
 	/**
@@ -346,6 +369,20 @@ public interface Project extends IExtendable {
 		throws IOException;
 	
 	/**
+	 * Save a session writing the file using the given writer.
+	 * 
+	 * @param corpus
+	 * @param sessionName
+	 * @param session
+	 * @param writer
+	 * @param writeLock
+	 * 
+	 * @throws IOException
+	 */
+	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer, UUID writeLock)
+			throws IOException;
+	
+	/**
 	 * Remove a session from the project.  The writeLock 
 	 * for the session is also released.
 	 * 
@@ -377,7 +414,7 @@ public interface Project extends IExtendable {
 	 * 
 	 * @return session modifiation date
 	 */
-	public DateTime getSessionModificationTime(Session session);
+	public LocalDateTime getSessionModificationTime(Session session);
 	
 	/**
 	 * Returns the modification date for the specified session.
@@ -385,7 +422,7 @@ public interface Project extends IExtendable {
 	 * @param corpus
 	 * @param session
 	 */
-	public DateTime getSessionModificationTime(String corpus, String session);
+	public LocalDateTime getSessionModificationTime(String corpus, String session);
 	
 	/**
 	 * Returns the size on disk for the given session.
@@ -405,6 +442,20 @@ public interface Project extends IExtendable {
 	 * @return session size in bytes
 	 */
 	public long getSessionByteSize(String corpus, String session);
+	
+	/**
+	 * Get the location of the project resources folder.
+	 * 
+	 * @return location of the resources folder (default: <code>project_folder/__res</code>)
+	 */
+	public String getResourceLocation();
+	
+	/**
+	 * Set the location of the project resources folder.
+	 * 
+	 * @param folder
+	 */
+	public void setRecourceLocation(String location);
 	
 	/**
 	 * Get an input stream for the specified project resource.
