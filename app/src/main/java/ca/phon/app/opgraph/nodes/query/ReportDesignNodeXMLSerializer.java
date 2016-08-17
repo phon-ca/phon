@@ -117,7 +117,7 @@ public class ReportDesignNodeXMLSerializer implements XMLSerializer {
 			try {
 				JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.report.io");
 				Unmarshaller unmarshaller = ctx.createUnmarshaller();
-				XMLInputFactory factory = XMLInputFactory.newFactory();
+				XMLInputFactory factory = XMLInputFactory.newInstance();
 				XMLEventReader reader = factory.createXMLEventReader(
 						new FileInputStream(new File(PrefHelper.getUserDataFolder(), ReportDesignNode.AUTOSAVE_FILENAME)), "UTF-8");
 				JAXBElement<ReportDesign> reportDesignTypeEle =
