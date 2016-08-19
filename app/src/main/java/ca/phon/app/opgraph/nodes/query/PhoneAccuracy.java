@@ -386,7 +386,7 @@ public class PhoneAccuracy extends TableOpNode implements NodeSettings {
 			} else if(this.mannerAccuracyBox.isSelected()) {
 				return "MANNER";
 			} else {
-				return featureListField.getSelectedText();
+				return (featureListField != null ? featureListField.getSelectedText() : this.featureList);
 			}
 		} else {
 			return this.featureList;
