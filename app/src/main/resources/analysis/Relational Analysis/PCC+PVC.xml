@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
+    <graph id="root">
+        <node id="610ed415786f4f51" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="d5462a2a75374876" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                </oga:settings>
+                <oga:meta x="91" y="252"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="efdffb0e94cf4bc7" name="PCC" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="1dce77f1">
+                <opqry:queryNode id="1f3116a19c734179" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:11:40.749-02:30" name="PCC-PVC" uuid="26390be5-8b7e-41e4-b3ba-c8d4cf758519">
+                        <script>
+                            <url ref="PCC-PVC" rel="stock"/>
+                            <param id="pccOptions.aligned.ignoreDiacritics">false</param>
+                            <param id="pccOptions.standard.ignoreDiacritics">false</param>
+                            <param id="pccOptions.standard.includePcc">true</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="292" y="109"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="8e89219eb7b748b8" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="375" y="323"/>
+                    </extensions>
+                </node>
+                <node id="1f3ee7f4d86b4bc4" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="590" y="322">
+                            <oga:default for="buffer" type="java.lang.String">PCC</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="8e89219eb7b748b8" destField="project" source="1f3116a19c734179" sourceField="project"/>
+                <link dest="8e89219eb7b748b8" destField="results" source="1f3116a19c734179" sourceField="results"/>
+                <link dest="1f3ee7f4d86b4bc4" destField="data" source="8e89219eb7b748b8" sourceField="table"/>
+            </graph>
+            <ogcn:published_input field="sessions" name="sessions" ref="1f3116a19c734179"/>
+            <ogcn:published_input field="project" name="project" ref="1f3116a19c734179"/>
+            <extensions>
+                <oga:meta x="303" y="49"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="77041ce612064a9d" name="PCC (aligned)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="37502a2b">
+                <opqry:queryNode id="239e326ec24dcf" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:11:40.757-02:30" name="PCC-PVC" uuid="5a5caf6f-279f-4b4c-adbc-578c64a58a38">
+                        <script>
+                            <url ref="PCC-PVC" rel="stock"/>
+                            <param id="pccOptions.aligned.ignoreDiacritics">false</param>
+                            <param id="pccOptions.aligned.includePcc">true</param>
+                            <param id="pccOptions.standard.ignoreDiacritics">false</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="292" y="109"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="7ecab68b28c44332" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="375" y="323"/>
+                    </extensions>
+                </node>
+                <node id="2382d0137cd449c3" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="590" y="322">
+                            <oga:default for="buffer" type="java.lang.String">PCC (aligned)</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="7ecab68b28c44332" destField="project" source="239e326ec24dcf" sourceField="project"/>
+                <link dest="7ecab68b28c44332" destField="results" source="239e326ec24dcf" sourceField="results"/>
+                <link dest="2382d0137cd449c3" destField="data" source="7ecab68b28c44332" sourceField="table"/>
+            </graph>
+            <ogcn:published_input field="sessions" name="sessions" ref="239e326ec24dcf"/>
+            <ogcn:published_input field="project" name="project" ref="239e326ec24dcf"/>
+            <extensions>
+                <oga:meta x="437" y="49"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="c3c98c311671428b" name="PVC" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="591e53e2">
+                <opqry:queryNode id="8c7323adcc5e488f" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:11:40.765-02:30" name="PCC-PVC" uuid="2e497838-9042-4463-a505-be9e7addbd7c">
+                        <script>
+                            <url ref="PCC-PVC" rel="stock"/>
+                            <param id="pccOptions.aligned.ignoreDiacritics">false</param>
+                            <param id="pccOptions.standard.ignoreDiacritics">false</param>
+                            <param id="pccOptions.standard.includePvc">true</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="292" y="109"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="6ca95b43e7f14dd5" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="375" y="323"/>
+                    </extensions>
+                </node>
+                <node id="d1b5847a714949a3" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="590" y="322">
+                            <oga:default for="buffer" type="java.lang.String">PVC</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="6ca95b43e7f14dd5" destField="project" source="8c7323adcc5e488f" sourceField="project"/>
+                <link dest="d1b5847a714949a3" destField="data" source="6ca95b43e7f14dd5" sourceField="table"/>
+                <link dest="6ca95b43e7f14dd5" destField="results" source="8c7323adcc5e488f" sourceField="results"/>
+            </graph>
+            <ogcn:published_input field="project" name="project" ref="8c7323adcc5e488f"/>
+            <ogcn:published_input field="sessions" name="sessions" ref="8c7323adcc5e488f"/>
+            <extensions>
+                <oga:meta x="302" y="170"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="5612d891af274ff1" name="PVC (aligned)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="61f2ea9a">
+                <opqry:queryNode id="435d8ea6fb0e4797" name="Query : PCC-PVC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:11:40.772-02:30" name="PCC-PVC" uuid="fdb09c49-c7e7-46b9-bbe9-71e82c7d8b0e">
+                        <script>
+                            <url ref="PCC-PVC" rel="stock"/>
+                            <param id="pccOptions.aligned.ignoreDiacritics">false</param>
+                            <param id="pccOptions.aligned.includePvc">true</param>
+                            <param id="pccOptions.standard.ignoreDiacritics">false</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="292" y="109"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="edaf35a41f004778" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="376" y="323"/>
+                    </extensions>
+                </node>
+                <node id="43c2b83e6d942f4" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="590" y="322">
+                            <oga:default for="buffer" type="java.lang.String">PVC (aligned)</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="edaf35a41f004778" destField="project" source="435d8ea6fb0e4797" sourceField="project"/>
+                <link dest="43c2b83e6d942f4" destField="data" source="edaf35a41f004778" sourceField="table"/>
+                <link dest="edaf35a41f004778" destField="results" source="435d8ea6fb0e4797" sourceField="results"/>
+            </graph>
+            <ogcn:published_input field="sessions" name="sessions" ref="435d8ea6fb0e4797"/>
+            <ogcn:published_input field="project" name="project" ref="435d8ea6fb0e4797"/>
+            <extensions>
+                <oga:meta x="437" y="170"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="efdffb0e94cf4bc7" destField="project" source="610ed415786f4f51" sourceField="obj"/>
+        <link dest="77041ce612064a9d" destField="project" source="610ed415786f4f51" sourceField="obj"/>
+        <link dest="c3c98c311671428b" destField="project" source="610ed415786f4f51" sourceField="obj"/>
+        <link dest="5612d891af274ff1" destField="project" source="610ed415786f4f51" sourceField="obj"/>
+        <link dest="efdffb0e94cf4bc7" destField="sessions" source="d5462a2a75374876" sourceField="obj"/>
+        <link dest="77041ce612064a9d" destField="sessions" source="d5462a2a75374876" sourceField="obj"/>
+        <link dest="c3c98c311671428b" destField="sessions" source="d5462a2a75374876" sourceField="obj"/>
+        <link dest="5612d891af274ff1" destField="sessions" source="d5462a2a75374876" sourceField="obj"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
+                <opqry:info title="PCC+PVC">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="1f3116a19c734179">
+                    <opqry:info title="Query : PCC-PVC">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="239e326ec24dcf">
+                    <opqry:info title="Query : PCC-PVC">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="8c7323adcc5e488f">
+                    <opqry:info title="Query : PCC-PVC">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="435d8ea6fb0e4797">
+                    <opqry:info title="Query : PCC-PVC">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:optionalNode enabled="true" ref="efdffb0e94cf4bc7"/>
+                <opqry:optionalNode enabled="true" ref="77041ce612064a9d"/>
+                <opqry:optionalNode enabled="true" ref="c3c98c311671428b"/>
+                <opqry:optionalNode enabled="true" ref="5612d891af274ff1"/>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>

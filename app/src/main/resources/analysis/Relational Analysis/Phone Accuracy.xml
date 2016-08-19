@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
+    <graph id="root">
+        <node id="cabaf11d4c2647bf" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="84b5e3402ed74552" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                </oga:settings>
+                <oga:meta x="91" y="252"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="eae3f6e617084a67" name="Phone Accuracy (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="1fc2b475">
+                <opqry:queryNode id="71b5bac8a8a04b30" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.164-02:30" name="Phones" uuid="990b8fd5-a656-46be-8e1d-22e7836e797c">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">\w</param>
+                            <param id="filters.speaker.participantRole">Target Child</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="260" y="15"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="e63ecb8858c54a9a" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="454" y="15"/>
+                    </extensions>
+                </node>
+                <node id="7b60531ba8394c06" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>
+                            <oga:property key="ignoreDiacritics"><![CDATA[false]]></oga:property>
+                            <oga:property key="groupBy"><![CDATA[Session]]></oga:property>
+                            <oga:property key="featureList"><![CDATA[PLACE]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="629" y="15"/>
+                    </extensions>
+                </node>
+                <node id="6464860f7daf4847" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="804" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Phone Accuracy</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="6464860f7daf4847" destField="data" source="7b60531ba8394c06" sourceField="table"/>
+                <link dest="7b60531ba8394c06" destField="table" source="e63ecb8858c54a9a" sourceField="table"/>
+                <link dest="e63ecb8858c54a9a" destField="results" source="71b5bac8a8a04b30" sourceField="results"/>
+                <link dest="e63ecb8858c54a9a" destField="project" source="71b5bac8a8a04b30" sourceField="project"/>
+            </graph>
+            <ogcn:published_input field="project" name="project" ref="71b5bac8a8a04b30"/>
+            <ogcn:published_input field="sessions" name="sessions" ref="71b5bac8a8a04b30"/>
+            <extensions>
+                <oga:meta x="295" y="22"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="d8ed374bb33c40af" name="Phone Accuracy (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="532d53ae">
+                <opqry:queryNode id="235c9933ca55491a" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.172-02:30" name="Phones" uuid="90692108-a692-4e95-b4de-243add872771">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">^\s?(X=\w)</param>
+                            <param id="filters.speaker.participantRole">Target Child</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="260" y="15"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="6767951cbc74e8e" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="454" y="15"/>
+                    </extensions>
+                </node>
+                <node id="f9aeaafa61a24841" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>
+                            <oga:property key="ignoreDiacritics"><![CDATA[false]]></oga:property>
+                            <oga:property key="groupBy"><![CDATA[Session]]></oga:property>
+                            <oga:property key="featureList"><![CDATA[PLACE]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="629" y="15"/>
+                    </extensions>
+                </node>
+                <node id="c2c34a9176f04461" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="804" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Phone Accuracy (word-initial)</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="c2c34a9176f04461" destField="data" source="f9aeaafa61a24841" sourceField="table"/>
+                <link dest="f9aeaafa61a24841" destField="table" source="6767951cbc74e8e" sourceField="table"/>
+                <link dest="6767951cbc74e8e" destField="results" source="235c9933ca55491a" sourceField="results"/>
+                <link dest="6767951cbc74e8e" destField="project" source="235c9933ca55491a" sourceField="project"/>
+            </graph>
+            <ogcn:published_input field="project" name="project" ref="235c9933ca55491a"/>
+            <ogcn:published_input field="sessions" name="sessions" ref="235c9933ca55491a"/>
+            <extensions>
+                <oga:meta x="295" y="143"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="246adcdeef184e3e" name="Phone Accuracy (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="6c0f0c4f">
+                <opqry:queryNode id="c56d6018509a4307" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.180-02:30" name="Phones" uuid="8d2a6d4c-3208-4cd5-ae9b-9952dd114738">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">(?&lt;\w[\s\.]?)\w(?&gt;[\s\.]?\w)</param>
+                            <param id="filters.speaker.participantRole">Target Child</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="260" y="15"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="24156e41465244e7" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="454" y="15"/>
+                    </extensions>
+                </node>
+                <node id="8249e86e0b754222" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>
+                            <oga:property key="ignoreDiacritics"><![CDATA[false]]></oga:property>
+                            <oga:property key="groupBy"><![CDATA[Session]]></oga:property>
+                            <oga:property key="featureList"><![CDATA[PLACE]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="629" y="15"/>
+                    </extensions>
+                </node>
+                <node id="59925c1cae1c4bd4" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="804" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Phone Accuracy (word-medial)</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="59925c1cae1c4bd4" destField="data" source="8249e86e0b754222" sourceField="table"/>
+                <link dest="8249e86e0b754222" destField="table" source="24156e41465244e7" sourceField="table"/>
+                <link dest="24156e41465244e7" destField="results" source="c56d6018509a4307" sourceField="results"/>
+                <link dest="24156e41465244e7" destField="project" source="c56d6018509a4307" sourceField="project"/>
+            </graph>
+            <ogcn:published_input field="project" name="project" ref="c56d6018509a4307"/>
+            <ogcn:published_input field="sessions" name="sessions" ref="c56d6018509a4307"/>
+            <extensions>
+                <oga:meta x="295" y="264"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="f501750e342b4678" name="Phone Accuracy (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="462ea251">
+                <opqry:queryNode id="528343b9b67c4a75" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.188-02:30" name="Phones" uuid="635377fd-d6f3-4248-bf2c-1b02b8529ec1">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">\w$</param>
+                            <param id="filters.speaker.participantRole">Target Child</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="260" y="15"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="39071ee0e5ec4012" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="454" y="15"/>
+                    </extensions>
+                </node>
+                <node id="3d9889c220194539" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>
+                            <oga:property key="ignoreDiacritics"><![CDATA[false]]></oga:property>
+                            <oga:property key="groupBy"><![CDATA[Session]]></oga:property>
+                            <oga:property key="featureList"><![CDATA[PLACE]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="629" y="15"/>
+                    </extensions>
+                </node>
+                <node id="8aaa1c13e3764328" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="804" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Phone Accuracy (word-final)</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="8aaa1c13e3764328" destField="data" source="3d9889c220194539" sourceField="table"/>
+                <link dest="3d9889c220194539" destField="table" source="39071ee0e5ec4012" sourceField="table"/>
+                <link dest="39071ee0e5ec4012" destField="results" source="528343b9b67c4a75" sourceField="results"/>
+                <link dest="39071ee0e5ec4012" destField="project" source="528343b9b67c4a75" sourceField="project"/>
+            </graph>
+            <ogcn:published_input field="project" name="project" ref="528343b9b67c4a75"/>
+            <ogcn:published_input field="sessions" name="sessions" ref="528343b9b67c4a75"/>
+            <extensions>
+                <oga:meta x="295" y="385"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="eae3f6e617084a67" destField="project" source="cabaf11d4c2647bf" sourceField="obj"/>
+        <link dest="d8ed374bb33c40af" destField="project" source="cabaf11d4c2647bf" sourceField="obj"/>
+        <link dest="246adcdeef184e3e" destField="project" source="cabaf11d4c2647bf" sourceField="obj"/>
+        <link dest="f501750e342b4678" destField="project" source="cabaf11d4c2647bf" sourceField="obj"/>
+        <link dest="eae3f6e617084a67" destField="sessions" source="84b5e3402ed74552" sourceField="obj"/>
+        <link dest="d8ed374bb33c40af" destField="sessions" source="84b5e3402ed74552" sourceField="obj"/>
+        <link dest="246adcdeef184e3e" destField="sessions" source="84b5e3402ed74552" sourceField="obj"/>
+        <link dest="f501750e342b4678" destField="sessions" source="84b5e3402ed74552" sourceField="obj"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
+                <opqry:info title="Phone Accuracy">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="71b5bac8a8a04b30">
+                    <opqry:info title="Query : Phones">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="7b60531ba8394c06">
+                    <opqry:info title="Phone Accuracy">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="235c9933ca55491a">
+                    <opqry:info title="Query : Phones">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="f9aeaafa61a24841">
+                    <opqry:info title="Phone Accuracy">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="c56d6018509a4307">
+                    <opqry:info title="Query : Phones">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="8249e86e0b754222">
+                    <opqry:info title="Phone Accuracy">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="528343b9b67c4a75">
+                    <opqry:info title="Query : Phones">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="3d9889c220194539">
+                    <opqry:info title="Phone Accuracy">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:optionalNode enabled="true" ref="eae3f6e617084a67"/>
+                <opqry:optionalNode enabled="true" ref="d8ed374bb33c40af"/>
+                <opqry:optionalNode enabled="true" ref="246adcdeef184e3e"/>
+                <opqry:optionalNode enabled="true" ref="f501750e342b4678"/>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>

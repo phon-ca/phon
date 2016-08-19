@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
+    <graph id="root">
+        <node id="1ac6a43682304a3f" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="65" y="45"/>
+            </extensions>
+        </node>
+        <node id="d74092db2d504c30" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                </oga:settings>
+                <oga:meta x="145" y="285"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="6d2ac9b1d8f14fe0" name="PMLU" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="3c6c10f2">
+                <opqry:queryNode id="32269c274bac452a" name="Query : PMLU" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:12:36.973-02:30" name="PMLU" uuid="1a529d8c-dc9b-40ae-95da-08c3c5397896">
+                        <script>
+                            <url ref="PMLU" rel="stock"/>
+                            <param id="includeEPMLU">false</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="287" y="30"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="fa348a228a534e38" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="491" y="35"/>
+                    </extensions>
+                </node>
+                <node id="52fd5119e0b84d12" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="666" y="41">
+                            <oga:default for="buffer" type="java.lang.String">PMLU</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="fa348a228a534e38" destField="project" source="32269c274bac452a" sourceField="project"/>
+                <link dest="fa348a228a534e38" destField="results" source="32269c274bac452a" sourceField="results"/>
+                <link dest="52fd5119e0b84d12" destField="data" source="fa348a228a534e38" sourceField="table"/>
+            </graph>
+            <ogcn:published_input field="project" name="project" ref="32269c274bac452a"/>
+            <ogcn:published_input field="sessions" name="sessions" ref="32269c274bac452a"/>
+            <extensions>
+                <oga:meta x="346" y="48"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="6355b39f9dcf4c30" name="ePMLU" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="2c97f55f">
+                <opqry:queryNode id="7d35858f79684892" name="Query : PMLU" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:12:36.981-02:30" name="PMLU" uuid="ef18bd58-7f4e-4353-9d83-2244b5a5aaf5">
+                        <script>
+                            <url ref="PMLU" rel="stock"/>
+                            <param id="includePMLU">false</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="287" y="30"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="b84b58f1e486463a" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="491" y="35"/>
+                    </extensions>
+                </node>
+                <node id="c1e9ea5e84494086" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="666" y="41">
+                            <oga:default for="buffer" type="java.lang.String">ePMLU</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="b84b58f1e486463a" destField="project" source="7d35858f79684892" sourceField="project"/>
+                <link dest="b84b58f1e486463a" destField="results" source="7d35858f79684892" sourceField="results"/>
+                <link dest="c1e9ea5e84494086" destField="data" source="b84b58f1e486463a" sourceField="table"/>
+            </graph>
+            <ogcn:published_input field="project" name="project" ref="7d35858f79684892"/>
+            <ogcn:published_input field="sessions" name="sessions" ref="7d35858f79684892"/>
+            <extensions>
+                <oga:meta x="349" y="180"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="6d2ac9b1d8f14fe0" destField="project" source="1ac6a43682304a3f" sourceField="obj"/>
+        <link dest="6355b39f9dcf4c30" destField="project" source="1ac6a43682304a3f" sourceField="obj"/>
+        <link dest="6d2ac9b1d8f14fe0" destField="sessions" source="d74092db2d504c30" sourceField="obj"/>
+        <link dest="6355b39f9dcf4c30" destField="sessions" source="d74092db2d504c30" sourceField="obj"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
+                <opqry:info title="PMLU">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="32269c274bac452a">
+                    <opqry:info title="Query : PMLU">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="7d35858f79684892">
+                    <opqry:info title="Query : PMLU">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:optionalNode enabled="true" ref="6d2ac9b1d8f14fe0"/>
+                <opqry:optionalNode enabled="true" ref="6355b39f9dcf4c30"/>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>
