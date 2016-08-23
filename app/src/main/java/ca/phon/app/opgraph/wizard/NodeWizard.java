@@ -114,7 +114,7 @@ public class NodeWizard extends WizardFrame {
 		
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "report");
-		builder.addMenuItem("File@report", new CreateReportAction(this));
+		builder.addItem("File@report", new CreateReportAction(this));
 	}
 	
 	@Override
@@ -570,14 +570,14 @@ public class NodeWizard extends WizardFrame {
 							path);
 			String name = (optionalsTree.isPathChecked(path) ? "Uncheck " : "Check ") +  opNode.getName();
 			checkNodeAction.putValue(PhonUIAction.NAME, name);
-			menuBuilder.addMenuItem(".", checkNodeAction);
+			menuBuilder.addItem(".", checkNodeAction);
 			
 			final PhonUIAction showOptionsAction = 
 					new PhonUIAction(NodeWizard.this, "showAdvancedSettings", path);
 			showOptionsAction.putValue(PhonUIAction.NAME, "Show settings");
 			showOptionsAction.putValue(PhonUIAction.SMALL_ICON,
 					IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
-			menuBuilder.addMenuItem(".", showOptionsAction);
+			menuBuilder.addItem(".", showOptionsAction);
 			
 			menu.show(optionalsTree, e.getX(), e.getY());
 		}

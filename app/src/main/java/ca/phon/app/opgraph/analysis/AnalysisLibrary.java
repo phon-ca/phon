@@ -2,6 +2,7 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
 import org.antlr.stringtemplate.language.ActionEvaluator;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
@@ -81,40 +84,62 @@ public class AnalysisLibrary {
 	public void setupMenu(Project project, List<SessionPath> selectedSessions, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 		
+		final List<String> createdFolders = new ArrayList<>();
 		for(URL reportURL:getStockGraphs()) {
 			final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
 			act.setShowWizard(selectedSessions.size() == 0);
-			builder.addMenuItem(".", act);
+			
+			String menuPath = ".";
+			final String path = reportURL.getPath();
+			final String parentPath = path.substring(0, path.lastIndexOf('/'));
+			try {
+				final String parentFolder = 
+						URLDecoder.decode(parentPath.substring(parentPath.lastIndexOf('/')+1), "UTF-8");
+				if(!parentFolder.equals(PROJECT_ANALYSIS_FOLDER)) {
+					if(!createdFolders.contains(parentFolder)) {
+						builder.addMenu(".", parentFolder);
+						createdFolders.add(parentFolder);
+					}
+					menuPath = parentFolder;
+				}
+			} catch (UnsupportedEncodingException e) { }
+			
+			builder.addItem(menuPath, act);
 		}
 		
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
 		if(userGraphIterator.hasNext()) {
 			builder.addSeparator(".", "user");
+			final JMenuItem sepItem = new JMenuItem("-- User Library --");
+			sepItem.setEnabled(false);
+			builder.addItem(".@user", sepItem);
 		}
 		while(userGraphIterator.hasNext()) {
 			final URL reportURL = userGraphIterator.next();
 			final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
 			act.setShowWizard(selectedSessions.size() == 0);
-			builder.addMenuItem(".", act);
+			builder.addItem(".", act);
 		}
 		
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
 		if(projectGraphIterator.hasNext()) {
 			builder.addSeparator(".", "project");
-			// TODO add menu header
+			final JMenuItem sepItem = new JMenuItem("-- Project Library --");
+			sepItem.setEnabled(false);
+			builder.addItem(".@user", sepItem);
 		}
 		while(projectGraphIterator.hasNext()) {
 			final URL reportURL = projectGraphIterator.next();
 			final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
 			act.setShowWizard(selectedSessions.size() == 0);
-			builder.addMenuItem(".", act);
+			builder.addItem(".", act);
 		}
 		
 		builder.addSeparator(".", "editor");
 		final PhonUIAction showEditorAct = new PhonUIAction(AnalysisLibrary.class, "showEditor");
 		showEditorAct.putValue(PhonUIAction.NAME, "Analysis Editor...");
 		showEditorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open analysis editor");
-		builder.addMenuItem(".@editor", showEditorAct);
+		builder.addItem(".@editor", showEditorAct);
 	}
 	
 	public static void showEditor() {
@@ -128,26 +153,6 @@ public class AnalysisLibrary {
 		editor.pack();
 		editor.setSize(1024, 768);
 		editor.setVisible(true);
-	}
-	
-	private Tuple<String, String> URLtoName(URL assessmentURL) {
-		Tuple<String, String> retVal = new Tuple<>();
-		
-		@SuppressWarnings("deprecation")
-		String name = URLDecoder.decode(assessmentURL.getPath());
-		if(name.endsWith(".xml")) name = name.substring(0, name.length()-4);
-		if(name.endsWith(".opgraph")) name = name.substring(0, name.length()-8);
-		
-		final File asFile = new File(name);
-		if(asFile.getParentFile() != null) {
-			retVal.setObj1(asFile.getParentFile().getName());
-			retVal.setObj2(asFile.getAbsolutePath().substring(asFile.getParent().length()+1));
-		} else {
-			retVal.setObj1("");
-			retVal.setObj2(asFile.getName());
-		}
-		
-		return retVal;
 	}
 	
 }

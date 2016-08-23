@@ -1,6 +1,7 @@
 package ca.phon.ui.menu;
 
 import java.awt.Component;
+import java.awt.MenuItem;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,6 @@ import javax.swing.MenuElement;
 
 import ca.phon.util.Tuple;
 
-/*
- * TODO finish javadoc
- * TODO FIX@!!!
- */
 /**
  * <p>Helper class for building menus.  Menus items are 'addressed' using paths.  Paths are
  * alphanumeric sequences separated by '/'.  Each section of the path is path of the 
@@ -44,7 +41,7 @@ import ca.phon.util.Tuple;
  * 
  * E.g., To add a new item to the beginning of the File menu, use the path
  * <code>File@^</code> in the path given to the {@link #addMenu(String, String)} and
- * {@link #addMenuItem(String, Action)} methods.</p>
+ * {@link #addItem(String, Action)} methods.</p>
  * 
  * <p>Menu builders may be attached to existing menus, in which case existing
  * menu items may be addressed using the scheme above.  Menu items are typically
@@ -69,22 +66,6 @@ public final class MenuBuilder {
 	public MenuElement getRoot() {
 		return rootRef.get();
 	}
-	
-	/**
-	 * <p>Add the specified menu item to the end of the last menu
-	 * in the path.<br/>
-	 * 
-	 * @param menuPath
-	 * @param item
-	 * 
-	 * @return the builder
-	 */
-	public MenuBuilder addItem(String path, JMenuItem menuItem) {
-		final JMenu menu = getMenu(path, true);
-		menu.add(path);
-		
-		return this;
-	}
 
 	/**
 	 * Get the menu specified by path.  Creates menu if
@@ -95,6 +76,8 @@ public final class MenuBuilder {
 	 * @return the menu
 	 */
 	public JMenu getMenu(String path, boolean createMenu) {
+		
+		
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final String name = path.substring(deepest.getObj1().length());
 		
@@ -105,7 +88,8 @@ public final class MenuBuilder {
 			String curpath = deepest.getObj1();
 			if(curpath.endsWith("/")) curpath = curpath.substring(0, curpath.length()-1);
 			for(String subpath:subpaths) {
-				curpath += "/" + subpath;
+				curpath += 
+						(curpath.length() > 0 ? "/" : "") + subpath;
 				retVal = addMenu(curpath, subpath);
 			}
 		} else {
@@ -120,86 +104,80 @@ public final class MenuBuilder {
 	
 	public JMenu addMenu(String path, String text) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
-		final String name = deepest.getObj1();
 		final MenuElement elem = deepest.getObj2();
 		
 		JMenu ret = null;
-		if(name.indexOf('/') == -1) {
-			int insertIdx = getInsertIndex(elem, name);
-			ret = new JMenu(text);
-			if(elem instanceof JMenu) {
-				if(insertIdx >= 0)
-					((JMenu)elem).add(ret, insertIdx);
-				else
-					((JMenu)elem).add(ret);
-			} else if(elem instanceof JPopupMenu) {
-				if(insertIdx >= 0)
-					((JPopupMenu)elem).add(ret, insertIdx);
-				else
-					((JPopupMenu)elem).add(ret);
-			} else if(elem instanceof JMenuBar) {
-				if(insertIdx >= 0)
-					((JMenuBar)elem).add(ret, insertIdx);
-				else
-					((JMenuBar)elem).add(ret);
-			}
+		int insertIdx = getInsertIndex(elem, deepest.getObj1());
+		ret = new JMenu(text);
+		if(elem instanceof JMenu) {
+			if(insertIdx >= 0)
+				((JMenu)elem).add(ret, insertIdx);
+			else
+				((JMenu)elem).add(ret);
+		} else if(elem instanceof JPopupMenu) {
+			if(insertIdx >= 0)
+				((JPopupMenu)elem).add(ret, insertIdx);
+			else
+				((JPopupMenu)elem).add(ret);
+		} else if(elem instanceof JMenuBar) {
+			if(insertIdx >= 0)
+				((JMenuBar)elem).add(ret, insertIdx);
+			else
+				((JMenuBar)elem).add(ret);
 		}
 		return ret;
 	}
 
 	public void addSeparator(String path, String sepName) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
-		final String name = deepest.getObj1();
 		final MenuElement elem = deepest.getObj2();
 		
-		if(name.indexOf('/') == -1) {
-			int insertIdx = getInsertIndex(elem, name);
-			if(elem instanceof JMenu) {
-				if(insertIdx < 0) {
-					((JMenu)elem).addSeparator();
-					insertIdx = ((JMenu)elem).getItemCount()-1;
-				} else
-					((JMenu)elem).insertSeparator(insertIdx);
-				final Component comp = ((JMenu)elem).getMenuComponent(insertIdx);
-				if(comp != null) comp.setName(sepName);
-			} else if(elem instanceof JPopupMenu) {
-				final JSeparator sep = new JPopupMenu.Separator();
-				sep.setName(sepName);
-				if(insertIdx < 0) {
-					((JPopupMenu)elem).add(sep);
-				} else
-					((JPopupMenu)elem).insert(sep, insertIdx);
-			}
+		int insertIdx = getInsertIndex(elem, deepest.getObj1());
+		if(elem instanceof JMenu) {
+			if(insertIdx < 0) {
+				((JMenu)elem).addSeparator();
+				insertIdx = ((JMenu)elem).getItemCount()-1;
+			} else
+				((JMenu)elem).insertSeparator(insertIdx);
+			final Component comp = ((JMenu)elem).getMenuComponent(insertIdx);
+			if(comp != null) comp.setName(sepName);
+		} else if(elem instanceof JPopupMenu) {
+			final JSeparator sep = new JPopupMenu.Separator();
+			sep.setName(sepName);
+			if(insertIdx < 0) {
+				((JPopupMenu)elem).add(sep);
+			} else
+				((JPopupMenu)elem).insert(sep, insertIdx);
+		}
+	}
+	
+	public void addItem(String path, JMenuItem menuItem) {
+		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
+		final MenuElement elem = deepest.getObj2();
+
+		int insertIdx = getInsertIndex(elem, deepest.getObj1());
+		if(elem instanceof JMenu) {
+			if(insertIdx >= 0)
+				((JMenu)elem).add(menuItem, insertIdx);
+			else
+				((JMenu)elem).add(menuItem);
+		} else if(elem instanceof JPopupMenu) {
+			if(insertIdx >= 0)
+				((JPopupMenu)elem).add(menuItem, insertIdx);
+			else
+				((JPopupMenu)elem).add(menuItem);
+		} else if(elem instanceof JMenuBar) {
+			if(insertIdx >= 0)
+				((JMenuBar)elem).add(menuItem, insertIdx);
+			else
+				((JMenuBar)elem).add(menuItem);
 		}
 	}
 
-	public JMenuItem addMenuItem(String path, Action action) {
-		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
-		final String name = deepest.getObj1();
-		final MenuElement elem = deepest.getObj2();
-
-		JMenuItem ret = null;
-		if(name.indexOf('/') == -1) {
-			int insertIdx = getInsertIndex(elem, name);
-			ret = new JMenuItem(action);
-			if(elem instanceof JMenu) {
-				if(insertIdx >= 0)
-					((JMenu)elem).add(ret, insertIdx);
-				else
-					((JMenu)elem).add(ret);
-			} else if(elem instanceof JPopupMenu) {
-				if(insertIdx >= 0)
-					((JPopupMenu)elem).add(ret, insertIdx);
-				else
-					((JPopupMenu)elem).add(ret);
-			} else if(elem instanceof JMenuBar) {
-				if(insertIdx >= 0)
-					((JMenuBar)elem).add(ret, insertIdx);
-				else
-					((JMenuBar)elem).add(ret);
-			}
-		}
-		return ret;
+	public JMenuItem addItem(String path, Action action) {
+		final JMenuItem  retVal = new JMenuItem(action);
+		addItem(path, retVal);
+		return retVal;
 	}
 	
 	private int getInsertIndex(MenuElement elem, String name) {
@@ -240,12 +218,14 @@ public final class MenuBuilder {
 			for(int i = 0; i < menu.getComponentCount(); i++) {
 				final Component menuComp = menu.getComponent(i);
 				if(menuComp instanceof MenuElement)
-					elements.add(getMenuElemenText((MenuElement)menuComp));
+					elements.add(getMenuElementText((MenuElement)menuComp));
+				else if(menuComp instanceof JPopupMenu.Separator)
+					elements.add(((JPopupMenu.Separator)menuComp).getName());
 			}
 		} else if(elem instanceof JMenuBar) {
 			final JMenuBar menu = (JMenuBar)elem;
 			for(int i = 0; i < menu.getMenuCount(); i++)
-				elements.add(getMenuElemenText(menu.getMenu(i)));
+				elements.add(getMenuElementText(menu.getMenu(i)));
 		}
 		
 		for(int i = 0; i < elements.size(); i++) {
@@ -257,7 +237,7 @@ public final class MenuBuilder {
 		return -1;
 	}
 	
-	private String getMenuElemenText(MenuElement elem) {
+	private String getMenuElementText(MenuElement elem) {
 		String retVal = elem.getComponent().getName();
 		
 		if(elem instanceof JMenu) {
@@ -298,7 +278,7 @@ public final class MenuBuilder {
 				}
 				
 				for(MenuElement subelem : elem.getSubElements()) {
-					if(compTxt.equals(getMenuElemenText(subelem))) {
+					if(compTxt.equals(getMenuElementText(subelem))) {
 						position += components[index].length() + 1;
 						++index;
 						elem = subelem;

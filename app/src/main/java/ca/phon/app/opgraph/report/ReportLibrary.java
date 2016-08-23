@@ -72,7 +72,7 @@ public class ReportLibrary {
 		
 		for(URL reportURL:getStockGraphs()) {
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
-			builder.addMenuItem(".", act);
+			builder.addItem(".", act);
 		}
 		
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
@@ -80,7 +80,7 @@ public class ReportLibrary {
 		while(userGraphIterator.hasNext()) {
 			final URL reportURL = userGraphIterator.next();
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
-			builder.addMenuItem(".", act);
+			builder.addItem(".", act);
 		}
 		
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
@@ -88,12 +88,12 @@ public class ReportLibrary {
 		while(projectGraphIterator.hasNext()) {
 			final URL reportURL = projectGraphIterator.next();
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
-			builder.addMenuItem(".", act);
+			builder.addItem(".", act);
 		}
 		
 		
 		builder.addSeparator(".", "editor");
-		builder.addMenuItem(".@editor", new ReportEditorAction());
+		builder.addItem(".@editor", new ReportEditorAction());
 	}
 	
 }

@@ -271,33 +271,33 @@ public class OpgraphEditor extends CommonModuleFrame {
 	protected void setupMenu() {
 		final MenuBuilder menuBuilder = new MenuBuilder(this.menuBar);
 	
-		menuBuilder.addMenuItem("File@^", new NewAction(this));
-		menuBuilder.addMenuItem("File@New...", new OpenAction(this));
+		menuBuilder.addItem("File@^", new NewAction(this));
+		menuBuilder.addItem("File@New...", new OpenAction(this));
 		menuBuilder.addSeparator("File@Open...", "sep1");
-		menuBuilder.addMenuItem("File@sep1", new SaveAction(this));
-		menuBuilder.addMenuItem("File@Save", new SaveAsAction(this));
+		menuBuilder.addItem("File@sep1", new SaveAction(this));
+		menuBuilder.addItem("File@Save", new SaveAsAction(this));
 		menuBuilder.addSeparator("File@Save as...", "sep2");
 		
 		menuBuilder.addMenu(".@Edit", "Graph");
-		menuBuilder.addMenuItem("Graph", new DeleteAction(this));
+		menuBuilder.addItem("Graph", new DeleteAction(this));
 		menuBuilder.addSeparator("Graph", "sep1");
-		menuBuilder.addMenuItem("Graph", new MergeNodesAction(this));
-		menuBuilder.addMenuItem("Graph", new ExpandMacroAction(this));
+		menuBuilder.addItem("Graph", new MergeNodesAction(this));
+		menuBuilder.addItem("Graph", new ExpandMacroAction(this));
 		menuBuilder.addSeparator("Graph", "sep2");
-		menuBuilder.addMenuItem("Graph", new AutoLayoutAction(this));
+		menuBuilder.addItem("Graph", new AutoLayoutAction(this));
 		menuBuilder.addSeparator("Graph", "sep3");
-		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, GridLayer.DEFAULT_GRID_SPACING / 2));
-		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, 0, -GridLayer.DEFAULT_GRID_SPACING / 2));
-		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, GridLayer.DEFAULT_GRID_SPACING/2, 0));
-		menuBuilder.addMenuItem("Graph", new MoveNodeAction(this, -GridLayer.DEFAULT_GRID_SPACING / 2, 0));
+		menuBuilder.addItem("Graph", new MoveNodeAction(this, 0, GridLayer.DEFAULT_GRID_SPACING / 2));
+		menuBuilder.addItem("Graph", new MoveNodeAction(this, 0, -GridLayer.DEFAULT_GRID_SPACING / 2));
+		menuBuilder.addItem("Graph", new MoveNodeAction(this, GridLayer.DEFAULT_GRID_SPACING/2, 0));
+		menuBuilder.addItem("Graph", new MoveNodeAction(this, -GridLayer.DEFAULT_GRID_SPACING / 2, 0));
 		menuBuilder.addSeparator("Graph", "sep4");
-		menuBuilder.addMenuItem("Graph", new DistributeNodesAction(this, SwingConstants.HORIZONTAL));
-		menuBuilder.addMenuItem("Graph", new DistributeNodesAction(this, SwingConstants.VERTICAL));
+		menuBuilder.addItem("Graph", new DistributeNodesAction(this, SwingConstants.HORIZONTAL));
+		menuBuilder.addItem("Graph", new DistributeNodesAction(this, SwingConstants.VERTICAL));
 		menuBuilder.addSeparator("Graph", "sep5");
-		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.TOP));
-		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.BOTTOM));
-		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.LEFT));
-		menuBuilder.addMenuItem("Graph", new AlignNodesAction(this, SwingConstants.RIGHT));
+		menuBuilder.addItem("Graph", new AlignNodesAction(this, SwingConstants.TOP));
+		menuBuilder.addItem("Graph", new AlignNodesAction(this, SwingConstants.BOTTOM));
+		menuBuilder.addItem("Graph", new AlignNodesAction(this, SwingConstants.LEFT));
+		menuBuilder.addItem("Graph", new AlignNodesAction(this, SwingConstants.RIGHT));
 		
 		final JMenu viewMenu = menuBuilder.addMenu(".@Graph", "View");
 		viewMenu.addMenuListener(new MenuListener() {
@@ -326,12 +326,12 @@ public class OpgraphEditor extends CommonModuleFrame {
 		});
 		
 		menuBuilder.addMenu(".@Graph", "Debug");
-		menuBuilder.addMenuItem("Debug", new StartAction(this));
-		menuBuilder.addMenuItem("Debug", new StopAction(this));
+		menuBuilder.addItem("Debug", new StartAction(this));
+		menuBuilder.addItem("Debug", new StopAction(this));
 		menuBuilder.addSeparator("Debug", "sep1");
-		menuBuilder.addMenuItem("Debug", new StepAction(this));
-		menuBuilder.addMenuItem("Debug", new StepIntoAction(this));
-		menuBuilder.addMenuItem("Debug", new StepOutOfAction(this));
+		menuBuilder.addItem("Debug", new StepAction(this));
+		menuBuilder.addItem("Debug", new StepIntoAction(this));
+		menuBuilder.addItem("Debug", new StepOutOfAction(this));
 	}
 	
 	protected void setupDefaultPerspective() {

@@ -33,13 +33,7 @@ public class AnalysisMenuListener implements MenuListener {
 		}
 		
 		final AnalysisLibrary library = new AnalysisLibrary();
-		library.setupMenu(project, selectedSessions, menu);
-		
-		if(PrefHelper.getBoolean("phon.debug", false)) {
-			menu.addSeparator();
-			
-			
-		}
+		library.setupMenu(project, selectedSessions, menu.getPopupMenu());
 	}
 
 	@Override

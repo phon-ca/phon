@@ -50,7 +50,7 @@ public class AnalysisWizard extends NodeWizard {
 		
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "save");
-		builder.addMenuItem("File@save", new SaveAnalysisAction(this));
+		builder.addItem("File@save", new SaveAnalysisAction(this));
 	}
 	
 	private void addSessionSelectionStep() {
