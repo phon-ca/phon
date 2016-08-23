@@ -1,3 +1,29 @@
-analysis/Independent Analysis.xml
-analysis/Relational Analysis.xml
-analysis/Khan-Lewis Phonological Analysis.xml
+analysis/Independent Analysis/Cluster Inventory.xml
+analysis/Independent Analysis/Consonant Inventory.xml
+analysis/Independent Analysis/Onset Inventory.xml
+analysis/Independent Analysis/Vowel Inventory.xml
+analysis/Independent Analysis/Word List.xml
+analysis/Independent Analysis/Word Shapes.xml
+analysis/Relational Analysis/Percent Consonants Correct (PCC).xml
+analysis/Relational Analysis/Percent Vowels Correct (PVC).xml
+analysis/Relational Analysis/Phone Accuracy.xml
+analysis/Relational Analysis/Manner Accuracy.xml
+analysis/Relational Analysis/Place Accuracy.xml
+analysis/Relational Analysis/Phone Dispersion.xml
+analysis/Relational Analysis/Phonological Mean Length of Utterance (PMLU).xml
+analysis/Relational Analysis/Target Consonants.xml
+analysis/Relational Analysis/Target Vowels.xml
+analysis/Relational Analysis/Transcript Variability.xml
+analysis/Relational Analysis/Word Match.xml
+analysis/Phonological Processes/Coronal Backing.xml
+analysis/Phonological Processes/Deaffrication.xml
+analysis/Phonological Processes/Deletion.xml
+analysis/Phonological Processes/Epenthesis.xml
+analysis/Phonological Processes/Gliding+Vocalization.xml
+analysis/Phonological Processes/Glottalization.xml
+analysis/Phonological Processes/Lateralization.xml
+analysis/Phonological Processes/Onset Deletion.xml
+analysis/Phonological Processes/Stopping.xml
+analysis/Phonological Processes/Syllable Truncation.xml
+analysis/Phonological Processes/Velar+Palatal Fronting.xml
+analysis/Phonological Processes/Voicing+Devoicing.xml
