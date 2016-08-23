@@ -73,7 +73,7 @@ public class ThemeHook implements PhonStartupHook,
 						 String uiClassName = PrefHelper.get(
 								PhonProperties.UI_THEME,
 								OSInfo.isNix() ? PhonSubstanceLookAndFeel.class.getName()
-										: PhonWindowsLookAndFeel.class.getName()
+										: UIManager.getSystemLookAndFeelClassName()
 								);
 						if(uiClassName != null) {
 							LOGGER.info("Installing L&F " + uiClassName);
