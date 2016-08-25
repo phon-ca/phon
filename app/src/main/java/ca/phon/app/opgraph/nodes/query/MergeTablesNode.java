@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
@@ -431,61 +432,82 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		
 		DefaultTableDataSource outputTable = new DefaultTableDataSource();
 		
+		String[] table1KeyColNames = getTable1KeyColumn().split(",");
+		int[] table1KeyCols = new int[table1KeyColNames.length];
+		for(int i = 0; i < table1KeyColNames.length; i++) {
+			table1KeyCols[i] = table1.getColumnIndex(table1KeyColNames[i].trim());
+		}
 		// collect unique column names from each table
-		int table1KeyCol = table1.getColumnIndex(getTable1KeyColumn());
-//		if(table1KeyCol < 0) {
-//			throw new ProcessingException(null, "Table 1 does not contain column " + getTable1KeyColumn());
-//		}
 		List<String> table1Columns = new ArrayList<>();
 		for(int col = 0; col < table1.getColumnCount(); col++) {
-			if(col != table1KeyCol) {
-				table1Columns.add(table1.getColumnTitle(col));
-			}
+			table1Columns.add(table1.getColumnTitle(col));
 		}
+		for(String col:table1KeyColNames) table1Columns.remove(col);
 		
-		int table2KeyCol = table2.getColumnIndex(getTable2KeyColumn());
-//		if(table2KeyCol < 0) {
-//			throw new ProcessingException(null, "Table 2 does not contain column " + getTable2KeyColumn());
-//		}
+		String[] table2KeyColNames = getTable2KeyColumn().split(",");
+		int[] table2KeyCols = new int[table2KeyColNames.length];
+		for(int i = 0; i < table2KeyColNames.length; i++) {
+			table2KeyCols[i] = table2.getColumnIndex(table2KeyColNames[i].trim());
+		}
+		// collect unique column names from each table
 		List<String> table2Columns = new ArrayList<>();
 		for(int col = 0; col < table2.getColumnCount(); col++) {
-			if(col != table2KeyCol) {
-				table2Columns.add(table2.getColumnTitle(col));
-			}
+			if(Arrays.asList(table2KeyCols).contains(col)) continue;
+			table2Columns.add(table2.getColumnTitle(col));
 		}
+		for(String col:table2KeyColNames) table2Columns.remove(col);
 		
-		if(table1KeyCol < 0 && table2KeyCol < 0) {
+		if(table1KeyCols.length == 0 && table2KeyCols.length == 0) {
 			outputTable = table1;
-		} else if(table1KeyCol < 0 && table2KeyCol >= 0) {
+		} else if(table1KeyCols.length == 0 && table2KeyCols.length > 0) {
 			outputTable = table2;
-		} else if(table1KeyCol >= 0 && table2KeyCol < 0) {
+		} else if(table1KeyCols.length > 0 && table2KeyCols.length == 0) {
 			outputTable = table1;
 		} else {
 			// collect unique row keys from both tables
-			Set<String> rowKeys = new LinkedHashSet<>();
+			Set<RowKey> rowKeys = new LinkedHashSet<>();
 			for(int row = 0; row < table1.getRowCount(); row++) {
 				checkCanceled();
-				String rowKey = TableUtils.objToString(table1.getValueAt(row, table1KeyCol), getTable1KeyColumnIgnoreDiacritics());
-				if(getTable1KeyColumnCaseSensitive())
-					rowKey = rowKey.toLowerCase();
-				rowKeys.add(rowKey);
+				String[] key = new String[table1KeyCols.length];
+				Object[] keyVals = new Object[table1KeyCols.length];
+				for(int i = 0; i < table1KeyCols.length; i++) {
+					Object tableVal = table1.getValueAt(row, table1KeyCols[i]);
+					String rowKey = TableUtils.objToString(tableVal, getTable1KeyColumnIgnoreDiacritics());
+					if(getTable1KeyColumnCaseSensitive())
+						rowKey = rowKey.toLowerCase();
+					key[i] = rowKey;
+					keyVals[i] = tableVal;
+				}
+				
+				rowKeys.add(new RowKey(key, keyVals));
 			}
 			for(int row = 0; row < table2.getRowCount(); row++) {
 				checkCanceled();
-				String rowKey = TableUtils.objToString(table2.getValueAt(row, table1KeyCol), getTable2KeyColumnIgnoreDiacritics());
-				if(getTable2KeyColumnCaseSensitive())
-					rowKey = rowKey.toLowerCase();
-				rowKeys.add(rowKey);
+				String[] key = new String[table2KeyCols.length];
+				Object[] keyVals = new Object[table2KeyCols.length];
+				for(int i = 0; i < table2KeyCols.length; i++) {
+					Object tableVal = table2.getValueAt(row, table2KeyCols[i]);
+					String rowKey = TableUtils.objToString(tableVal, getTable2KeyColumnIgnoreDiacritics());
+					if(getTable2KeyColumnCaseSensitive())
+						rowKey = rowKey.toLowerCase();
+					key[i] = rowKey;
+					keyVals[i] = tableVal;
+				}
+				
+				rowKeys.add(new RowKey(key, keyVals));
 			}
 			
 			// create output table
-			int numCols = 1 + table1Columns.size() + table2Columns.size();
-			for(String rowKey:rowKeys) {
+			int numKeyCols = Math.max(table1KeyCols.length, table2KeyCols.length);
+			int numCols = numKeyCols + table1Columns.size() + table2Columns.size();
+			for(RowKey rowKey:rowKeys) {
 				checkCanceled();
 				
 				int col = 0;
 				Object rowData[] = new Object[numCols];
-				rowData[col++] = rowKey;
+				for(int i = 0; i < numKeyCols && i < rowKey.vals.length; i++) {
+					rowData[col++] = rowKey.vals[i];
+				}
 				
 				if(isInterleaveColumns()) {
 					int table1ColIdx = 0;
@@ -495,7 +517,8 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 							if(table1ColIdx < table1Columns.size()) {
 								int colIdx = table1.getColumnIndex(table1Columns.get(table1ColIdx));
 								Object table1Val = table1.getValueAt(
-										getTable1KeyColumn(), rowKey, table1Columns.get(table1ColIdx++));
+										table1KeyCols, rowKey.getKeys(), table1Columns.get(table1ColIdx++),
+										getTable1KeyColumnIgnoreDiacritics(), getTable1KeyColumnCaseSensitive());
 								if(table1Val == null) {
 									Class<?> colType = table1.inferColumnType(colIdx);
 									if(colType != null && colType != Object.class) {
@@ -521,9 +544,10 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 						}
 						for(int table2ColNum = 0; table2ColNum < getTable2ColumnRatio(); table2ColNum++) {
 							if(table2ColIdx < table2Columns.size()) {
-								int colIdx = table2.getColumnIndex(table1Columns.get(table2ColIdx));
+								int colIdx = table2.getColumnIndex(table2Columns.get(table2ColIdx));
 								Object table2Val = table2.getValueAt(
-										getTable2KeyColumn(), rowKey, table2Columns.get(table2ColIdx++));
+										table2KeyCols, rowKey.getKeys(), table2Columns.get(table2ColIdx++),
+										getTable2KeyColumnIgnoreDiacritics(), getTable2KeyColumnCaseSensitive());
 								if(table2Val == null) {
 									Class<?> colType = table2.inferColumnType(colIdx);
 									if(colType != null && colType != Object.class) {
@@ -551,12 +575,12 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 				} else {
 					for(String colName:table1Columns) {
 						Object table1Val = table1.getValueAt(
-								getTable1KeyColumn(), rowKey, colName);
+								table1KeyCols, rowKey.getKeys(), colName);
 						rowData[col++] = (table1Val != null ? table1Val : "");
 					}
 					for(String colName:table2Columns) {
 						Object table2Val = table2.getValueAt(
-								getTable2KeyColumn(), rowKey, colName);
+								table2KeyCols, rowKey.getKeys(), colName);
 						rowData[col++] = (table2Val != null ? table2Val : "");
 					}
 				}
@@ -565,7 +589,12 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 			
 			// setup column names
 			int col = 0;
-			outputTable.setColumnTitle(col++, getKeyColumnName());
+			final String keyColNames[] = getKeyColumnName().split(",");
+			for(int i = 0; i < numKeyCols; i++) {
+				String colTitle = 
+						(i < keyColNames.length ? keyColNames[i] : "");
+				outputTable.setColumnTitle(col++, colTitle);
+			}
 			if(isInterleaveColumns()) {
 				int table1ColIdx = 0;
 				int table2ColIdx = 0;
@@ -602,6 +631,33 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		}
 		
 		context.put(tableOutput, outputTable);
+	}
+	
+	private class RowKey {
+		
+		private String[] keys;
+		
+		private Object[] vals;
+		
+		public RowKey(String[] keys, Object[] vals) {
+			this.keys = keys;
+			this.vals = vals;
+		}
+		
+		public String[] getKeys() {
+			return this.keys;
+		}
+		
+		public Object[] getVals() {
+			return this.vals;
+		}
+		
+		@Override
+		public boolean equals(Object rowkey) {
+			if(!(rowkey instanceof RowKey)) return false;
+			return Arrays.deepEquals(this.keys, ((RowKey)rowkey).keys);
+		}
+		
 	}
 
 }

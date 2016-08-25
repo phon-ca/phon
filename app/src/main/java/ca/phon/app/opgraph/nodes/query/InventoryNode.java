@@ -63,7 +63,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	}
 	
 	private String getGroupBy() {
-		return getInventorySettings().getGroupBy().getName();
+		return (getInventorySettings().getGroupBy() != null ? getInventorySettings().getGroupBy().getName() : null);
 	}
 	
 	private List<String> getColumns() {
@@ -78,13 +78,15 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 
 		// setup options based on global inputs
 		ColumnInfo groupBy = getInventorySettings().getGroupBy();
-		if(groupBy != null) {
-			if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
-				groupBy.caseSensitive = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
-			}
-			if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
-				groupBy.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
-			}
+		if(groupBy == null) {
+			groupBy = new ColumnInfo();
+			getInventorySettings().setGroupBy(groupBy);
+		}
+		if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+			groupBy.caseSensitive = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
+		}
+		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+			groupBy.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
 		}
 		for(ColumnInfo info:getInventorySettings().getColumns()) {
 			if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
@@ -130,12 +132,14 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	
 	private Set<GroupKey> collectGroupKeys(TableDataSource table) {
 		Set<GroupKey> retVal = new LinkedHashSet<>();
-		
-		int grouping = getColumnIndex(table, getGroupBy());
-		if(grouping >= 0 && grouping < table.getColumnCount()) {
-			for(int rowIdx = 0; rowIdx < table.getRowCount(); rowIdx++) {
-				retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping)));
-			}
+
+		if(getGroupBy() != null && getGroupBy().length() > 0) {
+			int grouping = getColumnIndex(table, getGroupBy());
+			if(grouping >= 0 && grouping < table.getColumnCount()) {
+				for(int rowIdx = 0; rowIdx < table.getRowCount(); rowIdx++) {
+					retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping)));
+				}
+			} 
 		} else {
 			retVal.add(new GroupKey("Total"));
 		}

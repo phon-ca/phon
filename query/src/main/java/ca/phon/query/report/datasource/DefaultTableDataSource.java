@@ -134,9 +134,25 @@ public class DefaultTableDataSource implements TableDataSource {
 	}
 	
 	public Object getValueAt(int keyCol, String rowKey, String colName) {
+		return getValueAt(new int[] {keyCol}, new String[] {rowKey}, colName);
+	}
+	
+	public Object getValueAt(final int[] keyCols, final String[] rowKey, String colName) {
+		return getValueAt(keyCols, rowKey, colName, false, true);
+	}
+	
+	public Object getValueAt(final int[] keyCols, final String[] rowKey, String colName, boolean ignoreDiacritics, boolean caseSensitive) {
 		Optional<Object[]> row = 
 				rowData.parallelStream()
-					.filter( r -> TableUtils.objToString(r[keyCol], true).equalsIgnoreCase(rowKey) )
+					.filter( r -> {
+						boolean equals = true;
+						for(int i = 0; i < keyCols.length && equals; i++) {
+							String testVal = TableUtils.objToString(r[keyCols[i]], ignoreDiacritics);
+							equals &= 
+									(caseSensitive ? rowKey[i].equals(testVal) : rowKey[i].equalsIgnoreCase(testVal));
+						}
+						return equals;
+					} )
 					.findAny();
 		if(row.isPresent()) {
 			return row.get()[getColumnIndex(colName)];
