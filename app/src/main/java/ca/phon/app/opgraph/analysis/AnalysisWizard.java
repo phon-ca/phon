@@ -99,7 +99,6 @@ public class AnalysisWizard extends NodeWizard {
 	@Override
 	public void gotoStep(int stepIdx) {
 		if(getWizardStep(stepIdx) == reportStep && sessionSelector != null) {
-			getBufferPanel().closeAllBuffers();
 			getProcessor().getContext().put("_selectedSessions", sessionSelector.getSelectedSessions());
 		}
 		super.gotoStep(stepIdx);

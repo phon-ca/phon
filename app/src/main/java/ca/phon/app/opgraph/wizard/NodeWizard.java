@@ -32,6 +32,8 @@ import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXBusyLabel;
@@ -188,12 +190,13 @@ public class NodeWizard extends WizardFrame {
 		
 		if(nodeWizardList.getWizardMessage() != null
 				&& nodeWizardList.getWizardMessage().length() > 0) {
-			final WizardStep introStep = createIntroStep(nodeWizardList.getWizardTitle(), nodeWizardList.getWizardMessage());
-			introStep.setPrevStep(stepIdx-1);
-			introStep.setNextStep(stepIdx+1);
+			final WizardStep aboutStep = createIntroStep(nodeWizardList.getWizardTitle(), nodeWizardList.getWizardMessage());
+			aboutStep.setTitle("About");
+			aboutStep.setPrevStep(stepIdx-1);
+			aboutStep.setNextStep(stepIdx+1);
 			++stepIdx;
 			
-			addWizardStep(introStep);
+			addWizardStep(aboutStep);
 		}
 		
 		if(nodeWizardList.getOptionalNodeCount() > 0) {
@@ -480,7 +483,14 @@ public class NodeWizard extends WizardFrame {
 				new JXTitledPanel(title);
 		stepTitle.getContentContainer().setLayout(new BorderLayout());
 		
+		final HTMLEditorKit editorKit = new HTMLEditorKit();
+		final StyleSheet styleSheet = editorKit.getStyleSheet();
+		
+		styleSheet.addRule("h2 {font-style: bold; font-size: 14.0; color: blue;}");
+		styleSheet.addRule("table {width: 100%; border: 1px solid;}");
+
 		final JEditorPane editorPane = new JEditorPane("text/html", message);
+		editorPane.setEditorKit(editorKit);
 		editorPane.setEditable(false);
 		editorPane.setText(message);
 		
@@ -519,6 +529,7 @@ public class NodeWizard extends WizardFrame {
 		
 					int retVal = NativeDialogs.showMessageDialog(props);
 					if(retVal == 1) return;
+					bufferPanel.closeAllBuffers();
 				}
 				
 				PhonWorker.getInstance().invokeLater(inBg);
@@ -531,7 +542,20 @@ public class NodeWizard extends WizardFrame {
 	@Override
 	protected void cancel() {
 		if(running) {
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setParentWindow(this);
+			props.setTitle("Close");
+			props.setHeader("Stop execution");
+			props.setMessage("Stop execution and close?");
+			props.setOptions(new String[] { "Cancel", "Stop", "Stop and Close"});
+			props.setDefaultOption("Cancel");
+			props.setRunAsync(false);
+			
+			int retVal = NativeDialogs.showMessageDialog(props);
+			if(retVal == 0) return;
 			stopExecution();
+			if(retVal == 2)
+				super.cancel();
 		} else {
 			super.cancel();
 		}
