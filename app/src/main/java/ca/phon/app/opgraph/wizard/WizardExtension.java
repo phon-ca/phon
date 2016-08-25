@@ -9,7 +9,6 @@ import java.util.Map;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.Processor;
-import ca.phon.ui.text.FormatterTextField.FormatterDocument;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are
@@ -19,17 +18,11 @@ import ca.phon.ui.text.FormatterTextField.FormatterDocument;
  */
 public class WizardExtension implements Iterable<OpNode> {
 	
-	private String wizardTitle = new String();
-	
-	private String wizardMessage = new String();
+	private WizardInfo wizardInfo = new WizardInfo();
 	
 	private final List<OpNode> wizardNodes = new ArrayList<>();
 	
-	private Map<OpNode, String> nodeTitles = new HashMap<>();
-	
-	private Map<OpNode, String> nodeMessages = new HashMap<>();
-	
-	private Map<OpNode, Boolean> forcedNodes = new HashMap<>();
+	private Map<OpNode, NodeInfo> nodeInfoMap = new HashMap<>();
 	
 	private final List<OpNode> optionalNodes = new ArrayList<>();
 	
@@ -63,7 +56,9 @@ public class WizardExtension implements Iterable<OpNode> {
 	}
 
 	public boolean addNode(OpNode e) {
-		return wizardNodes.add(e);
+		boolean retVal = wizardNodes.add(e);
+		nodeInfoMap.put(e, new NodeInfo(e));
+		return retVal;
 	}
 	
 	public int indexOf(OpNode e) {
@@ -71,7 +66,9 @@ public class WizardExtension implements Iterable<OpNode> {
 	}
 
 	public boolean removeNode(Object o) {
-		return wizardNodes.remove(o);
+		boolean retVal = wizardNodes.remove(o);
+		nodeInfoMap.remove(o);
+		return retVal;
 	}
 
 	public void clear() {
@@ -83,18 +80,18 @@ public class WizardExtension implements Iterable<OpNode> {
 	}
 	
 	public void setNodeForced(OpNode node, boolean forced) {
-		forcedNodes.put(node, forced);
+		final NodeInfo nodeInfo = nodeInfoMap.get(node);
+		if(nodeInfo != null) nodeInfo.setSettingsForced(forced);
 	}
 	
 	public boolean isNodeForced(OpNode node) {
-		boolean retVal = false;
-		if(forcedNodes.containsKey(node))
-			retVal = forcedNodes.get(node);
-		return retVal;
+		final NodeInfo nodeInfo = nodeInfoMap.get(node);
+		return (nodeInfo != null ? nodeInfo.isSettingsForced() : false);
 	}
 
 	public void addNode(int index, OpNode element) {
 		wizardNodes.add(index, element);
+		nodeInfoMap.put(element, new NodeInfo(element));
 	}
 
 	public OpNode removeNode(int index) {
@@ -102,7 +99,9 @@ public class WizardExtension implements Iterable<OpNode> {
 	}
 	
 	public void setNodeTitle(OpNode node, String title) {
-		nodeTitles.put(node, title);
+		final NodeInfo info = nodeInfoMap.get(node);
+		if(info != null)
+			info.setTitle(title);
 	}
 	
 	public OpNode getOptionalNode(int index) {
@@ -149,38 +148,60 @@ public class WizardExtension implements Iterable<OpNode> {
 	}
 	
 	public String getNodeTitle(OpNode node) {
-		String retVal = nodeTitles.get(node);
-		if(retVal == null || retVal.length() == 0) {
-			retVal = node.getName();
-		}
-		return retVal;
+		final NodeInfo nodeInfo = nodeInfoMap.get(node);
+		String title = (nodeInfo != null ? nodeInfo.getTitle() : "");
+		if(title.length() == 0) title = node.getName();
+		return title;
 	}
 	
 	public void setNodeMessage(OpNode node, String message) {
-		nodeMessages.put(node, message);
+		setNodeMessage(node, message, WizardInfoMessageFormat.HTML);
+	}
+	
+	public void setNodeMessage(OpNode node, String message, WizardInfoMessageFormat format) {
+		final NodeInfo nodeInfo = nodeInfoMap.get(node);
+		if(nodeInfo != null) {
+			nodeInfo.setMessage(message);
+			nodeInfo.setFormat(format);
+		}
 	}
 	
 	public String getNodeMessage(OpNode node) {
-		return nodeMessages.get(node);
+		final NodeInfo nodeInfo = nodeInfoMap.get(node);
+		return (nodeInfo != null ? nodeInfo.getMessageHTML() : "");
+	}
+	
+	public WizardInfoMessageFormat getNodeMessageFormat(OpNode node) {
+		final NodeInfo nodeInfo = nodeInfoMap.get(node);
+		return (nodeInfo != null ? nodeInfo.getFormat() : WizardInfoMessageFormat.HTML);
 	}
 	
 	public void setWizardTitle(String title) {
-		this.wizardTitle = title;
+		wizardInfo.setTitle(title);
 	}
 	
 	public String getWizardTitle() {
-		String retVal = this.wizardTitle;
+		String retVal = wizardInfo.getTitle();
 		if(retVal == null || retVal.length() == 0) {
-			retVal = "Introduction";
+			retVal = "About";
 		}
 		return retVal;
 	}
 	
 	public void setWizardMessage(String message) {
-		this.wizardMessage = message;
+		setWizardMessage(message, WizardInfoMessageFormat.HTML);
+	}
+	
+	public void setWizardMessage(String message, WizardInfoMessageFormat format) {
+		wizardInfo.setMessage(message);
+		wizardInfo.setFormat(format);
 	}
 	
 	public String getWizardMessage() {
-		return this.wizardMessage;
+		return wizardInfo.getMessageHTML();
+	}
+	
+	public WizardInfoMessageFormat getWizardMessageFormat() {
+		return wizardInfo.getFormat();
 	}
 }

@@ -123,7 +123,7 @@
 		<ca.gedge.opgraph.version>0.5-SNAPSHOT</ca.gedge.opgraph.version>
 		<ca.phon.native-dialogs.version>7</ca.phon.native-dialogs.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
-		<com.fifesoft.rsyntaxtextarea.version>2.0.2</com.fifesoft.rsyntaxtextarea.version>
+		<com.fifesoft.rsyntaxtextarea.version>2.5.8</com.fifesoft.rsyntaxtextarea.version>
 		<com.jgoodies.jgoodies-common.version>1.8.1</com.jgoodies.jgoodies-common.version>
 		<com.jgoodies.jgoodies-forms.version>1.9.0</com.jgoodies.jgoodies-forms.version>
 		<com.jgoodies.jgoodies-looks.version>2.7.0</com.jgoodies.jgoodies-looks.version>

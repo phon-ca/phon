@@ -147,11 +147,20 @@
             <xs:element ref="message" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="title" type="xs:string" use="optional"/>
+        <xs:attribute name="format" type="WizardInfoMessageFormat" use="optional" default="html"/>
     </xs:complexType>
+    
+    <xs:simpleType name="WizardInfoMessageFormat">
+    	<xs:restriction base="xs:string">
+    		<xs:enumeration value="html"/>
+    		<xs:enumeration value="markdown"/>
+    	</xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="node" type="NodeRefType"/>
     <xs:element name="optionalNode" type="OptionalNodeType"/>
     <xs:element name="nodewizard" type="NodeWizardType" substitutionGroup="og:extension"/>
     <xs:element name="info" type="WizardInfoType"/>
     <xs:element name="message" type="xs:string"/>
+    
 </xs:schema>

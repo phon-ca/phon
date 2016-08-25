@@ -44,6 +44,7 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		
 		final Element wizardInfoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
 		wizardInfoEle.setAttribute("title", nodeList.getWizardTitle());
+		wizardInfoEle.setAttribute("format", nodeList.getWizardMessageFormat().toString().toLowerCase());
 		final Element wizardMessageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
 		wizardMessageEle.setTextContent(nodeList.getWizardMessage());
 		wizardInfoEle.appendChild(wizardMessageEle);
@@ -59,6 +60,7 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 			
 			final Element infoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
 			infoEle.setAttribute("title", nodeList.getNodeTitle(node));
+			infoEle.setAttribute("format", nodeList.getNodeMessageFormat(node).toString().toLowerCase());
 			final Element messageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
 			messageEle.setTextContent(nodeList.getNodeMessage(node));
 			infoEle.appendChild(messageEle);
@@ -111,11 +113,16 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 				if(titleAttr != null) {
 					ext.setWizardTitle(titleAttr.getNodeValue());
 				}
+				final Node formatAttr = child.getAttributes().getNamedItem("format");
+				WizardInfoMessageFormat format = WizardInfoMessageFormat.HTML;
+				if(formatAttr != null) {
+					format = WizardInfoMessageFormat.valueOf(formatAttr.getNodeValue().toUpperCase());
+				}
 				final NodeList infoNodes = child.getChildNodes();
 				for(int j = 0; j < infoNodes.getLength(); j++) {
 					final Node infoNode = infoNodes.item(j);
 					if(infoNode.getNodeName().equals(PREFIX + ":message")) {
-						ext.setWizardMessage(infoNode.getTextContent());
+						ext.setWizardMessage(infoNode.getTextContent(), format);
 					}
 				}
 			} else if(child.getNodeName().equals(PREFIX + ":node")) {
@@ -135,12 +142,17 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 							if(titleAttr != null) {
 								ext.setNodeTitle(node, titleAttr.getNodeValue());
 							}
+							final Node formatAttr = subNode.getAttributes().getNamedItem("format");
+							WizardInfoMessageFormat format = WizardInfoMessageFormat.HTML;
+							if(formatAttr != null) {
+								format = WizardInfoMessageFormat.valueOf(formatAttr.getNodeValue().toUpperCase());
+							}
 							
 							final NodeList infoNodes = subNode.getChildNodes();
 							for(int k = 0; k < infoNodes.getLength(); k++) {
 								final Node infoNode = infoNodes.item(k);
 								if(infoNode.getNodeName().equals(PREFIX + ":message")) {
-									ext.setNodeMessage(node, infoNode.getTextContent());
+									ext.setNodeMessage(node, infoNode.getTextContent(), format);
 								}
 							}
 						}

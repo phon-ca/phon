@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -109,6 +110,11 @@ public class NodeWizardSettingsPanel extends JPanel {
 		return retVal;
 	}
 	
+	public WizardInfoMessageFormat getFormat(String step) {
+		final SettingsPanel panel = panels.get(step);
+		return (panel != null ? panel.getFormat() : WizardInfoMessageFormat.HTML);
+	}
+	
 	private class StepListModel extends AbstractListModel<String> {
 
 		@Override
@@ -134,6 +140,8 @@ public class NodeWizardSettingsPanel extends JPanel {
 	private class SettingsPanel extends JPanel {
 		
 		private PromptedTextField titleField;
+		
+		private JComboBox<WizardInfoMessageFormat> formatBox;
 		
 		private RSyntaxTextArea infoArea;
 		
@@ -165,9 +173,21 @@ public class NodeWizardSettingsPanel extends JPanel {
 				}
 			});
 			
+			formatBox = new JComboBox<>(WizardInfoMessageFormat.values());
+			formatBox.addItemListener( e -> {
+				if(getFormat() == WizardInfoMessageFormat.HTML) {
+					infoArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
+				} else {
+					infoArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+				}
+			});
+			
 			infoArea = new RSyntaxTextArea();
 			infoArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
 			final JPanel centerPanel = new JPanel(new BorderLayout());
+			final JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			formatPanel.add(formatBox);
+			centerPanel.add(formatPanel, BorderLayout.NORTH);
 			centerPanel.add(new RTextScrollPane(infoArea, true), BorderLayout.CENTER);
 			centerPanel.setBorder(BorderFactory.createTitledBorder("Info"));
 			add(centerPanel, BorderLayout.CENTER);
@@ -187,6 +207,14 @@ public class NodeWizardSettingsPanel extends JPanel {
 		
 		public String getInfo() {
 			return infoArea.getText();
+		}
+		
+		public void setFormat(WizardInfoMessageFormat format) {
+			formatBox.setSelectedItem(format);
+		}
+		
+		public WizardInfoMessageFormat getFormat() {
+			return (WizardInfoMessageFormat)formatBox.getSelectedItem();
 		}
 		
 	}

@@ -9,6 +9,7 @@ import ca.gedge.opgraph.OpNode;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;
 import ca.phon.app.opgraph.wizard.NodeWizardSettingsDialog;
 import ca.phon.app.opgraph.wizard.NodeWizardSettingsPanel;
+import ca.phon.app.opgraph.wizard.WizardInfoMessageFormat;
 import ca.phon.app.opgraph.wizard.edits.ChangeWizardInfoEdit;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -37,8 +38,10 @@ public class EditSettingsAction extends WizardPanelAction {
 					dialog.getSettings().getTitle(NodeWizardSettingsPanel.WIZARD_INFO);
 			String newMessage =
 					dialog.getSettings().getMessage(NodeWizardSettingsPanel.WIZARD_INFO);
-			ChangeWizardInfoEdit infoEdit = new ChangeWizardInfoEdit(panel, newTitle, newMessage,
-					panel.getWizardExtension().getWizardTitle(), panel.getWizardExtension().getWizardMessage());
+			WizardInfoMessageFormat newFormat =
+					dialog.getSettings().getFormat(NodeWizardSettingsPanel.WIZARD_INFO);
+			ChangeWizardInfoEdit infoEdit = new ChangeWizardInfoEdit(panel, newTitle, newMessage, newFormat,
+					panel.getWizardExtension().getWizardTitle(), panel.getWizardExtension().getWizardMessage(), panel.getWizardExtension().getWizardMessageFormat());
 			infoEdit.doIt();
 			edit.addEdit(infoEdit);
 			
@@ -47,13 +50,17 @@ public class EditSettingsAction extends WizardPanelAction {
 					dialog.getSettings().getTitle(node.getId());
 				newMessage =
 					dialog.getSettings().getMessage(node.getId());
+				newFormat =
+					dialog.getSettings().getFormat(node.getId());
 				String oldTitle = 
 					panel.getWizardExtension().getNodeTitle(node);
 				String oldMessage =
 					panel.getWizardExtension().getNodeMessage(node);
+				WizardInfoMessageFormat oldFormat =
+					panel.getWizardExtension().getNodeMessageFormat(node);
 				
 				ChangeWizardInfoEdit nodeEdit = new ChangeWizardInfoEdit(panel, node,
-						newTitle, newMessage, oldTitle, oldMessage);
+						newTitle, newMessage, newFormat, oldTitle, oldMessage, oldFormat);
 				nodeEdit.doIt();
 				edit.addEdit(nodeEdit);
 			}
