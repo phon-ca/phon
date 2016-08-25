@@ -65,21 +65,20 @@ public class AnalysisWizard extends NodeWizard {
 		sessionSelectorStep.setLayout(new BorderLayout());
 		sessionSelectorStep.add(panel, BorderLayout.CENTER);
 		
-		sessionSelectorStep.setNextStep(1);
-		
-		for(int stepIdx = 0; stepIdx < numberOfSteps(); stepIdx++) {
-			final WizardStep ws = super.getWizardStep(stepIdx);
-			
-			if(ws.getPrevStep() >= 0) {
-				ws.setPrevStep(ws.getPrevStep()+1);
-			}
-			if(ws.getNextStep() >= 0) {
-				ws.setNextStep(ws.getNextStep()+1);
-			}
+		int insertIdx = 0;
+		if(getWizardExtension().getWizardMessage() != null
+				&& getWizardExtension().getWizardMessage().length() > 0) {
+			insertIdx = 1;
 		}
-		super.addWizardStep(0, sessionSelectorStep);
-		super.getWizardStep(1).setPrevStep(0);
-		super.gotoStep(0);
+		sessionSelectorStep.setNextStep(insertIdx+1);
+		sessionSelectorStep.setPrevStep(insertIdx-1);
+		
+		super.addWizardStep(insertIdx, sessionSelectorStep);
+		
+		if(insertIdx == 1) {
+			getWizardStep(0).setNextStep(insertIdx);
+		}
+		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
 	}
 	
 	public void setProject(Project project) {

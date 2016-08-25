@@ -169,12 +169,35 @@ public class WizardFrame extends CommonModuleFrame {
 		LinkedHashMap<WizardStep, UUID> newSteps = new LinkedHashMap<>();
 		ArrayList<WizardStep> keys = new ArrayList<>(steps.keySet());
 		
+		WizardStep[] prevSteps = new WizardStep[keys.size()+1];
+		WizardStep[] nextSteps = new WizardStep[keys.size()+1];
+		
 		for(int i = 0; i < idx; i++) {
+			WizardStep step = getWizardStep(i);
+			prevSteps[i] = (step.getPrevStep() >= 0 ? getWizardStep(step.getPrevStep()) : null);
+			nextSteps[i] = (step.getNextStep() >= 0 ? getWizardStep(step.getNextStep()) : null);
 			newSteps.put(keys.get(i), steps.get(keys.get(i)));
 		}
 		newSteps.put(ws, uuid);
 		for(int i = idx; i < keys.size(); i++) {
+			WizardStep step = getWizardStep(i);
+			prevSteps[i+1] = (step.getPrevStep() >= 0 ? getWizardStep(step.getPrevStep()) : null);
+			nextSteps[i+1] = (step.getNextStep() >= 0 ? getWizardStep(step.getNextStep()) : null);
 			newSteps.put(keys.get(i), steps.get(keys.get(i)));
+		}
+		keys = new ArrayList<>(newSteps.keySet());
+		for(int i = 0; i < keys.size(); i++) {
+			if(i == idx) continue;
+			
+			// fix step links
+			WizardStep prevStep = prevSteps[i];
+			int prevStepIdx = (prevStep != null ? keys.indexOf(prevStep) : -1);
+
+			WizardStep nextStep = nextSteps[i];
+			int nextStepIdx = (nextStep != null ? keys.indexOf(nextStep) : -1);
+			
+			keys.get(i).setPrevStep(prevStepIdx);
+			keys.get(i).setNextStep(nextStepIdx);
 		}
 		steps = newSteps;
 		
