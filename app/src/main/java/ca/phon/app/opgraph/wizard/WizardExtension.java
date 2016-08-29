@@ -168,12 +168,16 @@ public class WizardExtension implements Iterable<OpNode> {
 	
 	public String getNodeMessage(OpNode node) {
 		final NodeInfo nodeInfo = nodeInfoMap.get(node);
-		return (nodeInfo != null ? nodeInfo.getMessageHTML() : "");
+		return (nodeInfo != null ? nodeInfo.getMessage() : "");
 	}
 	
 	public WizardInfoMessageFormat getNodeMessageFormat(OpNode node) {
 		final NodeInfo nodeInfo = nodeInfoMap.get(node);
 		return (nodeInfo != null ? nodeInfo.getFormat() : WizardInfoMessageFormat.HTML);
+	}
+	
+	public NodeInfo getNodeInfo(OpNode node) {
+		return nodeInfoMap.get(node);
 	}
 	
 	public void setWizardTitle(String title) {
@@ -198,10 +202,14 @@ public class WizardExtension implements Iterable<OpNode> {
 	}
 	
 	public String getWizardMessage() {
-		return wizardInfo.getMessageHTML();
+		return wizardInfo.getMessage();
 	}
 	
 	public WizardInfoMessageFormat getWizardMessageFormat() {
 		return wizardInfo.getFormat();
+	}
+	
+	public WizardInfo getWizardInfo() {
+		return this.wizardInfo;
 	}
 }

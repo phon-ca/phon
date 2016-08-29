@@ -57,6 +57,7 @@ public class NodeWizardSettingsPanel extends JPanel {
 		final SettingsPanel panel = new SettingsPanel();
 		panel.setTitle(wizardExtension.getWizardTitle());
 		panel.setInfo(wizardExtension.getWizardMessage());
+		panel.setFormat(wizardExtension.getWizardMessageFormat());
 		panels.put(WIZARD_INFO, panel);
 		cardPanel.add(panel, WIZARD_INFO);
 		
@@ -65,6 +66,7 @@ public class NodeWizardSettingsPanel extends JPanel {
 			final SettingsPanel nodePanel = new SettingsPanel();
 			nodePanel.setTitle(wizardExtension.getNodeTitle(node));
 			nodePanel.setInfo(wizardExtension.getNodeMessage(node));
+			nodePanel.setFormat(wizardExtension.getNodeMessageFormat(node));
 			panels.put(id, nodePanel);
 			cardPanel.add(nodePanel, id);
 		}

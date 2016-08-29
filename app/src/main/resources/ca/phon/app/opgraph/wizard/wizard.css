@@ -1,0 +1,31 @@
+h1 {
+   font-weight: bold;
+   color: blue;
+}
+
+h2 {
+    font-weight: bold;
+    color: blue;
+}
+
+em {
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+    empty-cells: show;
+    width: 100%;
+    overflow:hidden;
+    table-layout:fixed;
+}
+
+th {
+    overflow:hidden;
+    font-weight: bold; 
+    border-bottom: thin solid black;
+}
+
+td {
+    overflow:hidden; 
+}

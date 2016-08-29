@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="5510f430fd2b42da" name="Cluster Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="269cb755">
+            <graph id="4b521d42">
                 <node id="144c82d5c1e14ece" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -40,7 +40,7 @@
                     </extensions>
                 </node>
                 <opqry:queryNode id="572c422333884e20" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-24T11:43:35.733-02:30" name="Phones" uuid="b2346fc3-c39a-4e68-b5d9-741b5010b936">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-27T13:06:47.040-02:30" name="Phones" uuid="e13abdb1-2d06-45c9-be22-1994b471082c">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c&lt;2,&gt;</param>
@@ -57,7 +57,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="5c69e4bb2beb4c0d" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-24T11:43:35.740-02:30" name="Phones" uuid="1bf3e56d-89cf-474d-8644-9ecef044711b">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-27T13:06:47.051-02:30" name="Phones" uuid="b361b4fe-7af9-45bd-b9db-b505351c1465">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c&lt;2,&gt;</param>
@@ -186,182 +186,187 @@
         <link dest="5510f430fd2b42da" destField="obj1" source="25c7f8fd" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info title="Cluster Inventory">
-                    <opqry:message>&lt;html&gt;
-&lt;body&gt;
-&lt;h2&gt;Independent Analysis : Cluster Inventory&lt;/h2&gt;
-&lt;p&gt;Generate an inventory of consonant clusters found in both IPA Target and IPA Actual for the selected sessions.&lt;/p&gt;
+                <opqry:info format="markdown" title="Cluster Inventory">
+                    <opqry:message>#Cluster Inventory
+Generate an inventory of consonant clusters found in both IPA Target and IPA Actual for the selected sessions.&lt;/p&gt;
 
-&lt;h2&gt;Output&lt;/h2&gt;
-&lt;p&gt;Output table will have four columns:
-&lt;ol&gt;
-&lt;li&gt;&lt;b&gt;Session&lt;/b&gt;&lt;br/&gt;&lt;p&gt;Session name&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Cluster&lt;/b&gt;&lt;br/&gt;&lt;p&gt;Consonant cluster&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;IPA Target Total&lt;/b&gt;&lt;br/&gt;&lt;p&gt;Number of occurrences found in IPA Target&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;IPA Actual Total&lt;/b&gt;&lt;br/&gt;&lt;p&gt;Number of occurrences found in IPA Actual&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/p&gt;
+##Output&lt;/h2&gt;
+Output table will have four columns:
 
-&lt;h2&gt;Example:&lt;/h2&gt;
-&lt;table style="border-collapse: collapse; empty-cells: show; width: 100%; overflow:hidden; table-layout:fixed;" id="__bookmark_1"&gt;
-							&lt;col&gt;&lt;/col&gt;
-							&lt;col&gt;&lt;/col&gt;
-							&lt;col&gt;&lt;/col&gt;
-							&lt;col&gt;&lt;/col&gt;
-							&lt;tr class="style_8" valign="top" align="center"&gt;
-								&lt;th style=" overflow:hidden;font-weight: normal; border-bottom: thin solid black;"&gt;
-									&lt;div id="AUTOGENBOOKMARK_6_bb51b370-5fff-485a-b799-2bc86af4c461"&gt;Session&lt;/div&gt;
-								&lt;/th&gt;
-								&lt;th style=" overflow:hidden;font-weight: normal; border-bottom: thin solid black;"&gt;
-									&lt;div id="AUTOGENBOOKMARK_7_f64b7d82-8834-440c-b653-88e36cdc4bc5"&gt;Cluster&lt;/div&gt;
-								&lt;/th&gt;
-								&lt;th style=" overflow:hidden;font-weight: normal; border-bottom: thin solid black;"&gt;
-									&lt;div id="AUTOGENBOOKMARK_8_f2ba18aa-cc40-447d-99a8-3314d549eb27"&gt;IPA Target Total&lt;/div&gt;
-								&lt;/th&gt;
-								&lt;th style=" overflow:hidden;font-weight: normal; border-bottom: thin solid black;"&gt;
-									&lt;div id="AUTOGENBOOKMARK_9_fa388cfc-a86d-4e2c-9d02-7079f4e8e488"&gt;IPA Actual Total&lt;/div&gt;
-								&lt;/th&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;ɡɹ&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;2&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;0&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;nl&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;1&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;0&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;ld&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;1&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;0&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;ɹt&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;2&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;0&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;ɹθ&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;5&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;0&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;ɹs&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;2&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;0&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;ɹl&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;2&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;1&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr valign="top" align="left"&gt;
-								&lt;td class="style_9" style=" overflow:hidden;"&gt;
-									&lt;div&gt;Anne.Session&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;ɹl&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;2&lt;/div&gt;
-								&lt;/td&gt;
-								&lt;td style=" overflow:hidden;"&gt;
-									&lt;div&gt;1&lt;/div&gt;
-								&lt;/td&gt;
-							&lt;/tr&gt;
-							
-						&lt;/table&gt;
+ * *Session*
+ 
+ Session name
+ 
+ * *Cluster*
+ 
+ Consonant cluster
 
-&lt;/body&gt;
-&lt;/html&gt;</opqry:message>
+ * *IPA Target Total*
+ 
+ Number of occurrences found in IPA Target
+
+ * *IPA Actual Total*
+ 
+ Number of occurrences found in IPA Actual
+
+##Example:
+
+&lt;table&gt;
+	&lt;col&gt;&lt;/col&gt;
+	&lt;col&gt;&lt;/col&gt;
+	&lt;col&gt;&lt;/col&gt;
+	&lt;col&gt;&lt;/col&gt;
+	&lt;tr valign="top" align="center"&gt;
+		&lt;th&gt;
+			&lt;div id="AUTOGENBOOKMARK_6_bb51b370-5fff-485a-b799-2bc86af4c461"&gt;Session&lt;/div&gt;
+		&lt;/th&gt;
+		&lt;th&gt;
+			&lt;div id="AUTOGENBOOKMARK_7_f64b7d82-8834-440c-b653-88e36cdc4bc5"&gt;Cluster&lt;/div&gt;
+		&lt;/th&gt;
+		&lt;th&gt;
+			&lt;div id="AUTOGENBOOKMARK_8_f2ba18aa-cc40-447d-99a8-3314d549eb27"&gt;IPA Target Total&lt;/div&gt;
+		&lt;/th&gt;
+		&lt;th&gt;
+			&lt;div id="AUTOGENBOOKMARK_9_fa388cfc-a86d-4e2c-9d02-7079f4e8e488"&gt;IPA Actual Total&lt;/div&gt;
+		&lt;/th&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;ɡɹ&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;2&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;0&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;nl&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;1&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;0&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;ld&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;1&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;0&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;ɹt&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;2&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;0&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;ɹθ&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;5&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;0&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;ɹs&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;2&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;0&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;ɹl&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;2&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;1&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr valign="top" align="left"&gt;
+		&lt;td&gt;
+			&lt;div&gt;Anne.Session&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;ɹl&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;2&lt;/div&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div&gt;1&lt;/div&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	
+&lt;/table&gt;</opqry:message>
                 </opqry:info>
                 <opqry:node ref="572c422333884e20">
-                    <opqry:info title="Query : Phones (IPA Target)">
+                    <opqry:info format="html" title="Query : Phones (IPA Target)">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="8d17bf0f9a9f435a">
-                    <opqry:info title="Inventory">
+                    <opqry:info format="html" title="Inventory">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="5c69e4bb2beb4c0d">
-                    <opqry:info title="Query : Phones (IPA Actual)">
+                    <opqry:info format="html" title="Query : Phones (IPA Actual)">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="519687308b994573">
-                    <opqry:info title="Inventory">
+                    <opqry:info format="html" title="Inventory">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="efc4598d166c4ffd">
-                    <opqry:info title="Merge Tables">
+                    <opqry:info format="html" title="Merge Tables">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>

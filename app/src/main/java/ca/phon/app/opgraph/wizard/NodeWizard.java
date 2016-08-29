@@ -10,10 +10,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.swing.AbstractButton;
@@ -65,6 +70,8 @@ import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 
 public class NodeWizard extends WizardFrame {
+	
+	private final static Logger LOGGER = Logger.getLogger(NodeWizard.class.getName());
 	
 	private final Processor processor;
 	
@@ -190,7 +197,8 @@ public class NodeWizard extends WizardFrame {
 		
 		if(nodeWizardList.getWizardMessage() != null
 				&& nodeWizardList.getWizardMessage().length() > 0) {
-			final WizardStep aboutStep = createIntroStep(nodeWizardList.getWizardTitle(), nodeWizardList.getWizardMessage());
+			final WizardStep aboutStep = createIntroStep(nodeWizardList.getWizardTitle(),
+					nodeWizardList.getWizardInfo().getMessageHTML());
 			aboutStep.setTitle("About");
 			aboutStep.setPrevStep(stepIdx-1);
 			aboutStep.setNextStep(stepIdx+1);
@@ -485,9 +493,15 @@ public class NodeWizard extends WizardFrame {
 		
 		final HTMLEditorKit editorKit = new HTMLEditorKit();
 		final StyleSheet styleSheet = editorKit.getStyleSheet();
-		
-		styleSheet.addRule("h2 {font-style: bold; font-size: 14.0; color: blue;}");
-		styleSheet.addRule("table {width: 100%; border: 1px solid;}");
+		final URL cssURL = getClass().getClassLoader().getResource("ca/phon/app/opgraph/wizard/wizard.css");
+		if(cssURL != null) {
+			try {
+				styleSheet.loadRules(
+						new InputStreamReader(cssURL.openStream(), "UTF-8"), cssURL);
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
 
 		final JEditorPane editorPane = new JEditorPane("text/html", message);
 		editorPane.setEditorKit(editorKit);
