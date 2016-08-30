@@ -435,7 +435,10 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		String[] table1KeyColNames = getTable1KeyColumn().split(",");
 		int[] table1KeyCols = new int[table1KeyColNames.length];
 		for(int i = 0; i < table1KeyColNames.length; i++) {
-			table1KeyCols[i] = table1.getColumnIndex(table1KeyColNames[i].trim());
+			int table1ColIdx = table1.getColumnIndex(table1KeyColNames[i].trim());
+			if(table1ColIdx < 0)
+				throw new ProcessingException(null, String.format("Column '%s' not found", table1KeyColNames[i]));
+			table1KeyCols[i] = table1ColIdx;
 		}
 		// collect unique column names from each table
 		List<String> table1Columns = new ArrayList<>();
@@ -447,7 +450,10 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		String[] table2KeyColNames = getTable2KeyColumn().split(",");
 		int[] table2KeyCols = new int[table2KeyColNames.length];
 		for(int i = 0; i < table2KeyColNames.length; i++) {
-			table2KeyCols[i] = table2.getColumnIndex(table2KeyColNames[i].trim());
+			int table2ColIdx = table2.getColumnIndex(table2KeyColNames[i].trim());
+			if(table2ColIdx < 0)
+				throw new ProcessingException(null, String.format("Column '%s' not found", table2KeyColNames[i]));
+			table2KeyCols[i] = table2ColIdx;
 		}
 		// collect unique column names from each table
 		List<String> table2Columns = new ArrayList<>();
@@ -653,9 +659,30 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 		}
 		
 		@Override
-		public boolean equals(Object rowkey) {
-			if(!(rowkey instanceof RowKey)) return false;
-			return Arrays.deepEquals(this.keys, ((RowKey)rowkey).keys);
+		public boolean equals(Object obj) {
+			if(!(obj instanceof RowKey)) return false;
+			RowKey rowkey = (RowKey)obj;
+			if(rowkey.keys.length != keys.length) return false;
+			boolean retVal = true;
+			for(int i = 0; i < keys.length; i++) {
+				retVal &= keys[i].equals(rowkey.keys[i]);
+			}
+			return retVal;
+		}
+		
+		final int somePrimes[] = new int[] { 991, 997, 1003, 1013, 5881, 104623, 104701 };
+		@Override
+		public int hashCode() {
+			int retVal = 0;
+			for(int i = 0; i < keys.length; i++) {
+				retVal ^= somePrimes[i % somePrimes.length] * keys[i].hashCode();
+			}
+			return retVal;
+		}
+		
+		@Override
+		public String toString() {
+			return Arrays.toString(this.keys);
 		}
 		
 	}

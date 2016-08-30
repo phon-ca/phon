@@ -102,11 +102,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		Map<InventoryRowData, Map<GroupKey, Long>> inventory = 
 				generateInventory(groupKeys, inputTable);
 		
-		
-		int[] inventoryCols = getColumnIndices(inputTable, getColumns());
-		
-		List<String> colNames = new ArrayList<>();
-		Arrays.stream(inventoryCols).forEach( col -> colNames.add(inputTable.getColumnTitle(col)) );
+		final List<String> colNames = getColumns();
 		groupKeys.forEach( key -> colNames.add(key.toString()) );
 		
 		for(InventoryRowData key:inventory.keySet()) {
