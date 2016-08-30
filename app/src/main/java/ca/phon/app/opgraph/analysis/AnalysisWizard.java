@@ -10,6 +10,7 @@ import org.jdesktop.swingx.JXTitledPanel;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
+import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
@@ -51,6 +52,9 @@ public class AnalysisWizard extends NodeWizard {
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "save");
 		builder.addItem("File@save", new SaveAnalysisAction(this));
+		
+		builder.addSeparator("File@Save analysis...", "open_editor");
+		builder.addItem("File@open_editor", new OpenNodeEditorAction(getGraph()));
 	}
 	
 	private void addSessionSelectionStep() {
@@ -79,6 +83,7 @@ public class AnalysisWizard extends NodeWizard {
 			getWizardStep(0).setNextStep(insertIdx);
 		}
 		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
+		gotoStep(0);
 	}
 	
 	public void setProject(Project project) {

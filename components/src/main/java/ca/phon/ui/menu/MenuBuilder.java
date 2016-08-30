@@ -230,7 +230,7 @@ public final class MenuBuilder {
 		
 		for(int i = 0; i < elements.size(); i++) {
 			final String item = elements.get(i);
-			if(item.equals(itemName)) {
+			if(item != null && item.equals(itemName)) {
 				return i;
 			}
 		}
