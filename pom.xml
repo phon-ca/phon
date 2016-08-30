@@ -139,7 +139,7 @@
 		<net.lingala.zip4j.version>1.3.2</net.lingala.zip4j.version>
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		<org.eclipse.birt.runtime.version>4.5.0b</org.eclipse.birt.runtime.version>
-		<org.pegdown.pegdown.version>1.6.0</org.pegdown.pegdown.version>
+		<com.atlassian.commonmark.version>0.6.0</com.atlassian.commonmark.version>
 
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools>2.1</org.apache.velocity.velocity-tools>
@@ -397,9 +397,15 @@
 			</dependency>
 			
 			<dependency>
-				<groupId>org.pegdown</groupId>
-				<artifactId>pegdown</artifactId>
-				<version>${org.pegdown.pegdown.version}</version>
+				<groupId>com.atlassian.commonmark</groupId>
+				<artifactId>commonmark</artifactId>
+				<version>${com.atlassian.commonmark.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.atlassian.commonmark</groupId>
+			    <artifactId>commonmark-ext-gfm-tables</artifactId>
+			    <version>${com.atlassian.commonmark.version}</version>
 			</dependency>
 			
 		</dependencies>

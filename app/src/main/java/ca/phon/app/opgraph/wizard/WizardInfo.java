@@ -1,6 +1,13 @@
-package ca.phon.app.opgraph.wizard;import javax.swing.text.html.HTML;
+package ca.phon.app.opgraph.wizard;
 
-import org.pegdown.PegDownProcessor;
+import java.util.Arrays;
+import java.util.List;
+
+import org.commonmark.Extension;
+import org.commonmark.ext.gfm.tables.TablesExtension;
+import org.commonmark.html.HtmlRenderer;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
 
 /**
  * Title, message, and message format.
@@ -57,8 +64,12 @@ public class WizardInfo {
 	}
 	
 	private String markdownToHTML(String md) {
-		final PegDownProcessor processor = new PegDownProcessor();
-		return processor.markdownToHtml(md);
+		List<Extension> extensions = Arrays.asList(TablesExtension.create());
+
+		final Parser parser = Parser.builder().extensions(extensions).build();
+		final Node doc = parser.parse(md);
+		final HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
+		return renderer.render(doc);
 	}
 	
 	/**
