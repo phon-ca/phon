@@ -168,6 +168,11 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	public String getDefaultFolder() {
 		return super.getDefaultFolder();
 	}
+	
+	@Override
+	public String getTitle() {
+		return "Analysis Editor";
+	}
 
 	@Override
 	public boolean validate() {

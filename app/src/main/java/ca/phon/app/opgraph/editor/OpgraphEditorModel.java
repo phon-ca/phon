@@ -63,6 +63,13 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 	}
 	
 	/**
+	 * Return the editor title for the given model.
+	 * 
+	 * @return title
+	 */
+	public abstract String getTitle();
+	
+	/**
 	 * Get the default folder when displaying the open/save dialog.
 	 * 
 	 * @return folder path

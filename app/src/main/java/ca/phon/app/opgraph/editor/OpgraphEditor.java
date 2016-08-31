@@ -64,8 +64,6 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
  */
 public class OpgraphEditor extends CommonModuleFrame {
 	
-	private final static String WINDOW_TITLE = "Node Editor";
-
 	private static final long serialVersionUID = 311253647756696496L;
 	
 	/**
@@ -164,7 +162,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 	
 	protected void updateTitle() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(WINDOW_TITLE);
+		sb.append(getModel().getTitle());
 		sb.append(" : ");
 		if(getCurrentFile() != null)
 			sb.append(getCurrentFile().getAbsolutePath());

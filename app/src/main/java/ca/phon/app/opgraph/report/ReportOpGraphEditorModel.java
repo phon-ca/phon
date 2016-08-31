@@ -101,4 +101,8 @@ public class ReportOpGraphEditorModel extends AnalysisOpGraphEditorModel {
 		return PrefHelper.getUserDataFolder() + File.separator + "reports";
 	}
 	
+	@Override
+	public String getTitle() {
+		return "Report Editor";
+	}
 }

@@ -198,5 +198,10 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 	public String getDefaultFolder() {
 		return PrefHelper.getUserDataFolder() + File.separator + "syllabifier";
 	}
+
+	@Override
+	public String getTitle() {
+		return "Syllabifier Editor";
+	}
 	
 }

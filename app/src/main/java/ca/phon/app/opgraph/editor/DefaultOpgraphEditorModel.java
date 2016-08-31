@@ -24,6 +24,11 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 		
 		addQueryNodes();
 	}
+	
+	@Override
+	public String getTitle() {
+		return "Node Editor";
+	}
 
 	private void addQueryNodes() {
 		Consumer<QueryScript> addToLibrary = (QueryScript script) -> {
