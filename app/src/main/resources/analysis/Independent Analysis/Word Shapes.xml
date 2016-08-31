@@ -1,37 +1,105 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
-    <graph id="2004b2a1">
-        <opqry:queryNode id="80202e667a594136" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T16:03:02.399-02:30" name="Phones" uuid="647afb64-b1d1-4009-a7eb-89e25a0d058a">
-                <script>
-                    <url ref="Phones" rel="stock"/>
-                    <param id="filters.primary.filter">.+</param>
-                    <param id="filters.word.searchByWord">true</param>
-                    <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
-                    <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
-                </script>
-            </qry:query>
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="15" y="15"/>
-            </extensions>
-        </opqry:queryNode>
-        <node id="c4114535642947e8" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+    <graph id="root">
+        <node id="d774afb" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
                 </oga:settings>
-                <oga:meta x="209" y="15"/>
+                <oga:meta x="16" y="11"/>
             </extensions>
         </node>
-        <node id="2839bac54aa94a98" name="Add IPA Target CV" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+        <node id="2a96204c" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="__script"><![CDATA[/*
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                </oga:settings>
+                <oga:meta x="124" y="250"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="9a866b75e42a431d" name="Word Shapes (CV)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="579f1eb7">
+                <node id="a879e19a41cf4926" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                            <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="978a70b543cf426f" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                            <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="277"/>
+                    </extensions>
+                </node>
+                <opqry:queryNode id="83713295deca4809" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.967-02:30" name="Phones" uuid="2aaff5c4-c509-433b-af31-ad38facdcf5b">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">.+</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="270" y="15"/>
+                    </extensions>
+                </opqry:queryNode>
+                <opqry:queryNode id="df13c23bca4a4bba" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.974-02:30" name="Phones" uuid="20dbfb87-5c70-4782-9b82-5358a0a9833e">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">.+</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
+                            <param id="searchTier">IPA Actual</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="270" y="146"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="8cb2cc6acb144b1e" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="471" y="15"/>
+                    </extensions>
+                </node>
+                <node id="474deeccde1e422c" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="469" y="146"/>
+                    </extensions>
+                </node>
+                <node id="4d13f29c1c4d42de" name="Add IPA Target CV" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="__script"><![CDATA[/*
 params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
 ;
 */
@@ -40,16 +108,16 @@ function getRowValue(table, row) {
 	return table.getValueAt(row, "IPA Target").cvPattern;
 }
 ]]></oga:property>
-                    <oga:property key="column"><![CDATA[IPA Target Word Shape]]></oga:property>
-                    <oga:property key="columnIndex"><![CDATA[-1]]></oga:property>
-                </oga:settings>
-                <oga:meta x="384" y="15"/>
-            </extensions>
-        </node>
-        <node id="5dd6958dd0a94b85" name="Add IPA Actual CV" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
-            <extensions>
-                <oga:settings>
-                    <oga:property key="__script"><![CDATA[/*
+                            <oga:property key="column"><![CDATA[IPA Target Word Shape]]></oga:property>
+                            <oga:property key="columnIndex"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="624" y="15"/>
+                    </extensions>
+                </node>
+                <node id="2c453cba60e04fb0" name="Add IPA Actual CV" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="__script"><![CDATA[/*
 params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
 ;
 */
@@ -58,130 +126,604 @@ function getRowValue(table, row) {
 	return table.getValueAt(row, "IPA Actual").cvPattern;
 }
 ]]></oga:property>
-                    <oga:property key="column"><![CDATA[IPA Actual Word Shape]]></oga:property>
-                    <oga:property key="columnIndex"><![CDATA[-1]]></oga:property>
-                </oga:settings>
-                <oga:meta x="209" y="136"/>
-            </extensions>
-        </node>
-        <ogcn:macro id="e1105cfad98e4aea" name="Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="29f111d4">
-                <node id="eeef3031791844b1" name="TableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
+                            <oga:property key="column"><![CDATA[IPA Actual Word Shape]]></oga:property>
+                            <oga:property key="columnIndex"><![CDATA[0]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="15" y="15"/>
+                        <oga:meta x="622" y="146"/>
                     </extensions>
                 </node>
-                <node id="c58488c3c59246f8" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                <node id="bcbd59ed8eb74658" name="Inventory (IPA Target)" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
-                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
                             <opqry:column caseSensitive="false" column="IPA Target Word Shape" ignoreDiacritics="false"/>
                         </opqry:inventoryoptions>
                         <oga:settings/>
-                        <oga:meta x="242" y="15"/>
+                        <oga:meta x="777" y="15"/>
                     </extensions>
                 </node>
-                <node id="c48cd25eb408495f" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                <node id="275dd4dc815e4c91" name="Inventory (IPA Actual)" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
-                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
                             <opqry:column caseSensitive="false" column="IPA Actual Word Shape" ignoreDiacritics="false"/>
                         </opqry:inventoryoptions>
                         <oga:settings/>
-                        <oga:meta x="242" y="156"/>
+                        <oga:meta x="775" y="146"/>
                     </extensions>
                 </node>
-                <node id="ac21f955e09e4245" type="class:ca.phon.app.opgraph.nodes.query.MergeTablesNode">
+                <node id="247827c308374294" type="class:ca.phon.app.opgraph.nodes.query.MergeTablesNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="keyColumnName"><![CDATA[Word Shape]]></oga:property>
+                            <oga:property key="keyColumnName"><![CDATA[Session,Word Shape]]></oga:property>
                             <oga:property key="table1KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
-                            <oga:property key="table2ColumnSuffix"><![CDATA[ : IPA Actual Word Shape]]></oga:property>
+                            <oga:property key="table2ColumnSuffix"/>
                             <oga:property key="table2KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
-                            <oga:property key="table1KeyColumn"><![CDATA[IPA Target Word Shape]]></oga:property>
-                            <oga:property key="table1ColumnPrefix"/>
+                            <oga:property key="table1KeyColumn"><![CDATA[Session,IPA Target Word Shape]]></oga:property>
+                            <oga:property key="table1ColumnPrefix"><![CDATA[IPA Target ]]></oga:property>
                             <oga:property key="table1ColumnRatio"><![CDATA[1]]></oga:property>
                             <oga:property key="table2ColumnRatio"><![CDATA[1]]></oga:property>
-                            <oga:property key="table2KeyColumn"><![CDATA[IPA Actual Word Shape]]></oga:property>
+                            <oga:property key="table2KeyColumn"><![CDATA[Session,IPA Actual Word Shape]]></oga:property>
                             <oga:property key="table2KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
-                            <oga:property key="table1ColumnSuffix"><![CDATA[ : IPA Target Word Shape]]></oga:property>
+                            <oga:property key="table1ColumnSuffix"/>
                             <oga:property key="interleaveColumns"><![CDATA[true]]></oga:property>
-                            <oga:property key="table2ColumnPrefix"/>
+                            <oga:property key="table2ColumnPrefix"><![CDATA[IPA Actual]]></oga:property>
                             <oga:property key="table1KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="417" y="15"/>
+                        <oga:meta x="951" y="15"/>
                     </extensions>
                 </node>
-                <node id="d78b030013924c11" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="f53576f837974da8" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
                     <extensions>
                         <opqry:sortoptions>
+                            <opqry:sortBy column="Session" order="ascending" type="plain"/>
                             <opqry:sortBy column="Word Shape" order="ascending" type="plain"/>
                         </opqry:sortoptions>
                         <oga:settings/>
-                        <oga:meta x="592" y="15"/>
+                        <oga:meta x="1104" y="15"/>
                     </extensions>
                 </node>
-                <node id="9683b83b9a2b41f9" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                <node id="f641fe796a0f4ca6" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="showTable"><![CDATA[true]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="767" y="15">
+                        <oga:meta x="1257" y="15">
                             <oga:default for="buffer" type="java.lang.String">Word Shapes (CV)</oga:default>
                         </oga:meta>
                     </extensions>
                 </node>
-                <link dest="ac21f955e09e4245" destField="table2" source="c48cd25eb408495f" sourceField="table"/>
-                <link dest="ac21f955e09e4245" destField="table1" source="c58488c3c59246f8" sourceField="table"/>
-                <link dest="c48cd25eb408495f" destField="table" source="eeef3031791844b1" sourceField="obj"/>
-                <link dest="c58488c3c59246f8" destField="table" source="eeef3031791844b1" sourceField="obj"/>
-                <link dest="d78b030013924c11" destField="table" source="ac21f955e09e4245" sourceField="table"/>
-                <link dest="9683b83b9a2b41f9" destField="data" source="d78b030013924c11" sourceField="table"/>
+                <link dest="8cb2cc6acb144b1e" destField="results" source="83713295deca4809" sourceField="results"/>
+                <link dest="8cb2cc6acb144b1e" destField="project" source="83713295deca4809" sourceField="project"/>
+                <link dest="4d13f29c1c4d42de" destField="table" source="8cb2cc6acb144b1e" sourceField="table"/>
+                <link dest="f53576f837974da8" destField="table" source="247827c308374294" sourceField="table"/>
+                <link dest="247827c308374294" destField="table1" source="bcbd59ed8eb74658" sourceField="table"/>
+                <link dest="247827c308374294" destField="table2" source="275dd4dc815e4c91" sourceField="table"/>
+                <link dest="f641fe796a0f4ca6" destField="data" source="f53576f837974da8" sourceField="table"/>
+                <link dest="bcbd59ed8eb74658" destField="table" source="4d13f29c1c4d42de" sourceField="table"/>
+                <link dest="275dd4dc815e4c91" destField="table" source="2c453cba60e04fb0" sourceField="table"/>
+                <link dest="474deeccde1e422c" destField="results" source="df13c23bca4a4bba" sourceField="results"/>
+                <link dest="474deeccde1e422c" destField="project" source="df13c23bca4a4bba" sourceField="project"/>
+                <link dest="2c453cba60e04fb0" destField="table" source="474deeccde1e422c" sourceField="table"/>
+                <link dest="83713295deca4809" destField="project" source="a879e19a41cf4926" sourceField="obj"/>
+                <link dest="83713295deca4809" destField="sessions" source="978a70b543cf426f" sourceField="obj"/>
+                <link dest="df13c23bca4a4bba" destField="sessions" source="978a70b543cf426f" sourceField="obj"/>
+                <link dest="df13c23bca4a4bba" destField="project" source="a879e19a41cf4926" sourceField="obj"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                </extensions>
             </graph>
-            <ogcn:published_input field="obj" name="obj" ref="eeef3031791844b1"/>
+            <ogcn:published_input field="obj" name="obj" ref="a879e19a41cf4926"/>
+            <ogcn:published_input field="obj" name="obj1" ref="978a70b543cf426f"/>
             <extensions>
-                <oga:meta x="384" y="136"/>
+                <oga:meta x="316" y="15"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="74c42a68d9b24c77" name="Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5e143a5c">
-                <node id="83172d8fed6a4e74" type="class:ca.phon.app.opgraph.nodes.query.TokenSummaryNode">
+        <ogcn:macro id="e4d4c03159e14523" name="Word Shapes (Stress Pattern)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="509d6fa8">
+                <node id="b610f608d87548e6" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="caseSensitive"><![CDATA[false]]></oga:property>
-                            <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
-                            <oga:property key="columnNames"><![CDATA[IPA Target Word Shape;IPA Actual Word Shape]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                            <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
                         </oga:settings>
                         <oga:meta x="15" y="15"/>
                     </extensions>
                 </node>
-                <node id="9fcc3c339fc64936" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                <node id="ec0fc59274989" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                            <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="277"/>
+                    </extensions>
+                </node>
+                <opqry:queryNode id="7db0ff00ea594400" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.980-02:30" name="Phones" uuid="9bd727b1-cd60-4fd8-ba57-b5fffd9b7eb3">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">.+</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="270" y="15"/>
+                    </extensions>
+                </opqry:queryNode>
+                <opqry:queryNode id="cf338692ca794332" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.988-02:30" name="Phones" uuid="0a9d9294-ad76-4582-a83b-3a581b6d760d">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">.+</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
+                            <param id="searchTier">IPA Actual</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="270" y="146"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="f629621f1ff94a00" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="471" y="15"/>
+                    </extensions>
+                </node>
+                <node id="a722dd2bb2db445c" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="469" y="146"/>
+                    </extensions>
+                </node>
+                <node id="f999100e4d254bea" name="Add IPA Target Stress Pattern" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="__script"><![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return table.getValueAt(row, "IPA Target").stressPattern;
+}
+]]></oga:property>
+                            <oga:property key="column"><![CDATA[IPA Target Stress Pattern]]></oga:property>
+                            <oga:property key="columnIndex"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="624" y="15"/>
+                    </extensions>
+                </node>
+                <node id="f209450037d74f60" name="Add IPA Actual Stress Pattern" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="__script"><![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return table.getValueAt(row, "IPA Actual").stressPattern;
+}
+]]></oga:property>
+                            <oga:property key="column"><![CDATA[IPA Actual Stress Pattern]]></oga:property>
+                            <oga:property key="columnIndex"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="622" y="146"/>
+                    </extensions>
+                </node>
+                <node id="e8b7cb74d45e46a5" name="Inventory (IPA Target)" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                    <extensions>
+                        <opqry:inventoryoptions>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Target Stress Pattern" ignoreDiacritics="false"/>
+                        </opqry:inventoryoptions>
+                        <oga:settings/>
+                        <oga:meta x="838" y="15"/>
+                    </extensions>
+                </node>
+                <node id="a99b5e836ba14fce" name="Inventory (IPA Actual)" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                    <extensions>
+                        <opqry:inventoryoptions>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Actual Stress Pattern" ignoreDiacritics="false"/>
+                        </opqry:inventoryoptions>
+                        <oga:settings/>
+                        <oga:meta x="834" y="146"/>
+                    </extensions>
+                </node>
+                <node id="4edff671231e46ba" type="class:ca.phon.app.opgraph.nodes.query.MergeTablesNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="keyColumnName"><![CDATA[Session,Stress Pattern]]></oga:property>
+                            <oga:property key="table1KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
+                            <oga:property key="table2ColumnSuffix"/>
+                            <oga:property key="table2KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
+                            <oga:property key="table1KeyColumn"><![CDATA[Session,IPA Target Stress Pattern]]></oga:property>
+                            <oga:property key="table1ColumnPrefix"><![CDATA[IPA Target ]]></oga:property>
+                            <oga:property key="table1ColumnRatio"><![CDATA[1]]></oga:property>
+                            <oga:property key="table2ColumnRatio"><![CDATA[1]]></oga:property>
+                            <oga:property key="table2KeyColumn"><![CDATA[Session,IPA Actual Stress Pattern]]></oga:property>
+                            <oga:property key="table2KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
+                            <oga:property key="table1ColumnSuffix"/>
+                            <oga:property key="interleaveColumns"><![CDATA[true]]></oga:property>
+                            <oga:property key="table2ColumnPrefix"><![CDATA[IPA Actual ]]></oga:property>
+                            <oga:property key="table1KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="1012" y="15"/>
+                    </extensions>
+                </node>
+                <node id="3ca10c838a314220" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                    <extensions>
+                        <opqry:sortoptions>
+                            <opqry:sortBy column="Session" order="ascending" type="plain"/>
+                            <opqry:sortBy column="Stress Pattern" order="ascending" type="plain"/>
+                        </opqry:sortoptions>
+                        <oga:settings/>
+                        <oga:meta x="1165" y="15"/>
+                    </extensions>
+                </node>
+                <node id="c87797b8fda64b15" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="showTable"><![CDATA[true]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="190" y="15">
-                            <oga:default for="buffer" type="java.lang.String">Word Shapes (CV - Token Summary)</oga:default>
+                        <oga:meta x="1318" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Word Shapes (Stress Pattern)</oga:default>
                         </oga:meta>
                     </extensions>
                 </node>
-                <link dest="9fcc3c339fc64936" destField="data" source="83172d8fed6a4e74" sourceField="table"/>
+                <link dest="f629621f1ff94a00" destField="results" source="7db0ff00ea594400" sourceField="results"/>
+                <link dest="f629621f1ff94a00" destField="project" source="7db0ff00ea594400" sourceField="project"/>
+                <link dest="f999100e4d254bea" destField="table" source="f629621f1ff94a00" sourceField="table"/>
+                <link dest="4edff671231e46ba" destField="table1" source="e8b7cb74d45e46a5" sourceField="table"/>
+                <link dest="c87797b8fda64b15" destField="data" source="3ca10c838a314220" sourceField="table"/>
+                <link dest="3ca10c838a314220" destField="table" source="4edff671231e46ba" sourceField="table"/>
+                <link dest="4edff671231e46ba" destField="table2" source="a99b5e836ba14fce" sourceField="table"/>
+                <link dest="e8b7cb74d45e46a5" destField="table" source="f999100e4d254bea" sourceField="table"/>
+                <link dest="a722dd2bb2db445c" destField="results" source="cf338692ca794332" sourceField="results"/>
+                <link dest="a722dd2bb2db445c" destField="project" source="cf338692ca794332" sourceField="project"/>
+                <link dest="a99b5e836ba14fce" destField="table" source="f209450037d74f60" sourceField="table"/>
+                <link dest="f209450037d74f60" destField="table" source="a722dd2bb2db445c" sourceField="table"/>
+                <link dest="7db0ff00ea594400" destField="project" source="b610f608d87548e6" sourceField="obj"/>
+                <link dest="cf338692ca794332" destField="project" source="b610f608d87548e6" sourceField="obj"/>
+                <link dest="7db0ff00ea594400" destField="sessions" source="ec0fc59274989" sourceField="obj"/>
+                <link dest="cf338692ca794332" destField="sessions" source="ec0fc59274989" sourceField="obj"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                </extensions>
             </graph>
-            <ogcn:published_input field="table" name="table" ref="83172d8fed6a4e74"/>
+            <ogcn:published_input field="obj" name="obj" ref="b610f608d87548e6"/>
+            <ogcn:published_input field="obj" name="obj1" ref="ec0fc59274989"/>
             <extensions>
-                <oga:meta x="384" y="237"/>
+                <oga:meta x="315" y="136"/>
             </extensions>
         </ogcn:macro>
-        <link dest="c4114535642947e8" destField="results" source="80202e667a594136" sourceField="results"/>
-        <link dest="c4114535642947e8" destField="project" source="80202e667a594136" sourceField="project"/>
-        <link dest="2839bac54aa94a98" destField="table" source="c4114535642947e8" sourceField="table"/>
-        <link dest="e1105cfad98e4aea" destField="obj" source="5dd6958dd0a94b85" sourceField="table"/>
-        <link dest="5dd6958dd0a94b85" destField="table" source="2839bac54aa94a98" sourceField="table"/>
-        <link dest="74c42a68d9b24c77" destField="table" source="5dd6958dd0a94b85" sourceField="table"/>
+        <ogcn:macro id="e8a93cc666ee49af" name="Word Shapes (Syllables)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="6f4c11">
+                <node id="fb5084b02f4746e6" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                            <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="76b58176564c4a99" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                            <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="277"/>
+                    </extensions>
+                </node>
+                <opqry:queryNode id="e9bb2c0ad3664cca" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.993-02:30" name="Phones" uuid="81a6b692-2277-488a-bb13-85f337cdc50c">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">.+</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="270" y="15"/>
+                    </extensions>
+                </opqry:queryNode>
+                <opqry:queryNode id="e80b0c647b0423e" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.999-02:30" name="Phones" uuid="30b09520-f551-4614-8d86-988a98c2486c">
+                        <script>
+                            <url ref="Phones" rel="stock"/>
+                            <param id="filters.primary.filter">.+</param>
+                            <param id="filters.word.searchByWord">true</param>
+                            <param id="includeAligned">false</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
+                            <param id="searchTier">IPA Actual</param>
+                        </script>
+                    </qry:query>
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="270" y="146"/>
+                    </extensions>
+                </opqry:queryNode>
+                <node id="16bad7b84c0c40a8" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="471" y="15"/>
+                    </extensions>
+                </node>
+                <node id="612f18b41a8b4c2a" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                            <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="469" y="146"/>
+                    </extensions>
+                </node>
+                <node id="4dfa482884584e9f" name="Add IPA Target Syllable Count" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="__script"><![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return table.getValueAt(row, "IPA Target").syllables().size();
+}
+]]></oga:property>
+                            <oga:property key="column"><![CDATA[IPA Target Syllable Count]]></oga:property>
+                            <oga:property key="columnIndex"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="624" y="15"/>
+                    </extensions>
+                </node>
+                <node id="6f827782389c48b1" name="Add IPA Actual Syllable Count" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="__script"><![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return table.getValueAt(row, "IPA Actual").syllables().size();
+}
+]]></oga:property>
+                            <oga:property key="column"><![CDATA[IPA Actual Syllable Count]]></oga:property>
+                            <oga:property key="columnIndex"><![CDATA[0]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="622" y="146"/>
+                    </extensions>
+                </node>
+                <node id="bd704b0131824bab" name="Inventory (IPA Target)" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                    <extensions>
+                        <opqry:inventoryoptions>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Target Syllable Count" ignoreDiacritics="false"/>
+                        </opqry:inventoryoptions>
+                        <oga:settings/>
+                        <oga:meta x="836" y="15"/>
+                    </extensions>
+                </node>
+                <node id="8c2a25eb382040d1" name="Inventory (IPA Actual)" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                    <extensions>
+                        <opqry:inventoryoptions>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Actual Syllable Count" ignoreDiacritics="false"/>
+                        </opqry:inventoryoptions>
+                        <oga:settings/>
+                        <oga:meta x="832" y="146"/>
+                    </extensions>
+                </node>
+                <node id="4b71953d0e5d4672" type="class:ca.phon.app.opgraph.nodes.query.MergeTablesNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="keyColumnName"><![CDATA[Session,Syllable Count]]></oga:property>
+                            <oga:property key="table1KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
+                            <oga:property key="table2ColumnSuffix"/>
+                            <oga:property key="table2KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
+                            <oga:property key="table1KeyColumn"><![CDATA[Session,IPA Target Syllable Count]]></oga:property>
+                            <oga:property key="table1ColumnPrefix"><![CDATA[IPA Target]]></oga:property>
+                            <oga:property key="table1ColumnRatio"><![CDATA[1]]></oga:property>
+                            <oga:property key="table2ColumnRatio"><![CDATA[1]]></oga:property>
+                            <oga:property key="table2KeyColumn"><![CDATA[Session,IPA Actual Syllable Count]]></oga:property>
+                            <oga:property key="table2KeyColumnIgnoreDiacritics"><![CDATA[true]]></oga:property>
+                            <oga:property key="table1ColumnSuffix"/>
+                            <oga:property key="interleaveColumns"><![CDATA[true]]></oga:property>
+                            <oga:property key="table2ColumnPrefix"><![CDATA[IPA Actual]]></oga:property>
+                            <oga:property key="table1KeyColumnCaseSensitive"><![CDATA[false]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="1010" y="15"/>
+                    </extensions>
+                </node>
+                <node id="b9c88b34a3e6430b" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                    <extensions>
+                        <opqry:sortoptions>
+                            <opqry:sortBy column="Session" order="ascending" type="plain"/>
+                            <opqry:sortBy column="Syllable Count" order="ascending" type="plain"/>
+                        </opqry:sortoptions>
+                        <oga:settings/>
+                        <oga:meta x="1163" y="15"/>
+                    </extensions>
+                </node>
+                <node id="368990bc48b6462f" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="1316" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Word Shapes (Syllables)</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="16bad7b84c0c40a8" destField="project" source="e9bb2c0ad3664cca" sourceField="project"/>
+                <link dest="4dfa482884584e9f" destField="table" source="16bad7b84c0c40a8" sourceField="table"/>
+                <link dest="16bad7b84c0c40a8" destField="results" source="e9bb2c0ad3664cca" sourceField="results"/>
+                <link dest="4b71953d0e5d4672" destField="table2" source="8c2a25eb382040d1" sourceField="table"/>
+                <link dest="368990bc48b6462f" destField="data" source="b9c88b34a3e6430b" sourceField="table"/>
+                <link dest="4b71953d0e5d4672" destField="table1" source="bd704b0131824bab" sourceField="table"/>
+                <link dest="b9c88b34a3e6430b" destField="table" source="4b71953d0e5d4672" sourceField="table"/>
+                <link dest="bd704b0131824bab" destField="table" source="4dfa482884584e9f" sourceField="table"/>
+                <link dest="8c2a25eb382040d1" destField="table" source="6f827782389c48b1" sourceField="table"/>
+                <link dest="612f18b41a8b4c2a" destField="project" source="e80b0c647b0423e" sourceField="project"/>
+                <link dest="612f18b41a8b4c2a" destField="results" source="e80b0c647b0423e" sourceField="results"/>
+                <link dest="6f827782389c48b1" destField="table" source="612f18b41a8b4c2a" sourceField="table"/>
+                <link dest="e9bb2c0ad3664cca" destField="project" source="fb5084b02f4746e6" sourceField="obj"/>
+                <link dest="e80b0c647b0423e" destField="project" source="fb5084b02f4746e6" sourceField="obj"/>
+                <link dest="e9bb2c0ad3664cca" destField="sessions" source="76b58176564c4a99" sourceField="obj"/>
+                <link dest="e80b0c647b0423e" destField="sessions" source="76b58176564c4a99" sourceField="obj"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="obj" name="obj" ref="fb5084b02f4746e6"/>
+            <ogcn:published_input field="obj" name="obj1" ref="76b58176564c4a99"/>
+            <extensions>
+                <oga:meta x="315" y="257"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="9a866b75e42a431d" destField="obj" source="d774afb" sourceField="obj"/>
+        <link dest="9a866b75e42a431d" destField="obj1" source="2a96204c" sourceField="obj"/>
+        <link dest="e4d4c03159e14523" destField="obj" source="d774afb" sourceField="obj"/>
+        <link dest="e4d4c03159e14523" destField="obj1" source="2a96204c" sourceField="obj"/>
+        <link dest="e8a93cc666ee49af" destField="obj" source="d774afb" sourceField="obj"/>
+        <link dest="e8a93cc666ee49af" destField="obj1" source="2a96204c" sourceField="obj"/>
         <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
+                <opqry:info format="html" title="About">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="83713295deca4809">
+                    <opqry:info format="html" title="Query : Phones (IPA Target)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="bcbd59ed8eb74658">
+                    <opqry:info format="html" title="Inventory (IPA Target)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="df13c23bca4a4bba">
+                    <opqry:info format="html" title="Query : Phones (IPA Actual)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="275dd4dc815e4c91">
+                    <opqry:info format="html" title="Inventory (IPA Actual)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="247827c308374294">
+                    <opqry:info format="html" title="Merge Tables">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="f53576f837974da8">
+                    <opqry:info format="html" title="Sort">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="7db0ff00ea594400">
+                    <opqry:info format="html" title="Query : Phones (IPA Target)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="e8b7cb74d45e46a5">
+                    <opqry:info format="html" title="Inventory (IPA Target)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="cf338692ca794332">
+                    <opqry:info format="html" title="Query : Phones (IPA Actual)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="a99b5e836ba14fce">
+                    <opqry:info format="html" title="Inventory (IPA Actual)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="4edff671231e46ba">
+                    <opqry:info format="html" title="Merge Tables">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="3ca10c838a314220">
+                    <opqry:info format="html" title="Sort">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="e9bb2c0ad3664cca">
+                    <opqry:info format="html" title="Query : Phones (IPA Target)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="bd704b0131824bab">
+                    <opqry:info format="html" title="Inventory (IPA Target)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="e80b0c647b0423e">
+                    <opqry:info format="html" title="Query : Phones (IPA Actual)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="8c2a25eb382040d1">
+                    <opqry:info format="html" title="Inventory (IPA Actual)">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="4b71953d0e5d4672">
+                    <opqry:info format="html" title="Merge Tables">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="b9c88b34a3e6430b">
+                    <opqry:info format="html" title="Sort">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:optionalNode enabled="true" ref="9a866b75e42a431d"/>
+                <opqry:optionalNode enabled="true" ref="e4d4c03159e14523"/>
+                <opqry:optionalNode enabled="true" ref="e8a93cc666ee49af"/>
+            </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
         </extensions>
     </graph>

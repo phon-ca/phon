@@ -211,7 +211,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 		if(getCurrentFile() == null) {
 			if(!chooseFile()) return false;
 		}
-		OpgraphIO.write(getModel().getDocument().getGraph(), getCurrentFile());
+		OpgraphIO.write(getModel().getDocument().getRootGraph(), getCurrentFile());
 		getModel().getDocument().markAsUnmodified();
 		updateTitle();
 		return true;
