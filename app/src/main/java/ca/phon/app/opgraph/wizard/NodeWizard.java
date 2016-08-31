@@ -45,6 +45,8 @@ import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.JXTitledSeparator;
 
+import com.sun.jna.Native;
+
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -571,6 +573,19 @@ public class NodeWizard extends WizardFrame {
 			if(retVal == 2)
 				super.cancel();
 		} else {
+			if(bufferPanel.getBufferNames().size() > 0) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setTitle("Close");
+				props.setHeader("Close window?");
+				props.setMessage("Discard results and close?");
+				props.setOptions(MessageDialogProperties.okCancelOptions);
+				props.setDefaultOption("Cancel");
+				props.setRunAsync(false);
+				
+				int retVal = NativeDialogs.showMessageDialog(props);
+				if(retVal == 1) return;
+			}
 			super.cancel();
 		}
 	}
