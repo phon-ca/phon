@@ -131,7 +131,7 @@ public class Phone extends IPAElement {
 	 * Get the primary glyph for this Phone.  All other
 	 * parts of the Phone are 'attached' to this glyph.
 	 * 
-	 * @return the base caracter for the Phone
+	 * @return the base character for the Phone
 	 */
 	public Character getBasePhone() {
 		return basePhone;

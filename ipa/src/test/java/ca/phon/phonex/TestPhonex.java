@@ -35,6 +35,11 @@ public class TestPhonex {
 		PhonexPattern.compile(phonex);
 	}
 	
+	@Test(expected=PhonexPatternException.class)
+	public void textInvalidFeature() throws Exception {
+		PhonexPattern.compile("{invalid}");
+	}
+	
 	@Test
 	public void testBacktracking() throws Exception {
 		final String phonex = "(\\c*\\v+\\c*)*";
