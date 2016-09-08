@@ -79,7 +79,7 @@ public class AnalysisRunner implements Runnable {
 		ctx.put("_selectedSessions", selectedSessions);
 		
 		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
-		if(wizardExt != null) {
+		if(wizardExt != null && showWizard) {
 			SwingUtilities.invokeLater( () -> {
 				final NodeWizard wizard = wizardExt.createWizard(processor);
 				wizard.pack();
@@ -89,10 +89,6 @@ public class AnalysisRunner implements Runnable {
 						Toolkit.getDefaultToolkit().getScreenSize().height - padding);
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
-				
-				if(!showWizard) {
-					wizard.gotoStep(1);
-				}
 			});
 		} else {
 			processor.stepAll();

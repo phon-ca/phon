@@ -27,5 +27,10 @@ th {
 }
 
 td {
-    overflow:hidden; 
+    overflow:hidden;
+    font:"Charis SIL Compact"
+}
+
+code {
+    font-family:monospace;
 }

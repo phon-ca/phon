@@ -7,8 +7,11 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.SwingWorker;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
@@ -62,19 +65,34 @@ public class AnalysisAction extends HookableAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		try {
-			final OpGraph graph = loadAnalysis();
-			
-			final AnalysisRunner analysisRunner =
-					new AnalysisRunner(graph, project, selectedSessions, showWizard);
-			PhonWorker.getInstance().invokeLater(analysisRunner);
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
+		final AnalysisWorker worker = new AnalysisWorker();
+		worker.run();
 	}
 	
 	private OpGraph loadAnalysis() throws IOException {
 		return OpgraphIO.read(analysisURL.openStream());
 	}
 
+	private class AnalysisWorker extends SwingWorker<OpGraph, Object> {
+
+		@Override
+		protected OpGraph doInBackground() throws Exception {
+			final OpGraph graph = loadAnalysis();
+			return graph;
+		}
+
+		@Override
+		protected void done() {
+			try {
+				final AnalysisRunner analysisRunner =
+						new AnalysisRunner(get(), project, selectedSessions, showWizard);
+				PhonWorker.getInstance().invokeLater(analysisRunner);
+			} catch (ExecutionException | InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
+		
+	}
+	
 }
