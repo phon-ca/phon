@@ -20,6 +20,7 @@ import ca.phon.syllable.phonex.*;
 import ca.phon.syllable.*;
 
 import ca.phon.ipa.*;
+import ca.phon.ipa.features.*;
 
 import ca.phon.fsa.*;
 
@@ -328,12 +329,21 @@ scope {
 	{
 		$matcher = new FeatureSetMatcher();
 		
+		final FeatureMatrix fm = FeatureMatrix.getInstance();
+		
 		for(String feature:$feature_set_matcher::features) {
 			boolean not = false;
 			if(feature.startsWith("-")) {
 				not = true;
 				feature = feature.substring(1);
 			}
+			
+			// check feature name
+			final Feature featureObj = fm.getFeature(feature);
+			if(featureObj == null) {
+				throw new PhonexPatternException("Invalid feature name " + feature);
+			}
+			
 			if(not)
 				matcher.addNotFeature(feature);
 			else
