@@ -43,7 +43,6 @@ public class DefaultTierEditorExtension implements IPluginExtensionPoint<TierEdi
 		
 		@Override
 		public TierEditor createObject(Object... args) {
-			final SessionEditor editor = SessionEditor.class.cast(args[0]);
 			final Tier<?> tier = Tier.class.cast(args[1]);
 			final Integer group = Integer.class.cast(args[2]);
 			

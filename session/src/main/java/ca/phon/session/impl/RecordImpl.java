@@ -30,6 +30,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -339,10 +341,14 @@ public class RecordImpl implements Record {
 					// create a new string tier to return
 					final SessionFactory factory = SessionFactory.newFactory();
 					retVal = factory.createTier(name, type, userTier.isGrouped());
+					
+					final Formatter<Object> formatter = 
+							(Formatter<Object>)FormatterFactory.createFormatter(userTier.getDeclaredType());
+					
 					// copy group data as string
 					for(int i = 0; i < userTier.numberOfGroups(); i++) {
 						final Object obj = userTier.getGroup(i);
-						String val = obj.toString();
+						String val = (formatter != null ? formatter.format(obj) : obj.toString());
 						
 						if(obj instanceof IExtendable) {
 							final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
@@ -350,8 +356,7 @@ public class RecordImpl implements Record {
 								val = uv.getValue();
 							}
 						}
-						final T tierVal = (T)type.getClass().cast(val);
-						retVal.addGroup(tierVal);
+						retVal.addGroup((T)val);
 					}
 				}
 			}

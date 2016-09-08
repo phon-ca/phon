@@ -19,6 +19,7 @@
 package ca.phon.session.impl;
 
 import ca.phon.session.TierDescription;
+import ca.phon.session.TierString;
 
 /**
  * Basic description of a tier.
@@ -32,7 +33,7 @@ public class TierDescriptionImpl implements TierDescription {
 	private final Class<?> declaredType;
 	
 	TierDescriptionImpl(String name, boolean grouped) {
-		this(name, grouped, String.class);
+		this(name, grouped, TierString.class);
 	}
 	
 	TierDescriptionImpl(String name, boolean grouped, Class<?> declaredType) {

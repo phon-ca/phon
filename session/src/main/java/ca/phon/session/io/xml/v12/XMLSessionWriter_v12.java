@@ -56,6 +56,7 @@ import ca.phon.session.Session;
 import ca.phon.session.Sex;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
+import ca.phon.session.TierString;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
 import ca.phon.session.io.SessionIO;
@@ -450,17 +451,16 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		}
 		
 		for(String tierName:record.getExtraTierNames()) {
-			final Tier<String> userTier = record.getTier(tierName, String.class);
+			final Tier<TierString> userTier = record.getTier(tierName, TierString.class);
 			if(userTier.isGrouped()) {
 				// grouped tiers
 				final GroupTierType gtt = factory.createGroupTierType();
 				gtt.setTierName(tierName);
-				for(String groupVal:userTier) {
+				for(TierString groupVal:userTier) {
 					final TgType tg = factory.createTgType();
-					final String[] words = groupVal.split("\\p{Space}");
-					for(String word:words) {
+					for(TierString word:groupVal.getWords()) {
 						final WordType wt = factory.createWordType();
-						wt.setContent(word);
+						wt.setContent(word.toString());
 						tg.getW().add(wt);
 					}
 					gtt.getTg().add(tg);
@@ -470,7 +470,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				// flat tiers
 				final FlatTierType ftt = factory.createFlatTierType();
 				ftt.setTierName(tierName);
-				ftt.setContent(userTier.getGroup(0));
+				ftt.setContent(userTier.getGroup(0).toString());
 				retVal.getFlatTier().add(ftt);
 			}
 		}

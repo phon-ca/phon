@@ -73,6 +73,7 @@ import ca.phon.session.Sex;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
+import ca.phon.session.TierString;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
 import ca.phon.session.io.SessionIO;
@@ -115,7 +116,6 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		final ObjectFactory xmlFactory = new ObjectFactory();
 		
 		try {
-			// TODO JAXB is good enough for reading in this type of session
 			final JAXBContext context = JAXBContext.newInstance(xmlFactory.getClass());
 			final Unmarshaller unmarshaller = context.createUnmarshaller();
 			final JAXBElement<SessionType> sessionTypeEle =
@@ -446,13 +446,13 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		// user tiers
 		for(FlatTierType ftt:rt.getFlatTier()) {
-			final Tier<String> flatTier = factory.createTier(ftt.getTierName(), String.class, false);
-			flatTier.setGroup(0, ftt.getContent());
+			final Tier<TierString> flatTier = factory.createTier(ftt.getTierName(), TierString.class, false);
+			flatTier.setGroup(0, new TierString(ftt.getContent()));
 			retVal.putTier(flatTier);
 		}
 		
 		for(GroupTierType gtt:rt.getGroupTier()) {
-			final Tier<String> groupTier = factory.createTier(gtt.getTierName(), String.class, true);
+			final Tier<TierString> groupTier = factory.createTier(gtt.getTierName(), TierString.class, true);
 			int gidx = 0;
 			for(TgType tgt:gtt.getTg()) {
 				final StringBuffer buffer = new StringBuffer();
@@ -461,7 +461,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						buffer.append(" ");
 					buffer.append(wt.getContent());
 				}
-				groupTier.setGroup(gidx++, buffer.toString());
+				groupTier.setGroup(gidx++, new TierString(buffer.toString()));
 			}
 			// ensure the dependent tier has the correct number of groups
 			while(groupTier.numberOfGroups() < retVal.numberOfGroups()) {

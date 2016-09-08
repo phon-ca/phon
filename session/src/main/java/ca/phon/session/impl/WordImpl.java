@@ -31,6 +31,7 @@ import ca.phon.orthography.Orthography;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
+import ca.phon.session.TierString;
 import ca.phon.session.Word;
 
 public class WordImpl implements Word {
@@ -271,11 +272,10 @@ public class WordImpl implements Word {
 		}
 		
 		if(retVal == null) {
-			final String tierValue = getGroup().getTier(name, String.class);
-			final String wordList[] = tierValue.split("\\p{Space}");
+			final TierString tierValue = getGroup().getTier(name, TierString.class);
 			
-			if(wordIndex >= 0 && wordIndex < wordList.length)
-				retVal = wordList[wordIndex];
+			if(wordIndex >= 0 && wordIndex < tierValue.numberOfWords())
+				retVal = tierValue.getWord(wordIndex);
 		}
 		
 		return retVal;
@@ -285,15 +285,10 @@ public class WordImpl implements Word {
 	public int getTierWordLocation(String tierName) {
 		int retVal = -1;
 		
-		final String tierString = getGroup().getTier(tierName, String.class);
-		final String wordList[] = tierString.split("\\p{Space}");
+		final TierString tierString = getGroup().getTier(tierName, TierString.class);
 		
-		if(wordIndex >= 0 && wordIndex < wordList.length) {
-			int currentIndex = 0;
-			for(int i = 0; i < wordIndex; i++) {
-				currentIndex += (i > 0 ? 1 : 0) + wordList[i].length();
-			}
-			retVal = currentIndex;
+		if(wordIndex >= 0 && wordIndex < tierString.numberOfWords()) {
+			retVal = tierString.getWordOffset(wordIndex);
 		}
 		
 		return retVal;

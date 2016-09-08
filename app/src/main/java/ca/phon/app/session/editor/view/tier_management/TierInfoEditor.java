@@ -31,6 +31,7 @@ import ca.phon.formatter.FormatterFactory;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
+import ca.phon.session.TierString;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
@@ -158,8 +159,7 @@ public class TierInfoEditor extends JPanel {
 	
 	public TierDescription createTierDescription() {
 		final SessionFactory factory = SessionFactory.newFactory();
-		// TODO allow for different types
-		return factory.createTierDescription(getTierName(), isGrouped(), String.class);
+		return factory.createTierDescription(getTierName(), isGrouped(), TierString.class);
 	}
 	
 }
