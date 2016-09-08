@@ -28,6 +28,7 @@ import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.workspace.Workspace;
+import ca.phon.workspace.WorkspaceHistory;
 
 public class SelectWorkspaceCommand extends HookableAction {
 
@@ -61,7 +62,8 @@ public class SelectWorkspaceCommand extends HookableAction {
 		public void nativeDialogEvent(NativeDialogEvent event) {
 			final String selectedPath = (String)event.getDialogData();
 			if(selectedPath != null) {
-				Workspace.setUserWorkspaceFolder(new File(selectedPath));
+				final File workspaceFolder = new File(selectedPath);
+				Workspace.setUserWorkspaceFolder(workspaceFolder);
 			}
 		}
 		

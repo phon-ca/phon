@@ -28,13 +28,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
@@ -48,10 +47,12 @@ import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.workspace.Workspace;
+import ca.phon.workspace.WorkspaceHistory;
 
 /**
  * Start window panel for workspace projects.
@@ -68,10 +69,8 @@ public class WorkspaceProjectsPanel extends JPanel {
 		super();
 		
 		final Preferences prefs = PrefHelper.getUserPreferences();
-		prefs.addPreferenceChangeListener(new PreferenceChangeListener() {
-			
-			@Override
-			public void preferenceChange(PreferenceChangeEvent evt) {
+		prefs.addPreferenceChangeListener(
+			evt -> {
 				if(evt.getKey().equals(Workspace.WORKSPACE_FOLDER)) {
 					final Runnable onEdt = new Runnable() {
 						
@@ -89,8 +88,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 				}
 				
 			}
-			
-		});
+		);
 		
 		init();
 	}
@@ -110,12 +108,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 		browseForWorkspaceAction.putValue(Action.SMALL_ICON, icn);
 		
 		workspaceBtn = new MultiActionButton();
-//		workspaceBtn = new JLabel("<html><u style='color: blue;'>Change...</u></html>");
-//		workspaceBtn.setToolTipText("Change workspace folder");
-//		workspaceBtn.getBottomLabel().setBackground(Color.white);
-//		workspaceBtn.getBottomLabel().setOpaque(true);
 		workspaceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//		workspaceBtn.setIcon(icn);
 		
 		String infoTxt = "";
 		try {
@@ -131,20 +124,10 @@ public class WorkspaceProjectsPanel extends JPanel {
 		}
 		BgPainter bgPainter = new BgPainter();
 		
-		ImageIcon browseIcn = IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
-		ImageIcon browseIcnL = IconManager.getInstance().getIcon("actions/document-open", IconSize.MEDIUM);
-		final Action changeWorkspaceAct = new SelectWorkspaceCommand();
-		changeWorkspaceAct.putValue(Action.SMALL_ICON, browseIcn);
-		changeWorkspaceAct.putValue(Action.LARGE_ICON_KEY, browseIcnL);
-		
-		ImageIcon resetIcn = IconManager.getInstance().getIcon("actions/edit-undo", IconSize.SMALL);
-		ImageIcon resetIcnL = IconManager.getInstance().getIcon("actions/edit-undo", IconSize.MEDIUM);
-		PhonUIAction resetWorkspaceAct = 
-			new PhonUIAction(this, "onResetWorkspace");
-		resetWorkspaceAct.putValue(Action.NAME, "Reset workspace folder");
-		resetWorkspaceAct.putValue(Action.SHORT_DESCRIPTION, "Use default workspace folder");
-		resetWorkspaceAct.putValue(Action.SMALL_ICON, resetIcn);
-		resetWorkspaceAct.putValue(Action.LARGE_ICON_KEY, resetIcnL);
+		PhonUIAction selectHistoryAct = 
+				new PhonUIAction(this, "onShowHistory");
+		selectHistoryAct.putValue(Action.NAME, "Select workspace");
+		selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Select workspace folder from history");
 		
 		ImageIcon workspaceIcn = IconManager.getInstance().getIcon("places/folder-workspace", IconSize.SMALL);
 		
@@ -154,14 +137,9 @@ public class WorkspaceProjectsPanel extends JPanel {
 		workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
 		workspaceBtn.setBackgroundPainter(bgPainter);
 		workspaceBtn.addMouseListener(bgPainter);
-		workspaceBtn.setDefaultAction(changeWorkspaceAct);
-		workspaceBtn.addAction(resetWorkspaceAct);
+		workspaceBtn.setDefaultAction(selectHistoryAct);
 		
 		JXTitledPanel workspacePanel = new JXTitledPanel("Workspace Folder");
-//		workspacePanel.setTitleFont(workspacePanel.getTitleFont().deriveFont(Font.BOLD, 14.0f));
-		
-//		workspacePanel.getContentContainer().setBackground(Color.white);
-//		workspacePanel.getContentContainer().setOpaque(true);
 		
 		JPanel contentPanel = new JPanel();
 		contentPanel.setBackground(Color.white);
@@ -177,53 +155,55 @@ public class WorkspaceProjectsPanel extends JPanel {
 		projectList = new FolderProjectList();
 		
 		JXTitledPanel listPanel = new JXTitledPanel("Project List");
-//		listPanel.setTitleFont(listPanel.getTitleFont().deriveFont(Font.BOLD, 14.0f));
-//		listPanel.add(workspacePanel, BorderLayout.NORTH);
 		listPanel.getContentContainer().setLayout(new BorderLayout());
 		listPanel.getContentContainer().add(projectList, BorderLayout.CENTER);
 		
 		add(workspacePanel, BorderLayout.NORTH);
 		add(listPanel, BorderLayout.CENTER);
-		
-//		String infoTxt = "";
-//		try {
-//			BufferedReader r = new BufferedReader(new InputStreamReader(
-//					getClass().getResourceAsStream("workspace.txt")));
-//			String line = null;
-//			while((line = r.readLine()) != null) {
-//				infoTxt += line + "\n";
-//			}
-//			r.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		infoLbl = new JLabel();
-//		infoLbl.setBackground(Color.white);
-//		infoLbl.setVerticalAlignment(SwingConstants.TOP);
-//		infoLbl.setOpaque(true);
-//		infoLbl.setText(infoTxt);
-//		
-//		Dimension dim = infoLbl.getPreferredSize();
-//		dim.width = 250;
-//		infoLbl.setPreferredSize(dim);
-//		
-//		ImageIcon brwseIcn = 
-//			IconManager.getInstance().getIcon("actions/document-open", IconSize.MEDIUM);
-//		PhonUIAction browseForProjectAction = new PhonUIAction(this, "onBrowse");
-//		browseForProjectAction.putValue(PhonUIAction.NAME, "Browse for project...");
-//		browseForProjectAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for project...");
-//		browseForProjectAction.putValue(PhonUIAction.SMALL_ICON, brwseIcn);
-//		browseBtn = new JButton(browseForProjectAction);
-//		
-//		infoPanel = new JXTitledPanel("Workspace Folder");
-//		infoPanel.setTitleFont(infoPanel.getTitleFont().deriveFont(Font.BOLD, 14.0f));
-//		infoPanel.getContentContainer().setLayout(new BorderLayout());
-//		infoPanel.getContentContainer().add(infoLbl, BorderLayout.CENTER);
-//		infoPanel.getContentContainer().add(browseBtn, BorderLayout.SOUTH);
-//		
-//		add(infoPanel, BorderLayout.WEST);
 	}
-
+	
+	public void onShowHistory(PhonActionEvent pae) {
+		final WorkspaceHistory history = new WorkspaceHistory();
+		
+		final JPopupMenu menu = new JPopupMenu();
+		final MenuBuilder builder = new MenuBuilder(menu);
+		
+		for(File workspaceFolder:history) {
+			ImageIcon workspaceIcn = IconManager.getInstance().getIcon("places/folder-workspace", IconSize.SMALL);
+			final PhonUIAction selectAction = new PhonUIAction(this, "onSelectFolder", workspaceFolder);
+			selectAction.putValue(PhonUIAction.NAME, workspaceFolder.getAbsolutePath());
+			selectAction.putValue(PhonUIAction.SMALL_ICON, workspaceIcn);
+			builder.addItem(".", selectAction);
+		}
+	
+		builder.addSeparator(".", "browse");
+		final SelectWorkspaceCommand cmd = new SelectWorkspaceCommand();
+		cmd.putValue(Action.NAME, "Browse for workspace folder...");
+		ImageIcon browseIcn = IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
+		cmd.putValue(Action.SMALL_ICON, browseIcn);
+		builder.addItem(".@browse", cmd);
+		
+		builder.addSeparator(".", "clear");
+		final PhonUIAction clearHistoryAct = new PhonUIAction(this, "onClearHistory");
+		clearHistoryAct.putValue(PhonUIAction.NAME, "Clear history");
+		clearHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear workspace history");
+		builder.addItem(".@clear", clearHistoryAct);
+		
+		menu.show(workspaceBtn, 0, workspaceBtn.getHeight());
+	}
+	
+	public void onClearHistory() {
+		final WorkspaceHistory history = new WorkspaceHistory();
+		history.clearHistory();
+		history.addToHistory(Workspace.userWorkspaceFolder());
+	}
+	
+	public void onSelectFolder(File workspaceFolder) {
+		Workspace.setUserWorkspaceFolder(workspaceFolder);
+		projectList.setFolder(workspaceFolder);
+		workspaceBtn.setBottomLabelText(workspaceFolder.getAbsolutePath());
+	}
+	
 	public void onResetWorkspace(PhonActionEvent pae) {
 		final File defaultWorkspace = Workspace.defaultWorkspaceFolder();
 		Workspace.setUserWorkspaceFolder(defaultWorkspace);
@@ -254,12 +234,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 			g.setColor((origColor != null ? origColor : Color.white));
 			g.fillRect(0, 0, width, height);
 			if(useSelected) {
-//				GradientPaint gp = new GradientPaint(
-//						(float)0, 0.0f, new Color(237,243, 254), (float)0.0f, (float)height, new Color(207, 213, 224), true);
-//				MattePainter bgPainter = new MattePainter(gp);
-//				bgPainter.paint(g, object, width, height);
-//				
-//				NeonBorderEffect effect  = new NeonBorderEffect();
+
 				GlowPathEffect effect = new GlowPathEffect();
 				effect.setRenderInsideShape(true);
 				effect.setBrushColor(selectedColor);

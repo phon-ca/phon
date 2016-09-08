@@ -76,6 +76,7 @@ public class Workspace {
 		if(!workspaceFolder.isDirectory()) {
 			throw new IllegalArgumentException(workspaceFolder + " is not a folder");
 		}
+		(new WorkspaceHistory()).addToHistory(workspaceFolder);
 		PrefHelper.getUserPreferences().put(WORKSPACE_FOLDER, workspaceFolder.getAbsolutePath());
 	}
 	

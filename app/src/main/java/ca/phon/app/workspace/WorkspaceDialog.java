@@ -166,30 +166,7 @@ public class WorkspaceDialog extends CommonModuleFrame implements WindowListener
 		JXTitledPanel actionPanel = new JXTitledPanel("Workspace Actions",workspaceActionsContainer);
 		JXTitledPanel otherActionPanel = new JXTitledPanel("Other Actions", otherActionsContainer);
 		
-		// set a default size that does not change
-//		Dimension prefSize = new Dimension(250, 0);
-//		actionPanel.setPreferredSize(prefSize);
-//		Dimension maxSize = new Dimension(250, Short.MAX_VALUE);
-//		actionPanel.setMaximumSize(maxSize);
-//		Dimension minSize = new Dimension(250, 40);
-//		actionPanel.setMinimumSize(minSize);
-		
-//		actionPanel.setTitleFont(actionPanel.getTitleFont().deriveFont(Font.BOLD, 14.0f));
-		
-//		tabPanel = new TabbedPanel();
 		workspacePanel = new WorkspaceProjectsPanel();
-		
-//		ShapedGradientTheme gradientTheme = new ShapedGradientTheme();
-		
-//		JTabbedPane tabbedPane = new JTabbedPane();
-//		tabbedPane.addTab("Workspace", workspacePanel);
-//		TitledTab workspaceTab = new TitledTab("Workspace", null, workspacePanel, null);
-//		workspaceTab.getProperties().addSuperObject(gradientTheme.getTitledTabProperties());
-////		workspaceTab.getProp
-//		tabPanel.addTab(workspaceTab);
-//		tabPanel.getProperties().
-//		  addSuperObject(gradientTheme.getTabbedPanelProperties());
-//		tabPanel.getProperties().setTabAreaOrientation(Direction.DOWN);
 		
 		JPanel leftPanel = new JPanel(new FormLayout("250", "pref,fill:pref:grow"));
 		leftPanel.add(actionPanel, cc.xy(1,1));
