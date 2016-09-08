@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="5510f430fd2b42da" name="Cluster Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4b521d42">
+            <graph id="626093db">
                 <node id="144c82d5c1e14ece" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -40,7 +40,7 @@
                     </extensions>
                 </node>
                 <opqry:queryNode id="572c422333884e20" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-27T13:06:47.040-02:30" name="Phones" uuid="e13abdb1-2d06-45c9-be22-1994b471082c">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:53:22.357-02:30" name="Phones" uuid="e6658a7c-db76-4ff7-9d1e-2f9e60249ac9">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c&lt;2,&gt;</param>
@@ -57,7 +57,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="5c69e4bb2beb4c0d" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-27T13:06:47.051-02:30" name="Phones" uuid="b361b4fe-7af9-45bd-b9db-b505351c1465">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:53:22.365-02:30" name="Phones" uuid="cc0dd0b4-87df-4ada-90ab-9d15485a8bd2">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c&lt;2,&gt;</param>
@@ -187,29 +187,29 @@
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="markdown" title="Cluster Inventory">
-                    <opqry:message>#Cluster Inventory
-Generate an inventory of consonant clusters found in both IPA Target and IPA Actual for the selected sessions.&lt;/p&gt;
+                    <opqry:message># Cluster Inventory
+Generate an inventory of consonant clusters found in both IPA Target and IPA Actual for the selected sessions.
 
-##Output&lt;/h2&gt;
+## Output
 Output table will have four columns:
 
- * *Session*
+ - *Session*
  
- Session name
+   Session name
  
- * *Cluster*
+ - *Cluster*
  
- Consonant cluster
+   Consonant cluster
 
- * *IPA Target Total*
+ - *IPA Target Total*
  
- Number of occurrences found in IPA Target
+   Number of occurrences found in IPA Target
 
- * *IPA Actual Total*
+ - *IPA Actual Total*
  
- Number of occurrences found in IPA Actual
+   Number of occurrences found in IPA Actual
 
-##Example:
+## Example:
 
 &lt;table&gt;
 	&lt;col&gt;&lt;/col&gt;

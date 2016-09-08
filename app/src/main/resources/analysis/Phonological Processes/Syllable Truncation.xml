@@ -10,7 +10,7 @@
                 <oga:meta x="15" y="15"/>
             </extensions>
         </node>
-        <node id="71422adf" name="Selected Sessions" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="71422adf" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
@@ -20,9 +20,9 @@
             </extensions>
         </node>
         <ogcn:macro id="d38260ce2890417e" name="Syllable Truncation (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="c55928d">
+            <graph id="41f1802d">
                 <opqry:queryNode id="dca8af9c75f34ffa" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T13:35:38.773-02:30" name="Phones" uuid="7d0f57d9-10f8-4c32-af13-baa86a7d9994">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-08T08:14:10.905-02:30" name="Phones" uuid="c0375e7c-899e-4b4f-8c0c-4af780e1b482">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -54,8 +54,8 @@
                 <node id="eec0a6b13e0a4b14" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
-                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
-                            <opqry:column caseSensitive="false" column="Result" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
                         </opqry:inventoryoptions>
                         <oga:settings/>
                         <oga:meta x="667" y="33"/>
@@ -64,7 +64,8 @@
                 <node id="f623de0fa6cb4504" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
                     <extensions>
                         <opqry:sortoptions>
-                            <opqry:sortBy column="Result" order="ascending" type="ipa"/>
+                            <opqry:sortBy column="Session" order="ascending" type="plain"/>
+                            <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                         </opqry:sortoptions>
                         <oga:settings/>
                         <oga:meta x="298" y="174"/>
@@ -93,9 +94,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="31e0b7ef3bdf42a6" name="Syllable Truncation (stressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5adfd7b1">
+            <graph id="706a849c">
                 <opqry:queryNode id="fdd021a7db426b" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T13:35:38.778-02:30" name="Phones" uuid="6ad840e5-a831-4e5b-be5e-0585ae83919d">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-08T08:14:10.912-02:30" name="Phones" uuid="03624e7c-9310-4671-bb4e-cdd632dc6ce0">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -106,6 +107,8 @@
                             <param id="filters.syllable.sPrimary">true</param>
                             <param id="filters.syllable.sSecondary">true</param>
                             <param id="filters.syllable.searchBySyllable">true</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
                         </script>
                     </qry:query>
                     <extensions>
@@ -128,8 +131,8 @@
                 <node id="65daa81f84e043fe" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
-                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                            <opqry:column caseSensitive="false" column="Result" ignoreDiacritics="true"/>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
                         </opqry:inventoryoptions>
                         <oga:settings/>
                         <oga:meta x="667" y="33"/>
@@ -138,7 +141,8 @@
                 <node id="a8aee1023b1348dc" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
                     <extensions>
                         <opqry:sortoptions>
-                            <opqry:sortBy column="Result" order="ascending" type="ipa"/>
+                            <opqry:sortBy column="Session" order="ascending" type="plain"/>
+                            <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                         </opqry:sortoptions>
                         <oga:settings/>
                         <oga:meta x="298" y="174"/>
@@ -167,9 +171,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="a670feb94b8248b0" name="Syllable Truncation (unstressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4ed9c759">
+            <graph id="777ede0d">
                 <opqry:queryNode id="8fc5b2a8f5944563" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T13:35:38.784-02:30" name="Phones" uuid="a70f662d-48b9-47e5-81ea-ba9cddb52fa5">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-08T08:14:10.919-02:30" name="Phones" uuid="9bc4b00d-c891-4b5a-9863-27084c6acd1d">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -180,6 +184,8 @@
                             <param id="filters.syllable.sPrimary">false</param>
                             <param id="filters.syllable.sSecondary">false</param>
                             <param id="filters.syllable.searchBySyllable">true</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
                         </script>
                     </qry:query>
                     <extensions>
@@ -202,8 +208,8 @@
                 <node id="dc8cb1a8b6354340" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
-                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                            <opqry:column caseSensitive="false" column="Result" ignoreDiacritics="true"/>
+                            <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
                         </opqry:inventoryoptions>
                         <oga:settings/>
                         <oga:meta x="667" y="33"/>
@@ -212,7 +218,8 @@
                 <node id="e8b8cf1872e3473f" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
                     <extensions>
                         <opqry:sortoptions>
-                            <opqry:sortBy column="Result" order="ascending" type="ipa"/>
+                            <opqry:sortBy column="Session" order="ascending" type="plain"/>
+                            <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                         </opqry:sortoptions>
                         <oga:settings/>
                         <oga:meta x="298" y="174"/>
@@ -248,21 +255,71 @@
         <link dest="a670feb94b8248b0" destField="sessions" source="71422adf" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info title="Syllable Truncation">
-                    <opqry:message/>
+                <opqry:info format="markdown" title="Syllable Truncation">
+                    <opqry:message># Syllable Truncation
+
+Generate inventories of syllable truncation in the selected sessions.
+
+## Output
+
+Output table will have 3 columns:
+
+## Example
+
+Session|IPA Target|Total
+:---:|:---:|:---:
+Anne.Session|piː|1
+Anne.Session|biː|1
+Anne.Session|tiː|1
+Anne.Session|tiːz|1
+Anne.Session|vɪŋ|1
+Anne.Session|siː|1
+Anne.Session|ɪŋ|1
+Anne.Session|ə|3
+</opqry:message>
                 </opqry:info>
                 <opqry:node ref="dca8af9c75f34ffa">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="eec0a6b13e0a4b14">
+                    <opqry:info format="html" title="Inventory">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="f623de0fa6cb4504">
+                    <opqry:info format="html" title="Sort">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="fdd021a7db426b">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="65daa81f84e043fe">
+                    <opqry:info format="html" title="Inventory">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="a8aee1023b1348dc">
+                    <opqry:info format="html" title="Sort">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="8fc5b2a8f5944563">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="dc8cb1a8b6354340">
+                    <opqry:info format="html" title="Inventory">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="e8b8cf1872e3473f">
+                    <opqry:info format="html" title="Sort">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>

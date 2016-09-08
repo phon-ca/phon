@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="c108db3abe554a77" name="Consonant Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="44201dd7">
+            <graph id="1c798d17">
                 <node id="8c44eda9b1584f40" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -30,7 +30,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="b9b9d5e9df004727" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6487d3e9">
+                    <graph id="63207c2e">
                         <node id="24c3ef2eeba94766" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -48,7 +48,7 @@
                     </extensions>
                 </ogcn:macro>
                 <opqry:queryNode id="df8ea4939f8a476a" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-29T09:14:02.162-02:30" name="Phones" uuid="9e422a10-5753-4841-b4ae-1958c901cfab">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:54:53.481-02:30" name="Phones" uuid="7c581ba7-6503-4185-b7eb-77ee4a1b6e25">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c</param>
@@ -65,7 +65,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="a4e2f7e67a35468e" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-29T09:14:02.169-02:30" name="Phones" uuid="e5c51b7f-7ed8-4bff-ada6-a744ac4cd9be">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:54:53.491-02:30" name="Phones" uuid="c471e556-a9b1-4c36-9d82-1e943592c292">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c</param>
@@ -192,29 +192,29 @@
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="markdown" title="Consonant Inventory">
-                    <opqry:message>#Consonant Inventory
-Generate an inventory of consonants found in both IPA Target and IPA Actual for the selected sessions.&lt;/p&gt;
+                    <opqry:message># Consonant Inventory
+Generate an inventory of consonants found in both IPA Target and IPA Actual for the selected sessions.
 
-##Output&lt;/h2&gt;
+## Output
 Output table will have four columns:
 
- * *Session*
+ - *Session*
  
- Session name
+   Session name
  
- * *Consonant*
+ - *Consonant*
  
- Consonant cluster
+   Consonant cluster
 
- * *IPA Target Total*
+ - *IPA Target Total*
  
- Number of occurrences found in IPA Target
+   Number of occurrences found in IPA Target
 
- * *IPA Actual Total*
+ - *IPA Actual Total*
  
- Number of occurrences found in IPA Actual
+   Number of occurrences found in IPA Actual
 
-##Example:
+## Example:
 &lt;table id="__bookmark_1"&gt;
 							&lt;col&gt;&lt;/col&gt;
 							&lt;col&gt;&lt;/col&gt;

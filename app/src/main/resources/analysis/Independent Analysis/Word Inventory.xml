@@ -20,9 +20,9 @@
             </extensions>
         </node>
         <ogcn:macro id="4c2780b003274ccf" name="Word Inventory (Orthography)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="48e32d9d">
+            <graph id="3b6c60b0">
                 <opqry:queryNode id="63c8063dd0324a30" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T11:54:38.670-02:30" name="Data Tiers" uuid="d29eed0d-0ca2-46bb-978c-c88e87f8de72">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:00:37.551-02:30" name="Data Tiers" uuid="bf887eb9-0c9c-41c6-9355-d63a84782192">
                         <script>
                             <url ref="Data Tiers" rel="stock"/>
                             <param id="filters.primary.patternFilter.caseSensitive">false</param>
@@ -93,9 +93,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="a34eb2d08494ff9" name="Word Inventory (IPA Target)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="364ca6c9">
+            <graph id="3a002d5f">
                 <opqry:queryNode id="289ab7a4d72f4dd0" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T11:54:38.677-02:30" name="Phones" uuid="1d572fd9-a707-46a5-84a0-9b40891a7afb">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:00:37.556-02:30" name="Phones" uuid="f15d53db-4254-4125-949e-6ac74d53b203">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.caseSensitive">false</param>
@@ -168,9 +168,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="393ccb490b794938" name="Word Inventory (IPA Actual)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="1078a468">
+            <graph id="1076c8e6">
                 <opqry:queryNode id="ec881ce14c9f4c81" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T11:54:38.685-02:30" name="Phones" uuid="9ee49492-7f7d-4f76-be9f-6b2c74114c52">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:00:37.563-02:30" name="Phones" uuid="8599828b-ed07-4f26-963f-ea01d27a8ef9">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.caseSensitive">false</param>
@@ -250,8 +250,68 @@
         <link dest="393ccb490b794938" destField="sessions" source="4fbc6b9d" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="About">
-                    <opqry:message/>
+                <opqry:info format="markdown" title="Word Inventory">
+                    <opqry:message># Word Inventory
+
+Generate an inventory of unique words in the Orthography and/or IPA tiers.
+
+## Output
+
+Output table will have 3 columns:
+
+ - *Session* 
+ 
+   Session Name
+
+ - *Orthography/IPA Target/IPA Actual*
+
+   Unique token from the specified tier
+
+ - *Total*
+
+   Number of times token was found in the Session
+
+## Example:
+
+Session|IPA Target|Total
+:---:|:---:|:---:
+Anne.Session|ðə|1
+Anne.Session|hɔɹsiː|1
+Anne.Session|ə|3
+Anne.Session|ˈpɑɹtiː|1
+Anne.Session|ˈpɑɹtiːz|1
+Anne.Session|ˈbɪɡ|2
+Anne.Session|ˈbeɪbiː|1
+Anne.Session|ˈbʌɹθˌdeɪ|4
+Anne.Session|ˈbʌɹθˌde͜ɪ|1
+Anne.Session|ˈtuː|3
+Anne.Session|ˈtʰuː|1
+Anne.Session|ˈduː|1
+Anne.Session|ˈkeɪk|2
+Anne.Session|ˈɡɹæs|2
+Anne.Session|ˈɡoʊɪŋ|1
+Anne.Session|ˈɡʌɹl|2
+Anne.Session|ˈðeɪ|1
+Anne.Session|ˈsɪŋ|2
+Anne.Session|ˈsʌm|2
+Anne.Session|ˈʃiː|2
+Anne.Session|ˈʃiːz|2
+Anne.Session|ˈʃɪz|1
+Anne.Session|ˈhɔɹsiː|1
+Anne.Session|ˈhæpiː|2
+Anne.Session|ˈhævɪŋ|1
+Anne.Session|ˈhaʊ|1
+Anne.Session|ˈwʌt|2
+Anne.Session|ˈjuː|3
+Anne.Session|ˈjæ|6
+Anne.Session|ˈiːt|1
+Anne.Session|ˈɪz|2
+Anne.Session|ˈoʊ|1
+Anne.Session|ˈoʊnliː|1
+Anne.Session|ˈoʊld|1
+Anne.Session|ˈæt|1
+Anne.Session|ˈɑɹ|1
+</opqry:message>
                 </opqry:info>
                 <opqry:node ref="63c8063dd0324a30">
                     <opqry:info format="html" title="Query : Data Tiers">

@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="5045eac140334f94" name="Singleton Onsets" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="fba294f">
+            <graph id="1abbb911">
                 <node id="6c56699dc9b8422c" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -40,7 +40,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="84f40bbe0aa949ba" name="Singleton Onsets" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="2292ce6b">
+                    <graph id="1001cf24">
                         <node id="e5d90cb2e7c2475f" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -50,7 +50,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="272000e9088f4e46" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="2854b5bb">
+                            <graph id="6fbc317f">
                                 <node id="6987838ab04d4fdb" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -68,7 +68,7 @@
                             </extensions>
                         </ogcn:macro>
                         <opqry:queryNode id="b4ae82d8ca6749b4" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.880-02:30" name="Phones" uuid="e65d46bd-b51e-4c8a-a1ae-e478af8b5134">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.452-02:30" name="Phones" uuid="a3d3a2e2-8e1e-4053-b12c-2cdbae1dc411">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">^(?&lt;\s?\c:L*)\c:o(?&gt;\w:sctype("-Onset"))</param>
@@ -86,7 +86,7 @@
                             </extensions>
                         </opqry:queryNode>
                         <opqry:queryNode id="54b8f41598b476e" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.887-02:30" name="Phones" uuid="50dc1b57-bacb-4427-9d3a-1f6a2ad58c06">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.458-02:30" name="Phones" uuid="7181d759-d43e-466a-b126-44e5d98237dc">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">^(?&lt;\s?\c:L*)\c:o(?&gt;\w:sctype("-Onset"))</param>
@@ -210,7 +210,7 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="8ad051d84dc54990" name="Singleton Onsets (stressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6e27638">
+                    <graph id="20477910">
                         <node id="69e8794cffb14bb1" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -220,7 +220,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="d1b8ef44f6cd4e01" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="16425cac">
+                            <graph id="36f38a9e">
                                 <node id="5bb8fd8630e14198" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -238,7 +238,7 @@
                             </extensions>
                         </ogcn:macro>
                         <opqry:queryNode id="5c3f151c7a9f4a07" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.895-02:30" name="Phones" uuid="dbdd450a-5b1f-4cfc-b6f3-3fd915cb12be">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.465-02:30" name="Phones" uuid="8b419b06-2af9-45ab-b84d-c7490a665f5f">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">^(?&lt;\s?\c:L*)\c:o(?&gt;\w:sctype("-Onset"))</param>
@@ -259,7 +259,7 @@
                             </extensions>
                         </opqry:queryNode>
                         <opqry:queryNode id="6650705f86c341e3" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.901-02:30" name="Phones" uuid="ff907275-25b3-4a52-85b2-fd912c41b33b">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.471-02:30" name="Phones" uuid="fbd5afb0-dec5-4c18-9275-19ffb495cb1a">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">^(?&lt;\s?\c:L*)\c:o(?&gt;\w:sctype("-Onset"))</param>
@@ -386,7 +386,7 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="87564423d60a4a43" name="Singleton Onsets (unstressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="47709f62">
+                    <graph id="b317230">
                         <node id="3ecc95c96516490e" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -396,7 +396,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="7a501567a9c148b2" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="6c1cca38">
+                            <graph id="1e8d2069">
                                 <node id="54d5a2c85dc04fd4" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -414,7 +414,7 @@
                             </extensions>
                         </ogcn:macro>
                         <opqry:queryNode id="61fae8b4ba3c4bcd" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.907-02:30" name="Phones" uuid="b55c343e-14bb-4e79-98da-e604e2aeff62">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.477-02:30" name="Phones" uuid="c7351e85-0f13-4cc2-b514-8032bcd56960">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">^(?&lt;\s?\c:L*)\c:o(?&gt;\w:sctype("-Onset"))</param>
@@ -435,7 +435,7 @@
                             </extensions>
                         </opqry:queryNode>
                         <opqry:queryNode id="af8cbb0da29b4568" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.912-02:30" name="Phones" uuid="b2470d6b-73fb-4d2c-9004-75ce8e7027d7">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.483-02:30" name="Phones" uuid="5e1780b4-ff23-44df-9e8a-3acaf0044af2">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">^(?&lt;\s?\c:L*)\c:o(?&gt;\w:sctype("-Onset"))</param>
@@ -575,7 +575,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="d747edc1a8704e4a" name="Complex Onsets" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="673467f9">
+            <graph id="76aedf8d">
                 <node id="217f192ec1ab4ac2" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -595,7 +595,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="bb7eb18efdf64c7b" name="Complex Onsets" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5a313b68">
+                    <graph id="1f4d1de9">
                         <node id="238b6a4a47cf4a5b" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -605,7 +605,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="beb8c53f744447e7" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="2636842f">
+                            <graph id="266bd208">
                                 <node id="2fc8b7f2d00147d7" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -623,7 +623,7 @@
                             </extensions>
                         </ogcn:macro>
                         <opqry:queryNode id="3d018d4efd4ad7" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.918-02:30" name="Phones" uuid="9f2ea2c3-6c71-497f-a3df-0aadf956c69e">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.490-02:30" name="Phones" uuid="15d35129-d84b-4faf-aed5-cf884de10f1c">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">.:o&lt;2,&gt;</param>
@@ -641,7 +641,7 @@
                             </extensions>
                         </opqry:queryNode>
                         <opqry:queryNode id="20f45b9489fc4f9c" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.923-02:30" name="Phones" uuid="410ea4e8-09c8-4daa-8639-9cfd17480a8e">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.497-02:30" name="Phones" uuid="b9ded0df-0d03-45fe-8843-35d2e38863ac">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">.:o&lt;2,&gt;</param>
@@ -765,7 +765,7 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="49779bf3eebb4347" name="Complex Onsets (stressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="15bded57">
+                    <graph id="248180e4">
                         <node id="3bebf186645c4d56" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -775,7 +775,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="d4676ab691d438b" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="1503e824">
+                            <graph id="10da4d43">
                                 <node id="353f9a66c2c948ff" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -793,7 +793,7 @@
                             </extensions>
                         </ogcn:macro>
                         <opqry:queryNode id="67a7ba9e6cc74446" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.929-02:30" name="Phones" uuid="1d0cf359-5785-471d-8888-3abe7b08d800">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.503-02:30" name="Phones" uuid="1de4f2ee-287b-4b4f-8a4b-296b5bfc9d70">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">.:o&lt;2,&gt;</param>
@@ -814,7 +814,7 @@
                             </extensions>
                         </opqry:queryNode>
                         <opqry:queryNode id="368576deaf58453e" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.934-02:30" name="Phones" uuid="0fc0b88a-48fc-417a-b388-aae869366c0e">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.509-02:30" name="Phones" uuid="3207833a-db08-4298-86df-8706f6ea519a">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">.:o&lt;2,&gt;</param>
@@ -941,7 +941,7 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="10cd11f95f1a4bff" name="Complex Onsets (unstressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="75a64ffa">
+                    <graph id="21e67f85">
                         <node id="34280fdbd2474176" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -951,7 +951,7 @@
                             </extensions>
                         </node>
                         <ogcn:macro id="ec13d548513e453b" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="64afe48c">
+                            <graph id="242f046f">
                                 <node id="30167406801c421f" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -969,7 +969,7 @@
                             </extensions>
                         </ogcn:macro>
                         <opqry:queryNode id="fd55750d689c4f10" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.940-02:30" name="Phones" uuid="91f75d90-9ac4-489c-86e6-9ad86d3ff584">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.517-02:30" name="Phones" uuid="8692facc-4285-49ea-ae6f-98f30e1b21e3">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">.:o&lt;2,&gt;</param>
@@ -990,7 +990,7 @@
                             </extensions>
                         </opqry:queryNode>
                         <opqry:queryNode id="bf952087f51f4d7f" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T09:25:20.945-02:30" name="Phones" uuid="215f05a5-2973-4be7-87d8-50705db88db4">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:55:55.526-02:30" name="Phones" uuid="38c2d0c9-74fb-407f-8d58-3861bbf80fc0">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">.:o&lt;2,&gt;</param>
@@ -1137,28 +1137,30 @@
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="markdown" title="Onset Inventory">
                     <opqry:message># Onset Inventory
+
 Generate an inventory of onsets found in both IPA Target and IPA Actual for the selected sessions.  Singleton and
 complex onsets are printed in separate tables with options for generating additional tables for onsets in stressed
 or unstressed syllables.
 
 ## Output
+
 Output table(s) will have four columns:
 
- * *Session*
+ - *Session*
  
- Session name
+   Session name
  
- * *Onset*
+ - *Onset*
  
- Onset
+   Onset
 
- * *IPA Target Total*
+ - *IPA Target Total*
  
- Number of occurrences found in IPA Target
+   Number of occurrences found in IPA Target
 
- * *IPA Actual Total*
+ - *IPA Actual Total*
  
- Number of occurrences found in IPA Actual
+   Number of occurrences found in IPA Actual
 
 ## Example:
 

@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="5c2b8c90f92d468a" name="Vowel Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5f3e2c0c">
+            <graph id="10ea493a">
                 <node id="d40abb35a3734769" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -30,7 +30,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="bfa8bb6981e14fcd" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="4f9f792b">
+                    <graph id="37695077">
                         <node id="89f1e87d9f2e47d2" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -48,7 +48,7 @@
                     </extensions>
                 </ogcn:macro>
                 <opqry:queryNode id="69877945ff8a4473" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T10:56:29.394-02:30" name="Phones" uuid="ca5a4fab-bd15-46ff-89c3-222c2be0f9a2">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:57:25.617-02:30" name="Phones" uuid="f46ee36d-8cb5-45d1-be47-841633002219">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\v</param>
@@ -64,7 +64,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="e2e37fd502244373" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T10:56:29.401-02:30" name="Phones" uuid="b4ca6c7c-2f3a-43ea-a201-6f45ea761c63">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:57:25.623-02:30" name="Phones" uuid="6be30563-2b57-4570-8037-72e052dfc2e1">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\v</param>
@@ -186,7 +186,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="242563c645024f75" name="Vowel Inventory (stressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6dc811d6">
+            <graph id="4ab1c80d">
                 <node id="9d45c8e0cf4f40c2" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -196,7 +196,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="84f8d305019c4fb7" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="52c12bf9">
+                    <graph id="7c9df4d8">
                         <node id="8cdcbf84f71942bd" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -214,7 +214,7 @@
                     </extensions>
                 </ogcn:macro>
                 <opqry:queryNode id="7bb4a3ecc1f2484a" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T10:56:29.408-02:30" name="Phones" uuid="b3ddbd1d-7d0c-4dfa-938f-2d8ae156191e">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:57:25.630-02:30" name="Phones" uuid="46f7e5d0-16a7-4f2b-97da-33ae8d3b5d24">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\v</param>
@@ -234,7 +234,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="51f5c4f35de14785" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T10:56:29.414-02:30" name="Phones" uuid="b117aade-88e0-4ce1-9f6f-66acc3f1f0e7">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:57:25.636-02:30" name="Phones" uuid="6b50b608-549b-41dc-93ae-453b7a2ff2d1">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\v</param>
@@ -360,7 +360,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="35f1a7e8a23c4d42" name="Vowel Inventory (unstressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="31558bdc">
+            <graph id="6644da52">
                 <node id="27f5aca3033a4cce" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -370,7 +370,7 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="f8fb0997ebc241b4" name="ArrayList" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="37d4bc43">
+                    <graph id="2621eaf1">
                         <node id="dacaa9d9126b4905" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -388,7 +388,7 @@
                     </extensions>
                 </ogcn:macro>
                 <opqry:queryNode id="825afa72756b4972" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T10:56:29.422-02:30" name="Phones" uuid="b5039784-099c-4e94-be36-e5d1b403f6f9">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:57:25.642-02:30" name="Phones" uuid="2be6b7de-40ac-4265-9aee-625d3df185b1">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\v</param>
@@ -408,7 +408,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="a09bf4963a2a4dc1" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-30T10:56:29.427-02:30" name="Phones" uuid="c9a98dc9-22b5-4844-bf31-5b4ac27da082">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:57:25.647-02:30" name="Phones" uuid="9d525f88-75c4-43c0-973a-9a5fe1d94f1d">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\v</param>
@@ -543,29 +543,32 @@
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="markdown" title="Vowel Inventory">
                     <opqry:message># Vowel Inventory
+
 Generate an inventory of vowels found in both IPA Target and IPA Actual for the selected sessions with options for generating additional tables for onsets in stressed
 or unstressed syllables.
 
 ## Output
+
 Output table(s) will have four columns:
 
- * *Session*
+ - *Session*
  
- Session name
+   Session name
  
- * *Vowel*
+ - *Vowel*
  
- Onset
+   Onset
 
- * *IPA Target Total*
+ - *IPA Target Total*
  
- Number of occurrences found in IPA Target
+   Number of occurrences found in IPA Target
 
- * *IPA Actual Total*
+ - *IPA Actual Total*
  
- Number of occurrences found in IPA Actual
+   Number of occurrences found in IPA Actual
 
 ## Example:
+
 Session|Vowel|IPA Target Total|IPA Actual Total
 :---:|:---:|:---:|:---:
 Anne.Session|iː|13|3

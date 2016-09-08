@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="9a866b75e42a431d" name="Word Shapes (CV)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="579f1eb7">
+            <graph id="7a817cfd">
                 <node id="a879e19a41cf4926" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -40,7 +40,7 @@
                     </extensions>
                 </node>
                 <opqry:queryNode id="83713295deca4809" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.967-02:30" name="Phones" uuid="2aaff5c4-c509-433b-af31-ad38facdcf5b">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:12:47.986-02:30" name="Phones" uuid="efc95d74-aeb5-4992-85bd-73b7132a294f">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">.+</param>
@@ -56,7 +56,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="df13c23bca4a4bba" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.974-02:30" name="Phones" uuid="20dbfb87-5c70-4782-9b82-5358a0a9833e">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:12:47.991-02:30" name="Phones" uuid="3e031bf3-3939-48c1-8683-46cd2999e75a">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">.+</param>
@@ -220,7 +220,7 @@ function getRowValue(table, row) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="e4d4c03159e14523" name="Word Shapes (Stress Pattern)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="509d6fa8">
+            <graph id="267a88a7">
                 <node id="b610f608d87548e6" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -240,7 +240,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </node>
                 <opqry:queryNode id="7db0ff00ea594400" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.980-02:30" name="Phones" uuid="9bd727b1-cd60-4fd8-ba57-b5fffd9b7eb3">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:12:47.997-02:30" name="Phones" uuid="6bbce316-5324-479a-9c3e-771cb5d82a47">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">.+</param>
@@ -256,7 +256,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="cf338692ca794332" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.988-02:30" name="Phones" uuid="0a9d9294-ad76-4582-a83b-3a581b6d760d">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:12:48.002-02:30" name="Phones" uuid="ab0d28b9-65f6-4b44-b2ca-73ac82a88363">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">.+</param>
@@ -420,7 +420,7 @@ function getRowValue(table, row) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="e8a93cc666ee49af" name="Word Shapes (Syllables)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6f4c11">
+            <graph id="a0c2aee">
                 <node id="fb5084b02f4746e6" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -440,7 +440,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </node>
                 <opqry:queryNode id="e9bb2c0ad3664cca" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.993-02:30" name="Phones" uuid="81a6b692-2277-488a-bb13-85f337cdc50c">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:12:48.008-02:30" name="Phones" uuid="2b84d6d3-7e5e-409c-8de5-6a164443166f">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">.+</param>
@@ -456,7 +456,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="e80b0c647b0423e" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-31T07:33:23.999-02:30" name="Phones" uuid="30b09520-f551-4614-8d86-988a98c2486c">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:12:48.013-02:30" name="Phones" uuid="d5805817-1279-42cd-8ba5-e72ab24023e4">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">.+</param>
@@ -627,8 +627,58 @@ function getRowValue(table, row) {
         <link dest="e8a93cc666ee49af" destField="obj1" source="2a96204c" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="About">
-                    <opqry:message/>
+                <opqry:info format="markdown" title="Word Shapes">
+                    <opqry:message># Word Shapes
+
+Generate word shape inventories for CV sequence, # of syllables and/or stress pattern.
+
+## Output
+
+Output table will have four columns:
+
+ - *Session*
+
+   Session name
+
+ - *Word Shape/Syllable Count/Stress Pattern*
+
+   Word shape
+
+ - *IPA Target Total*
+
+   Number of occurences in IPA Target
+
+ - *IPA Actual Total*
+
+   Number of occurences in IPA Actual
+
+## Example:
+
+Session|Word Shape|IPA Target Total|IPA ActualTotal
+:---:|:---:|:---:|:---:
+Anne.Session|CCVC|2|0
+Anne.Session|CV|8|4
+Anne.Session|CVC|9|3
+Anne.Session|CVCC|2|1
+Anne.Session|CVCCCV|1|0
+Anne.Session|CVCCCVV|4|0
+Anne.Session|CVCCV|3|0
+Anne.Session|CVCCVC|1|0
+Anne.Session|CVCV|2|3
+Anne.Session|CVCVC|1|0
+Anne.Session|CVV|2|0
+Anne.Session|CVVC|2|1
+Anne.Session|CVVCV|1|0
+Anne.Session|CVVVC|1|0
+Anne.Session|GV|9|6
+Anne.Session|GVC|2|0
+Anne.Session|V|3|1
+Anne.Session|VC|5|0
+Anne.Session|VCV|0|2
+Anne.Session|VV|1|0
+Anne.Session|VVCC|1|0
+Anne.Session|VVCCV|1|0
+</opqry:message>
                 </opqry:info>
                 <opqry:node ref="83713295deca4809">
                     <opqry:info format="html" title="Query : Phones (IPA Target)">
