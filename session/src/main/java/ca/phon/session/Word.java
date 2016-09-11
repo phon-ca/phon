@@ -119,7 +119,7 @@ public interface Word {
 	/**
 	 * Notes - this will be the same for every group!
 	 */
-	public String getNotes();
+	public TierString getNotes();
 	
 	
 	/**

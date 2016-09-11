@@ -213,12 +213,11 @@ public class WordImpl implements Word {
 	}
 
 	@Override
-	public String getNotes() {
-		final String notes = getGroup().getNotes();
-		final String[] wordList = notes.split("\\p{Space}");
+	public TierString getNotes() {
+		final TierString notes = getGroup().getNotes();
 		
-		if(wordIndex >= 0 && wordIndex < wordList.length) {
-			return wordList[wordIndex];
+		if(wordIndex >= 0 && wordIndex < notes.numberOfWords()) {
+			return notes.getWord(wordIndex);
 		} else {
 			return null;
 		}
@@ -228,7 +227,7 @@ public class WordImpl implements Word {
 	public int getNotesWordLocation() {
 		int retVal = -1;
 		
-		final String notes = getGroup().getNotes();
+		final TierString notes = getGroup().getNotes();
 		final String[] wordList = notes.split("\\p{Space}");
 		
 		if(wordIndex >=0 && wordIndex < wordList.length) {

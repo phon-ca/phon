@@ -238,14 +238,14 @@ public interface Record extends IExtendable {
 	 * 
 	 * @return the notes tier
 	 */
-	public Tier<String> getNotes();
+	public Tier<TierString> getNotes();
 	
 	/**
 	 * Set the value of the notes tier
 	 * 
 	 * @param notes
 	 */
-	public void setNotes(Tier<String> notes);
+	public void setNotes(Tier<TierString> notes);
 	
 	/**
 	 * Get the register type of the given tier.

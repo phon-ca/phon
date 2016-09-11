@@ -75,9 +75,9 @@ public interface Group {
 	/**
 	 * Notes - this will be the same for every group!
 	 */
-	public String getNotes();
+	public TierString getNotes();
 	
-	public void setNotes(String notes);
+	public void setNotes(TierString notes);
 	
 	/**
 	 * Get the value for the specified tier

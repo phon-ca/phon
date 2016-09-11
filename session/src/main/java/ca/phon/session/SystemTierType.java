@@ -33,7 +33,7 @@ public enum SystemTierType implements TierDescription {
 	ActualSyllables("Actual Syllables", true, IPATranscript.class),
 	SyllableAlignment("Alignment", true, PhoneMap.class),
 	Segment("Segment", false, MediaSegment.class),
-	Notes("Notes", false, String.class);
+	Notes("Notes", false, TierString.class);
 	
 	private String tierName;
 	

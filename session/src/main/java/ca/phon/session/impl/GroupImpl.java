@@ -26,6 +26,7 @@ import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.TierString;
 import ca.phon.session.Word;
 
 public class GroupImpl implements Group {
@@ -127,14 +128,14 @@ public class GroupImpl implements Group {
 	}
 
 	@Override
-	public String getNotes() {
+	public TierString getNotes() {
 		return 
 				(record.getNotes() != null && 
 					record.getNotes().numberOfGroups() > 0 ? record.getNotes().getGroup(0) : null);
 	}
 
 	@Override
-	public void setNotes(String notes) {
+	public void setNotes(TierString notes) {
 		record.getNotes().setGroup(0, notes);
 	}
 
@@ -181,6 +182,8 @@ public class GroupImpl implements Group {
 			retVal = extractor.getWordList().size();
 		} else if(obj instanceof IPATranscript) {
 			retVal = ((IPATranscript)obj).words().size();
+		} else if(obj instanceof TierString) {
+			retVal = ((TierString)obj).numberOfWords();
 		} else if(obj instanceof String) {
 			retVal = obj.toString().split("\\p{Space}").length;
 		}

@@ -46,6 +46,7 @@ import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.TierString;
 import ca.phon.session.Word;
 
 /**
@@ -70,7 +71,7 @@ public class RecordImpl implements Record {
 	
 	private final Tier<MediaSegment> segment;
 	
-	private final Tier<String> notes;
+	private final Tier<TierString> notes;
 	
 	private final Tier<PhoneMap> alignment;
 	
@@ -85,7 +86,7 @@ public class RecordImpl implements Record {
 		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class, SystemTierType.IPATarget.isGrouped());
 		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class, SystemTierType.IPAActual.isGrouped());
 		segment = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class, SystemTierType.Segment.isGrouped());
-		notes = factory.createTier(SystemTierType.Notes.getName(), String.class, SystemTierType.Notes.isGrouped());
+		notes = factory.createTier(SystemTierType.Notes.getName(), TierString.class, SystemTierType.Notes.isGrouped());
 		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, SystemTierType.SyllableAlignment.isGrouped());
 		
 		userDefined = 
@@ -204,7 +205,7 @@ public class RecordImpl implements Record {
 		}
 		
 		if(notes.numberOfGroups() == 0)
-			notes.addGroup("");
+			notes.addGroup(new TierString());
 		if(segment.numberOfGroups() == 0)
 			segment.addGroup(SessionFactory.newFactory().createMediaSegment());
 		
@@ -291,12 +292,12 @@ public class RecordImpl implements Record {
 	}
 
 	@Override
-	public Tier<String> getNotes() {
+	public Tier<TierString> getNotes() {
 		return this.notes;
 	}
 
 	@Override
-	public void setNotes(Tier<String> notes) {
+	public void setNotes(Tier<TierString> notes) {
 		this.notes.removeAll();
 		if(notes.numberOfGroups() > 0) {
 			this.notes.addGroup(notes.getGroup(0));

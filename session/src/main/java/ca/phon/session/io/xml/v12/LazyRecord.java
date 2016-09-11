@@ -32,6 +32,7 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
+import ca.phon.session.TierString;
 
 public class LazyRecord implements Record {
 	
@@ -178,12 +179,12 @@ public class LazyRecord implements Record {
 		internalRecord.setPhoneAlignment(phoneAlignment);
 	}
 
-	public Tier<String> getNotes() {
+	public Tier<TierString> getNotes() {
 		loadRecord();
 		return internalRecord.getNotes();
 	}
 
-	public void setNotes(Tier<String> notes) {
+	public void setNotes(Tier<TierString> notes) {
 		loadRecord();
 		internalRecord.setNotes(notes);
 	}

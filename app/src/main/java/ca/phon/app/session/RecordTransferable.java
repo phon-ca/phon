@@ -37,6 +37,7 @@ import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
+import ca.phon.session.TierString;
 
 /**
  * Clipboard transferable implementation for {@link Record}s.
@@ -113,9 +114,9 @@ public class RecordTransferable implements Transferable {
 			writer.writeNext(row.toArray(new String[0]));
 			
 			row.clear();
-			final Tier<String> notes = record.getNotes();
+			final Tier<TierString> notes = record.getNotes();
 			row.add(notes.getName());
-			row.add(notes.getGroup(0));
+			row.add(notes.getGroup(0).toString());
 			writer.writeNext(row.toArray(new String[0]));
 			
 			row.clear();

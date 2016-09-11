@@ -422,7 +422,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		
 		// notes
 		if(rt.getNotes() != null)
-			retVal.getNotes().setGroup(0, rt.getNotes().getContent());
+			retVal.getNotes().setGroup(0, new TierString(rt.getNotes().getContent()));
 		
 		// segment
 		if(rt.getSegment() != null) {
