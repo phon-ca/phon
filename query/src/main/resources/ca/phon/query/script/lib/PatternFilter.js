@@ -453,11 +453,11 @@ exports.PatternFilter = function (id) {
         var strB = (caseSensitive == true ? filter: filter.toLowerCase());
         
         if (exactMatch == true) {
-            if (strA == strB) {
+            if (strA.equals(strB)) {
                 var v = {
                     start: 0, end: strA.length(), value: obj
                 };
-                retVal.append(v);
+                retVal.push(v);
             }
         } else {
             var i = 0;
