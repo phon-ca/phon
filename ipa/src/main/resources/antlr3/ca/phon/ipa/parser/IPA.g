@@ -1,6 +1,6 @@
 /*
  * Phon - An open source tool for research in phonology.
- * Copyright (C) 2011-2014 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * Copyright (C) 2011-2016 The Phon Project, Memorial University <http://phon.ling.mun.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

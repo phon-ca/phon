@@ -287,4 +287,21 @@ public class TestIPAParser {
 		Assert.assertEquals(ipa.elementAt(2).getText(), alignmentChar + "");
 	}
 	
+	@Test
+	public void testLeadingWhitespace() throws Exception {
+		final String txt = " helo";
+		
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		Assert.assertEquals(4, ipa.length());
+		Assert.assertEquals("h", ipa.elementAt(0).getText());
+	}
+	
+	@Test
+	public void testTrailingWhitespace() throws Exception {
+		final String txt = "helo ";
+		
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		Assert.assertEquals(4, ipa.length());
+		Assert.assertEquals("h", ipa.elementAt(0).getText());
+	}
 }

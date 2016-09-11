@@ -28,9 +28,7 @@ import ca.phon.syllable.SyllableConstituentType;
 
 
 /**
- * <p>Tokenize IPA strings for an ANTLR parser.  The 
- * {@link #next()} method will not throw an exception,
- * however a</p>
+ * <p>Tokenize IPA strings for an ANTLR parser.</p>
  * 
  * 
  */
@@ -52,6 +50,11 @@ public class IPALexer implements TokenSource {
 	 * Current position
 	 */
 	private int currentPosition = 0;
+	
+	/**
+	 * Have we returned at least one non-space token in nextToken
+	 */
+	private boolean hasReturnedToken = false;
 	
 	/**
 	 * Set to true when the next token expected is a 
@@ -83,6 +86,16 @@ public class IPALexer implements TokenSource {
 		while(retVal == null && currentPosition < source.length()) {
 			char currentChar = source.charAt(currentPosition);
 			IPATokenType tokenType = tokenMapper.getTokenType(currentChar);
+			
+			if(tokenType == IPATokenType.SPACE) {
+				// move to next word character, ignoring any remaining whitespace
+				currentPosition = nextWordStart();
+				if(hasReturnedToken && currentPosition < source.length()) {
+					// queue space token
+					retVal = new CommonToken(tokenMapper.getTypeValue(IPATokenType.SPACE));
+				}
+				continue;
+			}
 			
 			if(expectingScType) {
 				final SyllableConstituentType scType = SyllableConstituentType.fromString(currentChar+"");
@@ -141,6 +154,21 @@ public class IPALexer implements TokenSource {
 			retVal = new CommonToken(CommonToken.EOF);
 		}
 		
+		hasReturnedToken = true;
+		return retVal;
+	}
+	
+	private int nextWordStart() {
+		int retVal = currentPosition;
+		while(retVal < source.length()) {
+			char c = source.charAt(retVal);
+			if(Character.isWhitespace(c)) {
+				++retVal;
+				continue;
+			} else {
+				break;
+			}
+		}
 		return retVal;
 	}
 
