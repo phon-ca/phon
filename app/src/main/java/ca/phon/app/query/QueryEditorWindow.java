@@ -516,51 +516,51 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	}
 	
 	private void onDebugQuery() {
-//		final QueryScript script = (QueryScript)scriptEditor.getScript();
-//		final QueryName queryName = script.getExtension(QueryName.class);
-//		final String name = (queryName != null ? queryName.getName() : "untitled");
-//		
-//		final Main debugger = Main.mainEmbedded("Debugger : " + name);
-//		debugger.setBreakOnEnter(false);
-//		debugger.setBreakOnExceptions(true);
-//		
-//		PhonScriptContext scriptContext = script.getContext();
-//		try {
-//			final ScriptParameters scriptParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope());
-//			
-//			// we need to reset the context to activate debugging
-//			script.resetContext();
-//			scriptContext = script.getContext();
-//			
-//			final Context ctx = scriptContext.enter();
-//			final ScriptableObject debugScope = ctx.initStandardObjects();
-//			ctx.setOptimizationLevel(-1);
-//			debugger.attachTo(ctx.getFactory());
-//			debugger.setScope(debugScope);
-//			scriptContext.exit();
-//			
-//			final ScriptParameters newParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope(debugScope));
-//			ScriptParameters.copyParams(scriptParams, newParams);
-//		} catch (PhonScriptException e) {
-//			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//		}
-//		
-//		debugger.setExitAction(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				debugger.detach();
-//				debugger.setVisible(false);
-//			}
-//			
-//		});
-//		// break on entering main query script
-//		debugger.doBreak();
-//		debugger.setSize(500, 600);
-//		debugger.setVisible(true);
-//		debugger.go();
-//		
-//		onRunQuery();
+		final QueryScript script = (QueryScript)scriptEditor.getScript();
+		final QueryName queryName = script.getExtension(QueryName.class);
+		final String name = (queryName != null ? queryName.getName() : "untitled");
+		
+		final Main debugger = Main.mainEmbedded("Debugger : " + name);
+		debugger.setBreakOnEnter(false);
+		debugger.setBreakOnExceptions(true);
+		
+		PhonScriptContext scriptContext = script.getContext();
+		try {
+			final ScriptParameters scriptParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope());
+			
+			// we need to reset the context to activate debugging
+			script.resetContext();
+			scriptContext = script.getContext();
+			
+			final Context ctx = scriptContext.enter();
+			final ScriptableObject debugScope = ctx.initStandardObjects();
+			ctx.setOptimizationLevel(-1);
+			debugger.attachTo(ctx.getFactory());
+			debugger.setScope(debugScope);
+			scriptContext.exit();
+			
+			final ScriptParameters newParams = scriptContext.getScriptParameters(scriptContext.getEvaluatedScope(debugScope));
+			ScriptParameters.copyParams(scriptParams, newParams);
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		debugger.setExitAction(new Runnable() {
+			
+			@Override
+			public void run() {
+				debugger.detach();
+				debugger.setVisible(false);
+			}
+			
+		});
+		// break on entering main query script
+		debugger.doBreak();
+		debugger.setSize(500, 600);
+		debugger.setVisible(true);
+		debugger.go();
+		
+		onRunQuery();
 	}
 	
 	private void onRunQuery() {
