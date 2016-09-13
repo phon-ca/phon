@@ -18,9 +18,16 @@
  */
 package ca.phon.app.menu.file;
 
+import java.io.File;
+
+import javax.swing.Action;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+
+import ca.phon.app.project.RecentProjectHistory;
+import ca.phon.plugin.PluginAction;
 
 /**
  * Setup recent projects menu
@@ -42,25 +49,16 @@ public class RecentProjectsMenuListener implements MenuListener {
 		JMenu menu = (JMenu)arg0.getSource();
 		menu.removeAll();
 		
-//		// add recent projects to menu
-//		SystemProperties recentProjects = 
-//			   UserPrefManager.getUserRecentProjects();
-//		   
-//		for(int i = 1; i <= 5; i++) {
-//			final String projectString =
-//				recentProjects.getProperty("ca.phon.project.recent."+i).toString();
-//			   
-//			if(projectString.length() > 0) {
-//				PluginAction projectAct = new PluginAction("OpenProject");
-//				projectAct.putArg("ca.phon.modules.core.OpenProjectController.projectpath", projectString);
-//				projectAct.putValue(Action.NAME, projectString);
-//				projectAct.putValue(Action.SHORT_DESCRIPTION, "Open project");
-//				
-//				JMenuItem projectItem = new JMenuItem(projectAct);
-//				menu.add(projectItem);
-//			}
-//			
-//		}
+		final RecentProjectHistory history = new RecentProjectHistory();
+		for(File projectFile:history) {
+			PluginAction projectAct = new PluginAction("OpenProject");
+			projectAct.putArg("ca.phon.modules.core.OpenProjectController.projectpath", projectFile.getAbsolutePath());
+			projectAct.putValue(Action.NAME, projectFile.getName());
+			projectAct.putValue(Action.SHORT_DESCRIPTION, projectFile.getAbsolutePath());
+			
+			JMenuItem projectItem = new JMenuItem(projectAct);
+			menu.add(projectItem);
+		}
 	}
 	
 }

@@ -333,7 +333,7 @@ public class FolderProjectList extends JPanel {
 		private void init() {
 			// create border
 			MatteBorder lineBorder = 
-				BorderFactory.createMatteBorder(0, 1, 1, 1, Color.lightGray);
+				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.lightGray);
 			setBorder(lineBorder);
 			
 			FormLayout layout = new FormLayout(
@@ -575,7 +575,7 @@ public class FolderProjectList extends JPanel {
 		@Override
 		public int getScrollableBlockIncrement(Rectangle arg0, int arg1,
 				int arg2) {
-			return 10;
+			return 20;
 		}
 
 		@Override

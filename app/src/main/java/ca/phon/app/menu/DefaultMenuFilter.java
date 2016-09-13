@@ -30,7 +30,9 @@ import javax.swing.event.MenuListener;
 import ca.phon.app.menu.analysis.AnalysisMenuListener;
 import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
+import ca.phon.app.menu.file.NewProjectCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
+import ca.phon.app.menu.file.RecentProjectsMenuListener;
 import ca.phon.app.menu.help.HelpCommand;
 import ca.phon.app.menu.help.LogCommand;
 import ca.phon.app.menu.query.QueryMenuListener;
@@ -76,7 +78,12 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	protected void addFileMenu(Window owner, JMenuBar menu) {
 		JMenu fileMenu = new JMenu("File");
 		
+		fileMenu.add(new NewProjectCommand());
 		fileMenu.add(new OpenProjectCommand());
+		
+		final JMenu recentProjectsMenu = new JMenu("Recent Projects");
+		recentProjectsMenu.addMenuListener(new RecentProjectsMenuListener());
+		fileMenu.add(recentProjectsMenu);
 		
 		fileMenu.addSeparator();
 		

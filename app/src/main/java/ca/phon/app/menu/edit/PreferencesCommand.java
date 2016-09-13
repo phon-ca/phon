@@ -37,4 +37,12 @@ public class PreferencesCommand extends PluginAction {
 		putValue(Action.SHORT_DESCRIPTION, "Edit application preferences");
 	}
 	
+	public PreferencesCommand(String initialPanel) {
+		super(EP);
+		putValue(Action.NAME, "Preferences...");
+		putValue(Action.SHORT_DESCRIPTION, "Edit application preferences");
+		
+		putArg("prefpanel", initialPanel);
+	}
+	
 }

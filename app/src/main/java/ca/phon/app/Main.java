@@ -50,7 +50,7 @@ public class Main {
 			Main.class.getName() + ".initialEntryPoint";
 	
 	private final static String initialEntryPoint = 
-			PrefHelper.get(INITIAL_EP_PROP, "Workspace");
+			PrefHelper.get(INITIAL_EP_PROP, "WelcomeWindow");
 	
 	public static void main(String[] args) {
 		startLogging();

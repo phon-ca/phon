@@ -139,8 +139,6 @@ public class WorkspaceProjectsPanel extends JPanel {
 		workspaceBtn.addMouseListener(bgPainter);
 		workspaceBtn.setDefaultAction(selectHistoryAct);
 		
-		JXTitledPanel workspacePanel = new JXTitledPanel("Workspace Folder");
-		
 		JPanel contentPanel = new JPanel();
 		contentPanel.setBackground(Color.white);
 		contentPanel.setOpaque(true);
@@ -150,16 +148,10 @@ public class WorkspaceProjectsPanel extends JPanel {
 		contentPanel.add(infoLbl, BorderLayout.CENTER);
 		contentPanel.add(workspaceBtn, BorderLayout.SOUTH);
 		
-		workspacePanel.setContentContainer(contentPanel);
-	
 		projectList = new FolderProjectList();
 		
-		JXTitledPanel listPanel = new JXTitledPanel("Project List");
-		listPanel.getContentContainer().setLayout(new BorderLayout());
-		listPanel.getContentContainer().add(projectList, BorderLayout.CENTER);
-		
-		add(workspacePanel, BorderLayout.NORTH);
-		add(listPanel, BorderLayout.CENTER);
+		add(contentPanel, BorderLayout.NORTH);
+		add(projectList, BorderLayout.CENTER);
 	}
 	
 	public void onShowHistory(PhonActionEvent pae) {

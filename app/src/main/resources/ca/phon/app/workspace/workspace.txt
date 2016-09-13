@@ -2,8 +2,7 @@
 
 <body>
 
-<p style="color: #666666;">Phon stores your projects in a folder called a workspace.  <br>
-Projects found in the workspace are displayed in the list below.</p>
+<p style="color: #666666;">A workspace folder is one that contains one or more Phon sessions.</p>
 
 </body>
 

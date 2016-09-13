@@ -48,6 +48,10 @@ public class DesktopProjectFactory extends DefaultProjectFactory {
 			throw new IOException("Given file object must be a folder.");
 		}
 		
+		// add project to recent projects history
+		final RecentProjectHistory history = new RecentProjectHistory();
+		history.addToHistory(projectFolder);
+		
 		return new DesktopProject(projectFolder);
 	}
 
