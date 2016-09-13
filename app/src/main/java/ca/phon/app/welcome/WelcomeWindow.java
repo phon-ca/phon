@@ -9,7 +9,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -37,6 +41,8 @@ import ca.phon.app.workspace.WorkspaceProjectsPanel;
 import ca.phon.app.workspace.WorkspaceTextStyler;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MultiActionButton;
@@ -54,7 +60,9 @@ import ca.phon.util.icons.IconSize;
  * recent projects, and workspace setup.
  * 
  */
-public class WelcomeWindow extends CommonModuleFrame {
+public class WelcomeWindow extends CommonModuleFrame implements WindowListener {
+	
+	private final static Logger LOGGER = Logger.getLogger(WelcomeWindow.class.getName());
 
 	private static final long serialVersionUID = -8877301049044343272L;
 	
@@ -80,13 +88,13 @@ public class WelcomeWindow extends CommonModuleFrame {
 	
 	// workspace projects
 	private JXTitledPanel workspaceContainer;
-	private JXCollapsiblePane workspacePanel;
 	private WorkspaceProjectsPanel workspaceProjectsPanel;
 	
 	public WelcomeWindow() {
 		super();
 		
 		setWindowName("Welcome");
+		addWindowListener(this);
 		init();
 	}
 	
@@ -334,6 +342,50 @@ public class WelcomeWindow extends CommonModuleFrame {
 		public void mouseExited(MouseEvent me) {
 			useSelected = false;
 		}
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// if we are the only window open exit the application
+		if(CommonModuleFrame.getOpenWindows().size() == 0)
+		{
+			try {
+				PluginEntryPointRunner.executePlugin("Exit");
+			} catch (PluginException e1) {
+				LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+				System.exit(1);
+			}
+		}
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
 		
 	}
 }

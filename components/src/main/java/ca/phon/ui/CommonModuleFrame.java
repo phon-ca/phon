@@ -77,7 +77,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	/** The list of open module frames */
 	private static ArrayList<CommonModuleFrame> openFrames = 
 		new ArrayList<CommonModuleFrame>();
-	private static CommonModuleFrame currentFrame;
 	
 	private static void newWindowCreated(CommonModuleFrame f) {
 		openFrames.add(f);

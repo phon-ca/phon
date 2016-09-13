@@ -20,6 +20,7 @@ public class WelcomeWindowEP implements IPluginEntryPoint {
 		SwingUtilities.invokeLater( () -> {
 			final WelcomeWindow window = new WelcomeWindow();
 			window.pack();
+			window.setSize(900, 700);
 			window.centerWindow();
 			window.setVisible(true);
 		});

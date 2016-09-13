@@ -24,6 +24,7 @@ import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.workspace.Workspace;
 
 public class NewProjectCommand extends HookableAction {
 	
@@ -51,10 +52,11 @@ private final static String TXT = "New project...";
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setCanCreateDirectories(true);
 		props.setTitle("New Project");
-		props.setMessage("Create a new project at given path");
-		props.setNameFieldLabel("Enter project name:");
+		props.setMessage("Choose path and enter the name of the new project below.");
+		props.setNameFieldLabel("Project name:");
 		props.setPrompt("Create Project");
 		props.setRunAsync(true);
+		props.setInitialFolder(Workspace.userWorkspaceFolder().getAbsolutePath());
 		props.setListener( (e) -> {
 			if(e.getDialogData() != null) {
 				final String folderName = e.getDialogData().toString();

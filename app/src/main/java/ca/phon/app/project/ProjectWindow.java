@@ -89,6 +89,7 @@ import ca.phon.app.project.git.actions.CommitAction;
 import ca.phon.app.project.git.actions.InitAction;
 import ca.phon.app.project.git.actions.PullAction;
 import ca.phon.app.project.git.actions.PushAction;
+import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.app.workspace.WorkspaceDialog;
 import ca.phon.app.workspace.WorkspaceTextStyler;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -976,7 +977,7 @@ public class ProjectWindow extends CommonModuleFrame
 			
 			if(f instanceof ProjectWindow && f != this)
 				otherProjectsOpen = true;
-			else if(f instanceof WorkspaceDialog)
+			else if(f instanceof WelcomeWindow)
 				otherProjectsOpen = true; // also don't close if workspace window is still open
 		}
 		
