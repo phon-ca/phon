@@ -44,14 +44,13 @@ public class StepAction extends OpgraphEditorAction {
 		final GraphDocument document = getEditor().getModel().getDocument();
 		Runnable inBg = () -> {
 			if(document != null) {
-				final Processor context =
-						(document.getProcessingContext() != null 
-							? document.getProcessingContext() 
-							: new Processor(document.getGraph()));
-				document.setProcessingContext(context);
-				
-				context.getContext().setDebug(true);
-				getEditor().getModel().setupContext(context.getContext());
+				if(document.getProcessingContext() == null) {
+					Processor ctx = new Processor(document.getGraph());
+					document.setProcessingContext(ctx);
+					ctx.getContext().setDebug(true);
+					getEditor().getModel().setupContext(ctx.getContext());
+				}
+				final Processor context = document.getProcessingContext();
 	
 				if(context.hasNext()) {
 					context.step();

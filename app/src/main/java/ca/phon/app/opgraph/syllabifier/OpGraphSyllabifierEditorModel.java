@@ -85,9 +85,9 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 			});
 			
 			syllabificationDisplay = new SyllabificationDisplay();
-			getDocument().addPropertyChangeListener(GraphDocument.PROCESSING_CONTEXT, (e) -> {
-				syllabificationDisplay.repaint();
+			getDocument().addPropertyChangeListener(GraphDocument.DEBUG_STATE, (e) -> {
 				syllabificationDisplay.revalidate();
+				syllabificationDisplay.repaint();
 			});
 			
 			

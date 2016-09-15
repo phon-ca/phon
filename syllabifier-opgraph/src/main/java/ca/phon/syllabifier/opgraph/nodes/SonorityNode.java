@@ -151,8 +151,6 @@ public class SonorityNode extends OpNode implements NodeSettings {
 			retVal += sonorityMap.get(pattern) + "=" + pattern.pattern() + "\n";
 		}
 		
-		System.out.println(retVal);
-		
 		return retVal;
 	}
 
