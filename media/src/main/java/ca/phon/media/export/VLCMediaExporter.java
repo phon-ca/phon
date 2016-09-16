@@ -1,7 +1,7 @@
 /*
- * phon-media
- * Copyright (C) 2015, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
- * Department of Linguistics, Memorial University of Newfoundland (https://www.mun.ca)
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Dept of Linguistics, Memorial University <https://phon.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

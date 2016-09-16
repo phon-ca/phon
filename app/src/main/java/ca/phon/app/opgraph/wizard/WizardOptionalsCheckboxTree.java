@@ -1,16 +1,40 @@
+/*
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Dept of Linguistics, Memorial University <https://phon.ca>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ca.phon.app.opgraph.wizard;
 
 import java.util.List;
 import java.util.Stack;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreePath;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
-import ca.phon.ui.CheckedTreeNode;
-import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
-public class WizardOptionalsCheckboxTree extends CheckboxTree {
+public class WizardOptionalsCheckboxTree extends TristateCheckBoxTree {
 	
 	private static final long serialVersionUID = 1768403681110021388L;
 
@@ -21,14 +45,33 @@ public class WizardOptionalsCheckboxTree extends CheckboxTree {
 	}
 	
 	public WizardOptionalsCheckboxTree(WizardExtension wizardExtension) {
-		super(new CheckedTreeNode());
+		super();
 		this.wizardExtension = wizardExtension;
 		
 		init();
 	}
 	
 	private void init() {
-		((CheckedTreeNode)getModel().getRoot()).setUserObject(wizardExtension.getWizardTitle());
+		((TristateCheckBoxTreeNode)getModel().getRoot()).setUserObject(wizardExtension.getWizardTitle());
+		
+		ImageIcon sessionIcon = IconManager.getInstance().getIcon(
+				"mimetypes/text-xml", IconSize.SMALL);
+		final ImageIcon folderIcon = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
+		
+		final TristateCheckBoxTreeCellRenderer renderer = new TristateCheckBoxTreeCellRenderer();
+		renderer.setLeafIcon(sessionIcon);
+		renderer.setClosedIcon(folderIcon);
+		renderer.setOpenIcon(folderIcon);
+		
+		final TristateCheckBoxTreeCellRenderer editorRenderer = new TristateCheckBoxTreeCellRenderer();
+		editorRenderer.setLeafIcon(sessionIcon);
+		editorRenderer.setClosedIcon(folderIcon);
+		editorRenderer.setOpenIcon(folderIcon);
+		final TristateCheckBoxTreeCellEditor editor = new TristateCheckBoxTreeCellEditor(this, editorRenderer);
+		
+		setCellRenderer(renderer);
+		setCellEditor(editor);
+		
 		setupTree();
 		
 		expandRow(0);
@@ -39,7 +82,8 @@ public class WizardOptionalsCheckboxTree extends CheckboxTree {
 		for(OpNode optionalNode:wizardExtension.getOptionalNodes()) {
 			final List<OpNode> nodePath = graph.getNodePath(optionalNode.getId());
 			
-			CheckedTreeNode parentTreeNode = (CheckedTreeNode)getModel().getRoot();
+			TristateCheckBoxTreeNode parentTreeNode = (TristateCheckBoxTreeNode)getModel().getRoot();
+			parentTreeNode.setEnablePartialCheck(false);
 			for(OpNode node:nodePath) {
 				CheckedOpNode childNode = null;
 				// try to find a current tree node
@@ -83,17 +127,17 @@ public class WizardOptionalsCheckboxTree extends CheckboxTree {
 		final TreePath checkPath = getNodePath(node);
 		
 		if(checkPath != null) {
-			super.getCheckingModel().addCheckingPath(checkPath);
+			super.setCheckingStateForPath(checkPath, TristateCheckBoxState.CHECKED);
 			super.expandPath(checkPath.getParentPath());
 		}
 	}
 	
 	private CheckedOpNode findTreeNode(OpNode node) {
-		CheckedTreeNode currentNode = (CheckedTreeNode)getModel().getRoot();
+		TristateCheckBoxTreeNode currentNode = (TristateCheckBoxTreeNode)getModel().getRoot();
 		return findTreeNode(node, currentNode);
 	}
 	
-	private CheckedOpNode findTreeNode(OpNode node, CheckedTreeNode parent) {
+	private CheckedOpNode findTreeNode(OpNode node, TristateCheckBoxTreeNode parent) {
 		CheckedOpNode retVal = null;
 		
 		for(int i = 0; i < parent.getChildCount(); i++) {
@@ -110,7 +154,7 @@ public class WizardOptionalsCheckboxTree extends CheckboxTree {
 		return retVal;
 	}
 
-	public static class CheckedOpNode extends CheckedTreeNode {
+	public static class CheckedOpNode extends TristateCheckBoxTreeNode {
 		
 		private static final long serialVersionUID = 7282780647003827544L;
 
@@ -120,6 +164,7 @@ public class WizardOptionalsCheckboxTree extends CheckboxTree {
 			super();
 			this.node = node;
 			setUserObject(node.getName());
+			setEnablePartialCheck(false);
 		}
 		
 		public OpNode getNode() { return node; }

@@ -128,7 +128,6 @@
 		<com.jgoodies.jgoodies-forms.version>1.9.0</com.jgoodies.jgoodies-forms.version>
 		<com.jgoodies.jgoodies-looks.version>2.7.0</com.jgoodies.jgoodies-looks.version>
 		<de.susebox.jtopas.version>0.8</de.susebox.jtopas.version>
-		<it.cnr.imaa.essi.lablib-checkboxtree.version>3.0.2</it.cnr.imaa.essi.lablib-checkboxtree.version>
 		<junit.junit.version>4.8.2</junit.junit.version>
 		<net.sf.opencsv.opencsv.version>2.3</net.sf.opencsv.opencsv.version>
 		<org.antlr.antlr.version>3.5.2</org.antlr.antlr.version>
@@ -329,12 +328,6 @@
 				<groupId>ca.phon</groupId>
 				<artifactId>native-dialogs</artifactId>
 				<version>${ca.phon.native-dialogs.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>it.cnr.imaa.essi</groupId>
-				<artifactId>lablib-checkboxtree</artifactId>
-				<version>${it.cnr.imaa.essi.lablib-checkboxtree.version}</version>
 			</dependency>
 			
 			<dependency>

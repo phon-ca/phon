@@ -1,6 +1,6 @@
 /*
  * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 2015, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,6 @@
  */
 package ca.phon.app.session;
 
-import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
-import it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultTreeCheckingModel;
-
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +29,11 @@ import javax.swing.tree.TreePath;
 
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.CheckedTreeNode;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -42,7 +43,7 @@ import ca.phon.util.icons.IconSize;
  * sessions in a given project.
  *
  */
-public class SessionSelector extends CheckboxTree {
+public class SessionSelector extends TristateCheckBoxTree {
 	
 	private static final long serialVersionUID = 5336741342440773144L;
 
@@ -55,7 +56,7 @@ public class SessionSelector extends CheckboxTree {
 	
 	/** Constructor */
 	public SessionSelector(Project project) {
-		super(new CheckedTreeNode());
+		super(new TristateCheckBoxTreeNode());
 	
 		this.project = project;
 		
@@ -76,8 +77,9 @@ public class SessionSelector extends CheckboxTree {
 	
 	private void init() {
 		if(project != null) {
-			((CheckedTreeNode)getModel().getRoot()).setUserObject(project.getName());
-			((CheckedTreeNode)getModel().getRoot()).removeAllChildren();
+			((TristateCheckBoxTreeNode)getModel().getRoot()).setUserObject(project.getName());
+			((TristateCheckBoxTreeNode)getModel().getRoot()).setEnablePartialCheck(false);
+			((TristateCheckBoxTreeNode)getModel().getRoot()).removeAllChildren();
 			createTree();
 		}
 		
@@ -90,43 +92,49 @@ public class SessionSelector extends CheckboxTree {
 		List<String> corpora = project.getCorpora();
 		Collections.sort(corpora, collator);
 		for(String corpus:corpora) {
-			CheckedTreeNode corpusNode = new CheckedTreeNode(corpus);
+			TristateCheckBoxTreeNode corpusNode = new TristateCheckBoxTreeNode(corpus);
+			corpusNode.setEnablePartialCheck(false);
 			
 			List<String> sessions = project.getCorpusSessions(corpus);
 			Collections.sort(sessions, collator);
 			for(String session:sessions) {
-				CheckedTreeNode sessionNode = new CheckedTreeNode(session);
+				TristateCheckBoxTreeNode sessionNode = new TristateCheckBoxTreeNode(session);
+				sessionNode.setEnablePartialCheck(false);
 				corpusNode.add(sessionNode);
 			}
-			((CheckedTreeNode)getModel().getRoot()).add(corpusNode);
+			((TristateCheckBoxTreeNode)getModel().getRoot()).add(corpusNode);
 		}
-		((DefaultTreeModel)getModel()).reload((CheckedTreeNode)getModel().getRoot());
+		((DefaultTreeModel)getModel()).reload((TristateCheckBoxTreeNode)getModel().getRoot());
 		
 		
-		final CheckboxTree projectTree = this;
-		
-		it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer
-			renderer = new it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer();
 		ImageIcon sessionIcon = IconManager.getInstance().getIcon(
 				"mimetypes/text-xml", IconSize.SMALL);
-		
 		final ImageIcon folderIcon = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
 		
+		final TristateCheckBoxTreeCellRenderer renderer = new TristateCheckBoxTreeCellRenderer();
 		renderer.setLeafIcon(sessionIcon);
 		renderer.setClosedIcon(folderIcon);
 		renderer.setOpenIcon(folderIcon);
-		projectTree.setCellRenderer(renderer);
 		
-		revalidate();
+		final TristateCheckBoxTreeCellRenderer editorRenderer = new TristateCheckBoxTreeCellRenderer();
+		editorRenderer.setLeafIcon(sessionIcon);
+		editorRenderer.setClosedIcon(folderIcon);
+		editorRenderer.setOpenIcon(folderIcon);
+		final TristateCheckBoxTreeCellEditor editor = new TristateCheckBoxTreeCellEditor(this, editorRenderer);
+		
+		setCellRenderer(renderer);
+		setCellEditor(editor);
+		
+		//revalidate();
 	}
 	
 	public TreePath sessionPathToTreePath(SessionPath sessionPath) {
-		final CheckedTreeNode root = (CheckedTreeNode)getModel().getRoot();
+		final TristateCheckBoxTreeNode root = (TristateCheckBoxTreeNode)getModel().getRoot();
 		for(int i = 0; i < root.getChildCount(); i++) {
-			final CheckedTreeNode corpusNode = (CheckedTreeNode)root.getChildAt(i);
+			final TristateCheckBoxTreeNode corpusNode = (TristateCheckBoxTreeNode)root.getChildAt(i);
 			if(corpusNode.getUserObject().equals(sessionPath.getCorpus())) {
 				for(int j = 0; j < corpusNode.getChildCount(); j++) {
-					final CheckedTreeNode sessionNode = (CheckedTreeNode)corpusNode.getChildAt(j);
+					final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode)corpusNode.getChildAt(j);
 					if(sessionNode.getUserObject().equals(sessionPath.getSession())) {
 						final TreePath checkPath = new TreePath(
 								new Object[]{ root, corpusNode, sessionNode });
@@ -142,7 +150,7 @@ public class SessionSelector extends CheckboxTree {
 		List<SessionPath> retVal = 
 			new ArrayList<SessionPath>();
 		
-		TreePath[] checkPaths = getCheckingPaths();
+		List<TreePath> checkPaths = super.getCheckedPaths();
 	
 		
 		for(TreePath checkPath:checkPaths) {
@@ -165,7 +173,7 @@ public class SessionSelector extends CheckboxTree {
 		
 		for(SessionPath sessionPath:selectedSessions) {
 			final TreePath path = sessionPathToTreePath(sessionPath);
-			getCheckingModel().addCheckingPath(path);
+			super.setCheckingStateForPath(path, TristateCheckBoxState.CHECKED);
 			expandPath(path.getParentPath());
 		}
 	}

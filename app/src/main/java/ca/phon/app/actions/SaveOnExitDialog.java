@@ -1,6 +1,6 @@
 /*
  * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 2015, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,6 @@
  */
 package ca.phon.app.actions;
 
-import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
-import it.cnr.imaa.essi.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -29,6 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -37,13 +37,21 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -62,12 +70,9 @@ public class SaveOnExitDialog extends JDialog {
 		Cancel
 	};
 
-	// the list of editors with changes
-	private List<CommonModuleFrame> editors;
-	
 	// UI
 	private DialogHeader header;
-	private CheckboxTree checkboxTree;
+	private TristateCheckBoxTree checkboxTree;
 	private JButton discardAllButton;
 	private JButton saveSelectedButton;
 	private JButton cancelButton;
@@ -75,9 +80,8 @@ public class SaveOnExitDialog extends JDialog {
 	// close status
 	private QuitOption closeStatus = QuitOption.Cancel;
 	
-	public SaveOnExitDialog(CommonModuleFrame owner, List<CommonModuleFrame> editors) {
+	public SaveOnExitDialog(CommonModuleFrame owner) {
 		super(owner, "Phon : Quit", true);
-		this.editors = editors;
 		init();
 	}
 	
@@ -86,14 +90,11 @@ public class SaveOnExitDialog extends JDialog {
 		
 		header = new DialogHeader("Quit Phon", "Save changes before exit?");
 		
-		checkboxTree = new CheckboxTree();
-		checkboxTree.setRootVisible(false);
-		checkboxTree.setModel(new EditorTreeModel());
+		checkboxTree = new TristateCheckBoxTree(createTree());
 		checkboxTree.setCellRenderer(new EditorTreeRenderer());
+		checkboxTree.setCellEditor(new EditorTreeEditor(checkboxTree));
+		checkboxTree.setRootVisible(false);
 		checkboxTree.expandAll();
-		// check all
-		checkboxTree.getCheckingModel().toggleCheckingPath(
-				new TreePath(checkboxTree.getModel().getRoot()));
 		
 		saveSelectedButton = new JButton("Save selected");
 		saveSelectedButton.addActionListener(new ActionListener() {
@@ -139,7 +140,65 @@ public class SaveOnExitDialog extends JDialog {
 		saveSelectedButton.requestFocusInWindow();
 	}
 	
-	private class EditorTreeRenderer extends DefaultCheckboxTreeCellRenderer {
+	private TristateCheckBoxTreeNode createTree() {
+		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode("Unsaved Data");
+		root.setEnablePartialCheck(false);
+		
+		final Set<CommonModuleFrame> editorsWithChanges = 
+				new TreeSet<>( (e1, e2) -> e1.getTitle().compareTo(e2.getTitle()) );
+		final Set<Project> openProjects = new TreeSet<>( (p1, p2) -> p1.getName().compareTo(p2.toString()) );
+		
+		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+			if(cmf.hasUnsavedChanges()) {
+				editorsWithChanges.add(cmf);
+				
+				final Project project = cmf.getExtension(Project.class);
+				if(project != null) {
+					openProjects.add(project);
+				}
+			}
+		}
+		
+		// setup tree
+		for(final Project project:openProjects) {
+			final TristateCheckBoxTreeNode projectNode = new TristateCheckBoxTreeNode(project);
+			projectNode.setEnablePartialCheck(false);
+			
+			final List<CommonModuleFrame> projectEditors =
+					editorsWithChanges.stream()
+						.filter( (e) -> e.getExtension(Project.class) == project )
+						.collect(Collectors.toList());
+			for(CommonModuleFrame cmf:projectEditors) {
+				final TristateCheckBoxTreeNode editorNode = new TristateCheckBoxTreeNode(cmf);
+				editorNode.setEnablePartialCheck(false);
+				
+				projectNode.add(editorNode);
+			}
+			
+			root.add(projectNode);
+		}
+		
+		final List<CommonModuleFrame> noProjectEditors = 
+				editorsWithChanges.stream()
+					.filter( (e) -> e.getExtension(Project.class) == null )
+					.collect(Collectors.toList());
+		final TristateCheckBoxTreeNode otherNode = new TristateCheckBoxTreeNode("Other");
+		for(CommonModuleFrame cmf:noProjectEditors) {
+			final TristateCheckBoxTreeNode editorNode = new TristateCheckBoxTreeNode(cmf);
+			editorNode.setEnablePartialCheck(false);
+			
+			otherNode.add(editorNode);
+		}
+		if(otherNode.getChildCount() > 0) {
+			root.add(otherNode);
+		}
+		
+		// check all
+		root.setCheckingState(TristateCheckBoxState.CHECKED);
+		return root;
+	}
+	
+	private class EditorTreeRenderer extends TristateCheckBoxTreeCellRenderer {
 		
 		public EditorTreeRenderer() {
 			ImageIcon icn = IconManager.getInstance().getIcon(
@@ -151,178 +210,34 @@ public class SaveOnExitDialog extends JDialog {
 		}
 
 		@Override
-		public Component getTreeCellRendererComponent(JTree arg0, Object arg1,
+		public Component getTreeCellRendererComponent(JTree tree, Object value,
 				boolean arg2, boolean arg3, boolean arg4, int arg5, boolean arg6) {
-			Component retVal = super.getTreeCellRendererComponent(arg0, arg1, arg2, arg3, arg4, arg5,
+			Component retVal = super.getTreeCellRendererComponent(tree, value, arg2, arg3, arg4, arg5,
 					arg6);
 			
-			String labelText = arg1.toString();
-			
-			if(arg1 instanceof CommonModuleFrame) {
-				// get the corpus.id of the session
-				CommonModuleFrame editor = (CommonModuleFrame)arg1;
-				labelText = editor.getTitle();
-			} else if(arg1 instanceof Project) {
-				labelText = ((Project)arg1).getName();
+			if(value instanceof DefaultMutableTreeNode && retVal instanceof
+					TristateCheckBoxTreeCellRenderer.TristateCheckBoxTreeNodePanel) {
+				final TristateCheckBoxTreeCellRenderer.TristateCheckBoxTreeNodePanel panel = 
+						(TristateCheckBoxTreeCellRenderer.TristateCheckBoxTreeNodePanel)retVal;
+				final DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
+				final Object userObj = node.getUserObject();
+				if(userObj instanceof CommonModuleFrame) {
+					panel.getLabel().setText(((CommonModuleFrame)userObj).getTitle());
+				} else if(userObj instanceof Project) {
+					panel.getLabel().setText(((Project)userObj).getName());
+				}
 			}
-			super.label.setText(labelText);
 			
 			return retVal;
 		}
 		
 	}
 	
-	private class EditorTreeModel implements TreeModel {
-
-		private final String _root = "Unsaved Data";
+	private class EditorTreeEditor extends TristateCheckBoxTreeCellEditor {
 		
-		@Override
-		public void addTreeModelListener(TreeModelListener l) {
+		public EditorTreeEditor(JTree tree) {
+			super(tree, new EditorTreeRenderer());
 		}
-
-		@Override
-		public Object getChild(Object parent, int index) {
-			Object retVal = null;
-			
-			if(parent == _root) {
-				List<Project> projects = getProjects();
-				
-				if(index < projects.size())
-					retVal = projects.get(index);
-				else if(index == projects.size() && getStrayEditors().size() > 0)
-					retVal = "Other";
-			} else if (parent instanceof Project) {
-				List<CommonModuleFrame> editors = getEditors((Project)parent);
-				retVal = editors.get(index);
-			} else if(parent.toString().equals("Other")) {
-				retVal = getStrayEditors().get(index);
-			}
-			
-			return retVal;
-		}
-
-		@Override
-		public int getChildCount(Object parent) {
-			int retVal = 0;
-			
-			if(parent == _root) {
-				List<Project> projects = getProjects();
-				retVal = projects.size();
-				
-				List<CommonModuleFrame> strayEditors = getStrayEditors();
-				if(strayEditors.size() > 0) {
-					++retVal;
-				}
-			} else if (parent instanceof Project) {
-				List<CommonModuleFrame> editors = getEditors((Project)parent);
-				retVal = editors.size();
-			} else if(parent.toString().equals("Other")) {
-				retVal = getStrayEditors().size();
-			}
-			
-			return retVal;
-		}
-
-		@Override
-		public int getIndexOfChild(Object parent, Object child) {
-			int retVal = -1;
-			
-			if(parent == _root) {
-				List<Project> projects = getProjects();
-				
-				if(child.toString().equals("Other")) {
-					return projects.size();
-				} else {
-					for(int i = 0; i < projects.size(); i++) {
-						Project p = projects.get(i);
-						if(p == child) {
-							retVal = i;
-							break;
-						}
-					}
-				}
-			} else if (parent instanceof Project) {
-				List<CommonModuleFrame> editors = getEditors((Project)parent);
-				
-				for(int i = 0; i < editors.size(); i++) {
-					CommonModuleFrame editor = editors.get(i);
-					if(editor == child) {
-						retVal = i;
-						break;
-					}
-				}
-			} else if(parent.toString().equals("Other")) {
-				List<CommonModuleFrame> strayEditors = getStrayEditors();
-				
-				for(int i = 0; i < strayEditors.size(); i++) {
-					CommonModuleFrame editor = strayEditors.get(i);
-					if(editor == child) {
-						retVal = i;
-						break;
-					}
-				}
-			}
-			
-			return retVal;
-		}
-
-		@Override
-		public Object getRoot() {
-			return _root;
-		}
-
-		@Override
-		public boolean isLeaf(Object node) {
-			return (node instanceof CommonModuleFrame);
-		}
-
-		@Override
-		public void removeTreeModelListener(TreeModelListener l) {
-		}
-
-		@Override
-		public void valueForPathChanged(TreePath path, Object newValue) {
-		}
-		
-		private List<Project> getProjects() {
-			List<Project> retVal = new ArrayList<Project>();
-			
-			for(CommonModuleFrame editor:editors) {
-				final Project pfe = editor.getExtension(Project.class);
-				if(pfe != null && !retVal.contains(pfe)) {
-					retVal.add(pfe);
-				}
-			}
-			
-			return retVal;
-		}
-		
-		private List<CommonModuleFrame> getStrayEditors() {
-			List<CommonModuleFrame> retVal = new ArrayList<>();
-			
-			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-				final Project pfe = cmf.getExtension(Project.class);
-				if(pfe == null && cmf.hasUnsavedChanges()) {
-					retVal.add(cmf);
-				}
-			}
-			
-			return retVal;
-		}
-		
-		private List<CommonModuleFrame> getEditors(Project p) {
-			List<CommonModuleFrame> retVal = new ArrayList<CommonModuleFrame>();
-			
-			for(CommonModuleFrame editor:editors) {
-				final Project pfe = editor.getExtension(Project.class);
-				if(pfe != null && pfe == p) {
-					retVal.add(editor);
-				}
-			}
-			
-			return retVal;
-		}
-		
 		
 	}
 
@@ -337,13 +252,14 @@ public class SaveOnExitDialog extends JDialog {
 	public List<CommonModuleFrame> getSelectedEditors() {
 		List<CommonModuleFrame> retVal = new ArrayList<CommonModuleFrame>();
 		
-		TreePath[] selectedPaths = 
-			checkboxTree.getCheckingPaths();
-		for(TreePath p:selectedPaths) {
-			if(checkboxTree.getModel().isLeaf(p.getLastPathComponent())) {
-				CommonModuleFrame editor = 
-					(CommonModuleFrame)p.getLastPathComponent();
-				retVal.add(editor);
+		final List<TreePath> selectedPaths = checkboxTree.getCheckedPaths();
+		for(TreePath path:selectedPaths) {
+			if(path.getLastPathComponent() instanceof TristateCheckBoxTreeNode) {
+				final TristateCheckBoxTreeNode node = (TristateCheckBoxTreeNode)path.getLastPathComponent();
+				if(node.getUserObject() instanceof CommonModuleFrame) {
+					final CommonModuleFrame cmf = (CommonModuleFrame)node.getUserObject();
+					retVal.add(cmf);
+				}
 			}
 		}
 		

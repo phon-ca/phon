@@ -104,10 +104,6 @@
 			<artifactId>velocity</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>it.cnr.imaa.essi</groupId>
-			<artifactId>lablib-checkboxtree</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.dockingframes</groupId>
 			<artifactId>docking-frames-common</artifactId>
 		</dependency>
