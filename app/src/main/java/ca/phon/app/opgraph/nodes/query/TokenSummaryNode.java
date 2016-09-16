@@ -20,9 +20,6 @@ package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -32,8 +29,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ca.gedge.opgraph.OpContext;
@@ -41,12 +36,8 @@ import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.ui.text.PromptedTextField;
 import ca.phon.util.Tuple;
 
 @OpNodeInfo(

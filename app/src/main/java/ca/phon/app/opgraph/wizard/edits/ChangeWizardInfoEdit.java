@@ -19,9 +19,7 @@
 package ca.phon.app.opgraph.wizard.edits;
 
 import ca.gedge.opgraph.OpNode;
-import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;
-import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.WizardInfoMessageFormat;
 
 public class ChangeWizardInfoEdit extends WizardExtensionUndoableEdit {

@@ -19,14 +19,11 @@
 package ca.phon.app.opgraph.wizard;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JTabbedPane;
 
-import ca.gedge.opgraph.OpNode;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

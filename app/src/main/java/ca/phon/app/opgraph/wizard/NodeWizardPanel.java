@@ -25,17 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-
-import org.apache.derby.catalog.GetProcedureColumns;
-import org.jdesktop.swingx.VerticalLayout;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -44,13 +39,6 @@ import ca.phon.app.opgraph.wizard.actions.AddNodeAction;
 import ca.phon.app.opgraph.wizard.actions.EditSettingsAction;
 import ca.phon.app.opgraph.wizard.actions.MoveNodeAction;
 import ca.phon.app.opgraph.wizard.actions.RemoveNodeAction;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Provides a UI for selecting and ordering nodes in the wizard.

@@ -24,7 +24,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,13 +33,10 @@ import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.app.project.OpenProjectEP;
 import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.workspace.Workspace;
 

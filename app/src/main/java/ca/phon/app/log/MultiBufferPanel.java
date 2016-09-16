@@ -39,17 +39,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.ByteSize;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Container for multiple {@link BufferPanels} 

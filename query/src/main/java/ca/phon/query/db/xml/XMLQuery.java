@@ -19,10 +19,8 @@
 
 package ca.phon.query.db.xml;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;

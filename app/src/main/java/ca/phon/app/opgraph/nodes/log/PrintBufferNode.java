@@ -32,7 +32,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.lang3.Validate;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.gedge.opgraph.InputField;

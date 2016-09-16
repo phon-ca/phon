@@ -25,7 +25,6 @@ import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.opgraph.editor.NewDialogPanel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
 
 public class AnalysisNewPanel extends NewDialogPanel {
 

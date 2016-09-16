@@ -21,7 +21,6 @@ package ca.phon.app.opgraph.wizard.actions;
 import java.awt.event.ActionEvent;
 
 import javax.swing.undo.CompoundEdit;
-import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpNode;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;

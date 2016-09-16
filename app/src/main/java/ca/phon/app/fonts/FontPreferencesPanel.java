@@ -31,14 +31,14 @@ import javax.swing.event.ChangeListener;
 
 import org.jdesktop.swingx.VerticalLayout;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.prefs.PrefsPanel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.fonts.FontPreferences;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class FontPreferencesPanel extends PrefsPanel implements IPluginExtensionPoint<PrefsPanel> {
 

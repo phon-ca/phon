@@ -19,13 +19,10 @@
 package ca.phon.app.session.editor.view.common;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Shape;
 import java.text.ParseException;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import ca.phon.extensions.UnvalidatedValue;

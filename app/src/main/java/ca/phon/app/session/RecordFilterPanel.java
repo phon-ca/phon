@@ -52,6 +52,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.query.ResultSetEditor;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -76,9 +79,6 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Displays options for identify records by range, 

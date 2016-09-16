@@ -20,12 +20,9 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -37,16 +34,10 @@ import javax.swing.border.CompoundBorder;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
-import ca.phon.app.opgraph.nodes.query.QueryNode;
-import ca.phon.app.opgraph.nodes.query.QueryNodeData;
-import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.workspace.Workspace;
 
 public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {

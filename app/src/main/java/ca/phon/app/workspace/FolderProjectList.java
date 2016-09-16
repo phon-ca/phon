@@ -54,6 +54,9 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXRadioGroup;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
@@ -77,9 +80,6 @@ import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonWorker;
 import ca.phon.workspace.Workspace;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * List for displaying project in a given directory.

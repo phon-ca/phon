@@ -18,8 +18,6 @@
  */
 package ca.phon.app.opgraph.wizard.actions;
 
-import java.awt.event.ActionEvent;
-
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;
 

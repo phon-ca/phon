@@ -34,6 +34,9 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXRadioGroup;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -43,9 +46,6 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Auto-validate options.

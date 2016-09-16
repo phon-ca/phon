@@ -30,7 +30,6 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.PrefHelper;
 
 public class AnalysisMenuListener implements MenuListener {
 

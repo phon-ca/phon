@@ -19,10 +19,7 @@
 package ca.phon.app.opgraph.wizard.edits;
 
 import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
 
-import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.NodeWizardPanel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 

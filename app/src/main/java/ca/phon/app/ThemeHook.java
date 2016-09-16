@@ -32,7 +32,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.theme.PhonSubstanceLookAndFeel;
-import ca.phon.app.theme.PhonWindowsLookAndFeel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;

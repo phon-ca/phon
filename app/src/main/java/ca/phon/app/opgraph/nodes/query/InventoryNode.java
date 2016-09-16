@@ -19,8 +19,6 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;

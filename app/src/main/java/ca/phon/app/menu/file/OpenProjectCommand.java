@@ -33,7 +33,6 @@ import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.workspace.Workspace;
 
 public class OpenProjectCommand extends HookableAction {
 

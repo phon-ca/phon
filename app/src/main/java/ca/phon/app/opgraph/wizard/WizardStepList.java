@@ -18,45 +18,25 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.JXTitledSeparator;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.GlossPainter;
-import org.jdesktop.swingx.painter.MattePainter;
-import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.PinstripePainter;
-
-import ca.gedge.opgraph.OpNode;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.wizard.WizardEvent;
-import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

@@ -28,10 +28,10 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import ca.phon.util.MsFormat;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import ca.phon.util.MsFormat;
 
 /**
  * A component that lets the user graphically select a contiguous range of values by

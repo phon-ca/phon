@@ -21,7 +21,6 @@ package ca.phon.app.opgraph.nodes.query;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

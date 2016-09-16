@@ -47,7 +47,6 @@ import ca.phon.query.db.ScriptLibrary;
 import ca.phon.query.db.ScriptURL;
 import ca.phon.query.db.xml.XMLQuery;
 import ca.phon.query.db.xml.io.query.QueryType;
-import ca.phon.query.db.xml.io.query.ScriptURLType;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;

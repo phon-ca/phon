@@ -26,10 +26,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import ca.phon.query.report.io.Group;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import ca.phon.query.report.io.Group;
 
 public class GroupSectionPanel extends SectionPanel<Group> {
 	

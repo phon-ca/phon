@@ -33,11 +33,9 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXTitledSeparator;
 
 import ca.gedge.opgraph.InputField;

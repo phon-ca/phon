@@ -18,8 +18,6 @@
  */
 package ca.phon.query.db;
 
-import java.util.regex.Pattern;
-
 import ca.phon.util.PhonConstants;
 
 /**

@@ -26,11 +26,11 @@ import javax.swing.SwingConstants;
 
 import org.jdesktop.swingx.JXStatusBar;
 
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.OSInfo;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.OSInfo;
 
 public class NodeEditorStatusBar extends JXStatusBar {
 	

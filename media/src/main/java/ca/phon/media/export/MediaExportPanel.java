@@ -36,13 +36,13 @@ import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 import org.jdesktop.swingx.VerticalLayout;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.formatter.Formatter;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.FormatterTextField;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Panel for configuration options for media export.  Includes fields for

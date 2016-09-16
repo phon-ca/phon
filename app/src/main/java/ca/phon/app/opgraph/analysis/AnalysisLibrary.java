@@ -18,7 +18,6 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -27,13 +26,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
-
-import org.antlr.stringtemplate.language.ActionEvaluator;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
@@ -41,7 +35,6 @@ import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

@@ -44,13 +44,13 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.text.Document;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * A search field with optional context button.

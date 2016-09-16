@@ -45,6 +45,9 @@ import javax.swing.event.MouseInputAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
@@ -74,9 +77,6 @@ import ca.phon.ui.text.LanguageField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * 

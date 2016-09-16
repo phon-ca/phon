@@ -71,8 +71,6 @@ import ca.phon.project.io.SessionType;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.TierViewItem;
 import ca.phon.session.io.OriginalFormat;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionInputFactory;

@@ -27,10 +27,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ca.phon.media.util.MediaLocator;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import ca.phon.media.util.MediaLocator;
 
 /**
  * Edit prefs for media such as media search paths.
