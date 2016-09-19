@@ -20,13 +20,14 @@
             </extensions>
         </node>
         <ogcn:macro id="eae3f6e617084a67" name="Phone Accuracy (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="1fc2b475">
+            <graph id="451b3863">
                 <opqry:queryNode id="71b5bac8a8a04b30" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.164-02:30" name="Phones" uuid="990b8fd5-a656-46be-8e1d-22e7836e797c">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.759-02:30" name="Phones" uuid="a072a2ad-5e98-491e-b6c8-c06c4de8dcc1">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\w</param>
-                            <param id="filters.speaker.participantRole">Target Child</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
                         </script>
                     </qry:query>
                     <extensions>
@@ -79,13 +80,14 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="d8ed374bb33c40af" name="Phone Accuracy (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="532d53ae">
+            <graph id="3b3df1e2">
                 <opqry:queryNode id="235c9933ca55491a" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.172-02:30" name="Phones" uuid="90692108-a692-4e95-b4de-243add872771">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.767-02:30" name="Phones" uuid="fc020646-2602-4836-9be3-d0a24f0688b5">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">^\s?(X=\w)</param>
-                            <param id="filters.speaker.participantRole">Target Child</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
                         </script>
                     </qry:query>
                     <extensions>
@@ -138,13 +140,14 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="246adcdeef184e3e" name="Phone Accuracy (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6c0f0c4f">
+            <graph id="4eca1ddb">
                 <opqry:queryNode id="c56d6018509a4307" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.180-02:30" name="Phones" uuid="8d2a6d4c-3208-4cd5-ae9b-9952dd114738">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.774-02:30" name="Phones" uuid="6b1749c3-7fcf-4f48-b4ef-86f4c9ed2c2e">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">(?&lt;\w[\s\.]?)\w(?&gt;[\s\.]?\w)</param>
-                            <param id="filters.speaker.participantRole">Target Child</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
                         </script>
                     </qry:query>
                     <extensions>
@@ -197,13 +200,14 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="f501750e342b4678" name="Phone Accuracy (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="462ea251">
+            <graph id="2076f7c4">
                 <opqry:queryNode id="528343b9b67c4a75" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T11:50:26.188-02:30" name="Phones" uuid="635377fd-d6f3-4248-bf2c-1b02b8529ec1">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.781-02:30" name="Phones" uuid="44ea8e4f-f944-4571-9fea-aa9195a06b46">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\w$</param>
-                            <param id="filters.speaker.participantRole">Target Child</param>
+                            <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                            <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
                         </script>
                     </qry:query>
                     <extensions>
@@ -265,53 +269,156 @@
         <link dest="f501750e342b4678" destField="sessions" source="84b5e3402ed74552" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info title="Phone Accuracy">
-                    <opqry:message/>
+                <opqry:info format="markdown" title="Phone Accuracy">
+                    <opqry:message># Phone Accuracy
+
+Calculate phone accuracy for the selected sessions.
+
+## Output
+
+Output table will have six columns:
+
+ - *Session*
+ 
+   Session name
+
+ - *Phone*
+
+   Phone value
+
+ - *Count*
+
+   Total found
+
+ - *Accurate*
+
+   Total accurate
+
+ - *Substituted*
+
+   Total substituted
+
+ - *Deleted*
+
+   Total deleted
+   
+## Example
+
+Session|IPA Target|Count|Accurate|Substituted|Deleted
+Anne.Session|p|4|1|0|3
+Anne.Session|b|9|3|0|6
+Anne.Session|t|9|1|0|8
+Anne.Session|tʰ|1|1|0|0
+Anne.Session|d|7|0|0|7
+Anne.Session|k|4|1|1|2
+Anne.Session|ɡ|7|2|0|5
+Anne.Session|v|1|0|0|1
+Anne.Session|θ|5|0|2|3
+Anne.Session|ð|2|0|1|1
+Anne.Session|s|8|3|0|5
+Anne.Session|z|6|0|0|6
+Anne.Session|ʃ|5|0|0|5
+Anne.Session|h|6|1|0|5
+Anne.Session|m|2|1|0|1
+Anne.Session|n|1|1|0|0
+Anne.Session|ŋ|4|0|0|4
+Anne.Session|l|4|1|0|3
+Anne.Session|ɹ|14|1|2|11
+Anne.Session|w|2|0|0|2
+Anne.Session|j|9|6|0|3
+Anne.Session|iː|13|3|1|9
+Anne.Session|uː|8|3|0|5
+Anne.Session|ɪ|17|2|1|14
+Anne.Session|ʊ|5|0|1|4
+Anne.Session|e|8|2|0|6
+Anne.Session|e͜ɪ|1|1|0|0
+Anne.Session|o|4|0|0|4
+Anne.Session|ə|4|1|0|3
+Anne.Session|ʌ|11|2|2|7
+Anne.Session|ɔ|2|0|1|1
+Anne.Session|æ|12|4|3|5
+Anne.Session|a|1|0|0|1
+Anne.Session|ɑ|3|0|0|3
+Total|p|4|1|0|3
+Total|b|9|3|0|6
+Total|t|9|1|0|8
+Total|tʰ|1|1|0|0
+Total|d|7|0|0|7
+Total|k|4|1|1|2
+Total|ɡ|7|2|0|5
+Total|v|1|0|0|1
+Total|θ|5|0|2|3
+Total|ð|2|0|1|1
+Total|s|8|3|0|5
+Total|z|6|0|0|6
+Total|ʃ|5|0|0|5
+Total|h|6|1|0|5
+Total|m|2|1|0|1
+Total|n|1|1|0|0
+Total|ŋ|4|0|0|4
+Total|l|4|1|0|3
+Total|ɹ|14|1|2|11
+Total|w|2|0|0|2
+Total|j|9|6|0|3
+Total|iː|13|3|1|9
+Total|uː|8|3|0|5
+Total|ɪ|17|2|1|14
+Total|ʊ|5|0|1|4
+Total|e|8|2|0|6
+Total|e͜ɪ|1|1|0|0
+Total|o|4|0|0|4
+Total|ə|4|1|0|3
+Total|ʌ|11|2|2|7
+Total|ɔ|2|0|1|1
+Total|æ|12|4|3|5
+Total|a|1|0|0|1
+Total|ɑ|3|0|0|3
+</opqry:message>
                 </opqry:info>
                 <opqry:node ref="71b5bac8a8a04b30">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="7b60531ba8394c06">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="235c9933ca55491a">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="f9aeaafa61a24841">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="c56d6018509a4307">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="8249e86e0b754222">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="528343b9b67c4a75">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="3d9889c220194539">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:optionalNode enabled="true" ref="eae3f6e617084a67"/>
-                <opqry:optionalNode enabled="true" ref="d8ed374bb33c40af"/>
-                <opqry:optionalNode enabled="true" ref="246adcdeef184e3e"/>
-                <opqry:optionalNode enabled="true" ref="f501750e342b4678"/>
+                <opqry:optionalNode enabled="false" ref="d8ed374bb33c40af"/>
+                <opqry:optionalNode enabled="false" ref="246adcdeef184e3e"/>
+                <opqry:optionalNode enabled="false" ref="f501750e342b4678"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
         </extensions>
