@@ -171,39 +171,43 @@ public class PhoneAccuracy extends TableOpNode implements NodeSettings {
 		
 		// setup columns
 		List<String> colNames = new ArrayList<>();
+		if(groupByCol >= 0)
+			colNames.add(groupBy);
 		colNames.add("IPA Target");
-		if(groupByCol >= 0) {
-			for(String group:accuracyMap.keySet()) {
-				colNames.add(group + " : Count");
-				colNames.add(group + " : Accurate");
-				colNames.add(group + " : Substituted");
-				colNames.add(group + " : Deleted");
-			}
-		}
-		colNames.add("Total");
-		colNames.add("Total Accurate");
-		colNames.add("Total Substituted");
-		colNames.add("Total Deleted");
+		colNames.add("Count");
+		colNames.add("Accurate");
+		colNames.add("Substituted");
+		colNames.add("Deleted");
 		for(int i = 0; i < colNames.size(); i++) outputTable.setColumnTitle(i, colNames.get(i));
 		
 		// row data
+		if(groupByCol >= 0) {
+			for(String group:accuracyMap.keySet()) {
+				final IpaTernaryTree<AccuracyInfo> infoMap = accuracyMap.get(group);
+				for(IPATranscript ipa:totals.keySet()) {
+					Object rowData[] = new Object[colNames.size()];
+					int col = 0;
+					rowData[col++] = group;
+					rowData[col++] = ipa;
+					
+					AccuracyInfo info = infoMap.get(ipa);
+					if(info == null) info = new AccuracyInfo();
+					rowData[col++] = info.count;
+					rowData[col++] = info.accurate;
+					rowData[col++] = info.substitutions;
+					rowData[col++] = info.deleted;
+					
+					outputTable.addRow(rowData);
+				}
+			}
+		}
 		for(IPATranscript target:totals.keySet()) {
 			Object[] rowData = new Object[colNames.size()];
 			int col = 0;
+			if(groupByCol >= 0)
+				rowData[col++] = "Total";
 			rowData[col++] = target;
-			if(groupByCol >= 0) {
-				for(String group:accuracyMap.keySet()) {
-					IpaTernaryTree<AccuracyInfo> accuracyInfo = accuracyMap.get(group);
-					AccuracyInfo targetInfo = accuracyInfo.get(target);
-					if(targetInfo == null) {
-						targetInfo = new AccuracyInfo();
-					}
-					rowData[col++] = targetInfo.count;
-					rowData[col++] = targetInfo.accurate;
-					rowData[col++] = targetInfo.substitutions;
-					rowData[col++] = targetInfo.deleted;
-				}
-			}
+			
 			AccuracyInfo totalInfo = totals.get(target);
 			rowData[col++] = totalInfo.count;
 			rowData[col++] = totalInfo.accurate;
@@ -277,7 +281,6 @@ public class PhoneAccuracy extends TableOpNode implements NodeSettings {
 			
 			if(groupByCol >= 0) {
 				String group = table.getValueAt(row, groupByCol).toString();
-			
 				Map<String, AccuracyInfo> accuracyInfo = accuracyMap.get(group);
 				if(accuracyInfo == null) {
 					accuracyInfo = new TreeMap<>();
@@ -303,38 +306,41 @@ public class PhoneAccuracy extends TableOpNode implements NodeSettings {
 		}
 		
 		List<String> colNames = new ArrayList<>();
+		if(groupByCol >= 0)
+			colNames.add(groupBy);
 		colNames.add("Feature");
-		if(groupByCol >= 0) {
-			for(String group:accuracyMap.keySet()) {
-				colNames.add(group + " : Count");
-				colNames.add(group + " : Accurate");
-				colNames.add(group + " : Substituted");
-				colNames.add(group + " : Deleted");
-			}
-		}
-		colNames.add("Total");
-		colNames.add("Total Accurate");
-		colNames.add("Total Substituted");
-		colNames.add("Total Deleted");
+		colNames.add("Count");
+		colNames.add("Accurate");
+		colNames.add("Substituted");
+		colNames.add("Deleted");
+		
 		for(int i = 0; i < colNames.size(); i++) outputTable.setColumnTitle(i, colNames.get(i));
 		
+		if(groupByCol >= 0) {
+			for(String group:accuracyMap.keySet()) {
+				Map<String, AccuracyInfo> infoMap = accuracyMap.get(group);
+				for(String feature:totals.keySet()) {
+					Object[] rowData = new Object[colNames.size()];
+					int col = 0;
+					rowData[col++] = group;
+					rowData[col++] = feature;
+					
+					final AccuracyInfo info = infoMap.get(feature);
+					rowData[col++] = info.count;
+					rowData[col++] = info.accurate;
+					rowData[col++] = info.substitutions;
+					rowData[col++] = info.deleted;
+					
+					outputTable.addRow(rowData);
+				}
+			}
+		}
 		for(String feature:totals.keySet()) {
 			Object[] rowData = new Object[colNames.size()];
 			int col = 0;
+			if(groupByCol >= 0)
+				rowData[col++] = "Total";
 			rowData[col++] = feature;
-			if(groupByCol >= 0) {
-				for(String group:accuracyMap.keySet()) {
-					Map<String, AccuracyInfo> accuracyInfo = accuracyMap.get(group);
-					AccuracyInfo targetInfo = accuracyInfo.get(feature);
-					if(targetInfo == null) {
-						targetInfo = new AccuracyInfo();
-					}
-					rowData[col++] = targetInfo.count;
-					rowData[col++] = targetInfo.accurate;
-					rowData[col++] = targetInfo.substitutions;
-					rowData[col++] = targetInfo.deleted;
-				}
-			}
 			AccuracyInfo totalInfo = totals.get(feature);
 			rowData[col++] = totalInfo.count;
 			rowData[col++] = totalInfo.accurate;
