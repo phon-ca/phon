@@ -92,7 +92,7 @@ public class SessionEditorToolbar extends JPanel {
 		final SaveSessionAction saveAction = new SaveSessionAction(getEditor());
 		saveButton = new JButton(saveAction);
 		saveButton.setText(null);
-		saveButton.setEnabled(getEditor().isModified());
+		saveButton.setEnabled(getEditor().hasUnsavedChanges());
 		add(saveButton, gbc);
 		
 		final EditorAction modifiedAct = new DelegateEditorAction(this, "onModifiedChanged");
@@ -208,7 +208,7 @@ public class SessionEditorToolbar extends JPanel {
 	
 	@RunOnEDT
 	public void onModifiedChanged(EditorEvent ee) {
-		saveButton.setEnabled(getEditor().isModified());
+		saveButton.setEnabled(getEditor().hasUnsavedChanges());
 	}
 	
 }

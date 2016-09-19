@@ -28,6 +28,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -64,6 +65,7 @@ import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.opgraph.wizard.actions.CreateReportAction;
@@ -116,6 +118,8 @@ public class NodeWizard extends WizardFrame {
 	
 	private volatile boolean running = false;
 	
+	private boolean modified = false;
+	
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
 		setWindowName(title);
@@ -150,21 +154,6 @@ public class NodeWizard extends WizardFrame {
 			props.setParentWindow(this);
 			
 			okToClose = (NativeDialogs.showMessageDialog(props) == 0);
-		} else if(hasUnsavedChanges()) {
-			MessageDialogProperties props = new MessageDialogProperties();
-			props.setRunAsync(false);
-			props.setTitle("Close Window");
-			props.setHeader(props.getTitle());
-			props.setMessage("Save results before closing window?");
-			final String[] opts = { "Close without saving", "Save and close", "Cancel" };
-			props.setOptions(opts);
-			props.setParentWindow(this);
-			
-			int retVal = NativeDialogs.showMessageDialog(props);
-			if(retVal == 1) {
-				// run save results
-				
-			}
 		}
 		
 		if(okToClose) {
@@ -328,6 +317,8 @@ public class NodeWizard extends WizardFrame {
 			SwingUtilities.invokeLater( () -> {
 				if(!busyLabel.isBusy()) {
 					busyLabel.setBusy(true);
+					
+					setModified(false);
 				}
 				statusLabel.setText(nodeName);
 				btnBack.setEnabled(false);
@@ -339,6 +330,9 @@ public class NodeWizard extends WizardFrame {
 				busyLabel.setBusy(false);
 				statusLabel.setText("");
 				btnBack.setEnabled(true);
+				
+				setModified(true);
+				modified = true;
 			});
 			executionEnded(pe);
 		}
@@ -582,24 +576,31 @@ public class NodeWizard extends WizardFrame {
 			stopExecution();
 			if(retVal == 2)
 				super.cancel();
-		} else {
-			if(bufferPanel.getBufferNames().size() > 0) {
-				final MessageDialogProperties props = new MessageDialogProperties();
-				props.setParentWindow(this);
-				props.setTitle("Close");
-				props.setHeader("Close window?");
-				props.setMessage("Discard results and close?");
-				props.setOptions(MessageDialogProperties.okCancelOptions);
-				props.setDefaultOption("Cancel");
-				props.setRunAsync(false);
-				
-				int retVal = NativeDialogs.showMessageDialog(props);
-				if(retVal == 1) return;
-			}
-			super.cancel();
 		}
 	}
 	
+	@Override
+	public boolean saveData() throws IOException {
+		// save all buffers to folder
+		final SaveAllBuffersAction saveAct = new SaveAllBuffersAction(bufferPanel);
+		saveAct.actionPerformed(new ActionEvent(this, 0, "saveData"));
+		
+		modified = saveAct.wasCanceled();
+		
+		return !saveAct.wasCanceled();
+	}
+	
+	public void setModified(boolean modified) {
+		this.modified = modified;
+		
+		super.getRootPane().putClientProperty("Window.documentModified", hasUnsavedChanges());
+	}
+	
+	@Override
+	public boolean hasUnsavedChanges() {
+		return modified;
+	}
+
 	private class OptionalsContextHandler extends MouseInputAdapter {
 
 		@Override

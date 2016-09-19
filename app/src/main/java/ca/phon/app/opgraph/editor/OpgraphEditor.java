@@ -189,7 +189,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 		if(hasUnsavedChanges()) {
 			sb.append("*");
 		}
-		super.getRootPane().putClientProperty("Window.documentModified", hasUnsavedChanges());
 		setWindowName(sb.toString());
 	}
 	
@@ -386,6 +385,9 @@ public class OpgraphEditor extends CommonModuleFrame {
 	};
 	
 	private final UndoableEditListener undoListener = (e) -> {
+		if(e.getEdit().isSignificant()) {
+			setModified(true);
+		}
 		updateTitle();
 	};
 	

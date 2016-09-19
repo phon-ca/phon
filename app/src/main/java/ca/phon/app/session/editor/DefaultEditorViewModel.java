@@ -1178,7 +1178,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			String retVal = "(" + (accessoryWindows.indexOf(this)+1) + ") Session Editor";
 			if(session != null) {
 				retVal += " : " + session.getCorpus() + "." + session.getName();
-				if(getEditor().isModified())
+				if(getEditor().hasUnsavedChanges())
 					retVal += "*";
 			}
 			return retVal;

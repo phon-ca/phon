@@ -118,6 +118,8 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	 */
 	private String windowName = null;
 	
+	private volatile transient boolean modified = false;
+	
 	/**
 	 * Creates a new CommonModuleFrame
 	 *
@@ -524,7 +526,13 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	 * @return true if this window has un-saved changes
 	 */
 	public boolean hasUnsavedChanges() {
-		return false;
+		return this.modified;
+	}
+	
+	public void setModified(boolean modified) {
+		this.modified = modified;
+		
+		getRootPane().putClientProperty("Window.documentModified", hasUnsavedChanges());
 	}
 	
 	/**

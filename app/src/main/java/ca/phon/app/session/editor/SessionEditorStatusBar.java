@@ -120,7 +120,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED, 
 				(ee) -> { 
-					if(getEditor().isModified()) {
+					if(getEditor().hasUnsavedChanges()) {
 						statusLabel.setIcon(modifiedIcon);
 					} else {
 						statusLabel.setIcon(unmodifiedIcon);
@@ -140,7 +140,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		
 		modifiedIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.XSMALL);
 		unmodifiedIcon = IconManager.getInstance().getDisabledIcon("actions/document-save", IconSize.XSMALL);
-		if(getEditor().isModified()) {
+		if(getEditor().hasUnsavedChanges()) {
 			statusLabel.setIcon(modifiedIcon);
 		} else {
 			statusLabel.setIcon(unmodifiedIcon);
@@ -211,7 +211,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		final Project project = editor.getProject();
 		final Session session = editor.getSession();
 		
-		if(editor.isModified()) {
+		if(editor.hasUnsavedChanges()) {
 			buf.append("*modified* ");
 		}
 		

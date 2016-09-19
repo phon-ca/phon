@@ -129,11 +129,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	private volatile transient int currentRecord = 0;
 	
-	/**
-	 * Has data been modified
-	 */
-	private volatile transient boolean modified = false;
-	
 	/*
 	 * Undo/Redo support
 	 */
@@ -353,7 +348,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			
 			@Override
 			public void menuSelected(MenuEvent e) {
-				saveItem.setEnabled(isModified());
+				saveItem.setEnabled(hasUnsavedChanges());
 			}
 			
 			@Override
@@ -537,29 +532,18 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	}
 	
 	/**
-	 * Has session data been modified
-	 * 
-	 * @return <code>true</code> if modified flag is set, 
-	 *  <code>false</code> otherwise
-	 */
-	public boolean isModified() {
-		return this.modified;
-	}
-	
-	/**
 	 * Set the modified flag
 	 * 
 	 * @param modified
 	 */
 	public void setModified(boolean modified) {
-		final boolean lastVal = this.modified;
-		this.modified = modified;
+		final boolean lastVal = super.hasUnsavedChanges();
+		setModified(modified);
 		
 		if(lastVal != modified) {
 			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFIED_FLAG_CHANGED, this);
 			getEventManager().queueEvent(ee);
 			
-			getRootPane().putClientProperty(SubstanceLookAndFeel.WINDOW_MODIFIED, modified);
 		}
 	}
 	
@@ -573,7 +557,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		String retVal = WINDOW_NAME;
 		if(session != null) {
 			retVal += " : " + session.getCorpus() + "." + session.getName();
-			if(isModified())
+			if(hasUnsavedChanges())
 				retVal += "*";
 		}
 		return retVal;
@@ -605,11 +589,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			final EditorEvent refreshAct = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
 			getEventManager().queueEvent(refreshAct);
 		}
-	}
-	
-	@Override
-	public boolean hasUnsavedChanges() {
-		return this.isModified();
 	}
 	
 	@Override

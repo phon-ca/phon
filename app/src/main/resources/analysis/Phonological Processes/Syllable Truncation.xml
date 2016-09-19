@@ -20,9 +20,9 @@
             </extensions>
         </node>
         <ogcn:macro id="d38260ce2890417e" name="Syllable Truncation (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="41f1802d">
+            <graph id="29be93a2">
                 <opqry:queryNode id="dca8af9c75f34ffa" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-08T08:14:10.905-02:30" name="Phones" uuid="c0375e7c-899e-4b4f-8c0c-4af780e1b482">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T12:22:41.699-02:30" name="Phones" uuid="cdcb13e3-b90b-4088-8e99-c0026a795c6c">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -94,9 +94,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="31e0b7ef3bdf42a6" name="Syllable Truncation (stressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="706a849c">
+            <graph id="287f746b">
                 <opqry:queryNode id="fdd021a7db426b" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-08T08:14:10.912-02:30" name="Phones" uuid="03624e7c-9310-4671-bb4e-cdd632dc6ce0">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T12:22:41.710-02:30" name="Phones" uuid="f378ccce-1e59-434d-b8e5-858e9f31c114">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -171,9 +171,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="a670feb94b8248b0" name="Syllable Truncation (unstressed)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="777ede0d">
+            <graph id="1ba13561">
                 <opqry:queryNode id="8fc5b2a8f5944563" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-08T08:14:10.919-02:30" name="Phones" uuid="9bc4b00d-c891-4b5a-9863-27084c6acd1d">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T12:22:41.717-02:30" name="Phones" uuid="b93c8660-3715-47b2-8791-f3d67c64970f">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -263,6 +263,18 @@ Generate inventories of syllable truncation in the selected sessions.
 ## Output
 
 Output table will have 3 columns:
+
+ - *Session*
+
+    Session name
+
+ - *IPA Target*
+
+    Deleted syllable
+
+ - *Total*
+
+    Number of times deleted
 
 ## Example
 

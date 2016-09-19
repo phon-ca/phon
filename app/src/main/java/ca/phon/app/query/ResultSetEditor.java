@@ -161,8 +161,6 @@ public class ResultSetEditor extends ProjectFrame {
 	 */
 	private Project tempProject;
 	
-	private boolean modified = false;
-	
 	private EditorAction recordChangedAct;
 	
 	/**
@@ -622,15 +620,9 @@ public class ResultSetEditor extends ProjectFrame {
 		updateRowFilter();
 	}
 	
-	@Override
-	public boolean hasUnsavedChanges() {
-		return this.modified;
-	}
-	
-	private void setModified(boolean modified) {
-		this.modified = modified;
+	public void setModified(boolean modified) {
+		super.setModified(modified);
 		saveButton.setEnabled(modified);
-		super.getRootPane().putClientProperty("Window.documentModified", modified);
 	}
 
 	public Project getTempProject() {

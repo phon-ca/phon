@@ -151,7 +151,7 @@ public class AutosaveManager {
 				if(cmf instanceof SessionEditor) {
 					final SessionEditor editor = (SessionEditor)cmf;
 					
-					if(editor.isModified()) {
+					if(editor.hasUnsavedChanges()) {
 						final Project project = editor.getProject();
 						final Session session = editor.getSession();
 						final Autosaves autosaves = project.getExtension(Autosaves.class);

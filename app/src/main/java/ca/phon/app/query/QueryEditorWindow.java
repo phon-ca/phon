@@ -78,6 +78,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.ActionTabComponent;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.Toast;
@@ -98,11 +99,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	
 	/** Undo manager */
 	private UndoManager undoManager;
-	
-	/**
-	 * Modified ?
-	 */
-	private boolean modified = false;
 	
 	/** Form */
 	private JComponent form;
@@ -274,7 +270,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				// set modification flag
-				if(!isModified()) {
+				if(!hasUnsavedChanges()) {
 					setModified(true);
 					updateComponents();
 				}
@@ -334,7 +330,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		final String scriptTitle = "Query : " + name + (hasUnsavedChanges() ? " *" : "");
 		
 		editorTabs.setTitleAt(0, scriptTitle);
-		saveButton.setEnabled(isModified());
+		saveButton.setEnabled(hasUnsavedChanges());
 	}
 	
 	/**
@@ -423,22 +419,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		updateComponents();
 	}
 	
-	public void setModified(boolean modified) {
-		this.modified = modified;
-		
-		JRootPane root = super.getRootPane();
-		root.putClientProperty( "Window.documentModified", new Boolean(modified) );
-	}
-	
-	public boolean isModified() {
-		return this.modified;
-	}
-	
-	@Override
-	public boolean hasUnsavedChanges() {
-		return isModified();
-	}
-	
 	@Override
 	public boolean saveData() 
 		throws IOException {
@@ -454,22 +434,6 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	 * Save script to file, first asking for location.
 	 */
 	public boolean saveScriptAs() {
-//		FileFilter[] filters = new FileFilter[2];
-//		filters[1] = FileFilter.jsFilter;
-//		filters[0] = FileFilter.xmlFilter;
-//		
-//		String file = 
-//			NativeDialogs.showSaveFileDialogBlocking(this,
-//					getParentFolder(), getFilename(),
-//					".xml", filters, "Save Query");
-//		if(file != null) {
-//			scriptEditor.getScript().setLocation(file);
-//			
-//			return saveScriptToFile(file);
-//		} else {
-//			return false;
-//		}
-		
 		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		
 		final SaveQueryDialog dialog = new SaveQueryDialog(this, script);
@@ -616,9 +580,14 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		final int idx = editorTabs.indexOfComponent(panel);
 		if(idx > 0) {
 			if(panel.isRunning()) {
-				// XXX causing thread lock on EDT - use non-block dialog or background thread
-				int result = 
-						NativeDialogs.showOkCancelDialogBlocking(QueryEditorWindow.this, null, "Cancel Query", "Stop query?");
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setRunAsync(false);
+				props.setOptions(MessageDialogProperties.okCancelOptions);
+				props.setTitle("Cancel Query");
+				props.setMessage("Stop query?");
+				int result = NativeDialogs.showMessageDialog(props);
+
 				if(result == 0) {
 					if(idx >= 0 && idx < editorTabs.getTabCount()) {
 						panel.stopQuery();

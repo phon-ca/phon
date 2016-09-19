@@ -53,6 +53,8 @@ public class SaveAllBuffersAction extends HookableAction {
 	
 	private BufferPanelContainer buffers;
 	
+	private boolean canceled = false;
+	
 	public SaveAllBuffersAction(BufferPanelContainer bufferPanelContainer) {
 		super();
 		
@@ -92,7 +94,13 @@ public class SaveAllBuffersAction extends HookableAction {
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
 				}
 			}
+		} else {
+			canceled = true;
 		}
+	}
+	
+	public boolean wasCanceled() {
+		return this.canceled;
 	}
 
 }

@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 /**
  * Annotation for editor event handlers.  If the specified event method
  * has this annotation it will be called on the AWT event dispatch
- * thread.  This is the default behaviors, this annotation is provided
+ * thread.  This is the default behavior, this annotation is provided
  * to be explicit.
  * 
  */
