@@ -171,15 +171,18 @@ public class WelcomeWindow extends CommonModuleFrame implements WindowListener {
 		gbc.gridwidth = 1;
 		add(actionsContainer, gbc);
 		
+		workspaceProjectsPanel = new WorkspaceProjectsPanel();
+		workspaceContainer = new JXTitledPanel("Workspace", workspaceProjectsPanel);
+		gbc.gridx++;
+		gbc.gridheight = 1;
+		add(workspaceContainer, gbc);
+		
 		recentProjectsPanel = new JXCollapsiblePane(Direction.DOWN);
 		recentProjectsPanel.setLayout(new BorderLayout());
 		recentProjectsList = new RecentProjectsList();
 		final JScrollPane recentProjectsScroller = new JScrollPane(recentProjectsList);
 		recentProjectsPanel.add(recentProjectsScroller, BorderLayout.CENTER);
 		recentProjectsContainer = new JXTitledPanel("Recent Projects", recentProjectsPanel);
-		gbc.gridx++;
-		gbc.gridheight = 1;
-		add(recentProjectsContainer, gbc);
 		
 		PrefHelper.getUserPreferences().addPreferenceChangeListener( (p) -> {
 			if(p.getKey().equals(RecentProjectHistory.PROJECT_HISTORY_PROP)) {
@@ -187,11 +190,8 @@ public class WelcomeWindow extends CommonModuleFrame implements WindowListener {
 			}
 		});
 		
-		workspaceProjectsPanel = new WorkspaceProjectsPanel();
-		workspaceContainer = new JXTitledPanel("Workspace", workspaceProjectsPanel);
-		
 		gbc.gridy++;
-		add(workspaceContainer, gbc);
+		add(recentProjectsContainer, gbc);
 	}
 	
 	private MultiActionButton createNewButton() {
