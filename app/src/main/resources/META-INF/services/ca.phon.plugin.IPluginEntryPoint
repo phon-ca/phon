@@ -1,7 +1,7 @@
 #Welcome
 ca.phon.app.welcome.WelcomeWindowEP
 # Workspace
-ca.phon.app.workspace.WorkspaceEP
+ca.phon.app.welcome.WorkspaceEP
 # OpenProject
 ca.phon.app.project.OpenProjectEP
 # Exit

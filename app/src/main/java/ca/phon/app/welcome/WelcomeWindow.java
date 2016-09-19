@@ -55,8 +55,6 @@ import ca.phon.app.menu.file.NewProjectCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
 import ca.phon.app.project.RecentProjectHistory;
 import ca.phon.app.project.RecentProjectsList;
-import ca.phon.app.workspace.WorkspaceProjectsPanel;
-import ca.phon.app.workspace.WorkspaceTextStyler;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -78,7 +76,7 @@ import ca.phon.util.icons.IconSize;
  * recent projects, and workspace setup.
  * 
  */
-public class WelcomeWindow extends CommonModuleFrame implements WindowListener {
+public class WelcomeWindow extends CommonModuleFrame {
 	
 	private final static Logger LOGGER = Logger.getLogger(WelcomeWindow.class.getName());
 
@@ -112,7 +110,7 @@ public class WelcomeWindow extends CommonModuleFrame implements WindowListener {
 		super();
 		
 		setWindowName("Welcome");
-		addWindowListener(this);
+		addWindowListener(windowListener);
 		init();
 	}
 	
@@ -363,47 +361,49 @@ public class WelcomeWindow extends CommonModuleFrame implements WindowListener {
 		
 	}
 
-	@Override
-	public void windowOpened(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// if we are the only window open exit the application
-		if(CommonModuleFrame.getOpenWindows().size() == 0)
-		{
-			try {
-				PluginEntryPointRunner.executePlugin("Exit");
-			} catch (PluginException e1) {
-				LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
-				System.exit(1);
+	private final WindowListener windowListener = new WindowListener() {
+		@Override
+		public void windowOpened(WindowEvent e) {
+			
+		}
+	
+		@Override
+		public void windowClosing(WindowEvent e) {
+			
+		}
+	
+		@Override
+		public void windowClosed(WindowEvent e) {
+			// if we are the only window open exit the application
+			if(CommonModuleFrame.getOpenWindows().size() == 0)
+			{
+				try {
+					PluginEntryPointRunner.executePlugin("Exit");
+				} catch (PluginException e1) {
+					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					System.exit(1);
+				}
 			}
 		}
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		
-	}
+	
+		@Override
+		public void windowIconified(WindowEvent e) {
+			
+		}
+	
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			
+		}
+	
+		@Override
+		public void windowActivated(WindowEvent e) {
+			
+		}
+	
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			
+		}
+	};
 }

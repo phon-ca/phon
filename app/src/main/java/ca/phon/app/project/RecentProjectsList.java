@@ -26,6 +26,7 @@ import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 
 import javax.swing.Action;
@@ -39,11 +40,12 @@ import javax.swing.Scrollable;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
 
-import ca.phon.app.workspace.LocalProjectButton;
+import ca.phon.app.welcome.LocalProjectButton;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -146,10 +148,27 @@ public class RecentProjectsList extends JPanel {
 		openAction.putValue(Action.SMALL_ICON, openIcn);
 		openAction.putValue(Action.LARGE_ICON_KEY, openIcnL);
 		
+		PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
+		showAction.putValue(Action.NAME, "Show project");
+		showAction.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("apps/system-file-manager", IconSize.SMALL));
+		showAction.putValue(Action.LARGE_ICON_KEY, IconManager.getInstance().getIcon("apps/system-file-manager", IconSize.MEDIUM));
+		showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in file system viewer");
+		retVal.addAction(showAction);
+		
 		retVal.getTopLabel().setIcon(openIcn);
 		retVal.setDefaultAction(openAction);
 		
 		return retVal;
+	}
+	
+	public void onShowProject(PhonActionEvent pae) {
+		LocalProjectButton btn = (LocalProjectButton)pae.getData();
+		try {
+			OpenFileLauncher.openURL(
+					btn.getProjectFile().toURI().toURL());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void onOpenProject(PhonActionEvent pae) {

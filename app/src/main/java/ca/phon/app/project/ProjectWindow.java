@@ -93,7 +93,7 @@ import ca.phon.app.project.git.actions.InitAction;
 import ca.phon.app.project.git.actions.PullAction;
 import ca.phon.app.project.git.actions.PushAction;
 import ca.phon.app.welcome.WelcomeWindow;
-import ca.phon.app.workspace.WorkspaceTextStyler;
+import ca.phon.app.welcome.WorkspaceTextStyler;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
