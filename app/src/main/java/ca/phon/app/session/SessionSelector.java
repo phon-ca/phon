@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -33,6 +34,7 @@ import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.icons.IconManager;
@@ -46,47 +48,13 @@ import ca.phon.util.icons.IconSize;
 public class SessionSelector extends TristateCheckBoxTree {
 	
 	private static final long serialVersionUID = 5336741342440773144L;
-
-	/** The project */
-	private Project project;
 	
-	public SessionSelector() {
-		this(null);
-	}
-	
-	/** Constructor */
-	public SessionSelector(Project project) {
-		super(new TristateCheckBoxTreeNode());
-	
-		this.project = project;
+	public static TristateCheckBoxTreeModel createModel(Project project) {
+		if(project == null)
+			return new TristateCheckBoxTreeModel(new DefaultMutableTreeNode("No project"));
 		
-		init();
-	}
-	
-	public Project getProject() {
-		return this.project;
-	}
-	
-	public void setProject(Project project) {
-		final Project oldProject = this.project;
-		this.project = project;
-		super.firePropertyChange("project", oldProject, project);
+		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode(project);
 		
-		init();
-	}
-	
-	private void init() {
-		if(project != null) {
-			((TristateCheckBoxTreeNode)getModel().getRoot()).setUserObject(project.getName());
-			((TristateCheckBoxTreeNode)getModel().getRoot()).setEnablePartialCheck(false);
-			((TristateCheckBoxTreeNode)getModel().getRoot()).removeAllChildren();
-			createTree();
-		}
-		
-		super.expandRow(0);
-	}
-	
-	private void createTree() {
 		// create new tree structure
 		Collator collator = CollatorFactory.defaultCollator();
 		List<String> corpora = project.getCorpora();
@@ -102,11 +70,41 @@ public class SessionSelector extends TristateCheckBoxTree {
 				sessionNode.setEnablePartialCheck(false);
 				corpusNode.add(sessionNode);
 			}
-			((TristateCheckBoxTreeNode)getModel().getRoot()).add(corpusNode);
+			root.add(corpusNode);
 		}
-		((DefaultTreeModel)getModel()).reload((TristateCheckBoxTreeNode)getModel().getRoot());
 		
+		return new TristateCheckBoxTreeModel(root);
+	}
+
+	/** The project */
+	private Project project;
+	
+	public SessionSelector() {
+		this(null);
+	}
+	
+	/** Constructor */
+	public SessionSelector(Project project) {
+		super(createModel(project));
+	
+		this.project = project;
 		
+		init();
+	}
+	
+	public Project getProject() {
+		return this.project;
+	}
+	
+	public void setProject(Project project) {
+		final Project oldProject = this.project;
+		this.project = project;
+		super.firePropertyChange("project", oldProject, project);
+		
+		setModel(createModel(project));
+	}
+	
+	private void init() {
 		ImageIcon sessionIcon = IconManager.getInstance().getIcon(
 				"mimetypes/text-xml", IconSize.SMALL);
 		final ImageIcon folderIcon = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
@@ -125,7 +123,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 		setCellRenderer(renderer);
 		setCellEditor(editor);
 		
-		//revalidate();
+		super.expandRow(0);
 	}
 	
 	public TreePath sessionPathToTreePath(SessionPath sessionPath) {
