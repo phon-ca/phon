@@ -20,9 +20,9 @@
             </extensions>
         </node>
         <ogcn:macro id="3c9e90c8e1ca40e9" name="Place Accuracy (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="ae6052f">
+            <graph id="16360e39">
                 <opqry:queryNode id="2527c170128646c6" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:07:16.489-02:30" name="Phones" uuid="476dcd9f-84e7-4790-af00-b2f3855f7d95">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:58:49.653-02:30" name="Phones" uuid="4d9dfb77-6cfa-4077-b6cc-97075275e21d">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\w</param>
@@ -80,9 +80,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="52f3649323a74c1a" name="Place Accuracy (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6e8f798a">
+            <graph id="42e42c61">
                 <opqry:queryNode id="f54f8a7c1df94773" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:07:16.497-02:30" name="Phones" uuid="7a40b394-9d41-44cc-824e-2c48a433adcc">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:58:49.662-02:30" name="Phones" uuid="e500e0d9-1a82-4371-bac2-efbf5a1e9a0f">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">^\s?(X=\w)</param>
@@ -140,9 +140,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="6d4335d0c2cc464d" name="Place Accuracy (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6353a892">
+            <graph id="73a10255">
                 <opqry:queryNode id="3b4f7e153ddc4911" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:07:16.504-02:30" name="Phones" uuid="7b706407-6283-406f-b60f-d18b72ffd81e">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:58:49.672-02:30" name="Phones" uuid="4ba24ff9-eda1-497b-ae02-c23d3a14c75b">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">(?&lt;\w[\s\.]?)\w(?&gt;[\s\.]?\w)</param>
@@ -200,9 +200,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="eaad7fa1854e4e49" name="Place Accuracy (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="29e369e">
+            <graph id="4b170cbd">
                 <opqry:queryNode id="f5fefebdc0294b77" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-19T12:07:16.511-02:30" name="Phones" uuid="130a80aa-5703-4b9f-a4f4-cc8af63efc6a">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:58:49.682-02:30" name="Phones" uuid="49b46c6c-d367-4369-9873-3ed03245952f">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\w$</param>
@@ -269,53 +269,101 @@
         <link dest="eaad7fa1854e4e49" destField="sessions" source="3261862c28a24844" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info title="Place Accuracy">
-                    <opqry:message/>
+                <opqry:info format="markdown" title="Place Accuracy">
+                    <opqry:message># Place Accuracy
+
+Calculate place accuracy for the selected sessions.
+
+## Output
+
+Output table will have six columns:
+
+ - *Session*
+ 
+   Session name
+
+ - *Feature*
+
+   Feature name
+
+ - *Count*
+
+   Total found
+
+ - *Accurate*
+
+   Total accurate
+
+ - *Substituted*
+
+   Total substituted
+
+ - *Deleted*
+
+   Total deleted
+
+## Example
+
+Session|Feature|Count|Accurate|Substituted|Deleted
+:---:|:---:|:---:|:---:|:---:|:---:
+Anne.Session|alveolar|50|8|2|40
+Anne.Session|dental|7|0|3|4
+Anne.Session|labial|18|5|0|13
+Anne.Session|laryngeal|6|1|0|5
+Anne.Session|palatal|9|6|0|3
+Anne.Session|velar|15|3|1|11
+Total|alveolar|50|8|2|40
+Total|dental|7|0|3|4
+Total|labial|18|5|0|13
+Total|laryngeal|6|1|0|5
+Total|palatal|9|6|0|3
+Total|velar|15|3|1|11
+</opqry:message>
                 </opqry:info>
                 <opqry:node ref="2527c170128646c6">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="29b5e3a646d24c21">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="f54f8a7c1df94773">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="bfbfce80630d4107">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="3b4f7e153ddc4911">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="e09ba0f06fd74f74">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="f5fefebdc0294b77">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="c8c37f0dc7834321">
-                    <opqry:info title="Phone Accuracy">
+                    <opqry:info format="html" title="Phone Accuracy">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:optionalNode enabled="true" ref="3c9e90c8e1ca40e9"/>
-                <opqry:optionalNode enabled="true" ref="52f3649323a74c1a"/>
-                <opqry:optionalNode enabled="true" ref="6d4335d0c2cc464d"/>
-                <opqry:optionalNode enabled="true" ref="eaad7fa1854e4e49"/>
+                <opqry:optionalNode enabled="false" ref="52f3649323a74c1a"/>
+                <opqry:optionalNode enabled="false" ref="6d4335d0c2cc464d"/>
+                <opqry:optionalNode enabled="false" ref="eaad7fa1854e4e49"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
         </extensions>
