@@ -10,7 +10,7 @@
                 <oga:meta x="15" y="15"/>
             </extensions>
         </node>
-        <node id="1a5b2e37" name="Selected Sessions" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="1a5b2e37" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="faee74843abd42ed" name="Phone Dispersion" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="65dc49d6">
+            <graph id="434829e7">
                 <node id="a5b7e9df6aa345e6" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -40,9 +40,9 @@
                     </extensions>
                 </node>
                 <ogcn:macro id="8d17b46c18244407" name="Phone Dispersion (global)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="12ad1508">
+                    <graph id="62d7947c">
                         <opqry:queryNode id="7fff3c48a5fd4b2a" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-17T12:49:21.210-02:30" name="Phones" uuid="7067f65a-2ca4-459e-8ccc-7e9d8ab083d7">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T10:18:00.848-02:30" name="Phones" uuid="4207bc54-89ec-44cd-b9d5-28c16c831998">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">\c</param>
@@ -52,7 +52,7 @@
                             </qry:query>
                             <extensions>
                                 <oga:settings/>
-                                <oga:meta x="277" y="115"/>
+                                <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
                         <node id="381ce3aecf344237" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
@@ -64,7 +64,7 @@
                                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                                     <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="487" y="129"/>
+                                <oga:meta x="180" y="15"/>
                             </extensions>
                         </node>
                         <node id="e3f2ba5af2eb4595" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
@@ -75,7 +75,7 @@
                                     <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
                                 </opqry:inventoryoptions>
                                 <oga:settings/>
-                                <oga:meta x="343" y="259"/>
+                                <oga:meta x="333" y="15"/>
                             </extensions>
                         </node>
                         <node id="d706b62019004cfc" type="class:ca.phon.app.opgraph.nodes.query.PhoneDispersion">
@@ -87,7 +87,7 @@
                                     <oga:property key="useFeatureVariability"><![CDATA[false]]></oga:property>
                                     <oga:property key="includeManner"><![CDATA[true]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="346" y="379"/>
+                                <oga:meta x="486" y="15"/>
                             </extensions>
                         </node>
                         <node id="74fe3d6c3cde4d1c" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
@@ -95,7 +95,7 @@
                                 <oga:settings>
                                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="531" y="359">
+                                <oga:meta x="639" y="15">
                                     <oga:default for="buffer" type="java.lang.String">Phone Dispersion (global)</oga:default>
                                 </oga:meta>
                             </extensions>
@@ -113,9 +113,9 @@
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="4fec0045b9fd4418" name="Phone Dispersion (feature)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="72d5492c">
+                    <graph id="76d1ca02">
                         <opqry:queryNode id="e05d552751e14c86" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-08-17T12:49:21.217-02:30" name="Phones" uuid="499f480a-db4a-4468-9776-ae70fc0606b7">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T10:18:00.857-02:30" name="Phones" uuid="1d1b95a7-384b-4bbe-a19b-7c0844a2fea5">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.primary.filter">\c</param>
@@ -200,26 +200,48 @@
         <link dest="faee74843abd42ed" destField="obj1" source="1a5b2e37" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info title="Phone Dispersion">
-                    <opqry:message/>
+                <opqry:info format="markdown" title="Phone Dispersion">
+                    <opqry:message># Phone Dispersion
+
+TODO
+
+## Output
+
+Output table will have three columns:
+
+ - *Session*
+
+    Session name
+
+ - *IPA Target*
+
+    Phone value
+
+ - *Dispersion*
+
+    Dispersion (global/feature)
+
+## Example
+
+</opqry:message>
                 </opqry:info>
                 <opqry:node ref="7fff3c48a5fd4b2a">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="d706b62019004cfc">
-                    <opqry:info title="Phone Dispersion">
+                    <opqry:info format="html" title="Phone Dispersion">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="e05d552751e14c86">
-                    <opqry:info title="Query : Phones">
+                    <opqry:info format="html" title="Query : Phones">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="99d0656f7dbc4ac0">
-                    <opqry:info title="Phone Dispersion">
+                    <opqry:info format="html" title="Phone Dispersion">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>

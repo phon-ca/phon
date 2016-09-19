@@ -20,9 +20,9 @@
             </extensions>
         </node>
         <ogcn:macro id="eae3f6e617084a67" name="Phone Accuracy (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="451b3863">
+            <graph id="26b8bde8">
                 <opqry:queryNode id="71b5bac8a8a04b30" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.759-02:30" name="Phones" uuid="a072a2ad-5e98-491e-b6c8-c06c4de8dcc1">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T10:38:45.318-02:30" name="Phones" uuid="17b18e9e-2a22-47a0-bd51-089ef60159ad">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\w</param>
@@ -80,9 +80,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="d8ed374bb33c40af" name="Phone Accuracy (word-initial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="3b3df1e2">
+            <graph id="58ef212c">
                 <opqry:queryNode id="235c9933ca55491a" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.767-02:30" name="Phones" uuid="fc020646-2602-4836-9be3-d0a24f0688b5">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T10:38:45.329-02:30" name="Phones" uuid="44f65610-9835-4009-976d-38776e856974">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">^\s?(X=\w)</param>
@@ -140,9 +140,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="246adcdeef184e3e" name="Phone Accuracy (word-medial)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4eca1ddb">
+            <graph id="b435b7a">
                 <opqry:queryNode id="c56d6018509a4307" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.774-02:30" name="Phones" uuid="6b1749c3-7fcf-4f48-b4ef-86f4c9ed2c2e">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T10:38:45.336-02:30" name="Phones" uuid="36c60424-7311-4aa2-9384-cd6804c79687">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">(?&lt;\w[\s\.]?)\w(?&gt;[\s\.]?\w)</param>
@@ -200,9 +200,9 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="f501750e342b4678" name="Phone Accuracy (word-final)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="2076f7c4">
+            <graph id="3c6f7945">
                 <opqry:queryNode id="528343b9b67c4a75" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T09:52:59.781-02:30" name="Phones" uuid="44ea8e4f-f944-4571-9fea-aa9195a06b46">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-19T10:38:45.342-02:30" name="Phones" uuid="0daad387-7521-4691-a79e-4622aaddead4">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\w$</param>
@@ -305,6 +305,7 @@ Output table will have six columns:
 ## Example
 
 Session|IPA Target|Count|Accurate|Substituted|Deleted
+:---:|:---:|:---:|:---:|:---:|:---:
 Anne.Session|p|4|1|0|3
 Anne.Session|b|9|3|0|6
 Anne.Session|t|9|1|0|8
