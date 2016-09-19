@@ -27,6 +27,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -516,6 +517,8 @@ public class NodeWizard extends WizardFrame {
 		editorPane.setEditorKit(editorKit);
 		editorPane.setEditable(false);
 		editorPane.setText(message);
+		
+		editorPane.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
 		
 		stepTitle.getContentContainer().add(new JScrollPane(editorPane), BorderLayout.CENTER);
 		retVal.add(stepTitle, BorderLayout.CENTER);
