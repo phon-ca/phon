@@ -45,7 +45,7 @@ public class TristateCheckBox extends JCheckBox implements Icon {
 	final static Icon defaultIcon = UIManager.getIcon("CheckBox.icon");
 	
 	private static ImageIcon uncheckedIcon =
-			IconManager.getInstance().getIcon("tristatecheckbox/checkbox-unchecked", IconSize.SMALL);
+			IconManager.getInstance().getIcon("tristatecheckbox/checkbox", IconSize.SMALL);
 	
 	private static ImageIcon checkedIcon = 
 			IconManager.getInstance().getIcon("tristatecheckbox/checkbox-checked", IconSize.SMALL);
