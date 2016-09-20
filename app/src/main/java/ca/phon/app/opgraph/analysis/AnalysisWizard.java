@@ -33,6 +33,8 @@ import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.wizard.WizardStep;
 
@@ -72,7 +74,16 @@ public class AnalysisWizard extends NodeWizard {
 		builder.addItem("File@save", new SaveAnalysisAction(this));
 		
 		builder.addSeparator("File@Save analysis...", "open_editor");
-		builder.addItem("File@open_editor", new OpenNodeEditorAction(getGraph()));
+		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
+		openEditorAct.putValue(PhonUIAction.NAME, "Open graph in analysis editor...");
+		builder.addItem("File@open_editor", openEditorAct);
+	}
+	
+	public void onOpenEditor(PhonActionEvent pae) {
+		final OpenNodeEditorAction act = new OpenNodeEditorAction(getGraph());
+		act.actionPerformed(pae.getActionEvent());
+		
+		dispose();
 	}
 	
 	private void addSessionSelectionStep() {
