@@ -45,6 +45,7 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.OSInfo;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -148,11 +149,21 @@ public class RecentProjectsList extends JPanel {
 		openAction.putValue(Action.SMALL_ICON, openIcn);
 		openAction.putValue(Action.LARGE_ICON_KEY, openIcnL);
 		
+		String fsIcon = "apps/system-file-manager";
+		String fsName = "file system viewer";
+		if(OSInfo.isWindows()) {
+			fsName = "File Explorer";
+			fsIcon = "apps/file-explorer";
+		} else {
+			fsName = "Finder";
+			fsIcon = "apps/finder";
+		}
+		
 		PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
 		showAction.putValue(Action.NAME, "Show project");
-		showAction.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("apps/system-file-manager", IconSize.SMALL));
-		showAction.putValue(Action.LARGE_ICON_KEY, IconManager.getInstance().getIcon("apps/system-file-manager", IconSize.MEDIUM));
-		showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in file system viewer");
+		showAction.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon(fsIcon, IconSize.SMALL));
+		showAction.putValue(Action.LARGE_ICON_KEY, IconManager.getInstance().getIcon(fsIcon, IconSize.MEDIUM));
+		showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in " + fsName);
 		retVal.addAction(showAction);
 		
 		retVal.getTopLabel().setIcon(openIcn);
