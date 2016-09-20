@@ -24,10 +24,14 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class TristateCheckBox extends JCheckBox implements Icon {
 
@@ -37,6 +41,18 @@ public class TristateCheckBox extends JCheckBox implements Icon {
 	private boolean enablePartialCheck = true;
 	
 	private boolean partialIsSelected = false;
+	
+	final static Icon defaultIcon = UIManager.getIcon("CheckBox.icon");
+	
+	private static ImageIcon uncheckedIcon =
+			IconManager.getInstance().getIcon("tristatecheckbox/checkbox-unchecked", IconSize.SMALL);
+	
+	private static ImageIcon checkedIcon = 
+			IconManager.getInstance().getIcon("tristatecheckbox/checkbox-checked", IconSize.SMALL);
+	
+	private static ImageIcon partiallyCheckedIcon =
+			IconManager.getInstance().getIcon("tristatecheckbox/checkbox-partially-checked", IconSize.SMALL);
+	
 	
 	public TristateCheckBox() {
 		super();
@@ -147,32 +163,37 @@ public class TristateCheckBox extends JCheckBox implements Icon {
 		testFrame.setVisible(true);
 	}
 	
-	final static Icon icon = UIManager.getIcon("CheckBox.icon");
+	
 
 	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
+		Icon icon = defaultIcon;
+		switch(getSelectionState()) {
+		case CHECKED:
+			icon = checkedIcon;
+			break;
+			
+		case UNCHECKED:
+			icon = uncheckedIcon;
+			break;
+			
+		case PARTIALLY_CHECKED:
+			icon = partiallyCheckedIcon;
+			break;
+			
+		default:
+			icon = defaultIcon;
+		}
 		icon.paintIcon(c, g, x, y);
-		if (getSelectionState() != TristateCheckBoxState.PARTIALLY_CHECKED)
-			return;
-
-		int w = getIconWidth();
-		int h = getIconHeight();
-		g.setColor(c.isEnabled() ? new Color(51, 51, 51) : new Color(122, 138, 153));
-		g.fillRect(x + 4, y + 4, w - 8, h - 8);
-
-		if (!c.isEnabled())
-			return;
-		g.setColor(new Color(81, 81, 81));
-		g.drawRect(x + 4, y + 4, w - 9, h - 9);
 	}
 
 	@Override
 	public int getIconWidth() {
-		return icon.getIconWidth();
+		return IconSize.SMALL.getWidth();
 	}
 
 	@Override
 	public int getIconHeight() {
-		return icon.getIconHeight();
+		return IconSize.SMALL.getHeight();
 	}
 }
