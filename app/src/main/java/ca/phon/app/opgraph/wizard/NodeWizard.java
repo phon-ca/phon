@@ -576,6 +576,8 @@ public class NodeWizard extends WizardFrame {
 			stopExecution();
 			if(retVal == 2)
 				super.cancel();
+		} else {
+			super.cancel();
 		}
 	}
 	
