@@ -538,7 +538,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	public void setModified(boolean modified) {
 		final boolean lastVal = super.hasUnsavedChanges();
-		setModified(modified);
+		super.setModified(modified);
 		
 		if(lastVal != modified) {
 			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFIED_FLAG_CHANGED, this);
