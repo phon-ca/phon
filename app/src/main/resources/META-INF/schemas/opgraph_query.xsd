@@ -119,6 +119,7 @@
                     <xs:element ref="info" maxOccurs="1" minOccurs="0"/>
                     <xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="optionalNode" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="report-template" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:attribute name="type" type="og:nonEmptyString" use="required">
                     <xs:annotation>
@@ -149,7 +150,14 @@
         <xs:attribute name="title" type="xs:string" use="optional"/>
         <xs:attribute name="format" type="WizardInfoMessageFormat" use="optional" default="html"/>
     </xs:complexType>
-    
+
+    <xs:complexType name="ReportTemplateType">
+        <xs:sequence>
+            <xs:element ref="template" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
     <xs:simpleType name="WizardInfoMessageFormat">
     	<xs:restriction base="xs:string">
     		<xs:enumeration value="html"/>
@@ -162,5 +170,7 @@
     <xs:element name="nodewizard" type="NodeWizardType" substitutionGroup="og:extension"/>
     <xs:element name="info" type="WizardInfoType"/>
     <xs:element name="message" type="xs:string"/>
+    <xs:element name="report-template" type="ReportTemplateType"/>
+    <xs:element name="template" type="xs:string"/>
     
 </xs:schema>

@@ -46,6 +46,8 @@ public class NodeWizardSettingsPanel extends JPanel {
 	
 	public static final String WIZARD_INFO = "_wizard_info_";
 	
+	public static final String REPORT_TEMPLATE = "_report_template_";
+	
 	private WizardExtension wizardExtension;
 	
 	private Map<String, SettingsPanel> panels = new HashMap<>();
@@ -84,6 +86,25 @@ public class NodeWizardSettingsPanel extends JPanel {
 			nodePanel.setFormat(wizardExtension.getNodeMessageFormat(node));
 			panels.put(id, nodePanel);
 			cardPanel.add(nodePanel, id);
+		}
+		
+		if(wizardExtension.getReportTemplateNames().size() > 0) {
+			for(String reportName:wizardExtension.getReportTemplateNames()) {
+				final String id = REPORT_TEMPLATE + reportName;
+				final SettingsPanel reportPanel = new SettingsPanel();
+				reportPanel.formatBox.setVisible(false);
+				reportPanel.setTitle("Report Template:" + reportName);
+				reportPanel.setInfo(wizardExtension.getReportTemplate(reportName));
+				panels.put(id, reportPanel);
+				cardPanel.add(reportPanel, id);
+			}
+		} else {
+			final SettingsPanel reportPanel = new SettingsPanel();
+			reportPanel.formatBox.setVisible(false);
+			reportPanel.setTitle("Report Template");
+			reportPanel.setInfo(wizardExtension.getReportTemplate(REPORT_TEMPLATE));
+			panels.put(REPORT_TEMPLATE, reportPanel);
+			cardPanel.add(reportPanel, REPORT_TEMPLATE);
 		}
 		
 		stepList = new JList<>(new StepListModel());
@@ -200,7 +221,7 @@ public class NodeWizardSettingsPanel extends JPanel {
 			});
 			
 			infoArea = new RSyntaxTextArea();
-			infoArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
+			infoArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
 			final JPanel centerPanel = new JPanel(new BorderLayout());
 			final JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			formatPanel.add(formatBox);

@@ -19,10 +19,13 @@
 package ca.phon.app.opgraph.wizard;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -45,6 +48,8 @@ public class WizardExtension implements Iterable<OpNode> {
 	private final List<OpNode> optionalNodes = new ArrayList<>();
 	
 	private final Map<OpNode, Boolean> optionalDefaults = new HashMap<>();
+	
+	private final Map<String, String> reportTemplates = new LinkedHashMap<>();
 	
 	private final OpGraph graph;
 	
@@ -230,4 +235,27 @@ public class WizardExtension implements Iterable<OpNode> {
 	public WizardInfo getWizardInfo() {
 		return this.wizardInfo;
 	}
+	
+	public Set<String> getReportTemplateNames() {
+		return Collections.unmodifiableSet(reportTemplates.keySet());
+	}
+	
+	public String getReportTemplate(String name) {
+		return reportTemplates.get(name);
+	}
+	
+	/**
+	 * Set report template for the given identifier.
+	 * 
+	 * @param name
+	 * @param template
+	 */
+	public void putReportTemplate(String name, String template) {
+		reportTemplates.put(name, template);
+	}
+	
+	public void removeReportTemplate(String name) {
+		reportTemplates.remove(name);
+	}
+	
 }
