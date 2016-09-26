@@ -40,6 +40,9 @@ import javax.swing.Scrollable;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.welcome.LocalProjectButton;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.PhonGuiConstants;
@@ -139,34 +142,55 @@ public class RecentProjectsList extends JPanel {
 		LocalProjectButton retVal = new LocalProjectButton(projectFolder);
 		
 		PhonUIAction openAction = new PhonUIAction(this, "onOpenProject", retVal);
+		
+		final String defaultIconName = "actions/document-open";
 		ImageIcon openIcn = 
-			IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
+			IconManager.getInstance().getSystemIconForPath(projectFolder.getAbsolutePath(), defaultIconName, IconSize.SMALL);
 		ImageIcon openIcnL =
-			IconManager.getInstance().getIcon("actions/document-open", IconSize.MEDIUM);
+			IconManager.getInstance().getSystemIconForPath(projectFolder.getAbsolutePath(), defaultIconName, IconSize.MEDIUM);
 		
 		openAction.putValue(Action.NAME, "Open project");
 		openAction.putValue(Action.SHORT_DESCRIPTION, "Open: " + projectFolder.getAbsolutePath());
 		openAction.putValue(Action.SMALL_ICON, openIcn);
 		openAction.putValue(Action.LARGE_ICON_KEY, openIcnL);
 		
-		String fsIcon = "apps/system-file-manager";
+		String fsIconName = "apps/system-file-manager";
 		String fsName = "file system viewer";
+		
+		ImageIcon fsIcon = IconManager.getInstance().getIcon(fsIconName, IconSize.SMALL);
+		ImageIcon fsIconL = IconManager.getInstance().getIcon(fsIconName, IconSize.MEDIUM);
+		
 		if(OSInfo.isWindows()) {
 			fsName = "File Explorer";
-			fsIcon = "apps/file-explorer";
+			
+			final String explorerPath = "C:\\Windows\\explorer.exe";
+			ImageIcon explorerIcon = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.SMALL);
+			ImageIcon explorerIconL = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.MEDIUM);
+			
+			if(explorerIcon != null)
+				fsIcon = explorerIcon;
+			if(explorerIconL != null)
+				fsIconL = explorerIconL;
 		} else {
 			fsName = "Finder";
-			fsIcon = "apps/finder";
+			
+			ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
+			ImageIcon finderIconL = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.MEDIUM);
+			
+			if(finderIcon != null)
+				fsIcon = finderIcon;
+			if(finderIconL != null)
+				fsIconL = finderIconL;
 		}
 		
 		PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
 		showAction.putValue(Action.NAME, "Show project");
-		showAction.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon(fsIcon, IconSize.SMALL));
-		showAction.putValue(Action.LARGE_ICON_KEY, IconManager.getInstance().getIcon(fsIcon, IconSize.MEDIUM));
+		showAction.putValue(Action.SMALL_ICON, fsIcon);
+		showAction.putValue(Action.LARGE_ICON_KEY, fsIconL);
 		showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in " + fsName);
 		retVal.addAction(showAction);
 		
-		retVal.getTopLabel().setIcon(openIcn);
+		retVal.getTopLabel().setIcon(openIcnL);
 		retVal.setDefaultAction(openAction);
 		
 		return retVal;

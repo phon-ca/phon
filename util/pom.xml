@@ -22,6 +22,11 @@
   		<groupId>de.susebox</groupId>
   		<artifactId>jtopas</artifactId>
   	</dependency>
+  	
+  	<dependency>
+  		<groupId>ca.hedlund</groupId>
+  		<artifactId>desktopicons</artifactId>
+  	</dependency>
   </dependencies>
   
 </project>

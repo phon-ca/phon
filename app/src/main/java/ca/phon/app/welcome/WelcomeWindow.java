@@ -195,7 +195,8 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton createNewButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
+		ImageIcon newIcn = 
+				IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
 		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
 		
 		String s1 = "Create Project";

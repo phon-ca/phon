@@ -120,6 +120,7 @@
 
 		<!-- Dependency versions -->
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
+		<ca.hedlund.desktopicons.version>1-SNAPSHOT</ca.hedlund.desktopicons.version>
 		<ca.gedge.opgraph.version>0.5-SNAPSHOT</ca.gedge.opgraph.version>
 		<ca.phon.native-dialogs.version>10</ca.phon.native-dialogs.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
@@ -189,6 +190,12 @@
 				<groupId>ca.hedlund</groupId>
 				<artifactId>tst</artifactId>
 				<version>${ca.hedlund.tst.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>ca.hedlund</groupId>
+				<artifactId>desktopicons</artifactId>
+				<version>${ca.hedlund.desktopicons.version}</version>
 			</dependency>
 
 			<dependency>

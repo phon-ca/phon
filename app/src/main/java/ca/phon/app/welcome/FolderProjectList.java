@@ -57,6 +57,7 @@ import org.jdesktop.swingx.JXRadioGroup;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
@@ -222,55 +223,70 @@ public class FolderProjectList extends JPanel {
 	private LocalProjectButton getProjectButton(File f) {
 		LocalProjectButton retVal = new LocalProjectButton(f);
 		
+		final String defaultIconName = 
+				(f.isFile() ? "actions/archive-extract" : "actions/document-open");
+		ImageIcon icon = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.SMALL);
+		ImageIcon iconL = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.MEDIUM);
+		
 		// if we have a file, we need to add the import action
 		if(f.isFile()) {
 			PhonUIAction extractAction = new PhonUIAction(this, "onExtractProject", retVal);
-			ImageIcon importIcn = 
-				IconManager.getInstance().getIcon("actions/archive-extract", IconSize.SMALL);
-			ImageIcon importIcnL = 
-				IconManager.getInstance().getIcon("actions/archive-extract", IconSize.MEDIUM);
+			
 			extractAction.putValue(Action.NAME, "Extract project");
 			extractAction.putValue(Action.SHORT_DESCRIPTION, "Extract: " +  f.getAbsolutePath());
-			extractAction.putValue(Action.SMALL_ICON, importIcn);
-			extractAction.putValue(Action.LARGE_ICON_KEY, importIcnL);
+			extractAction.putValue(Action.SMALL_ICON, icon);
+			extractAction.putValue(Action.LARGE_ICON_KEY, iconL);
 			retVal.setDefaultAction(extractAction);
 			
-			retVal.getTopLabel().setIcon(importIcn);
 			retVal.getTopLabel().setForeground(PhonGuiConstants.PHON_ORANGE);
 		} else {
 			PhonUIAction openAction = new PhonUIAction(this, "onOpenProject", retVal);
-			ImageIcon openIcn = 
-				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
-			ImageIcon openIcnL =
-				IconManager.getInstance().getIcon("actions/document-open", IconSize.MEDIUM);
-			
-			
 			
 			openAction.putValue(Action.NAME, "Open project");
 			openAction.putValue(Action.SHORT_DESCRIPTION, "Open: " + f.getAbsolutePath());
-			openAction.putValue(Action.SMALL_ICON, openIcn);
-			openAction.putValue(Action.LARGE_ICON_KEY, openIcnL);
+			openAction.putValue(Action.SMALL_ICON, icon);
+			openAction.putValue(Action.LARGE_ICON_KEY, iconL);
 			retVal.setDefaultAction(openAction);
 			
-			String fsIcon = "apps/system-file-manager";
+			String fsIconName = "apps/system-file-manager";
 			String fsName = "file system viewer";
+			
+			ImageIcon fsIcon = IconManager.getInstance().getIcon(fsIconName, IconSize.SMALL);
+			ImageIcon fsIconL = IconManager.getInstance().getIcon(fsIconName, IconSize.MEDIUM);
+			
 			if(OSInfo.isWindows()) {
 				fsName = "File Explorer";
-				fsIcon = "apps/file-explorer";
+				
+				final String explorerPath = "C:\\Windows\\explorer.exe";
+				ImageIcon explorerIcon = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.SMALL);
+				ImageIcon explorerIconL = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.MEDIUM);
+				
+				if(explorerIcon != null)
+					fsIcon = explorerIcon;
+				if(explorerIconL != null)
+					fsIconL = explorerIconL;
 			} else {
 				fsName = "Finder";
-				fsIcon = "apps/finder";
+				
+				ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
+				ImageIcon finderIconL = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.MEDIUM);
+				
+				if(finderIcon != null)
+					fsIcon = finderIcon;
+				if(finderIconL != null)
+					fsIconL = finderIconL;
 			}
 			
 			PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
 			showAction.putValue(Action.NAME, "Show project");
-			showAction.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon(fsIcon, IconSize.SMALL));
-			showAction.putValue(Action.LARGE_ICON_KEY, IconManager.getInstance().getIcon(fsIcon, IconSize.MEDIUM));
+			showAction.putValue(Action.SMALL_ICON, fsIcon);
+			showAction.putValue(Action.LARGE_ICON_KEY, fsIconL);
 			showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in " + fsName);
 			retVal.addAction(showAction);
 			
-			ImageIcon archiveIcn = IconManager.getInstance().getIcon("actions/archive-insert", IconSize.SMALL);
-			ImageIcon archiveIcnL = IconManager.getInstance().getIcon("actions/archive-insert", IconSize.MEDIUM);
+			final String defaultArchiveIconName = "actions/archive-insert";
+			ImageIcon archiveIcn = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.SMALL);
+			ImageIcon archiveIcnL = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.MEDIUM);
 			
 			PhonUIAction archiveAction = new PhonUIAction(this, "onArchiveProject", retVal);
 			archiveAction.putValue(Action.NAME, "Archive project");
@@ -278,10 +294,8 @@ public class FolderProjectList extends JPanel {
 			archiveAction.putValue(Action.SMALL_ICON, archiveIcn);
 			archiveAction.putValue(Action.LARGE_ICON_KEY, archiveIcnL);
 			retVal.addAction(archiveAction);
-		
-			retVal.getTopLabel().setIcon(openIcn);
 		}
-		
+		retVal.getTopLabel().setIcon(iconL);
 		
 		return retVal;
 	}

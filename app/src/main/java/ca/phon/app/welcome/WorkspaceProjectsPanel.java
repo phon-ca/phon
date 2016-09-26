@@ -41,12 +41,14 @@ import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -99,13 +101,6 @@ public class WorkspaceProjectsPanel extends JPanel {
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		PhonUIAction browseForWorkspaceAction =
-			new PhonUIAction(this, "onBrowseForWorkspace");
-		browseForWorkspaceAction.putValue(Action.NAME, "Change...");
-		browseForWorkspaceAction.putValue(Action.SHORT_DESCRIPTION, "Change workspace folder");
-		ImageIcon icn = IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		browseForWorkspaceAction.putValue(Action.SMALL_ICON, icn);
-		
 		workspaceBtn = new MultiActionButton();
 		workspaceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
@@ -128,11 +123,13 @@ public class WorkspaceProjectsPanel extends JPanel {
 		selectHistoryAct.putValue(Action.NAME, "Select workspace");
 		selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Select workspace folder from history");
 		
-		ImageIcon workspaceIcn = IconManager.getInstance().getIcon("places/folder-workspace", IconSize.SMALL);
+		ImageIcon workspaceIcn = 
+				IconManager.getInstance().getSystemIconForPath(
+						Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
 		
 		workspaceBtn.setTopLabelText(WorkspaceTextStyler.toHeaderText("Workspace Folder"));
-		workspaceBtn.getTopLabel().setIcon(workspaceIcn);
 		workspaceBtn.getTopLabel().setFont(FontPreferences.getTitleFont());
+		workspaceBtn.getBottomLabel().setIcon(workspaceIcn);
 		workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
 		workspaceBtn.setBackgroundPainter(bgPainter);
 		workspaceBtn.addMouseListener(bgPainter);
@@ -160,17 +157,29 @@ public class WorkspaceProjectsPanel extends JPanel {
 		final MenuBuilder builder = new MenuBuilder(menu);
 		
 		for(File workspaceFolder:history) {
-			ImageIcon workspaceIcn = IconManager.getInstance().getIcon("places/folder-workspace", IconSize.SMALL);
+			ImageIcon workspaceIcn = 
+					IconManager.getInstance().getSystemIconForPath(
+							Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
 			final PhonUIAction selectAction = new PhonUIAction(this, "onSelectFolder", workspaceFolder);
 			selectAction.putValue(PhonUIAction.NAME, workspaceFolder.getAbsolutePath());
 			selectAction.putValue(PhonUIAction.SMALL_ICON, workspaceIcn);
 			builder.addItem(".", selectAction);
 		}
 	
+		ImageIcon browseIcn = 
+				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
+		if(OSInfo.isMacOs()) {
+			ImageIcon finderIcon =
+					IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
+			if(finderIcon != null) browseIcn = finderIcon;
+		} else if(OSInfo.isWindows()) {
+			ImageIcon explorerIcon = 
+					IconManager.getInstance().getSystemIconForPath("C:\\Windows\\explorer.exe", IconSize.SMALL);
+			if(explorerIcon != null) browseIcn = explorerIcon;
+		}
 		builder.addSeparator(".", "browse");
 		final SelectWorkspaceCommand cmd = new SelectWorkspaceCommand();
 		cmd.putValue(Action.NAME, "Browse for workspace folder...");
-		ImageIcon browseIcn = IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
 		cmd.putValue(Action.SMALL_ICON, browseIcn);
 		builder.addItem(".@browse", cmd);
 		

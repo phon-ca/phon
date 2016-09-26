@@ -36,6 +36,9 @@ import java.util.logging.Logger;
 import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 
+import ca.hedlund.desktopicons.DesktopIconException;
+import ca.hedlund.desktopicons.DesktopIcons;
+import ca.hedlund.desktopicons.StockIcon;
 import ca.phon.util.StackTraceInfo;
 
 /**
@@ -126,6 +129,124 @@ public class IconManager {
 		Image gray = GrayFilter.createDisabledImage(img);
 		
 		return new ImageIcon(gray);
+	}
+	
+	/**
+	 * Load system icon for given path.
+	 * 
+	 * @param path
+	 * @param size
+	 * @param backupIcon icon name used as backup if system icon not found
+	 * @return icon for given path or <code>null</code> if not found
+	 */
+	public ImageIcon getSystemIconForPath(String path, IconSize size) {
+		return getSystemIconForPath(path, null, size);
+	}
+	
+	/**
+	 * Load system icon for given path.
+	 * 
+	 * @param path
+	 * @param backupIcon icon name used as backup if system icon not found. May be <code>null</code>
+	 * @param size
+
+	 * @return icon for given path or backup icon if not found
+	 */
+	public ImageIcon getSystemIconForPath(String path, String backupIcon, IconSize size) {
+		ImageIcon retVal = null;
+		
+		try {
+			final Image img = DesktopIcons.getIconForPath(path, size.getWidth(), size.getHeight());
+			retVal = new ImageIcon(img);
+		} catch (DesktopIconException e) {
+			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			
+			if(backupIcon != null && backupIcon.length() > 0) {
+				retVal = getIcon(backupIcon, size);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Load system icon for given file type.  File type should be an extension
+	 * without a leading '.'
+	 * 
+	 * @param filetype
+	 * @param size
+	 * 
+	 * @return icon for given file type or <code>null</code> if not found
+	 */
+	public ImageIcon getSystemIconForFileType(String filetype, IconSize size) {
+		return getSystemIconForFileType(filetype, null, size);
+	}
+	
+	/**
+	 * Load system icon for given file type.  File type should be an extension
+	 * without a leading '.'
+	 * 
+	 * @param filetype
+	 * @param size
+	 * @param backupIcon icon name used as backup if system icon not found, may be <code>null</code>
+	 * 
+	 * @return icon for given file type or backup icon if not found
+	 */
+	public ImageIcon getSystemIconForFileType(String filetype, String backupIcon, IconSize size) {
+		ImageIcon retVal = null;
+		
+		try {
+			final Image img = DesktopIcons.getIconForFileType(filetype, size.getWidth(), size.getHeight());
+			retVal = new ImageIcon(img);
+		} catch (DesktopIconException e) {
+			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			
+			if(backupIcon != null && backupIcon.length() > 0) {
+				retVal = getIcon(backupIcon, size);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Load system stock icon.  Use a value from either MacOSStockIcon or
+	 * WindowsStockIcon enums.
+	 * 
+	 * @param stockIcon
+	 * @param size
+	 * 
+	 * @return icon for given file type or backup icon if not found
+	 */
+	public ImageIcon getSystemStockIcon(StockIcon stockIcon, IconSize size) {
+		return getSystemStockIcon(stockIcon, null, size);
+	}
+	
+	/**
+	 * Load system stock icon.  Use a value from either MacOSStockIcon or
+	 * WindowsStockIcon enums.
+	 * 
+	 * @param stockIcon
+	 * @param size
+	 * @param backupIcon icon name used as backup if system icon not found
+	 * 
+	 * @return icon for given file type or backup icon if not found
+	 */
+	public ImageIcon getSystemStockIcon(StockIcon stockIcon, String backupIcon, IconSize size) {
+		ImageIcon retVal = null;
+		
+		try {
+			final Image img = DesktopIcons.getStockIcon(stockIcon, size.getWidth(), size.getHeight());
+			retVal = new ImageIcon(img);
+		} catch (DesktopIconException e) {
+			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			
+			if(backupIcon != null && backupIcon.length() > 0) {
+				retVal = getIcon(backupIcon, size);
+			}
+		}
+		
+		return retVal;
 	}
 	
 	/**
