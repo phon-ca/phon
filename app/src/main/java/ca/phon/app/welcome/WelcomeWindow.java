@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GradientPaint;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,6 +31,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,6 +51,10 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.NativeUtilities;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.VersionInfo;
 import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.menu.file.NewProjectCommand;
@@ -195,9 +201,22 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton createNewButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = 
-				IconManager.getInstance().getIcon("actions/folder_new", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/folder_new", IconSize.MEDIUM);
+		final String folderIconName = "actions/folder_new";
+		final StockIcon stockIcon = 
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER);
+		final ImageIcon folderIcon = 
+				IconManager.getInstance().getSystemStockIcon(stockIcon, folderIconName, IconSize.MEDIUM);
+		final ImageIcon addIcon =
+				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+		
+		final BufferedImage newIcnImg = 
+				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
+						BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = newIcnImg.createGraphics();
+		g.drawImage(folderIcon.getImage(), 0, 0, this);
+		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
+				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
+		final ImageIcon newIcn = new ImageIcon(newIcnImg);
 		
 		String s1 = "Create Project";
 		String s2 = "Create a new project...";
@@ -211,7 +230,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 		
 		final NewProjectCommand newProjectCmd = new NewProjectCommand();
 		newProjectCmd.putValue(NewProjectCommand.SMALL_ICON, newIcn);
-		newProjectCmd.putValue(NewProjectCommand.LARGE_ICON_KEY, newIcnL);
+		newProjectCmd.putValue(NewProjectCommand.LARGE_ICON_KEY, newIcn);
 		retVal.setDefaultAction(newProjectCmd);
 		
 		BtnBgPainter bgPainter = new BtnBgPainter();
@@ -226,14 +245,20 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton createBrowseButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon browseIcn = IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
-		ImageIcon browseIcnL = IconManager.getInstance().getIcon("actions/document-open", IconSize.MEDIUM);
+		final String defaultFolderIconName = "actions/document-open";
+		final StockIcon stockIcon = 
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.OpenFolderIcon : WindowsStockIcon.FOLDEROPEN);
+		
+		final ImageIcon browseIcn =
+				IconManager.getInstance().getSystemStockIcon(stockIcon, defaultFolderIconName, IconSize.SMALL);
+		final ImageIcon browseIcnL =
+				IconManager.getInstance().getSystemStockIcon(stockIcon, defaultFolderIconName, IconSize.MEDIUM);
 		
 		String s1 = "Browse for Project";
 		String s2 = "Browse for project folder on disk...";
 		
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
-		retVal.getTopLabel().setIcon(browseIcn);
+		retVal.getTopLabel().setIcon(browseIcnL);
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getBottomLabel().setText(WorkspaceTextStyler.toDescText(s2));
@@ -266,7 +291,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 		String s2 = "Modify application settings";
 		
 		retVal.setTopLabelText(WorkspaceTextStyler.toHeaderText(s1));
-		retVal.getTopLabel().setIcon(prefsIcn);
+		retVal.getTopLabel().setIcon(prefsIcnL);
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.setBottomLabelText(WorkspaceTextStyler.toDescText(s2));
@@ -290,14 +315,31 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton createMediaButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon videoFolderIcn = IconManager.getInstance().getIcon("places/folder-video", IconSize.SMALL);
-		ImageIcon videoFolderIcnL = IconManager.getInstance().getIcon("places/folder-video", IconSize.MEDIUM);
+		final String folderIconName = "places/folder-video";
+		final StockIcon stockIcon = 
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.VoicesFolderIcon : WindowsStockIcon.VIDEOFILES);
+		final ImageIcon folderIcon = 
+				IconManager.getInstance().getSystemStockIcon(stockIcon, folderIconName, IconSize.MEDIUM);
+		final ImageIcon addIcon =
+				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+		
+		final BufferedImage newIcnImg = 
+				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
+						BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = newIcnImg.createGraphics();
+		g.drawImage(folderIcon.getImage(), 0, 0, this);
+		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
+				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
+		final ImageIcon newIcn = new ImageIcon(newIcnImg);
+		
+//		ImageIcon videoFolderIcn = IconManager.getInstance().getIcon("places/folder-video", IconSize.SMALL);
+//		ImageIcon videoFolderIcnL = IconManager.getInstance().getIcon("places/folder-video", IconSize.MEDIUM);
 		
 		String s1 = "Select Media Folders";
 		String s2 = "Set up a list of folders where media can be found";
 		
 		retVal.setTopLabelText(WorkspaceTextStyler.toHeaderText(s1));
-		retVal.getTopLabel().setIcon(videoFolderIcn);
+		retVal.getTopLabel().setIcon(newIcn);
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.setBottomLabelText(WorkspaceTextStyler.toDescText(s2));
@@ -305,8 +347,8 @@ public class WelcomeWindow extends CommonModuleFrame {
 		final PreferencesCommand prefsAct = new PreferencesCommand("Media");
 		prefsAct.putValue(PhonUIAction.NAME, "Select media folders...");
 		prefsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Choose where Phon looks for media files...");
-		prefsAct.putValue(PhonUIAction.SMALL_ICON, videoFolderIcn);
-		prefsAct.putValue(PhonUIAction.LARGE_ICON_KEY, videoFolderIcnL);
+		prefsAct.putValue(PhonUIAction.SMALL_ICON, newIcn);
+		prefsAct.putValue(PhonUIAction.LARGE_ICON_KEY, newIcn);
 		
 		BtnBgPainter bgPainter = new BtnBgPainter();
 		retVal.setBackgroundPainter(bgPainter);

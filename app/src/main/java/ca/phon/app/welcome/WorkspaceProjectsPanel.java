@@ -159,7 +159,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 		for(File workspaceFolder:history) {
 			ImageIcon workspaceIcn = 
 					IconManager.getInstance().getSystemIconForPath(
-							Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
+							workspaceFolder.getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
 			final PhonUIAction selectAction = new PhonUIAction(this, "onSelectFolder", workspaceFolder);
 			selectAction.putValue(PhonUIAction.NAME, workspaceFolder.getAbsolutePath());
 			selectAction.putValue(PhonUIAction.SMALL_ICON, workspaceIcn);
