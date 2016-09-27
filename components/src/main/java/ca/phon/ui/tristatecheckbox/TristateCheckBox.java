@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -30,10 +31,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-public class TristateCheckBox extends JCheckBox implements Icon {
+public class TristateCheckBox extends JCheckBox {
 
 	private static final long serialVersionUID = 7998392527523539504L;
 
@@ -42,22 +44,9 @@ public class TristateCheckBox extends JCheckBox implements Icon {
 	
 	private boolean partialIsSelected = false;
 	
-	final static Icon defaultIcon = UIManager.getIcon("CheckBox.icon");
-	
-	private static ImageIcon uncheckedIcon =
-			IconManager.getInstance().getIcon("tristatecheckbox/checkbox", IconSize.SMALL);
-	
-	private static ImageIcon checkedIcon = 
-			IconManager.getInstance().getIcon("tristatecheckbox/checkbox-checked", IconSize.SMALL);
-	
-	private static ImageIcon partiallyCheckedIcon =
-			IconManager.getInstance().getIcon("tristatecheckbox/checkbox-partially-checked", IconSize.SMALL);
-	
-	
 	public TristateCheckBox() {
 		super();
 		setSelectionState(TristateCheckBoxState.UNCHECKED);
-		setIcon(this);
 		addActionListener( (e) -> {
 			final TristateCheckBoxState currentState = getSelectionState();
 			switch(currentState) {
@@ -163,37 +152,28 @@ public class TristateCheckBox extends JCheckBox implements Icon {
 		testFrame.setVisible(true);
 	}
 	
-	
-
 	@Override
-	public void paintIcon(Component c, Graphics g, int x, int y) {
-		Icon icon = defaultIcon;
-		switch(getSelectionState()) {
-		case CHECKED:
-			icon = checkedIcon;
-			break;
-			
-		case UNCHECKED:
-			icon = uncheckedIcon;
-			break;
-			
-		case PARTIALLY_CHECKED:
-			icon = partiallyCheckedIcon;
-			break;
-			
-		default:
-			icon = defaultIcon;
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		
+		if(getSelectionState() == TristateCheckBoxState.PARTIALLY_CHECKED) {
+			if(OSInfo.isMacOs()) {
+				int rectSize = 
+						getHeight() - (getInsets().top + getMargin().top);
+				final Rectangle macOSRect = 
+						new Rectangle(getInsets().left+getMargin().left+2, getInsets().top+getMargin().top, 14, 14);
+				final int macOSRectArc = 4;
+				g.setColor(Color.yellow);
+				g.fillRoundRect(macOSRect.x, macOSRect.y, macOSRect.width, macOSRect.height,
+						macOSRectArc, macOSRectArc);
+				g.setColor(Color.lightGray);
+				g.drawRoundRect(macOSRect.x, macOSRect.y, macOSRect.width, macOSRect.height,
+						macOSRectArc, macOSRectArc);
+			} else {
+				// TODO windows
+			}
 		}
-		icon.paintIcon(c, g, x, y);
 	}
-
-	@Override
-	public int getIconWidth() {
-		return IconSize.SMALL.getWidth();
-	}
-
-	@Override
-	public int getIconHeight() {
-		return IconSize.SMALL.getHeight();
-	}
+	
 }

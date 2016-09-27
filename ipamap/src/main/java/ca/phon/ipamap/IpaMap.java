@@ -30,6 +30,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -145,7 +146,7 @@ import ca.phon.util.Tuple;
  * set as a floating point value between 0 and 1.
  * 
  */
-public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
+public class IpaMap extends JPanel implements ClipboardOwner {
 	
 	private static final long serialVersionUID = 1758355523938039972L;
 
@@ -776,7 +777,7 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 		searchContainer = searchSection;
 		
 		// static content
-		final JPanel centerPanel = new JPanel(new VerticalLayout(0));
+		final JPanel centerPanel = new GridContentPanel(new VerticalLayout(0));
 		IpaGrids grids = getGridData();
 		for(final Grid grid:grids.getGrid()) {
 			final JXCollapsiblePane cp = getGridPanel(grid);
@@ -2092,47 +2093,66 @@ public class IpaMap extends JPanel implements ClipboardOwner, Scrollable {
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
 	}
 
-	@Override
-	public Dimension getPreferredScrollableViewportSize() {
-		int prefWidth = 0;
-		int prefHeight = 0;
-		// add size of first 3 grid panels
-		if(gridPanels.size() >= 3) {
-			for(int i = 0; i < 3; i++) {
-				JXCollapsiblePane gridPanel = gridPanels.get(i);
-				boolean wasCollapsed = gridPanel.isCollapsed();
-				gridPanel.setCollapsed(false);
-				prefHeight += gridPanel.getPreferredSize().height;
-				gridPanel.setCollapsed(wasCollapsed);
-				prefHeight += toggleButtons.get(i).getPreferredSize().height;
-				prefWidth = (int)Math.max(prefWidth, gridPanel.getPreferredSize().getWidth());
+	private class GridContentPanel extends JPanel implements Scrollable {
+		
+		public GridContentPanel() {
+			super();
+		}
+
+		public GridContentPanel(boolean isDoubleBuffered) {
+			super(isDoubleBuffered);
+		}
+
+		public GridContentPanel(LayoutManager layout, boolean isDoubleBuffered) {
+			super(layout, isDoubleBuffered);
+		}
+
+		public GridContentPanel(LayoutManager layout) {
+			super(layout);
+		}
+
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			int prefWidth = 0;
+			int prefHeight = 0;
+			// add size of first 3 grid panels
+			if(gridPanels.size() >= 3) {
+				for(int i = 0; i < 3; i++) {
+					JXCollapsiblePane gridPanel = gridPanels.get(i);
+					boolean wasCollapsed = gridPanel.isCollapsed();
+					gridPanel.setCollapsed(false);
+					prefHeight += gridPanel.getPreferredSize().height;
+					gridPanel.setCollapsed(wasCollapsed);
+					prefHeight += toggleButtons.get(i).getPreferredSize().height;
+					prefWidth = (int)Math.max(prefWidth, gridPanel.getPreferredSize().getWidth());
+				}
+				
 			}
 			
+			return new Dimension(prefWidth, prefHeight);
 		}
-		
-		return new Dimension(prefWidth, prefHeight);
-	}
-
-	@Override
-	public int getScrollableUnitIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		return (int)getCellDimension().getHeight();
-	}
-
-	@Override
-	public int getScrollableBlockIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		return getScrollableUnitIncrement(visibleRect, orientation, direction) * 3;
-	}
-
-	@Override
-	public boolean getScrollableTracksViewportWidth() {
-		return true;
-	}
-
-	@Override
-	public boolean getScrollableTracksViewportHeight() {
-		return false;
+	
+		@Override
+		public int getScrollableUnitIncrement(Rectangle visibleRect,
+				int orientation, int direction) {
+			return (int)getCellDimension().getHeight();
+		}
+	
+		@Override
+		public int getScrollableBlockIncrement(Rectangle visibleRect,
+				int orientation, int direction) {
+			return (int)getCellDimension().getHeight() * 2;
+		}
+	
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+	
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
+		}
 	}
 	
 }

@@ -21,6 +21,8 @@ package ca.phon.app.session.editor.view.speech_analysis;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -50,6 +52,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
@@ -265,7 +268,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		wavDisplay.setPreferredSize(prefSize);
 		
-		contentPane = new JPanel(new VerticalLayout());
+		contentPane = new ContentPane(new VerticalLayout());
 		
 		contentPane.add(wavDisplay);
 		
@@ -798,5 +801,50 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 		
 	};
+	
+	private class ContentPane extends JPanel implements Scrollable {
+		
+		public ContentPane() {
+			super();
+		}
+
+		public ContentPane(boolean isDoubleBuffered) {
+			super(isDoubleBuffered);
+		}
+
+		public ContentPane(LayoutManager layout, boolean isDoubleBuffered) {
+			super(layout, isDoubleBuffered);
+		}
+
+		public ContentPane(LayoutManager layout) {
+			super(layout);
+		}
+
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			return null;
+		}
+
+		@Override
+		public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return 10;
+		}
+
+		@Override
+		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return 100;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
+		}
+		
+	}
 	
 }

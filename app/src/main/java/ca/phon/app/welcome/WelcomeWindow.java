@@ -213,7 +213,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
 						BufferedImage.TYPE_INT_ARGB);
 		final Graphics g = newIcnImg.createGraphics();
-		g.drawImage(folderIcon.getImage(), 0, 0, this);
+		folderIcon.paintIcon(null, g, 0, 0);
 		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
 				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
 		final ImageIcon newIcn = new ImageIcon(newIcnImg);
@@ -327,7 +327,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
 						BufferedImage.TYPE_INT_ARGB);
 		final Graphics g = newIcnImg.createGraphics();
-		g.drawImage(folderIcon.getImage(), 0, 0, this);
+		folderIcon.paintIcon(null, g, 0, 0);
 		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
 				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
 		final ImageIcon newIcn = new ImageIcon(newIcnImg);

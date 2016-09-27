@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.dnd.DnDConstants;
@@ -33,6 +34,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +75,10 @@ import org.jdesktop.swingx.JXBusyLabel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.NativeUtilities;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.project.actions.AnonymizeAction;
 import ca.phon.app.project.actions.CheckTranscriptionsAction;
 import ca.phon.app.project.actions.DeleteCorpusAction;
@@ -539,8 +545,24 @@ public class ProjectWindow extends CommonModuleFrame
 	private MultiActionButton createNewCorpusButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon folderNewIcn = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/list-add", IconSize.MEDIUM);
+		final String folderIconName = "actions/folder_new";
+		final StockIcon stockIcon = 
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER);
+		final ImageIcon folderIcon = 
+				IconManager.getInstance().getSystemStockIcon(stockIcon, folderIconName, IconSize.MEDIUM);
+		final ImageIcon addIcon =
+				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+		
+		final BufferedImage newIcnImg = 
+				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
+						BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = newIcnImg.createGraphics();
+		folderIcon.paintIcon(null, g, 0, 0);
+		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
+				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
+		final ImageIcon folderNewIcn = new ImageIcon(newIcnImg);
+		
+//		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/list-add", IconSize.MEDIUM);
 		ImageIcon removeIcnL = IconManager.getInstance().getIcon("actions/list-remove", IconSize.MEDIUM);
 		ImageIcon renameIcnL = IconManager.getInstance().getIcon("actions/edit-rename", IconSize.MEDIUM);
 		
@@ -553,7 +575,7 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.setOpaque(false);
 		
 		PhonUIAction newAct = new PhonUIAction(this, "onSwapNewAndCreateCorpus", retVal);
-		newAct.putValue(Action.LARGE_ICON_KEY, newIcnL);
+		newAct.putValue(Action.LARGE_ICON_KEY, folderNewIcn);
 		newAct.putValue(Action.SMALL_ICON, folderNewIcn);
 		newAct.putValue(Action.NAME, "New corpus");
 		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new corpus folder");
@@ -566,7 +588,7 @@ public class ProjectWindow extends CommonModuleFrame
 		renameCurrentAct.putValue(Action.NAME, "Rename corpus");
 		renameCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Rename selected corpus");
 		
-		retVal.setDisplayDefaultAction(true);
+		retVal.setDisplayDefaultAction(false);
 		retVal.addAction(deleteCurrentAct);
 		retVal.addAction(renameCurrentAct);
 		
@@ -589,7 +611,22 @@ public class ProjectWindow extends CommonModuleFrame
 	private MultiActionButton createCorpusButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
+		final String folderIconName = "actions/folder_new";
+		final StockIcon stockIcon = 
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER);
+		final ImageIcon folderIcon = 
+				IconManager.getInstance().getSystemStockIcon(stockIcon, folderIconName, IconSize.MEDIUM);
+		final ImageIcon addIcon =
+				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+		
+		final BufferedImage newIcnImg = 
+				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
+						BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = newIcnImg.createGraphics();
+		folderIcon.paintIcon(null, g, 0, 0);
+		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
+				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
+		final ImageIcon folderNewIcn = new ImageIcon(newIcnImg);
 		
 		String s1 = "Corpus";
 		String s2 = "Enter corpus name and press enter.  Press escape to cancel.";
@@ -597,7 +634,7 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
-		retVal.getTopLabel().setIcon(newIcn);
+		retVal.getTopLabel().setIcon(folderNewIcn);
 		retVal.setAlwaysDisplayActions(true);
 		
 		retVal.setOpaque(false);
@@ -693,8 +730,21 @@ public class ProjectWindow extends CommonModuleFrame
 	private MultiActionButton createNewSessionButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("mimetypes/text-xml", IconSize.SMALL);
-		ImageIcon newIcnL = IconManager.getInstance().getIcon("actions/list-add", IconSize.MEDIUM);
+		final String xmlIconName = "mimetypes/text-xml";
+		final ImageIcon xmlIcon = 
+				IconManager.getInstance().getSystemIconForFileType("xml", xmlIconName, IconSize.MEDIUM);
+		final ImageIcon addIcon =
+				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+		
+		final BufferedImage newIcnImg = 
+				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
+						BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = newIcnImg.createGraphics();
+		xmlIcon.paintIcon(null, g, 0, 0);
+		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
+				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
+		final ImageIcon xmlNewIcn = new ImageIcon(newIcnImg);
+		
 		ImageIcon removeIcnL = IconManager.getInstance().getIcon("actions/list-remove", IconSize.MEDIUM);
 		ImageIcon renameIcnL = IconManager.getInstance().getIcon("actions/edit-rename", IconSize.MEDIUM);
 		ImageIcon openIcnL = IconManager.getInstance().getIcon("actions/view", IconSize.MEDIUM);
@@ -704,12 +754,10 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
-		retVal.getTopLabel().setIcon(newIcn);
+		retVal.getTopLabel().setIcon(xmlNewIcn);
 		retVal.setOpaque(false);
 		
 		PhonUIAction newAct = new PhonUIAction(this, "onSwapNewAndCreateSession", retVal);
-		newAct.putValue(Action.LARGE_ICON_KEY, newIcnL);
-		newAct.putValue(Action.SMALL_ICON, newIcn);
 		newAct.putValue(Action.NAME, "New session");
 		newAct.putValue(Action.SHORT_DESCRIPTION, "Create a new session in selected corpus");
 		retVal.setDefaultAction(newAct);
@@ -727,7 +775,7 @@ public class ProjectWindow extends CommonModuleFrame
 		openCurrentAct.putValue(Action.NAME, "Open session");
 		openCurrentAct.putValue(Action.SHORT_DESCRIPTION, "Open selected session");
 		
-		retVal.setDisplayDefaultAction(true);
+		retVal.setDisplayDefaultAction(false);
 		retVal.addAction(deleteCurrentAct);
 		retVal.addAction(renameCurrentAct);
 		retVal.addAction(openCurrentAct);
@@ -769,7 +817,20 @@ public class ProjectWindow extends CommonModuleFrame
 	private MultiActionButton createSessionButton() {
 		MultiActionButton retVal = new MultiActionButton();
 		
-		ImageIcon newIcn = IconManager.getInstance().getIcon("mimetypes/text-xml", IconSize.SMALL);
+		final String xmlIconName = "mimetypes/text-xml";
+		final ImageIcon xmlIcon = 
+				IconManager.getInstance().getSystemIconForFileType("xml", xmlIconName, IconSize.MEDIUM);
+		final ImageIcon addIcon =
+				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+		
+		final BufferedImage newIcnImg = 
+				new BufferedImage(IconSize.MEDIUM.getHeight(), IconSize.MEDIUM.getHeight(), 
+						BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = newIcnImg.createGraphics();
+		xmlIcon.paintIcon(null, g, 0, 0);
+		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
+				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
+		final ImageIcon xmlNewIcn = new ImageIcon(newIcnImg);
 		
 		String s1 = "Session";
 		String s2 = "Enter session name and press enter.  Press escape to cancel.";
@@ -777,7 +838,7 @@ public class ProjectWindow extends CommonModuleFrame
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		retVal.getTopLabel().setFont(FontPreferences.getTitleFont());
-		retVal.getTopLabel().setIcon(newIcn);
+		retVal.getTopLabel().setIcon(xmlNewIcn);
 		retVal.setAlwaysDisplayActions(true);
 		
 		retVal.setOpaque(false);

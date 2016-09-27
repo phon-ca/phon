@@ -22,6 +22,8 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
 import javax.swing.ImageIcon;
@@ -33,6 +35,8 @@ public class HiDPIIcon extends ImageIcon {
 	private final Image iconImage;
 	
 	private final IconSize targetSize;
+	
+	private Image scaledImage;
 	
 	public HiDPIIcon(Image iconImage, IconSize size) {
 		super();
@@ -47,16 +51,33 @@ public class HiDPIIcon extends ImageIcon {
 			obs = c;
 		}
 		
-		int width = iconImage.getWidth(obs);
-		int height = iconImage.getHeight(obs);
-		float widthScale = (float)targetSize.getWidth() / (float)width;
-		float heightScale = (float)targetSize.getHeight() / (float)height;
-		
-		final Graphics2D g2 = (Graphics2D)g.create(x, y, width, height);
-		g2.scale(widthScale, heightScale);
-		g2.drawImage(iconImage, 0, 0, obs);
-		g2.scale(1.0, 1.0);
-		g2.dispose();
+		g.drawImage(getImage(), 0, 0, obs);
+	}
+
+	@Override
+	public int getIconWidth() {
+		return targetSize.getWidth();
+	}
+
+	@Override
+	public int getIconHeight() {
+		return targetSize.getHeight();
+	}
+	
+	@Override
+	public Image getImage() {
+		if(scaledImage == null) {
+			final BufferedImage tmp = new BufferedImage(targetSize.getWidth(), targetSize.getHeight(), 
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2 = tmp.createGraphics();
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, 
+					RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			g2.drawImage(iconImage, 0, 0, targetSize.getWidth(), targetSize.getHeight(), null);
+			g2.dispose();
+			
+			scaledImage = tmp;
+		}
+		return scaledImage;
 	}
 	
 }
