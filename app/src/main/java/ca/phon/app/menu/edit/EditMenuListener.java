@@ -19,6 +19,7 @@
 package ca.phon.app.menu.edit;
 
 import java.awt.Window;
+import java.lang.ref.WeakReference;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -30,11 +31,11 @@ import ca.phon.extensions.IExtendable;
 
 public class EditMenuListener implements MenuListener {
 	
-	private final Window owner;
+	private final WeakReference<Window> owner;
 	
 	public EditMenuListener(Window window) {
 		super();
-		this.owner = window;
+		this.owner = new WeakReference<Window>(window);
 	}
 
 	@Override
@@ -44,7 +45,8 @@ public class EditMenuListener implements MenuListener {
 		editMenu.removeAll();
 		
 		// undo/redo
-		if(owner instanceof IExtendable) {
+		final Window owner = this.owner.get();
+		if(owner != null && owner instanceof IExtendable) {
 			final IExtendable extWindow = (IExtendable)owner;
 			
 			final UndoManager manager = extWindow.getExtension(UndoManager.class);
