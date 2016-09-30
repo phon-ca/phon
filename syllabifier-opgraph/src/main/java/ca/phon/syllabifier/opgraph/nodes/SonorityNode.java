@@ -22,13 +22,11 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +49,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 import ca.phon.syllabifier.phonex.SonorityInfo;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -71,19 +70,21 @@ import ca.phon.visitor.annotation.Visits;
 		description="Add sonority annotation to phones.",
 		category="Syllabifier")
 public class SonorityNode extends OpNode implements NodeSettings {
+	
+	private final static String SONORITY_KEY = SonorityNode.class.getName() + ".scale";
+
 	// ipa input
 	private final InputField ipaIn = 
 			new InputField("ipa", "ipa input", IPATranscript.class);
 	private final OutputField ipaOut = 
 			new OutputField("ipa", "ipa output", true, IPATranscript.class);
 	
+	private Settings settingsPanel;
+	
 	/**
-	 * Sonority scale
+	 * Sonority scale as text
 	 */
-	// list of sonority patterns in order they are given
-	private final List<PhonexPattern> patterns = new ArrayList<PhonexPattern>();
-	// map of pattern to sonority value
-	private final Map<PhonexPattern, Integer> sonorityMap = new TreeMap<PhonexPattern, Integer>();
+	private String sonorityScale = "";
 	
 	/**
 	 * Constructor
@@ -97,14 +98,32 @@ public class SonorityNode extends OpNode implements NodeSettings {
 		putExtension(NodeSettings.class, this);
 	}
 	
+	public String getSonorityScale() {
+		return (this.settingsPanel != null ? this.settingsPanel.scaleArea.getText().trim() : this.sonorityScale);
+	}
+	
+	public void setSonorityScale(String scale) {
+		this.sonorityScale = scale.trim();
+		if(this.settingsPanel != null) {
+			this.settingsPanel.scaleArea.setText(sonorityScale);
+		}
+	}
+	
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		// get ipa from context
 		final IPATranscript ipa = 
 				IPATranscript.class.cast(context.get(ipaIn));
 	
+		Map<PhonexPattern, Integer> sonorityMap = new LinkedHashMap<>();
+		try {
+			sonorityMap = parseSonorityScale(getSonorityScale());
+		} catch (PhonexPatternException pe) {
+			throw new ProcessingException(null, pe);
+		}
+		
 		// mark sonority
-		final SonorityVisitor visitor = new SonorityVisitor();
+		final SonorityVisitor visitor = new SonorityVisitor(sonorityMap);
 		ipa.accept(visitor);
 		
 		// set output
@@ -116,8 +135,8 @@ public class SonorityNode extends OpNode implements NodeSettings {
 	 * 
 	 * @param scale
 	 */
-	public void setSonorityScale(String scale) {
-		sonorityMap.clear();
+	public Map<PhonexPattern, Integer> parseSonorityScale(String scale) throws PhonexPatternException {
+		final Map<PhonexPattern, Integer> sonorityMap = new LinkedHashMap<>();
 		final Pattern scannerPattern = Pattern.compile("([0-9]+)=(.*)");
 		final Scanner scanner = new Scanner(scale);
 		String line = null;
@@ -126,35 +145,15 @@ public class SonorityNode extends OpNode implements NodeSettings {
 			if(matcher.matches()) {
 				final Integer sonorityValue = Integer.parseInt(matcher.group(1));
 				final String phonex = matcher.group(2);
-				
-				try {
-					final PhonexPattern pattern = PhonexPattern.compile(phonex);
-					
-					patterns.add(pattern);
-					sonorityMap.put(pattern, sonorityValue);
-				} catch (Exception e) {}
+				final PhonexPattern pattern = PhonexPattern.compile(phonex);
+				sonorityMap.put(pattern, sonorityValue);
 			}
 			scanner.nextLine();
 		}
 		scanner.close();
-	}
-	
-	/**
-	 * Return the current sonority scale as a string
-	 * 
-	 * @return the sonority scale as a parse-able string
-	 */
-	public String getSonorityScale() {
-		String retVal = "";
-		
-		for(final PhonexPattern pattern:patterns) {
-			retVal += sonorityMap.get(pattern) + "=" + pattern.pattern() + "\n";
-		}
-		
-		return retVal;
+		return sonorityMap;
 	}
 
-	private Settings settingsPanel;
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
@@ -164,8 +163,6 @@ public class SonorityNode extends OpNode implements NodeSettings {
 		return settingsPanel;
 	}
 
-	private final static String SONORITY_KEY = 
-			SonorityNode.class.getName() + ".scale";
 	@Override
 	public Properties getSettings() {
 		final Properties retVal = new Properties();
@@ -213,6 +210,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 				@Override
 				public void focusGained(FocusEvent arg0) {
 				}
+				
 			});
 		}
 	}
@@ -224,6 +222,13 @@ public class SonorityNode extends OpNode implements NodeSettings {
 		
 		private int lastSonority = 0;
 
+		private Map<PhonexPattern, Integer> sonorityMap;
+		
+		public SonorityVisitor(Map<PhonexPattern, Integer> sonorityMap) {
+			super();
+			this.sonorityMap = sonorityMap;
+		}
+		
 		@Override
 		public void fallbackVisit(IPAElement obj) {
 			// reset sonority
@@ -243,7 +248,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 		private void attachSonority(IPAElement p) {
 			int value = 0;
 			
-			for(PhonexPattern pattern:patterns) {
+			for(PhonexPattern pattern:sonorityMap.keySet()) {
 				final PhonexMatcher m = pattern.matcher(Collections.singletonList(p));
 				if(m.matches()) {
 					value = sonorityMap.get(pattern);
