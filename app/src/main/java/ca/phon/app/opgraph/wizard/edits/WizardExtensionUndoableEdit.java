@@ -19,27 +19,65 @@
 package ca.phon.app.opgraph.wizard.edits;
 
 import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
-import ca.phon.app.opgraph.wizard.NodeWizardPanel;
+import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 
 public class WizardExtensionUndoableEdit extends AbstractUndoableEdit {
 
 	private static final long serialVersionUID = 1L;
 
-	private final NodeWizardPanel wizardPanel;
+	private final OpGraph graph;
+	private final WizardExtension oldValue;
+	private final WizardExtension newValue;
 	
-	public WizardExtensionUndoableEdit(NodeWizardPanel panel) {
+	public WizardExtensionUndoableEdit(OpGraph graph, WizardExtension oldValue, WizardExtension newValue) {
 		super();
-		this.wizardPanel = panel;
+		
+		this.graph = graph;
+		this.newValue = newValue;
+		this.oldValue = oldValue;
+		
+		graph.putExtension(WizardExtension.class, this.newValue);
 	}
 	
-	public NodeWizardPanel getWizardPanel() {
-		return this.wizardPanel;
+	@Override
+	public String getPresentationName() {
+		return "Wizard Settings";
 	}
 	
-	public WizardExtension getWizardExtension() {
-		return getWizardPanel().getWizardExtension();
+	@Override
+	public boolean canRedo() {
+		return true;
+	}
+	
+	@Override
+	public boolean canUndo() {
+		return true;
+	}
+
+	public OpGraph getGraph() {
+		return graph;
+	}
+
+	public WizardExtension getOldValue() {
+		return oldValue;
+	}
+
+	public WizardExtension getNewValue() {
+		return newValue;
+	}
+
+	@Override
+	public void undo() throws CannotUndoException {
+		graph.putExtension(WizardExtension.class, getOldValue());
+	}
+
+	@Override
+	public void redo() throws CannotRedoException {
+		graph.putExtension(WizardExtension.class, getNewValue());
 	}
 	
 }

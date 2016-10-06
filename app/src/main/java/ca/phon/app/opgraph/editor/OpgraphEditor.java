@@ -117,6 +117,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 	public void setJMenuBar(JMenuBar menuBar) {
 		super.setJMenuBar(menuBar);
 		this.menuBar = menuBar;
+		setupMenu();
 	}
 	
 	@Override
@@ -139,6 +140,8 @@ public class OpgraphEditor extends CommonModuleFrame {
 			resetView();
 		else
 			updateTitle();
+		
+		setJMenuBar(MenuManager.createWindowMenuBar(this));
 	}
 	
 	public void resetView() {
@@ -248,7 +251,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 		add(dockControl.getContentArea(), BorderLayout.CENTER);
 			
 		setupDefaultPerspective();
-		setupMenu();
 		setupStatusBar();
 		add(statusBar, BorderLayout.SOUTH);
 	}

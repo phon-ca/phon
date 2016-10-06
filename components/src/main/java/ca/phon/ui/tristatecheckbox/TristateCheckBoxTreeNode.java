@@ -28,6 +28,8 @@ public class TristateCheckBoxTreeNode extends DefaultMutableTreeNode {
 	private TristateCheckBoxState checkingState = TristateCheckBoxState.UNCHECKED;
 	
 	private boolean enablePartialCheck = false;
+	
+	private boolean propogateState = true;
 
 	public TristateCheckBoxTreeNode() {
 		this(new Object(), TristateCheckBoxState.UNCHECKED);
@@ -55,11 +57,19 @@ public class TristateCheckBoxTreeNode extends DefaultMutableTreeNode {
 		return this.checkingState;
 	}
 	
+	public boolean isPropogateState() {
+		return this.propogateState;
+	}
+	
+	public void setPropogateState(boolean propogateState) {
+		this.propogateState = propogateState;
+	}
+	
 	public void setCheckingState(TristateCheckBoxState checkboxState) {
 		this.checkingState = checkboxState;
 		
-		if(checkboxState == TristateCheckBoxState.CHECKED ||
-				checkboxState == TristateCheckBoxState.UNCHECKED) {
+		if((checkboxState == TristateCheckBoxState.CHECKED ||
+				checkboxState == TristateCheckBoxState.UNCHECKED) && isPropogateState()) {
 			// set all children
 			for(int i = 0; i <  getChildCount(); i++) {
 				final TreeNode childNode = getChildAt(i);

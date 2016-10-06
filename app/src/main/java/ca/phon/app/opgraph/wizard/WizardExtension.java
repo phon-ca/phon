@@ -37,7 +37,7 @@ import ca.gedge.opgraph.Processor;
  * panel for each node (if available) will be presented
  * as a step inside the wizard.
  */
-public class WizardExtension implements Iterable<OpNode> {
+public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	private WizardInfo wizardInfo = new WizardInfo();
 	
@@ -256,6 +256,31 @@ public class WizardExtension implements Iterable<OpNode> {
 	
 	public void removeReportTemplate(String name) {
 		reportTemplates.remove(name);
+	}
+
+	@Override
+	protected Object clone() {
+		final WizardExtension retVal = new WizardExtension(getGraph());
+		
+		retVal.setWizardTitle(getWizardTitle());
+		retVal.setWizardMessage(getWizardMessage(), getWizardMessageFormat());
+		
+		for(OpNode node:this) {
+			retVal.addNode(node);
+			retVal.setNodeTitle(node, getNodeTitle(node));
+			retVal.setNodeMessage(node, getNodeMessage(node), getNodeMessageFormat(node));
+		}
+		
+		for(OpNode node:getOptionalNodes()) {
+			retVal.addOptionalNode(node);
+			retVal.setOptionalNodeDefault(node, getOptionalNodeDefault(node));
+		}
+		
+		for(String reportName:getReportTemplateNames()) {
+			retVal.putReportTemplate(reportName, getReportTemplate(reportName));
+		}
+		
+		return retVal;
 	}
 	
 }

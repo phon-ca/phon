@@ -1,3 +1,8 @@
+body {
+    background: white;
+    font-family:arial, helvetica, sans-serif;
+}
+
 h1 {
    font-weight: bold;
    color: blue;
@@ -16,7 +21,6 @@ table {
     border-collapse: collapse;
     empty-cells: show;
     width: 100%;
-    overflow:hidden;
     table-layout:fixed;
 }
 
@@ -26,12 +30,79 @@ th {
     border-bottom: thin solid black;
 }
 
+th td {
+    text-align:center;
+    overflow:auto;
+}
+
 td {
     overflow:hidden;
-    font:"Charis SIL Compact"
+}
+
+td:hover {
+    overflow:visible;
 }
 
 code {
     font-family:monospace;
 }
 
+.ipa_value {
+    font-family:"Charis SIL Compact", "Charis SIL", "Doulos SIL", arial, sans-serif;
+}
+
+.number_value {
+    font-family:monospace;
+    text-align:right;
+}
+
+@media print {
+
+    .pagebreak {
+        page-break-after:always !important;
+    }
+
+    .noprint {
+        display: none;
+    }
+
+    header, footer, nav {
+        display: none;
+    }
+    
+    section {
+        page-break-before:always;
+    }
+    
+    h1, h2, h3 {
+        page-break-after:avoid;
+    }
+    
+    ul, ol {
+        page-break-inside:avoid;
+    }
+    
+    table {
+        page-break-inside: auto;
+    }
+    
+    thead {
+        page-break-after:avoid !important;
+        display:table-header-group;
+    }
+    
+    tfoot {
+        page-break-before:avoid;
+        display:table-footer-group;
+    }
+    
+    tr {
+        page-break-inside:avoid !important;
+        page-break-after:auto;
+    }
+    
+    a {
+        font-style: normal;
+    }
+    
+}

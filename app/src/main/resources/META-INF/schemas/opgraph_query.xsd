@@ -151,10 +151,7 @@
         <xs:attribute name="format" type="WizardInfoMessageFormat" use="optional" default="html"/>
     </xs:complexType>
 
-    <xs:complexType name="ReportTemplateType">
-        <xs:sequence>
-            <xs:element ref="template" minOccurs="1" maxOccurs="1"/>
-        </xs:sequence>
+    <xs:complexType name="ReportTemplateType" mixed="true">
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
 

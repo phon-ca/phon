@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 
+import ca.gedge.opgraph.OpGraph;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
@@ -31,9 +32,11 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 
 public class NodeWizardSettingsDialog extends JDialog {
 
+	private final OpGraph graph;
+	
 	private final WizardExtension wizardExtension;
 	
-	private NodeWizardSettingsPanel settingsPanel;
+	private WizardSettingsPanel settingsPanel;
 	
 	private JButton okButton;
 	
@@ -41,9 +44,10 @@ public class NodeWizardSettingsDialog extends JDialog {
 	
 	private boolean wasCanceled = true;
 	
-	public NodeWizardSettingsDialog(WizardExtension wizardExtension) {
+	public NodeWizardSettingsDialog(OpGraph graph, WizardExtension wizardExtension) {
 		super();
 		
+		this.graph = graph;
 		this.wizardExtension = wizardExtension;
 		
 		setTitle("Wizard Settings");
@@ -57,7 +61,7 @@ public class NodeWizardSettingsDialog extends JDialog {
 				"Setup title and information messages for wizard steps");
 		add(header, BorderLayout.NORTH);
 		
-		settingsPanel = new NodeWizardSettingsPanel(wizardExtension);
+		settingsPanel = new WizardSettingsPanel(graph, wizardExtension);
 		add(settingsPanel, BorderLayout.CENTER);
 		
 		final PhonUIAction okAct = new PhonUIAction(this, "onOk");
@@ -75,7 +79,7 @@ public class NodeWizardSettingsDialog extends JDialog {
 		add(btnPanel, BorderLayout.SOUTH);
 	}
 	
-	public NodeWizardSettingsPanel getSettings() {
+	public WizardSettingsPanel getSettings() {
 		return this.settingsPanel;
 	}
 	

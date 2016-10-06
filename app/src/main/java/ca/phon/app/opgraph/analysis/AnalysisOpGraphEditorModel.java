@@ -20,8 +20,6 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -34,7 +32,6 @@ import javax.swing.border.CompoundBorder;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
-import ca.phon.app.opgraph.wizard.NodeWizardPanel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
@@ -48,8 +45,6 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	
 	private SessionSelector sessionSelector;
 
-	private NodeWizardPanel wizardPanel;
-	
 	public AnalysisOpGraphEditorModel() {
 		this(new OpGraph());
 	}
@@ -66,21 +61,6 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	
 	public SessionSelector getSessionSelector() {
 		return this.sessionSelector;
-	}
-	
-	public NodeWizardPanel getWizardPanel() {
-		if(wizardPanel == null) {
-			wizardPanel = new NodeWizardPanel(getDocument(),
-					getDocument().getGraph().getExtension(WizardExtension.class));
-		}
-		return wizardPanel;
-	}
-
-	@Override
-	public List<String> getAvailableViewNames() {
-		final List<String> retVal = new ArrayList<>(super.getAvailableViewNames());
-		retVal.add("Wizard");
-		return retVal;
 	}
 	
 	@Override
@@ -138,10 +118,6 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 			retVal.setBounds(800, 200, 200, 200);
 			break;
 			
-		case "Wizard":
-			retVal.setBounds(800, 200, 200, 200);
-			break;
-			
 		case "Library":
 			retVal.setBounds(0, 0, 200, 200);
 			break;
@@ -156,21 +132,11 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		}
 		return retVal;
 	}
-	
-	@Override
-	public JComponent getView(String viewName) {
-		JComponent retVal = super.getView(viewName);
-		if(viewName.equals("Wizard")) {
-			retVal = getWizardPanel();
-		}
-		return retVal;
-	}
 
 	@Override
 	public boolean isViewVisibleByDefault(String viewName) {
 		return super.isViewVisibleByDefault(viewName)
-				|| viewName.equals("Debug Settings")
-				|| viewName.equals("Wizard");
+				|| viewName.equals("Debug Settings");
 	}
 
 	@Override
