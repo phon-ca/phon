@@ -23,9 +23,25 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 public class TristateCheckBoxTreeModel extends DefaultTreeModel {
+	
+	public static enum CheckingMode {
+		SINGLE,
+		SINGLE_PATH,
+		MULTIPLE
+	};
+	
+	private CheckingMode checkingMode = CheckingMode.MULTIPLE;
 
 	public TristateCheckBoxTreeModel(TreeNode root) {
 		super(root);
+	}
+	
+	public CheckingMode getCheckingMode() {
+		return this.checkingMode;
+	}
+	
+	public void setCheckingMode(CheckingMode mode) {
+		this.checkingMode = mode;
 	}
 
 	@Override
@@ -37,6 +53,22 @@ public class TristateCheckBoxTreeModel extends DefaultTreeModel {
 			if(lastComp instanceof TristateCheckBoxTreeNode) {
 				final TristateCheckBoxTreeNode node = (TristateCheckBoxTreeNode)lastComp;
 				node.setCheckingState(state);
+				
+				if(getCheckingMode() == CheckingMode.SINGLE) {
+					// un-check any checked nodes
+					clearCheckedNodes((TreeNode)getRoot());
+				} else if(getCheckingMode() == CheckingMode.SINGLE_PATH) {
+					// un-check all siblings to this node
+					TreePath parentPath = path.getParentPath();
+					while(parentPath != null) {
+						final TreeNode parentNode = (TreeNode)parentPath.getLastPathComponent();
+						for(int i = 0; i < parentNode.getChildCount(); i++) {
+							final TreeNode childNode = parentNode.getChildAt(i);
+							clearCheckedNodes(childNode);
+						}
+						parentPath = parentPath.getParentPath();
+					}
+				}
 
 				nodeChanged(node);
 				TreePath parentPath = path.getParentPath();
@@ -51,6 +83,10 @@ public class TristateCheckBoxTreeModel extends DefaultTreeModel {
 		} else {
 			super.valueForPathChanged(path, newValue);
 		}
+	}
+	
+	public void clearCheckedNodes(TreeNode root) {
+		
 	}
 	
 }
