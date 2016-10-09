@@ -101,6 +101,10 @@ code {
         page-break-after:auto;
     }
     
+    img {
+        page-break-inside:avoid !important;
+    }
+    
     a {
         font-style: normal;
     }
