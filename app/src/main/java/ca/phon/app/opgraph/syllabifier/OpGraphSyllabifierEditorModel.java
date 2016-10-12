@@ -100,6 +100,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 				@Override
 				public void changedUpdate(DocumentEvent e) {
 				}
+				
 			});
 			
 			syllabificationDisplay = new SyllabificationDisplay();
