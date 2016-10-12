@@ -365,7 +365,11 @@ BOUND_START
 BOUND_END
 	:	'>'
 	;
-	
+
+/**
+ * TODO - this set should match exactly what is supported
+ * through the IPA parser. Only 
+ */
 LETTER
 	:	'a'..'z'
 	|	'A'..'Z'

@@ -23,6 +23,7 @@ import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IntraWordPause;
 import ca.phon.ipa.Phone;
+import ca.phon.ipa.StressMarker;
 import ca.phon.ipa.SyllableBoundary;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -66,6 +67,12 @@ public class BasePhoneMatcher implements PhoneMatcher {
 		
 		public boolean matches() {
 			return this.matches;
+		}
+		
+		@Visits
+		public void visitStressMarker(StressMarker marker) {
+			Character markerChar = marker.getType().getGlyph();
+			matches = markerChar.equals(baseChar);
 		}
 		
 		@Visits

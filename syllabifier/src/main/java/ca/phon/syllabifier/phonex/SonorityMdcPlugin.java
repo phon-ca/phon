@@ -28,10 +28,10 @@ import ca.phon.phonex.PluginProvider;
  * Provides the phonex 'mdc' (minimum distance constraint)
  * plug-in for syllabification.  Format of input should be
  * 
- *  INT(,[true|false])?
+ *  INT,[true|false]
  *  
  * Where INT is the minimum distance from the previous phone
- * and the optional boolean indicates if flat sonority is
+ * and the boolean indicates if flat sonority is
  * allowed.
  */
 @PhonexPlugin(name = "mdc")
