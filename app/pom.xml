@@ -104,6 +104,10 @@
 			<artifactId>velocity</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity-tools</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.dockingframes</groupId>
 			<artifactId>docking-frames-common</artifactId>
 		</dependency>
@@ -135,10 +139,12 @@
 		    <artifactId>org.eclipse.jgit.ui</artifactId>
 		</dependency>
 		
+		<!-- 
 		<dependency>
 			<groupId>org.eclipse.birt.runtime</groupId>
 			<artifactId>org.eclipse.birt.runtime</artifactId>
 		</dependency>
+		-->
 		
 		<dependency>
 			<groupId>com.atlassian.commonmark</groupId>

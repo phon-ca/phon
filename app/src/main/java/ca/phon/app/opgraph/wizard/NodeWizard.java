@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,7 +70,7 @@ import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
-import ca.phon.app.opgraph.wizard.actions.CreateReportAction;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.menu.MenuBuilder;
@@ -136,7 +138,7 @@ public class NodeWizard extends WizardFrame {
 		
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "report");
-		builder.addItem("File@report", new CreateReportAction(this));
+//		builder.addItem("File@report", new CreateReportAction(this));
 	}
 	
 	@Override
@@ -385,6 +387,33 @@ public class NodeWizard extends WizardFrame {
 			});
 			throw pe;
 		}
+	}
+	
+	/**
+	 * Setup report context variables for
+	 * graph, buffers, etc.
+	 * 
+	 * @param ctx
+	 */
+	public void setupReportContext(NodeWizardReportContext ctx) {
+		final Map<String, String> buffers = new HashMap<>();
+		final Map<String, DefaultTableDataSource> tables = new HashMap<>();
+		for(String bufferName:bufferPanel.getBufferNames()) {
+			final String data = 
+					bufferPanel.getBuffer(bufferName).getLogBuffer().getText();
+			buffers.put(bufferName, data);
+			
+			final DefaultTableDataSource table = 
+					bufferPanel.getBuffer(bufferName).getExtension(DefaultTableDataSource.class);
+			if(table != null) {
+				tables.put(bufferName, table);
+			}
+		}
+		
+		ctx.put("graph", getGraph());
+		ctx.put("bufferNames", bufferPanel.getBufferNames());
+		ctx.put("buffers", buffers);
+		ctx.put("tables", tables);
 	}
 	
 	public WizardOptionalsCheckboxTree getOptionalsTree() {

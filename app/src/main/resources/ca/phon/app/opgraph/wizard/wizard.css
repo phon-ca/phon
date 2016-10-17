@@ -1,6 +1,6 @@
 body {
     background: white;
-    font-family:arial, helvetica, sans-serif;
+    font-family:"noto sans", arial, helvetica, sans-serif;
 }
 
 h1 {
@@ -48,11 +48,11 @@ code {
 }
 
 .ipa_value {
-    font-family:"Charis SIL Compact", "Charis SIL", "Doulos SIL", arial, sans-serif;
+    font-family:"noto sans", "Charis SIL Compact", "Charis SIL", arial, sans-serif;
 }
 
 .number_value {
-    font-family:monospace;
+    font-family:"noto monospace", monospace;
     text-align:right;
 }
 
@@ -64,6 +64,14 @@ code {
 
     .noprint {
         display: none;
+    }
+    
+    body {
+        font-family:"noto serif", times, serif;
+    }
+    
+    .ipa_value {
+        font-family:"noto serif", "Doulos SIL", times, serif;
     }
 
     header, footer, nav {

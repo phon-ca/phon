@@ -20,7 +20,7 @@
             </extensions>
         </node>
         <ogcn:macro id="5510f430fd2b42da" name="Cluster Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="626093db">
+            <graph id="528bdb8">
                 <node id="144c82d5c1e14ece" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -40,7 +40,7 @@
                     </extensions>
                 </node>
                 <opqry:queryNode id="572c422333884e20" name="Query : Phones (IPA Target)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:53:22.357-02:30" name="Phones" uuid="e6658a7c-db76-4ff7-9d1e-2f9e60249ac9">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-10-17T11:10:43.212-02:30" name="Phones" uuid="f6066cc0-c0a0-47ae-9c1c-aae0243ecb97">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c&lt;2,&gt;</param>
@@ -57,7 +57,7 @@
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="5c69e4bb2beb4c0d" name="Query : Phones (IPA Actual)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T08:53:22.365-02:30" name="Phones" uuid="cc0dd0b4-87df-4ada-90ab-9d15485a8bd2">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-10-17T11:10:43.219-02:30" name="Phones" uuid="6785cd38-481f-4fcf-9877-13e5ac53bb77">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.primary.filter">\c&lt;2,&gt;</param>
@@ -185,7 +185,7 @@
         <link dest="5510f430fd2b42da" destField="obj" source="8010ef3" sourceField="obj"/>
         <link dest="5510f430fd2b42da" destField="obj1" source="25c7f8fd" sourceField="obj"/>
         <extensions>
-            <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
+            <opqry:nodewizard type="ca.phon.app.opgraph.wizard.WizardExtension">
                 <opqry:info format="markdown" title="Cluster Inventory">
                     <opqry:message># Cluster Inventory
 Generate an inventory of consonant clusters found in both IPA Target and IPA Actual for the selected sessions.
@@ -345,32 +345,16 @@ Output table will have four columns:
 	
 &lt;/table&gt;</opqry:message>
                 </opqry:info>
-                <opqry:node ref="572c422333884e20">
-                    <opqry:info format="html" title="Query : Phones (IPA Target)">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
-                <opqry:node ref="8d17bf0f9a9f435a">
-                    <opqry:info format="html" title="Inventory">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
-                <opqry:node ref="5c69e4bb2beb4c0d">
-                    <opqry:info format="html" title="Query : Phones (IPA Actual)">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
-                <opqry:node ref="519687308b994573">
-                    <opqry:info format="html" title="Inventory">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
-                <opqry:node ref="efc4598d166c4ffd">
-                    <opqry:info format="html" title="Merge Tables">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
-                <opqry:optionalNode enabled="true" ref="5510f430fd2b42da"/>
+                <opqry:report-template name="Report">#macro( h $n ) #foreach($i in [1..$n])$esc.h#end#end
+
+#h(1) Cluster Inventory
+
+This is a test
+
+#h(2) Data
+
+$tables["Cluster Inventory"]
+</opqry:report-template>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
         </extensions>

@@ -318,14 +318,17 @@ public class WizardSettingsPanel extends JPanel {
 		reportTemplateList.addListSelectionListener( (e) -> {
 			final String selectedReport = reportTemplateList.getSelectedValue();
 			if(selectedReport != null) {
-				final String template = wizardExtension.getReportTemplate(selectedReport);
+				NodeWizardReportTemplate template = wizardExtension.getReportTemplate(selectedReport);
+				if(template == null) {
+					template = wizardExtension.putReportTemplate(selectedReport, "");
+				}
 				
 				SettingsPanel settingsPanel = reportTemplateMap.get(selectedReport);
 				if(settingsPanel == null) {
 					settingsPanel = new SettingsPanel();
 					settingsPanel.formatBox.setVisible(false);
 					settingsPanel.checkBox.setVisible(false);
-					settingsPanel.infoArea.setText((template != null ? template : ""));
+					settingsPanel.infoArea.setText(template.getTemplate());
 					settingsPanel.titleField.setText(selectedReport);
 					
 					reportTemplateMap.put(selectedReport, settingsPanel);

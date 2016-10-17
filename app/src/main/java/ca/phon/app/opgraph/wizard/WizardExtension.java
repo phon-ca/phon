@@ -25,7 +25,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -39,6 +41,8 @@ import ca.gedge.opgraph.Processor;
  */
 public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
+	public final static String WIZARDEXT_CTX_NAME = "wizardExtension";
+	
 	private WizardInfo wizardInfo = new WizardInfo();
 	
 	private final List<OpNode> wizardNodes = new ArrayList<>();
@@ -49,7 +53,9 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	private final Map<OpNode, Boolean> optionalDefaults = new HashMap<>();
 	
-	private final Map<String, String> reportTemplates = new LinkedHashMap<>();
+	private final List<NodeWizardReportTemplate> reportTemplates = new ArrayList<>();
+	
+	public final static String OPGRAPH_CTX_NAME = "graph";
 	
 	private final OpGraph graph;
 	
@@ -236,26 +242,61 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		return this.wizardInfo;
 	}
 	
-	public Set<String> getReportTemplateNames() {
-		return Collections.unmodifiableSet(reportTemplates.keySet());
+	public List<NodeWizardReportTemplate> getReportTemplates() {
+		return Collections.unmodifiableList(reportTemplates);
 	}
 	
-	public String getReportTemplate(String name) {
-		return reportTemplates.get(name);
+	public Set<String> getReportTemplateNames() {
+		return reportTemplates.stream()
+				.map( (rt) -> rt.getName() )
+				.collect(Collectors.toSet());
+	}
+	
+	public NodeWizardReportTemplate getReportTemplate(String name) {
+		final Optional<NodeWizardReportTemplate> opt = reportTemplates.stream()
+				.filter( (rt) -> rt.getName().equals(name) )
+				.findAny();
+		return (opt.isPresent() ? opt.get() : null);
 	}
 	
 	/**
-	 * Set report template for the given identifier.
+	 * Set report template text for the given identifier.
 	 * 
 	 * @param name
 	 * @param template
+	 * 
+	 * @return the new or modified report template object
 	 */
-	public void putReportTemplate(String name, String template) {
-		reportTemplates.put(name, template);
+	public NodeWizardReportTemplate putReportTemplate(String name, String template) {
+		NodeWizardReportTemplate retVal = getReportTemplate(name);
+		if(retVal == null) {
+			retVal = new NodeWizardReportTemplate(name, template);
+			reportTemplates.add(retVal);
+		}
+		retVal.setTemplate(template);
+		return retVal;
 	}
 	
 	public void removeReportTemplate(String name) {
-		reportTemplates.remove(name);
+		final Iterator<NodeWizardReportTemplate> itr = reportTemplates.iterator();
+		while(itr.hasNext()) {
+			final NodeWizardReportTemplate template = itr.next();
+			if(template.getName().equals(name)) {
+				itr.remove();
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Setup a map of object which will be added to the
+	 * report generator context.
+	 * 
+	 * @param context
+	 */
+	public void setupReportContext(NodeWizardReportContext context) {
+		context.put(WIZARDEXT_CTX_NAME, this);
+		context.put(OPGRAPH_CTX_NAME, getGraph());
 	}
 
 	@Override
@@ -276,8 +317,8 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 			retVal.setOptionalNodeDefault(node, getOptionalNodeDefault(node));
 		}
 		
-		for(String reportName:getReportTemplateNames()) {
-			retVal.putReportTemplate(reportName, getReportTemplate(reportName));
+		for(NodeWizardReportTemplate report:getReportTemplates()) {
+			retVal.putReportTemplate(report.getName(), report.getTemplate());
 		}
 		
 		return retVal;

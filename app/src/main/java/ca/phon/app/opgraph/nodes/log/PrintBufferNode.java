@@ -116,8 +116,8 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 			}
 			
 			if(data instanceof DefaultTableDataSource) {
-				bufferPanel.putExtension(BirtBufferPanelExtension.class, 
-						new BirtBufferPanelExtension(bufferPanel, (DefaultTableDataSource)data));
+				bufferPanel.putExtension(DefaultTableDataSource.class, 
+						(DefaultTableDataSource)data);
 			}
 			
 			if(!append) {

@@ -96,11 +96,11 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 			settingsEle.appendChild(nodeEle);
 		}
 		
-		for(String reportName:nodeList.getReportTemplateNames()) {
+		for(NodeWizardReportTemplate report:nodeList.getReportTemplates()) {
 			final Element reportEle =
 					doc.createElementNS(NAMESPACE, PREFIX + ":report-template");
-			reportEle.setAttribute("name", reportName);
-			reportEle.setTextContent(nodeList.getReportTemplate(reportName));
+			reportEle.setAttribute("name", report.getName());
+			reportEle.setTextContent(report.getTemplate());
 			
 			settingsEle.appendChild(reportEle);
 		}
