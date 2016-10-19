@@ -18,6 +18,7 @@
  */
 package ca.phon.app;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.util.List;
@@ -27,6 +28,10 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Action;
+import javax.swing.SwingUtilities;
+
+import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;
@@ -44,6 +49,11 @@ import ca.phon.worker.PhonWorker;
 public class Main {
 	
 	private final static Logger LOGGER = Logger.getLogger(Main.class.getName());
+	
+	private final static String START_ACTION_PROP = Main.class.getName() + ".startAction";
+	
+	private final static String startAction =
+			PrefHelper.get(START_ACTION_PROP, null);
 	
 	private final static String INITIAL_EP_PROP = 
 			Main.class.getName() + ".initialEntryPoint";
@@ -124,16 +134,34 @@ public class Main {
 	}
 	
 	private static void startApp(String[] args) {
-		LOGGER.info("Starting " + initialEntryPoint);
-		final PluginEntryPointRunner entryPtRunner =
-				new PluginEntryPointRunner(initialEntryPoint);
-		try {
-			final EntryPointArgs entryPointArgs = new EntryPointArgs();
-			entryPointArgs.parseArgs(args);
-			entryPtRunner.setArgs(entryPointArgs);
-			entryPtRunner.executePlugin();
-		} catch (PluginException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		if(startAction != null) {
+			// override entry point and use a Swing Action as entry point for application
+			try {
+				Class<?> actionClazz = Class.forName(startAction, true, PluginManager.class.getClassLoader());
+				if(Action.class.isAssignableFrom(actionClazz)) {
+					final Action action = (Action)actionClazz.newInstance();
+					
+					final Runnable onEDT = () -> {
+						final ActionEvent ae = new ActionEvent(new Object(), 0, "startAction");
+						action.actionPerformed(ae);
+					};
+					SwingUtilities.invokeLater(onEDT);
+				}
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		} else {
+			LOGGER.info("Starting " + initialEntryPoint);
+			final PluginEntryPointRunner entryPtRunner =
+					new PluginEntryPointRunner(initialEntryPoint);
+			try {
+				final EntryPointArgs entryPointArgs = new EntryPointArgs();
+				entryPointArgs.parseArgs(args);
+				entryPtRunner.setArgs(entryPointArgs);
+				entryPtRunner.executePlugin();
+			} catch (PluginException e) {
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			}
 		}
 	}
 
