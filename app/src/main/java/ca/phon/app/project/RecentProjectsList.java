@@ -43,6 +43,7 @@ import javax.swing.event.MouseInputAdapter;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.StockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.welcome.LocalProjectButton;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.PhonGuiConstants;
@@ -209,10 +210,10 @@ public class RecentProjectsList extends JPanel {
 	public void onOpenProject(PhonActionEvent pae) {
 		LocalProjectButton btn = (LocalProjectButton)pae.getData();
 		
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("ca.phon.modules.core.OpenProjectController.projectpath", btn.getProjectFile().getAbsolutePath());
+		final EntryPointArgs args = new EntryPointArgs();
+		args.put(EntryPointArgs.PROJECT_LOCATION, btn.getProjectFile().getAbsolutePath());
 		
-		PluginEntryPointRunner.executePluginInBackground("OpenProject", initInfo);
+		PluginEntryPointRunner.executePluginInBackground("OpenProject", args);
 	}
 	
 	class ButtonPanel extends JPanel implements Scrollable {

@@ -33,6 +33,7 @@ import java.util.zip.ZipFile;
 
 import javax.swing.SwingUtilities;
 
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -49,10 +50,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	private final static Logger LOGGER = Logger.getLogger(OpenProjectEP.class.getName());
 	
 	public static final String EP_NAME = "OpenProject";
-	
-	/** The project path property */
-	public final static String PROJECTPATH_PROPERTY = 
-		"ca.phon.modules.core.OpenProjectController.projectpath";
 	
 	private String projectpath;
 	
@@ -252,11 +249,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	}
 
 	@Override
-	public void pluginStart(Map<String, Object> initInfo)  {
+	public void pluginStart(Map<String, Object> args)  {
 		if(GraphicsEnvironment.isHeadless()) return;
 		
-		if(initInfo.get(PROJECTPATH_PROPERTY) != null)
-			projectpath = initInfo.get(PROJECTPATH_PROPERTY).toString();
+		final EntryPointArgs epArgs = new EntryPointArgs(args);
+		this.projectpath = (String)epArgs.get(EntryPointArgs.PROJECT_LOCATION);
 		
 		if(SwingUtilities.isEventDispatchThread()) {
 			openProject.run();

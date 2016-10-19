@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.app.project.OpenProjectEP;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -107,10 +108,10 @@ private final static String TXT = "New project...";
 					factory.createProject(folder);
 					
 					// open project
-					final HashMap<String, Object> initInfo = new HashMap<String, Object>();
-					initInfo.put(OpenProjectEP.PROJECTPATH_PROPERTY, folderName);
+					final EntryPointArgs args = new EntryPointArgs();
+					args.put(EntryPointArgs.PROJECT_LOCATION, folderName);
 					
-					PluginEntryPointRunner.executePluginInBackground(OpenProjectEP.EP_NAME, initInfo);
+					PluginEntryPointRunner.executePluginInBackground(OpenProjectEP.EP_NAME, args);
 				} catch (IOException ex) {
 					LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), e);
 					final MessageDialogProperties p2 = new MessageDialogProperties();

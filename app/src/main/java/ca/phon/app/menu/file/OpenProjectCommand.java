@@ -26,6 +26,7 @@ import java.util.HashMap;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.OpenProjectEP;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.CommonModuleFrame;
@@ -72,10 +73,10 @@ public class OpenProjectCommand extends HookableAction {
 		public void nativeDialogEvent(NativeDialogEvent event) {
 			final String projectPath = (String)event.getDialogData();
 			if(projectPath != null) {
-				final HashMap<String, Object> initInfo = new HashMap<String, Object>();
-				initInfo.put(OpenProjectEP.PROJECTPATH_PROPERTY, projectPath);
+				final EntryPointArgs args = new EntryPointArgs();
+				args.put(EntryPointArgs.PROJECT_LOCATION, projectPath);
 				
-				PluginEntryPointRunner.executePluginInBackground(OpenProjectEP.EP_NAME, initInfo);
+				PluginEntryPointRunner.executePluginInBackground(OpenProjectEP.EP_NAME, args);
 			}
 		}
 		

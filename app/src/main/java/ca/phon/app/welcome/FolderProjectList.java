@@ -58,6 +58,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
@@ -568,16 +569,10 @@ public class FolderProjectList extends JPanel {
 	public void onOpenProject(PhonActionEvent pae) {
 		LocalProjectButton btn = (LocalProjectButton)pae.getData();
 		
-		HashMap<String, Object> initInfo = new HashMap<String, Object>();
-		initInfo.put("ca.phon.modules.core.OpenProjectController.projectpath", btn.getProjectFile().getAbsolutePath());
+		final EntryPointArgs args = new EntryPointArgs();
+		args.put(EntryPointArgs.PROJECT_LOCATION, btn.getProjectFile().getAbsolutePath());
 		
-		PluginEntryPointRunner.executePluginInBackground("OpenProject", initInfo);
-		
-//		ModuleInformation mi = 
-//			ResourceLocator.getInstance().getModuleInformationByAction(
-//					"ca.phon.modules.core.OpenProjectController");
-//		LoadModule lm = new LoadModule(mi, initInfo, true);
-//		lm.start();
+		PluginEntryPointRunner.executePluginInBackground("OpenProject", args);
 	}
 
 	public void onShowProject(PhonActionEvent pae) {

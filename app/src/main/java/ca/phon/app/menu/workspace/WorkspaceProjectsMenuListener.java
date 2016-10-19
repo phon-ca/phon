@@ -24,6 +24,7 @@ import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.OpenProjectEP;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
@@ -39,13 +40,13 @@ public class WorkspaceProjectsMenuListener implements MenuListener {
 		final Workspace workspace = Workspace.userWorkspace();
 		for(Project project:workspace.getProjects()) {
 			final String projectPath = project.getLocation();
-			final HashMap<String, Object> initInfo = new HashMap<String, Object>();
-			initInfo.put(OpenProjectEP.PROJECTPATH_PROPERTY, projectPath);
+			final EntryPointArgs args = new EntryPointArgs();
+			args.put(EntryPointArgs.PROJECT_LOCATION, projectPath);
 			
 			final PluginAction act = new PluginAction(OpenProjectEP.EP_NAME, true);
 			act.putValue(PluginAction.NAME, project.getName());
 			act.putValue(PluginAction.SHORT_DESCRIPTION, project.getLocation());
-			act.putArgs(initInfo);
+			act.putArgs(args);
 			menu.add(act);
 		}
 	}
