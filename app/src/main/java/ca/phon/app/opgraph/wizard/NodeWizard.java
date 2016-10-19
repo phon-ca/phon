@@ -55,7 +55,6 @@ import javax.swing.text.html.StyleSheet;
 import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.JXTitledPanel;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
@@ -73,6 +72,7 @@ import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -247,17 +247,13 @@ public class NodeWizard extends WizardFrame {
 		gbc.weighty = 1.0;
 		gbc.insets = new Insets(2, 2, 2, 2);
 		
-		final JXTitledPanel panel = new JXTitledPanel("Steps");
-		panel.getContentContainer().setLayout(new BorderLayout());
-		panel.getContentContainer().add(new JScrollPane(stepList), BorderLayout.CENTER);
+		final TitledPanel panel = new TitledPanel("Steps", new JScrollPane(stepList));
 		leftPanel.add(panel, gbc);
 		
 		++gbc.gridy;
 		gbc.weighty = 0.0;
 		optionsPanel = new WizardGlobalOptionsPanel();
-		final JXTitledPanel panel1 = new JXTitledPanel("Settings");
-		panel1.getContentContainer().setLayout(new BorderLayout());
-		panel1.getContentContainer().add(optionsPanel, BorderLayout.CENTER);
+		final TitledPanel panel1 = new TitledPanel("Settings", optionsPanel);
 		leftPanel.add(panel1, gbc);
 		
 		add(leftPanel, BorderLayout.WEST);
@@ -267,9 +263,7 @@ public class NodeWizard extends WizardFrame {
 		centerPanel = new JPanel(cardLayout);
 		centerPanel.add(stepPanel, WIZARD_LIST);
 		advancedSettingsPanel = new AdvancedSettingsPanel(nodeWizardList);
-		final JXTitledPanel advPanel = new JXTitledPanel("Advanced Settings");
-		advPanel.getContentContainer().setLayout(new BorderLayout());
-		advPanel.getContentContainer().add(advancedSettingsPanel);
+		final TitledPanel advPanel = new TitledPanel("Advanced Settings", advancedSettingsPanel);
 		
 		ImageIcon closeIcon = IconManager.getInstance().getIcon("misc/x-bold-white", IconSize.XSMALL);
 		JButton closeBtn = new JButton(closeIcon);
@@ -459,9 +453,7 @@ public class NodeWizard extends WizardFrame {
 				final BorderLayout layout = new BorderLayout();
 				step.setLayout(layout);
 				
-				final JXTitledPanel panel = new JXTitledPanel(ext.getNodeTitle(node));
-				panel.getContentContainer().setLayout(new BorderLayout());
-				panel.getContentContainer().add(new JScrollPane(comp), BorderLayout.CENTER);
+				final TitledPanel panel = new TitledPanel(ext.getNodeTitle(node), new JScrollPane(comp));
 				
 				step.add(panel, BorderLayout.CENTER);
 				
@@ -483,10 +475,7 @@ public class NodeWizard extends WizardFrame {
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final JXTitledPanel panel = new JXTitledPanel("Generate report");
-		panel.getContentContainer().setLayout(new BorderLayout());
-		panel.getContentContainer().add(getBufferPanel(), BorderLayout.CENTER);
-		
+		final TitledPanel panel = new TitledPanel("Generate report", getBufferPanel());
 		retVal.add(panel, BorderLayout.CENTER);
 		
 		return retVal;
@@ -498,9 +487,6 @@ public class NodeWizard extends WizardFrame {
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final JXTitledPanel panel = new JXTitledPanel("Select analyses");
-		panel.getContentContainer().setLayout(new BorderLayout());
-		
 		optionalsTree = new WizardOptionalsCheckboxTree(getWizardExtension());
 		optionalsTree.addMouseListener(new OptionalsContextHandler());
 		for(OpNode optionalNode:getWizardExtension().getOptionalNodes()) {
@@ -509,7 +495,7 @@ public class NodeWizard extends WizardFrame {
 			}
 		}
 		
-		panel.getContentContainer().add(new JScrollPane(optionalsTree), BorderLayout.CENTER);
+		final TitledPanel panel = new TitledPanel("Select analyses", new JScrollPane(optionalsTree));
 		retVal.add(panel, BorderLayout.CENTER);
 		
 		return retVal;
@@ -520,9 +506,6 @@ public class NodeWizard extends WizardFrame {
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final JXTitledPanel stepTitle = 
-				new JXTitledPanel(title);
-		stepTitle.getContentContainer().setLayout(new BorderLayout());
 		
 		final HTMLEditorKit editorKit = new HTMLEditorKit();
 		final StyleSheet styleSheet = editorKit.getStyleSheet();
@@ -543,7 +526,8 @@ public class NodeWizard extends WizardFrame {
 		
 		editorPane.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
 		
-		stepTitle.getContentContainer().add(new JScrollPane(editorPane), BorderLayout.CENTER);
+		final TitledPanel stepTitle = 
+				new TitledPanel(title, new JScrollPane(editorPane));
 		retVal.add(stepTitle, BorderLayout.CENTER);
 		
 		return retVal;

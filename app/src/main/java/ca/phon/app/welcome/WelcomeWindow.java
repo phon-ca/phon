@@ -38,13 +38,12 @@ import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.JXCollapsiblePane.Direction;
-import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.JXTitledSeparator;
 import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.painter.MattePainter;
@@ -71,6 +70,7 @@ import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
@@ -94,8 +94,8 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private final static String HEADER_MESSAGE = "To begin, create a project or select a project from the workspace or recent projects.";
 	
 	// action panel
-	private JXTitledPanel actionsContainer;
-	private JXCollapsiblePane actionsPanel;
+	private TitledPanel actionsContainer;
+	private JPanel actionsPanel;
 	
 	// action buttons
 	private MultiActionButton newProjectButton;
@@ -104,12 +104,12 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton mediaPrefsButton;
 	
 	// recent projects
-	private JXTitledPanel recentProjectsContainer;
-	private JXCollapsiblePane recentProjectsPanel;
+	private TitledPanel recentProjectsContainer;
+	private JPanel recentProjectsPanel;
 	private RecentProjectsList recentProjectsList;
 	
 	// workspace projects
-	private JXTitledPanel workspaceContainer;
+	private TitledPanel workspaceContainer;
 	private WorkspaceProjectsPanel workspaceProjectsPanel;
 	
 	public WelcomeWindow() {
@@ -138,7 +138,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 		add(header, gbc);
 		
 		// setup actions
-		actionsPanel = new JXCollapsiblePane(Direction.DOWN);
+		actionsPanel = new JPanel();
 
 		newProjectButton = createNewButton();
 		browseProjectButton = createBrowseButton();
@@ -164,7 +164,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 			actionsPanel.add(btn);
 		}
 		
-		actionsContainer = new JXTitledPanel("Actions", actionsPanel);
+		actionsContainer = new TitledPanel("Actions", actionsPanel);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.weightx = 0.0;
@@ -176,17 +176,17 @@ public class WelcomeWindow extends CommonModuleFrame {
 		add(actionsContainer, gbc);
 		
 		workspaceProjectsPanel = new WorkspaceProjectsPanel();
-		workspaceContainer = new JXTitledPanel("Workspace", workspaceProjectsPanel);
+		workspaceContainer = new TitledPanel("Workspace", workspaceProjectsPanel);
 		gbc.gridx++;
 		gbc.gridheight = 1;
 		add(workspaceContainer, gbc);
 		
-		recentProjectsPanel = new JXCollapsiblePane(Direction.DOWN);
+		recentProjectsPanel = new JPanel();
 		recentProjectsPanel.setLayout(new BorderLayout());
 		recentProjectsList = new RecentProjectsList();
 		final JScrollPane recentProjectsScroller = new JScrollPane(recentProjectsList);
 		recentProjectsPanel.add(recentProjectsScroller, BorderLayout.CENTER);
-		recentProjectsContainer = new JXTitledPanel("Recent Projects", recentProjectsPanel);
+		recentProjectsContainer = new TitledPanel("Recent Projects", recentProjectsPanel);
 		
 		PrefHelper.getUserPreferences().addPreferenceChangeListener( (p) -> {
 			if(p.getKey().equals(RecentProjectHistory.PROJECT_HISTORY_PROP)) {

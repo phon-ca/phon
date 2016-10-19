@@ -35,13 +35,17 @@ public class WelcomeWindowEP implements IPluginEntryPoint {
 
 	@Override
 	public void pluginStart(Map<String, Object> args) {
-		SwingUtilities.invokeLater( () -> {
+		final Runnable onEDT =  () -> {
 			final WelcomeWindow window = new WelcomeWindow();
 			window.pack();
 			window.setSize(900, 700);
 			window.centerWindow();
 			window.setVisible(true);
-		});
+		};
+		if(SwingUtilities.isEventDispatchThread())
+			onEDT.run();
+		else
+			SwingUtilities.invokeLater(onEDT);
 	}
 
 }
