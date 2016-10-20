@@ -44,7 +44,7 @@ import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
 import ca.phon.app.menu.workspace.WorkspaceCommand;
 import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
 import ca.phon.app.prefs.PhonProperties;
-import ca.phon.app.welcome.WorkspaceDialog;
+import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
@@ -115,7 +115,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	protected void addQueryMenu(Window owner, JMenuBar menu) {
 		if(!(owner instanceof CommonModuleFrame)) return;
 		final CommonModuleFrame frame = (CommonModuleFrame)owner;
-		if(!(frame instanceof WorkspaceDialog)) {
+		if(!(frame instanceof WelcomeWindow)) {
 			final JMenu queryMenu  = new JMenu("Query");
 			final QueryMenuListener queryMenuListener = new QueryMenuListener();
 			queryMenu.addMenuListener(queryMenuListener);

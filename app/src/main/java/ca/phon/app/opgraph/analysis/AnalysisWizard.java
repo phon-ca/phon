@@ -24,8 +24,6 @@ import java.util.List;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 
-import org.jdesktop.swingx.JXTitledPanel;
-
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
@@ -35,6 +33,7 @@ import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.wizard.WizardStep;
 
@@ -90,7 +89,7 @@ public class AnalysisWizard extends NodeWizard {
 		final WizardStep sessionSelectorStep = new WizardStep();
 		sessionSelectorStep.setTitle("Select sessions");
 		
-		final JXTitledPanel panel = new JXTitledPanel("Select sessions : " + getProject().getName());
+		final TitledPanel panel = new TitledPanel("Select sessions : " + getProject().getName());
 		panel.getContentContainer().setLayout(new BorderLayout());
 		
 		final JScrollPane scroller = new JScrollPane(sessionSelector);
