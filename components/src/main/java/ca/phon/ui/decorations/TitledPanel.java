@@ -5,6 +5,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 
 import javax.swing.BorderFactory;
@@ -25,10 +31,13 @@ public class TitledPanel extends JPanel {
 	private JPanel titlePanel;
 	
 	private JLabel titleLabel;
+	private GridBagConstraints gbcTitle;
 	
 	private Component leftDecoration;
+	private GridBagConstraints gbcLeft;
 	
 	private Component rightDecoration;
+	private GridBagConstraints gbcRight;
 	
 	private Container contentContainer;
 	
@@ -46,17 +55,48 @@ public class TitledPanel extends JPanel {
 		getContentContainer().add(content, BorderLayout.CENTER);
 	}
 	
+	@SuppressWarnings("serial")
 	private void init() {
 		super.setLayout(new BorderLayout(0, 0));
 		
-		titlePanel = new JPanel(new BorderLayout());
+		titlePanel = new JPanel(new GridBagLayout()) {
+			@Override
+			public void paintComponent(Graphics g) {
+				final Graphics2D g2 = (Graphics2D)g;
+				
+				final GradientPaint gp = new GradientPaint(0.0f, 0.0f, Color.decode("#aaaaaa"), 
+						0.0f, (float)getHeight(), Color.decode("#7c7c7c"));
+				g2.setPaint(gp);
+				g2.fillRect(0, 0, getWidth(), getHeight());
+			}
+		};
+		
+		gbcLeft = new GridBagConstraints();
+		gbcLeft.gridx = 0;
+		gbcLeft.gridy = 0;
+		gbcLeft.anchor = GridBagConstraints.WEST;
+		gbcLeft.fill = GridBagConstraints.NONE;
+		gbcLeft.gridwidth = 1;
+		gbcLeft.gridheight = 1;
+		gbcLeft.weightx = 0.0;
+		gbcLeft.weighty = 0.0;
+		gbcLeft.insets = new Insets(5, 2, 5, 2);
+		
+		gbcTitle = (GridBagConstraints)gbcLeft.clone();
+		gbcTitle.gridx = 1;
+		gbcTitle.weightx = 1.0;
+		gbcTitle.fill = GridBagConstraints.HORIZONTAL;
+		
+		gbcRight = (GridBagConstraints)gbcLeft.clone();
+		gbcRight.gridx = 2;
+		gbcRight.anchor = GridBagConstraints.EAST;
 		
 		titleLabel = new JLabel(getTitle());
 		titleLabel.setForeground(UIManager.getColor("titledpanel.foreground"));
 		titleLabel.setBackground(UIManager.getColor("titledpanel.background"));
 		titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
 
-		titlePanel.add(titleLabel, BorderLayout.CENTER);
+		titlePanel.add(titleLabel, gbcTitle);
 		titlePanel.setOpaque(true);
 		titlePanel.setBackground(UIManager.getColor("titledpanel.background"));
 		
@@ -106,7 +146,7 @@ public class TitledPanel extends JPanel {
 		this.leftDecoration = leftComponent;
 		
 		if(titlePanel != null && leftComponent != null) {
-			titlePanel.add(leftComponent, BorderLayout.WEST);
+			titlePanel.add(leftComponent, gbcLeft);
 		}
 	}
 
@@ -122,7 +162,7 @@ public class TitledPanel extends JPanel {
 		this.rightDecoration = rightComponent;
 		
 		if(titlePanel != null && rightComponent != null) {
-			titlePanel.add(rightComponent, BorderLayout.EAST);
+			titlePanel.add(rightComponent, gbcRight);
 		}
 	}
 
