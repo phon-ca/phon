@@ -46,13 +46,22 @@ public class TitledPanel extends JPanel {
 		UIManager.put("titledpanel.background", Color.gray);
 	}
 	
+	public TitledPanel() {
+		this("", null);
+	}
+	
+	public TitledPanel(String title) {
+		this(title, null);
+	}
+	
 	public TitledPanel(String title, Component content) {
 		super();
 		
 		init();
 	
 		setTitle(title);
-		getContentContainer().add(content, BorderLayout.CENTER);
+		if(content != null)
+			getContentContainer().add(content, BorderLayout.CENTER);
 	}
 	
 	@SuppressWarnings("serial")
@@ -64,7 +73,7 @@ public class TitledPanel extends JPanel {
 			public void paintComponent(Graphics g) {
 				final Graphics2D g2 = (Graphics2D)g;
 				
-				final GradientPaint gp = new GradientPaint(0.0f, 0.0f, Color.decode("#aaaaaa"), 
+				final GradientPaint gp = new GradientPaint(0.0f, 0.0f, Color.decode("#bbbbbb"), 
 						0.0f, (float)getHeight(), Color.decode("#7c7c7c"));
 				g2.setPaint(gp);
 				g2.fillRect(0, 0, getWidth(), getHeight());
@@ -80,12 +89,12 @@ public class TitledPanel extends JPanel {
 		gbcLeft.gridheight = 1;
 		gbcLeft.weightx = 0.0;
 		gbcLeft.weighty = 0.0;
-		gbcLeft.insets = new Insets(5, 2, 5, 2);
 		
 		gbcTitle = (GridBagConstraints)gbcLeft.clone();
 		gbcTitle.gridx = 1;
 		gbcTitle.weightx = 1.0;
 		gbcTitle.fill = GridBagConstraints.HORIZONTAL;
+		gbcTitle.insets = new Insets(5, 2, 5, 2);
 		
 		gbcRight = (GridBagConstraints)gbcLeft.clone();
 		gbcRight.gridx = 2;
