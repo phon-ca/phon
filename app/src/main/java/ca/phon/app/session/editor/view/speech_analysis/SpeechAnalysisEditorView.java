@@ -142,6 +142,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private JPanel btmPanel;
 	
+	private JPanel errorPanel;
 	private HidablePanel messageButton = new HidablePanel("SpeechAnalysisView.noAudio");
 	
 	private final static String WAV_DISPLAY_HEIGHT = "SpeechAnalysisView.wavDisplayHeight";
@@ -238,7 +239,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 		btmPanel = new JPanel(new VerticalLayout());
 		btmPanel.removeAll();
 		
-		btmPanel.add(messageButton);
+		errorPanel = new JPanel(new VerticalLayout());
+		errorPanel.add(messageButton);
+		
+		btmPanel.add(errorPanel);
 		btmPanel.add(horizontalScroller);
 		add(btmPanel, BorderLayout.SOUTH);
 		
@@ -769,6 +773,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	@Override
 	public DockPosition getPreferredDockPosition() {
 		return DockPosition.CENTER;
+	}
+	
+	public JPanel getErrorPane() {
+		return this.errorPanel;
 	}
 	
 	private final PropertyChangeListener segmentListener = new PropertyChangeListener() {
