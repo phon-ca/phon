@@ -116,6 +116,14 @@ public abstract class BufferedPainter<T> implements Painter<T> {
 	 * @param bounds
 	 */
 	protected abstract void paintBuffer(T obj, Graphics2D g2, Rectangle2D bounds);
+	
+	public int getBufferWidth(T obj, Rectangle2D bounds) {
+		return (int)Math.ceil(bounds.getWidth());
+	}
+	
+	public int getBufferHeight(T obj, Rectangle2D bounds) {
+		return (int)Math.ceil(bounds.getHeight());
+	}
 
 	@Override
 	public void paint(T obj, Graphics2D g2, Rectangle2D bounds) {
@@ -139,10 +147,10 @@ public abstract class BufferedPainter<T> implements Painter<T> {
 		BufferedImage img = getBufferdImage();
 		if((img == null || isRepaintBuffer())
 				&& (newBounds.getWidth() > 0 && newBounds.getHeight() > 0)) {
-			final BufferedImage buffer = new BufferedImage((int)newBounds.getWidth(), (int)newBounds.getHeight(), 
+			final BufferedImage buffer = new BufferedImage(getBufferWidth(obj, bounds), getBufferHeight(obj, bounds), 
 					BufferedImage.TYPE_4BYTE_ABGR);
 			final Graphics2D bufferG2 = (Graphics2D)buffer.createGraphics();
-			paintBuffer(obj, bufferG2, new Rectangle2D.Double(0, 0, bounds.getWidth(), bounds.getHeight()));
+			paintBuffer(obj, bufferG2, new Rectangle2D.Double(0, 0, buffer.getWidth(), buffer.getHeight()));
 			setBufferedImage(buffer);
 			setRepaintBuffer(false);
 			img = getBufferdImage();

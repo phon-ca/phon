@@ -20,6 +20,7 @@ package ca.phon.media.sampled;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -625,6 +626,14 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 				}
 				
 				view.setWindowLength(windowLength);
+			} else {
+				// send wheel scroll to parent container
+				if(e.getSource() instanceof Component) {
+					final Component comp = (Component)e.getSource();
+					if(comp.getParent() != null) {
+						comp.getParent().dispatchEvent(e);
+					}
+				}
 			}
 		}
 		

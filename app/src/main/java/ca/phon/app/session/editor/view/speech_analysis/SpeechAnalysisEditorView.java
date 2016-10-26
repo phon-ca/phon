@@ -225,8 +225,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 				isDragging = false;
 			}
 			
-			
-			
 		});
 		horizontalScroller.addAdjustmentListener( (e) -> {
 			if(!e.getValueIsAdjusting() || isDragging) {
@@ -811,18 +809,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 	};
 	
 	private class ContentPane extends JPanel implements Scrollable {
-		
-		public ContentPane() {
-			super();
-		}
-
-		public ContentPane(boolean isDoubleBuffered) {
-			super(isDoubleBuffered);
-		}
-
-		public ContentPane(LayoutManager layout, boolean isDoubleBuffered) {
-			super(layout, isDoubleBuffered);
-		}
 
 		public ContentPane(LayoutManager layout) {
 			super(layout);
