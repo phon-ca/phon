@@ -48,6 +48,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -825,6 +826,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private JMenu createContextMenu() {
 		final JMenu menu = new JMenu();
+		
+		final SelectSegmentAction selectSegAct = new SelectSegmentAction(wavDisplay);
+		selectSegAct.putValue(Action.NAME, "Select segment for record");
+		selectSegAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+		menu.add(new JMenuItem(selectSegAct));
+		menu.addSeparator();
 		
 		wavDisplay.getUI().addContextMenuItems(menu);
 		for(SpeechAnalysisTier tier:getPluginTiers()) {
