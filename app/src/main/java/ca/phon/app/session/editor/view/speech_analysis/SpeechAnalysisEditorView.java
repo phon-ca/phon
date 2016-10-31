@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -79,6 +80,7 @@ import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.PCMSegmentView;
 import ca.phon.media.sampled.Sampled;
 import ca.phon.media.sampled.actions.SelectMixerAction;
+import ca.phon.media.sampled.actions.SelectSegmentAction;
 import ca.phon.media.sampled.actions.ToggleLoop;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -92,6 +94,7 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.PhonTaskButton;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -210,7 +213,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private void init() {
 		setLayout(new BorderLayout());
 		setupToolbar();
-		setupInputMap();
 		
 		horizontalScroller = new JScrollBar(SwingConstants.HORIZONTAL);
 		horizontalScroller.addMouseListener(new MouseInputAdapter() {
@@ -259,6 +261,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 				playButton.setAction(new PlayAction(getEditor(), SpeechAnalysisEditorView.this));
 			}
 		});
+		wavDisplay.addMouseListener(contenxtMenuHandler);
 		
 		Dimension prefSize = wavDisplay.getPreferredSize();
 			
@@ -313,7 +316,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scroller, BorderLayout.CENTER);
 
-		setupActions();
+		setupInputMap();
 		setupEditorActions();
 		setupTimeScrollbar();
 	}
@@ -344,25 +347,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 	}
 	
-	private void setupActions() {
-		final ActionMap am = getActionMap();
-		final InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		
-		final String playId = "play";
-		final Action playAct = new PlayAction(getEditor(), this);
-		final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
-		am.put(playId, playAct);
-		im.put(ks, playId);
-		
-		setActionMap(am);
-		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
-	}
-	
 	private JPanel initPlugins() {
 		loadPlugins();
 		final JPanel retVal = new JPanel(new VerticalLayout());
 		for(SpeechAnalysisTier tier:pluginTiers) {
 			final JComponent comp = tier.getTierComponent();
+			comp.addMouseListener(contenxtMenuHandler);
 			retVal.add(comp);
 		}
 		return retVal;
@@ -378,16 +368,23 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	private void setupInputMap() {
-//		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()
-//				| InputEvent.SHIFT_MASK);
-//		this.registerKeyboardAction(new AbstractAction() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				wavDisplay.play();
-//			}
-//			
-//		}, ks, JComponent.WHEN_IN_FOCUSED_WINDOW);
+		final ActionMap am = getActionMap();
+		final InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		final String selectId = "select";
+		final SelectSegmentAction selectAct = new SelectSegmentAction(wavDisplay);
+		final KeyStroke selectKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		am.put(selectId, selectAct);
+		im.put(selectKs, selectId);
+		
+		final String playId = "play";
+		final Action playAct = new PlayAction(getEditor(), this);
+		final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
+		am.put(playId, playAct);
+		im.put(ks, playId);
+		
+		setActionMap(am);
+		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
 	}
 	
 	private void setupToolbar() {
@@ -807,6 +804,41 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 		
 	};
+	
+	private final MouseInputAdapter contenxtMenuHandler = new MouseInputAdapter() {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+		
+	};
+	
+	private JMenu createContextMenu() {
+		final JMenu menu = new JMenu();
+		
+		wavDisplay.getUI().addContextMenuItems(menu);
+		for(SpeechAnalysisTier tier:getPluginTiers()) {
+			tier.addMenuItems(menu);
+		}
+		
+		return menu;
+	}
+	
+	private void showContextMenu(MouseEvent e) {
+		final JMenu menu = createContextMenu();
+		
+		menu.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
+	}
 	
 	private class ContentPane extends JPanel implements Scrollable {
 

@@ -407,14 +407,14 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 			g2.drawString(cursorTxt, (float)cursorX, (float)(txtBaseY-fm.getDescent()));
 	}
 	
-	private void showContextMenu(Point p) {
-		final JPopupMenu menu = new JPopupMenu();
-		
-		final JMenuItem selectSegAct = new JMenuItem(new SelectSegmentAction(view));
-		selectSegAct.setEnabled(view.getSelectionStart() > 0.0f && view.getSelectionLength() > 0.0f);
-		menu.add(selectSegAct);
-		
-		menu.addSeparator();
+//	private void showContextMenu(Point p) {
+//		final JMenu menu = new JMenu();
+//		addContextMenuItems(menu);
+//		menu.getPopupMenu().show(view, p.x, p.y);
+//	}
+	
+	@Override
+	public void addContextMenuItems(JMenu menu) {
 		for(int i = 0; i < view.getSampled().getNumberOfChannels(); i++) {
 			final Channel ch = Channel.values()[i];
 			final ToggleChannelVisible toggleAct = new ToggleChannelVisible(view, ch);
@@ -455,8 +455,6 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		final JMenuItem saveSelectionItem = new JMenuItem(new SaveSelectionAction(view));
 		saveSelectionItem.setEnabled(view.hasSelection());
 		menu.add(saveSelectionItem);
-		
-		menu.show(view, p.x, p.y);
 	}
 	
 	private final PropertyChangeListener propListener = new PropertyChangeListener() {
@@ -540,8 +538,8 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			view.requestFocus();
-			if(OSInfo.isMacOs() && e.isPopupTrigger())
-				showContextMenu(e.getPoint());
+//			if(OSInfo.isMacOs() && e.isPopupTrigger())
+//				showContextMenu(e.getPoint());
 			if(e.getButton() != MouseEvent.BUTTON1) return;
 			dragStartX = e.getX();
 			if(e.getY() > contentRect.getY()) {
@@ -561,7 +559,7 @@ public class DefaultPCMSegmentViewUI extends PCMSegmentViewUI {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			if(!OSInfo.isMacOs() && e.isPopupTrigger()) {
-				showContextMenu(e.getPoint());
+//				showContextMenu(e.getPoint());
 			} else {
 				isDraggingSelection = false;
 				isDraggingPosition = false;

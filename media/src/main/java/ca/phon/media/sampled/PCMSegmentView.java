@@ -605,6 +605,10 @@ public class PCMSegmentView extends JComponent {
 		setUI(new DefaultPCMSegmentViewUI(this));
 	}
 	
+	public DefaultPCMSegmentViewUI getUI() {
+		return (DefaultPCMSegmentViewUI)super.ui;
+	}
+	
 	@Override
 	public void setUI(ComponentUI newUI) {
 		super.setUI(newUI);

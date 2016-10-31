@@ -18,8 +18,11 @@
  */
 package ca.phon.media.sampled;
 
+import javax.swing.JMenu;
 import javax.swing.plaf.ComponentUI;
 
-public class PCMSegmentViewUI extends ComponentUI {
+public abstract class PCMSegmentViewUI extends ComponentUI {
+	
+	public abstract void addContextMenuItems(JMenu menu);
 	
 }
