@@ -79,9 +79,12 @@ public class NewSegmentAction extends SegmentationViewAction {
 				
 			};
 			
-			final ChangeSpeakerEdit speakerEdit = new ChangeSpeakerEdit(getEditor(), utt, speaker);
-			speakerEdit.doIt();
-			edit.addEdit(speakerEdit);
+			// don't replace speaker if no speaker was defined
+			if(this.speaker != null) {
+				final ChangeSpeakerEdit speakerEdit = new ChangeSpeakerEdit(getEditor(), utt, speaker);
+				speakerEdit.doIt();
+				edit.addEdit(speakerEdit);
+			}
 			
 			final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getEditor(), utt.getSegment(), 0, m);
 			segEdit.doIt();
