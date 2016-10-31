@@ -1108,7 +1108,7 @@
 	<!-- ◌̝ (0x31d) -->
 	<feature_set char="&#x31d;">diacritic raised </feature_set>
 	<!-- ◌̞ (0x31e) -->
-	<feature_set char="&#x31e;">diacritic lowered </feature_set>
+	<feature_set char="&#x31e;">diacritic lowered approximant sonorant </feature_set>
 	<!-- ◌̟ (0x31f) -->
 	<feature_set char="&#x31f;">diacritic advanced </feature_set>
 	<!-- ◌̠ (0x320) -->
