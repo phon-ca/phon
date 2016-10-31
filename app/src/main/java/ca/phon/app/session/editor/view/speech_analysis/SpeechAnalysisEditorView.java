@@ -834,6 +834,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		menu.addSeparator();
 		
 		wavDisplay.getUI().addContextMenuItems(menu);
+		
 		for(SpeechAnalysisTier tier:getPluginTiers()) {
 			tier.addMenuItems(menu);
 		}

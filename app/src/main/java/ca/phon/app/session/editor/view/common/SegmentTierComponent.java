@@ -24,6 +24,8 @@ import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -46,6 +49,7 @@ import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
+import ca.phon.media.sampled.PCMSegmentView;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
@@ -54,6 +58,10 @@ import ca.phon.session.TierListener;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
+import uk.co.caprica.vlcj.player.MediaPlayer;
+import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
 
 /**
  * Editor for media segments.
@@ -76,6 +84,10 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 	private final SegmentField segmentField;
 	
 	private final JButton playButton;
+	private final ImageIcon playIcon = 
+			IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL);
+	private final ImageIcon pauseIcon =
+			IconManager.getInstance().getIcon("actions/media-playback-pause", IconSize.SMALL);
 
 	public SegmentTierComponent(SessionEditor editor, Tier<MediaSegment> tier, int groupIndex) {
 		super();
@@ -111,8 +123,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		
 		final PhonUIAction playAct = new PhonUIAction(this, "onPlaySegment");
 		
-		playAct.putValue(PhonUIAction.SMALL_ICON, 
-				IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		playAct.putValue(PhonUIAction.SMALL_ICON, playIcon);
 		playButton = new JButton(playAct);
 		playButton.setFocusable(false);
 		
@@ -146,24 +157,62 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		SessionEditor editor = getEditor();
 		if(editor == null) return;
 		
-		final MediaSegment segment = getGroupValue();
-		if(segment.getEndValue() - segment.getStartValue() <= 0) {
-			return;
-		}
-		
-		// try the media player first
-		if(editor.getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			final MediaPlayerEditorView mediaPlayerEditorView = 
-					(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-			if(mediaPlayerEditorView != null) {
-				mediaPlayerEditorView.getPlayer().playSegment((long)segment.getStartValue(), 
-						(long)(segment.getEndValue()-segment.getStartValue()));
+		if(playButton.getIcon() == playIcon) {
+			final MediaSegment segment = getGroupValue();
+			if(segment.getEndValue() - segment.getStartValue() <= 0) {
+				return;
 			}
-		} else if(editor.getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
-			final SpeechAnalysisEditorView waveformEditorView =
-					(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
-			if(waveformEditorView != null) {
-				waveformEditorView.play();
+			
+			// try the media player first
+			if(editor.getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+				final MediaPlayerEditorView mediaPlayerEditorView = 
+						(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				if(mediaPlayerEditorView != null) {
+					playButton.setIcon(pauseIcon);
+					mediaPlayerEditorView.getPlayer().addMediaPlayerListener(new MediaPlayerEventAdapter() {
+						
+						@Override
+						public void paused(MediaPlayer mediaPlayer) {
+							mediaPlayer.removeMediaPlayerEventListener(this);
+							playButton.setIcon(playIcon);
+						}
+						
+					});
+					mediaPlayerEditorView.getPlayer().playSegment((long)segment.getStartValue(), 
+							(long)(segment.getEndValue()-segment.getStartValue()));
+				}
+			} else if(editor.getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
+				final SpeechAnalysisEditorView waveformEditorView =
+						(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
+				if(waveformEditorView != null) {
+					playButton.setIcon(pauseIcon);
+					waveformEditorView.getWavDisplay().addPropertyChangeListener(PCMSegmentView.PLAYING_PROP, new PropertyChangeListener() {
+						
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							if(!waveformEditorView.getWavDisplay().isPlaying()) {
+								playButton.setIcon(playIcon);
+								waveformEditorView.getWavDisplay().removePropertyChangeListener(this);
+							}
+						}
+						
+					});
+					waveformEditorView.play();
+				}
+			}
+		} else {
+			if(editor.getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+				final MediaPlayerEditorView mediaPlayerEditorView = 
+						(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				if(mediaPlayerEditorView != null) {
+					mediaPlayerEditorView.getPlayer().pause();
+				}
+			} else if(editor.getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
+				final SpeechAnalysisEditorView waveformEditorView =
+						(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
+				if(waveformEditorView != null) {
+					waveformEditorView.getWavDisplay().stop();
+				}
 			}
 		}
 	}
