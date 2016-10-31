@@ -19,11 +19,13 @@
 package ca.phon.app.session.editor.view.tier_management;
 
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.Action;
@@ -68,6 +70,8 @@ import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -350,8 +354,24 @@ public class TierOrderingEditorView extends EditorView {
 				}
 			}
 			
-			final RemoveTierAction act = new RemoveTierAction(getEditor(), this, tierDesc, tierItem);
-			act.actionPerformed(pae.getActionEvent());
+			if(tierDesc != null) {
+				final TierDescription td = tierDesc;
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(getEditor());
+				props.setHeader("Delete Tier");
+				props.setMessage("Delete tier " + td.getName() + "?");
+				props.setRunAsync(true);
+				props.setListener( (e) -> {
+					if(e.getDialogResult() == 0) {
+						final RemoveTierAction act = new RemoveTierAction(getEditor(), this, td, tierItem);
+						act.actionPerformed(pae.getActionEvent());
+					}
+				});
+				props.setOptions(MessageDialogProperties.okCancelOptions);
+				NativeDialogs.showMessageDialog(props);
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
 	}
 	
