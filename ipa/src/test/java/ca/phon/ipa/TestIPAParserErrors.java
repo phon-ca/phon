@@ -135,12 +135,6 @@ public class TestIPAParserErrors {
 	}
 	
 	@Test
-	public void testExtraIntraWordSpace() {
-		final String txt = "helo  wrld";
-		testError(txt, 6, IPAParserException.class);
-	}
-	
-	@Test
 	public void testDoubleSyllableBoundary()  {
 		String txt = "hel..o";
 		testError(txt, 5, StrayDiacriticException.class);
