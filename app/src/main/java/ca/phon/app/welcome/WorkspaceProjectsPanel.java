@@ -28,6 +28,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javax.swing.Action;
@@ -42,6 +45,7 @@ import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;
@@ -49,6 +53,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.OSInfo;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -60,6 +65,8 @@ import ca.phon.workspace.WorkspaceHistory;
  *
  */
 public class WorkspaceProjectsPanel extends JPanel {
+	
+	private final static Logger LOGGER = Logger.getLogger(WorkspaceProjectsPanel.class.getName());
 	
 	/* UI */
 	private MultiActionButton workspaceBtn;
@@ -133,6 +140,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 		workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
 		workspaceBtn.setBackgroundPainter(bgPainter);
 		workspaceBtn.addMouseListener(bgPainter);
+		workspaceBtn.addAction(createShowWorkspaceAction());
 		workspaceBtn.setDefaultAction(selectHistoryAct);
 		
 		JPanel contentPanel = new JPanel();
@@ -170,18 +178,22 @@ public class WorkspaceProjectsPanel extends JPanel {
 				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
 		if(OSInfo.isMacOs()) {
 			ImageIcon finderIcon =
-					IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
+					IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.OpenFolderIcon, IconSize.SMALL);
 			if(finderIcon != null) browseIcn = finderIcon;
 		} else if(OSInfo.isWindows()) {
 			ImageIcon explorerIcon = 
-					IconManager.getInstance().getSystemIconForPath("C:\\Windows\\explorer.exe", IconSize.SMALL);
+					IconManager.getInstance().getSystemStockIcon(WindowsStockIcon.FOLDEROPEN, IconSize.SMALL);
 			if(explorerIcon != null) browseIcn = explorerIcon;
 		}
 		builder.addSeparator(".", "browse");
+		
+		final Action showWorkspaceAct = createShowWorkspaceAction();
+		builder.addItem(".@browse", showWorkspaceAct);
+		
 		final SelectWorkspaceCommand cmd = new SelectWorkspaceCommand();
 		cmd.putValue(Action.NAME, "Browse for workspace folder...");
 		cmd.putValue(Action.SMALL_ICON, browseIcn);
-		builder.addItem(".@browse", cmd);
+		builder.addItem(".", cmd);
 		
 		builder.addSeparator(".", "clear");
 		final PhonUIAction clearHistoryAct = new PhonUIAction(this, "onClearHistory");
@@ -190,6 +202,55 @@ public class WorkspaceProjectsPanel extends JPanel {
 		builder.addItem(".@clear", clearHistoryAct);
 		
 		menu.show(workspaceBtn, 0, workspaceBtn.getHeight());
+	}
+	
+	public void onShowWorkspace() {
+		try {
+			OpenFileLauncher.openURL(Workspace.userWorkspaceFolder().toURI().toURL());
+		} catch (MalformedURLException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	private Action createShowWorkspaceAction() {
+
+		String fsIconName = "apps/system-file-manager";
+		String fsName = "file system viewer";
+		
+		ImageIcon fsIcon = IconManager.getInstance().getIcon(fsIconName, IconSize.SMALL);
+		ImageIcon fsIconL = IconManager.getInstance().getIcon(fsIconName, IconSize.MEDIUM);
+		
+		if(OSInfo.isWindows()) {
+			fsName = "File Explorer";
+			
+			final String explorerPath = "C:\\Windows\\explorer.exe";
+			ImageIcon explorerIcon = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.SMALL);
+			ImageIcon explorerIconL = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.MEDIUM);
+			
+			if(explorerIcon != null)
+				fsIcon = explorerIcon;
+			if(explorerIconL != null)
+				fsIconL = explorerIconL;
+		} else {
+			fsName = "Finder";
+			
+			ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
+			ImageIcon finderIconL = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.MEDIUM);
+			
+			if(finderIcon != null)
+				fsIcon = finderIcon;
+			if(finderIconL != null)
+				fsIconL = finderIconL;
+		}
+		
+		
+		final PhonUIAction act = new PhonUIAction(this, "onShowWorkspace");
+		act.putValue(PhonUIAction.NAME, "Show workspace");
+		act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show worksace folder");
+		act.putValue(PhonUIAction.SMALL_ICON, fsIcon);
+		act.putValue(PhonUIAction.LARGE_ICON_KEY, fsIconL);
+		
+		return act;
 	}
 	
 	public void onClearHistory() {
