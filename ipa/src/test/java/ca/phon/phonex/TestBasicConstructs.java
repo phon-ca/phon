@@ -36,27 +36,7 @@ import junit.framework.Assert;
  */
 @RunWith(JUnit4.class)
 public class TestBasicConstructs {
-
-	@Test
-	public void testSinglePhoneMatcher() throws ParseException {
-		// create a test string 
-		final FeatureMatrix fm = FeatureMatrix.getInstance();
-		String text = new String();
-		final FeatureSet testFeatures = FeatureSet.fromArray(new String[]{"Consonant", "Obs"});
-		
-		for(Character c:fm.getCharacterSet()) {
-			if(fm.getFeatureSet(c).intersect(testFeatures).equals(testFeatures))
-				text += c;
-		}
-		
-		// ensure that phonex finds the character in the correct position
-		final IPATranscript bigIpa = IPATranscript.parseIPATranscript(text);
-		for(int i = 0; i < text.length(); i++) {
-			final Character c = text.charAt(i);
-			Assert.assertEquals(i, bigIpa.indexOf(c + ""));
-		}
-	}
-
+	
 	@Test
 	public void testCompoundPhoneMatcher() throws ParseException {
 		final String text = "st\u0361\u0283aad\u035c\u0292";
@@ -96,7 +76,6 @@ public class TestBasicConstructs {
 		
 	}
 
-	@Ignore
 	@Test
 	public void testAlignmentMarker() throws ParseException {
 		final String text = "ba \u2194 ab";
@@ -133,16 +112,16 @@ public class TestBasicConstructs {
 	@Test
 	public void testLookBehindWithBoundary() throws ParseException {
 		final String text = "ˈk:oʀ:oi:di:dt͡j:oi:n";
-		final String phonex = "^(?<\\s?\\c:L*)\\c:o(?>\\w:sctype(\"-O\"))";
+		// Beginning of input boundary marker must be inside look-behind group
+		final String phonex = "(?<\\S\\c:L*)\\c:O(?>\\w:sctype(\"-O\"))";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
-		System.out.println(pattern.getFsa().getDotText());
 		
 		final PhonexMatcher matcher = pattern.matcher(ipa);
 		
 		Assert.assertTrue(matcher.find());
-		Assert.assertEquals(ipa.elementAt(2), matcher.group().get(0));
+		Assert.assertEquals(ipa.elementAt(5), matcher.group().get(0));
 	}
 	
 }

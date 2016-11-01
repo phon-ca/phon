@@ -54,10 +54,6 @@ public class FeatureMatrix {
 	/** The singleton instance */
 	private static FeatureMatrix instance;
 
-	/** Each thread can have it's own feature matrix assigned. */
-	private static Map<Thread, FeatureMatrix> _fmMap = Collections
-			.synchronizedMap(new LinkedHashMap<Thread, FeatureMatrix>());
-
 	/** The default data file */
 	private final static String DATA_FILE = "features.xml";
 	
@@ -75,45 +71,13 @@ public class FeatureMatrix {
 
 	/** Returns the shared instance of the FeatureMatrix */
 	public static synchronized FeatureMatrix getInstance() {
-		FeatureMatrix retVal = null;
-		if (_fmMap.get(Thread.currentThread()) != null) {
-			retVal = _fmMap.get(Thread.currentThread());
-		} else {
-			if (instance == null) {
-//				URL defURL = 
-//					ClassLoader.getSystemResource(CP_DATA_FILE);
-//				if(defURL != null) {
-					instance = new FeatureMatrix(
-							FeatureMatrix.class.getResourceAsStream(DATA_FILE));
-//				} else {
-//					instance = new FeatureMatrix(DATA_FILE);
-//				}
-			}
-			retVal = instance;
+		if (instance == null) {
+			instance = new FeatureMatrix(
+					FeatureMatrix.class.getResourceAsStream(DATA_FILE));
 		}
-		return retVal;
+		return instance;
 	}
-
-	/**
-	 * Make the given feature matrix the current for the current thread.
-	 * 
-	 * @param fm
-	 * @return the previous assigned feature matrix for the thread
-	 */
-	public static synchronized FeatureMatrix makeCurrentInThread(
-			FeatureMatrix fm) {
-		FeatureMatrix retVal = _fmMap.get(Thread.currentThread());
-		if (retVal == null) {
-			if (instance == null) {
-				instance = new FeatureMatrix(
-						FeatureMatrix.class.getResourceAsStream(DATA_FILE));
-			}
-			retVal = instance;
-		}
-		_fmMap.put(Thread.currentThread(), fm);
-		return retVal;
-	}
-
+	
 	/** Create a new instance of the FeatureMatrix */
 	public FeatureMatrix(String fmFile) {
 		// create the matrix
@@ -146,12 +110,8 @@ public class FeatureMatrix {
 	private void buildFromXML(String fmFile)
 		throws IOException {
 		FileInputStream stream;
-//		try {
-			stream = new FileInputStream(fmFile);
-			buildFromXML(stream);
-//		} catch (IOException e) {
-//			Logger.getLogger(getClass().getName()).warning(e.toString());
-//		}
+		stream = new FileInputStream(fmFile);
+		buildFromXML(stream);
 	}
 	
 	/**
@@ -235,6 +195,7 @@ public class FeatureMatrix {
 	/**
 	 * Create the feature matrix from a CSV file.
 	 */
+	@Deprecated
 	private void buildFromCSV(String fmFile) 
 		throws IOException {
 //		CSVReader reader = new CSVReader(new FileReader(fmFile));
