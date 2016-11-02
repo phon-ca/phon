@@ -117,4 +117,5 @@ public class NodeWizardReportGenerator {
 		final HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
 		return renderer.render(doc);
 	}
+	
 }

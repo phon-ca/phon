@@ -39,6 +39,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.plugin.PluginManager;
+import ca.phon.properties.PhonProperty;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 
@@ -50,11 +51,17 @@ public class Main {
 	
 	private final static Logger LOGGER = Logger.getLogger(Main.class.getName());
 	
+	@PhonProperty(name="ca.phon.app.main.Main.startAction", 
+			description="Initial action for application, overrides initialEntryPoint",
+			defaultValue="")
 	private final static String START_ACTION_PROP = Main.class.getName() + ".startAction";
 	
 	private final static String startAction =
 			PrefHelper.get(START_ACTION_PROP, null);
 	
+	@PhonProperty(name="ca.phon.app.main.Main.initialEntryPoint",
+			description="Initial entry point for application",
+			defaultValue="WelcomeWindow")
 	private final static String INITIAL_EP_PROP = 
 			Main.class.getName() + ".initialEntryPoint";
 	
