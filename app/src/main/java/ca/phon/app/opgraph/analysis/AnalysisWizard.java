@@ -23,11 +23,13 @@ import java.util.List;
 
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
+import javax.swing.tree.TreePath;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.session.ParticipantSelector;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
@@ -35,6 +37,8 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel.CheckingMode;
 import ca.phon.ui.wizard.WizardStep;
 
 public class AnalysisWizard extends NodeWizard {
@@ -43,7 +47,11 @@ public class AnalysisWizard extends NodeWizard {
 
 	private Project project;
 	
+	private WizardStep sessionSelectorStep;
 	private SessionSelector sessionSelector = new SessionSelector();
+	
+	private WizardStep participantSelectorStep;
+	private ParticipantSelector participantSelector = new ParticipantSelector();
 	
 	public AnalysisWizard(String title, Processor processor, OpGraph graph) {
 		super(title, processor, graph);
@@ -59,7 +67,9 @@ public class AnalysisWizard extends NodeWizard {
 			}
 		}
 		
-		addSessionSelectionStep();
+		sessionSelectorStep = addSessionSelectionStep();
+		participantSelectorStep = addParticipantSelectionStep();
+		gotoStep(0);
 		
 		getRootPane().setDefaultButton(btnNext);
 	}
@@ -85,7 +95,7 @@ public class AnalysisWizard extends NodeWizard {
 		dispose();
 	}
 	
-	private void addSessionSelectionStep() {
+	private WizardStep addSessionSelectionStep() {
 		final WizardStep sessionSelectorStep = new WizardStep();
 		sessionSelectorStep.setTitle("Select sessions");
 		
@@ -111,7 +121,38 @@ public class AnalysisWizard extends NodeWizard {
 			getWizardStep(0).setNextStep(insertIdx);
 		}
 		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
-		gotoStep(0);
+		
+		return sessionSelectorStep;
+	}
+	
+	private WizardStep addParticipantSelectionStep() {
+		final WizardStep participantSelectorStep = new WizardStep();
+		participantSelectorStep.setTitle("Select participants");
+		
+		final TitledPanel panel = new TitledPanel("Select participants");
+		panel.getContentContainer().setLayout(new BorderLayout());
+		
+		final JScrollPane scroller = new JScrollPane(participantSelector);
+		panel.getContentContainer().add(scroller, BorderLayout.CENTER);
+		participantSelectorStep.setLayout(new BorderLayout());
+		participantSelectorStep.add(panel, BorderLayout.CENTER);
+		
+		int insertIdx = 0;
+		if(getWizardExtension().getWizardMessage() != null
+				&& getWizardExtension().getWizardMessage().length() > 0) {
+			insertIdx = 2;
+		}
+		participantSelectorStep.setNextStep(insertIdx+1);
+		participantSelectorStep.setPrevStep(insertIdx-1);
+		
+		super.addWizardStep(insertIdx, participantSelectorStep);
+		
+		if(insertIdx == 2) {
+			getWizardStep(1).setNextStep(insertIdx);
+		}
+		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
+		
+		return participantSelectorStep;
 	}
 	
 	public void setProject(Project project) {
@@ -131,8 +172,16 @@ public class AnalysisWizard extends NodeWizard {
 	
 	@Override
 	public void gotoStep(int stepIdx) {
-		if(getWizardStep(stepIdx) == reportStep && sessionSelector != null) {
-			getProcessor().getContext().put("_selectedSessions", sessionSelector.getSelectedSessions());
+		if(getWizardStep(stepIdx) == participantSelectorStep) {
+			// populate tree with information from selected sessions
+			participantSelector.loadParticipants(getProject(), sessionSelector.getSelectedSessions());
+			participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
+		}
+		if(getWizardStep(stepIdx) == reportStep) {
+			if(sessionSelector != null)
+				getProcessor().getContext().put("_selectedSessions", sessionSelector.getSelectedSessions());
+			if(participantSelector != null)
+				getProcessor().getContext().put("_selectedParticipants", participantSelector.getSelectedParticpants());
 		}
 		super.gotoStep(stepIdx);
 	}

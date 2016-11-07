@@ -20,6 +20,7 @@ package ca.phon.app.opgraph.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
@@ -48,6 +49,8 @@ import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.GraphEditorModel;
+import ca.gedge.opgraph.app.MenuProvider;
+import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
 import ca.gedge.opgraph.app.components.canvas.GridLayer;
 import ca.phon.app.opgraph.editor.actions.debug.StartAction;
 import ca.phon.app.opgraph.editor.actions.debug.StepAction;
@@ -342,7 +345,37 @@ public class OpgraphEditor extends CommonModuleFrame {
 			}
 		});
 		
-		menuBuilder.addMenu(".@Graph", "Debug");
+		final JMenu nodeMenu = menuBuilder.addMenu(".@Graph", "Node");
+		nodeMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				nodeMenu.removeAll();
+				
+				// build node menu from menu providers
+				final Object context =
+						(getModel().getDocument().getSelectionModel().getSelectedNode() != null
+								? getModel().getDocument().getSelectionModel().getSelectedNode() 
+								: getModel().getDocument().getGraph());
+				final PathAddressableMenuImpl addressable = new PathAddressableMenuImpl(nodeMenu);
+				final ca.gedge.opgraph.app.MenuManager manager = new ca.gedge.opgraph.app.MenuManager();
+				for(MenuProvider menuProvider : manager.getMenuProviders())
+					menuProvider.installPopupItems(context, 
+							new MouseEvent(getModel().getCanvas(), -1, System.currentTimeMillis(), 0, 0, 0, 1, true, 1), getModel(), addressable);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				
+			}
+		});
+		
+		menuBuilder.addMenu(".@Node", "Debug");
 		menuBuilder.addItem("Debug", new StartAction(this));
 		menuBuilder.addItem("Debug", new StopAction(this));
 		menuBuilder.addSeparator("Debug", "sep1");

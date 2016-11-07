@@ -10,19 +10,28 @@
                 <oga:meta x="15" y="20"/>
             </extensions>
         </node>
-        <node id="6f8825d0" name="ArrayList" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="6f8825d0" name="Selected Sessions" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                 </oga:settings>
-                <oga:meta x="138" y="255"/>
+                <oga:meta x="130" y="234"/>
+            </extensions>
+        </node>
+        <node id="56cc7db519094e8b" name="Selected Participants" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedParticipants]]></oga:property>
+                </oga:settings>
+                <oga:meta x="109" y="387"/>
             </extensions>
         </node>
         <ogcn:macro id="2c5ef188be3540bf" name="Coronal Backing (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="79a3981b">
+            <graph id="7ffb218b">
                 <opqry:queryNode id="5bd5fe6bae3f4355" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-09-07T09:38:39.098-02:30" name="Phones" uuid="0bebec7a-3a53-4bad-8ccb-fb33f399715b">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-07T06:23:13.671-03:30" name="Phones" uuid="a1055acb-2dc3-4ee2-8ee7-0d1c38c1386d">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -56,6 +65,7 @@
                             <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
                             <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
                             <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="Speaker" ignoreDiacritics="false"/>
                         </opqry:inventoryoptions>
                         <oga:settings/>
                         <oga:meta x="667" y="33"/>
@@ -94,11 +104,163 @@
             <ogcn:published_input field="sessions" name="sessions" ref="5bd5fe6bae3f4355"/>
             <ogcn:published_input field="project" name="project" ref="5bd5fe6bae3f4355"/>
             <extensions>
-                <oga:meta x="324" y="46"/>
+                <oga:meta x="394" y="86"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="10fdf615" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+            <graph id="1be06dc8">
+                <node id="7b108365" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                            <oga:property key="contextKey"/>
+                        </oga:settings>
+                        <oga:meta x="12" y="12"/>
+                    </extensions>
+                </node>
+                <node id="7a416ef2" name="Make Current Participant" type="class:ca.gedge.opgraph.nodes.general.ScriptNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="scriptLanguage"><![CDATA[Groovy]]></oga:property>
+                            <oga:property key="scriptSource"/>
+                        </oga:settings>
+                        <oga:meta x="549" y="20"/>
+                    </extensions>
+                </node>
+                <ogcn:macro id="dc980dcd390049a9" name="Coronal Backing (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                    <graph id="29d96c17">
+                        <opqry:queryNode id="1b8d5a8036754699" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-07T06:23:13.679-03:30" name="Phones" uuid="b43e3835-f975-4555-92da-5c74f8d6212b">
+                                <script>
+                                    <url ref="Phones" rel="stock"/>
+                                    <param id="filters.actualResultFilter.caseSensitive">false</param>
+                                    <param id="filters.actualResultFilter.exactMatch">true</param>
+                                    <param id="filters.actualResultFilter.filter">{velar}</param>
+                                    <param id="filters.primary.filter">{cor}</param>
+                                    <param id="metadataOptions.pcc_aligned.ignoreDiacritics">false</param>
+                                    <param id="metadataOptions.pcc_standard.ignoreDiacritics">false</param>
+                                </script>
+                            </qry:query>
+                            <extensions>
+                                <oga:settings/>
+                                <oga:meta x="298" y="33"/>
+                            </extensions>
+                        </opqry:queryNode>
+                        <node id="53c94628" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="87" y="385">
+                                    <oga:default for="arg1" type="java.lang.String">Coronal Backing </oga:default>
+                                </oga:meta>
+                            </extensions>
+                        </node>
+                        <node id="9e5277b6b3c74c1c" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                                    <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="492" y="33"/>
+                            </extensions>
+                        </node>
+                        <node id="5d9659c" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[java.lang.StringBuffer]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="243" y="386"/>
+                            </extensions>
+                        </node>
+                        <node id="ea918b2332424baa" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                            <extensions>
+                                <opqry:inventoryoptions>
+                                    <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
+                                    <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
+                                    <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
+                                    <opqry:column caseSensitive="false" column="Speaker" ignoreDiacritics="false"/>
+                                </opqry:inventoryoptions>
+                                <oga:settings/>
+                                <oga:meta x="667" y="33"/>
+                            </extensions>
+                        </node>
+                        <node id="26eeba037bd04788" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                            <extensions>
+                                <opqry:sortoptions>
+                                    <opqry:sortBy column="Session" order="ascending" type="plain"/>
+                                    <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
+                                    <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
+                                </opqry:sortoptions>
+                                <oga:settings/>
+                                <oga:meta x="298" y="174"/>
+                            </extensions>
+                        </node>
+                        <node id="43b7965a2d894348" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="473" y="174">
+                                    <oga:default for="buffer" type="java.lang.String">Coronal backing</oga:default>
+                                </oga:meta>
+                            </extensions>
+                        </node>
+                        <link dest="26eeba037bd04788" destField="table" source="ea918b2332424baa" sourceField="table"/>
+                        <link dest="9e5277b6b3c74c1c" destField="project" source="1b8d5a8036754699" sourceField="project"/>
+                        <link dest="ea918b2332424baa" destField="table" source="9e5277b6b3c74c1c" sourceField="table"/>
+                        <link dest="43b7965a2d894348" destField="data" source="26eeba037bd04788" sourceField="table"/>
+                        <link dest="9e5277b6b3c74c1c" destField="results" source="1b8d5a8036754699" sourceField="results"/>
+                        <link dest="5d9659c" destField="arg1" source="53c94628" sourceField="value"/>
+                        <extensions>
+                            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                        </extensions>
+                    </graph>
+                    <ogcn:published_input field="sessions" name="sessions" ref="1b8d5a8036754699"/>
+                    <ogcn:published_input field="project" name="project" ref="1b8d5a8036754699"/>
+                    <extensions>
+                        <oga:meta x="346" y="356"/>
+                    </extensions>
+                </ogcn:macro>
+                <node id="1ecb6bbf" name="To Participant Object" type="class:ca.gedge.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="144" y="15"/>
+                    </extensions>
+                </node>
+                <node id="24f7855b" name="Participant" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
+                            <oga:property key="contextKey"/>
+                        </oga:settings>
+                        <oga:meta x="294" y="19"/>
+                    </extensions>
+                </node>
+                <link dest="1ecb6bbf" destField="obj" source="7b108365" sourceField="obj"/>
+                <link dest="24f7855b" destField="obj" source="1ecb6bbf" sourceField="obj"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
+                </oga:settings>
+                <oga:meta x="349" y="395"/>
             </extensions>
         </ogcn:macro>
         <link dest="2c5ef188be3540bf" destField="project" source="5192ae81" sourceField="obj"/>
         <link dest="2c5ef188be3540bf" destField="sessions" source="6f8825d0" sourceField="obj"/>
+        <link dest="10fdf615" destField="obj" source="56cc7db519094e8b" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="markdown" title="Coronal Backing">
