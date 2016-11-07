@@ -361,7 +361,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 				final ca.gedge.opgraph.app.MenuManager manager = new ca.gedge.opgraph.app.MenuManager();
 				for(MenuProvider menuProvider : manager.getMenuProviders())
 					menuProvider.installPopupItems(context, 
-							new MouseEvent(getModel().getCanvas(), -1, System.currentTimeMillis(), 0, 0, 0, 1, true, 1), getModel(), addressable);
+							new MouseEvent(getModel().getCanvas(), -1, System.currentTimeMillis(), 0, 0, 0, 1, true, 1), getModel().getDocument(), addressable);
 			}
 			
 			@Override
