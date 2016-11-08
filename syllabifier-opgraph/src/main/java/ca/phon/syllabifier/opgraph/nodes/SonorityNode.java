@@ -158,7 +158,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
 			settingsPanel = new Settings();
-			settingsPanel.scaleArea.setText(getSonorityScale());
+			settingsPanel.scaleArea.setText(this.sonorityScale);
 		}
 		return settingsPanel;
 	}

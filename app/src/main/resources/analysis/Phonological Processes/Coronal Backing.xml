@@ -16,7 +16,7 @@
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                 </oga:settings>
-                <oga:meta x="130" y="234"/>
+                <oga:meta x="130" y="267"/>
             </extensions>
         </node>
         <node id="56cc7db519094e8b" name="Selected Participants" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -29,9 +29,9 @@
             </extensions>
         </node>
         <ogcn:macro id="2c5ef188be3540bf" name="Coronal Backing (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5c0efb2f">
+            <graph id="7a018175">
                 <opqry:queryNode id="5bd5fe6bae3f4355" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-07T16:55:36.811-03:30" name="Phones" uuid="a76d8a47-68f8-4191-80e3-53876b2c9a46">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-07T18:48:29.547-03:30" name="Phones" uuid="57fc3e21-bf3f-4c2e-ae86-95c153a88afa">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -108,7 +108,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="10fdf615" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="4e904526">
+            <graph id="22e27e69">
                 <node id="7b108365" name="Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -123,16 +123,15 @@
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="159" y="15"/>
+                        <oga:meta x="179" y="15"/>
                     </extensions>
                 </node>
                 <node id="24f7855b" name="Participant" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
-                            <oga:property key="contextKey"/>
                         </oga:settings>
-                        <oga:meta x="321" y="15"/>
+                        <oga:meta x="364" y="15"/>
                     </extensions>
                 </node>
                 <node id="b3b3af8a87894a33" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
@@ -141,13 +140,13 @@
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="268" y="492"/>
+                        <oga:meta x="590" y="15"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="dc980dcd390049a9" name="Coronal Backing (all)" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="2b0de83d">
+                    <graph id="624ae538">
                         <opqry:queryNode id="1b8d5a8036754699" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-07T16:55:36.827-03:30" name="Phones" uuid="3c17313b-8fc5-413e-b995-58817df8cf37">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-07T18:48:29.565-03:30" name="Phones" uuid="81ca83ae-9ba7-4a2e-87ac-4549b718e568">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.caseSensitive">false</param>
@@ -253,7 +252,7 @@
                     <ogcn:published_input field="project" name="project" ref="1b8d5a8036754699"/>
                     <ogcn:published_input field="arg1" name="arg1" ref="4edbb5ef"/>
                     <extensions>
-                        <oga:meta x="456" y="480"/>
+                        <oga:meta x="179" y="336"/>
                     </extensions>
                 </ogcn:macro>
                 <link dest="1ecb6bbf" destField="obj" source="7b108365" sourceField="obj"/>
