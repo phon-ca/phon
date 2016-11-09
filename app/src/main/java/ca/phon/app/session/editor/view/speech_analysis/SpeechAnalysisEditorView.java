@@ -71,6 +71,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.actions.GenerateAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.PlayAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
@@ -831,8 +832,14 @@ public class SpeechAnalysisEditorView extends EditorView {
 		selectSegAct.putValue(Action.NAME, "Select segment for record");
 		selectSegAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
 		menu.add(new JMenuItem(selectSegAct));
-		menu.addSeparator();
 		
+		if(wavDisplay.hasSelection()) {
+			final NewRecordAction newRecordAct = new NewRecordAction(getEditor(), this);
+			menu.add(newRecordAct);
+		}
+		
+		menu.addSeparator();
+
 		wavDisplay.getUI().addContextMenuItems(menu);
 		
 		for(SpeechAnalysisTier tier:getPluginTiers()) {
