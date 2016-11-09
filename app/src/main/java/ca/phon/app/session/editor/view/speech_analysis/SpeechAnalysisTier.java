@@ -38,8 +38,9 @@ public interface SpeechAnalysisTier {
 	 * Add custom commands to the editor view menu.
 	 * 
 	 * @param menu
+	 * @param includeAccelerators
 	 */
-	public void addMenuItems(JMenu menuEle);
+	public void addMenuItems(JMenu menuEle, boolean includeAccelerators);
 	
 	/**
 	 * Called on the Refresh action for the tier.

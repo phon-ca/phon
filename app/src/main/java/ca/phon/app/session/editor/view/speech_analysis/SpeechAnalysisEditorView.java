@@ -760,7 +760,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		retVal.add(new GenerateAction(getEditor(), this));
 		
 		for(SpeechAnalysisTier tier:pluginTiers) {
-			tier.addMenuItems(retVal);
+			tier.addMenuItems(retVal, false);
 		}
 		
 		return retVal;	
@@ -836,7 +836,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		wavDisplay.getUI().addContextMenuItems(menu);
 		
 		for(SpeechAnalysisTier tier:getPluginTiers()) {
-			tier.addMenuItems(menu);
+			tier.addMenuItems(menu, true);
 		}
 		
 		return menu;
