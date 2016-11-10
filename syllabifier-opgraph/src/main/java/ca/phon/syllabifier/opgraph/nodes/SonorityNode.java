@@ -148,7 +148,8 @@ public class SonorityNode extends OpNode implements NodeSettings {
 				final PhonexPattern pattern = PhonexPattern.compile(phonex);
 				sonorityMap.put(pattern, sonorityValue);
 			}
-			scanner.nextLine();
+			if(scanner.hasNext())
+				scanner.nextLine();
 		}
 		scanner.close();
 		return sonorityMap;
