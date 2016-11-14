@@ -38,9 +38,7 @@ public class FeatureGroup {
 	private FeatureGroup(String name, String family, String[] features) {
 		this.name = name;
 		this.family = family;
-		this.features = new FeatureSet();
-		for(String feature : features)
-			this.features.addFeature(feature);
+		this.features = FeatureSet.fromArray(features);
 	}
 	
 	/**

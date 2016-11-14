@@ -55,12 +55,12 @@ public class TonePluginProvider implements PluginProvider {
 				}
 				if(tone.equals("*")) {
 					// any tone, add all to tone features
-					toneFeatures.union(allToneFeatures);
+					toneFeatures = FeatureSet.union(toneFeatures, allToneFeatures);
 				} else {
 					try {
 						int toneNum = Integer.parseInt(tone);
 						String toneFeature = "tone" + toneNum;
-						toneFeatures.addFeature(toneFeature);
+						toneFeatures = FeatureSet.singleonFeature(toneFeature);
 					} catch (NumberFormatException e) {
 						throw new IllegalArgumentException(e);
 					}

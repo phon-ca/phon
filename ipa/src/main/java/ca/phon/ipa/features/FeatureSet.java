@@ -22,6 +22,7 @@ package ca.phon.ipa.features;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -30,8 +31,9 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Class to represent a charater's feature
- * set.
+ * Class to represent a charater's feature set.
+ * Features are stored internally as a {@link BitSet}.
+ * As of Phon 2.2 objects of this type are immutable after construction.
  *
  */
 public class FeatureSet implements Iterable<Feature> {
@@ -47,8 +49,18 @@ public class FeatureSet implements Iterable<Feature> {
 	/** The set of features */
 	private BitSet features;
 	
-	/** The character this feature set represents */
-	private char ipaChar;
+	/**
+	 * Create a feature set from a single feature.
+	 * 
+	 * @param featureSet
+	 */
+	public static FeatureSet singleonFeature(String featureName) {
+		Set<String> fs = new HashSet<>();
+		Feature fObj = FeatureMatrix.getInstance().getFeature(featureName);
+		if(fObj != null)
+			fs.add(featureName);
+		return new FeatureSet(fs);
+	}
 	
 	/**
 	 * Utility method for creating features sets from
@@ -94,12 +106,10 @@ public class FeatureSet implements Iterable<Feature> {
 	 */
 	public FeatureSet() {
 		this.features = new BitSet();
-		this.ipaChar = '\u0000';
 	}
 	
 	public FeatureSet(Set<String> features) {
 		this.features = new BitSet();
-		this.ipaChar = '\u0000';
 		for(String f:features) {
 			addFeature(f);
 		}
@@ -107,11 +117,10 @@ public class FeatureSet implements Iterable<Feature> {
 	
 	public FeatureSet(BitSet featureSet) {
 		this.features = featureSet;
-		this.ipaChar = '\u0000';
 	}
 	
 	/** Add a new feature to the set */
-	public FeatureSet addFeature(String feature) {
+	private FeatureSet addFeature(String feature) {
 		FeatureSet fs = 
 			FeatureMatrix.getInstance().getFeatureSetForFeature(feature);
 		this.features.or(fs.features);
@@ -119,7 +128,7 @@ public class FeatureSet implements Iterable<Feature> {
 	}
 	
 	/** Remove a feature from the set */
-	public FeatureSet removeFeature(String feature) {
+	private FeatureSet removeFeature(String feature) {
 		FeatureSet fs = 
 			FeatureMatrix.getInstance().getFeatureSetForFeature(feature);
 		this.features.andNot(fs.features);
@@ -142,7 +151,7 @@ public class FeatureSet implements Iterable<Feature> {
 			retVal.add(FeatureMatrix.getInstance().getFeatureForIndex(i));
 		}
 
-		return retVal;
+		return Collections.unmodifiableCollection(retVal);
 	}
 	
 	/**
@@ -170,22 +179,6 @@ public class FeatureSet implements Iterable<Feature> {
 		return getFeatures().toString();
 	}
 	
-	/**
-	 * @return Returns the ipaChar.
-	 */
-	public String getIpaChar() {
-		String retVal = new String();
-		retVal += ipaChar + "";
-		return retVal;
-	}
-	
-	/**
-	 * @param ipaChar The ipaChar to set.
-	 */
-	public void setIpaChar(char ipaChar) {
-		this.ipaChar = ipaChar;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof FeatureSet)) return false;
@@ -193,12 +186,6 @@ public class FeatureSet implements Iterable<Feature> {
 		FeatureSet fs = (FeatureSet)obj;
 		
 		return this.features.equals(fs.features);
-	}
-	
-	public FeatureSet union(FeatureSet fs2) {
-		FeatureSet fs = FeatureSet.union(this, fs2);
-		this.features = fs.features;
-		return this;
 	}
 	
 	/**
@@ -216,12 +203,6 @@ public class FeatureSet implements Iterable<Feature> {
 		bs.or(fs2.features);
 		
 		return new FeatureSet(bs);
-	}
-	
-	public FeatureSet intersect(FeatureSet fs2) {
-		FeatureSet fs = FeatureSet.intersect(this, fs2);
-		this.features = fs.features;
-		return this;
 	}
 	
 	public boolean intersects(FeatureSet fs2) {
@@ -254,12 +235,6 @@ public class FeatureSet implements Iterable<Feature> {
 			(BitSet)fs1.features.clone();
 		bs.and(fs2.features);
 		return new FeatureSet(bs);
-	}
-	
-	public FeatureSet minus(FeatureSet fs2) {
-		FeatureSet fs = FeatureSet.minus(this, fs2);
-		this.features = fs.features;
-		return this;
 	}
 	
 	/**

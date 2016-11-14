@@ -33,12 +33,12 @@ public final class FeatureSetMatcher implements PhoneMatcher {
 	 * Required features
 	 * 
 	 */
-	private final FeatureSet requiredFeatures = new FeatureSet();
+	private FeatureSet requiredFeatures = new FeatureSet();
 	
 	/**
 	 * Not features
 	 */
-	private final FeatureSet notFeatures = new FeatureSet();
+	private FeatureSet notFeatures = new FeatureSet();
 	
 	/**
 	 * Constructor
@@ -53,8 +53,8 @@ public final class FeatureSetMatcher implements PhoneMatcher {
 	}
 	
 	public FeatureSetMatcher(FeatureSet requiredFeatures, FeatureSet notFeatures) {
-		this.requiredFeatures.union(requiredFeatures);
-		this.notFeatures.union(notFeatures);
+		this.requiredFeatures = FeatureSet.union(this.requiredFeatures, requiredFeatures);
+		this.notFeatures = FeatureSet.union(this.notFeatures, notFeatures);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public final class FeatureSetMatcher implements PhoneMatcher {
 		FeatureSet fs = FeatureMatrix.getInstance().getFeatureSetForFeature(featureName);
 		if(fs == null)
 			throw new IllegalArgumentException("'" + featureName + "' is not a valid feature name.");
-		this.requiredFeatures.union(fs);
+		this.requiredFeatures = FeatureSet.union(this.requiredFeatures, fs);
 	}
 	
 	/**
@@ -83,7 +83,7 @@ public final class FeatureSetMatcher implements PhoneMatcher {
 		FeatureSet fs = FeatureMatrix.getInstance().getFeatureSetForFeature(featureName);
 		if(fs == null)
 			throw new IllegalArgumentException("'" + featureName + "' is not a valid feature name.");
-		this.notFeatures.union(fs);
+		this.notFeatures = FeatureSet.union(this.notFeatures, fs);
 	}
 
 	@Override

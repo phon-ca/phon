@@ -82,22 +82,22 @@ public class Diacritic extends IPAElement {
 	
 	@Override
 	protected FeatureSet _getFeatureSet() {
-		final FeatureSet fs = getFeatures(character);
+		FeatureSet fs = getFeatures(character);
 		for(Diacritic dia:prefixDiacritics) {
-			fs.union(dia.getFeatureSet());
+			fs = FeatureSet.union(fs, dia.getFeatureSet());
 		}
 		for(Diacritic dia:suffixDiacritics) {
-			fs.union(dia.getFeatureSet());
+			fs = FeatureSet.union(fs, dia.getFeatureSet());
 		}
 		return fs;
 	}
 	
 	private FeatureSet getFeatures(Character c) {
-		final FeatureSet retVal = new FeatureSet();
+		FeatureSet retVal = new FeatureSet();
 		if(c != null) {
 			FeatureSet fs = FeatureMatrix.getInstance().getFeatureSet(c);
 			if(fs != null) {
-				retVal.union(fs);
+				retVal = FeatureSet.union(retVal, fs);
 			}
 		}
 		return retVal;

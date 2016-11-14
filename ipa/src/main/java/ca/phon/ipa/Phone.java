@@ -120,9 +120,9 @@ public class Phone extends IPAElement {
 	 *  an empty set if not found
 	 */
 	public FeatureSet getPrefixFeatures() {
-		final FeatureSet retVal = new FeatureSet();
+		FeatureSet retVal = new FeatureSet();
 		for(Diacritic dia:getPrefixDiacritics()) {
-			retVal.union(dia.getFeatureSet());
+			retVal = FeatureSet.union(retVal, dia.getFeatureSet());
 		}
 		return retVal;
 	}
@@ -261,9 +261,9 @@ public class Phone extends IPAElement {
 	 *  diacritics
 	 */
 	public FeatureSet getCombiningFeatures() {
-		final FeatureSet retVal = new FeatureSet();
+		FeatureSet retVal = new FeatureSet();
 		for(Diacritic dia:getCombiningDiacritics()) {
-			retVal.union(dia.getFeatureSet());
+			retVal = FeatureSet.union(retVal, dia.getFeatureSet());
 		}
 		return retVal;
 	}
@@ -303,19 +303,19 @@ public class Phone extends IPAElement {
 	 *  or an empty set if not found
 	 */
 	public FeatureSet getSuffixFeatures() {
-		final FeatureSet retVal = new FeatureSet();
+		FeatureSet retVal = new FeatureSet();
 		for(Diacritic dia:getSuffixDiacritics()) {
-			retVal.union(dia.getFeatureSet());
+			retVal = FeatureSet.union(retVal, dia.getFeatureSet());
 		}
 		return retVal;
 	}
 	
 	private FeatureSet getFeatures(Character c) {
-		final FeatureSet retVal = new FeatureSet();
+		FeatureSet retVal = new FeatureSet();
 		if(c != null) {
 			FeatureSet fs = FeatureMatrix.getInstance().getFeatureSet(c);
 			if(fs != null) {
-				retVal.union(fs);
+				retVal = FeatureSet.union(retVal, fs);
 			}
 		}
 		return retVal;
@@ -323,11 +323,11 @@ public class Phone extends IPAElement {
 
 	@Override
 	protected FeatureSet _getFeatureSet() {
-		final FeatureSet retVal = new FeatureSet();
-			retVal.union(getPrefixFeatures());
-			retVal.union(getBaseFeatures());
-			retVal.union(getCombiningFeatures());
-			retVal.union(getSuffixFeatures());
+		FeatureSet retVal = new FeatureSet();
+		retVal = FeatureSet.union(retVal, getPrefixFeatures());
+		retVal = FeatureSet.union(retVal, getBaseFeatures());
+		retVal = FeatureSet.union(retVal, getCombiningFeatures());
+		retVal = FeatureSet.union(retVal, getSuffixFeatures());
 		return retVal;
 	}
 

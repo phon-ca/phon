@@ -259,7 +259,7 @@ public class PhoneAccuracy extends TableOpNode implements NodeSettings {
 			}
 			
 			Optional<String> featureNameOpt = 
-					ipaT.elementAt(0).getFeatureSet().intersect(fs).getFeatures().stream().findFirst();
+					FeatureSet.intersect(ipaT.elementAt(0).getFeatureSet(), fs).getFeatures().stream().findFirst();
 			if(!featureNameOpt.isPresent()) continue;
 			final String featureName = featureNameOpt.get();
 			

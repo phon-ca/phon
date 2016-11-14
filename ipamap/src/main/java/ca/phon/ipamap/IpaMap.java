@@ -527,7 +527,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 								if(feature == null) break;
 								Feature f = FeatureMatrix.getInstance().getFeature(StringUtils.strip(feature));
 								if(f != null) {
-									fs.union(f.getFeatureSet());
+									fs = FeatureSet.union(fs, f.getFeatureSet());
 								}
 							}
 							FeatureSet charFs = new FeatureSet();
@@ -535,7 +535,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 							for(Character c:cell.getText().toCharArray()) {
 								FeatureSet cFs = fm.getFeatureSet(c);
 								if(cFs != null) {
-									charFs.union(cFs);
+									charFs = FeatureSet.union(charFs, cFs);
 								}
 							}
 							FeatureSet intersectFs = FeatureSet.intersect(charFs, fs);
@@ -2029,7 +2029,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			for(Character c:cellData.toCharArray()) {
 				FeatureSet fs = fm.getFeatureSet(c);
 				if(fs != null) {
-					customFs = customFs.union(fs);
+					customFs = FeatureSet.union(customFs, fs);
 				}
 			}
 			

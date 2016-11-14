@@ -75,15 +75,15 @@ public class SyllabificationInfo {
 				"tone3", "tone4", "tone5", "tone6", "tone7", "tone8", "tone9" });
 		ipa.syllables().parallelStream().forEach( (syll) -> {
 			FeatureSet toneFeatures = new FeatureSet();
-			syll.forEach( (ele) -> {
-				toneFeatures.union(
+			for(IPAElement ele:syll) {
+				toneFeatures = FeatureSet.union(toneFeatures,
 						FeatureSet.intersect(allToneFeatures, ele.getFeatureSet()));
-			});
+			}
 			if(toneFeatures.size() > 0) {
-				syll.forEach( (ele) -> {
+				for(IPAElement ele:syll) {
 					final SyllabificationInfo info = ele.getExtension(SyllabificationInfo.class);
 					info.setToneFeatures(toneFeatures);
-				});
+				}
 			}
 		});
 	}

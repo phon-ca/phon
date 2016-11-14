@@ -93,7 +93,8 @@ public class FeatureCollator extends Collator {
 		
 		for(int i = 0; i < featureSets.size(); i++) {
 			final FeatureSet testFs = featureSets.get(i);
-			if(fs.intersect(testFs).equals(testFs)) {
+			final FeatureSet intersectFs = FeatureSet.intersect(fs, testFs);
+			if(intersectFs.equals(testFs)) {
 				retVal = i;
 				break;
 			}

@@ -184,7 +184,6 @@ public class FeatureMatrix {
 				}
 
 				FeatureSet fs = new FeatureSet(bs);
-				fs.setIpaChar(theChar);
 				featureSets.put(theChar, fs);
 			}
 		} catch (JAXBException ex) {
@@ -272,7 +271,6 @@ public class FeatureMatrix {
 		FeatureSet fs = featureSets.get(ipaChar);
 		if (fs == null) {
 			fs = new FeatureSet();
-			fs.setIpaChar(ipaChar);
 		}
 		return fs;
 	}

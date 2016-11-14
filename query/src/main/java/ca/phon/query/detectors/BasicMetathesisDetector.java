@@ -171,10 +171,9 @@ public class BasicMetathesisDetector extends Detector
 	private void addResult(Result r) {
 		// Remove any unwanted/obvious features and ensure that the result
 		// then has *some* features swapped
-		r.getFeatures1().removeFeature("Consonant");
-		r.getFeatures2().removeFeature("Consonant");
-		r.getFeatures1().removeFeature("Diacritic");
-		r.getFeatures2().removeFeature("Diacritic");
+		r.setFeatures1(FeatureSet.minus(r.getFeatures1(), FeatureSet.fromArray(new String[]{ "Consonant, Diacritic" })));
+		r.setFeatures2(FeatureSet.minus(r.getFeatures2(), FeatureSet.fromArray(new String[]{ "Consonant, Diacritic" })));
+		
 		//if(r.getFeatures1().getFeatures().size() == 0
 		//		|| r.getFeatures2().getFeatures().size() == 0)
 		if(r.getFeatures1().size() == 0

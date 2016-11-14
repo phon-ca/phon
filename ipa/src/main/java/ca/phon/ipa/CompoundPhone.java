@@ -123,14 +123,12 @@ public final class CompoundPhone extends Phone {
 	
 	@Override
 	protected FeatureSet _getFeatureSet() {
-		FeatureSet retVal = new FeatureSet();
-		retVal.union(firstPhone.getFeatureSet());
-		retVal.union(secondPhone.getFeatureSet());
+		FeatureSet retVal = FeatureSet.union(firstPhone.getFeatureSet(), secondPhone.getFeatureSet());
 		
 		// when the same consonant, add the long feature
 		if(retVal.hasFeature("c") && firstPhone.getBasePhone() != null 
 				&& firstPhone.getBasePhone().equals(secondPhone.getBasePhone())) {
-			retVal.addFeature("long");
+			retVal = FeatureSet.union(retVal, FeatureSet.singleonFeature("long"));
 		}
 		
 		return retVal;
