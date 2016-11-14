@@ -24,6 +24,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -55,8 +56,10 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.session.Tier;
 
@@ -83,16 +86,12 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	/** Include metadata columns */
 	private boolean includeMetadata;
 	
-	/** Include a column for each result value */
-	private boolean includeExtraColumns;
-	
 	/* UI */
 	private JPanel settingsPanel;
 	private JCheckBox includeSessionInfoBox;
 	private JCheckBox includeSpeakerInfoBox;
 	private JCheckBox includeTierInfoBox;
 	private JCheckBox includeMetadataBox;
-	private JCheckBox includeExtraColumnsBox;
 	
 	public ResultsToTableNode() {
 		super();
@@ -119,6 +118,12 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		
 		if(isIncludeSessionInfo()) {
 			columnNames.add("Session");
+			columnNames.add("Date");
+		}
+		
+		if(isIncludeSpeakerInfo()) {
+			columnNames.add("Speaker");
+			columnNames.add("Age");
 		}
 		
 		if(isIncludeTierInfo()) {
@@ -127,25 +132,23 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 			columnNames.add("Tier");
 			columnNames.add("Range");
 		}
-		
+
 		columnNames.add("Result");
 		
 		// collect all result value tier names
 		final Set<String> tierNames = new LinkedHashSet<>();
-		if(isIncludeExtraColumns()) {
-			// assuming all results come from the same query, the tiers should be the
-			// same in every result value
-			Arrays.asList(results).stream()
-				.filter((rs) -> rs.numberOfResults(true) > 0)
-				.findFirst()
-				.ifPresent( firstNonEmptyResultSet -> {
-					final Result firstResult = firstNonEmptyResultSet.getResult(0);
-					for(ResultValue rv:firstResult) {
-						tierNames.add(rv.getTierName());
-					}
-					columnNames.addAll(tierNames);
-				});
-		}
+		// assuming all results come from the same query, the tiers should be the
+		// same in every result value
+		Arrays.asList(results).stream()
+			.filter((rs) -> rs.numberOfResults(true) > 0)
+			.findFirst()
+			.ifPresent( firstNonEmptyResultSet -> {
+				final Result firstResult = firstNonEmptyResultSet.getResult(0);
+				for(ResultValue rv:firstResult) {
+					tierNames.add(rv.getTierName());
+				}
+				columnNames.addAll(tierNames);
+			});
 		
 		Set<String> metadataKeys = new LinkedHashSet<>();
 		if(isIncludeMetadata()) {
@@ -160,23 +163,46 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 				final Session session = project.openSession(rs.getCorpus(), rs.getSession());
 				for(Result result:rs) {
 					List<Object> rowData = new ArrayList<>();
-					rowData.add(new SessionPath(rs.getCorpus(), rs.getSession()));
-					rowData.add(result.getRecordIndex()+1);
-					rowData.add(result.getResultValue(0).getGroupIndex()+1);
+					final Record record = session.getRecord(result.getRecordIndex());
 					
-					rowData.add(ReportHelper.createReportString(tierNames.toArray(new String[0]), result.getSchema()));
-					
-					final String[] rvVals = new String[result.getNumberOfResultValues()];
-					for(int i = 0; i < result.getNumberOfResultValues(); i++) {
-						final ResultValue rv = result.getResultValue(i);
-						rvVals[i] = rv.getRange().toString();
+					if(isIncludeSessionInfo()) {
+						rowData.add(new SessionPath(rs.getCorpus(), rs.getSession()));
+						rowData.add(session.getDate());
 					}
-					rowData.add(ReportHelper.createReportString(rvVals, result.getSchema()));
+					
+					if(isIncludeSpeakerInfo()) {
+						final Participant speaker = record.getSpeaker();
+						if(speaker != null) {
+							rowData.add(speaker);
+							
+							final Period age = speaker.getAge(session.getDate());
+							if(age != null) {
+								rowData.add(age);
+							} else {
+								rowData.add("");
+							}
+						} else {
+							rowData.add("");
+							rowData.add("");
+						}
+						
+					}
+					
+					if(isIncludeTierInfo()) {
+						rowData.add(result.getRecordIndex()+1);
+						rowData.add(result.getResultValue(0).getGroupIndex()+1);
+						rowData.add(ReportHelper.createReportString(tierNames.toArray(new String[0]), result.getSchema()));
+						final String[] rvVals = new String[result.getNumberOfResultValues()];
+						for(int i = 0; i < result.getNumberOfResultValues(); i++) {
+							final ResultValue rv = result.getResultValue(i);
+							rvVals[i] = rv.getRange().toString();
+						}
+						rowData.add(ReportHelper.createReportString(rvVals, result.getSchema()));
+					}
 					
 					rowData.add(result);
 					
 					// add result objects from record
-					final Record record = session.getRecord(result.getRecordIndex());
 					for(ResultValue rv:result) {
 						final Tier<?> tier = record.getTier(rv.getTierName());
 						final Object tierValue = tier.getGroup(rv.getGroupIndex());
@@ -204,8 +230,10 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 						rowData.add(resultVal);
 					}
 					
-					for(String metakey:metadataKeys) {
-						rowData.add(result.getMetadata().get(metakey));
+					if(isIncludeMetadata()) {
+						for(String metakey:metadataKeys) {
+							rowData.add(result.getMetadata().get(metakey));
+						}
 					}
 					
 					retVal.addRow(rowData.toArray());
@@ -262,16 +290,6 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 			this.includeMetadataBox.setSelected(includeMetadata);
 	}
 	
-	public boolean isIncludeExtraColumns() {
-		return (includeExtraColumnsBox != null ? includeExtraColumnsBox.isSelected() : this.includeExtraColumns);
-	}
-	
-	public void setIncludeExtraColumns(boolean includeExtraColumns) {
-		this.includeExtraColumns = includeExtraColumns;
-		if(this.includeExtraColumnsBox != null)
-			this.includeExtraColumnsBox.setSelected(includeExtraColumns);
-	}
-
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
@@ -287,7 +305,6 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		includeSpeakerInfoBox = new JCheckBox("Include speaker name and age", true);
 		includeTierInfoBox = new JCheckBox("Include record number, tier, group and text range", true);
 		includeMetadataBox = new JCheckBox("Include result metadata columns", true);
-		includeExtraColumnsBox = new JCheckBox("Include a column for each tier in the result set", true);
 		
 		final GridBagLayout layout = new GridBagLayout();
 		final GridBagConstraints gbc = new GridBagConstraints();
@@ -309,9 +326,6 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		retVal.add(includeTierInfoBox, gbc);
 		++gbc.gridy;
 		retVal.add(includeMetadataBox, gbc);
-		++gbc.gridy;
-		gbc.weighty = 1.0;
-		retVal.add(includeExtraColumnsBox, gbc);
 		
 		return retVal;
 	}
@@ -324,7 +338,6 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		retVal.put("includeSpeakerInfo", isIncludeSpeakerInfo());
 		retVal.put("includeTierInfo", isIncludeTierInfo());
 		retVal.put("includeMetadata", isIncludeSessionInfo());
-		retVal.put("includeExtraColumns", isIncludeExtraColumns());
 		
 		return retVal;
 	}
@@ -339,8 +352,6 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 				Boolean.parseBoolean(properties.getProperty("includeTierInfo", "true")));
 		setIncludeMetadata(
 				Boolean.parseBoolean(properties.getProperty("includeMetadata", "true")));
-		setIncludeExtraColumns(
-				Boolean.parseBoolean(properties.getProperty("includeExtraColumns", "true")));
 	}
 	
 }
