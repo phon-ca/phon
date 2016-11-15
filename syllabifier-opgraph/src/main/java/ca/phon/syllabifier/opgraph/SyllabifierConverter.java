@@ -72,8 +72,15 @@ public class SyllabifierConverter {
 		final StringBuffer sb = new StringBuffer();
 		final SonorityValues sonorityVals = syllabifier.getSonorityScale();
 		for(SonorityClass sc:sonorityVals.getSonorityClass()) {
-			sb.append(sc.getSonorityValue()).append('=').append(sc.getPhonex()).append('\n');
+			sb.append(sc.getSonorityValue()).append('=');
+			if(sc.getPhonex().size() > 1) sb.append("[");
+			for(String phonex:sc.getPhonex()) {
+				sb.append(phonex);
+			}
+			if(sc.getPhonex().size() > 1) sb.append("]");
+			sb.append("\n");
 		}
+		
 		sonorityNode.setSonorityScale(sb.toString());
 		graph.add(sonorityNode);
 		
