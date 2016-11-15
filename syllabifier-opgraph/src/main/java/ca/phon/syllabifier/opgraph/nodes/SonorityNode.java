@@ -257,7 +257,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 				}
 			}
 			
-			final int distance = Math.abs(value - lastSonority);
+			final int distance = value - lastSonority;
 			lastSonority = value;
 			
 			final SonorityInfo info = new SonorityInfo(value, distance);
