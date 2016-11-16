@@ -6,8 +6,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -20,6 +24,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -33,6 +39,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -42,6 +49,8 @@ import ca.phon.util.icons.IconSize;
  *
  */
 public class WizardSettingsPanel extends JPanel {
+	
+	private final static Logger LOGGER = Logger.getLogger(WizardSettingsPanel.class.getName());
 	
 	private static final long serialVersionUID = 865535897566978589L;
 
@@ -203,6 +212,17 @@ public class WizardSettingsPanel extends JPanel {
 			}
 		});
 		
+		for(OpNode settingsNode:getWizardExtension()) {
+			final TreePath nodePath = advancedSettingsTree.treePathForNode(settingsNode);
+			advancedSettingsTree.setCheckingStateForPath(nodePath, TristateCheckBoxState.CHECKED);
+			
+			final TreeNode node = (TreeNode)nodePath.getLastPathComponent();
+			if(node.isLeaf())
+				advancedSettingsTree.expandPath(nodePath.getParentPath());
+			else
+				advancedSettingsTree.expandPath(nodePath);
+		}
+		
 		advancedSettingsCardLayout = new CardLayout();
 		advancedSettingsContentPanel = new JPanel(advancedSettingsCardLayout);
 		
@@ -272,6 +292,17 @@ public class WizardSettingsPanel extends JPanel {
 				}
 			}
 		});
+		
+		for(OpNode settingsNode:getWizardExtension().getOptionalNodes()) {
+			final TreePath nodePath = optionalsTree.treePathForNode(settingsNode);
+			optionalsTree.setCheckingStateForPath(nodePath, TristateCheckBoxState.CHECKED);
+			
+			final TreeNode node = (TreeNode)nodePath.getLastPathComponent();
+			if(node.isLeaf())
+				optionalsTree.expandPath(nodePath.getParentPath());
+			else
+				optionalsTree.expandPath(nodePath);
+		}
 		
 		optionalsCardLayout = new CardLayout();
 		optionalsContentPanel = new JPanel(optionalsCardLayout);
@@ -404,7 +435,17 @@ public class WizardSettingsPanel extends JPanel {
 	}
 	
 	public WizardExtension getUpdatedWizardExtension() {
-		final WizardExtension retVal = new WizardExtension(getGraph());
+		final Class<? extends WizardExtension> extClass = getWizardExtension().getClass();
+		
+		Constructor<? extends WizardExtension> constructor;
+		WizardExtension retVal = null;
+		try {
+			constructor = extClass.getConstructor(OpGraph.class);
+			retVal = constructor.newInstance(getGraph());
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			return getWizardExtension();
+		}
 		
 		retVal.setWizardTitle(introSettingsPanel.getTitle());
 		retVal.setWizardMessage(introSettingsPanel.getInfo(), introSettingsPanel.getFormat());
