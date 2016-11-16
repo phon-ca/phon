@@ -19,6 +19,7 @@
 package ca.phon.app.query;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -72,7 +73,8 @@ public class ScriptPanel extends JPanel {
 			.getLogger(ScriptPanel.class.getName());
 	
 	/**
-	 * Property for the script text
+	 * Property for the script text.  This is sent when the editor is no longer displayed.
+	 * 
 	 */
 	public static final String SCRIPT_PROP = ScriptPanel.class.getName() + ".script";
 	
@@ -81,20 +83,26 @@ public class ScriptPanel extends JPanel {
 	 */
 	public static final String PARAM_PREFIX = ScriptPanel.class.getName() + ".param";
 	
+	public static final String CURRENT_COMPONENT = ScriptPanel.class.getName() + ".component";
+	
 	/**
 	 * Script object
 	 */
 	private PhonScript script;
 	
+	private JPanel cardPanel;
+	private CardLayout cardLayout;
+	
 	/**
 	 * Script editor
 	 */
+	private String scriptEditorId = "scriptEditor";
 	private RSyntaxTextArea scriptEditor;
-	private JPanel scriptPanel;
 	
 	/**
 	 * Current form panel
 	 */
+	private final String paramPanelId = "paramPanel";
 	private JPanel paramPanel;
 	private JToggleButton scriptViewButton;
 	
@@ -108,6 +116,8 @@ public class ScriptPanel extends JPanel {
 	 */
 	private Action viewScriptAction;
 	private Action viewFormAction;
+	
+	private String oldScript = new String();
 	
 	/**
 	 */
@@ -194,9 +204,8 @@ public class ScriptPanel extends JPanel {
 		});
 		
 		final JPanel form = factory.getForm();
-		JScrollPane formScroller = new JScrollPane(form);
-		formScroller.getVerticalScrollBar().setUnitIncrement(10);
-		paramPanel.add(formScroller, BorderLayout.CENTER);
+		paramPanel.add(form, BorderLayout.CENTER);
+		
 		paramPanel.revalidate();
 		paramPanel.repaint();
 	}
@@ -204,13 +213,15 @@ public class ScriptPanel extends JPanel {
 	private void init() {
 		setLayout(new BorderLayout());
 		
+		cardPanel = new JPanel();
+		cardLayout = new CardLayout();
+		cardPanel.setLayout(cardLayout);
+		
 		paramPanel = new JPanel(new BorderLayout());
 		updateParamPanel();
-		add(paramPanel, BorderLayout.CENTER);
-		showingForm = true;
+		cardPanel.add(new JScrollPane(paramPanel), paramPanelId);
 		
 		// setup editor and save button
-		scriptPanel = new JPanel(new BorderLayout());
 		scriptEditor = new RSyntaxTextArea();
 		scriptEditor.setText(script.getScript());
 		scriptEditor.setColumns(20);
@@ -218,27 +229,28 @@ public class ScriptPanel extends JPanel {
 		RTextScrollPane scriptScroller = new RTextScrollPane(scriptEditor);
 		scriptEditor.setSyntaxEditingStyle("text/javascript");
 		scriptEditor.getDocument().addDocumentListener(scriptDocListener);
+		cardPanel.add(scriptScroller, scriptEditorId);
 
-		scriptPanel.add(scriptScroller, BorderLayout.CENTER);
-		
 		ImageIcon viewIcon = 
 				IconManager.getInstance().getIcon("apps/accessories-text-editor", IconSize.SMALL);
 		scriptViewButton = new JToggleButton(viewIcon);
-		scriptViewButton.setSelected(!isShowingForm());
+		scriptViewButton.setSelected(false);
 		scriptViewButton.setToolTipText("Toggle script/form");
 		scriptViewButton.putClientProperty("JButton.buttonType", "textured");
 		scriptViewButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(isShowingForm()) {
+				boolean showEditor = scriptViewButton.isSelected();
+				
+				if(showEditor) {
 					showScript();
-					
 				} else {
 					showForm();
 				}
-				scriptViewButton.setSelected(!isShowingForm());
+				scriptViewButton.setSelected(showEditor);
 			}
+			
 		});
 		
 		final FlowLayout layout = new FlowLayout(FlowLayout.RIGHT);
@@ -246,6 +258,8 @@ public class ScriptPanel extends JPanel {
 		
 		formBtnPanel = new JPanel(layout);
 		formBtnPanel.add(scriptViewButton);
+		
+		add(cardPanel, BorderLayout.CENTER);
 		add(formBtnPanel, BorderLayout.SOUTH);
 	}
 	
@@ -273,18 +287,16 @@ public class ScriptPanel extends JPanel {
 		}
 		return true;
 	}
-	
-	private boolean showingForm = false;
+
 	/**
 	 * Switches display to the script's form
 	 */
 	public void showForm() {
-		// update script params
-		remove(scriptPanel);
-		add(paramPanel, BorderLayout.CENTER);
-		updateParamPanel();
-		revalidate();
-		showingForm = true;
+		if(oldScript != null && !oldScript.equals(getScript().getScript())) {
+			firePropertyChange(SCRIPT_PROP, oldScript, getScript().getScript());
+		}
+		cardLayout.show(cardPanel, paramPanelId);
+		firePropertyChange(CURRENT_COMPONENT, scriptEditor, paramPanel);
 	}
 	
 	/**
@@ -292,16 +304,10 @@ public class ScriptPanel extends JPanel {
 	 * 
 	 */
 	public void showScript() {
-		// swap param panel with script editor
-		remove(paramPanel);
-		add(scriptPanel);
-		revalidate();
-		repaint();
-		showingForm = false;
-	}
-	
-	public boolean isShowingForm() {
-		return showingForm;
+		oldScript = getScript().getScript();
+		
+		cardLayout.show(cardPanel, scriptEditorId);
+		firePropertyChange(CURRENT_COMPONENT, paramPanel, scriptEditor);
 	}
 	
 	/*
@@ -321,14 +327,13 @@ public class ScriptPanel extends JPanel {
 	};
 	
 	/**
-	 * Listener for script document changes
+	 * Listener for script document changes and updated underlying script
 	 */
 	private DocumentListener scriptDocListener = new DocumentListener() {
 		
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			script.delete(e.getOffset(), e.getOffset()+e.getLength());
-			firePropertyChange(SCRIPT_PROP, true, false);
 		}
 		
 		@Override
@@ -336,7 +341,6 @@ public class ScriptPanel extends JPanel {
 			try {
 				String insertedText = e.getDocument().getText(e.getOffset(), e.getLength());
 				script.insert(e.getOffset(), insertedText);
-				firePropertyChange(SCRIPT_PROP, true, false);
 			} catch (BadLocationException e1) {
 			}
 		}
@@ -344,6 +348,7 @@ public class ScriptPanel extends JPanel {
 		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
+		
 	};
 	
 }
