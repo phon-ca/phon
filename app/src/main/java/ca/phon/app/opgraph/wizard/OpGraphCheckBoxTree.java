@@ -2,8 +2,12 @@ package ca.phon.app.opgraph.wizard;
 
 import java.awt.Component;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -50,6 +54,37 @@ public class OpGraphCheckBoxTree extends TristateCheckBoxTree {
 		
 		setCellRenderer(new OpGraphTreeRenderer());
 		setCellEditor(new OpGraphTreeEditor(this));
+	}
+	
+	/**
+	 * Return path or null if node not found
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public TreePath treePathForNode(OpNode node) {
+		final OpGraph graph = (OpGraph)((TristateCheckBoxTreeNode)getRoot()).getUserObject();
+		
+		final List<OpNode> path = graph.getNodePath(node.getId());
+		
+		TreeNode currentNode = getRoot();
+		TreePath treePath = new TreePath(getRoot());
+		
+		for(OpNode childNode:path) {
+			for(int i = 0; i < currentNode.getChildCount(); i++) {
+				final TreeNode childTreeNode = currentNode.getChildAt(i);
+				if(childTreeNode instanceof DefaultMutableTreeNode) {
+					final DefaultMutableTreeNode mutableTreeNode = (DefaultMutableTreeNode)childTreeNode;
+					if(mutableTreeNode.getUserObject() == childNode) {
+						treePath = treePath.pathByAddingChild(childTreeNode);
+						currentNode = childTreeNode;
+						break;
+					}
+				}
+			}
+		}
+		
+		return treePath;
 	}
 	
 	private class OpGraphTreeRenderer extends TristateCheckBoxTreeCellRenderer {

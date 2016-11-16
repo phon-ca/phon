@@ -81,7 +81,7 @@ public class PartitionTableNode extends TableScriptNode {
 				}
 				
 				Object filterRow = scriptContext.callFunction(scope, "filterRow", 
-						table, row);
+						context, table, row);
 				if(Boolean.parseBoolean(filterRow.toString())) {
 					trueTable.addRow(rowData.values().toArray());
 				} else {
@@ -89,7 +89,7 @@ public class PartitionTableNode extends TableScriptNode {
 				}
 			}
 		} catch (PhonScriptException e) {
-			
+			throw new ProcessingException(null, e);
 		}
 		
 		for(int col = 0; col < table.getColumnCount(); col++) {
