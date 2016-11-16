@@ -20,17 +20,31 @@ package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
+import javax.script.Invocable;
+import javax.script.ScriptException;
 import javax.swing.JPanel;
 
+import org.mozilla.javascript.Scriptable;
+
+import ca.gedge.opgraph.InputField;
+import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
+import ca.gedge.opgraph.nodes.general.script.InputFields;
+import ca.gedge.opgraph.nodes.general.script.OutputFields;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
@@ -72,6 +86,40 @@ public abstract class TableScriptNode extends TableOpNode implements NodeSetting
 		return this.scriptPanel;
 	}
 	
+	/**
+	 * Reload the input/output fields from the script. 
+	 */
+	private void reloadFields() {
+		final PhonScript phonScript = getScript();
+		final PhonScriptContext scriptContext = phonScript.getContext();
+		
+		final List<InputField> fixedInputs =
+				getInputFields().stream().filter( f -> f.isFixed() && f != ENABLED_FIELD ).collect( Collectors.toList() );
+		final List<OutputField> fixedOutputs =
+				getOutputFields().stream().filter( OutputField::isFixed ).collect( Collectors.toList() );
+		
+		removeAllInputFields();
+		removeAllOutputFields();
+		
+		for(InputField field:fixedInputs) {
+			putField(field);
+		}
+		for(OutputField field:fixedOutputs) {
+			putField(field);
+		}
+		
+		try {
+			final Scriptable scope = scriptContext.getEvaluatedScope();
+			scriptContext.installParams(scope);
+			
+			final InputFields inputFields = new InputFields(this);
+			final OutputFields outputFields = new OutputFields(this);
+			scriptContext.callFunction(scope, "init", inputFields, outputFields);
+		} catch (PhonScriptException e) {
+			LOGGER.fine(e.getLocalizedMessage());
+		}
+	}
+	
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
@@ -85,6 +133,7 @@ public abstract class TableScriptNode extends TableOpNode implements NodeSetting
 		
 		scriptPanel = new ScriptPanel(getScript());
 		retVal.add(scriptPanel, BorderLayout.CENTER);
+		scriptPanel.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
 		
 		return retVal;
 	}
@@ -119,6 +168,7 @@ public abstract class TableScriptNode extends TableOpNode implements NodeSetting
 			this.script = new BasicScript(properties.getProperty("__script"));
 			if(scriptPanel != null)
 				scriptPanel.setScript(this.script);
+			reloadFields();
 			
 			try {
 				final ScriptParameters scriptParams = getScript().getContext().getScriptParameters(
