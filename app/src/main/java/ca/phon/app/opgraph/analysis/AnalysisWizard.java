@@ -137,7 +137,7 @@ public class AnalysisWizard extends NodeWizard {
 		participantSelectorStep.setLayout(new BorderLayout());
 		participantSelectorStep.add(panel, BorderLayout.CENTER);
 		
-		int insertIdx = 0;
+		int insertIdx = 1;
 		if(getWizardExtension().getWizardMessage() != null
 				&& getWizardExtension().getWizardMessage().length() > 0) {
 			insertIdx = 2;
@@ -147,9 +147,7 @@ public class AnalysisWizard extends NodeWizard {
 		
 		super.addWizardStep(insertIdx, participantSelectorStep);
 		
-		if(insertIdx == 2) {
-			getWizardStep(1).setNextStep(insertIdx);
-		}
+		getWizardStep(insertIdx-1).setNextStep(insertIdx);
 		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
 		
 		return participantSelectorStep;
