@@ -36,12 +36,16 @@ import javax.swing.JPanel;
 import org.mozilla.javascript.Scriptable;
 
 import ca.gedge.opgraph.InputField;
+import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
+import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.gedge.opgraph.nodes.general.script.InputFields;
 import ca.gedge.opgraph.nodes.general.script.OutputFields;
 import ca.phon.app.query.ScriptPanel;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
@@ -50,12 +54,18 @@ import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 
 /**
- * Base class for script operations on tables.
- *
+ * Base class for script operations on tables.  This node looks for
+ * the function 'tableOp(context, table)' in the user-provided script.
+ * Output table will be same object as input table.
+ * 
  */
-public abstract class TableScriptNode extends TableOpNode implements NodeSettings {
+@OpNodeInfo(category="Report", description="Custom script for table input", name="Table Script", showInLibrary=true)
+public class TableScriptNode extends TableOpNode implements NodeSettings {
 	
 	private final static Logger LOGGER = Logger.getLogger(TableScriptNode.class.getName());
+	
+	private final static String SCRIPT_TEMPLATE =
+			"function tableOp(context, table) {\n}\n";
 
 	// script
 	private PhonScript script;
@@ -130,7 +140,7 @@ public abstract class TableScriptNode extends TableOpNode implements NodeSetting
 	
 	protected JPanel createSettingsPanel() {
 		JPanel retVal = new JPanel(new BorderLayout());
-		
+
 		scriptPanel = new ScriptPanel(getScript());
 		retVal.add(scriptPanel, BorderLayout.CENTER);
 		scriptPanel.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
@@ -184,6 +194,25 @@ public abstract class TableScriptNode extends TableOpNode implements NodeSetting
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);	
 			}
 		}
+	}
+
+	@Override
+	public void operate(OpContext context) throws ProcessingException {
+		final DefaultTableDataSource table = (DefaultTableDataSource)context.get(tableInput);
+		
+		final PhonScript phonScript = getScript();
+		final PhonScriptContext scriptContext = phonScript.getContext();
+		
+		try {
+			final Scriptable scope = scriptContext.getEvaluatedScope();
+			scriptContext.installParams(scope);
+			
+			scriptContext.callFunction(scope, "tableOp", context, table);
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		context.put(tableOutput, table);
 	}
 	
 }
