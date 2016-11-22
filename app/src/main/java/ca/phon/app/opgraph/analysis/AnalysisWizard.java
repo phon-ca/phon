@@ -29,9 +29,12 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.NodeWizardReportContext;
 import ca.phon.app.session.ParticipantSelector;
 import ca.phon.app.session.SessionSelector;
+import ca.phon.project.ParticipantHistory;
 import ca.phon.project.Project;
+import ca.phon.session.Participant;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -178,9 +181,26 @@ public class AnalysisWizard extends NodeWizard {
 		if(getWizardStep(stepIdx) == reportStep) {
 			if(sessionSelector != null)
 				getProcessor().getContext().put("_selectedSessions", sessionSelector.getSelectedSessions());
-			if(participantSelector != null)
-				getProcessor().getContext().put("_selectedParticipants", participantSelector.getSelectedParticpants());
+			if(participantSelector != null) {
+				List<Participant> selectedParticipants = participantSelector.getSelectedParticpants();
+				for(Participant p:selectedParticipants) {
+					final ParticipantHistory history = ParticipantHistory.calculateHistoryForParticpant(project, sessionSelector.getSelectedSessions(), p);
+					p.putExtension(ParticipantHistory.class, history);
+				}
+				getProcessor().getContext().put("_selectedParticipants", selectedParticipants);
+			}
 		}
 		super.gotoStep(stepIdx);
 	}
+	
+	@Override
+	public void setupReportContext(NodeWizardReportContext context) {
+		super.setupReportContext(context);
+		
+		// add selected sessions and participants
+		context.put("project", getProject());
+		context.put("selectedSessions", sessionSelector.getSelectedSessions());
+		context.put("selectedParticipants", participantSelector.getSelectedParticpants());
+	}
+	
 }

@@ -66,6 +66,13 @@ public class SessionPath extends Tuple<String, String> {
 	}
 	
 	@Override
+	public int hashCode() {
+		long hash = getObj1().hashCode();
+		hash = hash * 31 + getObj2().hashCode();
+		return (int)hash;
+	}
+	
+	@Override
 	public String toString() {
 		return getCorpus() + "." + getSession();
 	}
