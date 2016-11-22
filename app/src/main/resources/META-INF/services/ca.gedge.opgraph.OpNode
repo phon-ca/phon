@@ -11,6 +11,7 @@ ca.phon.app.opgraph.nodes.query.HomophonyAnalysis
 ca.phon.app.opgraph.nodes.query.AddColumnNode
 ca.phon.app.opgraph.nodes.query.RowFilterNode
 ca.phon.app.opgraph.nodes.query.TokenSummaryNode
+ca.phon.app.opgraph.nodes.query.TableScriptNode
 ca.phon.app.opgraph.nodes.query.PartitionTableNode
 ca.phon.app.opgraph.nodes.query.MergeTablesNode
 ca.phon.app.opgraph.nodes.query.AppendTableNode

@@ -41,7 +41,7 @@ import ca.gedge.opgraph.Processor;
  */
 public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
-	public final static String WIZARDEXT_CTX_NAME = "wizardExtension";
+	public final static String WIZARDEXT_CTX_KEY = "wizardExtension";
 	
 	private WizardInfo wizardInfo = new WizardInfo();
 	
@@ -55,7 +55,7 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	private final List<NodeWizardReportTemplate> reportTemplates = new ArrayList<>();
 	
-	public final static String OPGRAPH_CTX_NAME = "graph";
+	public final static String OPGRAPH_CTX_KEY = "graph";
 	
 	private final OpGraph graph;
 	
@@ -295,8 +295,8 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	 * @param context
 	 */
 	public void setupReportContext(NodeWizardReportContext context) {
-		context.put(WIZARDEXT_CTX_NAME, this);
-		context.put(OPGRAPH_CTX_NAME, getGraph());
+		context.put(WIZARDEXT_CTX_KEY, this);
+		context.put(OPGRAPH_CTX_KEY, getGraph());
 	}
 
 	@Override

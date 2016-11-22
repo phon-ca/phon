@@ -373,6 +373,8 @@ public class NodeWizard extends WizardFrame {
 				
 				final BufferPanel errPanel = bufferPanel.createBuffer("Error");
 				final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
+				writer.println(pe.getContext().getCurrentNode().getName() + " (" + pe.getContext().getCurrentNode().getId() + ")");
+				
 				pe.printStackTrace(writer);
 				writer.flush();
 				writer.close();
@@ -409,6 +411,7 @@ public class NodeWizard extends WizardFrame {
 		ctx.put("buffers", buffers);
 		ctx.put("tables", tables);
 	}
+	
 	
 	public WizardOptionalsCheckboxTree getOptionalsTree() {
 		return this.optionalsTree;
@@ -546,7 +549,7 @@ public class NodeWizard extends WizardFrame {
 				try {
 					executeGraph();
 				} catch (ProcessingException e) {
-					e.printStackTrace();
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			};
 			

@@ -150,11 +150,11 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 	}
 
 	public String getBufferName(OpContext ctx) {
-		return (ctx.containsKey(bufferNameField) ? ctx.get(bufferNameField).toString() : "default");
+		return (ctx.get(bufferNameField) != null ? ctx.get(bufferNameField).toString() : "default");
 	}
 	
 	public boolean isAppendToBuffer(OpContext ctx) {
-		return (ctx.containsKey(appendField) ? (Boolean)ctx.get(appendField) : false);
+		return (ctx.get(appendField) != null ? (Boolean)ctx.get(appendField) : false);
 	}
 
 	public boolean isShowTable() {

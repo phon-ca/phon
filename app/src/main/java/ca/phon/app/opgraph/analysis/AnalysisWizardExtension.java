@@ -21,6 +21,7 @@ package ca.phon.app.opgraph.analysis;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.NodeWizardReportContext;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 
 public class AnalysisWizardExtension extends WizardExtension {
@@ -36,4 +37,9 @@ public class AnalysisWizardExtension extends WizardExtension {
 				"Analysis : " + (getWizardTitle() != null ? getWizardTitle() : "Unknown"), processor, super.getGraph());
 	}
 
+	@Override
+	public void setupReportContext(NodeWizardReportContext context) {
+		super.setupReportContext(context);
+	}
+	
 }

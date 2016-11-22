@@ -1,0 +1,42 @@
+## Velocity global templates for opgraph wizard reports
+
+#macro( h1 $title ) #set($H = '#')$H $title#end
+#macro( h2 $title ) #set($H = '##')$H $title#end
+#macro( h3 $title ) #set($H = '###')$H $title#end
+
+#macro( printHeader $table )
+	#set($maxCol = $table.columnCount - 1)
+	#if($maxCol < 0) #break#end
+	<tr>
+		#foreach($i in [0..$maxCol])
+		<th>$table.getColumnTitle($i)</th>
+		#end
+	</tr>
+#end
+
+#macro( printValue $v )
+<td>$v</td>
+#end
+
+#macro( printBody $table )
+	#set($maxCol = $table.columnCount - 1)
+	#if($maxCol < 0) #break#end
+	#set($maxRow = $table.rowCount - 1)
+	#if($maxRow < 0) #break#end	
+	#foreach($row in [0..$maxRow])
+		<tr>
+		#foreach($col in [0..$maxCol])
+			#printValue($table.getValueAt($row, $col))
+		#end
+		</tr>
+	#end
+#end
+
+## Print table data as HTML
+#macro( printTable $table )
+<table>
+#printHeader( $table )
+#printBody( $table )
+</table>
+#end
+
