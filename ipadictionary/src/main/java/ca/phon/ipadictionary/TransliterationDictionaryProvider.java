@@ -32,7 +32,7 @@ import ca.phon.util.resources.ClassLoaderHandler;
  */
 public class TransliterationDictionaryProvider extends ClassLoaderHandler<IPADictionary> implements DictionaryProvider {
 
-	private final static String DICT_LIST = "META-INF/dict/transdicts.list";
+	private final static String DICT_LIST = "dict/transdicts.list";
 	
 	public TransliterationDictionaryProvider() {
 		super(PluginManager.getInstance());

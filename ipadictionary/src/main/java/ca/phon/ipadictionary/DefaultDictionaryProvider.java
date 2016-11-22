@@ -34,7 +34,7 @@ import ca.phon.util.resources.ClassLoaderHandler;
 public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary> 
 	implements DictionaryProvider {
 
-	private final static String DICT_LIST = "META-INF/dict/dicts.list";
+	private final static String DICT_LIST = "dict/dicts.list";
 	
 	private Set<Language> dbDicts = null;
 	
