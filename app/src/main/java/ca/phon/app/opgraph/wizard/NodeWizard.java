@@ -69,6 +69,8 @@ import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
+import ca.phon.formatter.FormatterFactory;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
@@ -405,6 +407,9 @@ public class NodeWizard extends WizardFrame {
 				tables.put(bufferName, table);
 			}
 		}
+		
+		ctx.put("Class", Class.class);
+		ctx.put("FormatterUtil", FormatterUtil.class);
 		
 		ctx.put("graph", getGraph());
 		ctx.put("bufferNames", bufferPanel.getBufferNames());

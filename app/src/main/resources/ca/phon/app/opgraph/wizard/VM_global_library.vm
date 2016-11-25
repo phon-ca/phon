@@ -15,7 +15,14 @@
 #end
 
 #macro( printValue $v )
-<td>$v</td>
+	#set($clazz = $v.class)
+	#set($txt = $FormatterUtil.format($v))
+	#set($number = $Class.forName("java.lang.Number"))
+	#set($ipa = $Class.forName("ca.phon.ipa.IPATranscript"))
+	#if($clazz == $ipa) #set($type = "ipa_value")
+	#elseif($number.isAssignableFrom($clazz)) #set($type = "number_value")
+	#else #set($type = "text_value")#end
+<td class='$type'>$txt</td>
 #end
 
 #macro( printBody $table )
@@ -34,6 +41,7 @@
 
 ## Print table data as HTML
 #macro( printTable $table )
+#if($table.columnCount == 0 || $table.rowCount == 0) #break#end
 <table>
 #printHeader( $table )
 #printBody( $table )
