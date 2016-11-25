@@ -22,6 +22,11 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -45,6 +50,7 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.gedge.opgraph.nodes.general.script.InputFields;
 import ca.gedge.opgraph.nodes.general.script.OutputFields;
 import ca.phon.app.query.ScriptPanel;
+import ca.phon.plugin.PluginManager;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
@@ -86,6 +92,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	public TableScriptNode(PhonScript script) {
 		super();
 		this.script = script;
+		addQueryLibrary();
 	}
 	
 	public PhonScript getScript() {
@@ -94,6 +101,29 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	
 	public ScriptPanel getScriptPanel() {
 		return this.scriptPanel;
+	}
+	
+	/**
+	 * Make query library functions available to scripts.
+	 * 
+	 */
+	private void addQueryLibrary() {
+		final ClassLoader cl = PluginManager.getInstance();
+		Enumeration<URL> libUrls;
+		try {
+			libUrls = cl.getResources("ca/phon/query/script/");
+			while(libUrls.hasMoreElements()) {
+				final URL url = libUrls.nextElement();
+				try {
+					final URI uri = url.toURI();
+					script.addRequirePath(uri);
+				} catch (URISyntaxException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+			}
+		} catch (IOException e1) {
+			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+		}
 	}
 	
 	/**
@@ -176,6 +206,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	public void loadSettings(Properties properties) {
 		if(properties.containsKey("__script")) {
 			this.script = new BasicScript(properties.getProperty("__script"));
+			addQueryLibrary();
 			if(scriptPanel != null)
 				scriptPanel.setScript(this.script);
 			reloadFields();
