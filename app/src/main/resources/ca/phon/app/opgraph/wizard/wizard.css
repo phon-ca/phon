@@ -47,8 +47,13 @@ code {
     font-family:monospace;
 }
 
+.text_value {
+    text-align:center;
+}
+
 .ipa_value {
     font-family:"noto sans", "Charis SIL Compact", "Charis SIL", arial, sans-serif;
+    text-align:center;
 }
 
 .number_value {
