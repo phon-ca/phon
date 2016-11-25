@@ -171,10 +171,12 @@ public class BasicScript implements PhonScript, Cloneable {
 		return Collections.unmodifiableList(requirePaths);
 	}
 	
+	@Override
 	public boolean addRequirePath(URI uri) {
 		return requirePaths.add(uri);
 	}
 	
+	@Override
 	public boolean removeRequirePath(URI uri) {
 		return requirePaths.remove(uri);
 	}

@@ -82,6 +82,10 @@ public interface PhonScript extends IExtendable, Appendable, CharSequence {
 	 */
 	public List<URI> getRequirePaths();
 	
+	public boolean addRequirePath(URI uri);
+	
+	public boolean removeRequirePath(URI uri);
+	
 	/* Buffer delegate methods */
 	public PhonScript append(boolean arg0);
 
