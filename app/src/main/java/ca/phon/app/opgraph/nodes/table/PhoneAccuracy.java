@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.nodes.query;
+package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
 import java.util.ArrayList;
@@ -38,6 +38,7 @@ import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.nodes.query.ColumnOptionsPanel;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.features.FeatureSet;

@@ -56,7 +56,7 @@
                                 <oga:meta x="268" y="102"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="99ee2ba7d3dd4226" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="99ee2ba7d3dd4226" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -68,7 +68,7 @@
                                 <oga:meta x="467" y="102"/>
                             </extensions>
                         </node>
-                        <node id="ead711ccc61d4be7" type="class:ca.phon.app.opgraph.nodes.query.IPAVariabilityNode">
+                        <node id="ead711ccc61d4be7" type="class:ca.phon.app.opgraph.nodes.table.IPAVariabilityNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
@@ -115,7 +115,7 @@
                                 <oga:meta x="268" y="102"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="86745d37c14b4421" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="86745d37c14b4421" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -127,7 +127,7 @@
                                 <oga:meta x="467" y="102"/>
                             </extensions>
                         </node>
-                        <node id="aef40b05db5242c7" type="class:ca.phon.app.opgraph.nodes.query.IPAVariabilityNode">
+                        <node id="aef40b05db5242c7" type="class:ca.phon.app.opgraph.nodes.table.IPAVariabilityNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
@@ -175,7 +175,7 @@
                                 <oga:meta x="268" y="102"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="ac50b952ec8d4fcf" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="ac50b952ec8d4fcf" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -187,7 +187,7 @@
                                 <oga:meta x="467" y="102"/>
                             </extensions>
                         </node>
-                        <node id="653167ce19b74caf" type="class:ca.phon.app.opgraph.nodes.query.IPAVariabilityNode">
+                        <node id="653167ce19b74caf" type="class:ca.phon.app.opgraph.nodes.table.IPAVariabilityNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
@@ -235,7 +235,7 @@
                                 <oga:meta x="268" y="102"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="d2a86c9770649d4" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="d2a86c9770649d4" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -247,7 +247,7 @@
                                 <oga:meta x="467" y="102"/>
                             </extensions>
                         </node>
-                        <node id="ddb9324ce0fb4856" type="class:ca.phon.app.opgraph.nodes.query.IPAVariabilityNode">
+                        <node id="ddb9324ce0fb4856" type="class:ca.phon.app.opgraph.nodes.table.IPAVariabilityNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>

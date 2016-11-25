@@ -30,7 +30,7 @@
                 <oga:meta x="270" y="15"/>
             </extensions>
         </opqry:queryNode>
-        <node id="18eaaccc" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+        <node id="18eaaccc" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -42,7 +42,7 @@
                 <oga:meta x="435" y="15"/>
             </extensions>
         </node>
-        <node id="4c7ea28d" type="class:ca.phon.app.opgraph.nodes.query.HomophonyAnalysis">
+        <node id="4c7ea28d" type="class:ca.phon.app.opgraph.nodes.table.HomophonyAnalysis">
             <extensions>
                 <oga:settings>
                     <oga:property key="ignoreDiacritics"><![CDATA[false]]></oga:property>

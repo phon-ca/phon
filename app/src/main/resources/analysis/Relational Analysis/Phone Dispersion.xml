@@ -55,7 +55,7 @@
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="381ce3aecf344237" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="381ce3aecf344237" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -67,7 +67,7 @@
                                 <oga:meta x="180" y="15"/>
                             </extensions>
                         </node>
-                        <node id="e3f2ba5af2eb4595" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="e3f2ba5af2eb4595" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -78,7 +78,7 @@
                                 <oga:meta x="333" y="15"/>
                             </extensions>
                         </node>
-                        <node id="d706b62019004cfc" type="class:ca.phon.app.opgraph.nodes.query.PhoneDispersion">
+                        <node id="d706b62019004cfc" type="class:ca.phon.app.opgraph.nodes.table.PhoneDispersion">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>
@@ -128,7 +128,7 @@
                                 <oga:meta x="277" y="115"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="a5cf72810b714971" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="a5cf72810b714971" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -140,7 +140,7 @@
                                 <oga:meta x="487" y="129"/>
                             </extensions>
                         </node>
-                        <node id="9c88b3596aaf48ec" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="9c88b3596aaf48ec" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -151,7 +151,7 @@
                                 <oga:meta x="343" y="259"/>
                             </extensions>
                         </node>
-                        <node id="99d0656f7dbc4ac0" type="class:ca.phon.app.opgraph.nodes.query.PhoneDispersion">
+                        <node id="99d0656f7dbc4ac0" type="class:ca.phon.app.opgraph.nodes.table.PhoneDispersion">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>

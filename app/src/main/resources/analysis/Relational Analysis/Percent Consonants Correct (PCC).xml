@@ -35,7 +35,7 @@
                         <oga:meta x="292" y="109"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="40a68328b8f04506" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="40a68328b8f04506" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -83,7 +83,7 @@
                         <oga:meta x="292" y="109"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="7ee30ee127a24f6d" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="7ee30ee127a24f6d" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>

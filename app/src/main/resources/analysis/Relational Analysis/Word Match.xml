@@ -52,7 +52,7 @@
                                 <oga:meta x="260" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="5d802b45cbe64cb2" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="5d802b45cbe64cb2" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -64,7 +64,7 @@
                                 <oga:meta x="454" y="15"/>
                             </extensions>
                         </node>
-                        <node id="f656f3c8345c4d34" name="Add IPA Target CV" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="f656f3c8345c4d34" name="Add IPA Target CV" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -82,7 +82,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="279" y="165"/>
                             </extensions>
                         </node>
-                        <node id="df018a99d3474be0" name="Add IPA Actual CV" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="df018a99d3474be0" name="Add IPA Actual CV" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -100,7 +100,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="454" y="165"/>
                             </extensions>
                         </node>
-                        <node id="7d6fe1156b2747a4" type="class:ca.phon.app.opgraph.nodes.query.PartitionTableNode">
+                        <node id="7d6fe1156b2747a4" type="class:ca.phon.app.opgraph.nodes.table.PartitionTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[function filterRow(table, row) {
@@ -116,7 +116,7 @@ function getRowValue(table, row) {
                         </node>
                         <ogcn:macro id="fe2cba1029d9486d" name="Word CVG Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
                             <graph id="61c08072">
-                                <node id="55694fcd3b454b0a" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                                <node id="55694fcd3b454b0a" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
                                             <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -127,7 +127,7 @@ function getRowValue(table, row) {
                                         <oga:meta x="511" y="380"/>
                                     </extensions>
                                 </node>
-                                <node id="856b29bdfb6f48fa" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                                <node id="856b29bdfb6f48fa" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                                     <extensions>
                                         <opqry:sortoptions>
                                             <opqry:sortBy column="IPA Target CV" order="ascending" type="plain"/>
@@ -157,7 +157,7 @@ function getRowValue(table, row) {
                         </ogcn:macro>
                         <ogcn:macro id="4eb8efcf27e94df0" name="Word CVG Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
                             <graph id="18ae9d73">
-                                <node id="892715722f274ec5" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                                <node id="892715722f274ec5" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
                                             <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -168,7 +168,7 @@ function getRowValue(table, row) {
                                         <oga:meta x="511" y="380"/>
                                     </extensions>
                                 </node>
-                                <node id="a962acf5b4664594" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                                <node id="a962acf5b4664594" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                                     <extensions>
                                         <opqry:sortoptions>
                                             <opqry:sortBy column="IPA Target CV" order="ascending" type="plain"/>
@@ -223,7 +223,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="260" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="61d509ae0e9a42a1" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="61d509ae0e9a42a1" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -235,7 +235,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="454" y="15"/>
                             </extensions>
                         </node>
-                        <node id="5091225b9fa24272" name="Add IPA Target Stress Pattern" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="5091225b9fa24272" name="Add IPA Target Stress Pattern" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -253,7 +253,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="301" y="167"/>
                             </extensions>
                         </node>
-                        <node id="5b8ef2c67f7d4388" name="Add IPA Actual Stress Pattern" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="5b8ef2c67f7d4388" name="Add IPA Actual Stress Pattern" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -271,7 +271,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="544" y="167"/>
                             </extensions>
                         </node>
-                        <node id="19f14c9be8d94864" type="class:ca.phon.app.opgraph.nodes.query.PartitionTableNode">
+                        <node id="19f14c9be8d94864" type="class:ca.phon.app.opgraph.nodes.table.PartitionTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[function filterRow(table, row) {
@@ -284,7 +284,7 @@ function getRowValue(table, row) {
                         </node>
                         <ogcn:macro id="d672361880084848" name="Word Stress Pattern Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
                             <graph id="7df802c4">
-                                <node id="8535f2dad9c044ec" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                                <node id="8535f2dad9c044ec" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
                                             <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -295,7 +295,7 @@ function getRowValue(table, row) {
                                         <oga:meta x="511" y="380"/>
                                     </extensions>
                                 </node>
-                                <node id="cd10dfbe25b44921" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                                <node id="cd10dfbe25b44921" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                                     <extensions>
                                         <opqry:sortoptions>
                                             <opqry:sortBy column="IPA Target Stress Pattern" order="ascending" type="plain"/>
@@ -325,7 +325,7 @@ function getRowValue(table, row) {
                         </ogcn:macro>
                         <ogcn:macro id="19f148699e8647cf" name="Word Stress Pattern Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
                             <graph id="48abacf6">
-                                <node id="d045ee0cffef4674" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                                <node id="d045ee0cffef4674" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
                                             <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -336,7 +336,7 @@ function getRowValue(table, row) {
                                         <oga:meta x="511" y="380"/>
                                     </extensions>
                                 </node>
-                                <node id="9dc0d678ba2246c9" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                                <node id="9dc0d678ba2246c9" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                                     <extensions>
                                         <opqry:sortoptions>
                                             <opqry:sortBy column="IPA Target Stress Pattern" order="ascending" type="plain"/>
@@ -391,7 +391,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="260" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="8efe6da769de482d" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="8efe6da769de482d" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -403,7 +403,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="454" y="15"/>
                             </extensions>
                         </node>
-                        <node id="200fed9746e24811" name="Add IPA Target Syllable Count" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="200fed9746e24811" name="Add IPA Target Syllable Count" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -421,7 +421,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="306" y="174"/>
                             </extensions>
                         </node>
-                        <node id="81c11f10fc6b4d04" name="Add IPA Actual Syllable Count" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="81c11f10fc6b4d04" name="Add IPA Actual Syllable Count" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -439,7 +439,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="554" y="174"/>
                             </extensions>
                         </node>
-                        <node id="4e8060a0e1a142fc" type="class:ca.phon.app.opgraph.nodes.query.PartitionTableNode">
+                        <node id="4e8060a0e1a142fc" type="class:ca.phon.app.opgraph.nodes.table.PartitionTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[function filterRow(table, row) {
@@ -452,7 +452,7 @@ function getRowValue(table, row) {
                         </node>
                         <ogcn:macro id="aed7700d61f34e0b" name="Word Syllable Count Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
                             <graph id="3ceddf17">
-                                <node id="a612ef6e083e458e" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                                <node id="a612ef6e083e458e" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
                                             <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -463,7 +463,7 @@ function getRowValue(table, row) {
                                         <oga:meta x="511" y="380"/>
                                     </extensions>
                                 </node>
-                                <node id="65dd9f0b5c9044c8" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                                <node id="65dd9f0b5c9044c8" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                                     <extensions>
                                         <opqry:sortoptions>
                                             <opqry:sortBy column="IPA Target Syllable Count" order="ascending" type="plain"/>
@@ -493,7 +493,7 @@ function getRowValue(table, row) {
                         </ogcn:macro>
                         <ogcn:macro id="2d1cdbec7bf74cb2" name="Word Syllable Count Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
                             <graph id="5953fd6b">
-                                <node id="2fbf9cc9b4c2497e" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                                <node id="2fbf9cc9b4c2497e" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                     <extensions>
                                         <opqry:inventoryoptions>
                                             <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -504,7 +504,7 @@ function getRowValue(table, row) {
                                         <oga:meta x="511" y="380"/>
                                     </extensions>
                                 </node>
-                                <node id="70e4ead12d0d4241" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                                <node id="70e4ead12d0d4241" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                                     <extensions>
                                         <opqry:sortoptions>
                                             <opqry:sortBy column="IPA Target Syllable Count" order="ascending" type="plain"/>

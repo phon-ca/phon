@@ -35,7 +35,7 @@
                         <oga:meta x="260" y="15"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="e63ecb8858c54a9a" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="e63ecb8858c54a9a" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -47,7 +47,7 @@
                         <oga:meta x="454" y="15"/>
                     </extensions>
                 </node>
-                <node id="7b60531ba8394c06" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                <node id="7b60531ba8394c06" type="class:ca.phon.app.opgraph.nodes.table.PhoneAccuracy">
                     <extensions>
                         <oga:settings>
                             <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>
@@ -95,7 +95,7 @@
                         <oga:meta x="260" y="15"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="6767951cbc74e8e" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="6767951cbc74e8e" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -107,7 +107,7 @@
                         <oga:meta x="454" y="15"/>
                     </extensions>
                 </node>
-                <node id="f9aeaafa61a24841" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                <node id="f9aeaafa61a24841" type="class:ca.phon.app.opgraph.nodes.table.PhoneAccuracy">
                     <extensions>
                         <oga:settings>
                             <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>
@@ -155,7 +155,7 @@
                         <oga:meta x="260" y="15"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="24156e41465244e7" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="24156e41465244e7" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -167,7 +167,7 @@
                         <oga:meta x="454" y="15"/>
                     </extensions>
                 </node>
-                <node id="8249e86e0b754222" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                <node id="8249e86e0b754222" type="class:ca.phon.app.opgraph.nodes.table.PhoneAccuracy">
                     <extensions>
                         <oga:settings>
                             <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>
@@ -215,7 +215,7 @@
                         <oga:meta x="260" y="15"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="39071ee0e5ec4012" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="39071ee0e5ec4012" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -227,7 +227,7 @@
                         <oga:meta x="454" y="15"/>
                     </extensions>
                 </node>
-                <node id="3d9889c220194539" type="class:ca.phon.app.opgraph.nodes.query.PhoneAccuracy">
+                <node id="3d9889c220194539" type="class:ca.phon.app.opgraph.nodes.table.PhoneAccuracy">
                     <extensions>
                         <oga:settings>
                             <oga:property key="globalAccuracy"><![CDATA[true]]></oga:property>

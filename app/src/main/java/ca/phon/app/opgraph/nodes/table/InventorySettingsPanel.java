@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.nodes.query;
+package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -36,7 +36,7 @@ import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
+import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;

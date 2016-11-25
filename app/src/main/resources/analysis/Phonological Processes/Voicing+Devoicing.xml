@@ -66,7 +66,7 @@
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="b5456eda664847f7" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="b5456eda664847f7" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -78,7 +78,7 @@
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="a00de8bdfee44e26" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="a00de8bdfee44e26" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -88,7 +88,7 @@
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="88ff41a4bc854c94" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="88ff41a4bc854c94" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -140,7 +140,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="3971d9929918433b" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="3971d9929918433b" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -152,7 +152,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="bdb19b5767e64d3e" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="bdb19b5767e64d3e" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -162,7 +162,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="bf1a7d7f0d2746e2" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="bf1a7d7f0d2746e2" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -192,12 +192,12 @@ function getRowValue(table, row) {
                         <oga:meta x="405" y="177"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="48f1189b92e3418d" type="class:ca.phon.app.opgraph.nodes.query.AppendTableNode">
+                <node id="48f1189b92e3418d" type="class:ca.phon.app.opgraph.nodes.table.AppendTableNode">
                     <extensions>
                         <oga:meta x="243" y="326"/>
                     </extensions>
                 </node>
-                <node id="bec5671b3634ba7" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="bec5671b3634ba7" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions>
                             <opqry:sortBy column="Type" order="ascending" type="plain"/>
@@ -277,7 +277,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="d103302e060c407d" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="d103302e060c407d" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -289,7 +289,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="35b6ffcb5a0e452d" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="35b6ffcb5a0e452d" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
@@ -299,7 +299,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="6de52ea41eab4671" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="6de52ea41eab4671" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -349,7 +349,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="62aceb7d46ab4914" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="62aceb7d46ab4914" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -361,7 +361,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="9e7b70109aac43ca" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="9e7b70109aac43ca" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
@@ -371,7 +371,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="b3a9be3fe2ab44cf" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="b3a9be3fe2ab44cf" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -401,12 +401,12 @@ function getRowValue(table, row) {
                         <oga:meta x="405" y="177"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="4d868ccca3ff4e6a" type="class:ca.phon.app.opgraph.nodes.query.AppendTableNode">
+                <node id="4d868ccca3ff4e6a" type="class:ca.phon.app.opgraph.nodes.table.AppendTableNode">
                     <extensions>
                         <oga:meta x="243" y="326"/>
                     </extensions>
                 </node>
-                <node id="f35fe22061784a95" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="f35fe22061784a95" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions>
                             <opqry:sortBy column="Type" order="ascending" type="plain"/>
@@ -486,7 +486,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="67ee2e20cc064672" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="67ee2e20cc064672" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -498,7 +498,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="eb3e2080f4a44eba" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="eb3e2080f4a44eba" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
@@ -508,7 +508,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="b49b0ccb232b4447" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="b49b0ccb232b4447" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -558,7 +558,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="1f92f06a8f39473d" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="1f92f06a8f39473d" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -570,7 +570,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="b2730a0c7afd4b01" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="b2730a0c7afd4b01" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
@@ -580,7 +580,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="3111820fcf0b434c" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="3111820fcf0b434c" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -610,12 +610,12 @@ function getRowValue(table, row) {
                         <oga:meta x="405" y="177"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="256786b9f7bf47b2" type="class:ca.phon.app.opgraph.nodes.query.AppendTableNode">
+                <node id="256786b9f7bf47b2" type="class:ca.phon.app.opgraph.nodes.table.AppendTableNode">
                     <extensions>
                         <oga:meta x="243" y="326"/>
                     </extensions>
                 </node>
-                <node id="e7fd01bab8644f31" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="e7fd01bab8644f31" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions>
                             <opqry:sortBy column="Type" order="ascending" type="plain"/>
@@ -695,7 +695,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="2f72d729126347ee" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="2f72d729126347ee" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -707,7 +707,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="cb38314571754006" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="cb38314571754006" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
@@ -717,7 +717,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="cfeb20ba6da1453f" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="cfeb20ba6da1453f" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -767,7 +767,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </opqry:queryNode>
-                        <node id="4e67d4e46c6c4292" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                        <node id="4e67d4e46c6c4292" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -779,7 +779,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="209" y="15"/>
                             </extensions>
                         </node>
-                        <node id="9b3c52f23b6e430f" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                        <node id="9b3c52f23b6e430f" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
@@ -789,7 +789,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="384" y="15"/>
                             </extensions>
                         </node>
-                        <node id="85c47caecc274f92" type="class:ca.phon.app.opgraph.nodes.query.AddColumnNode">
+                        <node id="85c47caecc274f92" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[/*
@@ -819,12 +819,12 @@ function getRowValue(table, row) {
                         <oga:meta x="405" y="177"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="5c04dd8438d5452b" type="class:ca.phon.app.opgraph.nodes.query.AppendTableNode">
+                <node id="5c04dd8438d5452b" type="class:ca.phon.app.opgraph.nodes.table.AppendTableNode">
                     <extensions>
                         <oga:meta x="243" y="326"/>
                     </extensions>
                 </node>
-                <node id="c343cb115e624ed9" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="c343cb115e624ed9" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions>
                             <opqry:sortBy column="Type" order="ascending" type="plain"/>

@@ -65,7 +65,7 @@
                         <oga:meta x="260" y="15"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="49553a7b3e1540f1" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="49553a7b3e1540f1" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -77,7 +77,7 @@
                         <oga:meta x="454" y="15"/>
                     </extensions>
                 </node>
-                <node id="f9d888564f904480" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                <node id="f9d888564f904480" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
                             <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -87,7 +87,7 @@
                         <oga:meta x="629" y="15"/>
                     </extensions>
                 </node>
-                <node id="50c5b59b87c041f1" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="50c5b59b87c041f1" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions>
                             <opqry:sortBy column="Session" order="ascending" type="plain"/>
@@ -170,7 +170,7 @@
                         <oga:meta x="260" y="15"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="14908b1f3eaa410f" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="14908b1f3eaa410f" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -182,7 +182,7 @@
                         <oga:meta x="454" y="15"/>
                     </extensions>
                 </node>
-                <node id="d19b71c3652743ae" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                <node id="d19b71c3652743ae" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
                             <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -193,7 +193,7 @@
                         <oga:meta x="629" y="15"/>
                     </extensions>
                 </node>
-                <node id="cf14ce4a5a0e400d" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="cf14ce4a5a0e400d" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions>
                             <opqry:sortBy column="Session" order="ascending" type="plain"/>
@@ -274,7 +274,7 @@
                         <oga:meta x="260" y="15"/>
                     </extensions>
                 </opqry:queryNode>
-                <node id="2b765e106e1f4440" type="class:ca.phon.app.opgraph.nodes.query.ResultsToTableNode">
+                <node id="2b765e106e1f4440" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -286,7 +286,7 @@
                         <oga:meta x="454" y="15"/>
                     </extensions>
                 </node>
-                <node id="569916948f6d4e66" type="class:ca.phon.app.opgraph.nodes.query.InventoryNode">
+                <node id="569916948f6d4e66" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
                             <opqry:column caseSensitive="false" column="Session" ignoreDiacritics="false"/>
@@ -296,7 +296,7 @@
                         <oga:meta x="629" y="15"/>
                     </extensions>
                 </node>
-                <node id="5efea1589384c69" type="class:ca.phon.app.opgraph.nodes.query.SortNode">
+                <node id="5efea1589384c69" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions>
                             <opqry:sortBy column="Session" order="ascending" type="plain"/>

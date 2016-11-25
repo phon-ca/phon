@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.nodes.query;
+package ca.phon.app.opgraph.nodes.table;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.io.xml.XMLSerializer;
 import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.app.opgraph.nodes.query.InventorySettings.ColumnInfo;
+import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
 
 public class InventorySettingsXMLSerializer implements XMLSerializer {
 	
