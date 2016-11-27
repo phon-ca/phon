@@ -50,14 +50,14 @@ public class WizardGlobalOptionsPanel extends JPanel {
 	private final static String IGNORE_DIACRITICS_PROP =
 			WizardGlobalOptionsPanel.class.getName() + ".ignoreDiacritics";
 	
-	private final static String PARTICIPANT_ROLE_PROP =
-			WizardGlobalOptionsPanel.class.getName() + ".participantRole";
+//	private final static String PARTICIPANT_ROLE_PROP =
+//			WizardGlobalOptionsPanel.class.getName() + ".participantRole";
 	
 	private JCheckBox caseSensitiveBox;
 	
 	private JCheckBox ignoreDiacriticsBox;
 	
-	private JComboBox<ParticipantRole> participantRoleBox;
+//	private JComboBox<ParticipantRole> participantRoleBox;
 	
 	private List<WizardGlobalOption> pluginGlobalOptions = new ArrayList<>();
 	
@@ -96,13 +96,13 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		++gbc.gridx;
 		gbc.weightx = 1.0;
 		
-		ParticipantRole selectedRole = 
-				ParticipantRole.fromString(PrefHelper.get(PARTICIPANT_ROLE_PROP, "null"));
-		participantRoleBox = new JComboBox<>(ParticipantRole.values());
-		((DefaultComboBoxModel<ParticipantRole>)participantRoleBox.getModel()).insertElementAt(null, 0);
-		participantRoleBox.setSelectedItem(selectedRole);
-		participantRoleBox.setRenderer(new ParticipantCellRenderer());
-		add(participantRoleBox, gbc);
+//		ParticipantRole selectedRole = 
+//				ParticipantRole.fromString(PrefHelper.get(PARTICIPANT_ROLE_PROP, "null"));
+//		participantRoleBox = new JComboBox<>(ParticipantRole.values());
+//		((DefaultComboBoxModel<ParticipantRole>)participantRoleBox.getModel()).insertElementAt(null, 0);
+//		participantRoleBox.setSelectedItem(selectedRole);
+//		participantRoleBox.setRenderer(new ParticipantCellRenderer());
+//		add(participantRoleBox, gbc);
 		
 		// add global options
 		final List<IPluginExtensionPoint<WizardGlobalOption>> pluginOptions =
@@ -119,9 +119,9 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		}
 	}
 	
-	public ParticipantRole getSelectedParticipantRole() {
-		return (ParticipantRole)this.participantRoleBox.getSelectedItem();
-	}
+//	public ParticipantRole getSelectedParticipantRole() {
+//		return (ParticipantRole)this.participantRoleBox.getSelectedItem();
+//	}
 	
 	public boolean isCaseSensitive() {
 		return this.caseSensitiveBox.isSelected();
@@ -133,10 +133,6 @@ public class WizardGlobalOptionsPanel extends JPanel {
 	
 	public List<WizardGlobalOption> getPluginGlobalOptions() {
 		return this.pluginGlobalOptions;
-	}
-	
-	private class ParticipantCellRenderer extends DefaultListCellRenderer {
-		
 	}
 
 }

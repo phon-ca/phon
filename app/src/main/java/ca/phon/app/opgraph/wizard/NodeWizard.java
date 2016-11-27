@@ -107,7 +107,7 @@ public class NodeWizard extends WizardFrame {
 	private WizardGlobalOptionsPanel optionsPanel;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
-	public final static String PARTICIPANT_ROLE_GLOBAL_OPTION = "__participantRole";
+//	public final static String PARTICIPANT_ROLE_GLOBAL_OPTION = "__participantRole";
 	
 	private JPanel centerPanel;
 	private CardLayout cardLayout;
@@ -444,7 +444,7 @@ public class NodeWizard extends WizardFrame {
 	protected void setupGlobalOptions(OpContext ctx) {
 		ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, optionsPanel.isCaseSensitive());
 		ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, optionsPanel.isIgnoreDiacritics());
-		ctx.put(PARTICIPANT_ROLE_GLOBAL_OPTION, optionsPanel.getSelectedParticipantRole());
+//		ctx.put(PARTICIPANT_ROLE_GLOBAL_OPTION, optionsPanel.getSelectedParticipantRole());
 		
 		for(WizardGlobalOption pluginGlobalOption:optionsPanel.getPluginGlobalOptions()) {
 			ctx.put(pluginGlobalOption.getName(), pluginGlobalOption.getValue());
