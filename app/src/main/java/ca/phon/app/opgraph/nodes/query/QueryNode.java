@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -64,19 +65,25 @@ public class QueryNode extends OpNode implements NodeSettings {
 	
 	private InputField projectInputField = new InputField("project", "Project", false, true, Project.class);
 	
-	private InputField inputField = new InputField("sessions", "List of sessions or query results", false,
+	private InputField sessionsInputField = new InputField("sessions", "List of sessions or query results", false,
 			true, new RecordContainerTypeValidator());
+	
+	private InputField paramsInputField = new InputField("parameters", "Map of query parameters, these will override query settings.",
+			true, true, Map.class);
 	
 	private OutputField projectOutputField = new OutputField("project", "Project", true, Project.class);
 	
 	private OutputField queryField = new OutputField("query",
 			"Query parameters", true, Query.class);
 
-	private OutputField outputField = new OutputField("results", 
+	private OutputField resultsField = new OutputField("results", 
 			"Result set, one per input session", true, ResultSet[].class);
 	
 	private OutputField scriptOutput = new OutputField("buffer",
 			"Text output from query", true, String.class);
+	
+	private OutputField paramsOutputField = new OutputField("parameters",
+			"Parameters used for query, including those entered using the settings dialog", true, Map.class);
 	
 	public QueryNode() {
 		this(new QueryScript(""));
@@ -88,10 +95,12 @@ public class QueryNode extends OpNode implements NodeSettings {
 		this.queryScript = queryScript;
 		
 		super.putField(projectInputField);
-		super.putField(inputField);
+		super.putField(sessionsInputField);
+		super.putField(paramsInputField);
 		super.putField(projectOutputField);
 		super.putField(queryField);
-		super.putField(outputField);
+		super.putField(paramsOutputField);
+		super.putField(resultsField);
 		super.putField(scriptOutput);
 		
 		putExtension(NodeSettings.class, this);
@@ -102,13 +111,8 @@ public class QueryNode extends OpNode implements NodeSettings {
 		final Project project = (Project)opCtx.get(projectInputField);
 		if(project == null) throw new ProcessingException(null, "No project available");
 		
-		final Object inputObj = opCtx.get(inputField);
+		final Object inputObj = opCtx.get(sessionsInputField);
 		if(inputObj == null) throw new ProcessingException(null, "No session information given");
-		
-		// ensure query form validates (if available)
-		if(scriptPanel != null && !scriptPanel.checkParams()) {
-			throw new ProcessingException(null, "Invalid query settings");
-		}
 		
 		final QueryManager qm = QueryManager.getInstance();
 		final QueryFactory queryFactory = qm.createQueryFactory();
@@ -138,8 +142,14 @@ public class QueryNode extends OpNode implements NodeSettings {
 		qScript.setMimeType("text/javascript");
 		query.setDate(LocalDateTime.now());
 
+		final Map<?, ?> inputParams = (Map<?,?>)opCtx.get(paramsInputField);
+		final Map<String, Object> allParams = new LinkedHashMap<>();
 		for(ScriptParam sp:scriptParams) {
 			for(String paramId:sp.getParamIds()) {
+				if(inputParams != null && inputParams.containsKey(paramId)) {
+					sp.setValue(paramId, inputParams.get(paramId));
+				}
+				
 				if(paramId.endsWith("ignoreDiacritics")
 						&& opCtx.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
 					sp.setValue(paramId, opCtx.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
@@ -150,11 +160,13 @@ public class QueryNode extends OpNode implements NodeSettings {
 					sp.setValue(paramId, opCtx.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));
 				}
 				
-				if(paramId.endsWith("participantRole")
-						&& opCtx.containsKey(NodeWizard.PARTICIPANT_ROLE_GLOBAL_OPTION)) {
-					sp.setValue(paramId, opCtx.get(NodeWizard.PARTICIPANT_ROLE_GLOBAL_OPTION));
-				}
+				allParams.put(paramId, sp.getValue(paramId));
 			}
+		}
+		
+		// ensure query form validates (if available)
+		if(scriptPanel != null && !scriptPanel.checkParams()) {
+			throw new ProcessingException(null, "Invalid query settings");
 		}
 				
 		final List<RecordContainer> recordContainers =
@@ -181,9 +193,10 @@ public class QueryNode extends OpNode implements NodeSettings {
 		
 		// setup outputs
 		opCtx.put(projectOutputField, project);
-		opCtx.put(outputField, results);
+		opCtx.put(resultsField, results);
 		opCtx.put(scriptOutput, new String(bOut.toByteArray()));
 		opCtx.put(queryField, query);
+		opCtx.put(paramsOutputField, allParams);
 	}
 	
 	public QueryScript getQueryScript() {

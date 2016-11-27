@@ -28,7 +28,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +51,7 @@ import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.gedge.opgraph.nodes.general.script.InputFields;
 import ca.gedge.opgraph.nodes.general.script.OutputFields;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.plugin.PluginManager;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
@@ -72,6 +75,12 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	
 	private final static String SCRIPT_TEMPLATE =
 			"function tableOp(context, table) {\n}\n";
+	
+	private InputField paramsInputField = new InputField("parameters", "Map of query parameters, these will override query settings.",
+			true, true, Map.class);
+	
+	private OutputField paramsOutputField = new OutputField("parameters",
+			"Parameters used for query, including those entered using the settings dialog", true, Map.class);
 
 	// script
 	private PhonScript script;
@@ -93,6 +102,9 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		super();
 		this.script = script;
 		addQueryLibrary();
+		
+		putField(paramsInputField);
+		putField(paramsOutputField);
 	}
 	
 	public PhonScript getScript() {
@@ -232,18 +244,53 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		final DefaultTableDataSource table = (DefaultTableDataSource)context.get(tableInput);
 		
 		final PhonScript phonScript = getScript();
-		final PhonScriptContext scriptContext = phonScript.getContext();
+		final PhonScriptContext ctx = phonScript.getContext();
+		
+		ScriptParameters scriptParams = new ScriptParameters();
+		try {
+			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
+		} catch (PhonScriptException e) {
+			throw new ProcessingException(null, e);
+		}
+		
+		final Map<?, ?> inputParams = (Map<?,?>)context.get(paramsInputField);
+		final Map<String, Object> allParams = new LinkedHashMap<>();
+		for(ScriptParam sp:scriptParams) {
+			for(String paramId:sp.getParamIds()) {
+				if(inputParams != null && inputParams.containsKey(paramId)) {
+					sp.setValue(paramId, inputParams.get(paramId));
+				}
+				
+				if(paramId.endsWith("ignoreDiacritics")
+						&& context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+					sp.setValue(paramId, context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
+				}
+				
+				if(paramId.endsWith("caseSensitive")
+						&& context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+					sp.setValue(paramId, context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));
+				}
+				
+				allParams.put(paramId, sp.getValue(paramId));
+			}
+		}
+		
+		// ensure query form validates (if available)
+		if(scriptPanel != null && !scriptPanel.checkParams()) {
+			throw new ProcessingException(null, "Invalid settings");
+		}
 		
 		try {
-			final Scriptable scope = scriptContext.getEvaluatedScope();
-			scriptContext.installParams(scope);
+			final Scriptable scope = ctx.getEvaluatedScope();
+			ctx.installParams(scope);
 			
-			scriptContext.callFunction(scope, "tableOp", context, table);
+			ctx.callFunction(scope, "tableOp", context, table);
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		
 		context.put(tableOutput, table);
+		context.put(paramsOutputField, allParams);
 	}
 	
 }
