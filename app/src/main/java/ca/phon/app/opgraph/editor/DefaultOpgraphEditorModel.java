@@ -19,20 +19,36 @@
 package ca.phon.app.opgraph.editor;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.FilenameUtils;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.components.canvas.NodeStyle;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
+import ca.phon.app.opgraph.nodes.table.TableScriptNode;
+import ca.phon.app.opgraph.nodes.table.TableScriptNodeData;
+import ca.phon.app.opgraph.nodes.table.TableScriptNodeInstantiator;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.script.BasicScript;
+import ca.phon.script.PhonScript;
+import ca.phon.util.FileUtil;
+import ca.phon.util.resources.ResourceHandler;
+import ca.phon.util.resources.ResourceLoader;
 
 @OpgraphEditorModelInfo(name="General", description="Empty graph with default context")
 public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
@@ -47,6 +63,7 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 		super(opgraph);
 		
 		addQueryNodes();
+		addTableScriptNodes();
 		
 		setupNodeStyles();
 	}
@@ -58,8 +75,30 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 
 	private void addQueryNodes() {
 		final QueryScriptLibrary library = new QueryScriptLibrary();
-		library.stockScriptFiles().forEach(this::addToLibrary);
-		library.userScriptFiles().forEach(this::addToLibrary);
+		library.stockScriptFiles().forEach(this::addQueryScriptToLibrary);
+		library.userScriptFiles().forEach(this::addQueryScriptToLibrary);
+	}
+	
+	private void addTableScriptNodes() {
+		final ResourceLoader<URL> tableScripts = TableScriptNode.getTableScriptResourceLoader();
+		final Iterator<URL> itr = tableScripts.iterator();
+		while(itr.hasNext()) {
+			final URL tableScriptURL = itr.next();
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(tableScriptURL.openStream(), "UTF-8"))) {
+				StringBuffer buffer = new StringBuffer();
+				String line = null;
+				while((line = reader.readLine()) != null) {
+					buffer.append(line).append("\n");
+				}
+				final PhonScript script = new BasicScript(buffer.toString());
+				
+				final String name = FilenameUtils.getBaseName(
+						URLDecoder.decode(tableScriptURL.getFile(), "UTF-8"));
+				addTableScriptToLibrary(name, script);
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			}
+		}
 	}
 	
 	private void setupNodeStyles() {
@@ -72,7 +111,20 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 		NodeStyle.installStyleForNode(QueryNode.class, queryStyle);
 	}
 	
-	private void addToLibrary(QueryScript script) {
+	private void addTableScriptToLibrary(String name, PhonScript tableScript) {
+		try {
+			final URI tableNodeClassURI = new URI("class", TableScriptNode.class.getName(), name);
+			final TableScriptNodeInstantiator instantiator = new TableScriptNodeInstantiator();
+			
+			final TableScriptNodeData nodeData = new TableScriptNodeData(tableScript, tableNodeClassURI, name, 
+					"", "Table Scripts", instantiator);
+			getNodeLibrary().getLibrary().put(nodeData);
+		} catch (URISyntaxException e) {
+			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	private void addQueryScriptToLibrary(QueryScript script) {
 		final QueryName qn = script.getExtension(QueryName.class);
 		final String name = (qn != null ? qn.getName() : "<unknown>");
 		try {
