@@ -293,6 +293,7 @@ public class ScriptPanel extends JPanel {
 	 */
 	public void showForm() {
 		if(oldScript != null && !oldScript.equals(getScript().getScript())) {
+			updateParamPanel();
 			firePropertyChange(SCRIPT_PROP, oldScript, getScript().getScript());
 		}
 		cardLayout.show(cardPanel, paramPanelId);
