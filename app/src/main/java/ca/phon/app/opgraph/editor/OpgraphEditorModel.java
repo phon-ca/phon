@@ -65,7 +65,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			viewMap.put("Debug", new JScrollPane(getDebugInfoPanel()));
 			viewMap.put("Defaults", new JScrollPane(getNodeDefaults()));
 			viewMap.put("Library", getLibraryView());
-			viewMap.put("Settings", new JScrollPane(getNodeSettings()));
+			viewMap.put("Settings", getNodeSettings());
 		}
 		return this.viewMap;
 	}
