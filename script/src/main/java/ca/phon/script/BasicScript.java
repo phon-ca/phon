@@ -145,10 +145,12 @@ public class BasicScript implements PhonScript, Cloneable {
 		return Collections.unmodifiableList(pkgImports);
 	}
 
+	@Override
 	public boolean addPackageImport(String pkgImport) {
 		return pkgImports.add(pkgImport);
 	}
 
+	@Override
 	public boolean removePackageImport(String pkgImport) {
 		return pkgImports.remove(pkgImport);
 	}
@@ -158,10 +160,12 @@ public class BasicScript implements PhonScript, Cloneable {
 		return Collections.unmodifiableList(classImports);
 	}
 	
+	@Override
 	public boolean addClassImport(String classImport) {
 		return classImports.add(classImport);
 	}
 	
+	@Override
 	public boolean removeClassImport(String classImport) {
 		return classImports.remove(classImport);
 	}

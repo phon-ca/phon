@@ -216,6 +216,13 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	 * 
 	 */
 	private void addQueryLibrary() {
+		script.addPackageImport("Packages.ca.phon.session");
+		script.addPackageImport("Packages.ca.phon.project");
+		script.addPackageImport("Packages.ca.phon.ipa");
+		script.addPackageImport("Packages.ca.phon.query");
+		script.addPackageImport("Packages.ca.phon.query.report");
+		script.addPackageImport("Packages.ca.phon.query.report.datasource");
+		
 		final ClassLoader cl = PluginManager.getInstance();
 		Enumeration<URL> libUrls;
 		try {

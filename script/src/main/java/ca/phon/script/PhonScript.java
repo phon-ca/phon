@@ -62,6 +62,10 @@ public interface PhonScript extends IExtendable, Appendable, CharSequence {
 	 */
 	public List<String> getPackageImports();
 	
+	public boolean addPackageImport(String pkgImport);
+
+	public boolean removePackageImport(String pkgImport);
+	
 	/**
 	 * Get a list of classes that should be imported when
 	 * the scope is created.  These classes will also
@@ -72,6 +76,10 @@ public interface PhonScript extends IExtendable, Appendable, CharSequence {
 	 *  to this script and any dependencies
 	 */
 	public List<String> getClassImports();
+	
+	public boolean addClassImport(String classImport);
+	
+	public boolean removeClassImport(String classImport);
 	
 	/**
 	 * Get the list of URLs that should be available

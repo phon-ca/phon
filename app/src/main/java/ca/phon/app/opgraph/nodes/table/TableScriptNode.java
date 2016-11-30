@@ -61,6 +61,8 @@ import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.util.resources.ClassLoaderHandler;
+import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Base class for script operations on tables.  This node looks for
@@ -73,6 +75,8 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	
 	private final static Logger LOGGER = Logger.getLogger(TableScriptNode.class.getName());
 	
+	private final static String TABLE_SCRIPT_RESOURCE_FILE = "ca/phon/app/opgraph/nodes/table/table_scripts";
+	
 	private final static String SCRIPT_TEMPLATE =
 			"function tableOp(context, table) {\n}\n";
 	
@@ -81,6 +85,24 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	
 	private OutputField paramsOutputField = new OutputField("parameters",
 			"Parameters used for query, including those entered using the settings dialog", true, Map.class);
+	
+	public static ResourceLoader<URL> getTableScriptResourceLoader() {
+		final ResourceLoader<URL> retVal = new ResourceLoader<>();
+		
+		// add classpath handler
+		final ClassLoaderHandler<URL> handler = new ClassLoaderHandler<URL>() {
+			
+			@Override
+			public URL loadFromURL(URL url) throws IOException {
+				return url;
+			}
+			
+		};
+		handler.loadResourceFile(TABLE_SCRIPT_RESOURCE_FILE);
+		retVal.addHandler(handler);
+		
+		return retVal;
+	}
 
 	// script
 	private PhonScript script;
@@ -95,7 +117,6 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 
 	public TableScriptNode(String script) {
 		this(new BasicScript(script));
-		putExtension(NodeSettings.class, this);
 	}
 	
 	public TableScriptNode(PhonScript script) {
@@ -105,6 +126,9 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		
 		putField(paramsInputField);
 		putField(paramsOutputField);
+		reloadFields();
+		
+		putExtension(NodeSettings.class, this);
 	}
 	
 	public PhonScript getScript() {
@@ -120,6 +144,13 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	 * 
 	 */
 	private void addQueryLibrary() {
+		script.addPackageImport("Packages.ca.phon.session");
+		script.addPackageImport("Packages.ca.phon.project");
+		script.addPackageImport("Packages.ca.phon.ipa");
+		script.addPackageImport("Packages.ca.phon.query");
+		script.addPackageImport("Packages.ca.phon.query.report");
+		script.addPackageImport("Packages.ca.phon.query.report.datasource");
+		
 		final ClassLoader cl = PluginManager.getInstance();
 		Enumeration<URL> libUrls;
 		try {
