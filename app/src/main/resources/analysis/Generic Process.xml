@@ -31,44 +31,161 @@
         <node id="7c282337" name="Process Settings" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="filters.column.exactMatch"><![CDATA[true]]></oga:property>
-                    <oga:property key="filters.column.filterType"><![CDATA[Phonex]]></oga:property>
-                    <oga:property key="__script"><![CDATA[var PatternFilter = require("lib/PatternFilter").PatternFilter;
+                    <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+var PatternType = require("lib/PatternFilter").PatternType;
+var Pcc = require("lib/Pcc").Pcc;
+var PccOptions = require("lib/Pcc").PccOptions;
+var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
+var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
+var ResultType = require("lib/PhonScriptConstants").ResultType;
+	
+/********************************
+ * Setup params
+ *******************************/
 
 var filters = {
-    "column": new PatternFilter("filters.column")
-}
+    "primary": new PatternFilter("filters.primary"),
+    "column": new PatternFilter("filters.column"),
+    "targetResultFilter": new PatternFilter("filters.targetResultFilter"),
+    "actualResultFilter": new PatternFilter("filters.actualResultFilter"),
+    "group": new GroupFilter("filters.group"),
+    "groupPattern": new PatternFilter("filters.groupPattern"),
+    "alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+    "word": new WordFilter("filters.word"),
+    "wordPattern": new PatternFilter("filters.wordPattern"),
+    "alignedWord": new AlignedWordFilter("filters.alignedWord"),
+    "syllable": new SyllableFilter("filters.syllable"),
+    "speaker": new ParticipantFilter("filters.speaker")
+};
+
+var metadataOptions = {
+    "pcc_aligned": new PccOptions("metadataOptions.pcc_aligned", true),
+    "pcc_standard": new PccOptions("metadataOptions.pcc_standard", false),
+    "stressPattern": new StressPatternOptions("metadataOptions.stressPattern"),
+    "cvPattern": new CvPatternOptions("metadataOptions.cvPattern")
+};
+
+var includeAlignedParamInfo = {
+    "id": "includeAligned",
+    "title": "",
+    "desc": "Include aligned phones",
+    "def": true
+};
+var includeAlignedParam;
+var includeAligned = includeAlignedParamInfo.def;
 
 var processNameParamInfo = {
 	"id": "processName",
 	"title": "Process Name",
 	"def": "Generic",
 	"prompt": "Enter process name"
-}
+};
+var processNameParam;
 
 function setup_params(params) {
+
 	processNameParam = new StringScriptParam(
 			processNameParamInfo.id,
 			processNameParamInfo.title,
 			processNameParamInfo.def);
      processNameParam.setPrompt(processNameParamInfo.prompt);
 	params.add(processNameParam);
-	
+
+	var ipaTargetSepParam = new SeparatorScriptParam("IPA Target Options", false);
+	params.add(ipaTargetSepParam);
+	filters.primary.setSelectedPatternType(PatternType.PHONEX);
+	filters.primary.param_setup(params);
+	filters.primary.set_required(true);
+
+	var ipaActualSepParam = new SeparatorScriptParam("IPA Actual Options", false);
+	params.add(ipaActualSepParam);
+	filters.column.setSelectedPatternType(PatternType.PHONEX);
 	filters.column.param_setup(params);
+	
+	// setup result filter section
+	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
+	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
+	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
+	
+	includeAlignedParam = new BooleanScriptParam(
+	    includeAlignedParamInfo.id,
+	    includeAlignedParamInfo.desc,
+	    includeAlignedParamInfo.title,
+	    includeAlignedParamInfo.def);
+    
+	params.add(resultFilterSection);
+	params.add(includeAlignedParam);
+	params.add(targetLbl);
+	filters.targetResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.targetResultFilter.param_setup(params);
+	params.add(actualLbl);
+	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.actualResultFilter.param_setup(params);
+	
+	filters.group.param_setup(params);
+	filters.groupPattern.param_setup(params);
+	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
+	params.add(sep);
+	filters.alignedGroup.param_setup(params);
+	
+	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+    filters.wordPattern.setEnabled(false);
+	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
+    params.add(wordsep);
+    filters.alignedWord.param_setup(params);
+    var searchByWordListener = new java.beans.PropertyChangeListener {
+        propertyChange: function(e) {
+            var enabled = e.source.getValue(e.source.paramId);
+            filters.wordPattern.setEnabled(enabled);
+            filters.alignedWord.setEnabled(enabled);
+        }    
+    };
+    filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
+    var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+    filters.wordPattern.setEnabled(enabled);
+    filters.alignedWord.setEnabled(enabled);
+    
+	filters.syllable.param_setup(params);
+	filters.speaker.param_setup(params);
+	
+	// add metadata options
+	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
+	params.add(metadataSep);
+	
+	var spLbl = new LabelScriptParam("", "<html><b>Stress Pattern</b></html>");
+	params.add(spLbl);
+	metadataOptions.stressPattern.param_setup(params);
+	
+	var cvLbl = new LabelScriptParam("", "<html><b>CGV Pattern</b></html>");
+	params.add(cvLbl);
+	metadataOptions.cvPattern.param_setup(params);
+
+    var pccStandardLbl = new LabelScriptParam("", "<html><b>PCC/PVC (standard)</b></html>");
+    params.add(pccStandardLbl);
+    metadataOptions.pcc_standard.param_setup(params);
+
+	var pccAlignedLbl = new LabelScriptParam("", "<html><b>PCC/PVC (aligned)</b></html>");
+	params.add(pccAlignedLbl);
+	metadataOptions.pcc_aligned.param_setup(params);
 }
 
 function run(context) {
 	
 }
 ]]></oga:property>
-                    <oga:property key="filters.column.caseSensitive"><![CDATA[false]]></oga:property>
-                    <oga:property key="filters.column.filter"><![CDATA[{stop}]]></oga:property>
                 </oga:settings>
                 <oga:meta x="165" y="649"/>
             </extensions>
         </node>
         <opqry:queryNode id="1b7448dbba9c47fc" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-30T13:05:15.741-03:30" name="Phones" uuid="5a63bc4c-0a28-48f5-8ca5-f59af9fcd2bf">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-11-30T13:27:12.281-03:30" name="Phones" uuid="e490a6fd-6612-4d48-b0c5-167efab8127d">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -96,7 +213,7 @@ function run(context) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="e879a7148c25481e" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="c0c6d69">
+            <graph id="6834a274">
                 <node id="8e42e1926c24dd2" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -157,7 +274,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="8e17af4dea0749f9" name="Print Aggregate Inventories for each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="7dd220b">
+            <graph id="1bd3c0e3">
                 <node id="d438fc0ce30e446a" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -192,7 +309,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="29ba4149" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6569c628">
+                    <graph id="6720d6e6">
                         <node id="482d16e" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -468,7 +585,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="3b44178eebd140df" name="Print Aggregate Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3c9bce50">
+                    <graph id="65d98805">
                         <node id="e64d3b859bf44fb5" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -542,7 +659,7 @@ function filterRow(table, row, col) {
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                     <oga:notes>
-                        <oga:note color="0xffff96" height="293" title="Macro Published Inputs" width="316" x="56" y="289"/>
+                        <oga:note color="0xffff96" height="0" title="Macro Published Inputs" width="0" x="56" y="289"/>
                     </oga:notes>
                 </extensions>
             </graph>
@@ -556,7 +673,7 @@ function filterRow(table, row, col) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="67e70cc9" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="6b694cfe">
+            <graph id="1f25f1c9">
                 <node id="3a017bbc" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -575,7 +692,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="221fabf2" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="17d9a03c">
+                    <graph id="ce6a153">
                         <node id="58da6f6306d74786" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -634,7 +751,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4c1b6b00" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3497a731">
+                    <graph id="639664dd">
                         <node id="ce75632b7ddb43bb" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -684,7 +801,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6d596da5" name="Summary Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3905020b">
+                    <graph id="6536ba65">
                         <node id="a2e2e864a5fa48a8" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -845,7 +962,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="770bb306" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="cda4c2f">
+                    <graph id="ec56998">
                         <node id="1090ec3d" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -896,7 +1013,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="84f07bf" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="70cfb9d9">
+                            <graph id="7a75b8e4">
                                 <node id="2e320544" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -936,7 +1053,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="8b5adb48b1e449e" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="b50e51a">
+                            <graph id="48c68813">
                                 <node id="54144e1b73749ff" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1209,7 +1326,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="160763c2" name="Print Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="222fbebc">
+                            <graph id="7a8f36a6">
                                 <node id="f6c873e4d35e4c95" name="Session Path" type="class:ca.gedge.opgraph.nodes.reflect.ObjectCastNode">
                                     <extensions>
                                         <oga:settings>
@@ -1322,7 +1439,7 @@ function filterRow(table, row, col) {
                                 <link dest="28d4c1c141784992" destField="obj" source="697e02307bdb4773" sourceField="value"/>
                                 <extensions>
                                     <oga:notes>
-                                        <oga:note color="0xffff96" height="643" title="Macro Published Inputs" width="342" x="58" y="191"/>
+                                        <oga:note color="0xffff96" height="0" title="Macro Published Inputs" width="0" x="58" y="191"/>
                                     </oga:notes>
                                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                 </extensions>
@@ -1401,7 +1518,7 @@ function tableOp(context, table) {
                         <link dest="429c6bd671da47bd" destField="numMatches" source="446bea52" sourceField="rowCount"/>
                         <extensions>
                             <oga:notes>
-                                <oga:note color="0xffff96" height="435" title="Macro Published Inputs" width="271" x="50" y="269"/>
+                                <oga:note color="0xffff96" height="0" title="Macro Published Inputs" width="0" x="50" y="269"/>
                             </oga:notes>
                             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                         </extensions>
@@ -1440,8 +1557,8 @@ function tableOp(context, table) {
                 <link dest="770bb306" destField="collection" source="46e5c0fefb6f41dc" sourceField="obj"/>
                 <extensions>
                     <oga:notes>
-                        <oga:note color="0xffff96" height="414" title="Macro Published Inputs" width="386" x="24" y="415"/>
-                        <oga:note color="0x96ff96" height="237" title="Find Cases of Process" width="396" x="598" y="176">Find cases of process for each participant, also update summary table for session.</oga:note>
+                        <oga:note color="0xffff96" height="0" title="Macro Published Inputs" width="0" x="24" y="415"/>
+                        <oga:note color="0x96ff96" height="0" title="Find Cases of Process" width="0" x="598" y="176">Find cases of process for each participant, also update summary table for session.</oga:note>
                     </oga:notes>
                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                 </extensions>
@@ -1469,16 +1586,12 @@ function tableOp(context, table) {
         <link dest="7a9aa1c0" destField="data" source="e879a7148c25481e" sourceField="value"/>
         <link dest="67e70cc9" destField="collection" source="3b0295b9" sourceField="obj"/>
         <link dest="8e17af4dea0749f9" destField="collection" source="b3d1e883a3aa4275" sourceField="obj"/>
+        <link dest="1b7448dbba9c47fc" destField="parameters" source="7c282337" sourceField="parameters"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Generic Process">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="1b7448dbba9c47fc" showAsStep="true">
-                    <opqry:info format="html" title="Query : Phones">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
                 <opqry:node ref="7c282337" showAsStep="true">
                     <opqry:info format="html" title="Process Settings">
                         <opqry:message/>
