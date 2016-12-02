@@ -35,6 +35,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.components.canvas.NodeStyle;
+import ca.phon.app.opgraph.nodes.PhonScriptNode;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
@@ -47,6 +48,8 @@ import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.util.FileUtil;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.util.resources.ResourceHandler;
 import ca.phon.util.resources.ResourceLoader;
 
@@ -103,12 +106,17 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 	
 	private void setupNodeStyles() {
 		final NodeStyle queryStyle = new NodeStyle(NodeStyle.DEFAULT);
-		queryStyle.NodeBackgroundColor = new Color(66, 134, 244, 180);
-		queryStyle.NodeNameTopColor = new Color(66, 134, 244);
+		queryStyle.NodeIcon = IconManager.getInstance().getIcon("actions/system-search", IconSize.SMALL);
+		queryStyle.NodeBackgroundColor = new Color(144, 195, 212, 180);
+		queryStyle.NodeNameTopColor = new Color(144, 195, 212);
 		queryStyle.NodeNameBottomColor = queryStyle.NodeNameTopColor.darker();
-		queryStyle.NodeNameTextColor = Color.white;
+		
+		final NodeStyle scriptStyle = new NodeStyle(NodeStyle.DEFAULT);
+		scriptStyle.NodeIcon = IconManager.getInstance().getIcon("mimetypes/text-x-script", IconSize.SMALL);
 		
 		NodeStyle.installStyleForNode(QueryNode.class, queryStyle);
+		NodeStyle.installStyleForNode(PhonScriptNode.class, scriptStyle);
+		NodeStyle.installStyleForNode(TableScriptNode.class, scriptStyle);
 	}
 	
 	private void addTableScriptToLibrary(String name, PhonScript tableScript) {
