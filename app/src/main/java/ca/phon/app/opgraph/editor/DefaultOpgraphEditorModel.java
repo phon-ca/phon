@@ -39,6 +39,7 @@ import ca.phon.app.opgraph.nodes.PhonScriptNode;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
+import ca.phon.app.opgraph.nodes.table.TableOpNode;
 import ca.phon.app.opgraph.nodes.table.TableScriptNode;
 import ca.phon.app.opgraph.nodes.table.TableScriptNodeData;
 import ca.phon.app.opgraph.nodes.table.TableScriptNodeInstantiator;
@@ -113,10 +114,14 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 		
 		final NodeStyle scriptStyle = new NodeStyle(NodeStyle.DEFAULT);
 		scriptStyle.NodeIcon = IconManager.getInstance().getIcon("mimetypes/text-x-script", IconSize.SMALL);
+	
+		final NodeStyle tableStyle = new NodeStyle(NodeStyle.DEFAULT);
+		tableStyle.NodeIcon = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
 		
 		NodeStyle.installStyleForNode(QueryNode.class, queryStyle);
 		NodeStyle.installStyleForNode(PhonScriptNode.class, scriptStyle);
 		NodeStyle.installStyleForNode(TableScriptNode.class, scriptStyle);
+		NodeStyle.installStyleForNode(TableOpNode.class, tableStyle);
 	}
 	
 	private void addTableScriptToLibrary(String name, PhonScript tableScript) {
