@@ -337,7 +337,12 @@ public class PhonScriptContext {
 		throws PhonScriptException {
 		if(parameters == null) {
 			final String paramComment = ScriptParameters.extractParamsComment(script.getScript());
-			parameters = ScriptParameters.parseScriptParams(paramComment);
+			
+			if(paramComment.trim().startsWith("params")) {
+				parameters = ScriptParameters.parseScriptParams(paramComment);
+			} else {
+				parameters = new ScriptParameters();
+			}
 			
 			// check for setup_params function
 			if(hasFunction(scope, "setup_params", 1)) {
