@@ -199,6 +199,7 @@ public class WizardSettingsPanel extends JPanel {
 							nodePanel.setInfo(wizardExtension.getNodeMessage(node));
 							nodePanel.setFormat(wizardExtension.getNodeMessageFormat(node));
 							nodePanel.checkBox.setText("Required (show node settings as a wizard step)");
+							nodePanel.checkBox.setSelected(wizardExtension.isNodeForced(node));
 							
 							final String id = Integer.toHexString(nodePanel.hashCode());
 							advancedSettingsMap.put(node, nodePanel);
@@ -281,6 +282,7 @@ public class WizardSettingsPanel extends JPanel {
 						nodePanel.infoArea.setVisible(false);
 						nodePanel.titleField.setVisible(false);
 						nodePanel.checkBox.setText("Default value");
+						nodePanel.checkBox.setSelected(wizardExtension.getOptionalNodeDefault(node));
 						
 						final String id = Integer.toHexString(nodePanel.hashCode());
 						optionalsMap.put(node, nodePanel);
