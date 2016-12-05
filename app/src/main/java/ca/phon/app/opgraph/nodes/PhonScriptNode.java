@@ -68,11 +68,11 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	
 	private ScriptPanel scriptPanel;
 	
-	private InputField paramsInputField = new InputField("parameters", "Map of query parameters, these will override query settings.",
+	private InputField paramsInputField = new InputField("parameters", "Map of script parameters, these will override node settings.",
 			true, true, Map.class);
 	
 	private OutputField paramsOutputField = new OutputField("parameters",
-			"Parameters used for query, including those entered using the settings dialog", true, Map.class);
+			"Parameters used for script, including those entered using the node settings dialog", true, Map.class);
 	
 	public PhonScriptNode() {
 		this("");
