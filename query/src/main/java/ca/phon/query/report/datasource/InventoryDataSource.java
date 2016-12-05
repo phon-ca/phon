@@ -34,6 +34,12 @@ import ca.phon.query.report.io.InventorySection;
 import ca.phon.util.CollatorFactory;
 import ca.phon.util.Tuple;
 
+/**
+ * Inventory data source for (now deprecated) reports.
+ * 
+ * @deprecated
+ */
+@Deprecated
 public class InventoryDataSource implements TableDataSource {
 
 	/**

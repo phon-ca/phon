@@ -35,8 +35,9 @@ import ca.phon.util.CollatorFactory;
 /**
  * Factory for creating report builders.
  *
- *
+ * @deprecated
  */
+@Deprecated
 public class ReportBuilderFactory {
 	
 	/**

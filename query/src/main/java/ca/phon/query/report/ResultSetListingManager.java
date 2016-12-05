@@ -34,7 +34,10 @@ import ca.phon.query.report.io.Section;
 /**
  * Handles storage of result listing formats
  * for result sets.
+ * 
+ * @deprecated
  */
+@Deprecated
 public class ResultSetListingManager {
 	
 	/**

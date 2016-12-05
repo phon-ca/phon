@@ -24,8 +24,9 @@ import ca.phon.query.report.io.SummarySection;
 /**
  * Displays a list of session  names along with
  * the number of results found in each session.
- *
+ * @deprecated
  */
+@Deprecated
 public class SummaryDataSource implements TableDataSource {
 
 	private ResultSet[] resultSets;

@@ -50,7 +50,9 @@ import ca.phon.session.Session;
  * result in a search in a table.  The value
  * of each column is given by a script.
  *
+ * @deprecated
  */
+@Deprecated
 public class ResultListingDataSource extends AbstractScriptTableModel implements TableDataSource {
 	
 	private static final long serialVersionUID = 6508115371509706432L;

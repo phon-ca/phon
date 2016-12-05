@@ -54,13 +54,7 @@ public class LazyQueryScript extends BasicScript {
 		super("");
 		this.scriptURL = url;
 		
-		// setup QueryName extension
-//		try {
-//			final Path path = Paths.get(url.toURI());
-//			final Path fileName = path.getFileName();
-			putExtension(QueryName.class, new QueryName(url.getFile()));
-//		} catch (URISyntaxException e) {
-//		} finally {}
+		putExtension(QueryName.class, new QueryName(url.getFile()));
 	}
 	
 	@Override

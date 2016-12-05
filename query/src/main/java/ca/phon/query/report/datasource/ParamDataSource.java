@@ -30,7 +30,10 @@ import ca.phon.util.CollatorFactory;
 
 /**
  * List query parameters.
+ * 
+ * @deprecated
  */
+@Deprecated
 public class ParamDataSource implements TableDataSource {
 	
 	/**

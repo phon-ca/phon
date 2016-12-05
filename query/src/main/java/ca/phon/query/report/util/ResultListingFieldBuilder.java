@@ -26,7 +26,12 @@ import ca.phon.query.report.io.ObjectFactory;
 import ca.phon.query.report.io.ResultListingField;
 import ca.phon.query.report.io.ScriptParameter;
 
-
+/**
+ * Scripts for adding values to (now deprecated) reports.
+ * 
+ * @deprecated
+ */
+@Deprecated
 public class ResultListingFieldBuilder {
 
 	/*

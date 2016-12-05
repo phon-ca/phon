@@ -21,7 +21,10 @@ package ca.phon.query.report;
 /**
  * Represents a single option for a report builder.
  * Each option has a type, message, name, and property.
+ * 
+ * @deprecated
  */
+@Deprecated
 public interface ReportBuilderOption {
 	
 	/**

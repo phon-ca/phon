@@ -37,7 +37,10 @@ import ca.phon.query.report.io.ReportDesign;
  * 
  * Each type of report output (CSV, excel, etc.) requires an 
  * implementation of this interface.
+ * 
+ * @deprecated
  */
+@Deprecated
 public abstract class ReportBuilder {
 	
 	/**

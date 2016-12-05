@@ -40,7 +40,9 @@ import ca.phon.query.report.io.ReportDesign;
 /**
  * Methods for reading/writing report designs.
  *
+ * @deprecated
  */
+@Deprecated
 public class ReportIO {
 	
 	// internal control for report versions.
