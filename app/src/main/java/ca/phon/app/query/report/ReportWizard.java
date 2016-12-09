@@ -298,8 +298,7 @@ public class ReportWizard extends WizardFrame {
 						btnBack.setEnabled(false);
 						btnCancel.setText("Cancel");
 						if(!console.isShowingBuffer()) {
-							console.getLogBuffer().setText("");
-							console.onSwapBuffer();
+							console.clear();
 						}
 					}
 				};
@@ -315,7 +314,7 @@ public class ReportWizard extends WizardFrame {
 					public void run() {
 						btnBack.setEnabled(true);
 						btnCancel.setText("Close");
-						console.onSwapBuffer();
+						console.showTable();
 						try {
 							out.flush();
 							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);

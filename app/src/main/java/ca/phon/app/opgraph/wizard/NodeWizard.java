@@ -65,13 +65,14 @@ import ca.gedge.opgraph.ProcessorListener;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
-import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
@@ -84,8 +85,39 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 
+/**
+ * The Node wizard servers as the UI layer for opgraph
+ * analysis and reports.  It provides the following steps
+ * by default:
+ * <ul>
+ * <li>Introduction (if supplied in the {@link WizardExtension})</li>
+ * <li>Optional Nodes (if any are defined in the {@link WizardExtension})</li>
+ * <li>Settings for Nodes (if any are defined as 'required' in the {@link WizardExtension})</li>
+ * <li>Report data generation</li>
+ * <li>Report</li>
+ * </ul>
+ * 
+ * The wizard also provides a panel for buffer storage - used during opgraph execution
+ * for report data.  Finally, any reports defined in the {@link WizardExtension} are displayed
+ * during the last step of the wizard.  Reports utilize data generated during the
+ * report data step.  Reports are written using Apache velocity syntax.  Table data may be
+ * accessed from the <code>$tables</code> map variable, buffer text data may be
+ * accessed from the <code>$buffers</code> map varaible.  The map keys are the names
+ * of the buffers generated during the report data step.
+ * 
+ * Other variables available to the velocity context are:
+ * <ul>
+ * <li><code>$Class</code> - static access to java.lang.Class</li>
+ * <li><code>$FormatterUtil</code> - access to Phon object formatters</li>
+ * <li><code>$project</code> - the project</li>
+ * <li><code>$graph</code> - the opgraph used</li>
+ * </ul>
+ * 
+ */
 public class NodeWizard extends WizardFrame {
 	
+	private static final long serialVersionUID = -652423592288338133L;
+
 	private final static Logger LOGGER = Logger.getLogger(NodeWizard.class.getName());
 	
 	private final Processor processor;
@@ -98,7 +130,7 @@ public class NodeWizard extends WizardFrame {
 	
 	private JLabel statusLabel;
 	
-	protected WizardStep reportStep;
+	protected WizardStep reportDataStep;
 	
 	protected WizardStep optionalsStep;
 	
@@ -107,7 +139,6 @@ public class NodeWizard extends WizardFrame {
 	private WizardGlobalOptionsPanel optionsPanel;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
-//	public final static String PARTICIPANT_ROLE_GLOBAL_OPTION = "__participantRole";
 	
 	private JPanel centerPanel;
 	private CardLayout cardLayout;
@@ -228,10 +259,10 @@ public class NodeWizard extends WizardFrame {
 			}
 		}
 		
-		reportStep = createReportStep();
-		reportStep.setPrevStep(stepIdx-1);
-		reportStep.setNextStep(-1);
-		addWizardStep(reportStep);
+		reportDataStep = createReportStep();
+		reportDataStep.setPrevStep(stepIdx-1);
+		reportDataStep.setNextStep(-1);
+		addWizardStep(reportDataStep);
 		
 		final WizardStepList stepList = new WizardStepList(this);
 		stepList.setMinimumSize(new Dimension(250, 20));
@@ -368,6 +399,24 @@ public class NodeWizard extends WizardFrame {
 		processor.addProcessorListener(processorListener);
 		try {
 			processor.stepAll();
+			
+			final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
+			for(String reportName:ext.getReportTemplateNames()) {
+				// create buffer
+				final BufferPanel reportBufferPanel = bufferPanel.createBuffer(reportName);
+				final LogBuffer reportBuffer = reportBufferPanel.getLogBuffer();
+				
+				final NodeWizardReportGenerator reportGenerator = 
+						new NodeWizardReportGenerator(this, reportName, reportBuffer.getStdOutStream());
+				try {
+					reportGenerator.generateReport();
+					
+					SwingUtilities.invokeLater(reportBufferPanel::showHtml);
+				} catch (NodeWizardReportException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					e.printStackTrace(new PrintWriter(reportBuffer.getStdErrStream()));
+				}
+			}
 		} catch (ProcessingException pe) {
 			SwingUtilities.invokeLater( () -> {
 				busyLabel.setBusy(false);
@@ -444,7 +493,6 @@ public class NodeWizard extends WizardFrame {
 	protected void setupGlobalOptions(OpContext ctx) {
 		ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, optionsPanel.isCaseSensitive());
 		ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, optionsPanel.isIgnoreDiacritics());
-//		ctx.put(PARTICIPANT_ROLE_GLOBAL_OPTION, optionsPanel.getSelectedParticipantRole());
 		
 		for(WizardGlobalOption pluginGlobalOption:optionsPanel.getPluginGlobalOptions()) {
 			ctx.put(pluginGlobalOption.getName(), pluginGlobalOption.getValue());
@@ -460,6 +508,8 @@ public class NodeWizard extends WizardFrame {
 				final WizardStep step = new WizardStep();
 				final BorderLayout layout = new BorderLayout();
 				step.setLayout(layout);
+				
+				
 				
 				final TitledPanel panel = new TitledPanel(ext.getNodeTitle(node), new JScrollPane(comp));
 				
@@ -477,16 +527,40 @@ public class NodeWizard extends WizardFrame {
 		return null;
 	}
 	
-	protected WizardStep createReportStep() {
+	protected WizardStep createIntroStep(String title, String message) {
 		final WizardStep retVal = new WizardStep();
-		retVal.setTitle("Generate report");
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final TitledPanel panel = new TitledPanel("Generate report", getBufferPanel());
-		retVal.add(panel, BorderLayout.CENTER);
+		final JEditorPane editorPane = createHTMLPane();
+		editorPane.setText(message);
+		
+		editorPane.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
+		
+		final TitledPanel stepTitle = 
+				new TitledPanel(title, new JScrollPane(editorPane));
+		retVal.add(stepTitle, BorderLayout.CENTER);
 		
 		return retVal;
+	}
+
+	private JEditorPane createHTMLPane() {
+		final HTMLEditorKit editorKit = new HTMLEditorKit();
+		final StyleSheet styleSheet = editorKit.getStyleSheet();
+		final URL cssURL = getClass().getClassLoader().getResource("ca/phon/app/opgraph/wizard/wizard.css");
+		if(cssURL != null) {
+			try {
+				styleSheet.loadRules(
+						new InputStreamReader(cssURL.openStream(), "UTF-8"), cssURL);
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+	
+		final JEditorPane editorPane = new JEditorPane("text/html", "");
+		editorPane.setEditorKit(editorKit);
+		editorPane.setEditable(false);
+		return editorPane;
 	}
 	
 	protected WizardStep createOptionalsStep() {
@@ -508,35 +582,23 @@ public class NodeWizard extends WizardFrame {
 		
 		return retVal;
 	}
-	
-	protected WizardStep createIntroStep(String title, String message) {
+
+	protected WizardStep createReportStep() {
 		final WizardStep retVal = new WizardStep();
+		retVal.setTitle("Generate report data");
 		
 		retVal.setLayout(new BorderLayout());
 		
+		final TitledPanel panel = new TitledPanel("Generate report data", getBufferPanel());
 		
-		final HTMLEditorKit editorKit = new HTMLEditorKit();
-		final StyleSheet styleSheet = editorKit.getStyleSheet();
-		final URL cssURL = getClass().getClassLoader().getResource("ca/phon/app/opgraph/wizard/wizard.css");
-		if(cssURL != null) {
-			try {
-				styleSheet.loadRules(
-						new InputStreamReader(cssURL.openStream(), "UTF-8"), cssURL);
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
-		}
-
-		final JEditorPane editorPane = new JEditorPane("text/html", message);
-		editorPane.setEditorKit(editorKit);
-		editorPane.setEditable(false);
-		editorPane.setText(message);
+		final HidablePanel msgPanel = new HidablePanel(NodeWizard.class.getName() + ".reportDataMessage");
+		msgPanel.setTopLabelText("Generate report data");
+		msgPanel.setBottomLabelText("<html><p>This process may take some time, when complete you may save "
+				+ "the displayed tables or proceed to the 'Generate Report' step which will provide "
+				+ "printable reports.</p></html>");
 		
-		editorPane.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
-		
-		final TitledPanel stepTitle = 
-				new TitledPanel(title, new JScrollPane(editorPane));
-		retVal.add(stepTitle, BorderLayout.CENTER);
+		retVal.add(msgPanel, BorderLayout.NORTH);
+		retVal.add(panel, BorderLayout.CENTER);
 		
 		return retVal;
 	}
@@ -548,7 +610,7 @@ public class NodeWizard extends WizardFrame {
 		if(cardLayout != null)
 			cardLayout.show(centerPanel, WIZARD_LIST);
 		
-		if(!inInit && getCurrentStep() == reportStep) {
+		if(!inInit && getCurrentStep() == reportDataStep) {
 
 			final Runnable inBg = () -> {
 				try {

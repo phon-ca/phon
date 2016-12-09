@@ -178,7 +178,7 @@ public class AnalysisWizard extends NodeWizard {
 			participantSelector.loadParticipants(getProject(), sessionSelector.getSelectedSessions());
 			participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
 		}
-		if(getWizardStep(stepIdx) == reportStep) {
+		if(getWizardStep(stepIdx) == reportDataStep) {
 			if(sessionSelector != null)
 				getProcessor().getContext().put("_selectedSessions", sessionSelector.getSelectedSessions());
 			if(participantSelector != null) {

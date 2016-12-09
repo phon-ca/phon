@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -24,14 +25,19 @@ public class NodeWizardReportGenerator {
 	
 	private final String reportName;
 	
-	private String outputPath;
+	private OutputStream stream;
 	
-	public NodeWizardReportGenerator(NodeWizard wizard, String reportName, String outputPath) {
+	public NodeWizardReportGenerator(NodeWizard wizard, String reportName, String outputPath) 
+		throws IOException {
+		this(wizard, reportName, new FileOutputStream(outputPath));
+	}
+	
+	public NodeWizardReportGenerator(NodeWizard wizard, String reportName, OutputStream stream) {
 		super();
 		
 		this.wizard = wizard;
 		this.reportName = reportName;
-		this.outputPath = outputPath;
+		this.stream = stream;
 	}
 	
 	public void generateReport()
@@ -55,20 +61,7 @@ public class NodeWizardReportGenerator {
 		sb.append(reportAsHTML);
 		sb.append(htmlSuffix());
 		
-		File outputFile = null;
-		if(this.outputPath == null) {
-			try {
-				outputFile = 
-						(this.outputPath == null ? File.createTempFile("phon", "report") : new File(outputPath));
-				outputFile.deleteOnExit();
-			} catch (IOException e) {
-				throw new NodeWizardReportException(e);
-			}
-		} else {
-			outputFile = new File(outputPath);
-		}
-		
-		try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"))) {
+		try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(stream, "UTF-8"))) {
 			out.write(sb.toString());
 			out.flush();
 		} catch (IOException e) {

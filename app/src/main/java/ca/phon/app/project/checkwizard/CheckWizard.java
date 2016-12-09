@@ -369,8 +369,7 @@ public class CheckWizard extends WizardFrame {
 			worker.setName("Check transcriptions");
 			
 			if(!bufferPanel.isShowingBuffer()) {
-				bufferPanel.onSwapBuffer();
-				bufferPanel.getLogBuffer().setText("");
+				bufferPanel.clear();
 			}
 			try {
 				final OutputStreamWriter out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");

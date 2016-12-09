@@ -29,7 +29,7 @@ public class WizardSettingsAction extends HookableAction {
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final OpGraph graph = editor.getModel().getDocument().getGraph();
+		final OpGraph graph = editor.getModel().getDocument().getRootGraph();
 		final WizardExtension ext = graph.getExtension(WizardExtension.class);
 		if(ext == null) return;
 		

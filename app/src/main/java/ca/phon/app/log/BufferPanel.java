@@ -19,7 +19,9 @@
 package ca.phon.app.log;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -44,6 +46,7 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -86,11 +89,19 @@ import ca.phon.util.icons.IconSize;
 
 public class BufferPanel extends JPanel implements IExtendable {
 	
+	private final static String TABLE_VIEW_ID = "table";
+	
 	public final static String SHOW_TABLE_CODE = "SHOW_TABLE";
 	
 	public final static String PACK_TABLE_COLUMNS = "PACK_COLUMNS";
 	
+	private final static String BUFFER_VIEW_ID = "buffer";
+	
 	public final static String SHOW_BUFFER_CODE = "SHOW_BUFFER";
+	
+	private final static String HTML_VIEW_ID = "html";
+	
+	public final static String SHOW_HTML_CODE = "SHOW_HTML";
 	
 	public final static String SHOW_BUSY = "SHOW_BUSY";
 	
@@ -102,14 +113,17 @@ public class BufferPanel extends JPanel implements IExtendable {
 	private static final long serialVersionUID = -153000974506461908L;
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(BufferPanel.class, this);
+	
+	private final String name;
 
-	private JScrollPane logScroller;
+	private JPanel contentPanel;
+	private CardLayout cardLayout;
+	
 	private LogBuffer logBuffer;
 	
-	private JScrollPane tableScroller;
 	private JXTable dataTable;
 	
-	private boolean showingBuffer = true;
+	private JEditorPane htmlPane;
 	
 	private JButton saveButton;
 	
@@ -128,26 +142,29 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 	
+	private JComponent currentView;
+	
 	public BufferPanel(String name) {
 		super();
 		
-		logBuffer = new LogBuffer(name);
-		logBuffer.addEscapeCodeHandler(new LogEscapeCodeHandler() {
+		this.name = name;
+		
+		init();
+		extSupport.initExtensions();
+	}
+	
+	private LogBuffer createLogBuffer() {
+		LogBuffer retVal = new LogBuffer(getName());
+		retVal.addEscapeCodeHandler(new LogEscapeCodeHandler() {
 			
 			@Override
 			public void handleEscapeCode(String code) {
-				final Runnable swapBuffer = new Runnable() {
-					
-					@Override
-					public void run() {
-						onSwapBuffer();
-					}
-					
-				};
-				if(SHOW_TABLE_CODE.equals(code) && isShowingBuffer()) {
-					SwingUtilities.invokeLater(swapBuffer);
-				} else if(SHOW_BUFFER_CODE.equals(code) && !isShowingBuffer()) {
-					SwingUtilities.invokeLater(swapBuffer);
+				if(SHOW_TABLE_CODE.equals(code)) {
+					SwingUtilities.invokeLater(BufferPanel.this::showTable);
+				} else if(SHOW_BUFFER_CODE.equals(code)) {
+					SwingUtilities.invokeLater(BufferPanel.this::showBuffer);
+				} else if(SHOW_HTML_CODE.equals(code))  {
+					SwingUtilities.invokeLater(BufferPanel.this::showHtml);
 				} else if(PACK_TABLE_COLUMNS.equals(code) && !isShowingBuffer()) {
 					SwingUtilities.invokeLater(new Runnable() {
 						
@@ -176,25 +193,115 @@ public class BufferPanel extends JPanel implements IExtendable {
 			}
 			
 		});
-		
-		dataTable = new JXTable();
-		dataTable.setColumnControlVisible(true);
-		dataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		dataTable.setFont(FontPreferences.getUIIpaFont());
-		
-		init();
-		extSupport.initExtensions();
+		return retVal;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 	
 	public boolean isShowingBuffer() {
-		return showingBuffer;
+		return currentView != null && currentView == logBuffer;
+	}
+	
+	public void showBuffer() {
+		JComponent oldComp = currentView;
+		
+		cardLayout.show(contentPanel, BUFFER_VIEW_ID);
+		currentView = logBuffer;
+		
+		logBuffer.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
+		
+		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 	
 	public void clear() {
 		getLogBuffer().setText("");
-		if(!isShowingBuffer()) {
-			onSwapBuffer();
+		showBuffer();
+	}
+	
+	private JXTable createTable() {
+		final JXTable retVal = new JXTable();
+		
+		retVal.setColumnControlVisible(true);
+		retVal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		retVal.setFont(FontPreferences.getUIIpaFont());
+		
+		final ActionMap am = retVal.getActionMap();
+		final InputMap im = retVal.getInputMap(JComponent.WHEN_FOCUSED);
+		
+		final String deleteRowsKey = "__delete_rows__";
+		final PhonUIAction deleteRowsAct = new PhonUIAction(this, "deleteSelectedRows");
+		am.put(deleteRowsKey, deleteRowsAct);
+		
+		final KeyStroke delKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+		im.put(delKs, deleteRowsKey);
+
+		final String defaultActKey = "__default_act__";
+		final TableAction defaultAct = new TableAction(tableAct);
+		am.put(defaultActKey, defaultAct);
+		
+		final KeyStroke defKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		im.put(defKs, defaultActKey);
+		
+		retVal.setActionMap(am);
+		retVal.setInputMap(JComponent.WHEN_FOCUSED, im);
+		retVal.addMouseListener(new TableMouseAdapter(tableAct));
+		
+		return retVal;
+	}
+	
+	public boolean isShowingTable() {
+		return currentView != null && currentView == dataTable;
+	}
+	
+	public void showTable() {
+		JComponent oldComp = currentView;
+		
+		if(dataTable == null) {
+			dataTable = createTable();
+			final JScrollPane tableScroller = new JScrollPane(dataTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			contentPanel.add(tableScroller, TABLE_VIEW_ID);
 		}
+		final CSVReader reader = new CSVReader(new StringReader(logBuffer.getText()));
+		final CSVTableModel model = new CSVTableModel(reader);
+		model.setUseFirstRowAsHeader(firstRowAsHeaderBox.isSelected());
+		dataTable.setModel(model);
+		
+		dataTable.scrollCellToVisible(0, 0);
+		
+		cardLayout.show(contentPanel, TABLE_VIEW_ID);
+		currentView = dataTable;
+		
+		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
+	}
+	
+	private JEditorPane createHtmlPane() {
+		JEditorPane retVal = new JEditorPane("text/html", "");
+		return retVal;
+	}
+	
+	public boolean isShowingHtml() {
+		return currentView != null && currentView == htmlPane;
+	}
+	
+	public void showHtml() {
+		JComponent oldComp = currentView;
+		
+		if(htmlPane == null) {
+			htmlPane = createHtmlPane();
+			final JScrollPane htmlScroller = new JScrollPane(htmlPane);
+			contentPanel.add(htmlScroller, HTML_VIEW_ID);
+		}
+		htmlPane.setText(logBuffer.getText());
+		
+		SwingUtilities.invokeLater(() -> {
+			htmlPane.scrollRectToVisible(new Rectangle(0,0,0,0));
+		});
+		cardLayout.show(contentPanel, HTML_VIEW_ID);
+		currentView = htmlPane;
+		
+		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 	
 	private void init() {
@@ -235,31 +342,15 @@ public class BufferPanel extends JPanel implements IExtendable {
 		
 		add(topPanel, BorderLayout.NORTH);
 		
-		logScroller = new RTextScrollPane(logBuffer, true);
-		add(logScroller, BorderLayout.CENTER);
+		cardLayout = new CardLayout();
+		contentPanel = new JPanel(cardLayout);
 		
-		final ActionMap am = dataTable.getActionMap();
-		final InputMap im = dataTable.getInputMap(JComponent.WHEN_FOCUSED);
+		logBuffer = createLogBuffer();
+		final JScrollPane logScroller = new RTextScrollPane(logBuffer, true);
+		contentPanel.add(logScroller, BUFFER_VIEW_ID);
 		
-		final String deleteRowsKey = "__delete_rows__";
-		final PhonUIAction deleteRowsAct = new PhonUIAction(this, "deleteSelectedRows");
-		am.put(deleteRowsKey, deleteRowsAct);
-		
-		final KeyStroke delKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
-		im.put(delKs, deleteRowsKey);
-
-		final String defaultActKey = "__default_act__";
-		final TableAction defaultAct = new TableAction(tableAct);
-		am.put(defaultActKey, defaultAct);
-		
-		final KeyStroke defKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		im.put(defKs, defaultActKey);
-		
-		dataTable.setActionMap(am);
-		dataTable.setInputMap(JComponent.WHEN_FOCUSED, im);
-		dataTable.addMouseListener(new TableMouseAdapter(tableAct));
-
-		tableScroller = new JScrollPane(dataTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		currentView = logBuffer;
+		add(contentPanel, BorderLayout.CENTER);
 	}
 	
 	public String getBufferName() {
@@ -272,6 +363,10 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public JXTable getDataTable() {
 		return dataTable;
+	}
+	
+	public JEditorPane getHtmlPane() {
+		return htmlPane;
 	}
 	
 	public void setBusy(boolean busy) {
@@ -291,43 +386,21 @@ public class BufferPanel extends JPanel implements IExtendable {
 		setFirstRowIsHeader(isFirstRowHeader);
 	}
 	
-	public void onSwapBuffer() {
-		boolean wasShowingBuffer = isShowingBuffer();
-		if(showingBuffer) {
-			final CSVReader reader = new CSVReader(new StringReader(logBuffer.getText()));
-			final CSVTableModel tableModel = new CSVTableModel(reader);
-			tableModel.setUseFirstRowAsHeader(firstRowAsHeaderBox.isSelected());
-			dataTable.setModel(tableModel);
-			
-			remove(logScroller);
-			add(tableScroller, BorderLayout.CENTER);
-			
-			showingBuffer = false;
-		} else {
-			remove(tableScroller);
-			
-			add(logScroller, BorderLayout.CENTER);
-			showingBuffer = true;
-		}
-		super.firePropertyChange(SHOWING_BUFFER_PROP, wasShowingBuffer, isShowingBuffer());
-		revalidate();
-		repaint();
-	}
-	
 	public void onSaveBuffer() {
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setRunAsync(false);
 		props.setInitialFile(logBuffer.getBufferName());
 		final FileFilter filter = 
-				(showingBuffer ? new FileFilter("Text files (*.txt)", "txt") : FileFilter.csvFilter);
+				(isShowingBuffer() ? new FileFilter("Text files (*.txt)", "txt") : 
+					isShowingTable() ? FileFilter.csvFilter : FileFilter.htmlFilter);
 		props.setFileFilter(filter);
 		props.setCanCreateDirectories(true);
 		
 		final String saveAs = NativeDialogs.showSaveDialog(props);
 		
 		if(saveAs != null && saveAs.length() > 0) {
-			if(showingBuffer) {
+			if(isShowingBuffer() || isShowingHtml()) {
 				// save buffer contents as text
 				try {
 					final File f = new File(saveAs);
@@ -341,7 +414,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 							.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
 				}
-			} else {
+			} else if(isShowingTable()) {
 				// save table model as csv 
 				final CSVTableDataWriter writer = new CSVTableDataWriter();
 				try {

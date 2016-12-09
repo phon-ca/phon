@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
+import ca.hedlund.desktopicons.StockIcon;
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -51,9 +52,14 @@ public class BufferPanelButtons extends JComponent {
 	
 	private static final String TEXT_TEXT = "Show data as text";
 	
+	private static final String HTML_ICON = "mimetypes/text-html";
+	
+	private static final String HTML_TEXT = "Show data as html";
+	
 	private ButtonGroup buttonGroup;
 	private JButton tableButton;
 	private JButton textButton;
+	private JButton htmlButton;
 	
 	private final WeakReference<BufferPanel> panelRef;
 	
@@ -71,23 +77,34 @@ public class BufferPanelButtons extends JComponent {
 	private void init() {
 		buttonGroup = new ButtonGroup();
 		final List<JButton> buttons = 
-				(new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(2, buttonGroup);
+				(new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(3, buttonGroup);
 		
-		final ImageIcon txtIcon = IconManager.getInstance().getIcon(TEXT_ICON, IconSize.SMALL);
-		final PhonUIAction txtAct = new PhonUIAction(this, "showText");
+		final ImageIcon txtIcon = 
+				IconManager.getInstance().getSystemIconForFileType(".txt", TEXT_ICON, IconSize.SMALL);
+		final PhonUIAction txtAct = new PhonUIAction(getBufferPanel(), "showBuffer");
 		txtAct.putValue(PhonUIAction.SMALL_ICON, txtIcon);
 		txtAct.putValue(PhonUIAction.SHORT_DESCRIPTION, TEXT_TEXT);
 		textButton = buttons.get(0);
 		textButton.setAction(txtAct);
 		textButton.setFocusable(false);
 		
-		final ImageIcon tblIcon = IconManager.getInstance().getIcon(TABLE_ICON, IconSize.SMALL);
-		final PhonUIAction tblAct = new PhonUIAction(this, "showTable");
+		final ImageIcon tblIcon =
+				IconManager.getInstance().getSystemIconForFileType(".csv", TABLE_ICON, IconSize.SMALL);
+		final PhonUIAction tblAct = new PhonUIAction(getBufferPanel(), "showTable");
 		tblAct.putValue(PhonUIAction.SMALL_ICON, tblIcon);
 		tblAct.putValue(PhonUIAction.SHORT_DESCRIPTION, TABLE_TEXT);
 		tableButton = buttons.get(1);
 		tableButton.setAction(tblAct);
 		tableButton.setFocusable(false);
+		
+		final ImageIcon htmlIcon = 
+				IconManager.getInstance().getSystemIconForFileType(".html", HTML_ICON, IconSize.SMALL);
+		final PhonUIAction htmlAct = new PhonUIAction(getBufferPanel(), "showHtml");
+		htmlAct.putValue(PhonUIAction.SMALL_ICON, htmlIcon);
+		htmlAct.putValue(PhonUIAction.SHORT_DESCRIPTION, HTML_TEXT);
+		htmlButton = buttons.get(2);
+		htmlButton.setAction(htmlAct);
+		htmlButton.setFocusable(false);
 		
 		final BufferPanel bufferPanel = getBufferPanel();
 		bufferPanel.addPropertyChangeListener(BufferPanel.SHOWING_BUFFER_PROP, new PropertyChangeListener() {
@@ -95,17 +112,20 @@ public class BufferPanelButtons extends JComponent {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				textButton.setSelected(bufferPanel.isShowingBuffer());
-				tableButton.setSelected(!bufferPanel.isShowingBuffer());
+				tableButton.setSelected(bufferPanel.isShowingTable());
+				htmlButton.setSelected(bufferPanel.isShowingHtml());
 			}
 			
 		});
 		
 		textButton.setSelected(bufferPanel.isShowingBuffer());
 		tableButton.setSelected(!bufferPanel.isShowingBuffer());
+		htmlButton.setSelected(!bufferPanel.isShowingHtml());
 		
 		setLayout(new HorizontalLayout(0));
 		add(textButton);
 		add(tableButton);
+		add(htmlButton);
 	}
 	
 	public void showHTML() {
@@ -125,18 +145,6 @@ public class BufferPanelButtons extends JComponent {
 			
 		} catch (BufferExportException e) {
 			e.printStackTrace();
-		}
-	}
-	
-	public void showText() {
-		if(!getBufferPanel().isShowingBuffer()) {
-			getBufferPanel().onSwapBuffer();
-		}
-	}
-	
-	public void showTable() {
-		if(getBufferPanel().isShowingBuffer()) {
-			getBufferPanel().onSwapBuffer();
 		}
 	}
 

@@ -50,14 +50,9 @@ public class WizardGlobalOptionsPanel extends JPanel {
 	private final static String IGNORE_DIACRITICS_PROP =
 			WizardGlobalOptionsPanel.class.getName() + ".ignoreDiacritics";
 	
-//	private final static String PARTICIPANT_ROLE_PROP =
-//			WizardGlobalOptionsPanel.class.getName() + ".participantRole";
-	
 	private JCheckBox caseSensitiveBox;
 	
 	private JCheckBox ignoreDiacriticsBox;
-	
-//	private JComboBox<ParticipantRole> participantRoleBox;
 	
 	private List<WizardGlobalOption> pluginGlobalOptions = new ArrayList<>();
 	
@@ -89,21 +84,6 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		ignoreDiacriticsBox.setSelected(PrefHelper.getBoolean(IGNORE_DIACRITICS_PROP, false));
 		add(ignoreDiacriticsBox, gbc);
 		
-		++gbc.gridy;
-		gbc.weightx = 0.0;
-		gbc.gridwidth = 1;
-		add(new JLabel("Participant Role:"), gbc);
-		++gbc.gridx;
-		gbc.weightx = 1.0;
-		
-//		ParticipantRole selectedRole = 
-//				ParticipantRole.fromString(PrefHelper.get(PARTICIPANT_ROLE_PROP, "null"));
-//		participantRoleBox = new JComboBox<>(ParticipantRole.values());
-//		((DefaultComboBoxModel<ParticipantRole>)participantRoleBox.getModel()).insertElementAt(null, 0);
-//		participantRoleBox.setSelectedItem(selectedRole);
-//		participantRoleBox.setRenderer(new ParticipantCellRenderer());
-//		add(participantRoleBox, gbc);
-		
 		// add global options
 		final List<IPluginExtensionPoint<WizardGlobalOption>> pluginOptions =
 				PluginManager.getInstance().getExtensionPoints(WizardGlobalOption.class);
@@ -118,10 +98,6 @@ public class WizardGlobalOptionsPanel extends JPanel {
 			this.pluginGlobalOptions.add(globalOption);
 		}
 	}
-	
-//	public ParticipantRole getSelectedParticipantRole() {
-//		return (ParticipantRole)this.participantRoleBox.getSelectedItem();
-//	}
 	
 	public boolean isCaseSensitive() {
 		return this.caseSensitiveBox.isSelected();
