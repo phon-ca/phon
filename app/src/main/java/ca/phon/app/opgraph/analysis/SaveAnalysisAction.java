@@ -43,9 +43,9 @@ public class SaveAnalysisAction extends HookableAction {
 	private final static String DEFAULT_FOLDER = 
 			PrefHelper.getUserDataFolder() + File.separator + "analysis";
 	
-	private final static String TXT = "Save analysis...";
+	public final static String TXT = "Save analysis...";
 	
-	private final static String DESC = "Save analysis with current setup to file.";
+	public final static String DESC = "Save analysis with current setup to file.";
 	
 	private final AnalysisWizard wizard;
 	

@@ -44,6 +44,8 @@ public class FormatterUtil {
 	}
 	
 	public static String format(Object obj) {
+		if(obj == null) return "";
+		
 		final Class<?> typ = obj.getClass();
 		@SuppressWarnings("unchecked")
 		final Formatter<Object> formatter = 

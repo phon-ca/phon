@@ -28,14 +28,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,12 +52,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.tree.TreePath;
 
+import org.apache.velocity.tools.generic.MathTool;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.gedge.opgraph.OpContext;
@@ -136,7 +142,7 @@ public class NodeWizard extends WizardFrame {
 	
 	private WizardOptionalsCheckboxTree optionalsTree;
 	
-	private WizardGlobalOptionsPanel optionsPanel;
+	private WizardNavigationAndSettings navigationAndSettings;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
 	
@@ -171,7 +177,25 @@ public class NodeWizard extends WizardFrame {
 		
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "report");
-//		builder.addItem("File@report", new CreateReportAction(this));
+		
+		final PhonUIAction saveAllAct = new PhonUIAction(this, "onSaveAll");
+		saveAllAct.putValue(PhonUIAction.NAME, "Save all buffers to folder...");
+		saveAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save all buffers to a folder.");
+		saveAllAct.putValue(PhonUIAction.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		saveAllAct.putValue(PhonUIAction.SMALL_ICON, 
+				IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+		builder.addItem("File@report", saveAllAct);
+
+		final PhonUIAction saveAct = new PhonUIAction(this, "onSaveBuffer");
+		saveAct.putValue(PhonUIAction.NAME, "Save buffer...");
+		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save selected buffer to file.");
+		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		saveAct.putValue(PhonUIAction.SMALL_ICON, 
+				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+		builder.addItem("File@report", saveAct);
+		
+		builder.addSeparator("File@Save all buffers to folder...", "other");
 	}
 	
 	@Override
@@ -205,13 +229,13 @@ public class NodeWizard extends WizardFrame {
 		final DialogHeader header = new DialogHeader(super.getTitle(), "");
 		add(header, BorderLayout.NORTH);
 		
-		final JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		busyLabel = new JXBusyLabel(new Dimension(22, 22));
+//		final JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		statusLabel = new JLabel();
-		
-		statusPanel.setOpaque(false);
-		statusPanel.add(busyLabel);
-		statusPanel.add(statusLabel);
+//		
+//		statusPanel.setOpaque(false);
+//		statusPanel.add(busyLabel);
+//		statusPanel.add(statusLabel);
 		
 		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -222,7 +246,8 @@ public class NodeWizard extends WizardFrame {
 		gbc.weightx = 1.0;
 		gbc.gridwidth = 1;
 		
-		header.add(statusPanel, gbc);
+		navigationAndSettings = new WizardNavigationAndSettings(this);
+		header.add(navigationAndSettings, gbc);
 		
 		final WizardExtension nodeWizardList = 
 				graph.getExtension(WizardExtension.class);
@@ -264,32 +289,32 @@ public class NodeWizard extends WizardFrame {
 		reportDataStep.setNextStep(-1);
 		addWizardStep(reportDataStep);
 		
-		final WizardStepList stepList = new WizardStepList(this);
-		stepList.setMinimumSize(new Dimension(250, 20));
-		stepList.setPreferredSize(new Dimension(250, 0));
-		stepList.setMaximumSize(new Dimension(250, Integer.MAX_VALUE));
-		
-		final JPanel leftPanel = new JPanel(new GridBagLayout());
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridheight = 1;
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		gbc.insets = new Insets(2, 2, 2, 2);
-		
-		final TitledPanel panel = new TitledPanel("Steps", new JScrollPane(stepList));
-		leftPanel.add(panel, gbc);
-		
-		++gbc.gridy;
-		gbc.weighty = 0.0;
-		optionsPanel = new WizardGlobalOptionsPanel();
-		final TitledPanel panel1 = new TitledPanel("Settings", optionsPanel);
-		leftPanel.add(panel1, gbc);
-		
-		add(leftPanel, BorderLayout.WEST);
+//		final WizardStepList stepList = new WizardStepList(this);
+//		stepList.setMinimumSize(new Dimension(250, 20));
+//		stepList.setPreferredSize(new Dimension(250, 0));
+//		stepList.setMaximumSize(new Dimension(250, Integer.MAX_VALUE));
+//		
+//		final JPanel leftPanel = new JPanel(new GridBagLayout());
+//		gbc.anchor = GridBagConstraints.EAST;
+//		gbc.fill = GridBagConstraints.BOTH;
+//		gbc.gridheight = 1;
+//		gbc.gridwidth = 1;
+//		gbc.gridx = 0;
+//		gbc.gridy = 0;
+//		gbc.weightx = 1.0;
+//		gbc.weighty = 1.0;
+//		gbc.insets = new Insets(2, 2, 2, 2);
+//		
+//		final TitledPanel panel = new TitledPanel("Steps", new JScrollPane(stepList));
+//		leftPanel.add(panel, gbc);
+//		
+//		++gbc.gridy;
+//		gbc.weighty = 0.0;
+//		optionsPanel = new WizardGlobalOptionsPanel();
+//		final TitledPanel panel1 = new TitledPanel("Settings", optionsPanel);
+//		leftPanel.add(panel1, gbc);
+//		
+//		add(leftPanel, BorderLayout.WEST);
 		
 		// setup card layout
 		cardLayout = new CardLayout();
@@ -319,7 +344,6 @@ public class NodeWizard extends WizardFrame {
 		advancedSettingsButton.addActionListener( (e) -> {
 			cardLayout.show(centerPanel, SETTINGS);
 		});
-		panel1.setRightDecoration(advancedSettingsButton);
 		
 		super.btnFinish.setVisible(false);
 	}
@@ -403,7 +427,14 @@ public class NodeWizard extends WizardFrame {
 			final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
 			for(String reportName:ext.getReportTemplateNames()) {
 				// create buffer
-				final BufferPanel reportBufferPanel = bufferPanel.createBuffer(reportName);
+				final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
+				try {
+					SwingUtilities.invokeAndWait( () -> bufferPanelRef.getAndSet(bufferPanel.createBuffer(reportName)));
+				} catch (InterruptedException | InvocationTargetException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					continue;
+				}
+				final BufferPanel reportBufferPanel = bufferPanelRef.get();
 				final LogBuffer reportBuffer = reportBufferPanel.getLogBuffer();
 				
 				final NodeWizardReportGenerator reportGenerator = 
@@ -459,6 +490,7 @@ public class NodeWizard extends WizardFrame {
 		
 		ctx.put("Class", Class.class);
 		ctx.put("FormatterUtil", FormatterUtil.class);
+		ctx.put("Math", new MathTool());
 		
 		ctx.put("graph", getGraph());
 		ctx.put("bufferNames", bufferPanel.getBufferNames());
@@ -491,12 +523,13 @@ public class NodeWizard extends WizardFrame {
 	}
 	
 	protected void setupGlobalOptions(OpContext ctx) {
-		ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, optionsPanel.isCaseSensitive());
-		ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, optionsPanel.isIgnoreDiacritics());
-		
-		for(WizardGlobalOption pluginGlobalOption:optionsPanel.getPluginGlobalOptions()) {
-			ctx.put(pluginGlobalOption.getName(), pluginGlobalOption.getValue());
-		}
+		// TODO fix method
+//		ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, optionsPanel.isCaseSensitive());
+//		ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, optionsPanel.isIgnoreDiacritics());
+//		
+//		for(WizardGlobalOption pluginGlobalOption:optionsPanel.getPluginGlobalOptions()) {
+//			ctx.put(pluginGlobalOption.getName(), pluginGlobalOption.getValue());
+//		}
 	}
 	
 	protected WizardStep createStep(WizardExtension ext, OpNode node) {
@@ -585,19 +618,19 @@ public class NodeWizard extends WizardFrame {
 
 	protected WizardStep createReportStep() {
 		final WizardStep retVal = new WizardStep();
-		retVal.setTitle("Generate report data");
+		retVal.setTitle("Generate report");
 		
 		retVal.setLayout(new BorderLayout());
 		
-		final TitledPanel panel = new TitledPanel("Generate report data", getBufferPanel());
+		final TitledPanel panel = new TitledPanel("Generate report", getBufferPanel());
+		panel.setLeftDecoration(busyLabel);
 		
-		final HidablePanel msgPanel = new HidablePanel(NodeWizard.class.getName() + ".reportDataMessage");
-		msgPanel.setTopLabelText("Generate report data");
-		msgPanel.setBottomLabelText("<html><p>This process may take some time, when complete you may save "
-				+ "the displayed tables or proceed to the 'Generate Report' step which will provide "
-				+ "printable reports.</p></html>");
-		
-		retVal.add(msgPanel, BorderLayout.NORTH);
+//		final HidablePanel msgPanel = new HidablePanel(NodeWizard.class.getName() + ".reportDataMessage");
+//		msgPanel.setTopLabelText("Generate report");
+//		msgPanel.setBottomLabelText("<html><p>This process may take some time, when complete you may save "
+//				+ "the displayed buffers to disk using the buttons below.</p></html>");
+//		
+//		retVal.add(msgPanel, BorderLayout.NORTH);
 		retVal.add(panel, BorderLayout.CENTER);
 		
 		return retVal;
@@ -605,6 +638,8 @@ public class NodeWizard extends WizardFrame {
 	
 	@Override
 	public void gotoStep(int step) {
+		if(step == getCurrentStepIndex()) return;
+		
 		super.gotoStep(step);
 		
 		if(cardLayout != null)

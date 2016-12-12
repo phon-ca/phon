@@ -196,6 +196,9 @@ public class OpgraphEditor extends CommonModuleFrame {
 			sb.append("*");
 		}
 		setWindowName(sb.toString());
+		
+		// also update modification status
+		setModified(hasUnsavedChanges());
 	}
 	
 	public boolean chooseFile() {
@@ -420,9 +423,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 	};
 	
 	private final UndoableEditListener undoListener = (e) -> {
-		if(e.getEdit().isSignificant()) {
-			setModified(true);
-		}
 		updateTitle();
 	};
 	

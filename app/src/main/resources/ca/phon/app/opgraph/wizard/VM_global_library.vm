@@ -23,7 +23,12 @@
 	#set($number = $Class.forName("java.lang.Number"))
 	#set($ipa = $Class.forName("ca.phon.ipa.IPATranscript"))
 	#if($clazz == $ipa) #set($type = "ipa_value")
-	#elseif($number.isAssignableFrom($clazz)) #set($type = "number_value")
+	#elseif($number.isAssignableFrom($clazz)) 
+		#set($type = "number_value")
+		#if($Class.forName("java.lang.Float").isAssignableFrom($clazz) || 
+			$Class.forName("java.lang.Double").isAssignableFrom($clazz))
+			#set($txt = $Math.roundTo(2, $v))
+		#end
 	#else #set($type = "text_value")#end
 <td class='$type'>$txt</td>
 #end

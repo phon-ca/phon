@@ -65,7 +65,7 @@ public class StartAction extends OpgraphEditorAction {
 		Runnable inBg = () -> {
 			if(document != null) {
 				final Processor context = 
-						(document.getProcessingContext() == null ? new Processor(document.getGraph()) : document.getProcessingContext());
+						(document.getProcessingContext() == null ? new Processor(document.getRootGraph()) : document.getProcessingContext());
 				document.setProcessingContext(context);
 				context.addProcessorListener( (pe) -> {
 					SwingUtilities.invokeLater( () -> {
@@ -85,7 +85,7 @@ public class StartAction extends OpgraphEditorAction {
 				context.getContext().setDebug(true);
 				getEditor().getModel().setupContext(context.getContext());
 				
-				final WizardExtension wizardExt = document.getGraph().getExtension(WizardExtension.class);
+				final WizardExtension wizardExt = document.getRootGraph().getExtension(WizardExtension.class);
 				if(wizardExt != null) {
 					final NodeWizard nodeWizard = wizardExt.createWizard(context);
 					nodeWizard.pack();

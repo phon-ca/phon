@@ -85,10 +85,9 @@ public class AnalysisWizard extends NodeWizard {
 		builder.addSeparator("File@1", "save");
 		builder.addItem("File@save", new SaveAnalysisAction(this));
 		
-		builder.addSeparator("File@Save analysis...", "open_editor");
 		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
 		openEditorAct.putValue(PhonUIAction.NAME, "Open graph in analysis editor...");
-		builder.addItem("File@open_editor", openEditorAct);
+		builder.addItem("File@" + SaveAnalysisAction.TXT, openEditorAct);
 	}
 	
 	public void onOpenEditor(PhonActionEvent pae) {

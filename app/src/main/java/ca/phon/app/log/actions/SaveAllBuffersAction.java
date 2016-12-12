@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,12 +31,14 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferPanelContainer;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -75,13 +78,15 @@ public class SaveAllBuffersAction extends HookableAction {
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setTitle("Select Assessment Folder");
 		props.setInitialFolder(PrefHelper.getUserDataFolder());
+		props.setPrompt("Save Buffers to Folder");
 		props.setRunAsync(false);
 		
 		List<String> selectedFolders = NativeDialogs.showOpenDialog(props);
 		if(selectedFolders != null && selectedFolders.size() > 0) {
 			for(String bufferName:buffers.getBufferNames()) {
-				final File bufferFile = new File(selectedFolders.get(0), bufferName + ".csv");
-				final LogBuffer logBuffer = buffers.getBuffer(bufferName).getLogBuffer();
+				final BufferPanel bufferPanel = buffers.getBuffer(bufferName);
+				final LogBuffer logBuffer = bufferPanel.getLogBuffer();
+				final File bufferFile = new File(selectedFolders.get(0), bufferName + "." + bufferPanel.getDefaultExtension());
 				try {
 					final FileOutputStream out = new FileOutputStream(bufferFile);
 					final OutputStreamWriter writer = new OutputStreamWriter(out, logBuffer.getEncoding());
@@ -92,6 +97,15 @@ public class SaveAllBuffersAction extends HookableAction {
 					LOGGER
 							.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
+				}
+				
+				if(bufferPanel == buffers.getCurrentBuffer()
+						&& bufferPanel.isOpenAfterSave()) {
+					try {
+						OpenFileLauncher.openURL(bufferFile.toURI().toURL());
+					} catch (MalformedURLException e) {
+						LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+					}
 				}
 			}
 		} else {

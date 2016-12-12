@@ -244,6 +244,7 @@ public class WizardFrame extends CommonModuleFrame {
 	}
 	
 	public void gotoStep(int stepIndex) {
+		if(stepIndex == getCurrentStepIndex()) return;
 		if(currentStep != null) {
 			remove(currentStep);
 		}
@@ -313,6 +314,17 @@ public class WizardFrame extends CommonModuleFrame {
 
 	public WizardStep getCurrentStep() {
 		return currentStep;
+	}
+	
+	public int getCurrentStepIndex() {
+		int retVal = -1;
+		for(WizardStep step:steps.keySet()) {
+			++retVal;
+			if(step == currentStep) {
+				break;
+			}
+		}
+		return retVal;
 	}
 	
 	public void showWizard() {

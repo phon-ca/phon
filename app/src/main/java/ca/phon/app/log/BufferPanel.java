@@ -278,6 +278,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	private JEditorPane createHtmlPane() {
 		JEditorPane retVal = new JEditorPane("text/html", "");
+		retVal.setEditable(false);
 		return retVal;
 	}
 	
@@ -369,6 +370,10 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return htmlPane;
 	}
 	
+	public boolean isOpenAfterSave() {
+		return openFileAfterSaving;
+	}
+	
 	public void setBusy(boolean busy) {
 		busyLabel.setBusy(busy);
 		busyLabel.setVisible(busy);
@@ -384,6 +389,22 @@ public class BufferPanel extends JPanel implements IExtendable {
 	public void onToggleFirstRowAsHeader() {
 		boolean isFirstRowHeader = firstRowAsHeaderBox.isSelected();
 		setFirstRowIsHeader(isFirstRowHeader);
+	}
+	
+	/**
+	 * Returns the appropriate extension based on the current
+	 * view of the data.
+	 * 
+	 * @return one of 'txt', 'csv', or 'html'
+	 */
+	public String getDefaultExtension() {
+		String retVal = "txt";
+		if(isShowingTable()) {
+			retVal = "csv";
+		} else if(isShowingHtml()) {
+			retVal = "html";
+		}
+		return retVal;
 	}
 	
 	public void onSaveBuffer() {

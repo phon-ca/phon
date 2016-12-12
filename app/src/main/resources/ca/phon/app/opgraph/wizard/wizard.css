@@ -18,7 +18,7 @@ em {
 }
 
 table {
-    border-collapse: collapse;
+    border-collapse: 1px solid black;
     empty-cells: show;
     width: 100%;
     table-layout:fixed;
@@ -58,7 +58,7 @@ code {
 
 .number_value {
     font-family:"noto monospace", monospace;
-    text-align:right;
+    text-align:center;
 }
 
 @media print {
