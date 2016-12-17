@@ -43,6 +43,10 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 import ca.phon.ui.fonts.FontPreferences;
 
+/**
+ * A buffer for general output.
+ * 
+ */
 public class LogBuffer extends RSyntaxTextArea {
 	
 	private static final Logger LOGGER = Logger.getLogger(LogBuffer.class

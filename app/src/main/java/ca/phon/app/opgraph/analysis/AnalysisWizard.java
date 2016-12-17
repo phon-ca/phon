@@ -19,11 +19,21 @@
 package ca.phon.app.opgraph.analysis;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
+
+import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
@@ -40,9 +50,12 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel.CheckingMode;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.worker.PhonWorker;
 
 public class AnalysisWizard extends NodeWizard {
 
@@ -52,9 +65,8 @@ public class AnalysisWizard extends NodeWizard {
 	
 	private WizardStep sessionSelectorStep;
 	private SessionSelector sessionSelector = new SessionSelector();
-	
-	private WizardStep participantSelectorStep;
 	private ParticipantSelector participantSelector = new ParticipantSelector();
+	private JXBusyLabel participantBusyLabel = new JXBusyLabel(new Dimension(16, 16));
 	
 	public AnalysisWizard(String title, Processor processor, OpGraph graph) {
 		super(title, processor, graph);
@@ -67,11 +79,12 @@ public class AnalysisWizard extends NodeWizard {
 				final List<SessionPath> selectedSessions = 
 						(List<SessionPath>)processor.getContext().get("_selectedSessions");
 				sessionSelector.setSelectedSessions(selectedSessions);
+				
+				SwingUtilities.invokeLater( () -> updateParticipantSelector() );
 			}
 		}
 		
 		sessionSelectorStep = addSessionSelectionStep();
-		participantSelectorStep = addParticipantSelectionStep();
 		gotoStep(0);
 		
 		getRootPane().setDefaultButton(btnNext);
@@ -98,16 +111,78 @@ public class AnalysisWizard extends NodeWizard {
 	}
 	
 	private WizardStep addSessionSelectionStep() {
-		final WizardStep sessionSelectorStep = new WizardStep();
-		sessionSelectorStep.setTitle("Select sessions");
+		final WizardStep sessionSelectorStep = new WizardStep() {
+
+			@Override
+			public boolean validateStep() {
+				boolean valid = true;
+				
+				if(sessionSelector.getSelectedSessions().size() == 0) {
+					valid = false;
+					ToastFactory.makeToast("Please select at least one session")
+						.start(sessionSelector);
+				}
+				
+				if(participantSelector.getSelectedParticpants().size() == 0) {
+					valid = false;
+					ToastFactory.makeToast("Please select at least one participant")
+						.start(participantSelector);
+				}
+				
+				return valid;
+			}
+			
+		};
+		sessionSelectorStep.setTitle("Sessions & Participants");
 		
-		final TitledPanel panel = new TitledPanel("Select sessions : " + getProject().getName());
+		final Container container = sessionSelectorStep;
+
+		final GridBagConstraints gbc = new GridBagConstraints();
+		container.setLayout(new GridBagLayout());
+		gbc.gridx = 0; 
+		gbc.gridy = 0;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.gridheight = 2;
+		gbc.gridwidth = 1;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.insets = new Insets(2, 2, 2, 2);
+		
+		final TitledPanel panel = new TitledPanel("Select Sessions");
 		panel.getContentContainer().setLayout(new BorderLayout());
+		final JScrollPane sessionScroller = new JScrollPane(sessionSelector);
+		sessionSelector.getModel().addTreeModelListener(new TreeModelListener() {
+			
+			@Override
+			public void treeStructureChanged(TreeModelEvent e) {
+			}
+			
+			@Override
+			public void treeNodesRemoved(TreeModelEvent e) {
+			}
+			
+			@Override
+			public void treeNodesInserted(TreeModelEvent e) {
+			}
+			
+			@Override
+			public void treeNodesChanged(TreeModelEvent e) {
+				updateParticipantSelector();
+			}
+			
+		});
+		panel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
 		
-		final JScrollPane scroller = new JScrollPane(sessionSelector);
-		panel.getContentContainer().add(scroller, BorderLayout.CENTER);
-		sessionSelectorStep.setLayout(new BorderLayout());
-		sessionSelectorStep.add(panel, BorderLayout.CENTER);
+		final TitledPanel participantPanel = new TitledPanel("Select Participants");
+		participantPanel.getContentContainer().setLayout(new BorderLayout());
+		final JScrollPane participantScroller = new JScrollPane(participantSelector);
+		participantPanel.getContentContainer().add(participantScroller, BorderLayout.CENTER);
+		participantPanel.setLeftDecoration(participantBusyLabel);
+		
+		sessionSelectorStep.add(panel, gbc);
+		++gbc.gridx;
+		sessionSelectorStep.add(participantPanel, gbc);
 		
 		int insertIdx = 0;
 		if(getWizardExtension().getWizardMessage() != null
@@ -127,33 +202,49 @@ public class AnalysisWizard extends NodeWizard {
 		return sessionSelectorStep;
 	}
 	
-	private WizardStep addParticipantSelectionStep() {
-		final WizardStep participantSelectorStep = new WizardStep();
-		participantSelectorStep.setTitle("Select participants");
-		
-		final TitledPanel panel = new TitledPanel("Select participants");
-		panel.getContentContainer().setLayout(new BorderLayout());
-		
-		final JScrollPane scroller = new JScrollPane(participantSelector);
-		panel.getContentContainer().add(scroller, BorderLayout.CENTER);
-		participantSelectorStep.setLayout(new BorderLayout());
-		participantSelectorStep.add(panel, BorderLayout.CENTER);
-		
-		int insertIdx = 1;
-		if(getWizardExtension().getWizardMessage() != null
-				&& getWizardExtension().getWizardMessage().length() > 0) {
-			insertIdx = 2;
-		}
-		participantSelectorStep.setNextStep(insertIdx+1);
-		participantSelectorStep.setPrevStep(insertIdx-1);
-		
-		super.addWizardStep(insertIdx, participantSelectorStep);
-		
-		getWizardStep(insertIdx-1).setNextStep(insertIdx);
-		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
-		
-		return participantSelectorStep;
+	private void updateParticipantSelector() {
+		final Runnable onBg = () -> {
+			SwingUtilities.invokeLater(() -> participantBusyLabel.setBusy(true));
+			
+			final TristateCheckBoxTreeModel model = ParticipantSelector.createModel(getProject(), sessionSelector.getSelectedSessions(), 
+					new ParticipantSelector.DefaultParticipantComparator());
+			
+			SwingUtilities.invokeLater( () -> { 
+				participantSelector.setModel(model);
+				participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
+				participantBusyLabel.setBusy(false);
+			});
+		};
+		PhonWorker.getInstance().invokeLater(onBg);
 	}
+	
+//	private WizardStep addParticipantSelectionStep() {
+//		final WizardStep participantSelectorStep = new WizardStep();
+//		participantSelectorStep.setTitle("Select participants");
+//		
+//		final TitledPanel panel = new TitledPanel("Select participants");
+//		panel.getContentContainer().setLayout(new BorderLayout());
+//		
+//		final JScrollPane scroller = new JScrollPane(participantSelector);
+//		panel.getContentContainer().add(scroller, BorderLayout.CENTER);
+//		participantSelectorStep.setLayout(new BorderLayout());
+//		participantSelectorStep.add(panel, BorderLayout.CENTER);
+//		
+//		int insertIdx = 1;
+//		if(getWizardExtension().getWizardMessage() != null
+//				&& getWizardExtension().getWizardMessage().length() > 0) {
+//			insertIdx = 2;
+//		}
+//		participantSelectorStep.setNextStep(insertIdx+1);
+//		participantSelectorStep.setPrevStep(insertIdx-1);
+//		
+//		super.addWizardStep(insertIdx, participantSelectorStep);
+//		
+//		getWizardStep(insertIdx-1).setNextStep(insertIdx);
+//		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
+//		
+//		return participantSelectorStep;
+//	}
 	
 	public void setProject(Project project) {
 		this.project = project;
@@ -172,11 +263,11 @@ public class AnalysisWizard extends NodeWizard {
 	
 	@Override
 	public void gotoStep(int stepIdx) {
-		if(getWizardStep(stepIdx) == participantSelectorStep) {
-			// populate tree with information from selected sessions
-			participantSelector.loadParticipants(getProject(), sessionSelector.getSelectedSessions());
-			participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
-		}
+//		if(getWizardStep(stepIdx) == participantSelectorStep) {
+//			// populate tree with information from selected sessions
+//			participantSelector.loadParticipants(getProject(), sessionSelector.getSelectedSessions());
+//			participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
+//		}
 		if(getWizardStep(stepIdx) == reportDataStep) {
 			if(sessionSelector != null)
 				getProcessor().getContext().put("_selectedSessions", sessionSelector.getSelectedSessions());

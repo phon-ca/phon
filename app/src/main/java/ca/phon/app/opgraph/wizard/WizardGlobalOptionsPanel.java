@@ -24,6 +24,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
@@ -50,9 +51,9 @@ public class WizardGlobalOptionsPanel extends JPanel {
 	private final static String IGNORE_DIACRITICS_PROP =
 			WizardGlobalOptionsPanel.class.getName() + ".ignoreDiacritics";
 	
-	private JCheckBox caseSensitiveBox;
+	private JComboBox<String> caseSensitiveBox;
 	
-	private JCheckBox ignoreDiacriticsBox;
+	private JComboBox<String> ignoreDiacriticsBox;
 	
 	private List<WizardGlobalOption> pluginGlobalOptions = new ArrayList<>();
 	
@@ -70,18 +71,28 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridheight = 1;
-		gbc.gridwidth = 2;
+		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.weightx = 1.0;
+		gbc.weightx = 0.0;
 		
-		caseSensitiveBox = new JCheckBox("Case sensitive");
-		caseSensitiveBox.setSelected(PrefHelper.getBoolean(CASE_SENSITIVE_PROP, false));
+		final String[] comboBoxItems = new String[] {
+				"default",
+				"yes",
+				"no"
+		};
+		
+		add(new JLabel("Case sensitive:"), gbc);
+		++gbc.gridx;
+		caseSensitiveBox = new JComboBox<>(comboBoxItems);
+		caseSensitiveBox.setSelectedItem(PrefHelper.get(CASE_SENSITIVE_PROP, comboBoxItems[0]));
 		add(caseSensitiveBox, gbc);
-		
-		++gbc.gridy;
-		ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
-		ignoreDiacriticsBox.setSelected(PrefHelper.getBoolean(IGNORE_DIACRITICS_PROP, false));
+
+		++gbc.gridx;
+		add(new JLabel("Ignore diacritics:"), gbc);
+		++gbc.gridx;
+		ignoreDiacriticsBox = new JComboBox<>(comboBoxItems);
+		ignoreDiacriticsBox.setSelectedItem(PrefHelper.get(IGNORE_DIACRITICS_PROP, comboBoxItems[0]));
 		add(ignoreDiacriticsBox, gbc);
 		
 		// add global options
@@ -90,21 +101,30 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		for(IPluginExtensionPoint<WizardGlobalOption> extPt:pluginOptions) {
 			final WizardGlobalOption globalOption = extPt.getFactory().createObject();
 			
-			++gbc.gridy;
-			gbc.gridx = 0;
-			gbc.weightx = 1.0;
-			gbc.gridwidth = 2;
+			++gbc.gridx;
 			add(globalOption.getGlobalOptionsComponent(), gbc);
 			this.pluginGlobalOptions.add(globalOption);
 		}
+		
+		gbc.weightx = 1.0;
+		++gbc.gridx;
+		add(Box.createHorizontalGlue(), gbc);
+	}
+	
+	public boolean isUseGlobalCaseSensitive() {
+		return this.caseSensitiveBox.getSelectedIndex() > 0;
 	}
 	
 	public boolean isCaseSensitive() {
-		return this.caseSensitiveBox.isSelected();
+		return this.caseSensitiveBox.getSelectedIndex() == 1;
 	}
-	
+
+	public boolean isUseGlobalIgnoreDiacritics() {
+		return this.ignoreDiacriticsBox.getSelectedIndex() > 0;
+	}
+
 	public boolean isIgnoreDiacritics() {
-		return this.ignoreDiacriticsBox.isSelected();
+		return this.ignoreDiacriticsBox.getSelectedIndex() == 1;
 	}
 	
 	public List<WizardGlobalOption> getPluginGlobalOptions() {

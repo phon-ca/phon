@@ -87,6 +87,14 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
+/**
+ * A panel showing a single {@link LogBuffer} with options
+ * for displaying the data in different formats.  CSV data
+ * may be displayed in a table, while HTML data may be
+ * rendered inside a {@link JEditorPane}.
+ *
+ */
+// TODO improve handling of types
 public class BufferPanel extends JPanel implements IExtendable {
 	
 	private final static String TABLE_VIEW_ID = "table";

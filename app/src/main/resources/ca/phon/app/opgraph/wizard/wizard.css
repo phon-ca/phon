@@ -18,7 +18,7 @@ em {
 }
 
 table {
-    border-collapse: 1px solid black;
+    border: thin solid black;
     empty-cells: show;
     width: 100%;
     table-layout:fixed;

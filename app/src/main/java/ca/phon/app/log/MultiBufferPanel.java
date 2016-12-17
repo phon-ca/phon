@@ -39,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -63,6 +64,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	private JComponent bufferPanel;
 	private CardLayout cardLayout;
 	
+	private JSplitPane splitPane;
+	
 	private JToolBar toolbar;
 	
 	private LinkedHashMap<String, BufferPanel> bufferPanelMap = new LinkedHashMap<>();
@@ -80,18 +83,6 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		add(toolbar, BorderLayout.NORTH);
 		
 		final JButton saveAllButton = new JButton(new SaveAllBuffersAction(this));
-		
-		final ImageIcon upIcon = IconManager.getInstance().getIcon("actions/go-up", IconSize.SMALL);
-		final PhonUIAction moveUpAct = new PhonUIAction(this, "onMoveUp");
-		moveUpAct.putValue(PhonUIAction.SMALL_ICON, upIcon);
-		moveUpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move buffer up");
-		final JButton moveUpBtn = new JButton(moveUpAct);
-		
-		final ImageIcon downIcon = IconManager.getInstance().getIcon("actions/go-down", IconSize.SMALL);
-		final PhonUIAction moveDownAct = new PhonUIAction(this, "onMoveDown");
-		moveDownAct.putValue(PhonUIAction.SMALL_ICON, downIcon);
-		moveDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move buffer down");
-		final JButton moveDownBtn = new JButton(moveDownAct);
 		
 		final ImageIcon closeIcon = IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
 		final PhonUIAction closeBuffersAct = new PhonUIAction(this, "onRemoveSelectedBuffers");
@@ -111,8 +102,6 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		
 		leftPanel.add(saveAllButton, cc.xy(1, 1));
 		leftPanel.add(closeBtn, cc.xy(3, 1));
-		leftPanel.add(moveUpBtn, cc.xy(4, 2));
-		leftPanel.add(moveDownBtn, cc.xy(4, 3));
 		leftPanel.add(scroller, cc.xywh(1, 2, 3, 3));
 		
 		cardLayout = new CardLayout();
@@ -121,13 +110,17 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		
 		leftPanel.setBorder(BorderFactory.createTitledBorder("Buffer List"));
 		
-		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, bufferPanel);
-		
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, bufferPanel);
+		splitPane.setResizeWeight(0.0);
 		add(splitPane, BorderLayout.CENTER);
 	}
 	
 	public JToolBar getToolbar() {
 		return this.toolbar;
+	}
+	
+	public JSplitPane getSplitPane() {
+		return this.splitPane;
 	}
 	
 	private JPanel createNoSelectionPanel() {
@@ -234,13 +227,14 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		final JTable retVal = new JTable(bufferTableModel);
 		
 		retVal.getSelectionModel().addListSelectionListener( (l) -> {
-			int selectedRow = bufferList.getSelectedRow();
+			final int selectedRow = bufferList.getSelectedRow();
 			if(selectedRow >= 0 && selectedRow < bufferList.getRowCount()) {
 				final String bufferName = bufferList.getModel().getValueAt(selectedRow, 0).toString();
 				cardLayout.show(bufferPanel, bufferName);
 			} else {
 				cardLayout.show(bufferPanel, "no_selection");
 			}
+			SwingUtilities.invokeLater( () -> retVal.scrollRectToVisible(retVal.getCellRect(selectedRow, 0, true)) );
 		});
 		
 		return retVal;
@@ -301,7 +295,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return (columnIndex == 0);
+			return false;
 		}
 
 		@Override

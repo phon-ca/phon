@@ -23,6 +23,9 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -35,6 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -47,12 +51,18 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.breadcrumb.Breadcrumb;
+import ca.phon.ui.breadcrumb.BreadcrumbViewer;
 import ca.phon.ui.wizard.WizardEvent.WizardEventType;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 /**
- * Frame for a wizard display.  This wizard does not block.
+ * A basic wizard implementation.
+ * 
+ * Since Phon 2.2, this component includes a breadcrumb
+ * viewer which is not shown by default.  To display
+ * the breadcrumb, use the setBreadcrumbVisible() method.
  *
  */
 public class WizardFrame extends CommonModuleFrame {
@@ -60,6 +70,7 @@ public class WizardFrame extends CommonModuleFrame {
 	private static final long serialVersionUID = 3188162360218776636L;
 	
 	/* UI */
+	protected JPanel buttonPanel;
 	protected JButton btnBack;
 	protected JButton btnNext;
 	protected JButton btnFinish;
@@ -77,13 +88,31 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	protected JPanel stepPanel;
 	
+	/** The breadcrumb */
+	private Breadcrumb<WizardStep, String> breadcrumb;
+	protected BreadcrumbViewer<WizardStep, String> breadcrumbViewer;
+	
 	private List<WizardListener> listeners = 
 			Collections.synchronizedList(new ArrayList<>());
 	
 	public WizardFrame(String title) {
 		super(title);
 		
+		breadcrumb = new Breadcrumb<WizardStep, String>() {
+
+			@Override
+			public void gotoState(WizardStep state) {
+				super.gotoState(state);
+				WizardFrame.this.gotoStep(getStepIndex(state));
+			}
+			
+		};
+		
 		init();
+	}
+	
+	public int getStepIndex(WizardStep step) {
+		return (new ArrayList<>(steps.keySet())).indexOf(step);
 	}
 	
 	private void init() {
@@ -91,6 +120,9 @@ public class WizardFrame extends CommonModuleFrame {
 		stepLayout = new CardLayout();
 		stepPanel = new JPanel(stepLayout);
 		add(stepPanel, BorderLayout.CENTER);
+		
+		breadcrumbViewer = new BreadcrumbViewer<>(breadcrumb);
+		breadcrumbViewer.setVisible(false);
 		
 		// button bar
 		ImageIcon icnBack = IconManager.getInstance().getIcon("actions/agt_back", IconSize.SMALL);
@@ -144,19 +176,45 @@ public class WizardFrame extends CommonModuleFrame {
 			
 		});
 		
-		FormLayout barLayout = new FormLayout(
-				"fill:pref:grow, pref, pref, 5dlu, pref, pref",
-				"pref");
-		CellConstraints cc = new CellConstraints();
-		JPanel buttonPanel = new JPanel(barLayout);
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 2, 0, 0);
 		
-		buttonPanel.add(btnBack, cc.xy(2,1));
-		buttonPanel.add(btnNext, cc.xy(3,1));
-		buttonPanel.add(btnFinish, cc.xy(5,1));
-		buttonPanel.add(btnCancel, cc.xy(6,1));
+		buttonPanel = new JPanel(new GridBagLayout());
+		
+		gbc.weightx = 1.0;
+//		buttonPanel.add(breadcrumbViewer, gbc);
+		
+		++gbc.gridx;
+		buttonPanel.add(Box.createHorizontalGlue(), gbc);
+		
+		++gbc.gridx;
+		gbc.weightx = 0.0;
+		buttonPanel.add(btnBack, gbc);
+		++gbc.gridx;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		buttonPanel.add(btnNext, gbc);
+		++gbc.gridx;
+		gbc.insets = new Insets(0, 5, 0, 0);
+		buttonPanel.add(btnFinish, gbc);
+		++gbc.gridx;
+		buttonPanel.add(btnCancel, gbc);
 		buttonPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));
 		
 		add(buttonPanel, BorderLayout.SOUTH);
+	}
+	
+	public boolean isBreadcrumbVisible() {
+		return breadcrumbViewer.isVisible();
+	}
+	
+	public void setBreadcrumbVisible(boolean breadcrumbVisible) {
+		breadcrumbViewer.setVisible(breadcrumbVisible);
 	}
 	
 	public WizardStep getWizardStep(int idx) {
@@ -232,11 +290,22 @@ public class WizardFrame extends CommonModuleFrame {
 	public void removeWizardStep(WizardStep ws) {
 		steps.remove(ws);
 		stepPanel.remove(ws);
+		
+		if(breadcrumb.containsState(ws)) {
+			while(breadcrumb.size() > 0) {
+				breadcrumb.popState();
+				if(breadcrumb.peekState(breadcrumb.size()-1) == ws) {
+					break;
+				}
+			}
+		}
 	}
 	
 	public void removeAllSteps() {
 		steps.clear();
 		stepPanel.removeAll();
+		
+		breadcrumb.clear();
 	}
 	
 	public int numberOfSteps() {
@@ -256,6 +325,16 @@ public class WizardFrame extends CommonModuleFrame {
 		stepLayout.show(stepPanel, steps.get(ws).toString());
 		
 		setupButtons();
+		
+		if(breadcrumb.containsState(ws)) {
+			breadcrumb.gotoState(ws);
+		} else {
+			for(int i = breadcrumb.size(); i < numberOfSteps(); i++) {
+				WizardStep step = getWizardStep(i);
+				breadcrumb.addState(step, step.getTitle());
+				if(step == ws) break;
+			}
+		}
 		
 		fireWizardEvent(WizardEvent.createGotoStepEvent(this, stepIndex));
 	}
