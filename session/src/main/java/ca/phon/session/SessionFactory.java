@@ -21,10 +21,14 @@ package ca.phon.session;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -322,6 +326,16 @@ public abstract class SessionFactory {
 	 * @return new participant object
 	 */
 	public abstract Participant createParticipant();
+	
+	/**
+	 * Create the unknown participant object.
+	 * 
+	 * @return a new participant object with values setup for
+	 * an unknown speaker
+	 */
+	public Participant createUnknownParticipant() {
+		return new UnidentifiedParticipant();
+	}
 	
 	/**
 	 * Clone participant

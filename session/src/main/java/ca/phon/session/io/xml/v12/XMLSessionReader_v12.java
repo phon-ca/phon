@@ -359,6 +359,8 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					break;
 				}
 			}
+		} else {
+			retVal.setSpeaker(Participant.UNKNOWN);
 		}
 		
 		// orthography

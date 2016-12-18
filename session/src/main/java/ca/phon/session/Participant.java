@@ -30,7 +30,9 @@ import ca.phon.extensions.IExtendable;
  *
  */
 public interface Participant extends IExtendable {
-
+	
+	public static final Participant UNKNOWN = SessionFactory.newFactory().createUnknownParticipant();
+	
 	/**
 	 * @return Returns the age.
 	 */

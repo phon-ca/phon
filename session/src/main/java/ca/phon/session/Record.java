@@ -46,7 +46,10 @@ public interface Record extends IExtendable {
 	public void setUuid(UUID id);
 	
 	/**
-	 * The participant (speaker)
+	 * The participant (speaker).
+	 * 
+	 * As of Phon 2.2, this method will return
+	 * {@link Participant#UNKNOWN} instead of <code>null</code>
 	 * 
 	 * @return IParticipant
 	 */

@@ -137,7 +137,7 @@ public class RecordDataEditorView extends EditorView {
 	/**
 	 * speaker selection
 	 */
-	private JComboBox speakerBox;
+	private JComboBox<Participant> speakerBox;
 	
 	private volatile boolean updating = false;
 
@@ -573,12 +573,12 @@ public class RecordDataEditorView extends EditorView {
 			topPanel.add(recNumField, cc.xy(colIdx++, rowIdx));
 			colIdx++;  // 3dlu spacer
 			
-			final DefaultComboBoxModel speakerBoxModel = new DefaultComboBoxModel();
-			speakerBoxModel.addElement(null);
+			final DefaultComboBoxModel<Participant> speakerBoxModel = new DefaultComboBoxModel<>();
+			speakerBoxModel.addElement(Participant.UNKNOWN);
 			for(Participant participant:session.getParticipants()) {
 				speakerBoxModel.addElement(participant);
 			}
-			speakerBox = new JComboBox(speakerBoxModel);
+			speakerBox = new JComboBox<>(speakerBoxModel);
 			speakerBox.setRenderer(speakerRenderer);
 			speakerBox.addItemListener(speakerListener);
 			

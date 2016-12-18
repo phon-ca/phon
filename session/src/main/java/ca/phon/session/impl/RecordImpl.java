@@ -112,7 +112,9 @@ public class RecordImpl implements Record {
 
 	@Override
 	public void setSpeaker(Participant participant) {
-		participantRef.getAndSet(participant);
+		participantRef.getAndSet(
+				(participant != null ? participant : Participant.UNKNOWN)
+				);
 	}
 
 	@Override
