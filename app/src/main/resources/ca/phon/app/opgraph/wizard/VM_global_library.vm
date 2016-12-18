@@ -18,6 +18,7 @@
 #end
 
 #macro( printValue $v )
+	#if( (! $v) && ("$!v" == "") ) <td/>#break#end
 	#set($clazz = $v.class)
 	#set($txt = $FormatterUtil.format($v))
 	#set($number = $Class.forName("java.lang.Number"))

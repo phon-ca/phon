@@ -30,13 +30,17 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,9 +72,11 @@ import ca.phon.project.io.CorpusType;
 import ca.phon.project.io.ObjectFactory;
 import ca.phon.project.io.ProjectType;
 import ca.phon.project.io.SessionType;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
 import ca.phon.session.io.OriginalFormat;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionInputFactory;
@@ -875,6 +881,81 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new IOException(e);
 			} catch (XPathExpressionException e) {
 				throw new IOException(e);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	@Override
+	public Set<Participant> getParticipants(Collection<SessionPath> sessions) {
+		final Comparator<Participant> comparator = (p1, p2) -> {
+			int retVal = p1.getId().compareTo(p2.getId());
+			if(retVal == 0) {
+				retVal = p1.getName().compareTo(p2.getName());
+				if(retVal == 0) {
+					retVal = p1.getRole().compareTo(p2.getRole());
+				}
+			}
+			return retVal;
+		};
+		final Set<Participant> retVal = new TreeSet<>(comparator);
+		
+		for(SessionPath sessionPath:sessions) {
+			try {
+				Session session = openSession(sessionPath.getCorpus(), sessionPath.getSession());
+				Collection<Participant> participants = new ArrayList<>();
+				
+				participants.add( SessionFactory.newFactory().cloneParticipant(Participant.UNKNOWN) );
+				session.getParticipants().forEach( (p) -> participants.add(p) );
+				
+				for(Participant participant:participants) {
+					Participant speaker = null;
+					if(retVal.contains(participant)) {
+						for(Participant p:retVal) {
+							if(comparator.compare(participant, p) == 0) {
+								speaker = p;
+								break;
+							}
+						}
+					} else {
+						speaker = SessionFactory.newFactory().cloneParticipant(participant);
+					}
+					
+					// get record count
+					int count = 0;
+					for(Record r:session.getRecords()) {
+						if(comparator.compare(r.getSpeaker(), participant) == 0) ++count;
+					}
+					
+					if(speaker != null) {
+						if(count == 0 && comparator.compare(Participant.UNKNOWN, speaker) == 0) {
+							// do not add unknown speaker if there are no records
+						} else {
+							ParticipantHistory history = speaker.getExtension(ParticipantHistory.class);
+							if(history == null) {
+								history = new ParticipantHistory();
+								speaker.putExtension(ParticipantHistory.class, history);
+							}
+							Period age = 
+									(participant != null ? participant.getAge(session.getDate()) : null);
+							history.setAgeForSession(sessionPath, age);
+							history.setNumberOfRecordsForSession(sessionPath, count);
+						}
+					}
+					
+					if(!retVal.contains(speaker)) {
+						if(comparator.compare(Participant.UNKNOWN, speaker) == 0) {
+							if(count > 0)
+								retVal.add(speaker);
+						} else {
+							retVal.add(speaker);
+						}
+					}
+					
+				}
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		

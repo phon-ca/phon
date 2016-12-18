@@ -22,11 +22,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.Participant;
 import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
 import ca.phon.session.io.SessionReader;
 import ca.phon.session.io.SessionWriter;
 
@@ -227,6 +232,22 @@ public interface Project extends IExtendable {
 	 */
 	public int numberOfRecordsInSession(String corpus, String session)
 		throws IOException;
+	
+	/**
+	 * Return a set of participants which are found in the
+	 * given collection of Sessions.  The participant objects
+	 * returned by this method will include the {@link ParticipantHistory}
+	 * extension.
+	 * 
+	 * Participants from two sessions are considered to be the same
+	 * if their ids, names and roles match.  If the speaker for some records
+	 * is unidenified, a clone of Participant.UNKOWN will be added in the returned
+	 * set.
+	 * 
+	 * @param sessions
+	 * @return a set of participants
+	 */
+	public Set<Participant> getParticipants(Collection<SessionPath> sessions);
 	
 	/**
 	 * Open the specified session.  This will create a new session

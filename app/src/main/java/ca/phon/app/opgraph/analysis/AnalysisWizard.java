@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JMenuBar;
@@ -134,7 +135,7 @@ public class AnalysisWizard extends NodeWizard {
 			
 		};
 		sessionSelectorStep.setTitle("Sessions & Participants");
-		
+	
 		final Container container = sessionSelectorStep;
 
 		final GridBagConstraints gbc = new GridBagConstraints();
@@ -174,6 +175,8 @@ public class AnalysisWizard extends NodeWizard {
 		});
 		panel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
 		
+		participantSelector.setRootVisible(false);
+		
 		final TitledPanel participantPanel = new TitledPanel("Select Participants");
 		participantPanel.getContentContainer().setLayout(new BorderLayout());
 		final JScrollPane participantScroller = new JScrollPane(participantSelector);
@@ -206,13 +209,16 @@ public class AnalysisWizard extends NodeWizard {
 		final Runnable onBg = () -> {
 			SwingUtilities.invokeLater(() -> participantBusyLabel.setBusy(true));
 			
-			final TristateCheckBoxTreeModel model = ParticipantSelector.createModel(getProject(), sessionSelector.getSelectedSessions(), 
-					new ParticipantSelector.DefaultParticipantComparator());
+			final Collection<Participant> participantHistory =
+					project.getParticipants(sessionSelector.getSelectedSessions());
 			
+			final TristateCheckBoxTreeModel model = ParticipantSelector.createModel(participantHistory);
 			SwingUtilities.invokeLater( () -> { 
 				participantSelector.setModel(model);
 				participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
 				participantBusyLabel.setBusy(false);
+				
+				participantSelector.expandAll(new TreePath(participantSelector.getRoot()));
 			});
 		};
 		PhonWorker.getInstance().invokeLater(onBg);
@@ -263,20 +269,11 @@ public class AnalysisWizard extends NodeWizard {
 	
 	@Override
 	public void gotoStep(int stepIdx) {
-//		if(getWizardStep(stepIdx) == participantSelectorStep) {
-//			// populate tree with information from selected sessions
-//			participantSelector.loadParticipants(getProject(), sessionSelector.getSelectedSessions());
-//			participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
-//		}
 		if(getWizardStep(stepIdx) == reportDataStep) {
 			if(sessionSelector != null)
 				getProcessor().getContext().put("_selectedSessions", sessionSelector.getSelectedSessions());
 			if(participantSelector != null) {
 				List<Participant> selectedParticipants = participantSelector.getSelectedParticpants();
-				for(Participant p:selectedParticipants) {
-					final ParticipantHistory history = ParticipantHistory.calculateHistoryForParticpant(project, sessionSelector.getSelectedSessions(), p);
-					p.putExtension(ParticipantHistory.class, history);
-				}
 				getProcessor().getContext().put("_selectedParticipants", selectedParticipants);
 			}
 		}
