@@ -22,8 +22,11 @@ import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -95,6 +98,7 @@ public class DatePicker extends JComponent {
 			public void focusGained(FocusEvent e) {
 				
 			}
+			
 		});
 		
 		monthView = new JXMonthView();
@@ -144,7 +148,11 @@ public class DatePicker extends JComponent {
 			
 			@Override
 			public void valueChanged(DateSelectionEvent ev) {
-				textField.setValue(LocalDate.from(monthView.getSelectionDate().toInstant()));
+				final Date javaDate = monthView.getSelectionDate();
+				if(javaDate == null) return;
+				final LocalDate localDate = javaDate.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+				
+				textField.setValue(localDate);
 			}
 			
 		});

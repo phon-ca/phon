@@ -288,6 +288,8 @@ public class SessionInfoEditorView extends EditorView {
 
 			void dateFieldUpdate() {
 				final LocalDate selectedDate = retVal.getDateTime();
+				if(selectedDate == null) return;
+				
 				final LocalDate newDate = LocalDate.from(selectedDate);
 				
 				final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, getEditor().getSession().getDate());
