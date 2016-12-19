@@ -66,7 +66,7 @@ public class QueryHistoryNode extends OpNode {
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		Project project = null;
-		if(context.containsKey(projectInput)) {
+		if(context.get(projectInput) != null) {
 			project = (Project)context.get(projectInput);
 		} else if(context.containsKey("_project") && context.get("_project") instanceof Project) {
 			project = (Project)context.get("_project");
@@ -75,7 +75,7 @@ public class QueryHistoryNode extends OpNode {
 		}
 		
 		String queryId = "";
-		if(context.containsKey(queryIdInput)) {
+		if(context.get(queryIdInput) != null) {
 			queryId = (String)context.get(queryIdInput);
 		} else if(context.containsKey("_queryId")) {
 			queryId = context.get("_queryId").toString();

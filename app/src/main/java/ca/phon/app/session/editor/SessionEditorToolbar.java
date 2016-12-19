@@ -129,12 +129,12 @@ public class SessionEditorToolbar extends JPanel {
 		++gbc.gridx;
 		add(viewLayoutBtn, gbc);
 		
-		final PhonUIAction assessmentMenuAction = new PhonUIAction(this, "onShowAssessmentMenu");
-		assessmentMenuAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/report", IconSize.SMALL));
-		assessmentMenuAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show analysis menu");
-		final JButton assessmentMenuBtn = new JButton(assessmentMenuAction);
-		++gbc.gridx;
-		add(assessmentMenuBtn, gbc);
+//		final PhonUIAction assessmentMenuAction = new PhonUIAction(this, "onShowAssessmentMenu");
+//		assessmentMenuAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/report", IconSize.SMALL));
+//		assessmentMenuAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show analysis menu");
+//		final JButton assessmentMenuBtn = new JButton(assessmentMenuAction);
+//		++gbc.gridx;
+//		add(assessmentMenuBtn, gbc);
 		
 //		++gbc.gridx;
 //		add(createViewButtons(), gbc);
