@@ -47,6 +47,7 @@ import ca.phon.phonex.PhonexPatternException;
 import ca.phon.stresspattern.StressMatcherType;
 import ca.phon.stresspattern.StressPattern;
 import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableAndPausesVisitor;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableVisitor;
 import ca.phon.util.Range;
@@ -456,6 +457,17 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 */
 	public List<IPATranscript> syllables() {
 		final SyllableVisitor visitor = new SyllableVisitor();
+		accept(visitor);
+		return Collections.unmodifiableList(visitor.getSyllables());
+	}
+	
+	/**
+	 * Return syllables, including intra-word pauses.
+	 * 
+	 * @return syllables and pauses
+	 */
+	public List<IPATranscript> syllablesAndPauses() {
+		final SyllableAndPausesVisitor visitor = new SyllableAndPausesVisitor();
 		accept(visitor);
 		return Collections.unmodifiableList(visitor.getSyllables());
 	}

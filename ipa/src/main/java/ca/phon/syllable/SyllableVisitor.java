@@ -48,7 +48,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	 * current syllable
 	 * 
 	 */
-	private IPATranscriptBuilder currentSyllableBuilder = new IPATranscriptBuilder();
+	protected IPATranscriptBuilder currentSyllableBuilder = new IPATranscriptBuilder();
 	
 	/**
 	 * last phone
@@ -79,7 +79,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		appendSyllable(stressMarker);
 	}
 	
-	private void breakSyllable() {
+	protected void breakSyllable() {
 		final IPATranscript currentSyllable = currentSyllableBuilder.toIPATranscript();
 		if(currentSyllable.length() > 0) {
 			// check for stress marker
