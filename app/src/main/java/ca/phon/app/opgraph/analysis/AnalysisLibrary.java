@@ -98,7 +98,7 @@ public class AnalysisLibrary {
 		final List<String> createdFolders = new ArrayList<>();
 		for(URL reportURL:getStockGraphs()) {
 			final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
-			act.setShowWizard(selectedSessions.size() == 0);
+//			act.setShowWizard(selectedSessions.size() == 0);
 			
 			String menuPath = ".";
 			final String path = reportURL.getPath();
