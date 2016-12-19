@@ -220,6 +220,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 		
 		logBuffer.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
 		
+		firstRowAsHeaderBox.setVisible(false);
+		
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 	
@@ -281,6 +283,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		cardLayout.show(contentPanel, TABLE_VIEW_ID);
 		currentView = dataTable;
 		
+		firstRowAsHeaderBox.setVisible(true);
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 	
@@ -303,6 +306,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 			contentPanel.add(htmlScroller, HTML_VIEW_ID);
 		}
 		htmlPane.setText(logBuffer.getText());
+		firstRowAsHeaderBox.setVisible(false);
 		
 		SwingUtilities.invokeLater(() -> {
 			htmlPane.scrollRectToVisible(new Rectangle(0,0,0,0));
@@ -338,6 +342,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		firstRowAsHeaderAct.putValue(PhonUIAction.NAME, "Use first row as column header");
 		firstRowAsHeaderAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
 		firstRowAsHeaderBox = new JCheckBox(firstRowAsHeaderAct);
+		firstRowAsHeaderBox.setVisible(false);
 		
 		busyLabel.setVisible(false);
 		
