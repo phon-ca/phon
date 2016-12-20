@@ -103,7 +103,9 @@ public class WizardFrame extends CommonModuleFrame {
 			@Override
 			public void gotoState(WizardStep state) {
 				super.gotoState(state);
-				WizardFrame.this.gotoStep(getStepIndex(state));
+				
+				if(getCurrentStep() != state)
+					WizardFrame.this.gotoStep(getStepIndex(state));
 			}
 			
 		};
@@ -313,7 +315,6 @@ public class WizardFrame extends CommonModuleFrame {
 	}
 	
 	public void gotoStep(int stepIndex) {
-		if(stepIndex == getCurrentStepIndex()) return;
 		if(currentStep != null) {
 			remove(currentStep);
 		}
@@ -329,7 +330,8 @@ public class WizardFrame extends CommonModuleFrame {
 		if(breadcrumb.containsState(ws)) {
 			breadcrumb.gotoState(ws);
 		} else {
-			for(int i = breadcrumb.size(); i < numberOfSteps(); i++) {
+			breadcrumb.clear();
+			for(int i = 0; i < numberOfSteps() && i <= getCurrentStepIndex(); i++) {
 				WizardStep step = getWizardStep(i);
 				breadcrumb.addState(step, step.getTitle());
 				if(step == ws) break;

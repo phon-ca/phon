@@ -107,6 +107,8 @@ public class AnalysisRunner implements Runnable {
 						Toolkit.getDefaultToolkit().getScreenSize().height - padding);
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
+				
+				wizard.gotoStep(0);
 			});
 		} else {
 			processor.stepAll();

@@ -239,6 +239,7 @@ public class NodeWizard extends WizardFrame {
 		breadcrumbViewer.setBackground(new Color(200, 200, 200));
 		breadcrumbViewer.setOpaque(true);
 		
+		
 		// add breadcrumb view to header
 		final GridBagConstraints gbch = new GridBagConstraints();
 		gbch.gridx = 0;
@@ -640,9 +641,7 @@ public class NodeWizard extends WizardFrame {
 	}
 	
 	@Override
-	public void gotoStep(int step) {
-		if(step == getCurrentStepIndex()) return;
-		
+	public void gotoStep(int step) {		
 		super.gotoStep(step);
 		
 		if(cardLayout != null)
