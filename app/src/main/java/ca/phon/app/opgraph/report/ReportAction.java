@@ -23,11 +23,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingWorker;
+
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.opgraph.analysis.AnalysisRunner;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.worker.PhonWorker;
@@ -62,18 +66,33 @@ public class ReportAction extends HookableAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		try {
-			final OpGraph graph = loadReport();
-			
-			final ReportRunner reportRunner = new ReportRunner(graph, project, queryId);
-			PhonWorker.getInstance().invokeLater(reportRunner);
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
+		final ReportWorker worker = new ReportWorker();
+		worker.run();
 	}
 	
 	private OpGraph loadReport() throws IOException {
 		return OpgraphIO.read(reportURL.openStream());
+	}
+	
+	private class ReportWorker extends SwingWorker<OpGraph, Object> {
+
+		@Override
+		protected OpGraph doInBackground() throws Exception {
+			final OpGraph graph = loadReport();
+			return graph;
+		}
+
+		@Override
+		protected void done() {
+			try {
+				final ReportRunner reportRunner = new ReportRunner(get(), project, queryId);
+				PhonWorker.getInstance().invokeLater(reportRunner);
+			} catch (ExecutionException | InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
+		
 	}
 	
 }

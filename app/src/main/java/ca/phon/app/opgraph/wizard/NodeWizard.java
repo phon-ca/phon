@@ -649,34 +649,21 @@ public class NodeWizard extends WizardFrame {
 			cardLayout.show(centerPanel, WIZARD_LIST);
 		
 		if(!inInit && getCurrentStep() == reportDataStep) {
-
-			final Runnable inBg = () -> {
-				try {
-					executeGraph();
-				} catch (ProcessingException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
-			};
+			if(bufferPanel.getBufferNames().size() > 0) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setTitle("Re-run analysis");
+				props.setHeader("Re-run analysis");
+				props.setMessage("Clear results and re-run analysis.");
+				props.setOptions(MessageDialogProperties.okCancelOptions);
+				props.setRunAsync(false);
+				props.setParentWindow(this);
+	
+				int retVal = NativeDialogs.showMessageDialog(props);
+				if(retVal == 1) return;
+				bufferPanel.closeAllBuffers();
+			}
 			
-			final Runnable onEDT = () -> {
-				if(bufferPanel.getBufferNames().size() > 0) {
-					final MessageDialogProperties props = new MessageDialogProperties();
-					props.setTitle("Re-run analysis");
-					props.setHeader("Re-run analysis");
-					props.setMessage("Clear results and re-run analysis.");
-					props.setOptions(MessageDialogProperties.okCancelOptions);
-					props.setRunAsync(false);
-					props.setParentWindow(this);
-		
-					int retVal = NativeDialogs.showMessageDialog(props);
-					if(retVal == 1) return;
-					bufferPanel.closeAllBuffers();
-				}
-				
-				PhonWorker.getInstance().invokeLater(inBg);
-			};
-			
-			SwingUtilities.invokeLater(onEDT);
+			PhonWorker.getInstance().invokeLater( () -> executeGraph() );
 		}
 	}
 

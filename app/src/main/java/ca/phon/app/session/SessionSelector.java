@@ -54,6 +54,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 			return new TristateCheckBoxTreeModel(new DefaultMutableTreeNode("No project"));
 		
 		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode(project);
+		root.setEnablePartialCheck(false);
 		
 		// create new tree structure
 		Collator collator = CollatorFactory.defaultCollator();

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
         <node id="3b7dacf0" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
@@ -12,7 +13,6 @@
                     <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="225" y="15"/>
             </extensions>
@@ -32,6 +32,7 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>
+                    <oga:property key="useMajorPlace"><![CDATA[true]]></oga:property>
                     <oga:property key="includePlace"><![CDATA[true]]></oga:property>
                     <oga:property key="useFeatureVariability"><![CDATA[false]]></oga:property>
                     <oga:property key="includeManner"><![CDATA[true]]></oga:property>
@@ -68,21 +69,21 @@
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info title="Inventory">
+                <opqry:info format="html" title="Inventory">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="3790be87">
-                    <opqry:info title="Inventory Options">
+                    <opqry:info format="html" title="Inventory Options">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
-                <opqry:node ref="50f011e9">
-                    <opqry:info title="Phone Dispersion">
+                <opqry:node ref="50f011e9" showAsStep="true">
+                    <opqry:info format="html" title="Phone Dispersion">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
                 <opqry:node ref="b5aa672">
-                    <opqry:info title="Sort">
+                    <opqry:info format="html" title="Sort">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>

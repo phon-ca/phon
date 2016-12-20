@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
         <node id="21367d23" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
@@ -12,7 +13,6 @@
                     <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeExtraColumns"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="62" y="141"/>
             </extensions>
@@ -42,11 +42,16 @@
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info title="Transcript Variability">
+                <opqry:info format="html" title="Transcript Variability">
                     <opqry:message/>
                 </opqry:info>
+                <opqry:node ref="58b853f2">
+                    <opqry:info format="html" title="Results To Table">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
                 <opqry:node ref="4172dddc06ea48a3">
-                    <opqry:info title="IPA Variability">
+                    <opqry:info format="html" title="IPA Variability">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>

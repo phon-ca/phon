@@ -397,6 +397,7 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	public int getCurrentStepIndex() {
 		int retVal = -1;
+		if(currentStep == null) return retVal;
 		for(WizardStep step:steps.keySet()) {
 			++retVal;
 			if(step == currentStep) {
@@ -429,7 +430,6 @@ public class WizardFrame extends CommonModuleFrame {
 			busyLabel = new JXBusyLabel();
 			Rectangle consoleBounds = comp.getBounds();
 			Rectangle rect = SwingUtilities.convertRectangle(comp.getParent(), consoleBounds, glassPane);
-//			System.out.println(rect);
 			Rectangle busyBounds = 
 				new Rectangle(rect.x + rect.width - busyLabel.getPreferredSize().width-20,
 						rect.y+10,

@@ -28,7 +28,7 @@ public class ReportWizard extends NodeWizard {
 
 	public ReportWizard(String title, Processor processor, OpGraph graph) {
 		super(title, processor, graph);
+		gotoStep(0);
 	}
 	
 }
-
