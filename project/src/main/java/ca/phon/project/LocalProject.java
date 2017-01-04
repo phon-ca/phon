@@ -892,7 +892,9 @@ public class LocalProject implements Project, ProjectRefresh {
 		final Comparator<Participant> comparator = (p1, p2) -> {
 			int retVal = p1.getId().compareTo(p2.getId());
 			if(retVal == 0) {
-				retVal = p1.getName().compareTo(p2.getName());
+				final String p1Name = (p1.getName() == null ? "" : p1.getName());
+				final String p2Name = (p2.getName() == null ? "" : p2.getName());
+				retVal = p1Name.compareTo(p2Name);
 				if(retVal == 0) {
 					retVal = p1.getRole().compareTo(p2.getRole());
 				}
