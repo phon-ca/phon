@@ -33,9 +33,6 @@ import javax.swing.tree.TreePath;
 public class TristateCheckBoxTree extends JTree {
 
 	private static final long serialVersionUID = 1360119840510903927L;
-
-	/** Property change for checked status */
-	public final static String PATH_CHECK_CHANGED = "pathCheckChanged";
 	
 	public TristateCheckBoxTree() {
 		this(new TristateCheckBoxTreeNode());

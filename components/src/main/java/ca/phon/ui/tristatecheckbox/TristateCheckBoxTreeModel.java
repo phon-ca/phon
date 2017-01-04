@@ -18,6 +18,7 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -70,7 +71,7 @@ public class TristateCheckBoxTreeModel extends DefaultTreeModel {
 					}
 				}
 
-				nodeChanged(node);
+				nodeCheckingChanged(node, state);
 				TreePath parentPath = path.getParentPath();
 				while(parentPath != null) {
 					if(parentPath.getLastPathComponent() instanceof TristateCheckBoxTreeNode) {
@@ -82,6 +83,50 @@ public class TristateCheckBoxTreeModel extends DefaultTreeModel {
 			}
 		} else {
 			super.valueForPathChanged(path, newValue);
+		}
+	}
+	
+	private void nodeCheckingChanged(TreeNode node, TristateCheckBoxState state) {
+		// copied from DefaultTreeModel
+		TreeNode parent = node.getParent();
+
+        if(parent != null) {
+            int anIndex = parent.getIndex(node);
+            if(anIndex != -1) {
+                int[] cIndexs = new int[1];
+
+                cIndexs[0] = anIndex;
+                nodeCheckingChanged(parent, cIndexs, state);
+            }
+        } else if (node == getRoot()) {
+            nodeCheckingChanged(node, null, state);
+        }
+	}
+	
+	private void nodeCheckingChanged(TreeNode node, int[] childIndices, TristateCheckBoxState state) {
+		if (node != null) {
+			if (childIndices != null) {
+				int cCount = childIndices.length;
+
+				if (cCount > 0) {
+					Object[] cChildren = new Object[cCount];
+
+					for (int counter = 0; counter < cCount; counter++)
+						cChildren[counter] = node.getChildAt(childIndices[counter]);
+					
+					fireTreeNodeCheckingChanged(this, getPathToRoot(node), childIndices, cChildren, state);
+				}
+			} else if (node == getRoot()) {
+				fireTreeNodeCheckingChanged(this, getPathToRoot(node), null, null, state);
+			}
+		}
+	}
+	
+	public void fireTreeNodeCheckingChanged(Object source, Object[] path, int[] childIndices, Object[] children, TristateCheckBoxState state) {
+		final TristateCheckBoxTreeModelEvent evt =
+				new TristateCheckBoxTreeModelEvent(source, path, childIndices, children, state);
+		for(TreeModelListener listener:super.getTreeModelListeners()) {
+			listener.treeNodesChanged(evt);
 		}
 	}
 	
