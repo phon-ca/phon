@@ -214,8 +214,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	protected void addWorkspaceMenu(Window owner, JMenuBar menu) {
 		JMenu workspaceMenu = new JMenu("Workspace");
 		
-		workspaceMenu.add(new WorkspaceCommand());
-		
 		workspaceMenu.add(new SelectWorkspaceCommand());
 		
 		final JMenu workspaceProjectsMenu = new JMenu("Workspace projects");
