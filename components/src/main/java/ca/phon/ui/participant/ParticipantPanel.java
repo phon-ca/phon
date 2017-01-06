@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -54,7 +55,6 @@ import org.jdesktop.swingx.VerticalLayout;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import ca.phon.functor.Functor;
 import ca.phon.session.AgeFormatter;
 import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
@@ -81,12 +81,12 @@ public class ParticipantPanel extends JPanel {
 	/*
 	 * UI
 	 */
-	private JComboBox roleBox;
+	private JComboBox<ParticipantRole> roleBox;
 	
 	private JCheckBox assignIdBox;
 	private JTextField idField;
 	
-	private JComboBox sexBox;
+	private JComboBox<Sex> sexBox;
 	
 	private JTextField nameField;
 	private JTextField groupField;
@@ -120,7 +120,7 @@ public class ParticipantPanel extends JPanel {
 	
 	private void init() {
 		// setup form
-		roleBox = new JComboBox(ParticipantRole.values());
+		roleBox = new JComboBox<>(ParticipantRole.values());
 		
 		assignIdBox = new JCheckBox("Assign ID from role");
 		assignIdBox.setSelected(true);
@@ -128,13 +128,13 @@ public class ParticipantPanel extends JPanel {
 		idField = new JTextField();
 		idField.setEnabled(false);
 		
-		sexBox = new JComboBox(Sex.values());
+		sexBox = new JComboBox<>(Sex.values());
 		sexBox.setSelectedItem(
 				(participant.getSex() != null ? participant.getSex() : Sex.UNSPECIFIED));
 		sexBox.setRenderer(new DefaultListCellRenderer() {
 
 			@Override
-			public Component getListCellRendererComponent(JList list,
+			public Component getListCellRendererComponent(JList<?> list,
 					Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
@@ -215,152 +215,86 @@ public class ParticipantPanel extends JPanel {
 		}
 		
 		// setup listeners
-		final Functor<Void, Participant> roleUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				final ParticipantRole role = (ParticipantRole)roleBox.getSelectedItem();
-				participant.setRole(role);
-				if(assignIdBox.isSelected()) {
-					idField.setText(getRoleId());
-				}
-				
-				return null;
+		final Consumer<Participant> roleUpdater = (obj) -> {
+			final ParticipantRole role = (ParticipantRole)roleBox.getSelectedItem();
+			obj.setRole(role);
+			if(assignIdBox.isSelected()) {
+				idField.setText(getRoleId());
 			}
-			
 		};
 		roleBox.addItemListener(new ItemUpdater(roleUpdater));
 		
-		final Functor<Void, Participant> idUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				participant.setId(idField.getText());
-				return null;
-			}
-			
+		final Consumer<Participant> idUpdater = (obj) -> {
+			obj.setId(idField.getText());
 		};
 		idField.getDocument().addDocumentListener(new TextFieldUpdater(idUpdater));
 		
-		final Functor<Void, Participant> nameUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				participant.setName(nameField.getText());
-				return null;
-			}
-			
+		final Consumer<Participant> nameUpdater = (obj) -> {
+			obj.setName(nameField.getText());
 		};
 		nameField.getDocument().addDocumentListener(new TextFieldUpdater(nameUpdater));
 		
-		final Functor<Void, Participant> langUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				participant.setLanguage(languageField.getText());
-				return null;
-			}
-			
+		final Consumer<Participant> langUpdater = (obj) -> {
+			obj.setLanguage(languageField.getText());
 		};
 		languageField.getDocument().addDocumentListener(new TextFieldUpdater(langUpdater));
 		
-		final Functor<Void, Participant> groupUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				participant.setGroup(groupField.getText());
-				return null;
-			}
-			
+		final Consumer<Participant> groupUpdater = (obj) -> {
+			obj.setGroup(groupField.getText());
 		};
 		groupField.getDocument().addDocumentListener(new TextFieldUpdater(groupUpdater));
 		
-		final Functor<Void, Participant> eduUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				participant.setEducation(educationField.getText());
-				return null;
-			}
-			
+		final Consumer<Participant> eduUpdater = (obj) -> {
+			obj.setEducation(educationField.getText());
 		};
 		educationField.getDocument().addDocumentListener(new TextFieldUpdater(eduUpdater));
 		
-		final Functor<Void, Participant> sesUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				participant.setSES(sesField.getText());
-				return null;
-			}
-			
+		final Consumer<Participant> sesUpdater = (obj) -> {
+			obj.setSES(sesField.getText());
 		};
 		sesField.getDocument().addDocumentListener(new TextFieldUpdater(sesUpdater));
 		
-		final Functor<Void, Participant> sexUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				participant.setSex((Sex)sexBox.getSelectedItem());
-				return null;
-			}
-			
+		final Consumer<Participant> sexUpdater = (obj) -> {
+			obj.setSex((Sex)sexBox.getSelectedItem());
 		};
 		sexBox.addItemListener(new ItemUpdater(sexUpdater));
 		
-		final Functor<Void, Participant> assignIdFunctor = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
+		final Consumer<Participant> assignIdFunctor = (obj) -> {
+			if(assignIdBox.isSelected()) {
 				if(assignIdBox.isSelected()) {
-					if(assignIdBox.isSelected()) {
-						idField.setText(getRoleId());
-					}
+					idField.setText(getRoleId());
 				}
-				idField.setEnabled(!assignIdBox.isSelected());
-				return null;
 			}
-			
+			idField.setEnabled(!assignIdBox.isSelected());
 		};
 		assignIdBox.addItemListener(new ItemUpdater(assignIdFunctor));
 		
-		final Functor<Void, Participant> bdayUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				final LocalDate bday = bdayField.getDateTime();
-				participant.setBirthDate(bday);
-				if(participant.getAge(null) == null) {
-					if(sessionDate != null
-						&& sessionDate.isAfter(participant.getBirthDate())) {
-						final Period age = participant.getAge(sessionDate);
-						ageField.setPrompt(AgeFormatter.ageToString(age));
-						ageField.setKeepPrompt(true);
-					} else {
-						ageField.setPrompt("YY:MM.DD");
-						ageField.setKeepPrompt(false);
-					}
+		final Consumer<Participant> bdayUpdater = (obj) -> {
+			final LocalDate bday = bdayField.getDateTime();
+			obj.setBirthDate(bday);
+			if(obj.getAge(null) == null) {
+				if(sessionDate != null && obj.getBirthDate() != null
+					&& sessionDate.isAfter(obj.getBirthDate())) {
+					final Period age = obj.getAge(sessionDate);
+					ageField.setPrompt(AgeFormatter.ageToString(age));
+					ageField.setKeepPrompt(true);
+				} else {
+					ageField.setPrompt("YY:MM.DD");
+					ageField.setKeepPrompt(false);
 				}
-				return null;
 			}
-			
 		};
+//		bdayField.addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
 		bdayField.getTextField().getDocument().addDocumentListener(new TextFieldUpdater(bdayUpdater));
 		bdayField.getTextField().addActionListener(new ActionUpdater(bdayUpdater));
 		
-		final Functor<Void, Participant> ageUpdater = new Functor<Void, Participant>() {
-			
-			@Override
-			public Void op(Participant obj) {
-				if(ageField.getText().trim().length() == 0) {
-					participant.setAge(null);
-				} else {
-					final Period p = ageField.getValue();
-					participant.setAge(p);
-				}
-				return null;
+		final Consumer<Participant> ageUpdater = (obj) -> {
+			if(ageField.getText().trim().length() == 0) {
+				obj.setAge(null);
+			} else {
+				final Period p = ageField.getValue();
+				obj.setAge(p);
 			}
-			
 		};
 		ageField.getDocument().addDocumentListener(new TextFieldUpdater(ageUpdater));
 		
@@ -530,50 +464,50 @@ public class ParticipantPanel extends JPanel {
 	
 	private class ItemUpdater implements ItemListener {
 		
-		private final Functor<Void, Participant> updater;
+		private final Consumer<Participant> updater;
 		
-		public ItemUpdater(Functor<Void, Participant> updater) {
+		public ItemUpdater(Consumer<Participant> updater) {
 			this.updater = updater;
 		}
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			updater.op(participant);
+			updater.accept(participant);
 		}
 		
 	}
 	
 	private class ActionUpdater implements ActionListener {
 		
-		private final Functor<Void, Participant> updater;
+		private final Consumer<Participant> updater;
 		
-		public ActionUpdater(Functor<Void, Participant> updater) {
+		public ActionUpdater(Consumer<Participant> updater) {
 			this.updater = updater;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			updater.op(participant);
+			updater.accept(participant);
 		}
 		
 	}
 	
 	private class TextFieldUpdater implements DocumentListener {
 
-		private final Functor<Void, Participant> updater;
+		private final Consumer<Participant> updater;
 		
-		public TextFieldUpdater(Functor<Void, Participant> updater) {
+		public TextFieldUpdater(Consumer<Participant> updater) {
 			this.updater = updater;
 		}
 		
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			updater.op(participant);
+			updater.accept(participant);
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			updater.op(participant);
+			updater.accept(participant);
 		}
 
 		@Override
@@ -585,16 +519,16 @@ public class ParticipantPanel extends JPanel {
 	
 	private class PropertyUpdater implements PropertyChangeListener {
 		
-		private final Functor<Void, Participant> updater;
+		private final Consumer<Participant> updater;
 		
-		public PropertyUpdater(Functor<Void, Participant> updater) {
+		public PropertyUpdater(Consumer<Participant> updater) {
 			super();
 			this.updater = updater;
 		}
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			updater.op(participant);
+			updater.accept(participant);
 		}
 		
 	}
