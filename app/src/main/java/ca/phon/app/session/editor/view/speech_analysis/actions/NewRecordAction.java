@@ -28,11 +28,15 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		if(!getView().getWavDisplay().hasSelection()) return;
 		
+		final Record currentRecord = getEditor().currentRecord();
+		
 		final float startTime = getView().getWavDisplay().getSelectionStart();
 		final float endTime = startTime + getView().getWavDisplay().getSelectionLength();
 		
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Record record = factory.createRecord();
+		record.setSpeaker(currentRecord.getSpeaker());
+		record.addGroup();
 		
 		final MediaSegment segment = factory.createMediaSegment();
 		segment.setStartValue(startTime*1000.0f);
