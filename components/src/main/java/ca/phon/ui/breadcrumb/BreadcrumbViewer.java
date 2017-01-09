@@ -21,6 +21,7 @@ package ca.phon.ui.breadcrumb;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -46,7 +47,7 @@ public class BreadcrumbViewer<S, V> extends JPanel {
 	/** The width of the right-hand side of a breadcrumb */ 
 	private static final int RIGHT_WIDTH = 10;
 
-	private static class StateComponent<S, V> extends JLabel {
+	private class StateComponent<S, V> extends JLabel {
 		/** The state for this component */
 		public final S state;
 
@@ -59,6 +60,11 @@ public class BreadcrumbViewer<S, V> extends JPanel {
 			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			if(state != null)
 				setBorder(new EmptyBorder(5, 0, 5, 2*RIGHT_WIDTH));
+		}
+		
+		@Override
+		public Font getFont() {
+			return BreadcrumbViewer.this.getFont();
 		}
 
 		@Override
