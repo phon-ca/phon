@@ -23,6 +23,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -124,13 +125,12 @@ public class WizardFrame extends CommonModuleFrame {
 		add(stepPanel, BorderLayout.CENTER);
 		
 		breadcrumbViewer = new BreadcrumbViewer<>(breadcrumb);
+		breadcrumbViewer.setFont(breadcrumbViewer.getFont().deriveFont(Font.BOLD));
 		breadcrumbViewer.setVisible(false);
 		
 		// button bar
-		ImageIcon icnBack = IconManager.getInstance().getIcon("actions/agt_back", IconSize.SMALL);
-		ImageIcon icnNext = IconManager.getInstance().getIcon("actions/agt_forward", IconSize.SMALL);
-		ImageIcon icnFinish = IconManager.getInstance().getIcon("actions/button_ok", IconSize.SMALL);
-		ImageIcon icnCancel = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
+		ImageIcon icnBack = IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL);
+		ImageIcon icnNext = IconManager.getInstance().getIcon("actions/go-next", IconSize.SMALL);
 		
 		btnBack = new JButton("Back");
 		btnBack.setIcon(icnBack);
@@ -156,7 +156,6 @@ public class WizardFrame extends CommonModuleFrame {
 		btnNext.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		
 		btnFinish = new JButton("Finish");
-		btnFinish.setIcon(icnFinish);
 		btnFinish.addActionListener(new ActionListener() {
 
 			@Override
@@ -168,7 +167,6 @@ public class WizardFrame extends CommonModuleFrame {
 		super.getRootPane().setDefaultButton(btnFinish);
 		
 		btnCancel = new JButton("Close");
-		btnCancel.setIcon(icnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 
 			@Override
