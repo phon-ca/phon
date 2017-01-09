@@ -190,7 +190,7 @@ function run(context) {
             </extensions>
         </node>
         <opqry:queryNode id="1b7448dbba9c47fc" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2016-12-16T08:11:35.994-03:30" name="Phones" uuid="7319f272-4a9e-41cb-b135-68e0d884ab44">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-01-06T12:49:11.889-03:30" name="Phones" uuid="7a8a524d-481d-452e-90e0-ca04dcfd9295">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -218,7 +218,7 @@ function run(context) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="e879a7148c25481e" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="1f54967c">
+            <graph id="7bbd4845">
                 <node id="8e42e1926c24dd2" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -279,7 +279,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="8e17af4dea0749f9" name="Print Aggregate Inventories for each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="41e17e51">
+            <graph id="2cc1064c">
                 <node id="d438fc0ce30e446a" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -314,7 +314,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="29ba4149" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="26895429">
+                    <graph id="2b52352">
                         <node id="482d16e" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -589,11 +589,21 @@ function filterRow(table, row, col) {
                             <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
                         </opqry:inventoryoptions>
                         <oga:settings/>
-                        <oga:meta x="650" y="177"/>
+                        <oga:meta x="504" y="177"/>
+                    </extensions>
+                </node>
+                <node id="a132f4a" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                    <extensions>
+                        <opqry:sortoptions>
+                            <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
+                            <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
+                        </opqry:sortoptions>
+                        <oga:settings/>
+                        <oga:meta x="657" y="177"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="3b44178eebd140df" name="Print Aggregate Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="77cb12ae">
+                    <graph id="1b0566e3">
                         <node id="e64d3b859bf44fb5" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -652,7 +662,7 @@ function filterRow(table, row, col) {
                     <ogcn:published_input field="data" name="table" ref="6748c514e6e44ba7"/>
                     <ogcn:published_input field="obj" name="speaker" ref="e8e16dda4c13472c"/>
                     <extensions>
-                        <oga:meta x="825" y="177"/>
+                        <oga:meta x="810" y="177"/>
                     </extensions>
                 </ogcn:macro>
                 <link dest="92f101aabba4ede" destField="obj" source="d438fc0ce30e446a" sourceField="obj"/>
@@ -663,7 +673,8 @@ function filterRow(table, row, col) {
                 <link dest="29ba4149" destField="speaker" source="92f101aabba4ede" sourceField="obj"/>
                 <link dest="275a0268" destField="parameters" source="29ba4149" sourceField="value"/>
                 <link dest="7f881488" destField="table" source="7771bcf2" sourceField="trueTable"/>
-                <link dest="3b44178eebd140df" destField="table" source="7f881488" sourceField="table"/>
+                <link dest="a132f4a" destField="table" source="7f881488" sourceField="table"/>
+                <link dest="3b44178eebd140df" destField="table" source="a132f4a" sourceField="table"/>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                     <oga:notes>
@@ -681,7 +692,7 @@ function filterRow(table, row, col) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="67e70cc9" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="103d0d2c">
+            <graph id="189fac03">
                 <node id="3a017bbc" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -700,7 +711,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="221fabf2" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7c719c3f">
+                    <graph id="732a162c">
                         <node id="58da6f6306d74786" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -759,7 +770,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4c1b6b00" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4d7dbcb9">
+                    <graph id="71dafc5e">
                         <node id="ce75632b7ddb43bb" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -809,7 +820,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6d596da5" name="Summary Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5bb59e17">
+                    <graph id="436a4571">
                         <node id="a2e2e864a5fa48a8" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -971,7 +982,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="770bb306" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="9d115eb">
+                    <graph id="5c3e8bae">
                         <node id="1090ec3d" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -1022,7 +1033,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="84f07bf" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="6859d8d8">
+                            <graph id="4490c6b7">
                                 <node id="2e320544" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1065,7 +1076,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="8b5adb48b1e449e" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="77f946ef">
+                            <graph id="31e67d08">
                                 <node id="54144e1b73749ff" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1341,7 +1352,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="160763c2" name="Print Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="3ac50f6f">
+                            <graph id="43707cb9">
                                 <node id="f6c873e4d35e4c95" name="Session Path" type="class:ca.gedge.opgraph.nodes.reflect.ObjectCastNode">
                                     <extensions>
                                         <oga:settings>
