@@ -39,6 +39,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -85,11 +86,13 @@ import ca.phon.formatter.FormatterUtil;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.breadcrumb.BreadcrumbListener;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.icons.IconManager;
@@ -146,6 +149,8 @@ public class NodeWizard extends WizardFrame {
 	protected WizardStep optionalsStep;
 	
 	private WizardOptionalsCheckboxTree optionalsTree;
+	
+	private Map<OpNode, WizardStep> optionalSteps;
 	
 	private WizardGlobalOptionsPanel globalOptionsPanel;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
@@ -232,23 +237,27 @@ public class NodeWizard extends WizardFrame {
 	private void init() {
 		bufferPanel = new MultiBufferPanel();
 		
-		final DialogHeader header = new DialogHeader(super.getTitle(), "");
-		add(header, BorderLayout.NORTH);
-		
 		breadcrumbViewer.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
 		breadcrumbViewer.setBackground(new Color(200, 200, 200));
 		breadcrumbViewer.setOpaque(true);
 		
+		// add next button to end of breadcrumb on state change
+		breadcrumbViewer.getBreadcrumb().addBreadcrumbListener(new BreadcrumbListener<WizardStep, String>() {
+			
+			@Override
+			public void stateChanged(WizardStep oldState, WizardStep newState) {
+				breadcrumbViewer.add(btnNext);
+			}
+			
+			@Override
+			public void stateAdded(WizardStep state, String value) {
+				
+			}
+			
+		});
+		add(breadcrumbViewer, BorderLayout.NORTH);
 		
-		// add breadcrumb view to header
-		final GridBagConstraints gbch = new GridBagConstraints();
-		gbch.gridx = 0;
-		gbch.gridy = 2;
-		gbch.gridwidth = 2;
-		gbch.weightx = 1.0;
-		gbch.fill = GridBagConstraints.HORIZONTAL;
-		gbch.anchor = GridBagConstraints.WEST;
-		header.add(breadcrumbViewer, gbch);
+		btnBack.setVisible(false);
 		
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		statusLabel = new JLabel();
@@ -269,6 +278,7 @@ public class NodeWizard extends WizardFrame {
 			addWizardStep(aboutStep);
 		}
 		
+		
 		if(nodeWizardList.getOptionalNodeCount() > 0) {
 			optionalsStep = createOptionalsStep();
 			optionalsStep.setPrevStep(stepIdx-1);
@@ -278,13 +288,18 @@ public class NodeWizard extends WizardFrame {
 			addWizardStep(optionalsStep);
 		}
 		
-		for(OpNode node:nodeWizardList) {
-			if(nodeWizardList.isNodeForced(node)) {
-				final WizardStep step = createStep(nodeWizardList, node);
-				step.setPrevStep(stepIdx-1);
-				step.setNextStep(stepIdx+1);
-				addWizardStep(step);
-				++stepIdx;
+		optionalSteps = new HashMap<>();
+		if(optionalsStep == null) {
+			// add settings nodes
+			for(OpNode node:nodeWizardList) {
+				if(nodeWizardList.isNodeForced(node)) {
+					final WizardStep step = createStep(nodeWizardList, node);
+					step.setPrevStep(stepIdx-1);
+					step.setNextStep(stepIdx+1);
+					addWizardStep(step);
+					++stepIdx;
+					optionalSteps.put(node, step);
+				}
 			}
 		}
 		
@@ -664,6 +679,45 @@ public class NodeWizard extends WizardFrame {
 			
 			PhonWorker.getInstance().invokeLater( () -> executeGraph() );
 		}
+	}
+	
+	@Override
+	protected void next() {
+		if(getCurrentStep() == optionalsStep) {
+			// remove all current optionals
+			for(OpNode node:optionalSteps.keySet()) {
+				final WizardStep step = optionalSteps.get(node);
+				removeWizardStep(step);
+			}
+			removeWizardStep(reportDataStep);
+			
+			// add settings nodes, excluding those
+			// disabled in the optionals stage
+			final WizardExtension nodeWizardList = getWizardExtension();
+			int stepIdx = super.numberOfSteps();
+			for(OpNode node:nodeWizardList) {
+				// create tree path for optionals tree
+				TreePath checkPath = new TreePath(new TristateCheckBoxTreeNode(nodeWizardList.getWizardTitle()));
+				final List<OpNode> graphPath = getGraph().getNodePath(node.getId());
+				for(OpNode n:graphPath) {
+					checkPath = checkPath.pathByAddingChild(new CheckedOpNode(n));
+				}
+				
+				boolean isEnabled = true;
+				// TODO figure out if tree path is checked
+				
+				if(nodeWizardList.isNodeForced(node) && isEnabled) {
+					final WizardStep step = createStep(nodeWizardList, node);
+					step.setPrevStep(stepIdx-1);
+					step.setNextStep(stepIdx+1);
+					addWizardStep(step);
+					++stepIdx;
+					optionalSteps.put(node, step);
+				}
+			}
+			addWizardStep(reportDataStep);
+		}
+		super.next();
 	}
 
 	@Override
