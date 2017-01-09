@@ -21,6 +21,9 @@ package ca.phon.media.player;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -49,8 +52,6 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import com.sun.jna.Memory;
 
 import ca.phon.ui.action.PhonActionEvent;
@@ -82,6 +83,8 @@ public class PhonMediaPlayer extends JPanel {
 	/** UI  components */
 	/* Play/pause button */
 	private JButton playPauseBtn;
+	
+	private JButton replayBtn;
 
 	/* Position slider */
 	private TimeSlider positionSlider;
@@ -109,13 +112,12 @@ public class PhonMediaPlayer extends JPanel {
 	
 	/* Icons */
 	private ImageIcon playIcn;
+	private ImageIcon replayIcn;
 	private ImageIcon pauseIcn;
 	private ImageIcon volMuteIcn;
 	private ImageIcon volIcn;
 	private ImageIcon menuIcn;
 	
-//	private boolean reloadMedia = true;
-
 	/** Menu filters */
 	private List<IMediaMenuFilter> menuFilters =
 			new ArrayList<IMediaMenuFilter>();
@@ -126,16 +128,6 @@ public class PhonMediaPlayer extends JPanel {
 	/** Volume popup frame */
 	private JFrame volumePopup;
 	
-	/**
-	 * Last playback location
-	 */
-	private long lastLocation = 0L;
-	
-	/**
-	 * Was player playing
-	 */
-	private boolean wasPlaying = false;
-
 	/**
 	 * Constructor
 	 */
@@ -149,9 +141,6 @@ public class PhonMediaPlayer extends JPanel {
 	public void cleanup() {
 		// clean up player
 		if(mediaPlayerComponent != null) {
-			wasPlaying = mediaPlayerComponent.getMediaPlayer().isPlaying();
-			lastLocation = mediaPlayerComponent.getMediaPlayer().getTime();
-			
 			mediaPlayerComponent.getMediaPlayer().stop();
 			
 			mediaPlayerComponent.release();
@@ -170,6 +159,7 @@ public class PhonMediaPlayer extends JPanel {
 		volMuteIcn = icnMgr.getIcon("status/audio-volume-muted", icnSize);
 		volIcn = icnMgr.getIcon("status/audio-volume-high", icnSize);
 		menuIcn = icnMgr.getIcon("misc/layer_lowerlayer", icnSize);
+		replayIcn = icnMgr.getIcon("actions/media-replay-30", icnSize);
 	}
 
 	/*
@@ -209,28 +199,39 @@ public class PhonMediaPlayer extends JPanel {
 
 			playPauseBtn = getPlayPauseButton();
 			playPauseBtn.setEnabled(false);
+			replayBtn = getReplayButton();
+			replayBtn.setEnabled(false);
 			positionSlider = getPositionSlider();
 			positionSlider.setEnabled(false);
 			positionSlider.setUI(new TimeSliderUI());
 			volumeBtn = getVolumeButton();
 			menuBtn = getMenuButton();
-
-//			volumeSlider = new JSlider();
-//			volumeSlider.setOrientation(JSlider.VERTICAL);
-//			volumeSlider.setPreferredSize(new Dimension(volumeBtn.getPreferredSize().width, 100));
 			
 			// setup layout
-			FormLayout layout = new FormLayout(
-					"pref, fill:pref:grow, pref, pref",
-					"pref");
-			CellConstraints cc = new CellConstraints();
-
-			retVal.setLayout(layout);
-			retVal.add(playPauseBtn, cc.xy(1,1));
-			retVal.add(positionSlider, cc.xy(2,1));
-//			retVal.add(volumePane, cc.xy(3, 1));
-			retVal.add(volumeBtn, cc.xy(3,1));
-			retVal.add(menuBtn, cc.xy(4,1));
+			final GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridheight = 1;
+			gbc.gridwidth = 1;
+			gbc.insets = new Insets(0, 0, 0, 0);
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.weightx = 0.0;
+			gbc.weighty = 0.0;
+			gbc.fill = GridBagConstraints.NONE;
+			retVal.setLayout(new GridBagLayout());
+			
+			retVal.add(playPauseBtn, gbc);
+			++gbc.gridx;
+			retVal.add(replayBtn, gbc);
+			++gbc.gridx;
+			gbc.weightx = 1.0;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			retVal.add(positionSlider, gbc);
+			gbc.weightx = 0.0;
+			gbc.fill = GridBagConstraints.NONE;
+			++gbc.gridx;
+			retVal.add(volumeBtn, gbc);
+			++gbc.gridx;
+			retVal.add(menuBtn, gbc);
 		}
 		return retVal;
 	}
@@ -244,6 +245,19 @@ public class PhonMediaPlayer extends JPanel {
 			retVal = new JButton();
 			retVal.setAction(playPauseAct);
 			playPauseBtn = retVal;
+		}
+		return retVal;
+	}
+	
+	public JButton getReplayButton() {
+		JButton retVal = replayBtn;
+		if(retVal == null) {
+			PhonUIAction replayAct = 
+					new PhonUIAction(this, "onReplay30");
+			replayAct.putValue(Action.SMALL_ICON, replayIcn);
+			retVal = new JButton();
+			retVal.setAction(replayAct);
+			replayBtn = retVal;
 		}
 		return retVal;
 	}
@@ -333,8 +347,6 @@ public class PhonMediaPlayer extends JPanel {
 	 */
 	public void setMediaFile(String mediaFile) {
 		this.mediaFile = mediaFile;
-		wasPlaying = false;
-		lastLocation = 0L;
 		loadMedia();
 	}
 	
@@ -367,11 +379,13 @@ public class PhonMediaPlayer extends JPanel {
 		positionSlider.setValue(0);
 		if(mediaFile == null) {
 			playPauseBtn.setEnabled(false);
+			replayBtn.setEnabled(false);
 			positionSlider.setEnabled(false);
 			mediaPlayerCanvas.setBufferedImage(null);
 			mediaPlayerCanvas.repaint();
 		} else {
 			playPauseBtn.setEnabled(true);
+			replayBtn.setEnabled(true);
 			positionSlider.setEnabled(true);
 			mediaPlayer.prepareMedia(getMediaFile(), ":play-and-pause", ":no-video-title-show");
 			
@@ -484,6 +498,15 @@ public class PhonMediaPlayer extends JPanel {
 			} else {
 				player.play();
 			}
+		}
+	}
+	
+	public void onReplay30(PhonActionEvent pae) {
+		final MediaPlayer player = getMediaPlayer();
+		if(player != null) {
+			long currentPos = player.getTime();
+			long newPos = Math.max(0, currentPos - (30 * 1000));
+			player.setTime(newPos);
 		}
 	}
 
