@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Stack;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import ca.gedge.opgraph.OpGraph;
@@ -130,6 +131,28 @@ public class WizardOptionalsCheckboxTree extends TristateCheckBoxTree {
 			super.setCheckingStateForPath(checkPath, TristateCheckBoxState.CHECKED);
 			super.expandPath(checkPath.getParentPath());
 		}
+	}
+	
+	public TreePath graphPathToTreePath(List<OpNode> graphPath) {
+		TreePath retVal = null;
+		
+		// graph path does not include root, add it
+		TristateCheckBoxTreeNode currentNode = (TristateCheckBoxTreeNode)getRoot();
+		retVal = new TreePath(currentNode);
+		
+		for(int i = 0; i < graphPath.size(); i++) {
+			final OpNode opNode = graphPath.get(i);
+			final CheckedOpNode treeNode = findTreeNode(opNode, currentNode);
+			if(treeNode == null) {
+				// not found, return null
+				retVal = null;
+				break;
+			}
+			retVal = retVal.pathByAddingChild(treeNode);
+			currentNode = treeNode;
+		}
+		
+		return retVal;
 	}
 	
 	private CheckedOpNode findTreeNode(OpNode node) {

@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -189,6 +191,56 @@ public class TristateCheckBoxTree extends JTree {
 		if(lastComp instanceof TristateCheckBoxTreeNode) {
 			final TristateCheckBoxTreeNode node = (TristateCheckBoxTreeNode)lastComp;
 			retVal = node.getCheckingState();
+		}
+		return retVal;
+	}
+	
+	/**
+	 * Find the tree path, if any, which contains the give
+	 * user object path.
+	 * 
+	 * @param userPath
+	 * @return the tree path if found, <code>null</code> otherwise
+	 */
+	public TreePath userPathToTreePath(Object[] userPath) {
+		int pathLength = userPath.length;
+		TreePath treePath = null;
+		
+		final Object rootObj = getRoot();
+		if(pathLength > 0 && rootObj instanceof DefaultMutableTreeNode) {
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode)rootObj;
+			
+			if(currentNode.getUserObject().equals(userPath[0])) {
+				treePath = new TreePath(currentNode);
+				
+				for(int i = 1; i < userPath.length; i++) {
+					TreeNode nextNode = findNodeWithUserObject(currentNode, userPath[i]);
+					if(nextNode == null) {
+						treePath = null;
+						break;
+					}
+					treePath = treePath.pathByAddingChild(nextNode);
+					currentNode = (DefaultMutableTreeNode)nextNode;
+				}
+			}
+			
+		}
+		
+		return treePath;
+	}
+	
+	public TreeNode findNodeWithUserObject(TreeNode rootNode, Object userObject) {
+		TreeNode retVal = null;
+		for(int i = 0; i < rootNode.getChildCount(); i++) {
+			final TreeNode childNode = rootNode.getChildAt(i);
+			if(childNode instanceof DefaultMutableTreeNode) {
+				final DefaultMutableTreeNode mutableNode = (DefaultMutableTreeNode)childNode;
+				
+				if(mutableNode.getUserObject().equals(userObject)) {
+					retVal = childNode;
+					break;
+				}
+			}
 		}
 		return retVal;
 	}

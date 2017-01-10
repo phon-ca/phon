@@ -512,7 +512,6 @@ public class NodeWizard extends WizardFrame {
 		ctx.put("tables", tables);
 	}
 	
-	
 	public WizardOptionalsCheckboxTree getOptionalsTree() {
 		return this.optionalsTree;
 	}
@@ -699,24 +698,32 @@ public class NodeWizard extends WizardFrame {
 			int stepIdx = super.numberOfSteps();
 			for(OpNode node:nodeWizardList) {
 				// create tree path for optionals tree
-				TreePath checkPath = new TreePath(new TristateCheckBoxTreeNode(nodeWizardList.getWizardTitle()));
 				final List<OpNode> graphPath = getGraph().getNodePath(node.getId());
-				for(OpNode n:graphPath) {
-					checkPath = checkPath.pathByAddingChild(new CheckedOpNode(n));
-				}
 				
-				boolean isEnabled = true;
-				// TODO figure out if tree path is checked
-				
-				if(nodeWizardList.isNodeForced(node) && isEnabled) {
-					final WizardStep step = createStep(nodeWizardList, node);
-					step.setPrevStep(stepIdx-1);
-					step.setNextStep(stepIdx+1);
-					addWizardStep(step);
-					++stepIdx;
-					optionalSteps.put(node, step);
+				while(graphPath.size() > 0) {
+					final TreePath treePath = optionalsTree.graphPathToTreePath(graphPath);
+					
+					if(treePath == null) {
+						// path not found, try parent
+						graphPath.remove(graphPath.size()-1);
+					} else {
+						boolean isEnabled = optionalsTree.isPathChecked(treePath);
+						
+						if(nodeWizardList.isNodeForced(node) && isEnabled) {
+							final WizardStep step = createStep(nodeWizardList, node);
+							step.setPrevStep(stepIdx-1);
+							step.setNextStep(stepIdx+1);
+							addWizardStep(step);
+							++stepIdx;
+							optionalSteps.put(node, step);
+						}
+						
+						// found but not enabled
+						break;
+					}
 				}
 			}
+			
 			addWizardStep(reportDataStep);
 		}
 		super.next();
