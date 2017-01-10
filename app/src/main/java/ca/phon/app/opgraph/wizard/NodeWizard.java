@@ -83,6 +83,7 @@ import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.project.ParticipantHistory;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
@@ -503,6 +504,7 @@ public class NodeWizard extends WizardFrame {
 		ctx.put("Class", Class.class);
 		ctx.put("FormatterUtil", FormatterUtil.class);
 		ctx.put("Math", new MathTool());
+		ctx.put("ParticipantHistory", ParticipantHistory.class);
 		
 		ctx.put("graph", getGraph());
 		ctx.put("bufferNames", bufferPanel.getBufferNames());
