@@ -54,6 +54,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.breadcrumb.Breadcrumb;
 import ca.phon.ui.breadcrumb.BreadcrumbViewer;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.wizard.WizardEvent.WizardEventType;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -125,7 +126,7 @@ public class WizardFrame extends CommonModuleFrame {
 		add(stepPanel, BorderLayout.CENTER);
 		
 		breadcrumbViewer = new BreadcrumbViewer<>(breadcrumb);
-		breadcrumbViewer.setFont(breadcrumbViewer.getFont().deriveFont(Font.BOLD));
+		breadcrumbViewer.setFont(FontPreferences.getTitleFont());
 		breadcrumbViewer.setVisible(false);
 		
 		// button bar
