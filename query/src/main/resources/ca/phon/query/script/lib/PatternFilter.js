@@ -139,7 +139,15 @@ exports.PatternFilter = function (id) {
      * @param value
      */
     this.setPattern = function (pattern) {
-    	filterParamInfo.def = pattern;
+    	filterParam.setValue(filterParamInfo.id, pattern);
+    }
+    
+    this.setCaseSensitive = function (caseSensitive) {
+        matchGroupParam.setValue(matchGroupParamInfo.id[0], caseSensitive);
+    }
+    
+    this.setExactMatch = function (exactMatch) {
+        matchGroupParam.setValue(matchGroupParamInfo.id[1], exactMatch);
     }
     
     /* Check filter */

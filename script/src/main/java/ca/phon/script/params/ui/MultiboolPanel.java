@@ -64,9 +64,15 @@ public class MultiboolPanel extends JPanel {
 			checkBox.setEnabled(param.isEnabled(i));
 			checkBox.setVisible(param.isVisible(i));
 			
+			param.addPropertyChangeListener(paramId, (e) -> {
+				checkBox.setSelected(Boolean.parseBoolean(param.getValue(paramId).toString()));
+			});
+			
 			checkboxes[i] = checkBox;
 		}
 	}
+	
+
 	
 	@Override
 	public void setEnabled(boolean enabled) {

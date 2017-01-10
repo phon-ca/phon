@@ -31,7 +31,7 @@
         <node id="7c282337" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="metadataOptions.pcc_aligned.ignoreDiacritics"><![CDATA[false]]></oga:property>
+                    <oga:property key="processSelection"><![CDATA[Custom]]></oga:property>
                     <oga:property key="filters.column.exactMatch"><![CDATA[true]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -46,10 +46,296 @@ var PccOptions = require("lib/Pcc").PccOptions;
 var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
 var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
-	
+
+
+
 /********************************
  * Setup params
  *******************************/
+
+var processes = [
+    {
+        "name": "Custom",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"\""
+            }
+        ]
+    },
+    {
+        "name": "Coronal Backing",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{velar}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{cor}\""
+            }
+        ]
+    },
+    {
+        "name": "Deaffrication",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{aff}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{-aff}\""
+            }
+        ]
+    },
+    {
+        "name": "Deletion",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"\\\\w\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"^$\""
+            }
+        ]
+    },
+    {
+        "name": "Devoicing",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{voiced}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{voiceless}\""
+            }
+        ]
+    },
+    {
+        "name": "Gliding & Vocalization",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{liquid}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"[\\\\g\\\\v]\""
+            }
+        ]
+    },
+    {
+        "name": "Glottalization",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{-glottal}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{glottal}\""
+            }
+        ]
+    },
+    {
+        "name": "Lateralization",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{-lat}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{lat}\""
+            }
+        ]
+    },
+    {
+        "name": "Stopping",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{-stop}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{stop}\""
+            }
+        ]
+    },
+    {
+        "name": "Velar & Palatal Fronting",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"[{velar,-cor,-labial}{palatal,-cor,-labial}]\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{cor}\""
+            }
+        ]
+    },
+    {
+        "name": "Voicing",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"{voiceless}\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"{voiced}\""
+            }
+        ]
+    }
+];
+var processSelectionParamInfo = {
+    "id": "processSelection",
+    "title": "Process",
+    "def": 0,
+};
+var processSelectionParam;
 
 var filters = {
     "primary": new PatternFilter("filters.primary"),
@@ -66,13 +352,6 @@ var filters = {
     "speaker": new ParticipantFilter("filters.speaker")
 };
 
-var metadataOptions = {
-    "pcc_aligned": new PccOptions("metadataOptions.pcc_aligned", true),
-    "pcc_standard": new PccOptions("metadataOptions.pcc_standard", false),
-    "stressPattern": new StressPatternOptions("metadataOptions.stressPattern"),
-    "cvPattern": new CvPatternOptions("metadataOptions.cvPattern")
-};
-
 var includeAlignedParamInfo = {
     "id": "includeAligned",
     "title": "",
@@ -85,12 +364,15 @@ var includeAligned = includeAlignedParamInfo.def;
 var processNameParamInfo = {
 	"id": "processName",
 	"title": "Process Name",
-	"def": "Generic",
+	"def": "Custom",
 	"prompt": "Enter process name"
 };
 var processNameParam;
 
 function setup_params(params) {
+
+    processSelectionParam = createProcessSelection();
+    params.add(processSelectionParam);
 
 	processNameParam = new StringScriptParam(
 			processNameParamInfo.id,
@@ -156,41 +438,56 @@ function setup_params(params) {
     
 	filters.syllable.param_setup(params);
 	filters.speaker.param_setup(params);
-	
-	// add metadata options
-	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
-	params.add(metadataSep);
-	
-	var spLbl = new LabelScriptParam("", "<html><b>Stress Pattern</b></html>");
-	params.add(spLbl);
-	metadataOptions.stressPattern.param_setup(params);
-	
-	var cvLbl = new LabelScriptParam("", "<html><b>CGV Pattern</b></html>");
-	params.add(cvLbl);
-	metadataOptions.cvPattern.param_setup(params);
+}
 
-    var pccStandardLbl = new LabelScriptParam("", "<html><b>PCC/PVC (standard)</b></html>");
-    params.add(pccStandardLbl);
-    metadataOptions.pcc_standard.param_setup(params);
-
-	var pccAlignedLbl = new LabelScriptParam("", "<html><b>PCC/PVC (aligned)</b></html>");
-	params.add(pccAlignedLbl);
-	metadataOptions.pcc_aligned.param_setup(params);
+function createProcessSelection() {
+    // get a list of all process names
+    var processNames = [];
+    for(i = 0; i < processes.length; i++) {
+        name = processes[i]["name"];
+        processNames.push(name);
+    }
+    
+    var retVal = new EnumScriptParam(
+        processSelectionParamInfo.id,
+        processSelectionParamInfo.title,
+        processSelectionParamInfo.def,
+        processNames);
+    
+     var processSelectionListener = new java.beans.PropertyChangeListener() {
+            propertyChange: function(e) {
+                var selectedIdx = processSelectionParam.getValue(processSelectionParamInfo.id).index;
+                if(selectedIdx >= 0) {
+                    var process = processes[selectedIdx];
+                    
+                    processNameParam.setValue(processNameParamInfo.id, process["name"]);
+                    
+                    var params = process["params"];
+                    for(i = 0; i < params.length; i++) {
+                        var param = params[i];
+                        var setParam = param["object"] + "." + param["function"] + "(" + param["value"] + ");";
+                        eval(setParam);
+                    }
+                    
+                }
+            }
+     };
+     retVal.addPropertyChangeListener(processSelectionListener);
+     
+    return retVal;
 }
 
 function run(context) {
 	
 }
 ]]></oga:property>
-                    <oga:property key="processName"><![CDATA[Custom Process]]></oga:property>
-                    <oga:property key="metadataOptions.pcc_standard.ignoreDiacritics"><![CDATA[false]]></oga:property>
                     <oga:property key="filters.column.caseSensitive"><![CDATA[false]]></oga:property>
                 </oga:settings>
                 <oga:meta x="130" y="641"/>
             </extensions>
         </node>
         <opqry:queryNode id="1b7448dbba9c47fc" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-01-09T21:45:14.579-03:30" name="Phones" uuid="9f6d4c71-2514-4e15-88ab-6da33e0ae289">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-01-10T10:43:33.493-03:30" name="Phones" uuid="33056567-6e6d-4dff-9826-8e18c73794ca">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -218,7 +515,7 @@ function run(context) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="e879a7148c25481e" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="20f6e9f0">
+            <graph id="41f1afea">
                 <node id="8e42e1926c24dd2" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -279,7 +576,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="8e17af4dea0749f9" name="Print Aggregate Inventories for each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="79a0f77b">
+            <graph id="5cb0a3ff">
                 <node id="d438fc0ce30e446a" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -314,7 +611,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="29ba4149" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="63ba5962">
+                    <graph id="4819b4cf">
                         <node id="482d16e" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -603,7 +900,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="3b44178eebd140df" name="Print Aggregate Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7ade8bde">
+                    <graph id="845373">
                         <node id="e64d3b859bf44fb5" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -692,7 +989,7 @@ function filterRow(table, row, col) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="67e70cc9" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="40b9861">
+            <graph id="c068c46">
                 <node id="3a017bbc" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -711,7 +1008,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="221fabf2" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4a4f15b2">
+                    <graph id="2a4fdcc1">
                         <node id="58da6f6306d74786" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -770,7 +1067,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4c1b6b00" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="189df5e1">
+                    <graph id="78514209">
                         <node id="ce75632b7ddb43bb" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -820,7 +1117,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6d596da5" name="Summary Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="bf76e6a">
+                    <graph id="78a1deda">
                         <node id="a2e2e864a5fa48a8" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -982,7 +1279,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="770bb306" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="2658f502">
+                    <graph id="545d4981">
                         <node id="1090ec3d" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -1033,7 +1330,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="84f07bf" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="2aef8673">
+                            <graph id="56ee52d8">
                                 <node id="2e320544" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1076,7 +1373,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="8b5adb48b1e449e" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="41bad815">
+                            <graph id="500e5025">
                                 <node id="54144e1b73749ff" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1352,7 +1649,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="160763c2" name="Print Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="4f5364e">
+                            <graph id="164d574e">
                                 <node id="f6c873e4d35e4c95" name="Session Path" type="class:ca.gedge.opgraph.nodes.reflect.ObjectCastNode">
                                     <extensions>
                                         <oga:settings>

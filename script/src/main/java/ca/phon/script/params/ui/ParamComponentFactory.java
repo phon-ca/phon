@@ -88,6 +88,9 @@ public class ParamComponentFactory {
 		retVal.setVisible(boolScriptParam.getVisible());
 		
 		installParamListener(retVal, boolScriptParam);
+		boolScriptParam.addPropertyChangeListener(paramId, (e) -> {
+			retVal.setSelected(Boolean.parseBoolean(boolScriptParam.getValue(paramId).toString()));
+		});
 		
 		return retVal;
 	}
@@ -171,6 +174,7 @@ public class ParamComponentFactory {
 		final PromptedTextField retVal = new PromptedTextField();
 		retVal.setText(initialText);
 		retVal.setPrompt(stringScriptParam.getPrompt());
+		
 		final StringScriptParamListener listener = new StringScriptParamListener(stringScriptParam, paramId, retVal);
 		retVal.getDocument().addDocumentListener(listener);
 		
@@ -277,6 +281,17 @@ public class ParamComponentFactory {
 			public void propertyChange(PropertyChangeEvent evt) {
 				textField.setToolTipText((String)evt.getNewValue());
 			}
+		});
+		param.addPropertyChangeListener(param.getParamId(), new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				String val = param.getValue(param.getParamId()).toString();
+				if(!textField.getText().equals(val)) {
+					textField.setText(param.getValue(param.getParamId()).toString());
+				}
+			}
+			
 		});
 	}
 	
