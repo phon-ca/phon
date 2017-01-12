@@ -22,7 +22,9 @@
                 <oga:settings>
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="410" y="15"/>
+                <oga:meta x="410" y="15">
+                    <oga:default for="buffer" type="java.lang.String">Listing</oga:default>
+                </oga:meta>
             </extensions>
         </node>
         <link dest="24049103" destField="project" source="3b7dacf0" sourceField="project"/>

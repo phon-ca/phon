@@ -54,7 +54,7 @@
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Inventory">
+                <opqry:info format="html" title="Aggregate">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="3790be87" showAsStep="true">
