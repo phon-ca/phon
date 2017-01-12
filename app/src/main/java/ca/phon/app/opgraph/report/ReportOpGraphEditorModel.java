@@ -60,6 +60,7 @@ public class ReportOpGraphEditorModel extends AnalysisOpGraphEditorModel {
 		WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
 		if(wizardExt == null || (wizardExt instanceof AnalysisWizardExtension && wizardExt.size() == 0)) {
 			wizardExt = new ReportWizardExtension(graph);
+			wizardExt.addDefaultReport();
 			graph.putExtension(WizardExtension.class, wizardExt);
 		}
 	}

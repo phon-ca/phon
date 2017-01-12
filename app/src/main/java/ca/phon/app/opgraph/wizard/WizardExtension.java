@@ -18,6 +18,11 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import ca.gedge.opgraph.OpGraph;
@@ -41,7 +48,13 @@ import ca.gedge.opgraph.Processor;
  */
 public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
+	private final static Logger LOGGER = Logger.getLogger(WizardExtension.class.getName());
+	
 	public final static String WIZARDEXT_CTX_KEY = "wizardExtension";
+	
+	private final static String DEFAULT_REPORT_FILE = "ca/phon/app/opgraph/wizard/DefaultReport.vm";
+	
+	private final static String DEFAULT_REPORT_NAME = "Report";
 	
 	private WizardInfo wizardInfo = new WizardInfo();
 	
@@ -62,6 +75,43 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	public WizardExtension(OpGraph graph) {
 		super();
 		this.graph = graph;
+	}
+	
+	/**
+	 * Add the default report to the wizard with the given
+	 * name.
+	 * 
+	 * @param reportName
+	 */
+	public void addDefaultReport(String reportName) {
+		final InputStream defaultReportStream = 
+				getClass().getClassLoader().getResourceAsStream(DEFAULT_REPORT_FILE);
+		if(defaultReportStream != null) {
+			final StringBuffer buffer = new StringBuffer();
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(defaultReportStream, "UTF-8"))) {
+				String line = null;
+				while((line = reader.readLine()) != null) {
+					buffer.append(line).append("\n");
+				}
+				
+				putReportTemplate(reportName, buffer.toString());
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		} else {
+			LOGGER.log(Level.WARNING, "Not found " + DEFAULT_REPORT_FILE, new FileNotFoundException(DEFAULT_REPORT_FILE));
+		}
+	}
+	
+	/**
+	 * Add default report to the wizard with name
+	 * {@link DEFAULT_REPORT_NAME}.  If there is
+	 * not {@link WizardExtension} in this report
+	 * this method does nothing.
+	 * 
+	 */
+	public void addDefaultReport() {
+		addDefaultReport(DEFAULT_REPORT_NAME);
 	}
 	
 	public NodeWizard createWizard(Processor processor) {

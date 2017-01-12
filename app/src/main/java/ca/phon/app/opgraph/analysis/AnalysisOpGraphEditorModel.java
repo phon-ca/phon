@@ -55,6 +55,7 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		WizardExtension wizardExt = opgraph.getExtension(WizardExtension.class);
 		if(wizardExt == null) {
 			wizardExt = new AnalysisWizardExtension(opgraph);
+			wizardExt.addDefaultReport();
 			opgraph.putExtension(WizardExtension.class, wizardExt);
 		}
 	}
