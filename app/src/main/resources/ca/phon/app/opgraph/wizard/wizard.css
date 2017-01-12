@@ -1,16 +1,23 @@
 body {
     background: white;
-    font-family:"noto sans", arial, helvetica, sans-serif;
+    font-family: "noto sans", arial, helvetica, sans-serif;
 }
 
 h1 {
-   font-weight: bold;
-   color: blue;
+    font-weight: bold;
 }
 
 h2 {
     font-weight: bold;
-    color: blue;
+    color: darkblue;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 em {
@@ -18,25 +25,26 @@ em {
 }
 
 table {
-    border: thin solid black;
+    border: thin solid darkblue;
     empty-cells: show;
-    width: 100%;
     table-layout:fixed;
+    text-align: left;
 }
 
 th {
     overflow:hidden;
     font-weight: bold; 
-    border-bottom: thin solid black;
+    border-bottom: thin solid darkblue;
+    padding-right: 20px;
 }
 
 th td {
-    text-align:center;
     overflow:auto;
 }
 
 td {
     overflow:hidden;
+    padding-right: 20px;
 }
 
 td:hover {
@@ -48,17 +56,14 @@ code {
 }
 
 .text_value {
-    text-align:center;
 }
 
 .ipa_value {
-    font-family:"noto sans", "Charis SIL Compact", "Charis SIL", arial, sans-serif;
-    text-align:center;
+    font-family:"Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
 }
 
 .number_value {
     font-family:"noto monospace", monospace;
-    text-align:center;
 }
 
 @media print {
@@ -72,11 +77,13 @@ code {
     }
     
     body {
-        font-family:"noto serif", times, serif;
+        font-family: "noto serif", arial, times, serif;
+        font-size: 12pt;
     }
     
     .ipa_value {
-        font-family:"noto serif", "Doulos SIL", times, serif;
+        font-family: "Charis SIL Compact", "noto serif", "Charis SIL", times, serif;
+        font-size: 12pt;
     }
 
     header, footer, nav {
@@ -84,11 +91,10 @@ code {
     }
     
     section {
-        page-break-before:always;
     }
     
     h1, h2, h3 {
-        page-break-after:avoid;
+        page-break-after: avoid !important;
     }
     
     ul, ol {
@@ -96,10 +102,13 @@ code {
     }
     
     table {
-        page-break-inside: auto;
+        table-layout:auto;
+        page-break-before: avoid !important;
+        page-break-inside: avoid;
     }
     
     thead {
+        page-break-before: avoid !important;
         page-break-after:avoid !important;
         display:table-header-group;
     }
