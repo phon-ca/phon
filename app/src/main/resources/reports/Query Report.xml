@@ -1,214 +1,216 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor"
-	xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes"
-	xmlns:opqry="https://phon.ca/ns/opgraph_query">
-	<graph id="root">
-		<node id="42970fb4" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
-			<extensions>
-				<oga:meta x="15" y="15" />
-			</extensions>
-		</node>
-		<node id="7202c965"
-			type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
-			<extensions>
-				<oga:settings>
-					<oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
-					<oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
-					<oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
-					<oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
-				</oga:settings>
-				<oga:meta x="194" y="15" />
-			</extensions>
-		</node>
-		<ogcn:macro id="2a2071bf" name="Listing"
-			type="ca.gedge.opgraph.nodes.general.MacroNode">
-			<graph id="1015b314">
-				<node id="6154d682" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-					<extensions>
-						<oga:settings>
-							<oga:property key="showTable"><![CDATA[true]]></oga:property>
-						</oga:settings>
-						<oga:meta x="15" y="15">
-							<oga:default for="buffer" type="java.lang.String">Listing</oga:default>
-						</oga:meta>
-					</extensions>
-				</node>
-				<extensions>
-					<nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel" />
-				</extensions>
-			</graph>
-			<ogcn:published_input field="data" name="data"
-				ref="6154d682" />
-			<extensions>
-				<oga:meta x="347" y="15" />
-			</extensions>
-		</ogcn:macro>
-		<ogcn:macro id="3c2b0fd7" name="Aggregate"
-			type="ca.gedge.opgraph.nodes.general.MacroNode">
-			<graph id="6ad5afe1">
-				<node id="42a65cac" name="Aggregate"
-					type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
-					<extensions>
-						<opqry:inventoryoptions>
-							<opqry:groupBy caseSensitive="false" column="Session"
-								ignoreDiacritics="true" />
-							<opqry:column caseSensitive="false" column="IPA Target"
-								ignoreDiacritics="false" />
-							<opqry:column caseSensitive="false" column="IPA Actual"
-								ignoreDiacritics="false" />
-						</opqry:inventoryoptions>
-						<oga:settings />
-						<oga:meta x="15" y="15" />
-					</extensions>
-				</node>
-				<node id="37cd9dbe" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
-					<extensions>
-						<opqry:sortoptions>
-							<opqry:sortBy column="IPA Target" order="ascending"
-								type="ipa" />
-							<opqry:sortBy column="IPA Actual" order="ascending"
-								type="ipa" />
-						</opqry:sortoptions>
-						<oga:settings />
-						<oga:meta x="168" y="15" />
-					</extensions>
-				</node>
-				<node id="4d5b18cf" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-					<extensions>
-						<oga:settings>
-							<oga:property key="showTable"><![CDATA[true]]></oga:property>
-						</oga:settings>
-						<oga:meta x="321" y="15">
-							<oga:default for="buffer" type="java.lang.String">Aggregate</oga:default>
-						</oga:meta>
-					</extensions>
-				</node>
-				<link dest="4d5b18cf" destField="data" source="37cd9dbe"
-					sourceField="table" />
-				<link dest="37cd9dbe" destField="table" source="42a65cac"
-					sourceField="table" />
-			</graph>
-			<ogcn:published_input field="table" name="table"
-				ref="42a65cac" />
-			<extensions>
-				<oga:meta x="347" y="128" />
-			</extensions>
-		</ogcn:macro>
-		<ogcn:macro id="7808fde6" name="IPA Variability"
-			type="ca.gedge.opgraph.nodes.general.MacroNode">
-			<graph id="227d05c0">
-				<node id="62c9e57b"
-					type="class:ca.phon.app.opgraph.nodes.table.IPAVariabilityNode">
-					<extensions>
-						<oga:settings>
-							<oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
-						</oga:settings>
-						<oga:meta x="15" y="15" />
-					</extensions>
-				</node>
-				<node id="7434a78c" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-					<extensions>
-						<oga:settings>
-							<oga:property key="showTable"><![CDATA[true]]></oga:property>
-						</oga:settings>
-						<oga:meta x="168" y="15">
-							<oga:default for="buffer" type="java.lang.String">IPA Variability</oga:default>
-						</oga:meta>
-					</extensions>
-				</node>
-				<link dest="7434a78c" destField="data" source="62c9e57b"
-					sourceField="table" />
-				<extensions>
-					<nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel" />
-				</extensions>
-			</graph>
-			<ogcn:published_input field="table" name="table"
-				ref="62c9e57b" />
-			<extensions>
-				<oga:meta x="347" y="223" />
-			</extensions>
-		</ogcn:macro>
-		<ogcn:macro id="2e75a90f" name="Phone Dispersion"
-			type="ca.gedge.opgraph.nodes.general.MacroNode">
-			<graph id="1c20d162">
-				<node id="10444aa5"
-					type="class:ca.phon.app.opgraph.nodes.table.PhoneDispersion">
-					<extensions>
-						<oga:settings>
-							<oga:property key="includeVoicing"><![CDATA[true]]></oga:property>
-							<oga:property key="useMajorPlace"><![CDATA[true]]></oga:property>
-							<oga:property key="includePlace"><![CDATA[true]]></oga:property>
-							<oga:property key="useFeatureVariability"><![CDATA[false]]></oga:property>
-							<oga:property key="includeManner"><![CDATA[true]]></oga:property>
-						</oga:settings>
-						<oga:meta x="15" y="15" />
-					</extensions>
-				</node>
-				<node id="2207110c" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-					<extensions>
-						<oga:settings>
-							<oga:property key="showTable"><![CDATA[true]]></oga:property>
-						</oga:settings>
-						<oga:meta x="171" y="15">
-							<oga:default for="buffer" type="java.lang.String">Phone Dispersion</oga:default>
-						</oga:meta>
-					</extensions>
-				</node>
-				<link dest="2207110c" destField="data" source="10444aa5"
-					sourceField="table" />
-				<extensions>
-					<nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel" />
-				</extensions>
-			</graph>
-			<ogcn:published_input field="table" name="table"
-				ref="10444aa5" />
-			<extensions>
-				<oga:meta x="347" y="318" />
-			</extensions>
-		</ogcn:macro>
-		<link dest="7202c965" destField="project" source="42970fb4"
-			sourceField="project" />
-		<link dest="7202c965" destField="results" source="42970fb4"
-			sourceField="result sets" />
-		<link dest="3c2b0fd7" destField="table" source="7202c965"
-			sourceField="table" />
-		<link dest="2a2071bf" destField="data" source="7202c965"
-			sourceField="table" />
-		<link dest="7808fde6" destField="table" source="7202c965"
-			sourceField="table" />
-		<link dest="2e75a90f" destField="table" source="7202c965"
-			sourceField="table" />
-		<extensions>
-			<opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-				<opqry:info format="html" title="Query Report">
-					<opqry:message />
-				</opqry:info>
-				<opqry:node ref="42a65cac" showAsStep="true">
-					<opqry:info format="html" title="Aggregate">
-						<opqry:message />
-					</opqry:info>
-				</opqry:node>
-				<opqry:node ref="37cd9dbe">
-					<opqry:info format="html" title="Sort">
-						<opqry:message />
-					</opqry:info>
-				</opqry:node>
-				<opqry:node ref="62c9e57b" showAsStep="true">
-					<opqry:info format="html" title="IPA Variability">
-						<opqry:message />
-					</opqry:info>
-				</opqry:node>
-				<opqry:node ref="10444aa5" showAsStep="true">
-					<opqry:info format="html" title="Phone Dispersion">
-						<opqry:message />
-					</opqry:info>
-				</opqry:node>
-				<opqry:optionalNode enabled="true" ref="2a2071bf" />
-				<opqry:optionalNode enabled="true" ref="3c2b0fd7" />
-				<opqry:optionalNode enabled="true" ref="7808fde6" />
-				<opqry:optionalNode enabled="true" ref="2e75a90f" />
-			</opqry:nodewizard>
-			<nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel" />
-		</extensions>
-	</graph>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
+    <graph id="root">
+        <node id="42970fb4" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+            <extensions>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="7202c965" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                </oga:settings>
+                <oga:meta x="194" y="15"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="2a2071bf" name="Listing" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="7f9d4696">
+                <node id="6154d682" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Listing</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="data" name="data" ref="6154d682"/>
+            <extensions>
+                <oga:meta x="347" y="15"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="3c2b0fd7" name="Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="1d834966">
+                <node id="42a65cac" name="Aggregate" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+                    <extensions>
+                        <opqry:inventoryoptions>
+                            <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
+                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
+                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
+                        </opqry:inventoryoptions>
+                        <oga:settings/>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="37cd9dbe" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                    <extensions>
+                        <opqry:sortoptions>
+                            <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
+                            <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
+                        </opqry:sortoptions>
+                        <oga:settings/>
+                        <oga:meta x="168" y="15"/>
+                    </extensions>
+                </node>
+                <node id="4d5b18cf" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="321" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Aggregate</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="4d5b18cf" destField="data" source="37cd9dbe" sourceField="table"/>
+                <link dest="37cd9dbe" destField="table" source="42a65cac" sourceField="table"/>
+            </graph>
+            <ogcn:published_input field="table" name="table" ref="42a65cac"/>
+            <extensions>
+                <oga:meta x="347" y="128"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="7808fde6" name="IPA Variability" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="351cec1b">
+                <node id="62c9e57b" type="class:ca.phon.app.opgraph.nodes.table.IPAVariabilityNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="7434a78c" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="168" y="15">
+                            <oga:default for="buffer" type="java.lang.String">IPA Variability</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="7434a78c" destField="data" source="62c9e57b" sourceField="table"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="table" name="table" ref="62c9e57b"/>
+            <extensions>
+                <oga:meta x="347" y="223"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="2e75a90f" name="Phone Dispersion" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="5def2c41">
+                <node id="10444aa5" type="class:ca.phon.app.opgraph.nodes.table.PhoneDispersion">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>
+                            <oga:property key="useMajorPlace"><![CDATA[true]]></oga:property>
+                            <oga:property key="includePlace"><![CDATA[true]]></oga:property>
+                            <oga:property key="useFeatureVariability"><![CDATA[false]]></oga:property>
+                            <oga:property key="includeManner"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="2207110c" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="171" y="15">
+                            <oga:default for="buffer" type="java.lang.String">Phone Dispersion</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="2207110c" destField="data" source="10444aa5" sourceField="table"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="table" name="table" ref="10444aa5"/>
+            <extensions>
+                <oga:meta x="347" y="318"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="7202c965" destField="project" source="42970fb4" sourceField="project"/>
+        <link dest="7202c965" destField="results" source="42970fb4" sourceField="result sets"/>
+        <link dest="3c2b0fd7" destField="table" source="7202c965" sourceField="table"/>
+        <link dest="2a2071bf" destField="data" source="7202c965" sourceField="table"/>
+        <link dest="7808fde6" destField="table" source="7202c965" sourceField="table"/>
+        <link dest="2e75a90f" destField="table" source="7202c965" sourceField="table"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
+                <opqry:info format="html" title="Query Report">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="42a65cac" showAsStep="true">
+                    <opqry:info format="html" title="Aggregate">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="37cd9dbe">
+                    <opqry:info format="html" title="Sort">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="62c9e57b" showAsStep="true">
+                    <opqry:info format="html" title="IPA Variability">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="10444aa5" showAsStep="true">
+                    <opqry:info format="html" title="Phone Dispersion">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:optionalNode enabled="true" ref="2a2071bf"/>
+                <opqry:optionalNode enabled="true" ref="3c2b0fd7"/>
+                <opqry:optionalNode enabled="true" ref="7808fde6"/>
+                <opqry:optionalNode enabled="true" ref="2e75a90f"/>
+                <opqry:report-template name="Report">#**
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2005 - 2017, Gregory Hedlund &lt;ghedlund@mun.ca&gt; and Yvan Rose &lt;yrose@mun.ca&gt;
+ * Dept of Linguistics, Memorial University &lt;https://phon.ca&gt;
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ *#
+#foreach($bufferName in $bufferNames)
+#if(!$bufferName.equals("Report"))
+#h2($bufferName)
+
+#if($tables.containsKey($bufferName))
+#printTable($tables[$bufferName], [])
+#else
+$buffers[$bufferName]
+#end
+#end
+
+#end
+</opqry:report-template>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+        </extensions>
+    </graph>
 </opgraph>
