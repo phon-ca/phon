@@ -220,6 +220,82 @@ var processes = [
         ]
     },
     {
+        "name": "Singleton Onset Deletion",
+        "params": [ 
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"^(?<\\\\s?\\\\c:L*)\\\\c:o(?>\\\\w:sctype('-Onset'))\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"^$\""
+            }
+        ]
+    },
+    {
+        "name": "Onset Simplification",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"\\\\w:O<2>\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\".\""
+            }
+        ]
+    },
+    {
+        "name": "Complex Onset Deletion",
+        "params": [
+            {
+                "object": "filters.primary",
+                "function": "setPattern",
+                "value": "\"\\\\w:O<2,>\""
+            },
+            {
+                "object": "filters.column",
+                "function": "setCaseSensitive",
+                "value": "false"
+            },
+            {
+                "object": "filters.column",
+                "function": "setExactMatch",
+                "value": "true"
+            },
+            {
+                "object": "filters.column",
+                "function": "setPattern",
+                "value": "\"^$\""
+            }
+        ]
+        
+    },
+    {
         "name": "Stopping",
         "params": [
             {
