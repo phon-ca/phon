@@ -18,9 +18,16 @@
  */
 package ca.phon.app.opgraph.report;
 
+import javax.swing.JMenuBar;
+
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
+import ca.phon.app.opgraph.analysis.SaveAnalysisAction;
+import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 
 public class ReportWizard extends NodeWizard {
 
@@ -29,6 +36,26 @@ public class ReportWizard extends NodeWizard {
 	public ReportWizard(String title, Processor processor, OpGraph graph) {
 		super(title, processor, graph);
 		gotoStep(0);
+	}
+	
+	@Override
+	public void setJMenuBar(JMenuBar menuBar) {
+		super.setJMenuBar(menuBar);
+		
+		final MenuBuilder builder = new MenuBuilder(menuBar);
+		builder.addSeparator("File@1", "save");
+		builder.addItem("File@save", new SaveReportAction(this));
+		
+		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
+		openEditorAct.putValue(PhonUIAction.NAME, "Open graph in report editor...");
+		builder.addItem("File@" + SaveReportAction.TXT, openEditorAct);
+	}
+	
+	public void onOpenEditor(PhonActionEvent pae) {
+		final OpenNodeEditorAction act = new OpenNodeEditorAction(getGraph());
+		act.actionPerformed(pae.getActionEvent());
+		
+		dispose();
 	}
 	
 }
