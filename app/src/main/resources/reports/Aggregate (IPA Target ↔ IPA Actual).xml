@@ -44,7 +44,7 @@
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="400" y="136">
-                    <oga:default for="buffer" type="java.lang.String">Aggregate (IPA Target vs IPA Actual)</oga:default>
+                    <oga:default for="buffer" type="java.lang.String">Aggregate (IPA Target ↔ IPA Actual)</oga:default>
                 </oga:meta>
             </extensions>
         </node>
@@ -56,11 +56,11 @@
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate (IPA Target vs IPA Actual)">
+                <opqry:info format="html" title="Aggregate (IPA Target ↔ IPA Actual)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="3790be87" showAsStep="true">
-                    <opqry:info format="html" title="Aggregate Options">
+                    <opqry:info format="html" title="Aggregate">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
