@@ -60,7 +60,7 @@ public class ReportAction extends HookableAction {
 		if(name.endsWith(".xml")) name = name.substring(0, name.length()-4);
 		if(name.endsWith(".opgraph")) name = name.substring(0, name.length()-8);
 		final File asFile = new File(name);
-		putValue(NAME, asFile.getName());
+		putValue(NAME, asFile.getName() + "...");
 		putValue(SHORT_DESCRIPTION, reportURL.getPath());
 	}
 

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpGraph;
@@ -18,6 +17,7 @@ import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
+import ca.phon.project.Project;
 
 /**
  * Class to produce a single, mega-report, from all available
@@ -26,12 +26,25 @@ import ca.phon.opgraph.OpgraphIO;
  */
 public class ReportMerger {
 
-	private final static Logger LOGGER = Logger.getLogger(ReportMerger.class.getName());
-	
 	private final static String TEMPLATE_FILE = "ca/phon/app/opgraph/report/AllReportsTemplate.xml";
+	
+	private Project project;
 	
 	public ReportMerger() {
 		super();
+	}
+	
+	public ReportMerger(Project project) {
+		super();
+		this.project = project;
+	}
+	
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	
+	public Project getProject() {
+		return this.project;
 	}
 	
 	// recursive method to update all node ids in a graph
@@ -175,6 +188,20 @@ public class ReportMerger {
 			}
 		}
 		
+		final Project proj = getProject();
+		if(proj != null && library.getProjectGraphs(proj).iterator().hasNext()) {
+			final MacroNode projectReportsNode = addReportCategoryMacroNode(retVal, "Project Reports");
+			for(URL reportURL:library.getProjectGraphs(proj)) {
+				final String name = reportURL.getFile();
+				if(!checkName(name)) continue;
+				
+				final OpGraph graph = OpgraphIO.read(reportURL.openStream());
+				updateIds(graph);
+				
+				addReport(retVal, projectReportsNode.getGraph(), graph);
+			}
+		}
+		
 		return retVal;
 	}
 	
@@ -193,7 +220,7 @@ public class ReportMerger {
 	 * @throws CycleDetectedException 
 	 * @throws VertexNotFoundException 
 	 */
-	public OpGraph addReport(OpGraph document, OpGraph macroGraph, OpGraph report)
+	private OpGraph addReport(OpGraph document, OpGraph macroGraph, OpGraph report)
 		throws IllegalArgumentException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
 		final WizardExtension extA = document.getExtension(WizardExtension.class);
 		if(extA == null || !(extA instanceof ReportWizardExtension))

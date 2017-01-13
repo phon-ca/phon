@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
 import ca.phon.project.Project;
@@ -88,13 +89,21 @@ public class ReportLibrary {
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 		
+		final JMenuItem stockSep = new JMenuItem("Stock Reports");
+		stockSep.setEnabled(false);
+		builder.addItem(".", stockSep);
 		for(URL reportURL:getStockGraphs()) {
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
 			builder.addItem(".", act);
 		}
 		
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
-		if(userGraphIterator.hasNext()) builder.addSeparator(".", "user");
+		if(userGraphIterator.hasNext()) {
+			builder.addSeparator(".", "user");
+			final JMenuItem userSep = new JMenuItem("User Reports");
+			userSep.setEnabled(false);
+			builder.addItem(".", userSep);
+		}
 		while(userGraphIterator.hasNext()) {
 			final URL reportURL = userGraphIterator.next();
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
@@ -102,13 +111,20 @@ public class ReportLibrary {
 		}
 		
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
-		if(projectGraphIterator.hasNext()) builder.addSeparator(".", "project");
+		if(projectGraphIterator.hasNext()) {
+			builder.addSeparator(".", "project");
+			final JMenuItem projectSep = new JMenuItem("Project Reports");
+			projectSep.setEnabled(false);
+			builder.addItem(".", projectSep);
+		}
 		while(projectGraphIterator.hasNext()) {
 			final URL reportURL = projectGraphIterator.next();
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
 			builder.addItem(".", act);
 		}
 		
+		builder.addSeparator(".", "all");
+		builder.addItem(".@all", new AllReportsAction(project, queryId));
 		
 		builder.addSeparator(".", "editor");
 		builder.addItem(".@editor", new ReportEditorAction());
