@@ -437,6 +437,7 @@ public class WizardSettingsPanel extends JPanel {
 	}
 	
 	public WizardExtension getUpdatedWizardExtension() {
+		final WizardExtension origExtension = getWizardExtension();
 		final Class<? extends WizardExtension> extClass = getWizardExtension().getClass();
 		
 		Constructor<? extends WizardExtension> constructor;
@@ -463,6 +464,10 @@ public class WizardSettingsPanel extends JPanel {
 					retVal.setNodeTitle(node, nodeSettings.getTitle());
 					retVal.setNodeMessage(node, nodeSettings.getInfo(), nodeSettings.getFormat());
 					retVal.setNodeForced(node, nodeSettings.isSelected());
+				} else {
+					retVal.setNodeTitle(node, origExtension.getNodeTitle(node));
+					retVal.setNodeMessage(node, origExtension.getNodeMessage(node));
+					retVal.setNodeForced(node, origExtension.isNodeForced(node));
 				}
 			}
 		}
@@ -475,6 +480,8 @@ public class WizardSettingsPanel extends JPanel {
 			final SettingsPanel nodeSettings = optionalsMap.get(node);
 			if(nodeSettings != null) {
 				retVal.setOptionalNodeDefault(node, nodeSettings.isSelected());
+			} else {
+				retVal.setOptionalNodeDefault(node, origExtension.getOptionalNodeDefault(node));
 			}
 		}
 		
@@ -483,6 +490,8 @@ public class WizardSettingsPanel extends JPanel {
 			final SettingsPanel settings = reportTemplateMap.get(name);
 			if(settings != null) {
 				retVal.putReportTemplate(name, settings.getInfo());
+			} else {
+				retVal.putReportTemplate(name, origExtension.getReportTemplate(name).getTemplate());
 			}
 		}
 		
