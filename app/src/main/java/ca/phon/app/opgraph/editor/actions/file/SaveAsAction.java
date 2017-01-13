@@ -31,6 +31,7 @@ import javax.swing.KeyStroke;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.RecentFiles;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -64,7 +65,14 @@ public class SaveAsAction extends OpgraphEditorAction {
 		if(getEditor().chooseFile()) {
 			// call save on the editor
 			try {
-				getEditor().saveData();
+				if(getEditor().chooseFile()) {
+					getEditor().saveData();
+					
+					if(getEditor().getCurrentFile() != null) {
+						final RecentFiles recentFiles = new RecentFiles(OpgraphEditor.RECENT_DOCS_PROP);
+						recentFiles.addToHistory(getEditor().getCurrentFile());
+					}
+				}
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				ToastFactory.makeToast(e.getLocalizedMessage()).start(getEditor());

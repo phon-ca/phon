@@ -26,10 +26,12 @@ import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.MenuEvent;
@@ -76,6 +78,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.util.RecentFiles;
 
 /**
  * Generic opgragh editor.
@@ -99,6 +102,10 @@ public class OpgraphEditor extends CommonModuleFrame {
 	private JToolBar toolBar;
 	
 	private NodeEditorStatusBar statusBar;
+	
+	public final static String RECENT_DOCS_PROP = OpgraphEditor.class.getName() + ".recentDocs";
+	
+	private final static int MAX_RECENT_FILES = 10;
 
 	public OpgraphEditor() {
 		this(new DefaultOpgraphEditorModel());
@@ -296,7 +303,35 @@ public class OpgraphEditor extends CommonModuleFrame {
 	
 		menuBuilder.addItem("File@^", new NewAction(this));
 		menuBuilder.addItem("File@New...", new OpenAction(this));
-		menuBuilder.addSeparator("File@Open...", "sep1");
+		final JMenu recentsMenu = menuBuilder.addMenu("File@" + OpenAction.TXT, "Recent documents");
+		recentsMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				// setup recents menu items
+				final RecentFiles recentFiles = new RecentFiles(RECENT_DOCS_PROP);
+				
+				recentsMenu.removeAll();
+				for(File recentFile:recentFiles) {
+					// add menu item for graph file
+					final OpenAction openRecentAct = new OpenAction(OpgraphEditor.this, recentFile);
+					openRecentAct.putValue(Action.NAME, recentFile.getName());
+					openRecentAct.putValue(Action.SHORT_DESCRIPTION, recentFile.getAbsolutePath());
+					openRecentAct.putValue(Action.ACCELERATOR_KEY, null);
+					recentsMenu.add(new JMenuItem(openRecentAct));
+				}
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+		});
+		menuBuilder.addSeparator("File@Recent documents", "sep1");
+		
 		menuBuilder.addItem("File@sep1", new SaveAction(this));
 		menuBuilder.addItem("File@Save", new SaveAsAction(this));
 		menuBuilder.addSeparator("File@Save as...", "sep2");

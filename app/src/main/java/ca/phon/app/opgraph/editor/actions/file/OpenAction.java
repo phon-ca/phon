@@ -39,6 +39,7 @@ import ca.phon.opgraph.OpgraphIO;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.util.RecentFiles;
 
 public class OpenAction extends OpgraphEditorAction {
 	
@@ -53,8 +54,16 @@ public class OpenAction extends OpgraphEditorAction {
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_O,
 			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 
+	private File openFile;
+	
 	public OpenAction(OpgraphEditor editor) {
+		this(editor, null);
+	}
+	
+	public OpenAction(OpgraphEditor editor, File openFile) {
 		super(editor);
+		
+		this.openFile = openFile;
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
@@ -98,42 +107,53 @@ public class OpenAction extends OpgraphEditorAction {
 				return;
 			}
 		}
-		final OpenDialogProperties props = new OpenDialogProperties();
-		props.setParentWindow(getEditor());
-		props.setCanChooseFiles(true);
-		props.setCanChooseDirectories(false);
-		props.setAllowMultipleSelection(false);
-		props.setTitle("Open Graph");
-		props.setRunAsync(false);
-		props.setFileFilter(new OpgraphFileFilter());
-		props.setInitialFolder(getEditor().getModel().getDefaultFolder());
 		
-		final List<String> savePath = NativeDialogs.showOpenDialog(props);
-		if(savePath != null && savePath.size() > 0) {
-			try {
-				final File saveFile = new File(savePath.get(0));
-				final OpGraph graph = OpgraphIO.read(saveFile);
-				final OpgraphEditorModelFactory factory = new OpgraphEditorModelFactory();
-				final OpgraphEditorModel model = factory.fromGraph(graph);
-				
-				if(useCurrentWindow) {
-					getEditor().setModel(model);
-					getEditor().setCurrentFile(saveFile);
-				} else {
-					final OpgraphEditor editor = new OpgraphEditor(model);
-					editor.setCurrentFile(saveFile);
-					editor.pack();
-					editor.setSize(1064, 768);
-					editor.setLocationByPlatform(true);
-					editor.setVisible(true);
-				}
-				
-				
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		if(openFile == null) {
+			final OpenDialogProperties props = new OpenDialogProperties();
+			props.setParentWindow(getEditor());
+			props.setCanChooseFiles(true);
+			props.setCanChooseDirectories(false);
+			props.setAllowMultipleSelection(false);
+			props.setTitle("Open Graph");
+			props.setRunAsync(false);
+			props.setFileFilter(new OpgraphFileFilter());
+			props.setInitialFolder(getEditor().getModel().getDefaultFolder());
+			
+			final List<String> savePath = NativeDialogs.showOpenDialog(props);
+			if(savePath != null && savePath.size() > 0) {
+				openFile = new File(savePath.get(0));
+			} else {
+				return;
 			}
 		}
+		try {
+			openFile(openFile, useCurrentWindow);
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	private void openFile(File file, boolean useCurrentWindow) throws ClassNotFoundException, IOException {
+		final OpGraph graph = OpgraphIO.read(file);
+		final OpgraphEditorModelFactory factory = new OpgraphEditorModelFactory();
+		final OpgraphEditorModel model = factory.fromGraph(graph);
+		
+		if(useCurrentWindow) {
+			getEditor().setModel(model);
+			getEditor().setCurrentFile(file);
+		} else {
+			final OpgraphEditor editor = new OpgraphEditor(model);
+			editor.setCurrentFile(file);
+			editor.pack();
+			editor.setSize(1064, 768);
+			editor.setLocationByPlatform(true);
+			editor.setVisible(true);
+		}
+		
+		// add to recent documents list
+		final RecentFiles recentFiles = new RecentFiles(OpgraphEditor.RECENT_DOCS_PROP);
+		recentFiles.addToHistory(file);
 	}
 
 }
