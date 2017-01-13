@@ -33,6 +33,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -58,6 +63,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
@@ -391,14 +397,7 @@ public class NodeWizard extends WizardFrame {
 			executionStarted(pe);
 		} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
 		} else if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
-			SwingUtilities.invokeLater( () -> {
-				busyLabel.setBusy(false);
-				statusLabel.setText("");
-				btnBack.setEnabled(true);
-				
-				setModified(true);
-				modified = true;
-			});
+			
 			executionEnded(pe);
 		}
 	};
@@ -439,6 +438,20 @@ public class NodeWizard extends WizardFrame {
 			
 			final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
 			for(String reportName:ext.getReportTemplateNames()) {
+				// create temp file
+				final File tempFile = File.createTempFile("phon", reportName);
+				tempFile.deleteOnExit();
+				
+				final FileOutputStream fout = new FileOutputStream(tempFile);
+				
+				final NodeWizardReportGenerator reportGenerator = 
+						new NodeWizardReportGenerator(this, reportName, fout);
+				try {
+					reportGenerator.generateReport();
+				} catch (NodeWizardReportException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+				
 				// create buffer
 				final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
 				try {
@@ -448,27 +461,26 @@ public class NodeWizard extends WizardFrame {
 					continue;
 				}
 				final BufferPanel reportBufferPanel = bufferPanelRef.get();
-				final LogBuffer reportBuffer = reportBufferPanel.getLogBuffer();
-				
-				final NodeWizardReportGenerator reportGenerator = 
-						new NodeWizardReportGenerator(this, reportName, reportBuffer.getStdOutStream());
-				try {
-					reportGenerator.generateReport();
-					
-					SwingUtilities.invokeLater(reportBufferPanel::showHtml);
-				} catch (NodeWizardReportException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					e.printStackTrace(new PrintWriter(reportBuffer.getStdErrStream()));
-				}
+				final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
+				reader.execute();
 			}
-		} catch (ProcessingException pe) {
+			
+			SwingUtilities.invokeLater( () -> {
+				busyLabel.setBusy(false);
+				statusLabel.setText("");
+				btnBack.setEnabled(true);
+				
+				setModified(true);
+				modified = true;
+			});
+		} catch (ProcessingException | IOException pe) {
 			SwingUtilities.invokeLater( () -> {
 				busyLabel.setBusy(false);
 				statusLabel.setText(pe.getLocalizedMessage());
 				
 				final BufferPanel errPanel = bufferPanel.createBuffer("Error");
 				final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
-				writer.println(pe.getContext().getCurrentNode().getName() + " (" + pe.getContext().getCurrentNode().getId() + ")");
+//				writer.println(pe.getContext().getCurrentNode().getName() + " (" + pe.getContext().getCurrentNode().getId() + ")");
 				
 				pe.printStackTrace(writer);
 				writer.flush();
@@ -476,7 +488,7 @@ public class NodeWizard extends WizardFrame {
 				
 				executionEnded(new ProcessorEvent());
 			});
-			throw pe;
+//			throw pe;
 		}
 	}
 	
@@ -771,6 +783,51 @@ public class NodeWizard extends WizardFrame {
 	@Override
 	public boolean hasUnsavedChanges() {
 		return modified;
+	}
+	
+	private class ReportReader extends SwingWorker<String, String> {
+		
+		private BufferPanel panel;
+		
+		private File file;
+		
+		private PrintWriter printer;
+		
+		public ReportReader(BufferPanel panel, File reportFile) {
+			super();
+			this.panel = panel;
+			this.file = reportFile;
+		}
+
+		@Override
+		protected String doInBackground() throws Exception {
+			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+			String line = null;
+			final StringBuffer sb = new StringBuffer();
+			while((line = in.readLine()) != null) {
+				publish(line, "\n");
+				sb.append(line).append("\n");
+			}
+			in.close();
+			return sb.toString();
+		}
+		
+		@Override
+		protected void process(List<String> chunks) {
+			if(this.printer == null) {
+				this.printer = new PrintWriter(panel.getLogBuffer().getStdOutStream());
+			}
+			for(String chunk:chunks) {
+				printer.write(chunk);
+			}
+			printer.flush();
+		}
+
+		@Override
+		protected void done() {
+			panel.showHtml();
+		}
+		
 	}
 
 	private class OptionalsContextHandler extends MouseInputAdapter {
