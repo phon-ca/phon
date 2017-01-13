@@ -85,7 +85,7 @@ public class RecentProjectsList extends JPanel {
 			
 			@Override
 			public void mouseClicked(MouseEvent me) {
-				final RecentProjectHistory history = new RecentProjectHistory();
+				final RecentProjects history = new RecentProjects();
 				history.clearHistory();
 			}
 			
@@ -121,7 +121,7 @@ public class RecentProjectsList extends JPanel {
 		buttonPanel.removeAll();
 		buttonPanel.revalidate();
 		
-		final RecentProjectHistory history = new RecentProjectHistory();
+		final RecentProjects history = new RecentProjects();
 		
 		boolean stripeRow = false;
 		for(File projectFolder:history) {

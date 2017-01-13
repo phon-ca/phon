@@ -49,7 +49,7 @@ public class DesktopProjectFactory extends DefaultProjectFactory {
 		}
 		
 		// add project to recent projects history
-		final RecentProjectHistory history = new RecentProjectHistory();
+		final RecentProjects history = new RecentProjects();
 		history.addToHistory(projectFolder);
 		
 		return new DesktopProject(projectFolder);

@@ -27,7 +27,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.project.RecentProjectHistory;
+import ca.phon.app.project.RecentProjects;
 import ca.phon.plugin.PluginAction;
 
 /**
@@ -50,7 +50,7 @@ public class RecentProjectsMenuListener implements MenuListener {
 		JMenu menu = (JMenu)arg0.getSource();
 		menu.removeAll();
 		
-		final RecentProjectHistory history = new RecentProjectHistory();
+		final RecentProjects history = new RecentProjects();
 		for(File projectFile:history) {
 			PluginAction projectAct = new PluginAction("OpenProject");
 			final EntryPointArgs args = new EntryPointArgs();

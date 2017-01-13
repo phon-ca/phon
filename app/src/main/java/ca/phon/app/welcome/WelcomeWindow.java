@@ -58,7 +58,7 @@ import ca.phon.app.VersionInfo;
 import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.menu.file.NewProjectCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
-import ca.phon.app.project.RecentProjectHistory;
+import ca.phon.app.project.RecentProjects;
 import ca.phon.app.project.RecentProjectsList;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -189,7 +189,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 		recentProjectsContainer = new TitledPanel("Recent Projects", recentProjectsPanel);
 		
 		PrefHelper.getUserPreferences().addPreferenceChangeListener( (p) -> {
-			if(p.getKey().equals(RecentProjectHistory.PROJECT_HISTORY_PROP)) {
+			if(p.getKey().equals(RecentProjects.PROJECT_HISTORY_PROP)) {
 				SwingUtilities.invokeLater( () -> recentProjectsList.updateProjectList() );
 			}
 		});

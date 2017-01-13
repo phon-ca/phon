@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.project;
+package ca.phon.util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,27 +25,55 @@ import java.util.List;
 
 import ca.phon.util.PrefHelper;
 
-public class RecentProjectHistory implements Iterable<File> {
+public class RecentFiles implements Iterable<File> {
 	
-	public static final String PROJECT_HISTORY_PROP = RecentProjectHistory.class.getName() + ".stack";
+	private String propertyKey;
 	
-	public static final int MAX_PROJECTS = 10;
+	private final static int DEFAULT_MAX_FILES = 10;
 	
-	private List<File> projectHistory = new ArrayList<>();
+	private int maxFiles = 10;
 	
-	public RecentProjectHistory() {
+	private List<File> fileHistory = new ArrayList<>();
+	
+	public RecentFiles() {
 		super();
+	}
+	
+	public RecentFiles(String propertyKey) {
+		this(propertyKey, DEFAULT_MAX_FILES);
+	}
+	
+	public RecentFiles(String propertyKey, int maxFiles) {
+		super();
+		setMaxFiles(maxFiles);
+		setPropertyKey(propertyKey);
+	}
+	
+	public void setMaxFiles(int maxFiles) {
+		this.maxFiles = Math.max(0, maxFiles);
+	}
+	
+	public int getMaxFiles() {
+		return this.maxFiles;
+	}
+	
+	public void setPropertyKey(String key) {
+		this.propertyKey = key;
 		loadHistory();
 	}
 	
+	public String getPropertyKey() {
+		return this.propertyKey;
+	}
+	
 	private void loadHistory() {
-		String folderList = PrefHelper.get(PROJECT_HISTORY_PROP, "");
+		String folderList = PrefHelper.get(propertyKey, "");
 		final String folders[] = folderList.split(";");
 		
 		for(String folderName:folders) {
 			if(folderName.trim().length() == 0) continue;
 			final File folder = new File(folderName);
-			projectHistory.add(0, folder);
+			fileHistory.add(0, folder);
 		}
 	}
 	
@@ -53,29 +81,29 @@ public class RecentProjectHistory implements Iterable<File> {
 		final StringBuffer sb = new StringBuffer();
 		
 		int num = 0;
-		for(int i = projectHistory.size()-1; i >= 0 && num++ < MAX_PROJECTS; i--) {
-			final File projectFolder = projectHistory.get(i);
-			if(i < (projectHistory.size()-1)) sb.append(';');
+		for(int i = fileHistory.size()-1; i >= 0 && num++ < maxFiles; i--) {
+			final File projectFolder = fileHistory.get(i);
+			if(i < (fileHistory.size()-1)) sb.append(';');
 			sb.append(projectFolder.getAbsolutePath());
 		}
 		
-		PrefHelper.getUserPreferences().put(PROJECT_HISTORY_PROP, sb.toString());
+		PrefHelper.getUserPreferences().put(propertyKey, sb.toString());
 	}
 	
 	public void addToHistory(File workspaceFolder) {
-		if(projectHistory.contains(workspaceFolder))
-			projectHistory.remove(workspaceFolder);
-		projectHistory.add(0, workspaceFolder);
+		if(fileHistory.contains(workspaceFolder))
+			fileHistory.remove(workspaceFolder);
+		fileHistory.add(0, workspaceFolder);
 		saveHistory();
 	}
 	
 	public void clearHistory() {
-		projectHistory.clear();
+		fileHistory.clear();
 		saveHistory();
 	}
 
 	@Override
 	public Iterator<File> iterator() {
-		return projectHistory.iterator();
+		return fileHistory.iterator();
 	}
 }
