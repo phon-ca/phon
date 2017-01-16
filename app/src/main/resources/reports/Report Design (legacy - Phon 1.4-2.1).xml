@@ -45,7 +45,7 @@
                     </opqry:info>
                 </opqry:node>
             </opqry:nodewizard>
-            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel" generated="true"/>
         </extensions>
     </graph>
 </opgraph>

@@ -24,18 +24,43 @@ package ca.phon.app.opgraph.editor;
  */
 public class NodeEditorSettings {
 	
-	private String modelType;
+	private String modelType = "ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel";
+	
+	private boolean generated = false;
 	
 	public NodeEditorSettings() {
 		
 	}
 
+	/**
+	 * Returns the {@link OpgraphEditorModel} implementation
+	 * used by the graph.
+	 * 
+	 * @return editor model type
+	 */
 	public String getModelType() {
 		return modelType;
 	}
 
 	public void setModelType(String modelType) {
 		this.modelType = modelType;
+	}
+	
+	/**
+	 * Returns <code>true</code> if this graph was
+	 * generated instead of created in the editor.
+	 * 
+	 * Some methods may handle 'dynamic' graphs
+	 * differently.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isGenerated() {
+		return this.generated;
+	}
+	
+	public void setGenerated(boolean generated) {
+		this.generated = generated;
 	}
 	
 

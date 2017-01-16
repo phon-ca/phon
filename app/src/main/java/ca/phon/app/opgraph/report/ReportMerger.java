@@ -15,6 +15,7 @@ import ca.gedge.opgraph.dag.CycleDetectedException;
 import ca.gedge.opgraph.dag.VertexNotFoundException;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.nodes.general.MacroNode;
+import ca.phon.app.opgraph.editor.NodeEditorSettings;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
@@ -157,6 +158,14 @@ public class ReportMerger {
 	
 	public OpGraph createAllReportsGraph() throws IOException, IllegalArgumentException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
 		final OpGraph retVal = loadTemplate();
+		
+		NodeEditorSettings nes = retVal.getExtension(NodeEditorSettings.class);
+		if(nes == null) {
+			nes = new NodeEditorSettings();
+			retVal.putExtension(NodeEditorSettings.class, nes);
+		}
+		nes.setGenerated(true);
+		
 		final WizardExtension ext = retVal.getExtension(WizardExtension.class);
 		if(ext != null)
 			ext.setWizardTitle("All Reports");
@@ -170,6 +179,8 @@ public class ReportMerger {
 			if(!checkName(name)) continue;
 			
 			final OpGraph graph = OpgraphIO.read(reportURL.openStream());
+			if(graphGenerated(graph)) continue;
+			
 			updateIds(graph);
 			
 			addReport(retVal, stockReportsNode.getGraph(), graph);
@@ -182,6 +193,7 @@ public class ReportMerger {
 				if(!checkName(name)) continue;
 				
 				final OpGraph graph = OpgraphIO.read(reportURL.openStream());
+				if(graphGenerated(graph)) continue;
 				updateIds(graph);
 				
 				addReport(retVal, userReportsNode.getGraph(), graph);
@@ -196,6 +208,7 @@ public class ReportMerger {
 				if(!checkName(name)) continue;
 				
 				final OpGraph graph = OpgraphIO.read(reportURL.openStream());
+				if(graphGenerated(graph)) continue;
 				updateIds(graph);
 				
 				addReport(retVal, projectReportsNode.getGraph(), graph);
@@ -203,6 +216,11 @@ public class ReportMerger {
 		}
 		
 		return retVal;
+	}
+	
+	private boolean graphGenerated(OpGraph graph) {
+		final NodeEditorSettings settings = graph.getExtension(NodeEditorSettings.class);
+		return (settings != null && settings.isGenerated());
 	}
 	
 	/**

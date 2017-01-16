@@ -56,6 +56,10 @@ public class NodeEditorSettingsSerializer implements XMLSerializer {
 		final Element metaElem = doc.createElementNS(NAMESPACE, PREFIX + ":settings");
 		metaElem.setAttribute("type", meta.getModelType());
 		
+		if(meta.isGenerated()) {
+			metaElem.setAttribute("generated", Boolean.toString(meta.isGenerated()));
+		}
+		
 		parentElem.appendChild(metaElem);
 	}
 
@@ -70,6 +74,10 @@ public class NodeEditorSettingsSerializer implements XMLSerializer {
 
 			final String name = elem.getAttribute("type");
 			settings.setModelType(name);
+			
+			if(elem.hasAttribute("generated")) {
+				settings.setGenerated(Boolean.parseBoolean(elem.getAttribute("generated")));
+			}
 			
 			graph.putExtension(NodeEditorSettings.class, settings);
 		}
