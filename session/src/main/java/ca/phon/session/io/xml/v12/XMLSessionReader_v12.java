@@ -248,7 +248,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	}
 	
 	// participants
-	private Participant copyParticipant(SessionFactory factory, ParticipantType pt, LocalDate sessionDate) {
+	Participant copyParticipant(SessionFactory factory, ParticipantType pt, LocalDate sessionDate) {
 		final Participant retVal = factory.createParticipant();
 		
 		retVal.setId(pt.getId());
@@ -260,8 +260,10 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			retVal.setBirthDate(bdt);
 			
 			// calculate age up to the session date
-			final Period period = Period.between(bdt, sessionDate);
-			retVal.setAgeTo(period);
+			if(sessionDate != null) {
+				final Period period = Period.between(bdt, sessionDate);
+				retVal.setAgeTo(period);
+			}
 		}
 		
 		final Duration ageDuration = pt.getAge();

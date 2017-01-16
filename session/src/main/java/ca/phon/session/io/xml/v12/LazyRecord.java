@@ -65,8 +65,12 @@ public class LazyRecord implements Record {
 	}
 
 	public UUID getUuid() {
-		loadRecord();
-		return internalRecord.getUuid();
+		if(internalRecord == null) {
+			final String idStr = recordElement.getId();
+			return UUID.fromString(idStr);
+		} else {
+			return internalRecord.getUuid();
+		}
 	}
 
 	public void setUuid(UUID id) {
@@ -75,8 +79,14 @@ public class LazyRecord implements Record {
 	}
 
 	public Participant getSpeaker() {
-		loadRecord();
-		return internalRecord.getSpeaker();
+		if(internalRecord == null) {
+			final XMLSessionReader_v12 reader = new XMLSessionReader_v12();
+			final ParticipantType pt = (ParticipantType)recordElement.getSpeaker();
+			if(pt == null) return Participant.UNKNOWN;
+			return reader.copyParticipant(factory, pt, null);
+		} else {
+			return internalRecord.getSpeaker();
+		}
 	}
 
 	public void setSpeaker(Participant participant) {
