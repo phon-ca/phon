@@ -25,7 +25,7 @@ em {
 }
 
 table {
-    border: thin solid darkblue;
+    border: thin solid black;
     empty-cells: show;
     table-layout:fixed;
     text-align: left;
@@ -34,7 +34,7 @@ table {
 th {
     overflow:hidden;
     font-weight: bold; 
-    border-bottom: thin solid darkblue;
+    border-bottom: thin solid black;
     padding-right: 20px;
 }
 
