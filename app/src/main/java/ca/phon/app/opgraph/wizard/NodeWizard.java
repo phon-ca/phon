@@ -260,6 +260,8 @@ public class NodeWizard extends WizardFrame {
 					
 					width += btnNext.getPreferredSize().width;
 					breadcrumbViewer.scrollRectToVisible(new Rectangle(width-1, 0, 1, 1));
+					
+					getRootPane().setDefaultButton(btnNext);
 				});
 			}
 			
@@ -686,10 +688,10 @@ public class NodeWizard extends WizardFrame {
 		currentNodePanel.setOpaque(false);
 		statusLabel.setOpaque(false);
 		statusLabel.setForeground(UIManager.getColor("titledpanel.foreground"));
-		currentNodePanel.add(btnCancel);
 		btnCancel.setVisible(false);
 		btnCancel.putClientProperty("JComponent.sizeVariant", "small");
 		btnCancel.putClientProperty("JButton.buttonType", "square");
+		currentNodePanel.add(btnCancel);
 		panel.setRightDecoration(currentNodePanel);
 		
 		retVal.add(panel, BorderLayout.CENTER);
