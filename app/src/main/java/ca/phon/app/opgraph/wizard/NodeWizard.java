@@ -64,6 +64,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
@@ -268,7 +269,6 @@ public class NodeWizard extends WizardFrame {
 			}
 			
 		});
-//		add(breadcrumbViewer, BorderLayout.NORTH);
 		
 		final JScrollPane breadcrumbScroller = new JScrollPane(breadcrumbViewer);
 		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
@@ -405,7 +405,7 @@ public class NodeWizard extends WizardFrame {
 					
 					setModified(false);
 				}
-				statusLabel.setText(nodeName);
+				statusLabel.setText(nodeName + "...");
 				btnBack.setEnabled(false);
 			});
 			executionStarted(pe);
@@ -422,6 +422,7 @@ public class NodeWizard extends WizardFrame {
 	public void executionStarted(ProcessorEvent pe) {
 		running = true;
 		btnCancel.setText("Stop Analysis");
+		btnCancel.setVisible(true);
 	}
 	
 	/**
@@ -430,6 +431,7 @@ public class NodeWizard extends WizardFrame {
 	public void executionEnded(ProcessorEvent pe) {
 		running = false;
 		btnCancel.setText("Close");
+		btnCancel.setVisible(false);
 		btnBack.setEnabled(true);
 	}
 	
@@ -460,6 +462,8 @@ public class NodeWizard extends WizardFrame {
 				
 				final NodeWizardReportGenerator reportGenerator = 
 						new NodeWizardReportGenerator(this, reportName, fout);
+				
+				SwingUtilities.invokeLater(() -> statusLabel.setText("Generating report..."));
 				try {
 					reportGenerator.generateReport();
 				} catch (NodeWizardReportException e) {
@@ -676,6 +680,17 @@ public class NodeWizard extends WizardFrame {
 		SwingUtilities.invokeLater(() -> bufferPanel.getSplitPane().setDividerLocation(400) );
 		final TitledPanel panel = new TitledPanel("Report", bufferPanel);
 		panel.setLeftDecoration(busyLabel);
+		
+		final JPanel currentNodePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		currentNodePanel.add(statusLabel);
+		currentNodePanel.setOpaque(false);
+		statusLabel.setOpaque(false);
+		statusLabel.setForeground(UIManager.getColor("titledpanel.foreground"));
+		currentNodePanel.add(btnCancel);
+		btnCancel.setVisible(false);
+		btnCancel.putClientProperty("JComponent.sizeVariant", "small");
+		btnCancel.putClientProperty("JButton.buttonType", "square");
+		panel.setRightDecoration(currentNodePanel);
 		
 		retVal.add(panel, BorderLayout.CENTER);
 		

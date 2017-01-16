@@ -83,6 +83,7 @@ public class TitledPanel extends JPanel {
 		gbcLeft = new GridBagConstraints();
 		gbcLeft.gridx = 0;
 		gbcLeft.gridy = 0;
+		gbcLeft.insets = new Insets(0, 5, 0, 5);
 		gbcLeft.anchor = GridBagConstraints.WEST;
 		gbcLeft.fill = GridBagConstraints.NONE;
 		gbcLeft.gridwidth = 1;
@@ -98,6 +99,7 @@ public class TitledPanel extends JPanel {
 		
 		gbcRight = (GridBagConstraints)gbcLeft.clone();
 		gbcRight.gridx = 2;
+		gbcRight.insets = new Insets(0, 5, 0, 5);
 		gbcRight.anchor = GridBagConstraints.EAST;
 		
 		titleLabel = new JLabel(getTitle());
