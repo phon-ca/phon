@@ -31,7 +31,7 @@
         <node id="7c282337" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="processSelection"><![CDATA[Custom]]></oga:property>
+                    <oga:property key="processSelection"><![CDATA[Stopping]]></oga:property>
                     <oga:property key="filters.column.exactMatch"><![CDATA[true]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -481,20 +481,23 @@ function run(context) {
 	
 }
 ]]></oga:property>
+                    <oga:property key="filters.primary.filter"><![CDATA[{-stop}]]></oga:property>
+                    <oga:property key="processName"><![CDATA[Stopping]]></oga:property>
                     <oga:property key="filters.column.caseSensitive"><![CDATA[false]]></oga:property>
+                    <oga:property key="filters.column.filter"><![CDATA[{stop}]]></oga:property>
                 </oga:settings>
                 <oga:meta x="130" y="641"/>
             </extensions>
         </node>
         <opqry:queryNode id="1b7448dbba9c47fc" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-01-10T10:43:33.493-03:30" name="Phones" uuid="33056567-6e6d-4dff-9826-8e18c73794ca">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-01-13T12:31:44.692-03:30" name="Phones" uuid="6cc79292-eeaf-4ba1-8873-4d412ceeefc1">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
                     <param id="filters.groupPattern.filterType">Plain text</param>
-                    <param id="filters.primary.filter">{stop}</param>
+                    <param id="filters.primary.filter">{-stop}</param>
                     <param id="filters.primary.filterType">Phonex</param>
                     <param id="filters.speaker.age1Comparator">equal to</param>
                     <param id="filters.speaker.age2Comparator">equal to</param>
@@ -515,7 +518,7 @@ function run(context) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="e879a7148c25481e" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="41f1afea">
+            <graph id="25e50841">
                 <node id="8e42e1926c24dd2" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -576,7 +579,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="8e17af4dea0749f9" name="Print Aggregate Inventories for each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="5cb0a3ff">
+            <graph id="322d8db2">
                 <node id="d438fc0ce30e446a" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -611,7 +614,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="29ba4149" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4819b4cf">
+                    <graph id="25ef6aeb">
                         <node id="482d16e" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -873,7 +876,7 @@ function filterRow(table, row, col) {
 }
 ]]></oga:property>
                             <oga:property key="filters.column.caseSensitive"><![CDATA[false]]></oga:property>
-                            <oga:property key="filters.column.filter"><![CDATA[{-stop}]]></oga:property>
+                            <oga:property key="filters.column.filter"><![CDATA[{stop}]]></oga:property>
                         </oga:settings>
                         <oga:meta x="879" y="15"/>
                     </extensions>
@@ -900,7 +903,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="3b44178eebd140df" name="Print Aggregate Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="845373">
+                    <graph id="e9e75ce">
                         <node id="e64d3b859bf44fb5" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -989,7 +992,7 @@ function filterRow(table, row, col) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="67e70cc9" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="c068c46">
+            <graph id="261e9fdf">
                 <node id="3a017bbc" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1008,7 +1011,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="221fabf2" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="2a4fdcc1">
+                    <graph id="525fa2c8">
                         <node id="58da6f6306d74786" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1067,7 +1070,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4c1b6b00" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="78514209">
+                    <graph id="41be71f7">
                         <node id="ce75632b7ddb43bb" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1117,7 +1120,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6d596da5" name="Summary Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="78a1deda">
+                    <graph id="63b933f5">
                         <node id="a2e2e864a5fa48a8" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1273,13 +1276,13 @@ function filterRow(table, row, col) {
 }
 ]]></oga:property>
                             <oga:property key="filters.column.caseSensitive"><![CDATA[false]]></oga:property>
-                            <oga:property key="filters.column.filter"><![CDATA[Catootje.2_07_04]]></oga:property>
+                            <oga:property key="filters.column.filter"><![CDATA[Anne.Session]]></oga:property>
                         </oga:settings>
                         <oga:meta x="619" y="23"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="770bb306" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="545d4981">
+                    <graph id="4ddfd271">
                         <node id="1090ec3d" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -1330,7 +1333,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="84f07bf" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="56ee52d8">
+                            <graph id="18333ea0">
                                 <node id="2e320544" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1373,7 +1376,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="8b5adb48b1e449e" name="Setup Table Script Parameters" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="500e5025">
+                            <graph id="4e666ac7">
                                 <node id="54144e1b73749ff" name="HashMap#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1635,7 +1638,7 @@ function filterRow(table, row, col) {
 }
 ]]></oga:property>
                                     <oga:property key="filters.column.caseSensitive"><![CDATA[false]]></oga:property>
-                                    <oga:property key="filters.column.filter"><![CDATA[{-stop}]]></oga:property>
+                                    <oga:property key="filters.column.filter"><![CDATA[{stop}]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="867" y="27"/>
                             </extensions>
@@ -1649,7 +1652,7 @@ function filterRow(table, row, col) {
                             </extensions>
                         </node>
                         <ogcn:macro id="160763c2" name="Print Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="164d574e">
+                            <graph id="5f912bd">
                                 <node id="f6c873e4d35e4c95" name="Session Path" type="class:ca.gedge.opgraph.nodes.reflect.ObjectCastNode">
                                     <extensions>
                                         <oga:settings>
@@ -1928,13 +1931,12 @@ function tableOp(context, table) {
 #h2("Summary")
 
 #foreach($participant in $selectedParticipants)
-#set($headerTxt = "Speaker: "+$participant)
-#h3($headerTxt)
+**Speaker:** $participant&lt;br/&gt;
+**Role:** $participant.role
 
 &lt;table&gt;
 &lt;tr&gt;
 	&lt;th&gt;Session&lt;/th&gt;
-	&lt;th&gt;Role&lt;/th&gt;
 	&lt;th&gt;Age&lt;/th&gt;
 	&lt;th&gt;# Targets&lt;/th&gt;
 	&lt;th&gt;Count&lt;/th&gt;
@@ -1961,7 +1963,6 @@ function tableOp(context, table) {
 
 &lt;tr&gt;
 	&lt;td&gt;$sessionPath&lt;/td&gt;
-	&lt;td&gt;$participant.role&lt;/td&gt;
 #printValue($age)
 #printValue($targets)
 #printValue($count)
@@ -1976,8 +1977,7 @@ function tableOp(context, table) {
 
 &lt;tr&gt;
 	&lt;td/&gt;
-	&lt;td/&gt;
-	&lt;td&gt;&lt;b&gt;Total:&lt;/b&gt;&lt;/td&gt;
+	&lt;td style="text-align:right;"&gt;&lt;b&gt;Total:&lt;/b&gt;&lt;/td&gt;
 #printValue($totalTargets)
 #printValue($totalCount)
 #printValue($totalPercent)
@@ -1987,11 +1987,11 @@ function tableOp(context, table) {
 
 #end
 
-#h2("Aggregate Inventories")
+#h2("Aggregates")
 
 #foreach($participant in $selectedParticipants)
-#set($headerTxt = "Aggregate Inventory: "+$participant)
-#h3($headerTxt)
+
+**Speaker:** $participant
 
 #set($tableName = "Inventory_"+$participant)
 #set($table = $tables.get($tableName))
@@ -2009,8 +2009,8 @@ No results
 #foreach($sessionPath in $selectedSessions)
 #foreach($participant in $selectedParticipants)
 
-#set($headerTxt = "Session: "+$sessionPath+" Speaker: "+$participant)
-#h3($headerTxt)
+**Session:** $sessionPath&lt;br/&gt;
+**Speaker:** $participant
 
 #set($tableName = $processName+"_"+$sessionPath+"_"+$participant)
 #set($table = $tables.get($tableName))
