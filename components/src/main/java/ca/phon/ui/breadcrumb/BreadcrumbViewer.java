@@ -20,6 +20,7 @@ package ca.phon.ui.breadcrumb;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -32,7 +33,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Scrollable;
 import javax.swing.border.EmptyBorder;
+
+import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.ui.GUIHelper;
 import ca.phon.util.Tuple;
@@ -43,9 +47,11 @@ import ca.phon.util.Tuple;
  * @param <S>  the type of state in the breadcrumb
  * @param <V>  the type of value in the breadcrumb
  */
-public class BreadcrumbViewer<S, V> extends JPanel {
+public class BreadcrumbViewer<S, V> extends JPanel implements Scrollable {
 	/** The width of the right-hand side of a breadcrumb */ 
 	private static final int RIGHT_WIDTH = 10;
+	
+	private static final int HGAP = 2;
 
 	private class StateComponent<S, V> extends JLabel {
 		/** The state for this component */
@@ -53,13 +59,13 @@ public class BreadcrumbViewer<S, V> extends JPanel {
 
 		public StateComponent(S state, V value) {
 			super(value == null ? "" : value.toString());
-
+			
 			this.state = state;
 
 			setOpaque(false);
 			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			if(state != null)
-				setBorder(new EmptyBorder(5, 0, 5, 2*RIGHT_WIDTH));
+				setBorder(new EmptyBorder(5, 3, 5, 2*RIGHT_WIDTH));
 		}
 		
 		@Override
@@ -109,6 +115,7 @@ public class BreadcrumbViewer<S, V> extends JPanel {
 			synchronized(getTreeLock()) {
 				removeAll();
 
+				int width = 0;
 				for(Tuple<S, V> statePair : breadcrumb) {
 					final S state = statePair.getObj1();
 					final StateComponent<S, V> comp = new StateComponent<S, V>(state, statePair.getObj2());
@@ -120,11 +127,13 @@ public class BreadcrumbViewer<S, V> extends JPanel {
 					});
 
 					add(comp, 0);
+					width += comp.getPreferredSize().width;
 				}
+				revalidate();
+				
+				scrollRectToVisible(new Rectangle(width-1, 0, 1, 1));
 			}
 
-			revalidate();
-			repaint();
 		}
 
 		@Override
@@ -138,7 +147,7 @@ public class BreadcrumbViewer<S, V> extends JPanel {
 	 * @param breadcrumb  the breadcrumb to display
 	 */
 	public BreadcrumbViewer(Breadcrumb<S, V> breadcrumb) {
-		super(new FlowLayout(FlowLayout.LEFT, RIGHT_WIDTH, 0));
+		super(new HorizontalLayout(HGAP));
 
 		add(new StateComponent<S, V>(null, null));
 
@@ -178,5 +187,32 @@ public class BreadcrumbViewer<S, V> extends JPanel {
 					listener.stateAdded(state.getObj1(), state.getObj2());
 			}
 		}
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		final Dimension dim = getPreferredSize();
+		dim.width = Integer.MAX_VALUE;
+		return dim;
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 20;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 100;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return true;
 	}
 }

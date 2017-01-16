@@ -244,7 +244,6 @@ public class NodeWizard extends WizardFrame {
 	private void init() {
 		bufferPanel = new MultiBufferPanel();
 		
-		breadcrumbViewer.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
 		breadcrumbViewer.setBackground(new Color(200, 200, 200));
 		breadcrumbViewer.setOpaque(true);
 		
@@ -253,7 +252,14 @@ public class NodeWizard extends WizardFrame {
 			
 			@Override
 			public void stateChanged(WizardStep oldState, WizardStep newState) {
-				breadcrumbViewer.add(btnNext);
+				SwingUtilities.invokeLater( () -> {
+					int width = breadcrumbViewer.getPreferredSize().width;
+					breadcrumbViewer.add(btnNext);
+					breadcrumbViewer.revalidate();
+					
+					width += btnNext.getPreferredSize().width;
+					breadcrumbViewer.scrollRectToVisible(new Rectangle(width-1, 0, 1, 1));
+				});
 			}
 			
 			@Override
@@ -262,7 +268,15 @@ public class NodeWizard extends WizardFrame {
 			}
 			
 		});
-		add(breadcrumbViewer, BorderLayout.NORTH);
+//		add(breadcrumbViewer, BorderLayout.NORTH);
+		
+		final JScrollPane breadcrumbScroller = new JScrollPane(breadcrumbViewer);
+		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
+		breadcrumbScroller.getViewport().setBackground(breadcrumbViewer.getBackground());
+		breadcrumbScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		breadcrumbScroller.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+		breadcrumbScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		add(breadcrumbScroller, BorderLayout.NORTH);
 		
 		btnBack.setVisible(false);
 		
