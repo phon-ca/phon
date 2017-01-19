@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -52,8 +53,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.breadcrumb.Breadcrumb;
-import ca.phon.ui.breadcrumb.BreadcrumbViewer;
+import ca.phon.ui.breadcrumb.BreadCrumb;
+import ca.phon.ui.breadcrumb.BreadCrumbViewer;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.wizard.WizardEvent.WizardEventType;
 import ca.phon.util.icons.IconManager;
@@ -62,9 +63,9 @@ import ca.phon.util.icons.IconSize;
 /**
  * A basic wizard implementation.
  * 
- * Since Phon 2.2, this component includes a breadcrumb
+ * Since Phon 2.2, this component includes a breadCrumb
  * viewer which is not shown by default.  To display
- * the breadcrumb, use the setBreadcrumbVisible() method.
+ * the breadCrumb, use the setBreadcrumbVisible() method.
  *
  */
 public class WizardFrame extends CommonModuleFrame {
@@ -90,9 +91,9 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	protected JPanel stepPanel;
 	
-	/** The breadcrumb */
-	private Breadcrumb<WizardStep, String> breadcrumb;
-	protected BreadcrumbViewer<WizardStep, String> breadcrumbViewer;
+	/** The breadCrumb */
+	private BreadCrumb<WizardStep, String> breadCrumb;
+	protected BreadCrumbViewer<WizardStep, String> breadCrumbViewer;
 	
 	private List<WizardListener> listeners = 
 			Collections.synchronizedList(new ArrayList<>());
@@ -100,7 +101,7 @@ public class WizardFrame extends CommonModuleFrame {
 	public WizardFrame(String title) {
 		super(title);
 		
-		breadcrumb = new Breadcrumb<WizardStep, String>() {
+		breadCrumb = new BreadCrumb<WizardStep, String>() {
 
 			@Override
 			public void gotoState(WizardStep state) {
@@ -125,9 +126,9 @@ public class WizardFrame extends CommonModuleFrame {
 		stepPanel = new JPanel(stepLayout);
 		add(stepPanel, BorderLayout.CENTER);
 		
-		breadcrumbViewer = new BreadcrumbViewer<>(breadcrumb);
-		breadcrumbViewer.setFont(FontPreferences.getTitleFont());
-		breadcrumbViewer.setVisible(false);
+		breadCrumbViewer = new BreadCrumbViewer<>(breadCrumb);
+		breadCrumbViewer.setFont(FontPreferences.getTitleFont());
+		breadCrumbViewer.setVisible(false);
 		
 		// button bar
 		ImageIcon icnBack = IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL);
@@ -189,7 +190,7 @@ public class WizardFrame extends CommonModuleFrame {
 		buttonPanel = new JPanel(new GridBagLayout());
 		
 		gbc.weightx = 1.0;
-//		buttonPanel.add(breadcrumbViewer, gbc);
+//		buttonPanel.add(breadCrumbViewer, gbc);
 		
 		++gbc.gridx;
 		buttonPanel.add(Box.createHorizontalGlue(), gbc);
@@ -211,11 +212,11 @@ public class WizardFrame extends CommonModuleFrame {
 	}
 	
 	public boolean isBreadcrumbVisible() {
-		return breadcrumbViewer.isVisible();
+		return breadCrumbViewer.isVisible();
 	}
 	
 	public void setBreadcrumbVisible(boolean breadcrumbVisible) {
-		breadcrumbViewer.setVisible(breadcrumbVisible);
+		breadCrumbViewer.setVisible(breadcrumbVisible);
 	}
 	
 	public WizardStep getWizardStep(int idx) {
@@ -292,10 +293,10 @@ public class WizardFrame extends CommonModuleFrame {
 		steps.remove(ws);
 		stepPanel.remove(ws);
 		
-		if(breadcrumb.containsState(ws)) {
-			while(breadcrumb.size() > 0) {
-				breadcrumb.popState();
-				if(breadcrumb.peekState(breadcrumb.size()-1) == ws) {
+		if(breadCrumb.containsState(ws)) {
+			while(breadCrumb.size() > 0) {
+				breadCrumb.popState();
+				if(breadCrumb.peekState(breadCrumb.size()-1) == ws) {
 					break;
 				}
 			}
@@ -306,7 +307,7 @@ public class WizardFrame extends CommonModuleFrame {
 		steps.clear();
 		stepPanel.removeAll();
 		
-		breadcrumb.clear();
+		breadCrumb.clear();
 	}
 	
 	public int numberOfSteps() {
@@ -326,13 +327,13 @@ public class WizardFrame extends CommonModuleFrame {
 		
 		setupButtons();
 		
-		if(breadcrumb.containsState(ws)) {
-			breadcrumb.gotoState(ws);
+		if(breadCrumb.containsState(ws)) {
+			breadCrumb.gotoState(ws);
 		} else {
-			breadcrumb.clear();
+			breadCrumb.clear();
 			for(int i = 0; i < numberOfSteps() && i <= getCurrentStepIndex(); i++) {
 				WizardStep step = getWizardStep(i);
-				breadcrumb.addState(step, step.getTitle());
+				breadCrumb.addState(step, step.getTitle());
 				if(step == ws) break;
 			}
 		}

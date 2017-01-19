@@ -25,6 +25,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -94,9 +95,11 @@ import ca.phon.project.ParticipantHistory;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.breadcrumb.BreadcrumbListener;
+import ca.phon.ui.breadcrumb.BreadCrumbEvent;
+import ca.phon.ui.breadcrumb.BreadCrumbListener;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -245,36 +248,32 @@ public class NodeWizard extends WizardFrame {
 	private void init() {
 		bufferPanel = new MultiBufferPanel();
 		
-		breadcrumbViewer.setBackground(new Color(200, 200, 200));
-		breadcrumbViewer.setOpaque(true);
+		if(btnNext.getParent() != null) {
+			btnNext.getParent().remove(btnNext);
+		}
+		btnNext = new NodeWizardBreadcrumbButton();
+		btnNext.setFont(FontPreferences.getTitleFont());
+		btnNext.setText("Next");
+		btnNext.setBackground(Color.yellow);
+		btnNext.addActionListener( (e) -> next() );
 		
-		// add next button to end of breadcrumb on state change
-		breadcrumbViewer.getBreadcrumb().addBreadcrumbListener(new BreadcrumbListener<WizardStep, String>() {
-			
-			@Override
-			public void stateChanged(WizardStep oldState, WizardStep newState) {
-				SwingUtilities.invokeLater( () -> {
-					int width = breadcrumbViewer.getPreferredSize().width;
-					breadcrumbViewer.add(btnNext);
-					breadcrumbViewer.revalidate();
-					
-					width += btnNext.getPreferredSize().width;
-					breadcrumbViewer.scrollRectToVisible(new Rectangle(width-1, 0, 1, 1));
-					
-					getRootPane().setDefaultButton(btnNext);
-				});
-			}
-			
-			@Override
-			public void stateAdded(WizardStep state, String value) {
+		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
+		breadCrumbViewer.setBackground(Color.white);
+		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener( (evt) -> {
+			SwingUtilities.invokeLater(() -> {
+				final Rectangle bounds = 
+						new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width, 0, btnNext.getPreferredSize().width, breadCrumbViewer.getHeight());
+				btnNext.setBounds(bounds);
+				breadCrumbViewer.revalidate();
 				
-			}
-			
+				getRootPane().setDefaultButton(btnNext);
+			});
 		});
+		breadCrumbViewer.add(btnNext);
 		
-		final JScrollPane breadcrumbScroller = new JScrollPane(breadcrumbViewer);
+		final JScrollPane breadcrumbScroller = new JScrollPane(breadCrumbViewer);
 		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
-		breadcrumbScroller.getViewport().setBackground(breadcrumbViewer.getBackground());
+		breadcrumbScroller.getViewport().setBackground(breadCrumbViewer.getBackground());
 		breadcrumbScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		breadcrumbScroller.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
 		breadcrumbScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
