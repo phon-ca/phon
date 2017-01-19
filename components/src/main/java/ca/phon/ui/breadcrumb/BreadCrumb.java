@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2012 Jason Gedge <http://www.gedge.ca>
- *
- * This file is part of the OpGraph project.
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Dept of Linguistics, Memorial University <https://phon.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import ca.phon.ui.breadcrumb.BreadCrumbEvent.BreadcrumbEventType;
 import ca.phon.util.Tuple;
 
 /**
@@ -32,7 +33,7 @@ import ca.phon.util.Tuple;
  * @param <S>  the type of state
  * @param <V>  the type of value associated with a state 
  */
-public class Breadcrumb<S, V> implements Iterable<Tuple<S, V>> { 
+public class BreadCrumb<S, V> implements Iterable<Tuple<S, V>> { 
 	/** The state stack */
 	private LinkedList<S> states = new LinkedList<S>();
 
@@ -86,6 +87,16 @@ public class Breadcrumb<S, V> implements Iterable<Tuple<S, V>> {
 	 */
 	public int size() {
 		return states.size();
+	}
+	
+	/**
+	 * Index of given state
+	 * 
+	 * @param state
+	 * @return index of state or -1
+	 */
+	public int getIndexOfState(S state) {
+		return states.indexOf(state);
 	}
 
 	/**
@@ -237,7 +248,7 @@ public class Breadcrumb<S, V> implements Iterable<Tuple<S, V>> {
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException("remove() not supported in Breadcrumb");
+				throw new UnsupportedOperationException("remove() not supported in BreadCrumb");
 			}
 		};
 	}
@@ -246,14 +257,14 @@ public class Breadcrumb<S, V> implements Iterable<Tuple<S, V>> {
 	// Listeners
 	//
 
-	private ArrayList<BreadcrumbListener<S, V>> listeners = new ArrayList<BreadcrumbListener<S, V>>();
+	private ArrayList<BreadCrumbListener<S, V>> listeners = new ArrayList<BreadCrumbListener<S, V>>();
 
 	/**
 	 * Adds a breadcrumb listener to this breadcrumb.
 	 * 
 	 * @param listener  the listener to add
 	 */
-	public void addBreadcrumbListener(BreadcrumbListener<S, V> listener) {
+	public void addBreadcrumbListener(BreadCrumbListener<S, V> listener) {
 		synchronized(listeners) {
 			if(listener != null && !listeners.contains(listener))
 				listeners.add(listener);
@@ -265,7 +276,7 @@ public class Breadcrumb<S, V> implements Iterable<Tuple<S, V>> {
 	 * 
 	 * @param listener  the listener to remove
 	 */
-	public void removeBreadcrumbListener(BreadcrumbListener<S, V> listener) {
+	public void removeBreadcrumbListener(BreadCrumbListener<S, V> listener) {
 		synchronized(listeners) {
 			listeners.remove(listener);
 		}
@@ -273,15 +284,26 @@ public class Breadcrumb<S, V> implements Iterable<Tuple<S, V>> {
 
 	protected void fireStateChanged(S oldState, S newState) {
 		synchronized(listeners) {
-			for(BreadcrumbListener<S, V> listener : listeners)
-				listener.stateChanged(oldState, newState);
+			int stateIdx = getIndexOfState(newState);
+			if(stateIdx >= 0) {
+				final BreadCrumbEvent<S, V> evt = 
+						new BreadCrumbEvent<>(this, newState, values.get(stateIdx), stateIdx, BreadcrumbEventType.GOTO_STATE);
+				for(BreadCrumbListener<S, V> listener : listeners)
+					listener.breadcrumbEvent(evt);
+			}
 		}
 	}
 
 	protected void fireStateAdded(S state, V value) {
 		synchronized(listeners) {
-			for(BreadcrumbListener<S, V> listener : listeners)
-				listener.stateAdded(state, value);
+			int index = getIndexOfState(state);
+			if(index >= 0) {
+				final BreadCrumbEvent<S, V> evt = 
+						new BreadCrumbEvent<>(this, state, value, index, BreadcrumbEventType.STATE_ADDED);
+				for(BreadCrumbListener<S, V> listener : listeners)
+					listener.breadcrumbEvent(evt);
+			}
 		}
 	}
+	
 }

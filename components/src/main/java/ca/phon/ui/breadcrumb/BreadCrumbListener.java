@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2012 Jason Gedge <http://www.gedge.ca>
- *
- * This file is part of the OpGraph project.
+ * Phon - An open source tool for research in phonology.
+ * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Dept of Linguistics, Memorial University <https://phon.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,19 @@ package ca.phon.ui.breadcrumb;
 
 /**
  * An interface for classes that want to listen to state changes in
- * a {@link Breadcrumb}.
+ * a {@link BreadCrumb}.
  * 
  * @param <S>  the type of state
  * @param <V>  the type of value associated with a state
  */
-public interface BreadcrumbListener<S, V> {
+@FunctionalInterface
+public interface BreadCrumbListener<S, V> {
+	
 	/**
-	 * Called when the state of a breadcrumb changes.
+	 * Called when a BreadCrumbEvent occurs.
 	 * 
-	 * @param oldState  the old state
-	 * @param newState  the new state
+	 * @param event
 	 */
-	public void stateChanged(S oldState, S newState);
-
-	/**
-	 * Called when a state is added to a breadcrumb.
-	 * 
-	 * @param state  the state
-	 * @param value  the value associated with the given state
-	 */
-	public void stateAdded(S state, V value);
+	public void breadcrumbEvent(BreadCrumbEvent<S, V> event);
+	
 }
