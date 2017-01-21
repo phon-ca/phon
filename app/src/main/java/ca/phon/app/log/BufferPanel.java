@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,6 +62,7 @@ import org.jdesktop.swingx.JXTable;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sun.javafx.application.PlatformImpl;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
@@ -84,8 +86,13 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
 
 /**
  * A panel showing a single {@link LogBuffer} with options
@@ -94,7 +101,6 @@ import ca.phon.util.icons.IconSize;
  * rendered inside a {@link JEditorPane}.
  *
  */
-// TODO improve handling of types
 public class BufferPanel extends JPanel implements IExtendable {
 	
 	private final static String TABLE_VIEW_ID = "table";
@@ -131,7 +137,9 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	private JXTable dataTable;
 	
-	private JEditorPane htmlPane;
+	private JFXPanel fxPanel;
+	
+	private WebView htmlView;
 	
 	private JButton saveButton;
 	
@@ -215,6 +223,10 @@ public class BufferPanel extends JPanel implements IExtendable {
 	public void showBuffer() {
 		JComponent oldComp = currentView;
 		
+		if(logBuffer == null) {
+			logBuffer = createLogBuffer();
+		}
+		
 		cardLayout.show(contentPanel, BUFFER_VIEW_ID);
 		currentView = logBuffer;
 		
@@ -287,34 +299,43 @@ public class BufferPanel extends JPanel implements IExtendable {
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 	
-	private JEditorPane createHtmlPane() {
-		JEditorPane retVal = new JEditorPane("text/html", "");
-		retVal.setEditable(false);
-		return retVal;
+	@SuppressWarnings("restriction")
+	private Tuple<JFXPanel, WebView> createHtmlPane() {
+		final JFXPanel fxpanel = new JFXPanel();
+		final AtomicReference<JFXPanel> panelRef = new AtomicReference<JFXPanel>(fxpanel);
+		final AtomicReference<WebView> viewRef = new AtomicReference<WebView>();
+		PlatformImpl.runAndWait( () -> {
+			final WebView webView = new WebView();
+			fxpanel.setScene(new Scene(webView));
+			
+			panelRef.set(fxpanel);
+			viewRef.set(webView);
+		});
+		contentPanel.add(panelRef.get(), HTML_VIEW_ID);
+		return new Tuple<>(panelRef.get(), viewRef.get());
 	}
 	
 	public boolean isShowingHtml() {
-		return currentView != null && currentView == htmlPane;
+		return currentView != null && currentView == fxPanel;
 	}
 	
 	public void showHtml() {
 		JComponent oldComp = currentView;
 		
-		if(htmlPane == null) {
-			htmlPane = createHtmlPane();
-			final JScrollPane htmlScroller = new JScrollPane(htmlPane);
-			contentPanel.add(htmlScroller, HTML_VIEW_ID);
+		if(fxPanel == null) {
+			final Tuple<JFXPanel, WebView> webTuple = createHtmlPane();
+			fxPanel = webTuple.getObj1();
+			htmlView = webTuple.getObj2();
 		}
-		htmlPane.setText(logBuffer.getText());
-		firstRowAsHeaderBox.setVisible(false);
 		
-		SwingUtilities.invokeLater(() -> {
-			htmlPane.scrollRectToVisible(new Rectangle(0,0,0,0));
+		Platform.runLater( () -> {
+			htmlView.getEngine().loadContent(logBuffer.getText());
+			
+			SwingUtilities.invokeLater(() -> {
+				cardLayout.show(contentPanel, HTML_VIEW_ID);
+				firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
+			});
 		});
-		cardLayout.show(contentPanel, HTML_VIEW_ID);
-		currentView = htmlPane;
-		
-		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 	
 	private void init() {
@@ -379,9 +400,9 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return dataTable;
 	}
 	
-	public JEditorPane getHtmlPane() {
-		return htmlPane;
-	}
+//	public JEditorPane getHtmlPane() {
+//		return htmlPane;
+//	}
 	
 	public boolean isOpenAfterSave() {
 		return openFileAfterSaving;
