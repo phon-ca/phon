@@ -28,6 +28,7 @@ import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.Tuple;
 
 public class ReportWizard extends NodeWizard {
 
@@ -56,6 +57,11 @@ public class ReportWizard extends NodeWizard {
 		act.actionPerformed(pae.getActionEvent());
 		
 		dispose();
+	}
+	
+	@Override
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("Report", "Reports");
 	}
 	
 }

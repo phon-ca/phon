@@ -38,6 +38,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.Tuple;
 
 public class AnalysisWizard extends NodeWizard {
 
@@ -89,6 +90,11 @@ public class AnalysisWizard extends NodeWizard {
 		act.actionPerformed(pae.getActionEvent());
 		
 		dispose();
+	}
+	
+	@Override
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("Analysis", "Analyses");
 	}
 	
 	private WizardStep addSessionSelectionStep() {

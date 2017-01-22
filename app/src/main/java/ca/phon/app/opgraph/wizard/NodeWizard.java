@@ -106,6 +106,7 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
@@ -381,6 +382,19 @@ public class NodeWizard extends WizardFrame {
 		super.btnFinish.setVisible(false);
 	}
 	
+	/**
+	 * Return the noun associated with the type of graph 
+	 * executed in the wizard.  The first element of the
+	 * {@link Tuple} is the singleton version, while the
+	 * second element is the plural.  String should be
+	 * returned as all lower case.
+	 * 
+	 * @return Tuple<String, String>
+	 */
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("macro", "macros");
+	}
+	
 	public MultiBufferPanel getBufferPanel() {
 		return this.bufferPanel;
 	}
@@ -653,7 +667,7 @@ public class NodeWizard extends WizardFrame {
 	
 	protected WizardStep createOptionalsStep() {
 		final WizardStep retVal = new WizardStep();
-		retVal.setTitle("Select analyses");
+		retVal.setTitle("Select " + getNoun().getObj2());
 		
 		retVal.setLayout(new BorderLayout());
 		
@@ -665,7 +679,7 @@ public class NodeWizard extends WizardFrame {
 			}
 		}
 		
-		final TitledPanel panel = new TitledPanel("Select analyses", new JScrollPane(optionalsTree));
+		final TitledPanel panel = new TitledPanel("Select " + getNoun().getObj2(), new JScrollPane(optionalsTree));
 		retVal.add(panel, BorderLayout.CENTER);
 		
 		return retVal;
