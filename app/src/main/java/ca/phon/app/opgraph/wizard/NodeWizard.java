@@ -103,6 +103,7 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
@@ -258,19 +259,60 @@ public class NodeWizard extends WizardFrame {
 		btnNext.setBackground(Color.yellow);
 		btnNext.addActionListener( (e) -> next() );
 		
+		btnCancel = new NodeWizardBreadcrumbButton();
+		btnCancel.setFont(FontPreferences.getTitleFont());
+		btnCancel.setText("Stop");
+		btnCancel.setBackground(Color.red);
+		btnCancel.setForeground(Color.white);
+		btnCancel.addActionListener( (e) -> cancel() );
+		btnCancel.setVisible(false);
+		
+		final NodeWizardBreadcrumbButton gotoReportBtn = new NodeWizardBreadcrumbButton();
+		gotoReportBtn.setBackground(Color.green);
+		gotoReportBtn.setText("Use defaults and goto Report");
+		gotoReportBtn.setFont(FontPreferences.getTitleFont());
+		gotoReportBtn.addActionListener( (e) -> gotoReport() );
+		
 		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		breadCrumbViewer.setBackground(Color.white);
 		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener( (evt) -> {
 			SwingUtilities.invokeLater(() -> {
-				final Rectangle bounds = 
-						new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width, 0, btnNext.getPreferredSize().width, breadCrumbViewer.getHeight());
-				btnNext.setBounds(bounds);
-				breadCrumbViewer.revalidate();
+				JButton endBtn = btnNext;
+				if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
+					btnNext.setVisible(false);
+					breadCrumbViewer.remove(btnNext);
+					breadCrumbViewer.add(btnCancel);
+					endBtn = btnCancel;
+				} else {
+					btnNext.setVisible(true);
+					
+					breadCrumbViewer.remove(btnCancel);
+					breadCrumbViewer.add(btnNext);
+				}
 				
-				getRootPane().setDefaultButton(btnNext);
+				final Rectangle bounds = 
+						new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1, 
+								0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
+				endBtn.setBounds(bounds);
+				
+				if(breadCrumbViewer.getBreadcrumb().size() == 1
+						&& breadCrumbViewer.getBreadcrumb().getCurrentState() != reportDataStep) {
+					// show goto report button
+					breadCrumbViewer.add(gotoReportBtn);
+					
+					final Rectangle gotoBounds = new Rectangle(
+							bounds.x + bounds.width, 0, gotoReportBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
+					gotoReportBtn.setBounds(gotoBounds);
+				} else {
+					breadCrumbViewer.remove(gotoReportBtn);
+				}
+				
+				getRootPane().setDefaultButton(endBtn);
+			
+				breadCrumbViewer.revalidate();
+				breadCrumbViewer.scrollRectToVisible(bounds);
 			});
 		});
-		breadCrumbViewer.add(btnNext);
 		
 		final JScrollPane breadcrumbScroller = new JScrollPane(breadCrumbViewer);
 		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
@@ -436,7 +478,6 @@ public class NodeWizard extends WizardFrame {
 	 */
 	public void executionStarted(ProcessorEvent pe) {
 		running = true;
-		btnCancel.setText("Stop Analysis");
 		btnCancel.setVisible(true);
 	}
 	
@@ -445,7 +486,6 @@ public class NodeWizard extends WizardFrame {
 	 */
 	public void executionEnded(ProcessorEvent pe) {
 		running = false;
-		btnCancel.setText("Close");
 		btnCancel.setVisible(false);
 		btnBack.setEnabled(true);
 	}
@@ -702,9 +742,6 @@ public class NodeWizard extends WizardFrame {
 		statusLabel.setOpaque(false);
 		statusLabel.setForeground(UIManager.getColor("titledpanel.foreground"));
 		btnCancel.setVisible(false);
-		btnCancel.putClientProperty("JComponent.sizeVariant", "small");
-		btnCancel.putClientProperty("JButton.buttonType", "square");
-		currentNodePanel.add(btnCancel);
 		panel.setRightDecoration(currentNodePanel);
 		
 		retVal.add(panel, BorderLayout.CENTER);
@@ -735,6 +772,19 @@ public class NodeWizard extends WizardFrame {
 			}
 			
 			PhonWorker.getInstance().invokeLater( () -> executeGraph() );
+		}
+	}
+	
+	public void gotoReport() {
+		int lastStep = -1;
+		do {
+			lastStep = getCurrentStepIndex();
+			next();
+		} while(getCurrentStepIndex() != lastStep);
+		
+		if(getCurrentStep() != reportDataStep) {
+			// form requries input, prompt user
+			ToastFactory.makeToast("This form requires input").start(breadCrumbViewer);
 		}
 	}
 	
