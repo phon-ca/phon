@@ -28,7 +28,7 @@ import ca.phon.ui.breadcrumb.BreadCrumbEvent.BreadcrumbEventType;
 import ca.phon.util.Tuple;
 
 /**
- * A breadcrumb maintains a linear navigation history.
+ * A BredCrumb maintains a linear navigation history.
  * 
  * @param <S>  the type of state
  * @param <V>  the type of value associated with a state 
@@ -289,7 +289,7 @@ public class BreadCrumb<S, V> implements Iterable<Tuple<S, V>> {
 				final BreadCrumbEvent<S, V> evt = 
 						new BreadCrumbEvent<>(this, newState, values.get(stateIdx), stateIdx, BreadcrumbEventType.GOTO_STATE);
 				for(BreadCrumbListener<S, V> listener : listeners)
-					listener.breadcrumbEvent(evt);
+					listener.breadCrumbEvent(evt);
 			}
 		}
 	}
@@ -301,7 +301,7 @@ public class BreadCrumb<S, V> implements Iterable<Tuple<S, V>> {
 				final BreadCrumbEvent<S, V> evt = 
 						new BreadCrumbEvent<>(this, state, value, index, BreadcrumbEventType.STATE_ADDED);
 				for(BreadCrumbListener<S, V> listener : listeners)
-					listener.breadcrumbEvent(evt);
+					listener.breadCrumbEvent(evt);
 			}
 		}
 	}

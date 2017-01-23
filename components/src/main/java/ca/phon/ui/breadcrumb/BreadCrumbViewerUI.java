@@ -24,7 +24,7 @@ import java.awt.Point;
 import javax.swing.plaf.ComponentUI;
 
 /**
- * Base UI for {@link BreadCrumbViewer}
+ * Base component UI for {@link BreadCrumbViewer}
  */
 public abstract class BreadCrumbViewerUI extends ComponentUI {
 	

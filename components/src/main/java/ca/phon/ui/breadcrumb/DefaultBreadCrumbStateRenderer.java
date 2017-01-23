@@ -33,13 +33,15 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Default {@link BreadCrumb} state renderer.
+ *
+ * @param <S>
+ * @param <V>
+ */
 public class DefaultBreadCrumbStateRenderer<S, V> extends JLabel implements BreadCrumbStateRenderer<S, V> {
 	
-	private final static int RIGHT_WIDTH = 5;
-
 	private static final long serialVersionUID = 2519454994582489644L;
-	
-	private boolean drawFocus = false;
 	
 	public DefaultBreadCrumbStateRenderer() {
 		super();
@@ -55,9 +57,9 @@ public class DefaultBreadCrumbStateRenderer<S, V> extends JLabel implements Brea
 		setText(value.toString());
 		
 		if(stateIdx == viewer.getBreadcrumb().size()-1) {
-			setBorder(new EmptyBorder(5, RIGHT_WIDTH, 5, 2*RIGHT_WIDTH));
+			setBorder(new BreadCrumbStateBorder(false));
 		} else {
-			setBorder(new EmptyBorder(5, 2*RIGHT_WIDTH, 5, 2*RIGHT_WIDTH));
+			setBorder(new BreadCrumbStateBorder());
 		}
 		
 		if(stateIdx == 0) {
@@ -67,8 +69,6 @@ public class DefaultBreadCrumbStateRenderer<S, V> extends JLabel implements Brea
 			setBackground(viewer.getStateBackground());
 			setForeground(viewer.getStateForeground());
 		}
-		
-		drawFocus = hasFocus;
 		
 		return this;
 	}
@@ -80,73 +80,12 @@ public class DefaultBreadCrumbStateRenderer<S, V> extends JLabel implements Brea
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		
 		final Insets insets = getInsets();
-		final Rectangle2D rect = new Rectangle2D.Double(insets.left, 0, getWidth()-RIGHT_WIDTH-insets.left, getHeight());
+		final Rectangle2D rect = new Rectangle2D.Double(insets.left, 0, getWidth()-insets.right-insets.left, getHeight());
 		
 		g2.setColor(getBackground());
 		g2.fill(rect);
 		
 		super.paintComponent(g2);
-	}
-
-	@Override
-	protected void paintBorder(Graphics gfx) {
-		Graphics2D g = (Graphics2D)gfx;
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		final GeneralPath arrowPath = new GeneralPath();
-		arrowPath.moveTo(0, 0);
-		arrowPath.lineTo(RIGHT_WIDTH, getHeight()/2-1);
-		arrowPath.lineTo(0, getHeight());
-		arrowPath.closePath();
-		
-		if(getInsets().left == 2*RIGHT_WIDTH) {
-			final Rectangle2D rect = new Rectangle2D.Double(0, 0, 2*RIGHT_WIDTH, getHeight());
-			final Area area = new Area(rect);
-			area.subtract(new Area(arrowPath));
-			
-			g.setColor(getBackground());
-			g.fill(area);
-			
-			// draw border line
-			g.setColor(getForeground());
-			g.drawLine(0, 0, RIGHT_WIDTH, getHeight()/2-1);
-			g.drawLine(RIGHT_WIDTH, getHeight()/2-1, 0, getHeight());
-		} else {
-			g.setColor(getBackground());
-			g.fillRect(0, 0, RIGHT_WIDTH, getHeight());
-		}
-		
-		AffineTransform origTrans = g.getTransform();
-		
-		g.translate((getWidth()-1)-RIGHT_WIDTH, 0);
-		g.setColor(getBackground());
-		g.fill(arrowPath);
-	
-		// draw border line
-		g.setColor(getForeground());
-		g.drawLine(0, 0, RIGHT_WIDTH, getHeight()/2-1);
-		g.drawLine(RIGHT_WIDTH, getHeight()/2-1, 0, getHeight());
-		
-		if(drawFocus) {
-			g.setTransform(origTrans);
-
-			final Rectangle rect = new Rectangle(RIGHT_WIDTH + 1, 2, getWidth() - 2 * RIGHT_WIDTH - 2, getHeight() - 4);
-			int vx, vy;
-
-			g.setColor(UIManager.getDefaults().getColor("Button.focus"));
-
-			// draw upper and lower horizontal dashes
-			for (vx = rect.x; vx < (rect.x + rect.width); vx += 2) {
-				g.fillRect(vx, rect.y, 1, 1);
-				g.fillRect(vx, rect.y + rect.height - 1, 1, 1);
-			}
-
-			// draw left and right vertical dashes
-			for (vy = rect.y; vy < (rect.y + rect.height); vy += 2) {
-				g.fillRect(rect.x, vy, 1, 1);
-				g.fillRect(rect.x + rect.width - 1, vy, 1, 1);
-			}
-		}
 	}
 
 }

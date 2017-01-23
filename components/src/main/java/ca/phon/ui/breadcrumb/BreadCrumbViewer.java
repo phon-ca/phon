@@ -29,7 +29,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
- * A {@link BreadCrumb} component. A {@link BreadCrumbViewer} shows a linear navigation history.
+ * A {@link BreadCrumbViewer} is a specialized list view using
+ * a {@link BreadCrumb} for the data model.
  * 
  * @param <S>  the type of state in the breadCrumb
  * @param <V>  the type of value in the breadCrumb
@@ -154,7 +155,7 @@ public class BreadCrumbViewer<S, V> extends JComponent implements Scrollable {
 		
 		firePropertyChange("breadCrumb", oldBreadcrumb, breadcrumb);
 	}
-
+	
 	@Override
 	public Dimension getPreferredSize() {
 		Dimension retVal = getBreadcrumbViewerUI().getPreferredSize();

@@ -33,6 +33,6 @@ public interface BreadCrumbListener<S, V> {
 	 * 
 	 * @param event
 	 */
-	public void breadcrumbEvent(BreadCrumbEvent<S, V> event);
+	public void breadCrumbEvent(BreadCrumbEvent<S, V> event);
 	
 }

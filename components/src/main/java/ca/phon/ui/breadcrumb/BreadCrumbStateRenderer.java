@@ -19,10 +19,9 @@
 package ca.phon.ui.breadcrumb;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 /**
- * State renderer for breadcrumb states.
+ * Renderer for {@link BreadCrumb} states.
  * 
  * @param <S> state type
  * @param <V> value type

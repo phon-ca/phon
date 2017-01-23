@@ -75,6 +75,8 @@ public class DefaultBreadCrumbViewerUI extends BreadCrumbViewerUI {
 			breadCrumbViewer.getBreadcrumb().addBreadcrumbListener(breadCrumbListener) );
 		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener(breadCrumbListener);
 	}
+	
+	
 
 	@Override
 	public void uninstallUI(JComponent c) {

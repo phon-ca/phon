@@ -18,6 +18,12 @@
  */
 package ca.phon.ui.breadcrumb;
 
+/**
+ * State changes for a {@link BreadCrumb}
+ * 
+ * @param <S>
+ * @param <V>
+ */
 public class BreadCrumbEvent<S, V> {
 	
 	public static enum BreadcrumbEventType {
