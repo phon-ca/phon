@@ -248,12 +248,15 @@ public class NodeWizard extends WizardFrame {
 	}
 	
 	private void init() {
+		// turn off parent navigation controls
+		super.btnBack.setVisible(false);
+		super.btnCancel.setVisible(false);
+		super.btnFinish.setVisible(false);
+		super.btnNext.setVisible(false);
+		
 		bufferPanel = new MultiBufferPanel();
 		
-		if(btnNext.getParent() != null) {
-			btnNext.getParent().remove(btnNext);
-		}
-		btnNext = new NodeWizardBreadcrumbButton();
+		final JButton btnNext = new NodeWizardBreadcrumbButton();
 		btnNext.setFont(FontPreferences.getTitleFont());
 		btnNext.setText("Next");
 		btnNext.setBackground(Color.yellow);
@@ -265,7 +268,6 @@ public class NodeWizard extends WizardFrame {
 		btnCancel.setBackground(Color.red);
 		btnCancel.setForeground(Color.white);
 		btnCancel.addActionListener( (e) -> cancel() );
-		btnCancel.setVisible(false);
 		
 		final NodeWizardBreadcrumbButton gotoReportBtn = new NodeWizardBreadcrumbButton();
 		gotoReportBtn.setBackground(Color.green);
@@ -279,13 +281,10 @@ public class NodeWizard extends WizardFrame {
 			SwingUtilities.invokeLater(() -> {
 				JButton endBtn = btnNext;
 				if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
-					btnNext.setVisible(false);
 					breadCrumbViewer.remove(btnNext);
 					breadCrumbViewer.add(btnCancel);
 					endBtn = btnCancel;
 				} else {
-					btnNext.setVisible(true);
-					
 					breadCrumbViewer.remove(btnCancel);
 					breadCrumbViewer.add(btnNext);
 				}
@@ -321,8 +320,6 @@ public class NodeWizard extends WizardFrame {
 		breadcrumbScroller.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
 		breadcrumbScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		add(breadcrumbScroller, BorderLayout.NORTH);
-		
-		btnBack.setVisible(false);
 		
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		statusLabel = new JLabel();
@@ -420,8 +417,6 @@ public class NodeWizard extends WizardFrame {
 		gbc.gridwidth = 1;
 		
 		buttonPanel.add(settingsPanel, gbc);
-		
-		super.btnFinish.setVisible(false);
 	}
 	
 	/**
@@ -478,7 +473,6 @@ public class NodeWizard extends WizardFrame {
 	 */
 	public void executionStarted(ProcessorEvent pe) {
 		running = true;
-		btnCancel.setVisible(true);
 	}
 	
 	/**
@@ -741,7 +735,6 @@ public class NodeWizard extends WizardFrame {
 		currentNodePanel.setOpaque(false);
 		statusLabel.setOpaque(false);
 		statusLabel.setForeground(UIManager.getColor("titledpanel.foreground"));
-		btnCancel.setVisible(false);
 		panel.setRightDecoration(currentNodePanel);
 		
 		retVal.add(panel, BorderLayout.CENTER);
