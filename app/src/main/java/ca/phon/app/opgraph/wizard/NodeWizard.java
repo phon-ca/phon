@@ -480,6 +480,7 @@ public class NodeWizard extends WizardFrame {
 	 */
 	public void executionEnded(ProcessorEvent pe) {
 		running = false;
+		breadCrumbViewer.setEnabled(true);
 		btnCancel.setVisible(false);
 		btnBack.setEnabled(true);
 	}
@@ -492,44 +493,56 @@ public class NodeWizard extends WizardFrame {
 	
 	public void executeGraph() throws ProcessingException {
 		setupContext(processor.getContext());
-		if(!processor.hasNext()) {
-			processor.reset();
-		}
+		processor.reset();
 		setupOptionals(processor.getContext());
 		setupGlobalOptions(processor.getContext());
 		processor.addProcessorListener(processorListener);
 		try {
+			SwingUtilities.invokeLater( () -> {
+				btnCancel.setVisible(true);
+				breadCrumbViewer.setEnabled(false);
+			});
+			
 			processor.stepAll();
 			
 			final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
 			for(String reportName:ext.getReportTemplateNames()) {
 				// create temp file
-				final File tempFile = File.createTempFile("phon", reportName);
-				tempFile.deleteOnExit();
-				
-				final FileOutputStream fout = new FileOutputStream(tempFile);
-				
-				final NodeWizardReportGenerator reportGenerator = 
-						new NodeWizardReportGenerator(this, reportName, fout);
-				
-				SwingUtilities.invokeLater(() -> statusLabel.setText("Generating report..."));
+				File tempFile = null;
 				try {
-					reportGenerator.generateReport();
-				} catch (NodeWizardReportException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
-				
-				// create buffer
-				final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
-				try {
-					SwingUtilities.invokeAndWait( () -> bufferPanelRef.getAndSet(bufferPanel.createBuffer(reportName)));
-				} catch (InterruptedException | InvocationTargetException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					tempFile = File.createTempFile("phon", reportName);
+				} catch (IOException e) {
 					continue;
 				}
-				final BufferPanel reportBufferPanel = bufferPanelRef.get();
-				final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
-				reader.execute();
+				tempFile.deleteOnExit();
+				
+				try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
+					final NodeWizardReportGenerator reportGenerator = 
+							new NodeWizardReportGenerator(this, reportName, fout);
+					
+					SwingUtilities.invokeLater(() -> {
+						statusLabel.setText("Generating report...");
+					});
+					try {
+						reportGenerator.generateReport();
+					} catch (NodeWizardReportException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+					
+					// create buffer
+					final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
+					try {
+						SwingUtilities.invokeAndWait( () -> bufferPanelRef.getAndSet(bufferPanel.createBuffer(reportName)));
+					} catch (InterruptedException | InvocationTargetException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						continue;
+					}
+					final BufferPanel reportBufferPanel = bufferPanelRef.get();
+					final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
+					reader.execute();
+				} catch (IOException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
 			}
 			
 			SwingUtilities.invokeLater( () -> {
@@ -537,17 +550,25 @@ public class NodeWizard extends WizardFrame {
 				statusLabel.setText("");
 				btnBack.setEnabled(true);
 				
+				breadCrumbViewer.setEnabled(true);
+				
 				setModified(true);
 				modified = true;
 			});
-		} catch (ProcessingException | IOException pe) {
+		} catch (ProcessingException pe) {
 			SwingUtilities.invokeLater( () -> {
 				busyLabel.setBusy(false);
 				statusLabel.setText(pe.getLocalizedMessage());
 				
 				final BufferPanel errPanel = bufferPanel.createBuffer("Error");
+				errPanel.getLogBuffer().setForeground(Color.red);
 				final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
-//				writer.println(pe.getContext().getCurrentNode().getName() + " (" + pe.getContext().getCurrentNode().getId() + ")");
+				
+				if(pe.getContext().getCurrentNode() != null) {
+					writer.println(pe.getContext().getCurrentNode().getName() + " (" + pe.getContext().getCurrentNode().getId() + ")");
+					// reset canceled status for node
+					pe.getContext().getCurrentNode().setCanceled(false);
+				}
 				
 				pe.printStackTrace(writer);
 				writer.flush();
@@ -555,7 +576,7 @@ public class NodeWizard extends WizardFrame {
 				
 				executionEnded(new ProcessorEvent());
 			});
-//			throw pe;
+			throw pe;
 		}
 	}
 	
@@ -752,9 +773,9 @@ public class NodeWizard extends WizardFrame {
 		if(!inInit && getCurrentStep() == reportDataStep) {
 			if(bufferPanel.getBufferNames().size() > 0) {
 				final MessageDialogProperties props = new MessageDialogProperties();
-				props.setTitle("Re-run analysis");
-				props.setHeader("Re-run analysis");
-				props.setMessage("Clear results and re-run analysis.");
+				props.setTitle("Re-run " + getNoun().getObj1());
+				props.setHeader("Re-run " + getNoun().getObj1());
+				props.setMessage("Clear results and re-run " + getNoun().getObj1() + ".");
 				props.setOptions(MessageDialogProperties.okCancelOptions);
 				props.setRunAsync(false);
 				props.setParentWindow(this);
@@ -773,7 +794,7 @@ public class NodeWizard extends WizardFrame {
 		do {
 			lastStep = getCurrentStepIndex();
 			next();
-		} while(getCurrentStepIndex() != lastStep);
+		} while(getCurrentStepIndex() != lastStep && getCurrentStep() != reportDataStep);
 		
 		if(getCurrentStep() != reportDataStep) {
 			// form requries input, prompt user
