@@ -263,7 +263,7 @@ public class NodeWizard extends WizardFrame {
 		btnNext.addActionListener( (e) -> next() );
 		
 		btnCancel = new NodeWizardBreadcrumbButton();
-		btnCancel.setFont(FontPreferences.getTitleFont());
+		btnCancel.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		btnCancel.setText("Stop");
 		btnCancel.setBackground(Color.red);
 		btnCancel.setForeground(Color.white);
@@ -795,11 +795,6 @@ public class NodeWizard extends WizardFrame {
 			lastStep = getCurrentStepIndex();
 			next();
 		} while(getCurrentStepIndex() != lastStep && getCurrentStep() != reportDataStep);
-		
-		if(getCurrentStep() != reportDataStep) {
-			// form requries input, prompt user
-			ToastFactory.makeToast("This form requires input").start(breadCrumbViewer);
-		}
 	}
 	
 	@Override

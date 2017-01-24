@@ -56,6 +56,8 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.breadcrumb.BreadCrumb;
 import ca.phon.ui.breadcrumb.BreadCrumbViewer;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardEvent.WizardEventType;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -366,6 +368,15 @@ public class WizardFrame extends CommonModuleFrame {
 	protected void next() {
 		if(currentStep.validateStep())
 			gotoStep(currentStep.getNextStep());
+		else {
+			final MessageDialogProperties messageProps = new MessageDialogProperties();
+			messageProps.setTitle("Step Incomplete");
+			messageProps.setHeader(messageProps.getTitle());
+			messageProps.setMessage("This step requires user input or corrections. Please review and click Next to continue.");
+			messageProps.setOptions(MessageDialogProperties.okOptions);
+			messageProps.setRunAsync(true);
+			NativeDialogs.showMessageDialog(messageProps);
+		}
 	}
 	
 	protected void prev() {
@@ -374,7 +385,6 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	protected void finish() {
 		if(currentStep.validateStep()) {
-			
 			fireWizardEvent(WizardEvent.createFinishedEvent(this));
 			
 			setVisible(false);
