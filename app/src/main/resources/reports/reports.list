@@ -1,6 +1,4 @@
 reports/Aggregate.xml
-reports/Aggregate (IPA Target ↔ IPA Actual).xml
+reports/Aggregate (IPA).xml
 reports/Listing.xml
-reports/Phone Dispersion.xml
-reports/Transcript Variability.xml
-reports/Report Design (legacy - Phon 1.4-2.1).xml
+reports/Report Design (legacy).xml
