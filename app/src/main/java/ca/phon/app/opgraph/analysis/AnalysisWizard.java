@@ -81,7 +81,7 @@ public class AnalysisWizard extends NodeWizard {
 		builder.addItem("File@save", new SaveAnalysisAction(this));
 		
 		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
-		openEditorAct.putValue(PhonUIAction.NAME, "Open graph in analysis editor...");
+		openEditorAct.putValue(PhonUIAction.NAME, "Open analysis in Composer...");
 		builder.addItem("File@" + SaveAnalysisAction.TXT, openEditorAct);
 	}
 	
@@ -102,21 +102,17 @@ public class AnalysisWizard extends NodeWizard {
 
 			@Override
 			public boolean validateStep() {
-				boolean valid = true;
-				
 				if(participantsPanel.getCheckedSessions().size() == 0) {
-					valid = false;
-					ToastFactory.makeToast("Please select at least one session")
-						.start(participantsPanel.getSessionSelector());
+					showOkDialog("Select Sessions", "Please select at least one session.");
+					return false;
 				}
 				
 				if(participantsPanel.getCheckedParticipants().size() == 0) {
-					valid = false;
-					ToastFactory.makeToast("Please select at least one participant")
-						.start(participantsPanel.getParticipantSelector());
+					showOkDialog("Select Participants", "Please select at least one participant.");
+					return false;
 				}
 				
-				return valid;
+				return true;
 			}
 			
 		};

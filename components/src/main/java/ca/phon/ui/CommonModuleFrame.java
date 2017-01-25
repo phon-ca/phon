@@ -429,8 +429,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		}
 		
 		private void init() {
-//			this.setLayout(new BorderLayout());
-			
 			FormLayout layout = new FormLayout(
 					"fill:pref:grow, pref, 3dlu",
 					"3dlu, pref, fill:pref:grow");
@@ -461,17 +459,9 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			messageLabel.setText(" " + msg + " ");
 		}
 
-		public Color getForeColor() {
-			return foreColor;
-		}
-
 		public void setForeColor(Color foreColor) {
 			this.foreColor = foreColor;
 			messageLabel.setForeground(foreColor);
-		}
-
-		public Color getBackColor() {
-			return backColor;
 		}
 
 		public void setBackColor(Color backColor) {
@@ -480,6 +470,45 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		}
 	}
 	
+	public void showOkDialog(String title, String message) {
+		showMessageDialog(title, message, MessageDialogProperties.okOptions);
+	}
+	
+	public int showOkCancelDialog(String title, String message) {
+		return showMessageDialog(title, message, MessageDialogProperties.okCancelOptions);
+	}
+	
+	public int showYesNoDialog(String title, String message) {
+		return showMessageDialog(title, message, MessageDialogProperties.yesNoOptions);
+	}
+	
+	public int showYesNoCancelDialog(String title, String message) {
+		return showMessageDialog(title, message, MessageDialogProperties.yesNoCancelOptions);
+	}
+	
+	/**
+	 * Display a message dialog to the user positioned for
+	 * this window.
+	 * 
+	 * @param title
+	 * @param message
+	 * @param options list of options displayed to the user
+	 * @return the selected option
+	 */
+	public int showMessageDialog(String title, String message, String[] options) {
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setParentWindow(this);
+		props.setRunAsync(false);
+		props.setTitle(title);
+		props.setHeader(title);
+		props.setMessage(message);
+		props.setOptions(options);
+		
+		return NativeDialogs.showMessageDialog(props);
+	}
+	
+	// TODO Fix these methods and make more useful
+	// Glass pane could be used to draw red around components of interest
 	private StatusDisplay statusDisplay;
 	public void showStatusMessage(String message) {
 		if(statusDisplay == null) {
