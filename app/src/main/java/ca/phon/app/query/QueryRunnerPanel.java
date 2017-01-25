@@ -223,7 +223,7 @@ public class QueryRunnerPanel extends JPanel {
 			// show menu
 			final JMenu menu = new JMenu();
 			final ReportLibrary library = new ReportLibrary();
-			library.setupMenu(tempProject, query.getUUID().toString(), menu);
+			library.setupMenu(tempProject, query.getUUID().toString(), menu.getPopupMenu());
 			
 			menu.getPopupMenu().show(reportButton, 0, reportButton.getHeight());
 		});

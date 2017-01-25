@@ -318,7 +318,7 @@ public class QueryInfoPanel extends JPanel {
 		if(project == null || query == null) return;
 		final JMenu menu = new JMenu();
 		final ReportLibrary library = new ReportLibrary();
-		library.setupMenu(project, query.getUUID().toString(), menu);
+		library.setupMenu(project, query.getUUID().toString(), menu.getPopupMenu());
 		menu.getPopupMenu().show(reportButton, 0, reportButton.getHeight());
 	}
 	

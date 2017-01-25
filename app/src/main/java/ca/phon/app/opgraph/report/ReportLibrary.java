@@ -18,17 +18,28 @@
  */
 package ca.phon.app.opgraph.report;
 
+import java.awt.Font;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import ca.phon.app.opgraph.analysis.UserAnalysisHandler;
 import ca.phon.project.Project;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -43,6 +54,8 @@ import ca.phon.util.resources.ResourceLoader;
 public class ReportLibrary {
 	
 	private final static String PROJECT_REPORT_FOLDER = "reports";
+	
+	private final static Logger LOGGER = Logger.getLogger(ReportLibrary.class.getName());
 	
 	/**
 	 * Report loader
@@ -86,41 +99,108 @@ public class ReportLibrary {
 		return retVal;
 	}
 	
+	public File getProjectReportFolder(Project project) {
+		return new File(project.getResourceLocation(), PROJECT_REPORT_FOLDER);
+	}
+	
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 		
-		final JMenuItem stockSep = new JMenuItem("Stock Reports");
-		stockSep.setEnabled(false);
-		builder.addItem(".", stockSep);
 		for(URL reportURL:getStockGraphs()) {
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
-			builder.addItem(".", act);
+			
+			try {
+				final String fullPath = URLDecoder.decode(reportURL.getPath(), "UTF-8");
+				final String relativePath = 
+						fullPath.substring(fullPath.lastIndexOf("/" + PROJECT_REPORT_FOLDER + "/")+PROJECT_REPORT_FOLDER.length()+2);
+				
+				String menuPath = ".";
+				int lastFolderIndex = relativePath.lastIndexOf('/');
+				if(lastFolderIndex >= 0) {
+					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
+				}
+				
+				builder.addItem(menuPath, act);
+			} catch (UnsupportedEncodingException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 		}
-		
+
+		final JMenu userMenu = new JMenu("User Library");
+		final MenuBuilder userMenuBuilder = new MenuBuilder(userMenu);
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
-		if(userGraphIterator.hasNext()) {
-			builder.addSeparator(".", "user");
-			final JMenuItem userSep = new JMenuItem("User Reports");
-			userSep.setEnabled(false);
-			builder.addItem(".", userSep);
-		}
 		while(userGraphIterator.hasNext()) {
-			final URL reportURL = userGraphIterator.next();
-			final ReportAction act = new ReportAction(project, queryId, reportURL);
-			builder.addItem(".", act);
+			try {
+				final URL reportURL = userGraphIterator.next();
+
+				final URI relativeURI = 
+						(new File(UserReportHandler.DEFAULT_USER_REPORT_FOLDER)).toURI().relativize(reportURL.toURI());
+				
+				final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
+				String menuPath = ".";
+				int lastFolderIndex = relativePath.lastIndexOf('/');
+				if(lastFolderIndex >= 0) {
+					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
+				}
+				
+				final ReportAction act = new ReportAction(project, queryId, reportURL);
+				userMenuBuilder.addItem(menuPath, act);
+			} catch (URISyntaxException | UnsupportedEncodingException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		if(userMenu.getMenuComponentCount() > 0) {
+			builder.addSeparator(".", "user_library");
+			final JMenuItem userLibItem = builder.addItem(".@user_library", "-- User Library --");
+			userLibItem.setFont(userLibItem.getFont().deriveFont(Font.BOLD));
+			final File userLibFolder = new File(UserReportHandler.DEFAULT_USER_REPORT_FOLDER);
+			userLibItem.setToolTipText("Show folder " + userLibFolder.getAbsolutePath());
+			userLibItem.addActionListener( (e) -> {
+				try {
+					OpenFileLauncher.openURL( userLibFolder.toURI().toURL() );
+				} catch (MalformedURLException e1) {
+					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+				}
+			});
+			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
 		}
 		
+		final JMenu projectMenu = new JMenu("Project Library");
+		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu);
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
-		if(projectGraphIterator.hasNext()) {
-			builder.addSeparator(".", "project");
-			final JMenuItem projectSep = new JMenuItem("Project Reports");
-			projectSep.setEnabled(false);
-			builder.addItem(".", projectSep);
-		}
 		while(projectGraphIterator.hasNext()) {
-			final URL reportURL = projectGraphIterator.next();
-			final ReportAction act = new ReportAction(project, queryId, reportURL);
-			builder.addItem(".", act);
+			try {
+				final URL reportURL = projectGraphIterator.next();
+				final URI relativeURI = 
+						getProjectReportFolder(project).toURI().relativize(reportURL.toURI());
+				
+				final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
+				String menuPath = ".";
+				int lastFolderIndex = relativePath.lastIndexOf('/');
+				if(lastFolderIndex >= 0) {
+					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
+				}
+				
+				final ReportAction act = new ReportAction(project, queryId, reportURL);
+				projectMenuBuilder.addItem(menuPath, act);
+			} catch (URISyntaxException | UnsupportedEncodingException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		if(projectMenu.getMenuComponentCount() > 0) {
+			builder.addSeparator(".", "project_library");
+			final JMenuItem projectSepItem = builder.addItem(".@project_library", "-- Project Library --");
+			projectSepItem.setFont(projectSepItem.getFont().deriveFont(Font.BOLD));
+			final File projectFolder = getProjectReportFolder(project);
+			projectSepItem.addActionListener( (e) -> {
+				try {
+					OpenFileLauncher.openURL( projectFolder.toURI().toURL() );
+				} catch (MalformedURLException e1) {
+					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+				}
+			});
+			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
+			projectMenuBuilder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 		}
 		
 		builder.addSeparator(".", "all");

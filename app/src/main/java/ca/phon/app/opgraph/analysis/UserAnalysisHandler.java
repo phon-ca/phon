@@ -37,7 +37,7 @@ public class UserAnalysisHandler extends FolderHandler<URL> {
 	
 	public UserAnalysisHandler(File file) {
 		super(file);
-		
+		setRecursive(true);
 		super.setFileFilter(new FileFilter() {
 			
 			@Override
