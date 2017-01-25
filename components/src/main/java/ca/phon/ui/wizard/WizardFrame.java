@@ -368,15 +368,6 @@ public class WizardFrame extends CommonModuleFrame {
 	protected void next() {
 		if(currentStep.validateStep())
 			gotoStep(currentStep.getNextStep());
-		else {
-			final MessageDialogProperties messageProps = new MessageDialogProperties();
-			messageProps.setTitle("Step Incomplete");
-			messageProps.setHeader(messageProps.getTitle());
-			messageProps.setMessage("This step requires user input or corrections. Please review and click Next to continue.");
-			messageProps.setOptions(MessageDialogProperties.okOptions);
-			messageProps.setRunAsync(true);
-			NativeDialogs.showMessageDialog(messageProps);
-		}
 	}
 	
 	protected void prev() {
