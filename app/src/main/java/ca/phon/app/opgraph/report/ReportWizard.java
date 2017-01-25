@@ -48,7 +48,7 @@ public class ReportWizard extends NodeWizard {
 		builder.addItem("File@save", new SaveReportAction(this));
 		
 		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
-		openEditorAct.putValue(PhonUIAction.NAME, "Open graph in report editor...");
+		openEditorAct.putValue(PhonUIAction.NAME, "Open report in Composer...");
 		builder.addItem("File@" + SaveReportAction.TXT, openEditorAct);
 	}
 	

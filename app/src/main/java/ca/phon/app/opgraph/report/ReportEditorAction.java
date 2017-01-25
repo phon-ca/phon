@@ -39,9 +39,9 @@ public class ReportEditorAction extends HookableAction {
 
 	private final static Logger LOGGER = Logger.getLogger(ReportEditorAction.class.getName());
 
-	private final static String TXT = "Node editor...";
+	private final static String TXT = "Report Composer...";
 	
-	private final static String DESC = "Open node editor to create new report";
+	private final static String DESC = "Open a new report using Composer...";
 	
 	public ReportEditorAction() {
 		super();

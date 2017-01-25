@@ -147,7 +147,7 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	
 	@Override
 	public String getTitle() {
-		return "Analysis Editor";
+		return "Analysis Composer";
 	}
 
 	@Override
