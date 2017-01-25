@@ -83,48 +83,18 @@ public final class MenuBuilder {
 	public MenuElement getRoot() {
 		return rootRef.get();
 	}
-
-	/**
-	 * Get the menu specified by path.  Creates menu if
-	 * requested.
-	 * 
-	 * @param path
-	 * @param createMenu
-	 * @return the menu
-	 */
-	public JMenu getMenu(String path, boolean createMenu) {
-		
-		
-		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
-		final String name = path.substring(deepest.getObj1().length());
-		
-		JMenu retVal = null;
-		if(name.length() > 0 && createMenu) {
-			// create menu for each subpath
-			final String[] subpaths = name.split("/");
-			String curpath = deepest.getObj1();
-			if(curpath.endsWith("/")) curpath = curpath.substring(0, curpath.length()-1);
-			for(String subpath:subpaths) {
-				curpath += 
-						(curpath.length() > 0 ? "/" : "") + subpath;
-				retVal = addMenu(curpath, subpath);
-			}
-		} else {
-			if(deepest.getObj2() instanceof JMenu) {
-				retVal = (JMenu)deepest.getObj2();
-			}
-		}
-		
-		return retVal;
-	}
-	
 	
 	public JMenu addMenu(String path, String text) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final MenuElement elem = deepest.getObj2();
-		
-		JMenu ret = null;
 		int insertIdx = getInsertIndex(elem, deepest.getObj1());
+		
+		return addMenu(elem, insertIdx, text);
+	}
+	
+	public JMenu addMenu(MenuElement elem, int insertIdx, String text) {
+		JMenu ret = null;
+		
 		ret = new JMenu(text);
 		if(elem instanceof JMenu) {
 			if(insertIdx >= 0)
@@ -144,7 +114,7 @@ public final class MenuBuilder {
 		}
 		return ret;
 	}
-
+	
 	public void addSeparator(String path, String sepName) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final MenuElement elem = deepest.getObj2();
@@ -166,6 +136,12 @@ public final class MenuBuilder {
 			} else
 				((JPopupMenu)elem).insert(sep, insertIdx);
 		}
+	}
+	
+	public JMenuItem addItem(String path, String text) {
+		JMenuItem retVal = new JMenuItem(text);
+		addItem(path, retVal);
+		return retVal;
 	}
 	
 	public void addItem(String path, JMenuItem menuItem) {
@@ -195,6 +171,57 @@ public final class MenuBuilder {
 		final JMenuItem  retVal = new JMenuItem(action);
 		addItem(path, retVal);
 		return retVal;
+	}
+	
+	public void addItem(String path, MenuElement ele) {
+		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
+		final MenuElement elem = deepest.getObj2();
+		int insertIdx = getInsertIndex(elem, deepest.getObj1());
+		
+		addItem(elem, insertIdx, ele);
+	}
+	
+	public void addItem(MenuElement elem, int insertIdx, MenuElement menuItem) {
+		if(elem instanceof JMenu) {
+			if(insertIdx >= 0)
+				((JMenu)elem).add(menuItem.getComponent(), insertIdx);
+			else
+				((JMenu)elem).add(menuItem.getComponent());
+		} else if(elem instanceof JPopupMenu) {
+			if(insertIdx >= 0)
+				((JPopupMenu)elem).add(menuItem.getComponent(), insertIdx);
+			else
+				((JPopupMenu)elem).add(menuItem.getComponent());
+		} else if(elem instanceof JMenuBar) {
+			if(insertIdx >= 0)
+				((JMenuBar)elem).add(menuItem.getComponent(), insertIdx);
+			else
+				((JMenuBar)elem).add(menuItem.getComponent());
+		}
+	}
+	
+	/**
+	 * Append all subitems from the given {@link MenuElement} at
+	 * the provied path.
+	 * 
+	 * @param path
+	 * @param menuEle
+	 */
+	public void appendSubItems(String path, MenuElement menu) {
+		appendSubItems(getRoot(), path, menu);
+	}
+	
+	public void appendSubItems(MenuElement parent, String path, MenuElement menu) {
+		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(parent, path);
+		final MenuElement elem = deepest.getObj2();
+		int insertIdx = getInsertIndex(elem, deepest.getObj1());
+		
+		for(MenuElement subelem : menu.getSubElements()) {
+			addItem(elem, insertIdx, subelem);
+			if(insertIdx >= 0) {
+				++insertIdx;
+			}
+		}
 	}
 	
 	private int getInsertIndex(MenuElement elem, String name) {
@@ -303,9 +330,13 @@ public final class MenuBuilder {
 					}
 				}
 
-				// If we didn't move, stop
-				if(index == oldIndex)
-					break;
+				// If we didn't move, create new menu
+				if(index == oldIndex) {
+					int insertIdx = getInsertIndex(elem, components[index]);
+					elem = addMenu(elem, insertIdx, compTxt);
+					position += components[index].length() + 1;
+					++index;
+				}
 			}
 
 			if(index == components.length)
