@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:ops="https://www.phon.ca/ns/syllabifier">
+    <graph id="root">
+        <node id="476cd9ee" name="IPATranscript" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_ipa]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="2cb42faa" type="class:ca.phon.syllabifier.opgraph.nodes.SonorityNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.syllabifier.opgraph.nodes.SonorityNode.scale"><![CDATA[0=[{obstruent}]
+1=[{c, nasal}]
+2=[{liquid}]
+3=[{g}]
+4=[{v}]]]></oga:property>
+                </oga:settings>
+                <oga:meta x="241" y="15"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="519208ad" name="MarkNuclei" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="18186d45">
+                <node id="53d6e5dc" name="MarkNuclei #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(D=j{v})]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="5e925973" name="MarkNuclei #2" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(D={v,-long}[ə{g,-stop,-fricative,-affricate,-liquid}{v,high,lax}])]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="203" y="15"/>
+                    </extensions>
+                </node>
+                <node id="1f04f56c" name="MarkNuclei #3" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(N={v}:U)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="391" y="15"/>
+                    </extensions>
+                </node>
+                <node id="4a8bd534" name="MarkNuclei #4" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(N='.*[\u0329].*')]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="579" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="5e925973" destField="ipa" source="53d6e5dc" sourceField="ipa out"/>
+                <link dest="1f04f56c" destField="ipa" source="5e925973" sourceField="ipa out"/>
+                <link dest="4a8bd534" destField="ipa" source="1f04f56c" sourceField="ipa out"/>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="53d6e5dc"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="4a8bd534"/>
+            <extensions>
+                <oga:meta x="404" y="15"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="562bbe69" name="MarkOnset" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="235b09df">
+                <node id="171ce53" name="MarkOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(O=\c:U).:N]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="27a36e7d" name="MarkOnset #2" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:sctype("-O")?(O={g}:N).:N]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="203" y="15"/>
+                    </extensions>
+                </node>
+                <node id="2c705416" name="MarkOnset #3" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[^(O=j:N)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="391" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="27a36e7d" destField="ipa" source="171ce53" sourceField="ipa out"/>
+                <link dest="2c705416" destField="ipa" source="27a36e7d" sourceField="ipa out"/>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="171ce53"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="2c705416"/>
+            <extensions>
+                <oga:meta x="567" y="15"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="35d1e7f6" name="MaxOnset" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="52900096">
+                <node id="17e04e5f" name="MaxOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(O={c,-strident}:U).:O:mdc("2","false")]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="17" y="15"/>
+                    </extensions>
+                </node>
+                <node id="75fe32eb" name="MaxOnset #2" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(O={strident, -anterior}:U).:O:mdc("2","false")]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="203" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="75fe32eb" destField="ipa" source="17e04e5f" sourceField="ipa out"/>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="17e04e5f"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="75fe32eb"/>
+            <extensions>
+                <oga:meta x="730" y="15"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="ec9334a42580438f" name="Fix Cju" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="208ad71d">
+                <node id="8f2074e3b1f4050" name="Fix Cju" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[\c:O(D=j:Ou)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+                    <ops:settings lang="eng-smith" name="English-Smith"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="8f2074e3b1f4050"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="8f2074e3b1f4050"/>
+            <extensions>
+                <oga:meta x="241" y="116"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="158ee453" name="MarkCoda" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="4001bf24">
+                <node id="7f1ec136" name="MarkCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:N(C=\c:U)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="7f1ec136"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="7f1ec136"/>
+            <extensions>
+                <oga:meta x="404" y="116"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="2434dd9a" name="MaxCoda" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="6d129ee3">
+                <node id="30bb4b75" name="MaxCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:C(C={c}:U:mdc("-1","false"))]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+                    <ops:settings lang="eng-simple" name="English-simple"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="30bb4b75"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="30bb4b75"/>
+            <extensions>
+                <oga:meta x="567" y="116"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="78dfa91d" name="Fix Branching Codas" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="22b36106">
+                <node id="2c35780f" name="Fix Branching Codas #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:N(C={obs,-cor}:U)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="2c35780f"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="2c35780f"/>
+            <extensions>
+                <oga:meta x="730" y="116"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="3ff32b44" name="MarkLA" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="34128c05">
+                <node id="2c532ff1" name="MarkLA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[^(L={anterior,strident,voiceless}:U)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="1aae70b1" name="MarkLA #2" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:sctype("Coda|SyllableStressMarker|SyllableBoundaryMarker|Nucleus")(L={anterior,strident,voiceless}:U).:O]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="203" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="1aae70b1" destField="ipa" source="2c532ff1" sourceField="ipa out"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+                    <ops:settings lang="eng-simple" name="English-simple"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="2c532ff1"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="1aae70b1"/>
+            <extensions>
+                <oga:meta x="241" y="217"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="6f607434" name="MarkRA" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="4fc2aaa8">
+                <node id="2cb066a5" name="MarkRA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:C(R={cor}:U)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+                    <ops:settings lang="eng-simple" name="English-simple"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="2cb066a5"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="2cb066a5"/>
+            <extensions>
+                <oga:meta x="404" y="217"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="4337096a" name="MaxRA" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="6d4bd04e">
+                <node id="47edc140" name="MaxRA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:R(R={cor}:U+)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="47edc140"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="47edc140"/>
+            <extensions>
+                <oga:meta x="567" y="217"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="e3739b4" name="MarkOEHS" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="622b3169">
+                <node id="4c9e6d4b" name="MarkOEHS #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(E=\c:U)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="4c9e6d4b"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="4c9e6d4b"/>
+            <extensions>
+                <oga:meta x="730" y="217"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="35ad8c0c" name="Make Simple" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="7383becd">
+                <node id="69863664" name="Make Simple #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(C=.:E+)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="51398046" name="Make Simple #2" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(O=.:L+)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="203" y="15"/>
+                    </extensions>
+                </node>
+                <node id="82dab81" name="Make Simple #3" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(C=.:R+)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="391" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="51398046" destField="ipa" source="69863664" sourceField="ipa out"/>
+                <link dest="82dab81" destField="ipa" source="51398046" sourceField="ipa out"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+                    <ops:settings lang="eng-simple" name="English-simple"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="ipa" name="ipa" ref="69863664"/>
+            <ogcn:published_output field="ipa out" name="ipa" ref="82dab81"/>
+            <extensions>
+                <oga:meta x="241" y="318"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="2cb42faa" destField="ipa" source="476cd9ee" sourceField="obj"/>
+        <link dest="519208ad" destField="ipa" source="2cb42faa" sourceField="ipa"/>
+        <link dest="562bbe69" destField="ipa" source="519208ad" sourceField="ipa"/>
+        <link dest="35d1e7f6" destField="ipa" source="562bbe69" sourceField="ipa"/>
+        <link dest="2434dd9a" destField="ipa" source="158ee453" sourceField="ipa"/>
+        <link dest="78dfa91d" destField="ipa" source="2434dd9a" sourceField="ipa"/>
+        <link dest="3ff32b44" destField="ipa" source="78dfa91d" sourceField="ipa"/>
+        <link dest="6f607434" destField="ipa" source="3ff32b44" sourceField="ipa"/>
+        <link dest="4337096a" destField="ipa" source="6f607434" sourceField="ipa"/>
+        <link dest="e3739b4" destField="ipa" source="4337096a" sourceField="ipa"/>
+        <link dest="35ad8c0c" destField="ipa" source="e3739b4" sourceField="ipa"/>
+        <link dest="ec9334a42580438f" destField="ipa" source="35d1e7f6" sourceField="ipa"/>
+        <link dest="158ee453" destField="ipa" source="ec9334a42580438f" sourceField="ipa"/>
+        <extensions>
+            <ops:settings lang="eng-simple" name="English-simple"/>
+            <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>
