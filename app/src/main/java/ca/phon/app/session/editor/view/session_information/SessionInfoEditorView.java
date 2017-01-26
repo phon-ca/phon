@@ -451,10 +451,10 @@ public class SessionInfoEditorView extends EditorView {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(updatingMediaLocation) return;
-			final File mediaFile = mediaLocationField.getSelectedFile();
-			final String mediaLoc = (mediaFile == null ? null : mediaFile.getPath());
+//			final File mediaFile = mediaLocationField.getSelectedFile();
+//			final String mediaLoc = (mediaFile == null ? null : mediaFile.getPath());
 			
-			final MediaLocationEdit edit = new MediaLocationEdit(getEditor(), mediaLoc);
+			final MediaLocationEdit edit = new MediaLocationEdit(getEditor(), mediaLocationField.getText());
 			edit.setSource(this);
 			getEditor().getUndoSupport().postEdit(edit);
 		}

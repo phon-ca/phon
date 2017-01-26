@@ -34,17 +34,22 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 	
 	private TernaryTree<String> tree = new TernaryTree<>();
 	
+	private boolean caseSensitive = false;
+	
 	public void addCompletion(String completion) {
+		if(!caseSensitive) completion = completion.toLowerCase();
 		addCompletion(completion, completion);
 	}
 
 	@Override
 	public void addCompletion(String completion, String display) {
+		if(!caseSensitive) completion = completion.toLowerCase();
 		tree.put(completion, display);
 	}
 
 	@Override
 	public void removeCompletion(String completion) {
+		if(!caseSensitive) completion = completion.toLowerCase();
 		tree.remove(completion);
 	}
 
@@ -55,6 +60,7 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 
 	@Override
 	public List<String> getCompletions(String text) {
+		if(!caseSensitive) text = text.toLowerCase();
 		final Set<Entry<String, String>> entries = tree.entriesWithPrefix(text);
 		
 		final List<String> retVal = new ArrayList<>(entries.size());
@@ -72,6 +78,7 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 
 	@Override
 	public String getData(String completion) {
+		if(!caseSensitive) completion = completion.toLowerCase();
 		return tree.get(completion);
 	}
 

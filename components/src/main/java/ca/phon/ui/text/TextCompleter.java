@@ -39,6 +39,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
+import ca.phon.formatter.FormatterUtil;
+
 public class TextCompleter implements DocumentListener, FocusListener, KeyListener, ListSelectionListener {
 	
 	private TextCompleterModel<?> model;
@@ -54,6 +56,8 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 	private List<String> completions = null;
 	
 	private DefaultListModel<String> completionListModel;
+	
+	private boolean useDataForCompletion = false;
 	
 	public TextCompleter() {
 		this(new DefaultTextCompleterModel());
@@ -72,6 +76,14 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 		
 		completionWindow = new JWindow();
 		completionWindow.add(listScroller);
+	}
+	
+	public boolean isUseDataForCompletion() {
+		return this.useDataForCompletion;
+	}
+	
+	public void setUseDataForCompletion(boolean useDataForCompletion) {
+		this.useDataForCompletion = useDataForCompletion;
 	}
 	
 	public void install(JTextComponent textComponent) {
@@ -210,7 +222,8 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 		final int selectedIdx = completionList.getSelectedIndex();
 		if(selectedIdx >= 0 && selectedIdx < completions.size()) {
 			completionList.ensureIndexIsVisible(selectedIdx);
-			final String completion = completions.get(selectedIdx);
+			final String completion = 
+					(isUseDataForCompletion() ? FormatterUtil.format(model.getData(completions.get(selectedIdx))) : completions.get(selectedIdx));
 			String text = getTextComponent().getText();
 			final String replacementText = model.completeText(text, completion);
 			
