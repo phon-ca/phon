@@ -38,7 +38,6 @@ import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
@@ -91,7 +90,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private DialogHeader header;
 	
 	private final static String HEADER_TITLE = "Welcome to Phon " + VersionInfo.getInstance().getShortVersion();
-	private final static String HEADER_MESSAGE = "To begin, create a project or select a project from the workspace or recent projects.";
+	private final static String HEADER_MESSAGE = "";
 	
 	// action panel
 	private TitledPanel actionsContainer;
