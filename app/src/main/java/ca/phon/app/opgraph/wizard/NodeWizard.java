@@ -275,43 +275,46 @@ public class NodeWizard extends WizardFrame {
 		gotoReportBtn.setFont(FontPreferences.getTitleFont());
 		gotoReportBtn.addActionListener( (e) -> gotoReport() );
 		
+		final Runnable updateBreadcrumbButtons = () -> {
+			JButton endBtn = btnNext;
+			if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
+				breadCrumbViewer.remove(btnNext);
+				breadCrumbViewer.add(btnCancel);
+				endBtn = btnCancel;
+			} else {
+				breadCrumbViewer.remove(btnCancel);
+				breadCrumbViewer.add(btnNext);
+			}
+			
+			final Rectangle bounds = 
+					new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1, 
+							0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
+			endBtn.setBounds(bounds);
+			
+			if(breadCrumbViewer.getBreadcrumb().size() == 1
+					&& breadCrumbViewer.getBreadcrumb().getCurrentState() != reportDataStep) {
+				// show goto report button
+				breadCrumbViewer.add(gotoReportBtn);
+				
+				final Rectangle gotoBounds = new Rectangle(
+						bounds.x + bounds.width, 0, gotoReportBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
+				gotoReportBtn.setBounds(gotoBounds);
+			} else {
+				breadCrumbViewer.remove(gotoReportBtn);
+			}
+			
+			getRootPane().setDefaultButton(endBtn);
+		
+			breadCrumbViewer.revalidate();
+			breadCrumbViewer.scrollRectToVisible(bounds);
+		};
+		
 		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		breadCrumbViewer.setBackground(Color.white);
 		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener( (evt) -> {
-			SwingUtilities.invokeLater(() -> {
-				JButton endBtn = btnNext;
-				if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
-					breadCrumbViewer.remove(btnNext);
-					breadCrumbViewer.add(btnCancel);
-					endBtn = btnCancel;
-				} else {
-					breadCrumbViewer.remove(btnCancel);
-					breadCrumbViewer.add(btnNext);
-				}
-				
-				final Rectangle bounds = 
-						new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1, 
-								0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
-				endBtn.setBounds(bounds);
-				
-				if(breadCrumbViewer.getBreadcrumb().size() == 1
-						&& breadCrumbViewer.getBreadcrumb().getCurrentState() != reportDataStep) {
-					// show goto report button
-					breadCrumbViewer.add(gotoReportBtn);
-					
-					final Rectangle gotoBounds = new Rectangle(
-							bounds.x + bounds.width, 0, gotoReportBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
-					gotoReportBtn.setBounds(gotoBounds);
-				} else {
-					breadCrumbViewer.remove(gotoReportBtn);
-				}
-				
-				getRootPane().setDefaultButton(endBtn);
-			
-				breadCrumbViewer.revalidate();
-				breadCrumbViewer.scrollRectToVisible(bounds);
-			});
+			SwingUtilities.invokeLater(updateBreadcrumbButtons);
 		});
+		updateBreadcrumbButtons.run();
 		
 		final JScrollPane breadcrumbScroller = new JScrollPane(breadCrumbViewer);
 		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
