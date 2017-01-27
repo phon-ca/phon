@@ -112,8 +112,6 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 				});
 			});
 			
-			
-			
 			final FormLayout layout = new FormLayout(
 					"right:pref, 3dlu, fill:pref:grow", "pref, 3dlu, pref, pref");
 			final CellConstraints cc = new CellConstraints();
@@ -223,7 +221,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 
 	@Override
 	public String getTitle() {
-		return "Syllabifier Editor";
+		return "Syllabifier Composer";
 	}
 	
 }
