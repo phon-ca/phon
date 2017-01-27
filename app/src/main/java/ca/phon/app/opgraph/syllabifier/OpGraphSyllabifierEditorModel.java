@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -104,9 +105,11 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 			});
 			
 			syllabificationDisplay = new SyllabificationDisplay();
-			getDocument().addPropertyChangeListener(GraphDocument.DEBUG_STATE, (e) -> {
-				syllabificationDisplay.revalidate();
-				syllabificationDisplay.repaint();
+			getDocument().addPropertyChangeListener(GraphDocument.PROCESSING_CONTEXT, (e) -> {
+				SwingUtilities.invokeLater(() -> {
+					syllabificationDisplay.revalidate();
+					syllabificationDisplay.repaint();
+				});
 			});
 			
 			
