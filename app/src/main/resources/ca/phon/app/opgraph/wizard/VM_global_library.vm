@@ -59,3 +59,12 @@
 #printBody( $table $columnNames )
 </table>
 #end
+
+#macro( printTableWithCaption $table $caption $columnNames )
+#if($table.columnCount == 0 || $table.rowCount == 0) #break#end
+<table>
+<caption>$caption</caption>
+#printHeader( $table $columnNames )
+#printBody( $table $columnNames )
+</table>
+#end

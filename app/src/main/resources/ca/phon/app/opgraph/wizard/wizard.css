@@ -5,18 +5,21 @@ body {
 
 h1 {
     font-weight: bold;
+    color: darkgrey;
 }
 
 h2 {
     font-weight: bold;
     margin-top: 15px;
     margin-bottom: 10px;
+    color: darkgrey;
 }
 
 h3 {
     font-weight: bold;
     margin-top: 10px;
     margin-bottom: 5px;
+    color: darkgrey;
 }
 
 em {
@@ -24,7 +27,7 @@ em {
 }
 
 table {
-    border: thin solid black;
+    border: thin solid darkgrey;
     empty-cells: show;
     table-layout:fixed;
     text-align: left;
@@ -33,7 +36,7 @@ table {
 th {
     overflow:hidden;
     font-weight: bold; 
-    border-bottom: thin solid black;
+    border-bottom: thin solid darkgrey;
     padding-right: 20px;
 }
 
@@ -52,6 +55,11 @@ td:hover {
 
 code {
     font-family:monospace;
+}
+
+caption {
+    display: table-caption;
+    text-align: left;
 }
 
 .text_value {
