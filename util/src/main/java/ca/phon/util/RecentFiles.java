@@ -94,6 +94,9 @@ public class RecentFiles implements Iterable<File> {
 		if(fileHistory.contains(workspaceFolder))
 			fileHistory.remove(workspaceFolder);
 		fileHistory.add(0, workspaceFolder);
+		while(fileHistory.size() > getMaxFiles()) {
+			fileHistory.remove(fileHistory.size()-1);
+		}
 		saveHistory();
 	}
 	

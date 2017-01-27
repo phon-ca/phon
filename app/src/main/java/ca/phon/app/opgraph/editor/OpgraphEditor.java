@@ -320,6 +320,11 @@ public class OpgraphEditor extends CommonModuleFrame {
 					openRecentAct.putValue(Action.ACCELERATOR_KEY, null);
 					recentsMenu.add(new JMenuItem(openRecentAct));
 				}
+				
+				recentsMenu.addSeparator();
+				final JMenuItem clearItem = new JMenuItem("Clear recent documents");
+				clearItem.addActionListener( (evt) -> recentFiles.clearHistory() );
+				recentsMenu.add(clearItem);
 			}
 			
 			@Override
