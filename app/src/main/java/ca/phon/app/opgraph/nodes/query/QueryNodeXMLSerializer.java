@@ -92,8 +92,9 @@ public class QueryNodeXMLSerializer implements XMLSerializer {
 		
 		// write query elements
 		final QueryScript queryScript = queryNode.getQueryScript();
-		final QueryName qn = queryScript.getExtension(QueryName.class);
-		
+		final QueryName qn = 
+				(queryScript.getExtension(QueryName.class) != null ? queryScript.getExtension(QueryName.class) : new QueryName(queryNode.getName()));
+				
 		// create a query object
 		final QueryManager qm = QueryManager.getSharedInstance();
 		final QueryFactory qf = qm.createQueryFactory();
