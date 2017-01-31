@@ -5,7 +5,7 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
-                    <oga:property key="contextKey"><![CDATA[_ipa]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[__ipa]]></oga:property>
                 </oga:settings>
                 <oga:meta x="15" y="15"/>
             </extensions>

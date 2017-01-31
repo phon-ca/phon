@@ -36,6 +36,7 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 
 /**
  * IPA source node for the syllabifier.
@@ -48,7 +49,7 @@ import ca.phon.ipa.IPATranscript;
 public class IPASourceNode extends OpNode implements NodeSettings {
 	
 	// context value
-	public final static String IPA_KEY = "__ipa__";
+	public final static String IPA_KEY = OpGraphSyllabifier.IPA_CONTEXT_KEY;
 	
 	// single output
 	private final OutputField ipaOut = 

@@ -38,7 +38,7 @@ import ca.phon.util.Language;
  */
 public final class OpGraphSyllabifier implements Syllabifier {
 	
-	public final static String IPA_CONTEXT_KEY = "_ipa";
+	public final static String IPA_CONTEXT_KEY = "__ipa";
 	
 	/**
 	 * graph
@@ -104,7 +104,7 @@ public final class OpGraphSyllabifier implements Syllabifier {
 		final Processor processor = new Processor(graph);
 		final OpContext ctx = processor.getContext();
 		final IPATranscript transcript = new IPATranscript(phones);
-		ctx.put("__ipa__", transcript);
+		ctx.put(IPA_CONTEXT_KEY, transcript);
 		
 		processor.stepAll();
 	}
