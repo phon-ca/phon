@@ -57,7 +57,7 @@ import ca.phon.script.params.ScriptParameters;
 	category="Query",
 	name="Query Node",
 	description="Query script node",
-	showInLibrary=false
+	showInLibrary=true
 )
 public class QueryNode extends OpNode implements NodeSettings {
 	
