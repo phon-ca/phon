@@ -10,10 +10,8 @@ ca.phon.app.opgraph.nodes.log.PrintBufferNode
 ca.phon.app.opgraph.nodes.table.IPAVariabilityNode
 ca.phon.app.opgraph.nodes.table.HomophonyAnalysis
 ca.phon.app.opgraph.nodes.table.AddColumnNode
-ca.phon.app.opgraph.nodes.table.RowFilterNode
 ca.phon.app.opgraph.nodes.table.TokenSummaryNode
 ca.phon.app.opgraph.nodes.table.TableScriptNode
-ca.phon.app.opgraph.nodes.table.PartitionTableNode
 ca.phon.app.opgraph.nodes.table.MergeTablesNode
 ca.phon.app.opgraph.nodes.table.AppendTableNode
 ca.phon.app.opgraph.nodes.table.PhoneAccuracy

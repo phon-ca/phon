@@ -22,8 +22,11 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -35,10 +38,13 @@ import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;
 import ca.phon.ui.text.PromptedTextField;
+import ca.phon.util.resources.ClassLoaderHandler;
+import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Add a new column to the given table using
@@ -52,7 +58,9 @@ import ca.phon.ui.text.PromptedTextField;
 		showInLibrary=true
 )
 public class AddColumnNode extends TableScriptNode {
-
+	
+	private final static String ADD_COLUMN_SCRIPT_LIST = "ca/phon/app/opgraph/nodes/table/addcolumn/addcolumn_scripts";
+	
 	private final static String DEFAULT_SCRIPT = "/*\n" + 
 			"params = {label, \"Add a new column to the input table using javascript.\", \"<html><b>Add column to table</b></html>\"}\n" + 
 			";\n" + 
@@ -62,6 +70,24 @@ public class AddColumnNode extends TableScriptNode {
 			"	return new String();\n" + 
 			"}\n" + 
 			"";
+	
+	public static ResourceLoader<URL> getAddColumnScriptResourceLoader() {
+		final ResourceLoader<URL> retVal = new ResourceLoader<>();
+		
+		// add classpath handler
+		final ClassLoaderHandler<URL> handler = new ClassLoaderHandler<URL>() {
+			
+			@Override
+			public URL loadFromURL(URL url) throws IOException {
+				return url;
+			}
+			
+		};
+		handler.loadResourceFile(ADD_COLUMN_SCRIPT_LIST);
+		retVal.addHandler(handler);
+		
+		return retVal;
+	}
 	
 	// settings
 	private String columnName = "NewColumn";
@@ -75,6 +101,10 @@ public class AddColumnNode extends TableScriptNode {
 	
 	public AddColumnNode() {
 		super(DEFAULT_SCRIPT);
+	}
+	
+	public AddColumnNode(PhonScript script) {
+		super(script);
 	}
 
 	@Override
@@ -130,6 +160,14 @@ public class AddColumnNode extends TableScriptNode {
 		context.put(tableOutput, outputTable);
 	}
 	
+	public ResourceLoader<URL> getAddColumnScriptLibrary() {
+		final ResourceLoader<URL> retVal = new ResourceLoader<>();
+		
+		
+		
+		return retVal;
+	}
+	
 	@Override
 	protected JPanel createSettingsPanel() {
 		final JPanel retVal = super.createSettingsPanel();
@@ -144,6 +182,8 @@ public class AddColumnNode extends TableScriptNode {
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		
+		
 		
 		settingsPanel.add(new JLabel("Column Name:"), gbc);
 		++gbc.gridx;

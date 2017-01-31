@@ -1,7 +1,3 @@
-/*
-params = { label, "", "" }
-;
-*/
 
 function getRowValue(table, row) {
 	ipaTarget = table.getValueAt(row, "IPA Target");

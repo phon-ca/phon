@@ -1,6 +1,6 @@
 /*
  * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 201, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
+ * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -18,23 +18,20 @@
  */
  
  /**
-  * Partition Table.js
+  * Split Table.js
   * 
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
   * 
-  * Partition table using a standard query filter and column name.
+  * Split table based on column name.  Two outputs
+  * are produced, a set of keys from the column used in the filter  and a 
+  * map of key -> table values.
   */
-var PatternFilter = require("lib/PatternFilter").PatternFilter;
 
 var columnParamInfo = {
 	"id": "columnName",
 	"title": "Column Name",
 	"def": "",
 	"prompt": "Enter column name"
-}
-
-var filters = {
-    "column": new PatternFilter("filters.column")
 }
 
 function setup_params(params) {
@@ -44,50 +41,48 @@ function setup_params(params) {
 		columnParamInfo.def);
 	columnParam.setPrompt(columnParamInfo.prompt);
 	params.add(columnParam);
-	
-	filters.column.param_setup(params);
 }
 
 // add custom inputs/outputs here
 function init(inputs, outputs) {
-	outputs.add("trueTable", "Table of rows from input table which match filter", false, DefaultTableDataSource);
-	outputs.add("falseTable", "Table of rows from output table which do not match the filter", false, DefaultTableDataSource);
+	outputs.add("keySet", "Unique values from given column name", false, java.util.Set);
+	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
+}
+
+/* 
+ * Create a new table with the same schema as the inputTable
+ */
+function setupTable(inputTable) {
+    var table = new DefaultTableDataSource();
+    for(c = 0; c < inputTable.columnCount; c++) {
+	    var colTitle = inputTable.getColumnTitle(c);
+	    table.setColumnTitle(c, colTitle);
+	}
+	return table;
 }
 
 // run operation on table
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
+	
 	if(col < 0) 
 		return; // column not found
 	
-	// create output tables
-	trueTable = new DefaultTableDataSource();
-	falseTable = new DefaultTableDataSource();
-	for(c = 0; c < table.columnCount; c++) {
-	    var colTitle = table.getColumnTitle(c);
-	    trueTable.setColumnTitle(c, colTitle);
-	    falseTable.setColumnTitle(c, colTitle);
-	}
+	var tableMap = new java.util.LinkedHashMap();
 	
 	for(row = 0; row < table.rowCount; row++) {
-		rowData = table.getRow(row);
-		rowMatches = filterRow(table, row, col);
+	    // use string value as row key
+		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
 		
-		if(rowMatches == true) {
-			trueTable.addRow(rowData);
-		} else {
-			falseTable.addRow(rowData);
+		var keyTable = tableMap.get(rowKey);
+		if(keyTable == null) {
+		    keyTable = setupTable(table);
+		    tableMap.put(rowKey, keyTable);
 		}
+		keyTable.addRow(table.getRow(row));
 	}
 	
-	context.put("trueTable", trueTable);
-	context.put("falseTable", falseTable);
-}
-
-function filterRow(table, row, col) {
-	var value = table.getValueAt(row, col);
-	if(value == null) return false;
-	
-	return filters.column.check_filter(value);
+	context.put("keySet", tableMap.keySet);
+	context.put("tableMap", tableMap);
 }
