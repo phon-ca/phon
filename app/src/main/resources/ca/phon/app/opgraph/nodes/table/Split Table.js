@@ -83,6 +83,6 @@ function tableOp(context, table) {
 		keyTable.addRow(table.getRow(row));
 	}
 	
-	context.put("keySet", tableMap.keySet);
+	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
