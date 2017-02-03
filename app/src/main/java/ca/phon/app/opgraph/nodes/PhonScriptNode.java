@@ -121,7 +121,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 			final OutputFields outputFields = new OutputFields(this);
 			scriptContext.callFunction(scope, "init", inputFields, outputFields);
 		} catch (PhonScriptException e) {
-			LOGGER.fine(e.getLocalizedMessage());
+			LOGGER.warning(e.getLocalizedMessage());
 		}
 	}
 
