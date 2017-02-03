@@ -26,6 +26,8 @@ import java.util.Optional;
 import ca.phon.query.TableUtils;
 
 /**
+ * Basic implementation of a {@link TableDataSource}.  Data
+ * is stored in a list of arrays.
  * 
  */
 public class DefaultTableDataSource implements TableDataSource {
