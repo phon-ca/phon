@@ -2,12 +2,13 @@
 ## Print message and class#method if a warning or severe
 ($log.level.toString().charAt(0)) $log.message #if($log.level == "SEVERE" || $log.level == "WARNING")($log.sourceClassName#$log.sourceMethodName)#end
 
+#set($isPhonDebug = $PrefHelper.getBoolean("phon.debug", false))
 ## Print throwable information if available
 #if($log.thrown)
 	$log.thrown.toString()
 #set($printEllipses = "false")
 #foreach($ste in $log.thrown.stackTrace)
-#if($ste.className.startsWith("ca.phon"))
+#if($ste.className.startsWith("ca.phon") || $isPhonDebug)
 #if($printEllipses == "true")
 		...
 #set($printEllipses = "false")
@@ -24,7 +25,7 @@
 #if($log.thrown.cause)
 	Caused by $log.thrown.cause.toString()
 #foreach($ste in $log.thrown.cause.stackTrace)
-#if($ste.className.startsWith("ca.phon"))
+#if($ste.className.startsWith("ca.phon") || $isPhonDebug)
 #if($printEllipses == "true")
 		...
 #set($printEllipses = "false")

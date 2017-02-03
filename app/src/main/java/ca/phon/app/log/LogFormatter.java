@@ -29,6 +29,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import ca.phon.util.PrefHelper;
+
 /**
  * Formatter for application log messages.
  *
@@ -65,6 +67,7 @@ public class LogFormatter extends Formatter {
 	public String format(LogRecord record) {
 		context.put(LOG_VAR, record);
 		context.put(DATE_VAR, new Date(record.getMillis()));
+		context.put("PrefHelper", PrefHelper.class);
 		
 		final StringWriter sw = new StringWriter();
 		template.merge(context, sw);
