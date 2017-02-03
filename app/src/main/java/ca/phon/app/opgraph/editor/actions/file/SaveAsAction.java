@@ -65,13 +65,11 @@ public class SaveAsAction extends OpgraphEditorAction {
 		if(getEditor().chooseFile()) {
 			// call save on the editor
 			try {
-				if(getEditor().chooseFile()) {
-					getEditor().saveData();
-					
-					if(getEditor().getCurrentFile() != null) {
-						final RecentFiles recentFiles = new RecentFiles(OpgraphEditor.RECENT_DOCS_PROP);
-						recentFiles.addToHistory(getEditor().getCurrentFile());
-					}
+				getEditor().saveData();
+				
+				if(getEditor().getCurrentFile() != null) {
+					final RecentFiles recentFiles = new RecentFiles(OpgraphEditor.RECENT_DOCS_PROP);
+					recentFiles.addToHistory(getEditor().getCurrentFile());
 				}
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
