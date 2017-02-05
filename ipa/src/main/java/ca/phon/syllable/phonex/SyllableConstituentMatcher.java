@@ -71,8 +71,14 @@ public final class SyllableConstituentMatcher implements PhoneMatcher {
 		boolean retVal = true;
 		SyllabificationInfo scInfo = p.getExtension(SyllabificationInfo.class);
 		if(scInfo != null) {
-			if(allowedTypes.size() > 0)
-				retVal &= allowedTypes.contains(scInfo.getConstituentType());
+			if(allowedTypes.size() > 0) {
+				if(scInfo.getConstituentType() == SyllableConstituentType.AMBISYLLABIC) {
+					retVal &= (allowedTypes.contains(SyllableConstituentType.AMBISYLLABIC)
+							|| allowedTypes.contains(SyllableConstituentType.ONSET)
+							|| allowedTypes.contains(SyllableConstituentType.CODA));
+				} else 
+					retVal &= allowedTypes.contains(scInfo.getConstituentType());
+			}
 			if(disallowedTypes.size() > 0)
 				retVal &= !disallowedTypes.contains(scInfo.getConstituentType());
 		} else {
