@@ -103,7 +103,7 @@ public class DefaultBreadCrumbViewerUI extends BreadCrumbViewerUI {
 				final JComponent comp = stateRenderer.createStateComponent(breadCrumbViewer, stateIndex, state, value, false);
 				final Rectangle compRect = new Rectangle(x, 0, comp.getPreferredSize().width, comp.getPreferredSize().height);
 				SwingUtilities.paintComponent(g, comp, breadCrumbViewer, compRect);
-				x += compRect.width;
+				x += compRect.width + stateRenderer.getComponentOffset();
 				
 				stateRects.add(compRect);
 			}
@@ -121,6 +121,8 @@ public class DefaultBreadCrumbViewerUI extends BreadCrumbViewerUI {
 			final JComponent comp = breadCrumbViewer.getStateRenderer().createStateComponent(breadCrumbViewer, i, state,
 					breadCrumbViewer.getBreadcrumb().getValues().get(i), false);
 			width += comp.getPreferredSize().width;
+			if(i > 0) width += breadCrumbViewer.getStateRenderer().getComponentOffset();
+			
 			height = Math.max(height, comp.getPreferredSize().height);
 		}
 		

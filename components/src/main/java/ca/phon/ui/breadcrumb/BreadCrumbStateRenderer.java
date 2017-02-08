@@ -31,4 +31,12 @@ public interface BreadCrumbStateRenderer<S, V> {
 	public JComponent createStateComponent(BreadCrumbViewer<S, V> viewer, int stateIdx,
 			S state, V value, boolean hasFocus);
 	
+	/**
+	 * Returns the amount of space (may be negative) that should
+	 * exist between this state component and the last.
+	 * 
+	 * @return component horizontal offset
+	 */
+	public int getComponentOffset();
+	
 }

@@ -31,6 +31,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -71,6 +72,16 @@ public class DefaultBreadCrumbStateRenderer<S, V> extends JLabel implements Brea
 		}
 		
 		return this;
+	}
+	
+	@Override
+	public int getComponentOffset() {
+		final Border border = getBorder();
+		int retVal = 0;
+		if(border instanceof BreadCrumbStateBorder) {
+			retVal = -((BreadCrumbStateBorder)border).getArrowWidth();
+		}
+		return retVal;
 	}
 	
 	@Override

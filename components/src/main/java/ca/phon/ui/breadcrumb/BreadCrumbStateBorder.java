@@ -24,13 +24,13 @@ import javax.swing.border.Border;
  */
 public class BreadCrumbStateBorder implements Border {
 
-	private final static int TOP_INSET = 5;
+	public final static int TOP_INSET = 5;
 	private int topInset;
 	
-	private final static int BOTTOM_INSET = 5;
+	public final static int BOTTOM_INSET = 5;
 	private int bottomInset;
 	
-	private final static int ARROW_WIDTH = 5;
+	public final static int ARROW_WIDTH = 5;
 	private int arrowWidth;
 	
 	private boolean drawTail;
@@ -51,6 +51,38 @@ public class BreadCrumbStateBorder implements Border {
 		this.drawTail = drawTail;
 	}
 	
+	public int getTopInset() {
+		return topInset;
+	}
+
+	public void setTopInset(int topInset) {
+		this.topInset = topInset;
+	}
+
+	public int getBottomInset() {
+		return bottomInset;
+	}
+
+	public void setBottomInset(int bottomInset) {
+		this.bottomInset = bottomInset;
+	}
+
+	public int getArrowWidth() {
+		return arrowWidth;
+	}
+
+	public void setArrowWidth(int arrowWidth) {
+		this.arrowWidth = arrowWidth;
+	}
+
+	public boolean isDrawTail() {
+		return drawTail;
+	}
+
+	public void setDrawTail(boolean drawTail) {
+		this.drawTail = drawTail;
+	}
+
 	@Override
 	public void paintBorder(Component c, Graphics gfx, int x, int y, int width, int height) {
 		Graphics2D g = (Graphics2D)gfx;
@@ -78,9 +110,9 @@ public class BreadCrumbStateBorder implements Border {
 			g.fill(area);
 			
 			// draw border line
-			g.setColor(foreground);
-			g.drawLine(0, 0, arrowWidth, c.getHeight()/2-1);
-			g.drawLine(arrowWidth, c.getHeight()/2-1, 0, c.getHeight());
+//			g.setColor(foreground);
+//			g.drawLine(0, 0, arrowWidth, c.getHeight()/2-1);
+//			g.drawLine(arrowWidth, c.getHeight()/2-1, 0, c.getHeight());
 		} else {
 			g.setColor(background);
 			g.fillRect(0, 0, arrowWidth, c.getHeight());
