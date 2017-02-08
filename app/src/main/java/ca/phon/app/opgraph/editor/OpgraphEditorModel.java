@@ -66,6 +66,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			viewMap.put("Defaults", new JScrollPane(getNodeDefaults()));
 			viewMap.put("Library", getLibraryView());
 			viewMap.put("Settings", getNodeSettings());
+			viewMap.put("Outline", getGraphOutline());
 		}
 		return this.viewMap;
 	}
@@ -130,6 +131,10 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			retVal.setBounds(200, 0, 600, 600);
 			break;
 			
+		case "Outline":
+			retVal.setBounds(0, 200, 200, 200);
+			break;
+			
 		case "Console":
 			retVal.setBounds(0, 200, 200, 200);
 			break;
@@ -187,6 +192,10 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			break;
 			
 		case "Settings":
+			retVal = true;
+			break;
+			
+		case "Outline":
 			retVal = true;
 			break;
 			
