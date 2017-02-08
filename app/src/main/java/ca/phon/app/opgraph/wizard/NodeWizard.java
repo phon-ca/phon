@@ -269,11 +269,11 @@ public class NodeWizard extends WizardFrame {
 		btnCancel.setForeground(Color.white);
 		btnCancel.addActionListener( (e) -> cancel() );
 		
-		final NodeWizardBreadcrumbButton gotoReportBtn = new NodeWizardBreadcrumbButton();
-		gotoReportBtn.setBackground(Color.green);
-		gotoReportBtn.setText("Use defaults and goto Report");
-		gotoReportBtn.setFont(FontPreferences.getTitleFont());
-		gotoReportBtn.addActionListener( (e) -> gotoReport() );
+//		final NodeWizardBreadcrumbButton gotoReportBtn = new NodeWizardBreadcrumbButton();
+//		gotoReportBtn.setBackground(Color.green);
+//		gotoReportBtn.setText("Use defaults and goto Report");
+//		gotoReportBtn.setFont(FontPreferences.getTitleFont());
+//		gotoReportBtn.addActionListener( (e) -> gotoReport() );
 		
 		final Runnable updateBreadcrumbButtons = () -> {
 			JButton endBtn = btnNext;
@@ -291,17 +291,17 @@ public class NodeWizard extends WizardFrame {
 							0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
 			endBtn.setBounds(bounds);
 			
-			if(breadCrumbViewer.getBreadcrumb().size() == 1
-					&& breadCrumbViewer.getBreadcrumb().getCurrentState() != reportDataStep) {
-				// show goto report button
-				breadCrumbViewer.add(gotoReportBtn);
-				
-				final Rectangle gotoBounds = new Rectangle(
-						bounds.x + bounds.width, 0, gotoReportBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
-				gotoReportBtn.setBounds(gotoBounds);
-			} else {
-				breadCrumbViewer.remove(gotoReportBtn);
-			}
+//			if(breadCrumbViewer.getBreadcrumb().size() == 1
+//					&& breadCrumbViewer.getBreadcrumb().getCurrentState() != reportDataStep) {
+//				// show goto report button
+//				breadCrumbViewer.add(gotoReportBtn);
+//				
+//				final Rectangle gotoBounds = new Rectangle(
+//						bounds.x + bounds.width, 0, gotoReportBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
+//				gotoReportBtn.setBounds(gotoBounds);
+//			} else {
+//				breadCrumbViewer.remove(gotoReportBtn);
+//			}
 			
 			getRootPane().setDefaultButton(endBtn);
 		
