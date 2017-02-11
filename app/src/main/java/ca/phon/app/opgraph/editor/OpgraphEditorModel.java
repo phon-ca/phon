@@ -35,6 +35,7 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.library.NodeLibrary;
 import ca.phon.app.opgraph.editor.library.LibraryView;
+import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
 import ca.phon.util.PrefHelper;
 
 /**
@@ -58,7 +59,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 		if(viewMap == null) {
 			viewMap = new TreeMap<>();
 			final JPanel canvasPanel = new JPanel(new BorderLayout());
-			canvasPanel.add(getBreadcrumb(), BorderLayout.NORTH);
+			canvasPanel.add(new JBreadcrumbScrollPane<>(getBreadcrumb()), BorderLayout.NORTH);
 			canvasPanel.add(new JScrollPane(getCanvas()), BorderLayout.CENTER);
 			viewMap.put("Canvas", canvasPanel);
 			viewMap.put("Console", new JScrollPane(getConsolePanel()));

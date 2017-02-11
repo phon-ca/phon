@@ -26,6 +26,10 @@
       <artifactId>jgoodies-forms</artifactId>
     </dependency>
     <dependency>
+		<groupId>ca.phon</groupId>
+		<artifactId>jbreadcrumb</artifactId>
+	</dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>native-dialogs</artifactId>
     </dependency>

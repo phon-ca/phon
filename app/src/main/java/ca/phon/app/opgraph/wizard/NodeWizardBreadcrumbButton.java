@@ -16,7 +16,7 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 
 import ca.phon.ui.GUIHelper;
-import ca.phon.ui.breadcrumb.BreadCrumbStateBorder;
+import ca.phon.ui.jbreadcrumb.BreadcrumbStateBorder;
 
 public class NodeWizardBreadcrumbButton extends JButton {
 
@@ -26,7 +26,7 @@ public class NodeWizardBreadcrumbButton extends JButton {
 		super();
 		
 		setOpaque(false);
-		setBorder(new BreadCrumbStateBorder());
+		setBorder(new BreadcrumbStateBorder());
 	}
 
 	@Override

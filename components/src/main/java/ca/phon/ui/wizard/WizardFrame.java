@@ -53,9 +53,9 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.breadcrumb.BreadCrumb;
-import ca.phon.ui.breadcrumb.BreadCrumbViewer;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.jbreadcrumb.Breadcrumb;
+import ca.phon.ui.jbreadcrumb.JBreadcrumb;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardEvent.WizardEventType;
@@ -94,8 +94,8 @@ public class WizardFrame extends CommonModuleFrame {
 	protected JPanel stepPanel;
 	
 	/** The breadCrumb */
-	private BreadCrumb<WizardStep, String> breadCrumb;
-	protected BreadCrumbViewer<WizardStep, String> breadCrumbViewer;
+	private Breadcrumb<WizardStep, String> breadCrumb;
+	protected JBreadcrumb<WizardStep, String> breadCrumbViewer;
 	
 	private List<WizardListener> listeners = 
 			Collections.synchronizedList(new ArrayList<>());
@@ -103,7 +103,7 @@ public class WizardFrame extends CommonModuleFrame {
 	public WizardFrame(String title) {
 		super(title);
 		
-		breadCrumb = new BreadCrumb<WizardStep, String>() {
+		breadCrumb = new Breadcrumb<WizardStep, String>() {
 
 			@Override
 			public void gotoState(WizardStep state) {
@@ -128,7 +128,7 @@ public class WizardFrame extends CommonModuleFrame {
 		stepPanel = new JPanel(stepLayout);
 		add(stepPanel, BorderLayout.CENTER);
 		
-		breadCrumbViewer = new BreadCrumbViewer<>(breadCrumb);
+		breadCrumbViewer = new JBreadcrumb<>(breadCrumb);
 		breadCrumbViewer.setFont(FontPreferences.getTitleFont());
 		breadCrumbViewer.setVisible(false);
 		
@@ -298,7 +298,7 @@ public class WizardFrame extends CommonModuleFrame {
 		if(breadCrumb.containsState(ws)) {
 			while(breadCrumb.size() > 0) {
 				breadCrumb.popState();
-				if(breadCrumb.peekState(breadCrumb.size()-1) == ws) {
+				if(breadCrumb.getCurrentState() == ws) {
 					break;
 				}
 			}
