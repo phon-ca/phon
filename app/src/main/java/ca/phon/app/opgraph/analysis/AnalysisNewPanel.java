@@ -48,6 +48,11 @@ public class AnalysisNewPanel extends NewDialogPanel {
 		sessionListNode.setName("Selected Sessions");
 		graph.add(sessionListNode);
 		
+		final ObjectNode participantListNode = new ObjectNode(ArrayList.class);
+		participantListNode.setContextKey("_selectedParticipants");
+		participantListNode.setName("Selected Participants");
+		graph.add(participantListNode);
+		
 		return new AnalysisOpGraphEditorModel(graph);
 	}
 

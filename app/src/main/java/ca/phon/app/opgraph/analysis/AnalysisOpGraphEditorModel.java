@@ -32,6 +32,7 @@ import javax.swing.border.CompoundBorder;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
+import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
@@ -40,6 +41,8 @@ import ca.phon.workspace.Workspace;
 public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 
 	private JPanel debugSettings;
+	
+	private ReportTemplateView reportTemplateView;
 	
 	private JComboBox<Project> projectList;
 	
@@ -55,7 +58,6 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		WizardExtension wizardExt = opgraph.getExtension(WizardExtension.class);
 		if(wizardExt == null) {
 			wizardExt = new AnalysisWizardExtension(opgraph);
-			wizardExt.addDefaultReport();
 			opgraph.putExtension(WizardExtension.class, wizardExt);
 		}
 	}
@@ -67,8 +69,16 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	@Override
 	protected Map<String, JComponent> getViewMap() {
 		final Map<String, JComponent> retVal = super.getViewMap();
+		retVal.put("Report Template", getReportTemplateView());
 		retVal.put("Debug Settings", getDebugSettings());
 		return retVal;
+	}
+	
+	protected JComponent getReportTemplateView() {
+		if(reportTemplateView == null) {
+			reportTemplateView = new ReportTemplateView(getDocument());
+		}
+		return reportTemplateView;
 	}
 	
 	protected JComponent getDebugSettings() {
@@ -107,6 +117,10 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 			retVal.setBounds(0, 200, 200, 200);
 			break;
 			
+		case "Report Template":
+			retVal.setBounds(0, 0, 200, 200);
+			break;
+			
 		case "Console":
 			retVal.setBounds(0, 200, 200, 200);
 			break;
@@ -137,7 +151,8 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	@Override
 	public boolean isViewVisibleByDefault(String viewName) {
 		return super.isViewVisibleByDefault(viewName)
-				|| viewName.equals("Debug Settings");
+				|| viewName.equals("Debug Settings")
+				|| viewName.equals("Report Template");
 	}
 
 	@Override
