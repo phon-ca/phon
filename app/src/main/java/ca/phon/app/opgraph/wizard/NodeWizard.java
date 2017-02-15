@@ -35,9 +35,12 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -132,7 +135,9 @@ import ca.phon.worker.PhonWorker;
 public class NodeWizard extends WizardFrame {
 	
 	private static final long serialVersionUID = -652423592288338133L;
-
+	
+	private final static String DEFAULT_REPORT_FILE = "ca/phon/app/opgraph/wizard/DefaultReport.vm";
+	
 	private final static Logger LOGGER = Logger.getLogger(NodeWizard.class.getName());
 	
 	private final Processor processor;
@@ -482,58 +487,106 @@ public class NodeWizard extends WizardFrame {
 		}
 	}
 	
+	/**
+	 * Executes graph. During execution, data generated may be printed
+	 * to buffers which are displayed during this stage.  If there
+	 * is a buffer named 'Report Template' at the end of execution,
+	 * a HTML report is generated using the contents of 'Report Template'
+	 * which should be a velocity template.
+	 * 
+	 * @throws ProcessingException
+	 */
 	public void executeGraph() throws ProcessingException {
 		setupContext(processor.getContext());
 		processor.reset();
 		setupOptionals(processor.getContext());
 		setupGlobalOptions(processor.getContext());
 		processor.addProcessorListener(processorListener);
+		final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
+		final String reportTemplateBufferName = "Report Template";
+		
 		try {
 			SwingUtilities.invokeLater( () -> {
 				btnCancel.setVisible(true);
 				breadCrumbViewer.setEnabled(false);
 			});
 			
+			// if the graph has a 'Report Prefix' template, add it to the 'Report Template' buffer
+			final NodeWizardReportTemplate reportPrefixTemplate = ext.getReportTemplate("Report Prefix");
+			final String reportPrefix = ( reportPrefixTemplate != null ? reportPrefixTemplate.getTemplate() : "");
+			if(reportPrefix.trim().length() > 0) {
+				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer(reportTemplateBufferName);
+				
+				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
+				final PrintWriter writer = new PrintWriter(os);
+				writer.write(reportPrefix + "\n");
+				writer.flush();
+				writer.close();
+			}
+			
 			processor.stepAll();
 			
-			final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
-			for(String reportName:ext.getReportTemplateNames()) {
-				// create temp file
-				File tempFile = null;
-				try {
-					tempFile = File.createTempFile("phon", reportName);
-				} catch (IOException e) {
-					continue;
-				}
+			// if the graph has a 'Report Suffix' template, add it to the 'Report Template' buffer
+			final NodeWizardReportTemplate reportSuffixTemplate = ext.getReportTemplate("Report Suffix");
+			final String reportSuffix = ( reportSuffixTemplate != null ? reportSuffixTemplate.getTemplate() : "");
+			if(reportPrefix.trim().length() > 0) {
+				final BufferPanel reportTemplateBuffer = 
+						(bufferPanel.getBufferNames().contains(reportTemplateBufferName) ? bufferPanel.getBuffer(reportTemplateBufferName) : 
+							bufferPanel.createBuffer(reportTemplateBufferName) );
+				
+				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
+				final PrintWriter writer = new PrintWriter(os);
+				writer.write(reportSuffix + "\n");
+			}
+			
+			// generate report
+			final BufferPanel reportTemplateBuffer = bufferPanel.getBuffer(reportTemplateBufferName);
+			String template = null;
+			if(reportTemplateBuffer == null) {
+				template = loadDefaultReport();
+			} else {
+				template = reportTemplateBuffer.getLogBuffer().getText();
+			}
+			
+			// create temp file
+			File tempFile = null;
+			try {
+				tempFile = File.createTempFile("phon", reportTemplateBufferName);
 				tempFile.deleteOnExit();
 				
 				try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
 					final NodeWizardReportGenerator reportGenerator = 
-							new NodeWizardReportGenerator(this, reportName, fout);
+							new NodeWizardReportGenerator(this, template, fout);
 					
 					SwingUtilities.invokeLater(() -> {
 						statusLabel.setText("Generating report...");
 					});
-					try {
-						reportGenerator.generateReport();
-					} catch (NodeWizardReportException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					}
-					
-					// create buffer
-					final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
-					try {
-						SwingUtilities.invokeAndWait( () -> bufferPanelRef.getAndSet(bufferPanel.createBuffer(reportName)));
-					} catch (InterruptedException | InvocationTargetException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-						continue;
-					}
+				
+					reportGenerator.generateReport();
+				} catch (IOException | NodeWizardReportException e) {
+					// throw to outer try
+					throw new IOException(e);
+				}
+				
+				// create buffer
+				final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
+				try {
+					SwingUtilities.invokeAndWait( () -> bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report")));
 					final BufferPanel reportBufferPanel = bufferPanelRef.get();
 					final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
 					reader.execute();
-				} catch (IOException e) {
+				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				
+				final BufferPanel errPanel = bufferPanel.createBuffer("Error");
+				errPanel.getLogBuffer().setForeground(Color.red);
+				final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
+				e.printStackTrace(writer);
+				writer.flush();
+				writer.close();
 			}
 			
 			SwingUtilities.invokeLater( () -> {
@@ -569,6 +622,25 @@ public class NodeWizard extends WizardFrame {
 			});
 			throw pe;
 		}
+	}
+	
+	public String loadDefaultReport() {
+		final StringBuffer buffer = new StringBuffer();
+		final InputStream defaultReportStream = 
+				getClass().getClassLoader().getResourceAsStream(DEFAULT_REPORT_FILE);
+		if(defaultReportStream != null) {
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(defaultReportStream, "UTF-8"))) {
+				String line = null;
+				while((line = reader.readLine()) != null) {
+					buffer.append(line).append("\n");
+				}
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		} else {
+			LOGGER.log(Level.WARNING, "Not found " + DEFAULT_REPORT_FILE, new FileNotFoundException(DEFAULT_REPORT_FILE));
+		}
+		return buffer.toString();
 	}
 	
 	/**

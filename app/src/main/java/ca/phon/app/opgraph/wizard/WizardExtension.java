@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.Processor;
+import ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are
@@ -48,13 +49,7 @@ import ca.gedge.opgraph.Processor;
  */
 public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
-	private final static Logger LOGGER = Logger.getLogger(WizardExtension.class.getName());
-	
 	public final static String WIZARDEXT_CTX_KEY = "wizardExtension";
-	
-	private final static String DEFAULT_REPORT_FILE = "ca/phon/app/opgraph/wizard/DefaultReport.vm";
-	
-	private final static String DEFAULT_REPORT_NAME = "Report";
 	
 	private WizardInfo wizardInfo = new WizardInfo();
 	
@@ -72,46 +67,20 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	private final OpGraph graph;
 	
+	private final List<WizardExtensionListener> listenerList = 
+			Collections.synchronizedList(new ArrayList<>());
+	
 	public WizardExtension(OpGraph graph) {
 		super();
 		this.graph = graph;
+		addDefaultReportTemplates();
 	}
 	
-	/**
-	 * Add the default report to the wizard with the given
-	 * name.
-	 * 
-	 * @param reportName
-	 */
-	public void addDefaultReport(String reportName) {
-		final InputStream defaultReportStream = 
-				getClass().getClassLoader().getResourceAsStream(DEFAULT_REPORT_FILE);
-		if(defaultReportStream != null) {
-			final StringBuffer buffer = new StringBuffer();
-			try(BufferedReader reader = new BufferedReader(new InputStreamReader(defaultReportStream, "UTF-8"))) {
-				String line = null;
-				while((line = reader.readLine()) != null) {
-					buffer.append(line).append("\n");
-				}
-				
-				putReportTemplate(reportName, buffer.toString());
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
-		} else {
-			LOGGER.log(Level.WARNING, "Not found " + DEFAULT_REPORT_FILE, new FileNotFoundException(DEFAULT_REPORT_FILE));
-		}
-	}
-	
-	/**
-	 * Add default report to the wizard with name
-	 * {@link DEFAULT_REPORT_NAME}.  If there is
-	 * not {@link WizardExtension} in this report
-	 * this method does nothing.
-	 * 
-	 */
-	public void addDefaultReport() {
-		addDefaultReport(DEFAULT_REPORT_NAME);
+	public void addDefaultReportTemplates() {
+		if(getReportTemplate("Report Prefix") == null)
+			putReportTemplate("Report Prefix", "");
+		if(getReportTemplate("Report Suffix") == null)
+			putReportTemplate("Report Suffix", "");
 	}
 	
 	public NodeWizard createWizard(Processor processor) {
@@ -137,6 +106,9 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	public boolean addNode(OpNode e) {
 		boolean retVal = wizardNodes.add(e);
 		nodeInfoMap.put(e, new NodeInfo(e));
+		
+		fireNodeEvent(EventType.NODE_ADDED_TO_SETTINGS, e);
+		
 		return retVal;
 	}
 	
@@ -147,6 +119,9 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	public boolean removeNode(Object o) {
 		boolean retVal = wizardNodes.remove(o);
 		nodeInfoMap.remove(o);
+		
+		fireNodeEvent(EventType.NODE_REMOVED_FROM_SETTINGS, (OpNode)o);
+		
 		return retVal;
 	}
 
@@ -160,7 +135,11 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	public void setNodeForced(OpNode node, boolean forced) {
 		final NodeInfo nodeInfo = nodeInfoMap.get(node);
-		if(nodeInfo != null) nodeInfo.setSettingsForced(forced);
+		if(nodeInfo != null) {
+			nodeInfo.setSettingsForced(forced);
+			
+			fireNodeEvent( (forced ? EventType.NODE_MARKED_AS_REQUIRED : EventType.NODE_MAKRED_AS_NOT_REQUIRED), node);
+		}
 	}
 	
 	public boolean isNodeForced(OpNode node) {
@@ -168,13 +147,12 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		return (nodeInfo != null ? nodeInfo.isSettingsForced() : false);
 	}
 
-	public void addNode(int index, OpNode element) {
-		wizardNodes.add(index, element);
-		nodeInfoMap.put(element, new NodeInfo(element));
-	}
-
 	public OpNode removeNode(int index) {
-		return wizardNodes.remove(index);
+		OpNode retVal = wizardNodes.remove(index);
+		
+		fireNodeEvent(EventType.NODE_REMOVED_FROM_SETTINGS, retVal);
+		
+		return retVal;
 	}
 	
 	public void setNodeTitle(OpNode node, String title) {
@@ -189,18 +167,25 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	public void addOptionalNode(OpNode node) {
 		optionalNodes.add(node);
-	}
-	
-	public void addOptionalNode(int index, OpNode node) {
-		optionalNodes.add(index, node);
+		
+		fireNodeEvent(EventType.NODE_MAKRED_AS_OPTIONAL, node);
 	}
 	
 	public OpNode removeOptionalNode(int index) {
-		return optionalNodes.remove(index);
+		OpNode retVal = optionalNodes.remove(index);
+		
+		fireNodeEvent(EventType.NODE_MAKRED_AS_NONOPTIONAL, retVal);
+		
+		return retVal;
 	}
 	
 	public boolean removeOptionalNode(OpNode node) {
-		return optionalNodes.remove(node);
+		boolean retVal = optionalNodes.remove(node);
+		
+		if(retVal)
+			fireNodeEvent(EventType.NODE_MAKRED_AS_NONOPTIONAL, node);
+		
+		return retVal;
 	}
 
 	public int getOptionalNodeCount() {
@@ -208,11 +193,11 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	}
 	
 	public List<OpNode> getOptionalNodes() {
-		return optionalNodes;
+		return Collections.unmodifiableList(optionalNodes);
 	}
 	
 	public Map<OpNode, Boolean> getOptionalNodeDefaults() {
-		return this.optionalDefaults;
+		return Collections.unmodifiableMap(this.optionalDefaults);
 	}
 	
 	public void setOptionalNodeDefault(OpNode node, boolean enabled) {
@@ -260,13 +245,15 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	}
 	
 	public void setWizardTitle(String title) {
+		String oldTitle = getWizardTitle();
 		wizardInfo.setTitle(title);
+		fireTitleChangedEvent(oldTitle, title);
 	}
 	
 	public String getWizardTitle() {
 		String retVal = wizardInfo.getTitle();
 		if(retVal == null || retVal.length() == 0) {
-			retVal = "About";
+			retVal = "";
 		}
 		return retVal;
 	}
@@ -297,9 +284,9 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	}
 	
 	public Set<String> getReportTemplateNames() {
-		return reportTemplates.stream()
+		return Collections.unmodifiableSet( reportTemplates.stream()
 				.map( (rt) -> rt.getName() )
-				.collect(Collectors.toSet());
+				.collect(Collectors.toSet()) );
 	}
 	
 	public NodeWizardReportTemplate getReportTemplate(String name) {
@@ -322,8 +309,15 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		if(retVal == null) {
 			retVal = new NodeWizardReportTemplate(name, template);
 			reportTemplates.add(retVal);
+			retVal.setTemplate(template);
+			
+			fireReportTemplateEvent(EventType.REPORT_TEMPLATE_ADDED, name, "", template);
+		} else {
+			final String oldContent = retVal.getTemplate();
+			retVal.setTemplate(template);
+			
+			fireReportTemplateEvent(EventType.REPORT_TEMPLATE_CHANGED, name, oldContent, template);
 		}
-		retVal.setTemplate(template);
 		return retVal;
 	}
 	
@@ -333,6 +327,9 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 			final NodeWizardReportTemplate template = itr.next();
 			if(template.getName().equals(name)) {
 				itr.remove();
+				
+				fireReportTemplateEvent(EventType.REPORT_TEMPLATE_REMOVED, name, template.getTemplate(), null);
+				
 				break;
 			}
 		}
@@ -372,6 +369,39 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		}
 		
 		return retVal;
+	}
+	
+	public void addWizardExtensionListener(WizardExtensionListener listener) {
+		if(listenerList.contains(listener))
+			listenerList.add(listener);
+	}
+	
+	public void removeWizardExtensionListener(WizardExtensionListener listener) {
+		listenerList.remove(listener);
+	}
+	
+	public List<WizardExtensionListener> getWizardExtensionListeners() {
+		return Collections.unmodifiableList(listenerList);
+	}
+	
+	public void fireTitleChangedEvent(String oldTitle, String newTitle) {
+		final WizardExtensionEvent event = new WizardExtensionEvent(oldTitle, newTitle);
+		getWizardExtensionListeners().forEach( (l) -> l.wizardExtensionChanged(event) );
+	}
+	
+	public void fireNodeTitleChangedEvent(OpNode node, String oldTitle, String newTitle) {
+		final WizardExtensionEvent event = new WizardExtensionEvent(node, oldTitle, newTitle);
+		getWizardExtensionListeners().forEach( (l) -> l.wizardExtensionChanged(event) );
+	}
+	
+	public void fireNodeEvent(EventType eventType, OpNode node) {
+		final WizardExtensionEvent event = new WizardExtensionEvent(EventType.NODE_ADDED_TO_SETTINGS, node);
+		getWizardExtensionListeners().forEach( (l) -> l.wizardExtensionChanged(event) );
+	}
+	
+	public void fireReportTemplateEvent(EventType eventType, String reportName, String oldContent, String reportContent) {
+		final WizardExtensionEvent event = new WizardExtensionEvent(eventType, reportName, oldContent, reportContent);
+		getWizardExtensionListeners().forEach( (l) -> l.wizardExtensionChanged(event) );
 	}
 	
 }

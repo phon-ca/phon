@@ -23,20 +23,20 @@ public class NodeWizardReportGenerator {
 	
 	private final NodeWizard wizard;
 	
-	private final String reportName;
+	private final String reportTemplate;
 	
 	private OutputStream stream;
 	
-	public NodeWizardReportGenerator(NodeWizard wizard, String reportName, String outputPath) 
+	public NodeWizardReportGenerator(NodeWizard wizard, String reportTemplate, String outputPath) 
 		throws IOException {
-		this(wizard, reportName, new FileOutputStream(outputPath));
+		this(wizard, reportTemplate, new FileOutputStream(outputPath));
 	}
 	
-	public NodeWizardReportGenerator(NodeWizard wizard, String reportName, OutputStream stream) {
+	public NodeWizardReportGenerator(NodeWizard wizard, String reportTemplate, OutputStream stream) {
 		super();
 		
 		this.wizard = wizard;
-		this.reportName = reportName;
+		this.reportTemplate = reportTemplate;
 		this.stream = stream;
 	}
 	
@@ -44,14 +44,11 @@ public class NodeWizardReportGenerator {
 		throws NodeWizardReportException {
 		
 		final WizardExtension wizardSettings = wizard.getWizardExtension();
-		final NodeWizardReportTemplate template = wizardSettings.getReportTemplate(reportName);
-		if(template == null) {
-			throw new NodeWizardReportException("No report named " + reportName + " found.");
-		}
-		
 		final NodeWizardReportContext ctx = new NodeWizardReportContext();
 		wizard.setupReportContext(ctx);
 		wizardSettings.setupReportContext(ctx);
+		
+		final NodeWizardReportTemplate template = new NodeWizardReportTemplate("temp", this.reportTemplate);
 		
 		final String reportAsMarkdown = template.merge(ctx);
 		final String reportAsHTML = markdownToHTML(reportAsMarkdown);
