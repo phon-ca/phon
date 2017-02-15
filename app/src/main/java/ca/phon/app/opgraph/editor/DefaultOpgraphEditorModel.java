@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -35,7 +36,12 @@ import org.apache.commons.io.FilenameUtils;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.components.canvas.NodeStyle;
+import ca.gedge.opgraph.nodes.general.MacroNode;
+import ca.phon.app.opgraph.analysis.AnalysisLibrary;
+import ca.phon.app.opgraph.nodes.MacroNodeData;
+import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
+import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
@@ -45,6 +51,7 @@ import ca.phon.app.opgraph.nodes.table.TableOpNode;
 import ca.phon.app.opgraph.nodes.table.TableScriptNode;
 import ca.phon.app.opgraph.nodes.table.TableScriptNodeData;
 import ca.phon.app.opgraph.nodes.table.TableScriptNodeInstantiator;
+import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
@@ -72,12 +79,27 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 		addTableScriptNodes();
 		addAddColumnScriptNodes();
 		
+		addAnalysisNodes();
+		addReportNodes();
+		
 		setupNodeStyles();
 	}
 	
 	@Override
 	public String getTitle() {
-		return "Node Editor";
+		return "Macro Composer";
+	}
+	
+	private void addAnalysisNodes() {
+		final AnalysisLibrary library = new AnalysisLibrary();
+		library.getStockGraphs().forEach(this::addAnalysisNodeToLibrary);
+		library.getUserGraphs().forEach(this::addAnalysisNodeToLibrary);
+	}
+	
+	private void addReportNodes() {
+		final ReportLibrary library = new ReportLibrary();
+		library.getStockGraphs().forEach(this::addReportNodeToLibrary);
+		library.getUserGraphs().forEach(this::addAnalysisNodeToLibrary);
 	}
 
 	private void addQueryNodes() {
@@ -179,17 +201,45 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 		final QueryName qn = script.getExtension(QueryName.class);
 		final String name = (qn != null ? qn.getName() : "<unknown>");
 		try {
-			final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), qn.getName());
+			final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), name);
 			final QueryNodeInstantiator instantiator = new QueryNodeInstantiator();
 			
 			final String description = 
-					"Add " + qn.getName() + " query to graph.";
+					"Add " + name + " query to graph.";
 			
 			final QueryNodeData nodeData = new QueryNodeData(script, queryNodeClassURI,
 					name, description, "Query", instantiator);
 			getNodeLibrary().getLibrary().put(nodeData);
 		} catch (URISyntaxException e) {
 			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	private void addAnalysisNodeToLibrary(URL url) {
+		try {
+			String filename = URLDecoder.decode(url.getFile(), "UTF-8");
+			String name = FilenameUtils.getBaseName(filename);
+			
+			final URI uri = new URI("class", MacroNode.class.getName(), name);
+			
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Analysis", new AnalysisNodeInstantiator());
+			getNodeLibrary().getLibrary().put(nodeData);
+		} catch (UnsupportedEncodingException | URISyntaxException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	private void addReportNodeToLibrary(URL url) {
+		try {
+			String filename = URLDecoder.decode(url.getFile(), "UTF-8");
+			String name = FilenameUtils.getBaseName(filename);
+			
+			final URI uri = new URI("class", MacroNode.class.getName(), name);
+			
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Report", new ReportNodeInstantiator());
+			getNodeLibrary().getLibrary().put(nodeData);
+		} catch (UnsupportedEncodingException | URISyntaxException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
 	
