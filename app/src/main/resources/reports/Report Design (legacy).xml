@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:rpt="http://phon.ling.mun.ca/ns/report">
     <graph id="root">
+        <node id="53fa4503af9e4420" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="f5756e53e77e4bf2" name="Query ID" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
+                </oga:settings>
+                <oga:meta x="116" y="246"/>
+            </extensions>
+        </node>
         <node id="58072efd" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
-                <oga:meta x="15" y="15"/>
+                <oga:meta x="340" y="57"/>
             </extensions>
         </node>
         <opqry:reportDesignNode id="334d668e" type="ca.phon.app.opgraph.nodes.query.ReportDesignNode" useLastReport="true">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="232" y="71"/>
+                <oga:meta x="557" y="113"/>
             </extensions>
         </opqry:reportDesignNode>
         <node id="2af8637b" name="Query" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -17,7 +35,7 @@
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.db.Query]]></oga:property>
                 </oga:settings>
-                <oga:meta x="176" y="220"/>
+                <oga:meta x="501" y="262"/>
             </extensions>
         </node>
         <node id="7ab6cf1a" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
@@ -25,7 +43,7 @@
                 <oga:settings>
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="479" y="148"/>
+                <oga:meta x="804" y="190"/>
             </extensions>
         </node>
         <link dest="334d668e" destField="project" source="58072efd" sourceField="project"/>
@@ -34,6 +52,8 @@
         <link dest="334d668e" destField="query" source="58072efd" sourceField="query"/>
         <link dest="7ab6cf1a" destField="data" source="334d668e" sourceField="report"/>
         <link dest="334d668e" destField="results" source="58072efd" sourceField="result sets"/>
+        <link dest="58072efd" destField="project" source="53fa4503af9e4420" sourceField="obj"/>
+        <link dest="58072efd" destField="queryId" source="f5756e53e77e4bf2" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" title="Legacy Report">
@@ -45,7 +65,7 @@
                     </opqry:info>
                 </opqry:node>
             </opqry:nodewizard>
-            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel" generated="true"/>
+            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>
     </graph>
 </opgraph>

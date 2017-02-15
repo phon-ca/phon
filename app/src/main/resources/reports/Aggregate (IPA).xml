@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
-        <node id="3b7dacf0" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+        <node id="5354ffb7" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
                 <oga:meta x="15" y="15"/>
             </extensions>
         </node>
-        <node id="24049103" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
+        <node id="61300356" name="Query ID" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
+                </oga:settings>
+                <oga:meta x="116" y="246"/>
+            </extensions>
+        </node>
+        <node id="87e30b6166544cc8" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+            <extensions>
+                <oga:meta x="383" y="178"/>
+            </extensions>
+        </node>
+        <node id="c2c36aa400ff4f50" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
@@ -14,10 +32,10 @@
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="225" y="15"/>
+                <oga:meta x="593" y="178"/>
             </extensions>
         </node>
-        <node id="3790be87" name="Aggregate" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+        <node id="c41947665b034a0e" name="Aggregate" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
             <extensions>
                 <opqry:inventoryoptions>
                     <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
@@ -25,46 +43,47 @@
                     <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="true"/>
                 </opqry:inventoryoptions>
                 <oga:settings/>
-                <oga:meta x="410" y="15"/>
+                <oga:meta x="778" y="178"/>
             </extensions>
         </node>
-        <node id="b5aa672" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+        <node id="1271664e64514bf6" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
             <extensions>
                 <opqry:sortoptions>
                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
                 </opqry:sortoptions>
                 <oga:settings/>
-                <oga:meta x="225" y="136"/>
+                <oga:meta x="593" y="299"/>
             </extensions>
         </node>
-        <node id="6f7c2ffa" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+        <node id="a7430a2b16d440a7" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="400" y="136">
-                    <oga:default for="buffer" type="java.lang.String">Aggregate (IPA Target ↔ IPA Actual)</oga:default>
+                <oga:meta x="768" y="299">
+                    <oga:default for="buffer" type="java.lang.String">Aggregate (IPA)</oga:default>
                 </oga:meta>
             </extensions>
         </node>
-        <link dest="24049103" destField="project" source="3b7dacf0" sourceField="project"/>
-        <link dest="3790be87" destField="table" source="24049103" sourceField="table"/>
-        <link dest="b5aa672" destField="table" source="3790be87" sourceField="table"/>
-        <link dest="6f7c2ffa" destField="data" source="b5aa672" sourceField="table"/>
-        <link dest="24049103" destField="results" source="3b7dacf0" sourceField="result sets"/>
+        <link dest="1271664e64514bf6" destField="table" source="c41947665b034a0e" sourceField="table"/>
+        <link dest="a7430a2b16d440a7" destField="data" source="1271664e64514bf6" sourceField="table"/>
+        <link dest="c2c36aa400ff4f50" destField="project" source="87e30b6166544cc8" sourceField="project"/>
+        <link dest="c2c36aa400ff4f50" destField="results" source="87e30b6166544cc8" sourceField="result sets"/>
+        <link dest="c41947665b034a0e" destField="table" source="c2c36aa400ff4f50" sourceField="table"/>
+        <link dest="87e30b6166544cc8" destField="project" source="5354ffb7" sourceField="obj"/>
+        <link dest="87e30b6166544cc8" destField="queryId" source="61300356" sourceField="obj"/>
         <extensions>
-            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate (IPA Target ↔ IPA Actual)">
+                <opqry:info format="html" title="Aggregate (IPA)">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="3790be87" showAsStep="true">
+                <opqry:node ref="c41947665b034a0e">
                     <opqry:info format="html" title="Aggregate">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
-                <opqry:node ref="b5aa672" showAsStep="true">
+                <opqry:node ref="1271664e64514bf6">
                     <opqry:info format="html" title="Sort">
                         <opqry:message/>
                     </opqry:info>
@@ -98,8 +117,10 @@ $buffers[$bufferName]
 #end
 #end
 
-#end</opqry:report-template>
+#end
+</opqry:report-template>
             </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>
     </graph>
 </opgraph>

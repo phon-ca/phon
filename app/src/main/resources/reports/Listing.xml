@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
+        <node id="5897d31c5e1642ec" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="27a0c0b98e1245d6" name="Query ID" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
+                </oga:settings>
+                <oga:meta x="116" y="246"/>
+            </extensions>
+        </node>
         <node id="3b7dacf0" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
-                <oga:meta x="15" y="15"/>
+                <oga:meta x="386" y="106"/>
             </extensions>
         </node>
         <node id="24049103" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -14,7 +32,7 @@
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="225" y="15"/>
+                <oga:meta x="596" y="106"/>
             </extensions>
         </node>
         <node id="6f7c2ffa" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
@@ -22,7 +40,7 @@
                 <oga:settings>
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="410" y="15">
+                <oga:meta x="781" y="106">
                     <oga:default for="buffer" type="java.lang.String">Listing</oga:default>
                 </oga:meta>
             </extensions>
@@ -30,6 +48,8 @@
         <link dest="24049103" destField="project" source="3b7dacf0" sourceField="project"/>
         <link dest="6f7c2ffa" destField="data" source="24049103" sourceField="table"/>
         <link dest="24049103" destField="results" source="3b7dacf0" sourceField="result sets"/>
+        <link dest="3b7dacf0" destField="project" source="5897d31c5e1642ec" sourceField="obj"/>
+        <link dest="3b7dacf0" destField="queryId" source="27a0c0b98e1245d6" sourceField="obj"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
