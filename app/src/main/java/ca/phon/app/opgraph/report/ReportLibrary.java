@@ -36,8 +36,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import ca.phon.app.opgraph.analysis.AnalysisLibrary;
+import ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel;
 import ca.phon.app.opgraph.analysis.UserAnalysisHandler;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
@@ -207,7 +212,26 @@ public class ReportLibrary {
 		builder.addItem(".@all", new AllReportsAction(project, queryId));
 		
 		builder.addSeparator(".", "editor");
-		builder.addItem(".@editor", new ReportEditorAction());
+		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
+		showComposerAct.putValue(PhonUIAction.NAME, "Report Composer...");
+		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
+		builder.addItem(".@composer", showComposerAct);
+	}
+	
+	public static void showComposer() {
+		final ReportOpGraphEditorModel editorModel = new ReportOpGraphEditorModel();
+		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
+		
+		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
+		if(project != null) {
+			editor.putExtension(Project.class, project);
+			((ReportOpGraphEditorModel)editor.getModel()).getSessionSelector().setProject(project);
+		}
+		
+		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+		editor.pack();
+		editor.setSize(1024, 768);
+		editor.setVisible(true);
 	}
 	
 }

@@ -1,0 +1,92 @@
+package ca.phon.app.opgraph.macro;
+
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.SwingWorker;
+
+import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.opgraph.analysis.AnalysisRunner;
+import ca.phon.app.opgraph.report.ReportAction;
+import ca.phon.opgraph.OpgraphIO;
+import ca.phon.project.Project;
+import ca.phon.session.SessionPath;
+import ca.phon.worker.PhonWorker;
+
+public class MacroAction extends HookableAction {
+
+	private static final long serialVersionUID = 7095649504101466591L;
+
+	private final static Logger LOGGER = Logger.getLogger(ReportAction.class.getName());
+	
+	private Project project;
+	
+	private URL analysisURL;
+	
+	private boolean showWizard = true;
+	
+	public MacroAction(Project project, URL analysisURL) {
+		super();
+		
+		this.project = project;
+		this.analysisURL = analysisURL;
+		
+		@SuppressWarnings("deprecation")
+		String name = URLDecoder.decode(analysisURL.getPath());
+		if(name.endsWith(".xml")) name = name.substring(0, name.length()-4);
+		if(name.endsWith(".opgraph")) name = name.substring(0, name.length()-8);
+		final File asFile = new File(name);
+		putValue(NAME, asFile.getName());
+		putValue(SHORT_DESCRIPTION, analysisURL.getPath());
+	}
+	
+	public boolean isShowWizard() {
+		return showWizard;
+	}
+
+	public void setShowWizard(boolean showWizard) {
+		this.showWizard = showWizard;
+	}
+
+	@Override
+	public void hookableActionPerformed(ActionEvent ae) {
+		final MacroWorker worker = new MacroWorker();
+		worker.run();
+	}
+	
+	private OpGraph loadMacro() throws IOException {
+		return OpgraphIO.read(analysisURL.openStream());
+	}
+
+	private class MacroWorker extends SwingWorker<OpGraph, Object> {
+
+		@Override
+		protected OpGraph doInBackground() throws Exception {
+			final OpGraph graph = loadMacro();
+			return graph;
+		}
+
+		@Override
+		protected void done() {
+			try {
+				final MacroRunner analysisRunner =
+						new MacroRunner(get(), project, showWizard);
+				PhonWorker.getInstance().invokeLater(analysisRunner);
+			} catch (ExecutionException | InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+		
+		
+	}
+	
+}

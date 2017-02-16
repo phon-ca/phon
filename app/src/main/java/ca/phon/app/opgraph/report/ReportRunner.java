@@ -91,6 +91,7 @@ public class ReportRunner implements Runnable {
 	public void run(OpGraph graph, Project project, String queryId) throws ProcessingException {
 		final Processor processor = new Processor(graph);
 		final OpContext ctx = processor.getContext();
+		ctx.put("_window", CommonModuleFrame.getCurrentFrame());
 		ctx.put("_project", project);
 		ctx.put("_queryId", queryId);
 		
@@ -98,6 +99,7 @@ public class ReportRunner implements Runnable {
 		if(wizardExt != null) {
 			SwingUtilities.invokeLater(() -> {
 				final NodeWizard wizard = wizardExt.createWizard(processor);
+				wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
 				wizard.pack();
 				int padding = 100;
 				wizard.setSize(

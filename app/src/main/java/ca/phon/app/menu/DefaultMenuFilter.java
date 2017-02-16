@@ -35,13 +35,13 @@ import ca.phon.app.menu.file.OpenProjectCommand;
 import ca.phon.app.menu.file.RecentProjectsMenuListener;
 import ca.phon.app.menu.help.HelpCommand;
 import ca.phon.app.menu.help.LogCommand;
+import ca.phon.app.menu.macro.MacroMenuListener;
 import ca.phon.app.menu.query.QueryMenuListener;
 import ca.phon.app.menu.tools.BasicSyllabifierTestCommand;
 import ca.phon.app.menu.tools.IpaMapCommand;
 import ca.phon.app.menu.tools.LanguageCodesCommand;
 import ca.phon.app.menu.window.OpenWindowsMenuListener;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
-import ca.phon.app.menu.workspace.WorkspaceCommand;
 import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.welcome.WelcomeWindow;
@@ -64,6 +64,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		addFileMenu(owner, menu);
 		addEditMenu(owner, menu);
 		addWorkspaceMenu(owner, menu);
+		addMacroMenu(owner, menu);
 		addQueryMenu(owner, menu);
 		addAnalysisMenu(owner, menu);
 		addToolsMenu(owner, menu);
@@ -124,6 +125,25 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 			queryMenuListener.menuSelected(me);
 			
 			menu.add(queryMenu);
+		}
+	}
+	
+	/**
+	 * Add macro menu
+	 */
+	protected void addMacroMenu(Window owner, JMenuBar menu) {
+		if(!(owner instanceof CommonModuleFrame)) return;
+		final CommonModuleFrame frame = (CommonModuleFrame)owner;
+		final Project project = frame.getExtension(Project.class);
+		if(project != null) {
+			final JMenu macroMenu = new JMenu("Macro");
+			final MacroMenuListener macroMenuListener = new MacroMenuListener();
+			macroMenu.addMenuListener(macroMenuListener);
+			
+			final MenuEvent me = new MenuEvent(macroMenu);
+			macroMenuListener.menuSelected(me);
+			
+			menu.add(macroMenu);
 		}
 	}
 	

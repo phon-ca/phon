@@ -1,22 +1,4 @@
-/*
- * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
- * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-package ca.phon.app.opgraph.analysis;
+package ca.phon.app.opgraph.macro;
 
 import java.awt.Toolkit;
 import java.util.List;
@@ -33,22 +15,18 @@ import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 
-public class AnalysisRunner implements Runnable {
+public class MacroRunner implements Runnable {
 	
 	private OpGraph graph;
 	
 	private Project project;
 	
-	private List<SessionPath> selectedSessions;
-	
 	private boolean showWizard = true;
 	
-	public AnalysisRunner(OpGraph graph, Project project, 
-			List<SessionPath> selectedSessions, boolean showWizard) {
+	public MacroRunner(OpGraph graph, Project project, boolean showWizard) {
 		super();
 		this.graph = graph;
 		this.project = project;
-		this.selectedSessions = selectedSessions;
 		this.showWizard = showWizard;
 	}
 	
@@ -68,14 +46,6 @@ public class AnalysisRunner implements Runnable {
 		this.project = project;
 	}
 
-	public List<SessionPath> getSelectedSessions() {
-		return selectedSessions;
-	}
-
-	public void setSelectedSessions(List<SessionPath> selectedSessions) {
-		this.selectedSessions = selectedSessions;
-	}
-	
 	public boolean isShowWizard() {
 		return showWizard;
 	}
@@ -86,16 +56,15 @@ public class AnalysisRunner implements Runnable {
 
 	@Override
 	public void run() {
-		run(getGraph(), getProject(), getSelectedSessions(), isShowWizard());
+		run(getGraph(), getProject(), isShowWizard());
 	}
 
-	public void run(OpGraph graph, Project project, List<SessionPath> selectedSessions, boolean showWizard) 
+	public void run(OpGraph graph, Project project, boolean showWizard) 
 		throws ProcessingException {
 		final Processor processor = new Processor(graph);
 		final OpContext ctx = processor.getContext();
 		ctx.put("_window", CommonModuleFrame.getCurrentFrame());
 		ctx.put("_project", project);
-		ctx.put("_selectedSessions", selectedSessions);
 		
 		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
 		if(wizardExt != null && showWizard) {
@@ -109,8 +78,6 @@ public class AnalysisRunner implements Runnable {
 						Toolkit.getDefaultToolkit().getScreenSize().height - padding);
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
-				
-				wizard.gotoStep(0);
 			});
 		} else {
 			processor.stepAll();

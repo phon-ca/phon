@@ -19,12 +19,16 @@
 package ca.phon.util.icons;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Transparency;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.io.File;
@@ -34,6 +38,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.GrayFilter;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import ca.hedlund.desktopicons.DesktopIconException;
@@ -247,6 +252,65 @@ public class IconManager {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Create a new icon with a single character
+	 * using the given foreground, background.  The
+	 * size of the icon will be the size of the
+	 * bounding rectangle returned by {@link FontMetrics#getStringBounds(String, java.awt.Graphics)}
+	 * 
+	 * @param c
+	 * @param font
+	 * @param foreground
+	 * @param background
+	 */
+	public ImageIcon createGlyphIcon(Character c, Font font, Color foreground, Color background) {
+		final BufferedImage bufferedImage = new BufferedImage(1, 1,
+				BufferedImage.TYPE_4BYTE_ABGR);
+		final Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT);
+		
+		g.setFont(font);
+		final FontMetrics fm = g.getFontMetrics(font);
+		final Rectangle2D charRect = fm.getStringBounds(c.toString(), g);
+		
+		final BufferedImage img = new BufferedImage((int)charRect.getWidth()+1, (int)charRect.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		final Graphics2D g2 = (Graphics2D)img.createGraphics();
+		
+		// get baseline of character
+		g2.setColor(foreground);
+		g2.drawString(c.toString(), 0, (int)(charRect.getHeight() - fm.getDescent()));
+		
+		return new ImageIcon(img);
+	}
+	
+	/**
+	 * Combine icons into an icon strip.
+	 * 
+	 * @param icons
+	 */
+	public ImageIcon createIconStrip(ImageIcon[] icons) {
+		// determine size
+		int width = 0;
+		int height = 0;
+		
+		for(Icon icon:icons) {
+			width += icon.getIconWidth();
+			height = Math.max(height, icon.getIconHeight());
+		}
+		
+		final BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+		final Graphics2D g = (Graphics2D)img.createGraphics();
+		
+		int x = 0;
+		int y = 0;
+		for(ImageIcon icon:icons) {
+			g.drawImage(icon.getImage(), x, y, null);
+			x += icon.getIconWidth();
+		}
+		
+		return new ImageIcon(img);
 	}
 	
 	/**

@@ -211,6 +211,10 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		return enabled;
 	}
 	
+	public boolean isNodeOptional(OpNode node) {
+		return getOptionalNodes().contains(node);
+	}
+	
 	public String getNodeTitle(OpNode node) {
 		final NodeInfo nodeInfo = nodeInfoMap.get(node);
 		String title = (nodeInfo != null ? nodeInfo.getTitle() : "");

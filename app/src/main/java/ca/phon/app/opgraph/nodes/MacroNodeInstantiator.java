@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.util.GraphUtils;
 import ca.gedge.opgraph.library.instantiators.Instantiator;
 import ca.gedge.opgraph.nodes.general.MacroNode;
@@ -37,6 +38,13 @@ public class MacroNodeInstantiator implements Instantiator<MacroNode> {
 				retVal = (MacroNode)graph.getVertices().get(0);
 			} else {
 				retVal = new MacroNode(graph);
+				
+				// find input nodes and publish fields
+				final OpNode projectNode = graph.getNodesByName("Project").stream().findFirst().orElse(null);
+				if(projectNode != null) {
+					// publish obj field to project
+					retVal.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
+				}
 			}
 			retVal.setName(nodeData.name);
 		} catch (IOException e) {

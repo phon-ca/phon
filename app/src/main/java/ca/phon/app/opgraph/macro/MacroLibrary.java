@@ -1,22 +1,4 @@
-/*
- * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
- * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-package ca.phon.app.opgraph.analysis;
+package ca.phon.app.opgraph.macro;
 
 import java.awt.Font;
 import java.io.File;
@@ -36,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
@@ -45,38 +28,29 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
 
-/**
- * <p>Library of analysis. These analysis are available
- * from the 'Analysis' menu button in the query and query history
- * dialogs.</p>
- * 
- * <p>Reports are stored in <code>~/Documents/Phon/reports</code>
- * by default. Reports can also be stored in the project 
- * <code>__res/reports/</code> folder.</p>
- */
-public class AnalysisLibrary {
+public class MacroLibrary {
 	
-	private final static Logger LOGGER = Logger.getLogger(AnalysisLibrary.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(MacroLibrary.class.getName());
 	
-	private final static String PROJECT_ANALYSIS_FOLDER = "analysis";
+	private final static String MACRO_FOLDER = "macro";
 	
 	/**
 	 * Report loader
 	 */
 	private ResourceLoader<URL> loader = new ResourceLoader<>();
 	
-	public AnalysisLibrary() {
+	public MacroLibrary() {
 		super();
-		loader.addHandler(new StockAnalysisHandler());
-		loader.addHandler(new UserAnalysisHandler());
+		loader.addHandler(new StockMacroHandler());
+		loader.addHandler(new StockMacroHandler());
 	}
 	
-	public List<URL> getAvailableAnalysis() {
+	public List<URL> getAvailableMacros() {
 		List<URL> retVal = new ArrayList<URL>();
 		
-		final Iterator<URL> reportIterator = loader.iterator();
-		while(reportIterator.hasNext()) {
-			final URL url = reportIterator.next();
+		final Iterator<URL> macroIterator = loader.iterator();
+		while(macroIterator.hasNext()) {
+			final URL url = macroIterator.next();
 			if(url == null) continue;
 			retVal.add(url);
 		}
@@ -86,36 +60,36 @@ public class AnalysisLibrary {
 	
 	public ResourceLoader<URL> getStockGraphs() {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new StockAnalysisHandler());
+		retVal.addHandler(new StockMacroHandler());
 		return retVal;
 	}
 	
 	public ResourceLoader<URL> getUserGraphs() {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserAnalysisHandler());
+		retVal.addHandler(new UserMacroHandler());
 		return retVal;
 	}
 	
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserAnalysisHandler(getProjectAnalysisFolder(project)));
+		retVal.addHandler(new UserMacroHandler(getProjectAnalysisFolder(project)));
 		return retVal;
 	}
 	
 	public File getProjectAnalysisFolder(Project project) {
-		return new File(project.getResourceLocation(), PROJECT_ANALYSIS_FOLDER);
+		return new File(project.getResourceLocation(), MACRO_FOLDER);
 	}
 	
-	public void setupMenu(Project project, List<SessionPath> selectedSessions, MenuElement menu) {
+	public void setupMenu(Project project, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 		
-		for(URL reportURL:getStockGraphs()) {
-			final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
+		for(URL macroURL:getStockGraphs()) {
+			final MacroAction act = new MacroAction(project, macroURL);
 			
 			try {
-				final String fullPath = URLDecoder.decode(reportURL.getPath(), "UTF-8");
+				final String fullPath = URLDecoder.decode(macroURL.getPath(), "UTF-8");
 				final String relativePath = 
-						fullPath.substring(fullPath.lastIndexOf(PROJECT_ANALYSIS_FOLDER + "/")+PROJECT_ANALYSIS_FOLDER.length()+1);
+						fullPath.substring(fullPath.lastIndexOf(MACRO_FOLDER + "/")+MACRO_FOLDER.length()+1);
 				
 				String menuPath = ".";
 				int lastFolderIndex = relativePath.lastIndexOf('/');
@@ -136,7 +110,7 @@ public class AnalysisLibrary {
 			try {
 				final URL reportURL = userGraphIterator.next();
 				final URI relativeURI = 
-						(new File(UserAnalysisHandler.DEFAULT_USER_ANALYSIS_FOLDER)).toURI().relativize(reportURL.toURI());
+						(new File(UserMacroHandler.DEFAULT_USER_MACRO_FOLDER)).toURI().relativize(reportURL.toURI());
 				
 				final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
 				String menuPath = ".";
@@ -145,8 +119,7 @@ public class AnalysisLibrary {
 					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
 				}
 				
-				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
-				act.setShowWizard(selectedSessions.size() == 0);
+				final MacroAction act = new MacroAction(project, reportURL);
 				userMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -156,7 +129,7 @@ public class AnalysisLibrary {
 			builder.addSeparator(".", "user_library");
 			final JMenuItem userLibItem = builder.addItem(".@user_library", "-- User Library --");
 			userLibItem.setFont(userLibItem.getFont().deriveFont(Font.BOLD));
-			final File userLibFolder = new File(UserAnalysisHandler.DEFAULT_USER_ANALYSIS_FOLDER);
+			final File userLibFolder = new File(UserMacroHandler.DEFAULT_USER_MACRO_FOLDER);
 			userLibItem.setToolTipText("Show folder " + userLibFolder.getAbsolutePath());
 			userLibItem.addActionListener( (e) -> {
 				try {
@@ -184,8 +157,7 @@ public class AnalysisLibrary {
 					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
 				}
 				
-				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
-				act.setShowWizard(selectedSessions.size() == 0);
+				final MacroAction act = new MacroAction(project, reportURL);
 				projectMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -208,20 +180,19 @@ public class AnalysisLibrary {
 		}
 		
 		builder.addSeparator(".", "composer");
-		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Analysis Composer...");
-		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
+		final PhonUIAction showComposerAct = new PhonUIAction(MacroLibrary.class, "showComposer");
+		showComposerAct.putValue(PhonUIAction.NAME, "Macro Composer...");
+		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new macro using Composer...");
 		builder.addItem(".@composer", showComposerAct);
 	}
 	
 	public static void showComposer() {
-		final AnalysisOpGraphEditorModel editorModel = new AnalysisOpGraphEditorModel();
+		final DefaultOpgraphEditorModel editorModel = new DefaultOpgraphEditorModel();
 		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
 		
 		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
 		if(project != null) {
 			editor.putExtension(Project.class, project);
-			((AnalysisOpGraphEditorModel)editor.getModel()).getSessionSelector().setProject(project);
 		}
 		
 		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
@@ -229,5 +200,5 @@ public class AnalysisLibrary {
 		editor.setSize(1024, 768);
 		editor.setVisible(true);
 	}
-	
+
 }

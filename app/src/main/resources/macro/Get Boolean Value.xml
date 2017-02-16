@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes">
+    <graph id="root">
+        <ogcn:macro id="1b7121a80cf9493d" name="Get Boolean Value" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="5f216536">
+                <node id="f8a185da7e944b40" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="b5bb7285fcd94f77" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="128">
+                            <oga:default for="arg1" type="java.lang.String"/>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <node id="c825261c41604b57" name="Map#get(Object)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="159" y="15"/>
+                    </extensions>
+                </node>
+                <node id="3f6c9697d4fa454c" name="To Boolean" type="class:ca.gedge.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="317" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="c825261c41604b57" destField="arg1" source="b5bb7285fcd94f77" sourceField="value"/>
+                <link dest="c825261c41604b57" destField="obj" source="f8a185da7e944b40" sourceField="obj"/>
+                <link dest="3f6c9697d4fa454c" destField="obj" source="c825261c41604b57" sourceField="value"/>
+            </graph>
+            <ogcn:published_input field="obj" name="parameters" ref="f8a185da7e944b40"/>
+            <ogcn:published_input field="arg1" name="paramName" ref="b5bb7285fcd94f77"/>
+            <ogcn:published_output field="obj" name="bValue" ref="3f6c9697d4fa454c"/>
+            <extensions>
+                <oga:meta x="193" y="148"/>
+            </extensions>
+        </ogcn:macro>
+        <extensions>
+            <nes:settings type="ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>

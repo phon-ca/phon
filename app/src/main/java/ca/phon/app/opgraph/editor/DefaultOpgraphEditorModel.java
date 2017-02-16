@@ -38,7 +38,9 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.components.canvas.NodeStyle;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
+import ca.phon.app.opgraph.macro.MacroLibrary;
 import ca.phon.app.opgraph.nodes.MacroNodeData;
+import ca.phon.app.opgraph.nodes.MacroNodeInstantiator;
 import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
@@ -79,6 +81,7 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 		addTableScriptNodes();
 		addAddColumnScriptNodes();
 		
+		addMacroNodes();
 		addAnalysisNodes();
 		addReportNodes();
 		
@@ -88,6 +91,12 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 	@Override
 	public String getTitle() {
 		return "Macro Composer";
+	}
+	
+	private void addMacroNodes() {
+		final MacroLibrary library = new MacroLibrary();
+		library.getStockGraphs().forEach(this::addMacroNodeToLibrary);
+		library.getUserGraphs().forEach(this::addMacroNodeToLibrary);
 	}
 	
 	private void addAnalysisNodes() {
@@ -212,6 +221,20 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 			getNodeLibrary().getLibrary().put(nodeData);
 		} catch (URISyntaxException e) {
 			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+		}
+	}
+	
+	private void addMacroNodeToLibrary(URL url) {
+		try {
+			String filename = URLDecoder.decode(url.getFile(), "UTF-8");
+			String name = FilenameUtils.getBaseName(filename);
+			
+			final URI uri = new URI("class", MacroNode.class.getName(), name);
+			
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Macro", new MacroNodeInstantiator());
+			getNodeLibrary().getLibrary().put(nodeData);
+		} catch (UnsupportedEncodingException | URISyntaxException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
 	
