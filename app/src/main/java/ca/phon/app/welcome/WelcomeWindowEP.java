@@ -38,7 +38,7 @@ public class WelcomeWindowEP implements IPluginEntryPoint {
 		final Runnable onEDT =  () -> {
 			final WelcomeWindow window = new WelcomeWindow();
 			window.pack();
-			window.setSize(900, 700);
+			window.setSize(900, 740);
 			window.centerWindow();
 			window.setVisible(true);
 		};
