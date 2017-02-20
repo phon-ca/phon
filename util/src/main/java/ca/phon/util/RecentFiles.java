@@ -57,6 +57,28 @@ public class RecentFiles implements Iterable<File> {
 		return this.maxFiles;
 	}
 	
+	public int getFileCount() {
+		return fileHistory.size();
+	}
+	
+	public File getFileAt(int idx) {
+		return fileHistory.get(idx);
+	}
+	
+	/**
+	 * Remove any files which cannot be located from the
+	 * history.
+	 * 
+	 */
+	public void purgeFilesNotFound() {
+		final Iterator<File> itr = iterator();
+		while(itr.hasNext()) {
+			final File f = itr.next();
+			if(!f.exists())
+				itr.remove();
+		}
+	}
+	
 	public void setPropertyKey(String key) {
 		this.propertyKey = key;
 		loadHistory();
