@@ -332,6 +332,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 			htmlView.getEngine().loadContent(logBuffer.getText());
 			
 			SwingUtilities.invokeLater(() -> {
+				currentView = fxPanel;
 				cardLayout.show(contentPanel, HTML_VIEW_ID);
 				firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 			});

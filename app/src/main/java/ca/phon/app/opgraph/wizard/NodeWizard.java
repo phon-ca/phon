@@ -995,6 +995,7 @@ public class NodeWizard extends WizardFrame {
 		@Override
 		protected void done() {
 			panel.showHtml();
+			bufferPanel.getBufferTable().repaint();
 		}
 		
 	}

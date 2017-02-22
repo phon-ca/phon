@@ -34,6 +34,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -121,6 +122,10 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	
 	public JSplitPane getSplitPane() {
 		return this.splitPane;
+	}
+	
+	public JTable getBufferTable() {
+		return this.bufferList;
 	}
 	
 	private JPanel createNoSelectionPanel() {
