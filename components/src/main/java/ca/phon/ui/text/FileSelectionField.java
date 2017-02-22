@@ -20,6 +20,9 @@ package ca.phon.ui.text;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.SystemColor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
@@ -102,12 +105,21 @@ public class FileSelectionField extends JPanel {
 	}
 	
 	private void init() {
-		final FormLayout layout = new FormLayout("fill:pref:grow, pref", "pref");
-		final CellConstraints cc = new CellConstraints();
+		final GridBagLayout layout = new GridBagLayout();
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weighty = 1.0;
 		setLayout(layout);
 		
 		textField = new PromptedTextField();
-		add(textField, cc.xy(1,1));
+		gbc.weightx = 1.0;
+		add(textField, gbc);
 		
 		final ImageIcon browseIcon = 
 				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
@@ -118,18 +130,13 @@ public class FileSelectionField extends JPanel {
 		browseButton = new JButton(browseAct);
 		browseButton.putClientProperty("JButton.buttonType", "square");
 		browseButton.setCursor(Cursor.getDefaultCursor());
-		add(browseButton, cc.xy(2,1));
+		gbc.gridx++;
+		gbc.weightx = 0.0;
+		add(browseButton, gbc);
 		
-		setBorder(textField.getBorder());
-		textField.setBorder(null);
-		
-		textField.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				final File f = getSelectedFile();
-				setFile(f);
-			}
+		textField.addActionListener( (e) -> {
+			final File f = getSelectedFile();
+			setFile(f);
 		});
 	}
 

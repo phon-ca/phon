@@ -19,6 +19,9 @@
 package ca.phon.ui.text;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -112,9 +115,23 @@ public class DatePicker extends JComponent {
 		monthViewAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show calendar");
 		monthViewButton = new JButton(monthViewAct);
 		
-		setLayout(new BorderLayout());
-		add(textField, BorderLayout.CENTER);
-		add(monthViewButton, BorderLayout.EAST);
+		final GridBagLayout layout = new GridBagLayout();
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weighty = 1.0;
+		gbc.weightx = 1.0;
+		setLayout(layout);
+		
+		add(textField, gbc);
+		gbc.gridx++;
+		gbc.weightx = 0.0;
+		add(monthViewButton, gbc);
 	}
 	
 	
