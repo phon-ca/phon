@@ -39,6 +39,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -83,6 +84,7 @@ import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.util.VersionInfo;
 
 /**
  * A local on-disk project
@@ -102,7 +104,9 @@ public class LocalProject implements Project, ProjectRefresh {
 	 * project.xml data
 	 */
 	private ProjectType projectData;
-	private final static String projectDataFile = "project.xml";
+	public final static String PROJECT_XML_FILE = "project.xml";
+	
+	public final static String PROJECT_PROPERTIES_FILE = "props";
 	
 	private final static String sessionTemplateFile = "__sessiontemplate.xml";
 	
@@ -149,7 +153,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	private ProjectType loadProjectData() throws ProjectConfigurationException {
 		final ObjectFactory factory = new ObjectFactory();
 		
-		final File dataFile = new File(getFolder(), projectDataFile);
+		final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
 		
 		if(dataFile.exists()) {
 			try {
@@ -170,6 +174,19 @@ public class LocalProject implements Project, ProjectRefresh {
 			} catch (XMLStreamException e) {
 				throw new ProjectConfigurationException(e);
 			}
+		}
+		
+		
+		final File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
+		if(propsFile.exists()) {
+			// load properties
+			Properties props = new Properties();
+			try {
+				props.load(new FileInputStream(propsFile));
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, "Could not load project properties. " + e.getLocalizedMessage(), e);
+			}
+			putExtension(Properties.class, props);
 		}
 		
 		final ProjectType retVal = factory.createProjectType();
@@ -193,7 +210,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			
-			final File dataFile = new File(getFolder(), projectDataFile);
+			final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
 			
 			final ProjectType projectData = getProjectData();
 			// HACK to ensure compatibility with Phon 1.6.2
@@ -204,6 +221,17 @@ public class LocalProject implements Project, ProjectRefresh {
 			marshaller.marshal(projectDataEle, dataFile);
 		} catch (JAXBException e) {
 			throw new IOException(e);
+		}
+		
+		// save properties
+		final Properties properties = getExtension(Properties.class);
+		if(properties != null) {
+			final File propFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
+			try {
+				properties.store(new FileOutputStream(propFile), "Phon " + VersionInfo.getInstance().getLongVersion());
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
 		}
 	}
 	
