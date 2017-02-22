@@ -42,6 +42,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -121,6 +122,13 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	private volatile transient boolean modified = false;
 	
 	/**
+	 * Messages for unsaved data
+	 */
+	private String unsavedChangesTitle = "Save data?";
+	
+	private String unsavedChangesMessage = "Save changes before close?";
+	
+	/**
 	 * Creates a new CommonModuleFrame
 	 *
 	 */
@@ -138,7 +146,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		super(title);
 		
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-//		this.setFocusableWindowState(false);
 		
 		// assign the title
 		this.title = title;
@@ -146,8 +153,13 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		// make the frame resizable
 		this.setResizable(true);
 		
-		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
-		setJMenuBar(menuBar);
+		// defer menu creation until after window construction
+		// some menu handlers may require information not created
+		// until sub-class construction is complete
+		SwingUtilities.invokeLater(() -> {
+			final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
+			setJMenuBar(menuBar);
+		});
 		
 		this.addWindowListener(new WindowListener() {
 
@@ -206,14 +218,30 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		newWindowCreated(this);
 	}
 	
+	public String getUnsavedChangesTitle() {
+		return this.unsavedChangesTitle;
+	}
+	
+	public void setUnsavedChangesTitle(String title) {
+		this.unsavedChangesTitle = title;
+	}
+	
+	public String getUnsavedChangesMessage() {
+		return this.unsavedChangesMessage;
+	}
+	
+	public void setUnsavedChangesMessage(String message) {
+		this.unsavedChangesMessage = message;
+	}
+	
 	public void close() {
 		if(hasUnsavedChanges()) {
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setParentWindow(this);
 			props.setOptions(MessageDialogProperties.yesNoCancelOptions);
-			props.setTitle("Save changes?");
-			props.setHeader("Save changes?");
-			props.setMessage("Save changes before closing?");
+			props.setTitle(getTitle());
+			props.setHeader(getUnsavedChangesTitle());
+			props.setMessage(getUnsavedChangesMessage());
 			props.setRunAsync(false);
 			
 			int retVal = NativeDialogs.showMessageDialog(props);

@@ -182,6 +182,9 @@ public class NodeWizard extends WizardFrame {
 		setBreadcrumbVisible(true);
 		setWindowName(title);
 		
+		setUnsavedChangesTitle("Save data?");
+		setUnsavedChangesMessage("Save buffers before closing?");
+		
 		this.processor = processor;
 		this.graph = graph;
 		init();
