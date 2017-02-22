@@ -68,8 +68,6 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 	
 	private final static Logger LOGGER = Logger.getLogger(PrintBufferNode.class.getName());
 	
-	public static final String BUFFERS_KEY = "_buffers";
-	
 	private InputField dataField =
 			new InputField("data", "Data to print", true, false, Object.class);
 	
@@ -128,7 +126,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		}
 		
 		final AtomicReference<BufferPanelContainer> bufferPanelContainerRef =
-				new AtomicReference<BufferPanelContainer>((BufferPanelContainer)context.get(BUFFERS_KEY));
+				new AtomicReference<BufferPanelContainer>((BufferPanelContainer)context.get(BufferNodeConstants.BUFFER_CONTEXT_KEY));
 		// update buffer name based on current list of buffers
 		final Collection<String> currentBuffers = bufferPanelContainerRef.get().getBufferNames();
 		String tempName = bufferInput;

@@ -84,6 +84,7 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.log.actions.SaveAllBuffersAction;
+import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.query.ScriptPanel;
@@ -683,7 +684,7 @@ public class NodeWizard extends WizardFrame {
 	}
 
 	protected void setupContext(OpContext ctx) {
-		ctx.put(PrintBufferNode.BUFFERS_KEY, bufferPanel);
+		ctx.put(BufferNodeConstants.BUFFER_CONTEXT_KEY, bufferPanel);
 	}
 	
 	protected void setupOptionals(OpContext ctx) {
