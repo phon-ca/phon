@@ -24,7 +24,7 @@
             </extensions>
         </node>
         <ogcn:macro id="56a57207" name="MarkNuclei" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="45b35b2c">
+            <graph id="41cee07b">
                 <node id="65764680" name="MarkNuclei #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -59,7 +59,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7cc157d9" name="MarkOnset" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4829abdc">
+            <graph id="1d0b981">
                 <node id="378313bc" name="MarkOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -76,7 +76,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7af8be78" name="MaxOnset" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4b4dc8e1">
+            <graph id="523d229d">
                 <node id="43573cf2" name="MaxOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -97,7 +97,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="4262e2d3" name="MarkCoda" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="f293bb6">
+            <graph id="576314d0">
                 <node id="2a6ced11" name="MarkCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -114,11 +114,11 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="12e8d27d" name="MarkLA1" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="45f440ce">
+            <graph id="4cd7e0e0">
                 <node id="4fbf3c9f" name="MarkLA1 #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[^(LA={strident,voiceless}.:O)]]></oga:property>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[^(LA={strident}.:O)]]></oga:property>
                         </oga:settings>
                         <oga:meta x="15" y="15"/>
                     </extensions>
@@ -126,12 +126,16 @@
                 <node id="1d0b9345" name="MarkLA1 #2" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:sctype("C|N|SyllableStressMarker|SyllableBoundaryMarker")(LA={strident,voiceless}:U).:O]]></oga:property>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:sctype("C|N|SyllableStressMarker|SyllableBoundaryMarker")(LA={strident}:U).:O]]></oga:property>
                         </oga:settings>
                         <oga:meta x="203" y="15"/>
                     </extensions>
                 </node>
                 <link dest="1d0b9345" destField="ipa" source="4fbf3c9f" sourceField="ipa out"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+                    <ops:settings lang="slv" name="Slovenian"/>
+                </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="4fbf3c9f"/>
             <ogcn:published_output field="ipa out" name="ipa" ref="1d0b9345"/>
@@ -140,7 +144,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="3d74ae85" name="MarkRA" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6308adce">
+            <graph id="661171a8">
                 <node id="65e1c30a" name="MarkRA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -157,7 +161,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="3d80c1dc" name="FixLARA" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="526a3da0">
+            <graph id="48ff9255">
                 <node id="2effbce0" name="FixLARA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
