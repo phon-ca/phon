@@ -1,7 +1,6 @@
 package ca.phon.app.opgraph.nodes.log;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.SwingUtilities;
@@ -10,46 +9,32 @@ import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferPanelContainer;
 
 /**
- * Node for reading the current text of a given buffer.
- *
+ * Close the buffer with given name.
+ * 
  */
-@OpNodeInfo(name="Get Buffer", description="Get text contents of given buffer.", category=BufferNodeConstants.BUFFER_NODE_LIBRARY_CATEGORY, showInLibrary=true)
-public class GetBufferNode extends OpNode {
+@OpNodeInfo(name="Close Buffer", description="Close buffer with given name", category=BufferNodeConstants.BUFFER_NODE_LIBRARY_CATEGORY, showInLibrary=true)
+public class CloseBufferNode extends OpNode {
 	
 	private final InputField bufferNameField = 
-			new InputField("buffer", "Buffer name", true, true, String.class);
-	
-	private final OutputField bufferTextField =
-			new OutputField("text", "Buffer data as text", true, String.class);
-	
-	public GetBufferNode() {
+			new InputField("buffer", "Buffer name", false, true, String.class);
+
+	public CloseBufferNode() {
 		super();
 		
 		putField(bufferNameField);
-		putField(bufferTextField);
 	}
 
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
-		final String bufferInput =
-				(context.get(bufferNameField) != null ? (String)context.get(bufferNameField) : "default");
+		final String bufferInput = (String)context.get(bufferNameField);
 		
 		final AtomicReference<BufferPanelContainer> bufferPanelContainerRef =
 				new AtomicReference<BufferPanelContainer>((BufferPanelContainer)context.get(BufferNodeConstants.BUFFER_CONTEXT_KEY));
-		final Runnable onEDT = () -> {
-			final BufferPanel bufferPanel = bufferPanelContainerRef.get().getBuffer(bufferInput);
-			if(bufferPanel != null) {
-				context.put(bufferTextField, bufferPanel.getLogBuffer().getText());
-			} else {
-				context.put(bufferTextField, "");
-			}
-		};
+		final Runnable onEDT = () -> bufferPanelContainerRef.get().removeBuffer(bufferInput);
 		if(SwingUtilities.isEventDispatchThread())
 			onEDT.run();
 		else
@@ -59,5 +44,5 @@ public class GetBufferNode extends OpNode {
 				throw new ProcessingException(null, e);
 			}
 	}
-
+	
 }

@@ -7,8 +7,9 @@ ca.phon.app.opgraph.nodes.query.QueryHistoryNode
 ca.phon.app.opgraph.nodes.table.InventoryNode
 ca.phon.app.opgraph.nodes.table.ResultsToTableNode
 ca.phon.app.opgraph.nodes.table.SortNode
-ca.phon.app.opgraph.nodes.log.PrintBufferNode
+ca.phon.app.opgraph.nodes.log.CloseBufferNode
 ca.phon.app.opgraph.nodes.log.GetBufferNode
+ca.phon.app.opgraph.nodes.log.PrintBufferNode
 ca.phon.app.opgraph.nodes.table.IPAVariabilityNode
 ca.phon.app.opgraph.nodes.table.HomophonyAnalysis
 ca.phon.app.opgraph.nodes.table.AddColumnNode

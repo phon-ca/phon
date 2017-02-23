@@ -60,7 +60,7 @@ import ca.phon.ui.HidablePanel;
 
 @OpNodeInfo(
 		name="Print to Buffer",
-		category="Report",
+		category=BufferNodeConstants.BUFFER_NODE_LIBRARY_CATEGORY,
 		description="Print given data to the buffer specified in settings.",
 		showInLibrary=true
 )
@@ -119,7 +119,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		final String dataVal = FormatterUtil.format(data);
 		
 		final StringBuffer dataBuffer = new StringBuffer();
-		if(templateVal == null || templateVal.trim().length() == 0) {
+		if(templateVal == null || templateVal.trim().length() == 0 || templateVal.equals(DEFAULT_TEMPLATE)) {
 			dataBuffer.append(dataVal);
 		} else {
 			dataBuffer.append(templateVal.replaceAll("\\$DATA", dataVal));
