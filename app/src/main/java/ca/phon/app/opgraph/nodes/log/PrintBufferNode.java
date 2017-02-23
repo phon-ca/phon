@@ -122,7 +122,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		if(templateVal == null || templateVal.trim().length() == 0 || templateVal.equals(DEFAULT_TEMPLATE)) {
 			dataBuffer.append(dataVal);
 		} else {
-			dataBuffer.append(templateVal.replaceAll("\\$DATA", dataVal));
+			dataBuffer.append(templateVal.replace("$DATA", dataVal));
 		}
 		
 		final AtomicReference<BufferPanelContainer> bufferPanelContainerRef =

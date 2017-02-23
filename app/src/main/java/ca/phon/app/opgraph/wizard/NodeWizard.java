@@ -256,7 +256,6 @@ public class NodeWizard extends WizardFrame {
 		final JButton btnNext = new NodeWizardBreadcrumbButton();
 		btnNext.setFont(FontPreferences.getTitleFont());
 		btnNext.setText("Next");
-		btnNext.setBackground(Color.yellow);
 		btnNext.addActionListener( (e) -> next() );
 		
 		btnCancel = new NodeWizardBreadcrumbButton();
@@ -265,6 +264,8 @@ public class NodeWizard extends WizardFrame {
 		btnCancel.setBackground(Color.red);
 		btnCancel.setForeground(Color.white);
 		btnCancel.addActionListener( (e) -> cancel() );
+		
+		breadCrumbViewer.setStateBackground(btnNext.getBackground().darker());
 		
 //		final NodeWizardBreadcrumbButton gotoReportBtn = new NodeWizardBreadcrumbButton();
 //		gotoReportBtn.setBackground(Color.green);
