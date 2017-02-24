@@ -103,25 +103,80 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		final List<OutputField> fixedOutputs =
 				getOutputFields().stream().filter( OutputField::isFixed ).collect( Collectors.toList() );
 		
-		removeAllInputFields();
-		removeAllOutputFields();
+//		removeAllInputFields();
+//		removeAllOutputFields();
 		
+		// setup fields on temporary node
+		final OpNode tempNode = new OpNode("temp", "temp", "temp") {
+			@Override
+			public void operate(OpContext context) throws ProcessingException {
+			}
+		};
 		for(InputField field:fixedInputs) {
-			putField(field);
+			tempNode.putField(field);
 		}
 		for(OutputField field:fixedOutputs) {
-			putField(field);
+			tempNode.putField(field);
 		}
-		
 		try {
 			final Scriptable scope = scriptContext.getEvaluatedScope();
 			scriptContext.installParams(scope);
 			
-			final InputFields inputFields = new InputFields(this);
-			final OutputFields outputFields = new OutputFields(this);
-			scriptContext.callFunction(scope, "init", inputFields, outputFields);
+			final InputFields inputFields = new InputFields(tempNode);
+			final OutputFields outputFields = new OutputFields(tempNode);
+			
+			if(scriptContext.hasFunction(scope, "init", 2)) {
+				scriptContext.callFunction(scope, "init", inputFields, outputFields);
+			}
 		} catch (PhonScriptException e) {
-			LOGGER.warning(e.getLocalizedMessage());
+			LOGGER.log(Level.SEVERE, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+		}
+		
+		// check inputs
+		for(InputField currentInputField:getInputFields().toArray(new InputField[0])) {
+			final InputField tempInputField = tempNode.getInputFieldWithKey(currentInputField.getKey());
+			if(tempInputField != null) {
+				// copy field information
+				currentInputField.setDescription(tempInputField.getDescription());
+				currentInputField.setFixed(tempInputField.isFixed());
+				currentInputField.setOptional(tempInputField.isOptional());
+				currentInputField.setValidator(tempInputField.getValidator());
+			} else {
+				// remove field from node
+				removeField(currentInputField);
+			}
+		}
+		
+		final List<String> tempInputKeys = tempNode.getInputFields()
+				.stream().map( InputField::getKey ).collect( Collectors.toList() );
+		// add new input fields
+		for(String tempInputKey:tempInputKeys) {
+			final InputField currentInput = getInputFieldWithKey(tempInputKey);
+			if(currentInput == null) {
+				// add new field to node
+				putField(tempInputKeys.indexOf(tempInputKey), tempNode.getInputFieldWithKey(tempInputKey));
+			}
+		}
+		
+		// check outputs
+		for(OutputField currentOutputField:getOutputFields().toArray(new OutputField[0])) {
+			final OutputField tempOutputField = tempNode.getOutputFieldWithKey(currentOutputField.getKey());
+			if(tempOutputField != null) {
+				currentOutputField.setDescription(tempOutputField.getDescription());
+				currentOutputField.setFixed(tempOutputField.isFixed());
+				currentOutputField.setOutputType(tempOutputField.getOutputType());
+			} else {
+				removeField(currentOutputField);
+			}
+		}
+		
+		final List<String> tempOutputKeys = tempNode.getOutputFields()
+				.stream().map( OutputField::getKey ).collect( Collectors.toList() );
+		for(String tempOutputKey:tempOutputKeys) {
+			final OutputField currentOutput = getOutputFieldWithKey(tempOutputKey);
+			if(currentOutput == null) {
+				putField(tempOutputKeys.indexOf(tempOutputKey), tempNode.getOutputFieldWithKey(tempOutputKey));
+			}
 		}
 	}
 

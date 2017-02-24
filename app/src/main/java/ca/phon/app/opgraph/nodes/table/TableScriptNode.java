@@ -44,6 +44,7 @@ import org.mozilla.javascript.Scriptable;
 
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
+import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.OutputField;
 import ca.gedge.opgraph.app.GraphDocument;
@@ -181,25 +182,77 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		final List<OutputField> fixedOutputs =
 				getOutputFields().stream().filter( OutputField::isFixed ).collect( Collectors.toList() );
 		
-		removeAllInputFields();
-		removeAllOutputFields();
-		
+		// setup fields on temporary node
+		final OpNode tempNode = new OpNode("temp", "temp", "temp") {
+			@Override
+			public void operate(OpContext context) throws ProcessingException {
+			}
+		};
 		for(InputField field:fixedInputs) {
-			putField(field);
+			tempNode.putField(field);
 		}
 		for(OutputField field:fixedOutputs) {
-			putField(field);
+			tempNode.putField(field);
 		}
-		
 		try {
 			final Scriptable scope = scriptContext.getEvaluatedScope();
 			scriptContext.installParams(scope);
 			
-			final InputFields inputFields = new InputFields(this);
-			final OutputFields outputFields = new OutputFields(this);
-			scriptContext.callFunction(scope, "init", inputFields, outputFields);
+			final InputFields inputFields = new InputFields(tempNode);
+			final OutputFields outputFields = new OutputFields(tempNode);
+			
+			if(scriptContext.hasFunction(scope, "init", 2)) {
+				scriptContext.callFunction(scope, "init", inputFields, outputFields);
+			}
 		} catch (PhonScriptException e) {
-			LOGGER.fine(e.getLocalizedMessage());
+			LOGGER.log(Level.SEVERE, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+		}
+		
+		// check inputs
+		for(InputField currentInputField:getInputFields()) {
+			final InputField tempInputField = tempNode.getInputFieldWithKey(currentInputField.getKey());
+			if(tempInputField != null) {
+				// copy field information
+				currentInputField.setDescription(tempInputField.getDescription());
+				currentInputField.setFixed(tempInputField.isFixed());
+				currentInputField.setOptional(tempInputField.isOptional());
+				currentInputField.setValidator(tempInputField.getValidator());
+			} else {
+				// remove field from node
+				removeField(currentInputField);
+			}
+		}
+		
+		final List<String> tempInputKeys = tempNode.getInputFields()
+				.stream().map( InputField::getKey ).collect( Collectors.toList() );
+		// add new input fields
+		for(String tempInputKey:tempInputKeys) {
+			final InputField currentInput = getInputFieldWithKey(tempInputKey);
+			if(currentInput == null) {
+				// add new field to node
+				putField(tempInputKeys.indexOf(tempInputKey), tempNode.getInputFieldWithKey(tempInputKey));
+			}
+		}
+		
+		// check outputs
+		for(OutputField currentOutputField:getOutputFields()) {
+			final OutputField tempOutputField = tempNode.getOutputFieldWithKey(currentOutputField.getKey());
+			if(tempOutputField != null) {
+				currentOutputField.setDescription(tempOutputField.getDescription());
+				currentOutputField.setFixed(tempOutputField.isFixed());
+				currentOutputField.setOutputType(tempOutputField.getOutputType());
+			} else {
+				removeField(currentOutputField);
+			}
+		}
+		
+		final List<String> tempOutputKeys = tempNode.getOutputFields()
+				.stream().map( OutputField::getKey ).collect( Collectors.toList() );
+		for(String tempOutputKey:tempOutputKeys) {
+			final OutputField currentOutput = getOutputFieldWithKey(tempOutputKey);
+			if(currentOutput == null) {
+				putField(tempOutputKeys.indexOf(tempOutputKey), tempNode.getOutputFieldWithKey(tempOutputKey));
+			}
 		}
 	}
 	
@@ -281,7 +334,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		try {
 			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
 		} catch (PhonScriptException e) {
-			throw new ProcessingException(null, e);
+			throw new ProcessingException(null, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
 		}
 		
 		final Map<?, ?> inputParams = (Map<?,?>)context.get(paramsInputField);
@@ -308,7 +361,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		
 		// ensure query form validates (if available)
 		if(scriptPanel != null && !scriptPanel.checkParams()) {
-			throw new ProcessingException(null, "Invalid settings");
+			throw new ProcessingException(null, getName() + " (" + getId() + "): " + "Invalid settings");
 		}
 		
 		try {
@@ -317,7 +370,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 			
 			ctx.callFunction(scope, "tableOp", context, table);
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			throw new ProcessingException(null, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
 		}
 		
 		context.put(tableOutput, table);
