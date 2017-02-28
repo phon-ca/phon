@@ -19,6 +19,7 @@
 package ca.phon.app.opgraph.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import javax.swing.JScrollPane;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.GraphEditorModel;
+import ca.gedge.opgraph.app.components.canvas.GraphCanvas;
 import ca.gedge.opgraph.library.NodeLibrary;
 import ca.phon.app.opgraph.editor.library.LibraryView;
 import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
@@ -64,7 +66,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			viewMap.put("Canvas", canvasPanel);
 			viewMap.put("Console", new JScrollPane(getConsolePanel()));
 			viewMap.put("Debug", new JScrollPane(getDebugInfoPanel()));
-			viewMap.put("Defaults", new JScrollPane(getNodeDefaults()));
+			viewMap.put("Connections", new JScrollPane(getNodeFieldsPanel()));
 			viewMap.put("Library", getLibraryView());
 			viewMap.put("Settings", getNodeSettings());
 			viewMap.put("Outline", getGraphOutline());
@@ -120,6 +122,13 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 		return getViewMap().get(viewName);
 	}
 	
+	@Override
+	public GraphCanvas getCanvas() {
+		final GraphCanvas retVal = super.getCanvas();
+		retVal.setPreferredSize(new Dimension(4096, 4096));
+		return retVal;
+	}
+	
 	/**
 	 * Get initial view location as a rectangle.
 	 * 
@@ -144,7 +153,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			retVal.setBounds(0, 200, 200, 200);
 			break;
 			
-		case "Defaults":
+		case "Connections":
 			retVal.setBounds(800, 200, 200, 200);
 			break;
 			
@@ -184,7 +193,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			retVal = true;
 			break;
 			
-		case "Defaults":
+		case "Connections":
 			retVal = true;
 			break;
 			

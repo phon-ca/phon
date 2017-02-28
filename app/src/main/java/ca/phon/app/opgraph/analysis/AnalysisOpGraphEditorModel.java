@@ -37,15 +37,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.components.GraphOutline;
 import ca.gedge.opgraph.app.components.OpGraphTreeModel;
+import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
+import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.wizard.ReportTemplateView;
@@ -75,6 +80,22 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		this(new OpGraph());
 	}
 	
+	public AnalysisOpGraphEditorModel(OpGraph opgraph) {
+		super(opgraph);
+		
+		WizardExtension ext = opgraph.getExtension(WizardExtension.class);
+		if(ext != null && !(ext instanceof AnalysisWizardExtension)) {
+			throw new IllegalArgumentException("Graph is not an analysis document.");
+		}
+		if(ext == null) {
+			ext = new AnalysisWizardExtension(opgraph);
+			opgraph.putExtension(WizardExtension.class, ext);
+		}
+		wizardExt = (AnalysisWizardExtension)ext;
+		
+		init();
+	}
+
 	private void init() {
 		final GraphOutline graphOutline = getGraphOutline();
 		final OpGraphTreeModel model = graphOutline.getModel();
@@ -99,24 +120,25 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		
 		final AnalysisCellRenderer renderer = new AnalysisCellRenderer(graphOutline.getTree().getCellRenderer());
 		graphOutline.getTree().setCellRenderer(renderer);
+		
+		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
+			final UndoableEdit edit = e.getEdit();
+			if(edit instanceof AddNodeEdit) {
+				final OpNode addedNode = ((AddNodeEdit)edit).getNode();
+				if(addedNode instanceof CompositeNode) {
+					final OpGraph addedGraph = ((CompositeNode)addedNode).getGraph();
+					
+					final WizardExtension wizardExt = addedGraph.getExtension(WizardExtension.class);
+					if(wizardExt != null && wizardExt instanceof AnalysisWizardExtension) {
+						final AnalysisWizardExtension analysisExt = (AnalysisWizardExtension)wizardExt;
+						
+						
+					}
+				}
+			}
+		});
 	}
 
-	public AnalysisOpGraphEditorModel(OpGraph opgraph) {
-		super(opgraph);
-		
-		WizardExtension ext = opgraph.getExtension(WizardExtension.class);
-		if(ext != null && !(ext instanceof AnalysisWizardExtension)) {
-			throw new IllegalArgumentException("Graph is not an analysis document.");
-		}
-		if(ext == null) {
-			ext = new AnalysisWizardExtension(opgraph);
-			opgraph.putExtension(WizardExtension.class, ext);
-		}
-		wizardExt = (AnalysisWizardExtension)ext;
-		
-		init();
-	}
-	
 	public SessionSelector getSessionSelector() {
 		return this.sessionSelector;
 	}
@@ -125,6 +147,11 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		return getDocument().getRootGraph().getExtension(WizardExtension.class);
 	}
 	
+	@Override
+	public GraphOutline getGraphOutline() {
+		return super.getGraphOutline();
+	}
+
 	@Override
 	protected Map<String, JComponent> getViewMap() {
 		final Map<String, JComponent> retVal = super.getViewMap();
@@ -188,7 +215,7 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 			retVal.setBounds(0, 200, 200, 200);
 			break;
 			
-		case "Defaults":
+		case "Connections":
 			retVal.setBounds(800, 200, 200, 200);
 			break;
 			

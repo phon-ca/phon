@@ -78,9 +78,9 @@ public class ReportTemplateView extends JPanel {
 	}
 
 	private void updateTemplate() {
-		final ReportTemplateEdit edit = new ReportTemplateEdit(getWizardExtension(),
-				reportNames[templateNameBox.getSelectedIndex()], textArea.getText());
-		getDocument().getUndoSupport().postEdit(edit);
+//		final ReportTemplateEdit edit = new ReportTemplateEdit(getWizardExtension(),
+//				reportNames[templateNameBox.getSelectedIndex()], textArea.getText());
+//		getDocument().getUndoSupport().postEdit(edit);
 	}
 	
 	private final DocumentListener docListener = new DocumentListener() {
