@@ -53,6 +53,7 @@ import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
 import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.session.SessionSelector;
@@ -124,6 +125,9 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
 			final UndoableEdit edit = e.getEdit();
 			if(edit instanceof AddNodeEdit) {
+				final AnalysisWizardExtension graphExtension = 
+						(AnalysisWizardExtension)getWizardExtension();
+				
 				final OpNode addedNode = ((AddNodeEdit)edit).getNode();
 				if(addedNode instanceof CompositeNode) {
 					final OpGraph addedGraph = ((CompositeNode)addedNode).getGraph();
@@ -132,7 +136,34 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 					if(wizardExt != null && wizardExt instanceof AnalysisWizardExtension) {
 						final AnalysisWizardExtension analysisExt = (AnalysisWizardExtension)wizardExt;
 						
+						for(OpNode node:analysisExt) {
+							graphExtension.addNode(node);
+							graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
+						}
 						
+						for(OpNode optionalNode:analysisExt.getOptionalNodes()) {
+							graphExtension.addOptionalNode(optionalNode);
+							graphExtension.setOptionalNodeDefault(optionalNode, analysisExt.getOptionalNodeDefault(optionalNode));
+						}
+						
+						// copy report template
+						final NodeWizardReportTemplate prefixTemplate = graphExtension.getReportTemplate("Report Prefix");
+						final NodeWizardReportTemplate suffixTemplate = graphExtension.getReportTemplate("Report Suffix");
+						final NodeWizardReportTemplate pt =
+								analysisExt.getReportTemplate("Report Prefix");
+						if(pt != null) {
+							if(!prefixTemplate.getTemplate().contains(pt.getTemplate())) {
+								prefixTemplate.setTemplate(prefixTemplate.getTemplate() + "\n" + pt.getTemplate());
+							}
+						}
+						
+						final NodeWizardReportTemplate st = 
+								analysisExt.getReportTemplate("Report Suffix");
+						if(st != null) {
+							if(!suffixTemplate.getTemplate().contains(st.getTemplate())) {
+								suffixTemplate.setTemplate(suffixTemplate.getTemplate() + "\n" + st.getTemplate());
+							}
+						}
 					}
 				}
 			}

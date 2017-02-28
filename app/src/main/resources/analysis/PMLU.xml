@@ -16,7 +16,7 @@
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                 </oga:settings>
-                <oga:meta x="110" y="251"/>
+                <oga:meta x="150" y="317"/>
             </extensions>
         </node>
         <node id="2996961c" name="Selected Participants" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -25,11 +25,11 @@
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_selectedParticipants]]></oga:property>
                 </oga:settings>
-                <oga:meta x="91" y="348"/>
+                <oga:meta x="127" y="438"/>
             </extensions>
         </node>
         <opqry:queryNode id="4d9316ca" name="Query: PMLU" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-02-27T16:04:01.629-03:30" name="Query: PMLU" uuid="627dbf5a-5905-44da-8a88-0f1e19378d73">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-02-27T21:23:24.137-03:30" name="Query: PMLU" uuid="42f3eba1-1e97-40cf-a164-9a5a6cc86332">
                 <script>
                     <source>/**
  * PMLU.js
@@ -254,7 +254,7 @@ function query_record(recordIndex, record)
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="297" y="75"/>
+                <oga:meta x="326" y="15"/>
             </extensions>
         </opqry:queryNode>
         <node id="56c78a6e" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -265,7 +265,7 @@ function query_record(recordIndex, record)
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="509" y="96"/>
+                <oga:meta x="561" y="15"/>
             </extensions>
         </node>
         <node id="55c4fdf76a6a4f5a" name="Split Table by Speaker" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -364,17 +364,16 @@ function tableOp(context, table) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="662" y="91"/>
+                <oga:meta x="326" y="176"/>
             </extensions>
         </node>
         <ogcn:macro id="6d1fd7c9" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="2efe384e">
+            <graph id="4f113bcb">
                 <node id="12865dcf" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
-                            <oga:property key="contextKey"/>
                         </oga:settings>
                         <oga:meta x="48" y="48"/>
                     </extensions>
@@ -383,7 +382,6 @@ function tableOp(context, table) {
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
-                            <oga:property key="contextKey"/>
                         </oga:settings>
                         <oga:meta x="68" y="208"/>
                     </extensions>
@@ -406,7 +404,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="93f701ce1dbf44bc" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="a92623e">
+                    <graph id="478d9d67">
                         <node id="e0c7ca77a9a4440f" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -464,12 +462,11 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="17cda38e" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="macro17cda38e">
+                    <graph id="2699c3e3">
                         <node id="28c45bf3" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
-                                    <oga:property key="contextKey"/>
                                 </oga:settings>
                                 <oga:meta x="100" y="212"/>
                             </extensions>
@@ -583,7 +580,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="2eede1c1" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="61392c3b">
+                            <graph id="4e6bdac6">
                                 <node id="7e76e5f0" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -634,7 +631,7 @@ function tableOp(context, table) {
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="879" y="102"/>
+                <oga:meta x="561" y="176"/>
             </extensions>
         </ogcn:macro>
         <link dest="56c78a6e" destField="project" source="4d9316ca" sourceField="project"/>
