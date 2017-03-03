@@ -46,6 +46,10 @@ public class ParticipantsPanel extends JPanel {
 	
 	private Project project;
 	
+	public ParticipantsPanel() {
+		this(null);
+	}
+	
 	public ParticipantsPanel(Project project) {
 		super();
 		

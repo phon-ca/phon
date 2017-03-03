@@ -50,6 +50,7 @@ public class ParticipantSelector extends TristateCheckBoxTree {
 		}
 		
 		return new TristateCheckBoxTreeModel(root);
+		
 	}
 	
 	public ParticipantSelector() {

@@ -221,7 +221,7 @@ public class AnalysisLibrary {
 		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
 		if(project != null) {
 			editor.putExtension(Project.class, project);
-			((AnalysisOpGraphEditorModel)editor.getModel()).getSessionSelector().setProject(project);
+			((AnalysisOpGraphEditorModel)editor.getModel()).getParticipantSelector().getSessionSelector().setProject(project);
 		}
 		
 		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());

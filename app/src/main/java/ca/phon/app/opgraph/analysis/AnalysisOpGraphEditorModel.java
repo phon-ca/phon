@@ -29,19 +29,23 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpContext;
@@ -51,19 +55,20 @@ import ca.gedge.opgraph.app.components.GraphOutline;
 import ca.gedge.opgraph.app.components.OpGraphTreeModel;
 import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
 import ca.gedge.opgraph.extensions.CompositeNode;
+import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
-import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
 import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.app.session.SessionSelector;
+import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
+import ca.phon.app.opgraph.wizard.edits.NodeWizardSettingsEdit;
+import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.project.Project;
-import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
 import ca.phon.workspace.Workspace;
-
-import static ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
 
 public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 
@@ -73,7 +78,7 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	
 	private JComboBox<Project> projectList;
 	
-	private SessionSelector sessionSelector;
+	private ParticipantsPanel participantSelector;
 
 	private AnalysisWizardExtension wizardExt;
 	
@@ -122,6 +127,56 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		final AnalysisCellRenderer renderer = new AnalysisCellRenderer(graphOutline.getTree().getCellRenderer());
 		graphOutline.getTree().setCellRenderer(renderer);
 		
+		graphOutline.addContextMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				final MenuBuilder builder = new MenuBuilder((JPopupMenu)e.getSource());
+				
+				final TreeSelectionModel selectionModel = graphOutline.getTree().getSelectionModel();
+				if(selectionModel.getSelectionCount() == 1 && selectionModel.getLeadSelectionRow() > 0) {
+					builder.addSeparator(".", "analysis");
+					
+					final TreePath selectedPath = selectionModel.getSelectionPath();
+					final DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)selectedPath.getLastPathComponent();
+					final OpNode node = (OpNode)treeNode.getUserObject();
+					
+					boolean isSettingButNotStep = ext.containsNode(node) && !ext.isNodeForced(node);
+					boolean isStep = ext.containsNode(node) && ext.isNodeForced(node);
+
+					if(!isSettingButNotStep) {
+						final PhonUIAction toggleNodeAsStepAct = new PhonUIAction(AnalysisOpGraphEditorModel.this, "onToggleNodeAsStep", node);
+						toggleNodeAsStepAct.putValue(PhonUIAction.NAME, "Show as step");
+						toggleNodeAsStepAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show node settings as a wizard step (and in advanced settings)");
+						toggleNodeAsStepAct.putValue(PhonUIAction.SELECTED_KEY, isStep);
+						builder.addItem(".@analysis", new JCheckBoxMenuItem(toggleNodeAsStepAct));
+					}
+					
+					if(!isStep) {
+						final PhonUIAction toggleNodeSettingsAct = new PhonUIAction(AnalysisOpGraphEditorModel.this, "onToggleNodeSettings", node);
+						toggleNodeSettingsAct.putValue(PhonUIAction.NAME, "Show in advanced settings");
+						toggleNodeSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show node settings in advanced settings");
+						toggleNodeSettingsAct.putValue(PhonUIAction.SELECTED_KEY, isSettingButNotStep);
+						builder.addItem(".", new JCheckBoxMenuItem(toggleNodeSettingsAct));
+					}
+					
+					final PhonUIAction toggleOptionalAct = new PhonUIAction(AnalysisOpGraphEditorModel.this, "onToggleNodeOptional", node);
+					toggleOptionalAct.putValue(PhonUIAction.NAME, "Optional node");
+					toggleOptionalAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make execution of this node optional");
+					toggleOptionalAct.putValue(PhonUIAction.SELECTED_KEY, wizardExt.isNodeOptional(node));
+					builder.addItem(".", new JCheckBoxMenuItem(toggleOptionalAct));
+				}
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+		});
+		
 		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
 			final UndoableEdit edit = e.getEdit();
 			if(edit instanceof AddNodeEdit) {
@@ -169,18 +224,37 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 			}
 		});
 	}
+	
+	public void onToggleNodeSettings(PhonActionEvent pae) {
+		final OpNode node = (OpNode)pae.getData();
+		final NodeWizardSettingsEdit edit = new NodeWizardSettingsEdit(
+				getDocument().getGraph(), getWizardExtension(), node, 
+					!getWizardExtension().containsNode(node), false);
+		getDocument().getUndoSupport().postEdit(edit);
+	}
+	
+	public void onToggleNodeAsStep(PhonActionEvent pae) {
+		final OpNode node = (OpNode)pae.getData();
+		final NodeWizardSettingsEdit edit = new NodeWizardSettingsEdit(
+				getDocument().getGraph(), getWizardExtension(), node, 
+					!getWizardExtension().containsNode(node), true);
+		getDocument().getUndoSupport().postEdit(edit);
+	}
 
-	public SessionSelector getSessionSelector() {
-		return this.sessionSelector;
+	public void onToggleNodeOptional(PhonActionEvent pae) {
+		final OpNode node = (OpNode)pae.getData();
+		final NodeWizardOptionalsEdit edit = new NodeWizardOptionalsEdit(
+				getDocument().getGraph(), getWizardExtension(), node, 
+					!getWizardExtension().isNodeOptional(node), true);
+		getDocument().getUndoSupport().postEdit(edit);
+	}
+	
+	public ParticipantsPanel getParticipantSelector() {
+		return this.participantSelector;
 	}
 	
 	private WizardExtension getWizardExtension() {
 		return getDocument().getRootGraph().getExtension(WizardExtension.class);
-	}
-	
-	@Override
-	public GraphOutline getGraphOutline() {
-		return super.getGraphOutline();
 	}
 
 	@Override
@@ -208,12 +282,12 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 					projectList.getBorder()));
 			
 			projectList.addItemListener( (e) -> {
-				sessionSelector.setProject((Project)projectList.getSelectedItem());
+				participantSelector.setProject((Project)projectList.getSelectedItem());
 			} );
 			
-			sessionSelector = new SessionSelector();
-			final JScrollPane sessionScroller = new JScrollPane(sessionSelector);
-			sessionScroller.setBorder(BorderFactory.createTitledBorder("Sessions"));
+			participantSelector = new ParticipantsPanel();
+			final JScrollPane sessionScroller = new JScrollPane(participantSelector);
+			sessionScroller.setBorder(BorderFactory.createTitledBorder("Sessions & Participants"));
 			
 			debugSettings.setLayout(new BorderLayout());
 			debugSettings.add(projectList, BorderLayout.NORTH);
@@ -292,7 +366,9 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 		super.setupContext(context);
 		
 		context.put("_project", projectList.getSelectedItem());
-		context.put("_selectedSessions", sessionSelector.getSelectedSessions());
+		context.put("_selectedSessions", participantSelector.getSessionSelector().getSelectedSessions());
+		context.put("_selectedParticipants", participantSelector.getParticipantSelector().getSelectedParticpants());
+		context.put("_buffers", new MultiBufferPanel());
 	}
 	
 	private class AnalysisCellRenderer extends DefaultTreeCellRenderer {

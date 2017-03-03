@@ -225,7 +225,7 @@ public class ReportLibrary {
 		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
 		if(project != null) {
 			editor.putExtension(Project.class, project);
-			((ReportOpGraphEditorModel)editor.getModel()).getSessionSelector().setProject(project);
+			((ReportOpGraphEditorModel)editor.getModel()).getParticipantSelector().getSessionSelector().setProject(project);
 		}
 		
 		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
