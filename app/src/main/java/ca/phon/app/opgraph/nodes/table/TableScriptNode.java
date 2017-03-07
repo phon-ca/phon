@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -209,7 +211,8 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		}
 		
 		// check inputs
-		for(InputField currentInputField:getInputFields()) {
+		final List<InputField> inputFields = new ArrayList<>(getInputFields());
+		for(InputField currentInputField:inputFields) {
 			final InputField tempInputField = tempNode.getInputFieldWithKey(currentInputField.getKey());
 			if(tempInputField != null) {
 				// copy field information
@@ -235,7 +238,8 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		}
 		
 		// check outputs
-		for(OutputField currentOutputField:getOutputFields()) {
+		final List<OutputField> outputFields = new ArrayList<>(getOutputFields());
+		for(OutputField currentOutputField:outputFields) {
 			final OutputField tempOutputField = tempNode.getOutputFieldWithKey(currentOutputField.getKey());
 			if(tempOutputField != null) {
 				currentOutputField.setDescription(tempOutputField.getDescription());
