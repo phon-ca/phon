@@ -25,6 +25,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
@@ -73,6 +74,8 @@ import ca.phon.app.opgraph.editor.actions.graph.MoveNodeAction;
 import ca.phon.app.opgraph.editor.actions.view.ResetViewAction;
 import ca.phon.app.opgraph.editor.actions.view.ToggleViewAction;
 import ca.phon.opgraph.OpgraphIO;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
@@ -301,8 +304,17 @@ public class OpgraphEditor extends CommonModuleFrame {
 	protected void setupMenu() {
 		final MenuBuilder menuBuilder = new MenuBuilder(this.menuBar);
 	
-		menuBuilder.addItem("File@^", new NewAction(this));
-		menuBuilder.addItem("File@New...", new OpenAction(this));
+		final JMenu newMenu = menuBuilder.addMenu("File@^", "New");
+		// add new actions
+		final List<IPluginExtensionPoint<EditorModelInstantiator>> extPts = 
+			PluginManager.getInstance().getExtensionPoints(EditorModelInstantiator.class);
+		for(IPluginExtensionPoint<EditorModelInstantiator> extPt:extPts) {
+			final EditorModelInstantiator instantiator = extPt.getFactory().createObject();
+			final NewAction act = new NewAction(this, instantiator);
+			newMenu.add(new JMenuItem(act));
+		}
+				
+		menuBuilder.addItem("File@New", new OpenAction(this));
 		final JMenu recentsMenu = menuBuilder.addMenu("File@" + OpenAction.TXT, "Recent documents");
 		recentsMenu.addMenuListener(new MenuListener() {
 			

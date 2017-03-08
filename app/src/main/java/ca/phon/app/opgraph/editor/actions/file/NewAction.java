@@ -25,8 +25,9 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import ca.phon.app.opgraph.editor.NewDialogPanel;
-import ca.phon.app.opgraph.editor.NewGraphDialog;
+import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
@@ -45,14 +46,18 @@ public class NewAction extends OpgraphEditorAction {
 	
 	public final static String DESC = "New graph";
 	
-	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_N,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+	private final EditorModelInstantiator instantiator; 
 	
-	public NewAction(OpgraphEditor editor) {
+	public NewAction(OpgraphEditor editor, EditorModelInstantiator instantiator) {
 		super(editor);
-		putValue(NAME, TXT);
-		putValue(SHORT_DESCRIPTION, DESC);
-		putValue(ACCELERATOR_KEY, KS);
+		
+		final EditorModelInstantiatorMenuInfo menuInfo =
+				instantiator.getClass().getAnnotation(EditorModelInstantiatorMenuInfo.class);
+		
+		putValue(NAME, (menuInfo != null ? menuInfo.name() : TXT));
+		putValue(SHORT_DESCRIPTION, (menuInfo != null ? menuInfo.tooltip() : DESC));
+		
+		this.instantiator = instantiator;
 	}
 
 	@Override
@@ -93,29 +98,19 @@ public class NewAction extends OpgraphEditorAction {
 			}
 		}
 		
-		final NewGraphDialog newDlg = new NewGraphDialog(getEditor());
-		newDlg.pack();
-		newDlg.setResizable(false);
-		newDlg.setLocationRelativeTo(getEditor());
-		newDlg.setVisible(true);
-		if(!newDlg.wasCanceled()) {
-			final NewDialogPanel selectedPanel = newDlg.getSelectedPanel();
-			if(selectedPanel != null) {
-				final OpgraphEditorModel model = selectedPanel.createModel();
-				
-				if(useCurrentWindow) {
-					getEditor().setModel(model);
-					SwingUtilities.invokeLater(() -> (new AutoLayoutAction(getEditor())).actionPerformed(arg0));
-				} else {
-					final OpgraphEditor editor = new OpgraphEditor(model);
-					editor.pack();
-					editor.setSize(1064, 768);
-					editor.setLocationByPlatform(true);
-					editor.setVisible(true);
-					SwingUtilities.invokeLater(() -> (new AutoLayoutAction(editor)).actionPerformed(arg0));
-				}
-				
-			}
+		// create new model
+		final OpgraphEditorModel model = instantiator.createModel(new OpGraph());
+		
+		if(useCurrentWindow) {
+			getEditor().setModel(model);
+			SwingUtilities.invokeLater(() -> (new AutoLayoutAction(getEditor())).actionPerformed(arg0));
+		} else {
+			final OpgraphEditor editor = new OpgraphEditor(model);
+			editor.pack();
+			editor.setSize(1064, 768);
+			editor.setLocationByPlatform(true);
+			editor.setVisible(true);
+			SwingUtilities.invokeLater(() -> (new AutoLayoutAction(editor)).actionPerformed(arg0));
 		}
 	}
 

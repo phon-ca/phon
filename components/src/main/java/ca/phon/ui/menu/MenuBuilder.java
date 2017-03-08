@@ -96,6 +96,7 @@ public final class MenuBuilder {
 		JMenu ret = null;
 		
 		ret = new JMenu(text);
+		ret.setName(text);
 		if(elem instanceof JMenu) {
 			if(insertIdx >= 0)
 				((JMenu)elem).add(ret, insertIdx);

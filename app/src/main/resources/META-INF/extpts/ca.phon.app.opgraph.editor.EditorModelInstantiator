@@ -1,0 +1,4 @@
+ca.phon.app.opgraph.analysis.AnalysisEditorModelInstantiator
+ca.phon.app.opgraph.report.ReportEditorModelInstantiator
+ca.phon.app.opgraph.syllabifier.SyllabifierEditorModelInstantiator
+ca.phon.app.opgraph.macro.MacroEditorModelInstantiator

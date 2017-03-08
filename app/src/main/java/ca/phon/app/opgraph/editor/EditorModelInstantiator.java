@@ -1,5 +1,8 @@
 package ca.phon.app.opgraph.editor;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 import ca.gedge.opgraph.OpGraph;
 
 /**
@@ -8,6 +11,17 @@ import ca.gedge.opgraph.OpGraph;
  */
 @FunctionalInterface
 public interface EditorModelInstantiator {
+
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface EditorModelInstantiatorMenuInfo {
+		
+		public String name();
+		
+		public String tooltip() default "";
+		
+		public Class<? extends OpgraphEditorModel> modelType() default DefaultOpgraphEditorModel.class;
+		
+	}
 	
 	/**
 	 * Create model with the given arguments.
