@@ -134,7 +134,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 				IconManager.getInstance().getSystemIconForPath(
 						Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
 		
-		workspaceBtn.setTopLabelText(WorkspaceTextStyler.toHeaderText("Workspace Folder"));
+		workspaceBtn.setTopLabelText(WorkspaceTextStyler.toHeaderText("Set Workspace Folder"));
 		workspaceBtn.getTopLabel().setFont(FontPreferences.getTitleFont());
 		workspaceBtn.getBottomLabel().setIcon(workspaceIcn);
 		workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
@@ -246,7 +246,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 		
 		final PhonUIAction act = new PhonUIAction(this, "onShowWorkspace");
 		act.putValue(PhonUIAction.NAME, "Show workspace");
-		act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show worksace folder");
+		act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show workspace folder");
 		act.putValue(PhonUIAction.SMALL_ICON, fsIcon);
 		act.putValue(PhonUIAction.LARGE_ICON_KEY, fsIconL);
 		
