@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -65,7 +65,7 @@ public class AutoTranscriptionForm extends JPanel {
 	private JCheckBox setIPAActualBox;
 
 	private JCheckBox overwriteBox;
-	
+
 	private JComboBox<Syllabifier> syllabifierBox;
 
 	public AutoTranscriptionForm(Project project, Session session) {
@@ -80,9 +80,9 @@ public class AutoTranscriptionForm extends JPanel {
 				"pref, pref");
 		setLayout(layout);
 		CellConstraints cc = new CellConstraints();
-		
+
 		overwriteBox = new JCheckBox("Overwrite");
-		overwriteBox.setSelected(true);
+		overwriteBox.setSelected(false);
 
 		setIPATargetBox = new JCheckBox("IPA Target");
 		setIPATargetBox.setSelected(true);
@@ -90,7 +90,7 @@ public class AutoTranscriptionForm extends JPanel {
 		setIPAActualBox = new JCheckBox("IPA Actual");
 
 		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
-		
+
 		final Language syllLangPref = syllabifierLibrary.defaultSyllabifierLanguage();
 
 		Syllabifier defSyllabifier = null;
@@ -103,7 +103,7 @@ public class AutoTranscriptionForm extends JPanel {
 			sortedSyllabifiers.add(syllabifier);
 		}
 		Collections.sort(sortedSyllabifiers, new SyllabifierComparator());
-	
+
 		syllabifierBox = new JComboBox<>(sortedSyllabifiers.toArray(new Syllabifier[0]));
 		syllabifierBox.setRenderer(new SyllabifierCellRenderer());
 		if(defSyllabifier != null)
@@ -146,20 +146,20 @@ public class AutoTranscriptionForm extends JPanel {
 	public RecordFilter getRecordFilter() {
 		return filterPanel.getRecordFilter();
 	}
-	
+
 	public boolean isOverwrite() {
 		return overwriteBox.isSelected();
 	}
-	
+
 	private class SyllabifierComparator implements Comparator<Syllabifier> {
 
 		@Override
 		public int compare(Syllabifier o1, Syllabifier o2) {
 			return o1.toString().compareTo(o2.toString());
 		}
-		
+
 	}
-	
+
 	private class SyllabifierCellRenderer extends DefaultListCellRenderer {
 
 		@Override
@@ -168,15 +168,15 @@ public class AutoTranscriptionForm extends JPanel {
 				boolean cellHasFocus) {
 			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
 					cellHasFocus);
-			
+
 			if(value != null) {
 				final Syllabifier syllabifier = (Syllabifier)value;
 				final String text = syllabifier.getName() + " (" + syllabifier.getLanguage().toString() + ")";
 				retVal.setText(text);
 			}
-			
+
 			return retVal;
 		}
-		
+
 	}
 }

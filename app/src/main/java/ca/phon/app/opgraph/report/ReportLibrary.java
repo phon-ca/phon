@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -52,80 +52,82 @@ import ca.phon.util.resources.ResourceLoader;
  * <p>Library of query reports. These reports are available
  * from the 'Report' menu button in the query and query history
  * dialogs.</p>
- * 
+ *
  * <p>Reports are stored in <code>~/Documents/Phon/reports</code>
- * by default. Reports can also be stored in the project 
+ * by default. Reports can also be stored in the project
  * <code>__res/reports/</code> folder.</p>
  */
 public class ReportLibrary {
-	
+
+	private final static String LEGACY_REPORT_DOCUMENT = "reports/Legacy Report Design.xml";
+
 	private final static String PROJECT_REPORT_FOLDER = "reports";
-	
+
 	private final static Logger LOGGER = Logger.getLogger(ReportLibrary.class.getName());
-	
+
 	/**
 	 * Report loader
 	 */
 	private ResourceLoader<URL> loader = new ResourceLoader<>();
-	
+
 	public ReportLibrary() {
 		super();
 		loader.addHandler(new StockReportHandler());
 		loader.addHandler(new UserReportHandler());
 	}
-	
+
 	public List<URL> getAvailableReports() {
 		List<URL> retVal = new ArrayList<URL>();
-		
+
 		final Iterator<URL> reportIterator = loader.iterator();
 		while(reportIterator.hasNext()) {
 			final URL url = reportIterator.next();
 			if(url == null) continue;
 			retVal.add(url);
 		}
-		
+
 		return retVal;
 	}
-	
+
 	public ResourceLoader<URL> getStockGraphs() {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
 		retVal.addHandler(new StockReportHandler());
 		return retVal;
 	}
-	
+
 	public ResourceLoader<URL> getUserGraphs() {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
 		retVal.addHandler(new UserReportHandler());
 		return retVal;
 	}
-	
+
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
 		retVal.addHandler(new UserReportHandler(new File(project.getResourceLocation(), PROJECT_REPORT_FOLDER)));
 		return retVal;
 	}
-	
+
 	public File getProjectReportFolder(Project project) {
 		return new File(project.getResourceLocation(), PROJECT_REPORT_FOLDER);
 	}
-	
+
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
-		
+
 		for(URL reportURL:getStockGraphs()) {
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
-			
+
 			try {
 				final String fullPath = URLDecoder.decode(reportURL.getPath(), "UTF-8");
-				final String relativePath = 
-						fullPath.substring(fullPath.lastIndexOf("/" + PROJECT_REPORT_FOLDER + "/")+PROJECT_REPORT_FOLDER.length()+2);
-				
+				final String relativePath =
+						fullPath.substring(fullPath.indexOf("/" + PROJECT_REPORT_FOLDER + "/")+PROJECT_REPORT_FOLDER.length()+2);
+
 				String menuPath = ".";
 				int lastFolderIndex = relativePath.lastIndexOf('/');
 				if(lastFolderIndex >= 0) {
 					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
 				}
-				
+
 				builder.addItem(menuPath, act);
 			} catch (UnsupportedEncodingException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -139,16 +141,16 @@ public class ReportLibrary {
 			try {
 				final URL reportURL = userGraphIterator.next();
 
-				final URI relativeURI = 
+				final URI relativeURI =
 						(new File(UserReportHandler.DEFAULT_USER_REPORT_FOLDER)).toURI().relativize(reportURL.toURI());
-				
+
 				final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
 				String menuPath = ".";
 				int lastFolderIndex = relativePath.lastIndexOf('/');
 				if(lastFolderIndex >= 0) {
 					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
 				}
-				
+
 				final ReportAction act = new ReportAction(project, queryId, reportURL);
 				userMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
@@ -170,23 +172,23 @@ public class ReportLibrary {
 			});
 			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
 		}
-		
+
 		final JMenu projectMenu = new JMenu("Project Library");
 		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu);
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
 		while(projectGraphIterator.hasNext()) {
 			try {
 				final URL reportURL = projectGraphIterator.next();
-				final URI relativeURI = 
+				final URI relativeURI =
 						getProjectReportFolder(project).toURI().relativize(reportURL.toURI());
-				
+
 				final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
 				String menuPath = ".";
 				int lastFolderIndex = relativePath.lastIndexOf('/');
 				if(lastFolderIndex >= 0) {
 					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
 				}
-				
+
 				final ReportAction act = new ReportAction(project, queryId, reportURL);
 				projectMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
@@ -208,32 +210,34 @@ public class ReportLibrary {
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
 			projectMenuBuilder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 		}
-		
-		builder.addSeparator(".", "all");
-		builder.addItem(".@all", new AllReportsAction(project, queryId));
-		
+
+		builder.addSeparator(".", "legacy");
+		final ReportAction reportAct = new ReportAction(project, queryId,
+				getClass().getClassLoader().getResource(LEGACY_REPORT_DOCUMENT));
+		builder.addItem(".@legacy", reportAct);
+
 		builder.addSeparator(".", "editor");
 		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
-		builder.addItem(".@composer", showComposerAct);
+		builder.addItem(".@editor", showComposerAct);
 	}
-	
+
 	public static void showComposer() {
 		final ReportEditorModelInstantiator instantiator = new ReportEditorModelInstantiator();
 		final ReportOpGraphEditorModel editorModel = instantiator.createModel(new OpGraph());
 		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
-		
+
 		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
 		if(project != null) {
 			editor.putExtension(Project.class, project);
 			((ReportOpGraphEditorModel)editor.getModel()).getParticipantSelector().getSessionSelector().setProject(project);
 		}
-		
+
 		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 		editor.pack();
 		editor.setSize(1024, 768);
 		editor.setVisible(true);
 	}
-	
+
 }
