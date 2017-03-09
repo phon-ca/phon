@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -64,9 +64,9 @@ import ca.phon.session.io.SessionWriter;
 import ca.phon.xml.annotation.XMLSerial;
 
 @XMLSerial(
-	namespace="http://phon.ling.mun.ca/ns/phonbank", 
-	elementName="session", 
-	bindType=Session.class 
+	namespace="http://phon.ling.mun.ca/ns/phonbank",
+	elementName="session",
+	bindType=Session.class
 )
 @SessionIO(
 		group="ca.phon",
@@ -74,27 +74,27 @@ import ca.phon.xml.annotation.XMLSerial;
 		version="1.2",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon 1.4-2.1"
+		name="Phon 1.4-2.2"
 )
 public class XMLSessionWriter_v12 implements SessionWriter {
-	
+
 	private final static Logger LOGGER = Logger.getLogger(XMLSessionWriter_v12.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session
-	 * 
+	 *
 	 * @param session
-	 * @return an version of the session use-able by jaxb 
+	 * @return an version of the session use-able by jaxb
 	 */
 	private JAXBElement<SessionType> toSessionType(Session session) throws IOException {
 		final ObjectFactory factory = new ObjectFactory();
 		final SessionType retVal = factory.createSessionType();
-		
+
 		// header data
 		retVal.setVersion("PB1.2");
 		retVal.setId(session.getName());
 		retVal.setCorpus(session.getCorpus());
-		
+
 		final HeaderType headerData = factory.createHeaderType();
 		if(session.getMediaLocation() != null && session.getMediaLocation().length() > 0) {
 			headerData.setMedia(session.getMediaLocation());
@@ -125,7 +125,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			final CommentType ct = copyComment(factory, c);
 			transcript.getUOrComment().add(ct);
 		}
-		
+
 		// participants
 		final ParticipantsType parts = factory.createParticipantsType();
 		for(int i = 0; i < session.getParticipantCount(); i++) {
@@ -134,7 +134,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			parts.getParticipant().add(pt);
 		}
 		retVal.setParticipants(parts);
-		
+
 		// transcribers
 		final TranscribersType tt = factory.createTranscribersType();
 		for(int i = 0; i < session.getTranscriberCount(); i++) {
@@ -143,7 +143,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			tt.getTranscriber().add(trt);
 		}
 		retVal.setTranscribers(tt);
-		
+
 		// tier info/ordering
 		final UserTiersType utt = factory.createUserTiersType();
 		for(int i = 0; i < session.getUserTierCount(); i++) {
@@ -152,33 +152,33 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			utt.getUserTier().add(tierType);
 		}
 		retVal.setUserTiers(utt);
-		
+
 		final TierOrderType tot = factory.createTierOrderType();
 		for(TierViewItem tvi:session.getTierView()) {
 			final TvType tvt = copyTierViewItem(factory, tvi);
 			tot.getTier().add(tvt);
 		}
 		retVal.setTierOrder(tot);
-		
+
 		// session data
 		for(int i = 0; i < session.getRecordCount(); i++) {
 			final Record record = session.getRecord(i);
-			
+
 			// insert comments first
 			for(int j = 0; j < record.getNumberOfComments(); j++) {
 				final Comment com = record.getComment(j);
 				final CommentType ct = copyComment(factory, com);
 				transcript.getUOrComment().add(ct);
 			}
-			
+
 			// copy record data
 			final RecordType rt = copyRecord(factory, retVal, record);
-			
+
 			rt.setId(record.getUuid().toString());
-			
+
 			if(record.isExcludeFromSearches())
 				rt.setExcludeFromSearches(record.isExcludeFromSearches());
-			
+
 			// setup participant
 			if(record.getSpeaker() != null) {
 				for(ParticipantType pt:parts.getParticipant()) {
@@ -188,26 +188,26 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 					}
 				}
 			}
-			
+
 			transcript.getUOrComment().add(rt);
 		}
 		retVal.setTranscript(transcript);
-		
+
 		return factory.createSession(retVal);
 	}
-	
+
 	private int pIdx = 0;
 	/**
 	 * copy participant info
 	 */
 	private ParticipantType copyParticipant(ObjectFactory factory, Participant part) {
 		final ParticipantType retVal = factory.createParticipantType();
-		
+
 		if(part.getId() != null)
 			retVal.setId(part.getId());
-		
+
 		retVal.setName(part.getName());
-		
+
 		final LocalDate bday = part.getBirthDate();
 		if(bday != null) {
 			try {
@@ -220,7 +220,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				LOGGER.log(Level.WARNING, e.toString(), e);
 			}
 		}
-		
+
 		final Period age = part.getAge(null);
 		if(age != null) {
 			try {
@@ -231,10 +231,10 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				LOGGER.log(Level.WARNING, e.toString(), e);
 			}
 		}
-		
+
 		retVal.setEducation(part.getEducation());
 		retVal.setGroup(part.getGroup());
-		
+
 		final String lang = part.getLanguage();
 		final String langs[] = (lang != null ? lang.split(",") : new String[0]);
 		for(String l:langs) {
@@ -245,12 +245,12 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			retVal.setSex(SexType.MALE);
 		else if(part.getSex() == Sex.FEMALE)
 			retVal.setSex(SexType.FEMALE);
-		
+
 		ParticipantRole prole = part.getRole();
 		if(prole == null)
 			prole = ParticipantRole.TARGET_CHILD;
 		retVal.setRole(prole.toString());
-		
+
 		// create ID based on role if possible
 		if(retVal.getId() == null && prole != null) {
 			if(prole == ParticipantRole.TARGET_CHILD) {
@@ -265,45 +265,45 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				retVal.setId("p" + (++pIdx));
 			}
 		}
-		
+
 		retVal.setSES(part.getSES());
-			
+
 		return retVal;
 	}
-	
+
 	/**
 	 * copy transcriber
 	 */
 	private TranscriberType copyTranscriber(ObjectFactory factory, Transcriber tr) {
 		final TranscriberType retVal = factory.createTranscriberType();
-		
+
 		retVal.setId(tr.getUsername());
 		retVal.setName(tr.getRealName());
 		final PasswordType pst = factory.createPasswordType();
 		pst.setContent(tr.getPassword());
 		pst.setUse(tr.usePassword());
 		retVal.setPassword(pst);
-		
+
 		return retVal;
 	}
-	
+
 	// tier descriptions
 	private UserTierType copyTierDescription(ObjectFactory factory, TierDescription td) {
 		final boolean grouped = td.isGrouped();
 		final String name = td.getName();
-		
+
 		final UserTierType retVal = factory.createUserTierType();
 		retVal.setGrouped(grouped);
 		retVal.setTierName(name);
 		return retVal;
 	}
-	
+
 	private TvType copyTierViewItem(ObjectFactory factory, TierViewItem tvi) {
 		final boolean locked = tvi.isTierLocked();
 		final boolean visible = tvi.isVisible();
 		final String name = tvi.getTierName();
 		final String font = tvi.getTierFont();
-		
+
 		final TvType retVal = factory.createTvType();
 		retVal.setLocked(locked);
 		retVal.setFont(font);
@@ -311,67 +311,67 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		retVal.setVisible(visible);
 		return retVal;
 	}
-	
+
 	// copy comment data
 	private CommentType copyComment(ObjectFactory factory, Comment com) {
 		final CommentEnum type = com.getType();
 		final String value = com.getValue();
-		
+
 		final CommentType retVal = factory.createCommentType();
 		retVal.setContent(value);
 		retVal.setType(type.toString());
 		return retVal;
 	}
-	
+
 	// record
 	private RecordType copyRecord(ObjectFactory factory, SessionType session, Record record) {
 		final RecordType retVal = factory.createRecordType();
-		
+
 		retVal.setExcludeFromSearches(record.isExcludeFromSearches());
-		
+
 		// orthography
 		final Tier<Orthography> orthoTier = record.getOrthography();
 		final OrthographyType orthoType = copyOrthography(factory, orthoTier);
 		retVal.setOrthography(orthoType);
-		
+
 		// ipa
 		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
 		final IpaTierType targetType = copyIPA(factory, ipaTarget);
 		targetType.setForm(PhoTypeType.MODEL);
 		retVal.getIpaTier().add(targetType);
-		
+
 		final Tier<IPATranscript> ipaActual = record.getIPAActual();
 		final IpaTierType actualType = copyIPA(factory, ipaActual);
 		actualType.setForm(PhoTypeType.ACTUAL);
 		retVal.getIpaTier().add(actualType);
-		
+
 		// blind transcriptions
 		final Map<String, BlindTierType> actualBlindTiers = new HashMap<String, BlindTierType>();
 		final Map<String, BlindTierType> targetBlindTiers = new HashMap<String, BlindTierType>();
 		final Map<String, Boolean> hasActualData = new HashMap<String, Boolean>();
 		final Map<String, Boolean> hasTargetData = new HashMap<String, Boolean>();
-		
+
 		for(TranscriberType tr:session.getTranscribers().getTranscriber()) {
 			final BlindTierType targetBt = factory.createBlindTierType();
 			targetBt.setUser(tr);
 			targetBt.setForm(PhoTypeType.MODEL);
 			targetBlindTiers.put(tr.getId(), targetBt);
 			hasTargetData.put(tr.getId(), false);
-			
+
 			final BlindTierType actualBt = factory.createBlindTierType();
 			actualBt.setUser(tr);
 			actualBt.setForm(PhoTypeType.ACTUAL);
 			actualBlindTiers.put(tr.getId(), actualBt);
 			hasActualData.put(tr.getId(), false);
 		}
-		
+
 		for(IPATranscript ipa:ipaTarget) {
 			final AlternativeTranscript blindTranscripts = ipa.getExtension(AlternativeTranscript.class);
-			
+
 			for(TranscriberType tr:session.getTranscribers().getTranscriber()) {
 				final BlindTierType btt = targetBlindTiers.get(tr.getId());
 				final BgType bg = factory.createBgType();
-				
+
 				if(blindTranscripts != null && blindTranscripts.containsKey(tr.getId())) {
 					final IPATranscript blindTranscript = blindTranscripts.get(tr.getId());
 					final String[] words = blindTranscript.toString().split("\\p{Space}");
@@ -386,14 +386,14 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				btt.getBg().add(bg);
 			}
 		}
-		
+
 		for(IPATranscript ipa:ipaActual) {
 			final AlternativeTranscript blindTranscripts = ipa.getExtension(AlternativeTranscript.class);
-			
+
 			for(TranscriberType tr:session.getTranscribers().getTranscriber()) {
 				final BlindTierType btt = actualBlindTiers.get(tr.getId());
 				final BgType bg = factory.createBgType();
-				
+
 				if(blindTranscripts != null && blindTranscripts.containsKey(tr.getId())) {
 					final IPATranscript blindTranscript = blindTranscripts.get(tr.getId());
 					final String[] words = blindTranscript.toString().split("\\p{Space}");
@@ -407,21 +407,21 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				btt.getBg().add(bg);
 			}
 		}
-		
+
 		for(String trId:hasActualData.keySet()) {
 			if(hasActualData.get(trId)) {
 				final BlindTierType btt = actualBlindTiers.get(trId);
 				retVal.getBlindTranscription().add(btt);
 			}
 		}
-		
+
 		for(String trId:hasTargetData.keySet()) {
 			if(hasTargetData.get(trId)) {
 				final BlindTierType btt = targetBlindTiers.get(trId);
 				retVal.getBlindTranscription().add(btt);
 			}
 		}
-		
+
 		// notes
 		final Tier<TierString> notesTier = record.getNotes();
 		if(notesTier.numberOfGroups() > 0 && notesTier.getGroup(0).length() > 0) {
@@ -430,26 +430,26 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			notesType.setTierName(notesTier.getName());
 			retVal.setNotes(notesType);
 		}
-		
+
 		// segment
 		if(record.getSegment().numberOfGroups() > 0) {
 			final SegmentType segType = factory.createSegmentType();
 			final MediaSegment segment = record.getSegment().getGroup(0);
-			
+
 			segType.setDuration(segment.getEndValue() - segment.getStartValue());
 			segType.setStartTime(segment.getStartValue());
 			segType.setUnitType(SegmentUnitType.MS);
-			
+
 			retVal.setSegment(segType);
 		}
-		
+
 		// alignment
 		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
 		if(alignmentTier != null) {
 			final AlignmentTierType att = copyAlignment(factory, record, alignmentTier);
 			retVal.getAlignment().add(att);
 		}
-		
+
 		for(String tierName:record.getExtraTierNames()) {
 			final Tier<TierString> userTier = record.getTier(tierName, TierString.class);
 			if(userTier.isGrouped()) {
@@ -474,13 +474,13 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				retVal.getFlatTier().add(ftt);
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	/**
 	 * Copy orthography
-	 * 
+	 *
 	 * @param factory
 	 * @param ot
 	 * @return
@@ -506,21 +506,21 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				retVal.getWOrGOrP().add(gt);
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	/**
 	 * Copy ipa
-	 * 
+	 *
 	 * @param ipaTier
 	 * @return {@link IpaTierType}
 	 */
 	public IpaTierType copyIPA(ObjectFactory factory, Tier<IPATranscript> ipaTier) {
 		final IpaTierType retVal = factory.createIpaTierType();
-		
+
 		for(IPATranscript ipa:ipaTier) {
-			
+
 			// XXX Check for unvalidated values first
 			final UnvalidatedValue unvalidatedValue = ipa.getExtension(UnvalidatedValue.class);
 			if(unvalidatedValue != null) {
@@ -538,21 +538,21 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				retVal.getPg().add(pt);
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	/**
 	 * Copy alignment data
 	 */
 	private AlignmentTierType copyAlignment(ObjectFactory factory, Record record, Tier<PhoneMap> alignmentTier) {
 		final AlignmentTierType retVal = factory.createAlignmentTierType();
-		
+
 		retVal.setType(AlignmentTypeType.SEGMENTAL);
 		for(PhoneMap pm:alignmentTier) {
 			final AlignmentType at = factory.createAlignmentType();
 			at.setLength(pm.getAlignmentLength());
-			
+
 			final Integer[] top = pm.getTopAlignment();
 			final Integer[] btm = pm.getBottomAlignment();
 			for(int i = 0; i < pm.getAlignmentLength(); i++) {
@@ -563,21 +563,21 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			}
 			retVal.getAg().add(at);
 		}
-		
+
 		return retVal;
 	}
-	
+
 	@Override
 	public void writeSession(Session session, OutputStream out)
 			throws IOException {
 		final JAXBElement<SessionType> ele = toSessionType(session);
-		
+
 		try {
 			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 			final Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		
+
 			marshaller.marshal(ele, out);
 		} catch(JAXBException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
