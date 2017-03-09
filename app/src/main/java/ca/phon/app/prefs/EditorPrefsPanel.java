@@ -222,16 +222,9 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 		@Override
 		public int compare(Language o1, Language o2) {
-			int retVal = 
-					o1.getPrimaryLanguage().getName().compareTo(o2.getPrimaryLanguage().getName());
-			if(retVal == 0) {
-				final String id1Str = 
-						Arrays.stream(o1.getUserIDs()).collect(Collectors.joining("-"));
-				final String id2Str =
-						Arrays.stream(o2.getUserIDs()).collect(Collectors.joining("-"));
-				retVal = id1Str.compareTo(id2Str);
-			}
-			return retVal;
+			String l1 = o1.getPrimaryLanguage().getName() + " (" + o1.toString() + ")";
+			String l2 = o2.getPrimaryLanguage().getName() + " (" + o2.toString() + ")";
+			return l1.compareTo(l2);
 		}
 		
 	}
@@ -262,7 +255,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 		@Override
 		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.getLanguage().toString().compareTo(o2.getLanguage().toString());
+			return o1.toString().compareTo(o2.toString());
 		}
 		
 	}

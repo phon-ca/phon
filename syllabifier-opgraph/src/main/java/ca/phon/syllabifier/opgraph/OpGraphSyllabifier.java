@@ -109,4 +109,9 @@ public final class OpGraphSyllabifier implements Syllabifier {
 		processor.stepAll();
 	}
 
+	@Override
+	public String toString() {
+		return getName() + " (" + getLanguage().toString() + ")";
+	}
+	
 }
