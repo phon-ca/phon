@@ -215,7 +215,7 @@ public class CheckWizardStep1 extends WizardStep {
 
 		@Override
 		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.getLanguage().toString().compareTo(o2.getLanguage().toString());
+			return o1.toString().compareTo(o2.toString());
 		}
 		
 	}

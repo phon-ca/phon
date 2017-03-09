@@ -66,9 +66,7 @@ public class AutoTranscriptionForm extends JPanel {
 
 	private JCheckBox overwriteBox;
 	
-//	private JComboBox dictBox;
-
-	private JComboBox syllabifierBox;
+	private JComboBox<Syllabifier> syllabifierBox;
 
 	public AutoTranscriptionForm(Project project, Session session) {
 		super();
@@ -88,22 +86,8 @@ public class AutoTranscriptionForm extends JPanel {
 
 		setIPATargetBox = new JCheckBox("IPA Target");
 		setIPATargetBox.setSelected(true);
-//		PhonUIAction toggleSetIPATargetAct =
-//				new PhonUIAction(this, "toggleIPABox", setIPATargetBox);
-//		toggleSetIPATargetAct.putValue(PhonUIAction.NAME, "Auto transcribe IPA Target");
-//		setIPATargetBox.setAction(toggleSetIPATargetAct);
 
 		setIPAActualBox = new JCheckBox("IPA Actual");
-//		PhonUIAction toggleSetIPAActualAct =
-//				new PhonUIAction(this, "toggleIPABox", setIPAActualBox);
-//		toggleSetIPAActualAct.putValue(PhonUIAction.NAME, "Auto transcribe IPA Actual");
-//		setIPAActualBox.setAction(toggleSetIPAActualAct);
-
-//		dictBox = new JComboBox(IPADictionary.getAvailableLanguages());
-//		dictBox.setSelectedItem(IPADictionary.getDefaultLanguage());
-//		PhonUIAction selectDictionaryAct =
-//				new PhonUIAction(this, "selectDictionary");
-//		dictBox.setAction(selectDictionaryAct);
 
 		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
 		
@@ -120,7 +104,7 @@ public class AutoTranscriptionForm extends JPanel {
 		}
 		Collections.sort(sortedSyllabifiers, new SyllabifierComparator());
 	
-		syllabifierBox = new JComboBox(sortedSyllabifiers.toArray(new Syllabifier[0]));
+		syllabifierBox = new JComboBox<>(sortedSyllabifiers.toArray(new Syllabifier[0]));
 		syllabifierBox.setRenderer(new SyllabifierCellRenderer());
 		if(defSyllabifier != null)
 			syllabifierBox.setSelectedItem(defSyllabifier);
@@ -137,8 +121,6 @@ public class AutoTranscriptionForm extends JPanel {
 		topPanel.add(overwriteBox, cc.xy(2,1));
 		topPanel.add(setIPATargetBox, cc.xy(2,2));
 		topPanel.add(setIPAActualBox, cc.xy(2,3));
-//		topPanel.add(new JLabel("IPA Dicitonary:"), cc.xy(1,3));
-//		topPanel.add(dictBox, cc.xy(2, 3));
 		topPanel.add(new JLabel("Syllabifier:"), cc.xy(1, 4));
 		topPanel.add(syllabifierBox, cc.xy(2, 4));
 
@@ -173,7 +155,7 @@ public class AutoTranscriptionForm extends JPanel {
 
 		@Override
 		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.getLanguage().toString().compareTo(o2.getLanguage().toString());
+			return o1.toString().compareTo(o2.toString());
 		}
 		
 	}

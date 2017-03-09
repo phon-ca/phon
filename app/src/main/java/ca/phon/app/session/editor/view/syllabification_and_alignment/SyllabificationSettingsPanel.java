@@ -44,9 +44,9 @@ public class SyllabificationSettingsPanel extends JPanel {
 	
 	private static final long serialVersionUID = -2762436673337886614L;
 
-	private JComboBox targetSyllabifierBox;
+	private JComboBox<Syllabifier> targetSyllabifierBox;
 	
-	private JComboBox actualSyllabifierBox;
+	private JComboBox<Syllabifier> actualSyllabifierBox;
 	
 	private final SyllabifierInfo syllabifierInfo;
 
@@ -68,13 +68,13 @@ public class SyllabificationSettingsPanel extends JPanel {
 		while(syllabifiers.hasNext()) syllabifierList.add(syllabifiers.next());
 		Collections.sort(syllabifierList, new SyllabifierComparator());
 		
-		this.targetSyllabifierBox = new JComboBox(syllabifierList.toArray(new Syllabifier[0]));
+		this.targetSyllabifierBox = new JComboBox<>(syllabifierList.toArray(new Syllabifier[0]));
 		final Syllabifier selectedSyllabifier = library.getSyllabifierForLanguage(
 				syllabifierInfo.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()));
 		this.targetSyllabifierBox.setSelectedItem(selectedSyllabifier);
 		this.targetSyllabifierBox.setRenderer(new SyllabifierCellRenderer());
 		
-		this.actualSyllabifierBox = new JComboBox(syllabifierList.toArray(new Syllabifier[0]));
+		this.actualSyllabifierBox = new JComboBox<>(syllabifierList.toArray(new Syllabifier[0]));
 		this.actualSyllabifierBox.setSelectedItem(library.getSyllabifierForLanguage(
 				syllabifierInfo.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName())));
 		this.actualSyllabifierBox.setRenderer(new SyllabifierCellRenderer());
@@ -106,7 +106,7 @@ public class SyllabificationSettingsPanel extends JPanel {
 
 		@Override
 		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.getLanguage().toString().compareTo(o2.getLanguage().toString());
+			return o1.toString().compareTo(o2.toString());
 		}
 		
 	}

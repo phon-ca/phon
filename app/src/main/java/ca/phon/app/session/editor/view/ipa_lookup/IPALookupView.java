@@ -83,7 +83,7 @@ public class IPALookupView extends EditorView {
 	
 	private JToolBar toolbar;
 	
-	private JComboBox langBox;
+	private JComboBox<Language> langBox;
 	
 	private JButton autoTranscribeBtn;
 	
@@ -138,10 +138,9 @@ public class IPALookupView extends EditorView {
 		Language langArray[] = langs.toArray(new Language[0]);
 		Arrays.sort(langArray, new LanguageComparator());
 		final Language defLang = IPADictionaryLibrary.getInstance().getDefaultLanguage();
-		final int langIdx = Arrays.binarySearch(langArray, defLang);
-		langBox = new JComboBox(langArray);
+		langBox = new JComboBox<>(langArray);
 		langBox.setRenderer(new LanguageCellRenderer());
-		langBox.setSelectedIndex(langIdx);
+		langBox.setSelectedItem(defLang);
 		langBox.addItemListener(new ItemListener() {
 			
 			@Override
@@ -282,7 +281,9 @@ public class IPALookupView extends EditorView {
 
 		@Override
 		public int compare(Language o1, Language o2) {
-			return o1.toString().compareTo(o2.toString());
+			String l1 = o1.getPrimaryLanguage().getName() + " (" + o1.toString() + ")";
+			String l2 = o2.getPrimaryLanguage().getName() + " (" + o2.toString() + ")";
+			return l1.compareTo(l2);
 		}
 		
 	}
