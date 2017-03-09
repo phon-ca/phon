@@ -73,6 +73,7 @@ import ca.phon.app.opgraph.editor.actions.graph.MergeNodesAction;
 import ca.phon.app.opgraph.editor.actions.graph.MoveNodeAction;
 import ca.phon.app.opgraph.editor.actions.view.ResetViewAction;
 import ca.phon.app.opgraph.editor.actions.view.ToggleViewAction;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -111,7 +112,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 	private final static int MAX_RECENT_FILES = 10;
 
 	public OpgraphEditor() {
-		this(new DefaultOpgraphEditorModel());
+		this(new MacroOpgraphEditorModel());
 	}
 	
 	public OpgraphEditor(OpgraphEditorModel model) {

@@ -4,6 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 
 /**
  * Instantiator for {@link OpgraphEditor} editor models.
@@ -19,7 +20,7 @@ public interface EditorModelInstantiator {
 		
 		public String tooltip() default "";
 		
-		public Class<? extends OpgraphEditorModel> modelType() default DefaultOpgraphEditorModel.class;
+		public Class<? extends OpgraphEditorModel> modelType() default MacroOpgraphEditorModel.class;
 		
 	}
 	

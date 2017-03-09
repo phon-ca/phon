@@ -24,7 +24,7 @@ package ca.phon.app.opgraph.editor;
  */
 public class NodeEditorSettings {
 	
-	private String modelType = "ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel";
+	private String modelType = "ca.phon.app.opgraph.editor.MacroOpgraphEditorModel";
 	
 	private boolean generated = false;
 	

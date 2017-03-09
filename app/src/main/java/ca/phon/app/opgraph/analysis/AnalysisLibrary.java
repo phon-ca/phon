@@ -36,6 +36,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
@@ -209,13 +210,14 @@ public class AnalysisLibrary {
 		
 		builder.addSeparator(".", "composer");
 		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Analysis Composer...");
+		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
 		builder.addItem(".@composer", showComposerAct);
 	}
 	
 	public static void showComposer() {
-		final AnalysisOpGraphEditorModel editorModel = new AnalysisOpGraphEditorModel();
+		final AnalysisEditorModelInstantiator instantiator = new AnalysisEditorModelInstantiator();
+		final AnalysisOpGraphEditorModel editorModel = instantiator.createModel(new OpGraph());
 		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
 		
 		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);

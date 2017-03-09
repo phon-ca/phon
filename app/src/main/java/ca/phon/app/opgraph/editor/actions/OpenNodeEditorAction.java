@@ -28,10 +28,10 @@ import java.util.logging.Logger;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpgraphIO;
 
 public class OpenNodeEditorAction extends HookableAction {
@@ -90,7 +90,7 @@ public class OpenNodeEditorAction extends HookableAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final OpgraphEditorModelFactory factory = new OpgraphEditorModelFactory();
-		OpgraphEditorModel editorModel = new DefaultOpgraphEditorModel();
+		OpgraphEditorModel editorModel = new MacroOpgraphEditorModel();
 		if(getGraph() != null) {
 			try {
 				editorModel = factory.fromGraph(getGraph());

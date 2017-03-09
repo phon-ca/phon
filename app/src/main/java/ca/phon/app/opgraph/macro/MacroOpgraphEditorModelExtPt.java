@@ -16,15 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.editor;
+package ca.phon.app.opgraph.macro;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(author="Greg J. Hedlund <ghedlund@mun.ca>", minPhonVersion="2.1.0", name="Default Opgraph Editor Model")
-public class DefaultOpgraphEditorModelExtPt implements IPluginExtensionPoint<OpgraphEditorModel> {
+public class MacroOpgraphEditorModelExtPt implements IPluginExtensionPoint<OpgraphEditorModel> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -35,9 +36,9 @@ public class DefaultOpgraphEditorModelExtPt implements IPluginExtensionPoint<Opg
 	public IPluginExtensionFactory<OpgraphEditorModel> getFactory() {
 		final IPluginExtensionFactory<OpgraphEditorModel> factory = (Object ... args) -> {
 			if(args.length > 0 && args[0] instanceof OpGraph) {
-				return new DefaultOpgraphEditorModel((OpGraph)args[0]);
+				return new MacroOpgraphEditorModel((OpGraph)args[0]);
 			} else {
-				return new DefaultOpgraphEditorModel();
+				return new MacroOpgraphEditorModel();
 			}
 		};
 		return factory;	

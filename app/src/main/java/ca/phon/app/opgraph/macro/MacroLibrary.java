@@ -18,7 +18,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
-import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
@@ -181,13 +180,13 @@ public class MacroLibrary {
 		
 		builder.addSeparator(".", "composer");
 		final PhonUIAction showComposerAct = new PhonUIAction(MacroLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Macro Composer...");
+		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new macro using Composer...");
 		builder.addItem(".@composer", showComposerAct);
 	}
 	
 	public static void showComposer() {
-		final DefaultOpgraphEditorModel editorModel = new DefaultOpgraphEditorModel();
+		final MacroOpgraphEditorModel editorModel = new MacroOpgraphEditorModel();
 		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
 		
 		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);

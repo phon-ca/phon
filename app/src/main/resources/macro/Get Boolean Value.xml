@@ -51,7 +51,7 @@
             </extensions>
         </ogcn:macro>
         <extensions>
-            <nes:settings type="ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel"/>
+            <nes:settings type="ca.phon.app.opgraph.macro.MacroOpgraphEditorModel"/>
         </extensions>
     </graph>
 </opgraph>

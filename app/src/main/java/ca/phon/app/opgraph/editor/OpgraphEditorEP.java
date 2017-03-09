@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.plugin.IPluginEntryPoint;
 
 public class OpgraphEditorEP implements IPluginEntryPoint {
@@ -39,7 +40,7 @@ public class OpgraphEditorEP implements IPluginEntryPoint {
 	public void pluginStart(Map<String, Object> args) {
 		final OpgraphEditorModel model =
 				(args.containsKey(OPGRAPH_MODEL_KEY) ? (OpgraphEditorModel)args.get(OPGRAPH_MODEL_KEY) : 
-					new DefaultOpgraphEditorModel());
+					new MacroOpgraphEditorModel());
 		final Runnable onEDT = () -> {
 			final OpgraphEditor editor = new OpgraphEditor(model);
 			editor.pack();

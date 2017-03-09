@@ -121,6 +121,6 @@ public class ReportOpGraphEditorModel extends AnalysisOpGraphEditorModel {
 	
 	@Override
 	public String getTitle() {
-		return "Report Composer";
+		return "Composer (Report)";
 	}
 }

@@ -1,4 +1,4 @@
-ca.phon.app.opgraph.editor.DefaultOpgraphEditorModelExtPt
+ca.phon.app.opgraph.macro.MacroOpgraphEditorModelExtPt
 ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModelExtPt
 ca.phon.app.opgraph.report.ReportOpGraphEditorModelExtPt
 ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModelExtPt

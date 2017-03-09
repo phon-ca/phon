@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.editor;
+package ca.phon.app.opgraph.macro;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -38,7 +38,8 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.app.components.canvas.NodeStyle;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
-import ca.phon.app.opgraph.macro.MacroLibrary;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.app.opgraph.editor.OpgraphEditorModelInfo;
 import ca.phon.app.opgraph.nodes.MacroNodeData;
 import ca.phon.app.opgraph.nodes.MacroNodeInstantiator;
 import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
@@ -66,15 +67,15 @@ import ca.phon.util.resources.ResourceHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 @OpgraphEditorModelInfo(name="General", description="Empty graph with default context")
-public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
+public class MacroOpgraphEditorModel extends OpgraphEditorModel {
 	
-	private final static Logger LOGGER = Logger.getLogger(DefaultOpgraphEditorModel.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(MacroOpgraphEditorModel.class.getName());
 
-	public DefaultOpgraphEditorModel() {
+	public MacroOpgraphEditorModel() {
 		this(new OpGraph());
 	}
 
-	public DefaultOpgraphEditorModel(OpGraph opgraph) {
+	public MacroOpgraphEditorModel(OpGraph opgraph) {
 		super(opgraph);
 		
 		addQueryNodes();
@@ -90,7 +91,7 @@ public class DefaultOpgraphEditorModel extends OpgraphEditorModel {
 	
 	@Override
 	public String getTitle() {
-		return "Macro Composer";
+		return "Composer (Macro)";
 	}
 	
 	private void addMacroNodes() {

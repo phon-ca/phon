@@ -56,7 +56,7 @@ import ca.gedge.opgraph.app.components.OpGraphTreeModel;
 import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.app.opgraph.editor.DefaultOpgraphEditorModel;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
 import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
@@ -70,7 +70,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.workspace.Workspace;
 
-public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
+public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 
 	private JPanel debugSettings;
 	
@@ -353,7 +353,7 @@ public class AnalysisOpGraphEditorModel extends DefaultOpgraphEditorModel {
 	
 	@Override
 	public String getTitle() {
-		return "Analysis Composer";
+		return "Composer (Analysis)";
 	}
 
 	@Override

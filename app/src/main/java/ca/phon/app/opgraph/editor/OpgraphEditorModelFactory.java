@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -80,7 +81,7 @@ public class OpgraphEditorModelFactory {
 	 * If the {@link OpGraph} includes a a setting for the property
 	 * <code>ca.phon.app.opgraph.editor.modeltype</code> this method will attempt
 	 * to create the appropriate model using the registered factory. Otherwise
-	 * a {@link DefaultOpgraphEditorModel} is returned.
+	 * a {@link MacroOpgraphEditorModel} is returned.
 	 * 
 	 * @param graph
 	 * @throws ClassNotFoundException
@@ -90,7 +91,7 @@ public class OpgraphEditorModelFactory {
 				availableFactories();
 		
 		final NodeEditorSettings editorSettings = graph.getExtension(NodeEditorSettings.class);
-		String modelClassname = DefaultOpgraphEditorModel.class.getName();
+		String modelClassname = MacroOpgraphEditorModel.class.getName();
 		if(editorSettings != null) {
 			modelClassname = editorSettings.getModelType();
 		}
@@ -102,10 +103,10 @@ public class OpgraphEditorModelFactory {
 			if(factory != null) {
 				return factory.createObject(graph);
 			} else {
-				return new DefaultOpgraphEditorModel(graph);
+				return new MacroOpgraphEditorModel(graph);
 			}
 		} else {
-			return new DefaultOpgraphEditorModel(graph);
+			return new MacroOpgraphEditorModel(graph);
 		}
 	}
 

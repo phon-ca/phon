@@ -30,6 +30,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -64,6 +65,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.html.HTMLEditorKit;
@@ -91,6 +93,7 @@ import ca.phon.app.query.ScriptPanel;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.project.ParticipantHistory;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
@@ -99,6 +102,7 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.MsFormatter;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -151,7 +155,10 @@ public class NodeWizard extends WizardFrame {
 	
 	private JLabel statusLabel;
 	
+	protected TitledPanel reportTitledPanel;
 	protected WizardStep reportDataStep;
+	private Timer reportTimer;
+	private long reportStartTime;
 	
 	protected WizardStep optionalsStep;
 	
@@ -510,6 +517,16 @@ public class NodeWizard extends WizardFrame {
 		final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
 		final String reportTemplateBufferName = "Report Template";
 		
+		reportStartTime = System.currentTimeMillis();
+		reportTimer = new Timer(500, (e) -> {
+			final long currentTime = System.currentTimeMillis();
+			final long elapsedTime = currentTime - reportStartTime;
+			
+			final String title = String.format("Report (%s)", MsFormatter.msToDisplayString(elapsedTime).substring(0, 6));
+			reportTitledPanel.setTitle(title);
+		});
+		reportTimer.start();
+		
 		try {
 			SwingUtilities.invokeLater( () -> {
 				btnCancel.setVisible(true);
@@ -622,6 +639,8 @@ public class NodeWizard extends WizardFrame {
 				pe.printStackTrace(writer);
 				writer.flush();
 				writer.close();
+				
+				reportTimer.stop();
 				
 				executionEnded(new ProcessorEvent());
 			});
@@ -816,17 +835,17 @@ public class NodeWizard extends WizardFrame {
 		
 		final MultiBufferPanel bufferPanel = getBufferPanel();
 		SwingUtilities.invokeLater(() -> bufferPanel.getSplitPane().setDividerLocation(400) );
-		final TitledPanel panel = new TitledPanel("Report", bufferPanel);
-		panel.setLeftDecoration(busyLabel);
+		reportTitledPanel = new TitledPanel("Report", bufferPanel);
+		reportTitledPanel.setLeftDecoration(busyLabel);
 		
 		final JPanel currentNodePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		currentNodePanel.add(statusLabel);
 		currentNodePanel.setOpaque(false);
 		statusLabel.setOpaque(false);
 		statusLabel.setForeground(UIManager.getColor("titledpanel.foreground"));
-		panel.setRightDecoration(currentNodePanel);
+		reportTitledPanel.setRightDecoration(currentNodePanel);
 		
-		retVal.add(panel, BorderLayout.CENTER);
+		retVal.add(reportTitledPanel, BorderLayout.CENTER);
 		
 		return retVal;
 	}
@@ -998,6 +1017,7 @@ public class NodeWizard extends WizardFrame {
 		protected void done() {
 			panel.showHtml();
 			bufferPanel.getBufferTable().repaint();
+			reportTimer.stop();
 		}
 		
 	}

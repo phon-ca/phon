@@ -221,7 +221,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 
 	@Override
 	public String getTitle() {
-		return "Syllabifier Composer";
+		return "Composer (Syllabifier)";
 	}
 	
 }
