@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ipaGrids xmlns="http://phon.ling.mun.ca/ns/ipamap">
-    
+
     <grid cols="44" rows="16" name="Consonants">
         <!-- Row 1 -->
         <cell y="0" x="0" h="2" w="2">
@@ -87,7 +87,7 @@
             <property name="Description">Epiglottal stop</property>
             <property name="Unicode">0x2a1</property>
         </cell>
-        
+
         <!-- Row 2 -->
         <cell y="2" x="2" h="2" w="2">
             <text>m</text>
@@ -131,7 +131,7 @@
             <property name="Description">Voiced uvular nasal</property>
             <property name="Unicode">0x274</property>
         </cell>
-        
+
         <!-- Row 3 -->
         <cell y="4" x="0" h="2" w="2">
             <text>ɸ</text>
@@ -265,7 +265,7 @@
             <property name="Description">Voiced glottal fricative</property>
             <property name="Unicode">0x266</property>
         </cell>
-        
+
         <!-- Row 4 -->
         <cell y="6" x="12" h="2" w="2">
             <text>ɬ</text>
@@ -309,7 +309,7 @@
             <property name="Description">Voiced epiglottal fricative</property>
             <property name="Unicode">0x2a2</property>
         </cell>
-        
+
         <!-- Row 5 -->
         <cell y="8" x="12" h="2" w="2">
             <text>ʦ</text>
@@ -359,7 +359,7 @@
             <property name="Description">Voiced alveolar lateral affricate</property>
             <property name="Unicode">0x3bb</property>
         </cell>
-        
+
         <!-- Row 6 -->
         <cell y="10" x="4" h="2" w="2">
             <text>ʙ</text>
@@ -409,7 +409,7 @@
             <property name="Description">Voiced uvular trill</property>
             <property name="Unicode">0x280</property>
         </cell>
-        
+
         <!-- Row 7 -->
         <cell y="12" x="12" h="2" w="2">
             <text>ɺ</text>
@@ -447,7 +447,7 @@
             <property name="Description">Voiced velar lateral approximant</property>
             <property name="Unicode">0x29f</property>
         </cell>
-        
+
         <!-- Row 8 -->
         <cell y="14" x="0" h="2" w="2">
             <text>ʍ</text>
@@ -524,7 +524,7 @@
             <property name="Description">Alveopalatal click</property>
             <property name="Unicode">0x1c2</property>
         </cell>
-        
+
         <!-- Implosives -->
         <cell y="0" x="12" h="2" w="2">
             <text>ɓ</text>
@@ -557,7 +557,7 @@
             <property name="Unicode">0x29b</property>
         </cell>
     </grid>
-    
+
     <!--Vowels-->
     <grid cols="27" rows="14" name="Vowels">
         <cell y="0" x="0" h="2" w="2">
@@ -741,7 +741,7 @@
             <property name="Unicode">0x252</property>
         </cell>
     </grid>
-    
+
     <!--Suprasegmentals-->
     <grid cols="18" rows="2" name="Suprasegmentals">
         <cell y="0" x="0" h="2" w="2">
@@ -799,7 +799,7 @@
             <property name="Unicode">0x2e</property>
         </cell>
     </grid>
-    
+
     <!--Contours-->
     <grid cols="22" rows="4" name="Contours">
         <cell y="0" x="0" h="2" w="2">
@@ -959,7 +959,7 @@
             <property name="Unicode">0x335</property>
         </cell>
     </grid>
-    
+
     <!--Diacritics-->
     <grid cols="34" rows="4" name="Diacritics">
         <cell y="0" x="0" h="2" w="2">
@@ -1112,8 +1112,14 @@
             <property name="Description">Rhoticity</property>
             <property name="Unicode">0x2de</property>
         </cell>
+        <cell y="2" x="24" h="2" w="2">
+            <text>&#x25cc;&#x032e;</text>
+            <property name="Name">Breve Below</property>
+            <property name="Description">Rhoticity</property>
+            <property name="Unicode">0x32e</property>
+        </cell>
     </grid>
-    
+
     <!--Tones-->
     <grid cols="30" rows="4" name="Tones">
         <cell y="0" x="0" h="2" w="2">
@@ -1261,7 +1267,7 @@
             <property name="Unicode">0x2079</property>
         </cell>
     </grid>
-    
+
     <!--ExtIPA-->
     <grid cols="34" rows="12" name="ExtIPA">
         <cell y="0" x="0" h="2" w="2">
@@ -1522,7 +1528,7 @@
             <property name="Description">Weak articulation</property>
             <property name="Unicode">0x349</property>
         </cell>
-        
+
         <cell y="10" x="16" h="2" w="2">
             <text>◌͎</text>
             <property name="Name">Subscript up arrow</property>
@@ -1571,7 +1577,7 @@
             <property name="Description">Post-voicing</property>
             <property name="Unicode">0x2ec</property>
         </cell>
-        
+
         <cell y="10" x="32" h="2" w="2">
             <text>ˬ̵◌</text>
             <property name="Name">Subscript wedge</property>

@@ -268,6 +268,9 @@
 	<feature name="back">
 		<primary_family>backness</primary_family>
 	</feature>
+	<feature name="derhoticized">
+		<primary_family>diacritic</primary_family>
+	</feature>
 	<feature name="syllabic">
 		<synonym>syl</synonym>
 		<primary_family>diacritic</primary_family>
@@ -457,6 +460,18 @@
 	</feature>
 	<feature name="sandhi">
 		<primary_family>diacritic</primary_family>
+	</feature>
+	<feature name="quasiresonant">
+		<primary_family>place</primary_family>
+	</feature>
+	<feature name="semiresonant">
+		<primary_family>place</primary_family>
+	</feature>
+	<feature name="raspberry">
+		<primary_family>place</primary_family>
+	</feature>
+	<feature name="transition">
+		<primary_family>place</primary_family>
 	</feature>
 
 	<!-- p (0x70) -->
@@ -779,12 +794,20 @@
 	<feature_set char="&#x252;">vowel round low lax back </feature_set>
 	<!-- C (0x43) -->
 	<feature_set char="&#x43;">consonant cover </feature_set>
+	<!-- F (0x46) -->
+	<feature_set char="&#x46;">cover semiresonant </feature_set>
 	<!-- G (0x47) -->
 	<feature_set char="&#x47;">glide cover </feature_set>
 	<!-- V (0x56) -->
 	<feature_set char="&#x56;">vowel cover </feature_set>
+	<!-- Q (0x51) -->
+	<feature_set char="&#x51;">cover quasiresonant </feature_set>
+	<!-- R (0x52) -->
+	<feature_set char="&#x52;">cover raspberry </feature_set>
 	<!-- X (0x58) -->
 	<feature_set char="&#x58;">unintelligible cover </feature_set>
+	<!-- > (0x3e) -->
+	<feature_set char="&#x3e;">transition glide </feature_set>
 	<!-- Ø (0xd8) -->
 	<feature_set char="&#xd8;">null </feature_set>
 	<!-- ◌( (0x28) -->
@@ -1124,7 +1147,7 @@
 	<!-- ◌̬ (0x32c) -->
 	<feature_set char="&#x32c;">diacritic voiced </feature_set>
 	<!-- ◌̮ (0x32e) -->
-	<feature_set char="&#x32e;">diacritic </feature_set>
+	<feature_set char="&#x32e;">diacritic derhoticized </feature_set>
 	<!-- ◌̯ (0x32f) -->
 	<feature_set char="&#x32f;">diacritic nonsyllabic </feature_set>
 	<!-- ◌̰ (0x330) -->

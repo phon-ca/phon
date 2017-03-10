@@ -106,6 +106,10 @@
         <name>Latin Capital Letter V</name>
         <token>COVER_SYMBOL</token>
     </char>
+    <char value="&#x0046;">
+        <name>Latin Capital Letter F</name>
+        <token>COVER_SYMBOL</token>
+    </char>
     <char value="&#x0047;">
         <name>Latin Capital Letter G</name>
         <token>COVER_SYMBOL</token>
@@ -113,6 +117,18 @@
     <char value="&#x0058;">
         <name>Latin Capital Letter X</name>
         <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0051;">
+        <name>Latin Capital Letter Q</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0052;">
+        <name>Latin Capital Letter R</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x003e;">
+        <name>Greater-than Sign</name>
+        <token>GLIDE</token>
     </char>
     <char value="&#x0061;">
         <name>Latin Letter Small A</name>
@@ -1138,7 +1154,7 @@
         <name>Latin Letter Small F with Hook</name>
         <token>CONSONANT</token>
     </char>
-    
+
     <!-- SANDHI -->
     <char value="&#x203f;">
         <name>Undertie</name>
@@ -1148,7 +1164,7 @@
         <name>Overtie</name>
         <token>SANDHI</token>
     </char>
-    
+
     <!--
         CHECK: Added from 1.6.2, token type needs to be checked.
     -->
@@ -1536,26 +1552,26 @@
         <name>Latin Letter Small V with Right Hook</name>
         <token>CONSONANT</token>
     </char>
-    
+
     <char value="&#xa71d;">
         <name>MODIFIER LETTER AFRICANIST DOWNSTEP</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
-    
+
     <char value="&#xa71e;">
         <name>MODIFIER LETTER AFRICANIST UPSTEP</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
-    
+
     <char value="&#x1da6;">
         <name>MODIFIER LETTER SMALL CAPITAL I</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
-    
+
     <char value="&#x1db7;">
         <name>MODIFIER LETTER SMALL UPSILON</name>
         <token>SUFFIX_DIACRITIC</token>
     </char>
-    
+
 </ipa>
 
