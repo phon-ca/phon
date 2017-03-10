@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,8 +29,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -88,83 +90,83 @@ import ca.phon.util.VersionInfo;
 
 /**
  * A local on-disk project
- * 
+ *
  */
 public class LocalProject implements Project, ProjectRefresh {
-	
+
 	private final static Logger LOGGER = Logger.getLogger(LocalProject.class.getName());
-	
+
 	/**
 	 * Project folder
-	 * 
+	 *
 	 */
 	private final File projectFolder;
-	
+
 	/**
 	 * project.xml data
 	 */
 	private ProjectType projectData;
 	public final static String PROJECT_XML_FILE = "project.xml";
-	
+
 	public final static String PROJECT_PROPERTIES_FILE = "props";
-	
+
 	private final static String sessionTemplateFile = "__sessiontemplate.xml";
-	
+
 	/**
 	 * Session write locks
 	 */
-	private final Map<String, UUID> sessionLocks = 
+	private final Map<String, UUID> sessionLocks =
 			Collections.synchronizedMap(new HashMap<String, UUID>());
-	
-	private final List<ProjectListener> projectListeners = 
+
+	private final List<ProjectListener> projectListeners =
 			Collections.synchronizedList(new ArrayList<ProjectListener>());
-	
+
 	private String resourceLocation = null;
 
 	/**
 	 * Extension support
 	 */
 	private final ExtensionSupport extSupport = new ExtensionSupport(Project.class, this);
-	
+
 	/**
-	 * 
+	 *
 	 * @param url
 	 */
-	protected LocalProject(File projectFolder) 
+	protected LocalProject(File projectFolder)
 			throws ProjectConfigurationException {
 		super();
 		this.projectFolder = projectFolder;
-		
+
 		extSupport.initExtensions();
-		
+
 		// load project data
 		projectData = loadProjectData();
 		refresh();
-		
+
 		putExtension(ProjectRefresh.class, this);
 	}
-	
+
 	/**
 	 * Load project data from the project.xml file.
 	 * If not found, empty project data is created.
-	 * 
+	 *
 	 * @return projectData
 	 */
 	private ProjectType loadProjectData() throws ProjectConfigurationException {
 		final ObjectFactory factory = new ObjectFactory();
-		
+
 		final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
-		
+
 		if(dataFile.exists()) {
 			try {
 				final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 				final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-				
+
 				final FileInputStream fin = new FileInputStream(dataFile);
 				final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
 				final XMLEventReader eventReader = inputFactory.createXMLEventReader(fin);
-				
-				final JAXBElement<ProjectType> projectEle = 
+
+				final JAXBElement<ProjectType> projectEle =
 						unmarshaller.unmarshal(eventReader, ProjectType.class);
 				return projectEle.getValue();
 			} catch (JAXBException jaxbEx) {
@@ -175,8 +177,8 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new ProjectConfigurationException(e);
 			}
 		}
-		
-		
+
+
 		final File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
 		if(propsFile.exists()) {
 			// load properties
@@ -188,20 +190,20 @@ public class LocalProject implements Project, ProjectRefresh {
 			}
 			putExtension(Properties.class, props);
 		}
-		
+
 		final ProjectType retVal = factory.createProjectType();
 		final UUID projectUUID = UUID.randomUUID();
 		retVal.setName(getFolder().getName());
 		retVal.setUuid(projectUUID.toString());
 		return retVal;
 	}
-	
+
 	/**
 	 * Save project data
-	 * 
+	 *
 	 * @throws IOException
 	 */
-	protected void saveProjectData() 
+	protected void saveProjectData()
 		throws IOException {
 		final ObjectFactory factory = new ObjectFactory();
 		try {
@@ -209,20 +211,20 @@ public class LocalProject implements Project, ProjectRefresh {
 			final Marshaller marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			
+
 			final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
-			
+
 			final ProjectType projectData = getProjectData();
 			// HACK to ensure compatibility with Phon 1.6.2
 			projectData.setAppid("1.5");
 			projectData.setVersion("1.5");
-			
+
 			final JAXBElement<ProjectType> projectDataEle = factory.createProject(getProjectData());
 			marshaller.marshal(projectDataEle, dataFile);
 		} catch (JAXBException e) {
 			throw new IOException(e);
 		}
-		
+
 		// save properties
 		final Properties properties = getExtension(Properties.class);
 		if(properties != null) {
@@ -234,23 +236,23 @@ public class LocalProject implements Project, ProjectRefresh {
 			}
 		}
 	}
-	
+
 	/**
 	 * Scan the project folder and build the list of corpora/sessions
 	 * available.  Local projects will always take the current list of
 	 * corpora/sessions directly from the storage device.
-	 * 
+	 *
 	 * @return list of corprora xml objects
 	 */
 	private List<CorpusType> scanProjectFolder() {
 		final ObjectFactory factory = new ObjectFactory();
 		final List<CorpusType> retVal = new ArrayList<CorpusType>();
-		
+
 		for(File f:getFolder().listFiles()) {
-			if(f.isDirectory() 
-					&& !f.getName().startsWith("~") 
-					&& !f.getName().endsWith("~") 
-					&& !f.getName().startsWith("__") 
+			if(f.isDirectory()
+					&& !f.getName().startsWith("~")
+					&& !f.getName().endsWith("~")
+					&& !f.getName().startsWith("__")
 					&& !f.getName().startsWith(".")
 					&& !f.isHidden()) {
 				final String corpusName = f.getName();
@@ -260,7 +262,7 @@ public class LocalProject implements Project, ProjectRefresh {
 					ct.setName(corpusName);
 					ct.setDescription("");
 				}
-				
+
 				final List<SessionType> toRemove = new ArrayList<SessionType>(ct.getSession());
 				// look for all xml files inside corpus folder
 				for(File xmlFile:f.listFiles()) {
@@ -271,7 +273,7 @@ public class LocalProject implements Project, ProjectRefresh {
 							&& !xmlFile.getName().startsWith(".")
 							&& !xmlFile.isHidden()) {
 						final String sessionName = xmlFile.getName().substring(0, xmlFile.getName().lastIndexOf('.'));
-						
+
 						SessionType sessionType = null;
 						for(SessionType st:ct.getSession()) {
 							if(st.getName().equals(sessionName)) {
@@ -279,7 +281,7 @@ public class LocalProject implements Project, ProjectRefresh {
 								break;
 							}
 						}
-						
+
 						if(sessionType == null) {
 							sessionType = factory.createSessionType();
 							sessionType.setName(sessionName);
@@ -292,19 +294,19 @@ public class LocalProject implements Project, ProjectRefresh {
 				for(SessionType st:toRemove) {
 					ct.getSession().remove(st);
 				}
-				
+
 				retVal.add(ct);
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	/**
 	 * Get the current corpus xml object from project data.
-	 * 
+	 *
 	 * @param corpus
-	 * @return the corpus xml object or <code>null</code> if 
+	 * @return the corpus xml object or <code>null</code> if
 	 *  not found
 	 */
 	protected CorpusType getCorpusInfo(String corpus) {
@@ -316,10 +318,10 @@ public class LocalProject implements Project, ProjectRefresh {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get the current session xml object from project data.
-	 * 
+	 *
 	 * @param corpus
 	 * @param session
 	 * @return the session xml object or <code>null</code> if
@@ -336,11 +338,11 @@ public class LocalProject implements Project, ProjectRefresh {
 		}
 		return null;
 	}
-	
+
 	protected ProjectType getProjectData() {
 		return this.projectData;
 	}
-	
+
 	private File getFolder() {
 		return this.projectFolder;
 	}
@@ -354,7 +356,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void setName(String name) {
 		final String oldName = getName();
 		projectData.setName(name);
-		
+
 		final ProjectEvent event = ProjectEvent.newNameChangedEvent(oldName, name);
 		fireProjectDataChanged(event);
 	}
@@ -369,7 +371,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void setUUID(UUID uuid) {
 		final UUID oldUUID = getUUID();
 		projectData.setUuid(uuid.toString());
-		
+
 		final ProjectEvent event = ProjectEvent.newUUIDChangedEvent(oldUUID.toString(), uuid.toString());
 		fireProjectDataChanged(event);
 	}
@@ -377,11 +379,11 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public List<String> getCorpora() {
 		final List<String> corpusList = new ArrayList<String>();
-		
+
 		for(CorpusType ct:getProjectData().getCorpus()) {
 			corpusList.add(ct.getName());
 		}
-		
+
 		return corpusList;
 	}
 
@@ -391,11 +393,11 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(corpusFolder.exists()) {
 			throw new IOException("Corpus with name '" + name + "' already exists.");
 		}
-		
+
 		if(!corpusFolder.mkdirs()) {
 			throw new IOException("Unable to create corpus folder.");
 		}
-		
+
 		final ObjectFactory factory = new ObjectFactory();
 		CorpusType ct = getCorpusInfo(name);
 		if(ct == null) {
@@ -404,9 +406,9 @@ public class LocalProject implements Project, ProjectRefresh {
 			getProjectData().getCorpus().add(ct);
 		}
 		ct.setDescription(description);
-		
+
 		saveProjectData();
-		
+
 		final ProjectEvent pe = ProjectEvent.newCorpusAddedEvent(name);
 		fireProjectStructureChanged(pe);
 	}
@@ -415,7 +417,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void renameCorpus(String corpus, String newName) throws IOException {
 		final File corpusFolder = getCorpusFolder(corpus);
 		final File newCorpusFolder = getCorpusFolder(newName);
-		
+
 		// rename folder
 		corpusFolder.renameTo(newCorpusFolder);
 
@@ -423,7 +425,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(ct != null) {
 			ct.setName(newName);
 		}
-		
+
 		ProjectEvent pe = ProjectEvent.newCorpusRemovedEvent(corpus);
 		fireProjectStructureChanged(pe);
 		pe = ProjectEvent.newCorpusAddedEvent(newName);
@@ -440,20 +442,20 @@ public class LocalProject implements Project, ProjectRefresh {
 					throw new IOException("Unable to remove file '" + f.getName() + "'");
 				}
 			}
-			
+
 			if(!corpusFolder.delete()) {
 				throw new IOException("Unable to remove corpus folder.");
 			}
 		}
-		
+
 		// remove entry from project data
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null) {
 			getProjectData().getCorpus().remove(ct);
 		}
-		
+
 		saveProjectData();
-		
+
 		ProjectEvent pe = ProjectEvent.newCorpusRemovedEvent(corpus);
 		fireProjectStructureChanged(pe);
 	}
@@ -475,13 +477,13 @@ public class LocalProject implements Project, ProjectRefresh {
 			getProjectData().getCorpus().add(ct);
 		}
 		ct.setDescription(description);
-		
+
 		try {
 			saveProjectData();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-		
+
 		ProjectEvent pe = ProjectEvent.newCorpusDescriptionChangedEvent(corpus, old, description);
 		fireProjectDataChanged(pe);
 	}
@@ -489,20 +491,20 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public List<String> getCorpusSessions(String corpus) {
 		final List<String> retVal = new ArrayList<String>();
-		
+
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null) {
 			for(SessionType st:ct.getSession()) {
 				retVal.add(st.getName());
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	private File getCorpusFolder(String corpus) {
 		File retVal = new File(getFolder(), corpus);
-		
+
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null && ct.getLoc() != null) {
 			try {
@@ -516,31 +518,31 @@ public class LocalProject implements Project, ProjectRefresh {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	private void setCorpusFolder(String corpus, File folder) {
 		CorpusType ct = getCorpusInfo(corpus);
 		if(ct == null) {
 			ct = (new ObjectFactory()).createCorpusType();
 			ct.setName(corpus);
 			ct.setDescription("");
-			
+
 			projectData.getCorpus().add(ct);
 		}
 		ct.setLoc(folder.toURI().toString());
 	}
-	
+
 	private File getSessionFile(String corpus, String session) {
 		File retVal = new File(getCorpusFolder(corpus), session + ".xml");
-		
+
 		// check to see if session file path has been defined in xml
 		final SessionType st = getSessionInfo(corpus,  session);
 		if(st != null && st.getLoc() != null) {
 			try {
 				final URI uri = new URI(st.getLoc());
-				
+
 				if(uri.isAbsolute()) {
 					retVal = new File(uri);
 				} else {
@@ -550,14 +552,14 @@ public class LocalProject implements Project, ProjectRefresh {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	private String sessionProjectPath(String corpus, String session) {
 		return corpus + "." + session;
 	}
-	
+
 	@Override
 	public Session openSession(String corpus, String session)
 			throws IOException {
@@ -576,10 +578,10 @@ public class LocalProject implements Project, ProjectRefresh {
 			throws IOException {
 		final File sessionFile = getSessionFile(corpus, session);
 		final URI uri = sessionFile.toURI();
-		
+
 		try(InputStream in = uri.toURL().openStream()) {
 			final Session retVal = reader.readSession(in);
-			
+
 			// make sure corpus and session match the expected values, these
 			// can change if the session file has been manually moved
 			if(!retVal.getCorpus().equals(corpus)) {
@@ -588,7 +590,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			if(retVal.getName() == null || !retVal.getName().equals(session)) {
 				retVal.setName(session);
 			}
-			
+
 			return retVal;
 		} catch (Exception e) {
 			// catch all exceptions
@@ -604,28 +606,28 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	@Override
-	public UUID getSessionWriteLock(String corpus, String session) 
+	public UUID getSessionWriteLock(String corpus, String session)
 		throws IOException {
 		final String key = sessionProjectPath(corpus, session);
 		UUID currentLock = sessionLocks.get(key);
-		
+
 		// already locks
 		if(currentLock != null) {
 			throw new IOException("Session '" + key + "' is already locked.");
 		}
-		
+
 		final UUID lock = UUID.randomUUID();
 		sessionLocks.put(key, lock);
-		
+
 		final ProjectEvent pe = ProjectEvent.newSessionChagnedEvent(corpus, session);
 		fireProjectWriteLocksChanged(pe);
-		
+
 		return lock;
 	}
-	
+
 	/**
 	 * Checks given session write lock
-	 * 
+	 *
 	 * @throws IOException if the write lock is not valid
 	 */
 	protected void checkSessionWriteLock(String corpus, String session, UUID writeLock)
@@ -652,7 +654,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		final String sessionLoc = sessionProjectPath(corpus, session);
 		checkSessionWriteLock(corpus, session, writeLock);
 		sessionLocks.remove(sessionLoc);
-		
+
 		final ProjectEvent pe = ProjectEvent.newSessionChagnedEvent(corpus, session);
 		fireProjectWriteLocksChanged(pe);
 	}
@@ -666,7 +668,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void saveSession(String corpus, String sessionName, Session session,
 			UUID writeLock) throws IOException {
 		final SessionOutputFactory outputFactory = new SessionOutputFactory();
-		
+
 		// get default writer
 		SessionWriter writer = outputFactory.createWriter();
 		// look for an original format, if found save in the same format
@@ -677,22 +679,22 @@ public class LocalProject implements Project, ProjectRefresh {
 
 		saveSession(corpus, sessionName, session, writer, writeLock);
 	}
-	
+
 	@Override
 	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer,
 			UUID writeLock) throws IOException {
 		checkSessionWriteLock(corpus, sessionName, writeLock);
-		
+
 		final File sessionFile = getSessionFile(corpus, sessionName);
 		final boolean created = !sessionFile.exists();
-		
+
 		// XXX safety checks, make sure we can read back in what we write.
 		// also make sure the number of records has not changed between
 		// the original and serialized session
 		final ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		try {
 			writer.writeSession(session, bout);
-			
+
 			final SessionReader reader = (new SessionInputFactory()).createReader(
 					writer.getClass().getAnnotation(SessionIO.class));
 			final Session testSession = reader.readSession(new ByteArrayInputStream(bout.toByteArray()));
@@ -704,11 +706,11 @@ public class LocalProject implements Project, ProjectRefresh {
 			// unable to write the session, bail!
 			throw new IOException("Session not written to disk", e);
 		}
-		
+
 		final FileOutputStream fOut  = new FileOutputStream(sessionFile);
 		writer.writeSession(session, fOut);
 		fOut.close();
-		
+
 		if(created) {
 			final ObjectFactory xmlFactory = new ObjectFactory();
 			final SessionType st = xmlFactory.createSessionType();
@@ -717,9 +719,9 @@ public class LocalProject implements Project, ProjectRefresh {
 			if(ct != null) {
 				ct.getSession().add(st);
 			}
-			
+
 			saveProjectData();
-			
+
 			final ProjectEvent pe = ProjectEvent.newSessionAddedEvent(corpus, sessionName);
 			fireProjectStructureChanged(pe);
 		}
@@ -734,21 +736,21 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void removeSession(String corpus, String session, UUID writeLock)
 			throws IOException {
 		checkSessionWriteLock(corpus, session, writeLock);
-		
+
 		final File sessionFile = getSessionFile(corpus, session);
-		
+
 		if(!sessionFile.exists()) {
 			throw new FileNotFoundException(sessionFile.getAbsolutePath());
 		}
-		
+
 		if(!sessionFile.canWrite()) {
 			throw new IOException("Unable to delete " + sessionFile.getAbsolutePath() + ", file is read-only.");
 		}
-		
+
 		if(!sessionFile.delete()) {
 			throw new IOException("Unable to delete " + sessionFile.getAbsolutePath() + ".");
 		}
-		
+
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null) {
 			final SessionType st = getSessionInfo(corpus, session);
@@ -756,9 +758,9 @@ public class LocalProject implements Project, ProjectRefresh {
 				ct.getSession().remove(st);
 			}
 		}
-		
+
 		saveProjectData();
-		
+
 		final ProjectEvent pe = ProjectEvent.newSessionRemovedEvent(corpus, session);
 		fireProjectStructureChanged(pe);
 	}
@@ -768,7 +770,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			throws IOException {
 		final File resFolder = new File(getResourceLocation());
 		final File resFile = new File(resFolder, resourceName);
-		
+
 		return new FileInputStream(resFile);
 	}
 
@@ -777,15 +779,15 @@ public class LocalProject implements Project, ProjectRefresh {
 			throws IOException {
 		final File resFolder = new File(getResourceLocation());
 		final File resFile = new File(resFolder, resourceName);
-		
+
 		// make parent folders as necessary
 		if(!resFile.getParentFile().exists()) {
 			resFile.getParentFile().mkdirs();
 		}
-		
+
 		return new FileOutputStream(resFile);
 	}
-	
+
 	@Override
 	public Set<Class<?>> getExtensions() {
 		return extSupport.getExtensions();
@@ -859,9 +861,12 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(sessionFile.exists()) {
 			modTime = sessionFile.lastModified();
 		}
-		return LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), ZoneOffset.UTC);
+		final ZoneId systemZoneId = ZoneId.systemDefault();
+		final ZoneOffset zoneOffset = systemZoneId.getRules().getOffset(Instant.now());
+
+		return LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), zoneOffset);
 	}
-	
+
 	@Override
 	public long getSessionByteSize(Session session) {
 		return getSessionByteSize(session.getCorpus(), session.getName());
@@ -870,12 +875,12 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public long getSessionByteSize(String corpus, String session) {
 		long size = 0L;
-	
+
 		final File sessionFile = getSessionFile(corpus, session);
 		if(sessionFile.exists() && sessionFile.canRead()) {
 			size = sessionFile.length();
 		}
-		
+
 		return size;
 	}
 
@@ -895,11 +900,11 @@ public class LocalProject implements Project, ProjectRefresh {
 			try {
 				builder = domFactory.newDocumentBuilder();
 				Document doc = builder.parse(sessionFile);
-				
+
 				XPathFactory xpathFactory = XPathFactory.newInstance();
 				XPath xpath = xpathFactory.newXPath();
 				XPathExpression expr = xpath.compile(xpathPattern);
-				
+
 				Object result = expr.evaluate(doc, XPathConstants.NODESET);
 				NodeList nodes = (NodeList) result;
 				retVal = nodes.getLength();
@@ -911,10 +916,10 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new IOException(e);
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	@Override
 	public Set<Participant> getParticipants(Collection<SessionPath> sessions) {
 		final Comparator<Participant> comparator = (p1, p2) -> {
@@ -930,15 +935,15 @@ public class LocalProject implements Project, ProjectRefresh {
 			return retVal;
 		};
 		final Set<Participant> retVal = new TreeSet<>(comparator);
-		
+
 		for(SessionPath sessionPath:sessions) {
 			try {
 				Session session = openSession(sessionPath.getCorpus(), sessionPath.getSession());
 				Collection<Participant> participants = new ArrayList<>();
-				
+
 				participants.add( SessionFactory.newFactory().cloneParticipant(Participant.UNKNOWN) );
 				session.getParticipants().forEach( (p) -> participants.add(p) );
-				
+
 				for(Participant participant:participants) {
 					Participant speaker = null;
 					if(retVal.contains(participant)) {
@@ -951,13 +956,13 @@ public class LocalProject implements Project, ProjectRefresh {
 					} else {
 						speaker = SessionFactory.newFactory().cloneParticipant(participant);
 					}
-					
+
 					// get record count
 					int count = 0;
 					for(Record r:session.getRecords()) {
 						if(comparator.compare(r.getSpeaker(), participant) == 0) ++count;
 					}
-					
+
 					if(speaker != null) {
 						if(count == 0 && comparator.compare(Participant.UNKNOWN, speaker) == 0) {
 							// do not add unknown speaker if there are no records
@@ -967,13 +972,13 @@ public class LocalProject implements Project, ProjectRefresh {
 								history = new ParticipantHistory();
 								speaker.putExtension(ParticipantHistory.class, history);
 							}
-							Period age = 
+							Period age =
 									(participant != null ? participant.getAge(session.getDate()) : null);
 							history.setAgeForSession(sessionPath, age);
 							history.setNumberOfRecordsForSession(sessionPath, count);
 						}
 					}
-					
+
 					if(!retVal.contains(speaker)) {
 						if(comparator.compare(Participant.UNKNOWN, speaker) == 0) {
 							if(count > 0)
@@ -982,13 +987,13 @@ public class LocalProject implements Project, ProjectRefresh {
 							retVal.add(speaker);
 						}
 					}
-					
+
 				}
 			} catch (IOException e) {
 				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
-		
+
 		return retVal;
 	}
 
@@ -1012,13 +1017,13 @@ public class LocalProject implements Project, ProjectRefresh {
 	public String getLocation() {
 		return projectFolder.getAbsolutePath();
 	}
-	
+
 	@Override
 	public String getCorpusPath(String corpus) {
 		final File corpusFolder = getCorpusFolder(corpus);
 		return (corpusFolder == null ? corpus : corpusFolder.getAbsolutePath());
 	}
-	
+
 	@Override
 	public void setCorpusPath(String corpus, String path) {
 		setCorpusFolder(corpus, new File(path));
@@ -1039,7 +1044,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	public Session getSessionTemplate(String corpus) throws IOException {
 		final File corpusFolder = new File(getLocation(), corpus);
 		final File templateFile = new File(corpusFolder, sessionTemplateFile);
-		
+
 		if(templateFile.exists()) {
 			final SessionInputFactory inputFactory = new SessionInputFactory();
 			// TODO use method to find which reader will work for the file
@@ -1059,10 +1064,10 @@ public class LocalProject implements Project, ProjectRefresh {
 			throws IOException {
 		final File corpusFolder = new File(getLocation(), corpus);
 		final File templateFile = new File(corpusFolder, sessionTemplateFile);
-		
+
 		final SessionOutputFactory outputFactory = new SessionOutputFactory();
 		final SessionWriter writer = outputFactory.createWriter();
-		
+
 		final FileOutputStream fOut  = new FileOutputStream(templateFile);
 		writer.writeSession(template, fOut);
 	}
@@ -1073,11 +1078,11 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(getCorpusSessions(corpus).contains(session)) {
 			throw new IOException("Session named " + corpus + "." + session + " already exists.");
 		}
-		
+
 		Session template = null;
 		try {
 			template = getSessionTemplate(corpus);
-		} catch (IOException e) { // do nothing 
+		} catch (IOException e) { // do nothing
 		}
 
 		final SessionFactory factory = SessionFactory.newFactory();
@@ -1088,33 +1093,33 @@ public class LocalProject implements Project, ProjectRefresh {
 			s.setName(session);
 		} else {
 			s = factory.createSession(corpus, session);
-			
+
 			final Record r = factory.createRecord();
 			r.addGroup();
 			s.addRecord(r);
 		}
-		
+
 		final UUID writeLock = getSessionWriteLock(s);
 		saveSession(s, writeLock);
 		releaseSessionWriteLock(s, writeLock);
-		
+
 		return s;
 	}
 
 	@Override
 	public void refresh() {
 		final List<CorpusType> corpora = scanProjectFolder();
-		
+
 		projectData.getCorpus().clear();
 		projectData.getCorpus().addAll(corpora);
-		
+
 		try {
 			saveProjectData();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return getName();
@@ -1133,5 +1138,5 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void setRecourceLocation(String location) {
 		this.resourceLocation = location;
 	}
-	
+
 }
