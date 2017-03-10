@@ -59,7 +59,7 @@ params = {separator, "<html><b>Cluster Type</b></html>", false},
 		{enum, filterSelection, "Anything"|"Singleton"|"Tuple"|"Heterosyllabic consonants"|"Other (specifiy below)",
 			0,
 			"<html>Pre-defined:</html>"},
-		{string, clusterPhonex, "", "<html>Phonex:</html>"},	
+		{string, clusterPhonex, "", "<html>Phonex:</html>"},
 		{label, "<html><p>. = singleton; &#92;c&#92;c = sequence of two consonants; .+ = one or more of anything; etc.</p></html>", "<html>Key:</html>"},
 		{label, "<html><p>{} can be specified for features (e.g. {Coronal}), syllable positions (e.g. .:C.:O)</p></html>", "<html>Note:</html>"},
 		{label, "<html><p>.:sctype(&#34;E|C|R&#34;)+ &#92;s? .:sctype(&#34;E|L|O&#34;)+</p></html>", "<html>Heterosyllabic consonant clusters:</html>"},
@@ -85,7 +85,7 @@ params = {separator, "<html><b>Cluster Type</b></html>", false},
 		{bool, includeStressPattern, true, "<html>Include word stress pattern (e.g., 1U2)</html>", ""}
 	;
  */
- 
+
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 
 var filters = {
@@ -107,7 +107,7 @@ function setup_params(params) {
 			reportTitleParamInfo.def);
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(0, reportTitleParam);
-	
+
 	filters.speaker.param_setup(params);
 }
 ]]></oga:property>
@@ -137,7 +137,7 @@ function setup_params(params) {
  */
 
 /*
-params = 
+params =
 	{separator, "&lt;html&gt;&lt;b&gt;Information&lt;/b&gt;&lt;/html&gt;", true},
 	{label, "&lt;html&gt;&lt;p&gt;Phone Clusters.js (version 3)&lt;/p&gt;&lt;/html&gt;", "&lt;html&gt;&lt;b&gt;Script:&lt;/b&gt;&lt;/html&gt;"},
 	{label, "&lt;html&gt;&lt;p&gt;Greg J. Hedlund &lt;a href='mailto:ghedlund@mun.ca'&gt;ghedlund@mun.ca&lt;/a&gt;&lt;/p&gt;&lt;/html&gt;", "&lt;html&gt;&lt;b&gt;Author:&lt;/b&gt;&lt;/html&gt;"},
@@ -158,7 +158,7 @@ params =
 		{enum, filterSelection, "Anything"|"Singleton"|"Tuple"|"Heterosyllabic consonants"|"Other (specifiy below)",
 			0,
 			"&lt;html&gt;Pre-defined:&lt;/html&gt;"},
-		{string, clusterPhonex, "", "&lt;html&gt;Phonex:&lt;/html&gt;"},	
+		{string, clusterPhonex, "", "&lt;html&gt;Phonex:&lt;/html&gt;"},
 		{label, "&lt;html&gt;&lt;p&gt;. = singleton; &amp;#92;c&amp;#92;c = sequence of two consonants; .+ = one or more of anything; etc.&lt;/p&gt;&lt;/html&gt;", "&lt;html&gt;Key:&lt;/html&gt;"},
 		{label, "&lt;html&gt;&lt;p&gt;{} can be specified for features (e.g. {Coronal}), syllable positions (e.g. .:C.:O)&lt;/p&gt;&lt;/html&gt;", "&lt;html&gt;Note:&lt;/html&gt;"},
 		{label, "&lt;html&gt;&lt;p&gt;.:sctype(&amp;#34;E|C|R&amp;#34;)+ &amp;#92;s? .:sctype(&amp;#34;E|L|O&amp;#34;)+&lt;/p&gt;&lt;/html&gt;", "&lt;html&gt;Heterosyllabic consonant clusters:&lt;/html&gt;"},
@@ -184,7 +184,7 @@ params =
 		{bool, includeStressPattern, true, "&lt;html&gt;Include word stress pattern (e.g., 1U2)&lt;/html&gt;", ""}
 	;
  */
- 
+
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 
 /********************************
@@ -195,10 +195,10 @@ var session;
 var CONSONANT_CLUSTER_PHONEX = "\\c+\\s?\\c*";
 var VOWEL_CLUSTER_PHONEX = "\\v+\\s?\\v*";
 
-var predefinedExprs = [ 
-	".+", 
-	".", 
-	".&lt;2&gt;", 
+var predefinedExprs = [
+	".+",
+	".",
+	".&lt;2&gt;",
 	".:sctype(\"OEHS|Coda|RightAppendix+\") .:sctype(\"SyllableBoundaryMarker|SyllableStressMarker?\") .:sctype(\"OEHS|LeftAppendix|Onset+\")"
 ];
 
@@ -225,37 +225,37 @@ function query_record(recordIndex, record)
 {
 	// check participant filter
 	if(!filters.speaker.check_speaker(record.speaker)) return;
-	
-	var phonex = 
+
+	var phonex =
 		(clusterType.index == 0 ? CONSONANT_CLUSTER_PHONEX : VOWEL_CLUSTER_PHONEX);
 	var pattern = PhonexPattern.compile(phonex);
 
-	var filter = 
+	var filter =
 		(filterSelection.index &lt; 4 ? predefinedExprs[filterSelection.index] : clusterPhonex);
-	
+
 	for(i = 0; i &lt; record.numberOfGroups(); i++)
 	{
 		var group = record.getGroup(i);
-		
+
 		var ipaGrp = group.getTier(tierName, IPATranscript);
-	
+
 		var ipaWords = getRequestedWords(ipaGrp);
-		
-		
+
+
 		for(j = 0; j &lt; ipaWords.length; j++)
 		{
 			var ipaWord = ipaWords[j];
-			
+
 			// convert results to a javascript array
 			// for the convienent 'splice' method
 			var clusters = new Array();
-			
+
 			var matcher = pattern.matcher(ipaWord);
 			while(matcher.find()) {
 				clusters.push(new IPATranscript(matcher.group()));
 			}
-			
-			for(k = 0; k &lt; clusters.length; k++) 
+
+			for(k = 0; k &lt; clusters.length; k++)
 			{
 				var cluster = clusters[k];
 				var clusterOk = false;
@@ -266,8 +266,8 @@ function query_record(recordIndex, record)
 				if(is_word_initial(ipaWord, cluster) &amp;&amp; cInitial == false) posOk = false;
 				if(is_word_medial(ipaWord, cluster) &amp;&amp; cMedial == false) posOk = false;
 				if(is_word_final(ipaWord, cluster) &amp;&amp; cFinal == false) posOk = false;
-				
-				if(clusterOk &amp; posOk) 
+
+				if(clusterOk &amp; posOk)
 				{
 					var result = create_result(recordIndex, record, group, ipaWord, cluster);
 					results.addResult(result);
@@ -293,7 +293,7 @@ function query_record(recordIndex, record)
  {
  	// store session in a global variable
  	session = s;
- 	
+
  	/*
  	 * Loading a Custom Feature set:
  	 *
@@ -301,17 +301,17 @@ function query_record(recordIndex, record)
  	 * search un-comment the following lines
  	 * and replace &lt;file&gt; with a properly
  	 * formatted features file.
- 	 * For more information see 
+ 	 * For more information see
  	 * http://phon.ling.mun.ca/phontrac/wiki/search/customfeatures
  	 */
 	// var customFM = new FeatureMatrix("&lt;file&gt;");
 	// FeatureMatrix.makeCurrentInThread( customFM );
  }
- 
+
  /********************************
  * end_search (optional)
  *
- * 
+ *
  * Perform any necessary cleanup operations.
  * Use this function to report data to the
  * console at the end of a search.
@@ -324,7 +324,7 @@ function query_record(recordIndex, record)
 function end_search(s)
 {
 	// do cleanup
-	
+
 	/*
 	 * If a custom feature matrix has been
 	 * loaded un-comment the following line
@@ -336,7 +336,7 @@ function end_search(s)
 
 /**
  * Is the given cluster word initial
- * 
+ *
  * @param word the parent word
  * @param cluster the cluster in question
  * @returns &lt;code&gt;true&lt;/code&gt; if the given cluster
@@ -346,7 +346,7 @@ function is_word_initial(word, cluster)
 {
 	var retVal = false;
 	// check index of first phone in cluster
-	// if it's 0 - it's word initial. 
+	// if it's 0 - it's word initial.
 	// if it's 1 - check the first phone in the word, if
 	//  it's a stress marker the cluster is also word initial
 	var phoneOffset = word.indexOf(cluster);
@@ -355,13 +355,13 @@ function is_word_initial(word, cluster)
 	} else if(phoneOffset == 1 &amp;&amp; word.matches("\\s.+")) {
 		retVal = true;
 	}
-	
+
 	return retVal;
 }
 
 /**
  * Is the given cluster word final
- * 
+ *
  * @param word the parent word
  * @param cluster the cluster in question
  * @returns &lt;code&gt;true&lt;/code&gt; if the given cluster
@@ -370,18 +370,18 @@ function is_word_initial(word, cluster)
 function is_word_final(word, cluster)
 {
 	var retVal = false;
-	
+
 	var lastClusterPhone = cluster.elementAt(cluster.length()-1);
 	var lastWordPhone = word.elementAt(word.length()-1);
-	
+
 	if(lastClusterPhone === lastWordPhone) {
 		retVal = true;
 	}
-	
+
 	return retVal;
 }
 
-function is_word_medial(word, cluster) 
+function is_word_medial(word, cluster)
 {
 	var retVal = !is_word_initial(word, cluster) &amp;&amp; !is_word_final(word, cluster);
 	return retVal;
@@ -389,7 +389,7 @@ function is_word_medial(word, cluster)
 
 /**
  * Create result
- * 
+ *
  * @param record
  * @param word the parent word
  * @param cluster the cluster to add
@@ -401,13 +401,13 @@ function create_result(recordIndex, record, group, word, cluster)
 	var result = factory.createResult();
 	result.schema = "LINEAR";
 	result.recordIndex = recordIndex;
-	
+
 	var ipaT = group.IPATarget;
 	var ipaA = group.IPAActual;
-	
+
 	var ipa = (tierName == "IPA Target" ? ipaT : ipaA);
 	var alignedIpa = (tierName == "IPA Target" ? ipaA : ipaT);
-	
+
 	var startIdx = ipa.stringIndexOf(cluster);
 	var endIdx = startIdx + cluster.toString().length();
 	var rv = factory.createResultValue();
@@ -416,35 +416,35 @@ function create_result(recordIndex, record, group, word, cluster)
 	rv.range = new Range(startIdx, endIdx, false);
 	rv.data = cluster;
 	result.addResultValue(rv);
-	
-	if(includeAligned) 
+
+	if(includeAligned)
 	{
 		var pm = group.getPhoneAlignment();
 		var aligned = pm.getAligned(cluster);
 		var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
-		
+
 		var alignedRv = factory.createResultValue();
 		alignedRv.groupIndex = group.groupIndex;
 		alignedRv.tierName = (tierName == "IPA Target" ? "IPA Actual" : "IPA Target");
-		
-		var groupStartIdx = 
+
+		var groupStartIdx =
 			(alignedIpaElements.length() &gt; 0 ? alignedIpa.indexOf(alignedIpaElements.elementAt(0)) : 0);
-		var groupEndIdx = 
+		var groupEndIdx =
 			(alignedIpaElements.length() &gt; 0 ? alignedIpa.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length()-1)) : 0);
 		var alignedData =
 			(alignedIpaElements.length() &gt; 0 ? alignedIpa.subsection(groupStartIdx, groupEndIdx+1) : new IPATranscript());
-		
+
 		if(aligned != null &amp;&amp; aligned.length &gt; 0) {
 			var alignedStart = alignedIpa.stringIndexOf(alignedData);
 			var alignedLength = alignedData.toString().length();
-			
+
 			alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, false);
 			alignedRv.data = alignedData;
 		} else {
 			alignedRv.range = new Range(0, 0, true);
 			alignedRv.data = "";
 		}
-		
+
 		result.addResultValue(alignedRv);
 	}
 
@@ -452,7 +452,7 @@ function create_result(recordIndex, record, group, word, cluster)
 	if(includeStressPattern) {
 		result.metadata.put("Stress Pattern", word.stressPattern);
 	}
-	
+
 	return result;
 }
 
@@ -488,7 +488,7 @@ function getRequestedWords(group)
 			if(wordStressPattern.length() &gt; 0) {
 				patternOk = word.matchesStressPattern(wordStressPattern);
 			}
-				
+
 			if(posOk == true &amp;&amp; patternOk == true)
 			{
 				retVal[retIdx++] = word;
@@ -592,28 +592,28 @@ function getRequestedWords(group)
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -639,7 +639,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -655,16 +655,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -672,7 +672,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -786,7 +786,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -983,7 +983,7 @@ function run(context) {
 #printTableWithCaption($table, $caption, [])
 #else
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -1038,28 +1038,28 @@ No Results
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -1085,7 +1085,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -1101,16 +1101,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -1118,7 +1118,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -1205,7 +1205,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -1405,7 +1405,7 @@ function tableOp(context, table) {
 
 	var speaker = context.get("speaker");
 	var sessionPath = context.get("sessionPath");
-	
+
 	var history = speaker.getExtension(Packages.ca.phon.project.ParticipantHistory);
 
 	row[0] = sessionPath;
@@ -1965,7 +1965,7 @@ $DATA
         <link dest="1637506f3b5408a" destField="input" source="6d1fd7c9" sourceField="collection"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="">
+                <opqry:info format="html" title="Phone Clusters">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="104752d601584a8d" showAsStep="true">

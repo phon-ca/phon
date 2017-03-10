@@ -76,10 +76,10 @@ function setup_params(params) {
 			reportTitleParamInfo.def);
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
-	
+
     var sep = new SeparatorScriptParam("PCC/PVC Options", false);
     params.add(sep);
-    
+
     var pccStandardLbl = new LabelScriptParam("", "<html><b>PCC/PVC (standard)</b></html>");
     params.add(pccStandardLbl);
     pccOptions.standard.param_setup(params);
@@ -87,12 +87,12 @@ function setup_params(params) {
 	var pccAlignedLbl = new LabelScriptParam("", "<html><b>PCC/PVC (aligned)</b></html>");
 	params.add(pccAlignedLbl);
 	pccOptions.aligned.param_setup(params);
-	
+
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "Aligned Group Filter");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-	
+
 	filters.word.searchByWordEnabled = false;
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
@@ -160,7 +160,7 @@ function begin_search(s) {
 function setup_params(params) {
     var sep = new SeparatorScriptParam("PCC/PVC Options", false);
     params.add(sep);
-    
+
     var pccStandardLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (standard)&lt;/b&gt;&lt;/html&gt;");
     params.add(pccStandardLbl);
     pccOptions.standard.param_setup(params);
@@ -168,12 +168,12 @@ function setup_params(params) {
 	var pccAlignedLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (aligned)&lt;/b&gt;&lt;/html&gt;");
 	params.add(pccAlignedLbl);
 	pccOptions.aligned.param_setup(params);
-	
+
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "Aligned Group Filter");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-	
+
 	filters.word.searchByWordEnabled = false;
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word&lt;/b&gt;&lt;/html&gt;");
@@ -197,35 +197,35 @@ function setup_params(params) {
 function query_record(recordIndex, record)
 {
 	if(!filters.speaker.check_speaker(record.speaker)) return;
-    
+
 	var searchObjects = filters.group.getRequestedGroups(record);
 	// check aligned group for each group returned
 	if(filters.alignedGroup.isUseFilter()) {
 	    searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
 	}
-	
+
 	for(var gIdx = 0; gIdx &lt; searchObjects.length; gIdx++) {
 		var group = searchObjects[gIdx];
 		var words = filters.word.getRequestedWords(group, "IPA Target");
-		
+
 		for(var wIdx = 0; wIdx &lt; words.length; wIdx++) {
 			var word = words[wIdx];
 			if(filters.alignedWord.isUseFilter()) {
 				var alignedWord = word.getTier(filters.alignedWord.tierName);
 				if(!filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
 			}
-			
+
 			if(ignoreTruncated &amp;&amp; word.getIPAActual() == null || word.getIPAActual().length() == 0) {
 				continue;
 			}
-			
+
 		    var ipaT = (word.getIPATarget() != null ? word.getIPATarget() : new IPATranscript());
 		    var ipaA = (word.getIPAActual() != null ? word.getIPAActual() : new IPATranscript());
-		    
+
 		    var result = factory.createResult();
 		    result.schema = "ALIGNED";
 		    result.recordIndex = recordIndex;
-		    
+
 		    var rvt = factory.createResultValue();
 		    rvt.tierName = "IPA Target";
 	    	rvt.groupIndex = gIdx;
@@ -234,7 +234,7 @@ function query_record(recordIndex, record)
 	    	rvt.range = new Range(startIndex, endIndex, false);
 	    	rvt.data = ipaT;
 	    	result.addResultValue(rvt);
-	    	
+
 	    	var rva = factory.createResultValue();
 	    	rva.tierName = "IPA Actual";
 	    	rva.groupIndex = gIdx;
@@ -243,10 +243,10 @@ function query_record(recordIndex, record)
 	    	rva.range = new Range(startIndex, endIndex, false);
 	    	rva.data = ipaA;
 	        result.addResultValue(rva);
-		    
+
 		    var metadata = result.metadata;
-		    
-		    // exclude values which bias results. 
+
+		    // exclude values which bias results.
 		    // (e.g., all-vowel words such as 'eau' in French when looking only at PCC)
 		    if( (pccOptions.standard.includePcc == true || pccOptions.aligned.includePcc == true)
 		    		&amp;&amp; (pccOptions.standard.includePvc == false &amp;&amp; pccOptions.aligned.includePvc == false)
@@ -258,10 +258,10 @@ function query_record(recordIndex, record)
 		    		&amp;&amp; ipaT.indexOf("\\v") &lt; 0) {
 		    	continue;
 		    }
-		    
+
 		    pccOptions.standard.setup_pcc_standard_metadata(word, metadata);
 		    pccOptions.aligned.setup_pcc_aligned_metadata(word, metadata);
-		    
+
 		    results.addResult(result);
 		}
 	}
@@ -362,28 +362,28 @@ function query_record(recordIndex, record)
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -409,7 +409,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -425,16 +425,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -442,7 +442,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -564,7 +564,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -641,28 +641,28 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -688,7 +688,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -704,16 +704,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -721,7 +721,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -815,7 +815,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -1913,7 +1913,7 @@ $DATA
         <link dest="e91c03b16c8b4b76" destField="parameters" source="12946bdb" sourceField="parameters"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="">
+                <opqry:info format="html" title="PCC &amp; PVC">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="12946bdb" showAsStep="true">

@@ -31,7 +31,7 @@
         <node id="6cccb293c40a4b75" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="processSelection"><![CDATA[Stopping]]></oga:property>
+                    <oga:property key="processSelection"><![CDATA[Custom]]></oga:property>
                     <oga:property key="filters.column.exactMatch"><![CDATA[true]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -391,18 +391,18 @@ function setup_params(params) {
 	params.add(ipaActualSepParam);
 	filters.column.setSelectedPatternType(PatternType.PHONEX);
 	filters.column.param_setup(params);
-	
+
 	// setup result filter section
 	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
 	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
 	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
-	
+
 	includeAlignedParam = new BooleanScriptParam(
 	    includeAlignedParamInfo.id,
 	    includeAlignedParamInfo.desc,
 	    includeAlignedParamInfo.title,
 	    includeAlignedParamInfo.def);
-    
+
 	params.add(resultFilterSection);
 	params.add(includeAlignedParam);
 	params.add(targetLbl);
@@ -411,13 +411,13 @@ function setup_params(params) {
 	params.add(actualLbl);
 	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
 	filters.actualResultFilter.param_setup(params);
-	
+
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-	
+
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
     filters.wordPattern.setEnabled(false);
@@ -429,13 +429,13 @@ function setup_params(params) {
             var enabled = e.source.getValue(e.source.paramId);
             filters.wordPattern.setEnabled(enabled);
             filters.alignedWord.setEnabled(enabled);
-        }    
+        }
     };
     filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
     var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
     filters.wordPattern.setEnabled(enabled);
     filters.alignedWord.setEnabled(enabled);
-    
+
 	filters.syllable.param_setup(params);
 	filters.speaker.param_setup(params);
 }
@@ -447,50 +447,47 @@ function createProcessSelection() {
         name = processes[i]["name"];
         processNames.push(name);
     }
-    
+
     var retVal = new EnumScriptParam(
         processSelectionParamInfo.id,
         processSelectionParamInfo.title,
         processSelectionParamInfo.def,
         processNames);
-    
+
      var processSelectionListener = new java.beans.PropertyChangeListener() {
             propertyChange: function(e) {
                 var selectedIdx = processSelectionParam.getValue(processSelectionParamInfo.id).index;
                 if(selectedIdx >= 0) {
                     var process = processes[selectedIdx];
-                    
+
                     processNameParam.setValue(processNameParamInfo.id, process["name"]);
-                    
+
                     var params = process["params"];
                     for(i = 0; i < params.length; i++) {
                         var param = params[i];
                         var setParam = param["object"] + "." + param["function"] + "(" + param["value"] + ");";
                         eval(setParam);
                     }
-                    
+
                 }
             }
      };
      retVal.addPropertyChangeListener(processSelectionListener);
-     
+
     return retVal;
 }
 
 function run(context) {
-	
+
 }
 ]]></oga:property>
-                    <oga:property key="filters.primary.filter"><![CDATA[{-stop}]]></oga:property>
-                    <oga:property key="processName"><![CDATA[Stopping]]></oga:property>
                     <oga:property key="filters.column.caseSensitive"><![CDATA[false]]></oga:property>
-                    <oga:property key="filters.column.filter"><![CDATA[{stop}]]></oga:property>
                 </oga:settings>
                 <oga:meta x="83" y="569"/>
             </extensions>
         </node>
         <opqry:queryNode id="e1621c04304b4cdf" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-03-07T09:04:44.455-03:30" name="Phones" uuid="35ffe270-4e62-4fb5-bbd2-024e2b63e805">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-03-10T10:56:31.064-03:30" name="Phones" uuid="6865223e-7dae-4739-bae3-11e877771d5a">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -518,7 +515,7 @@ function run(context) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="3f03971c2ba04d06" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="2f63abb9">
+            <graph id="66130ec0">
                 <node id="8048754b114f44f6" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -595,28 +592,28 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -642,7 +639,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -658,16 +655,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -675,7 +672,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -685,7 +682,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="736157b1" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="3ad1975b">
+            <graph id="7363e7ef">
                 <node id="10797378" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -712,7 +709,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="774a460c16004708" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6be6cce9">
+                    <graph id="169cbbf7">
                         <node id="5d4016d5c86745e6" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -730,7 +727,7 @@ function tableOp(context, table) {
 	table.setColumnTitle(0, "Session");
 	table.setColumnTitle(1, "Role");
 	table.setColumnTitle(2, "Age");
-	table.setColumnTitle(3, "# Targets"); 
+	table.setColumnTitle(3, "# Targets");
 	table.setColumnTitle(4, "Count");
 	table.setColumnTitle(5, "%");
 }
@@ -767,7 +764,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4f0aaec26b8c4e9c" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5e482acc">
+                    <graph id="45263f8e">
                         <node id="b183fe6fe58e4bd8" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -800,7 +797,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -825,7 +822,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="3fd9a198" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5e4d09c">
+                    <graph id="5d1a1134">
                         <node id="6b19d0d5" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -868,7 +865,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="c19e41a" name="Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="7d4ddf41">
+                            <graph id="7d091f57">
                                 <node id="4c3c0007" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -905,26 +902,26 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Partition Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Partition table using a standard query filter and column name.
   */
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
@@ -947,7 +944,7 @@ function setup_params(params) {
 		columnParamInfo.def);
 	columnParam.setPrompt(columnParamInfo.prompt);
 	params.add(columnParam);
-	
+
 	filters.column.param_setup(params);
 }
 
@@ -961,9 +958,9 @@ function init(inputs, outputs) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	if(col < 0) 
+	if(col < 0)
 		return; // column not found
-	
+
 	// create output tables
 	trueTable = new DefaultTableDataSource();
 	falseTable = new DefaultTableDataSource();
@@ -972,18 +969,18 @@ function tableOp(context, table) {
 	    trueTable.setColumnTitle(c, colTitle);
 	    falseTable.setColumnTitle(c, colTitle);
 	}
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 		rowData = table.getRow(row);
 		rowMatches = filterRow(table, row, col);
-		
+
 		if(rowMatches == true) {
 			trueTable.addRow(rowData);
 		} else {
 			falseTable.addRow(rowData);
 		}
 	}
-	
+
 	context.put("trueTable", trueTable);
 	context.put("falseTable", falseTable);
 }
@@ -991,7 +988,7 @@ function tableOp(context, table) {
 function filterRow(table, row, col) {
 	var value = table.getValueAt(row, col);
 	if(value == null) return false;
-	
+
 	return filters.column.check_filter(value);
 }
 ]]></oga:property>
@@ -1002,7 +999,7 @@ function filterRow(table, row, col) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="d296ee460a164202" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="38261dd7">
+                                    <graph id="5e007ebd">
                                         <node id="aa6da28b8b9e4fe2" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1087,7 +1084,7 @@ function filterRow(table, row, col) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="771cea50" name="Add to Aggregate Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="2d57cb9a">
+                                    <graph id="47973aeb">
                                         <node id="3f60764d" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
@@ -1117,7 +1114,7 @@ function filterRow(table, row, col) {
 #printTableWithCaption($table, $caption, [])
 #else
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -1175,28 +1172,28 @@ No Results
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -1222,7 +1219,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -1238,16 +1235,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -1255,7 +1252,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -1265,7 +1262,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="2e2ba4b0" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="6cd3aa6a">
+                            <graph id="293e526b">
                                 <node id="733c2ed3" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -1317,7 +1314,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="e02667a1b3024a5b" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="5f27a2a4">
+                                    <graph id="1fde549f">
                                         <node id="3892999740e54d4d" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1349,7 +1346,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -1388,7 +1385,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="4bb2dd70" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="583c4566">
+                                    <graph id="69a8c743">
                                         <node id="457ac419" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1441,26 +1438,26 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Partition Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Partition table using a standard query filter and column name.
   */
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
@@ -1483,7 +1480,7 @@ function setup_params(params) {
 		columnParamInfo.def);
 	columnParam.setPrompt(columnParamInfo.prompt);
 	params.add(columnParam);
-	
+
 	filters.column.param_setup(params);
 }
 
@@ -1497,9 +1494,9 @@ function init(inputs, outputs) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	if(col < 0) 
+	if(col < 0)
 		return; // column not found
-	
+
 	// create output tables
 	trueTable = new DefaultTableDataSource();
 	falseTable = new DefaultTableDataSource();
@@ -1508,18 +1505,18 @@ function tableOp(context, table) {
 	    trueTable.setColumnTitle(c, colTitle);
 	    falseTable.setColumnTitle(c, colTitle);
 	}
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 		rowData = table.getRow(row);
 		rowMatches = filterRow(table, row, col);
-		
+
 		if(rowMatches == true) {
 			trueTable.addRow(rowData);
 		} else {
 			falseTable.addRow(rowData);
 		}
 	}
-	
+
 	context.put("trueTable", trueTable);
 	context.put("falseTable", falseTable);
 }
@@ -1527,7 +1524,7 @@ function tableOp(context, table) {
 function filterRow(table, row, col) {
 	var value = table.getValueAt(row, col);
 	if(value == null) return false;
-	
+
 	return filters.column.check_filter(value);
 }
 ]]></oga:property>
@@ -1538,7 +1535,7 @@ function filterRow(table, row, col) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="aae60e888be04ae2" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="619ba3ed">
+                                            <graph id="3e423234">
                                                 <node id="f3142ba295f547af" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1581,7 +1578,7 @@ function filterRow(table, row, col) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="5970dad4c20246d0" name="Print Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="34b5a489">
+                                            <graph id="1543e84f">
                                                 <node id="73f2d75f8acb4f5e" name="Session Path" type="class:ca.gedge.opgraph.nodes.reflect.ObjectCastNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1721,7 +1718,7 @@ function filterRow(table, row, col) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="22cd75ce" name="Add to Breakdown Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="327e55b8">
+                                            <graph id="50ffa622">
                                                 <node id="8c2295fb179d4d89" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                     <input name="data" optional="false">Data to print</input>
                                                     <extensions>
@@ -1901,7 +1898,7 @@ function tableOp(context, table) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="45c2396c" name="Print Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="e8c8360">
+                    <graph id="3b05534d">
                         <node id="696e4325" type="class:ca.gedge.opgraph.nodes.general.PassThroughNode">
                             <extensions>
                                 <oga:meta x="79" y="165"/>
@@ -1924,7 +1921,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="56627982daa74a44" name="Summary Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="63324e0b">
+                            <graph id="b59a4f2">
                                 <node id="3b02538d5fb04220" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -2000,7 +1997,7 @@ function tableOp(context, table) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="dcfc9d7" name="Add to Summary Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="515f384c">
+                    <graph id="5011672f">
                         <node id="c14d76be22514f8b" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                             <input name="data" optional="false">Data to print</input>
                             <extensions>
@@ -2080,9 +2077,9 @@ function tableOp(context, table) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="1ee8cdd5" name="Finish Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5ce21431">
+            <graph id="2cc03ff4">
                 <ogcn:macro id="e8038cce9d304302" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="498bc0f2">
+                    <graph id="6cd4c620">
                         <node id="47d65cb00e0044f0" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -2093,7 +2090,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="8576ed4c0329450c" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="4765a30e">
+                            <graph id="7bbe1ed7">
                                 <node id="e8ad988196814630" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -2153,7 +2150,7 @@ $DATA
                     </extensions>
                 </node>
                 <ogcn:macro id="5ca5545f826e44c2" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5295db77">
+                    <graph id="6d650849">
                         <node id="dee498417ad54422" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -2164,7 +2161,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="f2fd04fe4c3640a7" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="716f1c3d">
+                            <graph id="683e2b98">
                                 <node id="7d30fd2b336c420f" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -2219,7 +2216,7 @@ $DATA
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="249b1294bebd47a5" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="43fbf15a">
+                    <graph id="6470c067">
                         <node id="ca3bad68b8654475" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -2230,7 +2227,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="ef932788c6b64ef7" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="620cfe3e">
+                            <graph id="2a68e6d">
                                 <node id="b90853cbd50d47b1" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -2310,7 +2307,7 @@ $DATA
         <link dest="1ee8cdd5" destField="input" source="736157b1" sourceField="collection"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="">
+                <opqry:info format="html" title="Phonological Process">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="6cccb293c40a4b75" showAsStep="true">
