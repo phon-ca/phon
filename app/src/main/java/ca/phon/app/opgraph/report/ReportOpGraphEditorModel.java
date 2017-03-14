@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -30,11 +31,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.CompoundBorder;
+import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
-import ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
+import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
+import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
+import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;
@@ -42,47 +50,127 @@ import ca.phon.query.db.Query;
 import ca.phon.util.PrefHelper;
 import ca.phon.workspace.Workspace;
 
-public class ReportOpGraphEditorModel extends AnalysisOpGraphEditorModel {
+public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 
 	private JPanel debugSettings;
-	
+
+	private ReportTemplateView reportTemplateView;
+
 	private JComboBox<Project> projectList;
-	
+
 	private JTable queryTable;
-	
+
 	public ReportOpGraphEditorModel() {
 		this(new OpGraph());
 	}
-	
+
 	public ReportOpGraphEditorModel(OpGraph graph) {
 		super(graph);
-		
+
 		WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
 		if(wizardExt == null || (wizardExt instanceof AnalysisWizardExtension && wizardExt.size() == 0)) {
 			wizardExt = new ReportWizardExtension(graph);
 			graph.putExtension(WizardExtension.class, wizardExt);
 		}
+
+		init();
+	}
+
+	protected WizardExtension getWizardExtension() {
+		return getDocument().getRootGraph().getExtension(WizardExtension.class);
+	}
+
+	@Override
+	protected Map<String, JComponent> getViewMap() {
+		final Map<String, JComponent> retVal = super.getViewMap();
+		retVal.put("Report Template", getReportTemplateView());
+		retVal.put("Debug Settings", getDebugSettings());
+		return retVal;
+	}
+
+	protected JComponent getReportTemplateView() {
+		if(reportTemplateView == null) {
+			reportTemplateView = new ReportTemplateView(getDocument());
+		}
+		return reportTemplateView;
+	}
+
+	private void init() {
+		PhonNodeLibrary.install(getNodeLibrary().getLibrary());
+		GraphOutlineExtension.install(getDocument(), getGraphOutline(), getWizardExtension());
+
+		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
+			final UndoableEdit edit = e.getEdit();
+			if(edit instanceof AddNodeEdit) {
+				final WizardExtension graphExtension = getWizardExtension();
+
+				final OpNode addedNode = ((AddNodeEdit)edit).getNode();
+				if(addedNode instanceof CompositeNode) {
+
+				}
+			}
+		} );
 	}
 
 	@Override
 	public Rectangle getInitialViewBounds(String viewName) {
-		Rectangle retVal = super.getInitialViewBounds(viewName);
-		if(viewName.equals("Report Wizard")) {
-			retVal = new Rectangle(0, 0, 200, 200);
+		Rectangle retVal = new Rectangle();
+		switch(viewName) {
+		case "Canvas":
+			retVal.setBounds(200, 0, 600, 600);
+			break;
+
+		case "Debug Settings":
+			retVal.setBounds(0, 200, 200, 200);
+			break;
+
+		case "Report Template":
+			retVal.setBounds(0, 0, 200, 200);
+			break;
+
+		case "Console":
+			retVal.setBounds(0, 200, 200, 200);
+			break;
+
+		case "Debug":
+			retVal.setBounds(0, 200, 200, 200);
+			break;
+
+		case "Connections":
+			retVal.setBounds(800, 200, 200, 200);
+			break;
+
+		case "Library":
+			retVal.setBounds(0, 0, 200, 200);
+			break;
+
+		case "Settings":
+			retVal.setBounds(800, 0, 200, 200);
+			break;
+
+		default:
+			retVal.setBounds(0, 0, 200, 200);
+			break;
 		}
 		return retVal;
 	}
 
 	@Override
+	public boolean isViewVisibleByDefault(String viewName) {
+		return super.isViewVisibleByDefault(viewName)
+				|| viewName.equals("Debug Settings")
+				|| viewName.equals("Report Template");
+	}
+
 	protected JComponent getDebugSettings() {
 		if(debugSettings == null) {
 			debugSettings = new JPanel(new BorderLayout());
-			
+
 			final Workspace workspace = Workspace.userWorkspace();
 			projectList = new JComboBox<Project>(workspace.getProjects().toArray(new Project[0]));
-			projectList.setBorder(new CompoundBorder(BorderFactory.createTitledBorder("Project"), 
+			projectList.setBorder(new CompoundBorder(BorderFactory.createTitledBorder("Project"),
 					projectList.getBorder()));
-			
+
 			projectList.addItemListener( (ItemEvent e) -> {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
 					final QueryHistoryTableModel model = new QueryHistoryTableModel((Project)projectList.getSelectedItem());
@@ -90,17 +178,17 @@ public class ReportOpGraphEditorModel extends AnalysisOpGraphEditorModel {
 					model.update();
 				}
 			});
-			
+
 			queryTable = new JTable();
 			final JScrollPane queryScroller = new JScrollPane(queryTable);
 			queryScroller.setBorder(BorderFactory.createTitledBorder("Query History"));
-			
+
 			debugSettings.add(projectList, BorderLayout.NORTH);
 			debugSettings.add(queryScroller, BorderLayout.CENTER);
 		}
 		return debugSettings;
 	}
-	
+
 	@Override
 	public void setupContext(OpContext context) {
 		if(projectList.getSelectedItem() != null) {
@@ -116,11 +204,12 @@ public class ReportOpGraphEditorModel extends AnalysisOpGraphEditorModel {
 
 	@Override
 	public String getDefaultFolder() {
-		return PrefHelper.getUserDataFolder() + File.separator + "reports";
+		return UserReportHandler.DEFAULT_USER_REPORT_FOLDER;
 	}
-	
+
 	@Override
 	public String getTitle() {
 		return "Composer (Report)";
 	}
+
 }

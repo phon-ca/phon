@@ -62,7 +62,10 @@ import ca.gedge.opgraph.dag.VertexNotFoundException;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
+import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
 import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
 import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
@@ -76,7 +79,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.workspace.Workspace;
 
-public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
+public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
 	private JPanel debugSettings;
 
@@ -111,79 +114,8 @@ public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 	}
 
 	private void init() {
-		final GraphOutline graphOutline = getGraphOutline();
-		final OpGraphTreeModel model = graphOutline.getModel();
-		final OpGraph graph = model.getGraph();
-		final WizardExtension ext = graph.getExtension(WizardExtension.class);
-
-		ext.addWizardExtensionListener( (e) -> {
-			switch(e.getEventType()) {
-			case NODE_MAKRED_AS_OPTIONAL:
-			case NODE_MAKRED_AS_NONOPTIONAL:
-			case NODE_ADDED_TO_SETTINGS:
-			case NODE_REMOVED_FROM_SETTINGS:
-			case NODE_MARKED_AS_REQUIRED:
-			case NODE_MAKRED_AS_NOT_REQUIRED:
-				model.nodeChanged(e.getNode());
-				break;
-
-			default:
-				break;
-			}
-		});
-
-		final AnalysisCellRenderer renderer = new AnalysisCellRenderer(graphOutline.getTree().getCellRenderer());
-		graphOutline.getTree().setCellRenderer(renderer);
-
-		graphOutline.addContextMenuListener(new PopupMenuListener() {
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				final MenuBuilder builder = new MenuBuilder((JPopupMenu)e.getSource());
-
-				final TreeSelectionModel selectionModel = graphOutline.getTree().getSelectionModel();
-				if(selectionModel.getSelectionCount() == 1 && selectionModel.getLeadSelectionRow() > 0) {
-					builder.addSeparator(".", "analysis");
-
-					final TreePath selectedPath = selectionModel.getSelectionPath();
-					final DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)selectedPath.getLastPathComponent();
-					final OpNode node = (OpNode)treeNode.getUserObject();
-
-					boolean isSettingButNotStep = ext.containsNode(node) && !ext.isNodeForced(node);
-					boolean isStep = ext.containsNode(node) && ext.isNodeForced(node);
-
-					if(!isSettingButNotStep) {
-						final PhonUIAction toggleNodeAsStepAct = new PhonUIAction(AnalysisOpGraphEditorModel.this, "onToggleNodeAsStep", node);
-						toggleNodeAsStepAct.putValue(PhonUIAction.NAME, "Show as step");
-						toggleNodeAsStepAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show node settings as a wizard step (and in advanced settings)");
-						toggleNodeAsStepAct.putValue(PhonUIAction.SELECTED_KEY, isStep);
-						builder.addItem(".@analysis", new JCheckBoxMenuItem(toggleNodeAsStepAct));
-					}
-
-					if(!isStep) {
-						final PhonUIAction toggleNodeSettingsAct = new PhonUIAction(AnalysisOpGraphEditorModel.this, "onToggleNodeSettings", node);
-						toggleNodeSettingsAct.putValue(PhonUIAction.NAME, "Show in advanced settings");
-						toggleNodeSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show node settings in advanced settings");
-						toggleNodeSettingsAct.putValue(PhonUIAction.SELECTED_KEY, isSettingButNotStep);
-						builder.addItem(".", new JCheckBoxMenuItem(toggleNodeSettingsAct));
-					}
-
-					final PhonUIAction toggleOptionalAct = new PhonUIAction(AnalysisOpGraphEditorModel.this, "onToggleNodeOptional", node);
-					toggleOptionalAct.putValue(PhonUIAction.NAME, "Optional node");
-					toggleOptionalAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make execution of this node optional");
-					toggleOptionalAct.putValue(PhonUIAction.SELECTED_KEY, wizardExt.isNodeOptional(node));
-					builder.addItem(".", new JCheckBoxMenuItem(toggleOptionalAct));
-				}
-			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-		});
+		PhonNodeLibrary.install(getNodeLibrary().getLibrary());
+		GraphOutlineExtension.install(getDocument(), getGraphOutline(), getWizardExtension());
 
 		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
 			final UndoableEdit edit = e.getEdit();
@@ -267,30 +199,6 @@ public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 				}
 			}
 		});
-	}
-
-	public void onToggleNodeSettings(PhonActionEvent pae) {
-		final OpNode node = (OpNode)pae.getData();
-		final NodeWizardSettingsEdit edit = new NodeWizardSettingsEdit(
-				getDocument().getGraph(), getWizardExtension(), node,
-					!getWizardExtension().containsNode(node), false);
-		getDocument().getUndoSupport().postEdit(edit);
-	}
-
-	public void onToggleNodeAsStep(PhonActionEvent pae) {
-		final OpNode node = (OpNode)pae.getData();
-		final NodeWizardSettingsEdit edit = new NodeWizardSettingsEdit(
-				getDocument().getGraph(), getWizardExtension(), node,
-					!getWizardExtension().containsNode(node), true);
-		getDocument().getUndoSupport().postEdit(edit);
-	}
-
-	public void onToggleNodeOptional(PhonActionEvent pae) {
-		final OpNode node = (OpNode)pae.getData();
-		final NodeWizardOptionalsEdit edit = new NodeWizardOptionalsEdit(
-				getDocument().getGraph(), getWizardExtension(), node,
-					!getWizardExtension().isNodeOptional(node), true);
-		getDocument().getUndoSupport().postEdit(edit);
 	}
 
 	public ParticipantsPanel getParticipantSelector() {
@@ -392,7 +300,7 @@ public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 
 	@Override
 	public String getDefaultFolder() {
-		return super.getDefaultFolder();
+		return UserAnalysisHandler.DEFAULT_USER_ANALYSIS_FOLDER;
 	}
 
 	@Override
@@ -413,65 +321,6 @@ public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 		context.put("_selectedSessions", participantSelector.getSessionSelector().getSelectedSessions());
 		context.put("_selectedParticipants", participantSelector.getParticipantSelector().getSelectedParticpants());
 		context.put("_buffers", new MultiBufferPanel());
-	}
-
-	private class AnalysisCellRenderer extends DefaultTreeCellRenderer {
-
-		private TreeCellRenderer parentRenderer;
-
-		private ImageIcon oIcon;
-
-		private ImageIcon sIcon;
-
-		private ImageIcon rIcon;
-
-		public AnalysisCellRenderer(TreeCellRenderer parent) {
-			super();
-
-			this.parentRenderer = parent;
-
-			final IconManager iconManager = IconManager.getInstance();
-			oIcon = iconManager.createGlyphIcon(new Character('O'), UIManager.getFont("Label.font").deriveFont(Font.BOLD), Color.BLACK,
-					new Color(255, 255, 255));
-			sIcon = iconManager.createGlyphIcon(new Character('S'), UIManager.getFont("Label.font"), Color.black, Color.WHITE);
-			rIcon =  iconManager.createGlyphIcon(new Character('R'), UIManager.getFont("Label.font"), Color.black, Color.WHITE);
-		}
-
-		@Override
-		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
-				boolean leaf, int row, boolean hasFocus) {
-			final WizardExtension ext = getWizardExtension();
-			JLabel retVal = (JLabel) parentRenderer.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-			if(value instanceof DefaultMutableTreeNode) {
-				final DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
-
-				if(treeNode.getUserObject() != null && treeNode.getUserObject() instanceof OpNode) {
-					final OpNode node = (OpNode)treeNode.getUserObject();
-
-					final List<ImageIcon> icons = new ArrayList<>();
-					icons.add((ImageIcon)retVal.getIcon());
-
-					if(ext.isNodeOptional(node)) {
-						icons.add(oIcon);
-					}
-
-					if(ext.containsNode(node)) {
-						if(ext.isNodeForced(node)) {
-							icons.add(rIcon);
-						} else {
-							icons.add(sIcon);
-						}
-					}
-
-					final ImageIcon icn = IconManager.getInstance().createIconStrip(icons.toArray(new ImageIcon[0]));
-					retVal.setIcon(icn);
-				}
-			}
-
-			return retVal;
-		}
-
 	}
 
 }
