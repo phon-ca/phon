@@ -26,6 +26,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -50,10 +52,14 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpLink;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.components.GraphOutline;
 import ca.gedge.opgraph.app.components.OpGraphTreeModel;
 import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
+import ca.gedge.opgraph.dag.CycleDetectedException;
+import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
@@ -81,6 +87,8 @@ public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 	private ParticipantsPanel participantSelector;
 
 	private AnalysisWizardExtension wizardExt;
+
+	private final static Logger LOGGER = Logger.getLogger(AnalysisOpGraphEditorModel.class.getName());
 
 	public AnalysisOpGraphEditorModel() {
 		this(new OpGraph());
@@ -188,6 +196,43 @@ public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 
 					final WizardExtension wizardExt = addedGraph.getExtension(WizardExtension.class);
 					if(wizardExt != null && wizardExt instanceof AnalysisWizardExtension) {
+						final OpGraph parentGraph = getDocument().getGraph();
+
+						// attempt to setup links for project, selected session and selected participants
+						final OpNode parentProjectNode = parentGraph.getNodesByName("Project").stream().findFirst().orElse(null);
+						final OpNode parentSessionsNode = parentGraph.getNodesByName("Selected Sessions").stream().findFirst().orElse(null);
+						final OpNode parentParticipantsNode = parentGraph.getNodesByName("Selected Participants").stream().findFirst().orElse(null);
+
+						if(parentProjectNode != null) {
+							try {
+								final OpLink projectLink =
+										new OpLink(parentProjectNode, "obj", addedNode, "project");
+								parentGraph.add(projectLink);
+							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+							}
+						}
+
+						if(parentSessionsNode != null) {
+							try {
+								final OpLink sessionsLink =
+										new OpLink(parentSessionsNode, "obj", addedNode, "selectedSessions");
+								parentGraph.add(sessionsLink);
+							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+							}
+						}
+
+						if(parentParticipantsNode != null) {
+							try {
+								final OpLink participantsLink =
+										new OpLink(parentParticipantsNode, "obj", addedNode, "selectedParticipants");
+								parentGraph.add(participantsLink);
+							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+							}
+						}
+
 						final AnalysisWizardExtension analysisExt = (AnalysisWizardExtension)wizardExt;
 
 						for(OpNode node:analysisExt) {
@@ -252,7 +297,7 @@ public class AnalysisOpGraphEditorModel extends MacroOpgraphEditorModel {
 		return this.participantSelector;
 	}
 
-	private WizardExtension getWizardExtension() {
+	protected WizardExtension getWizardExtension() {
 		return getDocument().getRootGraph().getExtension(WizardExtension.class);
 	}
 
