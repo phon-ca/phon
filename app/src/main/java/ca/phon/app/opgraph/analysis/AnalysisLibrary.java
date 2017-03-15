@@ -59,7 +59,7 @@ public class AnalysisLibrary {
 
 	private final static Logger LOGGER = Logger.getLogger(AnalysisLibrary.class.getName());
 
-	private final static String PROJECT_ANALYSIS_FOLDER = "analysis";
+	public final static String ANALYSIS_FOLDER = "analysis";
 
 	/**
 	 * Report loader
@@ -104,7 +104,7 @@ public class AnalysisLibrary {
 	}
 
 	public File getProjectAnalysisFolder(Project project) {
-		return new File(project.getResourceLocation(), PROJECT_ANALYSIS_FOLDER);
+		return new File(project.getResourceLocation(), ANALYSIS_FOLDER);
 	}
 
 	public void setupMenu(Project project, List<SessionPath> selectedSessions, MenuElement menu) {
@@ -116,7 +116,7 @@ public class AnalysisLibrary {
 			try {
 				final String fullPath = URLDecoder.decode(reportURL.getPath(), "UTF-8");
 				final String relativePath =
-						fullPath.substring(fullPath.indexOf(PROJECT_ANALYSIS_FOLDER + "/")+PROJECT_ANALYSIS_FOLDER.length()+1);
+						fullPath.substring(fullPath.indexOf(ANALYSIS_FOLDER + "/")+ANALYSIS_FOLDER.length()+1);
 
 				String menuPath = ".";
 				int lastFolderIndex = relativePath.lastIndexOf('/');
@@ -209,10 +209,23 @@ public class AnalysisLibrary {
 		}
 
 		builder.addSeparator(".", "composer");
+		final PhonUIAction showGeneratorAct = new PhonUIAction(AnalysisLibrary.class, "showGenerator");
+		showGeneratorAct.putValue(PhonUIAction.NAME, "Composer (simple)...");
+		showGeneratorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using simple Composer...");
+		builder.addItem(".@composer", showGeneratorAct);
+
 		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");
+		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
-		builder.addItem(".@composer", showComposerAct);
+		builder.addItem(".@Composer (simple)...", showComposerAct);
+	}
+
+	public static void showGenerator() {
+		final AnalysisGeneratorFrame frame =
+				new AnalysisGeneratorFrame(CommonModuleFrame.getCurrentFrame().getExtension(Project.class));
+		frame.pack();
+		frame.setLocationByPlatform(true);
+		frame.setVisible(true);
 	}
 
 	public static void showComposer() {
