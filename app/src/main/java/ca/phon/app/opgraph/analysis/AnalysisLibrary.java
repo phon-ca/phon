@@ -18,6 +18,7 @@
  */
 package ca.phon.app.opgraph.analysis;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -224,6 +225,7 @@ public class AnalysisLibrary {
 		final AnalysisGeneratorFrame frame =
 				new AnalysisGeneratorFrame(CommonModuleFrame.getCurrentFrame().getExtension(Project.class));
 		frame.pack();
+		frame.setSize(new Dimension(1024, 768));
 		frame.setLocationByPlatform(true);
 		frame.setVisible(true);
 	}
