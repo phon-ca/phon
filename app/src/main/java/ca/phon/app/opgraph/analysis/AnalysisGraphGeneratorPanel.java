@@ -11,6 +11,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -23,14 +24,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.DropMode;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -38,11 +44,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FilenameUtils;
@@ -66,17 +76,21 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.util.resources.ResourceLoader;
 
 public class AnalysisGraphGeneratorPanel extends JPanel {
-	
+
 	private static final long serialVersionUID = -7170934782795308487L;
 
 	private final static Logger LOGGER = Logger.getLogger(AnalysisGraphGeneratorPanel.class.getName());
@@ -94,14 +108,10 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 	private JXTable analysisNodeTable;
 	private List<OpNode> analysisNodes;
 
-	private JComboBox<OpNode> settingsNodeBox;
-	private CardLayout settingsLayout;
-	private JPanel settingsPanel;
-
 	private final AnalysisOpGraphEditorModel model;
 
 	private final Project project;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -147,7 +157,7 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 		bp1.add(addButton);
 		bp1.add(removeButton);
 		p1.add(bp1, BorderLayout.EAST);
-		
+
 		final JPanel p2 = new JPanel(new BorderLayout());
 
 		final PhonUIAction upAct = new PhonUIAction(this, "onMoveUp");
@@ -164,17 +174,15 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 		analysisNodeTable = new JXTable(new AnalysisNodeTableModel());
 		analysisNodeTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		analysisNodeTable.setSortable(false);
-		analysisNodeTable.getSelectionModel().addListSelectionListener( (e) -> {
-			final int selectedRow = analysisNodeTable.getSelectedRow();
-			if(selectedRow >= 0 && selectedRow < analysisNodes.size()) {
-				final OpNode analysisNode = analysisNodes.get(selectedRow);
-				setSelectedAnalysisNode(analysisNode);
-			}
-		});
 		analysisNodeTable.setDragEnabled(true);
 		analysisNodeTable.setTransferHandler(new AnalysisNodeTableTransferHandler());
 		analysisNodeTable.setDropMode(DropMode.INSERT);
 		analysisNodeTable.setVisibleRowCount(10);
+
+		// setup settings column
+		analysisNodeTable.getColumn(0).setCellRenderer(new SettingsRenderer());
+		analysisNodeTable.getColumn(0).setCellEditor(new SettingsEditor(new JCheckBox()));
+		analysisNodeTable.getColumn(0).setMaxWidth(24);
 		final JScrollPane analysisNodeScroller = new JScrollPane(analysisNodeTable);
 
 		p2.add(analysisNodeScroller, BorderLayout.CENTER);
@@ -183,90 +191,46 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 		bp2.add(moveUpButton);
 		bp2.add(moveDownButton);
 		p2.add(bp2, BorderLayout.EAST);
-		
-		final JPanel p3 = new JPanel(new BorderLayout());
 
-		this.settingsNodeBox = new JComboBox<>();
-		this.settingsNodeBox.setRenderer(new AnalysisListCellRenderer());
-		settingsNodeBox.addItemListener( (e) -> {
-			if(e.getStateChange() == ItemEvent.SELECTED) {
-				settingsPanel.removeAll();
-				
-				final OpNode node = (OpNode)e.getItem();
-				settingsLayout.show(settingsPanel, Integer.toHexString(node.hashCode()));
-			}
-		});
-		this.settingsLayout = new CardLayout();
-		this.settingsPanel = new JPanel(settingsLayout);
 
-		p3.add(settingsNodeBox, BorderLayout.NORTH);
-		p3.add(settingsPanel, BorderLayout.CENTER);
-		
 		final JPanel leftPanel = new JPanel(new GridBagLayout());
 		final GridBagConstraints gbc = new GridBagConstraints();
-		
+
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		
+
 		leftPanel.add(p1, gbc);
 		++gbc.gridx;
 		leftPanel.add(p2, gbc);
-		
-		add(leftPanel, BorderLayout.NORTH);
-		add(p3, BorderLayout.CENTER);
 
+		add(leftPanel, BorderLayout.CENTER);
 	}
-	
-	private void setSelectedAnalysisNode(OpNode analysisNode) {
-		final MacroNode macroNode = (MacroNode)analysisNode;
-		final OpGraph analysisGraph = macroNode.getGraph();
-		final WizardExtension analysisExt = analysisGraph.getExtension(WizardExtension.class);
-		
-		settingsPanel.removeAll();
-		final OpNode[] settingsNodes = new OpNode[analysisExt.size()];
-		for(int i = 0; i < analysisExt.size(); i++) {
-			final OpNode node = analysisExt.getNode(i);
-			final NodeSettings nodeSettings = node.getExtension(NodeSettings.class);
-			if(nodeSettings != null) {
-				settingsNodes[i] = node;
-			
-				settingsPanel.add(nodeSettings.getComponent(getModel().getDocument()), 
-						Integer.toHexString(node.hashCode()));
-			}
-		}
-		
-		final DefaultComboBoxModel<OpNode> boxModel = new DefaultComboBoxModel<>(settingsNodes);
-		settingsNodeBox.setModel(boxModel);
-		
-		settingsNodeBox.setSelectedIndex(0);
-		settingsLayout.show(settingsPanel, Integer.toHexString(settingsNodes[0].hashCode()));
-	}
-	
+
 	public void onAdd() {
 		// add all checked analysis as new nodes in graph
 		final List<TreePath> checkedPaths = analysisTree.getCheckedPaths();
 		int selectionIndex = analysisNodes.size();
 		for(TreePath checkedPath:checkedPaths) {
-			final TristateCheckBoxTreeNode node = 
+			final TristateCheckBoxTreeNode node =
 					(TristateCheckBoxTreeNode)checkedPath.getLastPathComponent();
 			if(node.isLeaf() && node.getUserObject() instanceof URL) {
 				final URL analysisURL = (URL)node.getUserObject();
-				
+
 				// create analysis node
 				try(InputStream is = analysisURL.openStream()) {
 					final String analysisFile = URLDecoder.decode(analysisURL.toString(), "UTF-8");
 					final String analysisName = FilenameUtils.getBaseName(analysisFile);
-					
+
 					final OpGraph analysisGraph = OpgraphIO.read(is);
-					
+
 					final MacroNode analysisNode = new MacroNode(analysisGraph);
 					analysisNode.setName(analysisName);
 					final NodeMetadata nodeMeta = new NodeMetadata(X_START, Y_START + analysisNodes.size() * Y_SEP);
 					analysisNode.putExtension(NodeMetadata.class, nodeMeta);
-					
+
 					// find input nodes and publish fields
 					final OpNode projectNode = analysisGraph.getNodesByName("Project").stream().findFirst().orElse(null);
 					final OpNode sessionsNode = analysisGraph.getNodesByName("Selected Sessions").stream().findFirst().orElse(null);
@@ -275,14 +239,14 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 					analysisNode.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
 					analysisNode.publish("selectedSessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
 					analysisNode.publish("selectedParticipants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
-					
+
 					final AddNodeEdit addEdit = new AddNodeEdit(getGraph(), analysisNode);
 					getModel().getDocument().getUndoSupport().postEdit(addEdit);
-					
-					final NodeWizardOptionalsEdit optEdit = 
+
+					final NodeWizardOptionalsEdit optEdit =
 							new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), analysisNode, true, true);
 					getModel().getDocument().getUndoSupport().postEdit(optEdit);
-					
+
 					analysisNodes.add(analysisNode);
 					((AnalysisNodeTableModel)analysisNodeTable.getModel()).fireTableRowsInserted(analysisNodes.size()-1, analysisNodes.size()-1);
 				} catch (IOException e) {
@@ -298,72 +262,87 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 		final int selectedRow = analysisNodeTable.getSelectedRow();
 		if(selectedRow >= 0 && selectedRow < analysisNodes.size()) {
 			final OpNode selectedNode = analysisNodes.get(selectedRow);
-			
+
 			getModel().getDocument().getUndoSupport().beginUpdate();
-			
-			final NodeWizardOptionalsEdit optEdit = 
+
+			final NodeWizardOptionalsEdit optEdit =
 					new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), selectedNode, false, false);
 			getModel().getDocument().getUndoSupport().postEdit(optEdit);
-			
-			final DeleteNodesEdit removeEdit = 
+
+			final DeleteNodesEdit removeEdit =
 					new DeleteNodesEdit(getGraph(), Collections.singleton(selectedNode));
 			getModel().getDocument().getUndoSupport().postEdit(removeEdit);
-			
+
 			getModel().getDocument().getUndoSupport().endUpdate();
-			
+
 			analysisNodes.remove(selectedRow);
 			((AnalysisNodeTableModel)analysisNodeTable.getModel()).fireTableRowsDeleted(selectedRow, selectedRow);
-		
+
 			updateNodeLocations();
 		}
 	}
-	
+
 	public void onMoveUp() {
 		final int selectedRow = analysisNodeTable.getSelectedRow();
 		if(selectedRow > 0 && selectedRow < analysisNodes.size()) {
 			final OpNode selectedNode = analysisNodes.get(selectedRow);
-			
+
 			int newLocation = selectedRow - 1;
 			analysisNodes.remove(selectedRow);
 			analysisNodes.add(newLocation, selectedNode);
-			
+
 			((AnalysisNodeTableModel)analysisNodeTable.getModel()).fireTableRowsDeleted(selectedRow, selectedRow);
 			((AnalysisNodeTableModel)analysisNodeTable.getModel()).fireTableRowsInserted(newLocation, newLocation);
 			analysisNodeTable.getSelectionModel().setSelectionInterval(newLocation, newLocation);
-			
+
 			updateNodeLocations();
 		}
 	}
-	
+
 	public void onMoveDown() {
 		final int selectedRow = analysisNodeTable.getSelectedRow();
 		if(selectedRow >= 0 && selectedRow < analysisNodes.size()-1) {
 			final OpNode selectedNode = analysisNodes.get(selectedRow);
-			
+
 			int newLocation = selectedRow + 1;
 			analysisNodes.remove(selectedRow);
 			analysisNodes.add(newLocation, selectedNode);
-			
+
 			((AnalysisNodeTableModel)analysisNodeTable.getModel()).fireTableRowsDeleted(selectedRow, selectedRow);
 			((AnalysisNodeTableModel)analysisNodeTable.getModel()).fireTableRowsInserted(newLocation, newLocation);
 			analysisNodeTable.getSelectionModel().setSelectionInterval(newLocation, newLocation);
-			
+
 			updateNodeLocations();
 		}
 	}
-	
+
+	public void showAnalysisSettings(MacroNode analysisNode) {
+		final AnalysisSettingsPanel settingsPanel = new AnalysisSettingsPanel(analysisNode);
+		final JDialog settingsDialog = new JDialog(CommonModuleFrame.getCurrentFrame(), "Settings : " + analysisNode.getName(), true);
+
+		final DialogHeader header = new DialogHeader("Settings : " + analysisNode.getName(), "Edit settings for the " + analysisNode.getName() + " analysis.");
+		settingsDialog.getContentPane().setLayout(new BorderLayout());
+		settingsDialog.getContentPane().add(header, BorderLayout.NORTH);
+		settingsDialog.getContentPane().add(settingsPanel, BorderLayout.CENTER);
+
+		settingsDialog.pack();
+		settingsDialog.setSize(900, 700);
+		settingsDialog.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+		settingsDialog.setVisible(true);
+	}
+
 	private void updateNodeLocations() {
 		getModel().getDocument().getUndoSupport().beginUpdate();
 		for(int i = 0; i < analysisNodes.size(); i++) {
 			final OpNode node = analysisNodes.get(i);
-			
+
 			final NodeMetadata nodeMeta = node.getExtension(NodeMetadata.class);
-			
+
 			final int newX = X_START;
 			final int newY = Y_START + (i * Y_SEP);
 			final int deltaX = newX - nodeMeta.getX();
 			final int deltaY = newY - nodeMeta.getY();
-			
+
 			final MoveNodesEdit moveEdit = new MoveNodesEdit(Collections.singleton(node),
 					deltaX, deltaY);
 			getModel().getDocument().getUndoSupport().postEdit(moveEdit);
@@ -433,23 +412,23 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 	public OpGraph getGraph() {
 		return this.model.getDocument().getGraph();
 	}
-	
+
 	private class AnalysisListCellRenderer extends DefaultListCellRenderer {
 
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			final JLabel retVal = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			
+
 			if(value instanceof OpNode) {
 				retVal.setText(((OpNode)value).getName());
 			}
-			
+
 			return retVal;
 		}
-		
+
 	}
-	
+
 	private class AnalysisNodeTableTransferHandler extends TransferHandler {
 
 		@Override
@@ -462,26 +441,26 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 			try {
                 // convert data to string
                 String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-                final JTable.DropLocation dropLocation = 
+                final JTable.DropLocation dropLocation =
                 		(JTable.DropLocation)support.getDropLocation();
-                
+
                 int idx = dropLocation.getRow();
                 int origIdx = Integer.parseInt(s);
                 OpNode srcNode = analysisNodes.remove(origIdx);
-                
+
                 if(idx < 0) {
                 	idx = analysisNodes.size();
                 } else if(idx > origIdx) {
                 	--idx;
                 }
                 analysisNodes.add(idx, srcNode);
-                
+
                 ((AnalysisNodeTableModel)analysisNodeTable.getModel()).fireTableDataChanged();
                 updateNodeLocations();
-                
+
                 return true;
             } catch (IOException | UnsupportedFlavorException e) {
-            	
+
             }
 
             return false;
@@ -497,7 +476,7 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 			int selectedRow = analysisNodeTable.getSelectedRow();
 			return new StringSelection(""+selectedRow);
 		}
-		
+
 	}
 
 	private class AnalysisNodeTableModel extends AbstractTableModel {
@@ -509,23 +488,51 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 
 		@Override
 		public int getColumnCount() {
-			return 1;
+			return 2;
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			final OpNode node = analysisNodes.get(rowIndex);
-			return node.getName();
+
+			switch(columnIndex) {
+			case 0:
+				return ((MacroNode)node).getGraph().getExtension(WizardExtension.class).size() > 0;
+
+			case 1:
+				return node.getName();
+
+			default:
+				return null;
+			}
 		}
-		
+
 		@Override
 		public String getColumnName(int columnIndex) {
-			return "Analysis";
+			switch(columnIndex) {
+			case 0:
+				return "";
+
+			case 1:
+				return "Analysis List";
+
+			default:
+				return super.getColumnName(columnIndex);
+			}
 		}
 
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return String.class;
+			switch(columnIndex) {
+			case 0:
+				return Boolean.class;
+
+			case 1:
+				return String.class;
+
+			default:
+				return super.getColumnClass(columnIndex);
+			}
 		}
 
 		@Override
@@ -535,12 +542,60 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-			if(aValue.toString().trim().length() == 0) return;
-			
-			final OpNode node = analysisNodes.get(rowIndex);
-			node.setName(aValue.toString());
+			if(columnIndex == 1) {
+				if(aValue.toString().trim().length() == 0) return;
+
+				final OpNode node = analysisNodes.get(rowIndex);
+				node.setName(aValue.toString());
+			}
 		}
-		
+
+	}
+
+	private final ImageIcon settingsIcon =
+			IconManager.getInstance().getIcon("actions/settings-black", IconSize.XSMALL);
+	private class SettingsRenderer extends DefaultTableCellRenderer {
+
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			JLabel retVal = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			retVal.setText("");
+			if((boolean)value) {
+				final JButton btn = new JButton();
+				btn.setIcon(settingsIcon);
+				btn.setBorderPainted(false);
+				btn.setHorizontalTextPosition(SwingConstants.CENTER);
+				return btn;
+			}
+
+			return retVal;
+		}
+
+	}
+
+	private class SettingsEditor extends DefaultCellEditor {
+
+		public SettingsEditor(JCheckBox checkBox) {
+			super(checkBox);
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+				int column) {
+			final JButton retVal = new JButton();
+			retVal.setIcon(settingsIcon);
+			retVal.setBorderPainted(false);
+			retVal.setHorizontalTextPosition(SwingConstants.CENTER);
+			retVal.addActionListener( (e) -> {
+				MacroNode analysisNode = (MacroNode)analysisNodes.get(row);
+				showAnalysisSettings(analysisNode);
+			});
+			return retVal;
+		}
+
 	}
 
 	private class TreeNodeRenderer extends TristateCheckBoxTreeCellRenderer {
@@ -549,7 +604,7 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
 				boolean leaf, int row, boolean hasFocus) {
 			TristateCheckBoxTreeNodePanel retVal = (TristateCheckBoxTreeNodePanel)super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-			
+
 			if(value instanceof TristateCheckBoxTreeNode) {
 				final TristateCheckBoxTreeNode node = (TristateCheckBoxTreeNode)value;
 				if(node.getUserObject() instanceof URL) {
@@ -563,10 +618,73 @@ public class AnalysisGraphGeneratorPanel extends JPanel {
 					}
 				}
 			}
-			
+
 			return retVal;
 		}
-		
+
 	}
-	
+
+	private class AnalysisSettingsPanel extends JPanel {
+
+		private final MacroNode analysisNode;
+
+		private JComboBox<OpNode> settingsNodeBox;
+		private CardLayout settingsLayout;
+		private JPanel settingsPanel;
+
+		public AnalysisSettingsPanel(MacroNode analysisNode) {
+			super();
+
+			this.analysisNode = analysisNode;
+
+			init();
+			update();
+		}
+
+		private void init() {
+			setLayout(new BorderLayout());
+
+			this.settingsNodeBox = new JComboBox<>();
+			this.settingsNodeBox.setRenderer(new AnalysisListCellRenderer());
+			settingsNodeBox.addItemListener( (e) -> {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					settingsPanel.removeAll();
+
+					final OpNode node = (OpNode)e.getItem();
+					settingsLayout.show(settingsPanel, Integer.toHexString(node.hashCode()));
+				}
+			});
+			this.settingsLayout = new CardLayout();
+			this.settingsPanel = new JPanel(settingsLayout);
+
+			add(settingsNodeBox, BorderLayout.NORTH);
+			add(settingsPanel, BorderLayout.CENTER);
+		}
+
+		private void update() {
+			final OpGraph analysisGraph = analysisNode.getGraph();
+			final WizardExtension analysisExt = analysisGraph.getExtension(WizardExtension.class);
+
+			settingsPanel.removeAll();
+			final OpNode[] settingsNodes = new OpNode[analysisExt.size()];
+			for(int i = 0; i < analysisExt.size(); i++) {
+				final OpNode node = analysisExt.getNode(i);
+				final NodeSettings nodeSettings = node.getExtension(NodeSettings.class);
+				if(nodeSettings != null) {
+					settingsNodes[i] = node;
+
+					settingsPanel.add(nodeSettings.getComponent(getModel().getDocument()),
+							Integer.toHexString(node.hashCode()));
+				}
+			}
+
+			final DefaultComboBoxModel<OpNode> boxModel = new DefaultComboBoxModel<>(settingsNodes);
+			settingsNodeBox.setModel(boxModel);
+
+			settingsNodeBox.setSelectedIndex(0);
+			settingsLayout.show(settingsPanel, Integer.toHexString(settingsNodes[0].hashCode()));
+		}
+
+	}
+
 }
