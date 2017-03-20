@@ -76,6 +76,7 @@ import ca.phon.project.Project;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.workspace.Workspace;
 
@@ -207,6 +208,11 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
 	protected WizardExtension getWizardExtension() {
 		return getDocument().getRootGraph().getExtension(WizardExtension.class);
+	}
+
+	@Override
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("analysis", "analyses");
 	}
 
 	@Override

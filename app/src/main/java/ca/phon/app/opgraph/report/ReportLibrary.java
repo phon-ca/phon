@@ -18,6 +18,7 @@
  */
 package ca.phon.app.opgraph.report;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -38,9 +39,10 @@ import javax.swing.MenuElement;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
-import ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel;
-import ca.phon.app.opgraph.analysis.UserAnalysisHandler;
+import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.SimpleEditor;
+import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
@@ -57,11 +59,11 @@ import ca.phon.util.resources.ResourceLoader;
  * by default. Reports can also be stored in the project
  * <code>__res/reports/</code> folder.</p>
  */
-public class ReportLibrary {
+public class ReportLibrary implements OpGraphLibrary {
 
 	private final static String LEGACY_REPORT_DOCUMENT = "reports/Legacy Report Design.xml";
 
-	private final static String PROJECT_REPORT_FOLDER = "reports";
+	private final static String REPORT_FOLDER = "reports";
 
 	private final static Logger LOGGER = Logger.getLogger(ReportLibrary.class.getName());
 
@@ -103,12 +105,12 @@ public class ReportLibrary {
 
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserReportHandler(new File(project.getResourceLocation(), PROJECT_REPORT_FOLDER)));
+		retVal.addHandler(new UserReportHandler(new File(project.getResourceLocation(), REPORT_FOLDER)));
 		return retVal;
 	}
 
 	public File getProjectReportFolder(Project project) {
-		return new File(project.getResourceLocation(), PROJECT_REPORT_FOLDER);
+		return new File(project.getResourceLocation(), REPORT_FOLDER);
 	}
 
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
@@ -120,7 +122,7 @@ public class ReportLibrary {
 			try {
 				final String fullPath = URLDecoder.decode(reportURL.getPath(), "UTF-8");
 				final String relativePath =
-						fullPath.substring(fullPath.indexOf("/" + PROJECT_REPORT_FOLDER + "/")+PROJECT_REPORT_FOLDER.length()+2);
+						fullPath.substring(fullPath.indexOf("/" + REPORT_FOLDER + "/")+REPORT_FOLDER.length()+2);
 
 				String menuPath = ".";
 				int lastFolderIndex = relativePath.lastIndexOf('/');
@@ -216,11 +218,27 @@ public class ReportLibrary {
 				getClass().getClassLoader().getResource(LEGACY_REPORT_DOCUMENT));
 		builder.addItem(".@legacy", reportAct);
 
-		builder.addSeparator(".", "editor");
-		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
+		builder.addSeparator(".", "composer");
+		final PhonUIAction showGeneratorAct = new PhonUIAction(ReportLibrary.class, "showGenerator");
+		showGeneratorAct.putValue(PhonUIAction.NAME, "Composer (simple)...");
+		showGeneratorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using simple Composer...");
+		builder.addItem(".@composer", showGeneratorAct);
+
+		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
 		builder.addItem(".@editor", showComposerAct);
+	}
+
+	public static void showGenerator() {
+		final SimpleEditor frame =
+				new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
+						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
+						ReportRunner::new );
+		frame.pack();
+		frame.setSize(new Dimension(1024, 768));
+		frame.setLocationByPlatform(true);
+		frame.setVisible(true);
 	}
 
 	public static void showComposer() {
@@ -237,6 +255,21 @@ public class ReportLibrary {
 		editor.pack();
 		editor.setSize(1024, 768);
 		editor.setVisible(true);
+	}
+
+	@Override
+	public String getFolderName() {
+		return REPORT_FOLDER;
+	}
+
+	@Override
+	public String getUserFolderPath() {
+		return UserReportHandler.DEFAULT_USER_REPORT_FOLDER;
+	}
+
+	@Override
+	public String getProjectFolderPath(Project project) {
+		return getProjectReportFolder(project).getAbsolutePath();
 	}
 
 }

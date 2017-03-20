@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,24 +47,25 @@ import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Tuple;
 
 /**
  * Editor model for syllabifiers implemented with opgraph.
  *
  */
 public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
-	
+
 	/**
 	 * Settings panel
 	 */
 	private JPanel syllabifierPanel;
-	
+
 	private SyllabifierSettingsPanel settingsPanel;
-	
+
 	private JTextField ipaField;
-	
+
 	private SyllabificationDisplay syllabificationDisplay;
-	
+
 	public OpGraphSyllabifierEditorModel() {
 		this(new OpGraph());
 	}
@@ -72,38 +73,38 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 	public OpGraphSyllabifierEditorModel(OpGraph opgraph) {
 		super(opgraph);
 	}
-	
+
 	private void updateIPA() {
 		final String txt = ipaField.getText().trim();
-		final IPATranscript transcript = 
+		final IPATranscript transcript =
 				(new IPATranscriptBuilder()).append(txt).toIPATranscript();
 		syllabificationDisplay.setTranscript(transcript);
 	}
-	
+
 	protected JPanel getDebugSettings() {
 		if(syllabifierPanel == null) {
 			syllabifierPanel = new JPanel();
-			
+
 			ipaField = new JTextField();
 			ipaField.setFont(FontPreferences.getUIIpaFont());
 			ipaField.getDocument().addDocumentListener(new DocumentListener() {
-				
+
 				@Override
 				public void removeUpdate(DocumentEvent e) {
 					updateIPA();
 				}
-				
+
 				@Override
 				public void insertUpdate(DocumentEvent e) {
 					updateIPA();
 				}
-				
+
 				@Override
 				public void changedUpdate(DocumentEvent e) {
 				}
-				
+
 			});
-			
+
 			syllabificationDisplay = new SyllabificationDisplay();
 			getDocument().addPropertyChangeListener(GraphDocument.PROCESSING_CONTEXT, (e) -> {
 				SwingUtilities.invokeLater(() -> {
@@ -111,7 +112,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 					syllabificationDisplay.repaint();
 				});
 			});
-			
+
 			final FormLayout layout = new FormLayout(
 					"right:pref, 3dlu, fill:pref:grow", "pref, 3dlu, pref, pref");
 			final CellConstraints cc = new CellConstraints();
@@ -121,13 +122,13 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 			ipaPanel.add(new JLabel("Syllabification:"), cc.xy(1, 3));
 			ipaPanel.add(syllabificationDisplay, cc.xyw(1, 4, 3));
 			ipaPanel.setBorder(BorderFactory.createTitledBorder("Debug Settings"));
-			
+
 			syllabifierPanel.setLayout(new BorderLayout());
 			syllabifierPanel.add(new JScrollPane(ipaPanel), BorderLayout.CENTER);
 		}
 		return syllabifierPanel;
 	}
-	
+
 	protected SyllabifierSettingsPanel getSyllabifierSettings() {
 		if(settingsPanel == null) {
 			settingsPanel = new SyllabifierSettingsPanel();
@@ -138,7 +139,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 		}
 		return settingsPanel;
 	}
-	
+
 	@Override
 	public void setupContext(OpContext context) {
 		updateIPA();
@@ -152,7 +153,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 		retVal.put("Debug Settings", getDebugSettings());
 		return retVal;
 	}
-	
+
 	@Override
 	public boolean isViewVisibleByDefault(String viewName) {
 		boolean retVal = super.isViewVisibleByDefault(viewName);
@@ -163,11 +164,11 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 	@Override
 	public boolean validate() {
 		boolean retVal = super.validate();
-		
+
 		// setup extensions
 		final SyllabifierSettings settings = settingsPanel.getSyllabifierSettings();
 		getDocument().getGraph().putExtension(SyllabifierSettings.class, settings);
-		
+
 		return retVal;
 	}
 
@@ -178,35 +179,35 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 		case "Canvas":
 			retVal.setBounds(200, 0, 600, 400);
 			break;
-			
+
 		case "Debug Settings":
 			retVal.setBounds(200, 400, 600, 200);
 			break;
-			
+
 		case "Syllabifier":
 			retVal.setBounds(0, 0, 200, 100);
 			break;
-			
+
 		case "Console":
 			retVal.setBounds(0, 200, 200, 200);
 			break;
-			
+
 		case "Debug":
 			retVal.setBounds(200, 400, 600, 200);
 			break;
-			
+
 		case "Defaults":
 			retVal.setBounds(800, 200, 200, 200);
 			break;
-			
+
 		case "Library":
 			retVal.setBounds(0, 100, 200, 500);
 			break;
-			
+
 		case "Settings":
 			retVal.setBounds(800, 0, 200, 200);
 			break;
-			
+
 		default:
 			retVal.setBounds(0, 0, 200, 200);
 			break;
@@ -223,5 +224,10 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 	public String getTitle() {
 		return "Composer (Syllabifier)";
 	}
-	
+
+	@Override
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("syllabifier", "sylalbifiers");
+	}
+
 }

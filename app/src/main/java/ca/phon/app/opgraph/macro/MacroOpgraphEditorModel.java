@@ -22,6 +22,7 @@ import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModelInfo;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
+import ca.phon.util.Tuple;
 
 @OpgraphEditorModelInfo(name="General", description="Empty graph with default context")
 public class MacroOpgraphEditorModel extends OpgraphEditorModel {
@@ -34,6 +35,11 @@ public class MacroOpgraphEditorModel extends OpgraphEditorModel {
 		super(opgraph);
 
 		PhonNodeLibrary.install(getNodeLibrary().getLibrary());
+	}
+
+	@Override
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("macro", "macros");
 	}
 
 	@Override

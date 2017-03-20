@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,58 +45,58 @@ public class AnalysisWizard extends NodeWizard {
 	private static final long serialVersionUID = -3667158379797520370L;
 
 	private Project project;
-	
+
 	private WizardStep sessionSelectorStep;
 	private ParticipantsPanel participantsPanel;
-	
+
 	public AnalysisWizard(String title, Processor processor, OpGraph graph) {
 		super(title, processor, graph);
-		
+
 		sessionSelectorStep = addSessionSelectionStep();
 		if(processor.getContext().containsKey("_project")) {
 			setProject((Project)processor.getContext().get("_project"));
-			
+
 			if(processor.getContext().containsKey("_selectedSessions")) {
 				@SuppressWarnings("unchecked")
-				final List<SessionPath> selectedSessions = 
+				final List<SessionPath> selectedSessions =
 						(List<SessionPath>)processor.getContext().get("_selectedSessions");
 				participantsPanel.getSessionSelector().setSelectedSessions(selectedSessions);
 			}
 		}
 		getRootPane().setDefaultButton(btnNext);
-		
+
 		gotoStep(0);
 	}
-	
+
 	public WizardStep getSessionSelectorStep() {
 		return this.sessionSelectorStep;
 	}
-	
+
 	@Override
 	public void setJMenuBar(JMenuBar menuBar) {
 		super.setJMenuBar(menuBar);
-		
+
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "save");
 		builder.addItem("File@save", new SaveAnalysisAction(this));
-		
+
 		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
 		openEditorAct.putValue(PhonUIAction.NAME, "Open analysis in Composer...");
 		builder.addItem("File@" + SaveAnalysisAction.TXT, openEditorAct);
 	}
-	
+
 	public void onOpenEditor(PhonActionEvent pae) {
 		final OpenNodeEditorAction act = new OpenNodeEditorAction(getGraph());
 		act.actionPerformed(pae.getActionEvent());
-		
+
 		dispose();
 	}
-	
+
 	@Override
 	public Tuple<String, String> getNoun() {
-		return new Tuple<>("Analysis", "Analyses");
+		return new Tuple<>("analysis", "analyses");
 	}
-	
+
 	private WizardStep addSessionSelectionStep() {
 		final WizardStep sessionSelectorStep = new WizardStep() {
 
@@ -106,22 +106,22 @@ public class AnalysisWizard extends NodeWizard {
 					showOkDialog("Select Sessions", "Please select at least one session.");
 					return false;
 				}
-				
+
 				if(participantsPanel.getCheckedParticipants().size() == 0) {
 					showOkDialog("Select Participants", "Please select at least one participant.");
 					return false;
 				}
-				
+
 				return true;
 			}
-			
+
 		};
 		sessionSelectorStep.setTitle("Sessions & Participants");
-	
+
 		participantsPanel = new ParticipantsPanel(getProject());
 		sessionSelectorStep.setLayout(new BorderLayout());
 		sessionSelectorStep.add(participantsPanel, BorderLayout.CENTER);
-		
+
 		int insertIdx = 0;
 		if(getWizardExtension().getWizardMessage() != null
 				&& getWizardExtension().getWizardMessage().length() > 0) {
@@ -129,14 +129,14 @@ public class AnalysisWizard extends NodeWizard {
 		}
 		sessionSelectorStep.setNextStep(insertIdx+1);
 		sessionSelectorStep.setPrevStep(insertIdx-1);
-		
+
 		super.addWizardStep(insertIdx, sessionSelectorStep);
-		
+
 		if(insertIdx == 1) {
 			getWizardStep(0).setNextStep(insertIdx);
 		}
 		getWizardStep(insertIdx+1).setPrevStep(insertIdx);
-		
+
 		return sessionSelectorStep;
 	}
 
@@ -145,11 +145,11 @@ public class AnalysisWizard extends NodeWizard {
 		putExtension(Project.class, project);
 		participantsPanel.setProject(project);
 	}
-	
+
 	public Project getProject() {
 		return this.project;
 	}
-	
+
 	@Override
 	public void gotoStep(int stepIdx) {
 		if(getWizardStep(stepIdx) == reportDataStep) {
@@ -162,15 +162,15 @@ public class AnalysisWizard extends NodeWizard {
 		}
 		super.gotoStep(stepIdx);
 	}
-	
+
 	@Override
 	public void setupReportContext(NodeWizardReportContext context) {
 		super.setupReportContext(context);
-		
+
 		// add selected sessions and participants
 		context.put("project", getProject());
 		context.put("selectedSessions", participantsPanel.getCheckedSessions());
 		context.put("selectedParticipants", participantsPanel.getCheckedParticipants());
 	}
-	
+
 }

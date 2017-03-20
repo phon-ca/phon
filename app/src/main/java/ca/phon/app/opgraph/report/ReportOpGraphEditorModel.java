@@ -48,6 +48,7 @@ import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Tuple;
 import ca.phon.workspace.Workspace;
 
 public class ReportOpGraphEditorModel extends OpgraphEditorModel {
@@ -78,6 +79,11 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 
 	protected WizardExtension getWizardExtension() {
 		return getDocument().getRootGraph().getExtension(WizardExtension.class);
+	}
+
+	@Override
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("Report", "Reports");
 	}
 
 	@Override

@@ -49,8 +49,11 @@ public class ReportRunner implements Runnable {
 	}
 
 	public ReportRunner(OpGraph graph) {
-		super();
-		this.graph = graph;
+		this(graph, null);
+	}
+
+	public ReportRunner(OpGraph graph, Project project) {
+		this(graph, project, "");
 	}
 
 	public ReportRunner(OpGraph graph, Project project, String queryId) {

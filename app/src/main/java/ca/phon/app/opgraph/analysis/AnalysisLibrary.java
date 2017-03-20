@@ -38,6 +38,9 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.phon.app.opgraph.editor.SimpleEditor;
+import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
+import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
@@ -56,7 +59,7 @@ import ca.phon.util.resources.ResourceLoader;
  * by default. Reports can also be stored in the project
  * <code>__res/reports/</code> folder.</p>
  */
-public class AnalysisLibrary {
+public class AnalysisLibrary implements OpGraphLibrary {
 
 	private final static Logger LOGGER = Logger.getLogger(AnalysisLibrary.class.getName());
 
@@ -206,7 +209,7 @@ public class AnalysisLibrary {
 				}
 			});
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
-			projectMenuBuilder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
+			builder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 		}
 
 		builder.addSeparator(".", "composer");
@@ -222,8 +225,10 @@ public class AnalysisLibrary {
 	}
 
 	public static void showGenerator() {
-		final AnalysisGeneratorFrame frame =
-				new AnalysisGeneratorFrame(CommonModuleFrame.getCurrentFrame().getExtension(Project.class));
+		final SimpleEditor frame =
+				new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
+						new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
+						AnalysisRunner::new );
 		frame.pack();
 		frame.setSize(new Dimension(1024, 768));
 		frame.setLocationByPlatform(true);
@@ -245,6 +250,21 @@ public class AnalysisLibrary {
 		editor.pack();
 		editor.setSize(1024, 768);
 		editor.setVisible(true);
+	}
+
+	@Override
+	public String getFolderName() {
+		return ANALYSIS_FOLDER;
+	}
+
+	@Override
+	public String getUserFolderPath() {
+		return UserAnalysisHandler.DEFAULT_USER_ANALYSIS_FOLDER;
+	}
+
+	@Override
+	public String getProjectFolderPath(Project project) {
+		return getProjectAnalysisFolder(project).getAbsolutePath();
 	}
 
 }
