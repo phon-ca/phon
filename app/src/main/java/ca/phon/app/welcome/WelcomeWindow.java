@@ -71,6 +71,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -283,8 +284,13 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton createPrefsButton() {
 		MultiActionButton retVal = new MultiActionButton();
 
-		ImageIcon prefsIcn = IconManager.getInstance().getIcon("categories/preferences", IconSize.SMALL);
-		ImageIcon prefsIcnL = IconManager.getInstance().getIcon("categories/preferences", IconSize.MEDIUM);
+		final String defIcn = "categories/preferences";
+		ImageIcon prefsIcn = (OSInfo.isMacOs()
+				? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.GenericPreferencesIcon, IconSize.SMALL)
+				: IconManager.getInstance().getIcon(defIcn, IconSize.SMALL));
+		ImageIcon prefsIcnL = (OSInfo.isMacOs()
+				? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.GenericPreferencesIcon, IconSize.MEDIUM)
+				: IconManager.getInstance().getIcon(defIcn, IconSize.MEDIUM));
 
 		String s1 = "Edit Preferences";
 		String s2 = "Modify application settings";
