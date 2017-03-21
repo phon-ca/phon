@@ -42,7 +42,7 @@ import ca.phon.visitor.annotation.Visits;
  *
  */
 @OpNodeInfo(
-		name="Format Script Parmaeters",
+		name="Format Script Parameters",
 		description="Format script parameters for report output",
 		category="Report",
 		showInLibrary=true)
