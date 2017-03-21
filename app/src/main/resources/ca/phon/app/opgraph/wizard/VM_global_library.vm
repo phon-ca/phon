@@ -3,6 +3,7 @@
 #macro( h1 $title ) #set($H = '#')$H $title#end
 #macro( h2 $title ) #set($H = '##')$H $title#end
 #macro( h3 $title ) #set($H = '###')$H $title#end
+#macro( h4 $title ) #set($H = '####')$H $title#end
 
 #macro( printHeader $table $columnNames )
 	#set($maxCol = $table.columnCount - 1)
@@ -24,9 +25,9 @@
 	#set($number = $Class.forName("java.lang.Number"))
 	#set($ipa = $Class.forName("ca.phon.ipa.IPATranscript"))
 	#if($clazz == $ipa) #set($type = "ipa_value")
-	#elseif($number.isAssignableFrom($clazz)) 
+	#elseif($number.isAssignableFrom($clazz))
 		#set($type = "number_value")
-		#if($Class.forName("java.lang.Float").isAssignableFrom($clazz) || 
+		#if($Class.forName("java.lang.Float").isAssignableFrom($clazz) ||
 			$Class.forName("java.lang.Double").isAssignableFrom($clazz))
 			#set($txt = $Math.roundTo(2, $v))
 		#end
@@ -38,7 +39,7 @@
 	#set($maxCol = $table.columnCount - 1)
 	#if($maxCol < 0) #break#end
 	#set($maxRow = $table.rowCount - 1)
-	#if($maxRow < 0) #break#end	
+	#if($maxRow < 0) #break#end
 	#foreach($row in [0..$maxRow])
 		<tr>
 		#foreach($col in [0..$maxCol])

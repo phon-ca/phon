@@ -22,10 +22,6 @@ h3 {
     color: darkgrey;
 }
 
-em {
-    font-weight: bold;
-}
-
 table {
     border: thin solid darkgrey;
     empty-cells: show;
@@ -35,7 +31,7 @@ table {
 
 th {
     overflow:hidden;
-    font-weight: bold; 
+    font-weight: bold;
     border-bottom: thin solid darkgrey;
     padding-right: 20px;
 }
@@ -82,12 +78,12 @@ caption {
     .noprint {
         display: none;
     }
-    
+
     body {
         font-family: "noto serif", arial, times, serif;
         font-size: 12pt;
     }
-    
+
     .ipa_value {
         font-family: "Charis SIL Compact", "noto serif", "Charis SIL", times, serif;
         font-size: 12pt;
@@ -96,46 +92,46 @@ caption {
     header, footer, nav {
         display: none;
     }
-    
+
     section {
     }
-    
+
     h1, h2, h3 {
         page-break-after: avoid !important;
     }
-    
+
     ul, ol {
         page-break-inside:avoid;
     }
-    
+
     table {
         table-layout:auto;
         page-break-before: avoid !important;
         page-break-inside: avoid;
     }
-    
+
     thead {
         page-break-before: avoid !important;
         page-break-after:avoid !important;
         display:table-header-group;
     }
-    
+
     tfoot {
         page-break-before:avoid;
         display:table-footer-group;
     }
-    
+
     tr {
         page-break-inside:avoid !important;
         page-break-after:auto;
     }
-    
+
     img {
         page-break-inside:avoid !important;
     }
-    
+
     a {
         font-style: normal;
     }
-    
+
 }

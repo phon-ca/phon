@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -61,51 +61,55 @@ import ca.phon.script.params.ScriptParameters;
 		showInLibrary=true
 )
 public class PhonScriptNode extends OpNode implements NodeSettings {
-	
+
 	private final static Logger LOGGER = Logger.getLogger(PhonScriptNode.class.getName());
-	
+
 	private PhonScript script;
-	
+
 	private ScriptPanel scriptPanel;
-	
+
 	private InputField paramsInputField = new InputField("parameters", "Map of script parameters, these will override node settings.",
 			true, true, Map.class);
-	
+
 	private OutputField paramsOutputField = new OutputField("parameters",
 			"Parameters used for script, including those entered using the node settings dialog", true, Map.class);
-	
+
+	public OutputField scriptOutputField = new OutputField("script",
+			"Script object", true, PhonScript.class);
+
 	public PhonScriptNode() {
 		this("");
 	}
-	
+
 	public PhonScriptNode(String text) {
 		this(new BasicScript(text));
 	}
-	
+
 	public PhonScriptNode(PhonScript script) {
 		super();
-		
+
 		this.script = script;
 		addQueryLibrary();
-		
+
 		putField(paramsInputField);
+		putField(scriptOutputField);
 		putField(paramsOutputField);
-		
+
 		putExtension(NodeSettings.class, this);
 	}
-	
+
 	private void reloadFields() {
 		final PhonScript phonScript = getScript();
 		final PhonScriptContext scriptContext = phonScript.getContext();
-		
+
 		final List<InputField> fixedInputs =
 				getInputFields().stream().filter( f -> f.isFixed() && f != ENABLED_FIELD ).collect( Collectors.toList() );
 		final List<OutputField> fixedOutputs =
 				getOutputFields().stream().filter( OutputField::isFixed ).collect( Collectors.toList() );
-		
+
 //		removeAllInputFields();
 //		removeAllOutputFields();
-		
+
 		// setup fields on temporary node
 		final OpNode tempNode = new OpNode("temp", "temp", "temp") {
 			@Override
@@ -121,17 +125,17 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		try {
 			final Scriptable scope = scriptContext.getEvaluatedScope();
 			scriptContext.installParams(scope);
-			
+
 			final InputFields inputFields = new InputFields(tempNode);
 			final OutputFields outputFields = new OutputFields(tempNode);
-			
+
 			if(scriptContext.hasFunction(scope, "init", 2)) {
 				scriptContext.callFunction(scope, "init", inputFields, outputFields);
 			}
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
 		}
-		
+
 		// check inputs
 		for(InputField currentInputField:getInputFields().toArray(new InputField[0])) {
 			final InputField tempInputField = tempNode.getInputFieldWithKey(currentInputField.getKey());
@@ -146,7 +150,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				removeField(currentInputField);
 			}
 		}
-		
+
 		final List<String> tempInputKeys = tempNode.getInputFields()
 				.stream().map( InputField::getKey ).collect( Collectors.toList() );
 		// add new input fields
@@ -157,7 +161,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				putField(tempInputKeys.indexOf(tempInputKey), tempNode.getInputFieldWithKey(tempInputKey));
 			}
 		}
-		
+
 		// check outputs
 		for(OutputField currentOutputField:getOutputFields().toArray(new OutputField[0])) {
 			final OutputField tempOutputField = tempNode.getOutputFieldWithKey(currentOutputField.getKey());
@@ -169,7 +173,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				removeField(currentOutputField);
 			}
 		}
-		
+
 		final List<String> tempOutputKeys = tempNode.getOutputFields()
 				.stream().map( OutputField::getKey ).collect( Collectors.toList() );
 		for(String tempOutputKey:tempOutputKeys) {
@@ -184,14 +188,14 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	public void operate(OpContext context) throws ProcessingException {
 		final PhonScript phonScript = getScript();
 		final PhonScriptContext ctx = phonScript.getContext();
-		
+
 		ScriptParameters scriptParams = new ScriptParameters();
 		try {
 			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
 		} catch (PhonScriptException e) {
 			throw new ProcessingException(null, e);
 		}
-		
+
 		final Map<?, ?> inputParams = (Map<?,?>)context.get(paramsInputField);
 		final Map<String, Object> allParams = new LinkedHashMap<>();
 		for(ScriptParam sp:scriptParams) {
@@ -199,38 +203,39 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				if(inputParams != null && inputParams.containsKey(paramId)) {
 					sp.setValue(paramId, inputParams.get(paramId));
 				}
-				
+
 				if(paramId.endsWith("ignoreDiacritics")
 						&& context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
 					sp.setValue(paramId, context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
 				}
-				
+
 				if(paramId.endsWith("caseSensitive")
 						&& context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
 					sp.setValue(paramId, context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));
 				}
-				
+
 				allParams.put(paramId, sp.getValue(paramId));
 			}
 		}
-		
+
 		// ensure query form validates (if available)
 		if(scriptPanel != null && !scriptPanel.checkParams()) {
 			throw new ProcessingException(null, "Invalid settings");
 		}
-		
+
 		try {
 			final Scriptable scope = ctx.getEvaluatedScope();
 			ctx.installParams(scope);
-			
+
 			ctx.callFunction(scope, "run", context);
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-		
+
+		context.put(scriptOutputField, getScript());
 		context.put(paramsOutputField, allParams);
 	}
-	
+
 	public PhonScript getScript() {
 		return this.script;
 	}
@@ -246,9 +251,9 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	@Override
 	public Properties getSettings() {
 		final Properties retVal = new Properties();
-		
+
 		retVal.setProperty("__script", getScript().getScript());
-		
+
 		try {
 			final ScriptParameters scriptParams = getScript().getContext().getScriptParameters(
 					getScript().getContext().getEvaluatedScope());
@@ -262,13 +267,13 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-		
+
 		return retVal;
 	}
-	
+
 	/**
 	 * Make query library functions available to scripts.
-	 * 
+	 *
 	 */
 	private void addQueryLibrary() {
 		script.addPackageImport("Packages.ca.phon.session");
@@ -277,7 +282,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		script.addPackageImport("Packages.ca.phon.query");
 		script.addPackageImport("Packages.ca.phon.query.report");
 		script.addPackageImport("Packages.ca.phon.query.report.datasource");
-		
+
 		final ClassLoader cl = PluginManager.getInstance();
 		Enumeration<URL> libUrls;
 		try {
@@ -304,7 +309,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 			if(scriptPanel != null)
 				scriptPanel.setScript(this.script);
 			reloadFields();
-			
+
 			try {
 				final ScriptParameters scriptParams = getScript().getContext().getScriptParameters(
 						getScript().getContext().getEvaluatedScope());
@@ -316,7 +321,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);	
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
 		}
 	}
