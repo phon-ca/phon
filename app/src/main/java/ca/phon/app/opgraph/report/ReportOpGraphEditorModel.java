@@ -23,6 +23,8 @@ import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -35,13 +37,18 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpLink;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
+import ca.gedge.opgraph.dag.CycleDetectedException;
+import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
 import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
+import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
 import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryHistoryTableModel;
@@ -52,6 +59,8 @@ import ca.phon.util.Tuple;
 import ca.phon.workspace.Workspace;
 
 public class ReportOpGraphEditorModel extends OpgraphEditorModel {
+
+	private final static Logger LOGGER = Logger.getLogger(ReportOpGraphEditorModel.class.getName());
 
 	private JPanel debugSettings;
 
@@ -112,7 +121,67 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 
 				final OpNode addedNode = ((AddNodeEdit)edit).getNode();
 				if(addedNode instanceof CompositeNode) {
+					final OpGraph addedGraph = ((CompositeNode)addedNode).getGraph();
 
+					final WizardExtension wizardExt = addedGraph.getExtension(WizardExtension.class);
+					if(wizardExt != null && wizardExt instanceof ReportWizardExtension) {
+						final OpGraph parentGraph = getDocument().getGraph();
+
+						final OpNode parentProjectNode = parentGraph.getNodesByName("Project").stream().findFirst().orElse(null);
+						final OpNode parentQueryIDNode = parentGraph.getNodesByName("Query ID").stream().findFirst().orElse(null);
+
+						if(parentProjectNode != null) {
+							try {
+								final OpLink projectLink =
+										new OpLink(parentProjectNode, "obj", addedNode, "project");
+								parentGraph.add(projectLink);
+							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+							}
+						}
+
+						if(parentQueryIDNode != null) {
+							try {
+								final OpLink queryIdLink =
+										new OpLink(parentQueryIDNode, "obj", addedNode, "queryId");
+								parentGraph.add(queryIdLink);
+							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+							}
+						}
+
+						final ReportWizardExtension analysisExt = (ReportWizardExtension)wizardExt;
+
+						for(OpNode node:analysisExt) {
+							graphExtension.addNode(node);
+							graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
+						}
+
+						for(OpNode optionalNode:analysisExt.getOptionalNodes()) {
+							graphExtension.addOptionalNode(optionalNode);
+							graphExtension.setOptionalNodeDefault(optionalNode, analysisExt.getOptionalNodeDefault(optionalNode));
+						}
+
+						// copy report template
+						final NodeWizardReportTemplate prefixTemplate = graphExtension.getReportTemplate("Report Prefix");
+						final NodeWizardReportTemplate suffixTemplate = graphExtension.getReportTemplate("Report Suffix");
+						final NodeWizardReportTemplate pt =
+								analysisExt.getReportTemplate("Report Prefix");
+						if(pt != null) {
+							if(!prefixTemplate.getTemplate().contains(pt.getTemplate())) {
+								prefixTemplate.setTemplate(prefixTemplate.getTemplate() + "\n" + pt.getTemplate());
+							}
+						}
+
+						final NodeWizardReportTemplate st =
+								analysisExt.getReportTemplate("Report Suffix");
+						if(st != null) {
+							if(!suffixTemplate.getTemplate().contains(st.getTemplate())) {
+								suffixTemplate.setTemplate(suffixTemplate.getTemplate() + "\n" + st.getTemplate());
+							}
+						}
+
+					}
 				}
 			}
 		} );

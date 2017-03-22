@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
+    <graph id="root">
+        <node id="7971e251" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="15"/>
+            </extensions>
+        </node>
+        <node id="3e633423" name="Query ID" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
+                </oga:settings>
+                <oga:meta x="113" y="251"/>
+            </extensions>
+        </node>
+        <node id="aca4840b5b94bad" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="__script"><![CDATA[var reportTitleParamInfo = {
+	"id": "reportTitle",
+	"title": "Report Title",
+	"def": "Query Information",
+	"prompt": "Enter report title"
+};
+var reportTitleParam;
+var reportTitle = reportTitleParamInfo.def;
+
+function setup_params(params) {
+	reportTitleParam = new StringScriptParam(
+			reportTitleParamInfo.id,
+			reportTitleParamInfo.title,
+			reportTitleParamInfo.def);
+     reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
+	params.add(reportTitleParam);
+}
+]]></oga:property>
+                </oga:settings>
+                <oga:meta x="96" y="445"/>
+            </extensions>
+        </node>
+        <node id="1052be62" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+            <extensions>
+                <oga:meta x="281" y="89"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="c8e58ab1ef694cfc" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="2f97a6e5">
+                <ogcn:macro id="7f12fb50172944d5" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                    <graph id="5d60f08c">
+                        <node id="857340867f2a4d0f" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="78" y="88">
+                                    <oga:default for="arg1" type="java.lang.String">reportTitle</oga:default>
+                                </oga:meta>
+                            </extensions>
+                        </node>
+                        <node id="bbddbe75c6f44857" name="Map#get(Object)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="236" y="91"/>
+                            </extensions>
+                        </node>
+                        <node id="d97c8c39adbb4ba4" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="393" y="100"/>
+                            </extensions>
+                        </node>
+                        <link dest="bbddbe75c6f44857" destField="arg1" source="857340867f2a4d0f" sourceField="value"/>
+                        <link dest="d97c8c39adbb4ba4" destField="obj" source="bbddbe75c6f44857" sourceField="value"/>
+                    </graph>
+                    <ogcn:published_input field="obj" name="parameters" ref="bbddbe75c6f44857"/>
+                    <ogcn:published_output field="value" name="value" ref="d97c8c39adbb4ba4"/>
+                    <extensions>
+                        <oga:meta x="35" y="48"/>
+                    </extensions>
+                </ogcn:macro>
+                <node id="2708a9b876ec487f" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                    <input name="data" optional="false">Data to print</input>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="dataTemplate"><![CDATA[
+#h1("$DATA")
+]]></oga:property>
+                            <oga:property key="showText"><![CDATA[true]]></oga:property>
+                            <oga:property key="showTable"><![CDATA[false]]></oga:property>
+                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="229" y="39">
+                            <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
+                            <oga:default for="append" type="java.lang.Boolean">true</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <link dest="2708a9b876ec487f" destField="data" source="7f12fb50172944d5" sourceField="value"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="parameters" name="parameters" ref="7f12fb50172944d5"/>
+            <ogcn:published_output field="value" name="reportTitle" ref="7f12fb50172944d5"/>
+            <extensions>
+                <oga:meta x="370" y="445"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="a71911e6a705459c" name="Load Query Script" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="4ea49743">
+                <node id="50dc926ad1674114" name="Query" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.db.Query]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="acc1089589324bf0" name="Script" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.db.Script]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="202" y="15"/>
+                    </extensions>
+                </node>
+                <node id="daf14d45f3c64ee8" name="QueryScript#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[ca.phon.query.script.QueryScript]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="403" y="15"/>
+                    </extensions>
+                </node>
+                <node id="f53c3b8cb0fb4aae" name="QueryScript" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.script.QueryScript]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="618" y="15"/>
+                    </extensions>
+                </node>
+                <node id="561ca8b574de4c70" name="PhonScriptContext" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.script.PhonScriptContext]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="824" y="15"/>
+                    </extensions>
+                </node>
+                <node id="b4d9e8b540ee45c0" name="PhonScriptContext#getScriptParameters(Scriptable)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[getScriptParameters(org.mozilla.javascript.Scriptable)]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[ca.phon.script.PhonScriptContext]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="76" y="274"/>
+                    </extensions>
+                </node>
+                <node id="b667fbd6f2244651" name="ScriptParameters#loadFromMap(Map)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[loadFromMap(java.util.Map)]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[ca.phon.script.params.ScriptParameters]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="481" y="287"/>
+                    </extensions>
+                </node>
+                <link dest="daf14d45f3c64ee8" destField="arg1" source="acc1089589324bf0" sourceField="source"/>
+                <link dest="f53c3b8cb0fb4aae" destField="obj" source="daf14d45f3c64ee8" sourceField="value"/>
+                <link dest="b4d9e8b540ee45c0" destField="arg1" source="561ca8b574de4c70" sourceField="evaluatedScope"/>
+                <link dest="acc1089589324bf0" destField="obj" source="50dc926ad1674114" sourceField="script"/>
+                <link dest="b4d9e8b540ee45c0" destField="obj" source="561ca8b574de4c70" sourceField="obj"/>
+                <link dest="561ca8b574de4c70" destField="obj" source="f53c3b8cb0fb4aae" sourceField="context"/>
+                <link dest="b667fbd6f2244651" destField="obj" source="b4d9e8b540ee45c0" sourceField="value"/>
+                <link dest="b667fbd6f2244651" destField="arg1" source="acc1089589324bf0" sourceField="parameters"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="obj" name="query" ref="50dc926ad1674114"/>
+            <ogcn:published_output field="obj" name="script" ref="f53c3b8cb0fb4aae"/>
+            <ogcn:published_output field="name" name="name" ref="50dc926ad1674114"/>
+            <extensions>
+                <oga:meta x="471" y="94"/>
+            </extensions>
+        </ogcn:macro>
+        <node id="6a3623ab" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+            <input name="data" optional="false">Data to print</input>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="dataTemplate"><![CDATA[
+**Query Name:** $DATA
+]]></oga:property>
+                    <oga:property key="showText"><![CDATA[true]]></oga:property>
+                    <oga:property key="showTable"><![CDATA[false]]></oga:property>
+                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                </oga:settings>
+                <oga:meta x="652" y="98">
+                    <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
+                    <oga:default for="append" type="java.lang.Boolean">true</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
+        <node id="64a20d4a" type="class:ca.phon.app.opgraph.nodes.log.PrintScriptParameters">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="includes"/>
+                    <oga:property key="printOnlyChanged"><![CDATA[false]]></oga:property>
+                    <oga:property key="excludes"/>
+                </oga:settings>
+                <oga:meta x="648" y="238"/>
+            </extensions>
+        </node>
+        <node id="e1b02f22d5734c8a" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+            <input name="data" optional="false">Data to print</input>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="dataTemplate"><![CDATA[
+$DATA
+]]></oga:property>
+                    <oga:property key="showText"><![CDATA[true]]></oga:property>
+                    <oga:property key="showTable"><![CDATA[false]]></oga:property>
+                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                </oga:settings>
+                <oga:meta x="874" y="239">
+                    <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
+                    <oga:default for="append" type="java.lang.Boolean">true</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
+        <link dest="1052be62" destField="project" source="7971e251" sourceField="obj"/>
+        <link dest="1052be62" destField="queryId" source="3e633423" sourceField="obj"/>
+        <link dest="a71911e6a705459c" destField="query" source="1052be62" sourceField="query"/>
+        <link dest="64a20d4a" destField="script" source="a71911e6a705459c" sourceField="script"/>
+        <link dest="6a3623ab" destField="data" source="a71911e6a705459c" sourceField="name"/>
+        <link dest="e1b02f22d5734c8a" destField="data" source="64a20d4a" sourceField="text"/>
+        <link dest="c8e58ab1ef694cfc" destField="parameters" source="aca4840b5b94bad" sourceField="parameters"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
+                <opqry:info format="html" title="">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="64a20d4a">
+                    <opqry:info format="html" title="Format Script Parameters">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:report-template name="Report Prefix"/>
+                <opqry:report-template name="Report Suffix"/>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>

@@ -1307,23 +1307,25 @@ public class SimpleEditor extends CommonModuleFrame {
 			final WizardExtension analysisExt = analysisGraph.getExtension(WizardExtension.class);
 
 			settingsPanel.removeAll();
-			final OpNode[] settingsNodes = new OpNode[analysisExt.size()];
+			final List<OpNode> settingsNodes = new ArrayList<>();
 			for(int i = 0; i < analysisExt.size(); i++) {
 				final OpNode node = analysisExt.getNode(i);
 				final NodeSettings nodeSettings = node.getExtension(NodeSettings.class);
 				if(nodeSettings != null) {
-					settingsNodes[i] = node;
+					settingsNodes.add(node);
 
 					settingsPanel.add(nodeSettings.getComponent(getModel().getDocument()),
 							node.getId());
 				}
 			}
 
-			final DefaultComboBoxModel<OpNode> boxModel = new DefaultComboBoxModel<>(settingsNodes);
+			final DefaultComboBoxModel<OpNode> boxModel = new DefaultComboBoxModel<>(settingsNodes.toArray(new OpNode[0]));
 			settingsNodeBox.setModel(boxModel);
 
-			settingsNodeBox.setSelectedIndex(0);
-			settingsLayout.show(settingsPanel, settingsNodes[0].getId());
+			if(settingsNodes.size() > 0) {
+				settingsNodeBox.setSelectedIndex(0);
+				settingsLayout.show(settingsPanel, settingsNodes.get(0).getId());
+			}
 		}
 
 	}
