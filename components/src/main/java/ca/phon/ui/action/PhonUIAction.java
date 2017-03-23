@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,9 +38,9 @@ import ca.phon.worker.PhonWorker;
  * <br/>
  * <CODE>(Lca/phon/gui/action/PhonActionEvent;)V</CODE>.
  * If a method accepting a {@link PhonActionEvent} is not found,
- * this class will look for a method accepting no parameters 
+ * this class will look for a method accepting no parameters
  * (if {@link #object} is <code>null</code>) or a method
- * accepting a single parameter with a type to which 
+ * accepting a single parameter with a type to which
  * {@link #object} is assignable.
  * </p>
  *
@@ -49,10 +49,10 @@ import ca.phon.worker.PhonWorker;
  * To specify a thread for this action to run on use the
  * <code>setWorkerThread</code> method (otherwise a new thread is
  * created).</p>
- * 
+ *
  */
 public class PhonUIAction extends AbstractAction {
-	
+
 	private static final long serialVersionUID = -3566788828631450043L;
 
 	private final static Logger LOGGER = Logger.getLogger(PhonUIAction.class
@@ -114,16 +114,21 @@ public class PhonUIAction extends AbstractAction {
 	}
 
 	public PhonUIAction(Class<?> clazz, String methodId) {
+		this(clazz, methodId, null);
+	}
+
+	public PhonUIAction(Class<?> clazz, String methodId, Object data) {
 		super();
-		
+
 		this.clazz = clazz;
 		this.methodId = methodId;
+		this.data = data;
 	}
 
 	public PhonUIAction(String text,
 			Class<?> clazz, String methodId) {
 		super(text);
-		
+
 		this.clazz = clazz;
 		this.methodId = methodId;
 	}
@@ -142,10 +147,10 @@ public class PhonUIAction extends AbstractAction {
 	 */
 	public boolean isStaticAction() {
 		boolean retVal = true;
-		
+
 		if(objectRef != null)
 			retVal = objectRef.get() == null;
-		
+
 		return retVal;
 	}
 
@@ -191,7 +196,7 @@ public class PhonUIAction extends AbstractAction {
 		public void run() {
 		try {
 			Method m = getMethod();
-			
+
 			Object[] params = new Object[0];
 			if(m.getParameterTypes().length > 0) {
 				Class<?> paramType = m.getParameterTypes()[0];
@@ -208,7 +213,7 @@ public class PhonUIAction extends AbstractAction {
 
 		} catch (InvocationTargetException e) {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
-			
+
 			if(evt.getActionEvent().getSource() instanceof JComponent) {
 				JComponent comp = (JComponent)evt.getActionEvent().getSource();
 //				PhonUtilities.showComponentMessage(comp, e.getCause().getMessage());
@@ -243,7 +248,7 @@ public class PhonUIAction extends AbstractAction {
 	 * Find the action method.
 	 * @return the method to call - or <code>null</code> if not
 	 * found.
-	 * 
+	 *
 	 */
 	private Method getMethod() {
 		Class<?> clazz = null;
@@ -254,14 +259,14 @@ public class PhonUIAction extends AbstractAction {
 			clazz = this.objectRef.get().getClass();
 		}
 
-		if(clazz == null) 
+		if(clazz == null)
 			throw new NullPointerException("Class not found");
 
 		Method retVal = null;
-		
+
 		try {
 			// look for a method that accepts a PhonActionEvent first
-			retVal = 
+			retVal =
 					clazz.getMethod(methodId, PhonActionEvent.class);
 		} catch (NoSuchMethodException ex) {
 				if(data != null) {
@@ -286,7 +291,7 @@ public class PhonUIAction extends AbstractAction {
 						} else if(dataType == Byte.class) {
 							dataType = byte.class;
 						}
-						
+
 						try {
 							retVal = clazz.getMethod(methodId, new Class[]{dataType});
 						} catch (NoSuchMethodException ex3) {
@@ -296,7 +301,7 @@ public class PhonUIAction extends AbstractAction {
 				} else {
 					try {
 						// now look for a method with no parameters
-						retVal = 
+						retVal =
 								clazz.getMethod(methodId, new Class[0]);
 					} catch (NoSuchMethodException ex2) {
 						LOGGER.log(Level.SEVERE, ex2.getLocalizedMessage(), ex);

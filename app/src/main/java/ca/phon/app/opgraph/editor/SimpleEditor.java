@@ -57,6 +57,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -64,6 +65,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.WordUtils;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
@@ -267,7 +269,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		nodeTable.setTransferHandler(new NodeTableTransferHandler());
 		nodeTable.setDropMode(DropMode.INSERT);
 		nodeTable.setVisibleRowCount(10);
-		nodeTable.setTableHeader(null);
+		nodeTable.getColumn(1).setMaxWidth(50);
 
 		final ActionMap am = nodeTable.getActionMap();
 		final InputMap inputMap = nodeTable.getInputMap(JComponent.WHEN_FOCUSED);
@@ -1164,7 +1166,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		@Override
 		public int getColumnCount() {
-			return 1;
+			return 2;
 		}
 
 		@Override
@@ -1175,6 +1177,9 @@ public class SimpleEditor extends CommonModuleFrame {
 			case 0:
 				return node.getName();
 
+			case 1:
+				return getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).isNodeOptional(node);
+
 			default:
 				return null;
 			}
@@ -1184,7 +1189,10 @@ public class SimpleEditor extends CommonModuleFrame {
 		public String getColumnName(int columnIndex) {
 			switch(columnIndex) {
 			case 0:
-				return "Analysis Name";
+				return WordUtils.capitalize(getModel().getNoun().getObj1()) + " Name";
+
+			case 1:
+				return "Optional";
 
 			default:
 				return super.getColumnName(columnIndex);
@@ -1194,8 +1202,11 @@ public class SimpleEditor extends CommonModuleFrame {
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
 			switch(columnIndex) {
-			case 1:
+			case 0:
 				return String.class;
+
+			case 1:
+				return Boolean.class;
 
 			default:
 				return super.getColumnClass(columnIndex);
@@ -1209,13 +1220,20 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+			final OpNode node = macroNodes.get(rowIndex);
 			if(columnIndex == 0) {
 				if(aValue.toString().trim().length() == 0) return;
 
-				final OpNode node = macroNodes.get(rowIndex);
 				node.setName(aValue.toString());
 
 				updateReportTitle((MacroNode)node);
+			} else if (columnIndex == 1) {
+				if((Boolean)aValue) {
+					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).addOptionalNode(node);
+					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).setOptionalNodeDefault(node, true);
+				} else {
+					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).removeOptionalNode(node);
+				}
 			}
 		}
 

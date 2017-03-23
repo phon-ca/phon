@@ -45,9 +45,11 @@ import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.OpenFileLauncher;
+import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -219,22 +221,25 @@ public class ReportLibrary implements OpGraphLibrary {
 		builder.addItem(".@legacy", reportAct);
 
 		builder.addSeparator(".", "composer");
-		final PhonUIAction showGeneratorAct = new PhonUIAction(ReportLibrary.class, "showGenerator");
+		final PhonUIAction showGeneratorAct = new PhonUIAction(ReportLibrary.class, "showGenerator", new Tuple<String, Project>(queryId, project));
 		showGeneratorAct.putValue(PhonUIAction.NAME, "Composer (simple)...");
 		showGeneratorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using simple Composer...");
 		builder.addItem(".@composer", showGeneratorAct);
 
 		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");
+		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
-		builder.addItem(".@editor", showComposerAct);
+		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
 
-	public static void showGenerator() {
+	public static void showGenerator(PhonActionEvent pae) {
+		@SuppressWarnings("unchecked")
+		final Tuple<String, Project> data = (Tuple<String, Project>)pae.getData();
+		final String queryId = data.getObj1();
 		final SimpleEditor frame =
-				new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
+				new SimpleEditor(data.getObj2(),
 						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
-						ReportRunner::new );
+						(graph, project) -> new ReportRunner(graph, project, queryId) );
 		frame.pack();
 		frame.setSize(new Dimension(1024, 768));
 		frame.setLocationByPlatform(true);
