@@ -106,7 +106,7 @@ public class AnalysisRunner implements Runnable {
 		if(wizardExt != null && showWizard) {
 			SwingUtilities.invokeLater( () -> {
 				final NodeWizard wizard = wizardExt.createWizard(processor);
-				wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
+//				wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
 				wizard.pack();
 				int padding = 100;
 				wizard.setSize(
