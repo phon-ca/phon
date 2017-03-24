@@ -1997,7 +1997,7 @@ $DATA
         <link dest="d55153c511f34d46" destField="parameters" source="104752d601584a8d" sourceField="parameters"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="Phone Clusters">
+                <opqry:info format="html" title="Phone Sequences">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="104752d601584a8d" showAsStep="true">
