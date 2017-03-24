@@ -110,19 +110,6 @@ public class WorkspaceProjectsPanel extends JPanel {
 
 		workspaceBtn = new MultiActionButton();
 		workspaceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-		String infoTxt = "";
-		try {
-			BufferedReader r = new BufferedReader(new InputStreamReader(
-					getClass().getResourceAsStream("workspace.txt")));
-			String line = null;
-			while((line = r.readLine()) != null) {
-				infoTxt += line + "\n";
-			}
-			r.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		BgPainter bgPainter = new BgPainter();
 
 		PhonUIAction selectHistoryAct =
@@ -148,8 +135,6 @@ public class WorkspaceProjectsPanel extends JPanel {
 		contentPanel.setOpaque(true);
 		contentPanel.setLayout(new BorderLayout());
 
-		JXLabel infoLbl = new JXLabel(infoTxt);
-		contentPanel.add(infoLbl, BorderLayout.CENTER);
 		contentPanel.add(workspaceBtn, BorderLayout.SOUTH);
 
 		projectList = new FolderProjectList();
