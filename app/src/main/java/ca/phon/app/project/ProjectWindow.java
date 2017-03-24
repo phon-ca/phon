@@ -569,6 +569,7 @@ public class ProjectWindow extends CommonModuleFrame
 		} else {
 			SwingUtilities.invokeLater( () -> {
 				corpusList.setSelectedIndex(0);
+				corpusList.requestFocusInWindow();
 			});
 		}
 	}
