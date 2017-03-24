@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,7 +39,7 @@ import ca.phon.worker.PhonWorker;
  * all changes.
  */
 public class InitAction extends ProjectWindowAction {
-	
+
 	private static final long serialVersionUID = 7839341789844508097L;
 
 	private final static Logger LOGGER =
@@ -47,11 +47,11 @@ public class InitAction extends ProjectWindowAction {
 
 	public InitAction(ProjectWindow projectWindow) {
 		super(projectWindow);
-		
+
 		putValue(NAME, "Initialize Git Repository");
 		putValue(SHORT_DESCRIPTION, "Initialize a new git repository for the project");
 	}
-	
+
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final ProjectGitController gitController = new ProjectGitController(getWindow().getProject());
@@ -62,13 +62,11 @@ public class InitAction extends ProjectWindowAction {
 		props.setHeader("Initialize Git Repository");
 		props.setRunAsync(true);
 		props.setOptions(MessageDialogProperties.okOptions);
-		
+
 		Runnable doInit = () -> {
-			final String msg = 
-					"Initializing git repository for project at " 
+			final String msg =
+					"Initializing git repository for project at "
 							+ gitController.getRepositoryFolder() +"...";
-			getWindow().getStatusPanel().setIndeterminate(true);
-			getWindow().getStatusPanel().setMessageLabel(msg);
 			if(!gitController.hasGitFolder()) {
 				LOGGER.info(msg);
 				try(Git git = gitController.init()) {
@@ -78,8 +76,8 @@ public class InitAction extends ProjectWindowAction {
 					gitController.addToIndex(".");
 					LOGGER.info("Creating initial commit");
 					gitController.commitAllChanges("Initial commit");
-					
-					props.setMessage("Initialized new git repository at " 
+
+					props.setMessage("Initialized new git repository at "
 							+ git.getRepository().getDirectory().getAbsolutePath());
 				} catch (IOException | GitAPIException e) {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -88,8 +86,6 @@ public class InitAction extends ProjectWindowAction {
 			} else {
 				props.setMessage(".git folder already exists");
 			}
-			getWindow().getStatusPanel().setIndeterminate(false);
-			getWindow().getStatusPanel().setMessageLabel("");
 			NativeDialogs.showMessageDialog(props);
 		};
 		PhonWorker.getInstance().invokeLater(doInit);
