@@ -5,21 +5,21 @@ body {
 
 h1 {
     font-weight: bold;
-    color: darkgrey;
+    color: rgb(17, 75, 122);
 }
 
-h2 {
+h2, h3 {
     font-weight: bold;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    color: darkgrey;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    color: rgb(17, 75, 122);
 }
 
-h3 {
+h4, h5  {
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    color: darkgrey;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    color: rgb(17, 75, 122);
 }
 
 table {
