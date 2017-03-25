@@ -194,7 +194,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="78e659da" name="Query: Word Match" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-03-21T13:31:34.911-02:30" name="Query: Word Match" uuid="8b46e734-569f-47bf-babf-4685b1d86556">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-03-25T08:12:54.182-02:30" name="Query: Word Match" uuid="188dfd32-7e5a-4e51-b396-9200f8fb58bb">
                 <script>
                     <source>/*
  * Phon - An open source tool for research in phonology.
@@ -532,9 +532,9 @@ function cvPattern(obj, includeStressMarkers, includeSyllableBoundaries) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="139b9021ac71404e" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="379f3abb">
+            <graph id="1f63ce81">
                 <ogcn:macro id="ad3918fd14ad4150" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6a3d851">
+                    <graph id="141c2871">
                         <node id="4e42c8b0339740de" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -739,7 +739,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="1030eddd" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="18146f89">
+            <graph id="3ad756de">
                 <node id="4d78e0c9" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -774,7 +774,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="7042cc1b9ceb408c" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6c3aa526">
+                    <graph id="2df2534f">
                         <node id="595ffa9c68124e62" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -880,7 +880,7 @@ function tableOp(context, table) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6b5d4572" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4cdad4e3">
+                    <graph id="205bc640">
                         <node id="4e580612" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -938,7 +938,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="588b604d" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="d14205b">
+                    <graph id="602180b3">
                         <node id="eeae57b70e674095" name="Summary Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -972,7 +972,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="4e3cfee1" name="Print Aggregate Tables" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="1907056e">
+                            <graph id="5245f34e">
                                 <node id="b33b6cca9203423e" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -998,7 +998,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="15c136ac7b154516" name="param: includeExactMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="3ea403ee">
+                                    <graph id="165d1640">
                                         <node id="96e4e968b041478c" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1223,7 +1223,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="9b468624100249c9" name="param: includeCVPatternMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="70e417bd">
+                                    <graph id="62cb86d7">
                                         <node id="dd5cf2b0e1f44ac0" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1274,7 +1274,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="c6b82d72ffcd43b2" name="param: includeSyllableCountMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="434e2565">
+                                    <graph id="6ed1942f">
                                         <node id="5263243fa2f54b43" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1325,7 +1325,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="1b558f53989e4ae9" name="param: includeStressPatternMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="5f131892">
+                                    <graph id="5702a55a">
                                         <node id="ea202c77fa614818" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1376,7 +1376,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="6551d22b" name="Exact Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="7f9fe1e4">
+                                    <graph id="32bcaa10">
                                         <node id="10b40ddac75d498e" name="Exact Match Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -1390,7 +1390,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="ec9ce15ed9cf4270" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="647bbced">
+                                            <graph id="7ac482dd">
                                                 <node id="d47ce8c085654d57" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1477,7 +1477,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="3093a46a" name="Mis-match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="5d060331">
+                                    <graph id="2adb5a6f">
                                         <node id="6d7814b69af34844" name="Mis-match Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -1491,7 +1491,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="2f22c0a300b3466b" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="6bde1d66">
+                                            <graph id="522b2d9b">
                                                 <node id="f08a6dd6245043dd" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1578,7 +1578,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="33b1f3d6" name="CV Pattern Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="d4f4f97">
+                                    <graph id="3ed0a1e2">
                                         <node id="13907d060b104952" name="CV Match Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -1591,7 +1591,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="50c2df898cbe4187" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="ca6487c">
+                                            <graph id="5154f2ba">
                                                 <node id="2a442c58c5aa4c7e" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1678,7 +1678,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="68acb46b" name="CV Pattern Mis-match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="f41c814">
+                                    <graph id="1501117b">
                                         <node id="3c0a56452dd84421" name="CV Mis-match Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -1691,7 +1691,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="79964bbc0054971" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="ba23dd2">
+                                            <graph id="2b3245cc">
                                                 <node id="58e6a3656af74dbb" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1778,7 +1778,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="16dad480" name="Syllable Count Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="3f9f88c6">
+                                    <graph id="38796744">
                                         <node id="f0b4aa897dac42f0" name="Syllable Count Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -1791,7 +1791,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="7ad4bb03e7774b83" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="23fbc6c2">
+                                            <graph id="75560ab4">
                                                 <node id="918167c988e447ca" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1878,7 +1878,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="12fa3aa0" name="Syllable Count Mis-match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="2cddf341">
+                                    <graph id="284aec91">
                                         <node id="2e90dc063fe64dce" name="Syllable Count Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -1891,7 +1891,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="298b00958c6b4676" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="f05654b">
+                                            <graph id="3314ebd1">
                                                 <node id="6013209a4d0348e5" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1978,7 +1978,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="6eca6828" name="Stress Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="1bc0167e">
+                                    <graph id="1925710d">
                                         <node id="f6b31c78682d4070" name="Stress Match Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -1991,7 +1991,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="c1ba369928e343d7" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="2626fec5">
+                                            <graph id="229fa802">
                                                 <node id="60ee27a2c2f8456e" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2078,7 +2078,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="4c9e31aa" name="Stress Mis-match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="53f8e684">
+                                    <graph id="22a00f4e">
                                         <node id="5f77c0fa1b8a42d4" name="Stress Mis-match Inventory" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                                             <extensions>
                                                 <opqry:inventoryoptions>
@@ -2091,7 +2091,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="e07ffd837583414d" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="372ca2f8">
+                                            <graph id="43ebe5ad">
                                                 <node id="dc7568e1d4b44a21" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2178,13 +2178,13 @@ function tableOp(context, table) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="74a6b486" name="Add exact Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="6dc4ea81">
+                                    <graph id="2d369335">
                                         <node id="924c8a2718fe416e" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>Exact Matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>Exact Matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2233,13 +2233,13 @@ No Results
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="fbfae79a9fef4b8c" name="Add Mis-match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="2d30628d">
+                                    <graph id="5a38871e">
                                         <node id="f9242e1267244a2f" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>Mis-matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>Mis-matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2288,13 +2288,13 @@ No Results
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="9e0bc05b98c4b22" name="Add CV Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="2078f4dc">
+                                    <graph id="2a850de5">
                                         <node id="fc9f6ef928ae4d03" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>CV Matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>CV Matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2343,13 +2343,13 @@ No Results
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="ba73f92805a54f3a" name="Add CV Mis-match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="411d2423">
+                                    <graph id="11d57cce">
                                         <node id="6f33da80c98c4ae7" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>CV Mis-matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>CV Mis-matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2398,13 +2398,13 @@ No Results
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="8e56b6d4a91c4ff7" name="Add Syllable Count Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="46d58a99">
+                                    <graph id="3ae5e98">
                                         <node id="89962d2acaa74856" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>Syllable Count Matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>Syllable Count Matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2453,13 +2453,13 @@ No Results
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="d95d095d67d8452c" name="Add Syllable Count Mis-match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="6812581d">
+                                    <graph id="649ad996">
                                         <node id="b123427f881a49e9" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>Syllable Count Mis-matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>Syllable Count Mis-matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2508,13 +2508,13 @@ No Results
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="635c00ae91c48b4" name="Add Stress Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="5154577a">
+                                    <graph id="3b5aebcc">
                                         <node id="55460e3f49ce4c1e" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>Stress Matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>Stress Matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2563,13 +2563,13 @@ No Results
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="1acfcb9198394262" name="Add Stress Match Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="361121b5">
+                                    <graph id="2f9de6eb">
                                         <node id="f3728a30104745e2" name="Set Caption for Aggregate" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>Stress Mis-matches</b></br><b>Speaker: </b> $DATA")
+#set($caption = "<h4>Stress Mis-matches; $DATA</h4>")
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -2786,7 +2786,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="2c588b90256c43b3" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="566260ac">
+                            <graph id="62367a83">
                                 <node id="12b4cc6150db4c9a" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -2851,7 +2851,7 @@ function tableOp(context, table) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="3ad7825a" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="6052ff3b">
+                            <graph id="3f86c0d9">
                                 <node id="20a81de6" name="Session Name" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -2894,7 +2894,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="7ae44e7f" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="36357c8b">
+                                    <graph id="6e7b1667">
                                         <node id="45ab2b8b" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2964,7 +2964,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="369cc50c" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="1f3edb2f">
+                                    <graph id="52281fbb">
                                         <node id="7eeb13ba4ea4541" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -3180,7 +3180,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="58a66d68" name="Print Tables" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="6a21654f">
+                                            <graph id="12c5f30a">
                                                 <node id="fb305db58e734b9f" name="Word Exact Matches" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -3270,7 +3270,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="234adeb1bb584288" name="param: includeExactMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="6acf7098">
+                                                    <graph id="4d552833">
                                                         <node id="557edd668b2e46db" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3321,7 +3321,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="d0a5b809f9b34b21" name="param: includeCVPatternMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="6511267">
+                                                    <graph id="7d7752af">
                                                         <node id="e1081c2e5e6145fb" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3372,7 +3372,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="2e860e72278f431f" name="param: includeSyllableCountMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5e198219">
+                                                    <graph id="5f879d4">
                                                         <node id="d58dbbac260446a6" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3423,7 +3423,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="15fb1e5bf1f44b67" name="param: includeStressPatternMatch" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="7aab01ce">
+                                                    <graph id="448ac3ef">
                                                         <node id="981693bede2f4da8" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3474,9 +3474,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="45036ba1" name="Breakdown: Exact Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="62d35791">
+                                                    <graph id="44b2fe28">
                                                         <ogcn:macro id="d29686b5042542d7" name="Setup Buffer Name: Word Exact Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="7c8dc1e7">
+                                                            <graph id="51693224">
                                                                 <node id="c44c153de46a47fd" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -3610,9 +3610,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="7b944ba1" name="Breakdown: Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="59e57e6">
+                                                    <graph id="4bd78984">
                                                         <ogcn:macro id="4a1999b04680491a" name="Setup Buffer Name: Word Exact Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="3c42b921">
+                                                            <graph id="4300944e">
                                                                 <node id="d5a043e0ca6f4f0f" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -3746,9 +3746,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="47161a9" name="Breakdown: CV Pattern Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="1dbe6d21">
+                                                    <graph id="60c2b443">
                                                         <ogcn:macro id="f71b6cf41d9e47a5" name="Setup Buffer Name: Word CV Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="17fc62af">
+                                                            <graph id="4b3b1d73">
                                                                 <node id="c340750712384eb7" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -3882,9 +3882,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="51d4449b" name="Breakdown: CV Pattern Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="4dfad225">
+                                                    <graph id="346dd3ab">
                                                         <ogcn:macro id="e0b4e3bc904e45" name="Setup Buffer Name: Word CV Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="68bc062">
+                                                            <graph id="760bc82c">
                                                                 <node id="79afa9a2da1b4b73" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -4018,9 +4018,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="5bb22ec1" name="Breakdown: Syllable Count Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="1713f0d0">
+                                                    <graph id="c485575">
                                                         <ogcn:macro id="af14ac2cec15494d" name="Setup Buffer Name: Syllable Count Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="7271723f">
+                                                            <graph id="461e1a20">
                                                                 <node id="f53e2b5477e7470d" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -4154,9 +4154,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="1851bcc4" name="Breakdown: Syllable Count Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="3944fcd9">
+                                                    <graph id="f1076d8">
                                                         <ogcn:macro id="72da30ec6b294080" name="Setup Buffer Name: Syllable Count Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="2a0399a4">
+                                                            <graph id="b2255d1">
                                                                 <node id="781a8647c3ab4370" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -4290,9 +4290,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="503e49b" name="Breakdown: Stress Pattern Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="26e1fd84">
+                                                    <graph id="1cbd6c75">
                                                         <ogcn:macro id="fa0b4710ab824292" name="Setup Buffer Name: Word Stress Matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="4e7a1e4b">
+                                                            <graph id="49d84090">
                                                                 <node id="91d7c6060a9848ea" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -4426,9 +4426,9 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="67c643f8" name="Breakdown: Stress Pattern Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="6263dd73">
+                                                    <graph id="2c7ccf2a">
                                                         <ogcn:macro id="c854410ef7aa4757" name="Setup Buffer Name: Word Stress Mis-matches" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="57634077">
+                                                            <graph id="1ec8134d">
                                                                 <node id="441e1b6bc0394654" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -4562,12 +4562,12 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="558bf240" name="Add Exact Matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="78e487c7">
+                                                    <graph id="9341ab8">
                                                         <node id="6c53600" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>Exact Matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>Exact Matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4614,12 +4614,12 @@ No Results
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="325397232011465b" name="Add Mis-matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5be26e0b">
+                                                    <graph id="2489f657">
                                                         <node id="6cf36f260264000" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>Mis-matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>Mis-matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4666,12 +4666,12 @@ No Results
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="874427b5fa5840e8" name="Add CV Matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="1e5d9ed2">
+                                                    <graph id="6f8fdbb5">
                                                         <node id="741e2923a6e447fd" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>CV Matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>CV Matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4710,6 +4710,9 @@ No Results
                                                                 </oga:meta>
                                                             </extensions>
                                                         </node>
+                                                        <extensions>
+                                                            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                                                        </extensions>
                                                     </graph>
                                                     <ogcn:published_input field="data" name="speaker" ref="741e2923a6e447fd"/>
                                                     <ogcn:published_input field="data" name="bufferName" ref="d63261d644f94514"/>
@@ -4718,12 +4721,12 @@ No Results
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="38f38996f071478d" name="Add CV Mis-matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="69a6a1a">
+                                                    <graph id="6ef9c96">
                                                         <node id="2cba3b02f7514373" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>CV Mis-matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>CV Mis-matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4770,12 +4773,12 @@ No Results
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="40631b0832294dec" name="Add Syllable Count Matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="2122ba82">
+                                                    <graph id="21548705">
                                                         <node id="93943019d3dd47d9" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>Syllable Count Matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>Syllable Count Matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4822,12 +4825,12 @@ No Results
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="64fa19b696ff41ea" name="Add Syllable Count Mis-matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="7d437337">
+                                                    <graph id="1b0598fd">
                                                         <node id="9e955b0c0c5e4985" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>Syllable Count Mis-matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>Syllable Count Mis-matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4877,12 +4880,12 @@ No Results
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="32630f3b5caf4570" name="Add Stress Matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5c325973">
+                                                    <graph id="19c22129">
                                                         <node id="6fc0d3aed9754eb5" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>Stress Matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>Stress Matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4929,12 +4932,12 @@ No Results
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="2c6bbf83d44e484b" name="Add Stress Mis-matches to Breakdown" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="66676ae1">
+                                                    <graph id="1476dd7b">
                                                         <node id="daee6227369a4a9d" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<b>Stress Mis-matches</b><br/><b>Session:</b> " + $sessionPath + "<br/><b>Speaker:</b> $DATA")
+                                                                    <oga:property key="dataTemplate"><![CDATA[#set($caption = "<h4>Stress Mis-matches; $DATA@" + $sessionPath + "</h4>")
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -4973,6 +4976,9 @@ No Results
                                                                 </oga:meta>
                                                             </extensions>
                                                         </node>
+                                                        <extensions>
+                                                            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                                                        </extensions>
                                                     </graph>
                                                     <ogcn:published_input field="data" name="speaker" ref="daee6227369a4a9d"/>
                                                     <ogcn:published_input field="data" name="bufferName" ref="bdbad158e28749fb"/>
@@ -5242,13 +5248,13 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="61a19e1" name="Add to Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="4e3291b2">
+                            <graph id="238fc8b">
                                 <node id="2ee41bab" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                     <input name="data" optional="false">Data to print</input>
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="dataTemplate"><![CDATA[
-#set($caption = "<b>Speaker:$DATA</b>")
+#set($caption = "<h4>$DATA</h4>")
 ]]></oga:property>
                                             <oga:property key="showText"><![CDATA[true]]></oga:property>
                                             <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -5345,9 +5351,9 @@ function tableOp(context, table) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="4b07ee17" name="Finish Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6ee6df5e">
+            <graph id="5675de7f">
                 <ogcn:macro id="53c82ab3" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="da02439">
+                    <graph id="600d4115">
                         <node id="5ef594ab" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -5358,7 +5364,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="6b7b90b" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="7e42716f">
+                            <graph id="7394d415">
                                 <node id="509f91f9" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -5418,7 +5424,7 @@ $DATA
                     </extensions>
                 </node>
                 <ogcn:macro id="cb6258e1026e4cde" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5143028e">
+                    <graph id="5cf1dfbf">
                         <node id="a201ca5d8f74d96" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -5429,7 +5435,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="36f1404139de4ad2" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="f09ff10">
+                            <graph id="2b3e1cd8">
                                 <node id="4fcf245e35fe40c7" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -5484,7 +5490,7 @@ $DATA
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="75fed0e4a7de40ca" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="38811559">
+                    <graph id="550505c">
                         <node id="449036de3a1d4bc7" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -5495,7 +5501,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="de87600469c34421" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="4804dcaf">
+                            <graph id="4c9c7e76">
                                 <node id="5ab1b8454a664eea" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
