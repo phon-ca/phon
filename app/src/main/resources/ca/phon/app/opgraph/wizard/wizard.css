@@ -3,21 +3,27 @@ body {
     font-family: "noto sans", arial, helvetica, sans-serif;
 }
 
+h1:first-of-type {
+    margin-top: 0px;
+}
+
 h1 {
     font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.25em;
     color: rgb(17, 75, 122);
 }
 
 h2, h3 {
     font-weight: bold;
     margin-top: 1em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.25em;
     color: rgb(17, 75, 122);
 }
 
 h4, h5  {
     font-weight: bold;
-    margin-top: 0.5em;
+    margin-top: 1em;
     margin-bottom: 0.5em;
     color: rgb(17, 75, 122);
 }
@@ -69,6 +75,72 @@ caption {
     font-family:"noto monospace", monospace;
 }
 
+.sidenav {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(17, 75, 122);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.sidenav a {
+    padding: 5px 5px 5px 5px;
+    text-decoration: none;
+    display: block;
+    transition: 1s;
+}
+
+.sidenav .menubtn {
+    float: right;
+    padding: 5px;
+    color: white;
+}
+
+.sidenav #toc {
+}
+
+#toc .h1 {
+    font-weight: bold;
+    font-size: large;
+    color: white;
+}
+
+#toc .h2 {
+    padding-left: 5px;
+    font-size: medium;
+    color: white;
+}
+
+#toc .h3 {
+    padding-left: 10px;
+    font-size: small;
+    color: white;
+}
+
+#toc .h4 {
+    padding-left: 15px;
+    font-size: smaller;
+    color: white;
+}
+
+#toc a {
+    color: white;
+}
+
+#toc a:hover {
+    color: lightgray;
+}
+
+#main {
+    margin-left: 300px;
+    padding: 0px;
+    transition: 0.5s;
+}
+
 @media print {
 
     .pagebreak {
@@ -84,9 +156,17 @@ caption {
         font-size: 12pt;
     }
 
+    #main {
+        margin: inherit;
+    }
+
     .ipa_value {
         font-family: "Charis SIL Compact", "noto serif", "Charis SIL", times, serif;
         font-size: 12pt;
+    }
+
+    .sidenav {
+        display: none;
     }
 
     header, footer, nav {
