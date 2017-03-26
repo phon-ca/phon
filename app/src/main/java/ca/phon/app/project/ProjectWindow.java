@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
@@ -151,8 +152,7 @@ public class ProjectWindow extends CommonModuleFrame
 	private SessionListModel sessionModel;
 	private SessionDetailsPane sessionDetails;
 
-//	/** The checkbox */
-//	private JCheckBox blindModeBox;
+	private JCheckBox blindModeBox;
 
 //	/** Label for messages */
 //	private StatusPanel msgPanel;
@@ -336,7 +336,6 @@ public class ProjectWindow extends CommonModuleFrame
 		final ProjectDataTransferHandler transferHandler = new ProjectDataTransferHandler(this);
 
 		/* Create components */
-//		newCorpusButton = createNewCorpusButton();
 		createCorpusButton = createCorpusButton();
 		createCorpusButton.setVisible(false);
 		corpusList = new JList<String>();
@@ -352,16 +351,10 @@ public class ProjectWindow extends CommonModuleFrame
 				corpusDetails.setCorpus(corpus);
 
 				if(getProject().getCorpusSessions(corpus).size() == 0) {
-					createSessionButton.setVisible(true);
+					onShowCreateSessionButton();
 				} else {
-					createSessionButton.setVisible(false);
+					onHideCreateSessionButton();
 				}
-
-//				if(getProject().getCorpusSessions(corpus).size() == 0) {
-//					onSwapNewAndCreateSession(newSessionButton);
-//				} else {
-//					onSwapNewAndCreateSession(createSessionButton);
-//				}
 			}
 		});
 		corpusList.addMouseListener(new MouseInputAdapter() {
@@ -528,8 +521,19 @@ public class ProjectWindow extends CommonModuleFrame
 		showCreateSessionBtn.setOpaque(false);
 		showCreateSessionBtn.setBorderPainted(false);
 
+		blindModeBox = new JCheckBox("Blind mode");
+		blindModeBox.setOpaque(false);
+		blindModeBox.setForeground(Color.white);
+		blindModeBox.setMargin(new Insets(0, 0, 0, 0));
+		blindModeBox.setSelected(false);
+
+		final JPanel sessionDecoration = new JPanel(new HorizontalLayout());
+		sessionDecoration.setOpaque(false);
+		sessionDecoration.add(blindModeBox);
+		sessionDecoration.add(showCreateSessionBtn);
+
 		sessionPanel = new TitledPanel("Session");
-		sessionPanel.setRightDecoration(showCreateSessionBtn);
+		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
 		sessionPanel.getContentContainer().add(sessionDetailsScroller, BorderLayout.SOUTH);
