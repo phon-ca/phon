@@ -443,6 +443,13 @@ public class SimpleEditor extends CommonModuleFrame {
 	public void setCurrentFile(File source) {
 		getModel().getDocument().setSource(source);
 		updateTitle();
+
+		// update node title for wizard
+		final WizardExtension ext = getModel().getDocument().getRootGraph().getExtension(WizardExtension.class);
+		if(ext != null) {
+			final String name = FilenameUtils.getBaseName(source.getAbsolutePath());
+			ext.setWizardTitle(name);
+		}
 	}
 
 	protected void updateTitle() {

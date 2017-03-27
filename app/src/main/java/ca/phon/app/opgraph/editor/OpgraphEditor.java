@@ -40,6 +40,8 @@ import javax.swing.event.MenuListener;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 
+import org.apache.commons.io.FilenameUtils;
+
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockable;
@@ -74,6 +76,7 @@ import ca.phon.app.opgraph.editor.actions.graph.MoveNodeAction;
 import ca.phon.app.opgraph.editor.actions.view.ResetViewAction;
 import ca.phon.app.opgraph.editor.actions.view.ToggleViewAction;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -171,6 +174,13 @@ public class OpgraphEditor extends CommonModuleFrame {
 	public void setCurrentFile(File source) {
 		getModel().getDocument().setSource(source);
 		updateTitle();
+
+		// update node title for wizard
+		final WizardExtension ext = getModel().getDocument().getRootGraph().getExtension(WizardExtension.class);
+		if(ext != null) {
+			final String name = FilenameUtils.getBaseName(source.getAbsolutePath());
+			ext.setWizardTitle(name);
+		}
 	}
 
 	public boolean isViewVisible(String viewName) {
