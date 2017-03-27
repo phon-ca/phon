@@ -171,6 +171,9 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 						for(OpNode node:analysisExt) {
 							graphExtension.addNode(node);
 							graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
+							final String nodeTitle = analysisExt.getWizardTitle() +
+									(node.getName().equals("Parameters") ? "" : " " + node.getName());
+							graphExtension.setNodeTitle(node, nodeTitle);
 						}
 
 						for(OpNode optionalNode:analysisExt.getOptionalNodes()) {
