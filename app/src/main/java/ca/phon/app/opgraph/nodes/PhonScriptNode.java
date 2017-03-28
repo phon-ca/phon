@@ -227,7 +227,8 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 			final Scriptable scope = ctx.getEvaluatedScope();
 			ctx.installParams(scope);
 
-			ctx.callFunction(scope, "run", context);
+			if(ctx.hasFunction(scope, "run", 1))
+				ctx.callFunction(scope, "run", context);
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
