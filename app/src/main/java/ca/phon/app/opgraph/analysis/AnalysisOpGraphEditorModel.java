@@ -172,7 +172,7 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 							graphExtension.addNode(node);
 							graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
 							final String nodeTitle = analysisExt.getWizardTitle() +
-									(node.getName().equals("Parameters") ? "" : " " + node.getName());
+									(node.getName().equals("Parameters") || node.getName().equals(analysisExt.getWizardTitle()) ? "" : " " + node.getName());
 							graphExtension.setNodeTitle(node, nodeTitle);
 						}
 
