@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
@@ -67,65 +68,65 @@ import ca.phon.session.Tier;
 	description="Convert a set of result to a table",
 	category="Report")
 public class ResultsToTableNode extends OpNode implements NodeSettings {
-	
+
 	private final static Logger LOGGER = Logger.getLogger(ResultsToTableNode.class.getName());
-	
+
 	private final InputField projectInput = new InputField("project", "Project", false, true, Project.class);
-	
+
 	private final InputField resultSetsInput = new InputField("results", "Query results", false, true, ResultSet[].class);
-	
+
 	private final OutputField tableOutput = new OutputField("table", "Result sets as table", true, TableDataSource.class);
 
 	/* Settings */
 	private boolean includeSessionInfo;
-	
+
 	private boolean includeSpeakerInfo;
-	
+
 	private boolean includeTierInfo;
-	
+
 	/** Include metadata columns */
 	private boolean includeMetadata;
-	
+
 	/* UI */
 	private JPanel settingsPanel;
 	private JCheckBox includeSessionInfoBox;
 	private JCheckBox includeSpeakerInfoBox;
 	private JCheckBox includeTierInfoBox;
 	private JCheckBox includeMetadataBox;
-	
+
 	public ResultsToTableNode() {
 		super();
-		
+
 		putField(projectInput);
 		putField(resultSetsInput);
 		putField(tableOutput);
-		
+
 		putExtension(NodeSettings.class, this);
 	}
-	
+
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final ResultSet[] resultSets = (ResultSet[])context.get(resultSetsInput);
 		final Project project = (Project)context.get(projectInput);
-		
+
 		context.put(tableOutput, resultsToTable(project, resultSets));
 	}
-	
+
 	private TableDataSource resultsToTable(Project project, ResultSet[] results) {
 		final DefaultTableDataSource retVal = new DefaultTableDataSource();
-		
+
 		List<String> columnNames = new ArrayList<>();
-		
+
 		if(isIncludeSessionInfo()) {
 			columnNames.add("Session");
 			columnNames.add("Date");
 		}
-		
+
 		if(isIncludeSpeakerInfo()) {
 			columnNames.add("Speaker");
 			columnNames.add("Age");
 		}
-		
+
 		if(isIncludeTierInfo()) {
 			columnNames.add("Record #");
 			columnNames.add("Group #");
@@ -134,7 +135,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		}
 
 		columnNames.add("Result");
-		
+
 		// collect all result value tier names
 		final Set<String> tierNames = new LinkedHashSet<>();
 		// assuming all results come from the same query, the tiers should be the
@@ -149,7 +150,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 				}
 				columnNames.addAll(tierNames);
 			});
-		
+
 		Set<String> metadataKeys = new LinkedHashSet<>();
 		if(isIncludeMetadata()) {
 			for(ResultSet rs:results) {
@@ -157,24 +158,24 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 			}
 			columnNames.addAll(metadataKeys);
 		}
-		
+
 		for(ResultSet rs:results) {
 			try {
 				final Session session = project.openSession(rs.getCorpus(), rs.getSession());
 				for(Result result:rs) {
 					List<Object> rowData = new ArrayList<>();
 					final Record record = session.getRecord(result.getRecordIndex());
-					
+
 					if(isIncludeSessionInfo()) {
 						rowData.add(new SessionPath(rs.getCorpus(), rs.getSession()));
 						rowData.add(session.getDate());
 					}
-					
+
 					if(isIncludeSpeakerInfo()) {
 						final Participant speaker = record.getSpeaker();
 						if(speaker != null) {
 							rowData.add(speaker);
-							
+
 							final Period age = speaker.getAge(session.getDate());
 							if(age != null) {
 								rowData.add(age);
@@ -185,9 +186,9 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							rowData.add("");
 							rowData.add("");
 						}
-						
+
 					}
-					
+
 					if(isIncludeTierInfo()) {
 						rowData.add(result.getRecordIndex()+1);
 						rowData.add(result.getResultValue(0).getGroupIndex()+1);
@@ -199,25 +200,25 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 						}
 						rowData.add(ReportHelper.createReportString(rvVals, result.getSchema()));
 					}
-					
+
 					rowData.add(result);
-					
+
 					// add result objects from record
 					for(ResultValue rv:result) {
 						final Tier<?> tier = record.getTier(rv.getTierName());
 						final Object tierValue = tier.getGroup(rv.getGroupIndex());
-						
+
 						// attempt to find a formatter
 						@SuppressWarnings("unchecked")
 						final Formatter<Object> formatter =
 								(Formatter<Object>)FormatterFactory.createFormatter(tierValue.getClass());
-						final String tierTxt = 
+						final String tierTxt =
 								(formatter != null ? formatter.format(tierValue) : tierValue.toString());
-						
-						final String resultTxt = 
+
+						final String resultTxt =
 								(rv.getRange().getFirst() >= 0 && rv.getRange().getLast() >= rv.getRange().getFirst() ?
 								tierTxt.substring(
-										Math.max(0, rv.getRange().getFirst()), 
+										Math.max(0, rv.getRange().getFirst()),
 										Math.max(0, Math.min(rv.getRange().getLast(), tierTxt.length()))) : "");
 						Object resultVal = resultTxt;
 						if(formatter != null) {
@@ -229,67 +230,67 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 						}
 						rowData.add(resultVal);
 					}
-					
+
 					if(isIncludeMetadata()) {
 						for(String metakey:metadataKeys) {
 							rowData.add(result.getMetadata().get(metakey));
 						}
 					}
-					
+
 					retVal.addRow(rowData.toArray());
 				}
 			} catch (IOException e) {
 				throw new ProcessingException(null, e);
 			}
 		}
-		
+
 		for(int i = 0; i < columnNames.size(); i++) {
 			retVal.setColumnTitle(i, columnNames.get(i));
 		}
-		
+
 		return retVal;
 	}
-	
+
 	public boolean isIncludeSessionInfo() {
 		return (includeSessionInfoBox != null ? includeSessionInfoBox.isSelected() : this.includeSessionInfo);
 	}
-	
+
 	public void setIncludeSessionInfo(boolean includeSessionInfo) {
 		this.includeSessionInfo = includeSessionInfo;
 		if(this.includeSessionInfoBox != null)
 			this.includeSessionInfoBox.setSelected(includeSessionInfo);
 	}
-	
+
 	public boolean isIncludeSpeakerInfo() {
 		return (includeSpeakerInfoBox != null ? includeSpeakerInfoBox.isSelected() : this.includeSpeakerInfo);
 	}
-	
+
 	public void setIncludeSpeakerInfo(boolean includeSpeakerInfo) {
 		this.includeSpeakerInfo = includeSpeakerInfo;
 		if(this.includeSpeakerInfoBox != null)
 			this.includeSpeakerInfoBox.setSelected(includeSpeakerInfo);
 	}
-	
+
 	public boolean isIncludeTierInfo() {
 		return (includeTierInfoBox != null ? includeTierInfoBox.isSelected() : this.includeTierInfo);
 	}
-	
+
 	public void setIncludeTierInfo(boolean includeTierInfo) {
 		this.includeTierInfo = includeTierInfo;
 		if(this.includeTierInfoBox != null)
 			this.includeTierInfoBox.setSelected(includeTierInfo);
 	}
-	
+
 	public boolean isIncludeMetadata() {
 		return (includeMetadataBox != null ? includeMetadataBox.isSelected() : this.includeMetadata);
 	}
-	
+
 	public void setIncludeMetadata(boolean includeMetadata) {
 		this.includeMetadata = includeMetadata;
 		if(this.includeMetadataBox != null)
 			this.includeMetadataBox.setSelected(includeMetadata);
 	}
-	
+
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
@@ -297,15 +298,15 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		}
 		return settingsPanel;
 	}
-	
+
 	private JPanel createSettingsPanel() {
 		JPanel retVal = new JPanel();
-		
+
 		includeSessionInfoBox = new JCheckBox("Include session name and date", true);
 		includeSpeakerInfoBox = new JCheckBox("Include speaker name and age", true);
 		includeTierInfoBox = new JCheckBox("Include record number, tier, group and text range", true);
 		includeMetadataBox = new JCheckBox("Include result metadata columns", true);
-		
+
 		final GridBagLayout layout = new GridBagLayout();
 		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -314,9 +315,9 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(2, 2, 5, 2);
-		
+
 		retVal.setLayout(layout);
-		
+
 		retVal.add(new JXTitledSeparator("Column options"), gbc);
 		++gbc.gridy;
 		retVal.add(includeSessionInfoBox, gbc);
@@ -326,19 +327,23 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		retVal.add(includeTierInfoBox, gbc);
 		++gbc.gridy;
 		retVal.add(includeMetadataBox, gbc);
-		
+		++gbc.gridy;
+		gbc.weighty = 1.0;
+		gbc.fill = GridBagConstraints.BOTH;
+		retVal.add(Box.createVerticalGlue(), gbc);
+
 		return retVal;
 	}
 
 	@Override
 	public Properties getSettings() {
 		Properties retVal = new Properties();
-		
+
 		retVal.put("includeSessionInfo", isIncludeSessionInfo());
 		retVal.put("includeSpeakerInfo", isIncludeSpeakerInfo());
 		retVal.put("includeTierInfo", isIncludeTierInfo());
 		retVal.put("includeMetadata", isIncludeSessionInfo());
-		
+
 		return retVal;
 	}
 
@@ -353,5 +358,5 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		setIncludeMetadata(
 				Boolean.parseBoolean(properties.getProperty("includeMetadata", "true")));
 	}
-	
+
 }
