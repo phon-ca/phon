@@ -236,6 +236,21 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 			}
 		}
 
+		private void printKey(String key) {
+			// remove ':' from end of key as it will be added after
+			if(key.endsWith(":")) {
+				key = key.substring(0, key.length()-1);
+			}
+			if(key.trim().length() > 0) {
+				buffer.append(key).append(": ");
+			}
+		}
+
+		private void printValue(Object value) {
+			if(value == null || value.toString().length() == 0) return;
+			buffer.append("__").append(value).append("__");
+		}
+
 		private boolean checkIncludeParam(ScriptParam param) {
 			if(isPrintOnlyChanged()) {
 				boolean isForceInclude =
@@ -272,11 +287,12 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 						(param.getParamDesc().trim().length() > 0
 								? param.getParamDesc()
 								: param.getLabelText());
-				buffer.append("\n * ").append("_").append(name).append("_: ");
+				buffer.append("\n * ");
+				printKey(name);
 				if((Boolean)param.getValue(param.getParamId())) {
-					buffer.append("yes");
+					printValue("yes");
 				} else {
-					buffer.append("no");
+					printValue("no");
 				}
 			}
 		}
@@ -287,15 +303,17 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 				printCategoryHeader();
 
 				if(param.getParamDesc().trim().length() > 0) {
-					buffer.append("\n * ").append("*").append(param.getParamDesc()).append("*");
+					buffer.append("\n * ");
+					printKey(param.getParamDesc());
 				}
 				for(int i = 0; i < param.getNumberOfOptions(); i++) {
-					buffer.append("\n   * _").append(param.getOptionText(i)).append("_: ");
+					buffer.append("\n   * ");
+					printKey(param.getOptionText(i));
 
 					if((Boolean)param.getValue(param.getOptionId(i))) {
-						buffer.append("yes");
+						printValue("yes");
 					} else {
-						buffer.append("no");
+						printValue("no");
 					}
 				}
 			}
@@ -306,8 +324,9 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 			if(checkIncludeParam(param)) {
 				printCategoryHeader();
 
-				buffer.append("\n * ").append("*").append(param.getParamDesc()).append("*: ")
-					.append(param.getValue(param.getParamId()));
+				buffer.append("\n * ");
+				printKey(param.getParamDesc());
+				printValue(param.getValue(param.getParamId()));
 			}
 		}
 
@@ -316,8 +335,9 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 			if(checkIncludeParam(param)) {
 				printCategoryHeader();
 
-				buffer.append("\n * ").append("*").append(param.getParamDesc()).append("*: ");
-				buffer.append(((EnumScriptParam.ReturnValue)param.getValue(param.getParamId())).toString());
+				buffer.append("\n * ");
+				printKey(param.getParamDesc());
+				printValue(((EnumScriptParam.ReturnValue)param.getValue(param.getParamId())));
 			}
 		}
 

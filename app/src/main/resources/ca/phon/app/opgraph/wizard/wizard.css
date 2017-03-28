@@ -1,6 +1,6 @@
 body {
     background: white;
-    font-family: "noto sans", arial, helvetica, sans-serif;
+    font-family: "Charis SIL Compact","noto sans","Arial", sans-serif;
 }
 
 h1:first-of-type {
@@ -91,13 +91,13 @@ caption {
     padding: 5px 5px 5px 5px;
     text-decoration: none;
     display: block;
-    transition: 1s;
 }
 
 .sidenav .menubtn {
     float: right;
     padding: 5px;
     color: white;
+    cursor: pointer;
 }
 
 .sidenav #toc {
@@ -105,26 +105,38 @@ caption {
 
 #toc .h1 {
     font-weight: bold;
-    font-size: large;
+    font-size: larger;
     color: white;
 }
 
 #toc .h2 {
     padding-left: 5px;
-    font-size: medium;
+    font-size: large;
     color: white;
 }
 
 #toc .h3 {
     padding-left: 10px;
-    font-size: small;
+    font-size: medium;
     color: white;
 }
 
 #toc .h4 {
     padding-left: 15px;
+    font-size: small;
+    color: white;
+}
+
+#toc .h5 {
+    padding-left: 20px;
     font-size: smaller;
     color: white;
+}
+
+#toc .h6 {
+    padding-left: 25px;
+    font-size: smaller;
+    color:white;
 }
 
 #toc a {
@@ -152,7 +164,7 @@ caption {
     }
 
     body {
-        font-family: "noto serif", arial, times, serif;
+        font-family: "Charis SIL Compact","noto serif", arial, times, serif;
         font-size: 12pt;
     }
 

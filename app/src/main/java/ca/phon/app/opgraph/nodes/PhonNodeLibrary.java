@@ -78,14 +78,14 @@ public class PhonNodeLibrary {
 
 	public void addAnalysisNodes() {
 		final AnalysisLibrary library = new AnalysisLibrary();
-		library.getStockGraphs().forEach(this::addAnalysisNodeToLibrary);
-		library.getUserGraphs().forEach(this::addAnalysisNodeToLibrary);
+		library.getStockGraphs().forEach( (url) -> addAnalysisNodeToLibrary(url, "Analysis") );
+		library.getUserGraphs().forEach( (url) -> addAnalysisNodeToLibrary(url, "Analysis (User Library)") );
 	}
 
 	public void addReportNodes() {
 		final ReportLibrary library = new ReportLibrary();
-		library.getStockGraphs().forEach(this::addReportNodeToLibrary);
-		library.getUserGraphs().forEach(this::addAnalysisNodeToLibrary);
+		library.getStockGraphs().forEach( (url) -> addReportNodeToLibrary(url, "Report") );
+		library.getUserGraphs().forEach( (url) -> addReportNodeToLibrary(url, "Report (User Library)") );
 	}
 
 	public void addQueryNodes() {
@@ -219,28 +219,28 @@ public class PhonNodeLibrary {
 		}
 	}
 
-	private void addAnalysisNodeToLibrary(URL url) {
+	private void addAnalysisNodeToLibrary(URL url, String category) {
 		try {
 			String filename = URLDecoder.decode(url.getFile(), "UTF-8");
 			String name = FilenameUtils.getBaseName(filename);
 
 			final URI uri = new URI("class", MacroNode.class.getName(), name);
 
-			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Analysis", new AnalysisNodeInstantiator());
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new AnalysisNodeInstantiator());
 			getNodeLibrary().put(nodeData);
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
 
-	private void addReportNodeToLibrary(URL url) {
+	private void addReportNodeToLibrary(URL url, String category) {
 		try {
 			String filename = URLDecoder.decode(url.getFile(), "UTF-8");
 			String name = FilenameUtils.getBaseName(filename);
 
 			final URI uri = new URI("class", MacroNode.class.getName(), name);
 
-			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Report", new ReportNodeInstantiator());
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new ReportNodeInstantiator());
 			getNodeLibrary().put(nodeData);
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);

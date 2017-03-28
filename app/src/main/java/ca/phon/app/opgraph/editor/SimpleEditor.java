@@ -420,15 +420,15 @@ public class SimpleEditor extends CommonModuleFrame {
 		builder.addItem("File@Run analysis...", openInComposerItem);
 		builder.addSeparator("File@Open in Composer (advanced)", "remainder");
 
-		builder.addMenu(".@Edit", "List");
-		builder.addItem("List", addItem);
-		builder.addItem("List", removeItem);
-		builder.addSeparator("List", "settings");
-		builder.addItem("List", settingsItem);
-		builder.addItem("List", renameItem);
-		builder.addSeparator("List", "move");
-		builder.addItem("List", upItem);
-		builder.addItem("List", downItem);
+		builder.addMenu(".@Edit", "Table");
+		builder.addItem("Table", addItem);
+		builder.addItem("Table", removeItem);
+		builder.addSeparator("Table", "settings");
+		builder.addItem("Table", settingsItem);
+		builder.addItem("Table", renameItem);
+		builder.addSeparator("Table", "move");
+		builder.addItem("Table", upItem);
+		builder.addItem("Table", downItem);
 	}
 
 	@Override
@@ -720,6 +720,7 @@ public class SimpleEditor extends CommonModuleFrame {
 	}
 
 	public void onRun() {
+		getModel().validate();
 		final Runnable toRun = runFactory.apply(getGraph(), getProject());
 		PhonWorker.getInstance().invokeLater(toRun);
 	}
@@ -757,10 +758,13 @@ public class SimpleEditor extends CommonModuleFrame {
 		settingsDialog.getContentPane().add(header, BorderLayout.NORTH);
 		settingsDialog.getContentPane().add(settingsPanel, BorderLayout.CENTER);
 
-		final PhonUIAction closeSettingsAct = new PhonUIAction(settingsDialog, "setVisible", false);
+		final PhonUIAction closeSettingsAct = new PhonUIAction(this, "onCloseSettings", settingsDialog);
 		closeSettingsAct.putValue(PhonUIAction.NAME, "Ok");
+		final JButton closeSettingsBtn = new JButton(closeSettingsAct);
+		closeSettingsBtn.addActionListener( (e) -> updateNodeName(documentNode) );
 
-		settingsDialog.getContentPane().add(ButtonBarBuilder.buildOkBar(new JButton(closeSettingsAct)), BorderLayout.SOUTH);
+		settingsDialog.getContentPane().add(ButtonBarBuilder.buildOkBar(closeSettingsBtn), BorderLayout.SOUTH);
+		settingsDialog.getRootPane().setDefaultButton(closeSettingsBtn);
 
 		settingsDialog.addWindowListener(new WindowListener() {
 
@@ -800,6 +804,11 @@ public class SimpleEditor extends CommonModuleFrame {
 		settingsDialog.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 		settingsDialog.setVisible(true);
 
+	}
+
+	public void onCloseSettings(JDialog dialog) {
+		dialog.setVisible(false);
+		dialog.dispose();
 	}
 
 	/**
@@ -1179,13 +1188,13 @@ public class SimpleEditor extends CommonModuleFrame {
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			final OpNode node = macroNodes.get(rowIndex);
-
+			final WizardExtension ext = getModel().getDocument().getRootGraph().getExtension(WizardExtension.class);
 			switch(columnIndex) {
 			case 0:
 				return node.getName();
 
 			case 1:
-				return getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).isNodeOptional(node);
+				return (ext != null && ext.isNodeOptional(node));
 
 			default:
 				return null;

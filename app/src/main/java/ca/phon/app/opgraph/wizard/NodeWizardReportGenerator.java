@@ -58,7 +58,7 @@ public class NodeWizardReportGenerator {
 		final String reportAsHTML = markdownToHTML(reportAsMarkdown);
 
 		final StringBuilder sb = new StringBuilder();
-		sb.append(htmlPrefix());
+		sb.append(htmlPrefix(wizardSettings));
 		sb.append(reportAsHTML);
 		sb.append(htmlSuffix());
 
@@ -70,13 +70,14 @@ public class NodeWizardReportGenerator {
 		}
 	}
 
-	private String htmlPrefix() {
+	private String htmlPrefix(WizardExtension ext) {
 		final StringBuilder sb = new StringBuilder();
 
 		final char nl = '\n';
 		sb.append("<!doctype html>").append(nl);
-		sb.append("<html>").append(nl);
+		sb.append("<html lang='en'>").append(nl);
 		sb.append("<head>").append(nl);
+		sb.append("<title>").append("Phon - " + ext.getWizardTitle()).append("</title>").append(nl);
 		sb.append("<meta name=\"author\" content=\"Phon ")
 		  .append(VersionInfo.getInstance().getShortVersion())
 		  .append("\"/>").append(nl);
