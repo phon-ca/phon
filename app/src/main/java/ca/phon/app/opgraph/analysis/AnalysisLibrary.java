@@ -20,7 +20,10 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOError;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -40,15 +43,23 @@ import javax.swing.MenuElement;
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
+import ca.phon.worker.PhonWorker;
 
 /**
  * <p>Library of analysis. These analysis are available
@@ -211,6 +222,12 @@ public class AnalysisLibrary implements OpGraphLibrary {
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
 			builder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 		}
+		
+		builder.addSeparator(".", "browse");
+		final PhonUIAction onBrowseAct = new PhonUIAction(AnalysisLibrary.class, "onBrowse", project);
+		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
+		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for analysis document.");
+		builder.addItem(".@browse", onBrowseAct);
 
 		builder.addSeparator(".", "composer");
 		final PhonUIAction showGeneratorAct = new PhonUIAction(AnalysisLibrary.class, "showGenerator");
@@ -222,6 +239,48 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
 		builder.addItem(".@Composer (simple)...", showComposerAct);
+	}
+	
+	public static void onBrowse(PhonActionEvent pae) {
+		final Project project = (Project)pae.getData();
+		final FileFilter filter = new FileFilter("Analysis Documents", "xml;opgraph");
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setFileFilter(filter);
+		props.setCanChooseDirectories(false);
+		props.setCanChooseFiles(true);
+		props.setAllowMultipleSelection(false);
+		props.setRunAsync(false);
+		
+		final List<String> selectedFiles = 
+				NativeDialogs.showOpenDialog(props);
+		if(selectedFiles != null && selectedFiles.size() == 1) {
+			final File selectedFile = new File(selectedFiles.get(0));
+			
+			// attempt to run file as an analysis
+			try {
+				final OpGraph graph = OpgraphIO.read(selectedFile);
+				
+				final WizardExtension ext = graph.getExtension(WizardExtension.class);
+				if(ext == null || !(ext instanceof AnalysisWizardExtension)) {
+					throw new IOException("Selected document is not an anlaysis");
+				}
+				
+				final AnalysisRunner runner = new AnalysisRunner(graph, project);
+				PhonWorker.getInstance().invokeLater(runner);
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				
+				final MessageDialogProperties mprops = new MessageDialogProperties();
+				mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
+				mprops.setTitle("Analysis : Error");
+				mprops.setHeader("Unable to run selected analysis");
+				mprops.setMessage(e.getLocalizedMessage());
+				mprops.setOptions(MessageDialogProperties.okOptions);
+				NativeDialogs.showMessageDialog(mprops);
+			}
+		}
 	}
 
 	public static void showGenerator() {

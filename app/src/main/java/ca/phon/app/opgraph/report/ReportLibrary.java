@@ -20,7 +20,9 @@ package ca.phon.app.opgraph.report;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -39,18 +41,27 @@ import javax.swing.MenuElement;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
+import ca.phon.app.opgraph.analysis.AnalysisRunner;
+import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
+import ca.phon.worker.PhonWorker;
 
 /**
  * <p>Library of query reports. These reports are available
@@ -219,6 +230,12 @@ public class ReportLibrary implements OpGraphLibrary {
 		final ReportAction reportAct = new ReportAction(project, queryId,
 				getClass().getClassLoader().getResource(LEGACY_REPORT_DOCUMENT));
 		builder.addItem(".@legacy", reportAct);
+		
+		builder.addSeparator(".", "browse");
+		final PhonUIAction onBrowseAct = new PhonUIAction(ReportLibrary.class, "onBrowse", new Tuple<String, Project>(queryId, project));
+		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
+		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query report document.");
+		builder.addItem(".@browse", onBrowseAct);
 
 		builder.addSeparator(".", "composer");
 		final PhonUIAction showGeneratorAct = new PhonUIAction(ReportLibrary.class, "showGenerator", new Tuple<String, Project>(queryId, project));
@@ -230,6 +247,51 @@ public class ReportLibrary implements OpGraphLibrary {
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
 		builder.addItem(".@Composer (simple)...", showComposerAct);
+	}
+	
+	public static void onBrowse(PhonActionEvent pae) {
+		@SuppressWarnings("unchecked")
+		final Tuple<String, Project> data = (Tuple<String, Project>)pae.getData();
+		final String queryId = data.getObj1();
+		final Project project = (Project)data.getObj2();
+		final FileFilter filter = new FileFilter("Query Report Documents", "xml;opgraph");
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setFileFilter(filter);
+		props.setCanChooseDirectories(false);
+		props.setCanChooseFiles(true);
+		props.setAllowMultipleSelection(false);
+		props.setRunAsync(false);
+		
+		final List<String> selectedFiles = 
+				NativeDialogs.showOpenDialog(props);
+		if(selectedFiles != null && selectedFiles.size() == 1) {
+			final File selectedFile = new File(selectedFiles.get(0));
+			
+			// attempt to run file as an analysis
+			try {
+				final OpGraph graph = OpgraphIO.read(selectedFile);
+				
+				final WizardExtension ext = graph.getExtension(WizardExtension.class);
+				if(ext == null || !(ext instanceof ReportWizardExtension)) {
+					throw new IOException("Selected document is not a query report");
+				}
+				
+				final ReportRunner runner = new ReportRunner(graph, project, queryId);
+				PhonWorker.getInstance().invokeLater(runner);
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				
+				final MessageDialogProperties mprops = new MessageDialogProperties();
+				mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
+				mprops.setTitle("Report : Error");
+				mprops.setHeader("Unable to run selected query report");
+				mprops.setMessage(e.getLocalizedMessage());
+				mprops.setOptions(MessageDialogProperties.okOptions);
+				NativeDialogs.showMessageDialog(mprops);
+			}
+		}
 	}
 
 	public static void showGenerator(PhonActionEvent pae) {
