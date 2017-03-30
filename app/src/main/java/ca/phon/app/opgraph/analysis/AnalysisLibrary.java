@@ -289,8 +289,8 @@ public class AnalysisLibrary implements OpGraphLibrary {
 						new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
 						AnalysisRunner::new );
 		frame.pack();
-		frame.setSize(new Dimension(1024, 768));
-		frame.setLocationByPlatform(true);
+		frame.setSize(new Dimension(700, 500));
+		frame.centerWindow();
 		frame.setVisible(true);
 	}
 

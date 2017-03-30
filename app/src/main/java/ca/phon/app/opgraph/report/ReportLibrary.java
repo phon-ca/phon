@@ -303,8 +303,8 @@ public class ReportLibrary implements OpGraphLibrary {
 						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
 						(graph, project) -> new ReportRunner(graph, project, queryId) );
 		frame.pack();
-		frame.setSize(new Dimension(1024, 768));
-		frame.setLocationByPlatform(true);
+		frame.setSize(new Dimension(700, 500));
+		frame.centerWindow();
 		frame.setVisible(true);
 	}
 
