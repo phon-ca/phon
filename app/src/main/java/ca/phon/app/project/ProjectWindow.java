@@ -229,7 +229,7 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 
 	public boolean isBlindMode() {
-		return false;
+		return blindModeBox.isSelected();
 	}
 
 	/**
