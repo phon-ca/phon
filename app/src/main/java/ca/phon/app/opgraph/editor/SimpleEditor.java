@@ -470,9 +470,6 @@ public class SimpleEditor extends CommonModuleFrame {
 	}
 
 	public void onAdd(PhonActionEvent pae) {
-		if(nodeTable.getSelectedRow() < 0) return;
-
-		final ActionEvent ae = pae.getActionEvent();
 		final JComponent comp = addButton;
 
 		final JTree tree = new JTree(createTreeModel());
