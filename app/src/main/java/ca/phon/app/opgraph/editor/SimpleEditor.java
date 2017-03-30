@@ -269,7 +269,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		nodeTable.setTransferHandler(new NodeTableTransferHandler());
 		nodeTable.setDropMode(DropMode.INSERT);
 		nodeTable.setVisibleRowCount(10);
-		nodeTable.getColumn(1).setMaxWidth(50);
+		nodeTable.getColumn(1).setMaxWidth(100);
 
 		final ActionMap am = nodeTable.getActionMap();
 		final InputMap inputMap = nodeTable.getInputMap(JComponent.WHEN_FOCUSED);
