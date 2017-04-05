@@ -155,8 +155,13 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 						for(OpNode node:analysisExt) {
 							graphExtension.addNode(node);
 							graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
-							final String nodeTitle = analysisExt.getWizardTitle() +
-									(node.getName().equals("Parameters") || node.getName().equals(analysisExt.getWizardTitle()) ? "" : " " + node.getName());
+
+							String nodeTitle = analysisExt.getWizardTitle();
+							if(analysisExt.getNodeTitle(node).trim().length() > 0) {
+								nodeTitle +=  " " + analysisExt.getNodeTitle(node);
+							} else {
+								nodeTitle += ( node.getName().equals("Parameters") || node.getName().equals(analysisExt.getWizardTitle()) ? "" : " " + node.getName());
+							}
 							graphExtension.setNodeTitle(node, nodeTitle);
 						}
 
