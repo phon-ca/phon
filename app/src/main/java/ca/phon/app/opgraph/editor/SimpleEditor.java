@@ -12,6 +12,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
@@ -56,6 +57,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -476,6 +478,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		tree.setVisibleRowCount(20);
 		tree.setCellRenderer(new TreeNodeRenderer());
 
+
 		// expand all first-level siblings
 		final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)tree.getModel().getRoot();
 		final TreePath rootPath = new TreePath(rootNode);
@@ -503,6 +506,22 @@ public class SimpleEditor extends CommonModuleFrame {
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
 			}
+
+		});
+
+		tree.addMouseListener(new MouseInputAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+					final int clickedRow = tree.getRowForLocation(e.getX(), e.getY());
+					if(clickedRow >= 0 && clickedRow < tree.getRowCount()) {
+						destroyPopup(popup);
+						addSelectedDocuments(tree);
+					}
+				}
+			}
+
 
 		});
 
@@ -543,9 +562,10 @@ public class SimpleEditor extends CommonModuleFrame {
 	}
 
 	public void addSelectedDocuments(JTree tree) {
-		final TreePath selectedPath = tree.getSelectionPath();
-		if(selectedPath != null) {
-			addDocuments((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
+		final TreePath[] selectedPaths = tree.getSelectionPaths();
+		if(selectedPaths != null && selectedPaths.length > 0) {
+			for(TreePath selectedPath:selectedPaths)
+				addDocuments((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 		}
 	}
 
@@ -822,7 +842,8 @@ public class SimpleEditor extends CommonModuleFrame {
 		final WizardExtension wizardExtension = graph.getExtension(WizardExtension.class);
 		OpNode parametersNode = null;
 		for(OpNode node:wizardExtension) {
-			if(node.getName().equals("Parameters") && node instanceof PhonScriptNode) {
+			if(node.getName().equals("Parameters") && node instanceof PhonScriptNode
+					&& graph.getNodePath(node.getId()).size() == 1) {
 				parametersNode = node;
 				break;
 			}
@@ -855,7 +876,8 @@ public class SimpleEditor extends CommonModuleFrame {
 		final WizardExtension wizardExtension = graph.getExtension(WizardExtension.class);
 		OpNode parametersNode = null;
 		for(OpNode node:wizardExtension) {
-			if(node.getName().equals("Parameters") && node instanceof PhonScriptNode) {
+			if(node.getName().equals("Parameters") && node instanceof PhonScriptNode
+					&& graph.getNodePath(node.getId()).size() == 1) {
 				parametersNode = node;
 				break;
 			}
