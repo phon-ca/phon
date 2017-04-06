@@ -123,19 +123,19 @@ caption {
 
 #toc .h4 {
     padding-left: 15px;
-    font-size: small;
+    font-size: initial;
     color: white;
 }
 
 #toc .h5 {
     padding-left: 20px;
-    font-size: smaller;
+    font-size: initial;
     color: white;
 }
 
 #toc .h6 {
     padding-left: 25px;
-    font-size: smaller;
+    font-size: initial;
     color:white;
 }
 

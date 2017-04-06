@@ -231,7 +231,7 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 
 		private void printCategoryHeader() {
 			if(printCategoryHeader) {
-				buffer.append("\n\n#h4(\"").append(currentCategory).append("\")").append('\n');
+				buffer.append("\n\n#h3(\"").append(currentCategory).append("\")").append('\n');
 				printCategoryHeader = false;
 			}
 		}
