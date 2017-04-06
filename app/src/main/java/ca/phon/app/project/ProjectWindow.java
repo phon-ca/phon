@@ -523,13 +523,11 @@ public class ProjectWindow extends CommonModuleFrame
 
 		blindModeBox = new JCheckBox("Blind mode");
 		blindModeBox.setOpaque(false);
-		blindModeBox.setForeground(Color.white);
 		blindModeBox.setMargin(new Insets(0, 0, 0, 0));
 		blindModeBox.setSelected(false);
 
 		final JPanel sessionDecoration = new JPanel(new HorizontalLayout());
 		sessionDecoration.setOpaque(false);
-		sessionDecoration.add(blindModeBox);
 		sessionDecoration.add(showCreateSessionBtn);
 
 		sessionPanel = new TitledPanel("Session");
@@ -554,6 +552,7 @@ public class ProjectWindow extends CommonModuleFrame
 
 		statusLabel = new JLabel();
 		statusBar.add(statusLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
+		statusBar.add(blindModeBox, new JXStatusBar.Constraint(ResizeBehavior.FIXED));
 
 		String projectName = null;
 		projectName = getProject().getName();
