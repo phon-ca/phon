@@ -141,11 +141,6 @@ public class SimpleEditor extends CommonModuleFrame {
 	 */
 	private final Instantiator<MacroNode> nodeInstantiator;
 
-	/**
-	 * {@link EditorModelInstantiator}
-	 */
-	private final EditorModelInstantiator modelInstantiator;
-
 	private JToolBar toolbar;
 	private JButton saveButton;
 	private JButton addButton;
@@ -181,14 +176,12 @@ public class SimpleEditor extends CommonModuleFrame {
 		super();
 
 		this.library = library;
-		this.modelInstantiator = modelInstantiator;
 		this.nodeInstantiator = nodeInstantiator;
 		this.runFactory = runFactory;
 
 		model = modelInstantiator.createModel(new OpGraph());
 		model.getDocument().getUndoSupport().addUndoableEditListener( (e) -> updateTitle() );
 
-//		putExtension(UndoManager.class, model.getDocument().getUndoManager());
 		putExtension(Project.class, project);
 
 		init();
@@ -250,8 +243,9 @@ public class SimpleEditor extends CommonModuleFrame {
 		moveDownButton = new JButton(downAct);
 
 		final ImageIcon runIcn =
-				IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL);
+				IconManager.getInstance().getIcon("actions/media-playback-start-7", IconSize.SMALL);
 		final PhonUIAction runAct = new PhonUIAction(this, "onRun");
+		runAct.putValue(PhonUIAction.NAME, "Run " + getModel().getNoun().getObj1());
 		runAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Run " + getModel().getNoun().getObj1());
 		runAct.putValue(PhonUIAction.SMALL_ICON, runIcn);
 		runButton = new JButton(runAct);
@@ -304,10 +298,9 @@ public class SimpleEditor extends CommonModuleFrame {
 		toolbar.add(moveDownButton);
 		toolbar.addSeparator();
 
-		toolbar.add(runButton);
-		toolbar.addSeparator();
-
 		toolbar.add(openInComposerButton);
+		toolbar.addSeparator();
+		toolbar.add(runButton);
 
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		statusLabel = new JLabel();
@@ -397,9 +390,9 @@ public class SimpleEditor extends CommonModuleFrame {
 		final JMenuItem downItem = new JMenuItem(downAct);
 
 		final ImageIcon runIcn =
-				IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL);
+				IconManager.getInstance().getIcon("actions/media-playback-start-7", IconSize.SMALL);
 		final PhonUIAction runAct = new PhonUIAction(this, "onRun");
-		runAct.putValue(PhonUIAction.NAME, "Run analysis...");
+		runAct.putValue(PhonUIAction.NAME, "Run " + getModel().getNoun().getObj1() + "...");
 		runAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Run " + getModel().getNoun().getObj1());
 		runAct.putValue(PhonUIAction.SMALL_ICON, runIcn);
 		final KeyStroke runKs = KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0);
