@@ -30,13 +30,19 @@ import java.util.TreeMap;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.components.canvas.GraphCanvas;
+import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
+import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
+import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.gedge.opgraph.library.NodeLibrary;
 import ca.phon.app.opgraph.editor.library.LibraryView;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
@@ -56,6 +62,33 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 		super();
 
 		getDocument().reset(null, opgraph);
+
+		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
+			final WizardExtension wizardExt = getDocument().getGraph().getExtension(WizardExtension.class);
+			if(wizardExt == null) return;
+
+			final UndoableEdit edit = e.getEdit();
+			if(edit instanceof DeleteNodesEdit) {
+				for(OpNode node:((DeleteNodesEdit)edit).getNodes()) {
+					removeNode(wizardExt, node);
+				}
+			}
+		} );
+	}
+
+	private void removeNode(WizardExtension wizardExt, OpNode node) {
+		if(wizardExt.isNodeOptional(node))
+			wizardExt.removeOptionalNode(node);
+		if(wizardExt.containsNode(node)) {
+			wizardExt.setNodeForced(node, false);
+			wizardExt.removeNode(node);
+		}
+		if(node instanceof CompositeNode) {
+			final OpGraph graph = ((CompositeNode)node).getGraph();
+			for(OpNode subnode:graph.getVertices()) {
+				removeNode(wizardExt, subnode);
+			}
+		}
 	}
 
 	protected Map<String, JComponent> getViewMap() {

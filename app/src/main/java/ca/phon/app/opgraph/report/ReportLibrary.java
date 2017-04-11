@@ -150,7 +150,7 @@ public class ReportLibrary implements OpGraphLibrary {
 		}
 
 		final JMenu userMenu = new JMenu("User Library");
-		final MenuBuilder userMenuBuilder = new MenuBuilder(userMenu);
+		final MenuBuilder userMenuBuilder = new MenuBuilder(userMenu.getPopupMenu());
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
 		while(userGraphIterator.hasNext()) {
 			try {
@@ -189,7 +189,7 @@ public class ReportLibrary implements OpGraphLibrary {
 		}
 
 		final JMenu projectMenu = new JMenu("Project Library");
-		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu);
+		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu.getPopupMenu());
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
 		while(projectGraphIterator.hasNext()) {
 			try {
@@ -230,7 +230,7 @@ public class ReportLibrary implements OpGraphLibrary {
 		final ReportAction reportAct = new ReportAction(project, queryId,
 				getClass().getClassLoader().getResource(LEGACY_REPORT_DOCUMENT));
 		builder.addItem(".@legacy", reportAct);
-		
+
 		builder.addSeparator(".", "browse");
 		final PhonUIAction onBrowseAct = new PhonUIAction(ReportLibrary.class, "onBrowse", new Tuple<String, Project>(queryId, project));
 		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
@@ -248,7 +248,7 @@ public class ReportLibrary implements OpGraphLibrary {
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
 		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
-	
+
 	public static void onBrowse(PhonActionEvent pae) {
 		@SuppressWarnings("unchecked")
 		final Tuple<String, Project> data = (Tuple<String, Project>)pae.getData();
@@ -262,27 +262,27 @@ public class ReportLibrary implements OpGraphLibrary {
 		props.setCanChooseFiles(true);
 		props.setAllowMultipleSelection(false);
 		props.setRunAsync(false);
-		
-		final List<String> selectedFiles = 
+
+		final List<String> selectedFiles =
 				NativeDialogs.showOpenDialog(props);
 		if(selectedFiles != null && selectedFiles.size() == 1) {
 			final File selectedFile = new File(selectedFiles.get(0));
-			
+
 			// attempt to run file as an analysis
 			try {
 				final OpGraph graph = OpgraphIO.read(selectedFile);
-				
+
 				final WizardExtension ext = graph.getExtension(WizardExtension.class);
 				if(ext == null || !(ext instanceof ReportWizardExtension)) {
 					throw new IOException("Selected document is not a query report");
 				}
-				
+
 				final ReportRunner runner = new ReportRunner(graph, project, queryId);
 				PhonWorker.getInstance().invokeLater(runner);
 			} catch (IOException e) {
 				Toolkit.getDefaultToolkit().beep();
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				
+
 				final MessageDialogProperties mprops = new MessageDialogProperties();
 				mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
 				mprops.setTitle("Report : Error");

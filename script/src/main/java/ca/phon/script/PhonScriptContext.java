@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,114 +43,114 @@ import ca.phon.script.params.ScriptParameters;
 /**
  * Handles setting up script context, scope and
  * evaluation scripts.
- * 
+ *
  */
 public class PhonScriptContext {
-	
+
 	/*
 	 * Script prefix - this is added to all scripts in the background
 	 * in order to ensure that everything is contained in a compilable
 	 * function
 	 */
 	public final static String SCRIPT_EXPORTS = "exports";
-	
+
 	/*
 	 * This wrap factory exposes extensions in IExtendable objects
-	 * as properties in the wrapped object. 
+	 * as properties in the wrapped object.
 	 */
 	private final static WrapFactory wrapFactory = new ExtendableWrapFactory();
-	
+
 	private PrintStream stdOutStream;
-	
+
 	private PrintStream stdErrStream;
-	
+
 	public void redirectStdOut(PrintStream stream) {
 		this.stdOutStream = stream;
 	}
-	
+
 	public PrintStream getStdOut() {
 		return (this.stdOutStream == null ? System.out : this.stdOutStream);
 	}
-	
+
 	public void redirectStdErr(PrintStream stream) {
 		this.stdErrStream = stream;
 	}
-	
+
 	public PrintStream getStdErr() {
 		return (this.stdErrStream == null ? System.err : this.stdErrStream);
 	}
-	
+
 	/**
 	 * Enter and return a new script context.  Every call
 	 * to this method should have a matching call to {#link {@link #exit()}
 	 */
 	public Context enter() {
 		final ContextFactory factory = ContextFactory.getGlobal();
-		
+
 		final Context retVal = factory.enterContext();
 		retVal.setWrapFactory(wrapFactory);
-		
+
 		return retVal;
 	}
 
 	public void exit() {
 		Context.exit();
 	}
-	
+
 	/**
 	 * Evaulate the given text and return the result (if any)
-	 * 
+	 *
 	 * @param script
-	 * 
+	 *
 	 * @return the return value of the script. May be <code>null</code>
 	 *
 	 */
-	public static Object eval(String text) 
+	public static Object eval(String text)
 		throws PhonScriptException {
 		Object retVal = null;
-		
+
 		final PhonScript script = new BasicScript(text);
 		final PhonScriptContext ctx = script.getContext();
-		
+
 		try {
 			retVal = ctx.exec(ctx.createImporterScope());
 		} catch (Exception e) {
 			throw new PhonScriptException(e);
 		}
-		
+
 		return retVal;
 	}
-	
+
 	/**
 	 * The script
 	 */
 	private final PhonScript script;
-	
+
 	/**
 	 * Compiled script
-	 * 
+	 *
 	 */
 	private Script compiledScript;
-	
+
 	/**
 	 * Evaluated scope - this is the scope that results
 	 * from compiling and evaluating the script.
 	 */
 	private Scriptable evaluatedScope;
-	
-	/** 
+
+	/**
 	 * Script parameters
 	 */
 	private ScriptParameters parameters;
-	
+
 	public PhonScriptContext(PhonScript script) {
 		super();
 		this.script = script;
 	}
-	
+
 	/**
-	 * Create a basic Scriptable object 
-	 * 
+	 * Create a basic Scriptable object
+	 *
 	 * @return basic Scriptable
 	 */
 	public Scriptable createBasicScope() {
@@ -159,33 +159,33 @@ public class PhonScriptContext {
 		exit();
 		return retVal;
 	}
-	
+
 	/**
 	 * Setup scope for script with default imports included
 	 * and the <code>require</code> function installed.
-	 * 
+	 *
 	 * @return the top-level scope for the script
 	 */
-	public Scriptable createImporterScope() 
+	public Scriptable createImporterScope()
 		throws PhonScriptException {
 		final Context ctx = enter();
 		final ScriptableObject scope = new ImporterTopLevel(ctx);
-		
+
 		// setup package/class imports
 		final StringBuilder importScriptBuilder = new StringBuilder();
-		
+
 		for(String pkgImport:script.getPackageImports()) {
 			importScriptBuilder.append("importPackage(");
 			importScriptBuilder.append(pkgImport);
 			importScriptBuilder.append(")\n");
 		}
-		
+
 		for(String classImport:script.getClassImports()) {
 			importScriptBuilder.append("importClass(");
 			importScriptBuilder.append(classImport);
 			importScriptBuilder.append(")\n");
 		}
-		
+
 		final String importScriptText = importScriptBuilder.toString();
 		Script importScript = null;
 		try {
@@ -195,7 +195,7 @@ public class PhonScriptContext {
 			exit();
 			throw new PhonScriptException(e);
 		}
-		
+
 		//  setup require paths
 		final List<URI> requirePaths = script.getRequirePaths();
 	    final ModuleSourceProvider sourceProvider = new UrlModuleSourceProvider(requirePaths, null);
@@ -204,20 +204,20 @@ public class PhonScriptContext {
 	    builder.setModuleScriptProvider(scriptProvider);
 	    if(importScript != null)
 	    	builder.setPreExec(importScript);
-			    
+
 		final Require require = builder.createRequire(ctx, scope);
 		require.install(scope);
-		
+
 		exit();
-		
+
 		return scope;
 	}
-	
+
 //	/**
 //	 * Get the script exports object from the given scope
-//	 * 
+//	 *
 //	 * @param scope
-//	 * 
+//	 *
 //	 * @return exports object for script or <code>null</code> if
 //	 *  not found
 //	 */
@@ -230,14 +230,14 @@ public class PhonScriptContext {
 //		}
 //		return retVal;
 //	}
-	
+
 	/**
 	 * Does the script have a function with the given
 	 * name and arity.
-	 * 
+	 *
 	 * @param name
 	 * @param arity
-	 * 
+	 *
 	 * @return <code>true</code> if a function with the given
 	 *  name and arity is found, <code>false</code> otherwise
 	 */
@@ -250,62 +250,64 @@ public class PhonScriptContext {
 			if(funcObj instanceof Scriptable) {
 				final Scriptable func = Scriptable.class.cast(funcObj);
 				if(ScriptableObject.hasProperty(func, "arity")) {
-					final Integer funcArity = 
+					final Integer funcArity =
 							(Integer)ScriptableObject.getProperty(func, "arity");
 					retVal = (funcArity == arity);
 				}
 			}
 		}
 		exit();
-		
+
 		return retVal;
 	}
-	
-	public synchronized Scriptable getEvaluatedScope() 
+
+	public synchronized Scriptable getEvaluatedScope()
 		throws PhonScriptException {
 		return getEvaluatedScope(null);
 	}
-	
+
 	/**
 	 * Get the evaluated scope for the script.  The evaluated scope
 	 * is the Scriptable object resulting from evaulating the script.
-	 * 
+	 *
 	 * The evaluated scope is useful for working with functions
 	 * defined in the scropt.
-	 * 
+	 *
 	 * @param parentScope may be <code>null</code>
-	 * 
+	 *
 	 * @return the evaluated scope
 	 */
-	public synchronized Scriptable getEvaluatedScope(Scriptable parentScope) 
+	public synchronized Scriptable getEvaluatedScope(Scriptable parentScope)
 		throws PhonScriptException {
 		if(evaluatedScope == null) {
 			final Context ctx = enter();
-			
-			evaluatedScope = createImporterScope();
-			
+
+			final Scriptable evScope = createImporterScope();
+
 			if(parentScope != null)
-				evaluatedScope.setParentScope(parentScope);
+				evScope.setParentScope(parentScope);
 			final Script compiledScript = getCompiledScript();
 
 			try {
-				compiledScript.exec(ctx, evaluatedScope);
+				compiledScript.exec(ctx, evScope);
 			} catch (Exception e) {
 				throw new PhonScriptException(e);
 			} finally {
 				exit();
 			}
+
+			evaluatedScope = evScope;
 		}
 		return evaluatedScope;
 	}
-	
+
 	/**
 	 * Return the compiled version of the script.567\l
-	 * 	 * 
+	 * 	 *
 	 * @return compiled script
-	 * @throws 
+	 * @throws
 	 */
-	public Script getCompiledScript() 
+	public Script getCompiledScript()
 		throws PhonScriptException {
 		final Context ctx = enter();
 		if(compiledScript == null) {
@@ -315,35 +317,35 @@ public class PhonScriptContext {
 		exit();
 		return compiledScript;
 	}
-	
+
 	/**
 	 * Get the phon script object associated with this context
-	 * 
+	 *
 	 * @return the PhonScript
 	 */
 	public PhonScript getPhonScript() {
 		return this.script;
 	}
-	
+
 	/**
 	 * Get the parameters for the script.
-	 * 
+	 *
 	 * @param scope
 	 * @return script parameters
-	 * 
+	 *
 	 * @throws PhonScriptException
 	 */
 	public ScriptParameters getScriptParameters(Scriptable scope)
 		throws PhonScriptException {
 		if(parameters == null) {
 			final String paramComment = ScriptParameters.extractParamsComment(script.getScript());
-			
+
 			if(paramComment.trim().startsWith("params")) {
 				parameters = ScriptParameters.parseScriptParams(paramComment);
 			} else {
 				parameters = new ScriptParameters();
 			}
-			
+
 			// check for setup_params function
 			if(hasFunction(scope, "setup_params", 1)) {
 				callFunction(scope, "setup_params", parameters);
@@ -351,17 +353,17 @@ public class PhonScriptContext {
 		}
 		return parameters;
 	}
-	
+
 	/**
 	 * Evaluate script using given scope
-	 * 
+	 *
 	 * @param scope
 	 * @return result of executing the script or <code>null</code>
 	 *  if not applicable
-	 *  
+	 *
 	 * @throws PhonScriptException
 	 */
-	public Object exec(Scriptable scope) 
+	public Object exec(Scriptable scope)
 		throws PhonScriptException {
 		Object retVal = null;
 		final Context ctx = enter();
@@ -374,21 +376,21 @@ public class PhonScriptContext {
 		}
 		return retVal;
 	}
-	
+
 	/**
-	 * Call the specified function with the given 
+	 * Call the specified function with the given
 	 * arguments.
-	 * 
+	 *
 	 * @param scope
 	 * @param method
 	 * @param args
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 */
-	public Object callFunction(Scriptable scope, String name, Object ... args) 
+	public Object callFunction(Scriptable scope, String name, Object ... args)
 		throws PhonScriptException {
 		Object retVal = null;
-		
+
 		enter();
 		try {
 			retVal = ScriptableObject.callMethod(scope, name, args);
@@ -396,17 +398,17 @@ public class PhonScriptContext {
 			throw new PhonScriptException(e);
 		}
 		exit();
-		
+
 		return retVal;
 	}
-	
+
 	public WrapFactory getWrapFactory() {
 		return wrapFactory;
 	}
-	
+
 	/**
 	 * Install these script params into the given scope
-	 * 
+	 *
 	 * @param context
 	 * @param scope
 	 */
@@ -418,31 +420,31 @@ public class PhonScriptContext {
 			for(String paramId:param.getParamIds()) {
 				final Object paramObj = param.getValue(paramId);
 				final Object wrappedObj = wrapFactory.wrap(ctx, scope, paramObj, null);
-				
+
 				// check for dot syntax
 				Scriptable parentObj = scope;
-				
+
 				final StringBuffer paramBuffer = new StringBuffer(paramId);
 				int dotIdx = -1;
 				while((dotIdx = paramBuffer.indexOf(".")) >= 0) {
 					final String parentId = paramBuffer.substring(0, dotIdx);
 					paramBuffer.delete(0, dotIdx+1);
-					
+
 					final Object pObj = ScriptableObject.getProperty(parentObj, parentId);
 					if(pObj == null) {
 						break;
 					}
-					
+
 					if(pObj instanceof Scriptable) {
 						parentObj = Scriptable.class.cast(pObj);
 					}
 				}
 				final String childId = paramBuffer.toString();
-				
+
 				ScriptableObject.putProperty(parentObj, childId, wrappedObj);
 			}
 		}
 		exit();
 	}
-	
+
 }

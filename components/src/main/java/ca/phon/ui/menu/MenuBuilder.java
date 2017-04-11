@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -35,9 +36,9 @@ import ca.phon.util.Tuple;
 
 /**
  * <p>Helper class for building menus.  Menus items are 'addressed' using paths.  Paths are
- * alphanumeric sequences separated by '/'.  Each section of the path is path of the 
+ * alphanumeric sequences separated by '/'.  Each section of the path is path of the
  * menu hierarchy, with the final item naming the terminating menu/menu item.</p>
- * 
+ *
  * <p>Example paths:<br/>
  * <ul>
  * <li><code>File</code></br>
@@ -47,7 +48,7 @@ import ca.phon.util.Tuple;
  * The item with name 'My Item' in the View/Record Data' menu.</li>
  * </ul>
  * </p>
- * 
+ *
  * <p>When adding a {@link MenuElement}, location of the element may be specified in the path
  * by adding the '@' token followed by
  * <ul>
@@ -55,46 +56,46 @@ import ca.phon.util.Tuple;
  * <li><code>$</code> - place new element at end of the menu (default behaviour)</li>
  * <li><i>item name</i> - place after given item name (or end if not found)</li>
  * </ul>
- * 
+ *
  * E.g., To add a new item to the beginning of the File menu, use the path
  * <code>File@^</code> in the path given to the {@link #addMenu(String, String)} and
  * {@link #addItem(String, Action)} methods.</p>
- * 
+ *
  * <p>Menu builders may be attached to existing menus, in which case existing
  * menu items may be addressed using the scheme above.  Menu items are typically
  * added 'before' or 'after' existing items.</p>
- * 
- * 
+ *
+ *
  */
 public final class MenuBuilder {
-	
+
 	private WeakReference<MenuElement> rootRef;
-	
+
 	public MenuBuilder() {
 		this(new JMenuBar());
 	}
-	
+
 	public MenuBuilder(MenuElement root) {
 		super();
-		
+
 		this.rootRef = new WeakReference<>(root);
 	}
-	
+
 	public MenuElement getRoot() {
 		return rootRef.get();
 	}
-	
+
 	public JMenu addMenu(String path, String text) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final MenuElement elem = deepest.getObj2();
 		int insertIdx = getInsertIndex(elem, deepest.getObj1());
-		
+
 		return addMenu(elem, insertIdx, text);
 	}
-	
+
 	public JMenu addMenu(MenuElement elem, int insertIdx, String text) {
 		JMenu ret = null;
-		
+
 		ret = new JMenu(text);
 		ret.setName(text);
 		if(elem instanceof JMenu) {
@@ -115,11 +116,11 @@ public final class MenuBuilder {
 		}
 		return ret;
 	}
-	
+
 	public void addSeparator(String path, String sepName) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final MenuElement elem = deepest.getObj2();
-		
+
 		int insertIdx = getInsertIndex(elem, deepest.getObj1());
 		if(elem instanceof JMenu) {
 			if(insertIdx < 0) {
@@ -138,13 +139,13 @@ public final class MenuBuilder {
 				((JPopupMenu)elem).insert(sep, insertIdx);
 		}
 	}
-	
+
 	public JMenuItem addItem(String path, String text) {
 		JMenuItem retVal = new JMenuItem(text);
 		addItem(path, retVal);
 		return retVal;
 	}
-	
+
 	public void addItem(String path, JMenuItem menuItem) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final MenuElement elem = deepest.getObj2();
@@ -173,15 +174,15 @@ public final class MenuBuilder {
 		addItem(path, retVal);
 		return retVal;
 	}
-	
+
 	public void addItem(String path, MenuElement ele) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final MenuElement elem = deepest.getObj2();
 		int insertIdx = getInsertIndex(elem, deepest.getObj1());
-		
+
 		addItem(elem, insertIdx, ele);
 	}
-	
+
 	public void addItem(MenuElement elem, int insertIdx, MenuElement menuItem) {
 		if(elem instanceof JMenu) {
 			if(insertIdx >= 0)
@@ -200,23 +201,23 @@ public final class MenuBuilder {
 				((JMenuBar)elem).add(menuItem.getComponent());
 		}
 	}
-	
+
 	/**
 	 * Append all subitems from the given {@link MenuElement} at
 	 * the provied path.
-	 * 
+	 *
 	 * @param path
 	 * @param menuEle
 	 */
 	public void appendSubItems(String path, MenuElement menu) {
 		appendSubItems(getRoot(), path, menu);
 	}
-	
+
 	public void appendSubItems(MenuElement parent, String path, MenuElement menu) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(parent, path);
 		final MenuElement elem = deepest.getObj2();
 		int insertIdx = getInsertIndex(elem, deepest.getObj1());
-		
+
 		for(MenuElement subelem : menu.getSubElements()) {
 			addItem(elem, insertIdx, subelem);
 			if(insertIdx >= 0) {
@@ -224,7 +225,7 @@ public final class MenuBuilder {
 			}
 		}
 	}
-	
+
 	private int getInsertIndex(MenuElement elem, String name) {
 		int insertIdx = -1;
 		if(name.indexOf('@') > 0) {
@@ -244,7 +245,7 @@ public final class MenuBuilder {
 		}
 		return insertIdx;
 	}
-	
+
 	private int getItemIndex(MenuElement elem, String itemName) {
 		List<String> elements = new ArrayList<>();
 		if(elem instanceof JMenu) {
@@ -272,7 +273,7 @@ public final class MenuBuilder {
 			for(int i = 0; i < menu.getMenuCount(); i++)
 				elements.add(getMenuElementText(menu.getMenu(i)));
 		}
-		
+
 		for(int i = 0; i < elements.size(); i++) {
 			final String item = elements.get(i);
 			if(item != null && item.equals(itemName)) {
@@ -281,10 +282,10 @@ public final class MenuBuilder {
 		}
 		return -1;
 	}
-	
+
 	private String getMenuElementText(MenuElement elem) {
 		String retVal = elem.getComponent().getName();
-		
+
 		if(elem instanceof JMenu) {
 			retVal = ((JMenu)elem).getText();
 		} else if(elem instanceof JMenuItem) {
@@ -298,10 +299,10 @@ public final class MenuBuilder {
 			else
 				retVal = "";
 		}
-		
+
 		return retVal;
 	}
-	
+
 	private Tuple<String, MenuElement> getDeepestMenuElement(MenuElement elem, String path) {
 		int position = 0;
 		if(elem != null && path != null) {
@@ -314,14 +315,14 @@ public final class MenuBuilder {
 				String compTxt = components[index];
 				if(compTxt.indexOf('@') > 0)
 					compTxt = compTxt.substring(0, compTxt.lastIndexOf('@'));
-				
+
 				if(compTxt.equals(".") && elem == getRoot()) {
 					elem = getRoot();
 					position += components[index].length() + 1;
 					++index;
 					continue;
 				}
-				
+
 				for(MenuElement subelem : elem.getSubElements()) {
 					if(compTxt.equals(getMenuElementText(subelem))) {
 						position += components[index].length() + 1;
@@ -346,5 +347,5 @@ public final class MenuBuilder {
 
 		return new Tuple<String, MenuElement>(path.substring(0, position), elem);
 	}
-	
+
 }

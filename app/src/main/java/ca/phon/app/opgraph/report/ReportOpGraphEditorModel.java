@@ -110,6 +110,72 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 		return reportTemplateView;
 	}
 
+	private void addReportNode(OpNode reportNode) {
+		final WizardExtension graphExtension = getWizardExtension();
+		final OpGraph parentGraph = getDocument().getGraph();
+		final WizardExtension reportExt = ((CompositeNode)reportNode).getGraph().getExtension(WizardExtension.class);
+
+		final OpNode parentProjectNode = parentGraph.getNodesByName("Project").stream().findFirst().orElse(null);
+		final OpNode parentQueryIDNode = parentGraph.getNodesByName("Query ID").stream().findFirst().orElse(null);
+
+		if(parentProjectNode != null) {
+			try {
+				final OpLink projectLink =
+						new OpLink(parentProjectNode, "obj", reportNode, "project");
+				parentGraph.add(projectLink);
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+			}
+		}
+
+		if(parentQueryIDNode != null) {
+			try {
+				final OpLink queryIdLink =
+						new OpLink(parentQueryIDNode, "obj", reportNode, "queryId");
+				parentGraph.add(queryIdLink);
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+			}
+		}
+
+		for(OpNode node:reportExt) {
+			graphExtension.addNode(node);
+			graphExtension.setNodeForced(node, reportExt.isNodeForced(node));
+
+			String nodeTitle = reportExt.getWizardTitle();
+			if(reportExt.getNodeTitle(node).trim().length() > 0) {
+				nodeTitle +=  " " + reportExt.getNodeTitle(node);
+			} else {
+				nodeTitle += ( node.getName().equals("Parameters") || node.getName().equals(reportExt.getWizardTitle()) ? "" : " " + node.getName());
+			}
+			graphExtension.setNodeTitle(node, nodeTitle);
+		}
+
+		for(OpNode optionalNode:reportExt.getOptionalNodes()) {
+			graphExtension.addOptionalNode(optionalNode);
+			graphExtension.setOptionalNodeDefault(optionalNode, reportExt.getOptionalNodeDefault(optionalNode));
+		}
+
+		// copy report template
+		final NodeWizardReportTemplate prefixTemplate = graphExtension.getReportTemplate("Report Prefix");
+		final NodeWizardReportTemplate suffixTemplate = graphExtension.getReportTemplate("Report Suffix");
+		final NodeWizardReportTemplate pt =
+				reportExt.getReportTemplate("Report Prefix");
+		if(pt != null) {
+			if(!prefixTemplate.getTemplate().contains(pt.getTemplate())) {
+				prefixTemplate.setTemplate(prefixTemplate.getTemplate() + "\n" + pt.getTemplate());
+			}
+		}
+
+		final NodeWizardReportTemplate st =
+				reportExt.getReportTemplate("Report Suffix");
+		if(st != null) {
+			if(!suffixTemplate.getTemplate().contains(st.getTemplate())) {
+				suffixTemplate.setTemplate(suffixTemplate.getTemplate() + "\n" + st.getTemplate());
+			}
+		}
+	}
+
 	private void init() {
 		PhonNodeLibrary.install(getNodeLibrary().getLibrary());
 		GraphOutlineExtension.install(getDocument(), getGraphOutline(), getWizardExtension());
@@ -117,78 +183,13 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
 			final UndoableEdit edit = e.getEdit();
 			if(edit instanceof AddNodeEdit) {
-				final WizardExtension graphExtension = getWizardExtension();
-
 				final OpNode addedNode = ((AddNodeEdit)edit).getNode();
 				if(addedNode instanceof CompositeNode) {
 					final OpGraph addedGraph = ((CompositeNode)addedNode).getGraph();
 
 					final WizardExtension wizardExt = addedGraph.getExtension(WizardExtension.class);
 					if(wizardExt != null && wizardExt instanceof ReportWizardExtension) {
-						final OpGraph parentGraph = getDocument().getGraph();
-
-						final OpNode parentProjectNode = parentGraph.getNodesByName("Project").stream().findFirst().orElse(null);
-						final OpNode parentQueryIDNode = parentGraph.getNodesByName("Query ID").stream().findFirst().orElse(null);
-
-						if(parentProjectNode != null) {
-							try {
-								final OpLink projectLink =
-										new OpLink(parentProjectNode, "obj", addedNode, "project");
-								parentGraph.add(projectLink);
-							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
-							}
-						}
-
-						if(parentQueryIDNode != null) {
-							try {
-								final OpLink queryIdLink =
-										new OpLink(parentQueryIDNode, "obj", addedNode, "queryId");
-								parentGraph.add(queryIdLink);
-							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
-							}
-						}
-
-						final ReportWizardExtension analysisExt = (ReportWizardExtension)wizardExt;
-
-						for(OpNode node:analysisExt) {
-							graphExtension.addNode(node);
-							graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
-
-							String nodeTitle = analysisExt.getWizardTitle();
-							if(analysisExt.getNodeTitle(node).trim().length() > 0) {
-								nodeTitle +=  " " + analysisExt.getNodeTitle(node);
-							} else {
-								nodeTitle += ( node.getName().equals("Parameters") || node.getName().equals(analysisExt.getWizardTitle()) ? "" : " " + node.getName());
-							}
-							graphExtension.setNodeTitle(node, nodeTitle);
-						}
-
-						for(OpNode optionalNode:analysisExt.getOptionalNodes()) {
-							graphExtension.addOptionalNode(optionalNode);
-							graphExtension.setOptionalNodeDefault(optionalNode, analysisExt.getOptionalNodeDefault(optionalNode));
-						}
-
-						// copy report template
-						final NodeWizardReportTemplate prefixTemplate = graphExtension.getReportTemplate("Report Prefix");
-						final NodeWizardReportTemplate suffixTemplate = graphExtension.getReportTemplate("Report Suffix");
-						final NodeWizardReportTemplate pt =
-								analysisExt.getReportTemplate("Report Prefix");
-						if(pt != null) {
-							if(!prefixTemplate.getTemplate().contains(pt.getTemplate())) {
-								prefixTemplate.setTemplate(prefixTemplate.getTemplate() + "\n" + pt.getTemplate());
-							}
-						}
-
-						final NodeWizardReportTemplate st =
-								analysisExt.getReportTemplate("Report Suffix");
-						if(st != null) {
-							if(!suffixTemplate.getTemplate().contains(st.getTemplate())) {
-								suffixTemplate.setTemplate(suffixTemplate.getTemplate() + "\n" + st.getTemplate());
-							}
-						}
-
+						addReportNode(addedNode);
 					}
 				}
 			}

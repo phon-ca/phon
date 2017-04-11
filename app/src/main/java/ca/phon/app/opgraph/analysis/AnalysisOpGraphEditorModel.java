@@ -90,8 +90,6 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
 	private ParticipantsPanel participantSelector;
 
-	private AnalysisWizardExtension wizardExt;
-
 	private final static Logger LOGGER = Logger.getLogger(AnalysisOpGraphEditorModel.class.getName());
 
 	public AnalysisOpGraphEditorModel() {
@@ -109,9 +107,86 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 			ext = new AnalysisWizardExtension(opgraph);
 			opgraph.putExtension(WizardExtension.class, ext);
 		}
-		wizardExt = (AnalysisWizardExtension)ext;
 
 		init();
+	}
+
+	private void addAnalysisNode(OpNode analysisNode) {
+		final WizardExtension graphExtension = getWizardExtension();
+		final OpGraph parentGraph = getDocument().getGraph();
+		final WizardExtension analysisExt = ((CompositeNode)analysisNode).getGraph().getExtension(WizardExtension.class);
+
+		// attempt to setup links for project, selected session and selected participants
+		final OpNode parentProjectNode = parentGraph.getNodesByName("Project").stream().findFirst().orElse(null);
+		final OpNode parentSessionsNode = parentGraph.getNodesByName("Selected Sessions").stream().findFirst().orElse(null);
+		final OpNode parentParticipantsNode = parentGraph.getNodesByName("Selected Participants").stream().findFirst().orElse(null);
+
+		if(parentProjectNode != null) {
+			try {
+				final OpLink projectLink =
+						new OpLink(parentProjectNode, "obj", analysisNode, "project");
+				parentGraph.add(projectLink);
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+			}
+		}
+
+		if(parentSessionsNode != null) {
+			try {
+				final OpLink sessionsLink =
+						new OpLink(parentSessionsNode, "obj", analysisNode, "selectedSessions");
+				parentGraph.add(sessionsLink);
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+			}
+		}
+
+		if(parentParticipantsNode != null) {
+			try {
+				final OpLink participantsLink =
+						new OpLink(parentParticipantsNode, "obj", analysisNode, "selectedParticipants");
+				parentGraph.add(participantsLink);
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+			}
+		}
+
+		for(OpNode node:analysisExt) {
+			graphExtension.addNode(node);
+			graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
+
+			String nodeTitle = analysisExt.getWizardTitle();
+			if(analysisExt.getNodeTitle(node).trim().length() > 0) {
+				nodeTitle +=  " " + analysisExt.getNodeTitle(node);
+			} else {
+				nodeTitle += ( node.getName().equals("Parameters") || node.getName().equals(analysisExt.getWizardTitle()) ? "" : " " + node.getName());
+			}
+			graphExtension.setNodeTitle(node, nodeTitle);
+		}
+
+		for(OpNode optionalNode:analysisExt.getOptionalNodes()) {
+			graphExtension.addOptionalNode(optionalNode);
+			graphExtension.setOptionalNodeDefault(optionalNode, analysisExt.getOptionalNodeDefault(optionalNode));
+		}
+
+		// copy report template
+		final NodeWizardReportTemplate prefixTemplate = graphExtension.getReportTemplate("Report Prefix");
+		final NodeWizardReportTemplate suffixTemplate = graphExtension.getReportTemplate("Report Suffix");
+		final NodeWizardReportTemplate pt =
+				analysisExt.getReportTemplate("Report Prefix");
+		if(pt != null) {
+			if(!prefixTemplate.getTemplate().contains(pt.getTemplate())) {
+				prefixTemplate.setTemplate(prefixTemplate.getTemplate() + "\n" + pt.getTemplate());
+			}
+		}
+
+		final NodeWizardReportTemplate st =
+				analysisExt.getReportTemplate("Report Suffix");
+		if(st != null) {
+			if(!suffixTemplate.getTemplate().contains(st.getTemplate())) {
+				suffixTemplate.setTemplate(suffixTemplate.getTemplate() + "\n" + st.getTemplate());
+			}
+		}
 	}
 
 	private void init() {
@@ -121,89 +196,13 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 		getDocument().getUndoSupport().addUndoableEditListener( (e) -> {
 			final UndoableEdit edit = e.getEdit();
 			if(edit instanceof AddNodeEdit) {
-				final WizardExtension graphExtension = getWizardExtension();
-
 				final OpNode addedNode = ((AddNodeEdit)edit).getNode();
 				if(addedNode instanceof CompositeNode) {
 					final OpGraph addedGraph = ((CompositeNode)addedNode).getGraph();
 
 					final WizardExtension wizardExt = addedGraph.getExtension(WizardExtension.class);
 					if(wizardExt != null && wizardExt instanceof AnalysisWizardExtension) {
-						final OpGraph parentGraph = getDocument().getGraph();
-
-						// attempt to setup links for project, selected session and selected participants
-						final OpNode parentProjectNode = parentGraph.getNodesByName("Project").stream().findFirst().orElse(null);
-						final OpNode parentSessionsNode = parentGraph.getNodesByName("Selected Sessions").stream().findFirst().orElse(null);
-						final OpNode parentParticipantsNode = parentGraph.getNodesByName("Selected Participants").stream().findFirst().orElse(null);
-
-						if(parentProjectNode != null) {
-							try {
-								final OpLink projectLink =
-										new OpLink(parentProjectNode, "obj", addedNode, "project");
-								parentGraph.add(projectLink);
-							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
-							}
-						}
-
-						if(parentSessionsNode != null) {
-							try {
-								final OpLink sessionsLink =
-										new OpLink(parentSessionsNode, "obj", addedNode, "selectedSessions");
-								parentGraph.add(sessionsLink);
-							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
-							}
-						}
-
-						if(parentParticipantsNode != null) {
-							try {
-								final OpLink participantsLink =
-										new OpLink(parentParticipantsNode, "obj", addedNode, "selectedParticipants");
-								parentGraph.add(participantsLink);
-							} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-								LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
-							}
-						}
-
-						final AnalysisWizardExtension analysisExt = (AnalysisWizardExtension)wizardExt;
-
-						for(OpNode node:analysisExt) {
-							graphExtension.addNode(node);
-							graphExtension.setNodeForced(node, analysisExt.isNodeForced(node));
-
-							String nodeTitle = analysisExt.getWizardTitle();
-							if(analysisExt.getNodeTitle(node).trim().length() > 0) {
-								nodeTitle +=  " " + analysisExt.getNodeTitle(node);
-							} else {
-								nodeTitle += ( node.getName().equals("Parameters") || node.getName().equals(analysisExt.getWizardTitle()) ? "" : " " + node.getName());
-							}
-							graphExtension.setNodeTitle(node, nodeTitle);
-						}
-
-						for(OpNode optionalNode:analysisExt.getOptionalNodes()) {
-							graphExtension.addOptionalNode(optionalNode);
-							graphExtension.setOptionalNodeDefault(optionalNode, analysisExt.getOptionalNodeDefault(optionalNode));
-						}
-
-						// copy report template
-						final NodeWizardReportTemplate prefixTemplate = graphExtension.getReportTemplate("Report Prefix");
-						final NodeWizardReportTemplate suffixTemplate = graphExtension.getReportTemplate("Report Suffix");
-						final NodeWizardReportTemplate pt =
-								analysisExt.getReportTemplate("Report Prefix");
-						if(pt != null) {
-							if(!prefixTemplate.getTemplate().contains(pt.getTemplate())) {
-								prefixTemplate.setTemplate(prefixTemplate.getTemplate() + "\n" + pt.getTemplate());
-							}
-						}
-
-						final NodeWizardReportTemplate st =
-								analysisExt.getReportTemplate("Report Suffix");
-						if(st != null) {
-							if(!suffixTemplate.getTemplate().contains(st.getTemplate())) {
-								suffixTemplate.setTemplate(suffixTemplate.getTemplate() + "\n" + st.getTemplate());
-							}
-						}
+						addAnalysisNode(addedNode);
 					}
 				}
 			}

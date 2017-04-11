@@ -654,17 +654,9 @@ public class SimpleEditor extends CommonModuleFrame {
 		if(selectedRow >= 0 && selectedRow < macroNodes.size()) {
 			final OpNode selectedNode = macroNodes.get(selectedRow);
 
-			getModel().getDocument().getUndoSupport().beginUpdate();
-
-			final NodeWizardOptionalsEdit optEdit =
-					new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), selectedNode, false, false);
-			getModel().getDocument().getUndoSupport().postEdit(optEdit);
-
 			final DeleteNodesEdit removeEdit =
 					new DeleteNodesEdit(getGraph(), Collections.singleton(selectedNode));
 			getModel().getDocument().getUndoSupport().postEdit(removeEdit);
-
-			getModel().getDocument().getUndoSupport().endUpdate();
 
 			macroNodes.remove(selectedRow);
 			((NodeTableModel)nodeTable.getModel()).fireTableRowsDeleted(selectedRow, selectedRow);

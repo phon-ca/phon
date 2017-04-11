@@ -146,7 +146,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		}
 
 		final JMenu userMenu = new JMenu("User Library");
-		final MenuBuilder userMenuBuilder = new MenuBuilder(userMenu);
+		final MenuBuilder userMenuBuilder = new MenuBuilder(userMenu.getPopupMenu());
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
 		while(userGraphIterator.hasNext()) {
 			try {
@@ -163,7 +163,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
 				act.setShowWizard(selectedSessions.size() == 0);
-				userMenuBuilder.addItem(menuPath, act);
+				userMenuBuilder.addItem(menuPath, new JMenuItem(act));
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
@@ -185,7 +185,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		}
 
 		final JMenu projectMenu = new JMenu("Project Library");
-		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu);
+		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu.getPopupMenu());
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
 		while(projectGraphIterator.hasNext()) {
 			try {
@@ -222,7 +222,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
 			builder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 		}
-		
+
 		builder.addSeparator(".", "browse");
 		final PhonUIAction onBrowseAct = new PhonUIAction(AnalysisLibrary.class, "onBrowse", project);
 		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
@@ -240,7 +240,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
 		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
-	
+
 	public static void onBrowse(PhonActionEvent pae) {
 		final Project project = (Project)pae.getData();
 		final FileFilter filter = new FileFilter("Analysis Documents", "xml;opgraph");
@@ -251,27 +251,27 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		props.setCanChooseFiles(true);
 		props.setAllowMultipleSelection(false);
 		props.setRunAsync(false);
-		
-		final List<String> selectedFiles = 
+
+		final List<String> selectedFiles =
 				NativeDialogs.showOpenDialog(props);
 		if(selectedFiles != null && selectedFiles.size() == 1) {
 			final File selectedFile = new File(selectedFiles.get(0));
-			
+
 			// attempt to run file as an analysis
 			try {
 				final OpGraph graph = OpgraphIO.read(selectedFile);
-				
+
 				final WizardExtension ext = graph.getExtension(WizardExtension.class);
 				if(ext == null || !(ext instanceof AnalysisWizardExtension)) {
 					throw new IOException("Selected document is not an anlaysis");
 				}
-				
+
 				final AnalysisRunner runner = new AnalysisRunner(graph, project);
 				PhonWorker.getInstance().invokeLater(runner);
 			} catch (IOException e) {
 				Toolkit.getDefaultToolkit().beep();
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				
+
 				final MessageDialogProperties mprops = new MessageDialogProperties();
 				mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
 				mprops.setTitle("Analysis : Error");
