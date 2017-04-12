@@ -1,6 +1,7 @@
 body {
     background: white;
-    font-family: "Charis SIL Compact","noto sans","Arial", sans-serif;
+    font-family: arial,"noto sans", sans-serif;
+    margin-top: 0px;
 }
 
 h1:first-of-type {
@@ -9,23 +10,33 @@ h1:first-of-type {
 
 h1 {
     font-weight: bold;
+    font-size: xx-large;
     margin-top: 1em;
     margin-bottom: 0.25em;
-    color: rgb(17, 75, 122);
+    color: rgb(0, 90, 140);
+}
+
+h2 {
+	font-size: x-large;
+}
+
+h3 {
+	font-size: larger;
 }
 
 h2, h3 {
     font-weight: bold;
     margin-top: 1em;
     margin-bottom: 0.25em;
-    color: rgb(17, 75, 122);
+    color: rgb(0, 90, 140);
 }
 
 h4, h5  {
+	font-size: large;
     font-weight: bold;
     margin-top: 1em;
     margin-bottom: 0.5em;
-    color: rgb(17, 75, 122);
+    color: rgb(0, 90, 140);
 }
 
 table {
@@ -75,6 +86,20 @@ caption {
     font-family:"noto monospace", monospace;
 }
 
+.banner {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	background-color: silver;
+}
+
+.banner .title {
+	display: flex;
+	color: rgb(0, 90, 140);
+	font-size: xx-large;
+	font-weight: bold;
+}
+
 .sidenav {
     height: 100%;
     width: 300px;
@@ -82,7 +107,7 @@ caption {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: rgb(17, 75, 122);
+    background-color: gainsboro;
     overflow-x: hidden;
     transition: 0.5s;
 }
@@ -95,6 +120,7 @@ caption {
 
 .sidenav .menubtn {
     float: right;
+    z-index: 999;
     padding: 5px;
     color: white;
     cursor: pointer;
@@ -106,45 +132,45 @@ caption {
 #toc .h1 {
     font-weight: bold;
     font-size: larger;
-    color: white;
+    color: rgb(50, 50, 50);
 }
 
 #toc .h2 {
     padding-left: 5px;
     font-size: large;
-    color: white;
+    color: rgb(50, 50, 50);
 }
 
 #toc .h3 {
     padding-left: 10px;
     font-size: medium;
-    color: white;
+    color: rgb(50, 50, 50);
 }
 
 #toc .h4 {
     padding-left: 15px;
     font-size: initial;
-    color: white;
+    color: rgb(50, 50, 50);
 }
 
 #toc .h5 {
     padding-left: 20px;
     font-size: initial;
-    color: white;
+    color: rgb(50, 50, 50);
 }
 
 #toc .h6 {
     padding-left: 25px;
     font-size: initial;
-    color:white;
+    color: rgb(50, 50, 50);
 }
 
 #toc a {
-    color: white;
+    color: rgb(50, 50, 50);
 }
 
 #toc a:hover {
-    color: lightgray;
+    color: steelblue;
 }
 
 #main {
@@ -164,7 +190,7 @@ caption {
     }
 
     body {
-        font-family: "Charis SIL Compact","noto serif", arial, times, serif;
+        font-family: arial, times, serif;
         font-size: 12pt;
     }
 
