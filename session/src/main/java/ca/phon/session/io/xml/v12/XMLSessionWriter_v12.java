@@ -53,6 +53,8 @@ import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionMetadata;
 import ca.phon.session.Sex;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
@@ -451,7 +453,10 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		}
 
 		for(String tierName:record.getExtraTierNames()) {
-			final Tier<TierString> userTier = record.getTier(tierName, TierString.class);
+			Tier<TierString> userTier = record.getTier(tierName, TierString.class);
+			if(userTier == null)
+				userTier = SessionFactory.newFactory().createTier(tierName, TierString.class, true);
+
 			if(userTier.isGrouped()) {
 				// grouped tiers
 				final GroupTierType gtt = factory.createGroupTierType();

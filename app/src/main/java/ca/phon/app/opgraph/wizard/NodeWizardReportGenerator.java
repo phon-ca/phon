@@ -122,7 +122,8 @@ public class NodeWizardReportGenerator {
 				: "Phon Report";
 		sb.append("<span class='title' style='margin-left: 10px'>").append(documentTitle).append("</span>").append(nl);
 		sb.append("</div>").append(nl);
-		sb.append("<span class='menubtn' onClick='toggleNav()'><img id='menuicon' width='16' height='16'></img></span>");
+//		sb.append("<div id='bannercontent' class='title'>").append(documentTitle).append("</div>").append(nl);
+		sb.append("<div class='menubtn' onClick='toggleNav()'><img id='menuicon' width='16' height='16'></img></div>");
 		sb.append("</div>").append(nl);
 		sb.append(nl).append("<div id='toc'></div>").append(nl);
 		sb.append("</div>").append(nl);
