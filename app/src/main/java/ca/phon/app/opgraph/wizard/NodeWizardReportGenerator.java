@@ -116,11 +116,11 @@ public class NodeWizardReportGenerator {
 		sb.append("<div id='banner' class='banner'>").append(nl);
 		sb.append("<div id='bannercontent' class='title' style='margin: 5px;'>").append(nl);
 		sb.append("<div class='icon'><img id='bannericon' width='48' height='48' src='").append(phonIcnBase64).append("')/></div>").append(nl);
-		String documentTitle =
-				(ext.getWizardTitle() != null && ext.getWizardTitle().trim().length() > 0)
-				? ext.getWizardTitle()
-				: "Phon Report";
-		sb.append("<span class='title' style='margin-left: 10px'>").append(documentTitle).append("</span>").append(nl);
+//		String documentTitle =
+//				(ext.getWizardTitle() != null && ext.getWizardTitle().trim().length() > 0)
+//				? ext.getWizardTitle()
+//				: "Phon Report";
+		sb.append("<span class='title' style='margin-left: 10px'>").append("Report").append("</span>").append(nl);
 		sb.append("</div>").append(nl);
 //		sb.append("<div id='bannercontent' class='title'>").append(documentTitle).append("</div>").append(nl);
 		sb.append("<div class='menubtn' onClick='toggleNav()'><img id='menuicon' width='16' height='16'></img></div>");
