@@ -7,7 +7,7 @@
 
 #macro( printHeader $table $columnNames )
 	#set($maxCol = $table.columnCount - 1)
-	#if($maxCol < 0) #break#end
+	#if($maxCol >= 0)
 	<tr>
 		#foreach($col in [0..$maxCol])
 			#set($columnName = $table.getColumnTitle($col))
@@ -16,10 +16,12 @@
 			#end
 		#end
 	</tr>
+	#end
 #end
 
 #macro( printValue $v )
-	#if( (! $v) && ("$!v" == "") ) <td/>#break#end
+	#if( (! $v) && ("$!v" == "") ) <td/>
+	#else
 	#set($clazz = $v.class)
 	#set($txt = $FormatterUtil.format($v))
 	#set($number = $Class.forName("java.lang.Number"))
@@ -33,39 +35,42 @@
 		#end
 	#else #set($type = "text_value")#end
 <td class='$type'>$txt</td>
+	#end
 #end
 
 #macro( printBody $table $columnNames )
 	#set($maxCol = $table.columnCount - 1)
-	#if($maxCol < 0) #break#end
 	#set($maxRow = $table.rowCount - 1)
-	#if($maxRow < 0) #break#end
-	#foreach($row in [0..$maxRow])
-		<tr>
-		#foreach($col in [0..$maxCol])
-			#set($columnName = $table.getColumnTitle($col))
-			#if($columnNames.size() == 0 || $columnNames.contains($columnName))
-				#printValue($table.getValueAt($row, $col))
+	#if($maxRow >= 0 && $maxCol >= 0)
+		#foreach($row in [0..$maxRow])
+			<tr>
+			#foreach($col in [0..$maxCol])
+				#set($columnName = $table.getColumnTitle($col))
+				#if($columnNames.size() == 0 || $columnNames.contains($columnName))
+					#printValue($table.getValueAt($row, $col))
+				#end
 			#end
+			</tr>
 		#end
-		</tr>
 	#end
 #end
 
 ## Print table data as HTML
 #macro( printTable $table $columnNames )
-#if($table.columnCount == 0 || $table.rowCount == 0) #break#end
+#if($table.columnCount > 0 && $table.rowCount > 0)
 <table>
 #printHeader( $table $columnNames )
 #printBody( $table $columnNames )
 </table>
 #end
+#end
 
 #macro( printTableWithCaption $table $caption $columnNames )
-#if($table.columnCount == 0 || $table.rowCount == 0) #break#end
+#if($table.columnCount > 0 && $table.rowCount > 0)
 <table>
 <caption>$caption</caption>
 #printHeader( $table $columnNames )
 #printBody( $table $columnNames )
 </table>
+#end
 #end
