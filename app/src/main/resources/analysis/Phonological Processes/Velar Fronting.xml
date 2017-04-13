@@ -2350,7 +2350,7 @@ $DATA
         <link dest="7b83f4f" destField="script" source="6cccb293c40a4b75" sourceField="script"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="Phonological Process">
+                <opqry:info format="html" title="Velar Fronting">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="6cccb293c40a4b75" showAsStep="true">
