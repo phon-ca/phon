@@ -2,13 +2,15 @@
 var openIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQMDDsrN46U4wAAADtJREFUSMdjYKAxYBSJ6vlPSwuYaO2DUQtGARXyAQMDAwOt8sKbZSWMoxlt4C2geSSP5qPRCmfUAjoAAObLDgf9SOjwAAAAAElFTkSuQmCC";
 var closeIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQMDDcayuXb1QAAAIpJREFUSMfFVMkNgDAMqzMD0zEHYzBHp2MH+CGEaHNa5O0jTdxgWfezPeroG1qi3nqiATLinwZRkxFHvAQvFhpA24nGhRUYEb9fEDGxYhHpytMIqlI0GiUqUjTbUzgh1qQhk3FLjKWR678RUZdMjSn1o1FPBfXYUc91RtxiIllxDStZcY0jFeIz7gUXTIASLqhmngAAAABJRU5ErkJggg==";
 
+var origDisplay = "flex";
+
 function openNav() {
 	document.getElementById("sidenav").style.width = "300px";
 	document.getElementById("main").style.marginLeft = "300px";
 	document.getElementById("toc").style.display = "block";
 	document.getElementById("menuicon").setAttribute('src', closeIcn);
 
-	document.getElementById("bannercontent").style.display = "flex";
+	document.getElementById("bannercontent").style.display = origDisplay;
 }
 
 function closeNav() {
@@ -59,8 +61,7 @@ function page_init(documentRef) {
 	var documentRef = documentRef || document;
 	htmlTableOfContents(documentRef);
 
-	//var headericon = document.getElementById('bannericon');
-//	headericon.setAttribute('src', phonIcn);
+	origDisplay = document.getElementById("bannercontent").style.display;
 
 	var menuicon = document.getElementById('menuicon');
 	menuicon.setAttribute('src', closeIcn);
