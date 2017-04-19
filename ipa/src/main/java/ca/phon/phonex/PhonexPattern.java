@@ -61,8 +61,6 @@ import ca.phon.syllable.SyllabificationInfo;
  */
 public class PhonexPattern implements Comparable<PhonexPattern> {
 
-	public static final int ALLOW_OVERLAPPING_MATCHES = 0x01;
-
 	/**
 	 * phonex pattern
 	 */

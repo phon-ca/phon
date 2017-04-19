@@ -61,7 +61,7 @@ public class PhonexMatcher {
 
 	private int regionEnd = -1;
 
-	private int flags = PhonexPattern.ALLOW_OVERLAPPING_MATCHES;
+	private int flags = 0;
 
 	/**
 	 * Constructor
@@ -141,7 +141,7 @@ public class PhonexMatcher {
 	public boolean find() {
 		boolean retVal = false;
 
-		boolean allowOverlap = (flags & PhonexPattern.ALLOW_OVERLAPPING_MATCHES) == PhonexPattern.ALLOW_OVERLAPPING_MATCHES;
+		boolean allowOverlap = PhonexFlag.ALLOW_OVERLAPPING_MATCHES.checkFlag(flags);
 		int currentIdx = lastMatchState.getTapeIndex();
 
 		if(hasMatch() && allowOverlap) {

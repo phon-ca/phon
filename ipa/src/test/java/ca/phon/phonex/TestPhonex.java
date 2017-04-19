@@ -54,20 +54,4 @@ public class TestPhonex {
 		Assert.assertEquals(2, numMatches);
 	}
 
-	@Test
-	public void testOverlappingMatches() throws Exception {
-		final String phonex = "\\c\\v\\c\\v/o";
-//		final String phonex = "(?>(\\c\\v\\c\\v)).";
-		final PhonexPattern pattern = PhonexPattern.compile(phonex);
-		final String ipa = "badafagabadafa";
-
-		final PhonexMatcher matcher = pattern.matcher(IPATranscript.parseIPATranscript(ipa));
-		int numMatches = 0;
-		while(matcher.find()) {
-//			System.out.println(matcher.group());
-			++numMatches;
-		}
-		Assert.assertEquals(6, numMatches);
-	}
-
 }

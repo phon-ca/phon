@@ -99,10 +99,12 @@ scope {
 	:	^(FORWARDSLASH (myFlag=LETTER {$flags::myflags.add($LETTER.text);})+)
 	{
 		for(String flag:$flags::myflags) {
-			if(flag.equalsIgnoreCase("o")) {
-				this.flags |= PhonexPattern.ALLOW_OVERLAPPING_MATCHES;
+			char flagChar = flag.charAt(0);
+			PhonexFlag phonexFlag = PhonexFlag.fromChar(flagChar);
+			if(phonexFlag != null) {
+				flags |= phonexFlag.getBitmask();
 			} else {
-				// throw exception
+				throw new PhonexPatternException("Invalid flag " + flagChar);
 			}
 		}
 	}
