@@ -21,6 +21,7 @@ package ca.phon.app.query;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -174,7 +175,11 @@ public class ScriptPanel extends JPanel {
 		PhonScript oldScript = this.script;
 		this.script = script;
 
-		updateParamPanel();
+		try {
+			updateParamPanel();
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
 		scriptEditor.getDocument().removeDocumentListener(scriptDocListener);
 		scriptEditor.setText(script.getScript());
 		scriptEditor.setCaretPosition(0);
@@ -186,16 +191,12 @@ public class ScriptPanel extends JPanel {
 		return this.script;
 	}
 
-	private void updateParamPanel() {
+	private void updateParamPanel() throws PhonScriptException {
 		paramPanel.removeAll();
 
 		final PhonScriptContext ctx = script.getContext();
 		ScriptParameters scriptParams = new ScriptParameters();
-		try {
 			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
-		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
 
 		final ParamPanelFactory factory = new ParamPanelFactory();
 		scriptParams.accept(factory);
@@ -218,7 +219,11 @@ public class ScriptPanel extends JPanel {
 		cardPanel.setLayout(cardLayout);
 
 		paramPanel = new JPanel(new BorderLayout());
-		updateParamPanel();
+		try {
+			updateParamPanel();
+		} catch (PhonScriptException e1) {
+			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+		}
 		cardPanel.add(new JScrollPane(paramPanel), paramPanelId);
 
 		// setup editor and save button
@@ -293,8 +298,14 @@ public class ScriptPanel extends JPanel {
 	 */
 	public void showForm() {
 		if(oldScript != null && !oldScript.equals(getScript().getScript())) {
-			updateParamPanel();
-			firePropertyChange(SCRIPT_PROP, oldScript, getScript().getScript());
+			try {
+				updateParamPanel();
+				firePropertyChange(SCRIPT_PROP, oldScript, getScript().getScript());
+			} catch (PhonScriptException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				return;
+			}
 		}
 		cardLayout.show(cardPanel, paramPanelId);
 		firePropertyChange(CURRENT_COMPONENT, scriptEditor, paramPanel);

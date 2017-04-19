@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Scriptable;
 
 import ca.gedge.opgraph.InputField;
@@ -265,7 +266,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 					}
 				}
 			}
-		} catch (PhonScriptException e) {
+		} catch (PhonScriptException | RhinoException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 

@@ -25,6 +25,7 @@ import java.util.List;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.ImporterTopLevel;
+import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -312,7 +313,11 @@ public class PhonScriptContext {
 		final Context ctx = enter();
 		if(compiledScript == null) {
 			final String scriptText = script.getScript();
-			compiledScript = ctx.compileString(scriptText, "", 1, null);
+			try {
+				compiledScript = ctx.compileString(scriptText, "", 1, null);
+			} catch (Exception e) {
+				throw new PhonScriptException(e);
+			}
 		}
 		exit();
 		return compiledScript;
