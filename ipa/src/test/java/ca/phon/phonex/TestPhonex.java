@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,24 +33,41 @@ public class TestPhonex {
 		final String phonex = "\\v:noplugin()";
 		PhonexPattern.compile(phonex);
 	}
-	
+
 	@Test(expected=PhonexPatternException.class)
 	public void textInvalidFeature() throws Exception {
 		PhonexPattern.compile("{invalid}");
 	}
-	
+
 	@Test
 	public void testBacktracking() throws Exception {
 		final String phonex = "(\\c*\\v+\\c*)*";
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final String ipa = "bbaab aba";
-		
+
 		final PhonexMatcher matcher = pattern.matcher(IPATranscript.parseIPATranscript(ipa));
 		int numMatches = 0;
 		while(matcher.find()) {
 			++numMatches;
 		}
-		
+
 		Assert.assertEquals(2, numMatches);
 	}
+
+	@Test
+	public void testOverlappingMatches() throws Exception {
+		final String phonex = "\\c\\v\\c\\v/o";
+//		final String phonex = "(?>(\\c\\v\\c\\v)).";
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final String ipa = "badafagabadafa";
+
+		final PhonexMatcher matcher = pattern.matcher(IPATranscript.parseIPATranscript(ipa));
+		int numMatches = 0;
+		while(matcher.find()) {
+//			System.out.println(matcher.group());
+			++numMatches;
+		}
+		Assert.assertEquals(6, numMatches);
+	}
+
 }

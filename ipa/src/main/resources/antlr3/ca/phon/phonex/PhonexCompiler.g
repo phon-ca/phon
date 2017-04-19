@@ -1,17 +1,17 @@
 /*
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2011-2016 The Phon Project, Memorial University <http://phon.ling.mun.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -56,8 +56,14 @@ private final Stack<Integer> groupStack = new Stack<Integer>();
 
 private PhonexFSA primaryFSA = null;
 
+private int flags = 0;
+
 public PhonexFSA getPrimaryFSA() {
 	return this.primaryFSA;
+}
+
+public int getFlags() {
+	return this.flags;
 }
 
 private PhonexFSA getFSA() {
@@ -77,14 +83,33 @@ expr returns [PhonexFSA fsa]
 	getFSA();
 	groupStack.push(groupIndex++);
 }
-	:	^(EXPR exprele+)
+	:	^(EXPR exprele+ flags?)
 	{
 		$fsa = primaryFSA;
 	}
 	;
 
+flags
+scope {
+	List<String> myflags;
+}
+@init {
+	$flags::myflags = new ArrayList<>();
+}
+	:	^(FORWARDSLASH (myFlag=LETTER {$flags::myflags.add($LETTER.text);})+)
+	{
+		for(String flag:$flags::myflags) {
+			if(flag.equalsIgnoreCase("o")) {
+				this.flags |= PhonexPattern.ALLOW_OVERLAPPING_MATCHES;
+			} else {
+				// throw exception
+			}
+		}
+	}
+	;
+
 /**
- * 
+ *
  */
 exprele	:	matcher
 	|	group
@@ -107,12 +132,12 @@ group
 	{
 		String groupName = $GROUP.text;
 		int groupIndex = groupStack.peek();
-		
+
 		// pop our group fsa, apply quantifier
 		// and add it to the fsa now on top
 		// of the stack
 		PhonexFSA grpFsa = fsaStack.pop();
-		
+
 		if(!nonCapturing) {
 			grpFsa.setGroupIndex(groupIndex);
 		}
@@ -122,23 +147,23 @@ group
 
 		// look-ahead/behind
 		if(nonCapturing && groupName != null) {
-			final OffsetType offsetType = 
+			final OffsetType offsetType =
 				(groupName.endsWith(">") ? OffsetType.LOOK_AHEAD :
 					(groupName.endsWith("<") ? OffsetType.LOOK_BEHIND : OffsetType.NORMAL));
 			grpFsa.getTransitions().forEach( (t) -> t.setOffsetType(offsetType) );
 		}
-		
+
 		// if the expression starts with a group
 		// make the group expression the new
 		// primary fsa
 		if(getFSA() == primaryFSA && getFSA().getFinalStates().length == 0) {
 			fsaStack.pop();
 			fsaStack.push(grpFsa);
-			
+
 			// copy group names
 			if(primaryFSA.getNumberOfGroups() > grpFsa.getNumberOfGroups())
 				grpFsa.setNumberOfGroups(primaryFSA.getNumberOfGroups());
-				
+
 			for(int gIdx = 1; gIdx <= primaryFSA.getNumberOfGroups(); gIdx++) {
 				String gName = primaryFSA.getGroupName(gIdx);
 				if(gName != null)
@@ -148,17 +173,17 @@ group
 		} else {
 			getFSA().appendGroup(grpFsa);
 		}
-		
+
 		if(!nonCapturing)
 			if(groupIndex > primaryFSA.getNumberOfGroups())
 					primaryFSA.setNumberOfGroups(groupIndex);
-				
+
 		// set group name (if available)
 		if(!nonCapturing && !groupName.equals("GROUP")) {
-			
+
 			primaryFSA.setGroupName(groupIndex, groupName);
 		}
-		
+
 	}
 	;
 
@@ -173,12 +198,12 @@ scope {
 	{
 		// append matcher to fsa
 		PhoneMatcher matcher = bm;
-		
+
 		PhoneMatcher[] pMatchers = new PhoneMatcher[$matcher::pluginMatchers.size()];
 		for(int i = 0; i < $matcher::pluginMatchers.size(); i++)
 			pMatchers[i] = PhoneMatcher.class.cast($matcher::pluginMatchers.get(i));
-		
-		
+
+
 		if(q == null)
 			getFSA().appendMatcher(matcher, pMatchers);
 		else
@@ -189,7 +214,7 @@ scope {
 		PhoneMatcher[] pMatchers = new PhoneMatcher[$matcher::pluginMatchers.size()];
 		for(int i = 0; i < $matcher::pluginMatchers.size(); i++)
 			pMatchers[i] = PhoneMatcher.class.cast($matcher::pluginMatchers.get(i));
-		
+
 		if(q == null)
 			getFSA().appendBackReference(groupIndex, pMatchers);
 		else
@@ -205,14 +230,14 @@ base_matcher returns [PhoneMatcher value]
 	|	cp=compound_matcher
 	{	$value = cp;	}
 	;
-	
+
 compound_matcher returns [PhoneMatcher value]
 	:	^(COMPOUND_MATCHER m1=single_phone_matcher m2=single_phone_matcher)
 	{
 		$value = new CompoundPhoneMatcher(m1, m2);
 	}
 	;
-	
+
 single_phone_matcher returns [PhoneMatcher value]
 	:	fs=feature_set_matcher
 	{	$value = fs;	}
@@ -223,7 +248,7 @@ single_phone_matcher returns [PhoneMatcher value]
 	|	pp=predefined_phone_class
 	{	$value = pp;	}
 	;
-	
+
 class_matcher returns [PhoneMatcher value]
 scope {
 	List<PhoneMatcher> innerMatchers;
@@ -237,7 +262,7 @@ scope {
 		for(int i = 0; i < $class_matcher::innerMatchers.size(); i++) {
 			classMatchers[i] = (PhoneMatcher)$class_matcher::innerMatchers.get(i);
 		}
-		
+
 		PhoneClassMatcher pcm = new PhoneClassMatcher(classMatchers);
 		if($PHONE_CLASS.text.equals("^")) {
 			pcm.setNot(true);
@@ -290,40 +315,40 @@ scope {
 		$value = stressMatcher;
 	}
 	;
-	
+
 sctype returns [SyllableConstituentType value]
 	:	SCTYPE
 	{
 		SyllableConstituentType scType = SyllableConstituentType.fromString($SCTYPE.text);
-		
-		if(scType == SyllableConstituentType.NUCLEUS && 
+
+		if(scType == SyllableConstituentType.NUCLEUS &&
 			$SCTYPE.text.equalsIgnoreCase("D")) {
 			$matcher::pluginMatchers.add(new DiphthongMatcher(true));
 		}
-		
+
 		if(scType == null)
 			throw new PhonexPluginException("Invalid syllable constituent type '" + $SCTYPE.text + "'");
 		$value = scType;
 	}
 	;
-	
+
 stress_type returns [SyllableStress value]
 	:	STRESS
 	{
 		$value = SyllableStress.fromString($STRESS.text);
 	}
 	;
-	
+
 argument_list returns [List<String> args]
 @init {
 	$args = new ArrayList<String>();
 }
 	:	^(ARG_LIST (arg=argument {$args.add(StringEscapeUtils.unescapeJava($arg.value.substring(1, $arg.value.length()-1)));})+)
 	;
-	
+
 argument returns [String value]
 	:	^(ARG STRING)
-	{	
+	{
 		$value = $STRING.text;
 	}
 	;
@@ -334,7 +359,7 @@ back_reference returns [Integer groupNumber]
 		$groupNumber = Integer.parseInt($BACK_REF.text);
 	}
 	;
-	
+
 feature_set_matcher returns [FeatureSetMatcher matcher]
 scope {
 	List<String> features;
@@ -345,31 +370,31 @@ scope {
 	:	^(FEATURE_SET (f=negatable_identifier {$feature_set_matcher::features.add($f.value);})*)
 	{
 		$matcher = new FeatureSetMatcher();
-		
+
 		final FeatureMatrix fm = FeatureMatrix.getInstance();
-		
+
 		for(String feature:$feature_set_matcher::features) {
 			boolean not = false;
 			if(feature.startsWith("-")) {
 				not = true;
 				feature = feature.substring(1);
 			}
-			
+
 			// check feature name
 			final Feature featureObj = fm.getFeature(feature);
 			if(featureObj == null) {
 				throw new PhonexPatternException("Invalid feature name " + feature);
 			}
-			
+
 			if(not)
 				matcher.addNotFeature(feature);
 			else
 				matcher.addRequiredFeature(feature);
 		}
-		
+
 	}
 	;
-	
+
 base_phone_matcher returns [PhoneMatcher matcher]
 	:	LETTER
 	{
@@ -377,7 +402,7 @@ base_phone_matcher returns [PhoneMatcher matcher]
 		$matcher = new BasePhoneMatcher(c);
 	}
 	;
-	
+
 regex_matcher returns [PhoneMatcher matcher]
 	:	REGEX_STRING
 	{
@@ -386,7 +411,7 @@ regex_matcher returns [PhoneMatcher matcher]
 		$matcher = retVal;
 	}
 	;
-	
+
 identifier returns [String value]
 	:	^(NAME chars+=LETTER+)
 	{
@@ -396,7 +421,7 @@ identifier returns [String value]
 		}
 	}
 	;
-	
+
 negatable_identifier returns [String value]
 	:	^(NAME n=MINUS? chars+=LETTER+)
 	{
@@ -406,22 +431,22 @@ negatable_identifier returns [String value]
 		}
 	}
 	;
-	
+
 quantifier returns [Quantifier value]
 	:	^(QUANTIFIER quant=SINGLE_QUANTIFIER type=SINGLE_QUANTIFIER?)
 	{
 		$value = new Quantifier(QuantifierType.fromString($quant.text));
-		
+
 		if($type != null) {
 			switch($type.text.charAt(0)) {
 			case '?':
 				$value.setTransitionType(TransitionType.RELUCTANT);
 				break;
-				
+
 			case '*':
 				$value.setTransitionType(TransitionType.GREEDY);
 				break;
-				
+
 			case '+':
 				$value.setTransitionType(TransitionType.POSSESSIVE);
 				break;
@@ -431,17 +456,17 @@ quantifier returns [Quantifier value]
 	|	^(QUANTIFIER bounded_quantifier type=SINGLE_QUANTIFIER?)
 	{
 		$value = $bounded_quantifier.value;
-		
+
 		if($type != null) {
 			switch($type.text.charAt(0)) {
 			case '?':
 				$value.setTransitionType(TransitionType.RELUCTANT);
 				break;
-				
+
 			case '*':
 				$value.setTransitionType(TransitionType.GREEDY);
 				break;
-				
+
 			case '+':
 				$value.setTransitionType(TransitionType.POSSESSIVE);
 				break;
@@ -449,7 +474,7 @@ quantifier returns [Quantifier value]
 		}
 	}
 	;
-	
+
 bounded_quantifier returns [Quantifier value]
 	:	^(BOUND_START INT)
 	{
@@ -462,41 +487,41 @@ bounded_quantifier returns [Quantifier value]
 			Integer.parseInt($x.text), Integer.parseInt($y.text));
 	}
 	;
-	
+
 predefined_phone_class returns [PhoneMatcher value]
 	:	P_PHONE_CLASS
 	{
-		char classChar = 
+		char classChar =
 			($P_PHONE_CLASS.text.length() == 2 ? $P_PHONE_CLASS.text.charAt(1) : $P_PHONE_CLASS.text.charAt(0));
-		
+
 		switch(classChar) {
 		case '.':
 			$value = new FeatureSetMatcher();
 			break;
-			
+
 		case 'c':
 			FeatureSetMatcher cm = new FeatureSetMatcher();
 			cm.addRequiredFeature("consonant");
 			$value = cm;
 			break;
-		
+
 		case 'v':
 			FeatureSetMatcher vm = new FeatureSetMatcher();
 			vm.addRequiredFeature("vowel");
 			$value = vm;
 			break;
-			
+
 		case 'g':
 			FeatureSetMatcher gm = new FeatureSetMatcher();
 			gm.addRequiredFeature("glide");
 			$value = gm;
 			break;
-			
+
 		case 'p':
 			RegexMatcher rm = new RegexMatcher("\\(\\.{1,3}\\)");
 			$value = rm;
 			break;
-			
+
 		case 'w':
 			PhoneClassMatcher wm = new PhoneClassMatcher();
 			FeatureSetMatcher cfsm = new FeatureSetMatcher();
@@ -507,7 +532,7 @@ predefined_phone_class returns [PhoneMatcher value]
 			wm.addMatcher(vfsm);
 			$value = wm;
 			break;
-			
+
 		case 'W':
 			PhoneClassMatcher notWm = new PhoneClassMatcher();
 			notWm.setNot(true);
@@ -519,23 +544,23 @@ predefined_phone_class returns [PhoneMatcher value]
 			notWm.addMatcher(notVfsm);
 			$value = notWm;
 			break;
-			
+
 		case 's':
 			$value = new PhoneMatcher() {
 				public boolean matches(IPAElement p) {
 					return p.getScType().equals(SyllableConstituentType.SYLLABLESTRESSMARKER);
 				}
-				
+
 				public boolean matchesAnything() { return false; }
 			};
 			break;
-			
+
 		default:
 			$value = new PhoneMatcher() {
 				public boolean matches(IPAElement p) {
 					return false;
 				}
-				
+
 				public boolean matchesAnything() {
 					return false;
 				}
@@ -544,36 +569,36 @@ predefined_phone_class returns [PhoneMatcher value]
 		}
 	}
 	;
-	
+
 boundary_matchers returns [PhoneMatcher value]
 	:	BOUNDARY_MATCHER
 	{
-		char bChar = 
+		char bChar =
 			($BOUNDARY_MATCHER.text.length() == 2 ? $BOUNDARY_MATCHER.text.charAt(1) : $BOUNDARY_MATCHER.text.charAt(0));
-		
+
 		switch(bChar) {
 		case '^':
 			getFSA().appendTransition(new BeginningOfInputTransition());
 			break;
-			
+
 		case '$':
 			getFSA().appendTransition(new EndOfInputTransition());
 			break;
-			
+
 		case 'b':
 			getFSA().appendTransition(new WordBoundaryTransition());
 			break;
-			
+
 		case 'S':
 			getFSA().appendTransition(new SyllableBoundaryTransition());
 			break;
-			
+
 		default:
 			$value = new PhoneMatcher() {
 				public boolean matches(IPAElement p) {
 					return false;
 				}
-				
+
 				public boolean matchesAnything() {
 					return false;
 				}
