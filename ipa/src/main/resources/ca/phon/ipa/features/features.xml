@@ -973,13 +973,13 @@
 	<!-- ◌ʿ (0x2bf) -->
 	<feature_set char="&#x2bf;">diacritic lessrounded </feature_set>
 	<!-- ◌˹ (0x2f9) -->
-	<feature_set char="&#x2f9;">diacritic </feature_set>
+	<feature_set char="&#x2f9;">diacritic tonehigh </feature_set>
 	<!-- ◌˺ (0x2fa) -->
-	<feature_set char="&#x2fa;">diacritic unreleased </feature_set>
+	<feature_set char="&#x2fa;">diacritic tonehigh </feature_set>
 	<!-- ◌˻ (0x2fb) -->
-	<feature_set char="&#x2fb;">diacritic </feature_set>
+	<feature_set char="&#x2fb;">diacritic tonelow </feature_set>
 	<!-- ◌˼ (0x2fc) -->
-	<feature_set char="&#x2fc;">diacritic </feature_set>
+	<feature_set char="&#x2fc;">diacritic tonelow </feature_set>
 	<!-- ◌̚ (0x31a) -->
 	<feature_set char="&#x31a;">diacritic unreleased </feature_set>
 	<!-- ◌¹ (0xb9) -->
