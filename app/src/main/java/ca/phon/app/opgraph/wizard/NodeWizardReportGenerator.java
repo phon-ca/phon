@@ -21,6 +21,9 @@ import org.commonmark.parser.Parser;
 
 import ca.phon.app.VersionInfo;
 
+/**
+ * Create a html report using data from generated buffers in wizard.
+ */
 public class NodeWizardReportGenerator {
 
 	private final static Logger LOGGER = Logger.getLogger(NodeWizardReportGenerator.class.getName());
@@ -115,7 +118,7 @@ public class NodeWizardReportGenerator {
 		sb.append("<div id='sidenav' class='sidenav'>").append(nl);
 		sb.append("<div id='banner' class='banner'>").append(nl);
 		sb.append("<div id='bannercontent' class='title' style='margin: 5px;'>").append(nl);
-		sb.append("<div class='icon'><img id='bannericon' width='48' height='48' src='").append(phonIcnBase64).append("')/></div>").append(nl);
+		sb.append("<div class='icon'><img id='bannericon' width='36' height='36' src='").append(phonIcnBase64).append("')/></div>").append(nl);
 //		String documentTitle =
 //				(ext.getWizardTitle() != null && ext.getWizardTitle().trim().length() > 0)
 //				? ext.getWizardTitle()
