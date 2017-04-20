@@ -711,7 +711,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		writer.writeSession(session, fOut);
 		fOut.close();
 
-		if(created) {
+		if(created && !sessionName.startsWith("__") && !sessionName.startsWith("~")) {
 			final ObjectFactory xmlFactory = new ObjectFactory();
 			final SessionType st = xmlFactory.createSessionType();
 			st.setName(sessionName);
