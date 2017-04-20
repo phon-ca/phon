@@ -31,6 +31,7 @@ import org.antlr.runtime.tree.RewriteEarlyExitException;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.syllable.SyllabificationInfo;
 
 /**
@@ -129,10 +130,19 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 * @param input The list of phones to be matched
 	 */
 	public PhonexMatcher matcher(Iterable<IPAElement> input) {
-		List<IPAElement> tape = new ArrayList<IPAElement>();
-		for(IPAElement p:input) tape.add(p);
+		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		for(IPAElement ele:input) builder.append(ele);
+		IPATranscript transcript = builder.toIPATranscript();
 
-		SyllabificationInfo.setupSyllabificationInfo(new IPATranscript(tape));
+//		if(PhonexFlag.STRIP_DIACRITICS.checkFlag(flags)) {
+//			transcript = transcript.stripDiacritics();
+//		}
+//		if(PhonexFlag.STRIP_PUNCTUATION.checkFlag(flags)) {
+//			transcript = transcript.removePunctuation();
+//		}
+
+		SyllabificationInfo.setupSyllabificationInfo(transcript);
+		List<IPAElement> tape = transcript.toList();
 
 		return new PhonexMatcher(this, tape, flags);
 	}

@@ -9,10 +9,9 @@ import java.util.List;
  */
 public enum PhonexFlag {
 	ALLOW_OVERLAPPING_MATCHES('o', 0x01)
-	// currently not implemented
-	/*
-	IGNORE_DIACRITICS('d', 0x02),
-	IGNORE_PUNCTUATION('p', 0x04)
+	/* currently not implemented
+	STRIP_DIACRITICS('d', 0x02),
+	STRIP_PUNCTUATION('p', 0x04)
 	*/
 	;
 

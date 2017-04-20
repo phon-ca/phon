@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2015, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,7 +41,7 @@ exports.PatternType = {
 };
 
 exports.PatternFilter = function (id) {
-    
+
     var filterParamInfo = {
         "id": id + ".filter",
         "title": "Expression:",
@@ -50,7 +50,7 @@ exports.PatternFilter = function (id) {
     };
     var filterParam;
     this.filter = filterParamInfo.def;
-    
+
     var filterTypeParamInfo = {
         "id": id + ".filterType",
         "title": "Expression type:",
@@ -61,52 +61,53 @@ exports.PatternFilter = function (id) {
     this.filterType = {
         "index": 0, "toString": "Plain text"
     };
-    
+
     var matchGroupParamInfo = {
-        "id":[id + ".caseSensitive", id + ".exactMatch"],
+        "id":[id + ".caseSensitive", id + ".exactMatch", id + ".allowOverlap"],
         "title": "",
-        "desc":[ "Case sensitive", "Exact match"],
-        "def":[ false, false],
-        "numCols": 2
+        "desc":[ "Case sensitive", "Exact match", "Allow overlapping matches"],
+        "def":[ false, false, false],
+        "numCols": 3
     };
     var matchGroupParam;
     this.caseSensitive = matchGroupParamInfo.def[0];
     this.exactMatch = matchGroupParamInfo.def[1];
-    
+	this.allowOverlap = matchGroupParamInfo.def[2];
+
     var helpLabelParamInfo = {
         "title": "",
         "desc": ""
     };
     var helpLabelParam;
-    
+
     var filterTypePromptText =[
     "Enter plain text expression",
     "Enter regular expression",
     "Enter phonex",
     "Enter stress pattern",
     "Enter CGV pattern"];
-    
+
     var filterTypeHelpText =[
     HelpText.plainTextHelpText,
     HelpText.regexHelpText,
     HelpText.phonexHelpText,
     HelpText.stressPatternHelpText,
     HelpText.cvPatternHelpText];
-    
+
     this.setEnabled = function (e) {
         var enabled = (e == true);
         filterParam.setEnabled(enabled);
         filterTypeParam.setEnabled(enabled);
         matchGroupParam.setEnabled(enabled);
     };
-    
+
     this.setVisible = function (v) {
         var visible = (v == true);
         filterParam.setVisible(visible);
         filterTypeParam.setVisible(visible);
         matchGroupParam.setVisible(visible);
     };
-    
+
     var setPatternFilterInvalid = function (message, loc) {
         var msg = (loc >= 0 ?
         "Error at index " + loc + ": " + message:
@@ -114,12 +115,12 @@ exports.PatternFilter = function (id) {
        	filterParam.setValidate(false);
        	filterParam.setTooltipText(message);
     };
-    
+
     var setPatternFilterOk = function () {
     	filterParam.setValidate(true);
     	filterParam.setTooltipText(null);
     };
-    
+
     /**
      * Set selected pattern type
      *
@@ -132,28 +133,28 @@ exports.PatternFilter = function (id) {
     this.setSelectedPatternType = function (type) {
         filterTypeParamInfo.def = type;
     };
-    
+
     /**
      * Set pattern value
-     * 
+     *
      * @param value
      */
     this.setPattern = function (pattern) {
     	filterParam.setValue(filterParamInfo.id, pattern);
     }
-    
+
     this.setCaseSensitive = function (caseSensitive) {
         matchGroupParam.setValue(matchGroupParamInfo.id[0], caseSensitive);
     }
-    
+
     this.setExactMatch = function (exactMatch) {
         matchGroupParam.setValue(matchGroupParamInfo.id[1], exactMatch);
     }
-    
+
     /* Check filter */
     var stressPatternRegex = /^([ ABUabu12][?+*]?)+$/;
     var cvPatternRegex = /^([ ABCVGcvg][?+*]?)+$/;
-    
+
     var checkRegexFilter = function (filter) {
         var retVal = {
             valid: false,
@@ -171,7 +172,7 @@ exports.PatternFilter = function (id) {
         }
         return retVal;
     };
-    
+
     var checkPhonexFilter = function (filter) {
         var retVal = {
             valid: false,
@@ -189,7 +190,7 @@ exports.PatternFilter = function (id) {
         }
         return retVal;
     };
-    
+
     var checkStressPatternFilter = function (filter) {
         var retVal = {
             valid: false,
@@ -203,7 +204,7 @@ exports.PatternFilter = function (id) {
         }
         return retVal;
     };
-    
+
     var checkCVPatternFilter = function (filter) {
         var retVal = {
             valid: false,
@@ -217,7 +218,7 @@ exports.PatternFilter = function (id) {
         }
         return retVal;
     };
-    
+
     // check the filter for errors
     // return value will have three properties
     //   valid:boolean, message:string, loc:int
@@ -227,46 +228,46 @@ exports.PatternFilter = function (id) {
             message: "",
             loc: 0
         };
-        
-        
+
+
         switch (filterType) {
             case 0:
             retVal.valid = true;
             break;
             // plain text is always ok
-            
+
             case 1:
             retVal = checkRegexFilter(filter);
             break;
-            
+
             case 2:
             retVal = checkPhonexFilter(filter);
             break;
-            
+
             case 3:
             retVal = checkStressPatternFilter(filter);
             break;
-            
+
             case 4:
             retVal = checkCVPatternFilter(filter);
             break;
-            
+
             default:
             retVal.valid = false;
             retVal.loc = -1;
             break;
         }
-        
+
         return retVal;
     };
-    
+
     var validatePattern = function () {
         var txt = filterParam.getValue(filterParamInfo.id);
-        
+
         if(txt.trim().length() == 0) {
         	return true;
         }
-        
+
         var filterType = filterTypeParam.getValue(filterTypeParamInfo.id);
         var filterCheck = checkFilter(txt, filterType.index);
         if (! filterCheck.valid) {
@@ -275,11 +276,11 @@ exports.PatternFilter = function (id) {
             setPatternFilterOk();
         }
     };
-    
+
     this.set_required = function(required) {
     	filterParam.setRequired(required);
     }
-    
+
     this.param_setup = function (params) {
         // don't add a separator as this filter may be used inside a parent filter
         matchGroupParam = new MultiboolScriptParam(
@@ -289,20 +290,20 @@ exports.PatternFilter = function (id) {
         matchGroupParamInfo.title,
         matchGroupParamInfo.numCols);
         matchGroupParam.setEnabled(0, false);
-        
+
         filterParam = new StringScriptParam(
         filterParamInfo.id,
         filterParamInfo.title,
         filterParamInfo.def);
         filterParam.setPrompt(filterParamInfo.prompt);
-        
+
         var filterListener = new java.beans.PropertyChangeListener() {
         	propertyChange: function(e) {
         		validatePattern();
         	}
         };
         filterParam.addPropertyChangeListener(filterParamInfo.id, filterListener);
-        
+
         filterTypeParam = new EnumScriptParam(
         filterTypeParamInfo.id,
         filterTypeParamInfo.title,
@@ -312,42 +313,48 @@ exports.PatternFilter = function (id) {
             propertyChange: function(e) {
                 // setup help label
                 var idx = e.source.getValue(e.source.paramId).index;
-                
+
                 // PHONEX
                 if(idx >= exports.PatternType.PHONEX) {
-                    matchGroupParam.setEnabled(0, false); 
+                    matchGroupParam.setEnabled(0, false);
                 } else {
                     matchGroupParam.setEnabled(0, true);
                 }
-                
+
+                if(idx == exports.PatternType.PHONEX) {
+                	matchGroupParam.setVisible(2, true);
+                } else {
+                	matchGroupParam.setVisible(2, false);
+                }
+
                 var filterPrompt = filterTypePromptText[idx];
                 var filterHelp = filterTypeHelpText[idx];
-                
+
                 filterParam.setPrompt(filterPrompt);
                 helpLabelParam.setText(filterHelp);
-            }  
+            }
         };
         filterTypeParam.addPropertyChangeListener(filterTypeParamInfo.id, filterTypeListener);
-        
+
         var helpLabelDesc = filterTypeHelpText[filterTypeParamInfo.def];
         helpLabelParam = new LabelScriptParam(
         helpLabelDesc,
         helpLabelParamInfo.title);
-        
+
         params.add(filterTypeParam);
         params.add(filterParam);
-        
+
         params.add(matchGroupParam);
-        
+
         var sepLine = new LabelScriptParam("<html>&nbsp;</html>", "");
         //   params.add(sepLine);
-        
+
         params.add(helpLabelParam);
     };
-    
+
     this.isUseFilter = function () {
         var txt = this.filter;
-        
+
         if (txt.length() > 0) {
             var filterCheck = checkFilter(this.filter, this.filterType.index);
             return filterCheck.valid;
@@ -355,19 +362,19 @@ exports.PatternFilter = function (id) {
             return false;
         }
     };
-    
+
     /* Check for matches (or exact match) of entered filter */
     var checkPlain = function (obj, filter, caseSensitive, exactMatch) {
         var strA = (caseSensitive == true ? obj.toString(): obj.toString().toLowerCase());
         var strB = (caseSensitive == true ? filter: filter.toLowerCase());
-        
+
         if (exactMatch == true) {
             return (strA == strB);
         } else {
             return (strA.indexOf(strB) >= 0);
         }
     };
-    
+
     var checkRegex = function (obj, filter, caseSensitive, exactMatch) {
         var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive == true? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
@@ -377,37 +384,39 @@ exports.PatternFilter = function (id) {
             return regexMatcher.find();
         }
     };
-    
-    var checkPhonex = function (obj, filter, exactMatch) {
+
+    var checkPhonex = function (obj, filter, exactMatch, allowOverlap) {
         if (!(obj instanceof IPATranscript)) return false;
-        
+        flags =
+        	(allowOverlap == true ? PhonexFlag.ALLOW_OVERLAPPING_MATCHES.getBitmask() : 0);
+
         if (exactMatch == true) {
-            return obj.matches(filter);
+            return obj.matches(filter, flags);
         } else {
-            return obj.contains(filter);
+            return obj.contains(filter, flags);
         }
     };
-    
+
     var checkStressPattern = function (obj, filter, exactMatch) {
     	if (!(obj instanceof IPATranscript)) return false;
-    	
+
     	if(exactMatch == true) {
     		return obj.matchesStressPattern(filter);
     	} else {
     		return obj.containsStressPattern(filter);
     	}
     };
-    
+
     var checkCVPattern = function (obj, filter, exactMatch) {
     	if (!(obj instanceof IPATranscript)) return false;
-    	
+
     	if(exactMatch == true) {
     		return obj.matchesCVPattern(filter);
     	} else {
     		return obj.containsCVPattern(filter);
     	}
     };
-    
+
     /**
      * Check object for occurances (or exact match)
      * of filter.
@@ -417,49 +426,49 @@ exports.PatternFilter = function (id) {
      */
     this.check_filter = function (obj) {
         var retVal = true;
-        
+
         if (obj == null) {
         	if(this.filterType.index == 2)
         		obj = new IPATranscript();
         	else
         		obj = new String();
         }
-        
+
         switch (this.filterType.index) {
             case 0:
             retVal = checkPlain(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
-            
+
             case 1:
             retVal = checkRegex(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
-            
+
             case 2:
-            retVal = checkPhonex(obj, this.filter, this.exactMatch);
+            retVal = checkPhonex(obj, this.filter, this.exactMatch, this.allowOverlap);
             break;
-            
+
             case 3:
             retVal = checkStressPattern(obj, this.filter, this.exactMatch);
             break;
-            
+
             case 4:
             retVal = checkCVPattern(obj, this.filter, this.exactMatch);
             break;
-            
+
             default:
             retVal = false;
             break;
         };
-        
+
         return retVal;
     };
-    
+
     var findPlain = function (obj, filter, caseSensitive, exactMatch) {
         var retVal = new Array();
-        
+
         var strA = (caseSensitive == true ? obj.toString(): obj.toString().toLowerCase());
         var strB = (caseSensitive == true ? filter: filter.toLowerCase());
-        
+
         if (exactMatch == true) {
             if (strA.equals(strB)) {
                 var v = {
@@ -481,20 +490,20 @@ exports.PatternFilter = function (id) {
                 var v = {
                     start: i, end: i + strB.length(), value: myValue
                 };
-                
+
                 retVal.push(v);
                 i += strB.length();
             }
         }
-        
+
         return retVal;
     };
-    
+
     var findRegex = function (obj, filter, caseSensitive, exactMatch) {
         var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive == true ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
         var regexMatcher = regexPattern.matcher(obj.toString());
         var retVal = new Array();
-        
+
         if (exactMatch == true) {
             if (regexMatcher.matches()) {
                 v = {
@@ -517,20 +526,23 @@ exports.PatternFilter = function (id) {
                 v = {
                     start: regexMatcher.start(), end: regexMatcher.end(), value: myValue, matcher: regexMatcher
                 };
-                
+
                 retVal.push(v);
             }
         }
-        
+
         return retVal;
     };
-    
-    var findPhonex = function (obj, filter, exactMatch) {
+
+    var findPhonex = function (obj, filter, exactMatch, allowOverlap) {
         var retVal = new Array();
-        
+
         if (!(obj instanceof IPATranscript)) return retVal;
-        
-        var phonexPattern = PhonexPattern.compile(filter);
+
+		flags =
+        	(allowOverlap == true ? PhonexFlag.ALLOW_OVERLAPPING_MATCHES.getBitmask() : 0);
+
+        var phonexPattern = PhonexPattern.compile(filter, flags);
         var phonexMatcher = phonexPattern.matcher(obj);
 
         if (exactMatch == true) {
@@ -543,7 +555,7 @@ exports.PatternFilter = function (id) {
         } else {
             while (phonexMatcher.find()) {
             	var groupData = new Array();
-            	
+
             	for(grpIdx = 1; grpIdx <= phonexMatcher.groupCount(); grpIdx++) {
             		grpName = phonexPattern.groupName(grpIdx);
             		if(phonexMatcher.start(grpIdx) >= 0) {
@@ -559,7 +571,7 @@ exports.PatternFilter = function (id) {
             				groupData[grpName] = { start:-1, end:-1, value: new IPATranscript() };
             		}
             	}
-            	
+
                 v = {
                     start: phonexMatcher.start(), end: phonexMatcher.end(), value: new IPATranscript(phonexMatcher.group()),
                     	groups:groupData
@@ -567,15 +579,15 @@ exports.PatternFilter = function (id) {
                 retVal.push(v);
             }
         }
-        
+
         return retVal;
     };
-    
+
     var findCVPattern = function (obj, filter, exactMatch) {
         var retVal = new Array();
-        
+
         if(!(obj instanceof IPATranscript)) return retVal;
-        
+
         if(exactMatch == true) {
         	if(obj.matchesCVPattern(filter)) {
         		v = {
@@ -585,7 +597,7 @@ exports.PatternFilter = function (id) {
         	}
         } else {
         	var found = obj.findCVPattern(filter);
-        	
+
         	for(i = 0; i < found.size(); i++) {
         		var subT = found.get(i);
         		var subTStart = obj.indexOf(subT);
@@ -595,15 +607,15 @@ exports.PatternFilter = function (id) {
         		retVal.push(v);
         	}
         }
-        
+
         return retVal;
     };
-    
+
     var findStressPattern = function (obj, filter, exactMatch) {
         var retVal = new Array();
-        
+
         if(!(obj instanceof IPATranscript)) return retVal;
-        
+
         if(exactMatch == true) {
         	if(obj.matchesStressPattern(filter)) {
         		v = {
@@ -613,7 +625,7 @@ exports.PatternFilter = function (id) {
         	}
         } else {
         	var found = obj.findStressPattern(filter);
-        	
+
         	for(i = 0; i < found.size(); i++) {
         		var subT = found.get(i);
         		var subTStart = obj.indexOf(subT);
@@ -623,10 +635,10 @@ exports.PatternFilter = function (id) {
         		retVal.push(v);
         	}
         }
-        
+
         return retVal;
     };
-    
+
     /**
      * Returns all occurances of the indicated pattern
      * within the given object.
@@ -643,37 +655,37 @@ exports.PatternFilter = function (id) {
      */
     this.find_pattern = function (obj) {
         var retVal = new Array();
-        
+
         if (obj == null) return retVal;
-        
+
         switch (this.filterType.index) {
             case 0:
             retVal = findPlain(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
-            
+
             case 1:
             retVal = findRegex(obj, this.filter, this.caseSensitive, this.exactMatch);
             break;
-            
+
             case 2:
-            retVal = findPhonex(obj, this.filter, this.exactMatch);
+            retVal = findPhonex(obj, this.filter, this.exactMatch, this.allowOverlap);
             break;
-            
+
             case 3:
             retVal = findStressPattern(obj, this.filter, this.exactMatch);
             break;
-            
+
             case 4:
             retVal = findCVPattern(obj, this.filter, this.exactMatch);
             break;
-            
+
             default:
             break;
         };
-        
+
         return retVal;
     };
-    
+
     /**
      * Filters a list of group objects given a tier name and list of groups.
      *
@@ -682,7 +694,7 @@ exports.PatternFilter = function (id) {
      */
     this.filter_groups = function (groups, tierName) {
         var retVal = new Array();
-        
+
         for (var gIdx = 0; gIdx < groups.length; gIdx++) {
             var group = groups[gIdx];
             var groupVal = group.getTier(tierName);
@@ -690,7 +702,7 @@ exports.PatternFilter = function (id) {
                 retVal.push(group);
             }
         }
-        
+
         return retVal;
     };
 }
