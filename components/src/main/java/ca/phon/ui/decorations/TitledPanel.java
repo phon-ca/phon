@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package ca.phon.ui.decorations;
 
 import java.awt.BorderLayout;

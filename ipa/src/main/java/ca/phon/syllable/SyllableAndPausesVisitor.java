@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package ca.phon.syllable;
 
 import ca.phon.ipa.IntraWordPause;

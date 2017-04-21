@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package ca.phon.properties;
 
 import java.lang.annotation.Documented;

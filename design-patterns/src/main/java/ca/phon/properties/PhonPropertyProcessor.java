@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package ca.phon.properties;
 
 /**

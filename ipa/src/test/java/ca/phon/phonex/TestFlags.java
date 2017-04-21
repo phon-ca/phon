@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package ca.phon.phonex;
 
 import org.junit.Test;

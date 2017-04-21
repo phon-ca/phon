@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package ca.phon.media.sampled.actions;
 
 import java.awt.event.ActionEvent;
