@@ -5,11 +5,14 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
@@ -18,6 +21,7 @@ import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.app.session.ParticipantSelector;
 import ca.phon.app.session.SessionSelector;
+import ca.phon.project.ParticipantCache;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
 import ca.phon.session.SessionPath;
@@ -26,12 +30,11 @@ import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModelEvent;
-import ca.phon.worker.PhonWorker;
 
 /**
  * UI for viewing participants in a project.  This view has has two parts,
  * a {@link TristateCheckBoxTree} for selecting sessions and another for
- * listing {@link Participant}s indentified in checked sessions.  A basic
+ * listing {@link Participant}s identified in checked sessions.  A basic
  * history, including # of records and age, is provided for each
  * session the {@link Participant} is found.
  *
@@ -46,6 +49,8 @@ public class ParticipantsPanel extends JPanel {
 
 	private Project project;
 
+	private ParticipantCache cache;
+
 	public ParticipantsPanel() {
 		this(null);
 	}
@@ -54,6 +59,9 @@ public class ParticipantsPanel extends JPanel {
 		super();
 
 		this.project = project;
+		if(project != null) {
+			this.cache = project.getExtension(ParticipantCache.class);
+		}
 
 		init();
 	}
@@ -95,27 +103,9 @@ public class ParticipantsPanel extends JPanel {
 		add(participantPanel, gbc);
 	}
 
-	private void updateParticipants() {
-		final Runnable onBg = () -> {
-			SwingUtilities.invokeLater(() -> participantBusyLabel.setBusy(true));
-
-			final Collection<Participant> participantHistory =
-					project.getParticipants(sessionSelector.getSelectedSessions());
-
-			final TristateCheckBoxTreeModel model = ParticipantSelector.createModel(participantHistory);
-			SwingUtilities.invokeLater( () -> {
-				participantSelector.setModel(model);
-				participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
-				participantBusyLabel.setBusy(false);
-
-				participantSelector.expandPath(new TreePath(participantSelector.getRoot()));
-			});
-		};
-		PhonWorker.getInstance().invokeLater(onBg);
-	}
-
 	public void setProject(Project project) {
 		this.project = project;
+		this.cache = project.getExtension(ParticipantCache.class);
 		sessionSelector.setProject(project);
 		sessionSelector.getModel().addTreeModelListener(treeModelListener);
 		sessionSelector.revalidate();
@@ -158,9 +148,53 @@ public class ParticipantsPanel extends JPanel {
 		@Override
 		public void treeNodesChanged(TreeModelEvent e) {
 			if(e instanceof TristateCheckBoxTreeModelEvent) {
-				updateParticipants();
+				participantBusyLabel.setBusy(true);
+
+				ParticipantWorker worker = new ParticipantWorker(sessionSelector.getSelectedSessions());
+				worker.execute();
 			}
 		}
 
 	};
+
+	private class ParticipantWorker extends SwingWorker<List<SessionPath>, SessionPath> {
+
+		private List<SessionPath> sessionPaths;
+
+		private List<SessionPath> processedPaths = new ArrayList<>();
+
+		public ParticipantWorker(Collection<SessionPath> paths) {
+			this.sessionPaths = new ArrayList<>(paths);
+		}
+
+		@Override
+		protected List<SessionPath> doInBackground() throws Exception {
+			for(SessionPath path:sessionPaths) {
+				cache.loadSession(path);
+				publish(path);
+			}
+
+			return sessionPaths;
+		}
+
+		@Override
+		protected void process(List<SessionPath> chunks) {
+			processedPaths.addAll(chunks);
+		}
+
+		@Override
+		protected void done() {
+			participantBusyLabel.setBusy(false);
+
+			final Set<Participant> participants = cache.getParticipants(processedPaths);
+			final TristateCheckBoxTreeModel model = ParticipantSelector.createModel(participants);
+			participantSelector.setModel(model);
+			participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);
+			participantBusyLabel.setBusy(false);
+
+			participantSelector.expandPath(new TreePath(participantSelector.getRoot()));
+		}
+
+	}
+
 }
