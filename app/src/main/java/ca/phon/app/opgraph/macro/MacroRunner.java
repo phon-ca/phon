@@ -1,7 +1,6 @@
 package ca.phon.app.opgraph.macro;
 
 import java.awt.Toolkit;
-import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -12,7 +11,6 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 
 public class MacroRunner implements Runnable {

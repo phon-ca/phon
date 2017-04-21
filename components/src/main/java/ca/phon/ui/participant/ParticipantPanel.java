@@ -56,7 +56,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.session.AgeFormatter;
-import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.SessionFactory;

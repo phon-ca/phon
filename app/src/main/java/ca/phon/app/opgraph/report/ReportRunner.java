@@ -30,7 +30,6 @@ import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.worker.PhonWorker;
 
 /**
  * Execute an opgraph report given a project and query.

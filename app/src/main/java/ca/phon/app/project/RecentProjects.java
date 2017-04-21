@@ -20,10 +20,8 @@ package ca.phon.app.project;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import ca.phon.util.PrefHelper;
 import ca.phon.util.RecentFiles;
 
 public class RecentProjects extends RecentFiles {

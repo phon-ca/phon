@@ -51,7 +51,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.media.sampled.actions.PlayAction;

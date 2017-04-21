@@ -31,7 +31,6 @@ import javax.swing.SwingWorker;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.analysis.AnalysisRunner;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.worker.PhonWorker;

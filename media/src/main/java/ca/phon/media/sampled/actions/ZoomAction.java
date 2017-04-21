@@ -2,8 +2,6 @@ package ca.phon.media.sampled.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.SwingConstants;
-
 import ca.phon.media.sampled.PCMSegmentView;
 
 public class ZoomAction extends PCMSegmentViewAction {

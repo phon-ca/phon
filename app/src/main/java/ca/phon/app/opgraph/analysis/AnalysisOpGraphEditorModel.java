@@ -19,43 +19,23 @@
 package ca.phon.app.opgraph.analysis;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 import javax.swing.undo.UndoableEdit;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpLink;
 import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.app.components.GraphOutline;
-import ca.gedge.opgraph.app.components.OpGraphTreeModel;
 import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
 import ca.gedge.opgraph.dag.CycleDetectedException;
 import ca.gedge.opgraph.dag.VertexNotFoundException;
@@ -63,21 +43,14 @@ import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
 import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
 import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
 import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
-import ca.phon.app.opgraph.wizard.edits.NodeWizardSettingsEdit;
 import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.project.Project;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Tuple;
-import ca.phon.util.icons.IconManager;
 import ca.phon.workspace.Workspace;
 
 public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {

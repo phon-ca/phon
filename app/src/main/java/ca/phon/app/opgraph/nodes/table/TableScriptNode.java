@@ -20,16 +20,12 @@ package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.script.Invocable;
-import javax.script.ScriptException;
 import javax.swing.JPanel;
 
 import org.mozilla.javascript.Scriptable;

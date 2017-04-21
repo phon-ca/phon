@@ -6,12 +6,8 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 

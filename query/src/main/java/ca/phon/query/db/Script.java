@@ -21,8 +21,6 @@ package ca.phon.query.db;
 
 import java.util.Map;
 
-import ca.phon.script.PhonScript;
-
 /**
  * An interface that defines a Phon script. A script has source code and
  * a set of parameters.

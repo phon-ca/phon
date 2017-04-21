@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
 
-import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;

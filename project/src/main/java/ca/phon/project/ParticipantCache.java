@@ -14,9 +14,6 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ca.phon.extensions.Extension;
-import ca.phon.extensions.ExtensionProvider;
-import ca.phon.extensions.IExtendable;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;

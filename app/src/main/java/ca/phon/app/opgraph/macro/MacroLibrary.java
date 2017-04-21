@@ -20,7 +20,6 @@ import javax.swing.MenuElement;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;

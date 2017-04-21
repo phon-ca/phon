@@ -27,7 +27,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.HashMap;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -41,8 +40,6 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.hedlund.desktopicons.StockIcon;
-import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.welcome.LocalProjectButton;
 import ca.phon.plugin.PluginEntryPointRunner;

@@ -23,7 +23,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -38,7 +37,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -49,15 +47,10 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.jbreadcrumb.Breadcrumb;
 import ca.phon.ui.jbreadcrumb.JBreadcrumb;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardEvent.WizardEventType;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

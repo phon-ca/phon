@@ -37,7 +37,6 @@ import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.components.canvas.GraphCanvas;
-import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
 import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.gedge.opgraph.library.NodeLibrary;

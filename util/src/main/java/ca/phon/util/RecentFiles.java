@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import ca.phon.util.PrefHelper;
-
 public class RecentFiles implements Iterable<File> {
 	
 	private String propertyKey;

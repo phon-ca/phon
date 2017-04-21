@@ -36,7 +36,6 @@ import ca.phon.session.SessionPath;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.Tuple;
 

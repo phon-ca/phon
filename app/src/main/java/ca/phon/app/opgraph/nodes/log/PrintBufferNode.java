@@ -20,7 +20,6 @@ package ca.phon.app.opgraph.nodes.log;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.List;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -33,7 +32,6 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;

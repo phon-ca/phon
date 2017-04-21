@@ -20,9 +20,7 @@ package ca.phon.app.project;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
@@ -75,9 +73,6 @@ import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.NativeUtilities;

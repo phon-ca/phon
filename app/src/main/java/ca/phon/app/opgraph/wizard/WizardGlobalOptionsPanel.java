@@ -25,16 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
-import ca.phon.session.ParticipantRole;
 import ca.phon.util.PrefHelper;
 
 /**

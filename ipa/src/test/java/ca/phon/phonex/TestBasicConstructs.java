@@ -20,14 +20,11 @@ package ca.phon.phonex;
 
 import java.text.ParseException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
 import junit.framework.Assert;
 
 /**

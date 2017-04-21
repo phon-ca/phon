@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Stack;
 
 import javax.swing.ImageIcon;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import ca.gedge.opgraph.OpGraph;

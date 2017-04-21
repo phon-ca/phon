@@ -21,7 +21,6 @@ package ca.phon.app.opgraph.report;
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
-import java.io.File;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +53,6 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.workspace.Workspace;
 

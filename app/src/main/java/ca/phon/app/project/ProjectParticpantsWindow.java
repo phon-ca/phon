@@ -2,12 +2,9 @@ package ca.phon.app.project;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JButton;
-
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 
 /**

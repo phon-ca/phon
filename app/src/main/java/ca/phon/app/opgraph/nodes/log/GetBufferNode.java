@@ -1,7 +1,6 @@
 package ca.phon.app.opgraph.nodes.log;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.SwingUtilities;

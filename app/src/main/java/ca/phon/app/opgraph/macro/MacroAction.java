@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,11 +13,9 @@ import javax.swing.SwingWorker;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.analysis.AnalysisRunner;
 import ca.phon.app.opgraph.report.ReportAction;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
 import ca.phon.worker.PhonWorker;
 
 public class MacroAction extends HookableAction {

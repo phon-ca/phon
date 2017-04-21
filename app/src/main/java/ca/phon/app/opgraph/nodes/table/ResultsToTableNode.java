@@ -60,7 +60,6 @@ import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.session.Tier;
 

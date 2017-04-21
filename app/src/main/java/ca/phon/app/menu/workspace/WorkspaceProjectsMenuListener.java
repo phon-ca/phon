@@ -18,8 +18,6 @@
  */
 package ca.phon.app.menu.workspace;
 
-import java.util.HashMap;
-
 import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;

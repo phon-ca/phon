@@ -41,7 +41,6 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEditSupport;
 
 import org.jdesktop.swingx.JXStatusBar;
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.actions.CopyRecordAction;

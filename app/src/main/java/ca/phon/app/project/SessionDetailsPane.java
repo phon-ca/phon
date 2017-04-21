@@ -20,8 +20,6 @@ package ca.phon.app.project;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JTextArea;

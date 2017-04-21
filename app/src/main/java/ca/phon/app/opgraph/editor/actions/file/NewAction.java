@@ -18,11 +18,8 @@
  */
 package ca.phon.app.opgraph.editor.actions.file;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import ca.gedge.opgraph.OpGraph;

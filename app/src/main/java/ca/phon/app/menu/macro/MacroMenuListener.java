@@ -1,16 +1,11 @@
 package ca.phon.app.menu.macro;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import ca.phon.app.opgraph.macro.MacroLibrary;
 import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 
 public class MacroMenuListener implements MenuListener {

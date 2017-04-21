@@ -16,8 +16,6 @@ import javax.swing.JPanel;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import com.sun.media.jfxmedia.logging.Logger;
-
 import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpNode;

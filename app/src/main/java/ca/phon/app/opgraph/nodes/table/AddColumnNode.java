@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -38,7 +37,6 @@ import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
 import ca.phon.script.PhonScriptException;

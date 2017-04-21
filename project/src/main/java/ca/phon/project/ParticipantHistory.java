@@ -1,18 +1,11 @@
 package ca.phon.project;
 
-import java.io.IOException;
 import java.time.Period;
-import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ca.phon.session.Participant;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 
 /**

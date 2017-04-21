@@ -40,9 +40,6 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.phon.app.opgraph.analysis.AnalysisLibrary;
-import ca.phon.app.opgraph.analysis.AnalysisRunner;
-import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.SimpleEditor;

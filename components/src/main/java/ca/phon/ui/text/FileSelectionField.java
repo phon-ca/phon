@@ -25,8 +25,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.SystemColor;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
@@ -40,9 +38,6 @@ import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dnd.FileTransferHandler;

@@ -22,7 +22,6 @@ import javax.swing.JMenuBar;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
-import ca.phon.app.opgraph.analysis.SaveAnalysisAction;
 import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ui.action.PhonActionEvent;

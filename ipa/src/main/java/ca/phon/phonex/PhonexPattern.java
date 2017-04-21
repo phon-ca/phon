@@ -18,7 +18,6 @@
  */
 package ca.phon.phonex;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.runtime.ANTLRStringStream;

@@ -18,15 +18,12 @@
  */
 package ca.phon.app.log;
 
-import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -35,9 +32,6 @@ import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
-import ca.hedlund.desktopicons.DesktopIcons;
-import ca.hedlund.desktopicons.StockIcon;
-import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
