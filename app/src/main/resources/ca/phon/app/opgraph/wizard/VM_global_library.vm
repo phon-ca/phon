@@ -74,3 +74,13 @@
 </table>
 #end
 #end
+
+#macro( printTableWithCaptionExcludingColumns $table $caption $excludedColumns )
+#set($columnNames = [])
+#set($maxCol = $table.columnCount - 1)
+#foreach($col in [0..$maxCol])
+#set($colName = $table.getColumnTitle($col))
+#if(!$excludedColumns.contains($colName))$columnNames.add($colName)#end
+#end
+#printTableWithCaption( $table $caption $columnNames )
+#end
