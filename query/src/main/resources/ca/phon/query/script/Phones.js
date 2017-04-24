@@ -158,7 +158,14 @@ function query_record(recordIndex, record) {
 
 	// perform searches
 	for (var i = 0; i < groups.length; i++) {
+		var alignedMetadata = new java.util.TreeMap();
 		var group = groups[i];
+
+		if(filters.alignedGroup.isUseFilter()) {
+			alignedGroup = group.getTier(filters.alignedGroup.tier);
+			alignedMetadata.put(filters.alignedGroup.tier, alignedGroup.toString());
+		}
+
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
 		var phoneMap = group.phoneAlignment;
 
@@ -182,6 +189,8 @@ function query_record(recordIndex, record) {
 				// check aligned word pattern if necessary
 				if (filters.alignedWord.isUseFilter()) {
 					addWord = filters.alignedWord.check_word(word);
+					alignedWord = word.getTier(filters.alignedWord.tier);
+					alignedMetadata.put(filters.alignedWord.tier + " (Word)", alignedWord.toString());
 				}
 
 				if (addWord == true) {
@@ -251,6 +260,8 @@ function query_record(recordIndex, record) {
 				var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual(): group.getIPATarget());
 				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()): null);
 				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned): new IPATranscript());
+
+				result.metadata.putAll(alignedMetadata);
 
 				// find location of aligned value in group
 				var groupStartIdx =
