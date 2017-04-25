@@ -1,13 +1,13 @@
-# Phon 2.2 Changes
-
 ## Changes from Phon 2.1.8
 
 ### General
 
- * The 'Workspace' window has been renamed 'Welcome' and now includes a list of recently used projects
+ * The 'Workspace' window has been renamed 'Welcome' and now includes a list of recently used projects as well as support for multiple Workspace folders
  * Added support for additional IPA characters
  * New phonex flag '/o' for allowing overlapping queries
  * Improved media file suggestions when typing in media location field
+ * Improved functions for corpus anonymization
+ * Addition of syllabification algorithms for several languages (e.g. German, Slovenian, Icelandic) and improvements to existing algorithms
 
 ### TextGrids
 
@@ -16,25 +16,31 @@
  * TextGrids no longer generate '#' intervals between groups
  * TextGrid generation now includes empty intervals when gaps exist between records
  * TextGrid generation can now add tiers to existing TextGrids
- * New TextGrid tier management window for renaming, ordering, and deleting TextGrid tiers.
+ * New TextGrid tier management window for renaming, ordering, and deleting TextGrid tiers
+
+### Dictionaries of IPA forms
+
+ * New dictionary for Latin-American Spanish
+ * Updated system for transliteration in Arabic, which provides support for additional dialects
 
 ### Composer
 
  * New UI for creating Query Reports and Analyses
- * Reports are creating through a visual editor displaying operations as nodes in a graph.
+ * For all analyses, the user is guided through the logical steps by a new 'breadcrumb' wizard
+ * Reports are created through a visual editor displaying operations as nodes in a graph
  * A 'simple' composer is available for quick development of a 'macro' Query Report/Analysis using existing documents
 
 ### Queries & Reporting
 
- * Word List, Word March, PCC, and PMLU queries have been moved to the analysis menu
+ * Word List, Word March, PCC, and PMLU queries have been moved to the Analysis menu
  * Query Reports have been redesigned using Composer.  The following Query Reports are available:
   * Query Information - general information about the query
   * Aggregate (IPA results) - aggregate inventory of results based on IPA Target <-> IPA Actual pairs, organized by session and sorted phonetically
-  * Aggregate (non-IPA results) - aggregate inventory of results based, organized by session and sort alphabetically
+  * Aggregate (non-IPA results) - aggregate inventory of results organized by session and sort alphabetically
   * Listing - listing of all results
   * Transcript Variability - # repeated, # correct, # one or more correct, # same error, # different errors, average Levenshtein distance for IPA Target <-> IPA Actual pairs in query results
   * Phone Dispersion
-  * Acoustic Data Reports: Duration, Pitch, Intensity, and Formants
+  * Acoustic Data Reports: Duration, Pitch, Intensity, Formants, and Spectral moments
 
 ### Analyses
 
