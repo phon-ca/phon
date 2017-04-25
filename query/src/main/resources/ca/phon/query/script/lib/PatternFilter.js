@@ -290,7 +290,7 @@ exports.PatternFilter = function (id) {
         matchGroupParamInfo.title,
         matchGroupParamInfo.numCols);
         matchGroupParam.setEnabled(0, false);
-        matchGroupParam.setVisible(2, filterTypeParamInfo.def == PatternType.PHONEX );
+        matchGroupParam.setVisible(2, filterTypeParamInfo.def == exports.PatternType.PHONEX );
 
         filterParam = new StringScriptParam(
         filterParamInfo.id,
