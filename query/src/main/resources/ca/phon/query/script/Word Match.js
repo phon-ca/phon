@@ -4,10 +4,10 @@
  * @author Greg J. Hedlund <ghedlund@mun.ca>
  * Date: 31 Oct 2014
  */
- 
+
 /*
 params = {label, "", "Whole-word comparison of IPA Actual vs. IPA Target forms."};
-*/
+ */
 
 importClass(Packages.ca.phon.syllable.SyllableConstituentType)
 importClass(Packages.ca.phon.orthography.Orthography)
@@ -37,11 +37,11 @@ var ignoreTruncatedParam;
 var ignoreTruncated = ignoreTruncatedParamInfo.def;
 
 var compTypesParamInfo = {
-	"id":["includeExactMatch", "includeCVPatternMatch", "includeStressPatternMatch"],
+	"id":[ "includeExactMatch", "includeCVPatternMatch", "includeStressPatternMatch"],
 	"title": "Comparators:",
-	"desc":["Exact match", "CV pattern (see options below)", "Stress pattern"],
-	"def":[true, true, true],
-	"numCols":1
+	"desc":[ "Exact match", "CV pattern (see options below)", "Stress pattern"],
+	"def":[ true, true, true],
+	"numCols": 1
 };
 var compTypesParam;
 var includeExactMatch = compTypesParamInfo.def[0];
@@ -49,11 +49,11 @@ var includeCVPatternMatch = compTypesParamInfo.def[1];
 var includeStressPatternMatch = compTypesParamInfo.def[2];
 
 var cvOptionsParamInfo = {
-    "id":["includeSyllableBoundaries", "includeImplicitBoundaries", "includeStressMarkers"],
-    "title": "CV Pattern Options",
-    "desc":[ "Include syllable boundaries", "Include implicit boundaries", "Include stress markers"],
-    "def":[ true, true, true],
-    "numCols": 1
+	"id":[ "includeSyllableBoundaries", "includeImplicitBoundaries", "includeStressMarkers"],
+	"title": "CV Pattern Options",
+	"desc":[ "Include syllable boundaries", "Include implicit boundaries", "Include stress markers"],
+	"def":[ true, true, true],
+	"numCols": 1
 };
 var cvOptionsParam;
 var includeSyllableBoundaries = cvOptionsParamInfo.def[0];
@@ -73,7 +73,7 @@ var mdataStressField = "Word Stress Match";
 var session;
 
 function begin_search(s) {
-    session = s;
+	session = s;
 }
 
 function setup_params(params) {
@@ -81,42 +81,42 @@ function setup_params(params) {
 	params.add(cvOptionsSep);
 	
 	ignoreTruncatedParam = new BooleanScriptParam(
-		ignoreTruncatedParamInfo.id,
-		ignoreTruncatedParamInfo.desc,
-		ignoreTruncatedParamInfo.title,
-		ignoreTruncatedParamInfo.def);
+	ignoreTruncatedParamInfo.id,
+	ignoreTruncatedParamInfo.desc,
+	ignoreTruncatedParamInfo.title,
+	ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
 	
 	compTypesParam = new MultiboolScriptParam(
-		compTypesParamInfo.id,
-		compTypesParamInfo.def,
-		compTypesParamInfo.desc,
-		compTypesParamInfo.title,
-		compTypesParamInfo.numCols);
+	compTypesParamInfo.id,
+	compTypesParamInfo.def,
+	compTypesParamInfo.desc,
+	compTypesParamInfo.title,
+	compTypesParamInfo.numCols);
 	params.add(compTypesParam);
-
+	
 	cvOptionsParam = new MultiboolScriptParam(
-		cvOptionsParamInfo.id,
-		cvOptionsParamInfo.def,
-		cvOptionsParamInfo.desc,
-		cvOptionsParamInfo.title,
-		cvOptionsParamInfo.numCols);
+	cvOptionsParamInfo.id,
+	cvOptionsParamInfo.def,
+	cvOptionsParamInfo.desc,
+	cvOptionsParamInfo.title,
+	cvOptionsParamInfo.numCols);
 	params.add(cvOptionsParam);
 	
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-		
+	
 	filters.word.searchByWordEnabled = false;
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
 	params.add(wordsep);
 	filters.alignedWord.param_setup(params);
-
+	
 	ignoreTruncatedParam = new BooleanScriptParam(ignoreTruncatedParamInfo.id,
-		ignoreTruncatedParamInfo.title, ignoreTruncatedParamInfo.desc,
-		ignoreTruncatedParamInfo.def);
+	ignoreTruncatedParamInfo.title, ignoreTruncatedParamInfo.desc,
+	ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
 	
 	filters.speaker.param_setup(params);
@@ -134,25 +134,24 @@ function setup_params(params) {
  * returns:
  *	void
  *******************************/
-function query_record(recordIndex, record)
-{
-	if(!filters.speaker.check_speaker(record.speaker)) return;
-    
+function query_record(recordIndex, record) {
+	if (! filters.speaker.check_speaker(record.speaker)) return;
+	
 	var searchObjects = filters.group.getRequestedGroups(record);
 	// check aligned group for each group returned
-	if(filters.alignedGroup.isUseFilter()) {
-	    searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
+	if (filters.alignedGroup.isUseFilter()) {
+		searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
 	}
 	
-	for(var gIdx = 0; gIdx < searchObjects.length; gIdx++) {
+	for (var gIdx = 0; gIdx < searchObjects.length; gIdx++) {
 		var group = searchObjects[gIdx];
 		var words = filters.word.getRequestedWords(group, "IPA Target");
 		
-		for(var wIdx = 0; wIdx < words.length; wIdx++) {
+		for (var wIdx = 0; wIdx < words.length; wIdx++) {
 			var word = words[wIdx];
-			if(filters.alignedWord.isUseFilter()) {
+			if (filters.alignedWord.isUseFilter()) {
 				var alignedWord = word.getTier(filters.alignedWord.tierName);
-				if(!filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
+				if (! filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
 			}
 			
 			checkWordMatch(recordIndex, record, word);
@@ -161,14 +160,14 @@ function query_record(recordIndex, record)
 }
 
 function checkWordMatch(recordIndex, record, obj) {
-	var word = (obj.IPATarget != null ? obj.IPATarget : new IPATranscript());
-	var aligned = (obj.IPAActual != null ? obj.IPAActual : new IPATranscript());
-	var ortho = (obj.orthography != null ? obj.orthography : new Orthography());
+	var word = (obj.IPATarget != null ? obj.IPATarget: new IPATranscript());
+	var aligned = (obj.IPAActual != null ? obj.IPAActual: new IPATranscript());
+	var ortho = (obj.orthography != null ? obj.orthography: new Orthography());
 	
-	if((aligned ==  null || aligned.length() == 0) && ignoreTruncated == true) {
+	if ((aligned == null || aligned.length() == 0) && ignoreTruncated == true) {
 		return;
 	}
-
+	
 	var result = factory.createResult();
 	result.recordIndex = recordIndex;
 	result.schema = "ALIGNED";
@@ -200,11 +199,11 @@ function checkWordMatch(recordIndex, record, obj) {
 	rv.data = aligned;
 	result.addResultValue(rv);
 	
-	if(includeExactMatch == true) {
+	if (includeExactMatch == true) {
 		result.metadata.put(mdataExactField, word.toString().equals(aligned.toString()) + "");
 	}
 	
-	if(includeCVPatternMatch == true) {
+	if (includeCVPatternMatch == true) {
 		var targetCVPattern = cvPattern2(word, includeStressMarkers, includeSyllableBoundaries, includeImplicitBoundaries);
 		var alignedCVPattern = cvPattern2(aligned, includeStressMarkers, includeSyllableBoundaries, includeImplicitBoundaries);
 		
@@ -215,7 +214,7 @@ function checkWordMatch(recordIndex, record, obj) {
 		result.metadata.put(mdataCVField, exactMatch + "");
 	}
 	
-	if(includeStressPatternMatch == true) {
+	if (includeStressPatternMatch == true) {
 		var targetStressPattern = word.stressPattern;
 		var actualStressPattern = aligned.stressPattern;
 		
@@ -234,11 +233,12 @@ function checkWordMatch(recordIndex, record, obj) {
  */
 function cvPattern2(obj, includeStressMarkers, includeSyllableBoundaries, includeImplicitBoundaries) {
 	var retVal = "";
-
-	if(includeSyllableBoundaries == true && includeImplicitBoundaries == true) {
-		for(var sIdx = 0; sIdx < obj.syllables().size(); sIdx++) {
+	
+	if (includeSyllableBoundaries == true && includeImplicitBoundaries == true) {
+		for (var sIdx = 0; sIdx < obj.syllables().size();
+		sIdx++) {
 			var syll = obj.syllables().get(sIdx);
-			retVal += (sIdx > 0 && !syll.matches(".:S.*") ? "." : "") + cvPattern(syll, includeStressMarkers, includeSyllableBoundaries);
+			retVal += (sIdx > 0 && ! syll.matches(".:S.*") ? ".": "") + cvPattern(syll, includeStressMarkers, includeSyllableBoundaries);
 		}
 	} else {
 		retVal = cvPattern(obj, includeStressMarkers, includeSyllableBoundaries);
@@ -246,29 +246,30 @@ function cvPattern2(obj, includeStressMarkers, includeSyllableBoundaries, includ
 	
 	return retVal;
 }
- 
+
 function cvPattern(obj, includeStressMarkers, includeSyllableBoundaries) {
 	var retVal = "";
-
-	for(var pIdx = 0; pIdx < obj.length(); pIdx++) {
+	
+	for (var pIdx = 0; pIdx < obj.length();
+	pIdx++) {
 		var p = obj.elementAt(pIdx);
 		
-		if(p.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
-			if(includeSyllableBoundaries == true && pIdx > 0)
-				retVal += ".";
+		if (p.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
+			if (includeSyllableBoundaries == true && pIdx > 0)
+			retVal += ".";
 			continue;
-		} else if(p.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
-			if(includeStressMarkers == true)
-				retVal += p.getText();
+		} else if (p.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
+			if (includeStressMarkers == true)
+			retVal += p.getText();
 			continue;
-		} else if(p.getScType() == SyllableConstituentType.WORDBOUNDARYMARKER) {
+		} else if (p.getScType() == SyllableConstituentType.WORDBOUNDARYMARKER) {
 			retVal += " ";
 			continue;
 		}
 		
-		if(p.getFeatureSet().hasFeature("Consonant")) {
+		if (p.getFeatureSet().hasFeature("Consonant")) {
 			retVal += "C";
-		} else if(p.getFeatureSet().hasFeature("Vowel")) {
+		} else if (p.getFeatureSet().hasFeature("Vowel")) {
 			retVal += "V";
 		}
 	}
