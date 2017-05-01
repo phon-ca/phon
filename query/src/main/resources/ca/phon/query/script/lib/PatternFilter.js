@@ -569,8 +569,7 @@ exports.PatternFilter = function (id) {
 			while (phonexMatcher.find()) {
 				var groupData = new Array();
 
-				for (grpIdx = 1; grpIdx <= phonexMatcher.groupCount();
-				grpIdx++) {
+				for (grpIdx = 1; grpIdx <= phonexMatcher.groupCount(); grpIdx++) {
 					grpName = phonexPattern.groupName(grpIdx);
 					if (phonexMatcher.start(grpIdx) >= 0) {
 						groupData[grpIdx] = {
@@ -657,6 +656,19 @@ exports.PatternFilter = function (id) {
 		return retVal;
 	};
 
+	var findResult = function(results, startIndex, endIndex) {
+		for(var i = 0; i < results.length; i++) {
+			var rStart = results[i].start;
+			var rEnd = results[i].end;
+
+			if(startIndex == rStart && endIndex == rEnd)
+				return results[i];
+
+			if(rStart > startIndex) break; // results are in order, no need to continue
+		}
+		return null;
+	};
+
 	/**
 	 * Returns all occurances of the indicated pattern
 	 * within the given object.
@@ -687,10 +699,13 @@ exports.PatternFilter = function (id) {
 
 			case 2:
 			filters = splitFilter(this.filter);
-			for(i = 0; i < filters.length; i++) {
+			for(var i = 0; i < filters.length; i++) {
 				sublist = findPhonex(obj, filters[i].trim(), this.exactMatch, this.allowOverlap);
-				for(j = 0; j < sublist.length; j++)
-					retVal.push(sublist[j]);
+				for(var j = 0; j < sublist.length; j++) {
+					r = findResult(retVal, sublist[j].start, sublist[j].end);
+					if(r == null)
+						retVal.push(sublist[j]);
+				}
 			}
 			break;
 
