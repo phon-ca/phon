@@ -53,22 +53,22 @@ var includeAlignedParam;
 var includeAligned = includeAlignedParamInfo.def;
 
 function setup_params(params) {
-	
+
 	filters.primary.setSelectedPatternType(PatternType.PHONEX);
 	filters.primary.param_setup(params);
 	filters.primary.set_required(true);
-	
+
 	// setup result filter section
 	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
 	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
 	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
-	
+
 	includeAlignedParam = new BooleanScriptParam(
 	includeAlignedParamInfo.id,
 	includeAlignedParamInfo.desc,
 	includeAlignedParamInfo.title,
 	includeAlignedParamInfo.def);
-	
+
 	params.add(resultFilterSection);
 	params.add(includeAlignedParam);
 	params.add(targetLbl);
@@ -77,13 +77,13 @@ function setup_params(params) {
 	params.add(actualLbl);
 	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
 	filters.actualResultFilter.param_setup(params);
-	
+
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-	
+
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
@@ -101,26 +101,26 @@ function setup_params(params) {
 	var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
 	filters.wordPattern.setEnabled(enabled);
 	filters.alignedWord.setEnabled(enabled);
-	
+
 	filters.syllable.param_setup(params);
 	filters.speaker.param_setup(params);
-	
+
 	// add metadata options
 	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
 	params.add(metadataSep);
-	
+
 	var spLbl = new LabelScriptParam("", "<html><b>Stress Pattern</b></html>");
 	params.add(spLbl);
 	metadataOptions.stressPattern.param_setup(params);
-	
+
 	var cvLbl = new LabelScriptParam("", "<html><b>CGV Pattern</b></html>");
 	params.add(cvLbl);
 	metadataOptions.cvPattern.param_setup(params);
-	
+
 	var pccStandardLbl = new LabelScriptParam("", "<html><b>PCC/PVC (standard)</b></html>");
 	params.add(pccStandardLbl);
 	metadataOptions.pcc_standard.param_setup(params);
-	
+
 	var pccAlignedLbl = new LabelScriptParam("", "<html><b>PCC/PVC (aligned)</b></html>");
 	params.add(pccAlignedLbl);
 	metadataOptions.pcc_aligned.param_setup(params);
@@ -144,61 +144,61 @@ function begin_search(s) {
 function query_record(recordIndex, record) {
 	// check participant filter
 	if (! filters.speaker.check_speaker(record.speaker)) return;
-	
+
 	// check group+groupPattern filters
 	var groups = filters.group.getRequestedGroups(record);
 	if (filters.groupPattern.isUseFilter()) {
 		groups = filters.groupPattern.filter_groups(groups, searchTier);
 	}
-	
+
 	// check aligned group for each group returned
 	if (filters.alignedGroup.isUseFilter()) {
 		groups = filters.alignedGroup.filter_groups(record, groups);
 	}
-	
+
 	// perform searches
 	for (var i = 0; i < groups.length; i++) {
 		var alignedMetadata = new java.util.TreeMap();
 		var group = groups[i];
-		
+
 		if (filters.alignedGroup.isUseFilter()) {
 			alignedGroup = group.getTier(filters.alignedGroup.tier);
 			alignedMetadata.put(filters.alignedGroup.tier, alignedGroup.toString());
 		}
-		
+
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
 		var phoneMap = group.phoneAlignment;
-		
+
 		var toSearch = new Array();
 		toSearch.push(ipa);
-		
+
 		// search by word?
 		if (filters.word.isUseFilter()) {
 			toSearch.length = 0;
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j < selectedWords.length; j++) {
 				var word = selectedWords[j];
-				
+
 				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
 				var addWord = (wordIpa != null);
 				// check word pattern if necessary
 				if (filters.wordPattern.isUseFilter()) {
 					addWord = filters.wordPattern.check_filter(wordIpa);
 				}
-				
+
 				// check aligned word pattern if necessary
 				if (filters.alignedWord.isUseFilter()) {
 					addWord = filters.alignedWord.check_word(word);
 					alignedWord = word.getTier(filters.alignedWord.tier);
 					alignedMetadata.put(filters.alignedWord.tier + " (Word)", alignedWord.toString());
 				}
-				
+
 				if (addWord == true) {
 					toSearch.push(wordIpa);
 				}
 			}
 		}
-		
+
 		// search by syllable?
 		if (filters.syllable.isUseFilter()) {
 			var syllList = new Array();
@@ -206,23 +206,23 @@ function query_record(recordIndex, record) {
 				var obj = toSearch[j];
 				var aligned = (phoneMap != null ? phoneMap: new Packages.ca.phon.ipa.alignment.PhoneMap());
 				var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
-				
+
 				for (k = 0; k < sylls.length; k++) {
 					syllList.push(sylls[k]);
 				}
 			}
 			toSearch = syllList;
 		}
-		
+
 		for (j = 0; j < toSearch.length; j++) {
 			var obj = toSearch[j];
 			var matches = filters.primary.find_pattern(obj);
 			var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter: filters.actualResultFilter);
 			var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter: filters.targetResultFilter);
-			
+
 			for (k = 0; k < matches.length; k++) {
 				var match = matches[k];
-				
+
 				if (match.groups) {
 					var xgrp = match.groups[ "X"];
 					if (xgrp) {
@@ -235,34 +235,34 @@ function query_record(recordIndex, record) {
 						match = newMatch;
 					}
 				}
-				
+
 				if (primaryFilter.isUseFilter()) {
 					if (! primaryFilter.check_filter(new IPATranscript(match.value))) {
 						continue;
 					}
 				}
-				
+
 				var result = factory.createResult();
 				// calculate start/end positions of data in text
 				var startIndex = ipa.stringIndexOf(match.value);
 				var length = match.value.toString().length();
-				
+
 				result.recordIndex = recordIndex;
 				result.schema = "LINEAR";
-				
+
 				var rv = factory.createResultValue();
 				rv.tierName = searchTier;
 				rv.groupIndex = group.groupIndex;
 				rv.range = new Range(startIndex, startIndex + length, false);
 				rv.data = (match.value != null ? new IPATranscript(match.value): new IPATranscript());
 				result.addResultValue(rv);
-				
+
 				var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual(): group.getIPATarget());
 				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()): null);
 				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned): new IPATranscript());
-				
+
 				result.metadata.putAll(alignedMetadata);
-				
+
 				// find location of aligned value in group
 				var groupStartIdx =
 				(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)): 0);
@@ -270,13 +270,13 @@ function query_record(recordIndex, record) {
 				(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length() -1)): 0);
 				var alignedIpa =
 				(alignedIpaElements.length() > 0 ? alignedGroup.subsection(groupStartIdx, groupEndIdx + 1): new IPATranscript());
-				
+
 				if (alignedFilter.isUseFilter()) {
 					if (! alignedFilter.check_filter(alignedIpa)) {
 						continue;
 					}
 				}
-				
+
 				if (includeAligned == true) {
 					var alignedRv = factory.createResultValue();
 					alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual": "IPA Target");
@@ -284,14 +284,14 @@ function query_record(recordIndex, record) {
 					if (aligned != null && aligned.length > 0) {
 						var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
 						var alignedLength = alignedIpa.toString().length();
-						
+
 						alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, false);
 						alignedRv.data = alignedIpa;
 					} else {
 						alignedRv.range = new Range(0, 0, true);
 						alignedRv.data = "";
 					}
-					
+
 					result.addResultValue(alignedRv);
 					result.schema = "ALIGNED";
 					calcMetadata(record, group, result.metadata,
@@ -301,18 +301,18 @@ function query_record(recordIndex, record) {
 					calcMetadata(record, group, result.metadata,
 					(match.value == null ? null: new IPATranscript(match.value)), null);
 				}
-				
+
 				// append named-group information (if any)
 				if (match.groups) {
 					groupKeys = Object.keys(match.groups);
 					for (keyIdx = 0; keyIdx < groupKeys.length; keyIdx++) {
 						var key = groupKeys[keyIdx];
-						if (! /^[0-9]+$/.test(key) && key != 'X') {
+						if (/^[a-zA-Z]\w*$/.test(key) && key != 'X') {
 							result.metadata.put(key, match.groups[key].value.toString());
 						}
 					}
 				}
-				
+
 				results.addResult(result);
 			}
 		}
@@ -326,11 +326,11 @@ function query_record(recordIndex, record) {
 /* Generate metadata based on parmeters */
 function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
 	var retVal = metadata;
-	
+
 	if (metadataOptions.stressPattern.include == true) {
 		var tsp = (ipaTVal == null ? null: ipaTVal.stressPattern);
 		var asp = (ipaAVal == null ? null: ipaAVal.stressPattern)
-		
+
 		if (tsp != null && asp != null && metadataOptions.stressPattern.separate == false) {
 			var sp = tsp + " \u2194 " + asp;
 			retVal.put("SP", sp);
@@ -345,11 +345,11 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
 			}
 		}
 	}
-	
+
 	if (metadataOptions.cvPattern.include == true) {
 		var tcv = (ipaTVal == null ? null: ipaTVal.cvPattern);
 		var acv = (ipaAVal == null ? null: ipaAVal.cvPattern);
-		
+
 		if (tcv != null && acv != null && metadataOptions.cvPattern.separate == false) {
 			var cv = tcv + " \u2194 " + acv;
 			retVal.put("CGV", cv);
@@ -364,7 +364,7 @@ function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
 			}
 		}
 	}
-	
+
 	if (group != null) {
 		metadataOptions.pcc_standard.setup_pcc_standard_metadata(group, retVal);
 		metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(group, retVal);
