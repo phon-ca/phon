@@ -2,66 +2,142 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ca.phon.app.project;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import ca.phon.project.Project;
 import ca.phon.session.Participant;
-import ca.phon.session.ParticipantRole;
-import ca.phon.session.Participants;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
 import ca.phon.session.TierDescription;
+import ca.phon.worker.PhonTask;
 
 /**
  * Handle merging of sessions
  *
  */
-public class SessionMerger {
-	
-	private Map<Participant, Participant> participantMap = 
-			new HashMap<>();
-	
+public class SessionMerger extends PhonTask {
+
+	private final static Logger LOGGER = Logger.getLogger(SessionMerger.class.getName());
+
+	private final Project project;
+
+	private Set<SessionPath> sessions;
+
+	private Set<Participant> participants;
+
+	private Map<SessionPath, RecordFilter> filterMap;
+
+	private Session mergedSession;
+
+	final Comparator<Participant> participantComparator = (p1, p2) -> {
+		int retVal = p1.getRole().compareTo(p2.getRole());
+		if(retVal == 0) {
+			final String p1Name = (p1.getName() == null ? "" : p1.getName());
+			final String p2Name = (p2.getName() == null ? "" : p2.getName());
+			retVal = p1Name.compareTo(p2Name);
+		}
+		return retVal;
+	};
+
+	public SessionMerger(Project project) {
+		super();
+
+		this.project = project;
+
+		this.sessions = new LinkedHashSet<>();
+		this.participants = new LinkedHashSet<>();
+
+		mergedSession = SessionFactory.newFactory().createSession();
+
+		this.filterMap = new TreeMap<>( (p1, p2) -> p1.toString().compareTo(p2.toString()) );
+	}
+
+	public Session getMergedSession() {
+		return this.mergedSession;
+	}
+
+	public void setMergedSession(Session session) {
+		this.mergedSession = session;
+	}
+
+	public Set<SessionPath> getSessionPaths() {
+		return this.sessions;
+	}
+
+	public void addSessionPath(SessionPath sp) {
+		this.sessions.add(sp);
+	}
+
+	public Set<Participant> getParticipants() {
+		return this.participants;
+	}
+
+	public void addParticipant(Participant participant) {
+		this.participants.add(participant);
+	}
+
+	public void setRecordFilter(SessionPath path, RecordFilter filter) {
+		filterMap.put(path, filter);
+	}
+
+	public RecordFilter getRecordFilter(SessionPath path) {
+		return filterMap.get(path);
+	}
+
+	public Session mergeSessions() throws IOException {
+		for(SessionPath sessionPath:getSessionPaths()) {
+			final Session session = project.openSession(sessionPath.getCorpus(), sessionPath.getSession());
+			mergeSession(getMergedSession(), session, getRecordFilter(sessionPath));
+		}
+
+		return getMergedSession();
+	}
+
 	/**
 	 * Merge the given sessions using the given
 	 * utterance filters.
-	 * 
+	 *
 	 * @param dest
 	 * @param src
 	 * @param filter
 	 */
 	public void mergeSession(Session dest, Session src,
 			RecordFilter filter) {
-		participantMap.clear();
-		// add participants first
-		addParticipants(dest, src);
-		
 		mergeDependentTiers(dest, src);
-		
+
 		// add selected records
 		addRecordsFromSession(dest, src, filter);
 	}
-	
+
 	/**
 	 * Merge dependent tiers.
-	 * 
+	 *
 	 */
 	public void mergeDependentTiers(Session dest, Session src) {
 		final SessionFactory factory = SessionFactory.newFactory();
@@ -76,7 +152,7 @@ public class SessionMerger {
 					break;
 				}
 			}
-			
+
 			if(newDesc == null) {
 				// add new dep tier
 				newDesc = factory.createTierDescription(tierDesc.getName(), tierDesc.isGrouped());
@@ -84,63 +160,46 @@ public class SessionMerger {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add filtered utterances to new transcript
-	 * 
+	 *
 	 * @param dest
 	 * @param src
 	 * @param filter
 	 */
-	private void addRecordsFromSession(Session dest, 
+	private void addRecordsFromSession(Session dest,
 			Session src, RecordFilter filter) {
 		for(int i = 0; i < src.getRecordCount(); i++) {
 			final Record r = src.getRecord(i);
-			if(filter.checkRecord(r)) {
-				r.setSpeaker(participantMap.get(r.getSpeaker()));
+			if(!filter.checkRecord(r)) continue;
+			final Participant speaker = r.getSpeaker();
+			Participant sessionParticipant = null;
+			for(Participant p:participants) {
+				if(participantComparator.compare(speaker, p) == 0) {
+					sessionParticipant = p;
+					break;
+				}
+			}
+			if(sessionParticipant != null) {
+				r.setSpeaker(sessionParticipant);
 				dest.addRecord(r);
 			}
 		}
 	}
-	
-	private void addParticipants(Session dest, Session src) {
-		final SessionFactory factory = SessionFactory.newFactory();
-		// add each participant to the 
-		// new transcript.  Make sure not
-		// to duplicate names
-		for(int i = 0; i < src.getParticipantCount(); i++) {
-			final Participant srcPart = src.getParticipant(i);
-			final String speakerName = srcPart.toString();
-			
-			Participant destPart = null;
-			for(int j = 0; j < dest.getParticipantCount(); j++) {
-				final Participant dp = dest.getParticipant(j);
-				if(dp.toString().equalsIgnoreCase(speakerName)) {
-					destPart = dp;
-					participantMap.put(srcPart, destPart);
-					break;
-				}
-			}
-			
-			if(destPart == null) {
-				String role = srcPart.getRole().getId();
-				// ensure unique ids for participants
-				Map<ParticipantRole, Integer> roleCount = dest.getParticipants().getRoleCount();
-				if(roleCount.get(srcPart.getRole()) != null
-						&& roleCount.get(srcPart.getRole()) > 0) {
-					int cnt = roleCount.get(srcPart.getRole());
-					role = srcPart.getRole().getId().substring(0, 2) + cnt;
-				}
-				
-				destPart = factory.createParticipant();
-				Participants.copyParticipantInfo(srcPart, destPart);
-				destPart.setId(role);
-				
-				participantMap.put(srcPart, destPart);
-				dest.addParticipant(destPart);
-			}
+
+	@Override
+	public void performTask() {
+		setStatus(TaskStatus.RUNNING);
+
+		try {
+			mergeSessions();
+			setStatus(TaskStatus.FINISHED);
+		} catch (IOException e) {
+			super.err = e;
+			setStatus(TaskStatus.ERROR);
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
-		
 	}
 
 }
