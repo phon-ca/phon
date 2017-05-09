@@ -29,9 +29,25 @@ import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
+import ca.phon.util.PrefHelper;
 
 @PhonPlugin(name="check", version="1", minPhonVersion="2.1.0")
 public class OverlappingSegmentsCheck implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
+
+	/** Overlap tolerance in ms */
+	public final static String OVERLAP_TOLERANCE_PROPERTY =
+			OverlappingSegmentsCheck.class.getName() + ".overlapTolerance";
+	public final static int DEFAULT_OVERLAP_TOLERANCE = 200;
+	private int overlapTolerance =
+			PrefHelper.getInt(OVERLAP_TOLERANCE_PROPERTY, DEFAULT_OVERLAP_TOLERANCE);
+
+	public int getOverlapTolerance() {
+		return this.overlapTolerance;
+	}
+
+	public void setOverlapTolerance(int overlapTolerance) {
+		this.overlapTolerance = overlapTolerance;
+	}
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -46,7 +62,9 @@ public class OverlappingSegmentsCheck implements SessionCheck, IPluginExtensionP
 	@Override
 	public void checkSession(SessionValidator validator, Session session, Map<String, Object> options) {
 		final Map<Participant, Float> endTimes = new HashMap<>();
+		final Map<Participant, Integer> lastRecords = new HashMap<>();
 		endTimes.put(Participant.UNKNOWN, 0.0f);
+		lastRecords.put(Participant.UNKNOWN, 0);
 
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			final Record r = session.getRecord(rIdx);
@@ -54,6 +72,9 @@ public class OverlappingSegmentsCheck implements SessionCheck, IPluginExtensionP
 			if(lastEndTime == null) {
 				lastEndTime = 0.0f;
 				endTimes.put(r.getSpeaker(), lastEndTime);
+			}
+			if(lastRecords.get(r.getSpeaker()) == null) {
+				lastRecords.put(r.getSpeaker(), 0);
 			}
 			final Tier<MediaSegment> segmentTier = r.getSegment();
 			if(segmentTier.numberOfGroups() == 1
@@ -64,13 +85,16 @@ public class OverlappingSegmentsCheck implements SessionCheck, IPluginExtensionP
 				if(segment.getStartValue() == 0f && segment.getEndValue() == 0f) continue;
 
 				final float currentStartTime = segment.getStartValue();
-				if(currentStartTime < lastEndTime) {
+				final float diffMs = currentStartTime - lastEndTime;
+
+				if( (diffMs < 0) && (Math.abs(diffMs) > getOverlapTolerance()) ) {
 					// issue warning
-					final ValidationEvent evt = new ValidationEvent(session, rIdx, "Segment overlaps with previous record for " + r.getSpeaker());
+					final ValidationEvent evt = new ValidationEvent(session, rIdx, "Segment overlaps with previous record for " + r.getSpeaker() + " (#" + (lastRecords.get(r.getSpeaker())+1) + ")");
 					validator.fireValidationEvent(evt);
 				}
 				lastEndTime = segment.getEndValue();
 				endTimes.put(r.getSpeaker(), lastEndTime);
+				lastRecords.put(r.getSpeaker(), rIdx);
 			}
 		}
 	}
