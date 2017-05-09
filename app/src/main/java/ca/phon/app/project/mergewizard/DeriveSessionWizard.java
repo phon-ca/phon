@@ -20,11 +20,15 @@ package ca.phon.app.project.mergewizard;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -153,7 +157,11 @@ public class DeriveSessionWizard extends WizardFrame {
 				};
 				SwingUtilities.invokeLater(turnOffBack);
 
-				doMerge();
+				try {
+					doMerge();
+				} catch (IOException e) {
+					// TODO show user message
+				}
 
 				SwingUtilities.invokeLater(turnOnBack);
 			}
@@ -166,7 +174,27 @@ public class DeriveSessionWizard extends WizardFrame {
 	/**
 	 * Perform the merge.
 	 */
-	private void doMerge() {
+	private void doMerge() throws IOException {
+		final PrintWriter out = new PrintWriter(new OutputStreamWriter(console.getLogBuffer().getStdOutStream(), "UTF-8"));
+		Logger.getLogger("ca.phon").addHandler( new Handler() {
+
+			@Override
+			public void publish(LogRecord record) {
+				out.println(record.getMessage());
+				out.flush();
+			}
+
+			@Override
+			public void flush() {
+			}
+
+			@Override
+			public void close() throws SecurityException {
+
+			}
+
+		});
+
 		String corpus = step1.getMergedCorpusName();
 		String session = step1.getMergedSessionName();
 
@@ -261,13 +289,19 @@ public class DeriveSessionWizard extends WizardFrame {
 				mergedSession.setMediaLocation(mergedMedia);
 			}
 
+			LOGGER.info("Saving session...");
+
 			// save
 			final UUID writeLock = project.getSessionWriteLock(mergedSession);
 			project.saveSession(mergedSession, writeLock);
 			project.releaseSessionWriteLock(mergedSession, writeLock);
+
+			LOGGER.info("Finshed. New session has " + mergedSession.getRecordCount() + " records.");
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			return;
+			throw e;
+		} finally {
+			out.close();
 		}
 
 	}
