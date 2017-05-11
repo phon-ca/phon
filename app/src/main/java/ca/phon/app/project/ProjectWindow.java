@@ -821,7 +821,7 @@ public class ProjectWindow extends CommonModuleFrame
 		final NewSessionAction newSessionAct = new NewSessionAction(this, getSelectedCorpus(), sessionName);
 		newSessionAct.actionPerformed(pae.getActionEvent());
 		if(newSessionAct.isSessionCreated()) {
-//			onSwapNewAndCreateSession(createSessionButton);
+			onHideCreateSessionButton();
 			sessionList.setSelectedValue(sessionName, true);
 		}
 	}
