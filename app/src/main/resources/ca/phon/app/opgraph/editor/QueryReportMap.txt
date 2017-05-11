@@ -1,0 +1,2 @@
+default=macro/Generic Report.xml
+Phones=macro/Aligned IPA Results Report.xml
