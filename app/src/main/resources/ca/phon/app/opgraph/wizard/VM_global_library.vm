@@ -80,7 +80,9 @@
 #set($maxCol = $table.columnCount - 1)
 #foreach($col in [0..$maxCol])
 #set($colName = $table.getColumnTitle($col))
-#if(!$excludedColumns.contains($colName))$columnNames.add($colName)#end
+#if(!$excludedColumns.contains($colName))
+#set( $swallow = $columnNames.add($colName))
+#end
 #end
 #printTableWithCaption( $table $caption $columnNames )
 #end
