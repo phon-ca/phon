@@ -453,10 +453,10 @@ exports.PatternFilter = function (id) {
 			break;
 
 			case 2:
-			filters = splitFilter(this.filter);
+			var filters = splitFilter(this.filter);
 			for(i = 0; i < filters.length; i++) {
-				retVal |= checkPhonex(obj, filters[i].trim(), this.exactMatch, this.allowOverlap);
-				if(retVal == false) break;
+				var b = checkPhonex(obj, filters[i].trim(), this.exactMatch, this.allowOverlap);
+				retVal = (i == 0 ? b : retVal || b);
 			}
 			break;
 
