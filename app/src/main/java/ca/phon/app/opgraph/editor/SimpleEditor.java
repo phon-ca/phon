@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -102,6 +102,7 @@ import ca.gedge.opgraph.library.instantiators.Instantiator;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.menu.query.QueryMenuListener;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.MacroNodeData;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
@@ -110,6 +111,9 @@ import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
@@ -177,6 +181,8 @@ public class SimpleEditor extends CommonModuleFrame {
 	private JMenuBar menuBar;
 
 	private final OpgraphEditorModel model;
+
+	private boolean includeQueries = false;
 
 	private final BiFunction<OpGraph, Project, Runnable> runFactory;
 
@@ -335,6 +341,14 @@ public class SimpleEditor extends CommonModuleFrame {
 		super.setJMenuBar(menuBar);
 		this.menuBar = menuBar;
 		setupMenu();
+	}
+
+	public boolean isIncludeQueries() {
+		return this.includeQueries;
+	}
+
+	public void setIncludeQueries(boolean includeQueries) {
+		this.includeQueries = includeQueries;
 	}
 
 	protected void setupMenu() {
@@ -603,6 +617,8 @@ public class SimpleEditor extends CommonModuleFrame {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					}
 				} );
+			} else if(isIncludeQueries() && node.getUserObject() instanceof QueryScript) {
+				addQuery((QueryScript)node.getUserObject());
 			}
 		} else {
 			for(int i = 0; i < node.getChildCount(); i++) {
@@ -610,6 +626,11 @@ public class SimpleEditor extends CommonModuleFrame {
 				addDocuments(childNode);
 			}
 		}
+	}
+
+	private void addQuery(QueryScript queryScript) {
+		// create a new, empty analysis node
+
 	}
 
 	private void addDocument(File file) throws IOException, InstantiationException {
@@ -631,8 +652,6 @@ public class SimpleEditor extends CommonModuleFrame {
 
 			final URI uri = new URI("class", MacroNode.class.getName(), documentName);
 			final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator);
-
-//			final OpGraph graph = OpgraphIO.read(is);
 
 			final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData);
 			analysisNode.setName(documentName);
@@ -923,9 +942,56 @@ public class SimpleEditor extends CommonModuleFrame {
 	}
 
 	private TreeModel createTreeModel() {
-		final DefaultMutableTreeNode root =
-				new DefaultMutableTreeNode("All " + getModel().getNoun().getObj2(), true);
+		final DefaultMutableTreeNode root = new DefaultMutableTreeNode("Add-able Items", true);
 
+		final DefaultMutableTreeNode doucmentRoot =
+				new DefaultMutableTreeNode("All " + getModel().getNoun().getObj2(), true);
+		setupDocumentLibraryTree(doucmentRoot);
+		root.add(doucmentRoot);
+
+		if(isIncludeQueries()) {
+			final DefaultMutableTreeNode queryRoot =
+					new DefaultMutableTreeNode("Queries", true);
+			setupQueryLibraryTree(queryRoot);
+			root.add(queryRoot);
+		}
+
+
+		return new DefaultTreeModel(root);
+	}
+
+	private void setupQueryLibraryTree(DefaultMutableTreeNode root) {
+		final QueryScriptLibrary scriptLibrary = new QueryScriptLibrary();
+		final ResourceLoader<QueryScript> stockScriptLoader = scriptLibrary.stockScriptFiles();
+		for(QueryScript stockScript:stockScriptLoader) {
+			final DefaultMutableTreeNode queryScriptNode = new DefaultMutableTreeNode(stockScript, false);
+			root.add(queryScriptNode);
+		}
+
+		final ResourceLoader<QueryScript> userScriptLoader = scriptLibrary.userScriptFiles();
+		if(userScriptLoader.iterator().hasNext()) {
+			final DefaultMutableTreeNode userScriptRoot = new DefaultMutableTreeNode("User Library", true);
+			for(QueryScript userScript:userScriptLoader) {
+				final DefaultMutableTreeNode userScriptNode = new DefaultMutableTreeNode(userScript, false);
+				userScriptRoot.add(userScriptNode);
+			}
+			root.add(userScriptRoot);
+		}
+
+		if(getProject() != null) {
+			final ResourceLoader<QueryScript> projectScriptLoader = scriptLibrary.projectScriptFiles(getProject());
+			if(projectScriptLoader.iterator().hasNext()) {
+				final DefaultMutableTreeNode projectScriptRoot = new DefaultMutableTreeNode("Project Library");
+				for(QueryScript projectScript:projectScriptLoader) {
+					final DefaultMutableTreeNode projectScriptNode = new DefaultMutableTreeNode(projectScript, false);
+					projectScriptRoot.add(projectScriptNode);
+				}
+				root.add(projectScriptRoot);
+			}
+		}
+	}
+
+	private void setupDocumentLibraryTree(DefaultMutableTreeNode root) {
 		final ResourceLoader<URL> stockLoader = library.getStockGraphs();
 		final Iterator<URL> stockItr = stockLoader.iterator();
 		if(stockItr.hasNext()) {
@@ -1060,8 +1126,6 @@ public class SimpleEditor extends CommonModuleFrame {
 				root.add(projectNode);
 			}
 		}
-
-		return new DefaultTreeModel(root);
 	}
 
 	public OpgraphEditorModel getModel() {
