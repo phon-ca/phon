@@ -322,7 +322,7 @@ public class RecordImpl implements Record {
 
 	@Override
 	public boolean hasTier(String name) {
-		return getExtraTierNames().contains(name);
+		return (SystemTierType.tierFromString(name) != null || getExtraTierNames().contains(name));
 	}
 
 	@SuppressWarnings("unchecked")

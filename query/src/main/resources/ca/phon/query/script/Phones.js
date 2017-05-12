@@ -7,6 +7,7 @@ params =
 var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
+var TierList = require("lib/TierList").TierList;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
@@ -27,9 +28,11 @@ var filters = {
 	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
 	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
 	"group": new GroupFilter("filters.group"),
+	"groupTiers": new TierList("filters.groupTiers"),
 	"groupPattern": new PatternFilter("filters.groupPattern"),
 	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
 	"word": new WordFilter("filters.word"),
+	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
 	"syllable": new SyllableFilter("filters.syllable"),
@@ -79,16 +82,24 @@ function setup_params(params) {
 	filters.actualResultFilter.param_setup(params);
 
 	filters.group.param_setup(params);
-	filters.groupPattern.param_setup(params);
-	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
+	var sep = new LabelScriptParam("", "<html><b>Add Aligned Groups</b></html>");
 	params.add(sep);
+	filters.groupTiers.param_setup(params);
+
+	filters.groupPattern.param_setup(params);
+	var sep2 = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
+	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
 
 	filters.word.param_setup(params);
+	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
+	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
+
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
-	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
-	params.add(wordsep);
+	var wordsep2 = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
+	params.add(wordsep2);
 	filters.alignedWord.param_setup(params);
 	var searchByWordListener = new java.beans.PropertyChangeListener {
 		propertyChange: function (e) {
@@ -161,9 +172,12 @@ function query_record(recordIndex, record) {
 		var alignedMetadata = new java.util.TreeMap();
 		var group = groups[i];
 
+		var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
+		alignedMetadata.putAll(alignedMeta);
+
 		if (filters.alignedGroup.isUseFilter()) {
 			alignedGroup = group.getTier(filters.alignedGroup.tier);
-			alignedMetadata.put(filters.alignedGroup.tier, alignedGroup.toString());
+			alignedMetadata.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
 		}
 
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
@@ -178,6 +192,9 @@ function query_record(recordIndex, record) {
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j < selectedWords.length; j++) {
 				var word = selectedWords[j];
+
+				var alignedMeta = filters.wordTiers.getAlignedTierData(record, word, "Word");
+				alignedMetadata.putAll(alignedMeta);
 
 				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
 				var addWord = (wordIpa != null);
