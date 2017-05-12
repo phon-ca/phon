@@ -860,7 +860,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		final OpGraph graph = documentNode.getGraph();
 		final WizardExtension wizardExtension = graph.getExtension(WizardExtension.class);
 		OpNode parametersNode = null;
-		for(OpNode node:wizardExtension) {
+		for(OpNode node:graph.getVertices()) {
 			if(node.getName().equals("Parameters") && node instanceof PhonScriptNode
 					&& graph.getNodePath(node.getId()).size() == 1) {
 				parametersNode = node;
