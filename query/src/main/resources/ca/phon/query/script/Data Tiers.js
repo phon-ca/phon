@@ -116,7 +116,8 @@ function query_record(recordIndex, record) {
 
 		if (filters.alignedGroup.isUseFilter()) {
 			alignedGroup = group.getTier(filters.alignedGroup.tier);
-			alignedMetadata.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
+			if(alignedGroup != null)
+				alignedMetadata.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
 		}
 
 		if (filters.word.isUseFilter()) {
@@ -128,7 +129,8 @@ function query_record(recordIndex, record) {
 				if (filters.alignedWord.isUseFilter()) {
 					var aligned = word.getTier(filters.alignedWord.tier);
 					checkWord = filters.alignedWord.patternFilter.check_filter(aligned);
-					alignedMetadata.put(filters.alignedWord.tier + " (Word)", aligned.toString());
+					if(aligned != null)
+						alignedMetadata.put(filters.alignedWord.tier + " (Word)", aligned.toString());
 				}
 				if (checkWord == true) {
 					var vals = filters.primary.patternFilter.find_pattern(word.getTier(searchTier));

@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -126,6 +126,18 @@ public class ReportLibrary implements OpGraphLibrary {
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 
+		final PhonUIAction showGeneratorAct = new PhonUIAction(ReportLibrary.class, "showGenerator", new Tuple<String, Project>(queryId, project));
+		showGeneratorAct.putValue(PhonUIAction.NAME, "Composer (simple)...");
+		showGeneratorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using simple Composer...");
+		builder.addItem(".@composer", showGeneratorAct);
+
+		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
+		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
+		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
+		builder.addItem(".@Composer (simple)...", showComposerAct);
+
+		builder.addSeparator(".", "composer");
+
 		for(URL reportURL:getStockGraphs()) {
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
 
@@ -223,10 +235,10 @@ public class ReportLibrary implements OpGraphLibrary {
 			projectMenuBuilder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 		}
 
-		builder.addSeparator(".", "legacy");
-		final ReportAction reportAct = new ReportAction(project, queryId,
-				getClass().getClassLoader().getResource(LEGACY_REPORT_DOCUMENT));
-		builder.addItem(".@legacy", reportAct);
+//		builder.addSeparator(".", "legacy");
+//		final ReportAction reportAct = new ReportAction(project, queryId,
+//				getClass().getClassLoader().getResource(LEGACY_REPORT_DOCUMENT));
+//		builder.addItem(".@legacy", reportAct);
 
 		builder.addSeparator(".", "browse");
 		final PhonUIAction onBrowseAct = new PhonUIAction(ReportLibrary.class, "onBrowse", new Tuple<String, Project>(queryId, project));
@@ -234,16 +246,7 @@ public class ReportLibrary implements OpGraphLibrary {
 		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query report document.");
 		builder.addItem(".@browse", onBrowseAct);
 
-		builder.addSeparator(".", "composer");
-		final PhonUIAction showGeneratorAct = new PhonUIAction(ReportLibrary.class, "showGenerator", new Tuple<String, Project>(queryId, project));
-		showGeneratorAct.putValue(PhonUIAction.NAME, "Composer (simple)...");
-		showGeneratorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using simple Composer...");
-		builder.addItem(".@composer", showGeneratorAct);
 
-		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
-		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
-		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
 
 	public static void onBrowse(PhonActionEvent pae) {

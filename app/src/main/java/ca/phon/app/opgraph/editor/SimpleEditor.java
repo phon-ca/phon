@@ -497,6 +497,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		final JComponent comp = addButton;
 
 		final JTree tree = new JTree(createTreeModel());
+		tree.setRootVisible(false);
 		tree.setVisibleRowCount(20);
 		tree.setCellRenderer(new TreeNodeRenderer());
 

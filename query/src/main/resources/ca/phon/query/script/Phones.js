@@ -82,22 +82,23 @@ function setup_params(params) {
 	filters.actualResultFilter.param_setup(params);
 
 	filters.group.param_setup(params);
+	filters.groupPattern.param_setup(params);
+
 	var sep = new LabelScriptParam("", "<html><b>Add Aligned Groups</b></html>");
 	params.add(sep);
 	filters.groupTiers.param_setup(params);
-
-	filters.groupPattern.param_setup(params);
 	var sep2 = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
 	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
 
 	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+	filters.wordPattern.setEnabled(false);
+
 	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
 
-	filters.wordPattern.param_setup(params);
-	filters.wordPattern.setEnabled(false);
 	var wordsep2 = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
 	params.add(wordsep2);
 	filters.alignedWord.param_setup(params);
@@ -177,7 +178,8 @@ function query_record(recordIndex, record) {
 
 		if (filters.alignedGroup.isUseFilter()) {
 			alignedGroup = group.getTier(filters.alignedGroup.tier);
-			alignedMetadata.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
+			if(alignedGroup != null)
+				alignedMetadata.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
 		}
 
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
@@ -207,7 +209,8 @@ function query_record(recordIndex, record) {
 				if (filters.alignedWord.isUseFilter()) {
 					addWord = filters.alignedWord.check_word(word);
 					alignedWord = word.getTier(filters.alignedWord.tier);
-					alignedMetadata.put(filters.alignedWord.tier + " (Word)", alignedWord.toString());
+					if(alignedWord != null)
+						alignedMetadata.put(filters.alignedWord.tier + " (Word)", alignedWord.toString());
 				}
 
 				if (addWord == true) {

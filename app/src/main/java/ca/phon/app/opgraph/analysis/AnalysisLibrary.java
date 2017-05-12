@@ -287,7 +287,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
 						new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
 						AnalysisRunner::new );
-		frame.setIncludeQueries(true);
+//		frame.setIncludeQueries(true);
 		frame.pack();
 		frame.setSize(new Dimension(700, 500));
 		frame.centerWindow();

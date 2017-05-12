@@ -23,9 +23,9 @@
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 
 exports.WordFilter = function (id) {
-	
-	var sectionTitle = "Word Filter";
-	
+
+	var sectionTitle = "Word Options";
+
 	var singletonParamInfo = {
 		"id": id + ".wSingleton",
 		"def": true,
@@ -33,7 +33,7 @@ exports.WordFilter = function (id) {
 		"desc": "(groups with only one word)"
 	};
 	this.wSingleton = singletonParamInfo.def;
-	
+
 	var posParamInfo = {
 		"id":[id + ".wInitial", id + ".wMedial", id + ".wFinal"],
 		"def":[ true, true, true],
@@ -44,7 +44,7 @@ exports.WordFilter = function (id) {
 	this.wInitial = posParamInfo.def[0];
 	this.wMedial = posParamInfo.def[1];
 	this.wFinal = posParamInfo.def[2];
-	
+
 	var searchByWordParamInfo = {
 		"id": id + ".searchByWord",
 		"def": true,
@@ -52,13 +52,13 @@ exports.WordFilter = function (id) {
 		"desc": ""
 	};
 	this.searchByWord = searchByWordParamInfo.def;
-	
+
 	this.searchByWordEnabled = true;
 	this.searchByWordOpt;
-	
+
 	var singletonGroupOpt;
 	var posGroupOpt;
-	
+
 	/**
 	 * Add params for the group, called automatically when needed.
 	 *
@@ -68,21 +68,21 @@ exports.WordFilter = function (id) {
 		// create a new section (collapsed by default)
 		var sep = new SeparatorScriptParam(sectionTitle, true);
 		params.add(sep);
-		
+
 		// search singleton groups.
 		singletonGroupOpt = new BooleanScriptParam(
 		singletonParamInfo.id,
 		singletonParamInfo.desc,
 		singletonParamInfo.title,
 		singletonParamInfo.def);
-		
+
 		posGroupOpt = new MultiboolScriptParam(
 		posParamInfo.id,
 		posParamInfo.def,
 		posParamInfo.desc,
 		posParamInfo.title,
 		posParamInfo.numCols);
-		
+
 		if (this.searchByWordEnabled == true) {
 			var searchByWordOpt = new BooleanScriptParam(
 			searchByWordParamInfo.id,
@@ -90,7 +90,7 @@ exports.WordFilter = function (id) {
 			searchByWordParamInfo.title,
 			searchByWordParamInfo.def);
 			params.add(searchByWordOpt);
-			
+
 			var searchByWordListener = new java.beans.PropertyChangeListener {
 				propertyChange: function (e) {
 					var enabled = e.source.getValue(e.source.paramId) == true;
@@ -102,14 +102,14 @@ exports.WordFilter = function (id) {
 			var enabled = searchByWordOpt.getValue(searchByWordOpt.paramId) == true;
 			singletonGroupOpt.setEnabled(enabled);
 			posGroupOpt.setEnabled(enabled);
-			
+
 			this.searchByWordOpt = searchByWordOpt;
 		}
-		
+
 		params.add(singletonGroupOpt);
 		params.add(posGroupOpt);
 	};
-	
+
 	/**
 	 * Returns a list of words for the given
 	 * group which match the criteria in the form.
@@ -129,29 +129,29 @@ exports.WordFilter = function (id) {
 	this.getRequestedWords = function (group, tierName) {
 		var retVal = new java.util.ArrayList();
 		var retIdx = 0;
-		
+
 		tierName = tierName || (searchTier || "Orthography");
-		
+
 		var words = new Array();
 		var wordCount = group.getWordCount(tierName);
 		for (var wIndex = 0; wIndex < wordCount; wIndex++) {
 			var word = group.getAlignedWord(wIndex);
-			
+
 			var posOk = false;
 			if (wIndex == 0 && this.wInitial == true) posOk = true;
 			if (wIndex > 0 && wIndex < wordCount -1 && this.wMedial == true) posOk = true;
 			if (wIndex == wordCount -1 && this.wFinal == true) posOk = true;
-			
+
 			if (wIndex == 0 && wordCount == 1) posOk = this.wSingleton;
-			
+
 			if (posOk == true) {
 				retVal.add(word);
 			}
 		}
-		
+
 		return retVal.toArray();
 	};
-	
+
 	this.isUseFilter = function () {
 		if (this.searchByWordEnabled == true) {
 			return this.searchByWord == true;
