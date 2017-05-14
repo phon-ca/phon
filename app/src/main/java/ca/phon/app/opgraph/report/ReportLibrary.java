@@ -40,6 +40,7 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.SimpleEditor;
@@ -301,6 +302,7 @@ public class ReportLibrary implements OpGraphLibrary {
 		final SimpleEditor frame =
 				new SimpleEditor(data.getObj2(),
 						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
+						(qs) -> new MacroNode(),
 						(graph, project) -> new ReportRunner(graph, project, queryId) );
 		frame.pack();
 		frame.setSize(new Dimension(700, 500));

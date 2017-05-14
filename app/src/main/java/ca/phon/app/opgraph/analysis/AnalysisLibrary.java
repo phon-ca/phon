@@ -40,13 +40,22 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
 import ca.gedge.opgraph.OpGraph;
+import ca.gedge.opgraph.OpLink;
+import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.dag.CycleDetectedException;
+import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.exceptions.ItemMissingException;
+import ca.gedge.opgraph.nodes.general.MacroNode;
+import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
+import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryScript;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
@@ -229,7 +238,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		builder.addItem(".@browse", onBrowseAct);
 
 		builder.addSeparator(".", "composer");
-		final PhonUIAction showGeneratorAct = new PhonUIAction(AnalysisLibrary.class, "showGenerator");
+		final PhonUIAction showGeneratorAct = new PhonUIAction(AnalysisLibrary.class, "showSimpleComposer");
 		showGeneratorAct.putValue(PhonUIAction.NAME, "Composer (simple)...");
 		showGeneratorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using simple Composer...");
 		builder.addItem(".@composer", showGeneratorAct);
@@ -282,12 +291,91 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		}
 	}
 
-	public static void showGenerator() {
+	public static String getQueryReport(QueryScript queryScript) {
+		return "macro/Generic Report.xml";
+	}
+
+	public static MacroNode analysisFromQuery(QueryScript queryScript)
+		throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
+		final AnalysisEditorModelInstantiator instantiator = new AnalysisEditorModelInstantiator();
+		final OpGraph graph = new OpGraph();
+		final AnalysisOpGraphEditorModel model = instantiator.createModel(graph);
+		final MacroNode retVal = new MacroNode(graph);
+
+		final QueryNode queryNode = new QueryNode(queryScript);
+		graph.add(queryNode);
+
+		final String reportDocument = getQueryReport(queryScript);
+		final OpGraph reportGraph = OpgraphIO.read(AnalysisLibrary.class.getResourceAsStream(reportDocument));
+		final OpNode reportNode = reportGraph.getVertices().stream().filter( (n) -> n instanceof MacroNode ).findAny().orElse(null);
+		graph.add(reportNode);
+
+		// create links
+		final OpNode projectNode = graph.getVertices().stream()
+			.filter( (n) -> n.getName().equals("Project")  && n instanceof ObjectNode )
+			.findFirst().orElse(null);
+		if(projectNode == null) {
+			throw new IllegalArgumentException("Graph has no Project node");
+		}
+		final OpNode sessionsNode = graph.getVertices().stream()
+			.filter( (n) -> n.getName().equals("Selected Sessions") && n instanceof ObjectNode )
+			.findFirst().orElse(null);
+		if(sessionsNode == null) {
+			throw new IllegalArgumentException("Graph has no Selected Sessions node");
+		}
+		final OpNode participantsNode = graph.getVertices().stream()
+			.filter( (n) -> n.getName().equals("Selected Participants") && n instanceof ObjectNode )
+			.findFirst().orElse(null);
+		if(participantsNode == null) {
+			throw new IllegalArgumentException("Graph has no Selected Participants node");
+		}
+
+		final OpLink projectLink = new OpLink(projectNode, "obj", queryNode, "project");
+		final OpLink sessionsLink = new OpLink(sessionsNode, "obj", queryNode, "sessions");
+		graph.add(projectLink);
+		graph.add(sessionsLink);
+
+		final OpLink projectLink2 = new OpLink(queryNode, "project", reportNode, "project");
+		graph.add(projectLink2);
+		final OpLink paramLink = new OpLink(queryNode, "parameters", reportNode, "parameters");
+		graph.add(paramLink);
+		final OpLink resultsLink = new OpLink(queryNode, "results", reportNode, "results");
+		graph.add(resultsLink);
+		final OpLink scriptLink = new OpLink(queryNode, "script", reportNode, "script");
+		graph.add(scriptLink);
+		final OpLink sessionsLink2 = new OpLink(sessionsNode, "obj", reportNode, "selected sessions");
+		graph.add(sessionsLink2);
+		final OpLink participantsLink = new OpLink(participantsNode, "obj", reportNode, "selected participants");
+		graph.add(participantsLink);
+
+		retVal.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
+		retVal.publish("sessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
+		retVal.publish("participants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
+
+		return retVal;
+	}
+
+	public static void showSimpleComposer() {
 		final SimpleEditor frame =
-				new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
-						new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
-						AnalysisRunner::new );
-//		frame.setIncludeQueries(true);
+			new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
+					new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
+					(qs) ->  {
+						try {
+							return AnalysisLibrary.analysisFromQuery(qs);
+						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
+							final MessageDialogProperties props = new MessageDialogProperties();
+							props.setTitle("Composer (simple)");
+							props.setHeader("Unable to create analysis from query");
+							props.setMessage(e.getLocalizedMessage());
+							props.setOptions(MessageDialogProperties.okOptions);
+							props.setRunAsync(false);
+							props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+							NativeDialogs.showMessageDialog(props);
+						}
+						return new MacroNode();
+					} ,
+					AnalysisRunner::new );
+		frame.setIncludeQueries(true);
 		frame.pack();
 		frame.setSize(new Dimension(700, 500));
 		frame.centerWindow();

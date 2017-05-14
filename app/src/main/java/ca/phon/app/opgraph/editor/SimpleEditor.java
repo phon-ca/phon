@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -160,6 +161,8 @@ public class SimpleEditor extends CommonModuleFrame {
 	 */
 	private final Instantiator<MacroNode> nodeInstantiator;
 
+	private Function<QueryScript, MacroNode> queryNodeInstantiator;
+
 	private JToolBar toolbar;
 	private JButton saveButton;
 	private JButton addButton;
@@ -190,14 +193,21 @@ public class SimpleEditor extends CommonModuleFrame {
 	 * Constructor
 	 *
 	 * @param project if <code>null</code> project graphs will not be displayed
+	 * @param library library display in add item dialog
+	 * @param modelInstantiator the editor model instantiator
+	 * @param nodeInstantiator instantiator for nodes created by adding documents from the library
+	 * @param queryNodeInstantiator instantiator for nodes created by adding queries to the doucment
+	 * @param runFactory factory for runnables used to execute graphs
 	 */
 	public SimpleEditor(Project project, OpGraphLibrary library,
 			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
+			Function<QueryScript, MacroNode> queryNodeInstantiator,
 			BiFunction<OpGraph, Project, Runnable> runFactory) {
 		super();
 
 		this.library = library;
 		this.nodeInstantiator = nodeInstantiator;
+		this.queryNodeInstantiator = queryNodeInstantiator;
 		this.runFactory = runFactory;
 
 		model = modelInstantiator.createModel(new OpGraph());
@@ -630,7 +640,6 @@ public class SimpleEditor extends CommonModuleFrame {
 	}
 
 	private void addQuery(QueryScript queryScript) {
-		// create a new, empty analysis node
 
 	}
 
