@@ -170,6 +170,9 @@ function query_record(recordIndex, record) {
 						rv.data = v.value;
 						result.addResultValue(rv);
 
+						var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
+						result.metadata.putAll(alignedMeta);
+
 						// add metadata
 						var alignedMeta = filters.wordTiers.getAlignedTierData(record, word, "Word");
 						result.metadata.putAll(alignedMeta);
@@ -204,12 +207,13 @@ function query_record(recordIndex, record) {
 				rv.data = v.value;
 				result.addResultValue(rv);
 
+				var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
+				result.metadata.putAll(alignedMeta);
 
 				results.addResult(result);
 			}
 		}
 
-		var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
-		result.metadata.putAll(alignedMeta);
+
 	}
 }
