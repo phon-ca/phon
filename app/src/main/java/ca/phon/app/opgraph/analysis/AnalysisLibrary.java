@@ -45,6 +45,7 @@ import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.dag.CycleDetectedException;
 import ca.gedge.opgraph.dag.VertexNotFoundException;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
+import ca.gedge.opgraph.extensions.NodeMetadata;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
@@ -55,6 +56,7 @@ import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
@@ -297,16 +299,34 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 	public static MacroNode analysisFromQuery(QueryScript queryScript)
 		throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
+		final QueryName queryName = queryScript.getExtension(QueryName.class);
+		String reportTitle = "Report";
+		if(queryName != null) {
+			reportTitle = queryName.getName();
+		}
+		
 		final AnalysisEditorModelInstantiator instantiator = new AnalysisEditorModelInstantiator();
 		final OpGraph graph = new OpGraph();
 		final AnalysisOpGraphEditorModel model = instantiator.createModel(graph);
 		final MacroNode retVal = new MacroNode(graph);
+		retVal.setName(reportTitle);
+
+		final ObjectNode reportTitleNode = new ObjectNode(String.class);
+		reportTitleNode.setName("Report Title");
+		
+		NodeMetadata reportNodeMeta = retVal.getExtension(NodeMetadata.class);
+		if(reportNodeMeta == null) {
+			reportNodeMeta = new NodeMetadata();
+			retVal.putExtension(NodeMetadata.class, reportNodeMeta);
+		}
+		reportNodeMeta.setDefault(reportTitleNode.getInputFieldWithKey("reportTitle"), reportTitle);
+		graph.add(reportTitleNode);
 
 		final QueryNode queryNode = new QueryNode(queryScript);
 		graph.add(queryNode);
 
 		final String reportDocument = getQueryReport(queryScript);
-		final OpGraph reportGraph = OpgraphIO.read(AnalysisLibrary.class.getResourceAsStream(reportDocument));
+		final OpGraph reportGraph = OpgraphIO.read(AnalysisLibrary.class.getClassLoader().getResourceAsStream(reportDocument));
 		final OpNode reportNode = reportGraph.getVertices().stream().filter( (n) -> n instanceof MacroNode ).findAny().orElse(null);
 		graph.add(reportNode);
 
@@ -329,12 +349,14 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		if(participantsNode == null) {
 			throw new IllegalArgumentException("Graph has no Selected Participants node");
 		}
-
+		
 		final OpLink projectLink = new OpLink(projectNode, "obj", queryNode, "project");
 		final OpLink sessionsLink = new OpLink(sessionsNode, "obj", queryNode, "sessions");
 		graph.add(projectLink);
 		graph.add(sessionsLink);
 
+		final OpLink reportTitleLink = new OpLink(reportTitleNode, "obj", reportNode, "reportTitle");
+		graph.add(reportTitleLink);
 		final OpLink projectLink2 = new OpLink(queryNode, "project", reportNode, "project");
 		graph.add(projectLink2);
 		final OpLink paramLink = new OpLink(queryNode, "parameters", reportNode, "parameters");
@@ -348,9 +370,10 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final OpLink participantsLink = new OpLink(participantsNode, "obj", reportNode, "selected participants");
 		graph.add(participantsLink);
 
+		retVal.publish("reportTitle", reportTitleNode, reportTitleNode.getInputFieldWithKey("obj"));
 		retVal.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
-		retVal.publish("sessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
-		retVal.publish("participants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
+		retVal.publish("selectedSessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
+		retVal.publish("selectedParticipants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
 
 		return retVal;
 	}

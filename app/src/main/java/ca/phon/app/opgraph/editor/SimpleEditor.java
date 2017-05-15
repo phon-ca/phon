@@ -91,6 +91,7 @@ import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 import org.jdesktop.swingx.JXTable;
 
 import com.sun.glass.events.KeyEvent;
+import com.sun.javafx.geom.AreaOp.AddOp;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -107,8 +108,10 @@ import ca.phon.app.menu.query.QueryMenuListener;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.MacroNodeData;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
+import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
+import ca.phon.app.opgraph.wizard.edits.NodeWizardSettingsEdit;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
@@ -640,7 +643,29 @@ public class SimpleEditor extends CommonModuleFrame {
 	}
 
 	private void addQuery(QueryScript queryScript) {
-
+		final MacroNode node = queryNodeInstantiator.apply(queryScript);
+		
+		final AddNodeEdit addNodeEdit = 
+				new AddNodeEdit(getGraph(), node, X_START, Y_START + macroNodes.size() * Y_SEP);
+		model.getDocument().getUndoSupport().postEdit(addNodeEdit);
+		
+		final NodeWizardOptionalsEdit optEdit = 
+				new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), node, true, true);
+		model.getDocument().getUndoSupport().postEdit(optEdit);
+		
+		final QueryNode queryNode = 
+				(QueryNode)node.getGraph().getVertices().stream()
+					.filter( (n) -> n instanceof QueryNode )
+					.findFirst().orElse(null);
+		if(queryNode != null) {
+			final NodeWizardSettingsEdit settingsEdit = new NodeWizardSettingsEdit(getGraph(), getGraph().getExtension(WizardExtension.class),
+					queryNode, true, true);
+			model.getDocument().getUndoSupport().postEdit(settingsEdit);
+		}
+		
+		macroNodes.add(node);
+		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
+		nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
 	}
 
 	private void addDocument(File file) throws IOException, InstantiationException {
@@ -1195,6 +1220,8 @@ public class SimpleEditor extends CommonModuleFrame {
 
 			if(value instanceof OpNode) {
 				retVal.setText(((OpNode)value).getName());
+			} else if(value instanceof QueryScript) {
+				retVal.setText(((QueryScript)value).getExtension(QueryName.class).getName());
 			}
 
 			return retVal;
