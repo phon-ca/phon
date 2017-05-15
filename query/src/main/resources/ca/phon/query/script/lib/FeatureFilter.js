@@ -22,7 +22,7 @@
  */
 
 exports.FeatureFilter = function (id) {
-	
+
 	var featureListParamInfo = {
 		"id": id + ".featureList",
 		"def": "",
@@ -31,20 +31,20 @@ exports.FeatureFilter = function (id) {
 	};
 	var featureListParam;
 	this.featureList = featureListParamInfo.def;
-	
+
 	this.setFilterTitle = function (title) {
 		featureListParamInfo.title = title;
 	};
-	
+
 	var setFilterInvalid = function (textField, message, loc) {
 		var msg = (loc >= 0 ?
 		"Error at index " + loc + ": " + message:
 		message);
 	};
-	
+
 	var setFilterOk = function (textField) {
 	};
-	
+
 	var checkFilter = function (filter) {
 		var retVal = {
 			"valid": true,
@@ -52,18 +52,18 @@ exports.FeatureFilter = function (id) {
 			"loc": -1
 		};
 		if (filter == null || filter.length() == 0) return retVal;
-		
+
 		var features = filter.split(",");
 		for (var i = 0; i < features.length; i++) {
 			var feature = StringUtils.strip(features[i]);
-			
+
 			if (feature.startsWith("-")) {
 				feature = feature.substring(1);
 			}
-			
+
 			var validFeature = FeatureMatrix.getInstance().getFeature(feature) != null;
 			retVal.valid &= validFeature;
-			
+
 			if (! retVal.valid) {
 				retVal.message = "Unknown feature: " + feature;
 				break;
@@ -71,19 +71,19 @@ exports.FeatureFilter = function (id) {
 		}
 		return retVal;
 	};
-	
-	
-	
+
+
+
 	this.param_setup = function (params) {
 		var featureListParam = new StringScriptParam(
 		featureListParamInfo.id,
 		featureListParamInfo.title,
 		featureListParamInfo.def);
 		featureListParam.setPrompt(featureListParamInfo.prompt);
-		
+
 		params.add(featureListParam);
 	};
-	
+
 	/**
 	 * Get the feature sets defined by this filter.
 	 *
@@ -91,30 +91,30 @@ exports.FeatureFilter = function (id) {
 	 *  'required' and 'absent'
 	 */
 	this.parse_features = function () {
-		var requiredFeatures = new FeatureSet();
-		var unwantedFeatures = new FeatureSet();
-		
-		var retVal = {
-			"required": requiredFeatures,
-			"absent": unwantedFeatures
-		};
-		
+		var requiredFeatures = new Array();
+		var unwantedFeatures = new Array();
+
 		var featureNames = this.featureList.split(",");
 		for (var i = 0; i < featureNames.length; i++) {
-			var feature = StringUtils.strip(featureNames[i]);
-			
-			if (feature.length == 0) continue;
+			var feature = featureNames[i].trim();
+
+			if (feature.length() == 0) continue;
 			if (feature.startsWith("-")) {
 				feature = feature.substring(1);
-				unwantedFeatures.addFeature(feature);
+				unwantedFeatures.push(feature);
 			} else {
-				requiredFeatures.addFeature(feature);
+				requiredFeatures.push(feature);
 			}
 		}
-		
+
+		var retVal = {
+			"required": (requiredFeatures.length > 0 ? FeatureSet.fromArray(requiredFeatures) : new FeatureSet()),
+			"absent": (unwantedFeatures.length > 0 ? FeatureSet.fromArray(unwantedFeatures) : new FeatureSet())
+		};
+
 		return retVal;
 	},
-	
+
 	/**
 	 * Function to test a featureset for the required
 	 * features.
@@ -128,10 +128,10 @@ exports.FeatureFilter = function (id) {
 		var featureSets = this.parse_features();
 		var requiredFeatures = featureSets.required;
 		var unwantedFeatures = featureSets.absent;
-		
+
 		var reqIntersection = FeatureSet.intersect(featureSet, requiredFeatures);
 		var unwantedIntersection = FeatureSet.intersect(featureSet, unwantedFeatures);
-		
+
 		return (unwantedIntersection.size() == 0 &&
 		reqIntersection.equals(requiredFeatures));
 	};
