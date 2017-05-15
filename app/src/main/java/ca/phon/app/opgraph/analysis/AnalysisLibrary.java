@@ -83,6 +83,8 @@ import ca.phon.worker.PhonWorker;
 public class AnalysisLibrary implements OpGraphLibrary {
 
 	private final static Logger LOGGER = Logger.getLogger(AnalysisLibrary.class.getName());
+	
+	private final static String PARAMETERS_TEMPLATE = "macro/Parameters Template.xml";
 
 	public final static String ANALYSIS_FOLDER = "analysis";
 
@@ -311,22 +313,29 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final MacroNode retVal = new MacroNode(graph);
 		retVal.setName(reportTitle);
 
-		final ObjectNode reportTitleNode = new ObjectNode(String.class);
-		reportTitleNode.setName("Report Title");
-		
-		NodeMetadata reportNodeMeta = retVal.getExtension(NodeMetadata.class);
-		if(reportNodeMeta == null) {
-			reportNodeMeta = new NodeMetadata();
-			retVal.putExtension(NodeMetadata.class, reportNodeMeta);
-		}
-		reportNodeMeta.setDefault(reportTitleNode.getInputFieldWithKey("reportTitle"), reportTitle);
-		graph.add(reportTitleNode);
-
 		final QueryNode queryNode = new QueryNode(queryScript);
 		graph.add(queryNode);
 
+		// add parameters template
+		final OpGraph parametersTemplate = OpgraphIO.read(
+				AnalysisLibrary.class.getClassLoader().getResourceAsStream(PARAMETERS_TEMPLATE));
+		for(OpNode node:parametersTemplate) {
+			graph.add(node);
+		}
+		for(OpNode node:parametersTemplate) {
+			for(OpLink link:parametersTemplate.getOutgoingEdges(node)) {
+				graph.add(link);
+			}
+		}
+		final OpNode reportTitleNode = parametersTemplate.getVertices().stream()
+				.filter( (n) -> n.getName().equals("Get Report Title") ).findFirst().orElse(null);
+		if(reportTitleNode == null) {
+			throw new IllegalArgumentException("Report title node not found");
+		}
+		
 		final String reportDocument = getQueryReport(queryScript);
-		final OpGraph reportGraph = OpgraphIO.read(AnalysisLibrary.class.getClassLoader().getResourceAsStream(reportDocument));
+		final OpGraph reportGraph = OpgraphIO.read(
+				AnalysisLibrary.class.getClassLoader().getResourceAsStream(reportDocument));
 		final OpNode reportNode = reportGraph.getVertices().stream().filter( (n) -> n instanceof MacroNode ).findAny().orElse(null);
 		graph.add(reportNode);
 
@@ -355,7 +364,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		graph.add(projectLink);
 		graph.add(sessionsLink);
 
-		final OpLink reportTitleLink = new OpLink(reportTitleNode, "obj", reportNode, "reportTitle");
+		final OpLink reportTitleLink = new OpLink(reportTitleNode, "reportTitle", reportNode, "reportTitle");
 		graph.add(reportTitleLink);
 		final OpLink projectLink2 = new OpLink(queryNode, "project", reportNode, "project");
 		graph.add(projectLink2);
@@ -370,7 +379,6 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final OpLink participantsLink = new OpLink(participantsNode, "obj", reportNode, "selected participants");
 		graph.add(participantsLink);
 
-		retVal.publish("reportTitle", reportTitleNode, reportTitleNode.getInputFieldWithKey("obj"));
 		retVal.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
 		retVal.publish("selectedSessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
 		retVal.publish("selectedParticipants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
@@ -386,6 +394,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 						try {
 							return AnalysisLibrary.analysisFromQuery(qs);
 						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
+							LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 							final MessageDialogProperties props = new MessageDialogProperties();
 							props.setTitle("Composer (simple)");
 							props.setHeader("Unable to create analysis from query");

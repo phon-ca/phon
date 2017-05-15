@@ -663,6 +663,8 @@ public class SimpleEditor extends CommonModuleFrame {
 			model.getDocument().getUndoSupport().postEdit(settingsEdit);
 		}
 		
+		updateReportTitle(node);
+		
 		macroNodes.add(node);
 		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
 		nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
