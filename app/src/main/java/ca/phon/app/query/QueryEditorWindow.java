@@ -575,35 +575,31 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	 * @return <code>true</code> if query was canceled/removed, 
 	 *  <code>false</code> otherwise.
 	 */
-	public boolean discardResults(QueryRunnerPanel panel) {
+	public void discardResults(QueryRunnerPanel panel) {
 		final int idx = editorTabs.indexOfComponent(panel);
 		if(idx > 0) {
 			if(panel.isRunning()) {
 				final MessageDialogProperties props = new MessageDialogProperties();
 				props.setParentWindow(this);
-				props.setRunAsync(false);
+				props.setRunAsync(true);
 				props.setOptions(MessageDialogProperties.okCancelOptions);
 				props.setTitle("Cancel Query");
 				props.setMessage("Stop query?");
-				int result = NativeDialogs.showMessageDialog(props);
-
-				if(result == 0) {
-					if(idx >= 0 && idx < editorTabs.getTabCount()) {
-						panel.stopQuery();
-						return true;
+				props.setHeader("Cancel Query");
+				props.setListener( (e) -> {
+					if(e.getDialogResult() == 0) {
+						if(idx >= 0 && idx < editorTabs.getTabCount()) {
+							panel.stopQuery();
+						}
 					}
-				} else {
-					return false;
-				}
+				});
+				NativeDialogs.showMessageDialog(props);
 			} else {
 				if(idx >= 0 && idx < editorTabs.getTabCount()) {
 					editorTabs.removeTabAt(idx);
-					return true;
 				}
 			}
 		}
-		// should never really get here
-		return false;
 	}
 	
 	@Override
