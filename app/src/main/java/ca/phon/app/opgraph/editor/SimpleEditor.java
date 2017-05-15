@@ -644,16 +644,16 @@ public class SimpleEditor extends CommonModuleFrame {
 
 	private void addQuery(QueryScript queryScript) {
 		final MacroNode node = queryNodeInstantiator.apply(queryScript);
-		
-		final AddNodeEdit addNodeEdit = 
+
+		final AddNodeEdit addNodeEdit =
 				new AddNodeEdit(getGraph(), node, X_START, Y_START + macroNodes.size() * Y_SEP);
 		model.getDocument().getUndoSupport().postEdit(addNodeEdit);
-		
-		final NodeWizardOptionalsEdit optEdit = 
+
+		final NodeWizardOptionalsEdit optEdit =
 				new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), node, true, true);
 		model.getDocument().getUndoSupport().postEdit(optEdit);
-		
-		final QueryNode queryNode = 
+
+		final QueryNode queryNode =
 				(QueryNode)node.getGraph().getVertices().stream()
 					.filter( (n) -> n instanceof QueryNode )
 					.findFirst().orElse(null);
@@ -662,9 +662,9 @@ public class SimpleEditor extends CommonModuleFrame {
 					queryNode, true, true);
 			model.getDocument().getUndoSupport().postEdit(settingsEdit);
 		}
-		
+
 		updateReportTitle(node);
-		
+
 		macroNodes.add(node);
 		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
 		nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
@@ -1000,14 +1000,16 @@ public class SimpleEditor extends CommonModuleFrame {
 	private void setupQueryLibraryTree(DefaultMutableTreeNode root) {
 		final QueryScriptLibrary scriptLibrary = new QueryScriptLibrary();
 		final ResourceLoader<QueryScript> stockScriptLoader = scriptLibrary.stockScriptFiles();
+		final DefaultMutableTreeNode stockRootNode = new DefaultMutableTreeNode("Stock Queries", true);
 		for(QueryScript stockScript:stockScriptLoader) {
 			final DefaultMutableTreeNode queryScriptNode = new DefaultMutableTreeNode(stockScript, false);
-			root.add(queryScriptNode);
+			stockRootNode.add(queryScriptNode);
 		}
+		root.add(stockRootNode);
 
 		final ResourceLoader<QueryScript> userScriptLoader = scriptLibrary.userScriptFiles();
 		if(userScriptLoader.iterator().hasNext()) {
-			final DefaultMutableTreeNode userScriptRoot = new DefaultMutableTreeNode("User Library", true);
+			final DefaultMutableTreeNode userScriptRoot = new DefaultMutableTreeNode("User Queries", true);
 			for(QueryScript userScript:userScriptLoader) {
 				final DefaultMutableTreeNode userScriptNode = new DefaultMutableTreeNode(userScript, false);
 				userScriptRoot.add(userScriptNode);
@@ -1018,7 +1020,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		if(getProject() != null) {
 			final ResourceLoader<QueryScript> projectScriptLoader = scriptLibrary.projectScriptFiles(getProject());
 			if(projectScriptLoader.iterator().hasNext()) {
-				final DefaultMutableTreeNode projectScriptRoot = new DefaultMutableTreeNode("Project Library");
+				final DefaultMutableTreeNode projectScriptRoot = new DefaultMutableTreeNode("Project Queries");
 				for(QueryScript projectScript:projectScriptLoader) {
 					final DefaultMutableTreeNode projectScriptNode = new DefaultMutableTreeNode(projectScript, false);
 					projectScriptRoot.add(projectScriptNode);
@@ -1222,8 +1224,6 @@ public class SimpleEditor extends CommonModuleFrame {
 
 			if(value instanceof OpNode) {
 				retVal.setText(((OpNode)value).getName());
-			} else if(value instanceof QueryScript) {
-				retVal.setText(((QueryScript)value).getExtension(QueryName.class).getName());
 			}
 
 			return retVal;
@@ -1416,6 +1416,12 @@ public class SimpleEditor extends CommonModuleFrame {
 						retVal.setText(analysisName);
 					} catch (UnsupportedEncodingException e) {
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+				} else if(node.getUserObject() instanceof QueryScript) {
+					final QueryScript queryScript = (QueryScript)node.getUserObject();
+					final QueryName queryName = queryScript.getExtension(QueryName.class);
+					if(queryName != null) {
+						retVal.setText(queryName.getName());
 					}
 				}
 			}
