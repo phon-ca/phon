@@ -312,9 +312,14 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final AnalysisOpGraphEditorModel model = instantiator.createModel(graph);
 		final MacroNode retVal = new MacroNode(graph);
 		retVal.setName(reportTitle);
+		
+		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
 
 		final QueryNode queryNode = new QueryNode(queryScript);
 		graph.add(queryNode);
+		
+		wizardExt.addNode(queryNode);
+		wizardExt.setNodeForced(queryNode, true);
 
 		// add parameters template
 		final OpGraph parametersTemplate = OpgraphIO.read(

@@ -653,15 +653,15 @@ public class SimpleEditor extends CommonModuleFrame {
 				new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), node, true, true);
 		model.getDocument().getUndoSupport().postEdit(optEdit);
 
-		final QueryNode queryNode =
-				(QueryNode)node.getGraph().getVertices().stream()
-					.filter( (n) -> n instanceof QueryNode )
-					.findFirst().orElse(null);
-		if(queryNode != null) {
-			final NodeWizardSettingsEdit settingsEdit = new NodeWizardSettingsEdit(getGraph(), getGraph().getExtension(WizardExtension.class),
-					queryNode, true, true);
-			model.getDocument().getUndoSupport().postEdit(settingsEdit);
-		}
+//		final QueryNode queryNode =
+//				(QueryNode)node.getGraph().getVertices().stream()
+//					.filter( (n) -> n instanceof QueryNode )
+//					.findFirst().orElse(null);
+//		if(queryNode != null) {
+//			final NodeWizardSettingsEdit settingsEdit = new NodeWizardSettingsEdit(getGraph(), getGraph().getExtension(WizardExtension.class),
+//					queryNode, true, true);
+//			model.getDocument().getUndoSupport().postEdit(settingsEdit);
+//		}
 
 		updateReportTitle(node);
 
