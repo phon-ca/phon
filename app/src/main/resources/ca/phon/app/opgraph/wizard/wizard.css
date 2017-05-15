@@ -1,6 +1,6 @@
 body {
     background: white;
-    font-family: arial,"noto sans", sans-serif;
+    font-family: "Charis SIL Compact", arial,"noto sans", sans-serif;
     margin-top: 0px;
 }
 
@@ -76,6 +76,7 @@ caption {
 }
 
 .text_value {
+	font-family: "Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
 }
 
 .ipa_value {
