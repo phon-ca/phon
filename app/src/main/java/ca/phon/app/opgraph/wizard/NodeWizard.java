@@ -864,7 +864,7 @@ public class NodeWizard extends WizardFrame {
 				props.setTitle("Re-run " + getNoun().getObj1());
 				props.setHeader("Re-run " + getNoun().getObj1());
 				props.setMessage("Clear results and re-run " + getNoun().getObj1() + ".");
-				props.setOptions(MessageDialogProperties.okCancelOptions);
+				props.setOptions(MessageDialogProperties.yesNoOptions);
 				props.setRunAsync(false);
 				props.setParentWindow(this);
 
