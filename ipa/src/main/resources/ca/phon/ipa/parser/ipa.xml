@@ -2,8 +2,8 @@
 <ipa xmlns="https://phon.ca/ns/ipa"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://phon.ca/ns/ipa ../../../../xml/xsd/ipa.xsd">
-    <char value="&#x00d8;">
-        <name>Latin Capital Letter O with stroke</name>
+    <char value="&#x2205;">
+        <name>Empty Set</name>
         <token>COVER_SYMBOL</token>
     </char>
     <char value="&#x0020;">

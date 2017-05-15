@@ -29,6 +29,7 @@ import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterType;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.util.PhonConstants;
 
 @FormatterType(value=TableDataSource.class)
 public class TableDataSourceFormatter implements Formatter<TableDataSource> {
@@ -66,7 +67,7 @@ public class TableDataSourceFormatter implements Formatter<TableDataSource> {
 					} else {
 						// insert 'null' if we have an empty IPA transcript
 						if(val instanceof IPATranscript && ((IPATranscript)val).length() == 0) {
-							row[i] = "\u00d8";
+							row[i] = PhonConstants.nullChar + "";
 						} else {
 							@SuppressWarnings("unchecked")
 							final Formatter<Object> formatter =

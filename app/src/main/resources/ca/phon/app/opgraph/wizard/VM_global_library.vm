@@ -34,7 +34,7 @@
 			#set($txt = $Math.roundTo(2, $v))
 		#end
 	#else #set($type = "text_value")#end
-	#if($clazz == $ipa && $v.length() == 0) #set($txt = "\u00d8") #end
+	#if($clazz == $ipa && $v.length() == 0) #set($txt = "\u2205") #end
 <td class='$type'>$txt</td>
 	#end
 #end

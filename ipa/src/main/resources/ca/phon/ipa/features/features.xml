@@ -808,8 +808,8 @@
 	<feature_set char="&#x58;">unintelligible cover </feature_set>
 	<!-- > (0x3e) -->
 	<feature_set char="&#x3e;">transition glide </feature_set>
-	<!-- Ø (0xd8) -->
-	<feature_set char="&#xd8;">null </feature_set>
+	<!--  (0x2205) -->
+	<feature_set char="&#x2205;">null </feature_set>
 	<!-- ◌( (0x28) -->
 	<feature_set char="&#x28;">diacritic </feature_set>
 	<!-- ◌) (0x29) -->
