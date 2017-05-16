@@ -602,6 +602,8 @@ public class SimpleEditor extends CommonModuleFrame {
 		if(selectedPaths != null && selectedPaths.length > 0) {
 			for(TreePath selectedPath:selectedPaths)
 				addDocuments((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
+			if(selectedPaths.length == 1) 
+				SwingUtilities.invokeLater( this::onShowSettings );
 		}
 	}
 
@@ -617,6 +619,9 @@ public class SimpleEditor extends CommonModuleFrame {
 					}
 				});
 			}
+		}
+		if(fileList.size() == 1) {
+			SwingUtilities.invokeLater( this::onShowSettings );
 		}
 	}
 
@@ -822,6 +827,9 @@ public class SimpleEditor extends CommonModuleFrame {
 		final List<File> fileList =
 				selectedFiles.stream().map( (s) -> new File(s) ).collect(Collectors.toList());
 		addDocuments(fileList);
+		if(fileList.size() == 1) {
+			SwingUtilities.invokeLater( this::onShowSettings );
+		}
 	}
 
 	public void showDocumentSettings(MacroNode documentNode) {

@@ -1,0 +1,4 @@
+default=macro/Generic Report.xml
+Phones=macro/Phones Report.xml
+Deletions=macro/Phones Report.xml
+Epenthesis=macro/Phones Report.xml

@@ -21,8 +21,10 @@ package ca.phon.app.opgraph.analysis;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -30,14 +32,19 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
+
+import org.apache.derby.iapi.tools.i18n.LocalizedResource;
+import org.codehaus.groovy.tools.shell.commands.LoadCommand;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpLink;
@@ -53,6 +60,8 @@ import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
+import ca.phon.app.opgraph.nodes.query.QueryNodeData;
+import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
@@ -83,6 +92,8 @@ import ca.phon.worker.PhonWorker;
 public class AnalysisLibrary implements OpGraphLibrary {
 
 	private final static Logger LOGGER = Logger.getLogger(AnalysisLibrary.class.getName());
+	
+	private final static String QUERY_REPORT_MAP = "analysis/QueryReportMap.txt";
 	
 	private final static String PARAMETERS_TEMPLATE = "macro/Parameters Template.xml";
 
@@ -294,13 +305,43 @@ public class AnalysisLibrary implements OpGraphLibrary {
 			}
 		}
 	}
+	
+	private static Map<String, String> loadReportMap() {
+		final Map<String, String> retVal = new HashMap<>();
+		
+		try(BufferedReader in = new BufferedReader(
+				new InputStreamReader(
+						AnalysisLibrary.class.getClassLoader().getResourceAsStream(QUERY_REPORT_MAP)))) {
+			String line = null;
+			while((line = in.readLine()) != null) {
+				int i = line.indexOf('=');
+				String key = line.substring(0, i).trim();
+				String value = line.substring(i+1).trim();
+				
+				retVal.put(key, value);
+			}
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		return retVal;
+	}
 
 	public static String getQueryReport(QueryScript queryScript) {
-		return "macro/Generic Report.xml";
+		final Map<String, String> reportMap = loadReportMap();
+		final QueryName queryName = queryScript.getExtension(QueryName.class);
+		
+		String retVal = reportMap.get("default");
+		if(queryName != null) {
+			if(reportMap.containsKey(queryName.getName()))
+				retVal = reportMap.get(queryName.getName());
+		}
+		
+		return retVal;
 	}
 
 	public static MacroNode analysisFromQuery(QueryScript queryScript)
-		throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
+		throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException, URISyntaxException, InstantiationException {
 		final QueryName queryName = queryScript.getExtension(QueryName.class);
 		String reportTitle = "Report";
 		if(queryName != null) {
@@ -315,7 +356,12 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		
 		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
 
-		final QueryNode queryNode = new QueryNode(queryScript);
+		final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), queryName.getName());
+		final QueryNodeInstantiator queryNodeInstantiator = new QueryNodeInstantiator();
+		final QueryNodeData nodeData = new QueryNodeData(queryScript, queryNodeClassURI,
+				reportTitle, "", "Query", queryNodeInstantiator);
+		
+		final QueryNode queryNode = queryNodeInstantiator.newInstance(nodeData);
 		graph.add(queryNode);
 		
 		wizardExt.addNode(queryNode);
@@ -398,7 +444,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 					(qs) ->  {
 						try {
 							return AnalysisLibrary.analysisFromQuery(qs);
-						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
+						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException | InstantiationException | URISyntaxException e) {
 							LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 							final MessageDialogProperties props = new MessageDialogProperties();
 							props.setTitle("Composer (simple)");
