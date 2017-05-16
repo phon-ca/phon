@@ -34,6 +34,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -115,6 +116,7 @@ import ca.phon.app.opgraph.wizard.edits.NodeWizardSettingsEdit;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
+import ca.phon.query.db.QueryManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
@@ -129,6 +131,7 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
@@ -611,13 +614,33 @@ public class SimpleEditor extends CommonModuleFrame {
 		for(File f:fileList) {
 			if(f.isFile()
 					&& f.getName().endsWith(".xml")) {
-				PhonWorker.getInstance().invokeLater( () -> {
+				
+				Runnable r = () -> {};
+				try {
+					OpgraphIO.read(f);
+					r = () -> { 
+						try {
+							addDocument(f);
+						} catch (InstantiationException | IOException e) {
+							LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						} 
+					};
+				} catch (IOException e) {
 					try {
-						addDocument(f);
-					} catch (IOException | InstantiationException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						final QueryScript queryScript = new QueryScript(f.toURI().toURL());
+						r = () -> { addQuery(queryScript); };
+					} catch (IOException e2) {
+						final MessageDialogProperties props = new MessageDialogProperties();
+						props.setParentWindow(this);
+						props.setHeader("Add Analysis");
+						props.setTitle("Unable to add analysis");
+						props.setMessage("Document is not an analysis or query");
+						props.setOptions(MessageDialogProperties.okOptions);
+						NativeDialogs.showMessageDialog(props);
 					}
-				});
+				}
+				
+				PhonWorker.getInstance().invokeLater( r );
 			}
 		}
 		if(fileList.size() == 1) {
