@@ -88,7 +88,7 @@ exports.WordFilter = function (id) {
 			searchByWordParamInfo.id,
 			searchByWordParamInfo.desc,
 			searchByWordParamInfo.title,
-			searchByWordParamInfo.def);
+			this.searchByWord);
 			params.add(searchByWordOpt);
 
 			var searchByWordListener = new java.beans.PropertyChangeListener {

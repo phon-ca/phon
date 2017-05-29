@@ -63,17 +63,17 @@ function setup_params(params) {
 function query_record(recordIndex, record) {
 	var searchTier = "IPA Target";
 	if (! filters.speaker.check_speaker(record.speaker)) return;
-	
+
 	var searchObjects = filters.group.getRequestedGroups(record, searchTier);
-	
+
 	// check aligned group for each group returned
 	if (filters.alignedGroup.isUseFilter()) {
 		searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
 	}
-	
+
 	var sharedFeatureSets = filters.shared.parse_features();
 	var neutralizedFeatureSets = filters.neutralized.parse_features();
-	
+
 	// perform harmony searches on groups
 	if (bConsonant) {
 		var detector = new AdvancedHarmonyDetector(0);
@@ -82,29 +82,31 @@ function query_record(recordIndex, record) {
 		detector.neutralizedFeatures = neutralizedFeatureSets.required;
 		detector.absentNeutralizedFeatures = neutralizedFeatureSets.absent;
 		detector.direction = eDirection.index;
-		
+
 		for (var i = 0; i < searchObjects.length; i++) {
 			var searchObj = searchObjects[i];
 			var phoneMap = searchObj.phoneAlignment;
 			var detectorResults = detector.detect(phoneMap);
-			addResults(recordIndex, searchObj.groupIndex, detectorResults);
+			if(detectorResults)
+				addResults(recordIndex, searchObj.groupIndex, detectorResults);
 		}
 	}
-	
+
 	if (bVowel) {
 		var detector = new AdvancedHarmonyDetector(1);
-		
+
 		detector.sharedFeatures = sharedFeatureSets.required;
 		detector.absentSharedFeatures = sharedFeatureSets.absent;
 		detector.neutralizedFeatures = neutralizedFeatureSets.required;
 		detector.absentNeutralizedFeatures = neutralizedFeatureSets.absent;
 		detector.direction = eDirection.index;
-		
+
 		for (var i = 0; i < searchObjects.length; i++) {
 			var searchObj = searchObjects[i];
 			var phoneMap = searchObj.phoneAlignment;
 			var detectorResults = detector.detect(phoneMap);
-			addResults(recordIndex, searchObj.groupIndex, detectorResults);
+			if(detectorResults)
+				addResults(recordIndex, searchObj.groupIndex, detectorResults);
 		}
 	}
 }

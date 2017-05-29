@@ -49,6 +49,8 @@ function setup_params(params) {
 	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
 
+	// change default status of word filter for this query
+	filters.word.searchByWord = false;
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
 	params.add(wordsep);
