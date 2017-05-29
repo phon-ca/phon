@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -50,36 +50,42 @@ import ca.phon.query.db.xml.io.resultset.ResultSetType;
  * system. XML data is stored on on disk.
  */
 public class XMLResultSetManager implements ResultSetManager {
-	
+
 	private static final Logger LOGGER = Logger
 			.getLogger(XMLResultSetManager.class.getName());
-	
+
+	/**
+	 * Folder inside of <code>&lt;project&gt;/__res</code> where
+	 * query results are saved.
+	 */
+	public static final String DEFAULT_QUERY_FOLDER = ".query_results";
+
 	/**
 	 * Default constructor.
 	 */
 	public XMLResultSetManager() { }
-	
+
 	/**
 	 * Get the path for storing queries.
 	 * @param project
 	 * @return
 	 */
 	static File getQueriesPath(Project project) {
-		final File retVal = new File(project.getLocation(), "__search");
+		final File retVal = new File(project.getLocation(), DEFAULT_QUERY_FOLDER);
 		return retVal;
 	}
-	
+
 	static File getQueryPath(Project project, Query query) {
 		final File queriesPath = getQueriesPath(project);
-		
+
 		final File retVal = new File(queriesPath, query.getUUID().toString());
 		return retVal;
 	}
-	
+
 	@Override
 	public List<Query> getQueries(Project project) {
 		List<Query> queries = new ArrayList<Query>();
-		
+
 		final File queriesPath = getQueriesPath(project);
 		if(queriesPath.exists() && queriesPath.isDirectory()) {
 			for(File queryDir : queriesPath.listFiles()) {
@@ -94,14 +100,14 @@ public class XMLResultSetManager implements ResultSetManager {
 				}
 			}
 		}
-		
+
 		return queries;
 	}
 
 	@Override
 	public List<ResultSet> getResultSetsForQuery(Project project, Query query) {
 		File queryPath = getQueryPath(project, query);
-		
+
 		List<ResultSet> resultSets = new ArrayList<ResultSet>();
 		if(!queryPath.exists() || !queryPath.isDirectory())
 			return resultSets;
@@ -117,7 +123,7 @@ public class XMLResultSetManager implements ResultSetManager {
 				}
 			}
 		}
-		
+
 		return resultSets;
 	}
 
@@ -128,14 +134,14 @@ public class XMLResultSetManager implements ResultSetManager {
 		// Create the directory, if necessary
 		if(!queryPath.exists() && !queryPath.mkdirs())
 			return;
-		
+
 		final File queryFile = new File(queryPath, "query.xml");
 		try {
 			// Use JAXBElement wrapper around object because they do not have
 			// the XMLRootElement annotation
 			final QueryType qt = ((XMLQuery)query).getXMLObject();
 			final JAXBElement<QueryType> jaxbElem = (new ca.phon.query.db.xml.io.query.ObjectFactory()).createQuery(qt);
-						
+
 			// Initialize marshaller and write to disk
 			final JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.query");
 			final Marshaller marshaller = context.createMarshaller();
@@ -154,7 +160,7 @@ public class XMLResultSetManager implements ResultSetManager {
 		File queryFile = new File(queryPath, "query.xml");
 		return new XMLLazyQuery(this, queryFile);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	QueryType loadQuery(File queryFile) throws IOException {
 		Schema schema = null;
@@ -164,7 +170,7 @@ public class XMLResultSetManager implements ResultSetManager {
 		} catch(SAXException exc) {
 			LOGGER.log(Level.WARNING,  exc.getLocalizedMessage(), exc);
 		}
-		
+
 		QueryType query = null;
 		try {
 			JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.query");
@@ -176,7 +182,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
 			throw new IOException("Could not load query file", exc);
 		}
-		
+
 		return query;
 	}
 
@@ -184,21 +190,21 @@ public class XMLResultSetManager implements ResultSetManager {
 	public void saveResultSet(Project project, Query query, ResultSet resultSet) throws IOException {
 		File queryPath = getQueryPath(project, query);
 		File resultSetFile = new File(queryPath, resultSet.getSessionPath() + ".xml");
-		
+
 		// ensure the list of metadata keys is created for quick reference later
 		resultSet.getMetadataKeys();
-		
+
 		try {
-			
+
 			if(!queryPath.exists()) {
 				queryPath.mkdirs();
 			}
-			
+
 			// Use JAXBElement wrapper around object because they do not have
 			// the XMLRootElement annotation
 			ResultSetType rst = ((XMLResultSet)resultSet).getXMLObject();
 			JAXBElement<ResultSetType> jaxbElem = (new ca.phon.query.db.xml.io.resultset.ObjectFactory()).createResultSet(rst);
-			
+
 			// Initialize marshaller and write to disk
 			JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.resultset");
 			Marshaller marshaller = context.createMarshaller();
@@ -220,7 +226,7 @@ public class XMLResultSetManager implements ResultSetManager {
 	}
 
 	/**
-	 * Load XML data for a result set. 
+	 * Load XML data for a result set.
 	 */
 	@SuppressWarnings("unchecked")
 	ResultSetType loadResultSet(File resultSetFile) throws IOException {
@@ -231,7 +237,7 @@ public class XMLResultSetManager implements ResultSetManager {
 		} catch(SAXException exc) {
 			LOGGER.log(Level.WARNING, exc.getLocalizedMessage(), exc);
 		}
-		
+
 		ResultSetType resultSet = null;
 		try {
 			JAXBContext context = JAXBContext.newInstance("ca.phon.query.db.xml.io.resultset");
@@ -241,7 +247,7 @@ public class XMLResultSetManager implements ResultSetManager {
 		} catch(JAXBException exc) {
 			throw new IOException("Could not load result set file", exc);
 		}
-		
+
 		return resultSet;
 	}
 
@@ -254,7 +260,7 @@ public class XMLResultSetManager implements ResultSetManager {
 				if(!qFile.delete()) {
 					throw new IOException("File " + qFile.getAbsolutePath() + " could not be removed from storage device.");
 				}
-			
+
 			}
 			if(!queryFile.delete()) {
 				throw new IOException("Folder " + queryFile.getAbsolutePath() + " could not be removed from storage device.");
