@@ -215,6 +215,7 @@ function query_record(recordIndex, record) {
 				result.addResultValue(rv);
 
 				var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
+				result.metadata.putAll(groupMeta);
 				result.metadata.putAll(alignedMeta);
 
 				results.addResult(result);
