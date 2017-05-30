@@ -89,6 +89,8 @@ public class DeriveSessionWizard extends WizardFrame {
 		step1 = new MergeSessionStep1(getProject());
 		step1.setNextStep(0);
 		addWizardStep(step1);
+
+		getRootPane().setDefaultButton(btnNext);
 	}
 
 	private WizardStep createMergeStep() {
@@ -296,7 +298,7 @@ public class DeriveSessionWizard extends WizardFrame {
 			project.saveSession(mergedSession, writeLock);
 			project.releaseSessionWriteLock(mergedSession, writeLock);
 
-			LOGGER.info("Finshed. New session has " + mergedSession.getRecordCount() + " records.");
+			LOGGER.info("Finished. New session has " + mergedSession.getRecordCount() + " records.");
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			throw e;

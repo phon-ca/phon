@@ -99,6 +99,18 @@ public class SessionMerger extends PhonTask {
 	}
 
 	public void addParticipant(Participant participant) {
+		// assign ID by role
+		String id = participant.getRole().getId();
+		int idx = 0;
+		// look at other participants, see if we need to modify id
+		for(Participant otherP:this.participants) {
+			if(otherP == participant) continue;
+			if(otherP.getId().equals(id)) {
+				id = participant.getRole().getId().substring(0, 2) + (++idx);
+			}
+		}
+		participant.setId(id);
+
 		this.participants.add(participant);
 	}
 
