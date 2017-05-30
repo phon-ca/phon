@@ -57,7 +57,7 @@ exports.TierList = function(id) {
 	};
 
 	this.getAlignedTierData = function(record, obj, label) {
-		var retVal = new java.util.TreeMap();
+		var retVal = new java.util.LinkedHashMap();
 		if(typeof obj.getTier !== "function") return retVal;
 
 		var extraTiers = this.getTiers();

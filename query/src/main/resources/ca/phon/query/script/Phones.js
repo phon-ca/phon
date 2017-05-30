@@ -170,33 +170,32 @@ function query_record(recordIndex, record) {
 
 	// perform searches
 	for (var i = 0; i < groups.length; i++) {
-		var alignedMetadata = new java.util.TreeMap();
 		var group = groups[i];
 
-		var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
-		alignedMetadata.putAll(alignedMeta);
+		var groupAlignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
 
 		if (filters.alignedGroup.isUseFilter()) {
 			alignedGroup = group.getTier(filters.alignedGroup.tier);
 			if(alignedGroup != null)
-				alignedMetadata.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
+				groupAlignedMeta.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
 		}
 
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
 		var phoneMap = group.phoneAlignment;
 
 		var toSearch = new Array();
-		toSearch.push(ipa);
+		toSearch.push([ipa, groupAlignedMeta]);
 
 		// search by word?
 		if (filters.word.isUseFilter()) {
 			toSearch.length = 0;
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j < selectedWords.length; j++) {
+				var wordAlignedMeta = new java.util.LinkedHashMap();
+				wordAlignedMeta.putAll(groupAlignedMeta);
 				var word = selectedWords[j];
 
-				var alignedMeta = filters.wordTiers.getAlignedTierData(record, word, "Word");
-				alignedMetadata.putAll(alignedMeta);
+				wordAlignedMeta.putAll(filters.wordTiers.getAlignedTierData(record, word, "Word"));
 
 				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
 				var addWord = (wordIpa != null);
@@ -210,11 +209,11 @@ function query_record(recordIndex, record) {
 					addWord = filters.alignedWord.check_word(word);
 					alignedWord = word.getTier(filters.alignedWord.tier);
 					if(alignedWord != null)
-						alignedMetadata.put(filters.alignedWord.tier + " (Word)", alignedWord.toString());
+						wordAlignedMeta.put(filters.alignedWord.tier + " (Word)", alignedWord.toString());
 				}
 
 				if (addWord == true) {
-					toSearch.push(wordIpa);
+					toSearch.push([wordIpa, wordAlignedMeta]);
 				}
 			}
 		}
@@ -235,7 +234,8 @@ function query_record(recordIndex, record) {
 		}
 
 		for (j = 0; j < toSearch.length; j++) {
-			var obj = toSearch[j];
+			var obj = toSearch[j][0];
+			var alignedMetadata = toSearch[j][1];
 			var matches = filters.primary.find_pattern(obj);
 			var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter: filters.actualResultFilter);
 			var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter: filters.targetResultFilter);
