@@ -222,12 +222,12 @@ function query_record(recordIndex, record) {
 		if (filters.syllable.isUseFilter()) {
 			var syllList = new Array();
 			for (j = 0; j < toSearch.length; j++) {
-				var obj = toSearch[j];
+				var obj = toSearch[j][0];
 				var aligned = (phoneMap != null ? phoneMap: new Packages.ca.phon.ipa.alignment.PhoneMap());
 				var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
 
 				for (k = 0; k < sylls.length; k++) {
-					syllList.push(sylls[k]);
+					syllList.push([sylls[k], toSearch[j][1]]);
 				}
 			}
 			toSearch = syllList;
