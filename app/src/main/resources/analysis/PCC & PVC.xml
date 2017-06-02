@@ -1332,7 +1332,7 @@ function tableOp(context, table) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual", "PCC # Target", "PCC # Attempted", "PCC # Correct", "PCC # Deleted", "PCC # Epenthesized", "PCC % Correct", "PCC % Deleted", "PCC % Epenthesized"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual", "PCC # Target", "PCC # Attempted", "PCC # Correct", "PCC # Deleted", "PCC # Epenthesized", "PCC % Correct", "PCC % Deleted", "PCC % Epenthesized"] )
 #else
 $caption
 
@@ -1384,7 +1384,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual", "PVC # Target", "PVC # Attempted", "PVC # Correct", "PVC # Deleted", "PVC # Epenthesized", "PVC % Correct", "PVC % Deleted", "PVC % Epenthesized"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual", "PVC # Target", "PVC # Attempted", "PVC # Correct", "PVC # Deleted", "PVC # Epenthesized", "PVC % Correct", "PVC % Deleted", "PVC % Epenthesized"] )
 #else
 $caption
 
@@ -1436,7 +1436,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual", "APCC # Target", "APCC # Attempted", "APCC # Correct", "APCC # Deleted", "APCC # Epenthesized", "APCC % Correct", "APCC % Deleted", "APCC % Epenthesized"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual", "APCC # Target", "APCC # Attempted", "APCC # Correct", "APCC # Deleted", "APCC # Epenthesized", "APCC % Correct", "APCC % Deleted", "APCC % Epenthesized"] )
 #else
 $caption
 
@@ -1488,7 +1488,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual", "APVC # Target", "APVC # Attempted", "APVC # Correct", "APVC # Deleted", "APVC # Epenthesized", "APVC % Correct", "APVC % Deleted", "APVC % Epenthesized"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual", "APVC # Target", "APVC # Attempted", "APVC # Correct", "APVC # Deleted", "APVC # Epenthesized", "APVC % Correct", "APVC % Deleted", "APVC % Epenthesized"] )
 #else
 $caption
 
@@ -1729,7 +1729,7 @@ No Results
                                     <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>

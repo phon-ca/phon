@@ -195,7 +195,7 @@ function createTypeSelection() {
 }
 
 function run(context) {
-	
+
 }
 ]]></oga:property>
                     <oga:property key="filters.primary.filter"><![CDATA[\w]]></oga:property>
@@ -732,7 +732,7 @@ function run(context) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption($table $tableName $caption [])
 #end
 ]]></oga:property>
                                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
@@ -1213,7 +1213,7 @@ function run(context) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 $caption
 
@@ -1683,7 +1683,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual"] )
 #else
 $caption
 
@@ -1735,7 +1735,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual"] )
 #else
 $caption
 
@@ -1787,7 +1787,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual"] )
 #else
 $caption
 
@@ -2093,7 +2093,7 @@ function tableOp(context, table) {
                                     <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>

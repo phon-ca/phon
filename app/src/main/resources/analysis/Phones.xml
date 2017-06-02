@@ -819,7 +819,7 @@ function run(context) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption($table $tableName $caption [])
 #else
 <b>Speaker:</b> $participant
 
@@ -1291,7 +1291,7 @@ function tableOp(context, table) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaptionExcludingColumns( $table $caption ["Date", "Speaker", "Age", "Group #", "Tier", "Range", "Result" ] )
+#printTableWithIdAndCaptionExcludingColumns( $table $tableName $caption ["Date", "Speaker", "Age", "Group #", "Tier", "Range", "Result" ] )
 #else
 $caption
 
@@ -1516,7 +1516,7 @@ No Results
                                     <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>

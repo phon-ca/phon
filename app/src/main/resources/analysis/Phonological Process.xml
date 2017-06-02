@@ -1152,7 +1152,7 @@ function filterRow(table, row, col) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 $caption
 
@@ -1784,7 +1784,7 @@ function filterRow(table, row, col) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual"] )
 #else
 $caption
 
@@ -2062,7 +2062,7 @@ function tableOp(context, table) {
                                     <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>

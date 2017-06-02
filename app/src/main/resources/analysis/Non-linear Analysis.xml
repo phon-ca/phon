@@ -623,28 +623,28 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -670,7 +670,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -686,16 +686,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -703,7 +703,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -1043,7 +1043,7 @@ function run(context) {
 	table.setColumnTitle(2, "Value");
 	table.setColumnTitle(3, "Total");
 
-	context.put("table", table);	
+	context.put("table", table);
 }
 ]]></oga:property>
                                                                 </oga:settings>
@@ -1251,7 +1251,7 @@ function tableOp(context, table) {
 
 	var primaryStressMatches = true;
 	var secondaryStressMatches = true;
-	
+
 	// check primary stress
 	var targetPrimaryStressIdx = targetStressPattern.indexOf("1");
 	var actualPrimaryStressIdx = actualStressPattern.indexOf("1");
@@ -1274,7 +1274,7 @@ function tableOp(context, table) {
 	var categoryRowAdded = false;
 	var row = new Array();
 	var total = 0;
-	
+
 	if(primaryStressMatches == false) {
 		row = new Array();
 		row[0] = (categoryRowAdded == false ? category : "");
@@ -1306,7 +1306,7 @@ function tableOp(context, table) {
 		row[2] = new java.lang.Integer(1);
 		row[3] = "";
 		table.addRow(row);
-		
+
 		++total;
 	}
 
@@ -1455,7 +1455,7 @@ function tableOp(context, table) {
 		var targetSyllable = targetSylls.get(syllIdx);
 		var aligned = alignment.getAligned(targetSyllable.removePunctuation());
 		var alignedTranscript = (new IPATranscriptBuilder()).append(aligned).toIPATranscript();
-		
+
 		if(aligned.length == 0 || !alignedTranscript.contains("\\v")) {
 			// deleted syllable
 			var rowData = new Array();
@@ -1597,11 +1597,11 @@ function checkCompensatoryVowelLengthening(table, target, actual, alignment) {
 		// has vowel been deleted
 		var aligned = alignment.getAligned(vowelList[i]);
 		if(aligned == null || aligned.length == 0) {
-			
+
 			// has the next vowel been lengthened
 			var nextVowel = vowelList[i+1].elementAt(0);
 			var vowelAlignment = alignment.getAligned(vowelList[i+1]);
-			
+
 			if(vowelAlignment != null && vowelAlignment.length > 0) {
 				var alignedVowel = vowelAlignment[0];
 
@@ -1737,7 +1737,7 @@ function checkVowelFeatures(table, tele, aele) {
 	if(!isSchwa) {
 		total += checkFeatures(table, roundingFeatures, "Rounding", tele, aele);
 	}
-	
+
 	return total;
 }
 
@@ -1758,7 +1758,7 @@ function tableOp(context, table) {
 
 		var isConsonant = (targetEle != null ? targetEle.featureSet.hasFeature("c") : actualEle.featureSet.hasFeature("c"));
 		var isSyllabicConsonant = isConsonant && (targetEle != null ? targetEle.featureSet.hasFeature("syllabic") : actualEle.featureSet.hasFeature("syllabic"));
-		
+
 		if(isConsonant && !isSyllabicConsonant) {
 			total += checkConsonantFeatures(table, targetEle, actualEle);
 		} else {
@@ -1852,7 +1852,7 @@ function tableOp(context, table) {
 	row[3] = new java.lang.Integer(phoneSubtotal);
 	row[4] = new java.lang.Integer(featureSubtotal);
 	row[5] = new java.lang.Integer(total);
-	
+
 	table.addRow(row);
 }
 ]]></oga:property>
@@ -1988,8 +1988,9 @@ function tableOp(context, table) {
                                                                     <extensions>
                                                                         <oga:settings>
                                                                             <oga:property key="dataTemplate"><![CDATA[
-#set($table = $tables.get("$DATA"))
-#printTableWithCaption( $table $caption [] )
+#set($tableName = '$DATA')
+#set($table = $tables.get($tableName))
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                                                             <oga:property key="showText"><![CDATA[false]]></oga:property>
                                                                             <oga:property key="showTable"><![CDATA[true]]></oga:property>
@@ -2296,8 +2297,9 @@ function tableOp(context, table) {
                                                             <extensions>
                                                                 <oga:settings>
                                                                     <oga:property key="dataTemplate"><![CDATA[
-#set($table = $tables.get("$DATA"))
-#printTableWithCaption( $table $caption [] )
+#set($tableName = '$DATA')
+#set($table = $tables.get($tableName))
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                                                     <oga:property key="showText"><![CDATA[false]]></oga:property>
                                                                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
@@ -2607,9 +2609,9 @@ function tableOp(context, table) {
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="dataTemplate"><![CDATA[
-#set($tableName = "$DATA")
+#set($tableName = '$DATA')
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                                             <oga:property key="showText"><![CDATA[true]]></oga:property>
                                                             <oga:property key="showTable"><![CDATA[false]]></oga:property>

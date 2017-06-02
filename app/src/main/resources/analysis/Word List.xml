@@ -73,7 +73,7 @@ function setup_params(params) {
 	params.add(reportTitleParam);
 
 	params.add(new SeparatorScriptParam("Search Options", false));
-	
+
     filters.primary.param_setup(params);
     filters.primary.set_required(true);
 
@@ -632,7 +632,7 @@ function run(context) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption($table $tableName $caption [])
 #else
 <b>Speaker:</b> $participant
 
@@ -856,7 +856,7 @@ function init(inputFields, outputFields) {
 
 function run(context) {
 	var table = context.get("table");
-	
+
 	context.put("exists", (table != null));
 
 	context.put("table", table);
@@ -1054,7 +1054,7 @@ function tableOp(context, table) {
 	row[3] = tokenSummary.getValueAt("Tokens", "Result");
 	row[4] = tokenSummary.getValueAt("Types", "Result");
 	row[5] = tokenSummary.getValueAt("Ratio", "Result");
-	
+
 	table.addRow(row);
 }
 ]]></oga:property>
@@ -1088,7 +1088,7 @@ function tableOp(context, table) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "Result"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "Result"] )
 #else
 $caption
 
@@ -1314,7 +1314,7 @@ No Results
                                     <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>

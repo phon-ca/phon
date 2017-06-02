@@ -76,6 +76,16 @@
 #end
 #end
 
+#macro( printTableWithIdAndCaption $table $id $caption $columnNames )
+#if($table.columnCount > 0 && $table.rowCount > 0)
+<table id='$id'>
+<caption>$caption</caption>
+#printHeader( $table $columnNames )
+#printBody( $table $columnNames )
+</table>
+#end
+#end
+
 #macro( printTableWithCaptionExcludingColumns $table $caption $excludedColumns )
 #set($columnNames = [])
 #set($maxCol = $table.columnCount - 1)
@@ -86,4 +96,16 @@
 #end
 #end
 #printTableWithCaption( $table $caption $columnNames )
+#end
+
+#macro( printTableWithIdAndCaptionExcludingColumns $table $id $caption $excludedColumns )
+#set($columnNames = [])
+#set($maxCol = $table.columnCount - 1)
+#foreach($col in [0..$maxCol])
+#set($colName = $table.getColumnTitle($col))
+#if(!$excludedColumns.contains($colName))
+#set( $swallow = $columnNames.add($colName))
+#end
+#end
+#printTableWithIdAndCaption( $table $id $caption $columnNames )
 #end

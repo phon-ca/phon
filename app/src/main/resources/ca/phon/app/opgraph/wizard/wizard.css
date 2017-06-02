@@ -75,6 +75,48 @@ caption {
     text-align: left;
 }
 
+img {
+	vertical-align: text-top;
+}
+
+.tableButtonRow {
+	display: flex;
+	flex-direction: row-reverse;
+	margin-right: -5px;
+}
+
+.tableButton {
+	font-size: small;
+	display: inline-block;
+
+	margin-bottom: 0px;
+	margin-top: 0px;
+	margin-left: 0px;
+	margin-right: 5px;
+
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 4px;
+	padding-left: 4px;
+
+	background-color: white;
+	color: rgb(50, 50, 50);
+
+	border-top: 1px;
+	border-left: 1px;
+	border-right: 1px;
+	border-bottom: 0px;
+	border-style: solid;
+	border-color: lightgrey;
+	border-radius: 5px 5px 0px 0px;
+}
+
+.tableButton:hover {
+	background-color: gainsboro;
+	color: rgb(0, 90, 140);
+	cursor: pointer;
+}
+
 .text_value {
 	font-family: "Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
 }
@@ -206,6 +248,10 @@ caption {
 
     .sidenav {
         display: none;
+    }
+
+    .tableButtonRow {
+    	display: none;
     }
 
     header, footer, nav {

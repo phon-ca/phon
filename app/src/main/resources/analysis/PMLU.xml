@@ -1179,7 +1179,7 @@ function tableOp(context, table) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Record #", "IPA Target", "IPA Actual", "Target PMLU", "Actual PMLU", "PWP", "Target ePMLU-Features", "Actual ePMLU-Features", "ePWP-Features", "Target ePMLU-Syllables", "Actual ePMLU-Syllables", "Target ePMLU", "Actual ePMLU", "ePWP"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Record #", "IPA Target", "IPA Actual", "Target PMLU", "Actual PMLU", "PWP", "Target ePMLU-Features", "Actual ePMLU-Features", "ePWP-Features", "Target ePMLU-Syllables", "Actual ePMLU-Syllables", "Target ePMLU", "Actual ePMLU", "ePWP"] )
 #else
 $caption
 
@@ -1404,7 +1404,7 @@ No Results
                                     <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>

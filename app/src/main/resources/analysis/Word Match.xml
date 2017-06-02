@@ -35,21 +35,21 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 /*
 params = {label, "", "Whole-word comparison of IPA Actual vs. IPA Target forms."};
 */
@@ -96,7 +96,7 @@ var ignoreDiacriticsParamInfo = {
 	"id": "ignoreDiacritics",
 	"title": "Exact Match Options",
 	"desc": "Ignore diacritics",
-	"def": true	
+	"def": true
 };
 var ignoreDiacriticsParam;
 var ignoreDiacritics = ignoreDiacriticsParamInfo.def;
@@ -136,10 +136,10 @@ function setup_params(params) {
 			reportTitleParamInfo.def);
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
-	
+
 	var cvOptionsSep = new SeparatorScriptParam("Comparison Options", false);
 	params.add(cvOptionsSep);
-	
+
 	ignoreTruncatedParam = new BooleanScriptParam(
 		ignoreTruncatedParamInfo.id,
 		ignoreTruncatedParamInfo.desc,
@@ -161,8 +161,8 @@ function setup_params(params) {
 		ignoreDiacriticsParamInfo.title,
 		ignoreDiacriticsParamInfo.def);
 	params.add(ignoreDiacriticsParam);
-	
-	
+
+
 	cvOptionsParam = new MultiboolScriptParam(
 		cvOptionsParamInfo.id,
 		cvOptionsParamInfo.def,
@@ -170,12 +170,12 @@ function setup_params(params) {
 		cvOptionsParamInfo.title,
 		cvOptionsParamInfo.numCols);
 	params.add(cvOptionsParam);
-	
+
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-		
+
 	filters.word.searchByWordEnabled = false;
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
@@ -186,7 +186,7 @@ function setup_params(params) {
 		ignoreTruncatedParamInfo.title, ignoreTruncatedParamInfo.desc,
 		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
-	
+
 	filters.speaker.param_setup(params);
 }]]></oga:property>
                 </oga:settings>
@@ -200,21 +200,21 @@ function setup_params(params) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund &lt;ghedlund@mun.ca&gt; and Yvan Rose &lt;yrose@mun.ca&gt;
  * Dept of Linguistics, Memorial University &lt;https://phon.ca&gt;
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
  */
- 
+
 /*
 params = {label, "", "Whole-word comparison of IPA Actual vs. IPA Target forms."};
 */
@@ -264,7 +264,7 @@ var ignoreDiacriticsParamInfo = {
 	"id": "ignoreDiacritics",
 	"title": "Exact Match Options",
 	"desc": "Ignore diacritics",
-	"def": true	
+	"def": true
 };
 var ignoreDiacriticsParam;
 var ignoreDiacritics = ignoreDiacriticsParamInfo.def;
@@ -301,7 +301,7 @@ function begin_search(s) {
 function setup_params(params) {
 	var cvOptionsSep = new SeparatorScriptParam("Comparison Options", false);
 	params.add(cvOptionsSep);
-	
+
 	ignoreTruncatedParam = new BooleanScriptParam(
 		ignoreTruncatedParamInfo.id,
 		ignoreTruncatedParamInfo.desc,
@@ -323,7 +323,7 @@ function setup_params(params) {
 		ignoreDiacriticsParamInfo.title,
 		ignoreDiacriticsParamInfo.def);
 	params.add(ignoreDiacriticsParam);
-	
+
 	cvOptionsParam = new MultiboolScriptParam(
 		cvOptionsParamInfo.id,
 		cvOptionsParamInfo.def,
@@ -331,12 +331,12 @@ function setup_params(params) {
 		cvOptionsParamInfo.title,
 		cvOptionsParamInfo.numCols);
 	params.add(cvOptionsParam);
-	
+
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group&lt;/b&gt;&lt;/html&gt;");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-		
+
 	filters.word.searchByWordEnabled = false;
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word&lt;/b&gt;&lt;/html&gt;");
@@ -347,7 +347,7 @@ function setup_params(params) {
 		ignoreTruncatedParamInfo.title, ignoreTruncatedParamInfo.desc,
 		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
-	
+
 	filters.speaker.param_setup(params);
 }
 
@@ -366,24 +366,24 @@ function setup_params(params) {
 function query_record(recordIndex, record)
 {
 	if(!filters.speaker.check_speaker(record.speaker)) return;
-    
+
 	var searchObjects = filters.group.getRequestedGroups(record);
 	// check aligned group for each group returned
 	if(filters.alignedGroup.isUseFilter()) {
 	    searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
 	}
-	
+
 	for(var gIdx = 0; gIdx &lt; searchObjects.length; gIdx++) {
 		var group = searchObjects[gIdx];
 		var words = filters.word.getRequestedWords(group, "IPA Target");
-		
+
 		for(var wIdx = 0; wIdx &lt; words.length; wIdx++) {
 			var word = words[wIdx];
 			if(filters.alignedWord.isUseFilter()) {
 				var alignedWord = word.getTier(filters.alignedWord.tier);
 				if(!filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
 			}
-			
+
 			checkWordMatch(recordIndex, record, word);
 		}
 	}
@@ -393,7 +393,7 @@ function checkWordMatch(recordIndex, record, obj) {
 	var word = (obj.IPATarget != null ? obj.IPATarget : new IPATranscript());
 	var aligned = (obj.IPAActual != null ? obj.IPAActual : new IPATranscript());
 	var ortho = (obj.orthography != null ? obj.orthography : new Orthography());
-	
+
 	if((aligned ==  null || aligned.length() == 0) &amp;&amp; ignoreTruncated == true) {
 		return;
 	}
@@ -401,7 +401,7 @@ function checkWordMatch(recordIndex, record, obj) {
 	var result = factory.createResult();
 	result.recordIndex = recordIndex;
 	result.schema = "ALIGNED";
-	
+
 	var orthoVal = factory.createResultValue();
 	orthoVal.tierName = "Orthography";
 	orthoVal.groupIndex = obj.group.groupIndex;
@@ -410,7 +410,7 @@ function checkWordMatch(recordIndex, record, obj) {
 	orthoVal.range = new Range(startIndex, startIndex + length, false);
 	orthoVal.data = ortho;
 	result.addResultValue(orthoVal);
-	
+
 	var rv = factory.createResultValue();
 	rv.tierName = searchTier;
 	rv.groupIndex = obj.group.groupIndex;
@@ -419,7 +419,7 @@ function checkWordMatch(recordIndex, record, obj) {
 	rv.range = new Range(startIndex, startIndex + length, false);
 	rv.data = word;
 	result.addResultValue(rv);
-	
+
 	rv = factory.createResultValue();
 	rv.tierName = alignedTier;
 	rv.groupIndex = obj.group.groupIndex;
@@ -428,19 +428,19 @@ function checkWordMatch(recordIndex, record, obj) {
 	rv.range = new Range(startIndex, startIndex + length, false);
 	rv.data = aligned;
 	result.addResultValue(rv);
-	
+
 	if(includeExactMatch == true) {
 		var testTarget = (ignoreDiacritics == true ? word.stripDiacritics().removePunctuation().toString() : word.toString());
 		var testActual = (ignoreDiacritics == true ? aligned.stripDiacritics().removePunctuation().toString() : aligned.toString());
 		result.metadata.put(mdataExactField, testTarget.equals(testActual) + "");
 	}
-	
+
 	if(includeCVPatternMatch == true) {
 		var targetCVPattern = cvPattern2(word, includeStressMarkers, includeSyllableBoundaries, includeImplicitBoundaries);
 		var alignedCVPattern = cvPattern2(aligned, includeStressMarkers, includeSyllableBoundaries, includeImplicitBoundaries);
-		
+
 		var exactMatch = (targetCVPattern == alignedCVPattern);
-		
+
 		result.metadata.put(searchTier + " CV", targetCVPattern);
 		result.metadata.put(alignedTier + " CV", alignedCVPattern)
 		result.metadata.put(mdataCVField, exactMatch + "");
@@ -456,18 +456,18 @@ function checkWordMatch(recordIndex, record, obj) {
 		result.metadata.put(alignedTier + " Syllable Count", actualSyllables + "");
 		result.metadata.put(mdataSyllableField, exactMatch + "");
 	}
-	
+
 	if(includeStressPatternMatch == true) {
 		var targetStressPattern = word.stressPattern;
 		var actualStressPattern = aligned.stressPattern;
-		
+
 		var exactMatch = word.matchesStressPattern(actualStressPattern);
-		
+
 		result.metadata.put(searchTier + " Stress", targetStressPattern);
 		result.metadata.put(alignedTier + " Stress", actualStressPattern);
 		result.metadata.put(mdataStressField, exactMatch + "");
 	}
-	
+
 	results.addResult(result);
 }
 
@@ -485,16 +485,16 @@ function cvPattern2(obj, includeStressMarkers, includeSyllableBoundaries, includ
 	} else {
 		retVal = cvPattern(obj, includeStressMarkers, includeSyllableBoundaries);
 	}
-	
+
 	return retVal;
 }
- 
+
 function cvPattern(obj, includeStressMarkers, includeSyllableBoundaries) {
 	var retVal = "";
 
 	for(var pIdx = 0; pIdx &lt; obj.length(); pIdx++) {
 		var p = obj.elementAt(pIdx);
-		
+
 		if(p.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
 			if(includeSyllableBoundaries == true &amp;&amp; pIdx &gt; 0)
 				retVal += ".";
@@ -507,14 +507,14 @@ function cvPattern(obj, includeStressMarkers, includeSyllableBoundaries) {
 			retVal += " ";
 			continue;
 		}
-		
+
 		if(p.getFeatureSet().hasFeature("Consonant")) {
 			retVal += "C";
 		} else if(p.getFeatureSet().hasFeature("Vowel")) {
 			retVal += "V";
 		}
 	}
-	
+
 	return retVal;
 }
 </source>
@@ -649,28 +649,28 @@ $DATA
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -696,7 +696,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -712,16 +712,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -729,7 +729,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -825,7 +825,7 @@ function tableOp(context, table) {
 	table.setColumnTitle(row++, "Session");
 	table.setColumnTitle(row++, "Age");
 	table.setColumnTitle(row++, "Word Count");
-	
+
 	if(includeExactMatch == true) {
 		table.setColumnTitle(row++, "# Exact Match");
 		table.setColumnTitle(row++, "# Exact Mis-match");
@@ -913,7 +913,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -1063,21 +1063,21 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 /**
  * This node will create output tables
  * for:
@@ -1121,7 +1121,7 @@ function init(inputFields, outputFields) {
 	outputFields.add("wordStressMisMatches", "table of word stress mis-matches", false, Packages.ca.phon.query.report.datasource.DefaultTableDataSource);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -2204,11 +2204,11 @@ function tableOp(context, table) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2259,11 +2259,11 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2314,11 +2314,11 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2369,11 +2369,11 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2424,11 +2424,11 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2479,11 +2479,11 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2534,11 +2534,11 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2589,11 +2589,11 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 <b>$title</b><br/>
 <b>Speaker:</b> $participant
-	
+
 No Results
 #end
 ]]></oga:property>
@@ -2696,28 +2696,28 @@ No Results
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Split Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Split table based on column name.  Two outputs
-  * are produced, a set of keys from the column used in the filter  and a 
+  * are produced, a set of keys from the column used in the filter  and a
   * map of key -> table values.
   */
 
@@ -2743,7 +2743,7 @@ function init(inputs, outputs) {
 	outputs.add("tableMap", "Map of key -> table values", false, java.util.Map);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -2759,16 +2759,16 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	
-	if(col < 0) 
+
+	if(col < 0)
 		return; // column not found
-	
+
 	var tableMap = new java.util.LinkedHashMap();
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
 		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
-		
+
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
@@ -2776,7 +2776,7 @@ function tableOp(context, table) {
 		}
 		keyTable.addRow(table.getRow(row));
 	}
-	
+
 	context.put("keySet", tableMap.keySet());
 	context.put("tableMap", tableMap);
 }
@@ -2926,7 +2926,7 @@ function init(inputFields, outputFields) {
 }
 
 function run(context) {
-	var tableExists = 
+	var tableExists =
 		(context.containsKey("table") && context.get("table") != null);
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
@@ -3020,21 +3020,21 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 /**
  * This node will create output tables
  * for:
@@ -3078,7 +3078,7 @@ function init(inputFields, outputFields) {
 	outputFields.add("wordStressMisMatches", "table of word stress mis-matches", false, Packages.ca.phon.query.report.datasource.DefaultTableDataSource);
 }
 
-/* 
+/*
  * Create a new table with the same schema as the inputTable
  */
 function setupTable(inputTable) {
@@ -5127,7 +5127,7 @@ function tableOp(context, table) {
 
 	var rowData = [];
 	var row = 0;
-	
+
 	rowData[row++] = sessionName;
 	rowData[row++] = age;
 	rowData[row++] = new java.lang.Integer(numWords);
@@ -5155,7 +5155,7 @@ function tableOp(context, table) {
 		rowData[row++] = new java.lang.Integer(wordStressMisMatches);
 		rowData[row++] = (wordStressMatches / numWords) * 100.0;
 	}
-	
+
 	table.addRow(rowData);
 }
 ]]></oga:property>
@@ -5272,7 +5272,8 @@ function tableOp(context, table) {
                                         <oga:settings>
                                             <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
-#printTableWithCaption($tables.get($tableName) $caption [])
+#set($table = $tables.get($tableName))
+#printTableWithIdAndCaption( $table $tableName $caption [])
 ]]></oga:property>
                                             <oga:property key="showText"><![CDATA[true]]></oga:property>
                                             <oga:property key="showTable"><![CDATA[false]]></oga:property>

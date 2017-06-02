@@ -75,6 +75,8 @@ import javax.swing.tree.TreePath;
 import org.apache.velocity.tools.generic.MathTool;
 import org.jdesktop.swingx.JXBusyLabel;
 
+import com.sun.media.jfxmediaimpl.platform.Platform;
+
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
@@ -105,6 +107,8 @@ import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
+import javafx.scene.web.WebView;
+import netscape.javascript.JSObject;
 
 /**
  * The Node wizard servers as the UI layer for opgraph
@@ -1017,6 +1021,15 @@ public class NodeWizard extends WizardFrame {
 		@Override
 		protected void done() {
 			panel.showHtml();
+
+			javafx.application.Platform.runLater( () -> {
+				// setup JS context for WebView and call
+				// methods for setting embedded customizations
+				final WebView webView = panel.getWebView();
+				final JSObject window = (JSObject) webView.getEngine().executeScript("window");
+				window.setMember("buffers", bufferPanel);
+			});
+
 			bufferPanel.getBufferTable().repaint();
 			reportTimer.stop();
 		}

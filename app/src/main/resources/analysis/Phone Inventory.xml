@@ -216,7 +216,7 @@ function createTypeSelection() {
 }
 
 function run(context) {
-	
+
 }
 ]]></oga:property>
                     <oga:property key="filters.primary_target.filter"><![CDATA[\w]]></oga:property>
@@ -1437,7 +1437,7 @@ function init(inputFields, outputFields) {
 function run(context) {
 	var table = context.get("table");
 	var tierName = context.get("tierName");
-	
+
 	context.put("exists", (table != null));
 
 	if(table == null) {
@@ -1515,7 +1515,7 @@ function init(inputFields, outputFields) {
 function run(context) {
 	var table = context.get("table");
 	var tierName = context.get("tierName");
-	
+
 	context.put("exists", (table != null));
 
 	if(table == null) {
@@ -1752,7 +1752,7 @@ function run(context) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption($table $tableName $caption [])
 #else
 <b>Speaker:</b> $participant
 
@@ -1955,7 +1955,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption($table, $caption, [])
+#printTableWithIdAndCaption($table $tableName $caption [])
 #else
 <b>Speaker:</b> $participant
 
@@ -2313,7 +2313,7 @@ function init(inputFields, outputFields) {
 function run(context) {
 	var table = context.get("table");
 	var tierName = context.get("tierName");
-	
+
 	context.put("exists", (table != null));
 
 	if(table == null) {
@@ -2390,7 +2390,7 @@ function init(inputFields, outputFields) {
 function run(context) {
 	var table = context.get("table");
 	var tierName = context.get("tierName");
-	
+
 	context.put("exists", (table != null));
 
 	if(table == null) {
@@ -2591,26 +2591,26 @@ function run(context) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 201, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Partition Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Partition table using a standard query filter and column name.
   */
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
@@ -2633,7 +2633,7 @@ function setup_params(params) {
 		columnParamInfo.def);
 	columnParam.setPrompt(columnParamInfo.prompt);
 	params.add(columnParam);
-	
+
 	filters.column.param_setup(params);
 }
 
@@ -2647,9 +2647,9 @@ function init(inputs, outputs) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	if(col < 0) 
+	if(col < 0)
 		return; // column not found
-	
+
 	// create output tables
 	trueTable = new DefaultTableDataSource();
 	falseTable = new DefaultTableDataSource();
@@ -2658,18 +2658,18 @@ function tableOp(context, table) {
 	    trueTable.setColumnTitle(c, colTitle);
 	    falseTable.setColumnTitle(c, colTitle);
 	}
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 		rowData = table.getRow(row);
 		rowMatches = filterRow(table, row, col);
-		
+
 		if(rowMatches == true) {
 			trueTable.addRow(rowData);
 		} else {
 			falseTable.addRow(rowData);
 		}
 	}
-	
+
 	context.put("trueTable", trueTable);
 	context.put("falseTable", falseTable);
 }
@@ -2677,7 +2677,7 @@ function tableOp(context, table) {
 function filterRow(table, row, col) {
 	var value = table.getValueAt(row, col);
 	if(value == null) return false;
-	
+
 	return filters.column.check_filter(value);
 }
 ]]></oga:property>
@@ -2697,26 +2697,26 @@ function filterRow(table, row, col) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 201, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
   * Partition Table.js
-  * 
+  *
   * Script for use with ca.phon.app.opgraph.nodes.table.TableScriptNode
-  * 
+  *
   * Partition table using a standard query filter and column name.
   */
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
@@ -2739,7 +2739,7 @@ function setup_params(params) {
 		columnParamInfo.def);
 	columnParam.setPrompt(columnParamInfo.prompt);
 	params.add(columnParam);
-	
+
 	filters.column.param_setup(params);
 }
 
@@ -2753,9 +2753,9 @@ function init(inputs, outputs) {
 function tableOp(context, table) {
 	// find table column index
 	col = table.getColumnIndex(columnName);
-	if(col < 0) 
+	if(col < 0)
 		return; // column not found
-	
+
 	// create output tables
 	trueTable = new DefaultTableDataSource();
 	falseTable = new DefaultTableDataSource();
@@ -2764,18 +2764,18 @@ function tableOp(context, table) {
 	    trueTable.setColumnTitle(c, colTitle);
 	    falseTable.setColumnTitle(c, colTitle);
 	}
-	
+
 	for(row = 0; row < table.rowCount; row++) {
 		rowData = table.getRow(row);
 		rowMatches = filterRow(table, row, col);
-		
+
 		if(rowMatches == true) {
 			trueTable.addRow(rowData);
 		} else {
 			falseTable.addRow(rowData);
 		}
 	}
-	
+
 	context.put("trueTable", trueTable);
 	context.put("falseTable", falseTable);
 }
@@ -2783,7 +2783,7 @@ function tableOp(context, table) {
 function filterRow(table, row, col) {
 	var value = table.getValueAt(row, col);
 	if(value == null) return false;
-	
+
 	return filters.column.check_filter(value);
 }
 ]]></oga:property>
@@ -2837,7 +2837,7 @@ function tableOp(context, table) {
 	row[4] = new java.lang.Integer(targetVowels.rowCount);
 	row[5] = new java.lang.Integer(actualConsonants.rowCount);
 	row[6] = new java.lang.Integer(actualVowels.rowCount);
-	
+
 	table.addRow(row);
 }
 ]]></oga:property>
@@ -2883,7 +2883,7 @@ function tableOp(context, table) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 #else
 $caption
 
@@ -3134,7 +3134,7 @@ No Results
                                     <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption [] )
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
