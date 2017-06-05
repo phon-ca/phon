@@ -172,6 +172,15 @@ img {
 .sidenav #toc {
 }
 
+.sessionLink {
+	color: inherit
+}
+
+.sessionLink:hover {
+	color: rgb(0, 90, 140);
+	cursor: pointer;
+}
+
 #toc .h1 {
     font-weight: bold;
     font-size: larger;

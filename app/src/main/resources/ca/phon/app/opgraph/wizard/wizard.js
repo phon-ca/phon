@@ -67,7 +67,7 @@ function tableToCSV(table) {
 
 		var tableData =[].slice.call(tableRow.querySelectorAll("th, td"));
 		for (var i = 0; i < tableData.length; i++) {
-			rowData += (rowData.length > 0 ? ",": "") + "\"" + tableData[i].textContent + "\"";
+			rowData += (rowData.length > 0 ? ",": "") + "\"" + tableData[i].textContent.trim() + "\"";
 		}
 
 		retVal += rowData + "\n";
@@ -81,7 +81,7 @@ function onCopyTableData(button, tableId) {
 	if (table != null) {
 		var tableCSV = tableToCSV(table);
 
-		if(window.app == undefined) {
+		if(buffer == undefined) {
 			var textArea = document.createElement("textarea");
 			textArea.style.position = 'fixed';
 			textArea.style.top = 0;
@@ -114,7 +114,7 @@ function onCopyTableData(button, tableId) {
 
 			document.body.removeChild(textArea);
 		} else {
-			window.app.copyTextToClipboard(tableCSV);
+			buffer.copyTextToClipboard(tableCSV);
 		}
 	}
 }
@@ -153,10 +153,6 @@ function page_init(documentRef) {
 	htmlTableOfContents(documentRef);
 	addCopyTableButtons(documentRef);
 
-	if(window.app) {
-		addShowBufferButtons(documentRef);
-	}
-
 	origDisplay = document.getElementById("bannercontent").style.display;
 
 	var menuicon = document.getElementById('menuicon');
@@ -166,6 +162,10 @@ function page_init(documentRef) {
 /*
  * Functions called by the application when using the embedded viewer
  */
+function showBuffer(bufferName) {
+	buffers.selectBuffer(bufferName);
+}
+
 function addShowBufferButtons(documentRef) {
 	var documentRef = documentRef || document;
 
@@ -178,8 +178,7 @@ function addShowBufferButtons(documentRef) {
 
 		var button = documentRef.createElement("div");
 		button.setAttribute("class", "tableButton");
-		button.setAttribute("onclick", "buffers.selectBuffer('" + table.getAttribute("id") + "')");
-//		button.setAttribute("id", buttonId);
+		button.setAttribute("onclick", "showBuffer('" + table.getAttribute("id") + "')");
 
 		var copyImg = documentRef.createElement("img");
 		copyImg.setAttribute("src", copyIcn);
@@ -188,5 +187,90 @@ function addShowBufferButtons(documentRef) {
 		button.append("Show Buffer");
 
 		div.appendChild(button);
+	});
+}
+
+function getColumnIndex(table, columnName) {
+	var retVal = -1;
+
+	var headerCols = [].slice.call(table.querySelectorAll("th"));
+	for(var i = 0; i < headerCols.length; i++) {
+		var headerCol = headerCols[i];
+		if(headerCol.textContent === columnName) {
+			retVal = i;
+			break;
+		}
+	}
+
+	return retVal;
+}
+
+function addSessionLinks(documentRef) {
+	var documentRef = documentRef || document;
+
+	var tables = [].slice.call(documentRef.body.querySelectorAll("table"));
+	tables.forEach(function (table, index) {
+		var tableId = table.getAttribute("id");
+
+		if(buffers) {
+			var buffer = buffers.getBuffer(tableId);
+			if(buffer != null) {
+				var tableModel = buffer.getUserObject();
+				if(tableModel != null) {
+					// check for session and Record # columns
+					var hasSession = (tableModel.getColumnIndex("Session") >= 0);
+					var hasRecord = (tableModel.getColumnIndex("Record #") >= 0);
+
+					// find column indicies in HTML table
+					var sessionColIdx = getColumnIndex(table, "Session");
+					var recordColIdx = getColumnIndex(table, "Record #");
+
+					if(hasSession && sessionColIdx >= 0) {
+						// add session links
+						var trs = [].slice.call(table.querySelectorAll("tr"));
+						for(var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
+							var row = trs[rowIdx];
+							var cols = [].slice.call(row.querySelectorAll("td"));
+
+							if(sessionColIdx < cols.length) {
+								var col = cols[sessionColIdx];
+								var sessionName = col.textContent;
+								col.textContent = "";
+
+								var sessionLink = documentRef.createElement("div");
+								sessionLink.setAttribute("class", "sessionLink");
+								sessionLink.setAttribute("onclick", "app.openSession('" + sessionName + "')");
+								sessionLink.textContent = sessionName;
+								col.appendChild(sessionLink);
+							}
+						}
+					}
+
+					if(hasSession && hasRecord && recordColIdx >= 0) {
+						// add session links
+						var trs = [].slice.call(table.querySelectorAll("tr"));
+						for(var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
+							var row = trs[rowIdx];
+							var cols = [].slice.call(row.querySelectorAll("td"));
+
+							if(recordColIdx < cols.length) {
+								var col = cols[recordColIdx];
+								var rowData = tableModel.getRow(rowIdx-1);
+								var modelSessionIdx = tableModel.getColumnIndex("Session");
+								var sessionName = rowData[modelSessionIdx];
+								var recordNumber = col.textContent;
+								col.textContent = "";
+
+								var sessionLink = documentRef.createElement("div");
+								sessionLink.setAttribute("class", "sessionLink");
+								sessionLink.setAttribute("onclick", "app.openSessionAtRecord('" + sessionName + "', (" + recordNumber + "-1))");
+								sessionLink.textContent = recordNumber;
+								col.appendChild(sessionLink);
+							}
+						}
+					}
+				}
+			}
+		}
 	});
 }

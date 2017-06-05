@@ -88,12 +88,20 @@ import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.log.actions.SaveAllBuffersAction;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.query.ScriptPanel;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.ParticipantHistory;
+import ca.phon.project.Project;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.session.SessionPath;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
@@ -107,6 +115,9 @@ import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
@@ -186,6 +197,8 @@ public class NodeWizard extends WizardFrame {
 	private volatile boolean running = false;
 
 	private boolean modified = false;
+
+	private WebViewInterface webViewInterface = new WebViewInterface();
 
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
@@ -572,6 +585,8 @@ public class NodeWizard extends WizardFrame {
 				template = reportTemplateBuffer.getLogBuffer().getText();
 			}
 
+
+
 			// create temp file
 			File tempFile = null;
 			try {
@@ -597,6 +612,27 @@ public class NodeWizard extends WizardFrame {
 				try {
 					SwingUtilities.invokeAndWait( () -> bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report")));
 					final BufferPanel reportBufferPanel = bufferPanelRef.get();
+					final WebView webView = reportBufferPanel.getWebView();
+					javafx.application.Platform.runLater(() -> {
+						webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
+
+							@Override
+							public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+								if(newValue == State.SUCCEEDED) {
+									final JSObject window = (JSObject) webView.getEngine().executeScript("window");
+									window.setMember("project", getExtension(Project.class));
+									window.setMember("buffers", bufferPanel);
+									window.setMember("app", webViewInterface);
+
+									// call functions to display app-specific UI elements
+									webView.getEngine().executeScript("addShowBufferButtons()");
+									webView.getEngine().executeScript("addSessionLinks()");
+								}
+							}
+
+						});
+
+					});
 					final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
 					reader.execute();
 				} catch (InterruptedException | InvocationTargetException e) {
@@ -980,6 +1016,48 @@ public class NodeWizard extends WizardFrame {
 		return modified;
 	}
 
+	public class WebViewInterface {
+
+		public void openSession(String sessionName) {
+			final SessionPath sessionPath = new SessionPath(sessionName);
+
+			// call open session module
+			final EntryPointArgs args = new EntryPointArgs();
+			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
+			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
+
+			try {
+				PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, args);
+			} catch (PluginException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			}
+		}
+
+		public void openSessionAtRecord(String sessionName, int recordIndex) {
+			final SessionPath sp = new SessionPath(sessionName);
+			openSession(sessionName);
+
+			SessionEditor editor = null;
+			// find session editor
+			for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
+				if(openWindow instanceof SessionEditor) {
+					final SessionEditor currentEditor = (SessionEditor)openWindow;
+					if(currentEditor.getSession().getCorpus().equals(sp.getCorpus())
+							&& currentEditor.getSession().getName().equals(sp.getSession())) {
+						editor = (SessionEditor)openWindow;
+						break;
+					}
+				}
+			}
+			if(editor == null) return;
+
+			// get record index
+			editor.setCurrentRecordIndex(recordIndex);
+		}
+
+	}
+
 	private class ReportReader extends SwingWorker<String, String> {
 
 		private BufferPanel panel;
@@ -1021,14 +1099,6 @@ public class NodeWizard extends WizardFrame {
 		@Override
 		protected void done() {
 			panel.showHtml();
-
-			javafx.application.Platform.runLater( () -> {
-				// setup JS context for WebView and call
-				// methods for setting embedded customizations
-				final WebView webView = panel.getWebView();
-				final JSObject window = (JSObject) webView.getEngine().executeScript("window");
-				window.setMember("buffers", bufferPanel);
-			});
 
 			bufferPanel.getBufferTable().repaint();
 			reportTimer.stop();

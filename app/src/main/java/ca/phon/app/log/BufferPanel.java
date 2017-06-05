@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +56,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableModel;
 
@@ -73,6 +75,7 @@ import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.functor.Functor;
+import ca.phon.ipa.parser.exceptions.HangingStressException;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
@@ -92,6 +95,9 @@ import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.print.PageLayout;
 import javafx.scene.Scene;
@@ -164,6 +170,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	private JComponent currentView;
 
+	private WeakReference<Object> userObjectRef;
+
 	public BufferPanel(String name) {
 		super();
 
@@ -218,6 +226,14 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public String getName() {
 		return this.name;
+	}
+
+	public Object getUserObject() {
+		return userObjectRef.get();
+	}
+
+	public void setUserObject(Object obj) {
+		userObjectRef = new WeakReference<Object>(obj);
 	}
 
 	public boolean isShowingBuffer() {
@@ -316,8 +332,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 				LOGGER.log(Level.WARNING, evt.toString());
 			});
 
-			JSObject window = (JSObject) webView.getEngine().executeScript("window");
-			window.setMember("app", BufferPanel.this);
 
 			panelRef.set(fxpanel);
 			viewRef.set(webView);
@@ -339,13 +353,20 @@ public class BufferPanel extends JPanel implements IExtendable {
 	public void showHtml() {
 		JComponent oldComp = currentView;
 
-		if(fxPanel == null) {
-			final Tuple<JFXPanel, WebView> webTuple = createHtmlPane();
-			fxPanel = webTuple.getObj1();
-			htmlView = webTuple.getObj2();
-		}
-
+		final WebView htmlView = getWebView();
 		Platform.runLater( () -> {
+			htmlView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
+
+				@Override
+				public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+					if(newValue == State.SUCCEEDED) {
+						JSObject window = (JSObject) htmlView.getEngine().executeScript("window");
+						window.setMember("buffer", BufferPanel.this);
+					}
+				}
+
+			});
+
 			htmlView.getEngine().loadContent(logBuffer.getText());
 
 			SwingUtilities.invokeLater(() -> {
@@ -415,6 +436,11 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 
 	public WebView getWebView() {
+		if(fxPanel == null) {
+			final Tuple<JFXPanel, WebView> webTuple = createHtmlPane();
+			fxPanel = webTuple.getObj1();
+			htmlView = webTuple.getObj2();
+		}
 		return this.htmlView;
 	}
 
@@ -676,6 +702,19 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public void setBufferName(String string) {
 		logBuffer.setBufferName(string);
+	}
+
+	public Object getExtension(String classname) {
+		Object retVal = null;
+
+		for(Class<?> ext:getExtensions()) {
+			if(ext.toString().equals("class " + classname)) {
+				retVal = getExtension(ext);
+				break;
+			}
+		}
+
+		return retVal;
 	}
 
 	public Set<Class<?>> getExtensions() {
