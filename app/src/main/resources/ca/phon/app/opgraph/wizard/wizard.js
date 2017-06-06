@@ -2,6 +2,7 @@
 var openIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQMDDsrN46U4wAAADtJREFUSMdjYKAxYBSJ6vlPSwuYaO2DUQtGARXyAQMDAwOt8sKbZSWMoxlt4C2geSSP5qPRCmfUAjoAAObLDgf9SOjwAAAAAElFTkSuQmCC";
 var closeIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQMDDcayuXb1QAAAIpJREFUSMfFVMkNgDAMqzMD0zEHYzBHp2MH+CGEaHNa5O0jTdxgWfezPeroG1qi3nqiATLinwZRkxFHvAQvFhpA24nGhRUYEb9fEDGxYhHpytMIqlI0GiUqUjTbUzgh1qQhk3FLjKWR678RUZdMjSn1o1FPBfXYUc91RtxiIllxDStZcY0jFeIz7gUXTIASLqhmngAAAABJRU5ErkJggg==";
 var copyIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfhBgEVNQ8OU07+AAAAZUlEQVQoz52QyQ3AIAwEB+SK3EI6oCFcYQpJE+QZbC4p+0IwYsdOAGpUutzpOwuoUfpLbT2c1SjtYhmhQnp2gGsENV8inh99cnyOPv6HiU+o8D4AmUOOgMTNbTOiYcxfDn7NE5sXVLwX2PBwtxgAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDYtMDFUMjE6NTM6MTUrMDI6MDC+FxbWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTA2LTAxVDIxOjUzOjE1KzAyOjAwz0quagAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=";
+var showIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfhBgUTAScLI/4WAAAAS0lEQVQoz2NgoBQwGvP/FcQtzfye5d8GJgfcCv4dYFRh5+HEreDLd4rdyMBonPVfD4/0JSbK7SDoBkLeZOHdweiAWwHvAYJBTbkjAbcvEQj70zelAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTA2LTA1VDE5OjAxOjM5KzAyOjAwvGO9kQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wNi0wNVQxOTowMTozOSswMjowMM0+BS0AAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC";
 
 var origDisplay = "flex";
 
@@ -141,7 +142,7 @@ function addCopyTableButtons(documentRef) {
 		copyImg.setAttribute("src", copyIcn);
 		copyImg.setAttribute("style", "padding-right: 2px;");
 		button.appendChild(copyImg);
-		button.append("Copy Table as CSV");
+		button.append("Copy");
 
 		div.appendChild(button);
 		tableCaption.appendChild(div);
@@ -181,7 +182,7 @@ function addShowBufferButtons(documentRef) {
 		button.setAttribute("onclick", "showBuffer('" + table.getAttribute("id") + "')");
 
 		var copyImg = documentRef.createElement("img");
-		copyImg.setAttribute("src", copyIcn);
+		copyImg.setAttribute("src", showIcn);
 		copyImg.setAttribute("style", "padding-right: 2px;");
 		button.appendChild(copyImg);
 		button.append("Show Buffer");
@@ -203,6 +204,23 @@ function getColumnIndex(table, columnName) {
 	}
 
 	return retVal;
+}
+
+function highlightResult(sessionName, result) {
+}
+
+function makeSessionLink(documentRef, cell, onclick) {
+	var documentRef = documentRef || document;
+
+	var div = documentRef.createElement("div");
+	div.setAttribute("class", "sessionLink");
+	div.setAttribute("onclick", onclick);
+
+	var cellText = cell.textContent;
+	cell.textContent = "";
+	div.textContent = cellText;
+
+	cell.appendChild(div);
 }
 
 function addSessionLinks(documentRef) {
@@ -235,13 +253,7 @@ function addSessionLinks(documentRef) {
 							if(sessionColIdx < cols.length) {
 								var col = cols[sessionColIdx];
 								var sessionName = col.textContent;
-								col.textContent = "";
-
-								var sessionLink = documentRef.createElement("div");
-								sessionLink.setAttribute("class", "sessionLink");
-								sessionLink.setAttribute("onclick", "app.openSession('" + sessionName + "')");
-								sessionLink.textContent = sessionName;
-								col.appendChild(sessionLink);
+								makeSessionLink(documentRef, col, "app.openSession('" + sessionName + "')");
 							}
 						}
 					}
@@ -259,16 +271,39 @@ function addSessionLinks(documentRef) {
 								var modelSessionIdx = tableModel.getColumnIndex("Session");
 								var sessionName = rowData[modelSessionIdx];
 								var recordNumber = col.textContent;
-								col.textContent = "";
-
-								var sessionLink = documentRef.createElement("div");
-								sessionLink.setAttribute("class", "sessionLink");
-								sessionLink.setAttribute("onclick", "app.openSessionAtRecord('" + sessionName + "', (" + recordNumber + "-1))");
-								sessionLink.textContent = recordNumber;
-								col.appendChild(sessionLink);
+								makeSessionLink(documentRef, col, "app.openSessionAtRecord('" + sessionName + "', (" + recordNumber + "-1))");
 							}
 						}
 					}
+
+					var resultCol = tableModel.getColumnIndex("Result");
+					if(resultCol >= 0) {
+						var trs = [].slice.call(table.querySelectorAll("tr"));
+						for(var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
+							var rowData = tableModel.getRow(rowIdx-1);
+							var modelSessionIdx = tableModel.getColumnIndex("Session");
+							var sessionName = rowData[modelSessionIdx];
+							var result = rowData[resultCol];
+
+							for(var i = 0; i < result.getNumberOfResultValues(); i++) {
+								var rv = result.getResultValue(i);
+								var tableColIdx = getColumnIndex(table, rv.getTierName());
+
+								if(tableColIdx >= 0) {
+									var row = trs[rowIdx];
+									var cols = [].slice.call(row.querySelectorAll("td"));
+
+									if(tableColIdx < cols.length) {
+										var col = cols[tableColIdx];
+										makeSessionLink(documentRef, col,
+//											"app.openSessionAtRecord('" + sessionName + "', (" + result.getRecordIndex() + "))");
+											"app.onHighlightResultValue('" + tableId + "',(" + rowIdx + "-1), '" + rv.getTierName() + "')");
+									}
+								}
+							}
+						}
+					}
+
 				}
 			}
 		}

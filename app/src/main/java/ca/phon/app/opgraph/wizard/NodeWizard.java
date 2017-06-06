@@ -92,13 +92,17 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.query.ScriptPanel;
+import ca.phon.app.session.editor.EditorSelectionModel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorEP;
+import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.ParticipantHistory;
 import ca.phon.project.Project;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
@@ -111,6 +115,7 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.MsFormatter;
+import ca.phon.util.Range;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -1034,7 +1039,7 @@ public class NodeWizard extends WizardFrame {
 			}
 		}
 
-		public void openSessionAtRecord(String sessionName, int recordIndex) {
+		public SessionEditor openSessionAtRecord(String sessionName, int recordIndex) {
 			final SessionPath sp = new SessionPath(sessionName);
 			openSession(sessionName);
 
@@ -1050,10 +1055,61 @@ public class NodeWizard extends WizardFrame {
 					}
 				}
 			}
-			if(editor == null) return;
+			if(editor == null) return null;
 
 			// get record index
 			editor.setCurrentRecordIndex(recordIndex);
+
+			return editor;
+		}
+
+		public void onHighlightResultValue(String tableId, int row, String columnName) {
+			final BufferPanel buffer = bufferPanel.getBuffer(tableId);
+			final Object obj = buffer.getUserObject();
+			if(obj == null || !(obj instanceof DefaultTableDataSource)) {
+				return;
+			}
+			final DefaultTableDataSource tableModel = (DefaultTableDataSource)obj;
+
+			if(row < 0 || row >= tableModel.getRowCount()) return;
+
+			final Object[] rowData = tableModel.getRow(row);
+
+			final int sessionCol = tableModel.getColumnIndex("Session");
+			if(sessionCol < 0) return;
+			final String sessionName = rowData[sessionCol].toString();
+
+			final int resultCol = tableModel.getColumnIndex("Result");
+			if(resultCol < 0) return;
+
+			final int dataCol = tableModel.getColumnIndex(columnName);
+			if(dataCol < 0) return;
+
+			final Result result = (Result) rowData[resultCol];
+			if(result == null) return;
+
+			// find result value using columnName - which should be the tier name
+			for(int i = 0; i < result.getNumberOfResultValues(); i++) {
+				final ResultValue rv = result.getResultValue(i);
+				if(rv.getTierName().equals(columnName)) {
+					highlightResultValue(sessionName, result.getRecordIndex(), rv);
+				}
+			}
+		}
+
+		public void highlightResultValue(String sessionName, int recordIndex, ResultValue rv) {
+			final SessionEditor editor = openSessionAtRecord(sessionName, recordIndex);
+
+			if(editor != null) {
+				// setup highlighting
+				final EditorSelectionModel selectionModel = editor.getSelectionModel();
+				selectionModel.clear();
+				final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
+				final SessionEditorSelection selection =
+						new SessionEditorSelection(recordIndex, rv.getTierName(),
+								rv.getGroupIndex(), range);
+				selectionModel.addSelection(selection);
+			}
 		}
 
 	}

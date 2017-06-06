@@ -70,8 +70,10 @@ import com.sun.javafx.application.PlatformImpl;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.EditorSelectionModel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorEP;
+import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.functor.Functor;
@@ -79,7 +81,10 @@ import ca.phon.ipa.parser.exceptions.HangingStressException;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.csv.CSVTableDataWriter;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
@@ -91,6 +96,7 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Range;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -584,9 +590,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 			final Session primarySession = cmf.getExtension(Session.class);
 			int sessionColumn = -1;
 			int recordColumn = -1;
-			int tierColumn = -1;
-			int groupColumn = -1;
-			int rangeColumn = -1;
 
 			for(int i = 0; i < tblModel.getColumnCount(); i++) {
 				final String colName = tblModel.getColumnName(i);
@@ -596,13 +599,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 				} else if(colName.equalsIgnoreCase("record")
 						|| colName.equalsIgnoreCase("record #")) {
 					recordColumn = i;
-				} else if(colName.equalsIgnoreCase("tier")
-						|| colName.equalsIgnoreCase("tier name")) {
-					tierColumn = i;
-				} else if(colName.equalsIgnoreCase("group")) {
-					groupColumn = i;
-				} else if(colName.equalsIgnoreCase("range")) {
-					rangeColumn = i;
 				}
 			}
 
@@ -659,11 +655,30 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 			editor.setCurrentRecordIndex(recordNum);
 
-			if(tierColumn >= 0 && groupColumn >= 0) {
-				// TODO attempt to setup highlighting
+			// setup result highlighting if we have the appropriate column and user object
+			if(getUserObject() != null && getUserObject() instanceof DefaultTableDataSource) {
+				final DefaultTableDataSource tableData = (DefaultTableDataSource)getUserObject();
+				final int resultColumn = tableData.getColumnIndex("Result");
+				if(resultColumn >= 0) {
+					final Object resultVal = tableData.getValueAt(row, resultColumn);
+					if(resultVal != null && resultVal instanceof Result) {
+						final Result result = (Result)resultVal;
+
+						// setup highlighting
+						final EditorSelectionModel selectionModel = editor.getSelectionModel();
+						selectionModel.clear();
+						for(ResultValue rv:result) {
+							final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
+							final SessionEditorSelection selection =
+									new SessionEditorSelection(result.getRecordIndex(), rv.getTierName(),
+											rv.getGroupIndex(), range);
+							selectionModel.addSelection(selection);
+						}
+					}
+				}
 			}
 
-			return null;
+			return null; /* Void return type */
 		}
 
 	};
