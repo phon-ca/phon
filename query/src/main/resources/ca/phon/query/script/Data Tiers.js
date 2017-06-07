@@ -115,12 +115,16 @@ function query_record(recordIndex, record) {
 
 	for (var gIdx = 0; gIdx < groups.length; gIdx++) {
 		var group = groups[gIdx];
-		var groupMeta = new java.util.HashMap();
+		var groupAlignedResults = new Array();
 
 		if (filters.alignedGroup.isUseFilter()) {
-			alignedGroup = group.getTier(filters.alignedGroup.tier);
-			if(alignedGroup != null)
-				groupMeta.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
+			var tierList = new TierList("group");
+			tierList.setTiers(filters.alignedGroup.tier);
+
+			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
+			for(var j = 0; j < alignedGroupData[0].length; j++) {
+				groupAlignedResults.push(alignedGroupData[0][j]);
+			}
 		}
 
 		if (filters.word.isUseFilter()) {
@@ -129,13 +133,21 @@ function query_record(recordIndex, record) {
 			for (var wIdx = 0; wIdx < words.length; wIdx++) {
 				var word = words[wIdx];
 				var checkWord = true;
-				var wordMeta = new java.util.HashMap();
+				var wordAlignedResults = new Array();
 
 				if (filters.alignedWord.isUseFilter()) {
 					var aligned = word.getTier(filters.alignedWord.tier);
 					checkWord = filters.alignedWord.patternFilter.check_filter(aligned);
-					if(aligned != null)
-						wordMeta.put(filters.alignedWord.tier + " (Word)", aligned.toString());
+
+					if(checkWord == true) {
+						var tierList = new TierList("word");
+						tierList.setTiers(filters.alignedWord.tier);
+
+						var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
+						for(var k = 0; k < alignedWordData[0].length; k++) {
+							wordAlignedResults.push(alignedWordData[0][k]);
+						}
+					}
 				}
 				if (checkWord == true) {
 					var vals = filters.primary.patternFilter.find_pattern(word.getTier(searchTier));
@@ -175,14 +187,25 @@ function query_record(recordIndex, record) {
 						rv.data = v.value;
 						result.addResultValue(rv);
 
-						var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
-						result.metadata.putAll(groupMeta);
-						result.metadata.putAll(alignedMeta);
+						for(var j = 0; j < groupAlignedResults.length; j++) {
+							result.addResultValue(groupAlignedResults[j]);
+						}
+						for(var j = 0; j < wordAlignedResults.length; j++) {
+							result.addResultValue(wordAlignedResults[j]);
+						}
+
+						var alignedGroupData = filters.groupTiers.getAlignedTierData(record, group, "Group");
+						for(var j = 0; j < alignedGroupData[0].length; j++) {
+							result.addResultValue(alignedGroupData[0][j]);
+						}
+						result.metadata.putAll(alignedGroupData[1]);
 
 						// add metadata
-						var alignedMeta = filters.wordTiers.getAlignedTierData(record, word, "Word");
-						result.metadata.putAll(wordMeta);
-						result.metadata.putAll(alignedMeta);
+						var alignedWordData = filters.wordTiers.getAlignedTierData(record, word, "Word");
+						for(var j = 0; j < alignedWordData[0].length; j++) {
+							result.addResultValue(alignedWordData[0][j]);
+						}
+						result.metadata.putAll(alignedWordData[1]);
 
 						results.addResult(result);
 					}
@@ -214,9 +237,15 @@ function query_record(recordIndex, record) {
 				rv.data = v.value;
 				result.addResultValue(rv);
 
-				var alignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
-				result.metadata.putAll(groupMeta);
-				result.metadata.putAll(alignedMeta);
+				for(var j = 0; j < groupAlignedResults.length; j++) {
+					result.addResultValue(groupAlignedResults[j]);
+				}
+
+				var alignedGroupData = filters.groupTiers.getAlignedTierData(record, group, "Group");
+				for(var j = 0; j < alignedGroupData[0].length; j++) {
+					result.addResultValue(alignedGroupData[0][j]);
+				}
+				result.metadata.putAll(alignedGroupData[1]);
 
 				results.addResult(result);
 			}

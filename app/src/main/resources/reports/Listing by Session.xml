@@ -414,8 +414,9 @@ function run(context) {
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="dataTemplate"><![CDATA[
-#set($table = $tables.get("$DATA"))
-#printTableWithCaption( $table $caption [] )
+#set($tableName = "$DATA")
+#set($table = $tables.get($tableName))
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                                             <oga:property key="showText"><![CDATA[false]]></oga:property>
                                             <oga:property key="showTable"><![CDATA[true]]></oga:property>

@@ -2,17 +2,17 @@
 <!--
     Phon - An open source tool for research in phonology.
     Copyright (C) 2008 The Phon Project, Memorial University <http://phon.ling.mun.ca>
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
@@ -28,7 +28,7 @@
             <jaxb:globalBindings generateIsSetMethod="true"/>
         </xs:appinfo>
     </xs:annotation>
-    
+
     <!-- Root element -->
 
     <xs:element name="result_set" type="ResultSetType">
@@ -90,6 +90,7 @@
         </xs:sequence>
         <xs:attribute name="tier_name" type="nonEmptyString" use="required"/>
         <xs:attribute name="group_index" type="groupIndex" use="required"/>
+    	<xs:attribute name="name" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="RangeType">
@@ -157,7 +158,7 @@
             <xs:minInclusive value="-1"/>
         </xs:restriction>
     </xs:simpleType>
-    
+
     <xs:simpleType name="charIndex">
         <xs:annotation>
             <xs:documentation>Index to character position within a group.  Allows for -1 for null result values.</xs:documentation>

@@ -172,30 +172,47 @@ function query_record(recordIndex, record) {
 	for (var i = 0; i < groups.length; i++) {
 		var group = groups[i];
 
-		var groupAlignedMeta = filters.groupTiers.getAlignedTierData(record, group, "Group");
+		var groupAlignedData = filters.groupTiers.getAlignedTierData(record, group, "Group");
+
+		var groupAlignedResults = groupAlignedData[0];
+		var groupAlignedMeta = groupAlignedData[1];
 
 		if (filters.alignedGroup.isUseFilter()) {
-			alignedGroup = group.getTier(filters.alignedGroup.tier);
-			if(alignedGroup != null)
-				groupAlignedMeta.put(filters.alignedGroup.tier + " (Group)", alignedGroup.toString());
+			var tierList = new TierList("group");
+			tierList.setTiers(filters.alignedGroup.tier);
+
+			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
+			for(var j = 0; j < alignedGroupData[0].length; j++) {
+				groupAlignedResults.push(alignedGroupData[0][j]);
+			}
 		}
 
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
 		var phoneMap = group.phoneAlignment;
 
 		var toSearch = new Array();
-		toSearch.push([ipa, groupAlignedMeta]);
+		toSearch.push([ipa, groupAlignedResults, groupAlignedMeta]);
 
 		// search by word?
 		if (filters.word.isUseFilter()) {
 			toSearch.length = 0;
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j < selectedWords.length; j++) {
-				var wordAlignedMeta = new java.util.LinkedHashMap();
-				wordAlignedMeta.putAll(groupAlignedMeta);
 				var word = selectedWords[j];
 
-				wordAlignedMeta.putAll(filters.wordTiers.getAlignedTierData(record, word, "Word"));
+				var wordAlignedMeta = new java.util.LinkedHashMap();
+				wordAlignedMeta.putAll(groupAlignedMeta);
+
+				var wordAlignedResults = new Array();
+				for(var k = 0; k < groupAlignedResults.length; k++) {
+					wordAlignedResults.push(groupAlignedResults[k]);
+				}
+
+				var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
+				for(var k = 0; k < wordAlignedData[0].length; k++) {
+					wordAlignedResults.push(wordAlignedData[0][k]);
+				}
+				wordAlignedMeta.putAll(wordAlignedData[1]);
 
 				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
 				var addWord = (wordIpa != null);
@@ -207,13 +224,18 @@ function query_record(recordIndex, record) {
 				// check aligned word pattern if necessary
 				if (filters.alignedWord.isUseFilter()) {
 					addWord = filters.alignedWord.check_word(word);
-					alignedWord = word.getTier(filters.alignedWord.tier);
-					if(alignedWord != null)
-						wordAlignedMeta.put(filters.alignedWord.tier + " (Word)", alignedWord.toString());
+
+					var tierList = new TierList("word");
+					tierList.setTiers(filters.alignedWord.tier);
+
+					var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
+					for(var k = 0; k < alignedWordData[0].length; k++) {
+						wordAlignedResults.push(alignedWordData[0][k]);
+					}
 				}
 
 				if (addWord == true) {
-					toSearch.push([wordIpa, wordAlignedMeta]);
+					toSearch.push([wordIpa, wordAlignedResults, wordAlignedMeta]);
 				}
 			}
 		}
@@ -227,7 +249,7 @@ function query_record(recordIndex, record) {
 				var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
 
 				for (k = 0; k < sylls.length; k++) {
-					syllList.push([sylls[k], toSearch[j][1]]);
+					syllList.push([sylls[k], toSearch[j][1], toSearch[j][2]]);
 				}
 			}
 			toSearch = syllList;
@@ -235,7 +257,8 @@ function query_record(recordIndex, record) {
 
 		for (j = 0; j < toSearch.length; j++) {
 			var obj = toSearch[j][0];
-			var alignedMetadata = toSearch[j][1];
+			var alignedResults = toSearch[j][1];
+			var alignedMetadata = toSearch[j][2];
 			var matches = filters.primary.find_pattern(obj);
 			var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter: filters.actualResultFilter);
 			var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter: filters.targetResultFilter);
@@ -281,7 +304,6 @@ function query_record(recordIndex, record) {
 				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()): null);
 				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned): new IPATranscript());
 
-				result.metadata.putAll(alignedMetadata);
 
 				// find location of aligned value in group
 				var groupStartIdx =
@@ -321,6 +343,11 @@ function query_record(recordIndex, record) {
 					calcMetadata(record, group, result.metadata,
 					(match.value == null ? null: new IPATranscript(match.value)), null);
 				}
+
+				for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+					result.addResultValue(alignedResults[alignedResultIdx]);
+				}
+				result.metadata.putAll(alignedMetadata);
 
 				// append named-group information (if any)
 				if (match.groups) {

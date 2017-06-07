@@ -52,12 +52,22 @@ exports.TierList = function(id) {
 		return retVal;
 	};
 
+	this.setTiers = function(tiers) {
+		this.tiers = tiers;
+	};
+
 	this.setTitle = function(title) {
 		tiersParamInfo.title = title;
 	};
 
+	/**
+	 * Returns a tuple of tier data.
+	 *
+	 * @return [resultValues, metadata]
+	 */
 	this.getAlignedTierData = function(record, obj, label) {
-		var retVal = new java.util.LinkedHashMap();
+		var resultValues = new Array();
+		var metadata = new java.util.LinkedHashMap();
 		if(typeof obj.getTier !== "function") return retVal;
 
 		var extraTiers = this.getTiers();
@@ -66,6 +76,35 @@ exports.TierList = function(id) {
 			var tierVal = null;
 			if(record.hasTier(tierName)) {
 				var tierVal = obj.getTier(tierName);
+
+				var tierResultValue = factory.createResultValue();
+				tierResultValue.name = tierName + " ("  + label + ")";
+				tierResultValue.tierName = tierName;
+				tierResultValue.groupIndex = (obj.getGroupIndex ? obj.groupIndex : obj.group.groupIndex);
+				tierResultValue.data = tierVal || "";
+
+				var startIndex = 0;
+				var length = (tierVal ? tierVal.toString().length() : 0);
+
+				if(tierVal != null && obj.getGroup) {
+					var systemTierType = SystemTierType.tierFromString(tierName);
+					var wordOffset = 0;
+
+					if(systemTierType == SystemTierType.Orthography) {
+						wordOffset = obj.getOrthographyWordLocation();
+					} else if(systemTierType == SystemTierType.IPATarget) {
+						wordOffset = obj.getIPATargetWordLocation();
+					} else if(systemTierType == SystemTierType.IPAActual) {
+						wordOffset = obj.getIPAActualWordLocation();
+					} else {
+						wordOffset = obj.getTierWordLocation(tierName);
+					}
+
+					startIndex += wordOffset;
+				}
+
+				tierResultValue.range = new Range(startIndex, startIndex + length, false);
+				resultValues.push(tierResultValue);
 			} else {
 				if(tierName == "Target CV") {
 					var ipaT = obj.IPATarget;
@@ -86,12 +125,12 @@ exports.TierList = function(id) {
 					var ipaA = obj.IPAActual;
 					tierVal = (ipaA != null ? ipaA.toString(true) : "");
 				}
+				if(tierVal != null)
+					metadata.put(extraTiers[j] + " (" + label + ")", tierVal.toString());
 			}
-			if(tierVal != null)
-				retVal.put(extraTiers[j] + " (" + label + ")", tierVal.toString());
 		}
 
-		return retVal;
+		return [resultValues, metadata];
 	};
 
 };

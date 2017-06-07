@@ -287,7 +287,7 @@ function addSessionLinks(documentRef) {
 
 							for(var i = 0; i < result.getNumberOfResultValues(); i++) {
 								var rv = result.getResultValue(i);
-								var tableColIdx = getColumnIndex(table, rv.getTierName());
+								var tableColIdx = getColumnIndex(table, rv.getName());
 
 								if(tableColIdx >= 0) {
 									var row = trs[rowIdx];
@@ -296,8 +296,7 @@ function addSessionLinks(documentRef) {
 									if(tableColIdx < cols.length) {
 										var col = cols[tableColIdx];
 										makeSessionLink(documentRef, col,
-//											"app.openSessionAtRecord('" + sessionName + "', (" + result.getRecordIndex() + "))");
-											"app.onHighlightResultValue('" + tableId + "',(" + rowIdx + "-1), '" + rv.getTierName() + "')");
+											"app.onHighlightResultValue('" + tableId + "',(" + rowIdx + "-1), '" + rv.getName() + "')");
 									}
 								}
 							}

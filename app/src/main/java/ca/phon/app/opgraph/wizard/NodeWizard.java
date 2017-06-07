@@ -1091,7 +1091,7 @@ public class NodeWizard extends WizardFrame {
 			// find result value using columnName - which should be the tier name
 			for(int i = 0; i < result.getNumberOfResultValues(); i++) {
 				final ResultValue rv = result.getResultValue(i);
-				if(rv.getTierName().equals(columnName)) {
+				if(rv.getName().equals(columnName)) {
 					highlightResultValue(sessionName, result.getRecordIndex(), rv);
 				}
 			}

@@ -4587,7 +4587,7 @@ function tableOp(context, table) {
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>
@@ -4639,7 +4639,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>
@@ -4691,7 +4691,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>
@@ -4746,7 +4746,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>
@@ -4798,7 +4798,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>
@@ -4850,7 +4850,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>
@@ -4905,7 +4905,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>
@@ -4957,7 +4957,7 @@ No Results
 #set($tableName = "$DATA")
 #if($tables.containsKey($tableName))
 #set($table = $tables.get($tableName))
-#printTableWithCaption( $table $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
+#printTableWithIdAndCaption( $table $tableName $caption ["Orthography", "IPA Target", "IPA Actual", "Word Exact Match", "IPA Target CV", "IPA Actual CV", "Word CV Match", "IPA Target Syllable Count", "IPA Actual Syllable Count", "Syllable Count Match", "IPA Target Stress", "IPA Actual Stress", "Word Stress Match"] )
 #else
 <b>$title</b><br/>
 <b>Session:</b> $sessionPath<br/>

@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -57,6 +57,7 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.session.Group;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -145,7 +146,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 			.ifPresent( firstNonEmptyResultSet -> {
 				final Result firstResult = firstNonEmptyResultSet.getResult(0);
 				for(ResultValue rv:firstResult) {
-					tierNames.add(rv.getTierName());
+					tierNames.add(rv.getName());
 				}
 				columnNames.addAll(tierNames);
 			});
@@ -204,8 +205,9 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 					// add result objects from record
 					for(ResultValue rv:result) {
-						final Tier<?> tier = record.getTier(rv.getTierName());
-						final Object tierValue = tier.getGroup(rv.getGroupIndex());
+						final Group group = record.getGroup(rv.getGroupIndex());
+						Object tierValue = group.getTier(rv.getTierName());
+						if(tierValue == null) tierValue = "";
 
 						// attempt to find a formatter
 						@SuppressWarnings("unchecked")
