@@ -101,8 +101,10 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.ParticipantHistory;
 import ca.phon.project.Project;
+import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
+import ca.phon.query.db.xml.XMLQueryFactory;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
@@ -1025,42 +1027,27 @@ public class NodeWizard extends WizardFrame {
 
 		public void openSession(String sessionName) {
 			final SessionPath sessionPath = new SessionPath(sessionName);
-
+	
 			// call open session module
 			final EntryPointArgs args = new EntryPointArgs();
 			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
 			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
 			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
 
-			try {
-				PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, args);
-			} catch (PluginException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
+			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
 		}
 
-		public SessionEditor openSessionAtRecord(String sessionName, int recordIndex) {
-			final SessionPath sp = new SessionPath(sessionName);
-			openSession(sessionName);
+		public void openSessionAtRecord(String sessionName, int recordIndex) {
+			final SessionPath sessionPath = new SessionPath(sessionName);
+			
+			// call open session module
+			final EntryPointArgs args = new EntryPointArgs();
+			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
+			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
+			args.put(SessionEditorEP.RECORD_INDEX_PROPERY, recordIndex);
 
-			SessionEditor editor = null;
-			// find session editor
-			for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
-				if(openWindow instanceof SessionEditor) {
-					final SessionEditor currentEditor = (SessionEditor)openWindow;
-					if(currentEditor.getSession().getCorpus().equals(sp.getCorpus())
-							&& currentEditor.getSession().getName().equals(sp.getSession())) {
-						editor = (SessionEditor)openWindow;
-						break;
-					}
-				}
-			}
-			if(editor == null) return null;
-
-			// get record index
-			editor.setCurrentRecordIndex(recordIndex);
-
-			return editor;
+			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
 		}
 
 		public void onHighlightResultValue(String tableId, int row, String columnName) {
@@ -1087,29 +1074,33 @@ public class NodeWizard extends WizardFrame {
 
 			final Result result = (Result) rowData[resultCol];
 			if(result == null) return;
-
+			
+			// create a temporary result object
+			final QueryFactory factory = new XMLQueryFactory();
+			final Result tempResult = factory.createResult();
+			tempResult.setRecordIndex(result.getRecordIndex());
+			tempResult.setExcluded(result.isExcluded());
+			tempResult.setSchema(result.getSchema());
+			
 			// find result value using columnName - which should be the tier name
 			for(int i = 0; i < result.getNumberOfResultValues(); i++) {
 				final ResultValue rv = result.getResultValue(i);
 				if(rv.getName().equals(columnName)) {
-					highlightResultValue(sessionName, result.getRecordIndex(), rv);
+					tempResult.addResultValue(rv);
 				}
 			}
-		}
+			
+			final SessionPath sessionPath = new SessionPath(sessionName);
+			
+			// call open session module
+			final EntryPointArgs args = new EntryPointArgs();
+			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
+			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
+			args.put(SessionEditorEP.RECORD_INDEX_PROPERY, result.getRecordIndex());
+			args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] { tempResult });
 
-		public void highlightResultValue(String sessionName, int recordIndex, ResultValue rv) {
-			final SessionEditor editor = openSessionAtRecord(sessionName, recordIndex);
-
-			if(editor != null) {
-				// setup highlighting
-				final EditorSelectionModel selectionModel = editor.getSelectionModel();
-				selectionModel.clear();
-				final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
-				final SessionEditorSelection selection =
-						new SessionEditorSelection(recordIndex, rv.getTierName(),
-								rv.getGroupIndex(), range);
-				selectionModel.addSelection(selection);
-			}
+			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
 		}
 
 	}

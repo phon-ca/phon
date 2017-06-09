@@ -81,7 +81,7 @@ img {
 
 .tableButtonRow {
 	display: flex;
-	flex-direction: row-reverse;
+	flex-direction: row;
 	margin-right: -5px;
 }
 

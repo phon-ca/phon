@@ -26,6 +26,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -48,6 +50,8 @@ import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Transcriber;
@@ -56,6 +60,7 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.JCrypt;
+import ca.phon.util.Range;
 
 /**
  * SessionEditor entry point
@@ -68,11 +73,23 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	private static final Logger LOGGER = Logger
 			.getLogger(SessionEditorEP.class.getName());
 	
+	public final static String RECORD_INDEX_PROPERY = "recordIndex";
+	
+	public final static String RESULT_VALUES_PROPERTY = "resultValues";
+	
 	public final static String EP_NAME = "SessionEditor";
+	
+	private int openAtRecord = -1;
+	
+	private Result[] highlightResults = new Result[0];
 
 	@Override
 	public String getName() {
 		return EP_NAME;
+	}
+	
+	public int getOpenAtRecord() {
+		return this.openAtRecord;
 	}
 
 	@Override
@@ -134,9 +151,33 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		final boolean grabFocus =
 				(args.get("grabFocus") != null ? (Boolean)args.get("grabFocus") : true);
 		
+		if(args.containsKey(RECORD_INDEX_PROPERY)) {
+			this.openAtRecord = (Integer)args.get(RECORD_INDEX_PROPERY);
+		}
+		
+		if(args.containsKey(RESULT_VALUES_PROPERTY)) {
+			this.highlightResults = (Result[])args.get(RESULT_VALUES_PROPERTY);
+		}
+		
 		final Runnable onEdt = new Runnable() {
 			public void run() {
-				showEditor(project, sessionRef.get(), blindMode, grabFocus);
+				final SessionEditor editor = showEditor(project, sessionRef.get(), blindMode, grabFocus);
+				
+				if(openAtRecord >= 0) {
+					editor.setCurrentRecordIndex(openAtRecord);
+					
+					final EditorSelectionModel selectionModel = editor.getSelectionModel();
+					selectionModel.clear();
+					for(Result result:highlightResults) {
+						for(ResultValue rv:result) {
+							final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
+							final SessionEditorSelection selection =
+									new SessionEditorSelection(result.getRecordIndex(), rv.getTierName(),
+											rv.getGroupIndex(), range);
+							selectionModel.addSelection(selection);
+						}
+					}
+				}
 			}
 		};
 		if(SwingUtilities.isEventDispatchThread())
@@ -156,7 +197,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	 * @param session
 	 * @param blindMode
 	 */
-	public void showEditor(Project project, Session session, boolean blindMode, boolean grabFocus) {
+	public SessionEditor showEditor(Project project, Session session, boolean blindMode, boolean grabFocus) {
 		// look for an already open editor
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 			if(cmf instanceof SessionEditor) {
@@ -166,7 +207,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 								editor.getSession().getName().equals(session.getName()))) {
 					editor.requestFocus();
 					editor.toFront();
-					return;
+					return editor;
 				}
 			}
 		}
@@ -181,7 +222,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			tsd.setVisible(true);
 			
 			// bail if dialog was canceled
-			if(tsd.wasDialogCanceled()) return;
+			if(tsd.wasDialogCanceled()) return null;
 			
 			// create a new transcriber if necessary
 			if(tsd.isNewTranscriber()) {
@@ -205,7 +246,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 					
 					// wait
 					
-					if(dlg.wasDialogCanceled()) return; // bail if dialog was cancelled
+					if(dlg.wasDialogCanceled()) return null; // bail if dialog was cancelled
 					
 					char salt[] = new char[2];
 					salt[0] = transcriber.getPassword().charAt(0);
@@ -220,7 +261,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 						props.setMessage("Password incorrect, please try again.");
 						NativeDialogs.showMessageDialog(props);
 						
-						return;
+						return null;
 					}
 				}
 			}
@@ -265,6 +306,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		SwingUtilities.invokeLater( () -> {
 			(new SessionCheckAction(editor, true)).actionPerformed(new ActionEvent(SessionEditorEP.this, -1, "check"));
 		});
+		
+		return editor;
 	}
 	
 	private class PasswordDialog extends JDialog {
