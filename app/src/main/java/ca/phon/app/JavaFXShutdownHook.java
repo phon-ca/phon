@@ -43,7 +43,7 @@ public class JavaFXShutdownHook implements PhonShutdownHook, IPluginExtensionPoi
 	@Override
 	public void shutdown() throws PluginException {
 		LOGGER.info("Shutdown JavaFX...");
-		Platform.exit();
+		Platform.runLater( Platform::exit );
 	}
 
 }
