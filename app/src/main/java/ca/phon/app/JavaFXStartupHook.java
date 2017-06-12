@@ -20,11 +20,14 @@ package ca.phon.app;
 
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
 import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 public class JavaFXStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
@@ -34,6 +37,14 @@ public class JavaFXStartupHook implements PhonStartupHook, IPluginExtensionPoint
 	public void startup() throws PluginException {
 		LOGGER.info("Setting JavaFX Platform implicit exit to false");
 		Platform.setImplicitExit(false);
+		
+		Runnable onEDT = () -> {
+			LOGGER.info("Initializing JavaFX");
+			// initialized JavaFX at application startup
+			@SuppressWarnings("unused")
+			final JFXPanel panel = new JFXPanel();
+		};
+		SwingUtilities.invokeLater(onEDT);
 	}
 
 	@Override
