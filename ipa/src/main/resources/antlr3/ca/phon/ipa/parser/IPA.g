@@ -560,6 +560,9 @@ sctype returns [SyllableConstituentType value, boolean isDiphthongMember]
 	:	SCTYPE
 	{
 		$value = SyllableConstituentType.fromString($SCTYPE.text);
+		if($value == SyllableConstituentType.UNKNOWN) {
+			throw new InvalidTokenException("Invalid syllable constituent type '" + $SCTYPE.text + "'");
+		}
 		$isDiphthongMember = ($SCTYPE.text.equalsIgnoreCase("D"));
 	}
 	;

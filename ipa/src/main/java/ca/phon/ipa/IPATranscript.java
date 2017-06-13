@@ -739,7 +739,8 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 			public void visit(IPAElement obj) {
 				buffer.append(obj.toString());
 				if(includeScType && obj.getScType() != SyllableConstituentType.WORDBOUNDARYMARKER
-						&& obj.getScType() != SyllableConstituentType.SYLLABLESTRESSMARKER) {
+						&& obj.getScType() != SyllableConstituentType.SYLLABLESTRESSMARKER
+						&& obj.getScType() != SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
 					buffer.append(":");
 					final SyllabificationInfo sInfo = obj.getExtension(SyllabificationInfo.class);
 					if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())

@@ -303,4 +303,12 @@ public class TestIPAParser {
 		Assert.assertEquals(4, ipa.length());
 		Assert.assertEquals("h", ipa.elementAt(0).getText());
 	}
+	
+	@Test(expected=ParseException.class)
+	public void testInvalidConsitutentType() throws Exception {
+		final String txt = "ʌ:wɪtaʊ";
+		
+		IPATranscript.parseIPATranscript(txt);
+	}
+	
 }
