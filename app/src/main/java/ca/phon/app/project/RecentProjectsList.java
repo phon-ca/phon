@@ -57,8 +57,6 @@ public class RecentProjectsList extends JPanel {
 	
 	private ButtonPanel buttonPanel;
 	
-	private JLabel refreshLabel;
-	
 	private JLabel clearLabel;
 	
 	public RecentProjectsList() {
@@ -88,21 +86,6 @@ public class RecentProjectsList extends JPanel {
 			
 		});
 		actionPanel.add(clearLabel);
-		
-		ImageIcon icn = IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
-		refreshLabel = new JLabel("<html><u style='color: blue;'>Refresh</u></html>");
-		refreshLabel.setIcon(icn);
-		refreshLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		refreshLabel.setToolTipText("Refresh project list");
-		refreshLabel.addMouseListener(new MouseInputAdapter() {
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				updateProjectList();
-			}
-			
-		});
-		actionPanel.add(refreshLabel);
 		
 		add(actionPanel, BorderLayout.NORTH);
 		
