@@ -147,8 +147,9 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	
 	public BufferPanel createBuffer(String bufferName) {
 		int idx = 0;
+		final String rootName = bufferName;
 		while(bufferPanelMap.containsKey(bufferName)) {
-			bufferName = bufferName + " (" + (++idx) + ")";
+			bufferName = rootName + " (" + (++idx) + ")";
 		}
 		final BufferPanel bp = new BufferPanel(bufferName);
 		bp.setBorder(BorderFactory.createTitledBorder("Buffer: " + bufferName));
