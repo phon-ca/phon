@@ -54,7 +54,7 @@ public class NewParticipantAction extends SessionInfoAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
-		boolean canceled = ParticipantEditor.editParticipant(getEditor(), part, 
+		boolean canceled = ParticipantEditor.editNewParticipant(getEditor(), part, 
 				getEditor().getDataModel().getSession().getDate(),
 				getEditor().getDataModel().getSession().getParticipants().otherParticipants(null));
 

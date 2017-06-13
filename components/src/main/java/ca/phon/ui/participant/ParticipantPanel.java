@@ -369,6 +369,10 @@ public class ParticipantPanel extends JPanel {
 			ageField.setKeepPrompt(true);
 		}
 	}
+	
+	public boolean isSetRoleFromId() {
+		return assignIdBox.isSelected();
+	}
 
 	public String getRoleId() {
 		final ParticipantRole role = (ParticipantRole)roleBox.getSelectedItem();
@@ -390,6 +394,10 @@ public class ParticipantPanel extends JPanel {
 		return id;
 	}
 
+	public void updateRoleId() {
+		idField.setText(getRoleId());
+	}
+	
 	public void onAnonymize() {
 		final JDialog anonymizeDialog = new JDialog(CommonModuleFrame.getCurrentFrame());
 		anonymizeDialog.setModal(true);

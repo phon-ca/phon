@@ -59,9 +59,31 @@ public class ParticipantEditor extends JDialog {
 		return editor.wasCanceled;
 	}
 	
+	public static boolean editNewParticipant(JFrame parent, Participant part,
+			List<Participant> otherParts) {
+		ParticipantEditor editor = new ParticipantEditor(parent, part, LocalDate.now(), otherParts);
+		editor.participantPanel.updateRoleId();
+		editor.pack();
+		editor.setLocationRelativeTo(parent);
+		editor.setVisible(true);
+		
+		return editor.wasCanceled;
+	}
+	
 	public static boolean editParticipant(JFrame parent, Participant part, LocalDate sessionDate,
 			List<Participant> otherParts) {
 		ParticipantEditor editor = new ParticipantEditor(parent, part, sessionDate, otherParts);
+		editor.pack();
+		editor.setLocationRelativeTo(parent);
+		editor.setVisible(true);
+		
+		return editor.wasCanceled;
+	}
+	
+	public static boolean editNewParticipant(JFrame parent, Participant part, LocalDate sessionDate,
+			List<Participant> otherParts) {
+		ParticipantEditor editor = new ParticipantEditor(parent, part, sessionDate, otherParts);
+		editor.participantPanel.updateRoleId();
 		editor.pack();
 		editor.setLocationRelativeTo(parent);
 		editor.setVisible(true);
