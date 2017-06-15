@@ -44,18 +44,18 @@ public class WordBoundaryTransition extends PhonexTransition {
 		
 		int tapeIdx = -1;
 		if(getOffsetType() == OffsetType.NORMAL) {
-			if(currentState.getTapeIndex() >= currentState.getTape().length) return false;
+			if(currentState.getTapeIndex() >= currentState.getTape().length) return true;
 			tapeIdx = currentState.getTapeIndex();
 		} else if(getOffsetType() == OffsetType.LOOK_BEHIND) {
 			tapeIdx = currentState.getTapeIndex() - currentState.getLookBehindOffset();
-			if(tapeIdx < 0) return false;
+			if(tapeIdx < 0) return true;
 		} else if(getOffsetType() == OffsetType.LOOK_AHEAD) {
 			tapeIdx = currentState.getTapeIndex() + currentState.getLookAheadOffset();
-			if(tapeIdx >= currentState.getTape().length) return false;
+			if(tapeIdx >= currentState.getTape().length) return true;
 		}
 		
-		if(tapeIdx == 0 && currentState.getCurrentState().equals("q0") ||
-				currentState.getTapeIndex() == currentState.getTape().length) {
+		if( (tapeIdx == 0 && currentState.getCurrentState().equals("q0")) ||
+				(currentState.getTapeIndex() >= currentState.getTape().length) ) {
 			retVal = true;
 			matchLength = 0;
 		} else {

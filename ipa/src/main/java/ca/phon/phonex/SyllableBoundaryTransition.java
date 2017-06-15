@@ -59,10 +59,10 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 			tapeIdx = currentState.getTapeIndex();
 		} else if(getOffsetType() == OffsetType.LOOK_BEHIND) {
 			tapeIdx = currentState.getTapeIndex() - currentState.getLookBehindOffset();
-			if(tapeIdx < 0) return false;
+			if(tapeIdx < 0) return true;
 		} else if(getOffsetType() == OffsetType.LOOK_AHEAD) {
 			tapeIdx = currentState.getTapeIndex() + currentState.getLookAheadOffset();
-			if(tapeIdx >= currentState.getTape().length) return false;
+			if(tapeIdx >= currentState.getTape().length) return true;
 		}
 
 		// edges
