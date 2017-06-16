@@ -37,3 +37,8 @@ for the elaboration of the shared ​PhonBank database, designed to support
 empirical needs of research in all areas of phonology and phonological development. 
 
 For more information, see https://www.phon.ca
+
+
+## Compiling Phon
+
+To compile, use must first install Java 8 (or later) and maven.

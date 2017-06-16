@@ -6,7 +6,7 @@ JAVA_HOME=`/usr/libexec/java_home -v1.8` \
 java -Xms250m -Xmx1024m \
 -Xdock:name=Phon \
 -Xdock:icon=app/src/main/resources/data/icons/Phon.icns \
--cp "app/target/phon-app-2.1.2.jar:app/target/deps/*" \
+-cp "app/target/phon-app-2.2.0-SNAPSHOT.jar:app/target/deps/*" \
 -Dswing.aatext=true \
 -Dcom.apple.mrj.application.apple.menu.about.name=Phon \
 -Dcom.apple.macos.smallTabs=true \
@@ -20,3 +20,4 @@ java -Xms250m -Xmx1024m \
 -Dapple.awt.graphics.UseQuartz=true \
 $PHON_OPTS \
 ca.phon.app.Main 2>&1 | tee phon.log
+
