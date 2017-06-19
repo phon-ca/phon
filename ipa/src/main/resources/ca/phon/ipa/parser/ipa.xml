@@ -98,12 +98,24 @@
         <name>Full Stop</name>
         <token>PERIOD</token>
     </char>
+    <char value="&#x0041;">
+        <name>Latin Capital Letter A</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0042;">
+        <name>Latin Capital Letter B</name>
+        <token>COVER_SYMBOL</token>
+    </char>
     <char value="&#x0043;">
         <name>Latin Capital Letter C</name>
         <token>COVER_SYMBOL</token>
     </char>
-    <char value="&#x0056;">
-        <name>Latin Capital Letter V</name>
+    <char value="&#x0044;">
+        <name>Latin Capital Letter D</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0045;">
+        <name>Latin Capital Letter E</name>
         <token>COVER_SYMBOL</token>
     </char>
     <char value="&#x0046;">
@@ -114,8 +126,40 @@
         <name>Latin Capital Letter G</name>
         <token>COVER_SYMBOL</token>
     </char>
-    <char value="&#x0058;">
-        <name>Latin Capital Letter X</name>
+    <char value="&#x0048;">
+        <name>Latin Capital Letter H</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0049;">
+        <name>Latin Capital Letter I</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x004a;">
+        <name>Latin Capital Letter J</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x004b;">
+        <name>Latin Capital Letter K</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x004c;">
+        <name>Latin Capital Letter L</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x004d;">
+        <name>Latin Capital Letter M</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x004e;">
+        <name>Latin Capital Letter N</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x004f;">
+        <name>Latin Capital Letter O</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0050;">
+        <name>Latin Capital Letter P</name>
         <token>COVER_SYMBOL</token>
     </char>
     <char value="&#x0051;">
@@ -124,6 +168,38 @@
     </char>
     <char value="&#x0052;">
         <name>Latin Capital Letter R</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0053;">
+        <name>Latin Capital Letter S</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0054;">
+        <name>Latin Capital Letter T</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0055;">
+        <name>Latin Capital Letter U</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0056;">
+        <name>Latin Capital Letter V</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0057;">
+        <name>Latin Capital Letter W</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0058;">
+        <name>Latin Capital Letter X</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x0059;">
+        <name>Latin Capital Letter Y</name>
+        <token>COVER_SYMBOL</token>
+    </char>
+    <char value="&#x005a;">
+        <name>Latin Capital Letter Z</name>
         <token>COVER_SYMBOL</token>
     </char>
     <char value="&#x003e;">
