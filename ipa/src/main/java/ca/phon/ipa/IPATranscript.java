@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +43,7 @@ import ca.phon.ipa.features.IPAElementComparator;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
@@ -649,7 +652,9 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	public String getCvPattern() {
-		return CVSeqPattern.getCVSeq(this.toList());
+		final CoverVisitor visitor = new CoverVisitor("G=\\g; C=\\c; V=\\v");
+		accept(visitor);
+		return visitor.getIPATranscript().toString();
 	}
 
 	public boolean matchesCVPattern(String pattern) {
@@ -705,6 +710,38 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 		return retVal;
 	}
+	
+	/**
+	 * Cover using string encoding symbol map.
+	 * 
+	 * @param symbolMap
+	 */
+	public IPATranscript cover(String symbolMap) {
+		final CoverVisitor visitor = new CoverVisitor(symbolMap);
+		accept(visitor);
+		return visitor.getIPATranscript();
+	}
+	
+	/**
+	 * Cover the image of {@link IPAElement}s in the transcript using
+	 * the given symbol map.  The result will be a new {@link IPATranscript}
+	 * whose elements have the same feature set and syllablifiation information
+	 * as the original transcript.  Elements which are not matched using
+	 * the symbol table are copied as-is.
+	 * 
+	 * @param matchers
+	 * @param symbolMap
+	 * @param includeStress include stress marker elements
+	 * @param includeSyllableBoundaries keep syllable boundaries (i.e., '.') elements
+	 * @param includeLengthDiacritics keep length diacritics on elements
+	 */
+	public IPATranscript cover(List<PhoneMatcher> matchers, Map<PhoneMatcher, Character> symbolMap, boolean includeStress,
+			boolean includeSyllableBoundaries, boolean includeLengthDiacritics) {
+		final CoverVisitor visitor = new CoverVisitor(matchers, symbolMap, includeStress, includeSyllableBoundaries, includeLengthDiacritics);
+		accept(visitor);
+		return visitor.getIPATranscript();
+	}
+	
 
 	@Override
 	public Set<Class<?>> getExtensions() {
