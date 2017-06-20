@@ -819,10 +819,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 	@Override
 	public int compareTo(IPATranscript o) {
-//		final Comparator<IPAElement> comparator =
-//				new CompoundIPAElementComparator(FeatureComparator.defaultComparator());
-		final Comparator<IPAElement> comparator =
-				new IPAElementComparator();
+		final Comparator<IPAElement> comparator = new IPAElementComparator();
 		return compareTo(o, comparator);
 	}
 

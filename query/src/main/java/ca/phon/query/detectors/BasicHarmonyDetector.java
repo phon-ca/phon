@@ -85,7 +85,7 @@ public class BasicHarmonyDetector extends Detector {
    			
    			// Find out what features they have in common
    			Collection<String> interFeatures =
-   				FeatureSet.intersect(fsTarget, fsActual).getFeatures();
+   				new ArrayList<>(FeatureSet.intersect(fsTarget, fsActual).getFeatures());
    			interFeatures.remove(lookFor);
    			
    			// Features in the intersection determine the beginnings and ends
