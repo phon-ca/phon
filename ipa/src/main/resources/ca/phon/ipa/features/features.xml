@@ -805,7 +805,7 @@
 	<!-- F (0x46) -->
 	<feature_set char="&#x46;">cover semiresonant </feature_set>
 	<!-- G (0x47) -->
-	<feature_set char="&#x47;">glide cover </feature_set>
+	<feature_set char="&#x47;">consonant glide cover </feature_set>
 	<!-- H (0x48) -->
 	<feature_set char="&#x48;">cover </feature_set>
 	<!-- I (0x49) -->
@@ -845,7 +845,7 @@
 	<!-- Z (0x5a) -->
 	<feature_set char="&#x5a;">cover </feature_set>
 	<!-- > (0x3e) -->
-	<feature_set char="&#x3e;">transition glide </feature_set>
+	<feature_set char="&#x3e;">transition consonant glide </feature_set>
 	<!--  (0x2205) -->
 	<feature_set char="&#x2205;">null </feature_set>
 	<!-- ◌( (0x28) -->
