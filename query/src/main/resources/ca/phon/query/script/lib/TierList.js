@@ -59,6 +59,8 @@ exports.TierList = function(id) {
 	this.setTitle = function(title) {
 		tiersParamInfo.title = title;
 	};
+	
+	var coverRegex = /Cover (IPA (Target|Actual)) \(([^;]+);\s?(.+)\)/;
 
 	/**
 	 * Returns a tuple of tier data.
@@ -124,9 +126,20 @@ exports.TierList = function(id) {
 				} else if(tierName == "Actual Syllabification") {
 					var ipaA = obj.IPAActual;
 					tierVal = (ipaA != null ? ipaA.toString(true) : "");
+				} else if(tierName.match(coverRegex)) {
+				    var groupData = coverRegex.exec(tierName);
+				    
+				    var phonTier = groupData[1].trim();
+				    var reportTier = groupData[3].trim();
+				    var symbolMap = groupData[4].trim();
+	
+	                var ipa = obj.getTier(phonTier);
+	                tierVal = (ipa != null ? ipa.cover(symbolMap) : "");
+	                
+	                tierName = reportTier;
 				}
 				if(tierVal != null)
-					metadata.put(extraTiers[j] + " (" + label + ")", tierVal.toString());
+					metadata.put(tierName + " (" + label + ")", tierVal.toString());
 			}
 		}
 
