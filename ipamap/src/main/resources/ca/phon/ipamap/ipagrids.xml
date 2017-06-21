@@ -1577,12 +1577,17 @@
             <property name="Description">Post-voicing</property>
             <property name="Unicode">0x2ec</property>
         </cell>
-
         <cell y="10" x="32" h="2" w="2">
             <text>ˬ̵◌</text>
             <property name="Name">Subscript wedge</property>
             <property name="Description">Pre-voicing</property>
             <property name="Unicode">0x2ec + 0x335</property>
+        </cell>
+        <cell y="10" x="34" h="2" w="2">
+            <text>◌̾</text>
+            <property name="Name">Combining Vertical Tilde</property>
+            <property name="Description">Distorted</property>
+            <property name="Unicode">0x33e</property>
         </cell>
     </grid>
 </ipaGrids>

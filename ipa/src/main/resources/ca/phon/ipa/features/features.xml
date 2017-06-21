@@ -439,6 +439,9 @@
 		<primary_family>diacritic</primary_family>
 		<secondary_family>manner</secondary_family>
 	</feature>
+	<feature name="distorted">
+		<primary_family>diacritic</primary_family>
+	</feature>
 	<feature name="subapical">
 		<primary_family>place</primary_family>
 		<secondary_family>coronal</secondary_family>
@@ -1209,7 +1212,7 @@
 	<!-- ◌̼ (0x33c) -->
 	<feature_set char="&#x33c;">diacritic labial </feature_set>
 	<!-- ◌̾ (0x33e) -->
-	<feature_set char="&#x33e;">diacritic </feature_set>
+	<feature_set char="&#x33e;">diacritic distorted </feature_set>
 	<!-- ◌̿ (0x33f) -->
 	<feature_set char="&#x33f;">diacritic unaspirated </feature_set>
 	<!-- ◌͆ (0x346) -->
