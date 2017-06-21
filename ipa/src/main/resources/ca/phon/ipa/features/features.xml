@@ -81,6 +81,14 @@
 		<primary_family>place</primary_family>
 		<secondary_family>coronal</secondary_family>
 	</feature>
+	<feature name="labiodental">
+		<primary_family>place</primary_family>
+		<secondary_family>coronal</secondary_family>
+	</feature>
+	<feature name="interdental">
+		<primary_family>place</primary_family>
+		<secondary_family>coronal</secondary_family>
+	</feature>
 	<feature name="apical">
 		<synonym>api</synonym>
 		<primary_family>place</primary_family>
@@ -570,15 +578,15 @@
 	<!-- β (0x3b2) -->
 	<feature_set char="&#x3b2;">consonant labial bilabial voiced continuant obstruent fricative </feature_set>
 	<!-- f (0x66) -->
-	<feature_set char="&#x66;">consonant labial dental voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&#x66;">consonant labial labiodental voiceless continuant obstruent fricative </feature_set>
 	<!-- ƒ (0x192) -->
 	<feature_set char="&#x192;">consonant labial bilabial voiceless continuant obstruent fricative </feature_set>
 	<!-- v (0x76) -->
-	<feature_set char="&#x76;">consonant labial dental voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&#x76;">consonant labial labiodental voiced continuant obstruent fricative </feature_set>
 	<!-- θ (0x3b8) -->
-	<feature_set char="&#x3b8;">consonant dental coronal lingual anterior distributed voiceless continuant obstruent fricative </feature_set>
+	<feature_set char="&#x3b8;">consonant interdental coronal lingual anterior distributed voiceless continuant obstruent fricative </feature_set>
 	<!-- ð (0xf0) -->
-	<feature_set char="&#xf0;">consonant dental coronal lingual anterior distributed voiced continuant obstruent fricative </feature_set>
+	<feature_set char="&#xf0;">consonant interdental coronal lingual anterior distributed voiced continuant obstruent fricative </feature_set>
 	<!-- δ (0x3b4) -->
 	<feature_set char="&#x3b4;">consonant dental coronal lingual anterior distributed voiced continuant obstruent fricative </feature_set>
 	<!-- s (0x73) -->
@@ -660,7 +668,7 @@
 	<!-- m (0x6d) -->
 	<feature_set char="&#x6d;">consonant labial bilabial voiced stop sonorant nasal </feature_set>
 	<!-- ɱ (0x271) -->
-	<feature_set char="&#x271;">consonant labial dental voiced stop sonorant nasal </feature_set>
+	<feature_set char="&#x271;">consonant labial labiodental voiced stop sonorant nasal </feature_set>
 	<!-- ƞ (0x19e) -->
 	<feature_set char="&#x19e;">consonant coronal lingual anterior alveolar voiced stop sonorant nasal </feature_set>
 	<!-- n (0x6e) -->
@@ -688,9 +696,9 @@
 	<!-- ʟ (0x29f) -->
 	<feature_set char="&#x29f;">consonant dorsal velar lingual voiced approximant liquid lateral continuant sonorant </feature_set>
 	<!-- ⱱ (0x2c71) -->
-	<feature_set char="&#x2c71;">consonant labial dental lingual voiced approximant continuant sonorant flap </feature_set>
+	<feature_set char="&#x2c71;">consonant labial labiodental lingual voiced approximant continuant sonorant flap </feature_set>
 	<!-- ʙ (0x299) -->
-	<feature_set char="&#x299;">consonant labial bilabial voiced approximant continuant sonorant trill </feature_set>
+	<feature_set char="&#x299;">consonant labial labiodental bilabial voiced approximant continuant sonorant trill </feature_set>
 	<!-- ɾ (0x27e) -->
 	<feature_set char="&#x27e;">consonant coronal lingual anterior alveolar voiced approximant liquid rhotic continuant sonorant flap </feature_set>
 	<!-- r (0x72) -->
@@ -716,7 +724,7 @@
 	<!-- ʍ (0x28d) -->
 	<feature_set char="&#x28d;">consonant labial bilabial dorsal velar lingual voiceless continuant obstruent fricative </feature_set>
 	<!-- ʋ (0x28b) -->
-	<feature_set char="&#x28b;">consonant glide labial dental voiced approximant continuant sonorant </feature_set>
+	<feature_set char="&#x28b;">consonant glide labial labiodendal voiced approximant continuant sonorant </feature_set>
 	<!-- j (0x6a) -->
 	<feature_set char="&#x6a;">consonant glide palatal coronal lingual posterior voiced approximant continuant sonorant </feature_set>
 	<!-- ɥ (0x265) -->
