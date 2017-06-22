@@ -19,12 +19,16 @@
 
 package ca.phon.ipa.features;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,13 +40,22 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.stream.StreamSource;
 
+import ca.phon.featureset.xml.Family;
 import ca.phon.featureset.xml.FeatureMatrixType;
 import ca.phon.featureset.xml.FeatureSetType;
 import ca.phon.featureset.xml.FeatureType;
 import ca.phon.featureset.xml.NamedFeatureSetType;
+import ca.phon.featureset.xml.ObjectFactory;
 
 /**
  * Holds all defined feature set for IPA characters. This information is held in
@@ -117,6 +130,120 @@ public class FeatureMatrix {
 		FileInputStream stream;
 		stream = new FileInputStream(fmFile);
 		buildFromXML(stream);
+	}
+	
+	public void saveAsXML(String filename) throws IOException {
+		saveAsXML(new File(filename));
+	}
+	
+	public void saveAsXML(File filename) throws IOException {
+		saveAsXML(new FileOutputStream(filename));
+	}
+	
+	public void saveAsXML(OutputStream stream) throws IOException {
+		try {
+			final ObjectFactory factory = new ObjectFactory();
+			FeatureMatrixType fmType = createFeatureMatrixType();
+			final JAXBElement<FeatureMatrixType> ele = factory.createFeatureMatrix(fmType);
+			
+			final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
+			final Marshaller marshaller = jaxbContext.createMarshaller();
+			
+			final XMLOutputFactory xof = XMLOutputFactory.newFactory();
+			final XMLEventWriter xsw = xof.createXMLEventWriter(stream);
+			marshaller.setListener(new MarshalListener(xsw));
+
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			
+			marshaller.marshal(ele, xsw);
+		} catch (JAXBException | XMLStreamException e) {
+			throw new IOException(e);
+		}
+		
+	}
+	
+	private final class MarshalListener extends Marshaller.Listener {
+		
+		private XMLEventWriter xsw;
+		
+		private XMLEventFactory factory;
+		
+		public MarshalListener(XMLEventWriter xsw) {
+			this.xsw = xsw;
+			
+			this.factory = XMLEventFactory.newFactory();
+		}
+		
+		@Override
+		public void beforeMarshal(Object source) {
+			super.beforeMarshal(source);
+			try {
+				xsw.add(factory.createCharacters("\n"));
+			} catch (XMLStreamException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(source instanceof FeatureSetType) {
+				final FeatureSetType fsType = (FeatureSetType)source;
+				final String comment = fsType.getChar() + " (0x" + Integer.toHexString(fsType.getChar().charAt(0)) + ")";
+				try {
+					xsw.add(factory.createComment(comment));
+				} catch (XMLStreamException e) {}
+			}
+		}
+		
+	}
+	
+	private FeatureMatrixType createFeatureMatrixType() {
+		final ObjectFactory factory = new ObjectFactory();
+		final FeatureMatrixType retVal = factory.createFeatureMatrixType();
+		
+		// features
+		final Map<String, FeatureType> featureTypeMap = new HashMap<>();
+		for(Feature feature:featureData) {
+			final FeatureType featureType = factory.createFeatureType();
+			featureType.setName(feature.getName());
+			if(feature.getPrimaryFamily() != null && feature.getPrimaryFamily() != FeatureFamily.UNDEFINED)
+				featureType.setPrimaryFamily(Family.fromValue(feature.getPrimaryFamily().toString().toLowerCase().replaceAll("_", " ")));
+			if(feature.getSecondaryFamily() != null && feature.getSecondaryFamily() != FeatureFamily.UNDEFINED)
+				featureType.setSecondaryFamily(Family.fromValue(feature.getSecondaryFamily().toString().toLowerCase().replaceAll("_", " ")));
+			if(feature.getSynonyms() != null) {
+				for(String syn:feature.getSynonyms())
+					featureType.getSynonym().add(syn);
+			}
+			
+			featureTypeMap.put(feature.getName(), featureType);
+			retVal.getFeature().add(featureType);
+		}
+		
+		// named feature sets
+		for(String key:namedFeatureSets.keySet()) {
+			final NamedFeatureSetType fsType = factory.createNamedFeatureSetType();
+			final FeatureSet fs = namedFeatureSets.get(key);
+			fsType.setName(key);
+			
+			for(Feature feature:fs) {
+				fsType.getValue().add(featureTypeMap.get(feature.getName()));
+			}
+			
+			retVal.getNamedFeatureSet().add(fsType);
+		}
+		
+		// character feature sets
+		for(Character c:getCharacterSet()) {
+			final FeatureSetType fsType = factory.createFeatureSetType();
+			final FeatureSet fs = getFeatureSet(c);
+			fsType.setChar(c.toString());
+			
+			for(Feature feature:fs) {
+				fsType.getValue().add(featureTypeMap.get(feature.getName()));
+			}
+			
+			retVal.getFeatureSet().add(fsType);
+		}
+		
+		return retVal;
 	}
 	
 	/**
