@@ -237,6 +237,10 @@
 		<primary_family>manner</primary_family>
 		<secondary_family>nasality</secondary_family>
 	</feature>
+	<feature name="oral">
+		<primary_family>manner</primary_family>
+		<secondary_family>nasality</secondary_family>
+	</feature>
 	<feature name="prenasalized">
 		<primary_family>manner</primary_family>
 		<secondary_family>nasality</secondary_family>
@@ -484,6 +488,14 @@
 	<feature name="transition">
 		<primary_family>place</primary_family>
 	</feature>
+	
+	<!-- Primary/Functional Features -->
+	<named_feature_set name="primary">labial labiodental bilabial
+	coronal interdental alveolar alveopalatal palatal retroflex retroflex
+	dorsal velar uvular guttural pharyngeal laryngeal
+	stop fricative affricate oral nasal lateral rhotic glide vowel
+	voiced voiceless
+	high mid low tense lax round front central back</named_feature_set>
 
 	<!-- p (0x70) -->
 	<feature_set char="&#x70;">consonant labial bilabial voiceless stop obstruent </feature_set>

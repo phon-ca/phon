@@ -49,12 +49,22 @@
             <xs:field xpath="feature_set"></xs:field>
         </xs:keyref>
         
+        <xs:keyref refer="feature_key" name="named_feature_key_ref">
+            <xs:selector xpath="."></xs:selector>
+            <xs:field xpath="named_feature_set"></xs:field>
+        </xs:keyref>
+        
         <!--
             Don't allow duplicate unicode entries
         -->
         <xs:unique name="feature_set_key">
             <xs:selector xpath=".//feature_set"></xs:selector>
-            <xs:field xpath="@unicode"></xs:field>
+            <xs:field xpath="@char"></xs:field>
+        </xs:unique>
+        
+        <xs:unique name="named_feature_set_key">
+            <xs:selector xpath=".//named_feature_set"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
         </xs:unique>
     </xs:element>
     
@@ -63,6 +73,7 @@
         to be declared at the root level of the schema
     -->
     <xs:element name="feature" type="featureType"/>
+    <xs:element name="named_feature_set" type="namedFeatureSetType"/>
     <xs:element name="feature_set" type="featureSetType"/>
     <xs:element name="features" type="xs:IDREFS"/>
     <xs:element name="name" type="nonEmptyString"/>
@@ -73,8 +84,17 @@
     <xs:complexType name="featureMatrixType" mixed="false">
         <xs:sequence>
             <xs:element ref="feature" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="named_feature_set" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="feature_set" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="namedFeatureSetType" mixed="false">
+        <xs:simpleContent>
+            <xs:extension base="xs:IDREFS">
+                <xs:attribute name="name" type="nonEmptyString" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
     
     <xs:complexType name="featureSetType" mixed="false">

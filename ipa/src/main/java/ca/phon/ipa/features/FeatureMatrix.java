@@ -30,16 +30,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 
 import ca.phon.featureset.xml.FeatureMatrixType;
 import ca.phon.featureset.xml.FeatureSetType;
 import ca.phon.featureset.xml.FeatureType;
+import ca.phon.featureset.xml.NamedFeatureSetType;
 
 /**
  * Holds all defined feature set for IPA characters. This information is held in
@@ -56,6 +59,9 @@ public class FeatureMatrix {
 	/** The default data file */
 	private final static String DATA_FILE = "features.xml";
 	
+	/** Named feature set */
+	private TreeMap<String, FeatureSet> namedFeatureSets;
+
 	/** The table of feature sets */
 	private LinkedHashMap<Character, FeatureSet> featureSets;
 
@@ -121,11 +127,9 @@ public class FeatureMatrix {
 		throws IOException {
 		try {
 			// parse the file
-			JAXBContext jaxbContext = JAXBContext
-					.newInstance("ca.phon.featureset.xml");
+			JAXBContext jaxbContext = JAXBContext.newInstance("ca.phon.featureset.xml");
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			JAXBElement<FeatureMatrixType> featureMatrixEle = 
-				(JAXBElement<FeatureMatrixType>)unmarshaller.unmarshal(stream);
+			JAXBElement<FeatureMatrixType> featureMatrixEle = unmarshaller.unmarshal(new StreamSource(stream), FeatureMatrixType.class);
 			FeatureMatrixType matrix = featureMatrixEle.getValue();
 
 			List<FeatureType> featureList = matrix.getFeature();
@@ -133,7 +137,6 @@ public class FeatureMatrix {
 			// read in features and their families
 			// use LinkedHashMap to retain iteration order
 			featureNameHash = new LinkedHashMap<String, Integer>();
-//			reverseHash = new LinkedHashMap<Integer, String>();
 			featureData = new Feature[featureList.size()];
 
 			for (int featureIndex = 0; featureIndex < featureList.size(); featureIndex++) {
@@ -161,9 +164,31 @@ public class FeatureMatrix {
 				// possibleFeatures.put(currentFeature, fd);
 			}
 			numberOfFeatures = featureList.size();
+			
+			// named features
+			namedFeatureSets = new TreeMap<>();
+			List<NamedFeatureSetType> namedSets = matrix.getNamedFeatureSet();
+			for(NamedFeatureSetType set:namedSets) {
+				BitSet bs = new BitSet(numberOfFeatures);
+				String setName = set.getName();
+				
+				for(Object fsObj:set.getValue()) {
+					if(!(fsObj instanceof FeatureType))
+						continue;
+					
+					FeatureType feature = (FeatureType)fsObj;
+					String fName = feature.getName().toLowerCase();
+					
+					int fIdx = featureNameHash.get(fName);
+					if(fIdx >= 0)
+						bs.set(fIdx, true);
+				}
+				
+				FeatureSet fs = new FeatureSet(bs);
+				namedFeatureSets.put(setName, fs);
+			}
 
-			// read in feature descriptions and save them
-			// in a hashtable
+			// feature set for characters
 			featureSets = new LinkedHashMap<Character, FeatureSet>();
 			List<FeatureSetType> sets = matrix.getFeatureSet();
 			for (FeatureSetType set : sets) {
@@ -335,6 +360,35 @@ public class FeatureMatrix {
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Return all named feature sets.
+	 * 
+	 * @return map of named feature sets
+	 */
+	public Map<String, FeatureSet> getNamedFeatureSets() {
+		return this.namedFeatureSets;
+	}
+	
+	/**
+	 * Set the value of a named FeatureSet
+	 * 
+	 * @param name
+	 * @param featureSet
+	 */
+	public void putNamedFeatureSet(String name, FeatureSet featureSet) {
+		this.namedFeatureSets.put(name, featureSet);
+	}
+
+	/**
+	 * Return the value of a named FeatureSet
+	 * 
+	 * @param name
+	 * @return featureSet for given name or <code>null</code>
+	 */
+	public FeatureSet getNamedFeatureSet(String name) {
+		return this.namedFeatureSets.get(name);
 	}
 
 	/**
