@@ -128,7 +128,8 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		});
 
 		setDragEnabled(false);
-
+		setDropTarget(null);
+		
 		setLineWrap(allowNewLine);
 		setWrapStyleWord(allowNewline);
 
