@@ -124,7 +124,7 @@ public class TestPluginMatchers {
 	
 	@Test
 	public void testStressMatcher() throws ParseException {
-		final String txt = "ˌ:Sh:Oa:Dɪ:Dp:Oə:Nˈ:Sk:Oɑ:Nn:Cd:Oɹ:Oiː:Næ:Nk:C";
+		final String txt = "ˌh:Oa:Dɪ:Dp:Oə:Nˈk:Oɑ:Nn:Cd:Oɹ:Oiː:Næ:Nk:C";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
 		
 		final IPATranscript[] unstressed = new IPATranscript[] {
