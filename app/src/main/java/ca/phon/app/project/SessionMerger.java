@@ -19,8 +19,10 @@
 package ca.phon.app.project;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -35,6 +37,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.session.TierDescription;
+import ca.phon.session.TierViewItem;
 import ca.phon.worker.PhonTask;
 
 /**
@@ -169,6 +172,11 @@ public class SessionMerger extends PhonTask {
 				// add new dep tier
 				newDesc = factory.createTierDescription(tierDesc.getName(), tierDesc.isGrouped());
 				dest.addUserTier(newDesc);
+				
+				final TierViewItem tvi = factory.createTierViewItem(tierDesc.getName(), true);
+				final List<TierViewItem> tierView = new ArrayList<>(dest.getTierView());
+				tierView.add(tvi);
+				dest.setTierView(tierView);
 			}
 		}
 	}
