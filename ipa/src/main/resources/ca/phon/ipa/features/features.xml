@@ -967,7 +967,7 @@
     <!--Z (0x5a)-->
     <feature_set char="Z">cover</feature_set>
     <!--> (0x3e)-->
-    <feature_set char="&gt;">consonant glide oral transition</feature_set>
+    <feature_set char="&gt;">consonant glide transition</feature_set>
     <!--∅ (0x2205)-->
     <feature_set char="∅">null</feature_set>
     <!--( (0x28)-->
