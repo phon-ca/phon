@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
 
@@ -132,8 +133,13 @@ public class TierImpl<T> implements Tier<T> {
 			if(!grouped && idx > 0) {
 				throw new ArrayIndexOutOfBoundsException(idx);
 			}
-			if(tierData.size() <= idx)
-				tierData.add(idx, val);
+			
+			// add empty groups if necessary
+			while(idx > tierData.size()) {
+				tierData.add(getDeclaredType().cast(FormatterUtil.parse(getDeclaredType(), "")));
+			}
+			if(idx == tierData.size())
+				tierData.add(val);
 			else
 				tierData.set(idx, val);
 		}
