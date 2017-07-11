@@ -912,15 +912,24 @@ public class NodeWizard extends WizardFrame {
 				props.setHeader("Re-run " + getNoun().getObj1());
 				props.setMessage("Clear results and re-run " + getNoun().getObj1() + ".");
 				props.setOptions(MessageDialogProperties.yesNoOptions);
-				props.setRunAsync(false);
+				props.setRunAsync(true);
 				props.setParentWindow(this);
 
-				int retVal = NativeDialogs.showMessageDialog(props);
-				if(retVal == 1) return;
-				bufferPanel.closeAllBuffers();
+				props.setListener( (e) -> {
+					final int retVal = e.getDialogResult();
+					
+					if(retVal == 1) return;
+					
+					SwingUtilities.invokeLater( () -> {
+						bufferPanel.closeAllBuffers();
+						PhonWorker.getInstance().invokeLater( () -> executeGraph() );
+					});
+					
+				});
+				NativeDialogs.showMessageDialog(props);
+			} else {
+				PhonWorker.getInstance().invokeLater( () -> executeGraph() );
 			}
-
-			PhonWorker.getInstance().invokeLater( () -> executeGraph() );
 		}
 	}
 
@@ -989,16 +998,26 @@ public class NodeWizard extends WizardFrame {
 			props.setMessage("Stop execution and close?");
 			props.setOptions(new String[] { "Cancel", "Stop", "Stop and Close"});
 			props.setDefaultOption("Cancel");
-			props.setRunAsync(false);
+			props.setRunAsync(true);
+			props.setListener( (e) -> {
+				final int retVal = e.getDialogResult();
+				
+				if(retVal == 0) return;
+				stopExecution();
+				
+				if(retVal == 2) {
+					SwingUtilities.invokeLater( () -> _cancel() );
+				}
+			});
 
-			int retVal = NativeDialogs.showMessageDialog(props);
-			if(retVal == 0) return;
-			stopExecution();
-			if(retVal == 2)
-				super.cancel();
+			NativeDialogs.showMessageDialog(props);
 		} else {
 			super.cancel();
 		}
+	}
+	
+	private void _cancel() {
+		super.cancel();
 	}
 
 	@Override
