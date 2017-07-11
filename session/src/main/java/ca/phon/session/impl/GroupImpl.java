@@ -59,7 +59,7 @@ public class GroupImpl implements Group {
 	public Orthography getOrthography() {
 		return 
 				(record.getOrthography().numberOfGroups() > groupIndex ? record.getOrthography().getGroup(groupIndex) 
-						: null);
+						: new Orthography());
 	}
 
 	@Override
