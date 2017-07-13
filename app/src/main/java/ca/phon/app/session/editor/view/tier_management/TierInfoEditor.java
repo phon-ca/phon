@@ -154,12 +154,12 @@ public class TierInfoEditor extends JPanel {
 		if(fontString.equals(PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT))) {
 			fontString = "default";
 		}
-		return factory.createTierViewItem(getTierName(), isVisible(), fontString);
+		return factory.createTierViewItem(getTierName().trim(), isVisible(), fontString);
 	}
 	
 	public TierDescription createTierDescription() {
 		final SessionFactory factory = SessionFactory.newFactory();
-		return factory.createTierDescription(getTierName(), isGrouped(), TierString.class);
+		return factory.createTierDescription(getTierName().trim(), isGrouped(), TierString.class);
 	}
 	
 }
