@@ -18,6 +18,8 @@
  */
 package ca.phon.session.check;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
@@ -99,6 +101,27 @@ public class ValidationEvent implements IExtendable {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	/**
+	 * Can this event be automatically fixed?  Sub-classes
+	 * should override this method.
+	 * 
+	 * @return can the validation event be fixed
+	 */
+	public boolean canFix() {
+		return false;
+	}
+	
+	/**
+	 * Options for fixing the problem identified by this
+	 * validation event.
+	 * 
+	 * @return a list of validation options or an empty
+	 *  list if this problem does not have a quick fix
+	 */
+	public List<SessionQuickFix> getQuickFixes() {
+		return new ArrayList<>();
 	}
 
 	@Override
