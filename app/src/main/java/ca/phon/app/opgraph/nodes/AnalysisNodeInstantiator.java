@@ -20,6 +20,8 @@ package ca.phon.app.opgraph.nodes;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.app.util.GraphUtils;
+import ca.gedge.opgraph.library.NodeData;
 import ca.gedge.opgraph.library.instantiators.Instantiator;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 
@@ -33,8 +35,16 @@ public class AnalysisNodeInstantiator extends MacroNodeInstantiator {
 	
 	@Override
 	public MacroNode newInstance(Object... params) throws InstantiationException {
-		final MacroNode node = super.newInstance(params);
-		final OpGraph graph = node.getGraph();
+		MacroNode node = null;
+		OpGraph graph = null;
+		if(params.length == 1 && params[0] instanceof OpGraph) {
+			graph = (OpGraph)params[0];
+			GraphUtils.changeNodeIds(graph);
+			node = new MacroNode(graph);
+		} else {
+			node = super.newInstance(params);
+			graph = node.getGraph();
+		}
 		
 		// find input nodes and publish fields
 		final OpNode projectNode = graph.getNodesByName("Project").stream().findFirst().orElse(null);

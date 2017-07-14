@@ -669,8 +669,30 @@ public class SimpleEditor extends CommonModuleFrame {
 			}
 		}
 	}
+	
+	public void addGraph(OpGraph graph) {
+		try {
+			final MacroNode node = nodeInstantiator.newInstance(graph);
+			
+			final AddNodeEdit addNodeEdit = 
+					new AddNodeEdit(getGraph(), node, X_START, Y_START + macroNodes.size() * Y_SEP);
+			model.getDocument().getUndoSupport().postEdit(addNodeEdit);
+			
+			final NodeWizardOptionalsEdit optEdit =
+					new NodeWizardOptionalsEdit(getGraph(),  getGraph().getExtension(WizardExtension.class), node, true, true);
+			model.getDocument().getUndoSupport().postEdit(optEdit);
+			
+			updateNodeName(node);
+			
+			macroNodes.add(node);
+			((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
+			nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
+		} catch (InstantiationException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
 
-	private void addQuery(QueryScript queryScript) {
+	public void addQuery(QueryScript queryScript) {
 		final MacroNode node = queryNodeInstantiator.apply(queryScript);
 
 		final AddNodeEdit addNodeEdit =
@@ -681,16 +703,6 @@ public class SimpleEditor extends CommonModuleFrame {
 				new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), node, true, true);
 		model.getDocument().getUndoSupport().postEdit(optEdit);
 
-//		final QueryNode queryNode =
-//				(QueryNode)node.getGraph().getVertices().stream()
-//					.filter( (n) -> n instanceof QueryNode )
-//					.findFirst().orElse(null);
-//		if(queryNode != null) {
-//			final NodeWizardSettingsEdit settingsEdit = new NodeWizardSettingsEdit(getGraph(), getGraph().getExtension(WizardExtension.class),
-//					queryNode, true, true);
-//			model.getDocument().getUndoSupport().postEdit(settingsEdit);
-//		}
-
 		updateReportTitle(node);
 
 		macroNodes.add(node);
@@ -698,14 +710,14 @@ public class SimpleEditor extends CommonModuleFrame {
 		nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
 	}
 
-	private void addDocument(File file) throws IOException, InstantiationException {
+	public void addDocument(File file) throws IOException, InstantiationException {
 		addDocument(file.toURI().toURL());
 	}
 
 	/*
 	 * This method should be executed on a background thread
 	 */
-	private void addDocument(URL documentURL) throws IOException, InstantiationException {
+	public void addDocument(URL documentURL) throws IOException, InstantiationException {
 		// create analysis node
 		try(InputStream is = documentURL.openStream()) {
 			final String documentFile = URLDecoder.decode(documentURL.toString(), "UTF-8");

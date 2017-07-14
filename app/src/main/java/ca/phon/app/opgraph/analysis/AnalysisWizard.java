@@ -19,14 +19,16 @@
 package ca.phon.app.opgraph.analysis;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.JMenuBar;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
-import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
+import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.NodeWizardReportContext;
 import ca.phon.app.project.ParticipantsPanel;
@@ -76,21 +78,17 @@ public class AnalysisWizard extends NodeWizard {
 		super.setJMenuBar(menuBar);
 
 		final MenuBuilder builder = new MenuBuilder(menuBar);
-		builder.addSeparator("File@1", "save");
-		builder.addItem("File@save", new SaveAnalysisAction(this));
-
-		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
-		openEditorAct.putValue(PhonUIAction.NAME, "Open analysis in Composer...");
-		builder.addItem("File@" + SaveAnalysisAction.TXT, openEditorAct);
+		builder.addSeparator("File@1", "composer");
+		
+		final OpenSimpleAnalysisComposerAction openSimpleComposerAct = new OpenSimpleAnalysisComposerAction(getGraph());
+		openSimpleComposerAct.putValue(Action.NAME, "Open analysis in Composer (simple)...");
+		builder.addItem("File@composer", openSimpleComposerAct).addActionListener( (e) -> dispose() );
+		
+		final OpenComposerAction openComposerAct = new OpenComposerAction(getGraph());
+		openComposerAct.putValue(Action.NAME, "Open analysis in Composer (advanced)...");
+		builder.addItem("File@" + openSimpleComposerAct.getValue(PhonUIAction.NAME), openComposerAct).addActionListener( (e) -> dispose() );
 	}
-
-	public void onOpenEditor(PhonActionEvent pae) {
-		final OpenNodeEditorAction act = new OpenNodeEditorAction(getGraph());
-		act.actionPerformed(pae.getActionEvent());
-
-		dispose();
-	}
-
+	
 	@Override
 	public Tuple<String, String> getNoun() {
 		return new Tuple<>("analysis", "analyses");

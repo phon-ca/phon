@@ -34,26 +34,26 @@ import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpgraphIO;
 
-public class OpenNodeEditorAction extends HookableAction {
+public class OpenComposerAction extends HookableAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(OpenNodeEditorAction.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(OpenComposerAction.class.getName());
 
-	private final String TXT = "Open Node Editor";
+	private final String TXT = "Composer (advanced)...";
 	
-	private final String DESC = "Open node editor";
+	private final String DESC = "Open advanced Composer";
 	
 	private URL documentURL;
 	
 	private OpGraph graph;
 	
-	public OpenNodeEditorAction() {
+	public OpenComposerAction() {
 		super();
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
 	}
 	
-	public OpenNodeEditorAction(URL documentURL) {
+	public OpenComposerAction(URL documentURL) {
 		super();
 		
 		this.documentURL = documentURL;
@@ -62,7 +62,7 @@ public class OpenNodeEditorAction extends HookableAction {
 		putValue(SHORT_DESCRIPTION, DESC);
 	}
 	
-	public OpenNodeEditorAction(OpGraph opgraph) {
+	public OpenComposerAction(OpGraph opgraph) {
 		super();
 		
 		this.graph = opgraph;

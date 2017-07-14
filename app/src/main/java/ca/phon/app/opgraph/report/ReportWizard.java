@@ -22,7 +22,7 @@ import javax.swing.JMenuBar;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
-import ca.phon.app.opgraph.editor.actions.OpenNodeEditorAction;
+import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -52,7 +52,7 @@ public class ReportWizard extends NodeWizard {
 	}
 	
 	public void onOpenEditor(PhonActionEvent pae) {
-		final OpenNodeEditorAction act = new OpenNodeEditorAction(getGraph());
+		final OpenComposerAction act = new OpenComposerAction(getGraph());
 		act.actionPerformed(pae.getActionEvent());
 		
 		dispose();
