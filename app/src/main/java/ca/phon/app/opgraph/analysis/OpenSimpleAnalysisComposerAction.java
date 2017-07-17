@@ -28,24 +28,27 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 	
 	private final static String TXT = "Composer (simple)...";
 	
+	private final Project project;
+	
 	private final OpGraph analysisGraph;
 	
-	public OpenSimpleAnalysisComposerAction() {
-		this(null);
+	public OpenSimpleAnalysisComposerAction(Project project) {
+		this(project, null);
 	}
 	
-	public OpenSimpleAnalysisComposerAction(OpGraph analysisGraph) {
+	public OpenSimpleAnalysisComposerAction(Project project, OpGraph analysisGraph) {
 		super();
 		
 		putValue(NAME, TXT);
 		
+		this.project = project;
 		this.analysisGraph = analysisGraph;
 	}
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final SimpleEditor frame =
-			new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
+			new SimpleEditor(project,
 					new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
 					(qs) ->  {
 						try {

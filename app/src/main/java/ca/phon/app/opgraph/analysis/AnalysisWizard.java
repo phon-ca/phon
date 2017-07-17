@@ -80,13 +80,13 @@ public class AnalysisWizard extends NodeWizard {
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("File@1", "composer");
 		
-		final OpenSimpleAnalysisComposerAction openSimpleComposerAct = new OpenSimpleAnalysisComposerAction(getGraph());
+		final OpenSimpleAnalysisComposerAction openSimpleComposerAct = new OpenSimpleAnalysisComposerAction(getProject(), getGraph());
 		openSimpleComposerAct.putValue(Action.NAME, "Open analysis in Composer (simple)...");
-		builder.addItem("File@composer", openSimpleComposerAct).addActionListener( (e) -> dispose() );
+		builder.addItem("File@composer", openSimpleComposerAct).addActionListener( (e) -> close() );
 		
 		final OpenComposerAction openComposerAct = new OpenComposerAction(getGraph());
 		openComposerAct.putValue(Action.NAME, "Open analysis in Composer (advanced)...");
-		builder.addItem("File@" + openSimpleComposerAct.getValue(PhonUIAction.NAME), openComposerAct).addActionListener( (e) -> dispose() );
+		builder.addItem("File@" + openSimpleComposerAct.getValue(PhonUIAction.NAME), openComposerAct).addActionListener( (e) -> close() );
 	}
 	
 	@Override

@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
@@ -127,10 +128,9 @@ public class ReportLibrary implements OpGraphLibrary {
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 
-		final PhonUIAction showGeneratorAct = new PhonUIAction(ReportLibrary.class, "showGenerator", new Tuple<String, Project>(queryId, project));
-		showGeneratorAct.putValue(PhonUIAction.NAME, "Composer (simple)...");
-		showGeneratorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using simple Composer...");
-		builder.addItem(".@composer", showGeneratorAct);
+		final OpenSimpleReportComposerAction showSimpleComposerAct = new OpenSimpleReportComposerAction(project, queryId);
+		showSimpleComposerAct.putValue(Action.NAME, "Composer (simple)...");
+		builder.addItem(".@composer", showSimpleComposerAct);
 
 		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
@@ -295,20 +295,20 @@ public class ReportLibrary implements OpGraphLibrary {
 		}
 	}
 
-	public static void showGenerator(PhonActionEvent pae) {
-		@SuppressWarnings("unchecked")
-		final Tuple<String, Project> data = (Tuple<String, Project>)pae.getData();
-		final String queryId = data.getObj1();
-		final SimpleEditor frame =
-				new SimpleEditor(data.getObj2(),
-						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
-						(qs) -> new MacroNode(),
-						(graph, project) -> new ReportRunner(graph, project, queryId) );
-		frame.pack();
-		frame.setSize(new Dimension(700, 500));
-		frame.centerWindow();
-		frame.setVisible(true);
-	}
+//	public static void showGenerator(PhonActionEvent pae) {
+//		@SuppressWarnings("unchecked")
+//		final Tuple<String, Project> data = (Tuple<String, Project>)pae.getData();
+//		final String queryId = data.getObj1();
+//		final SimpleEditor frame =
+//				new SimpleEditor(data.getObj2(),
+//						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
+//						(qs) -> new MacroNode(),
+//						(graph, project) -> new ReportRunner(graph, project, queryId) );
+//		frame.pack();
+//		frame.setSize(new Dimension(700, 500));
+//		frame.centerWindow();
+//		frame.setVisible(true);
+//	}
 
 	public static void showComposer() {
 		final ReportEditorModelInstantiator instantiator = new ReportEditorModelInstantiator();

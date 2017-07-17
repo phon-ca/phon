@@ -106,6 +106,7 @@ import ca.phon.project.ProjectListener;
 import ca.phon.project.ProjectPath;
 import ca.phon.project.ProjectRefresh;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.ClickableLabelSupport;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;

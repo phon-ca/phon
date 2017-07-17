@@ -18,12 +18,14 @@
  */
 package ca.phon.app.opgraph.report;
 
+import javax.swing.Action;
 import javax.swing.JMenuBar;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.project.Project;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
@@ -42,20 +44,20 @@ public class ReportWizard extends NodeWizard {
 	public void setJMenuBar(JMenuBar menuBar) {
 		super.setJMenuBar(menuBar);
 		
+		final Processor processor = getProcessor();
+		final Project project = (Project)processor.getContext().get("_project");
+		final String queryId = (String)processor.getContext().get("_queryId");
+		
 		final MenuBuilder builder = new MenuBuilder(menuBar);
-		builder.addSeparator("File@1", "save");
-		builder.addItem("File@save", new SaveReportAction(this));
+		builder.addSeparator("File@1", "composer");
 		
-		final PhonUIAction openEditorAct = new PhonUIAction(this, "onOpenEditor");
-		openEditorAct.putValue(PhonUIAction.NAME, "Open report in Composer...");
-		builder.addItem("File@" + SaveReportAction.TXT, openEditorAct);
-	}
-	
-	public void onOpenEditor(PhonActionEvent pae) {
-		final OpenComposerAction act = new OpenComposerAction(getGraph());
-		act.actionPerformed(pae.getActionEvent());
+		final OpenSimpleReportComposerAction openSimpleComposerAct = new OpenSimpleReportComposerAction(project, queryId, getGraph());
+		openSimpleComposerAct.putValue(Action.NAME, "Open report in Composer (simple)...");
+		builder.addItem("File@composer", openSimpleComposerAct).addActionListener( (e) -> close() );
 		
-		dispose();
+		final OpenComposerAction openComposerAct = new OpenComposerAction(getGraph());
+		openComposerAct.putValue(Action.NAME, "Open report in Composer (advanced)...");
+		builder.addItem("File@" + openSimpleComposerAct.getValue(Action.NAME), openComposerAct).addActionListener( (e) -> close() );
 	}
 	
 	@Override

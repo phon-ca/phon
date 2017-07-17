@@ -253,7 +253,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		builder.addItem(".@browse", onBrowseAct);
 
 		builder.addSeparator(".", "composer");
-		builder.addItem(".@composer", new OpenSimpleAnalysisComposerAction());
+		builder.addItem(".@composer", new OpenSimpleAnalysisComposerAction(project));
 
 		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
@@ -433,34 +433,6 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 		return retVal;
 	}
-
-//	public static void showSimpleComposer() {
-//		final SimpleEditor frame =
-//			new SimpleEditor(CommonModuleFrame.getCurrentFrame().getExtension(Project.class),
-//					new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
-//					(qs) ->  {
-//						try {
-//							return AnalysisLibrary.analysisFromQuery(qs);
-//						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException | InstantiationException | URISyntaxException e) {
-//							LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//							final MessageDialogProperties props = new MessageDialogProperties();
-//							props.setTitle("Composer (simple)");
-//							props.setHeader("Unable to create analysis from query");
-//							props.setMessage(e.getLocalizedMessage());
-//							props.setOptions(MessageDialogProperties.okOptions);
-//							props.setRunAsync(false);
-//							props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-//							NativeDialogs.showMessageDialog(props);
-//						}
-//						return new MacroNode();
-//					} ,
-//					AnalysisRunner::new );
-//		frame.setIncludeQueries(true);
-//		frame.pack();
-//		frame.setSize(new Dimension(700, 500));
-//		frame.centerWindow();
-//		frame.setVisible(true);
-//	}
 
 	public static void showComposer() {
 		final AnalysisEditorModelInstantiator instantiator = new AnalysisEditorModelInstantiator();
