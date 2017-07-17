@@ -64,6 +64,14 @@ public class RangeRecordFilter extends AbstractRecordFilter {
 		
 	}
 	
+	public void setSession(Session s) {
+		this.transcript = s;
+	}
+	
+	public Session getSession() {
+		return this.transcript;
+	}
+	
 	public void addRange(Range r) {
 		ranges.add(r);
 	}

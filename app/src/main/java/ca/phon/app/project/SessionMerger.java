@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
+import ca.phon.session.RangeRecordFilter;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
@@ -128,7 +129,13 @@ public class SessionMerger extends PhonTask {
 	public Session mergeSessions() throws IOException {
 		for(SessionPath sessionPath:getSessionPaths()) {
 			final Session session = project.openSession(sessionPath.getCorpus(), sessionPath.getSession());
-			mergeSession(getMergedSession(), session, getRecordFilter(sessionPath));
+			
+			final RecordFilter filter = getRecordFilter(sessionPath);
+			if(filter instanceof RangeRecordFilter) {
+				((RangeRecordFilter)filter).setSession(session);
+			}
+			
+			mergeSession(getMergedSession(), session, filter);
 		}
 
 		return getMergedSession();
