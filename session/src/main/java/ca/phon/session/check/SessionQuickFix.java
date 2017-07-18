@@ -17,6 +17,10 @@ public abstract class SessionQuickFix {
 	public ValidationEvent getValidationEvent() {
 		return validationEvent;
 	}
+	
+	public String getDescription() {
+		return "Fix issue";
+	}
 
 	/**
 	 * Perform the quick fix operation.
