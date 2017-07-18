@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -468,6 +469,16 @@ public class ProjectWindow extends CommonModuleFrame
 
 		sessionList.setDragEnabled(true);
 		sessionList.setTransferHandler(transferHandler);
+		
+		final ActionMap sessionListAM = sessionList.getActionMap();
+		final InputMap sessionListIM = sessionList.getInputMap(JComponent.WHEN_FOCUSED);
+		
+		final PhonUIAction openSessionAct = new PhonUIAction(this, "onOpenSelectedSession");
+		sessionListAM.put("openSelectedSession", openSessionAct);
+		sessionListIM.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "openSelectedSession");
+		
+		sessionList.setActionMap(sessionListAM);
+		sessionList.setInputMap(JComponent.WHEN_FOCUSED, sessionListIM);
 
 		final DragSource sessionDragSource = new DragSource();
 		sessionDragSource.createDefaultDragGestureRecognizer(sessionList, DnDConstants.ACTION_COPY, (event) -> {
@@ -571,6 +582,37 @@ public class ProjectWindow extends CommonModuleFrame
 				corpusList.requestFocusInWindow();
 			});
 		}
+	}
+	
+	public void onOpenSelectedSession(PhonActionEvent pae) {
+		final PhonWorker worker = PhonWorker.createWorker();
+		busyLabel.setBusy(true);
+		
+		for(int selectedIdx:sessionList.getSelectedIndices()) {
+			final String session = ((SessionListModel)sessionList.getModel()).getSessions().get(selectedIdx);
+			final String corpus =
+				((SessionListModel)sessionList.getModel()).getCorpus();
+	
+			worker.invokeLater( () -> {
+				try {
+					SwingUtilities.invokeAndWait( () -> statusLabel.setText("Opening " + corpus + "." + session + "...") );
+				} catch (InvocationTargetException | InterruptedException e) {
+				}
+			});
+	
+			worker.invokeLater(() -> {
+				final ActionEvent ae = new ActionEvent(sessionList, -1, "openSession");
+				(new OpenSessionAction(ProjectWindow.this, corpus, session)).actionPerformed(ae);
+			});
+		}
+		
+		worker.invokeLater( () -> {;
+			SwingUtilities.invokeLater( () -> {
+				statusLabel.setText("");
+				busyLabel.setBusy(false);
+			});
+		});
+		worker.start();
 	}
 
 	public void onRenameCorpus(PhonActionEvent pae) {
