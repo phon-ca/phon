@@ -18,17 +18,28 @@
  */
 package ca.phon.query.detectors;
 
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.ipa.features.FeatureSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
-public abstract class DetectorResult {
-	public abstract DetectorResultType getType();
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.alignment.PhoneMap;
+
+/**
+ * A result object for two positions of a {@link PhoneMap}
+ * 
+ */
+public class DetectorResult implements IExtendable {
 	
 	private final PhoneMap phoneMap;
 	protected int pos1;
 	protected int pos2;
-	protected FeatureSet features1;
-	protected FeatureSet features2;
+	
+	private Map<PhoneDimension, String> dimensions = new LinkedHashMap<>();
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(DetectorResult.class, this);
 	
 	/**
 	 * Default constructor.
@@ -36,9 +47,9 @@ public abstract class DetectorResult {
 	public DetectorResult(PhoneMap phoneMap) {
 		this.pos1 = -1;
 		this.pos2 = -1;
-		this.features1 = new FeatureSet();
-		this.features2 = new FeatureSet();
 		this.phoneMap = phoneMap;
+		
+		extSupport.initExtensions();
 	}
 	
     /**
@@ -70,35 +81,21 @@ public abstract class DetectorResult {
      * @return  the second position
      */
     public int getSecondPosition() { return this.pos2; }
-    
-    /**
-     * Get one group of feature(s) involved in the result.
-     * @return  the features as a {@link java.util.Collection<String>}
-     * @see     #getFeatures2
-     */
-    public FeatureSet getFeatures1() { return this.features1; }
-    
-    /**
-     * Set one group of feature(s) involved in the result.
-     * @return  the features as a {@link java.util.Collection<String>}
-     * @see     #setFeatures2
-     */
-    public void setFeatures1(FeatureSet features) { this.features1 = features; }
 
-    /**
-     * Get one group of feature(s) involved in the result.
-     * @return  the features as a {@link java.util.Collection<String>}
-     * @see     #getFeatures1
-     */
-    public FeatureSet getFeatures2() { return this.features2; }
-    
-    /**
-     * Set one group of feature(s) involved in the result.
-     * @return  the features as a {@link java.util.Collection<String>}
-     * @see     #setFeatures1
-     */
-    public void setFeatures2(FeatureSet features) { this.features2 = features; }
-    
-    
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
     
 }

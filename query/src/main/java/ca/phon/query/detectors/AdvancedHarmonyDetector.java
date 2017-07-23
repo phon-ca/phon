@@ -84,8 +84,9 @@ public class AdvancedHarmonyDetector extends BasicHarmonyDetector {
 		final Collection<DetectorResult> potentialResults = super.detect(pm);
 		final List<DetectorResult> retVal = new ArrayList<DetectorResult>();
 		
-		for(DetectorResult r:potentialResults) {
+		for(DetectorResult potentialResult:potentialResults) {
 			boolean addResult = true;
+			final HarmonyDetectorResult r = (HarmonyDetectorResult)potentialResult;
 			
 			if(directionality != Directionality.Both) {
 				Directionality resultDirection = 
@@ -96,7 +97,7 @@ public class AdvancedHarmonyDetector extends BasicHarmonyDetector {
 			}
 			
 			if(addResult && sharedFeatures != null && sharedFeatures.size() > 0) {
-				FeatureSet fsShared = r.getFeatures1();
+				FeatureSet fsShared = r.getSharedFeatures();
 				FeatureSet intersectSet = FeatureSet.intersect(sharedFeatures, fsShared);
 				if(!intersectSet.equals(sharedFeatures)) {
 					addResult = false;
@@ -104,7 +105,7 @@ public class AdvancedHarmonyDetector extends BasicHarmonyDetector {
 			}
 			
 			if(addResult && absentSharedFeatures != null && absentSharedFeatures.size() > 0) {
-				FeatureSet fsShared = r.getFeatures1();
+				FeatureSet fsShared = r.getSharedFeatures();
 				FeatureSet intersectSet = FeatureSet.intersect(absentSharedFeatures, fsShared);
 				if(intersectSet.size() > 0) {
 					addResult = false;
@@ -112,7 +113,7 @@ public class AdvancedHarmonyDetector extends BasicHarmonyDetector {
 			}
 			
 			if(addResult && neutralizedFeatures != null && neutralizedFeatures.size() > 0) {
-				FeatureSet fsNeutralized = r.getFeatures2();
+				FeatureSet fsNeutralized = r.getNeutralizedFeatures();
 				FeatureSet intersectSet = FeatureSet.intersect(neutralizedFeatures, fsNeutralized);
 				if(!intersectSet.equals(neutralizedFeatures)) {
 					addResult = false;
@@ -120,7 +121,7 @@ public class AdvancedHarmonyDetector extends BasicHarmonyDetector {
 			}
 			
 			if(addResult && absentNeutralizedFeatures != null && absentNeutralizedFeatures.size() > 0) {
-				FeatureSet fsNeutralized = r.getFeatures2();
+				FeatureSet fsNeutralized = r.getNeutralizedFeatures();
 				FeatureSet intersectSet = FeatureSet.intersect(absentNeutralizedFeatures, fsNeutralized);
 				if(intersectSet.size() > 0) {
 					addResult = false;

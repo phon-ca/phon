@@ -71,8 +71,7 @@ function query_record(recordIndex, record) {
 
 function addResults(recordIndex, groupIndex, detectorResults) {
 	var detectorResultFactory = new DetectorResultFactory();
-	for (var rIndex = 0; rIndex < detectorResults.size();
-	rIndex++) {
+	for (var rIndex = 0; rIndex < detectorResults.size(); rIndex++) {
 		var detectorResult = detectorResults.get(0);
 		var result = detectorResultFactory.createQueryResult(recordIndex, groupIndex, detectorResult);
 		results.addResult(result);

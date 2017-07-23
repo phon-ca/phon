@@ -45,6 +45,14 @@ public class BasicHarmonyDetector extends Detector {
     	this.consonants = consonants;
     }
     
+    public boolean isConsonants() {
+    	return this.consonants;
+    }
+    
+    public void setConsonants(boolean consonants) {
+    	this.consonants = consonants;
+    }
+    
     /*
      * Detector implementation.
      */
@@ -62,7 +70,7 @@ public class BasicHarmonyDetector extends Detector {
      */
     private void detect_harmony(boolean leftToRight) {    	
     	// A list to keep track of current harmonies
-    	ArrayList<Result> current = new ArrayList<Result>();
+    	ArrayList<HarmonyDetectorResult> current = new ArrayList<>();
     	
     	// The Consonant/Vowel feature depending on the type of detection
     	// specified by the `consonants` variable
@@ -94,9 +102,9 @@ public class BasicHarmonyDetector extends Detector {
 				// Any feature in the intersection that is in an existing
 				// potential result can be removed because this indicates
 	   			// an end to the harmony
-				Iterator<Result> iter = current.iterator();
+				Iterator<HarmonyDetectorResult> iter = current.iterator();
    				while(iter.hasNext()) {
-   					Result res = iter.next();
+   					HarmonyDetectorResult res = iter.next();
    					if(res.getSharedFeatures().hasFeature(feature)) {
    						addResult(res);
    						iter.remove();
@@ -104,7 +112,7 @@ public class BasicHarmonyDetector extends Detector {
    				}
    				
    				// This feature can be a potential for a new harmony
-   				Result res = new Result(map);
+   				HarmonyDetectorResult res = new HarmonyDetectorResult(map);
    				res.setFirstPosition(index);
    				res.setSecondPosition(index);
    				res.setSharedFeatures(FeatureSet.union(res.getSharedFeatures(), FeatureSet.singleonFeature(feature)));
@@ -113,9 +121,9 @@ public class BasicHarmonyDetector extends Detector {
    			
    			// Update the end positions of every result that wasn't removed
    			// in the loop above
-   			Iterator<Result> iter = current.iterator();
+   			Iterator<HarmonyDetectorResult> iter = current.iterator();
 OUTER:		while(iter.hasNext()) {
-   				Result res = iter.next();
+				HarmonyDetectorResult res = iter.next();
    				
    				// The neutralized features at this point
    	   			FeatureSet neutralized =
@@ -145,7 +153,7 @@ OUTER:		while(iter.hasNext()) {
    		
    		// Add any results that did not get added above (i.e., harmonies
    		// that go right to the end)00
-   		for(Result r : current)
+   		for(HarmonyDetectorResult r : current)
    			addResult(r);
     }
     
@@ -208,19 +216,19 @@ OUTER:		while(iter.hasNext()) {
      * result with another, and also discards result if zero length.
      * @param r  the Result to add
      */
-    private void addResult(Result r) {
+    private void addResult(HarmonyDetectorResult r) {
     	// Destroy harmonies that neutralized nothing
     	//if(r.getNeutralizedFeatures().getFeatures().size() == 0) return;
     	if(r.getLength() == 0) return;
     	
     	// If a result already exists at the same positions, it was
     	// already completely taken care of by the code below
-    	Result newResult = null;
+    	HarmonyDetectorResult newResult = null;
     	for(DetectorResult res : results) {
     		if(res.getFirstPosition() == r.getFirstPosition() &&
     			res.getSecondPosition() == r.getSecondPosition())
     		{
-    			newResult = (Result)res;
+    			newResult = (HarmonyDetectorResult)res;
     			break;
     		}
     	}
@@ -244,143 +252,4 @@ OUTER:		while(iter.hasNext()) {
     	newResult.setNeutralizedFeatures(newNeutralized);
     }
     
-    /**
-     * A result from consonant harmony detection.
-     *
-     * @author  Jason Gedge <gedge@cs.mun.ca>
-     */
-    public class Result extends DetectorResult {    	
-    	// Vowel or consonant harmony
-    	private DetectorResultType type;
-    	
-    	/**
-    	 * Default constructor. Uses the consonants member of the parent
-    	 * class to set the type of harmony for this result.
-    	 */
-    	public Result(PhoneMap pm) {
-    		super(pm);
-    		if(consonants)
-    			type = DetectorResultType.ConsonantHarmony;
-    		else
-    			type = DetectorResultType.VowelHarmony;
-    		
-    		// Start off with every feature neutralized
-    		setNeutralizedFeatures(
-    				new FeatureSet(FeatureMatrix.getInstance().getFeatures()));
-    	}
-    	
-    	/*
-    	 * DetectorResult implementation
-    	 */
-        @Override
-		public DetectorResultType getType() {
-        	return type;
-        }
-        
-        /**
-         * Get the length of the harmony.
-         * @return  the length
-         */
-        public int getLength() { return Math.abs(this.pos2 - this.pos1); }
-
-        /**
-         * Get the shared features affected by the harmony.
-         * @return  the feature
-         */
-        public FeatureSet getSharedFeatures() { return this.features1; }
-        
-        /**
-         * Set the shared features affected by the harmony.
-         * @param features  the new set of features
-         */
-        public void setSharedFeatures(FeatureSet features) { this.features1 = features; }
-        
-        /**
-         * Get the neutralized features affected by the harmony.
-         * @return  the feature
-         */
-        public FeatureSet getNeutralizedFeatures() { return this.features2; }
-        
-        /**
-         * Set the neutralized features affected by the harmony.
-         * @param features  the new set of features
-         */
-        public void setNeutralizedFeatures(FeatureSet features) { this.features2 = features; }
-
-        /**
-         * Check to see if this harmony goes from left to right or from
-         * right to left (progressive or regressive).
-         * @return  true if left-to-right, false otherwise
-         */
-        public boolean isLeftToRight() { return (this.pos1 <= this.pos2); }
-        
-        /**
-         * Get the alignment positions of parts that were involved in the
-         * harmony.
-         * @return  the positions involved in the harmony
-         */
-        public int[] getPositionsInvolved() {
-        	if(map == null || getLength() == 0) return new int[] {};
-        	
-        	String lookFor = (type == DetectorResultType.VowelHarmony ? "Vowel" : "Consonant");
-        	
-        	// Create an array big enough to store all of the potential
-        	// positions involved
-        	int[] tmp = new int[getLength() + 1];
-        	
-        	int start = Math.min(pos1, pos2);
-        	int end = Math.max(pos1, pos2);
-        	int j = 0;
-        	for(int i = start; i <= end; ++i) {
-        		List<IPAElement> p = map.getAlignedElements(i);
-        		if(p.get(0) == null || p.get(1) == null) continue;
-        		if(!p.get(0).getFeatureSet().hasFeature(lookFor)) continue;
-        		if(!p.get(1).getFeatureSet().hasFeature(lookFor)) continue;
-        		tmp[j++] = i;
-        	}
-        	
-        	// Copy over result elements
-        	int[] result = new int[j];
-        	for(int i = 0; i < j; ++i) result[i] = tmp[i];
-        	
-        	return result;
-        }
-
-        /*
-         * Object override(s)
-         */
-        @Override
-		public String toString() {
-        	if(map == null) return "";
-        	
-        	final String ELLIPSIS = "\u2026";
-        	
-        	int pos1 = isLeftToRight() ? this.pos1 : this.pos2;
-        	int pos2 = isLeftToRight() ? this.pos2 : this.pos1;
-        	List<IPAElement> elems1 = map.getAlignedElements(pos1);
-        	List<IPAElement> elems2 = map.getAlignedElements(pos2);
-        	
-        	// Set up target/actual strings
-        	String sTarget = elems1.get(0).toString();
-        	String sActual = elems1.get(1).toString();
-        	if(pos1 != pos2 - 1) {
-        		sTarget += ELLIPSIS;
-        		sActual += ELLIPSIS;
-        	}
-        	sTarget += elems2.get(0).toString();
-        	sActual += elems2.get(1).toString();
-        	if(pos1 > 0) {
-        		sTarget = ELLIPSIS + sTarget;
-        		sActual = ELLIPSIS + sActual;
-        	}
-        	if(pos2 < map.getAlignmentLength() - 1) {
-        		sTarget = sTarget + ELLIPSIS;
-        		sActual = sActual + ELLIPSIS;
-        	}
-        	
-        	return String.format(
-        			"%s \u2192 %s",
-        			sTarget, sActual);
-        }
-    }
 }

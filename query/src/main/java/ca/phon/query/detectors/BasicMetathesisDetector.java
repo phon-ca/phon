@@ -93,7 +93,7 @@ public class BasicMetathesisDetector extends Detector
 		if(pair1.get(1) != null && pair2.get(0) != null)
 			fs2 = FeatureSet.intersect(pair1.get(1).getFeatureSet(), pair2.get(0).getFeatureSet());
 		
-		Result r = new Result(map);
+		final MetathesisDetectorResult r = new MetathesisDetectorResult(map);
 		r.setFirstPosition(i);
 		r.setSecondPosition(j);
 		r.setFeatures1(fs1);
@@ -153,7 +153,7 @@ public class BasicMetathesisDetector extends Detector
 
 			// If there are still features in both then we're in business
 			if(f1.size() > 0 && f2.getFeatures().size() > 0) {
-				Result r = new Result(map);
+				MetathesisDetectorResult r = new MetathesisDetectorResult(map);
 				r.setFirstPosition(i);
 				r.setSecondPosition(j);
 				r.setFeatures1(f1);
@@ -168,7 +168,7 @@ public class BasicMetathesisDetector extends Detector
 	 * result with another.
 	 * @param r  the Result to add
 	 */
-	private void addResult(Result r) {
+	private void addResult(MetathesisDetectorResult r) {
 		// Remove any unwanted/obvious features and ensure that the result
 		// then has *some* features swapped
 		r.setFeatures1(FeatureSet.minus(r.getFeatures1(), FeatureSet.fromArray(new String[]{ "Consonant, Diacritic" })));
@@ -182,7 +182,8 @@ public class BasicMetathesisDetector extends Detector
 
 		// Merge results if existing metathesis at the same
 		// position, otherwise create a new result
-		for(DetectorResult res : results) {
+		for(DetectorResult result : results) {
+			final MetathesisDetectorResult res = (MetathesisDetectorResult)result;
 			if(res.getFirstPosition() == r.getFirstPosition() &&
 					res.getSecondPosition() == r.getSecondPosition())
 			{					
@@ -192,62 +193,6 @@ public class BasicMetathesisDetector extends Detector
 			}
 		}
 		results.add(r);
-	}
-
-	/**
-	 * A result from metathesis detection.
-	 *
-	 * @author  Jason Gedge <gedge@cs.mun.ca>
-	 */
-	public static class Result extends DetectorResult {
-		
-		public Result(PhoneMap pm) {
-			super(pm);
-		}
-		
-		@Override
-		public DetectorResultType getType() {
-			return DetectorResultType.Metathesis;
-		}
-
-		/*
-		 * Object override
-		 */
-		@Override
-		public String toString() {
-			final PhoneMap map = getPhoneMap();
-			if(map == null) return "";
-
-			final String ELLIPSIS = "\u2026";
-			List<IPAElement> elems1 = map.getAlignedElements(this.pos1);
-			List<IPAElement> elems2 = map.getAlignedElements(this.pos2);
-
-			// Set up target string
-			String sTarget = (elems1.get(0) != null
-					? elems1.get(0).toString()
-							: " ");
-			if(pos1 != pos2 - 1) sTarget += ELLIPSIS;
-			sTarget += (elems2.get(0) != null
-					? elems2.get(0).toString()
-							: " ");
-			if(pos1 > 0) sTarget = ELLIPSIS + sTarget;
-			if(pos2 < map.getAlignmentLength() - 1) sTarget = sTarget + ELLIPSIS;
-
-			// Set up actual string
-			String sActual = (elems1.get(1) != null
-					? elems1.get(1).toString()
-							: " ");
-			if(pos1 != pos2 - 1) sActual += ELLIPSIS;
-			sActual += (elems2.get(1) != null
-					? elems2.get(1).toString()
-							: " ");
-			if(pos1 > 0) sActual = ELLIPSIS + sActual;
-			if(pos2 < map.getAlignmentLength() - 1) sActual = sActual + ELLIPSIS;
-
-			return String.format(
-					"%s \u2192 %s",
-					sTarget, sActual);
-		}
 	}
 
 }

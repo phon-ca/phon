@@ -42,7 +42,8 @@ public class AdvancedMetathesisDetector extends BasicMetathesisDetector {
 		final List<DetectorResult> retVal = new ArrayList<DetectorResult>();
 		
 		// filter results
-		for(DetectorResult r:potentialResults) {
+		for(DetectorResult potentialResult:potentialResults) {
+			final MetathesisDetectorResult r = (MetathesisDetectorResult)potentialResult;
 			boolean addResult = true;
 			
 			if(features != null && features.size() > 0) {
