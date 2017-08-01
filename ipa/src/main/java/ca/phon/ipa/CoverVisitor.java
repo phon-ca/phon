@@ -102,6 +102,17 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 				} catch(RecognitionException re) {
 					throw new IllegalArgumentException(symbolMap, re);
 				}
+			} else {
+				if(g1.matches("stress")) {
+					Boolean includeStress = Boolean.parseBoolean(g2);
+					setIncludeStress(includeStress);
+				} else if(g1.matches("syllableBoundaries")) {
+					Boolean includeSyllableBoundaries = Boolean.parseBoolean(g2);
+					setIncludeSyllableBoundaries(includeSyllableBoundaries);
+				} else if(g1.matches("length")) {
+					Boolean includeLength = Boolean.parseBoolean(g2);
+					setIncludeLength(includeLength);
+				}
 			}
 		}
 		
