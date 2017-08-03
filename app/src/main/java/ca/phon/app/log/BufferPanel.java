@@ -432,6 +432,22 @@ public class BufferPanel extends JPanel implements IExtendable {
 		currentView = logBuffer;
 		add(contentPanel, BorderLayout.CENTER);
 	}
+	
+	public void updateSaveButtonText() {
+		final StringBuffer buffer = new StringBuffer();
+		buffer.append("Save ").append(getBufferName());
+		buffer.append(" as");
+		
+		if(buttons.tableButton.isSelected()) {
+			buffer.append(" CSV");
+		} else if(buttons.textButton.isSelected()) {
+			buffer.append(" Text");
+		} else if(buttons.htmlButton.isSelected()) {
+			buffer.append(" HTML");
+		}
+		
+		saveButton.setText(buffer.toString());
+	}
 
 	public String getBufferName() {
 		return logBuffer.getBufferName();

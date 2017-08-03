@@ -54,9 +54,9 @@ public class BufferPanelButtons extends JComponent {
 	private static final String HTML_TEXT = "Show data as html";
 	
 	private ButtonGroup buttonGroup;
-	private JRadioButton tableButton;
-	private JRadioButton textButton;
-	private JRadioButton htmlButton;
+	JRadioButton tableButton;
+	JRadioButton textButton;
+	JRadioButton htmlButton;
 	
 	private final WeakReference<BufferPanel> panelRef;
 	
@@ -70,7 +70,7 @@ public class BufferPanelButtons extends JComponent {
 	public BufferPanel getBufferPanel() {
 		return panelRef.get();
 	}
-	
+		
 	private void init() {
 		buttonGroup = new ButtonGroup();
 		
@@ -115,6 +115,8 @@ public class BufferPanelButtons extends JComponent {
 				textButton.setSelected(bufferPanel.isShowingBuffer());
 				tableButton.setSelected(bufferPanel.isShowingTable());
 				htmlButton.setSelected(bufferPanel.isShowingHtml());
+				
+				bufferPanel.updateSaveButtonText();
 			}
 			
 		});

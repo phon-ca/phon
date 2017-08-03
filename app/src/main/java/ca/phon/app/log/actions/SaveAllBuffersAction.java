@@ -47,7 +47,7 @@ public class SaveAllBuffersAction extends HookableAction {
 	
 	private final static Logger LOGGER = Logger.getLogger(SaveAllBuffersAction.class.getName());
 	
-	private final static String TXT = "Save all";
+	private final static String TXT = "Save all buffers to folder";
 	
 	private final static String DESC = "Save all buffers to folder...";
 	
