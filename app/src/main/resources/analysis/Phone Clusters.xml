@@ -16,7 +16,7 @@
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="236"/>
+                <oga:meta x="15" y="256"/>
             </extensions>
         </node>
         <node id="7b37d313" name="Selected Participants" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -25,13 +25,12 @@
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_selectedParticipants]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="331"/>
+                <oga:meta x="15" y="357"/>
             </extensions>
         </node>
         <node id="68bdcb49" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="processSelection"><![CDATA[Consonant Clusters]]></oga:property>
                     <oga:property key="__script"><![CDATA[/*
 params =
 {enum, searchTier, "IPA Target"|"IPA Actual", 0, "Search Tier"}
@@ -79,7 +78,7 @@ var processes = [
         ]
 	},
 	{
-        "name": "Consonant Clusters (Homosyllabic)",
+        "name": "Consonant Clusters (Monosyllabic)",
         "params": [
             {
                 "object": "filters.primary",
@@ -89,7 +88,7 @@ var processes = [
         ]
     },
     {
-        "name": "Consonant Clusters (Heterosyllabic)",
+        "name": "Consonant Clusters (Disyllabic)",
         "params": [
             {
                 "object": "filters.primary",
@@ -284,15 +283,12 @@ function run(context) {
 
 }
 ]]></oga:property>
-                    <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography, IPA Target, Target Stress, Target CV, IPA Actual, Actual Stress, Actual CV]]></oga:property>
-                    <oga:property key="reportTitle"><![CDATA[Consonant Clusters]]></oga:property>
-                    <oga:property key="filters.primary.filter"><![CDATA[\c+(\s?\c+)*]]></oga:property>
                 </oga:settings>
-                <oga:meta x="23" y="437"/>
+                <oga:meta x="15" y="458"/>
             </extensions>
         </node>
         <opqry:queryNode id="3cb83fde" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-05-30T12:05:56.916-02:30" name="Phones" uuid="516c954b-5f75-489a-b9c6-f424dd24d57e">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-08-25T16:38:09.647-02:30" name="Phones" uuid="538e95f3-f90c-410a-9b18-f54a96ed3221">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -315,13 +311,13 @@ function run(context) {
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="305" y="50"/>
+                <oga:meta x="326" y="15"/>
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="1bd31bd47ef34e56" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="1a2c607e">
+            <graph id="c30a0b5">
                 <ogcn:macro id="59bd6c8fb1d74a3e" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="50ae43a9">
+                    <graph id="fea5c5">
                         <node id="67310216bc114212" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -415,7 +411,7 @@ $DATA
             <ogcn:published_input field="parameters" name="parameters" ref="59bd6c8fb1d74a3e"/>
             <ogcn:published_input field="script" name="script" ref="258ce8f8bd0b4348"/>
             <extensions>
-                <oga:meta x="268" y="424"/>
+                <oga:meta x="321" y="448"/>
             </extensions>
         </ogcn:macro>
         <node id="1795f107d404aad" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -426,7 +422,7 @@ $DATA
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="526" y="58"/>
+                <oga:meta x="561" y="15"/>
             </extensions>
         </node>
         <node id="a1d432f0ac4e4eb2" name="Split Table by Speaker" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -525,11 +521,11 @@ function tableOp(context, table) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="679" y="58"/>
+                <oga:meta x="736" y="15"/>
             </extensions>
         </node>
         <ogcn:macro id="ca3489d5c7bf4c66" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="20fb27ee">
+            <graph id="34b9ca8c">
                 <node id="9a9ef9dcda0c4dc2" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -557,7 +553,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="6d063ac0d1504227" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="40e14a83">
+                    <graph id="17c44a06">
                         <node id="b357e8b1d80d41fc" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -600,7 +596,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="d2cea4f3206f4c4b" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="62b51032">
+                    <graph id="3fc34b0b">
                         <node id="1cea2736f1c64ea3" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -658,7 +654,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="c4d2a4fcd49845f4" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="ae8e039">
+                    <graph id="6b313955">
                         <node id="8a12d372d81c4037" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -693,7 +689,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="5ea162bd68664c08" name="Aggregate" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="378127b1">
+                            <graph id="1f2fcf22">
                                 <node id="e9e802c0cc1f4a09" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -745,7 +741,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="972e23b6d01144b4" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="652ce16f">
+                                    <graph id="2f6b82b4">
                                         <node id="eda57778b0794137" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                             <extensions>
                                                 <oga:settings>
@@ -797,7 +793,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="6c0e6b2" name="IPA Target" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="7284d8b1">
+                                    <graph id="72cbc5fb">
                                         <node id="eba4193" name="buffer" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -861,7 +857,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="f9f8d57c39f94def" name="IPA Actual" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="7b697d2c">
+                                    <graph id="198721b0">
                                         <node id="a3ee6bbb43194383" name="buffer" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -922,7 +918,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="8f7c453047f14a93" name="Aligned" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="f2e4f99">
+                                    <graph id="6aa7dfc7">
                                         <node id="b40de52597ad4ae8" name="buffer" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -988,7 +984,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="b694e70638b94ca8" name="Add to Aggregate Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="11815764">
+                                    <graph id="51f6300a">
                                         <node id="4281b4520f304e36" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
@@ -1168,7 +1164,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="ab7a1317d88e4f41" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="77c626b8">
+                            <graph id="3e4dd075">
                                 <node id="97d373bc8c294e5a" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -1212,7 +1208,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="e975fbbeda7e43e5" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="564d07de">
+                                    <graph id="43967f01">
                                         <node id="d234477ad5654d9d" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1283,7 +1279,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="b69948d154c541d6" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="2e4b49">
+                                    <graph id="1993f6cf">
                                         <node id="a9c39d06bfed41ac" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1317,7 +1313,7 @@ function run(context) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="170c54d8e4924cdd" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="108d6a3c">
+                                            <graph id="5123a7a0">
                                                 <node id="b6e439ce10d448e0" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1468,7 +1464,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="6da13f9e9db24936" name="Add to Breakdown Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="5f15bc60">
+                                            <graph id="22eddf25">
                                                 <node id="bd26ac190dcf4fa3" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                     <input name="data" optional="false">Data to print</input>
                                                     <extensions>
@@ -1594,7 +1590,7 @@ No Results
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="e01fb73e43f7435c" name="Print Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="24c26a03">
+                    <graph id="2106f54b">
                         <node id="7cea896f5d4d4994" type="class:ca.gedge.opgraph.nodes.general.PassThroughNode">
                             <extensions>
                                 <oga:meta x="79" y="165"/>
@@ -1617,7 +1613,7 @@ No Results
                             </extensions>
                         </node>
                         <ogcn:macro id="991326937d454858" name="Summary Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="1c97f9e8">
+                            <graph id="6697315f">
                                 <node id="30595bcea4f5473c" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -1693,7 +1689,7 @@ No Results
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="9746a2a93a614658" name="Add to Summary Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="76a2a391">
+                    <graph id="338846f8">
                         <node id="4c3c7de0c75c4b73" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                             <input name="data" optional="false">Data to print</input>
                             <extensions>
@@ -1766,13 +1762,13 @@ No Results
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="883" y="58"/>
+                <oga:meta x="971" y="15"/>
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7e529ef1c342444d" name="Finish Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="1cc4e6d3">
+            <graph id="7f42b27e">
                 <ogcn:macro id="86e7f4db983340b4" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5fe003f3">
+                    <graph id="c6a4b0e">
                         <node id="c35456341d4e4cac" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1783,7 +1779,7 @@ No Results
                             </extensions>
                         </node>
                         <ogcn:macro id="e4ad769cb7d4b4a" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="7dcb92f5">
+                            <graph id="66a624ca">
                                 <node id="44db26a17217465c" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -1843,7 +1839,7 @@ $DATA
                     </extensions>
                 </node>
                 <ogcn:macro id="5bcfb61341704350" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5c9b8c1">
+                    <graph id="5c67cc7a">
                         <node id="c89f2ad24255400c" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1854,7 +1850,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="1af810ade59645e9" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="3fc498bb">
+                            <graph id="70bab0ae">
                                 <node id="62adae36ebf94200" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -1909,7 +1905,7 @@ $DATA
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="52a1c60df6b46e9" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="63add07e">
+                    <graph id="70dd759c">
                         <node id="4d1873a186a149a5" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1920,7 +1916,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="411ec7368dd74e79" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="64dff61f">
+                            <graph id="82a4c3b">
                                 <node id="631ac7ed51af447c" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -1982,7 +1978,7 @@ $DATA
             </graph>
             <ogcn:published_input field="input" name="input" ref="487d637ba8e74a2b"/>
             <extensions>
-                <oga:meta x="771" y="395"/>
+                <oga:meta x="855" y="448"/>
             </extensions>
         </ogcn:macro>
         <link dest="3cb83fde" destField="project" source="4676e9d" sourceField="obj"/>
