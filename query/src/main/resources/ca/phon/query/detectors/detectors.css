@@ -1,0 +1,44 @@
+
+.matrix {
+    position: relative;
+}
+.matrix:before, .matrix:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    border: 1px solid #000;
+    width: 6px;
+    height: 100%;
+}
+.matrix:before {
+    left: -6px;
+    border-right: 0px;
+}
+.matrix:after {
+    right: -6px;
+    border-left: 0px;
+}
+.matrix td {
+    padding: 5px;    
+    text-align: center;
+}
+
+.stepfunction {
+    position: relative;
+}
+.stepfunction:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    border: 1px solid #000;
+    width: 6px;
+    height: 100%;
+}
+.stepfunction:before {
+    left: -6px;
+    border-right: 0px;
+}
+.stepfunction td {
+    padding: 5px;    
+    text-align: center;
+}

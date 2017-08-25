@@ -230,7 +230,9 @@ public class PhonNodeLibrary {
 
 			final URI uri = new URI("class", MacroNode.class.getName(), name);
 
-			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Macro", new MacroNodeInstantiator());
+//			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Macro", new MacroNodeInstantiator());
+			final LinkedMacroNodeData nodeData = 
+					new LinkedMacroNodeData(uri, name, "", "Macro", url.toURI(), new LinkedMacroNodeInstantiator());
 			getNodeLibrary().put(nodeData);
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
