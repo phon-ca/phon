@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/2.2.0b16/">
+  <entry targetMediaFileId="win32" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b16.exe" newVersion="2.2.0b16" newMediaFileId="win32" fileSize="160880640" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="1520" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b16.exe" newVersion="2.2.0b16" newMediaFileId="win32" fileSize="160880640" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="1527" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b16.exe" newVersion="2.2.0b16" newMediaFileId="win32" fileSize="160880640" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b16.exe" newVersion="2.2.0b16" newMediaFileId="win64" fileSize="172438016" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b16.exe" newVersion="2.2.0b16" newMediaFileId="win64" fileSize="172438016" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b16.exe" newVersion="2.2.0b16" newMediaFileId="win64" fileSize="172438016" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="win32zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b16.zip" newVersion="2.2.0b16" newMediaFileId="win32zip" fileSize="159760037" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b16.zip" newVersion="2.2.0b16" newMediaFileId="win64zip" fileSize="171227806" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b16.dmg" newVersion="2.2.0b16" newMediaFileId="macos" fileSize="180816483" bundledJre="../../../external-resources/jres/jre-8u131-macosx-amd64_unpacked" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b16.dmg" newVersion="2.2.0b16" newMediaFileId="macos" fileSize="180816483" bundledJre="../../../external-resources/jres/jre-8u131-macosx-amd64_unpacked" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+</updateDescriptor>
