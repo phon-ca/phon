@@ -42,7 +42,7 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b16.exe" newVersion="2.2.0b16" newMediaFileId="win64" fileSize="172438016" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b16.exe" newVersion="2.2.0b17" newMediaFileId="win64" fileSize="172438016" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
     <comment language="en">## Changes from Phon 2.2.0b17
 
 ### Analyses
