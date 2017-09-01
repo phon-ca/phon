@@ -44,10 +44,6 @@ function begin_search(s) {
 }
 
 function setup_params(params) {
-	filters.shared.setFilterTitle("Shared features:");
-	filters.shared.param_setup(params);
-	filters.neutralized.setFilterTitle("Neutralized features:");
-	filters.neutralized.param_setup(params);
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "Aligned Group");
 	params.add(sep);

@@ -3,15 +3,20 @@ package ca.phon.query.detectors;
 import java.util.List;
 
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 
 public class HarmonyDetectorResult extends DetectorResult {
 
-	private FeatureSet sharedFeatures;
+	private FeatureSet sharedFeatures = new FeatureSet();
 	
-	private FeatureSet neutralizedFeatures;
+	private FeatureSet neutralizedFeatures = new FeatureSet();
 
+	private PhoneticProfile sharedProfile = new PhoneticProfile();
+	
+	private PhoneticProfile neutralizedProfile = new PhoneticProfile();
+	
 	public HarmonyDetectorResult(PhoneMap phoneMap) {
 		super(phoneMap);
 	}
@@ -23,27 +28,65 @@ public class HarmonyDetectorResult extends DetectorResult {
     public int getLength() { return Math.abs(this.pos2 - this.pos1); }
 
     /**
+     * Get the shared profile for the harmony    
+     */
+    public PhoneticProfile getSharedProfile() {
+    	return this.sharedProfile;
+    }
+    
+    /**
+     * Set the shared profile for the harmony
+     * 
+     * @param profile
+     */
+    public void setSharedProfile(PhoneticProfile profile) {
+    	this.sharedProfile = profile;
+    }
+    
+    /**
+     * Get neutralized profile for harmony 
+     * 
+     * @return
+     */
+    public PhoneticProfile getNeutralizedProfile() {
+    	return this.neutralizedProfile;
+    }
+    
+    /**
+     * Set neutralized profile for harmony
+     * 
+     * @param profile
+     */
+    public void setNeutralizedProfile(PhoneticProfile profile) {
+    	this.neutralizedProfile = profile;
+    }
+    
+    /**
      * Get the shared features affected by the harmony.
      * @return  the feature
      */
+    @Deprecated
     public FeatureSet getSharedFeatures() { return this.sharedFeatures; }
     
     /**
      * Set the shared features affected by the harmony.
      * @param features  the new set of features
      */
+    @Deprecated
     public void setSharedFeatures(FeatureSet features) { this.sharedFeatures = features; }
     
     /**
      * Get the neutralized features affected by the harmony.
      * @return  the feature
      */
+    @Deprecated
     public FeatureSet getNeutralizedFeatures() { return this.neutralizedFeatures; }
     
     /**
      * Set the neutralized features affected by the harmony.
      * @param features  the new set of features
      */
+    @Deprecated
     public void setNeutralizedFeatures(FeatureSet features) { this.neutralizedFeatures = features; }
 
     /**

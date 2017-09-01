@@ -22,6 +22,32 @@
 exports.DetectorResultFactory = function () {
 	
 	/**
+	 * Convert the given HarmonyDetectorResult to a query result
+	 */
+	this.createHarmonyResult = function (recordIndex, groupIndex, detectorResult) {
+	    var retVal = this.createQueryResult(recordIndex, groupIndex, detectorResult);
+	    
+	    var metadata = retVal.metadata;
+	    // add metadata
+        var sharedProfile = detectorResult.sharedProfile;
+        var neutralizedProfile = detectorResult.neutralizedProfile;
+        
+        var dimensions = sharedProfile.dimensions;
+        var itr = dimensions.iterator();
+        var dimTxt = "";
+        while(itr.hasNext()) {
+            dimTxt += (dimTxt.length > 0 ? ", " : "") + itr.next();
+        }
+        metadata.put("Dimensions", dimTxt);
+        
+        metadata.put("Shared", sharedProfile.toString());
+        metadata.put("Neutralized", neutralizedProfile.toString());
+        metadata.put("Direction", detectorResult.isLeftToRight() ? "Progressive" : "Regressive");
+	    
+	    return retVal;
+	};
+	
+	/**
 	 * Convert the given ca.phon.query.detector.DetectorResult object
 	 * into a query Result
 	 *
@@ -43,48 +69,47 @@ exports.DetectorResultFactory = function () {
 		var ipaT = phoneMap.targetRep;
 		var ipaA = phoneMap.actualRep;
 		
+		var p1 = Math.min(detectorResult.firstPosition, detectorResult.secondPosition);
+		var p2 = Math.max(detectorResult.firstPosition, detectorResult.secondPosition);
+		
 		// result values
 		var rv1 = factory.createResultValue();
 		rv1.tierName = "IPA Target";
 		rv1.groupIndex = groupIndex;
-		ipaE = phoneMap.topAlignmentElements.get(detectorResult.firstPosition);
+		ipaE = phoneMap.topAlignmentElements.get(p1);
 		stringIdx = (ipaE == null ? -1: ipaT.stringIndexOfElement(ipaE));
-		rv1.range = new Range(stringIdx, stringIdx, false);
+		rv1.range = new Range(stringIdx, stringIdx+1, false);
 		rv1.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv1);
 		
 		var rv2 = factory.createResultValue();
 		rv2.tierName = "IPA Target";
 		rv2.groupIndex = groupIndex;
-		ipaE = phoneMap.topAlignmentElements.get(detectorResult.secondPosition);
+		ipaE = phoneMap.topAlignmentElements.get(p2);
 		stringIdx = (ipaE == null ? -1: ipaT.stringIndexOfElement(ipaE));
-		rv2.range = new Range(stringIdx, stringIdx, false);
+		rv2.range = new Range(stringIdx, stringIdx+1, false);
 		rv2.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv2);
 		
 		var rv3 = factory.createResultValue();
 		rv3.tierName = "IPA Actual";
 		rv3.groupIndex = groupIndex;
-		ipaE = phoneMap.bottomAlignmentElements.get(detectorResult.firstPosition);
+		ipaE = phoneMap.bottomAlignmentElements.get(p1);
 		stringIdx = (ipaE == null ? -1: ipaA.stringIndexOfElement(ipaE));
-		rv3.range = new Range(stringIdx, stringIdx, false);
+		rv3.range = new Range(stringIdx, stringIdx+1, false);
 		rv3.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv3);
 		
 		var rv4 = factory.createResultValue();
 		rv4.tierName = "IPA Actual";
 		rv4.groupIndex = groupIndex;
-		ipaE = phoneMap.bottomAlignmentElements.get(detectorResult.secondPosition);
+		ipaE = phoneMap.bottomAlignmentElements.get(p2);
 		stringIdx = (ipaE == null ? -1: ipaA.stringIndexOfElement(ipaE));
-		rv4.range = new Range(stringIdx, stringIdx, false);
+		rv4.range = new Range(stringIdx, stringIdx+1, false);
 		rv4.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv4);
 		
-		// metadata
-		var metadata = retVal.metadata;
-		metadata.put(FEATURES1, detectorResult.features1.toString());
-		metadata.put(FEATURES2, detectorResult.features2.toString());
-		
 		return retVal;
 	};
+	
 };

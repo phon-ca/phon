@@ -33,6 +33,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.swing.Box;
 import javax.swing.JCheckBox;
@@ -112,6 +114,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		context.put(tableOutput, resultsToTable(project, resultSets));
 	}
 
+	@SuppressWarnings("unchecked")
 	private TableDataSource resultsToTable(Project project, ResultSet[] results) {
 		final DefaultTableDataSource retVal = new DefaultTableDataSource();
 
@@ -204,27 +207,39 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 					rowData.add(result);
 
 					// add result objects from record
-					for(ResultValue rv:result) {
-						final Group group = record.getGroup(rv.getGroupIndex());
-						Object tierValue = group.getTier(rv.getTierName());
-						if(tierValue == null) tierValue = "";
+					for(String tierName:tierNames) {
+						final List<ResultValue> resultValues = StreamSupport.stream(result.spliterator(), false)
+							.filter( (rv) -> rv.getTierName().equals(tierName) )
+							.collect(Collectors.toList());
+						
+						Object resultVal = new String();
+						Formatter<Object> formatter = null;
+						StringBuffer buffer = new StringBuffer();
+						
+						for(ResultValue rv:resultValues) {
+							final Group group = record.getGroup(rv.getGroupIndex());
+							Object tierValue = group.getTier(rv.getTierName());
+							if(tierValue == null) tierValue = "";
 
-						// attempt to find a formatter
-						@SuppressWarnings("unchecked")
-						final Formatter<Object> formatter =
-								(Formatter<Object>)FormatterFactory.createFormatter(tierValue.getClass());
-						final String tierTxt =
-								(formatter != null ? formatter.format(tierValue) : tierValue.toString());
-
-						final String resultTxt =
-								(rv.getRange().getFirst() >= 0 && rv.getRange().getLast() >= rv.getRange().getFirst() ?
-								tierTxt.substring(
-										Math.max(0, rv.getRange().getFirst()),
-										Math.max(0, Math.min(rv.getRange().getLast(), tierTxt.length()))) : "");
-						Object resultVal = resultTxt;
+							// attempt to find a formatter
+							if(formatter == null) {
+								formatter = (Formatter<Object>)FormatterFactory.createFormatter(tierValue.getClass());
+							}
+							final String tierTxt =
+									(formatter != null ? formatter.format(tierValue) : tierValue.toString());
+							
+							final String resultTxt =
+									(rv.getRange().getFirst() >= 0 && rv.getRange().getLast() >= rv.getRange().getFirst() ?
+									tierTxt.substring(
+											Math.max(0, rv.getRange().getFirst()),
+											Math.max(0, Math.min(rv.getRange().getLast(), tierTxt.length()))) : "");
+							if(buffer.length() > 0) buffer.append("..");
+							buffer.append(resultTxt);
+						}
+						resultVal = buffer.toString();
 						if(formatter != null) {
 							try {
-								resultVal = formatter.parse(resultTxt);
+								resultVal = formatter.parse(buffer.toString());
 							} catch (ParseException e) {
 								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 							}

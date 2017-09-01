@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.alignment.PhoneMap;
 
 /**
@@ -14,47 +13,11 @@ import ca.phon.ipa.alignment.PhoneMap;
  */
 public class HarmonyDetector extends BasicHarmonyDetector {
 
-	/* Consonants */
-	final static String[] placeFeatures = { 
-			"{labial, -dental}",
-			"{labial, dental}", 
-			"{dental}", 
-			"{alveolar}", 
-			"{alveopalatal}", 
-			"{lateral}", 
-			"{retroflex}", 
-			"{palatal}",
-			"{velar}", 
-			"{uvular}",
-			"{pharyngeal}", 
-			"{laryngeal}" };
-
-	final static String[] mannerFeatures = { 
-			"{stop, -nasal}", 
-			"{fricative}", 
-			"{affricate}", 
-			"{nasal}",
-			"{liquid, lateral}", 
-			"{rhotic}", 
-			"{glide}", 
-			"{vowel}" };
-
-	final static String[] voicingFeatures = { 
-			"{voiceless, -aspirated}", 
-			"{voiceless, aspirated}", 
-			"{voiced}" };
-
 	private boolean includePlace = true;
 
 	private boolean includeManner = true;
 
 	private boolean includeVoicing = true;
-
-	/* Vowels */
-	final static String[] heightFeatures = { "{high}", "{mid}", "{low}" };
-	final static String[] backnessFeatures = { "{front}", "{central}", "{back}" };
-	final static String[] tensenessFeatures = { "{tense}", "{lax}" };
-	final static String[] roundingFeatures = { "{round}", "{-round}" };
 
 	private boolean includeHeight = true;
 	
@@ -68,27 +31,16 @@ public class HarmonyDetector extends BasicHarmonyDetector {
 		super(consonants);
 	}
 	
-	/**
-	 * Returns the first phonex expression in the given list
-	 * to which the given {@link IPAElement} matches.
-	 * 
-	 * @param featurePhonex
-	 * @param ele
-	 * @return index of the matched phonex expression or -1 if no expression matches
-	 */
-	public int getFeatureCategory(String[] featurePhonex, IPAElement ele) {
-		int retVal = -1;
-
-		for(int i = 0; i < featurePhonex.length; i++) {
-			final String features = featurePhonex[i];
-			final IPATranscript transcript = (new IPATranscriptBuilder()).append(ele).toIPATranscript();
-			if(transcript.matches(features)) {
-				retVal = i;
-				break;
-			}
-		}
-
-		return retVal;
+	public HarmonyDetector(boolean consonants, boolean includePlace, boolean includeManner, boolean includeVoicing,
+			boolean includeHeight, boolean includeBackness, boolean includeTenseness, boolean includeRounding) {
+		super(consonants);
+		this.includePlace = includePlace;
+		this.includeManner = includeManner;
+		this.includeVoicing = includeVoicing;
+		this.includeHeight = includeHeight;
+		this.includeBackness = includeBackness;
+		this.includeTenseness = includeTenseness;
+		this.includeRounding = includeRounding;
 	}
 
 	@Override
@@ -97,22 +49,85 @@ public class HarmonyDetector extends BasicHarmonyDetector {
 		final List<DetectorResult> results = new ArrayList<>();
 	
 		for(DetectorResult possibleResult:allPossibleResults) {
-			if(isConsonants()) {
-				results.addAll(findConsonantHarmony(possibleResult));
-			} else {
-				results.addAll(findVowelHarmony(possibleResult));
+			if(isConsonants() && isConsonantHarmony((HarmonyDetectorResult)possibleResult)) {
+				results.add(possibleResult);
+			} else if(isVowelHarmony((HarmonyDetectorResult)possibleResult)){
+				results.add(possibleResult);
 			}
 		}
 		
 		return results;
 	}
 	
-	private List<DetectorResult> findConsonantHarmony(DetectorResult result) {
-		return new ArrayList<>();
+	/**
+	 * Determine if there is consonant harmony.  Will also update the shared and neutralized
+	 * {@link PhoneticProfile} for the result.
+	 * 
+	 * @param potentialResult
+	 * @return
+	 */
+	public boolean isConsonantHarmony(HarmonyDetectorResult potentialResult) {
+		List<PhoneDimension> dimensions = new ArrayList<>();
+		if(includePlace) dimensions.add(PhoneDimension.PLACE);
+		if(includeManner) dimensions.add(PhoneDimension.MANNER);
+		if(includeVoicing) dimensions.add(PhoneDimension.VOICING);
+		
+		return isHarmony(potentialResult, dimensions);
 	}
 	
-	private List<DetectorResult> findVowelHarmony(DetectorResult result) {
-		return new ArrayList<>();
+	public boolean isVowelHarmony(HarmonyDetectorResult potentialResult) {
+		List<PhoneDimension> dimensions = new ArrayList<>();
+		if(includeHeight) dimensions.add(PhoneDimension.HEIGHT);
+		if(includeBackness) dimensions.add(PhoneDimension.BACKNESS);
+		if(includeTenseness) dimensions.add(PhoneDimension.TENSENESS);
+		if(includeRounding) dimensions.add(PhoneDimension.ROUNDING);
+		
+		return isHarmony(potentialResult, dimensions);
 	}
 	
+	private boolean isHarmony(HarmonyDetectorResult potentialResult, List<PhoneDimension> dimensions) {
+		PhoneMap pm = potentialResult.getPhoneMap();
+		int p1 = potentialResult.getFirstPosition();
+		int p2 = potentialResult.getSecondPosition();
+		
+		PhoneticProfile t1Profile = new PhoneticProfile(pm.getTopAlignmentElements().get(p1));
+		PhoneticProfile t2Profile = new PhoneticProfile(pm.getTopAlignmentElements().get(p2));
+		
+		PhoneticProfile a1Profile = new PhoneticProfile(pm.getBottomAlignmentElements().get(p1));
+		PhoneticProfile a2Profile = new PhoneticProfile(pm.getBottomAlignmentElements().get(p2));
+		
+		PhoneticProfile sharedProfile = new PhoneticProfile();
+		PhoneticProfile neutralizedProfile = new PhoneticProfile();
+		
+		boolean hasHarmony = false;
+		for(PhoneDimension dimension:dimensions) {
+			hasHarmony |= 
+					checkHarmony(dimension, sharedProfile, neutralizedProfile, t1Profile, t2Profile, a1Profile, a2Profile);
+		}
+		
+		potentialResult.setSharedProfile(sharedProfile);
+		potentialResult.setNeutralizedProfile(neutralizedProfile);
+		
+		return hasHarmony;
+	}
+	
+	private boolean checkHarmony(PhoneDimension dimension, 
+			/*out*/ PhoneticProfile sharedProfile, /*out*/ PhoneticProfile neutralizedProfile,
+			PhoneticProfile t1Profile, PhoneticProfile t2Profile,
+			PhoneticProfile a1Profile, PhoneticProfile a2Profile) {
+		int t1Val = t1Profile.getProfile().get(dimension);
+		int t2Val = t2Profile.getProfile().get(dimension);
+		int a1Val = a1Profile.getProfile().get(dimension);
+		int a2Val = a2Profile.getProfile().get(dimension);
+		
+		// target categories must be different, actual values the same
+		if( (t1Val != t2Val) && (a1Val == a2Val) && (a1Val == t1Val)) {
+			// update profile
+			sharedProfile.put(dimension, t1Profile.getProfile().get(dimension));
+			neutralizedProfile.put(dimension, t2Profile.getProfile().get(dimension));
+			return true;
+		}
+		
+		return false;
+	}
 }
