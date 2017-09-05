@@ -113,7 +113,7 @@ function query_record(recordIndex, record) {
 		var phoneMap = group.phoneAlignment;
 
 		var toSearch = new Array();
-		toSearch.push([ipa, groupAlignedResults, groupAlignedMeta]);
+		toSearch.push([phoneMap, groupAlignedResults, groupAlignedMeta]);
 
 		// search by word?
 		if (filters.word.isUseFilter()) {
@@ -156,8 +156,9 @@ function query_record(recordIndex, record) {
 					}
 				}
 
+                var wordPhoneAlignment = word.phoneAlignment;
 				if (addWord == true) {
-					toSearch.push([wordIpa, wordAlignedResults, wordAlignedMeta]);
+					toSearch.push([wordPhoneAlignment, wordAlignedResults, wordAlignedMeta]);
 				}
 			}
 		}
@@ -168,10 +169,13 @@ function query_record(recordIndex, record) {
 			for (j = 0; j < toSearch.length; j++) {
 				var obj = toSearch[j][0];
 				var aligned = (phoneMap != null ? phoneMap: new Packages.ca.phon.ipa.alignment.PhoneMap());
-				var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
+				var sylls = filters.syllable.getRequestedSyllables(obj.targetRep, aligned);
 
 				for (k = 0; k < sylls.length; k++) {
-					syllList.push([sylls[k], toSearch[j][1], toSearch[j][2]]);
+				    var alignedEles = aligned.getAligned(sylls[k]);
+				    var syllPhoneAlignment = aligned.getSubAlignment(sylls[k], new IPATranscript(alignedEles));
+				
+					syllList.push([syllPhoneAlignment, toSearch[j][1], toSearch[j][2]]);
 				}
 			}
 			toSearch = syllList;
@@ -183,20 +187,44 @@ function query_record(recordIndex, record) {
         	var alignedResults = toSearch[j][1];
         	var alignedMetadata = toSearch[j][2];
     	
-    	    if(filters.harmonyOptions.includeConsonantHarmony) {
+    	    var harmonyResults = [];
+    	    if(filters.harmonyOptions.includeConsonantHarmony == true) {
     	        var harmonyDetector = new Packages.ca.phon.query.detectors.HarmonyDetector(true,
     	            filters.harmonyOptions.includePlace == true, filters.harmonyOptions.includeManner == true,
     	            filters.harmonyOptions.includeVoicing == true,
     	            false, false, false, false  /* vowel options */);
-    	        var harmonyResults = harmonyDetector.detect(phoneMap);
-    	        
-    	        for(k = 0; k < harmonyResults.size(); k++) {
-    	            // create result from harmonyResult
-    	            var result = detectorResultFactory.createHarmonyResult(recordIndex, group.groupIndex, harmonyResults.get(k));
-    	            results.addResult(result);
-    	        }
+    	        var cHarmonyResults = harmonyDetector.detect(obj);
+    	        for(k = 0; k < cHarmonyResults.size(); k++) harmonyResults.push(cHarmonyResults.get(k));
+    	    }
+    	    
+    	    if(filters.harmonyOptions.includeVowelHarmony == true) {
+    	        var harmonyDetector = new Packages.ca.phon.query.detectors.HarmonyDetector(
+    	            false, false, false, false, // consonant options
+    	            filters.harmonyOptions.includeHeight == true, filters.harmonyOptions.includeBackness == true,
+    	            filters.harmonyOptions.includeTenseness == true, filters.harmonyOptions.includeVoicing == true);
+    	        var vHarmonyResults = harmonyDetector.detect(obj);
+    	        for(k = 0; k < vHarmonyResults.size(); k++) harmonyResults.push(vHarmonyResults.get(k));
     	    }
     	
+            for(k = 0; k < harmonyResults.length; k++) {               
+                if(harmonyResults[k].isLeftToRight() && (filters.harmonyOptions.includeProgressive == false))
+                    continue;
+                if(!harmonyResults[k].isLeftToRight() && (filters.harmonyOptions.includeRegressive == false))
+                    continue;
+                
+                // create result from harmonyResult
+                var result = detectorResultFactory.createHarmonyResult(recordIndex, group.groupIndex, harmonyResults[k]);
+                
+                for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+    				result.addResultValue(alignedResults[alignedResultIdx]);
+    			}
+    			result.metadata.putAll(alignedMetadata);
+                
+                results.addResult(result);
+            }
+            
     	}
+    	
     }
+    
 }

@@ -161,55 +161,10 @@ public class WordImpl implements Word {
 		final IPATranscript ipaT = (getIPATarget() == null ? new IPATranscript() : getIPATarget());
 		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
 
-		final PhoneMap retVal = new PhoneMap(ipaT, ipaA);
-		final IPATranscript filteredT = ipaT.removePunctuation(true);
-		final IPATranscript filteredA = ipaA.removePunctuation(true);
-
 		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
 		if(grpAlignment == null) new PhoneMap();
 
-		final int ipaTAlignStart =
-				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(0)) : -1);
-		final int ipaAAlignStart =
-				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(0)) : -1);
-		final int alignStart = Math.min(ipaTAlignStart, ipaAAlignStart);
-
-		final int ipaTAlignEnd =
-				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(filteredT.length()-1)) : -1);
-		final int ipaAAlignEnd =
-				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(filteredA.length()-1)) : -1);
-		final int alignEnd = Math.max(ipaTAlignEnd, ipaAAlignEnd);
-
-		if(alignStart >= 0 && alignEnd >= alignStart) {
-			final int alignLen = alignEnd - alignStart + 1;
-
-			final Integer topElements[] = new Integer[alignLen];
-			final Integer btmElements[] = new Integer[alignLen];
-
-			// copy alignment, but don't keep elements which are not
-			// part of our word transcripts
-			for(int i = 0; i < alignLen; i++) {
-				final List<IPAElement> alignedPair = grpAlignment.getAlignedElements(alignStart+i);
-				final IPAElement tEle = alignedPair.get(0);
-				final IPAElement aEle = alignedPair.get(1);
-
-				final Integer tIdx =
-						(tEle == null ? AlignmentMap.INDEL_VALUE : filteredT.indexOf(tEle));
-				final Integer aIdx =
-						(aEle == null ? AlignmentMap.INDEL_VALUE : filteredA.indexOf(aEle));
-
-				topElements[i] = tIdx;
-				btmElements[i] = aIdx;
-			}
-
-			retVal.setTopAlignment(topElements);
-			retVal.setBottomAlignment(btmElements);
-		} else {
-			retVal.setTopAlignment(new Integer[0]);
-			retVal.setBottomAlignment(new Integer[0]);
-		}
-
-		return retVal;
+		return grpAlignment.getSubAlignment(ipaT, ipaA);
 	}
 
 	@Override

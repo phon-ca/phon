@@ -205,11 +205,11 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 					}
 
 					rowData.add(result);
-
+					
 					// add result objects from record
 					for(String tierName:tierNames) {
 						final List<ResultValue> resultValues = StreamSupport.stream(result.spliterator(), false)
-							.filter( (rv) -> rv.getTierName().equals(tierName) )
+							.filter( (rv) -> rv.getName().equals(tierName) )
 							.collect(Collectors.toList());
 						
 						Object resultVal = new String();
@@ -241,7 +241,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							try {
 								resultVal = formatter.parse(buffer.toString());
 							} catch (ParseException e) {
-								LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+								LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 							}
 						}
 						rowData.add(resultVal);

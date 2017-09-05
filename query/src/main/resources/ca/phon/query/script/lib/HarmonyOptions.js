@@ -60,6 +60,16 @@ exports.HarmonyOptions = function(id) {
 	this.includeVoicing = vowelHarmonyOptionsInfo.def[2];
 	this.includeRounding = vowelHarmonyOptionsInfo.def[3];
 	
+	var directionOptionsInfo = {
+	    "id":[id + ".includeProgressive", id + ".includeRegressive"],
+	    "def":[true, true],
+	    "title": "Directionality",
+	    "desc":["Progressive", "Regressive"],
+	    "numCols": 2
+	};
+	this.includeProgressive = directionOptionsInfo.def[0];
+	this.includeRegressive = directionOptionsInfo.def[1];
+	
 	this.param_setup = function (params) {
 	    var includeConsonantHarmonyParam = new BooleanScriptParam(
 	        includeConsonantHarmonyInfo.id,
@@ -109,6 +119,14 @@ exports.HarmonyOptions = function(id) {
 			}
 		};
 		includeVowelHarmonyParam.addPropertyChangeListener(includeVowelHarmonyInfo.id, includeVowelsListener);
+	
+	    var directionParam = new MultiboolScriptParam(
+	        directionOptionsInfo.id,
+	        directionOptionsInfo.def,
+	        directionOptionsInfo.desc,
+	        directionOptionsInfo.title,
+	        directionOptionsInfo.numCols);
+	    params.add(directionParam);
 	};
 	
 };

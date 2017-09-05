@@ -36,7 +36,9 @@ exports.DetectorResultFactory = function () {
         var itr = dimensions.iterator();
         var dimTxt = "";
         while(itr.hasNext()) {
-            dimTxt += (dimTxt.length > 0 ? ", " : "") + itr.next();
+            var t = itr.next().toString().toLowerCase();
+            t = Packages.org.apache.commons.lang3.StringUtils.capitalize(t);
+            dimTxt += (dimTxt.length > 0 ? ", " : "") + t;
         }
         metadata.put("Dimensions", dimTxt);
         
@@ -78,7 +80,7 @@ exports.DetectorResultFactory = function () {
 		rv1.groupIndex = groupIndex;
 		ipaE = phoneMap.topAlignmentElements.get(p1);
 		stringIdx = (ipaE == null ? -1: ipaT.stringIndexOfElement(ipaE));
-		rv1.range = new Range(stringIdx, stringIdx+1, false);
+		rv1.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
 		rv1.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv1);
 		
@@ -87,7 +89,7 @@ exports.DetectorResultFactory = function () {
 		rv2.groupIndex = groupIndex;
 		ipaE = phoneMap.topAlignmentElements.get(p2);
 		stringIdx = (ipaE == null ? -1: ipaT.stringIndexOfElement(ipaE));
-		rv2.range = new Range(stringIdx, stringIdx+1, false);
+		rv2.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
 		rv2.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv2);
 		
@@ -96,7 +98,7 @@ exports.DetectorResultFactory = function () {
 		rv3.groupIndex = groupIndex;
 		ipaE = phoneMap.bottomAlignmentElements.get(p1);
 		stringIdx = (ipaE == null ? -1: ipaA.stringIndexOfElement(ipaE));
-		rv3.range = new Range(stringIdx, stringIdx+1, false);
+		rv3.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
 		rv3.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv3);
 		
@@ -105,7 +107,7 @@ exports.DetectorResultFactory = function () {
 		rv4.groupIndex = groupIndex;
 		ipaE = phoneMap.bottomAlignmentElements.get(p2);
 		stringIdx = (ipaE == null ? -1: ipaA.stringIndexOfElement(ipaE));
-		rv4.range = new Range(stringIdx, stringIdx+1, false);
+		rv4.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
 		rv4.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv4);
 		

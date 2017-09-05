@@ -252,6 +252,6 @@ public class AlignmentMap<T> {
 				(bottomValue == INDEL_VALUE ? null : bottomElements[bottomValue]));
 		
 		return retVal;
-	}
+	}	
 	
 }
