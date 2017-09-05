@@ -39,7 +39,7 @@ public class TableUtils {
 		String o1Txt = (formatter != null ? formatter.format(o1) : o1.toString());
 		String o2Txt = (formatter != null ? formatter.format(o2) : o2.toString());
 		
-		if(ignoreDiacritics) {
+		if(ignoreDiacritics && o1 instanceof IPATranscript && o2 instanceof IPATranscript) {
 			try {
 				final IPATranscript ipa = IPATranscript.parseIPATranscript(o1Txt);
 				o1Txt = ipa.removePunctuation().stripDiacritics().toString();
@@ -54,7 +54,7 @@ public class TableUtils {
 	
 	public static String objToString(Object val, boolean ignoreDiacritics) {
 		String retVal = (val != null ? FormatterUtil.format(val) : "");
-		if(ignoreDiacritics) {
+		if(ignoreDiacritics && val instanceof IPATranscript) {
 			try {
 				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
 					IPATranscript.parseIPATranscript(retVal));
