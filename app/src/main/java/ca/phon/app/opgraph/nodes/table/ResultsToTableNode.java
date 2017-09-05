@@ -228,11 +228,16 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							final String tierTxt =
 									(formatter != null ? formatter.format(tierValue) : tierValue.toString());
 							
-							final String resultTxt =
+							String resultTxt =
 									(rv.getRange().getFirst() >= 0 && rv.getRange().getLast() >= rv.getRange().getFirst() ?
 									tierTxt.substring(
 											Math.max(0, rv.getRange().getFirst()),
 											Math.max(0, Math.min(rv.getRange().getLast(), tierTxt.length()))) : "");
+							
+							if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
+								resultTxt = "\u2205";
+							}
+							
 							if(buffer.length() > 0) buffer.append("..");
 							buffer.append(resultTxt);
 						}

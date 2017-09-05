@@ -90,11 +90,15 @@ public class HarmonyDetector extends BasicHarmonyDetector {
 		int p1 = potentialResult.getFirstPosition();
 		int p2 = potentialResult.getSecondPosition();
 		
-		PhoneticProfile t1Profile = new PhoneticProfile(pm.getTopAlignmentElements().get(p1));
-		PhoneticProfile t2Profile = new PhoneticProfile(pm.getTopAlignmentElements().get(p2));
+		PhoneticProfile t1Profile = 
+				(p1 >= 0 ? new PhoneticProfile(pm.getTopAlignmentElements().get(p1)) : new PhoneticProfile());
+		PhoneticProfile t2Profile = 
+				(p2 >= 0 ? new PhoneticProfile(pm.getTopAlignmentElements().get(p2)) : new PhoneticProfile());
 		
-		PhoneticProfile a1Profile = new PhoneticProfile(pm.getBottomAlignmentElements().get(p1));
-		PhoneticProfile a2Profile = new PhoneticProfile(pm.getBottomAlignmentElements().get(p2));
+		PhoneticProfile a1Profile = 
+				(p1 >= 0 ? new PhoneticProfile(pm.getBottomAlignmentElements().get(p1)) : new PhoneticProfile());
+		PhoneticProfile a2Profile = 
+				(p2 >= 0 ? new PhoneticProfile(pm.getBottomAlignmentElements().get(p2)) : new PhoneticProfile());
 		
 		PhoneticProfile sharedProfile = new PhoneticProfile();
 		PhoneticProfile neutralizedProfile = new PhoneticProfile();
@@ -115,10 +119,10 @@ public class HarmonyDetector extends BasicHarmonyDetector {
 			/*out*/ PhoneticProfile sharedProfile, /*out*/ PhoneticProfile neutralizedProfile,
 			PhoneticProfile t1Profile, PhoneticProfile t2Profile,
 			PhoneticProfile a1Profile, PhoneticProfile a2Profile) {
-		int t1Val = t1Profile.getProfile().get(dimension);
-		int t2Val = t2Profile.getProfile().get(dimension);
-		int a1Val = a1Profile.getProfile().get(dimension);
-		int a2Val = a2Profile.getProfile().get(dimension);
+		Integer t1Val = t1Profile.getProfile().get(dimension);
+		Integer t2Val = t2Profile.getProfile().get(dimension);
+		Integer a1Val = a1Profile.getProfile().get(dimension);
+		Integer a2Val = a2Profile.getProfile().get(dimension);
 		
 		// target categories must be different, actual values the same
 		if( (t1Val != t2Val) && (a1Val == a2Val) && (a1Val == t1Val)) {

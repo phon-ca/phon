@@ -63,7 +63,7 @@ exports.HarmonyOptions = function(id) {
 	var directionOptionsInfo = {
 	    "id":[id + ".includeProgressive", id + ".includeRegressive"],
 	    "def":[true, true],
-	    "title": "Directionality",
+	    "title": "Direction",
 	    "desc":["Progressive", "Regressive"],
 	    "numCols": 2
 	};

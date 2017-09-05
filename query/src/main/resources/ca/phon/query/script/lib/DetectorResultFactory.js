@@ -75,43 +75,37 @@ exports.DetectorResultFactory = function () {
 		var p2 = Math.max(detectorResult.firstPosition, detectorResult.secondPosition);
 		
 		// result values
-		var rv1 = factory.createResultValue();
-		rv1.tierName = "IPA Target";
-		rv1.groupIndex = groupIndex;
-		ipaE = phoneMap.topAlignmentElements.get(p1);
-		stringIdx = (ipaE == null ? -1: ipaT.stringIndexOfElement(ipaE));
-		rv1.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
-		rv1.data = (ipaE == null ? "": ipaE.text);
+		var rv1 = this.createResultValue(phoneMap, groupIndex, true, p1);
+		var rv2 = this.createResultValue(phoneMap, groupIndex, true, p2);
+		var rv3 = this.createResultValue(phoneMap, groupIndex, false, p1);
+		var rv4 = this.createResultValue(phoneMap, groupIndex, false, p2);
+		
 		retVal.addResultValue(rv1);
-		
-		var rv2 = factory.createResultValue();
-		rv2.tierName = "IPA Target";
-		rv2.groupIndex = groupIndex;
-		ipaE = phoneMap.topAlignmentElements.get(p2);
-		stringIdx = (ipaE == null ? -1: ipaT.stringIndexOfElement(ipaE));
-		rv2.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
-		rv2.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv2);
-		
-		var rv3 = factory.createResultValue();
-		rv3.tierName = "IPA Actual";
-		rv3.groupIndex = groupIndex;
-		ipaE = phoneMap.bottomAlignmentElements.get(p1);
-		stringIdx = (ipaE == null ? -1: ipaA.stringIndexOfElement(ipaE));
-		rv3.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
-		rv3.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv3);
-		
-		var rv4 = factory.createResultValue();
-		rv4.tierName = "IPA Actual";
-		rv4.groupIndex = groupIndex;
-		ipaE = phoneMap.bottomAlignmentElements.get(p2);
-		stringIdx = (ipaE == null ? -1: ipaA.stringIndexOfElement(ipaE));
-		rv4.range = new Range(stringIdx, stringIdx+(ipaE.toString().length()), false);
-		rv4.data = (ipaE == null ? "": ipaE.text);
 		retVal.addResultValue(rv4);
 		
 		return retVal;
+	};
+	
+	this.createResultValue = function(phoneMap, groupIndex, isTarget, index) {
+	    var rv = factory.createResultValue();
+		rv.tierName = (isTarget == true ? "IPA Target" : "IPA Actual");
+		rv.groupIndex = groupIndex;
+		
+		var ipaE = null;
+		if(index >= 0) {
+		    ipaE = (isTarget == true ? phoneMap.topAlignmentElements.get(index)
+		        : phoneMap.bottomAlignmentElements.get(index));
+		}
+		
+		var ipa = (isTarget == true ? phoneMap.targetRep : phoneMap.actualRep);
+		stringIdx = (ipaE == null ? -1: ipa.stringIndexOfElement(ipaE));
+		rv.range = 
+		    (stringIdx < 0 ? new Range(0, 0, true) : new Range(stringIdx, stringIdx+(ipaE.toString().length()), false));
+		rv.data = (ipaE == null ? "\u2205": ipaE.text);
+		
+		return rv;
 	};
 	
 };

@@ -82,13 +82,15 @@ public class BasicHarmonyDetector extends Detector {
    			// Get aligned pairs
    			int index = (leftToRight ? i : len - i - 1);
    			List<IPAElement> pair1 = map.getAlignedElements(index);
-   			if(pair1.get(0) == null || pair1.get(1) == null)
-   				continue;
+   			
+   			IPAElement ele1 = pair1.get(0);
+   			IPAElement ele2 = pair1.get(1);
    			
    			// Get feature sets
-   			FeatureSet fsTarget = pair1.get(0).getFeatureSet();
-   			FeatureSet fsActual = pair1.get(1).getFeatureSet();
-   			if(!fsTarget.hasFeature(lookFor) || !fsActual.hasFeature(lookFor))
+   			FeatureSet fsTarget = (ele1 != null ? ele1.getFeatureSet() : new FeatureSet());
+   			FeatureSet fsActual = (ele2 != null ? ele2.getFeatureSet() : new FeatureSet());
+   			if((fsTarget.size() > 0 && !fsTarget.hasFeature(lookFor))
+   					|| (fsActual.size() > 0 && !fsActual.hasFeature(lookFor)) )
    				continue;
    			
    			// Find out what features they have in common

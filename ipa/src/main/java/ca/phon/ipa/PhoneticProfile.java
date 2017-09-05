@@ -105,7 +105,12 @@ public class PhoneticProfile {
 		int idx = 0;
 		for(PhoneDimension pd:profile.keySet()) {
 			if(idx++ > 0) buffer.append(", ");
-			buffer.append(StringUtils.capitalize(pd.name().toLowerCase())).append("=").append(pd.getCategories()[profile.get(pd)]);
+			buffer.append(StringUtils.capitalize(pd.name().toLowerCase())).append("=");
+			Integer val = profile.get(pd);
+			if(val != null)
+				buffer.append(pd.getCategories()[profile.get(pd)]);
+			else
+				buffer.append("\u2205");
 		}
 		
 		return buffer.toString();

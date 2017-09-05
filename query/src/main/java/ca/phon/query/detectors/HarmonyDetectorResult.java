@@ -58,6 +58,8 @@ public class HarmonyDetectorResult extends DetectorResult {
      * @param profile
      */
     public void setNeutralizedProfile(PhoneticProfile profile) {
+    	if(profile == null) 
+    		System.out.println("Hello world");
     	this.neutralizedProfile = profile;
     }
     
