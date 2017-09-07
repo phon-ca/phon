@@ -7,8 +7,6 @@ package ca.phon.ipa;
 public enum PhoneDimension {
 	PLACE(new String[]{ 
 		"{labial}",
-		"{coronal, anterior}", 
-		"{coronal, posterior}", 
 		"{interdental}", 
 		"{alveolar}", 
 		"{alveopalatal}", 
@@ -20,11 +18,11 @@ public enum PhoneDimension {
 		"{pharyngeal}", 
 		"{laryngeal}" }),
 	MANNER(new String[]{ 
-		"{stop, -nasal}", 
+		"{stop}", 
 		"{fricative}", 
 		"{affricate}", 
 		"{nasal}",
-		"{liquid, lateral}", 
+		"{lateral}", 
 		"{rhotic}", 
 		"{glide}", 
 		"{vowel}" }),
