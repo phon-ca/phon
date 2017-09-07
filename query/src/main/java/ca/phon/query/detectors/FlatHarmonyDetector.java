@@ -19,9 +19,9 @@ import ca.phon.util.Tuple;
 public class FlatHarmonyDetector {
 
 	/**
-	 * Detect harmony within the given ipa
+	 * Detect consonant harmony within the given ipa
 	 * 
-	 * @return
+	 * @return list of harmony locations
 	 */
 	public List<Tuple<Integer, Integer>> detectConsonantHarmony(IPATranscript ipa) {
 		final List<Tuple<Integer, Integer>> retVal = new ArrayList<>();
@@ -45,6 +45,13 @@ public class FlatHarmonyDetector {
 		return retVal;
 	}
 	
+	/**
+	 * Detect vowel harmony within the given ipa
+	 * 
+	 * @param ipa
+	 * 
+	 * @return list of harmony locations
+	 */
 	public List<Tuple<Integer, Integer>> detectVowelHarmony(IPATranscript ipa) {
 		final List<Tuple<Integer, Integer>> retVal = new ArrayList<>();
 		
