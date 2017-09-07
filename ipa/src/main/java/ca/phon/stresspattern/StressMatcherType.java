@@ -18,8 +18,7 @@
  */
 package ca.phon.stresspattern;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public enum StressMatcherType {
 	

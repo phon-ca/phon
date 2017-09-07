@@ -18,8 +18,7 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.fsa.FSAState;
-import ca.phon.fsa.OffsetType;
+import ca.phon.fsa.*;
 import ca.phon.ipa.IPAElement;
 
 /**

@@ -19,21 +19,10 @@
 
 package ca.phon.app.session.editor.view.find_and_replace;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.session.GroupRange;
-import ca.phon.session.Record;
-import ca.phon.session.RecordLocation;
-import ca.phon.session.RecordRange;
-import ca.phon.session.Session;
-import ca.phon.session.SessionLocation;
-import ca.phon.session.SessionRange;
-import ca.phon.session.Tier;
-import ca.phon.session.TierViewItem;
+import ca.phon.session.*;
 import ca.phon.util.Range;
 
 /**

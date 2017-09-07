@@ -18,65 +18,33 @@
  */
 package ca.phon.app.session.editor.view.session_information;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
 import java.io.File;
 import java.time.LocalDate;
 
-import javax.swing.ActionMap;
-import javax.swing.ComponentInputMap;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.session.editor.DelegateEditorAction;
-import ca.phon.app.session.editor.DockPosition;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.RunOnEDT;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.MediaLocationEdit;
-import ca.phon.app.session.editor.undo.SessionDateEdit;
-import ca.phon.app.session.editor.undo.SessionLanguageEdit;
-import ca.phon.app.session.editor.view.common.TierDataConstraint;
-import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
-import ca.phon.app.session.editor.view.session_information.actions.BrowseForMediaAction;
-import ca.phon.app.session.editor.view.session_information.actions.DeleteParticipantAction;
-import ca.phon.app.session.editor.view.session_information.actions.EditParticipantAction;
-import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.common.*;
+import ca.phon.app.session.editor.view.session_information.actions.*;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.participant.ParticipantsTableModel;
-import ca.phon.ui.text.DatePicker;
-import ca.phon.ui.text.FileSelectionField;
-import ca.phon.ui.text.LanguageField;
+import ca.phon.ui.text.*;
 import ca.phon.ui.text.PromptedTextField.FieldState;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * 

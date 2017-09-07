@@ -19,8 +19,7 @@
 package ca.phon.app.menu.macro;
 
 import javax.swing.JMenu;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 
 import ca.phon.app.opgraph.macro.MacroLibrary;
 import ca.phon.project.Project;

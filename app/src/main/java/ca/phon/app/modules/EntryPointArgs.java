@@ -18,22 +18,14 @@
  */
 package ca.phon.app.modules;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.util.*;
+import java.util.logging.*;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 import ca.phon.app.project.DesktopProjectFactory;
-import ca.phon.project.Project;
-import ca.phon.project.ProjectFactory;
+import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;
 import ca.phon.workspace.Workspace;

@@ -18,23 +18,13 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.extensions.Extension;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
 import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.basic.io.SonorityValues;
-import ca.phon.syllabifier.basic.io.StageType;
-import ca.phon.syllabifier.basic.io.SyllabifierDef;
-import ca.phon.util.Language;
-import ca.phon.util.PrefHelper;
+import ca.phon.syllabifier.basic.io.*;
+import ca.phon.util.*;
 
 /**
  * 

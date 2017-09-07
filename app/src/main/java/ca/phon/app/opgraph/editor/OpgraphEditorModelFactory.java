@@ -18,16 +18,11 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 public class OpgraphEditorModelFactory {
 	

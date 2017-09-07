@@ -20,13 +20,9 @@ package ca.phon.ipadictionary;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.ipadictionary.impl.CompoundDictionary;
-import ca.phon.ipadictionary.impl.DatabaseDictionary;
-import ca.phon.ipadictionary.impl.IPADatabaseManager;
-import ca.phon.ipadictionary.impl.ImmutablePlainTextDictionary;
+import ca.phon.ipadictionary.impl.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.util.Language;
 import ca.phon.util.resources.ClassLoaderHandler;

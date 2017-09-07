@@ -21,8 +21,7 @@ package ca.phon.app.project.git.actions;
 import java.awt.BorderLayout;
 import java.io.PrintWriter;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import org.eclipse.jgit.lib.ProgressMonitor;
 

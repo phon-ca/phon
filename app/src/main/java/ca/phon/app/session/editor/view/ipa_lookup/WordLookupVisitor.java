@@ -19,12 +19,8 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
 import ca.phon.app.ipalookup.OrthoWordIPAOptions;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.orthography.OrthoComment;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoWord;
-import ca.phon.orthography.OrthoWordnet;
+import ca.phon.ipa.*;
+import ca.phon.orthography.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

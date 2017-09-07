@@ -18,10 +18,8 @@
  */
 package ca.phon.session.io.xml.v12;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.WordBoundary;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.*;
+import ca.phon.syllable.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

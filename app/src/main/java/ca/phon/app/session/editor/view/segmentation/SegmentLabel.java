@@ -19,20 +19,14 @@
 
 package ca.phon.app.session.editor.view.segmentation;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.util.MsFormatter;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * Simple component which displays two labels for

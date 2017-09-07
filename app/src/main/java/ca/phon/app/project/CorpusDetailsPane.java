@@ -21,12 +21,7 @@ package ca.phon.app.project;
 import java.util.logging.Logger;
 
 import javax.swing.JTextArea;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
+import javax.swing.text.*;
 
 import ca.phon.project.Project;
 

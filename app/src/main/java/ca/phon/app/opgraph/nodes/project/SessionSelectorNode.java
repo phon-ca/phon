@@ -18,24 +18,14 @@
  */
 package ca.phon.app.opgraph.nodes.project;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;

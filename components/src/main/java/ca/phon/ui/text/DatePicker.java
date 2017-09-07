@@ -18,34 +18,21 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.awt.*;
+import java.awt.event.*;
+import java.time.*;
 import java.util.Date;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.JXMonthView;
-import org.jdesktop.swingx.event.DateSelectionEvent;
-import org.jdesktop.swingx.event.DateSelectionListener;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.event.*;
 
 import ca.phon.session.DateFormatter;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * Customizations for {@link JXDatePicker}

@@ -19,19 +19,15 @@
 package ca.phon.query.script;
 
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import org.mozilla.javascript.Scriptable;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.*;
 import ca.phon.query.script.QueryScript.QueryFunction;
 import ca.phon.script.PhonScriptException;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 import ca.phon.util.Range;
 import ca.phon.worker.PhonTask;
 

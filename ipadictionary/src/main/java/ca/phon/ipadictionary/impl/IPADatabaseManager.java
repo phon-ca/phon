@@ -18,35 +18,16 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+import java.util.logging.*;
+import java.util.regex.*;
 
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
 
 import ca.phon.ipadictionary.IPADictionaryLibrary;
-import ca.phon.util.Language;
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 import ca.phon.worker.PhonWorker;
 
 /**

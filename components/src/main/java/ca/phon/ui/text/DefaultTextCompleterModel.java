@@ -18,11 +18,8 @@
  */
 package ca.phon.ui.text;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import ca.hedlund.tst.TernaryTree;
 

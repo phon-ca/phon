@@ -20,29 +20,16 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 
 import java.util.List;
 
-import javax.swing.undo.CompoundEdit;
-import javax.swing.undo.UndoableEdit;
+import javax.swing.undo.*;
 
-import ca.phon.app.ipalookup.OrthoLookupVisitor;
-import ca.phon.app.ipalookup.OrthoWordIPAOptions;
+import ca.phon.app.ipalookup.*;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.BlindTierEdit;
-import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
-import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.ipa.AlternativeTranscript;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.OrthoElement;
-import ca.phon.session.Group;
-import ca.phon.session.Record;
-import ca.phon.session.RecordFilter;
-import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Transcriber;
-import ca.phon.session.Word;
+import ca.phon.session.*;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.util.Tuple;
 

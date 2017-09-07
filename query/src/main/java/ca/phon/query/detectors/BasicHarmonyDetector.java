@@ -18,16 +18,10 @@
  */
 package ca.phon.query.detectors;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.features.*;
 
 /**
  * A class that can detect consonant/vowel harmony in a word based on

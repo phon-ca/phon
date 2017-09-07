@@ -18,32 +18,20 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
+import java.util.*;
 
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXTitledSeparator;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNodeInfo;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.features.FeatureSet;
-import ca.phon.ipa.features.IPAElementComparator;
+import ca.phon.ipa.*;
+import ca.phon.ipa.features.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 @OpNodeInfo(

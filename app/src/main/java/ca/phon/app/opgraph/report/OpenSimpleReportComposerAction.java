@@ -2,24 +2,13 @@ package ca.phon.app.opgraph.report;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.dag.CycleDetectedException;
-import ca.gedge.opgraph.dag.VertexNotFoundException;
-import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.editor.SimpleEditor;
-import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
 import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
 
 public class OpenSimpleReportComposerAction extends HookableAction {
 	

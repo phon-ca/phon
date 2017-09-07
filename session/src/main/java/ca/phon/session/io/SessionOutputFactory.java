@@ -18,10 +18,7 @@
  */
 package ca.phon.session.io;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
 
 /**
  * Factory for creating {@link SessionWriter}s

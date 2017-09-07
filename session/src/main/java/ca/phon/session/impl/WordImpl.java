@@ -21,18 +21,10 @@ package ca.phon.session.impl;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import ca.phon.alignment.AlignmentMap;
-import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoWordExtractor;
-import ca.phon.orthography.Orthography;
-import ca.phon.session.Group;
-import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.TierString;
-import ca.phon.session.Word;
+import ca.phon.orthography.*;
+import ca.phon.session.*;
 
 public class WordImpl implements Word {
 

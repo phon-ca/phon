@@ -19,16 +19,10 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNodeInfo;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
@@ -36,8 +30,7 @@ import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.query.TableUtils;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(
 		name="Inventory",

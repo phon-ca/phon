@@ -19,8 +19,7 @@
 
 package ca.phon.session;
 
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;

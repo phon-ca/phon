@@ -19,30 +19,18 @@
 
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-import javax.swing.ActionMap;
-import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
@@ -50,18 +38,12 @@ import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.media.sampled.PCMSegmentView;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Tier;
-import ca.phon.session.TierListener;
+import ca.phon.session.*;
 import ca.phon.session.check.OverlappingSegmentsCheck;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import uk.co.caprica.vlcj.player.MediaPlayer;
-import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
+import ca.phon.util.icons.*;
+import uk.co.caprica.vlcj.player.*;
 
 /**
  * Editor for media segments.

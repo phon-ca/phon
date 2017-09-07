@@ -20,15 +20,10 @@ package ca.phon.app.menu.window;
 
 import java.awt.Window;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;

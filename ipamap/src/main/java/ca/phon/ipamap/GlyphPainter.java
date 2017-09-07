@@ -18,17 +18,11 @@
  */
 package ca.phon.ipamap;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.ui.ipamap.io.Cell;
-import ca.phon.ui.ipamap.io.Grid;
+import ca.phon.ui.ipamap.io.*;
 import ca.phon.ui.layout.GridCellLayout;
 import ca.phon.ui.painter.ComponentPainter;
 

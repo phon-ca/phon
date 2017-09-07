@@ -22,10 +22,8 @@ import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.BufferWindow;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.log.*;
+import ca.phon.util.icons.*;
 
 public class SaveCurrentBufferAction extends HookableAction {
 	

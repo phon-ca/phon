@@ -4,24 +4,11 @@
 package ca.phon.project;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.*;
+import java.util.*;
+import java.util.logging.*;
 
-import ca.phon.session.Participant;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionPath;
+import ca.phon.session.*;
 
 /**
  * Keep track of participants and what sessions in which they take part.

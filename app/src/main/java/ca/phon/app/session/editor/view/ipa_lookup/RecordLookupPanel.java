@@ -18,55 +18,30 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.ipalookup.OrthoLookupVisitor;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.BlindTierEdit;
-import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.common.IPAGroupField;
-import ca.phon.app.session.editor.view.common.TierDataConstraint;
-import ca.phon.app.session.editor.view.common.TierDataLayout;
-import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
-import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.common.*;
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.AlternativeTranscript;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.Group;
-import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SyllabifierInfo;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcriber;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 

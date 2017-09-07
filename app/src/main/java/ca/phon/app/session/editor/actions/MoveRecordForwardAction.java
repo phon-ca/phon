@@ -22,8 +22,7 @@ import java.awt.event.ActionEvent;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.RecordMoveEdit;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 
 public class MoveRecordForwardAction extends SessionEditorAction {
 

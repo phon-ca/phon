@@ -18,18 +18,11 @@
  */
 package ca.phon.ipadictionary;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 import ca.phon.plugin.PluginManager;
-import ca.phon.util.Language;
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

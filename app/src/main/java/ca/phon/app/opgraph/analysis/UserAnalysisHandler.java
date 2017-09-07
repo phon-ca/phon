@@ -18,9 +18,7 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 
 import ca.phon.util.PrefHelper;

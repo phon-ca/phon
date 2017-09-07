@@ -20,14 +20,8 @@ package ca.phon.session.impl;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.OrthoWordExtractor;
-import ca.phon.orthography.Orthography;
-import ca.phon.session.Group;
-import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
-import ca.phon.session.TierString;
-import ca.phon.session.Word;
+import ca.phon.orthography.*;
+import ca.phon.session.*;
 
 public class GroupImpl implements Group {
 	

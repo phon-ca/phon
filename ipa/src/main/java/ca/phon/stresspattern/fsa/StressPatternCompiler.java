@@ -19,21 +19,11 @@
 package ca.phon.stresspattern.fsa;
 
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import ca.phon.fsa.FSATransition;
-import ca.phon.fsa.SimpleFSA;
+import ca.phon.fsa.*;
 import ca.phon.stresspattern.StressMatcherType;
-import de.susebox.jtopas.Flags;
-import de.susebox.jtopas.StandardTokenizer;
-import de.susebox.jtopas.StandardTokenizerProperties;
-import de.susebox.jtopas.StringSource;
-import de.susebox.jtopas.Token;
-import de.susebox.jtopas.Tokenizer;
-import de.susebox.jtopas.TokenizerException;
-import de.susebox.jtopas.TokenizerProperties;
-import de.susebox.jtopas.TokenizerSource;
+import de.susebox.jtopas.*;
 
 /**
  * Compiles a given stress pattern string into

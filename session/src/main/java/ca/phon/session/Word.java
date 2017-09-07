@@ -20,8 +20,7 @@ package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.Orthography;
+import ca.phon.orthography.*;
 
 /**
  * <p>Aligned word access for a record. A word is typically any text content

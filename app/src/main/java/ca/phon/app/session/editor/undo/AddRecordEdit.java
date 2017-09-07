@@ -18,13 +18,8 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Tier;
+import ca.phon.app.session.editor.*;
+import ca.phon.session.*;
 
 /**
  * Edit performed when a new record is added.

@@ -18,39 +18,22 @@
  */
 package ca.phon.app.opgraph.nodes.log;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.BooleanScriptParam;
-import ca.phon.script.params.EnumScriptParam;
-import ca.phon.script.params.MultiboolScriptParam;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
-import ca.phon.script.params.SeparatorScriptParam;
-import ca.phon.script.params.StringScriptParam;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

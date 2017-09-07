@@ -18,23 +18,17 @@
  */
 package ca.phon.app.opgraph.editor.actions.debug;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.gedge.opgraph.Processor;
-import ca.gedge.opgraph.ProcessorEvent;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 
 public class StartAction extends OpgraphEditorAction {

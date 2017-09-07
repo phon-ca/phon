@@ -18,18 +18,13 @@
  */
 package ca.phon.query.report;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import javax.xml.bind.JAXBElement;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.report.io.ObjectFactory;
-import ca.phon.query.report.io.ReportDesign;
-import ca.phon.query.report.io.ResultListing;
-import ca.phon.query.report.io.Section;
+import ca.phon.query.db.*;
+import ca.phon.query.report.io.*;
 
 /**
  * Handles storage of result listing formats

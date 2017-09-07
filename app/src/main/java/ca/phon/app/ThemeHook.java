@@ -20,23 +20,16 @@ package ca.phon.app;
 
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.theme.PhonSubstanceLookAndFeel;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginException;
-import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
+import ca.phon.plugin.*;
+import ca.phon.util.*;
 
 /**
  * Sets UI theme

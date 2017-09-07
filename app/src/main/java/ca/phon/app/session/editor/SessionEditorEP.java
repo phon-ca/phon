@@ -18,49 +18,30 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.actions.SessionCheckAction;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 import ca.phon.project.Project;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultValue;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Transcriber;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.JCrypt;
-import ca.phon.util.Range;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.*;
 
 /**
  * SessionEditor entry point

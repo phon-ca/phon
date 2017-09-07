@@ -19,29 +19,16 @@
 package ca.phon.opgraph.nodes.phonex;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
-import ca.gedge.opgraph.Processor;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.gedge.opgraph.extensions.NodeMetadata;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
-import ca.phon.phonex.PhonexPatternException;
+import ca.phon.phonex.*;
 
 @OpNodeInfo(
 		name="Phonex Find",

@@ -19,8 +19,7 @@
 package ca.phon.app.opgraph.macro;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.app.opgraph.editor.OpgraphEditorModelInfo;
+import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
 import ca.phon.util.Tuple;
 

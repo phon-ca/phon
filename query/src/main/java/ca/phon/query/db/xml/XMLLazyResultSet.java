@@ -19,11 +19,9 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import ca.phon.query.db.Result;
 import ca.phon.query.db.xml.io.resultset.ResultSetType;

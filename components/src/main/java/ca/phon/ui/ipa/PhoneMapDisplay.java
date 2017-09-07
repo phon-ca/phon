@@ -19,16 +19,12 @@
 
 package ca.phon.ui.ipa;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.Phone;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.util.Tuple;
 

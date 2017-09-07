@@ -19,17 +19,10 @@
 package ca.phon.app.opgraph.nodes;
 
 import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.io.*;
+import java.net.*;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -39,23 +32,12 @@ import ca.gedge.opgraph.library.NodeLibrary;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
 import ca.phon.app.opgraph.macro.MacroLibrary;
-import ca.phon.app.opgraph.nodes.query.QueryNode;
-import ca.phon.app.opgraph.nodes.query.QueryNodeData;
-import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
-import ca.phon.app.opgraph.nodes.table.AddColumnNode;
-import ca.phon.app.opgraph.nodes.table.AddColumnNodeInstantiator;
-import ca.phon.app.opgraph.nodes.table.TableOpNode;
-import ca.phon.app.opgraph.nodes.table.TableScriptNode;
-import ca.phon.app.opgraph.nodes.table.TableScriptNodeData;
-import ca.phon.app.opgraph.nodes.table.TableScriptNodeInstantiator;
+import ca.phon.app.opgraph.nodes.query.*;
+import ca.phon.app.opgraph.nodes.table.*;
 import ca.phon.app.opgraph.report.ReportLibrary;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.query.script.*;
+import ca.phon.script.*;
+import ca.phon.util.icons.*;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

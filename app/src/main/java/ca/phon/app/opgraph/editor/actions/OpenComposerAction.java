@@ -19,18 +19,13 @@
 package ca.phon.app.opgraph.editor.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.net.*;
+import java.util.logging.*;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
+import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpgraphIO;
 

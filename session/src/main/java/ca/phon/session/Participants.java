@@ -18,16 +18,10 @@
  */
 package ca.phon.session;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.visitor.Visitable;
-import ca.phon.visitor.Visitor;
+import ca.phon.extensions.*;
+import ca.phon.visitor.*;
 
 /**
  * Helper class providing iterator and visitor methods

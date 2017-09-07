@@ -18,17 +18,14 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpLink;
-import ca.gedge.opgraph.dag.CycleDetectedException;
-import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.*;
+import ca.gedge.opgraph.dag.*;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.*;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 import ca.phon.syllabifier.opgraph.nodes.SonorityNode;
 

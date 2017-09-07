@@ -24,8 +24,7 @@ import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 public class StopAction extends SpeechAnalysisEditorViewAction {
 

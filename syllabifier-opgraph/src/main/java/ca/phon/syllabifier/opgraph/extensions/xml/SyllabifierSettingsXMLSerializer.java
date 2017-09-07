@@ -23,12 +23,10 @@ import java.io.IOException;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.io.xml.XMLSerializer;
-import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
+import ca.gedge.opgraph.io.xml.*;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.util.Language;
 

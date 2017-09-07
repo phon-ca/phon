@@ -18,24 +18,13 @@
  */
 package ca.phon.ipa.parser;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
 import java.util.logging.Logger;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 
-import ca.phon.ipa.xml.CharType;
-import ca.phon.ipa.xml.IpaType;
+import ca.phon.ipa.xml.*;
 
 /**
  * Maps individual glyphs to their IPA token type.

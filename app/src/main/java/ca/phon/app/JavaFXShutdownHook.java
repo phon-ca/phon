@@ -21,9 +21,7 @@ package ca.phon.app;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.PhonShutdownHook;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import javafx.application.Platform;
 
 public class JavaFXShutdownHook implements PhonShutdownHook, IPluginExtensionPoint<PhonShutdownHook> {

@@ -18,24 +18,15 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.*;
+import java.util.*;
+import java.util.logging.*;
 
 import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
-import ca.phon.ipadictionary.spi.AddEntry;
-import ca.phon.ipadictionary.spi.ClearEntries;
-import ca.phon.ipadictionary.spi.IPADictionarySPI;
-import ca.phon.ipadictionary.spi.LanguageInfo;
-import ca.phon.ipadictionary.spi.RemoveEntry;
+import ca.phon.ipadictionary.spi.*;
 import ca.phon.util.Language;
 
 /**

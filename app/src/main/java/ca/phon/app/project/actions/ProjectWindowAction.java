@@ -22,8 +22,7 @@ import java.lang.ref.WeakReference;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.*;
 
 public abstract class ProjectWindowAction extends HookableAction {
 

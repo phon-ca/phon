@@ -19,15 +19,11 @@
 package ca.phon.app.opgraph.analysis;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import javax.swing.SwingWorker;
 

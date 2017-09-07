@@ -18,8 +18,7 @@
  */
 package ca.phon.session;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Abstract implementation of utterance filter.

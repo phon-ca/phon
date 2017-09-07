@@ -20,29 +20,16 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.project.Project;
-import ca.phon.session.RecordFilter;
-import ca.phon.session.Session;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
 import ca.phon.util.Language;
 
 /**

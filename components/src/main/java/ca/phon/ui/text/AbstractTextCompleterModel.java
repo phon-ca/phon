@@ -18,8 +18,7 @@
  */
 package ca.phon.ui.text;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractTextCompleterModel<T> implements TextCompleterModel<T> {
 	

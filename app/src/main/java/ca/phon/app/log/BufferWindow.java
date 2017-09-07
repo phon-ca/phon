@@ -18,19 +18,12 @@
  */
 package ca.phon.app.log;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.util.Collection;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
+import javax.swing.*;
 
-import ca.phon.app.log.actions.CloseAllBuffersAction;
-import ca.phon.app.log.actions.CloseCurrentBufferAction;
-import ca.phon.app.log.actions.SaveCurrentBufferAction;
+import ca.phon.app.log.actions.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 

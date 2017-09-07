@@ -21,8 +21,7 @@ package ca.phon.app.session.editor.undo;
 import javax.swing.undo.CannotUndoException;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
+import ca.phon.session.*;
 
 public class RemoveTierEdit extends AddTierEdit {
 

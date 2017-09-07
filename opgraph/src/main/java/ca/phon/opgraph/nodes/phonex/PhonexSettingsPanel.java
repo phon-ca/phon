@@ -19,17 +19,12 @@
 package ca.phon.opgraph.nodes.phonex;
 
 import java.awt.BorderLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.util.Properties;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
+import javax.swing.*;
 
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.GraphEditorModel;
+import ca.gedge.opgraph.app.*;
 import ca.gedge.opgraph.app.edits.node.NodeSettingsEdit;
 
 /**

@@ -18,17 +18,12 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.Processor;
-import ca.gedge.opgraph.io.OpGraphSerializer;
-import ca.gedge.opgraph.io.OpGraphSerializerFactory;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
+import ca.gedge.opgraph.*;
+import ca.gedge.opgraph.io.*;
+import ca.phon.ipa.*;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.util.Language;

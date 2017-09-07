@@ -20,8 +20,7 @@ package ca.phon.session.impl;
 
 import java.util.Iterator;
 
-import ca.phon.session.Record;
-import ca.phon.session.Records;
+import ca.phon.session.*;
 
 public class RecordsImpl extends Records {
 

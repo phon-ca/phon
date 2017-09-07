@@ -20,9 +20,7 @@ package ca.phon.syllable.phonex;
 
 import java.util.List;
 
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.phonex.PluginProvider;
+import ca.phon.phonex.*;
 import ca.phon.syllable.SyllableStress;
 
 /**

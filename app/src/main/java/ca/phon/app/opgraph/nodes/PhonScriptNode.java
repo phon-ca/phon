@@ -20,40 +20,23 @@ package ca.phon.app.opgraph.nodes;
 
 import java.awt.Component;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.*;
+import java.util.*;
+import java.util.logging.*;
 import java.util.stream.Collectors;
 
-import org.mozilla.javascript.RhinoException;
-import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.*;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.gedge.opgraph.nodes.general.script.InputFields;
-import ca.gedge.opgraph.nodes.general.script.OutputFields;
+import ca.gedge.opgraph.nodes.general.script.*;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.plugin.PluginManager;
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
 
 @OpNodeInfo(
 		name="Script",

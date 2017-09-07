@@ -18,13 +18,10 @@
  */
 package ca.phon.session.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-import ca.phon.session.Comment;
-import ca.phon.session.SessionMetadata;
+import ca.phon.session.*;
 
 public class SessionMetadataImpl implements SessionMetadata {
 	

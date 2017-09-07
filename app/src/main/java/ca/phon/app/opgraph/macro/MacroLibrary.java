@@ -19,22 +19,12 @@
 package ca.phon.app.opgraph.macro;
 
 import java.awt.Font;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.logging.*;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.MenuElement;
+import javax.swing.*;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;

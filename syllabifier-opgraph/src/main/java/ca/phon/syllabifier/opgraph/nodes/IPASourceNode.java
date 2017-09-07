@@ -18,20 +18,13 @@
  */
 package ca.phon.syllabifier.opgraph.nodes;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.text.ParseException;
 import java.util.Properties;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;

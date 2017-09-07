@@ -18,8 +18,7 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.*;
 
 public class TristateCheckBoxTreeNode extends DefaultMutableTreeNode {
 

@@ -18,18 +18,11 @@
  */
 package ca.phon.orthography.parser;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.*;
 
-import ca.phon.orthography.OrthoPunctType;
-import ca.phon.orthography.WordPrefix;
-import ca.phon.orthography.WordPrefixType;
-import ca.phon.orthography.WordSuffix;
-import ca.phon.orthography.WordSuffixType;
+import ca.phon.orthography.*;
 
 /**
  * Chomps the given string into tokens usable

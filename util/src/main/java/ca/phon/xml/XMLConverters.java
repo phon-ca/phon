@@ -21,9 +21,7 @@ package ca.phon.xml;
 
 import java.util.Calendar;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.*;
 
 /**
  * Methods for converting from XML returned types to

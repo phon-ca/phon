@@ -18,9 +18,7 @@
  */
 package ca.phon.ipa.alignment.pmlu;
 
-import ca.phon.extensions.Extension;
-import ca.phon.extensions.ExtensionProvider;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 import ca.phon.ipa.alignment.PhoneMap;
 
 /**

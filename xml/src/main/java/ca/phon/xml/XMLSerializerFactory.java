@@ -18,8 +18,7 @@
  */
 package ca.phon.xml;
 
-import java.util.Iterator;
-import java.util.ServiceLoader;
+import java.util.*;
 
 /**
  * Obtain instances of {@link XMLSerializer} objects.

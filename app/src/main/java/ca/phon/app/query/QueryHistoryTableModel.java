@@ -18,25 +18,15 @@
  */
 package ca.phon.app.query;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.beans.*;
+import java.util.*;
 
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.*;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSetManager;
-import ca.phon.worker.PhonTask;
+import ca.phon.query.db.*;
+import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.worker.PhonTaskListener;
-import ca.phon.worker.PhonWorker;
 
 public class QueryHistoryTableModel extends AbstractTableModel {
 	

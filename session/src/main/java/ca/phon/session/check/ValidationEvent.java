@@ -18,12 +18,9 @@
  */
 package ca.phon.session.check;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 import ca.phon.session.Session;
 
 public class ValidationEvent implements IExtendable {

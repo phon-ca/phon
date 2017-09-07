@@ -18,20 +18,13 @@
  */
 package ca.phon.query.analysis;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import ca.phon.functor.AnalysisStep;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.report.ReportBuilder;
-import ca.phon.query.report.ReportBuilderException;
-import ca.phon.query.report.ReportBuilderFactory;
+import ca.phon.query.db.*;
+import ca.phon.query.report.*;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.session.SessionPath;
 

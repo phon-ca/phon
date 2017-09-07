@@ -18,8 +18,7 @@
  */
 package ca.phon.app.theme;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.pushingpixels.substance.api.skin.SkinInfo;
 import org.pushingpixels.substance.internal.plugin.SubstanceSkinPlugin;

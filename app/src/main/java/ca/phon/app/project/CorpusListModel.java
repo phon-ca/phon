@@ -19,14 +19,11 @@
 package ca.phon.app.project;
 
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
+import javax.swing.event.*;
 
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;

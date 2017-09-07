@@ -18,17 +18,14 @@
  */
 package ca.phon.app.project;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
 import com.sun.jna.platform.FileUtils;
 
-import ca.phon.project.LocalProject;
-import ca.phon.project.ProjectEvent;
+import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.project.io.CorpusType;
-import ca.phon.project.io.SessionType;
+import ca.phon.project.io.*;
 
 /**
  * Local project which will send files to trash instead of

@@ -20,14 +20,10 @@ package ca.phon.ui.action;
 
 import java.awt.event.ActionEvent;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.lang.reflect.*;
+import java.util.logging.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import ca.phon.worker.PhonWorker;
 

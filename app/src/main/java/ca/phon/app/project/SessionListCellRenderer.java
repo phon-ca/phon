@@ -20,12 +20,9 @@ package ca.phon.app.project;
 
 import java.awt.Component;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.*;
 
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 public class SessionListCellRenderer extends DefaultListCellRenderer {
 	

@@ -21,12 +21,9 @@ package ca.phon.app.session.editor;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 
 /**
  * A view in the {@link SessionEditor}.  Each editor view

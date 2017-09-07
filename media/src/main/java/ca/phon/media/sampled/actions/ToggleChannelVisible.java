@@ -20,8 +20,7 @@ package ca.phon.media.sampled.actions;
 
 import java.awt.event.ActionEvent;
 
-import ca.phon.media.sampled.Channel;
-import ca.phon.media.sampled.PCMSegmentView;
+import ca.phon.media.sampled.*;
 
 public class ToggleChannelVisible extends PCMSegmentViewAction {
 

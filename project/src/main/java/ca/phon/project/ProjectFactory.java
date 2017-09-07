@@ -18,8 +18,7 @@
  */
 package ca.phon.project;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 
 import ca.phon.project.exceptions.ProjectConfigurationException;

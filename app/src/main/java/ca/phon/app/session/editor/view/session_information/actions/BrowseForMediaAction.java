@@ -27,11 +27,8 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 public class BrowseForMediaAction extends SessionInfoAction {
 

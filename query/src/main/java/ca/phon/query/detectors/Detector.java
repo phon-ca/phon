@@ -18,8 +18,7 @@
  */
 package ca.phon.query.detectors;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 import ca.phon.ipa.alignment.PhoneMap;
 

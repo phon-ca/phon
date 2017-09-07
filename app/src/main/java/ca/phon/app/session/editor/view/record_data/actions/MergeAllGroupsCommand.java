@@ -25,10 +25,8 @@ import javax.swing.undo.CompoundEdit;
 import ca.phon.app.session.editor.undo.MergeGroupEdit;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 public class MergeAllGroupsCommand extends RecordDataEditorViewAction {
 

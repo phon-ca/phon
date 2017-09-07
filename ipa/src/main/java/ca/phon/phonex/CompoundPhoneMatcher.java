@@ -18,8 +18,7 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.ipa.CompoundPhone;
-import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

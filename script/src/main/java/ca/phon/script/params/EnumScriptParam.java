@@ -18,8 +18,7 @@
  */
 package ca.phon.script.params;
 
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 
 public class EnumScriptParam extends ScriptParam {
 

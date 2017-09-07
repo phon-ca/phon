@@ -18,9 +18,7 @@
  */
 package ca.phon.functor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class AbstractAnalysis<R, T> implements Analysis<R, T> {
 	

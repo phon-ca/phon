@@ -18,12 +18,10 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierProvider;
+import ca.phon.syllabifier.*;
 import ca.phon.util.resources.ClassLoaderHandler;
 
 /**

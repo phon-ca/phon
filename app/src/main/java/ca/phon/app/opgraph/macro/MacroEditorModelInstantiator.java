@@ -21,8 +21,7 @@ package ca.phon.app.opgraph.macro;
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.*;
 
 @EditorModelInstantiatorMenuInfo(
 		name="Macro",

@@ -18,8 +18,7 @@
  */
 package ca.phon.session.io;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 import ca.phon.session.Session;
 

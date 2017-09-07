@@ -21,16 +21,11 @@ package ca.phon.app.session.editor.view.common;
 import java.awt.Color;
 import java.text.ParseException;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.*;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.orthography.OrthoComment;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoEvent;
-import ca.phon.orthography.OrthoWord;
-import ca.phon.orthography.Orthography;
+import ca.phon.orthography.*;
 import ca.phon.session.Tier;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;

@@ -18,12 +18,9 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.session.TierViewItem;
 
 public class TierViewItemEdit extends SessionEditorUndoableEdit {

@@ -19,31 +19,19 @@
 package ca.phon.app.session.editor.view.ipa_validation;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXRadioGroup;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.session.Transcriber;
+import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 

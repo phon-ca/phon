@@ -18,37 +18,20 @@
  */
 package ca.phon.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.Scrollable;
+import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * A 'on click' button which includes the following features:

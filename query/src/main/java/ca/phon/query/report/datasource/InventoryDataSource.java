@@ -19,20 +19,12 @@
 package ca.phon.query.report.datasource;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.query.db.ReportHelper;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.*;
 import ca.phon.query.report.io.InventorySection;
-import ca.phon.util.CollatorFactory;
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 /**
  * Inventory data source for (now deprecated) reports.

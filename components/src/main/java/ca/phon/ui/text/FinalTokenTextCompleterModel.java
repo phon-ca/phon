@@ -18,9 +18,7 @@
  */
 package ca.phon.ui.text;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Text completion model which replaces the final token

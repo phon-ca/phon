@@ -18,50 +18,23 @@
  */
 package ca.phon.session.io.xml.v12;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.time.*;
+import java.util.*;
+import java.util.logging.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.DatatypeFactory;
+import javax.xml.bind.*;
+import javax.xml.datatype.*;
 import javax.xml.datatype.Duration;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.AlternativeTranscript;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.Comment;
-import ca.phon.session.CommentEnum;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Participant;
-import ca.phon.session.ParticipantRole;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Sex;
-import ca.phon.session.Tier;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierString;
-import ca.phon.session.TierViewItem;
-import ca.phon.session.Transcriber;
-import ca.phon.session.io.SessionIO;
-import ca.phon.session.io.SessionWriter;
+import ca.phon.session.*;
+import ca.phon.session.io.*;
 import ca.phon.xml.annotation.XMLSerial;
 
 @XMLSerial(

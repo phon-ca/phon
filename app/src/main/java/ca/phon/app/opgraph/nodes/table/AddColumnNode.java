@@ -18,31 +18,21 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.mozilla.javascript.NativeJavaObject;
-import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.*;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNodeInfo;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
+import ca.phon.query.report.datasource.*;
+import ca.phon.script.*;
 import ca.phon.ui.text.PromptedTextField;
-import ca.phon.util.resources.ClassLoaderHandler;
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.util.resources.*;
 
 /**
  * Add a new column to the given table using

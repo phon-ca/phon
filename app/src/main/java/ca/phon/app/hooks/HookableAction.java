@@ -23,8 +23,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 /**
  * 

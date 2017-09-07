@@ -18,38 +18,19 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.FeatureFamily;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
+import ca.phon.app.opgraph.nodes.query.SortNodeSettings.*;
 import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 public class SortNodeSettingsPanel extends JPanel {
 

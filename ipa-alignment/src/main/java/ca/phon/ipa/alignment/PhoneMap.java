@@ -19,18 +19,12 @@
 
 package ca.phon.ipa.alignment;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import ca.phon.alignment.AlignmentMap;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.AudiblePhoneVisitor;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.phonex.*;
 import ca.phon.util.PhonConstants;
 
 /**

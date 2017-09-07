@@ -20,9 +20,7 @@ package ca.phon.app.opgraph.syllabifier;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 
 @PhonPlugin(author="Greg J. Hedlund <ghedlund@mun.ca>", minPhonVersion="2.1.0", name="Syllabifier Opgraph Editor Model")
 public class OpGraphSyllabifierEditorModelExtPt implements IPluginExtensionPoint<OpgraphEditorModel> {

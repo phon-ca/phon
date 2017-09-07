@@ -18,17 +18,10 @@
  */
 package ca.phon.app.ipalookup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.orthography.OrthoComment;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoWord;
-import ca.phon.orthography.OrthoWordnet;
-import ca.phon.orthography.Orthography;
+import ca.phon.orthography.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

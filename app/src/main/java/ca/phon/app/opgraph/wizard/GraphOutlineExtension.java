@@ -18,34 +18,19 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JLabel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTree;
-import javax.swing.UIManager;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.tree.*;
 
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.components.GraphOutline;
-import ca.gedge.opgraph.app.components.OpGraphTreeModel;
-import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
-import ca.phon.app.opgraph.wizard.edits.NodeWizardSettingsEdit;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.gedge.opgraph.app.components.*;
+import ca.phon.app.opgraph.wizard.edits.*;
+import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 

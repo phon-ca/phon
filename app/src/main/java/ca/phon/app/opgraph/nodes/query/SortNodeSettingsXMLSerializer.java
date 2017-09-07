@@ -23,19 +23,12 @@ import java.io.IOException;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.extensions.Extendable;
-import ca.gedge.opgraph.io.xml.XMLSerializer;
-import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;
+import ca.gedge.opgraph.io.xml.*;
+import ca.phon.app.opgraph.nodes.query.SortNodeSettings.*;
 
 public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 	

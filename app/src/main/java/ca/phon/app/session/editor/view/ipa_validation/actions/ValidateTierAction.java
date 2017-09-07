@@ -25,10 +25,8 @@ import javax.swing.undo.CompoundEdit;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.ipa_validation.ValidationEditorView;
-import ca.phon.ipa.AlternativeTranscript;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcriber;
+import ca.phon.ipa.*;
+import ca.phon.session.*;
 
 public class ValidateTierAction extends ValidationAction {
 

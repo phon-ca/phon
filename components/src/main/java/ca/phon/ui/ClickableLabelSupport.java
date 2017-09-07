@@ -1,12 +1,9 @@
 package ca.phon.ui;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.Action;
-import javax.swing.JLabel;
+import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
 /**

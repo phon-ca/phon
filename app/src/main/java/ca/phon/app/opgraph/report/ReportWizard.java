@@ -18,16 +18,12 @@
  */
 package ca.phon.app.opgraph.report;
 
-import javax.swing.Action;
-import javax.swing.JMenuBar;
+import javax.swing.*;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.Processor;
+import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.project.Project;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Tuple;
 

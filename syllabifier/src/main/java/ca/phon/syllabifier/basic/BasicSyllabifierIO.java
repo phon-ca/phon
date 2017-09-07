@@ -18,21 +18,13 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.util.logging.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 import javax.xml.transform.stream.StreamSource;
 
-import ca.phon.syllabifier.basic.io.ObjectFactory;
-import ca.phon.syllabifier.basic.io.SyllabifierDef;
+import ca.phon.syllabifier.basic.io.*;
 
 /**
  * Utility methods for reading/writing {@link BasicSyllabifier}s.

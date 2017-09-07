@@ -21,9 +21,7 @@ package ca.phon.syllable.phonex;
 import java.util.List;
 
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.phonex.PluginProvider;
+import ca.phon.phonex.*;
 
 /**
  * Tone plug-in provider. This matcher allows for matching one of the

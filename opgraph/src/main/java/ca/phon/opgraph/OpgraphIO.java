@@ -18,15 +18,10 @@
  */
 package ca.phon.opgraph;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.io.OpGraphSerializer;
-import ca.gedge.opgraph.io.OpGraphSerializerFactory;
+import ca.gedge.opgraph.io.*;
 
 /**
  * Utility class providing easy access to open/save methods for opgraph

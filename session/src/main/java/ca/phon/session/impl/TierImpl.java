@@ -18,22 +18,12 @@
  */
 package ca.phon.session.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.extensions.*;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.session.Tier;
-import ca.phon.session.TierListener;
+import ca.phon.session.*;
 
 public class TierImpl<T> implements Tier<T> {
 	

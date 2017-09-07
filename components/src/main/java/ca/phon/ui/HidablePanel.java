@@ -18,28 +18,18 @@
  */
 package ca.phon.ui;
 
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
+import java.awt.*;
+import java.util.logging.*;
+import java.util.prefs.*;
 
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
-import org.jdesktop.swingx.painter.RectanglePainter;
+import org.jdesktop.swingx.painter.*;
 
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * A panel to display some information to the user.  The panel

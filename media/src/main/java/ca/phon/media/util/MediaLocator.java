@@ -19,16 +19,14 @@
 package ca.phon.media.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.EmptyQueueException;
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 import ca.phon.util.Queue;
 
 /**

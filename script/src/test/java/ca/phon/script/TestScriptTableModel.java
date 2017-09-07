@@ -17,18 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ca.phon.script;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import ca.phon.script.scripttable.AbstractScriptTableModel;
-import ca.phon.script.scripttable.ListScriptTableModel;
-import ca.phon.script.scripttable.ScriptTableModel;
+import ca.phon.script.scripttable.*;
 import ca.phon.util.Tuple;
 import junit.framework.Assert;
 

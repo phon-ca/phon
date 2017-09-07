@@ -18,34 +18,22 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogBuffer;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionEditorStatusBar;
+import ca.phon.app.log.*;
+import ca.phon.app.session.editor.*;
 import ca.phon.session.Session;
 import ca.phon.session.check.SessionValidator;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 
 public class SessionCheckAction extends SessionEditorAction {
 	

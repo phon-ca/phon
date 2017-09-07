@@ -19,8 +19,7 @@
 package ca.phon.app.session.editor.view.media_player.actions;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 import javax.swing.KeyStroke;
 

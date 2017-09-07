@@ -18,9 +18,7 @@
  */
 package ca.phon.util;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a language.

@@ -20,12 +20,8 @@ package ca.phon.app.query.report;
 
 import java.awt.BorderLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import ca.phon.query.report.io.CommentSection;
 

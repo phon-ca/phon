@@ -20,8 +20,7 @@ package ca.phon.session.impl;
 
 import java.util.Iterator;
 
-import ca.phon.session.Transcriber;
-import ca.phon.session.Transcribers;
+import ca.phon.session.*;
 
 public class TranscribersImpl extends Transcribers {
 

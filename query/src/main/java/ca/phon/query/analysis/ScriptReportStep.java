@@ -18,22 +18,14 @@
  */
 package ca.phon.query.analysis;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.util.logging.*;
 
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.*;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.functor.AnalysisStep;
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
+import ca.phon.script.*;
 
 public class ScriptReportStep implements AnalysisStep<String, QueryAnalysisResult> {
 

@@ -18,32 +18,17 @@
  */
 package ca.phon.util.icons;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Transparency;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
+import java.awt.image.*;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.GrayFilter;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
-import ca.hedlund.desktopicons.DesktopIconException;
-import ca.hedlund.desktopicons.DesktopIcons;
-import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.*;
 import ca.phon.util.StackTraceInfo;
 
 /**

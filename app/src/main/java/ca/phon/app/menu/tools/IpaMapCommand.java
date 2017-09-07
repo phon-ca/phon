@@ -21,11 +21,9 @@ package ca.phon.app.menu.tools;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
-import javax.swing.Action;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.ipamap.IPAMapEP;
-import ca.phon.ipamap.IpaMap;
+import ca.phon.ipamap.*;
 import ca.phon.plugin.PluginAction;
 
 /**

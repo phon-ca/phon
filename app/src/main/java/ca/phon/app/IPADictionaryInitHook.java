@@ -23,9 +23,7 @@ import java.util.logging.Logger;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.ipadictionary.impl.IPADatabaseManager;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import ca.phon.util.PrefHelper;
 
 public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {

@@ -18,12 +18,9 @@
  */
 package ca.phon.phonex;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import ca.phon.fsa.FSATransition;
-import ca.phon.fsa.SimpleFSA;
+import ca.phon.fsa.*;
 import ca.phon.ipa.IPAElement;
 
 /**

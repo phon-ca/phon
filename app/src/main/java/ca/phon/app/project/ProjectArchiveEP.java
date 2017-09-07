@@ -23,8 +23,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import ca.phon.app.welcome.ProjectArchiveTask;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.session.DateFormatter;
 import ca.phon.workspace.Workspace;

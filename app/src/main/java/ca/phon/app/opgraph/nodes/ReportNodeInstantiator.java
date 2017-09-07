@@ -18,8 +18,7 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.util.GraphUtils;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 

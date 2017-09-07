@@ -23,14 +23,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.SwingUtilities;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.BufferPanelContainer;
+import ca.phon.app.log.*;
 
 /**
  * Node for reading the current text of a given buffer.

@@ -21,8 +21,7 @@ package ca.phon.app.corpus;
 import java.io.IOException;
 import java.net.URL;
 
-import ca.phon.app.session.editor.RecordEditorPerspective;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 

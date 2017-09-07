@@ -19,31 +19,18 @@
 package ca.phon.query.report.datasource;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
 import org.mozilla.javascript.Scriptable;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.report.io.ResultListing;
-import ca.phon.query.report.io.ResultListingField;
-import ca.phon.query.report.io.ResultListingFormatType;
-import ca.phon.query.report.io.ScriptContainer;
-import ca.phon.query.report.io.ScriptParameter;
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.EnumScriptParam;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.query.db.*;
+import ca.phon.query.report.io.*;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
 import ca.phon.script.scripttable.AbstractScriptTableModel;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 
 /**
  * A data source which lists each

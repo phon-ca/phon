@@ -18,31 +18,18 @@
  */
 package ca.phon.app;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.hooks.PhonBootHook;
-import ca.phon.plugin.PluginException;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.OSInfo;
 

@@ -20,8 +20,7 @@ package ca.phon.syllable.phonex;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.PhoneMatcher;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.*;
 
 /**
  * Tests nucleus membership in diphthongs.

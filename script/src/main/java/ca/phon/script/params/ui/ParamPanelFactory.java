@@ -18,26 +18,13 @@
  */
 package ca.phon.script.params.ui;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.script.params.BooleanScriptParam;
-import ca.phon.script.params.EnumScriptParam;
-import ca.phon.script.params.LabelScriptParam;
-import ca.phon.script.params.MultiboolScriptParam;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.SeparatorScriptParam;
-import ca.phon.script.params.StringScriptParam;
+import ca.phon.script.params.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.visitor.VisitorAdapter;

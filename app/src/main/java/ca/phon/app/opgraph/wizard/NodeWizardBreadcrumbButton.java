@@ -18,16 +18,10 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JButton;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import ca.phon.ui.GUIHelper;
 import ca.phon.ui.jbreadcrumb.BreadcrumbStateBorder;

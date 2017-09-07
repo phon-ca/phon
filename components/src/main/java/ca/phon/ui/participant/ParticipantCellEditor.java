@@ -21,12 +21,8 @@ package ca.phon.ui.participant;
 import java.awt.Component;
 import java.time.LocalDate;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
+import javax.swing.*;
+import javax.swing.text.*;
 
 import ca.phon.session.Sex;
 import ca.phon.ui.DateTimeDocument;

@@ -22,9 +22,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.nativedialogs.*;
 
 public class ImportIPACommand extends IPALookupViewAction {
 	

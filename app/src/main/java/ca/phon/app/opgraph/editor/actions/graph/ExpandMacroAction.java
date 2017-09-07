@@ -19,11 +19,9 @@
 package ca.phon.app.opgraph.editor.actions.graph;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import ca.gedge.opgraph.OpNode;
 import ca.gedge.opgraph.app.GraphDocument;
@@ -32,8 +30,7 @@ import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.gedge.opgraph.nodes.menu.edits.ExplodeMacroEdit;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 public class ExpandMacroAction extends OpgraphEditorAction {
 

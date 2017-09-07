@@ -18,11 +18,9 @@
  */
 package ca.phon.query.analysis;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 

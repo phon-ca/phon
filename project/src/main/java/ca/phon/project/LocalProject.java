@@ -18,74 +18,25 @@
  */
 package ca.phon.project;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.net.*;
+import java.time.*;
+import java.util.*;
+import java.util.logging.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.bind.*;
+import javax.xml.parsers.*;
+import javax.xml.stream.*;
+import javax.xml.xpath.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.project.io.CorpusType;
-import ca.phon.project.io.ObjectFactory;
-import ca.phon.project.io.ProjectType;
-import ca.phon.project.io.SessionType;
-import ca.phon.session.Participant;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionPath;
-import ca.phon.session.io.OriginalFormat;
-import ca.phon.session.io.SessionIO;
-import ca.phon.session.io.SessionInputFactory;
-import ca.phon.session.io.SessionOutputFactory;
-import ca.phon.session.io.SessionReader;
-import ca.phon.session.io.SessionWriter;
+import ca.phon.project.io.*;
+import ca.phon.session.*;
+import ca.phon.session.io.*;
 import ca.phon.util.VersionInfo;
 
 /**

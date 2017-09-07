@@ -21,10 +21,8 @@ package ca.phon.query.script;
 import org.mozilla.javascript.Scriptable;
 
 import ca.phon.query.script.QueryScript.QueryFunction;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
+import ca.phon.script.*;
+import ca.phon.session.*;
 
 public class QueryScriptContext extends PhonScriptContext {
 

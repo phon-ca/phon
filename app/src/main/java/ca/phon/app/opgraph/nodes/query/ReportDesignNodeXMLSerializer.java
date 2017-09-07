@@ -18,32 +18,20 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.util.logging.*;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.*;
 
-import org.w3c.dom.Document;
+import org.w3c.dom.*;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.extensions.Extendable;
-import ca.gedge.opgraph.io.xml.XMLSerializer;
-import ca.gedge.opgraph.io.xml.XMLSerializerFactory;
+import ca.gedge.opgraph.io.xml.*;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.util.PrefHelper;
 

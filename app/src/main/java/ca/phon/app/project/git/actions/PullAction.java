@@ -19,17 +19,12 @@
 package ca.phon.app.project.git.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.util.logging.*;
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.MergeResult;
-import org.eclipse.jgit.api.PullResult;
+import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.transport.FetchResult;
-import org.eclipse.jgit.transport.TrackingRefUpdate;
+import org.eclipse.jgit.transport.*;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.app.project.actions.ProjectWindowAction;

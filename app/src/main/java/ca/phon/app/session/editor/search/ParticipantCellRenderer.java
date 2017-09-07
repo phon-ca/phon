@@ -20,8 +20,7 @@ package ca.phon.app.session.editor.search;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import ca.phon.session.Participant;

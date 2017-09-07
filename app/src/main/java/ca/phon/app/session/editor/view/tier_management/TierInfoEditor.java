@@ -20,22 +20,12 @@ package ca.phon.app.session.editor.view.tier_management;
 
 import java.awt.Font;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierString;
-import ca.phon.session.TierViewItem;
+import ca.phon.formatter.*;
+import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
 import ca.phon.ui.fonts.FontPreferences;

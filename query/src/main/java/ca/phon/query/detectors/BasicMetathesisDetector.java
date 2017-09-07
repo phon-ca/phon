@@ -21,7 +21,6 @@ package ca.phon.query.detectors;
 import java.util.List;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 
 /**

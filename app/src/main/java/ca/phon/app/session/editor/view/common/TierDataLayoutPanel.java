@@ -18,9 +18,7 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 import javax.swing.JPanel;
 

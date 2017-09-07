@@ -18,38 +18,24 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.BorderLayout;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.undo.UndoableEdit;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpLink;
-import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
-import ca.gedge.opgraph.dag.CycleDetectedException;
-import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.dag.*;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.extensions.CompositeNode;
 import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
-import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
-import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
-import ca.phon.app.opgraph.wizard.ReportTemplateView;
-import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;

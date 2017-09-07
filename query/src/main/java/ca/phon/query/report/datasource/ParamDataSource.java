@@ -18,13 +18,9 @@
  */
 package ca.phon.query.report.datasource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.query.db.Query;
-import ca.phon.query.db.Script;
+import ca.phon.query.db.*;
 import ca.phon.query.report.io.ParamSection;
 import ca.phon.util.CollatorFactory;
 

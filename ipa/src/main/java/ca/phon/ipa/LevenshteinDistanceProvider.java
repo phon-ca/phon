@@ -18,9 +18,7 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.extensions.Extension;
-import ca.phon.extensions.ExtensionProvider;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 
 @Extension(IPATranscript.class)
 public class LevenshteinDistanceProvider implements ExtensionProvider {

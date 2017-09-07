@@ -18,39 +18,21 @@
  */
 package ca.phon.ui.syllable;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.basic.BasicSyllabifier;
-import ca.phon.syllabifier.basic.BasicSyllabifierClassLoaderProvider;
-import ca.phon.syllabifier.basic.BasicSyllabifierFolderHandler;
+import ca.phon.syllabifier.basic.*;
 import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.util.resources.ResourceHandler;
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.util.resources.*;
 
 public class BasicSyllabifierTest extends JFrame {
 

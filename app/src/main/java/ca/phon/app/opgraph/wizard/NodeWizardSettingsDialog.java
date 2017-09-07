@@ -20,9 +20,7 @@ package ca.phon.app.opgraph.wizard;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
+import javax.swing.*;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.ui.CommonModuleFrame;

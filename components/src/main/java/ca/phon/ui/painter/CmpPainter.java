@@ -19,9 +19,7 @@
 package ca.phon.ui.painter;
 
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.JComponent;
 

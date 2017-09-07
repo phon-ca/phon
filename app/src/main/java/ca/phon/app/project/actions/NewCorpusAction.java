@@ -20,11 +20,9 @@ package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import ca.phon.app.project.NewCorpusDialog;
-import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.*;
 
 public class NewCorpusAction extends ProjectWindowAction {
 	

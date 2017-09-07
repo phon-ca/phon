@@ -20,8 +20,7 @@ package ca.phon.phonex;
 
 import java.text.ParseException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

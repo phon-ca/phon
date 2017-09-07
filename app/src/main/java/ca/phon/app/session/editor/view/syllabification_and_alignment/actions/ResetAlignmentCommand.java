@@ -22,17 +22,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.undo.CompoundEdit;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.session.Group;
-import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
+import ca.phon.ipa.alignment.*;
+import ca.phon.session.*;
 
 public class ResetAlignmentCommand extends SyllabificationAlignmentCommand {
 

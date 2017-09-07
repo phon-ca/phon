@@ -18,8 +18,7 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.*;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;

@@ -18,23 +18,15 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.undo.UndoableEdit;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphEditorModel;
 import ca.gedge.opgraph.app.components.canvas.GraphCanvas;
 import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
@@ -43,8 +35,7 @@ import ca.gedge.opgraph.library.NodeLibrary;
 import ca.phon.app.opgraph.editor.library.LibraryView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 /**
  * Base model for the opgraph editor.

@@ -19,12 +19,7 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.app.GraphDocument;

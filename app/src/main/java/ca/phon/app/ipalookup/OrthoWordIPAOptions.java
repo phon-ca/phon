@@ -18,10 +18,7 @@
  */
 package ca.phon.app.ipalookup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import ca.phon.extensions.Extension;
 import ca.phon.orthography.OrthoWord;

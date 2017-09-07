@@ -18,15 +18,10 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
+import ca.phon.ipa.*;
+import ca.phon.phonex.*;
 import ca.phon.syllabifier.basic.io.SonorityValues;
 import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;
 import ca.phon.syllabifier.phonex.SonorityInfo;

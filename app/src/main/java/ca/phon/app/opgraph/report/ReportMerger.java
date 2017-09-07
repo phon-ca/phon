@@ -18,19 +18,12 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.UUID;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpLink;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OutputField;
-import ca.gedge.opgraph.dag.CycleDetectedException;
-import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.*;
+import ca.gedge.opgraph.dag.*;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.opgraph.editor.NodeEditorSettings;

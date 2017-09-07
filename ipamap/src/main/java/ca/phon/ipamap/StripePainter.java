@@ -18,8 +18,7 @@
  */
 package ca.phon.ipamap;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.layout.GridCellLayout;

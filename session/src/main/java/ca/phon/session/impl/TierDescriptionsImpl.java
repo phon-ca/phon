@@ -20,8 +20,7 @@ package ca.phon.session.impl;
 
 import java.util.Iterator;
 
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierDescriptions;
+import ca.phon.session.*;
 
 public class TierDescriptionsImpl extends TierDescriptions {
 	

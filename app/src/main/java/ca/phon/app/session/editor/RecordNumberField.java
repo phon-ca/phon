@@ -19,9 +19,7 @@
 package ca.phon.app.session.editor;
 
 import javax.swing.JTextField;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
+import javax.swing.text.*;
 
 /**
  * Displays a number between (min, max).

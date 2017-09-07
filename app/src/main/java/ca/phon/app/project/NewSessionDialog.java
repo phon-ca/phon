@@ -21,11 +21,7 @@ package ca.phon.app.project;
 import java.awt.BorderLayout;
 import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;

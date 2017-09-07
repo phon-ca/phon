@@ -18,12 +18,8 @@
  */
 package ca.phon.util;
 
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.*;
+import java.util.regex.*;
 
 
 /**

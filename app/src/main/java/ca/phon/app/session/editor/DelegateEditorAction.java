@@ -19,10 +19,8 @@
 
 package ca.phon.app.session.editor;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.lang.reflect.*;
+import java.util.logging.*;
 
 import javax.swing.SwingUtilities;
 

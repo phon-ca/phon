@@ -21,23 +21,13 @@ package ca.phon.app.query.report;
 import java.awt.Component;
 import java.util.HashMap;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ca.phon.query.report.io.AggregrateInventory;
-import ca.phon.query.report.io.CommentSection;
-import ca.phon.query.report.io.Group;
-import ca.phon.query.report.io.InventorySection;
-import ca.phon.query.report.io.ParamSection;
-import ca.phon.query.report.io.ResultListing;
-import ca.phon.query.report.io.Section;
-import ca.phon.query.report.io.SummarySection;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.query.report.io.*;
+import ca.phon.util.icons.*;
 
 public class ReportTreeCellRenderer extends DefaultTreeCellRenderer {
 	

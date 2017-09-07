@@ -19,20 +19,14 @@
 package ca.phon.app.session.editor.view.find_and_replace;
 
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.logging.*;
+import java.util.regex.*;
 
 import ca.phon.app.session.editor.search.SearchType;
-import ca.phon.extensions.IExtendable;
-import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.extensions.*;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.ipa.AlternativeTranscript;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
+import ca.phon.ipa.*;
+import ca.phon.phonex.*;
 import ca.phon.util.Range;
 
 public class FindExpr {

@@ -22,8 +22,7 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 
 @PhonPlugin(author="Greg Hedlund", minPhonVersion="Phon 2.2", version="1")
 public class WelcomeWindowEP implements IPluginEntryPoint {

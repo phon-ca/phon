@@ -21,10 +21,7 @@ package ca.phon.syllable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.Extension;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.StressMarker;
-import ca.phon.ipa.StressType;
+import ca.phon.ipa.*;
 import ca.phon.ipa.features.FeatureSet;
 
 /**

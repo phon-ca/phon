@@ -20,8 +20,7 @@
 package ca.phon.query.db;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Interface for a Phon query. 

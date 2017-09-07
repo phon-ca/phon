@@ -23,8 +23,7 @@ import java.awt.event.ActionEvent;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierViewItemEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.TierViewItem;
+import ca.phon.session.*;
 
 public class ToggleTierLockAction extends TierManagementAction {
 	

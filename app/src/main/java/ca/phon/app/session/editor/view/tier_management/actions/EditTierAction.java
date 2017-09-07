@@ -24,18 +24,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.undo.CompoundEdit;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.TierNameEdit;
-import ca.phon.app.session.editor.undo.TierViewItemEdit;
-import ca.phon.app.session.editor.view.tier_management.TierEditorDialog;
-import ca.phon.app.session.editor.view.tier_management.TierInfoEditor;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.formatter.*;
+import ca.phon.session.*;
 import ca.phon.ui.fonts.FontPreferences;
 
 public class EditTierAction extends TierManagementAction {

@@ -21,12 +21,10 @@ package ca.phon.app.project.actions;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import ca.phon.session.SessionPath;
 
 public class OpenSessionAction extends ProjectWindowAction {

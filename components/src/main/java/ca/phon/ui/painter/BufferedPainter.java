@@ -18,16 +18,10 @@
  */
 package ca.phon.ui.painter;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.beans.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class BufferedPainter<T> implements Painter<T> {

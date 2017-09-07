@@ -22,11 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.table.AbstractTableModel;
 
-import ca.phon.session.Participant;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
+import ca.phon.session.*;
 
 public class SessionTableModel extends AbstractTableModel {
 	

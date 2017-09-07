@@ -20,10 +20,8 @@ package ca.phon.session;
 
 import java.util.Set;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.visitor.Visitable;
-import ca.phon.visitor.Visitor;
+import ca.phon.extensions.*;
+import ca.phon.visitor.*;
 
 /**
  * Iterator/vistor access for {@link Session} {@link Transcriber}s

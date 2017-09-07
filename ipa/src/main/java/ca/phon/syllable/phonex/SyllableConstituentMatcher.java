@@ -18,13 +18,11 @@
  */
 package ca.phon.syllable.phonex;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.PhoneMatcher;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.*;
 
 /**
  * Syllable constituent type matcher for phonex.

@@ -18,23 +18,15 @@
  */
 package ca.phon.app.welcome;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.logging.*;
+import java.util.zip.*;
 
 import org.apache.commons.io.FileUtils;
 
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.Tuple;
 import ca.phon.worker.PhonTask;
 import ca.phon.workspace.Workspace;

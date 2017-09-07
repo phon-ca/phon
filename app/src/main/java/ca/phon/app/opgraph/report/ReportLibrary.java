@@ -18,47 +18,26 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.Action;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.MenuElement;
+import javax.swing.*;
 
 import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.nodes.general.MacroNode;
-import ca.phon.app.opgraph.editor.OpGraphLibrary;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.SimpleEditor;
-import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
+import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.OpenFileLauncher;
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 import ca.phon.util.resources.ResourceLoader;
 import ca.phon.worker.PhonWorker;
 

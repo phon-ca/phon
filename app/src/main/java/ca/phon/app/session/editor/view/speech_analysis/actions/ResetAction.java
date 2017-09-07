@@ -23,10 +23,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisTier;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.view.speech_analysis.*;
+import ca.phon.util.icons.*;
 
 public class ResetAction extends SpeechAnalysisEditorViewAction {
 

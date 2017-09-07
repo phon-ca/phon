@@ -18,58 +18,28 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.beans.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.session.editor.DelegateEditorAction;
-import ca.phon.app.session.editor.EditorAction;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.RunOnEDT;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.common.TierDataConstraint;
-import ca.phon.app.session.editor.view.common.TierDataLayout;
-import ca.phon.app.session.editor.view.common.TierDataLayoutButtons;
-import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.ResetAlignmentCommand;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.ResetSyllabificationCommand;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.SyllabificationSettingsCommand;
+import ca.phon.app.session.editor.view.common.*;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.session.Group;
-import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
+import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipa.PhoneMapDisplay;
+import ca.phon.ui.ipa.*;
 import ca.phon.ui.ipa.PhoneMapDisplay.AlignmentChangeData;
-import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay.SyllabificationChangeData;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
 	

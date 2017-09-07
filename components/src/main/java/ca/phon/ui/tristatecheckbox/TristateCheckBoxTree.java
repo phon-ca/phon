@@ -18,14 +18,10 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 
 /**
  * Tree component with checkbox controls.

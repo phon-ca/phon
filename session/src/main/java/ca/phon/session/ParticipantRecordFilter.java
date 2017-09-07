@@ -18,8 +18,7 @@
  */
 package ca.phon.session;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Filter utterances by speaker.  If 'null' is given during construction

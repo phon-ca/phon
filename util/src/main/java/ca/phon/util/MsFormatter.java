@@ -18,8 +18,7 @@
  */
 package ca.phon.util;
 
-import java.text.Format;
-import java.text.ParseException;
+import java.text.*;
 
 
 /**

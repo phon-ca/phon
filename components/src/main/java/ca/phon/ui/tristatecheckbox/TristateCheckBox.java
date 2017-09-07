@@ -18,14 +18,9 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import ca.phon.util.OSInfo;
 

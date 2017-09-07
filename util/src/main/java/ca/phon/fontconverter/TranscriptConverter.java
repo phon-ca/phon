@@ -18,31 +18,16 @@
  */
 package ca.phon.fontconverter;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 
-import ca.phon.fontconverter.io.ConversionTable;
-import ca.phon.fontconverter.io.MappingType;
-import ca.phon.fontconverter.io.TokenType;
-import ca.phon.fontconverter.io.UnicodeSequenceType;
-import ca.phon.util.resources.ClassLoaderHandler;
-import ca.phon.util.resources.ResourceLoader;
-import de.susebox.jtopas.StandardTokenizer;
-import de.susebox.jtopas.StandardTokenizerProperties;
-import de.susebox.jtopas.StringSource;
-import de.susebox.jtopas.Token;
-import de.susebox.jtopas.Tokenizer;
-import de.susebox.jtopas.TokenizerException;
-import de.susebox.jtopas.TokenizerProperties;
+import ca.phon.fontconverter.io.*;
+import ca.phon.util.resources.*;
+import de.susebox.jtopas.*;
 
 /**
  * Handles conversion of one transcription method to UTF-8 IPA

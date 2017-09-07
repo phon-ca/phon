@@ -18,18 +18,14 @@
  */
 package ca.phon.app.actions;
 
-import java.awt.Component;
-import java.awt.KeyboardFocusManager;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.awt.*;
+import java.lang.reflect.*;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import javax.swing.text.JTextComponent;
 
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 
 @PhonPlugin(name="default")
 public class PasteEP implements IPluginEntryPoint {

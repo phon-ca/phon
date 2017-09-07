@@ -21,23 +21,16 @@ package ca.phon.app;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.Action;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 import ca.phon.properties.PhonProperty;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;

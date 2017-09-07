@@ -19,8 +19,7 @@
 package ca.phon.media.sampled;
 
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Audio channels

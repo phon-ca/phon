@@ -18,13 +18,9 @@
  */
 package ca.phon.orthography.parser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**

@@ -20,9 +20,7 @@ package ca.phon.query;
 
 import java.text.ParseException;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.formatter.FormatterUtil;
+import ca.phon.formatter.*;
 import ca.phon.ipa.IPATranscript;
 
 public class TableUtils {

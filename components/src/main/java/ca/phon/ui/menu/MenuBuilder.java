@@ -20,16 +20,9 @@ package ca.phon.ui.menu;
 
 import java.awt.Component;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.Action;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.MenuElement;
+import javax.swing.*;
 
 import ca.phon.util.Tuple;
 

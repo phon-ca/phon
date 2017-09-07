@@ -18,8 +18,7 @@
  */
 package ca.phon.query.analysis;
 
-import ca.phon.functor.AbstractAnalysis;
-import ca.phon.functor.AnalysisStep;
+import ca.phon.functor.*;
 
 public class QueryAnalysis extends AbstractAnalysis<String, QueryAnalysisInput> {
 	

@@ -19,22 +19,14 @@
 package ca.phon.app.opgraph.wizard;
 
 import java.awt.Component;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpNode;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.nodes.general.MacroNode;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
+import ca.phon.ui.tristatecheckbox.*;
 
 public class OpGraphCheckBoxTree extends TristateCheckBoxTree {
 

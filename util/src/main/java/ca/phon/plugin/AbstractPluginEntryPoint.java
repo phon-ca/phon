@@ -18,8 +18,7 @@
  */
 package ca.phon.plugin;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 import ca.phon.worker.PhonTask;

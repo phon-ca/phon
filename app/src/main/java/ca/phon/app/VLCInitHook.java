@@ -22,10 +22,7 @@ import java.util.logging.Logger;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.media.VLCHelper;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 
 @PhonPlugin
 public class VLCInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {

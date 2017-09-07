@@ -19,20 +19,16 @@
 
 package ca.phon.media;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.logging.*;
+import java.util.regex.*;
 
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
+import com.sun.jna.*;
 
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 import uk.co.caprica.vlcj.Info;
-import uk.co.caprica.vlcj.binding.LibC;
-import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.binding.*;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.version.LibVlcVersion;
 

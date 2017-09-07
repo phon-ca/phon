@@ -18,28 +18,20 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpLink;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.AutoLayoutManager;
-import ca.gedge.opgraph.dag.CycleDetectedException;
-import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.dag.*;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.basic.BasicSyllabifier;
-import ca.phon.syllabifier.basic.io.SonorityValues;
+import ca.phon.syllabifier.basic.io.*;
 import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;
-import ca.phon.syllabifier.basic.io.StageType;
-import ca.phon.syllabifier.basic.io.SyllabifierDef;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
-import ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode;
-import ca.phon.syllabifier.opgraph.nodes.SonorityNode;
+import ca.phon.syllabifier.opgraph.nodes.*;
 import ca.phon.util.Language;
 
 /**

@@ -18,12 +18,9 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNodeInfo;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(
 	name="Append Table",

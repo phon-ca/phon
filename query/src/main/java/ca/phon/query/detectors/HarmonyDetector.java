@@ -1,11 +1,8 @@
 package ca.phon.query.detectors;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.ipa.PhoneDimension;
-import ca.phon.ipa.PhoneticProfile;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 
 /**

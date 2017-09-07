@@ -21,12 +21,9 @@ package ca.phon.app.about;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import ca.phon.app.VersionInfo;
 import ca.phon.ui.CommonModuleFrame;

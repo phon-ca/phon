@@ -19,24 +19,16 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNodeInfo;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortColumn;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortType;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettingsPanel;
+import ca.phon.app.opgraph.nodes.query.*;
+import ca.phon.app.opgraph.nodes.query.SortNodeSettings.*;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(
 		name="Sort",

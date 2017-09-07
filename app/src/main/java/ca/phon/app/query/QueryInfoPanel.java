@@ -18,69 +18,34 @@
  */
 package ca.phon.app.query;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableRowSorter;
 
-import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.opgraph.report.ReportLibrary;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultSetManager;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
+import ca.phon.query.db.*;
+import ca.phon.query.script.*;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.*;
 import ca.phon.session.DateFormatter;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.StarBox;
+import ca.phon.ui.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * Display information about a given query.

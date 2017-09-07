@@ -22,9 +22,7 @@ import java.time.Period;
 
 import javax.swing.table.AbstractTableModel;
 
-import ca.phon.session.AgeFormatter;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 
 public class ParticipantsTableModel extends AbstractTableModel {
 	

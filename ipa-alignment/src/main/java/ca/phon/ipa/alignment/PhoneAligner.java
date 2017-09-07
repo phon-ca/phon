@@ -18,20 +18,12 @@
  */
 package ca.phon.ipa.alignment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
-import ca.phon.alignment.Aligner;
-import ca.phon.alignment.AlignmentMap;
-import ca.phon.ipa.AudiblePhoneVisitor;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.alignment.*;
+import ca.phon.ipa.*;
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.syllable.SyllableStress;
-import ca.phon.syllable.SyllableVisitor;
+import ca.phon.syllable.*;
 
 /**
  * Aligner for Phone objects with special contants setup for cost

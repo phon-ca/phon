@@ -19,28 +19,18 @@
 package ca.phon.app.opgraph.editor.actions.graph;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.event.*;
+import java.util.*;
 import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 import javax.swing.undo.CompoundEdit;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.OpLink;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.edits.graph.AddLinkEdit;
-import ca.gedge.opgraph.app.edits.graph.AddNodeEdit;
+import ca.gedge.opgraph.app.edits.graph.*;
 import ca.gedge.opgraph.app.util.GraphUtils;
-import ca.gedge.opgraph.dag.CycleDetectedException;
-import ca.gedge.opgraph.dag.VertexNotFoundException;
+import ca.gedge.opgraph.dag.*;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
 import ca.gedge.opgraph.extensions.NodeMetadata;
 import ca.phon.app.opgraph.editor.OpgraphEditor;

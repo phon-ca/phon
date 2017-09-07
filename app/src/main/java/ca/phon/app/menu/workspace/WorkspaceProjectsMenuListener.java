@@ -19,8 +19,7 @@
 package ca.phon.app.menu.workspace;
 
 import javax.swing.JMenu;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.OpenProjectEP;

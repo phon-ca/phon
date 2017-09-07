@@ -21,8 +21,7 @@ package ca.phon.app.menu.file;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
-import javax.swing.Action;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import ca.phon.plugin.PluginAction;
 

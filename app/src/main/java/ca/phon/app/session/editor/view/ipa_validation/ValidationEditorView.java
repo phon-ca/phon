@@ -21,52 +21,23 @@ package ca.phon.app.session.editor.view.ipa_validation;
 import java.awt.BorderLayout;
 import java.util.Iterator;
 
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.undo.CompoundEdit;
-import javax.swing.undo.UndoableEdit;
+import javax.swing.*;
+import javax.swing.undo.*;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
-import ca.phon.app.session.editor.DelegateEditorAction;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.RunOnEDT;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.common.IPAGroupField;
-import ca.phon.app.session.editor.view.common.TierDataConstraint;
-import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
-import ca.phon.app.session.editor.view.common.TierDataLayoutType;
-import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.ipa_validation.actions.AutoValidateAction;
-import ca.phon.ipa.AlternativeTranscript;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SyllabifierInfo;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcriber;
-import ca.phon.session.Transcribers;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Language;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * Editor view used to validate double-blind transcriptions.  References

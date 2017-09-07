@@ -18,69 +18,38 @@
  */
 package ca.phon.app.welcome;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.Scrollable;
+import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.JXRadioGroup;
+import org.jdesktop.swingx.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.project.Project;
-import ca.phon.project.ProjectFactory;
+import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.DateFormatter;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.MultiActionButton;
-import ca.phon.ui.PhonGuiConstants;
-import ca.phon.ui.PhonTaskButton;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
 import ca.phon.util.OpenFileLauncher;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.worker.PhonTaskListener;
-import ca.phon.worker.PhonWorker;
 import ca.phon.workspace.Workspace;
 
 /**

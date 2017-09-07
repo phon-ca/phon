@@ -18,12 +18,9 @@
  */
 package ca.phon.ipa.features;
 
-import java.text.Collator;
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.*;
+import java.util.*;
+import java.util.logging.*;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.util.CompoundComparator;

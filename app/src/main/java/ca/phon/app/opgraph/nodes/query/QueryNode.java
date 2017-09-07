@@ -19,39 +19,22 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.OpNodeInfo;
-import ca.gedge.opgraph.OutputField;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.app.opgraph.nodes.RecordContainer;
-import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
+import ca.phon.app.opgraph.nodes.*;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.Script;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptContext;
-import ca.phon.query.script.QueryTask;
+import ca.phon.query.db.*;
+import ca.phon.query.script.*;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.*;
 
 @OpNodeInfo(
 	category="Query",
