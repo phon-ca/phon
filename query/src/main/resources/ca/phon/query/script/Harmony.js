@@ -47,6 +47,7 @@ function setup_params(params) {
 	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
 
+    filters.word.searchByWord = false;
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
