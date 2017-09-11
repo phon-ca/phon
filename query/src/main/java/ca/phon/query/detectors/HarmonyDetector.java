@@ -39,6 +39,62 @@ public class HarmonyDetector extends BasicHarmonyDetector {
 		this.includeTenseness = includeTenseness;
 		this.includeRounding = includeRounding;
 	}
+	
+	public boolean isIncludePlace() {
+		return includePlace;
+	}
+
+	public void setIncludePlace(boolean includePlace) {
+		this.includePlace = includePlace;
+	}
+
+	public boolean isIncludeManner() {
+		return includeManner;
+	}
+
+	public void setIncludeManner(boolean includeManner) {
+		this.includeManner = includeManner;
+	}
+
+	public boolean isIncludeVoicing() {
+		return includeVoicing;
+	}
+
+	public void setIncludeVoicing(boolean includeVoicing) {
+		this.includeVoicing = includeVoicing;
+	}
+
+	public boolean isIncludeHeight() {
+		return includeHeight;
+	}
+
+	public void setIncludeHeight(boolean includeHeight) {
+		this.includeHeight = includeHeight;
+	}
+
+	public boolean isIncludeBackness() {
+		return includeBackness;
+	}
+
+	public void setIncludeBackness(boolean includeBackness) {
+		this.includeBackness = includeBackness;
+	}
+
+	public boolean isIncludeTenseness() {
+		return includeTenseness;
+	}
+
+	public void setIncludeTenseness(boolean includeTenseness) {
+		this.includeTenseness = includeTenseness;
+	}
+
+	public boolean isIncludeRounding() {
+		return includeRounding;
+	}
+
+	public void setIncludeRounding(boolean includeRounding) {
+		this.includeRounding = includeRounding;
+	}
 
 	@Override
 	public Collection<DetectorResult> detect(PhoneMap pm) {

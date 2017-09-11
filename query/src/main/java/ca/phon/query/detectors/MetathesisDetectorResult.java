@@ -2,11 +2,15 @@ package ca.phon.query.detectors;
 
 import java.util.List;
 
-import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 
 public class MetathesisDetectorResult extends DetectorResult {
+	
+	private PhoneticProfile profile1 = new PhoneticProfile();
+	
+	private PhoneticProfile profile2 = new PhoneticProfile();
 	
 	private FeatureSet features1;
 	
@@ -15,19 +19,39 @@ public class MetathesisDetectorResult extends DetectorResult {
 	public MetathesisDetectorResult(PhoneMap phoneMap) {
 		super(phoneMap);
 	}
+	
+	public PhoneticProfile getProfile1() {
+		return profile1;
+	}
 
+	public void setProfile1(PhoneticProfile profile1) {
+		this.profile1 = profile1;
+	}
+
+	public PhoneticProfile getProfile2() {
+		return profile2;
+	}
+
+	public void setProfile2(PhoneticProfile profile2) {
+		this.profile2 = profile2;
+	}
+
+	@Deprecated
 	public FeatureSet getFeatures1() {
 		return features1;
 	}
 
+	@Deprecated
 	public void setFeatures1(FeatureSet features1) {
 		this.features1 = features1;
 	}
 
+	@Deprecated
 	public FeatureSet getFeatures2() {
 		return features2;
 	}
 
+	@Deprecated
 	public void setFeatures2(FeatureSet features2) {
 		this.features2 = features2;
 	}

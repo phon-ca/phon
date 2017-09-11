@@ -50,6 +50,20 @@ exports.DetectorResultFactory = function () {
 	};
 	
 	/**
+	 * Convert the given MetathesisDetectorResult object into a
+	 * query result
+	 * 
+	 */
+	this.createMetathesisResult = function (recordIndex, groupIndex, detectorResult) {
+    	    var retVal = this.createQueryResult(recordIndex, groupIndex, detectorResult);
+	    
+	    var metadata = retVal.metadata;
+	    metadata.put("Features", detectorResult.profile1.toString() + " \u2194 " + detectorResult.profile2.toString());
+	    
+	    return retVal;
+	};
+	
+	/**
 	 * Convert the given ca.phon.query.detector.DetectorResult object
 	 * into a query Result
 	 *
