@@ -40,7 +40,6 @@ public class SeparatorScriptParam extends ScriptParam {
 	public void setCollapsed(boolean collapsed) {
 		final boolean wasCollapsed = this.collapsed;
 		this.collapsed = collapsed;
-		
 	}
 
 	@Override

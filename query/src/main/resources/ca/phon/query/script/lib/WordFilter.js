@@ -71,24 +71,24 @@ exports.WordFilter = function (id) {
 
 		// search singleton groups.
 		singletonGroupOpt = new BooleanScriptParam(
-		singletonParamInfo.id,
-		singletonParamInfo.desc,
-		singletonParamInfo.title,
-		singletonParamInfo.def);
+        		singletonParamInfo.id,
+        		singletonParamInfo.desc,
+        		singletonParamInfo.title,
+        		singletonParamInfo.def);
 
 		posGroupOpt = new MultiboolScriptParam(
-		posParamInfo.id,
-		posParamInfo.def,
-		posParamInfo.desc,
-		posParamInfo.title,
-		posParamInfo.numCols);
+        		posParamInfo.id,
+        		posParamInfo.def,
+        		posParamInfo.desc,
+        		posParamInfo.title,
+        		posParamInfo.numCols);
 
 		if (this.searchByWordEnabled == true) {
 			var searchByWordOpt = new BooleanScriptParam(
-			searchByWordParamInfo.id,
-			searchByWordParamInfo.desc,
-			searchByWordParamInfo.title,
-			this.searchByWord);
+        			searchByWordParamInfo.id,
+        			searchByWordParamInfo.desc,
+        			searchByWordParamInfo.title,
+        			this.searchByWord);
 			params.add(searchByWordOpt);
 
 			var searchByWordListener = new java.beans.PropertyChangeListener {
