@@ -76,6 +76,25 @@ public class ParamComponentFactory {
 		return retVal;
 	}
 	
+	public JComponent createEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
+		if(enumScriptParam.getType().equals("radiobutton")) {
+			return createRadiobuttonEnumScriptParamComponent(enumScriptParam);
+		} else {
+			return createComboboxEnumScriptParamComponent(enumScriptParam);
+		}
+	}
+	
+	public JPanel createRadiobuttonEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
+		final RadiobuttonEnumPanel retVal = new RadiobuttonEnumPanel(enumScriptParam);
+		
+		retVal.setEnabled(enumScriptParam.isEnabled());
+		retVal.setVisible(enumScriptParam.getVisible());
+		
+		installParamListener(retVal, enumScriptParam);
+		
+		return retVal;
+	}
+	
 	/**
 	 * Create a combobox component for enum script parameters.
 	 * 
@@ -83,14 +102,14 @@ public class ParamComponentFactory {
 	 * 
 	 * @return combo box
 	 */
-	public JComboBox createEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
+	public JComboBox<ReturnValue> createComboboxEnumScriptParamComponent(EnumScriptParam enumScriptParam) {
 		final String paramId = enumScriptParam.getParamIds().iterator().next();
 		
 		final EnumScriptParamListener listener = 
 				new EnumScriptParamListener(enumScriptParam, paramId);
 		
 		final ReturnValue[] choices = enumScriptParam.getChoices();
-		final JComboBox retVal = new JComboBox(choices);
+		final JComboBox<ReturnValue> retVal = new JComboBox<>(choices);
 		
 		if(enumScriptParam.getValue(paramId) != null) {
 			final ReturnValue val = (ReturnValue)enumScriptParam.getValue(paramId);
@@ -179,6 +198,9 @@ public class ParamComponentFactory {
 		panel.setLayout(new VerticalLayout());
 		panel.setCollapsed(separatorScriptParam.isCollapsed());
 		
+		installParamListener(panel, separatorScriptParam);
+		installSeparatorParamListener(panel, separatorScriptParam);
+		
 		return panel;
 	}
 	
@@ -188,7 +210,7 @@ public class ParamComponentFactory {
 	 * @param cp
 	 * @return
 	 */
-	public JXButton createToggleButton(String name, JXCollapsiblePane cp) {
+	public JXButton createToggleButton(String name, JXCollapsiblePane cp, SeparatorScriptParam param) {
 		Action toggleAction = cp.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION);
 		
 		// use the collapse/expand icons from the JTree UI
@@ -230,12 +252,23 @@ public class ParamComponentFactory {
 		
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
+		installParamListener(btn, param);
+		
 		return btn;
 	}
 	
 	private void installParamListener(JComponent comp, ScriptParam param) {
 		final ScriptParamComponentListener listener = new ScriptParamComponentListener(comp);
 		param.addPropertyChangeListener(listener);
+	}
+	
+	private void installSeparatorParamListener(final JXCollapsiblePane panel, final SeparatorScriptParam param) {
+		param.addPropertyChangeListener(SeparatorScriptParam.COLLAPSED_PROP, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				panel.setCollapsed(param.isCollapsed());
+			}
+		});
 	}
 	
 	private void installStringParamListener(final PromptedTextField textField, final StringScriptParam param) {

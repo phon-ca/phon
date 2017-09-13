@@ -28,17 +28,17 @@ exports.TierList = function(id) {
 		"prompt": "Enter tier names, separated by ','",
 		"def": ""
 	};
-	var tiersParam;
+	this.tiersParam;
 	this.tiers = tiersParamInfo.def;
 
 	this.param_setup = function(params) {
-		tiersParam = new StringScriptParam(
-		tiersParamInfo.id,
-		tiersParamInfo.title,
-		tiersParamInfo.def);
-		tiersParam.setPrompt(tiersParamInfo.prompt);
+		this.tiersParam = new StringScriptParam(
+        		tiersParamInfo.id,
+        		tiersParamInfo.title,
+        		tiersParamInfo.def);
+        	this.tiersParam.setPrompt(tiersParamInfo.prompt);
 
-		params.add(tiersParam);
+		params.add(this.tiersParam);
 	};
 
 	this.getTiers = function() {

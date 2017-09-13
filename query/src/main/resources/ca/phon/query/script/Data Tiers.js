@@ -10,6 +10,7 @@ var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 /********************************
  * Setup params
@@ -17,6 +18,7 @@ var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 
 var filters = {
 	"primary": new TierFilter("filters.primary"),
+	"searchBy": new SearchByOptions("filters.searchBy"),
 	"group": new GroupFilter("filters.group"),
 	"groupTiers": new TierList("filters.groupTiers"),
 	"word": new WordFilter("filters.word"),
@@ -38,6 +40,8 @@ function begin_search(s) {
 function setup_params(params) {
 	filters.primary.param_setup(params);
 	filters.primary.set_required(true);
+	
+	var insertIdx = 1;
 
 	filters.group.param_setup(params);
 
@@ -52,7 +56,10 @@ function setup_params(params) {
 	// change default status of word filter for this query
 	filters.word.searchByWord = false;
 	filters.word.param_setup(params);
-	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
+	
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, null, insertIdx);
+
+    var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
 
@@ -63,10 +70,11 @@ function setup_params(params) {
 	var alignedWordListener = new java.beans.PropertyChangeListener {
 		propertyChange: function (e) {
 			var enabled = e.source.getValue(e.source.paramId);
+			filters.wordTiers.tiersParam.setEnabled(enabled == true);
 			filters.alignedWord.setEnabled(enabled);
 		}
 	};
-	filters.word.searchByWordOpt.addPropertyChangeListener(alignedWordListener);
+	filters.word.searchByWordParam.addPropertyChangeListener(alignedWordListener);
 	filters.alignedWord.setEnabled(filters.word.searchByWord);
 
 	filters.speaker.param_setup(params);

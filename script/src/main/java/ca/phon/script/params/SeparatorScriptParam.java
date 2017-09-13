@@ -19,6 +19,8 @@
 package ca.phon.script.params;
 
 public class SeparatorScriptParam extends ScriptParam {
+	
+	public static final String COLLAPSED_PROP = SeparatorScriptParam.class.getName() + ".collapsed";
 
 	private boolean collapsed = false;
 	
@@ -40,6 +42,7 @@ public class SeparatorScriptParam extends ScriptParam {
 	public void setCollapsed(boolean collapsed) {
 		final boolean wasCollapsed = this.collapsed;
 		this.collapsed = collapsed;
+		super.propSupport.firePropertyChange(COLLAPSED_PROP, wasCollapsed, collapsed);
 	}
 
 	@Override

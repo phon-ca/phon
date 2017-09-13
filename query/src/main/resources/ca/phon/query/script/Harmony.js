@@ -9,10 +9,11 @@ var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
 var HarmonyOptions = require("lib/HarmonyOptions").HarmonyOptions;
 var DetectorResultFactory = require("lib/DetectorResultFactory").DetectorResultFactory;
-
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 var filters = {
     "harmonyOptions": new HarmonyOptions("filters.harmonyOptions"),
+    "searchBy": new SearchByOptions("filters.searchBy"),
 	"group": new GroupFilter("filters.group"),
 	"groupTiers": new TierList("filters.groupTiers"),
 	"groupPattern": new PatternFilter("filters.groupPattern"),
@@ -65,12 +66,16 @@ function setup_params(params) {
 			filters.alignedWord.setEnabled(enabled);
 		}
 	};
-	filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
-	var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
+	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
 	filters.wordPattern.setEnabled(enabled);
 	filters.alignedWord.setEnabled(enabled);
 
 	filters.syllable.param_setup(params);
+	
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, 0);
+	
 	filters.speaker.param_setup(params);
 }
 

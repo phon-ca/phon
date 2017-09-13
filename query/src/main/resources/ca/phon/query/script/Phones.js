@@ -18,6 +18,7 @@ var PccOptions = require("lib/Pcc").PccOptions;
 var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
 var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 /********************************
  * Setup params
@@ -25,6 +26,7 @@ var ResultType = require("lib/PhonScriptConstants").ResultType;
 
 var filters = {
 	"primary": new PatternFilter("filters.primary"),
+	"searchBy": new SearchByOptions("filters.searchBy"),
 	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
 	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
 	"group": new GroupFilter("filters.group"),
@@ -60,6 +62,8 @@ function setup_params(params) {
 	filters.primary.setSelectedPatternType(PatternType.PHONEX);
 	filters.primary.param_setup(params);
 	filters.primary.set_required(true);
+	
+	var insertIdx = 1;
 
 	// setup result filter section
 	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
@@ -109,12 +113,16 @@ function setup_params(params) {
 			filters.alignedWord.setEnabled(enabled);
 		}
 	};
-	filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
-	var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
+	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
 	filters.wordPattern.setEnabled(enabled);
 	filters.alignedWord.setEnabled(enabled);
 
 	filters.syllable.param_setup(params);
+	
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
+	
 	filters.speaker.param_setup(params);
 
 	// add metadata options

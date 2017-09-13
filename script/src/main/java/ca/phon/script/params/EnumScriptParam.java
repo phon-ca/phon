@@ -24,7 +24,20 @@ public class EnumScriptParam extends ScriptParam {
 
 	private String[] choices;
 	
+	/**
+	 * Type should be either 'combobox' or 'radiobutton'.
+	 * Will default to 'combo'
+	 */
+	private final static String DEFAULT_TYPE = "combobox";
+	private String type = DEFAULT_TYPE;
+	
+	private int columns = 1;
+	
 	public EnumScriptParam(String id, String desc, int def, String[] choices) {
+		this(id, desc, def, choices, DEFAULT_TYPE, 1);
+	}
+	
+	public EnumScriptParam(String id, String desc, int def, String[] choices, String type, int columns) {
 		super();
 		
 		this.choices = choices;
@@ -32,6 +45,24 @@ public class EnumScriptParam extends ScriptParam {
 		setParamDesc(desc);
 		setValue(id, null);
 		setDefaultValue(id, new ReturnValue(choices[def], def));
+		setType(type);
+		setColumns(columns);
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getType() {
+		return this.type;
+	}
+	
+	public void setColumns(int columns) {
+		this.columns = columns;
+	}
+	
+	public int getColumns() {
+		return this.columns;
 	}
 	
 	public ReturnValue[] getChoices() {

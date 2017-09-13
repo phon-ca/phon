@@ -92,8 +92,8 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	@Visits
 	public void visitEnumScriptParam(EnumScriptParam param) {
 		final JLabel paramLabel = factory.createParamLabel(param);
-		final JComboBox comboBox = factory.createEnumScriptParamComponent(param);
-		final JPanel panel = createComponentPanel(paramLabel, comboBox);
+		final JComponent comp = factory.createEnumScriptParamComponent(param);
+		final JPanel panel = createComponentPanel(paramLabel, comp);
 		currentContainer.add(panel);
 	}
 	
@@ -116,7 +116,7 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	@Visits
 	public void visitSeparatorScriptParam(SeparatorScriptParam param) {
 		final JXCollapsiblePane panel = factory.createSeparatorScriptParamComponent(param);
-		final JXButton button = factory.createToggleButton(param.getParamDesc(), panel);
+		final JXButton button = factory.createToggleButton(param.getParamDesc(), panel, param);
 		this.panel.add(button);
 		this.panel.add(panel);
 		this.currentContainer = panel;
@@ -130,6 +130,5 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		final JPanel panel = createComponentPanel(paramLabel, textField);
 		currentContainer.add(panel);
 	}
-
 
 }

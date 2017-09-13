@@ -29,10 +29,11 @@ exports.SyllableFilter = function (id) {
 	var searchBySyllableParamInfo = {
 		"id": id + ".searchBySyllable",
 		"def": false,
-		"title": "Search by syllable:",
-		"desc": "",
+		"title": "",
+		"desc": "Search by syllable",
 		"enbled": true
 	};
+	this.searchBySyllableParam;
 	this.searchBySyllable = searchBySyllableParamInfo.def;
 
 	var ignoreTruncatedParamInfo = {
@@ -153,8 +154,9 @@ exports.SyllableFilter = function (id) {
 			searchBySyllableParamInfo.desc,
 			searchBySyllableParamInfo.title,
 			searchBySyllableParamInfo.def);
-			params.add(searchBySyllOpt);
-
+            this.searchBySyllableParam = searchBySyllOpt;
+            params.add(searchBySyllOpt);
+            
 			var searchBySyllListener = new java.beans.PropertyChangeListener {
 				propertyChange: function (e) {
 					var enabled = e.source.getValue(e.source.paramId) == true;

@@ -48,12 +48,12 @@ exports.WordFilter = function (id) {
 	var searchByWordParamInfo = {
 		"id": id + ".searchByWord",
 		"def": true,
-		"title": "Search by word:",
-		"desc": ""
+		"title": "",
+		"desc": "Search by word"
 	};
 	this.searchByWord = searchByWordParamInfo.def;
-
-	this.searchByWordEnabled = true;
+	this.searchByWordParam;
+	// @deprecated - kept for backwards compatibility
 	this.searchByWordOpt;
 
 	var singletonGroupOpt;
@@ -83,28 +83,28 @@ exports.WordFilter = function (id) {
         		posParamInfo.title,
         		posParamInfo.numCols);
 
-		if (this.searchByWordEnabled == true) {
-			var searchByWordOpt = new BooleanScriptParam(
-        			searchByWordParamInfo.id,
-        			searchByWordParamInfo.desc,
-        			searchByWordParamInfo.title,
-        			this.searchByWord);
-			params.add(searchByWordOpt);
+		var searchByWordOpt = new BooleanScriptParam(
+        		searchByWordParamInfo.id,
+        		searchByWordParamInfo.desc,
+        		searchByWordParamInfo.title,
+        		this.searchByWord);
+		var searchByWordListener = new java.beans.PropertyChangeListener {
+			propertyChange: function (e) {
+				var enabled = e.source.getValue(e.source.paramId) == true;
+				singletonGroupOpt.setEnabled(enabled);
+				posGroupOpt.setEnabled(enabled);
+				
+				sep.setCollapsed(enabled == false);
+			}
+		};
+		searchByWordOpt.addPropertyChangeListener(searchByWordOpt.paramId, searchByWordListener);
+		var enabled = searchByWordOpt.getValue(searchByWordOpt.paramId) == true;
+		singletonGroupOpt.setEnabled(enabled);
+		posGroupOpt.setEnabled(enabled);
+		params.add(searchByWordOpt);
 
-			var searchByWordListener = new java.beans.PropertyChangeListener {
-				propertyChange: function (e) {
-					var enabled = e.source.getValue(e.source.paramId) == true;
-					singletonGroupOpt.setEnabled(enabled);
-					posGroupOpt.setEnabled(enabled);
-				}
-			};
-			searchByWordOpt.addPropertyChangeListener(searchByWordOpt.paramId, searchByWordListener);
-			var enabled = searchByWordOpt.getValue(searchByWordOpt.paramId) == true;
-			singletonGroupOpt.setEnabled(enabled);
-			posGroupOpt.setEnabled(enabled);
-
-			this.searchByWordOpt = searchByWordOpt;
-		}
+        this.searchByWordOpt = searchByWordOpt;
+		this.searchByWordParam = searchByWordOpt;
 
 		params.add(singletonGroupOpt);
 		params.add(posGroupOpt);
@@ -153,10 +153,6 @@ exports.WordFilter = function (id) {
 	};
 
 	this.isUseFilter = function () {
-		if (this.searchByWordEnabled == true) {
-			return this.searchByWord == true;
-		} else {
-			return true;
-		}
+    		return this.searchByWord == true;
 	};
 };
