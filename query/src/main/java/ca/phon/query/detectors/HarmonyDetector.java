@@ -6,7 +6,32 @@ import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 
 /**
+ * <div id='harmony'><h2>Harmony</h2>
  * 
+ * <p>Given two positions <i>i</i>, <i>k</i> within M, we determine if harmony exists for each dimension of <i>profile(p)</i> if any of the following cases are true:
+ * <ul>
+ * 	<li>
+ * 		<b>Progressive Harmony</b><br/>
+ * 		<i>dim(M<sub><i>1i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>1k</i></sub>)</i> = <i>y</i> (Values from T)<br/>
+ * 		<i>dim(M<sub><i>2i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>2k</i></sub>)</i> = <i>x</i> (Values from A)<br/>
+ * 	</li>
+ * 	<li>
+ * 		<b>Regressive Harmony</b><br/>
+ * 		<i>dim(M<sub><i>1i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>1k</i></sub>)</i> = <i>y</i> (Values from T)<br/>
+ * 		<i>dim(M<sub><i>2i</i></sub>)</i> = <i>y</i>, <i>dim(M<sub><i>2k</i></sub>)</i> = <i>y</i> (Values from A)<br/>
+ * 	</li>
+ * 	<li>
+ * 		<b>Progressive Harmony</b><br/>
+ * 		<i>dim(M<sub><i>1i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>1k</i></sub>)</i> = &#x2205; (Values from T)<br/>
+ * 		<i>dim(M<sub><i>2i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>2k</i></sub>)</i> = <i>x</i> (Values from A)<br/>
+ * 	</li>
+ *  <li>
+ * 		<b>Regressive Harmony</b><br/>
+ * 		<i>dim(M<sub><i>1i</i></sub>)</i> = &#x2205;, <i>dim(M<sub><i>1k</i></sub>)</i> = <i>x</i> (Values from T)<br/>
+ * 		<i>dim(M<sub><i>2i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>2k</i></sub>)</i> = <i>x</i> (Values from A)<br/>
+ * 	</li>
+ * </ul>
+ * </p>
  */
 public class HarmonyDetector extends BasicHarmonyDetector {
 

@@ -1,12 +1,30 @@
 package ca.phon.query.detectors;
 
-import java.util.List;
+import java.util.*;
 
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 
 public class MetathesisDetectorResult extends DetectorResult {
+	
+	public static enum Type {
+		Undefined("Undefined"),
+		Metathesis("Metathesis"),
+		ProgressiveMigration("Progressive Migration"),
+		RegressiveMigration("Regressive Migration");
+		
+		private String label;
+		
+		private Type(String label) {
+			this.label = label;
+		}
+		
+		@Override
+		public String toString() {
+			return label;
+		}
+	};
 	
 	private PhoneticProfile profile1 = new PhoneticProfile();
 	
@@ -15,9 +33,19 @@ public class MetathesisDetectorResult extends DetectorResult {
 	private FeatureSet features1;
 	
 	private FeatureSet features2;
+	
+	private Map<PhoneDimension, Type> typeMap = new LinkedHashMap<>();
 
 	public MetathesisDetectorResult(PhoneMap phoneMap) {
 		super(phoneMap);
+	}
+	
+	public Type getType(PhoneDimension dim) {
+		return this.typeMap.get(dim);
+	}
+	
+	public void setType(PhoneDimension dim, Type type) {
+		this.typeMap.put(dim, type);
 	}
 	
 	public PhoneticProfile getProfile1() {

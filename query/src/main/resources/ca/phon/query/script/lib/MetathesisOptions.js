@@ -22,26 +22,49 @@
  
 exports.MetathesisOptions = function(id) {
 
-    var metathesisOptionsInfo = {
+    var typeOptionsInfo = {
+        "id": [id + ".includeMetathesis", id + ".includeProgressiveMigration", id + ".includeRegressiveMigration"],
+        "title": "Metathesis Options",
+        "desc": ["Include metathesis (i.e., X\u2026Y ↔ Y\u2026X)",
+                 "Include progressive migration (i.e., X\u2026Y ↔ ?\u2026X)",
+                 "Include regressive migration (i.e., X\u2026Y ↔ Y\u2026?)"],
+        "def": [true, true, true],
+        "numCols": 1
+    };
+    var typeOptionsParam;
+    this.includeMetathesis = typeOptionsInfo.def[0];
+    this.includeProgressiveMigration = typeOptionsInfo.def[1];
+    this.includeRegressiveMigration = typeOptionsInfo.def[2];
+    
+    var dimensionOptionsInfo = {
 		"id":[id + ".includePlace", id + ".includeManner", id + ".includeVoicing"],
 		"def":[ true, true, true ],
-		"title": "Metathesis Options",
+		"title": "Dimensions",
 		"desc":[ "Place", "Manner", "Voicing"],
 		"numCols": 3
 	};
-	this.includePlace = metathesisOptionsInfo.def[0];
-	this.includeManner = metathesisOptionsInfo.def[1];
-	this.includeVoicing = metathesisOptionsInfo.def[2];
+	var dimensionOptionsParam;
+	this.includePlace = dimensionOptionsInfo.def[0];
+	this.includeManner = dimensionOptionsInfo.def[1];
+	this.includeVoicing = dimensionOptionsInfo.def[2];
 	
 	this.param_setup = function (params) {
-	    var metathesisOptionsParam = new MultiboolScriptParam(
-            metathesisOptionsInfo.id,
-            metathesisOptionsInfo.def,
-            metathesisOptionsInfo.desc,  
-            metathesisOptionsInfo.title,
-            metathesisOptionsInfo.numCols
+	    typeOptionsParam = new MultiboolScriptParam(
+	        typeOptionsInfo.id,
+	        typeOptionsInfo.def,
+	        typeOptionsInfo.desc,
+	        typeOptionsInfo.title,
+	        typeOptionsInfo.numCols);
+	    params.add(typeOptionsParam);
+	
+	    dimensionOptionsParam = new MultiboolScriptParam(
+            dimensionOptionsInfo.id,
+            dimensionOptionsInfo.def,
+            dimensionOptionsInfo.desc,  
+            dimensionOptionsInfo.title,
+            dimensionOptionsInfo.numCols
         );
-        params.add(metathesisOptionsParam);
+        params.add(dimensionOptionsParam);
     };
 	
 };

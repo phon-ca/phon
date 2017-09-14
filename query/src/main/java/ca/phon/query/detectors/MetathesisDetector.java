@@ -4,15 +4,39 @@ import java.util.*;
 
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.query.detectors.MetathesisDetectorResult.Type;
 
+/**
+ * <div id='metathesis'><h2>Metathesis</h2>
+ * 
+ * <p>Given two positions <i>i</i>, <i>k</i> within M, we determine if metathesis exists for each dimension of <i>profile(p)</i> if any of the following cases are true:
+ * <ul>
+ * 	<li>
+ * 		<b>Metathesis</b><br/>
+ * 		<i>dim(M<sub><i>1i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>1k</i></sub>)</i> = <i>y</i> (Values from T)<br/>
+ * 		<i>dim(M<sub><i>2i</i></sub>)</i> = <i>y</i>, <i>dim(M<sub><i>2k</i></sub>)</i> = <i>x</i> (Values from A)<br/>
+ * 	</li>
+ * 	<li>
+ * 		<b>Progressive Migration</b><br/>
+ * 		<i>dim(M<sub><i>1i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>1k</i></sub>)</i> = <i>y</i> (Values from T)<br/>
+ * 		<i>dim(M<sub><i>2i</i></sub>)</i> = <i>?</i>, <i>dim(M<sub><i>2k</i></sub>)</i> = <i>x</i> (Values from A)<br/>
+ * 	</li>
+ * 	<li>
+ * 		<b>Regressive Migration</b><br/>
+ * 		<i>dim(M<sub><i>1i</i></sub>)</i> = <i>x</i>, <i>dim(M<sub><i>1k</i></sub>)</i> = <i>y</i> (Values from T)<br/>
+ * 		<i>dim(M<sub><i>2i</i></sub>)</i> = <i>y</i>, <i>dim(M<sub><i>2k</i></sub>)</i> = <i>?</i> (Values from A)<br/>
+ * 	</li>
+ * </ul>
+ * </p>
+ */
 public class MetathesisDetector extends BasicMetathesisDetector {
-
+	
 	private boolean includePlace = true;
 
 	private boolean includeManner = true;
 
 	private boolean includeVoicing = true;
-
+	
 	public MetathesisDetector() {
 	}
 	
@@ -22,7 +46,7 @@ public class MetathesisDetector extends BasicMetathesisDetector {
 		this.includeManner = includeManner;
 		this.includeVoicing = includeVoicing;
 	}
-
+	
 	public boolean isIncludePlace() {
 		return includePlace;
 	}
@@ -90,8 +114,10 @@ public class MetathesisDetector extends BasicMetathesisDetector {
 		
 		boolean hasMetathesis = false;
 		for(PhoneDimension dimension:dimensions) {
-			hasMetathesis |=
+			Type type =
 					checkHarmony(dimension, profile1, profile2, t1Profile, t2Profile, a1Profile, a2Profile);
+			potentialResult.setType(dimension, type);
+			hasMetathesis |= (type.ordinal() != Type.Undefined.ordinal());
 		}
 		
 		potentialResult.setProfile1(profile1);
@@ -100,22 +126,31 @@ public class MetathesisDetector extends BasicMetathesisDetector {
 		return hasMetathesis;
 	}
 	
-	private boolean checkHarmony(PhoneDimension dimension, 
+	private MetathesisDetectorResult.Type checkHarmony(PhoneDimension dimension, 
 			/*out*/ PhoneticProfile profile1, /*out*/ PhoneticProfile profile2,
 			PhoneticProfile t1Profile, PhoneticProfile t2Profile,
 			PhoneticProfile a1Profile, PhoneticProfile a2Profile) {
+		Type retVal = Type.Undefined;
+		
 		Integer t1Val = t1Profile.getProfile().get(dimension);
 		Integer t2Val = t2Profile.getProfile().get(dimension);
 		Integer a1Val = a1Profile.getProfile().get(dimension);
 		Integer a2Val = a2Profile.getProfile().get(dimension);
 		
-		if(t1Val != t2Val && t1Val == a2Val && t2Val == a1Val) {
+		boolean isMetathesis = (t1Val != t2Val && t1Val == a2Val && t2Val == a1Val);
+		boolean isProgressiveMigration = (t1Val != t2Val && a1Val != a2Val && a2Val == t1Val);
+		boolean isRegressiveMigraion =  (t1Val != t2Val && a1Val != a2Val && a1Val == t2Val);
+		
+		if(isMetathesis || isProgressiveMigration || isRegressiveMigraion) {
 			profile1.put(dimension, t1Profile.getProfile().get(dimension));
 			profile2.put(dimension, a1Profile.getProfile().get(dimension));
-			return true;
+			
+			if(isMetathesis) retVal = Type.Metathesis;
+			else if(isProgressiveMigration) retVal = Type.ProgressiveMigration;
+			else if(isRegressiveMigraion) retVal = Type.RegressiveMigration;
 		}
 		
-		return false;
+		return retVal;
 	}
 	
 }

@@ -57,7 +57,26 @@ exports.DetectorResultFactory = function () {
 	this.createMetathesisResult = function (recordIndex, groupIndex, detectorResult) {
     	    var retVal = this.createQueryResult(recordIndex, groupIndex, detectorResult);
 	    
+	    var profile1 = detectorResult.profile1;
+	    var profile2 = detectorResult.profile2;
 	    var metadata = retVal.metadata;
+	    
+	    var dimensions = profile1.dimensions;
+	    var itr = dimensions.iterator();
+	    var dimTxt = "";
+	    var typeTxt = "";
+        while(itr.hasNext()) {
+            var dim = itr.next();
+            var t = dim.toString().toLowerCase();
+            t = Packages.org.apache.commons.lang3.StringUtils.capitalize(t);
+            dimTxt += (dimTxt.length > 0 ? ", " : "") + t;
+            
+            typeTxt += (typeTxt.length > 0 ? ", " : "") 
+                + t + " = " + detectorResult.getType(dim);
+        }
+        metadata.put("Dimensions", dimTxt);
+	    metadata.put("Type", typeTxt);
+	    
 	    metadata.put("Features", detectorResult.profile1.toString() + " \u2194 " + detectorResult.profile2.toString());
 	    
 	    return retVal;

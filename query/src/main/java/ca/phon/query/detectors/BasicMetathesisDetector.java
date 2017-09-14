@@ -112,27 +112,44 @@ public class BasicMetathesisDetector extends Detector
 			// Get aligned pairs
 			List<IPAElement> pair1 = map.getAlignedElements(i);
 			List<IPAElement> pair2 = null;
-			if(pair1.get(0) == null || pair1.get(1) == null)
-				continue;
+//			if(pair1.get(0) == null || pair1.get(1) == null)
+//				continue;
+			
+			final IPAElement ele1 = pair1.get(0);
+			final IPAElement ele2 = pair1.get(1);
 
 			// Get feature sets for previous consonant
-			FeatureSet fsTargetL = pair1.get(0).getFeatureSet();
-			FeatureSet fsActualL = pair1.get(1).getFeatureSet();
-			if(!fsTargetL.hasFeature("Consonant") || !fsActualL.hasFeature("Consonant"))
-				continue;
+			FeatureSet fsTargetL = (ele1 != null ? pair1.get(0).getFeatureSet() : new FeatureSet());
+			FeatureSet fsActualL = (ele2 != null ? pair1.get(1).getFeatureSet() : new FeatureSet());
+			
+			boolean bothC = fsTargetL.hasFeature("Consonant") && fsActualL.hasFeature("Consonant");
+			boolean targetC = fsActualL.size() == 0 && fsTargetL.hasFeature("Consonant");
+			boolean actualC = fsTargetL.size() == 0 && fsActualL.hasFeature("Consonant");
+			if(!bothC && !targetC && !actualC) continue;
 
 			// Get feature sets for the following consonant pair
 			FeatureSet fsTargetR = null, fsActualR = null;
 			int j = i+1;
+			boolean vowelFound = false;
 			for(; j < len; ++j) {
 				pair2 = map.getAlignedElements(j);
-				if(pair2.get(0) == null || pair2.get(1) == null)
-					continue;
+//				if(pair2.get(0) == null || pair2.get(1) == null)
+//					continue;
 
-				fsTargetR = pair2.get(0).getFeatureSet();
-				fsActualR = pair2.get(1).getFeatureSet();
-				if(fsTargetR.hasFeature("Consonant") && fsActualR.hasFeature("Consonant"))
-					break;
+				fsTargetR = (pair2.get(0) != null ? pair2.get(0).getFeatureSet() : new FeatureSet());
+				fsActualR = (pair2.get(1) != null ? pair2.get(1).getFeatureSet() : new FeatureSet());
+				
+				bothC = fsTargetR.hasFeature("Consonant") && fsActualR.hasFeature("Consonant");
+				targetC = fsTargetR.hasFeature("Consonant") && fsActualR.size() == 0;
+				actualC = fsTargetR.size() == 0 && fsActualR.hasFeature("Consonant");
+				
+				if(bothC || targetC || actualC) {
+					if(vowelFound) {
+						break;
+					}
+				} else {
+					vowelFound = true;
+				}
 			}
 
 			// Didn't find a proper consonant, so just exit
@@ -151,7 +168,9 @@ public class BasicMetathesisDetector extends Detector
 			f2 = FeatureSet.minus(f2, FeatureSet.union(fsActualR, fsTargetL));
 
 			// If there are still features in both then we're in business
-			if(f1.size() > 0 && f2.getFeatures().size() > 0) {
+			if( (f1.size() > 0 && f2.getFeatures().size() > 0)
+					|| (fsActualL.size() == 0 && f1.size() > 0)
+					|| (fsActualR.size() == 0 && f2.size() > 0)) {
 				MetathesisDetectorResult r = new MetathesisDetectorResult(map);
 				r.setFirstPosition(i);
 				r.setSecondPosition(j);
