@@ -25,6 +25,8 @@ package ca.phon.orthography;
 public enum WordPrefixType {
 	// w attribute:type
 	OMISSION("0", "omission"),
+	INCOMPLETE("&+", "incomplete"),
+	FILLER("&-", "filler"),
 	FRAGMENT("&", "fragment");
 	
 	private String code;
