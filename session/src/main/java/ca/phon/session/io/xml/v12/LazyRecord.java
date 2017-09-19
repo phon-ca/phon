@@ -71,13 +71,25 @@ public class LazyRecord implements Record {
 
 	public Participant getSpeaker() {
 		if(internalRecord == null) {
-			final XMLSessionReader_v12 reader = new XMLSessionReader_v12();
-			final ParticipantType pt = (ParticipantType)recordElement.getSpeaker();
-			if(pt == null) return Participant.UNKNOWN;
-			return reader.copyParticipant(factory, pt, null);
+			return findSpeaker();
 		} else {
 			return internalRecord.getSpeaker();
 		}
+	}
+	
+	private Participant findSpeaker() {
+		if(recordElement.getSpeaker() != null) {
+			final ParticipantType pt = (ParticipantType)recordElement.getSpeaker();
+			for(int pIdx = 0; pIdx < session.getParticipantCount(); pIdx++) {
+				final Participant participant = session.getParticipant(pIdx);
+				if(participant.getName() != null  && participant.getName().equals(pt.getName())) {
+					return participant;
+				} else if(participant.getId() != null && participant.getId().equals(pt.getId())) {
+					return participant;
+				}
+			}
+		}
+		return Participant.UNKNOWN;
 	}
 
 	public void setSpeaker(Participant participant) {

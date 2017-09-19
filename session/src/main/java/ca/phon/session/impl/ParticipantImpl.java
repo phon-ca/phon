@@ -202,6 +202,7 @@ public class ParticipantImpl implements Participant {
 		return extSupport.removeExtension(cap);
 	}
 	
+	@Override
 	public String toString() {
 		return (getName() != null ? getName() : 
 				(getId() != null ? getId() : getRole().toString() ));
