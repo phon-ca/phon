@@ -244,9 +244,12 @@ public class OrthoTokenSource implements TokenSource {
 		while(cIndex < data.length && !Character.isWhitespace(data[cIndex])
 				&& data[cIndex] != '('
 				&& data[cIndex] != '*'
-				&& data[cIndex] != '+'
 				&& data[cIndex] != '~') {
-			buffer.append(data[cIndex++]);
+			char c = data[cIndex++];
+			if(c == '+' && (buffer.length() == 0 || buffer.charAt(buffer.length()-1) != '&')) {
+				break;
+			}
+			buffer.append(c);
 		}
 		
 		// check for word prefix codes

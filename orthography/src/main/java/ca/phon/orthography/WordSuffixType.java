@@ -33,6 +33,7 @@ public enum WordSuffixType {
 	BABBLING("@b", "babbling"),
 	CHILD_INVENTED("@c", "child-invented"),
 	DIALECT("@d", "dialect"),
+	ECHOLALIA("@e", "echolalia"),
 	FAMILY_SPECIFIC("@f", "family-specific"),
 	FILLED_PAUSE("@fp", "filled-pause"),
 	FILLER_SYLLABLE("@fs", "filler syllable"),
@@ -44,16 +45,14 @@ public enum WordSuffixType {
 	NO_VOICE("@nv", "no voice"),
 	ONOMATOPOEIA("@o", "onomatopoeia"),
 	PHONOLOGY_CONSISTENT("@p", "phonology consistent"),
-	PROTO_MORPHEME("@pm", "proto-morpheme"),
 	QUOTED_METAREFERENCE("@q", "quoted metareference"),
 	SIGN_SPEECH("@sas", "sign speech"),
 	SINGING("@si", "singing"),
+	SIGNED_LANGUAGE("@sl", "signed language"),
 	TEST("@t", "test"),
 	UNIBET("@u", "UNIBET"),
 	WORDS_TO_BE_EXCLUDED("@x", "words to be excluded"),
-	WORD_PLAY("@wp", "word play"),
-	// w langs
-	SECOND_LANGUAGE("@s", "second language")
+	WORD_PLAY("@wp", "word play")
 	;
 	
 	private String code;
