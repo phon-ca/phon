@@ -404,8 +404,10 @@ public class SessionEditorQuickSearch {
 				// don't change record if we are not the focused table
 				if(!isPopup() && !table.hasFocus()) return;
 				int selectedRow = table.getSelectedRow();
-				int uttIdx = table.convertRowIndexToModel(selectedRow);
 				
+				if(selectedRow < 0 || selectedRow >= table.getModel().getRowCount()) return;
+				
+				int uttIdx = table.convertRowIndexToModel(selectedRow);
 				// get correct uttIdx from filter
 				if(table.getModel() instanceof FilterTableModel) {
 					final FilterTableModel tblModel = (FilterTableModel)table.getModel();

@@ -33,8 +33,30 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 
 	private final List<OrthoElement> wordList = new ArrayList<OrthoElement>();
 	
+	private boolean includeOmitted = false;
+	
+	public OrthoWordExtractor() {
+		this(false);
+	}
+	
+	public OrthoWordExtractor(boolean includeOmitted) {
+		super();
+		this.includeOmitted = includeOmitted;
+	}
+	
+	public boolean isIncludeOmitted() {
+		return this.includeOmitted;
+	}
+	
+	public void setIncludeOmitted(boolean includeOmitted) {
+		this.includeOmitted = includeOmitted;
+	}
+	
 	@Visits
 	public void visitWord(OrthoWord word) {
+		if(word.getPrefix() != null && word.getPrefix().getType() == WordPrefixType.OMISSION)
+			return;
+		
 		wordList.add(word);
 	}
 
@@ -58,4 +80,5 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 	@Override
 	public void fallbackVisit(OrthoElement obj) {
 	}
+	
 }
