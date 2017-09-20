@@ -245,10 +245,11 @@ public class OrthoTokenSource implements TokenSource {
 				&& data[cIndex] != '('
 				&& data[cIndex] != '*'
 				&& data[cIndex] != '~') {
-			char c = data[cIndex++];
+			char c = data[cIndex];
 			if(c == '+' && (buffer.length() == 0 || buffer.charAt(buffer.length()-1) != '&')) {
 				break;
 			}
+			++cIndex;
 			buffer.append(c);
 		}
 		
