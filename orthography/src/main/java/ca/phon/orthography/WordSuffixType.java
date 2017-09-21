@@ -35,7 +35,7 @@ public enum WordSuffixType {
 	DIALECT("@d", "dialect"),
 	ECHOLALIA("@e", "echolalia"),
 	FAMILY_SPECIFIC("@f", "family-specific"),
-	FILLED_PAUSE("@fp", "filled-pause"),
+	FILLED_PAUSE("@fp", "filled pause"),
 	FILLER_SYLLABLE("@fs", "filler syllable"),
 	GENERIC("@g", "generic"),
 	INTERJECTION("@i", "interjection"),

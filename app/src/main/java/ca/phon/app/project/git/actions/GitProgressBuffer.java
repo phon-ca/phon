@@ -20,12 +20,13 @@ package ca.phon.app.project.git.actions;
 
 import java.awt.BorderLayout;
 import java.io.PrintWriter;
+import java.util.Stack;
 
 import javax.swing.*;
 
 import org.eclipse.jgit.lib.ProgressMonitor;
 
-import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
@@ -45,6 +46,8 @@ public class GitProgressBuffer extends BufferPanel implements ProgressMonitor {
 	private PrintWriter errPrinter;
 	
 	private volatile boolean canceled = false;
+	
+	private Stack<String> taskStack = new Stack<>();
 	
 	public GitProgressBuffer(String title) {
 		super(title);
@@ -92,16 +95,43 @@ public class GitProgressBuffer extends BufferPanel implements ProgressMonitor {
 
 	@Override
 	public void beginTask(String title, int totalWork) {
-		printer.println(title);
+		if(!taskStack.isEmpty()) {
+			printer.println();
+			printer.flush();
+		}
+		
+		System.out.println(title + " " + totalWork);
+		printer.print(LogBuffer.ESCAPE_CODE_PREFIX);
+		printer.print(BufferPanel.SHOW_BUSY);
 		printer.flush();
+		
+		printer.print(title);
+		printer.flush();
+		
+		taskStack.push(title);
 	}
 
 	@Override
 	public void update(int completed) {
+		System.out.println("Completed " + completed);
+		if(completed == 1) {
+			printer.print(".");
+		} else {
+			printer.println(completed);
+		}
+		printer.flush();
 	}
 
 	@Override
 	public void endTask() {
+		taskStack.pop();
+		
+		printer.println();
+		printer.flush();
+		
+		printer.print(LogBuffer.ESCAPE_CODE_PREFIX);
+		printer.print(BufferPanel.STOP_BUSY);
+		printer.flush();
 	}
 
 	@Override
