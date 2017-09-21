@@ -130,7 +130,7 @@ public enum CommentEnum {
 		
 		for(CommentEnum ce:values()) {
 			
-			if(str.equalsIgnoreCase(names[ce.ordinal()])) {
+			if(str.equalsIgnoreCase(ce.toString()) || str.equalsIgnoreCase(names[ce.ordinal()])) {
 				retVal = ce;
 				break;
 			}	
