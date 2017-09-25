@@ -298,7 +298,7 @@ exports.PatternFilter = function (id) {
 		matchGroupParamInfo.desc,
 		matchGroupParamInfo.title,
 		matchGroupParamInfo.numCols);
-		matchGroupParam.setEnabled(0, false);
+		matchGroupParam.setEnabled(0, this.filterType.index < exports.PatternType.PHONEX);
 		matchGroupParam.setVisible(2, filterTypeParamInfo.def == exports.PatternType.PHONEX);
 
 		filterParam = new StringScriptParam(
