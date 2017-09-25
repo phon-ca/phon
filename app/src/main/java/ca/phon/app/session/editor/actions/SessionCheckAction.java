@@ -92,6 +92,7 @@ public class SessionCheckAction extends SessionEditorAction {
 		
 		final String[] row = new String[cols.length];
 		final SessionValidator validator = new SessionValidator();
+		validator.putExtension(SessionEditor.class, getEditor());
 		validator.addValidationListener( (e) -> {
 			Arrays.setAll(row, (i) -> { return new String(); } );
 			
@@ -132,7 +133,7 @@ public class SessionCheckAction extends SessionEditorAction {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				} finally {
 					try {
-						csvWriter.close();
+						csvWriter.close(); 
 						out.close();
 					} catch (IOException e) {
 						LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);

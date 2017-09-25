@@ -251,6 +251,17 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 				}
 			}
 		}
+		
+		// check if segment exceeds media length
+		final SpeechAnalysisEditorView speechAnalysisView = 
+				(SpeechAnalysisEditorView)getEditor().getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
+		if(speechAnalysisView != null && speechAnalysisView.getWavDisplay().getSampled() != null) {
+			float mediaEndMS = speechAnalysisView.getWavDisplay().getSampled().getLength() * 1000.0f;
+			if(validated.getEndValue() > mediaEndMS) {
+				getGroupFieldBorder().setShowWarningIcon(true);
+				segmentField.setToolTipText("Segment time exceeds media length");
+			}
+		}
 
 		return retVal;
 	}

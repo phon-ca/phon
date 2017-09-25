@@ -132,7 +132,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	private JComponent currentView;
 
-	private WeakReference<Object> userObjectRef;
+	private WeakReference<Object> userObjectRef = new WeakReference<Object>(null);
 
 	public BufferPanel(String name) {
 		super();
