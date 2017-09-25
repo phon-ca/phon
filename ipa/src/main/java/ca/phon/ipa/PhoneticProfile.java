@@ -91,6 +91,18 @@ public class PhoneticProfile {
 		profile.put(dimension, value);
 	}
 	
+	public Integer get(PhoneDimension dimension) {
+		return profile.get(dimension);
+	}
+	
+	public String getCategory(PhoneDimension dimension) {
+		Integer val = get(dimension);
+		if(val != null && val >= 0 && val < dimension.getCategories().length) {
+			return dimension.getCategories()[val];
+		}
+		return "\u2205";
+	}
+	
 	public Map<PhoneDimension, Integer> getProfile() {
 		return Collections.unmodifiableMap(profile);
 	}

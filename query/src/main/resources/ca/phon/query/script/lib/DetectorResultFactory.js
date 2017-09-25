@@ -77,7 +77,17 @@ exports.DetectorResultFactory = function () {
         metadata.put("Dimensions", dimTxt);
 	    metadata.put("Type", typeTxt);
 	    
-	    metadata.put("Features", detectorResult.profile1.toString() + " \u2194 " + detectorResult.profile2.toString());
+	    var featureTxt = "";
+	    itr = dimensions.iterator();
+	    while(itr.hasNext()) {
+			var dim = itr.next();	    		
+	   		var t = dim.toString().toLowerCase();
+            t = Packages.org.apache.commons.lang3.StringUtils.capitalize(t);
+	    	
+	    	featureTxt += (featureTxt.length > 0 ? ", " : "")
+	    		+ t + " = " + detectorResult.profile1.getCategory(dim) + " \u2194 " + detectorResult.profile2.getCategory(dim);
+	    }
+	    metadata.put("Features", featureTxt);
 	    
 	    return retVal;
 	};
