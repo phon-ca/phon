@@ -74,7 +74,7 @@ public class PhonProperties {
 	/**
 	 * UI Theme
 	 */
-	public final static String UI_THEME = "ca.phon.app.ui.theme";
+	public final static String UI_THEME = "ca.phon.app.theme";
 	
 	/**
 	 * Enable fullscreen on mac
