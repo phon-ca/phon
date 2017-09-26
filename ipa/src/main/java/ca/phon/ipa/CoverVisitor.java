@@ -29,10 +29,12 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	
 	private boolean includeSyllableBoundaries = true;
 	
+	private boolean insertImplicitSyllableBoundaries = false;
+	
 	private boolean includeLength = true;
 
 	public CoverVisitor(String symbolMap) {
-		this(symbolMap, true, true, true);
+		this(symbolMap, true, true, false, true);
 	}
 	
 	/**
@@ -47,20 +49,23 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	 * @param includeSyllableBoundaries
 	 * @param includeLength
 	 */
-	public CoverVisitor(String symbolMap, boolean includeStress, boolean includeSyllableBoundaries, boolean includeLength) {
+	public CoverVisitor(String symbolMap, boolean includeStress, boolean includeSyllableBoundaries,
+			boolean insertImplicitSyllableBoundaries, boolean includeLength) {
 		super();
 		
-		this.symbolMap = parseSymbolMap(symbolMap);
-		this.matchers = new ArrayList<>(this.symbolMap.keySet());
 		this.includeStress = includeStress;
 		this.includeSyllableBoundaries = includeSyllableBoundaries;
+		this.insertImplicitSyllableBoundaries = insertImplicitSyllableBoundaries;
 		this.includeLength = includeLength;
+
+		this.symbolMap = parseSymbolMap(symbolMap);
+		this.matchers = new ArrayList<>(this.symbolMap.keySet());
 	}
 
 	private Map<PhoneMatcher, Character> parseSymbolMap(String symbolMap) {
 		final Map<PhoneMatcher, Character> retVal = new LinkedHashMap<>();
 		
-		final String regex = "(([A-Z]|stress|syllableBoundaries|length))\\s?=\\s?([^;]+)";
+		final String regex = "(([A-Z]|stress|syllableBoundaries|implicitBoundaries|length))\\s?=\\s?([^;]+)";
 		final Pattern pattern = Pattern.compile(regex);
 		final Matcher matcher = pattern.matcher(symbolMap);
 		
@@ -94,6 +99,9 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 				} else if(g1.matches("syllableBoundaries")) {
 					Boolean includeSyllableBoundaries = Boolean.parseBoolean(g2);
 					setIncludeSyllableBoundaries(includeSyllableBoundaries);
+				} else if(g1.matches("implicitBoundaries")) {
+					Boolean insertImplicitBoundaries = Boolean.parseBoolean(g2);
+					setInsertImplicitSyllableBoundaries(insertImplicitBoundaries);
 				} else if(g1.matches("length")) {
 					Boolean includeLength = Boolean.parseBoolean(g2);
 					setIncludeLength(includeLength);
@@ -157,6 +165,14 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 
 	public void setIncludeSyllableBoundaries(boolean includeSyllableBoundaries) {
 		this.includeSyllableBoundaries = includeSyllableBoundaries;
+	}
+	
+	public boolean isInsertImplicitSyllableBoundaries() {
+		return insertImplicitSyllableBoundaries;
+	}
+
+	public void setInsertImplicitSyllableBoundaries(boolean insertImplicitSyllableBoundaries) {
+		this.insertImplicitSyllableBoundaries = insertImplicitSyllableBoundaries;
 	}
 
 	public boolean isIncludeLength() {
@@ -240,7 +256,20 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	}
 	
 	public IPATranscript getIPATranscript() {
-		return builder.toIPATranscript();
+		IPATranscript retVal = builder.toIPATranscript();
+		if(insertImplicitSyllableBoundaries) {
+			final IPATranscriptBuilder buffer = new IPATranscriptBuilder();
+			List<IPATranscript> sylls = retVal.syllables();
+			for(int syllIdx = 0; syllIdx < sylls.size(); syllIdx++) {
+				final IPATranscript syll = sylls.get(syllIdx);
+				if(syllIdx > 0 && !syll.matches("^\\s.+")) {
+					buffer.appendSyllableBoundary();
+				}
+				buffer.append(syll);
+			}
+			retVal = buffer.toIPATranscript();
+		}
+		return retVal;
 	}
 
 }
