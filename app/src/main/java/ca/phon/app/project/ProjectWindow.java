@@ -78,7 +78,7 @@ public class ProjectWindow extends CommonModuleFrame
 	private JTextField sessionNameField;
 	private JList<String> sessionList;
 	private SessionListModel sessionModel;
-	private SessionDetailsPane sessionDetails;
+	private SessionDetails sessionDetails;
 
 	private JCheckBox blindModeBox;
 
@@ -277,6 +277,8 @@ public class ProjectWindow extends CommonModuleFrame
 				sessionModel.setCorpus(corpus);
 				sessionList.clearSelection();
 				corpusDetails.setCorpus(corpus);
+				sessionDetails.setCorpus(corpus);
+				sessionDetails.setSession(null);
 
 				if(getProject().getCorpusSessions(corpus).size() == 0) {
 					onShowCreateSessionButton();
@@ -420,13 +422,9 @@ public class ProjectWindow extends CommonModuleFrame
 			event.startDrag(DragSource.DefaultCopyDrop, transferable);
 		});
 
-		sessionDetails = new SessionDetailsPane(getProject());
-		sessionDetails.setLineWrap(true);
-		sessionDetails.setRows(6);
-		sessionDetails.setWrapStyleWord(true);
+		sessionDetails = new SessionDetails(getProject());
 		sessionDetails.setBackground(Color.white);
 		sessionDetails.setOpaque(true);
-		JScrollPane sessionDetailsScroller = new JScrollPane(sessionDetails);
 
 		JScrollPane corpusScroller = new JScrollPane(corpusList);
 		JScrollPane sessionScroller = new JScrollPane(sessionList);
@@ -474,7 +472,7 @@ public class ProjectWindow extends CommonModuleFrame
 		
 		final JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
 		bottomPanel.add(corpusDetails);
-		bottomPanel.add(sessionDetailsScroller);
+		bottomPanel.add(sessionDetails);
 		
 		final JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(listPanel, BorderLayout.CENTER);
@@ -972,20 +970,58 @@ public class ProjectWindow extends CommonModuleFrame
 			JLabel comp = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected,
 					cellHasFocus);
 			
-			if(isSelected) {
-				final String corpus = comp.getText();
-				final String corpusPath = getProject().getCorpusPath(corpus);
-				comp.setIcon(
-						IconManager.getInstance().getSystemIconForPath(corpusPath, IconSize.SMALL));
-			} else {
-				comp.setIcon(
-						IconManager.getInstance().getIcon("blank", IconSize.SMALL));
-			}
+			final String corpus = comp.getText();
+			final String corpusPath = getProject().getCorpusPath(corpus);
+			comp.setIcon(
+					IconManager.getInstance().getSystemIconForPath(corpusPath, IconSize.SMALL));
+//			if(isSelected) {
+//			} else {
+//				comp.setIcon(
+//						IconManager.getInstance().getIcon("blank", IconSize.SMALL));
+//			}
 			
 			return comp;
 		}
 
 	}
+	
+	private class SessionListCellRenderer extends DefaultListCellRenderer {
+			
+			private static final long serialVersionUID = 576253657524546120L;
+
+			@Override
+			public Component getListCellRendererComponent(
+					JList list, Object value, int index, 
+					boolean isSelected, boolean cellHasFocus) {
+				JLabel comp = (JLabel)
+					super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				
+				final String corpus = getCorpusList().getSelectedValue();
+				final String session = comp.getText();
+				
+				comp.setIcon(IconManager.getInstance().getSystemIconForPath(getProject().getSessionPath(corpus, session), IconSize.SMALL));
+//				if(isSelected) {
+////					ImageIcon icon = 
+////						IconManager.getInstance().getIcon("animations/process-working", IconSize.SMALL);
+////						icon.setImageObserver(list);
+//					comp.setIcon(
+//							IconManager.getInstance().getIcon("mimetypes/text-xml", IconSize.SMALL));
+////							icon );
+//				} else {
+//					comp.setIcon(
+//							IconManager.getInstance().getIcon("blank", IconSize.SMALL));
+//				}
+				
+				// see if the transcript it locked...
+				SessionListModel model = (SessionListModel)list.getModel();
+				if(model.getProject().isSessionLocked(model.getCorpus(), value.toString())) {
+					comp.setIcon(
+							IconManager.getInstance().getIcon("emblems/emblem-readonly", IconSize.SMALL));
+				}
+			
+				return comp;
+			}
+		}
 
 	public class NameDocument extends PlainDocument {
 		/**

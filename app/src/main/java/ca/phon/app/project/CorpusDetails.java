@@ -47,11 +47,7 @@ public class CorpusDetails extends JPanel {
 	}
 	
 	private void init() {
-		setLayout(new VerticalLayout());
-		
-		
-		final JPanel folderPanel = new JPanel(new GridBagLayout());
-		folderPanel.setOpaque(false);
+		setLayout(new BorderLayout());
 		
 		locationLabel = new JLabel();
 		locationLabel.setForeground(Color.BLUE);
@@ -76,6 +72,8 @@ public class CorpusDetails extends JPanel {
 		
 		numSessionsLabel = new JLabel();
 		
+		final JPanel folderPanel = new JPanel(new GridBagLayout());
+		folderPanel.setOpaque(false);
 		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -88,15 +86,18 @@ public class CorpusDetails extends JPanel {
 		folderPanel.add(new JLabel("Folder:"), gbc);
 		++gbc.gridx;
 		gbc.weightx = 1.0;
+		gbc.insets = new Insets(0, 5, 0, 0);
 		folderPanel.add(locationLabel, gbc);
 		
 		++gbc.gridy;
 		gbc.gridx = 0;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.weightx = 0.0;
+		gbc.insets.left = 0;
 		folderPanel.add(new JLabel("Sessions:"), gbc);
 		++gbc.gridx;
 		gbc.weightx = 1.0;
+		gbc.insets.left = 5;
 		folderPanel.add(numSessionsLabel, gbc);
 		
 		folderPanel.setBorder(BorderFactory.createTitledBorder("Details"));
@@ -124,8 +125,8 @@ public class CorpusDetails extends JPanel {
 		final JScrollPane textScroller = new JScrollPane(corpusDescriptionArea);
 		textScroller.setBorder(BorderFactory.createTitledBorder("Description"));
 		
-		add(folderPanel);
-		add(textScroller);
+		add(folderPanel, BorderLayout.NORTH);
+		add(textScroller, BorderLayout.CENTER);
 	}
 	
 	public String getCorpus() {
