@@ -36,13 +36,20 @@ public class ParticipantSelector extends TristateCheckBoxTree {
 
 	private final static Logger LOGGER = Logger.getLogger(ParticipantSelector.class.getName());
 	
+	
 	public static TristateCheckBoxTreeModel createModel(Collection<Participant> participants) {
+		return createModel(participants, true);
+	}
+	
+	public static TristateCheckBoxTreeModel createModel(Collection<Participant> participants, boolean enableCheckboxes) {
 		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode("Participants");
 		root.setEnablePartialCheck(false);
 		
 		for(Participant participant:participants) {
-			final TristateCheckBoxTreeNode node = new TristateCheckBoxTreeNode(participant);
-			node.setEnablePartialCheck(false);
+			
+			final DefaultMutableTreeNode node = (enableCheckboxes ? new TristateCheckBoxTreeNode(participant) : new DefaultMutableTreeNode(participant));
+			if(enableCheckboxes)
+				((TristateCheckBoxTreeNode)node).setEnablePartialCheck(false);
 			root.add(node);
 			
 			final ParticipantHistory history = participant.getExtension(ParticipantHistory.class);

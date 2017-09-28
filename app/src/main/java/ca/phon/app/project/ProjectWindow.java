@@ -70,7 +70,7 @@ public class ProjectWindow extends CommonModuleFrame
 	private JTextField corpusNameField;
 	private JList<String> corpusList;
 	private CorpusListModel corpusModel;
-	private CorpusDetailsPane corpusDetails;
+	private CorpusDetails corpusDetails;
 
 	/** The session list */
 	private TitledPanel sessionPanel;
@@ -323,13 +323,9 @@ public class ProjectWindow extends CommonModuleFrame
 		corpusList.setDragEnabled(true);
 		corpusList.setTransferHandler(transferHandler);
 
-		corpusDetails = new CorpusDetailsPane(getProject());
-		corpusDetails.setWrapStyleWord(true);
-		corpusDetails.setRows(6);
-		corpusDetails.setLineWrap(true);
+		corpusDetails = new CorpusDetails(getProject(), null);
 		corpusDetails.setBackground(Color.white);
 		corpusDetails.setOpaque(true);
-		JScrollPane corpusDetailsScroller = new JScrollPane(corpusDetails);
 
 		sessionList = new JList<String>();
 		createSessionButton = createSessionButton();
@@ -447,7 +443,6 @@ public class ProjectWindow extends CommonModuleFrame
 		corpusPanel = new TitledPanel("Corpus");
 		corpusPanel.getContentContainer().add(createCorpusButton, BorderLayout.NORTH);
 		corpusPanel.getContentContainer().add(corpusScroller, BorderLayout.CENTER);
-		corpusPanel.getContentContainer().add(corpusDetailsScroller, BorderLayout.SOUTH);
 		corpusPanel.setRightDecoration(showCreateCorpusBtn);
 
 		final PhonUIAction showCreateSessionAct = new PhonUIAction(this, "onShowCreateSessionButton");
@@ -472,17 +467,18 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
-		sessionPanel.getContentContainer().add(sessionDetailsScroller, BorderLayout.SOUTH);
 
-		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setLeftComponent(corpusPanel);
-		splitPane.setRightComponent(sessionPanel);
-		splitPane.setResizeWeight(0.5);
-
-		// invoke later
-		SwingUtilities.invokeLater( () -> {
-			splitPane.setDividerLocation(0.5);
-		});
+		final JPanel listPanel = new JPanel(new GridLayout(1, 2));
+		listPanel.add(corpusPanel);
+		listPanel.add(sessionPanel);
+		
+		final JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
+		bottomPanel.add(corpusDetails);
+		bottomPanel.add(sessionDetailsScroller);
+		
+		final JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(listPanel, BorderLayout.CENTER);
+		centerPanel.add(bottomPanel, BorderLayout.SOUTH);
 
 		statusBar = new JXStatusBar();
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
@@ -499,7 +495,7 @@ public class ProjectWindow extends CommonModuleFrame
 				StringUtils.abbreviate(projectLoadPath, 80));
 
 		add(header, BorderLayout.NORTH);
-		add(splitPane, BorderLayout.CENTER);
+		add(centerPanel, BorderLayout.CENTER);
 		add(statusBar, BorderLayout.SOUTH);
 
 		// if no corpora are currently available, 'prompt' the user to create a new one
@@ -965,6 +961,30 @@ public class ProjectWindow extends CommonModuleFrame
 			impl.refresh();
 			updateLists();
 		}
+	}
+	
+	private class CorpusListCellRenderer extends DefaultListCellRenderer {
+		
+		@Override
+		public Component getListCellRendererComponent(
+				JList list, Object value, int index, 
+				boolean isSelected, boolean cellHasFocus) {
+			JLabel comp = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+			
+			if(isSelected) {
+				final String corpus = comp.getText();
+				final String corpusPath = getProject().getCorpusPath(corpus);
+				comp.setIcon(
+						IconManager.getInstance().getSystemIconForPath(corpusPath, IconSize.SMALL));
+			} else {
+				comp.setIcon(
+						IconManager.getInstance().getIcon("blank", IconSize.SMALL));
+			}
+			
+			return comp;
+		}
+
 	}
 
 	public class NameDocument extends PlainDocument {
