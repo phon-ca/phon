@@ -254,8 +254,8 @@ public class IconManager {
 		final BufferedImage bufferedImage = new BufferedImage(1, 1,
 				BufferedImage.TYPE_4BYTE_ABGR);
 		final Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
-		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT);
-		
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		g.setFont(font);
 		final FontMetrics fm = g.getFontMetrics(font);
 		final Rectangle2D charRect = fm.getStringBounds(c.toString(), g);
@@ -266,6 +266,7 @@ public class IconManager {
 		// get baseline of character
 		g2.setColor(foreground);
 		g2.drawString(c.toString(), 0, (int)(charRect.getHeight() - fm.getDescent()));
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		
 		return new ImageIcon(img);
 	}
