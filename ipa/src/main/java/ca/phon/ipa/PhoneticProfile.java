@@ -103,6 +103,14 @@ public class PhoneticProfile {
 		return "\u2205";
 	}
 	
+	public String getCategoryLabel(PhoneDimension dimension) {
+		Integer val = get(dimension);
+		if(val != null && val >= 0 && val < dimension.getCategoryLabels().length) {
+			return dimension.getCategoryLabels()[val];
+		}
+		return "\u2205";
+	}
+	
 	public Map<PhoneDimension, Integer> getProfile() {
 		return Collections.unmodifiableMap(profile);
 	}

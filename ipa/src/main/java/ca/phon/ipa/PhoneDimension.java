@@ -84,6 +84,10 @@ public enum PhoneDimension {
 		return this.categories;
 	}
 	
+	public String[] getCategoryLabels() {
+		return this.labels;
+	}
+	
 	public int getCategoryIndex(IPAElement ele) {
 		int retVal = -1;
 		

@@ -334,7 +334,19 @@ exports.SegmentalRelationsOptions = function(id) {
 		metadata.put("Type", relation.relation.toString());
 		metadata.put("Direction", relation.direction.toString());
 		metadata.put("Locality", relation.locality.toString());
-		metadata.put("Dimensions", relation.dimensions.toString());
+		
+		var dimTxt = "";
+		var featureTxt = "";
+		var dimItr = relation.dimensions.iterator();
+		while(dimItr.hasNext()) {
+			var dim = dimItr.next();
+			dimTxt += (dimTxt.length > 0 ? ", " : "") + dim;
+			
+			featureTxt += (featureTxt.length > 0 ? ", " : "")
+	    		+ dim + " = " + relation.profile1.getCategoryLabel(dim) + " \u2194 " + relation.profile2.getCategoryLabel(dim);
+		}
+		metadata.put("Dimensions", dimTxt);
+		metadata.put("Features", featureTxt);
 		
 		return retVal;
 	};
