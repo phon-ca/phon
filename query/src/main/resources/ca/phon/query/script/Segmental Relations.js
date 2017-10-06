@@ -203,8 +203,14 @@ function query_record(recordIndex, record) {
         	for(k = 0; k < relations.size(); k++) {
         		var relation = relations.get(k);
         		if(filters.segmentalRelationsOptions.filterRelation(relation)) {
-	        		var queryResult = filters.segmentalRelationsOptions.createQueryResult(recordIndex, i, relation);
-	        		results.addResult(queryResult);
+	        		var result = filters.segmentalRelationsOptions.createQueryResult(recordIndex, i, relation);
+	        		
+	        		for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+	    				result.addResultValue(alignedResults[alignedResultIdx]);
+	    			}
+	    			result.metadata.putAll(alignedMetadata);
+	        		
+	        		results.addResult(result);
         		}
         	}
 		}
