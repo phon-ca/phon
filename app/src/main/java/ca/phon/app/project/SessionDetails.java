@@ -1,18 +1,25 @@
 package ca.phon.app.project;
 
+import java.util.*;
+import java.util.List;
+
 import java.awt.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 
 import org.codehaus.groovy.transform.LazyASTTransformation;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.project.Project;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.project.*;
+import ca.phon.session.*;
 import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 
 public class SessionDetails extends JPanel {
 
@@ -25,6 +32,11 @@ public class SessionDetails extends JPanel {
 	private JLabel fileLabel;
 	private JLabel modifiedLabel;
 	private JLabel recordsLabel;
+	
+	private JXTable speakerTable;
+	private SpeakerTableModel speakerTableModel;
+	
+	private UpdateTask currentUpdateTask;
 	
 	public SessionDetails(Project project) {
 		super();
@@ -84,7 +96,14 @@ public class SessionDetails extends JPanel {
 		
 		detailsPanel.setBorder(BorderFactory.createTitledBorder("Details"));
 		
+		speakerTableModel = new SpeakerTableModel();
+		speakerTable = new JXTable(speakerTableModel);
+		speakerTable.setVisibleRowCount(4);
+		final JScrollPane speakerScroller = new JScrollPane(speakerTable);
+		speakerScroller.setBorder(BorderFactory.createTitledBorder("Participants"));
+		
 		add(detailsPanel, BorderLayout.NORTH);
+		add(speakerScroller, BorderLayout.CENTER);
 	}
 	
 	public String getCorpus() {
@@ -119,16 +138,15 @@ public class SessionDetails extends JPanel {
 			fileLabel.setIcon(IconManager.getInstance().getSystemIconForPath(sessionPath, IconSize.SMALL));
 			fileLabel.setToolTipText(sessionPath);
 			
-			try {
-				int numRecords = project.numberOfRecordsInSession(corpus, session);
-				recordsLabel.setText("" + numRecords);
-			} catch (IOException e) {
-				LogUtil.warning(e);
-			}
-			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@h:mma");
 			final LocalDateTime time = project.getSessionModificationTime(corpus, session);
 			modifiedLabel.setText(formatter.format(time));
+			
+			final UpdateTask updateTask = new UpdateTask(corpus, session);
+			if(currentUpdateTask != null)
+				currentUpdateTask.shutdown();
+			currentUpdateTask = updateTask;
+			PhonWorker.getInstance().invokeLater(updateTask);
 		} else {
 			fileLabel.setText("");
 			fileLabel.setToolTipText("");
@@ -136,7 +154,113 @@ public class SessionDetails extends JPanel {
 			
 			modifiedLabel.setText("");
 			recordsLabel.setText("");
+			
+			speakerTableModel.clear();
 		}
+	}
+	
+	private class UpdateTask extends PhonTask {
+
+		private final String corpus;
+		
+		private final String session;
+		
+		public UpdateTask(String corpus, String session) {
+			super();
+			this.corpus = corpus;
+			this.session = session;
+		}
+		
+		@Override
+		public void performTask() {
+			super.setStatus(TaskStatus.RUNNING);
+			
+			SwingUtilities.invokeLater( () -> speakerTableModel.clear() );
+			
+			try {
+				final int numRecords = project.numberOfRecordsInSession(corpus, session);
+				if(!isShutdown())
+					SwingUtilities.invokeLater( () -> recordsLabel.setText("" + numRecords) );
+				else {
+					super.setStatus(TaskStatus.TERMINATED);
+					return;
+				}
+			} catch (IOException e) {
+				super.err = e;
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			}
+			
+			final SessionPath sp = new SessionPath(corpus, session);
+			final List<SessionPath> spList = Collections.singletonList(sp);
+			final Set<Participant> speakerList = project.getParticipants(spList);
+			if(!isShutdown())
+				SwingUtilities.invokeLater( () -> speakerTableModel.setParticipants(speakerList) );
+			else {
+				super.setStatus(TaskStatus.TERMINATED);
+				return;
+			}
+			
+			super.setStatus(TaskStatus.FINISHED);
+		}
+		
+	}
+	
+	private class SpeakerTableModel extends AbstractTableModel {
+		
+		List<Participant> participants = new ArrayList<>();
+		
+		public void clear() {
+			this.participants.clear();
+			super.fireTableDataChanged();
+		}
+		
+		public void setParticipants(Collection<Participant> participants) {
+			this.participants.clear();
+			this.participants.addAll(participants);
+			
+			super.fireTableDataChanged();
+		}
+		
+		@Override
+		public String getColumnName(int col) {
+			if(col == 0) 
+				return "Participant";
+			else if(col == 1)
+				return "Role";
+			else if(col == 2)
+				return "Age";
+			else
+				return super.getColumnName(col);
+		}
+		
+		@Override
+		public int getRowCount() {
+			return participants.size();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return 3;
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			final Participant p = this.participants.get(rowIndex);
+			
+			if(columnIndex == 0) {
+				return p.toString();
+			} else if(columnIndex == 1) {
+				return p.getRole().getTitle();
+			} else if(columnIndex == 2) {
+				final ParticipantHistory history = p.getExtension(ParticipantHistory.class);
+				if(history != null) {
+					return 
+							FormatterUtil.format(history.getAgeForSession(new SessionPath(corpus, session)));
+				} else return "";
+			} else return "";
+		}
+		
 	}
 	
 }

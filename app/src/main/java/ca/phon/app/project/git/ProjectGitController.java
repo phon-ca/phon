@@ -123,6 +123,10 @@ public class ProjectGitController {
 		return git;
 	}
 	
+	public boolean isOpen() {
+		return git != null;
+	}
+	
 	/**
 	 * Get status of repository.
 	 * 
@@ -134,6 +138,20 @@ public class ProjectGitController {
 		if(git == null)
 			throw new NoWorkTreeException();
 		return git.status().call();
+	}
+	
+	public Status status(String path) throws NoWorkTreeException, GitAPIException {
+		if(git == null)
+			throw new NoWorkTreeException();
+		return git.status().addPath(path).call();
+	}
+	
+	public Status statis(String ... paths) throws NoWorkTreeException, GitAPIException {
+		if(git == null)
+			throw new NoWorkTreeException();
+		StatusCommand status = git.status();
+		for(String path:paths) status.addPath(path);
+		return status.call();
 	}
 	
 	public void printStatus(Writer writer) throws IOException, GitAPIException {

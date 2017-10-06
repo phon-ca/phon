@@ -22,7 +22,10 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.net.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.List;
 import java.util.logging.*;
@@ -32,10 +35,14 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jgit.api.Status;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import ca.hedlund.desktopicons.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.actions.*;
 import ca.phon.app.project.git.ProjectGitController;
 import ca.phon.app.project.git.actions.*;
@@ -49,6 +56,7 @@ import ca.phon.ui.decorations.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 
@@ -80,6 +88,10 @@ public class ProjectWindow extends CommonModuleFrame
 	private SessionListModel sessionModel;
 	private SessionDetails sessionDetails;
 
+	public static final String BLIND_MODE_PROPERTY = ProjectWindow.class.getName() + ".blindMode";
+	public static final boolean DEFAULT_BLIND_MODE = false;
+	public boolean blindMode =
+			PrefHelper.getBoolean(BLIND_MODE_PROPERTY, DEFAULT_BLIND_MODE);
 	private JCheckBox blindModeBox;
 
 //	/** Label for messages */
@@ -93,6 +105,8 @@ public class ProjectWindow extends CommonModuleFrame
 	private String projectLoadPath = new String();
 
 	private final ProjectListener myProjectListener;
+	
+	private ProjectGitController gitController;
 
 	/** Constructor */
 	public ProjectWindow(Project project, String projectPath) {
@@ -101,6 +115,14 @@ public class ProjectWindow extends CommonModuleFrame
 		setWindowName("Project Manager");
 
 		putExtension(Project.class, project);
+		gitController = new ProjectGitController(project);
+		if(gitController.hasGitFolder()) { 
+			try {
+				gitController.open();
+			} catch (IOException e) {
+				LogUtil.warning(e);
+			}
+		}
 
 		myProjectListener = new ProjectWindowProjectListener(project);
 
@@ -157,7 +179,12 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 
 	public boolean isBlindMode() {
-		return blindModeBox.isSelected();
+		return this.blindMode;
+	}
+	
+	public void setBlindMode(boolean blindMode) {
+		this.blindMode = blindMode;
+		PrefHelper.getUserPreferences().putBoolean(BLIND_MODE_PROPERTY, blindMode);
 	}
 
 	/**
@@ -341,6 +368,10 @@ public class ProjectWindow extends CommonModuleFrame
 				String corpus = getSelectedCorpus();
 				String session = getSelectedSessionName();
 
+				// clear details if more than one session is selected
+				if(sessionList.getSelectedIndices().length > 1)
+					session = null;
+				
 				sessionDetails.setSession(corpus, session);
 			}
 		});
@@ -455,7 +486,8 @@ public class ProjectWindow extends CommonModuleFrame
 		blindModeBox = new JCheckBox("Blind mode");
 		blindModeBox.setOpaque(false);
 		blindModeBox.setMargin(new Insets(0, 0, 0, 0));
-		blindModeBox.setSelected(false);
+		blindModeBox.setSelected(this.blindMode);
+		blindModeBox.addActionListener( (e) -> setBlindMode(blindModeBox.isSelected()) );
 
 		final JPanel sessionDecoration = new JPanel(new HorizontalLayout());
 		sessionDecoration.setOpaque(false);
@@ -490,8 +522,25 @@ public class ProjectWindow extends CommonModuleFrame
 		projectName = getProject().getName();
 
 		DialogHeader header = new DialogHeader(projectName,
-				StringUtils.abbreviate(projectLoadPath, 80));
-
+				"<html><u>" + StringUtils.abbreviate(projectLoadPath, 80) + "</u></html>");
+		header.getBottomLabel().setToolTipText(projectLoadPath);
+		header.getBottomLabel().setForeground(Color.blue);
+		header.getBottomLabel().addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				try {
+					final URL projectURL = new File(projectLoadPath).toURI().toURL();
+					OpenFileLauncher.openURL(projectURL);
+				} catch (MalformedURLException e) {
+					LogUtil.warning(e);
+				}
+			}
+			
+		});
+		header.getBottomLabel().setIcon(IconManager.getInstance().getSystemIconForPath(projectLoadPath, IconSize.MEDIUM));
+		header.getBottomLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
 		add(header, BorderLayout.NORTH);
 		add(centerPanel, BorderLayout.CENTER);
 		add(statusBar, BorderLayout.SOUTH);
@@ -972,13 +1021,25 @@ public class ProjectWindow extends CommonModuleFrame
 			
 			final String corpus = comp.getText();
 			final String corpusPath = getProject().getCorpusPath(corpus);
-			comp.setIcon(
-					IconManager.getInstance().getSystemIconForPath(corpusPath, IconSize.SMALL));
-//			if(isSelected) {
-//			} else {
-//				comp.setIcon(
-//						IconManager.getInstance().getIcon("blank", IconSize.SMALL));
-//			}
+			
+			ImageIcon icon = IconManager.getInstance().getSystemIconForPath(corpusPath, IconSize.SMALL);
+			
+			if(gitController.hasGitFolder() && gitController.isOpen()) {
+				try {
+					final Status status = gitController.status(corpus);
+					
+					if(status.hasUncommittedChanges() || status.getUntracked().size() > 0) {
+						ImageIcon modifiedIcn = 
+								IconManager.getInstance().createGlyphIcon('*', 
+										FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
+						icon = 
+								IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
+					}
+				} catch (NoWorkTreeException | GitAPIException e) {
+					LogUtil.warning(e);
+				}
+			}
+			comp.setIcon(icon);
 			
 			return comp;
 		}
@@ -999,18 +1060,42 @@ public class ProjectWindow extends CommonModuleFrame
 				final String corpus = getCorpusList().getSelectedValue();
 				final String session = comp.getText();
 				
-				comp.setIcon(IconManager.getInstance().getSystemIconForPath(getProject().getSessionPath(corpus, session), IconSize.SMALL));
-//				if(isSelected) {
-////					ImageIcon icon = 
-////						IconManager.getInstance().getIcon("animations/process-working", IconSize.SMALL);
-////						icon.setImageObserver(list);
-//					comp.setIcon(
-//							IconManager.getInstance().getIcon("mimetypes/text-xml", IconSize.SMALL));
-////							icon );
-//				} else {
-//					comp.setIcon(
-//							IconManager.getInstance().getIcon("blank", IconSize.SMALL));
-//				}
+				final String projectLocation = getProject().getLocation();
+				final String sessionLocation = getProject().getSessionPath(corpus, session);
+				
+				// get relative path for session
+				final Path projectPath = FileSystems.getDefault().getPath(projectLocation);
+				final Path sessionPath = FileSystems.getDefault().getPath(sessionLocation);
+				final Path relPath = projectPath.relativize(sessionPath);
+				final String sessionRelPath = relPath.toString();
+				
+			    ImageIcon icon = 
+			    		IconManager.getInstance().getSystemIconForPath(getProject().getSessionPath(corpus, session), IconSize.SMALL);
+
+				if(gitController.hasGitFolder() && gitController.isOpen()) {
+					try {
+						final Status status = gitController.status(sessionRelPath);
+						
+						if(status.hasUncommittedChanges()) {
+							ImageIcon modifiedIcn = 
+									IconManager.getInstance().createGlyphIcon('*', FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
+							icon = 
+									IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
+						} else if(status.getUntracked().contains(sessionRelPath)) {
+							ImageIcon modifiedIcn = 
+									IconManager.getInstance().createGlyphIcon('?', FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
+							icon = 
+									IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
+						} else if(status.getConflicting().contains(sessionRelPath)) {
+							ImageIcon modifiedIcn = 
+									IconManager.getInstance().createGlyphIcon('C', FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
+							icon = 
+									IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
+						}
+					} catch (NoWorkTreeException | GitAPIException e) {
+						LogUtil.warning(e);
+					}
+				}
 				
 				// see if the transcript it locked...
 				SessionListModel model = (SessionListModel)list.getModel();
@@ -1018,6 +1103,8 @@ public class ProjectWindow extends CommonModuleFrame
 					comp.setIcon(
 							IconManager.getInstance().getIcon("emblems/emblem-readonly", IconSize.SMALL));
 				}
+				
+				comp.setIcon(icon);
 			
 				return comp;
 			}
