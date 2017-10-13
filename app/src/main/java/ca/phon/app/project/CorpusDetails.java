@@ -7,10 +7,6 @@ import java.net.*;
 import java.nio.file.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.BadLocationException;
-
-import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
@@ -50,7 +46,7 @@ public class CorpusDetails extends JPanel {
 		setLayout(new BorderLayout());
 		
 		locationLabel = new JLabel();
-		locationLabel.setForeground(Color.BLUE);
+		locationLabel.setForeground(new Color(0, 90, 140));
 		locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		locationLabel.addMouseListener(new MouseAdapter() {
 			
@@ -100,7 +96,7 @@ public class CorpusDetails extends JPanel {
 		gbc.insets.left = 5;
 		folderPanel.add(numSessionsLabel, gbc);
 		
-		folderPanel.setBorder(BorderFactory.createTitledBorder("Details"));
+//		folderPanel.setBorder(BorderFactory.createTitledBorder(""));
 				
 		corpusDescriptionArea = new JTextArea();
 		corpusDescriptionArea.setLineWrap(true);
@@ -160,12 +156,13 @@ public class CorpusDetails extends JPanel {
 			final Path corpusPath = FileSystems.getDefault().getPath(corpusAbsolutePath);
 			final Path projectPath = FileSystems.getDefault().getPath(project.getLocation());
 			final Path relativePath  = projectPath.relativize(corpusPath);
-			locationLabel.setText("<html><u>." + File.separator + relativePath.toString() + "</u></html>");
+			locationLabel.setText("<html><u>" + relativePath.toString() + "</u></html>");
 			locationLabel.setIcon(IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, IconSize.SMALL));
 			locationLabel.setToolTipText(corpusAbsolutePath);
 			
 			corpusDescriptionArea.setText(project.getCorpusDescription(corpus));
 			corpusDescriptionArea.setEnabled(true);
+			corpusDescriptionArea.setCaretPosition(0);
 		}
 	}
 	

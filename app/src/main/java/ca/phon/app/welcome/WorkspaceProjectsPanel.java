@@ -249,7 +249,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 
 		private Color origColor = Color.white;
 
-		private Color selectedColor = new Color(0, 100, 200, 100);
+		private Color selectedColor = new Color(0, 90, 140, 100);
 
 		public BgPainter() {
 

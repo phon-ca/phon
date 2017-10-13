@@ -1,22 +1,20 @@
 package ca.phon.app.project;
 
-import java.util.*;
-import java.util.List;
-
 import java.awt.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
-import org.codehaus.groovy.transform.LazyASTTransformation;
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXTable;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.project.*;
+import ca.phon.project.ProjectEvent.ProjectEventProp;
 import ca.phon.session.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
@@ -42,6 +40,7 @@ public class SessionDetails extends JPanel {
 		super();
 		
 		this.project = project;
+		project.addProjectListener(projectListener);
 		
 		init();
 	}
@@ -94,13 +93,11 @@ public class SessionDetails extends JPanel {
 		gbc.weightx = 1.0;
 		detailsPanel.add(recordsLabel, gbc);
 		
-		detailsPanel.setBorder(BorderFactory.createTitledBorder("Details"));
-		
 		speakerTableModel = new SpeakerTableModel();
 		speakerTable = new JXTable(speakerTableModel);
 		speakerTable.setVisibleRowCount(4);
 		final JScrollPane speakerScroller = new JScrollPane(speakerTable);
-		speakerScroller.setBorder(BorderFactory.createTitledBorder("Participants"));
+		speakerScroller.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 		
 		add(detailsPanel, BorderLayout.NORTH);
 		add(speakerScroller, BorderLayout.CENTER);
@@ -205,6 +202,30 @@ public class SessionDetails extends JPanel {
 		}
 		
 	}
+	
+	private final ProjectListener projectListener = new ProjectListener() {
+		
+		@Override
+		public void projectWriteLocksChanged(ProjectEvent pe) {
+			final String corpus = pe.getProperty(ProjectEventProp.CORPUS);
+			final String session = pe.getProperty(ProjectEventProp.SESSION);
+			
+			// update when unlocked
+			if(!project.isSessionLocked(corpus, session)
+					&& corpus.equals(getCorpus()) && session.equals(getSession()) ) {
+				update();
+			}
+		}
+		
+		@Override
+		public void projectStructureChanged(ProjectEvent pe) {
+		}
+		
+		@Override
+		public void projectDataChanged(ProjectEvent pe) {
+		}
+		
+	};
 	
 	private class SpeakerTableModel extends AbstractTableModel {
 		

@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.logging.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.*;
 import javax.swing.text.*;
 
@@ -39,6 +40,7 @@ import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import ca.hedlund.desktopicons.*;
@@ -355,6 +357,7 @@ public class ProjectWindow extends CommonModuleFrame
 		corpusDetails = new CorpusDetails(getProject(), null);
 		corpusDetails.setBackground(Color.white);
 		corpusDetails.setOpaque(true);
+		corpusDetails.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
 		sessionList = new JList<String>();
 		createSessionButton = createSessionButton();
@@ -456,6 +459,7 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionDetails = new SessionDetails(getProject());
 		sessionDetails.setBackground(Color.white);
 		sessionDetails.setOpaque(true);
+		sessionDetails.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
 		JScrollPane corpusScroller = new JScrollPane(corpusList);
 		JScrollPane sessionScroller = new JScrollPane(sessionList);
@@ -470,6 +474,11 @@ public class ProjectWindow extends CommonModuleFrame
 		showCreateCorpusBtn.setBorderPainted(false);
 
 		corpusPanel = new TitledPanel("Corpus");
+		final ImageIcon defCorpusIcn = IconManager.getInstance().getSystemStockIcon(
+				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : 
+					OSInfo.isWindows() ? WindowsStockIcon.FOLDER : null), IconSize.SMALL);
+		corpusPanel.setIcon(defCorpusIcn);
+		
 		corpusPanel.getContentContainer().add(createCorpusButton, BorderLayout.NORTH);
 		corpusPanel.getContentContainer().add(corpusScroller, BorderLayout.CENTER);
 		corpusPanel.setRightDecoration(showCreateCorpusBtn);
@@ -494,21 +503,33 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionDecoration.add(showCreateSessionBtn);
 
 		sessionPanel = new TitledPanel("Session");
+		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType(".xml", IconSize.SMALL));
 		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
 
-		final JPanel listPanel = new JPanel(new GridLayout(1, 2));
-		listPanel.add(corpusPanel);
-		listPanel.add(sessionPanel);
-		
-		final JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
+		final JXCollapsiblePane bottomPanel = new JXCollapsiblePane(Direction.UP);
+		bottomPanel.setLayout(new GridLayout(1, 2));
 		bottomPanel.add(corpusDetails);
 		bottomPanel.add(sessionDetails);
+
+		final TitledPanel detailsPanel = new TitledPanel("Details", bottomPanel);
+		detailsPanel.setIcon(IconManager.getInstance().getIcon("categories/info-white", IconSize.SMALL));
 		
-		final JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(listPanel, BorderLayout.CENTER);
-		centerPanel.add(bottomPanel, BorderLayout.SOUTH);
+		final JXMultiSplitPane multiSplitPane = new JXMultiSplitPane();
+		final String multiSplitLayout = "(COLUMN "
+				+ "(ROW weight=1.0 (LEAF weight=0.5 name=corpus) (LEAF weight=0.5 name=session) ) "
+				+ "(LEAF weight=0.0 name=details))";
+		final MultiSplitLayout.Node rootLayoutNode = MultiSplitLayout.parseModel(multiSplitLayout);
+		
+		corpusPanel.setPreferredSize(new Dimension(500, 600));
+		sessionPanel.setPreferredSize(new Dimension(500, 600));
+
+		multiSplitPane.setModel(rootLayoutNode);
+		multiSplitPane.setDividerSize(2);
+		multiSplitPane.add(corpusPanel, "corpus");
+		multiSplitPane.add(sessionPanel, "session");
+		multiSplitPane.add(detailsPanel, "details");
 
 		statusBar = new JXStatusBar();
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
@@ -517,12 +538,12 @@ public class ProjectWindow extends CommonModuleFrame
 		statusLabel = new JLabel();
 		statusBar.add(statusLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
 		statusBar.add(blindModeBox, new JXStatusBar.Constraint(ResizeBehavior.FIXED));
-
+		
 		String projectName = null;
 		projectName = getProject().getName();
 
 		DialogHeader header = new DialogHeader(projectName,
-				"<html><u>" + StringUtils.abbreviate(projectLoadPath, 80) + "</u></html>");
+				"<html><u style='color: rgb(0, 90, 140);'>" + StringUtils.abbreviate(projectLoadPath, 80) + "</u></html>");
 		header.getBottomLabel().setToolTipText(projectLoadPath);
 		header.getBottomLabel().setForeground(Color.blue);
 		header.getBottomLabel().addMouseListener(new MouseAdapter() {
@@ -542,7 +563,7 @@ public class ProjectWindow extends CommonModuleFrame
 		header.getBottomLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		add(header, BorderLayout.NORTH);
-		add(centerPanel, BorderLayout.CENTER);
+		add(multiSplitPane, BorderLayout.CENTER);
 		add(statusBar, BorderLayout.SOUTH);
 
 		// if no corpora are currently available, 'prompt' the user to create a new one

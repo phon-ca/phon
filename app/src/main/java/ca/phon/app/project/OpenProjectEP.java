@@ -158,9 +158,10 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				return true;
 			}
 			
-			ProjectWindow pwindow = new ProjectWindow(proj, proj.getLocation());
+			final ProjectWindow pwindow = new ProjectWindow(proj, proj.getLocation());
     		pwindow.pack();
-    		pwindow.cascadeWindow(null);
+    		pwindow.setSize(800, 600);
+    		pwindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
     		pwindow.setVisible(true);
     		
     		return true;

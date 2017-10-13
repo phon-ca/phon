@@ -58,7 +58,7 @@ public class RecentProjectsList extends JPanel {
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.lightGray);
 		actionPanel.setBorder(lineBorder);
 		
-		clearLabel = new JLabel("<html><u style='color: blue;'>Clear History</u></html>");
+		clearLabel = new JLabel("<html><u style='color: rgb(0, 90, 140);'>Clear History</u></html>");
 		clearLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		clearLabel.setToolTipText("Clear recent projects history");
 		clearLabel.addMouseListener(new MouseInputAdapter() {

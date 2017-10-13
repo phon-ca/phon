@@ -4,9 +4,12 @@
 package ca.phon.ui.decorations;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+
+import ca.phon.ui.painter.Painter;
 
 /**
  * Panel with a title, content section, and optional left/right decorations.
@@ -28,10 +31,28 @@ public class TitledPanel extends JPanel {
 	private GridBagConstraints gbcRight;
 
 	private Container contentContainer;
+	
+	private final Painter<JPanel> defaultTitlePanelPainter = new Painter<JPanel>() {
+		
+		@Override
+		public void paint(JPanel obj, Graphics2D g2, Rectangle2D bounds) {
+			final GradientPaint gp = new GradientPaint(0.0f, 0.0f, getTopColor(),
+					0.0f, (float)bounds.getHeight(), getBottomColor());
+			g2.setPaint(gp);
+			g2.fill(bounds);
+		}
+		
+	};
+	private Painter<JPanel> titlePanelPainter = defaultTitlePanelPainter;
+	
+	private Color topColor;
+	private Color bottomColor;
 
 	static {
 		UIManager.put("titledpanel.foreground", Color.white);
 		UIManager.put("titledpanel.background", Color.gray);
+		UIManager.put("titledpanel.backgroundTop",  Color.decode("#bbbbbb"));
+		UIManager.put("titledpanel.backgroundBottom", Color.decode("#8c8c8c"));
 	}
 
 	public TitledPanel() {
@@ -55,17 +76,18 @@ public class TitledPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private void init() {
 		super.setLayout(new BorderLayout(0, 0));
+		
+		topColor = UIManager.getColor("titledpanel.backgroundTop");
+		bottomColor = UIManager.getColor("titledpanel.backgroundBottom");
 
 		titlePanel = new JPanel(new GridBagLayout()) {
 			@Override
 			public void paintComponent(Graphics g) {
 				final Graphics2D g2 = (Graphics2D)g;
-
-				final GradientPaint gp = new GradientPaint(0.0f, 0.0f, Color.decode("#bbbbbb"),
-						0.0f, (float)getHeight(), Color.decode("#7c7c7c"));
-				g2.setPaint(gp);
-				g2.fillRect(0, 0, getWidth(), getHeight());
+				final Rectangle2D rect = new Rectangle2D.Double(0, 0, getWidth(), getHeight());
+				getTitlePanelPainter().paint(titlePanel, g2, rect);
 			}
+			
 		};
 
 		gbcLeft = new GridBagConstraints();
@@ -114,6 +136,37 @@ public class TitledPanel extends JPanel {
 
 	public Container getContentContainer() {
 		return this.contentContainer;
+	}
+	
+	public void setContentContainer(Container container) {
+		super.remove(this.contentContainer);
+		this.contentContainer = container;
+		add(contentContainer, BorderLayout.CENTER);
+		revalidate();
+	}
+
+	public Painter<JPanel> getTitlePanelPainter() {
+		return titlePanelPainter;
+	}
+
+	public void setTitlePanelPainter(Painter<JPanel> titlePanelPainter) {
+		this.titlePanelPainter = titlePanelPainter;
+	}
+
+	public Color getTopColor() {
+		return topColor;
+	}
+
+	public void setTopColor(Color topColor) {
+		this.topColor = topColor;
+	}
+
+	public Color getBottomColor() {
+		return bottomColor;
+	}
+
+	public void setBottomColor(Color bottomColor) {
+		this.bottomColor = bottomColor;
 	}
 
 	public String getTitle() {
@@ -172,5 +225,7 @@ public class TitledPanel extends JPanel {
 	public void setTitleLabel(JLabel titleLabel) {
 		this.titleLabel = titleLabel;
 	}
+	
+	
 
 }

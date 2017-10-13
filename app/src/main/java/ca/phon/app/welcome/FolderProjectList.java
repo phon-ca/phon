@@ -129,8 +129,6 @@ public class FolderProjectList extends JPanel {
 		sortBar = new SortPanel();
 		add(sortBar, BorderLayout.NORTH);
 		
-		
-		
 		scanDirectory();
 		updateProjectList();
 	}
@@ -375,7 +373,7 @@ public class FolderProjectList extends JPanel {
 //			JButton refreshButton = new JButton(refreshAction);
 //			refreshButton.setBorderPainted(false);
 			
-			JLabel refreshLabel = new JLabel("<html><u style='color: blue;'>Refresh</u></html>");
+			JLabel refreshLabel = new JLabel("<html><u style='color: rgb(0, 90, 140);'>Refresh</u></html>");
 			refreshLabel.setIcon(icn);
 			refreshLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			refreshLabel.setToolTipText("Refresh project list");
