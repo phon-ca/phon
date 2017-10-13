@@ -503,7 +503,9 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					eleList.add("*" + e.getContent() + "*");
 				} else if(ele instanceof CommentType) {
 					CommentType oct = (CommentType)ele;
-					eleList.add("(" + oct.getContent() + ")");
+					final StringBuffer buffer = new StringBuffer();
+					for(Object obj:oct.getContent()) buffer.append(obj);
+					eleList.add("(" + (oct.getType() != null ? oct.getType() + ":" : "") + buffer.toString() + ")");
 				} else if(ele instanceof InnerGroupMarker) {
 					InnerGroupMarker ig = (InnerGroupMarker)ele;
 					if(ig.getType() == InnerGroupMarkerType.S)
