@@ -158,9 +158,14 @@ public abstract class SessionFactory {
 	 * @return new comment
 	 */
 	public Comment createComment(CommentEnum type, String value) {
+		return createComment(type, value, null);
+	}
+	
+	public Comment createComment(CommentEnum type, String value, MediaSegment segment) {
 		final Comment retVal = createComment();
 		retVal.setType(type);
 		retVal.setValue(value);
+		if(segment != null) retVal.putExtension(MediaSegment.class, segment);
 		return retVal;
 	}
 	

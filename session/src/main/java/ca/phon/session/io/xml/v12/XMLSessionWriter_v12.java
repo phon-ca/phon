@@ -285,6 +285,14 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		retVal.setVisible(visible);
 		return retVal;
 	}
+	
+	private SegmentType copySegment(ObjectFactory factory, MediaSegment segment) {
+		final SegmentType segType = factory.createSegmentType();
+		segType.setDuration(segment.getEndValue() - segment.getStartValue());
+		segType.setStartTime(segment.getStartValue());
+		segType.setUnitType(SegmentUnitType.MS);
+		return segType;
+	}
 
 	// copy comment data
 	private CommentType copyComment(ObjectFactory factory, Comment com) {
@@ -292,7 +300,12 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		final String value = com.getValue();
 
 		final CommentType retVal = factory.createCommentType();
-		retVal.setContent(value);
+		retVal.getContent().add(value);
+		if(com.getExtension(MediaSegment.class) != null) {
+			retVal.getContent().add(
+					factory.createSegment(copySegment(factory, (MediaSegment)com.getExtension(MediaSegment.class)))
+			);
+		}
 		retVal.setType(type.toString());
 		return retVal;
 	}
@@ -407,13 +420,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 
 		// segment
 		if(record.getSegment().numberOfGroups() > 0) {
-			final SegmentType segType = factory.createSegmentType();
-			final MediaSegment segment = record.getSegment().getGroup(0);
-
-			segType.setDuration(segment.getEndValue() - segment.getStartValue());
-			segType.setStartTime(segment.getStartValue());
-			segType.setUnitType(SegmentUnitType.MS);
-
+			final SegmentType segType = copySegment(factory, record.getSegment().getGroup(0));
 			retVal.setSegment(segType);
 		}
 

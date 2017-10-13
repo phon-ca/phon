@@ -47,7 +47,7 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	@Visits
 	public void visitComment(OrthoComment comment) {
 		final CommentType ct = factory.createCommentType();
-		ct.setContent(
+		ct.getContent().add(
 				(comment.getType() != null ? comment.getType() + ":" : "") + comment.getData());
 		ct.setType(comment.getType());
 		gt.getWOrComOrE().add(ct);

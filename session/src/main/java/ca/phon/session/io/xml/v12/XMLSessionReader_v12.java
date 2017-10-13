@@ -293,12 +293,30 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 
 		return factory.createTierViewItem(name, visible, font, locked);
 	}
+	
+	private MediaSegment copySegment(SessionFactory factory, SegmentType st) {
+		final MediaSegment segment = factory.createMediaSegment();
+		segment.setStartValue(st.getStartTime());
+		segment.setEndValue(st.getStartTime() + st.getDuration());
+		segment.setUnitType(MediaUnit.Millisecond);
+		return segment;
+	}
 
 	// copy comment data
 	private Comment copyComment(SessionFactory factory, CommentType ct) {
 		final CommentEnum type = CommentEnum.fromString(ct.getType());
-		final String value = ct.getContent();
-		return factory.createComment(type, value);
+		final StringBuffer buffer = new StringBuffer();
+		MediaSegment segment = null;
+		for(Object obj:ct.getContent()) {
+			if(obj instanceof JAXBElement) {
+				final JAXBElement<?> jaxbEle = (JAXBElement<?>)obj;
+				if(jaxbEle.getDeclaredType() == SegmentType.class)
+					segment = copySegment(factory, (SegmentType)jaxbEle.getValue());
+			} else {
+				buffer.append(obj.toString());
+			}
+		}
+		return factory.createComment(type, buffer.toString(), segment);
 	}
 
 	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {
@@ -395,11 +413,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 
 		// segment
 		if(rt.getSegment() != null) {
-			final MediaSegment segment = factory.createMediaSegment();
-			segment.setStartValue(rt.getSegment().getStartTime());
-			segment.setEndValue(rt.getSegment().getStartTime() + rt.getSegment().getDuration());
-			segment.setUnitType(MediaUnit.Millisecond);
-
+			final MediaSegment segment = copySegment(factory, rt.getSegment());
 			retVal.getSegment().setGroup(0, segment);
 		} else {
 			retVal.getSegment().setGroup(0, factory.createMediaSegment());

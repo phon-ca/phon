@@ -333,6 +333,9 @@ Schema for Phon sessions.
         <xs:annotation>
             <xs:documentation>A storage class for comments.</xs:documentation>
         </xs:annotation>
+    	<xs:sequence>
+    		<xs:element ref="segment" minOccurs="0" maxOccurs="1"/>
+    	</xs:sequence>
         <xs:attribute name="type" type="xs:string"/>
     </xs:complexType>
 
