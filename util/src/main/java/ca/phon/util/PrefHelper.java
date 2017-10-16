@@ -20,6 +20,7 @@ package ca.phon.util;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.text.*;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -242,6 +243,39 @@ public class PrefHelper {
 			// continue to search in preferences chain
 			retVal = getUserPreferences().getLong(key, def);
 		}
+		return retVal;
+	}
+	
+	/**
+	 * Get the value of the specified enum preference.
+	 * 
+	 * @param key
+	 * @param def
+	 * @param enumClazz
+	 * 
+	 * @return the value of the specified <code>key</code>
+	 */
+	public static <T extends Enum<?>> T getEnum(Class<T> enumClazz, String key, T def) {
+		T retVal = def;
+		
+		// check for preference
+		final String stringPref = get(key, (def != null ? def.toString() : null));
+		if(stringPref != null && stringPref.length() > 0) {
+			// check for a 'fromString' method first
+			try {
+				final Method fromString = enumClazz.getMethod("fromString", String.class);
+				retVal = enumClazz.cast(fromString.invoke(enumClazz, stringPref));
+			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				// else search using the toString method
+				for(T constant:enumClazz.getEnumConstants()) {
+					if(constant.toString().equals(stringPref)) {
+						retVal = constant;
+						break;
+					}
+				}
+			}
+		}
+		
 		return retVal;
 	}
 	
