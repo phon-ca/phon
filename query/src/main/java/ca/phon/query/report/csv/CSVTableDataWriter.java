@@ -51,16 +51,22 @@ public class CSVTableDataWriter {
 	/**
 	 * File Encoding
 	 */
-	public static final String FILE_ENCODING = "UTF-8";
+	public static final String DEFAULT_FILE_ENCODING = "UTF-8";
+	
+	private String charEncoding = DEFAULT_FILE_ENCODING;
 	
 	public CSVTableDataWriter() {
-		super();
+		this(DEFAULT_FILE_ENCODING);
+	}
+	
+	public CSVTableDataWriter(String encoding) {
+		this.charEncoding = encoding;
 	}
 	
 	public void writeTableToFile(JTable table, File file) 
 		throws IOException {
 		final CSVWriter writer = 
-				new CSVWriter(new PrintWriter(file), ',', '\"', 
+				new CSVWriter(new PrintWriter(file, charEncoding), ',', '\"', 
 						(OSInfo.isWindows() ? "\r\n" : "\n"));
 		// output column names
 		final String[] colnames = new String[table.getColumnCount()];

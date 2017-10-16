@@ -492,8 +492,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
 				}
 			} else if(isShowingTable()) {
-				// save table model as csv
-				final CSVTableDataWriter writer = new CSVTableDataWriter();
+				// save table model as csv using UTF-16 so Excel will correctly open file
+				final CSVTableDataWriter writer = new CSVTableDataWriter("UTF-16");
 				try {
 					writer.writeTableToFile(dataTable, new File(saveAs));
 				} catch (IOException e) {
