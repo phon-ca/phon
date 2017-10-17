@@ -45,6 +45,7 @@ exports.WordFilter = function (id) {
 	this.wMedial = posParamInfo.def[1];
 	this.wFinal = posParamInfo.def[2];
 
+	this.searchByWordEnabled = true;
 	var searchByWordParamInfo = {
 		"id": id + ".searchByWord",
 		"def": true,
@@ -101,7 +102,8 @@ exports.WordFilter = function (id) {
 		var enabled = searchByWordOpt.getValue(searchByWordOpt.paramId) == true;
 		singletonGroupOpt.setEnabled(enabled);
 		posGroupOpt.setEnabled(enabled);
-		params.add(searchByWordOpt);
+		if(this.searchByWordEnabled == true)
+			params.add(searchByWordOpt);
 
         this.searchByWordOpt = searchByWordOpt;
 		this.searchByWordParam = searchByWordOpt;

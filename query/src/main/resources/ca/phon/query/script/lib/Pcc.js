@@ -22,15 +22,12 @@
 importPackage(Packages.ca.phon.ipa.features)
 
 exports.Pcc = {
-
 	/**
 	 * Perform PCC (aligned) calculation for an aligned pair of
 	 * IPA values
 	 *
-	 * @param record
-	 * @param targetGroup
-	 * @param actualGroup
-	 * @param features - comma separated list of features
+	 * @param word
+	 * @param features
 	 * @param ignoreDiacritics
 	 *
 	 * @return {
@@ -119,8 +116,7 @@ exports.Pcc = {
 	 * Calculates PCC (standard) for a pair of ipa transcriptions.
 	 * In this version, direct phone alignment is not considered.
 	 *
-	 * @param targetIpa
-	 * @param acutalIpa
+	 * @param word
 	 * @param features
 	 * @param ignoreDiacritics
 	 *
@@ -196,55 +192,59 @@ exports.Pcc = {
 
 exports.PccOptions = function (id, aligned) {
 
-	var includePccParamInfo = {
-		"id": id +(".includePcc"),
-		"title": "",
-		"desc": "Include percent consonants correct (" + (aligned ? "A": "") + "PCC)",
-		"def": false
+	var pcTypeParamInfo = {
+		"id": id + ".pcType",
+		"title": "PCC/PVC",
+		"choices": ["Percent Consonants Correct (PCC)", "Percent Vowels Correct (PVC)"],
+		"def": 0,
+		"cols": 1,
+		"type": "radiobutton"
 	};
-	var includePccParam;
-	this.includePcc;
-
-	var includePvcParamInfo = {
-		"id": id +(".includePvc"),
+	var pcTypeParam;
+	this.pcType = { index:0, toString:pcTypeParamInfo.choices[0] };
+	
+	var useAlignmentParamInfo = {
+		"id": id + ".useAlignment",
 		"title": "",
-		"desc": "Include percent vowels correct (" + (aligned ? "A": "") + "PVC)",
-		"def": false
+		"desc": "Use phone alignment when considering correctness",
+		"def": false,
 	};
-	var includePvcParam;
-	this.includePvc;
-
+	var useAlignmentParam;
+	this.useAlignment = useAlignmentParamInfo.def;
+	
 	var ignoreDiacriticsParamInfo = {
 		"id": id +(".ignoreDiacritics"),
 		"title": "",
 		"desc": "Ignore diacritics",
-		"def": true
+		"def": false
 	};
 	var ignoreDiacriticsParam;
-	this.ignoreDicacritic;
+	this.ignoreDicacritics = ignoreDiacriticsParamInfo.def;
 
 	this.param_setup = function (params) {
-		includePccParam = new BooleanScriptParam(
-		includePccParamInfo.id,
-		includePccParamInfo.desc,
-		includePccParamInfo.title,
-		includePccParamInfo.def);
-
-		includePvcParam = new BooleanScriptParam(
-		includePvcParamInfo.id,
-		includePvcParamInfo.desc,
-		includePvcParamInfo.title,
-		includePvcParamInfo.def);
+		pcTypeParam = new EnumScriptParam(
+			pcTypeParamInfo.id,
+			pcTypeParamInfo.title,
+			pcTypeParamInfo.def,
+			pcTypeParamInfo.choices,
+			pcTypeParamInfo.type,
+			pcTypeParamInfo.cols);
+	
+		useAlignmentParam = new BooleanScriptParam(
+			useAlignmentParamInfo.id,
+			useAlignmentParamInfo.desc,
+			useAlignmentParamInfo.title,
+			useAlignmentParamInfo.def);
 
 		ignoreDiacriticsParam = new BooleanScriptParam(
-		ignoreDiacriticsParamInfo.id,
-		ignoreDiacriticsParamInfo.desc,
-		ignoreDiacriticsParamInfo.title,
-		ignoreDiacriticsParamInfo.def);
+			ignoreDiacriticsParamInfo.id,
+			ignoreDiacriticsParamInfo.desc,
+			ignoreDiacriticsParamInfo.title,
+			ignoreDiacriticsParamInfo.def);
 
-		params.add(includePccParam);
-		params.add(includePvcParam);
+		params.add(pcTypeParam);
 		params.add(ignoreDiacriticsParam);
+		params.add(useAlignmentParam);
 	};
 
 	this.setup_pcc_aligned_metadata = function (group, metadata) {
@@ -259,10 +259,6 @@ exports.PccOptions = function (id, aligned) {
 			metadata.put("APCC # Epenthesized", pccAligned.epen + "");
 			var pCorrect = (pccAligned.target > 0 ? pccAligned.correct / pccAligned.target: 0) * 100;
 			metadata.put("APCC % Correct", nf.format(pCorrect));
-			var pDeleted = (pccAligned.target > 0 ? pccAligned.deleted / pccAligned.target: 0) * 100;
-			metadata.put("APCC % Deleted", nf.format(pDeleted));
-			var pEpen = (pccAligned.target > 0 ? pccAligned.epen / pccAligned.target: 0) * 100;
-			metadata.put("APCC % Epenthesized", nf.format(pEpen));
 		}
 		if (this.includePvc == true) {
 			var pvcAligned = Pcc.calc_pc_aligned(group, "Vowel", this.ignoreDiacritics);
@@ -273,10 +269,6 @@ exports.PccOptions = function (id, aligned) {
 			metadata.put("APVC # Epenthesized", pvcAligned.epen + "");
 			var pCorrect = (pvcAligned.target > 0 ? pvcAligned.correct / pvcAligned.target: 0) * 100;
 			metadata.put("APVC % Correct", nf.format(pCorrect));
-			var pDeleted = (pvcAligned.target > 0 ? pvcAligned.deleted / pvcAligned.target: 0) * 100;
-			metadata.put("APVC % Deleted", nf.format(pDeleted));
-			var pEpen = (pvcAligned.target > 0 ? pvcAligned.epen / pvcAligned.target: 0) * 100;
-			metadata.put("APVC % Epenthesized", nf.format(pEpen));
 		}
 	};
 
@@ -286,30 +278,24 @@ exports.PccOptions = function (id, aligned) {
 		if (this.includePcc == true) {
 			var pccStandard = Pcc.calc_pc_standard(group, "Consonant", this.ignoreDiacritics);
 			metadata.put("PCC # Target", pccStandard.target + "");
-			metadata.put("PCC # Attempted", pccStandard.actual + "");
+			metadata.put("PCC # Actual", pccStandard.actual + "");
 			metadata.put("PCC # Correct", pccStandard.correct + "");
+			metadata.put("PCC # Substituted", (pccStandard.actual - pccStandard.correct) + "");
 			metadata.put("PCC # Deleted", pccStandard.deleted + "");
 			metadata.put("PCC # Epenthesized", pccStandard.epen + "");
 			var pCorrect = (pccStandard.target > 0 ? pccStandard.correct / pccStandard.target: 0) * 100;
-			metadata.put("PCC % Correct", nf.format(pCorrect));
-			var pDeleted = (pccStandard.target > 0 ? pccStandard.deleted / pccStandard.target: 0) * 100;
-			metadata.put("PCC % Deleted", nf.format(pDeleted));
-			var pEpen = (pccStandard.target > 0 ? pccStandard.epen / pccStandard.target: 0) * 100;
-			metadata.put("PCC % Epenthesized", nf.format(pEpen));
+			metadata.put("PCC", nf.format(pCorrect));
 		}
 		if (this.includePvc == true) {
 			var pvcStandard = Pcc.calc_pc_standard(group, "Vowel", this.ignoreDiacritics);
 			metadata.put("PVC # Target", pvcStandard.target + "");
 			metadata.put("PVC # Attempted", pvcStandard.actual + "");
 			metadata.put("PVC # Correct", pvcStandard.correct + "");
+			metadata.put("PVC # Substituted", (pvcStandard.actual - pccStandard.correct) + "");
 			metadata.put("PVC # Deleted", pvcStandard.deleted + "");
 			metadata.put("PVC # Epenthesized", pvcStandard.epen + "");
 			var pCorrect = (pvcStandard.target > 0 ? pvcStandard.correct / pvcStandard.target: 0) * 100;
-			metadata.put("PVC % Correct", nf.format(pCorrect));
-			var pDeleted = (pvcStandard.target > 0 ? pvcStandard.deleted / pvcStandard.target: 0) * 100;
-			metadata.put("PVC % Deleted", nf.format(pDeleted));
-			var pEpen = (pvcStandard.target > 0 ? pvcStandard.epen / pvcStandard.target: 0) * 100;
-			metadata.put("PVC % Epenthesized", nf.format(pEpen));
+			metadata.put("PVC", nf.format(pCorrect));
 		}
 	};
 };
