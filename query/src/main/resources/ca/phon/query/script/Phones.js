@@ -13,8 +13,6 @@ var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
-var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
