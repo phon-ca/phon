@@ -265,8 +265,11 @@ public class PrefHelper {
 			try {
 				final Method fromString = enumClazz.getMethod("fromString", String.class);
 				retVal = enumClazz.cast(fromString.invoke(enumClazz, stringPref));
-			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				// else search using the toString method
+			} catch (NoSuchMethodException | SecurityException 
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			}
+			// else search using the toString method
+			if(retVal == null) {
 				for(T constant:enumClazz.getEnumConstants()) {
 					if(constant.toString().equals(stringPref)) {
 						retVal = constant;
