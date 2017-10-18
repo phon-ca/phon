@@ -824,7 +824,6 @@ public class NodeWizard extends WizardFrame {
 		retVal.setLayout(new BorderLayout());
 
 		final MultiBufferPanel bufferPanel = getBufferPanel();
-		SwingUtilities.invokeLater(() -> bufferPanel.getSplitPane().setDividerLocation(400) );
 		reportTitledPanel = new TitledPanel("Report", bufferPanel);
 		reportTitledPanel.setLeftDecoration(busyLabel);
 
