@@ -206,7 +206,7 @@ exports.PccOptions = function (id, aligned) {
 	var useAlignmentParamInfo = {
 		"id": id + ".useAlignment",
 		"title": "",
-		"desc": "Use phone alignment when considering correctness",
+		"desc": "Include segment metathesis and migration as errors",
 		"def": false,
 	};
 	var useAlignmentParam;
@@ -247,55 +247,4 @@ exports.PccOptions = function (id, aligned) {
 		params.add(useAlignmentParam);
 	};
 
-	this.setup_pcc_aligned_metadata = function (group, metadata) {
-		var nf = java.text.NumberFormat.getNumberInstance();
-		nf.setMaximumFractionDigits(6);
-		if (this.includePcc == true) {
-			var pccAligned = Pcc.calc_pc_aligned(group, "Consonant", this.ignoreDiacritics);
-			metadata.put("APCC # Target", pccAligned.target + "");
-			metadata.put("APCC # Attempted", pccAligned.actual + "");
-			metadata.put("APCC # Correct", pccAligned.correct + "");
-			metadata.put("APCC # Deleted", pccAligned.deleted + "");
-			metadata.put("APCC # Epenthesized", pccAligned.epen + "");
-			var pCorrect = (pccAligned.target > 0 ? pccAligned.correct / pccAligned.target: 0) * 100;
-			metadata.put("APCC % Correct", nf.format(pCorrect));
-		}
-		if (this.includePvc == true) {
-			var pvcAligned = Pcc.calc_pc_aligned(group, "Vowel", this.ignoreDiacritics);
-			metadata.put("APVC # Target", pvcAligned.target + "");
-			metadata.put("APVC # Attempted", pvcAligned.actual + "");
-			metadata.put("APVC # Correct", pvcAligned.correct + "");
-			metadata.put("APVC # Deleted", pvcAligned.deleted + "");
-			metadata.put("APVC # Epenthesized", pvcAligned.epen + "");
-			var pCorrect = (pvcAligned.target > 0 ? pvcAligned.correct / pvcAligned.target: 0) * 100;
-			metadata.put("APVC % Correct", nf.format(pCorrect));
-		}
-	};
-
-	this.setup_pcc_standard_metadata = function (group, metadata) {
-		var nf = java.text.NumberFormat.getNumberInstance();
-		nf.setMaximumFractionDigits(6);
-		if (this.includePcc == true) {
-			var pccStandard = Pcc.calc_pc_standard(group, "Consonant", this.ignoreDiacritics);
-			metadata.put("PCC # Target", pccStandard.target + "");
-			metadata.put("PCC # Actual", pccStandard.actual + "");
-			metadata.put("PCC # Correct", pccStandard.correct + "");
-			metadata.put("PCC # Substituted", (pccStandard.actual - pccStandard.correct) + "");
-			metadata.put("PCC # Deleted", pccStandard.deleted + "");
-			metadata.put("PCC # Epenthesized", pccStandard.epen + "");
-			var pCorrect = (pccStandard.target > 0 ? pccStandard.correct / pccStandard.target: 0) * 100;
-			metadata.put("PCC", nf.format(pCorrect));
-		}
-		if (this.includePvc == true) {
-			var pvcStandard = Pcc.calc_pc_standard(group, "Vowel", this.ignoreDiacritics);
-			metadata.put("PVC # Target", pvcStandard.target + "");
-			metadata.put("PVC # Attempted", pvcStandard.actual + "");
-			metadata.put("PVC # Correct", pvcStandard.correct + "");
-			metadata.put("PVC # Substituted", (pvcStandard.actual - pccStandard.correct) + "");
-			metadata.put("PVC # Deleted", pvcStandard.deleted + "");
-			metadata.put("PVC # Epenthesized", pvcStandard.epen + "");
-			var pCorrect = (pvcStandard.target > 0 ? pvcStandard.correct / pvcStandard.target: 0) * 100;
-			metadata.put("PVC", nf.format(pCorrect));
-		}
-	};
 };
