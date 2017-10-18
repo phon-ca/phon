@@ -240,7 +240,7 @@ function addCopyTableButtons(documentRef) {
         copyImg.setAttribute("src", copyIcn);
         copyImg.setAttribute("style", "padding-right: 2px;");
         button.appendChild(copyImg);
-        button.append("Copy");
+        button.append("Copy table to clipboard");
         
         div.appendChild(button);
         tableCaption.appendChild(div);
@@ -283,7 +283,7 @@ function addShowBufferButtons(documentRef) {
         copyImg.setAttribute("src", showIcn);
         copyImg.setAttribute("style", "padding-right: 2px;");
         button.appendChild(copyImg);
-        button.append("Show Buffer");
+        button.append("Show raw data");
         
         div.appendChild(button);
     });
