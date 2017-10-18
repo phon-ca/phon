@@ -1,11 +1,14 @@
 package ca.phon.ipa.relations;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.alignment.PhoneMap;
 
+/**
+ * Order of segmental relations: Reduplication, Migration, Metathesis, Harmony, Assimilation
+ *
+ */
 public class SegmentalRelations {
 
 	private boolean includeConsonants = true;
@@ -21,11 +24,11 @@ public class SegmentalRelations {
 	}
 	
 	private void initDefaultDetectors() {
-		detectors.add(new AssimilationDetector());
-		detectors.add(new HarmonyDetector());
+		detectors.add(new ReduplicationDetector());
 		detectors.add(new MetathesisDetector());
 		detectors.add(new MigrationDetector());
-		detectors.add(new ReduplicationDetector());
+		detectors.add(new HarmonyDetector());
+		detectors.add(new AssimilationDetector());
 	}
 	
 	public void addDetector(SegmentalRelationDetector detector) {
@@ -68,6 +71,7 @@ public class SegmentalRelations {
 		final List<SegmentalRelation> relations = new ArrayList<>();
 		
 		for(int i = 0; i < pm.getAlignmentLength()-1; i++) {
+			List<SegmentalRelation> elementRelations = new ArrayList<>();
 			for(int j = i+1; j < pm.getAlignmentLength(); j++) {
 				final int p1 = i;
 				final int p2 = j;
@@ -102,18 +106,17 @@ public class SegmentalRelations {
 				for(SegmentalRelationDetector detector:detectors) {
 					final Optional<SegmentalRelation> relation = detector.detect(pm, p1, p2);
 					if(relation.isPresent())
-						relations.add(relation.get());
+						elementRelations.add(relation.get());
 				}
-				
-//				relations.addAll(
-						
-//					detectors.parallelStream()
-//						.map( (detector) -> detector.detect(pm, p1, p2) )
-//						.filter( (result) -> result.isPresent() )
-//						.map( (result) -> result.get() )
-//						.collect( Collectors.toList() ) 
-//				);
 			}
+			
+			// return only one relation per element
+			if(elementRelations.size() > 0) {
+				final Optional<SegmentalRelation> relation =
+						elementRelations.stream().sorted().findFirst();
+				if(relation.isPresent()) relations.add(relation.get());
+			}
+			
 		}
 		
 		return relations;

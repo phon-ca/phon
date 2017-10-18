@@ -72,19 +72,23 @@ import ca.phon.ipa.alignment.PhoneMap;
 * 
 * </div>
 */
-public class SegmentalRelation {
+public class SegmentalRelation implements Comparable<SegmentalRelation> {
 	
 	public static enum Direction {
 		Progressive,
 		Regressive
 	};
 	
+	/**
+	 * Relation types.
+	 * 
+	 */
 	public static enum Relation {
-		Assimiliation,
-		Harmony,
 		Reduplication,
+		Migration,
 		Metathesis,
-		Migration
+		Harmony,
+		Assimilation
 	};
 	
 	public static enum Locality {
@@ -233,6 +237,24 @@ public class SegmentalRelation {
 		getDimensions().stream().forEach( (dim) -> buffer.append(' ').append(dim) );
 		
 		return buffer.toString();
+	}
+
+	@Override
+	public int compareTo(SegmentalRelation o) {
+		// order by p1, relation, p2
+		int retVal = 
+				new Integer(getPosition1()).compareTo(o.getPosition1());
+		if(retVal == 0) {		
+			retVal = 
+				new Integer(getRelation().ordinal()).compareTo(o.getRelation().ordinal());
+			
+			if(retVal == 0) {
+				retVal =
+					new Integer(getPosition2()).compareTo(o.getPosition2());
+			}
+		}
+		
+		return retVal;
 	}
 	
 }

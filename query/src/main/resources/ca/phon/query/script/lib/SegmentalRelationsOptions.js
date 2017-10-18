@@ -4,23 +4,30 @@ importPackage(Packages.ca.phon.ipa.relations)
 exports.SegmentalRelationsOptions = function(id) {
 
 	var relationTypesInfo = {
-		"ids": [id+".includeAssimilation",id+".includeHarmony", id+".includeReduplication",
-				id+".includeMetathesis", id+".includeMigration"],
-		"descs": ["Assimilation (XY \u2194 XX)", 
-				  "Harmony (X\u2026Y \u2194 X\u2026X) ", 
+		"ids": [
+				id+".includeReduplication",
+				id+".includeMigration",
+				id+".includeMetathesis",
+				id+".includeHarmony",
+				id+".includeAssimilation"
+			],
+		"descs": [
 				  "Reduplication (X\u2205 \u2194 XX, X\u2026\u2205 \u2194 X\u2026X)", 
+				  "Migration (X\u2026Y \u2194 \u2205\u2026X, X\u2026\u2205 \u2194 \u2205\u2026X)", 
 				  "Metathesis (XY \u2194 YX, X\u2026Y \u2194 Y\u2026X)", 
-				  "Migration (X\u2026Y \u2194 \u2205\u2026X, X\u2026\u2205 \u2194 \u2205\u2026X)" ],
+				  "Harmony (X\u2026Y \u2194 X\u2026X) ", 
+				  "Assimilation (XY \u2194 XX)"
+			],
 		"title": "Relations",
 		"def": [true, true, true, true, true],
 		"cols": 1
 	};
 	var relationTypesParam;
-	this.includeAssimliation = relationTypesInfo.def[0];
-	this.includeHarmony = relationTypesInfo.def[1];
-	this.includeReduplication = relationTypesInfo.def[2];
-	this.includeMetathesis = relationTypesInfo.def[3];
-	this.includeMigration = relationTypesInfo.def[4];
+	this.includeReduplication = relationTypesInfo.def[0];
+	this.includeMigration = relationTypesInfo.def[1];
+	this.includeMetathesis = relationTypesInfo.def[2];
+	this.includeHarmony = relationTypesInfo.def[3];
+	this.includeAssimliation = relationTypesInfo.def[4];
 	
 	var directionTypesInfo = {
 		"ids": [id+".includeProgressive", id+".includeRegressive"],
@@ -178,6 +185,21 @@ exports.SegmentalRelationsOptions = function(id) {
 		
 	};
 	
+	this.filterRelationType = function(segmentalRelation) {
+		if(segmentalRelation.relation == SegmentalRelation.Relation.Reduplication)
+			return this.includeReduplication == true;
+		else if(segmentalRelation.relation == SegmentalRelation.Relation.Metathesis)
+			return this.includeMetathesis == true;
+		else if(segmentalRelation.relation == SegmentalRelation.Relation.Migration)
+			return this.includeMigration == true;
+		else if(segmentalRelation.relation == SegmentalRelation.Relation.Harmony)
+			return this.includeHarmony == true;
+		else if(segmentalRelation.relation == SegmentalRelation.Relation.Assimilation)
+			return this.includeAssimliation == true;
+		else
+			return false;
+	};
+	
 	this.filterLocality = function(segmentalRelation) {
 		if((segmentalRelation.locality == SegmentalRelation.Locality.Nonlocal && this.includeNonlocal == true)
 			|| (segmentalRelation.locality == SegmentalRelation.Locality.Local && this.includeLocal == true) )
@@ -237,7 +259,8 @@ exports.SegmentalRelationsOptions = function(id) {
 	};
 	
 	this.filterRelation = function(segmentalRelation) {
-		return (this.filterLocality(segmentalRelation) 
+		return (this.filterRelationType(segmentalRelation)
+					&& this.filterLocality(segmentalRelation) 
 					&& this.filterDirection(segmentalRelation)
 					&& this.filterDimensions(segmentalRelation));
 	};
@@ -256,32 +279,26 @@ exports.SegmentalRelationsOptions = function(id) {
 	this.createDetector = function() {
 		var retVal = new SegmentalRelations(this.includeConsonantRelations == true, this.includeVowelRelations == true);
 		
-		if(this.includeAssimilation == true) {
-			var detector = new AssimilationDetector();
-			this.setupDetector(detector);
-			retVal.addDetector(detector);
-		} 
-		if(this.includeHarmony == true) {
-			var detector = new HarmonyDetector();
-			this.setupDetector(detector);
-			retVal.addDetector(detector);
-		} 
-		if(this.includeReduplication == true) {
-			var detector = new ReduplicationDetector();
-			this.setupDetector(detector);
-			retVal.addDetector(detector);
-		} 
-		if(this.includeMetathesis == true) {
-			var detector = MetathesisDetector();
-			this.setupDetector(detector);
-			retVal.addDetector(detector);
-		}
-		if(this.includeMigration == true) {
-			var detector = new MigrationDetector();
-			this.setupDetector(detector);
-			retVal.addDetector(detector);
-		}
+		var detector = new ReduplicationDetector();
+		this.setupDetector(detector);
+		retVal.addDetector(detector);
+			
+		var detector = MetathesisDetector();
+		this.setupDetector(detector);
+		retVal.addDetector(detector);
+			
+		var detector = new MigrationDetector();
+		this.setupDetector(detector);
+		retVal.addDetector(detector);
 		
+		var detector = new HarmonyDetector();
+		this.setupDetector(detector);
+		retVal.addDetector(detector);
+		
+		var detector = new AssimilationDetector();
+		this.setupDetector(detector);
+		retVal.addDetector(detector);
+	
 		return retVal;
 	};
 	

@@ -7,7 +7,7 @@ import ca.phon.ipa.relations.SegmentalRelation.Relation;
 public class AssimilationDetector extends AbstractSegmentalRelationDetector {
 
 	public AssimilationDetector() {
-		super(Relation.Assimiliation, true, true, false);
+		super(Relation.Assimilation, true, true, false);
 	}
 
 	@Override
