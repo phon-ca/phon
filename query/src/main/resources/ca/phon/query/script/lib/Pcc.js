@@ -207,7 +207,7 @@ exports.PccOptions = function (id, aligned) {
 		"id": id + ".useAlignment",
 		"title": "",
 		"desc": "Include segment metathesis and migration as errors",
-		"def": false,
+		"def": true,
 	};
 	var useAlignmentParam;
 	this.useAlignment = useAlignmentParamInfo.def;
