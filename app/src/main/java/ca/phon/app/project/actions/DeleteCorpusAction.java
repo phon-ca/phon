@@ -71,6 +71,7 @@ public class DeleteCorpusAction extends ProjectWindowAction {
 		
 		final Project project = getWindow().getProject();
 		if(retVal == 0) {
+			getWindow().getCorpusList().clearSelection();
 			for(String corpus:corpora) {
 				try {
 					project.removeCorpus(corpus);
@@ -80,7 +81,6 @@ public class DeleteCorpusAction extends ProjectWindowAction {
 					showMessage("Delete Corpus", e.getLocalizedMessage());
 				}
 			}
-			getWindow().getCorpusList().clearSelection();
 		}
 	}
 

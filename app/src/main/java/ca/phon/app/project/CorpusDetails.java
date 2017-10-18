@@ -130,7 +130,7 @@ public class CorpusDetails extends JPanel {
 	}
 	
 	public void setCorpus(String corpus) {
-		if(this.corpus != null) {
+		if(this.corpus != null && project.getCorpora().contains(this.corpus)) {
 			project.setCorpusDescription(this.corpus, corpusDescriptionArea.getText());
 		}
 		
