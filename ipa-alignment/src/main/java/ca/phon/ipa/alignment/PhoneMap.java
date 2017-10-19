@@ -207,6 +207,19 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		return retVal;
 	}
 	
+	public int getSubAlignmentIndex(IPATranscript ipaT, IPATranscript ipaA) {
+		final IPATranscript filteredT = ipaT.removePunctuation(true);
+		final IPATranscript filteredA = ipaA.removePunctuation(true);
+
+		final PhoneMap grpAlignment = this;
+		final int ipaTAlignStart =
+				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(0)) : -1);
+		final int ipaAAlignStart =
+				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(0)) : -1);
+		final int alignStart = Math.min(ipaTAlignStart, ipaAAlignStart);
+		return alignStart;
+	}
+	
 	/**
 	 * Get the sub-alignment from the given elements.
 	 * 

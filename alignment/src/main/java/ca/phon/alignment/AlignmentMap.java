@@ -125,7 +125,7 @@ public class AlignmentMap<T> {
 	@SuppressWarnings("unchecked")
 	public T[] getAligned(List<T> eles) {
 		final List<T> retVal = new ArrayList<T>();		
-		if(eles.size() == 0) return null;
+		if(eles.size() == 0) return (T[])retVal.toArray();
 		final List<T> topElements = getTopAlignmentElements();
 		final List<T> btmElements = getBottomAlignmentElements();
 		

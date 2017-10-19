@@ -158,6 +158,17 @@ public class WordImpl implements Word {
 
 		return grpAlignment.getSubAlignment(ipaT, ipaA);
 	}
+	
+	@Override
+	public int getPhoneAlignmentLocation() {
+		final IPATranscript ipaT = (getIPATarget() == null ? new IPATranscript() : getIPATarget());
+		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
+
+		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
+		if(grpAlignment == null) return -1;
+		
+		return grpAlignment.getSubAlignmentIndex(ipaT, ipaA);
+	}
 
 	@Override
 	public TierString getNotes() {

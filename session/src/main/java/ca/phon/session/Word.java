@@ -115,6 +115,8 @@ public interface Word {
 	 */
 	public PhoneMap getPhoneAlignment();
 	
+	public int getPhoneAlignmentLocation();
+	
 	/**
 	 * Notes - this will be the same for every group!
 	 */

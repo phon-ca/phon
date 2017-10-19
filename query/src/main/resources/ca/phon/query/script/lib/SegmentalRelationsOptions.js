@@ -90,7 +90,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		"id": id+".includeVowelRelations",
 		"desc": "Include vowel relations",
 		"title": "<html><b>Vowels</b></html>",
-		"def": true,
+		"def": false,
 	};
 	var includeVowelsParam;
 	this.includeVowelRelations = includeVowelsInfo.def;
@@ -182,7 +182,7 @@ exports.SegmentalRelationsOptions = function(id) {
 			vowelDimensionsInfo.title,
 			vowelDimensionsInfo.cols);
 		params.add(vowelDimensionsParam);
-		
+		vowelDimensionsParam.setEnabled(this.includeVowelRelations);
 	};
 	
 	this.filterRelationType = function(segmentalRelation) {

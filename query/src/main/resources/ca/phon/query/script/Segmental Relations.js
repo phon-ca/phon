@@ -184,7 +184,7 @@ function query_record(recordIndex, record) {
 				var sylls = filters.syllable.getRequestedSyllables(obj.targetRep, aligned);
 
 				for (k = 0; k < sylls.length; k++) {
-				    var alignedEles = aligned.getAligned(sylls[k]);
+				    var alignedEles = aligned.getAligned(sylls[k].removePunctuation());
 				    var syllPhoneAlignment = aligned.getSubAlignment(sylls[k], new IPATranscript(alignedEles));
 				
 					syllList.push([syllPhoneAlignment, toSearch[j][1], toSearch[j][2]]);
@@ -202,6 +202,11 @@ function query_record(recordIndex, record) {
         	var relations = detector.detect(obj);
         	for(k = 0; k < relations.size(); k++) {
         		var relation = relations.get(k);
+        		var offset = phoneMap.getSubAlignmentIndex(obj.targetRep, obj.actualRep);
+        		relation.phoneMap = phoneMap;
+        		relation.position1 += offset;
+        		relation.position2 += offset;
+        		
         		if(filters.segmentalRelationsOptions.filterRelation(relation)) {
 	        		var result = filters.segmentalRelationsOptions.createQueryResult(recordIndex, i, relation);
 	        		
