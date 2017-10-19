@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/2.2.0b18/">
-  <entry targetMediaFileId="win32" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b18.exe" newVersion="2.2.0b18" newMediaFileId="win32" fileSize="160879616" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/2.2.0b19/">
+  <entry targetMediaFileId="win32" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b19.exe" newVersion="2.2.0b19" newMediaFileId="win32" fileSize="161639936" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -14,8 +37,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1520" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b18.exe" newVersion="2.2.0b18" newMediaFileId="win32" fileSize="160879616" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="1520" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b19.exe" newVersion="2.2.0b19" newMediaFileId="win32" fileSize="161639936" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -28,8 +74,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1527" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b18.exe" newVersion="2.2.0b18" newMediaFileId="win32" fileSize="160879616" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="1527" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b19.exe" newVersion="2.2.0b19" newMediaFileId="win32" fileSize="161639936" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -42,8 +111,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b18.exe" newVersion="2.2.0b18" newMediaFileId="win64" fileSize="172436992" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b19.exe" newVersion="2.2.0b19" newMediaFileId="win64" fileSize="173197312" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -56,8 +148,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b18.exe" newVersion="2.2.0b18" newMediaFileId="win64" fileSize="172436992" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b19.exe" newVersion="2.2.0b19" newMediaFileId="win64" fileSize="173197312" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -70,8 +185,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b18.exe" newVersion="2.2.0b18" newMediaFileId="win64" fileSize="172436992" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b19.exe" newVersion="2.2.0b19" newMediaFileId="win64" fileSize="173197312" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -84,8 +222,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win32zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b18.zip" newVersion="2.2.0b18" newMediaFileId="win32zip" fileSize="159760321" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="win32zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b19.zip" newVersion="2.2.0b19" newMediaFileId="win32zip" fileSize="160522475" bundledJre="../../../external-resources/jres/jre-8u131-windows-x86" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -98,8 +259,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b18.zip" newVersion="2.2.0b18" newMediaFileId="win64zip" fileSize="171227325" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b19.zip" newVersion="2.2.0b19" newMediaFileId="win64zip" fileSize="171989482" bundledJre="../../../external-resources/jres/jre-8u131-windows-amd64" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -112,8 +296,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b18.dmg" newVersion="2.2.0b18" newMediaFileId="macos" fileSize="180810439" bundledJre="../../../external-resources/jres/jre-8u131-macosx-amd64_unpacked" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b19.dmg" newVersion="2.2.0b19" newMediaFileId="macos" fileSize="181551726" bundledJre="../../../external-resources/jres/jre-8u131-macosx-amd64_unpacked" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
@@ -126,8 +333,31 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b18.dmg" newVersion="2.2.0b18" newMediaFileId="macos" fileSize="180810439" bundledJre="../../../external-resources/jres/jre-8u131-macosx-amd64_unpacked" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.2.0b17
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b19.dmg" newVersion="2.2.0b19" newMediaFileId="macos" fileSize="181551726" bundledJre="../../../external-resources/jres/jre-8u131-macosx-amd64_unpacked" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
 
 ### Analyses
 
