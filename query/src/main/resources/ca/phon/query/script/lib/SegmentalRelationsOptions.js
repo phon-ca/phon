@@ -360,7 +360,8 @@ exports.SegmentalRelationsOptions = function(id) {
 			dimTxt += (dimTxt.length > 0 ? ", " : "") + dim;
 			
 			featureTxt += (featureTxt.length > 0 ? ", " : "")
-	    		+ dim + " = " + relation.profile1.getCategoryLabel(dim) + " \u2194 " + relation.profile2.getCategoryLabel(dim);
+	    		+ dim + " = " + relation.profile1.getCategoryLabel(dim) + 
+	    			(relation.profile2.get(dim) != null ? " \u2194 " + relation.profile2.getCategoryLabel(dim) : "");
 		}
 		metadata.put("Dimensions", dimTxt);
 		metadata.put("Features", featureTxt);

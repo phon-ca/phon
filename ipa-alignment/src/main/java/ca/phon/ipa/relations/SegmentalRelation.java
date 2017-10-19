@@ -1,6 +1,8 @@
 package ca.phon.ipa.relations;
 
 import java.util.*;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -241,7 +243,7 @@ public class SegmentalRelation implements Comparable<SegmentalRelation> {
 
 	@Override
 	public int compareTo(SegmentalRelation o) {
-		// order by p1, relation, p2
+		// order by p1, relation, dimensions, p2
 		int retVal = 
 				new Integer(getPosition1()).compareTo(o.getPosition1());
 		if(retVal == 0) {		
@@ -249,8 +251,19 @@ public class SegmentalRelation implements Comparable<SegmentalRelation> {
 				new Integer(getRelation().ordinal()).compareTo(o.getRelation().ordinal());
 			
 			if(retVal == 0) {
-				retVal =
-					new Integer(getPosition2()).compareTo(o.getPosition2());
+				final Set<PhoneDimension> dimensions = getDimensions();
+				final Set<PhoneDimension> theirDimensions = o.getDimensions();
+
+				final ToIntFunction<PhoneDimension> mapper = (d) -> PhoneDimension.values().length - d.ordinal();
+				final int dimVal = dimensions.stream().collect(Collectors.summingInt(mapper));
+				final int theirDimVal = theirDimensions.stream().collect(Collectors.summingInt(mapper));
+				
+				retVal = new Integer(dimVal).compareTo(theirDimVal);
+				
+				if(retVal == 0) {
+					retVal =
+							new Integer(getPosition2()).compareTo(o.getPosition2());
+				}
 			}
 		}
 		
