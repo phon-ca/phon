@@ -110,13 +110,21 @@ public class SegmentalRelations {
 				}
 			}
 			
-			// return only one relation per element
-			if(elementRelations.size() > 0) {
-				final Optional<SegmentalRelation> relation =
-						elementRelations.stream().sorted().findFirst();
-				if(relation.isPresent()) relations.add(relation.get());
-			}
+			relations.addAll(elementRelations);
+		}
+	
+		Collections.sort(relations);
+		final List<Integer> positions = new ArrayList<>();
+		final Iterator<SegmentalRelation> itr = relations.iterator();
+		while(itr.hasNext()) {
+			final SegmentalRelation relation = itr.next();
 			
+			if(positions.contains(relation.getPosition1()) || positions.contains(relation.getPosition2())) {
+				itr.remove();
+			} else {
+				positions.add(relation.getPosition1());
+				positions.add(relation.getPosition2());
+			}
 		}
 		
 		return relations;

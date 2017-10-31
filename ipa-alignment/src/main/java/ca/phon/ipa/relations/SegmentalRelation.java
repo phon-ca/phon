@@ -1,8 +1,6 @@
 package ca.phon.ipa.relations;
 
 import java.util.*;
-import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -86,8 +84,8 @@ public class SegmentalRelation implements Comparable<SegmentalRelation> {
 	 * 
 	 */
 	public static enum Relation {
-		Reduplication,
 		Migration,
+		Reduplication,
 		Metathesis,
 		Harmony,
 		Assimilation
@@ -181,6 +179,10 @@ public class SegmentalRelation implements Comparable<SegmentalRelation> {
 		return (getPosition2() == getPosition1()+1 ? Locality.Local : Locality.Nonlocal);
 	}
 	
+	public int getDistance() {
+		return (int)Math.sqrt((getPosition1()*getPosition1()) + (getPosition2()*getPosition2()));
+	}
+	
 	public String getName() {
 		final StringBuffer buffer = new StringBuffer();
 		
@@ -243,31 +245,7 @@ public class SegmentalRelation implements Comparable<SegmentalRelation> {
 
 	@Override
 	public int compareTo(SegmentalRelation o) {
-		// order by p1, relation, dimensions, p2
-		int retVal = 
-				new Integer(getPosition1()).compareTo(o.getPosition1());
-		if(retVal == 0) {		
-			retVal = 
-				new Integer(getRelation().ordinal()).compareTo(o.getRelation().ordinal());
-			
-			if(retVal == 0) {
-				final Set<PhoneDimension> dimensions = getDimensions();
-				final Set<PhoneDimension> theirDimensions = o.getDimensions();
-
-				final ToIntFunction<PhoneDimension> mapper = (d) -> PhoneDimension.values().length - d.ordinal();
-				final int dimVal = dimensions.stream().collect(Collectors.summingInt(mapper));
-				final int theirDimVal = theirDimensions.stream().collect(Collectors.summingInt(mapper));
-				
-				retVal = new Integer(dimVal).compareTo(theirDimVal);
-				
-				if(retVal == 0) {
-					retVal =
-							new Integer(getPosition2()).compareTo(o.getPosition2());
-				}
-			}
-		}
-		
-		return retVal;
+		return (new SegmentalRelationComparator()).compare(this, o);
 	}
 	
 }

@@ -5,7 +5,7 @@ package ca.phon.ipa;
  *
  */
 public enum PhoneDimension {
-	PLACE(new String[]{ 
+	PLACE(2, new String[]{ 
 			"{labial}",
 			"{interdental}", 
 			"{alveolar}", 
@@ -30,7 +30,7 @@ public enum PhoneDimension {
 			"Pharyngeal",
 			"Laryngeal"}
 		),
-	MANNER(new String[]{ 
+	MANNER(2, new String[]{ 
 			"{stop, -nasal}",
 			"{fricative}", 
 			"{affricate}", 
@@ -49,7 +49,7 @@ public enum PhoneDimension {
 			"Glide",
 			"Vowel"
 		}),
-	VOICING(new String[]{ 
+	VOICING(1, new String[]{ 
 			"{voiceless, -aspirated}",
 			"{voiced, -aspirated}",
 			"{voiceless, aspirated}", 
@@ -62,20 +62,23 @@ public enum PhoneDimension {
 		}),
 	
 	/* Vowels */
-	HEIGHT(new String[]{ "{high}", "{mid}", "{low}" },
+	HEIGHT(3, new String[]{ "{high}", "{mid}", "{low}" },
 			new String[]{"High", "Mid", "Low"}),
-	BACKNESS(new String[]{ "{front}", "{central}", "{back}" },
+	BACKNESS(2, new String[]{ "{front}", "{central}", "{back}" },
 			new String[]{"Front", "Central", "Back"}),
-	TENSENESS(new String[]{ "{tense}", "{lax}" },
+	TENSENESS(2, new String[]{ "{tense}", "{lax}" },
 			new String[]{"Tense", "Lax"}),
-	ROUNDING(new String[]{ "{round}", "{-round}" },
+	ROUNDING(1, new String[]{ "{round}", "{-round}" },
 			new String[]{"Round", "Not round"});
+	
+	private int weight;
 	
 	private String[] categories;
 	
 	private String[] labels;
 	
-	private PhoneDimension(String[] categories, String[] labels) {
+	private PhoneDimension(int weight, String[] categories, String[] labels) {
+		this.weight = weight;
 		this.categories = categories;
 		this.labels = labels;
 	}
@@ -103,6 +106,10 @@ public enum PhoneDimension {
 		}
 		
 		return retVal;
+	}
+	
+	public int getWeight() {
+		return this.weight;
 	}
 	
 	public String getCategory(IPAElement ele) {
