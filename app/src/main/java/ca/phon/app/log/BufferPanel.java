@@ -493,7 +493,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 				}
 			} else if(isShowingTable()) {
 				// save table model as csv using UTF-16 so Excel will correctly open file
-				final CSVTableDataWriter writer = new CSVTableDataWriter("UTF-16");
+				final CSVTableDataWriter writer = new CSVTableDataWriter("UTF-8");
 				try {
 					writer.writeTableToFile(dataTable, new File(saveAs));
 				} catch (IOException e) {
