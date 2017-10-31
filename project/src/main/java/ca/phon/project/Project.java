@@ -19,7 +19,7 @@
 package ca.phon.project;
 
 import java.io.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import ca.phon.extensions.IExtendable;
@@ -426,7 +426,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @return session modification date in system time zone
 	 */
-	public LocalDateTime getSessionModificationTime(Session session);
+	public ZonedDateTime getSessionModificationTime(Session session);
 
 	/**
 	 * Returns the modification date for the specified session.
@@ -436,7 +436,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @return session modification date in system time zone
 	 */
-	public LocalDateTime getSessionModificationTime(String corpus, String session);
+	public ZonedDateTime getSessionModificationTime(String corpus, String session);
 
 	/**
 	 * Returns the size on disk for the given session.

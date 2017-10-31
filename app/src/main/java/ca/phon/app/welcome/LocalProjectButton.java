@@ -81,10 +81,6 @@ public class LocalProjectButton extends MultiActionButton {
 
 	@Override
 	public void setBackground(Color c) {
-//		super.setBackground(c);
-
-//		if(getBackgroundPainter() != null) {
-			//((BgPainter)getBackgroundPainter()).origColor = c;
 		if(bgPainter != null) {
 			bgPainter.origColor = c;
 			repaint();
@@ -94,20 +90,7 @@ public class LocalProjectButton extends MultiActionButton {
 	private void updateLabels() {
 		String projPath =
 			projectFile.getName();
-//		if(filterPattern != null) {
-//			Pattern p = Pattern.compile(filterPattern);
-//			Matcher m = p.matcher(projPath);
-//			if(m.find()) {
-//				int s = m.start();
-//				int e = m.end();
-//
-//				String p1 = projPath.substring(0, s);
-//				String p2 = projPath.substring(s, e);
-//				String p3 = projPath.substring(e);
-//
-//				projPath = p1 + "<font style='background-color: blue;'>" + p2 + "</font>" + p3;
-//			}
-//		}
+		
 		getTopLabel().setText(WorkspaceTextStyler.toHeaderText(projPath));
 		getTopLabel().setFont(FontPreferences.getTitleFont());
 		getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
@@ -117,14 +100,13 @@ public class LocalProjectButton extends MultiActionButton {
 		final ZoneOffset zoneOffset = systemZoneId.getRules().getOffset(Instant.now());
 
 		final LocalDateTime modDate = LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), zoneOffset);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@h:mma");
+		final ZonedDateTime zonedDate = ZonedDateTime.of(modDate, systemZoneId);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - H:mm:ss (zzz)");
 
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		nf.setMaximumFractionDigits(2);
 
-		String modStr =
-			"Modified: " + formatter.format(modDate);
-
+		String modStr =	"Modified: " + formatter.format(zonedDate);
 		String sizeStr = "Size: ";
 		if(!projSizeCalculated) {
 			sizeStr += "Calculating...";
@@ -134,7 +116,7 @@ public class LocalProjectButton extends MultiActionButton {
 			projSizeLock.unlock();
 		}
 
-		String detailsStr =modStr + " &#8226; " + sizeStr;
+		String detailsStr = modStr + " &#8226; " + sizeStr;
 		getBottomLabel().setText(WorkspaceTextStyler.toDescText(detailsStr));
 	}
 

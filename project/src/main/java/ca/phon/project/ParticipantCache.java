@@ -23,7 +23,7 @@ public class ParticipantCache {
 
 	private final Set<Participant> participantSet;
 
-	private final Map<SessionPath, LocalDateTime> sessionMap;
+	private final Map<SessionPath, ZonedDateTime> sessionMap;
 
 	final Comparator<Participant> participantComparator = (p1, p2) -> {
 		int retVal = p1.getId().compareTo(p2.getId());
@@ -54,9 +54,9 @@ public class ParticipantCache {
 	}
 
 	public void loadSession(SessionPath sessionPath) {
-		final LocalDateTime lastScanModTime = sessionMap.get(sessionPath);
+		final ZonedDateTime lastScanModTime = sessionMap.get(sessionPath);
 		if(lastScanModTime != null) {
-			final LocalDateTime currentModTime = project.getSessionModificationTime(sessionPath.getCorpus(), sessionPath.getSession());
+			final ZonedDateTime currentModTime = project.getSessionModificationTime(sessionPath.getCorpus(), sessionPath.getSession());
 			if(currentModTime.isEqual(lastScanModTime) || currentModTime.isBefore(lastScanModTime))
 				return;
 		}

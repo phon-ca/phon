@@ -19,7 +19,7 @@
 package ca.phon.app.project;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.*;
@@ -60,7 +60,7 @@ public class SessionDetailsPane extends JTextArea {
 				int numRecords = project.numberOfRecordsInSession(corpus, session);
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@h:mma");
 
-				final LocalDateTime time = project.getSessionModificationTime(corpus, session);
+				final ZonedDateTime time = project.getSessionModificationTime(corpus, session);
 
 				sb.append("Number of records: ").append(numRecords).append("\n\n");
 				sb.append("Last modified: ").append(formatter.format(time));

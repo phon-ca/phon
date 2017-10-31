@@ -2,7 +2,7 @@ package ca.phon.app.project;
 
 import java.awt.*;
 import java.io.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
@@ -135,8 +135,8 @@ public class SessionDetails extends JPanel {
 			fileLabel.setIcon(IconManager.getInstance().getSystemIconForPath(sessionPath, IconSize.SMALL));
 			fileLabel.setToolTipText(sessionPath);
 			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@h:mma");
-			final LocalDateTime time = project.getSessionModificationTime(corpus, session);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - H:mm:ss (zzz)");
+			final ZonedDateTime time = project.getSessionModificationTime(corpus, session);
 			modifiedLabel.setText(formatter.format(time));
 			
 			final UpdateTask updateTask = new UpdateTask(corpus, session);

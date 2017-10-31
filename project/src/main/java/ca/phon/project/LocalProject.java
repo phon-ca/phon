@@ -23,6 +23,7 @@ import java.net.*;
 import java.time.*;
 import java.util.*;
 import java.util.logging.*;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.*;
 import javax.xml.parsers.*;
@@ -217,7 +218,8 @@ public class LocalProject implements Project, ProjectRefresh {
 				final List<SessionType> toRemove = new ArrayList<SessionType>(ct.getSession());
 				// look for all xml files inside corpus folder
 				for(File xmlFile:f.listFiles()) {
-					if(xmlFile.getName().endsWith(".xml")
+					if((xmlFile.getName().endsWith(".xml")
+							|| xmlFile.getName().endsWith(".cha"))
 							&& !xmlFile.getName().startsWith("~")
 							&& !xmlFile.getName().endsWith("~")
 							&& !xmlFile.getName().startsWith("__")
@@ -485,9 +487,26 @@ public class LocalProject implements Project, ProjectRefresh {
 		ct.setLoc(folder.toURI().toString());
 	}
 
+	private Set<String> getSessionExtensions() {
+		final Set<String> retVal = new LinkedHashSet<>();
+		
+		final SessionInputFactory factory = new SessionInputFactory();
+		for(SessionIO sessionIO:factory.availableReaders()) {
+			retVal.add(sessionIO.extension());
+		}
+		
+		return retVal;
+	}
+	
 	private File getSessionFile(String corpus, String session) {
-		File retVal = new File(getCorpusFolder(corpus), session + ".xml");
-
+		final List<File> potentialFiles = 
+				getSessionExtensions().stream()
+					.map( (ext) -> new File(getCorpusFolder(corpus), session + "." + ext) )
+					.collect( Collectors.toList() );
+		File retVal = potentialFiles.stream()
+					.filter( File::exists ) 
+					.findFirst().get();
+		
 		// check to see if session file path has been defined in xml
 		final SessionType st = getSessionInfo(corpus,  session);
 		if(st != null && st.getLoc() != null) {
@@ -801,12 +820,12 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	@Override
-	public LocalDateTime getSessionModificationTime(Session session) {
+	public ZonedDateTime getSessionModificationTime(Session session) {
 		return getSessionModificationTime(session.getCorpus(), session.getName());
 	}
 
 	@Override
-	public LocalDateTime getSessionModificationTime(String corpus, String session) {
+	public ZonedDateTime getSessionModificationTime(String corpus, String session) {
 		final File sessionFile = getSessionFile(corpus, session);
 		long modTime = 0L;
 		if(sessionFile.exists()) {
@@ -815,7 +834,8 @@ public class LocalProject implements Project, ProjectRefresh {
 		final ZoneId systemZoneId = ZoneId.systemDefault();
 		final ZoneOffset zoneOffset = systemZoneId.getRules().getOffset(Instant.now());
 
-		return LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), zoneOffset);
+		final LocalDateTime localTime = LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), zoneOffset);
+		return ZonedDateTime.of(localTime, systemZoneId);
 	}
 
 	@Override
@@ -840,7 +860,8 @@ public class LocalProject implements Project, ProjectRefresh {
 			throws IOException {
 		final File sessionFile = getSessionFile(corpus, session);
 		int retVal = 0;
-		if(sessionFile.exists()) {
+		
+		if(sessionFile.exists() && sessionFile.getName().endsWith(".xml") ) {
 			// it's faster to use an xpath expression
 			// to determine the number of records.
 			String xpathPattern = "//u";
@@ -866,6 +887,9 @@ public class LocalProject implements Project, ProjectRefresh {
 			} catch (XPathExpressionException e) {
 				throw new IOException(e);
 			}
+		} else {
+			final Session s = openSession(corpus, session);
+			retVal = s.getRecordCount();
 		}
 
 		return retVal;
