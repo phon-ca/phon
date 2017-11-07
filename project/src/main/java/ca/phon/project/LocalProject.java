@@ -503,9 +503,10 @@ public class LocalProject implements Project, ProjectRefresh {
 				getSessionExtensions().stream()
 					.map( (ext) -> new File(getCorpusFolder(corpus), session + "." + ext) )
 					.collect( Collectors.toList() );
-		File retVal = potentialFiles.stream()
+		final Optional<File> optionalFile = potentialFiles.stream()
 					.filter( File::exists ) 
-					.findFirst().get();
+					.findFirst();
+		File retVal = optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
 		
 		// check to see if session file path has been defined in xml
 		final SessionType st = getSessionInfo(corpus,  session);
