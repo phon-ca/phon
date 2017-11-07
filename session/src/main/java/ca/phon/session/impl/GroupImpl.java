@@ -19,7 +19,7 @@
 package ca.phon.session.impl;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.*;
 import ca.phon.orthography.*;
 import ca.phon.session.*;
 
@@ -185,4 +185,8 @@ public class GroupImpl implements Group {
 		return retVal;
 	}
 
+	public SyllableMap getSyllableAlignment() {
+		return new SyllableMap(getIPATarget(), getIPAActual(), getPhoneAlignment());
+	}
+	
 }
