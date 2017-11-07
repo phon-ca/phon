@@ -108,119 +108,6 @@ public class PhoneAligner implements Aligner<IPAElement> {
 	}
 	
 	/**
-	 * Creates the syllable alignment
-	 * 
-	 * @param targetRep
-	 * @param actualRep
-	 * @param targetPhoneAlignment
-	 * @param actualPhoneAlignment
-	 */
-	protected Integer[][] createSyllableMap(
-			IPATranscript targetRep, IPATranscript actualRep,
-			Integer[] targetPhoneAlignment, Integer[] actualPhoneAlignment) {
-		Integer[][] retVal = new Integer[2][];
-		
-		final SyllableVisitor syllVisitor = new SyllableVisitor();
-		
-		targetRep.accept(syllVisitor);
-		final List<IPATranscript> targetSylls = syllVisitor.getSyllables();
-				
-		syllVisitor.reset();
-		actualRep.accept(syllVisitor);
-		final List<IPATranscript> actualSylls = syllVisitor.getSyllables();
-		
-		ArrayList<Mapping> mappings = new ArrayList<Mapping>();
-		
-		int targetIndex = -1;
-		int actualIndex = -1;
-		
-		final AudiblePhoneVisitor soundPhoneVisitor = new AudiblePhoneVisitor();
-		targetRep.accept(soundPhoneVisitor);
-		final List<IPAElement> targetPhones = soundPhoneVisitor.getPhones();
-		
-		soundPhoneVisitor.reset();
-		actualRep.accept(soundPhoneVisitor);
-		final List<IPAElement> actualPhones = soundPhoneVisitor.getPhones();
-		
-		// add mappings for present alignments
-		for(int i = 0; i < targetPhoneAlignment.length; i++) {
-			final IPAElement targetPhone = 
-				(targetPhoneAlignment[i] < 0 ? null : targetPhones.get(targetPhoneAlignment[i]));
-			final IPAElement actualPhone = 
-				(actualPhoneAlignment[i] < 0 ? null : actualPhones.get(actualPhoneAlignment[i]));
-			targetIndex = getSyllableIndex(targetRep, targetPhone, targetSylls);
-			actualIndex = getSyllableIndex(actualRep, actualPhone, actualSylls);
-			
-			if(targetIndex >= 0 && actualIndex >= 0) {
-				Mapping newMap = new Mapping();
-				newMap.targetIndex = targetIndex;
-				newMap.actualIndex = actualIndex;
-				
-				if(!mappings.contains(newMap))
-					mappings.add(newMap);
-			}
-		}
-		
-		// add indels for deleted syllables
-		int[] targetSyllableCount = new int[targetSylls.size()];
-		int[] actualSyllableCount = new int[actualSylls.size()];
-		
-		for(Mapping m:mappings) {
-			targetSyllableCount[m.targetIndex]++;
-			actualSyllableCount[m.actualIndex]++;
-		}
-		
-		for(int i = 0; i < targetSyllableCount.length; i++) {
-			if(targetSyllableCount[i] == 0) {
-				Mapping newMap = new Mapping();
-				newMap.targetIndex = i;
-				newMap.actualIndex = -1;
-				
-				mappings.add(newMap);
-			}
-		}
-		
-		for(int i = 0; i < actualSyllableCount.length; i++) {
-			if(actualSyllableCount[i] == 0) {
-				Mapping newMap = new Mapping();
-				newMap.targetIndex = -1;
-				newMap.actualIndex = i;
-				
-				mappings.add(newMap);
-			}
-		}
-		
-		// create the syllable arrays
-		Integer[] targetSyllableAlignment = new Integer[mappings.size()];
-		Integer[] actualSyllableAlignment = new Integer[mappings.size()];
-		
-		Collections.sort(mappings);
-		
-		int index = 0;
-		for(Mapping m:mappings) {
-			if(m.targetIndex >= 0) {
-				targetSyllableAlignment[index] = m.targetIndex;
-			} else {
-				targetSyllableAlignment[index] = AlignmentMap.INDEL_VALUE;
-			}
-			
-			
-			if(m.actualIndex >= 0) {
-				actualSyllableAlignment[index] = m.actualIndex;
-			} else {
-				actualSyllableAlignment[index] = AlignmentMap.INDEL_VALUE;
-			}
-			
-			index++;
-		}
-		
-		retVal[0] = targetSyllableAlignment;
-		retVal[1] = actualSyllableAlignment;
-				
-		return retVal;
-	}
-	
-	/**
 	 * Return the cost to insert or delete a phone
 	 * 
 	 * @param p the phone
@@ -739,9 +626,11 @@ public class PhoneAligner implements Aligner<IPAElement> {
 				isGlide(p) || isHighLaxVowel(p));
 	}
 	
+	private PhoneMap lastAlignmentMap = null;
 	@Override
 	public AlignmentMap<IPAElement> calculateAlignment(IPAElement[] top, IPAElement[] bottom) {
-		return calculatePhoneMap(new IPATranscript(top), new IPATranscript(bottom));
+		lastAlignmentMap = calculatePhoneMap(new IPATranscript(top), new IPATranscript(bottom));
+		return getAlignmentMap();
 	}
 	
 	public PhoneMap calculatePhoneMap(IPATranscript target, IPATranscript actual) {
@@ -750,14 +639,15 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		final PhoneMap pm = new PhoneMap(target, actual);
 		pm.setTopAlignment(alignment[0]);
 		pm.setBottomAlignment(alignment[1]);
+	
+		lastAlignmentMap = pm;
 		
 		return pm;
 	}
 
 	@Override
 	public AlignmentMap<IPAElement> getAlignmentMap() {
-		// TODO Auto-generated method stub
-		return null;
+		return lastAlignmentMap;
 	}
 
 	/* Class for internal workings */
