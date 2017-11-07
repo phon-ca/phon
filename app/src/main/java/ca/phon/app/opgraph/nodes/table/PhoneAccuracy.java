@@ -173,9 +173,9 @@ public class PhoneAccuracy extends TableOpNode implements NodeSettings {
 		List<String> colNames = new ArrayList<>();
 		colNames.add("IPA Target");
 		colNames.add("Count");
-		colNames.add("Accurate");
-		colNames.add("Substituted");
-		colNames.add("Deleted");
+		colNames.add("# Correct");
+		colNames.add("# Substituted");
+		colNames.add("# Deleted");
 		for(int i = 0; i < colNames.size(); i++) outputTable.setColumnTitle(i, colNames.get(i));
 
 		for(IPATranscript target:totals.keySet()) {
