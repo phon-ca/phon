@@ -520,6 +520,11 @@ predefined_phone_class returns [PhoneMatcher value]
 			break;
 
 		case 'p':
+			IntraWordPauseMatcher pauseMatcher = new IntraWordPauseMatcher();
+			$value = pauseMatcher;
+			break;
+			
+		case 'P':
 			RegexMatcher rm = new RegexMatcher("\\(\\.{1,3}\\)");
 			$value = rm;
 			break;
