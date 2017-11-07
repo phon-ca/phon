@@ -94,7 +94,7 @@ public class AlignmentMap<T> {
 		this.topElements = topElements;
 	}
 	
-	public T[] getAligned(T[] eles) {
+	public List<T> getAligned(T[] eles) {
 		return getAligned(Arrays.asList(eles));
 	}
 	
@@ -105,7 +105,7 @@ public class AlignmentMap<T> {
 	 * @param eles
 	 * @return aligned lements
 	 */
-	public T[] getAligned(Iterable<T> iterable) {
+	public List<T> getAligned(Iterable<T> iterable) {
 		final Iterator<T> itr = iterable.iterator();
 		final List<T> list = new ArrayList<T>();
 		while(itr.hasNext()) list.add(itr.next());
@@ -122,10 +122,9 @@ public class AlignmentMap<T> {
 	 * @param eles
 	 * @return aligned elements
 	 */
-	@SuppressWarnings("unchecked")
-	public T[] getAligned(List<T> eles) {
+	public List<T> getAligned(List<T> eles) {
 		final List<T> retVal = new ArrayList<T>();		
-		if(eles.size() == 0) return (T[])retVal.toArray();
+		if(eles.size() == 0) return retVal;
 		final List<T> topElements = getTopAlignmentElements();
 		final List<T> btmElements = getBottomAlignmentElements();
 		
@@ -134,14 +133,14 @@ public class AlignmentMap<T> {
 		final int startIdx = (isTop ? topElements.indexOf(eles.get(0)) : btmElements.indexOf(eles.get(0)));
 		final int endIdx = (isTop ? topElements.indexOf(eles.get(eles.size()-1)) : btmElements.indexOf(eles.get(eles.size()-1)));
 		
-		if(startIdx < 0 || endIdx < 0) return null;
+		if(startIdx < 0 || endIdx < 0) return retVal;
 		
 		for(int i = startIdx; i <= endIdx; i++) {
 			final T ele = (isTop ? btmElements.get(i) : topElements.get(i));
 			if(ele != null)
-				retVal.add(ele);
+				retVal.add((T)ele);
 		}
-		return (T[])retVal.toArray();
+		return retVal;
 	}
 	
 	/** Get the top alignment as an array of elements */

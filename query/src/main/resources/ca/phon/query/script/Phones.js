@@ -300,7 +300,7 @@ function query_record(recordIndex, record) {
 					var alignedRv = factory.createResultValue();
 					alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual": "IPA Target");
 					alignedRv.groupIndex = group.groupIndex;
-					if (aligned != null && aligned.length > 0) {
+					if (aligned != null && aligned.size() > 0) {
 						var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
 						var alignedLength = alignedIpa.toString().length();
 

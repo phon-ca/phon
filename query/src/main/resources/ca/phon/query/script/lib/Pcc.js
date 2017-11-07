@@ -60,8 +60,8 @@ exports.Pcc = {
 
 				// check aligned phone
 				var alignedData = alignment[ "getAligned(java.lang.Iterable)"]([phone]);
-				if (alignedData != null) {
-					var actualPhone = alignedData[0];
+				if (alignedData.size() > 0) {
+					var actualPhone = alignedData.get(0);
 					if (actualPhone != null) {
 						var targetPhoneString =
 						(ignoreDiacritics ? (new IPATranscript([phone])).removePunctuation(true).stripDiacritics().toString(): phone.toString());
@@ -91,8 +91,8 @@ exports.Pcc = {
 
 				// check aligned phone
 				var alignedData = alignment[ "getAligned(java.lang.Iterable)"]([phone]);
-				if (alignedData != null) {
-					var targetPhone = alignedData[0];
+				if (alignedData.size() > 0) {
+					var targetPhone = alignedData.get(0);
 					if (targetPhone == null) {
 						numEpenthesized++;
 					}
