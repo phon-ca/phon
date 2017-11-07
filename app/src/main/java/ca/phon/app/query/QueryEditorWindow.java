@@ -482,7 +482,7 @@ public class QueryEditorWindow extends CommonModuleFrame {
 		});
 		// break on entering main query script
 		debugger.doBreak();
-		debugger.setSize(500, 600);
+		debugger.pack();
 		debugger.setVisible(true);
 		debugger.go();
 		
