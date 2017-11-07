@@ -108,7 +108,10 @@ exports.TierList = function(id) {
 				tierResultValue.range = new Range(startIndex, startIndex + length, false);
 				resultValues.push(tierResultValue);
 			} else {
-				if(tierName == "Target CV") {
+				if(tierName == "Phone Alignment") {
+					var align = obj.phoneAlignment;
+					tierVal = (align != null ? align.toString(false) : "");
+				} else if(tierName == "Target CV") {
 					var ipaT = obj.IPATarget;
 					tierVal = (ipaT != null ? ipaT.cvPattern : "");
 				} else if(tierName == "Actual CV") {
