@@ -21,7 +21,7 @@ package ca.phon.ipa;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 
-public class IntraWordPause extends IPAElement {
+public final class IntraWordPause extends IPAElement {
 	
 	public static final Character INTRA_WORD_PAUSE_CHAR = '^';
 	

@@ -7,7 +7,7 @@ import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
 
 import ca.phon.phonex.*;
-import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -236,6 +236,13 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	}
 	
 	@Visits
+	public void visitIntraWordPause(IntraWordPause wp) {
+		if(includeSyllableBoundaries) {
+			builder.append(new IntraWordPause());
+		}
+	}
+	
+	@Visits
 	public void visitCompoundPhone(CompoundPhone cp) {
 		final Phone c1 = cover(cp.getFirstPhone());
 		final Phone c2 = cover(cp.getSecondPhone());
@@ -262,7 +269,10 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 			List<IPATranscript> sylls = retVal.syllables();
 			for(int syllIdx = 0; syllIdx < sylls.size(); syllIdx++) {
 				final IPATranscript syll = sylls.get(syllIdx);
-				if(syllIdx > 0 && !syll.matches("^\\s.+")) {
+				final Segregated seg = syll.getExtension(Segregated.class);
+				if(seg.isSegregated())
+					buffer.append(new IntraWordPause());
+				if(syllIdx > 0 && !seg.isSegregated() && !syll.matches("^\\s.+")) {
 					buffer.appendSyllableBoundary();
 				}
 				buffer.append(syll);

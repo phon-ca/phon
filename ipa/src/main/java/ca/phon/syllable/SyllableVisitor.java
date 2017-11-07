@@ -32,6 +32,8 @@ import ca.phon.visitor.annotation.Visits;
  */
 public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	
+	private boolean segregated = false;
+	
 	/**
 	 * list of detected syllables
 	 */
@@ -72,6 +74,12 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		appendSyllable(stressMarker);
 	}
 	
+	@Visits
+	public void visitIntraWordPause(IntraWordPause intraWordPause) {
+		breakSyllable();
+		segregated = true;
+	}
+	
 	protected void breakSyllable() {
 		final IPATranscript currentSyllable = currentSyllableBuilder.toIPATranscript();
 		if(currentSyllable.length() > 0) {
@@ -84,7 +92,11 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 			}
 			currentSyllable.putExtension(SyllableStress.class, stress);
 			
+			currentSyllable.putExtension(Segregated.class, new Segregated(segregated));
+			
 			syllables.add(currentSyllable);
+			
+			segregated = false;
 			currentSyllableBuilder = new IPATranscriptBuilder();
 		}
 	}

@@ -39,7 +39,6 @@ public final class SyllableBoundary extends IPAElement {
 
 	@Override
 	protected FeatureSet _getFeatureSet() {
-		// TODO Fix feature set for syllable boundary
 		return new FeatureSet();
 	}
 
