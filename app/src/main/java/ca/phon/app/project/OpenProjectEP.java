@@ -19,10 +19,9 @@
 package ca.phon.app.project;
 
 import java.awt.GraphicsEnvironment;
-import java.io.*;
+import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.zip.*;
 
 import javax.swing.SwingUtilities;
 
@@ -98,33 +97,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 					return true;
 				}
 			}
-
-			// 2010-11-24: New project format - plain directories.  We
-			//             need to force people into decompressing the project.
-			// is the file a .phon (or .zip) file or a directory?
-			// if it's a .phon file we need to de-compress the file
-			if(myFile.isFile() && (myFile.getName().endsWith(".phon")
-									|| myFile.getName().endsWith(".zip")) ) {
-				int retVal =
-						NativeDialogs.showYesNoDialogBlocking(
-							CommonModuleFrame.getCurrentFrame(), "",
-							"Expand Project",
-							"Phon 1.5+ no longer uses a compressed file format for projects. "
-							+ " Press yes to expand the contents of your project before opening.");
-				if(retVal == NativeDialogEvent.YES_OPTION) {
-					File parentDir = myFile.getParentFile();
-					String newProjName = myFile.getName().substring(0, myFile.getName().length()-5);
-					File extractDir = new File(parentDir, newProjName);
-					extractZip(myFile, extractDir);
-
-					myFile = extractDir;
-					
-				} else {
-					props.setMessage("Could not open project, see log for details.");
-					NativeDialogs.showMessageDialog(props);
-					return false;
-				}
-			}
 			
 			// file is read-only
 			if(!myFile.canWrite()) {
@@ -175,67 +147,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		
 		return false;
     }
-
-	private final static int ZIP_BUFFER = 2048;
-	/**
-	 * Extract contents of a zip file to the destination directory.
-	 */
-	private void extractZip(File zipFile, File destDir)
-		throws IOException {
-
-		BufferedOutputStream out = null;
-		BufferedInputStream in = null;
-		
-		
-		// create output directory if it does not exist
-		if(destDir.exists() && !destDir.isDirectory()) {
-			throw new IOException("'" + destDir.getAbsolutePath() + "' is not a directory.");
-		}
-		
-		ZipFile zip = new ZipFile(zipFile);
-
-		if(!destDir.exists()) {
-			destDir.mkdirs();
-		}
-
-		ZipEntry entry = null;
-		Enumeration<? extends ZipEntry> entries = zip.entries();
-		while(entries.hasMoreElements()) {
-			entry = entries.nextElement();
-
-			if(entry.isDirectory()) {
-				File outDir = new File(destDir, entry.getName());
-				if(!outDir.exists())
-					outDir.mkdirs();
-			} else {
-				LOGGER.info("Extracting: " + entry);
-
-				in = new BufferedInputStream(zip.getInputStream(entry));
-				int count = -1;
-				byte data[] = new byte[ZIP_BUFFER];
-				File outputFile = new File(destDir, entry.getName());
-
-				if(outputFile.exists()) {
-					LOGGER.warning("Overwriting file '" + outputFile.getAbsolutePath() + "'");
-				}
-
-				File parentFile = outputFile.getParentFile();
-
-				if(!parentFile.exists())
-					parentFile.mkdirs();
-
-				FileOutputStream fos = new FileOutputStream(outputFile);
-				out = new BufferedOutputStream(fos, ZIP_BUFFER);
-				while((count = in.read(data, 0, ZIP_BUFFER)) != -1) {
-					out.write(data, 0, count);
-				}
-				out.flush();
-				out.close();
-				in.close();
-			}
-		}
-		zip.close();
-	}
 
 	@Override
 	public void pluginStart(Map<String, Object> args)  {
