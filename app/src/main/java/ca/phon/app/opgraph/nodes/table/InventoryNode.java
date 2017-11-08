@@ -83,8 +83,13 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final TableDataSource inputTable = (TableDataSource)context.get(tableInput);
+		
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
-
+		context.put(tableOutput, outputTable);
+		
+		if(inputTable == null)
+			return;
+		
 		// setup options based on global inputs
 		ColumnInfo groupBy = getInventorySettings().getGroupBy();
 		if(groupBy == null) {
@@ -131,8 +136,6 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		for(int i = 0; i < colNames.size(); i++) {
 			outputTable.setColumnTitle(i, colNames.get(i));
 		}
-		
-		context.put(tableOutput, outputTable);
 	}
 	
 	private Set<GroupKey> collectGroupKeys(TableDataSource table) {
