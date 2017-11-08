@@ -135,7 +135,7 @@ public class SessionDetails extends JPanel {
 			fileLabel.setIcon(IconManager.getInstance().getSystemIconForPath(sessionPath, IconSize.SMALL));
 			fileLabel.setToolTipText(sessionPath);
 			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - H:mm:ss (zzz)");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss (zzz)");
 			final ZonedDateTime time = project.getSessionModificationTime(corpus, session);
 			modifiedLabel.setText(formatter.format(time));
 			

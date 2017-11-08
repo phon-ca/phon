@@ -297,8 +297,8 @@ public class FolderProjectList extends JPanel {
 				
 				retVal = o1Name.compareTo(o2Name);
 			} else if(sortBy == SortBy.MOD_DATE) {
-				Long o1Mod = o1.getProjectFile().lastModified();
-				Long o2Mod = o2.getProjectFile().lastModified();
+				Long o1Mod = new File(o1.getProjectFile(), "project.xml").lastModified();
+				Long o2Mod = new File(o2.getProjectFile(), "project.xml").lastModified();
 				
 				retVal = o2Mod.compareTo(o1Mod);
 			} else if(sortBy == SortBy.SIZE) {
