@@ -104,7 +104,7 @@ public class TestPredefinedPhoneClasses {
 	
 	@Test
 	public void testPauseClass() throws ParseException {
-		final String phonex = "\\p";
+		final String phonex = "\\P";
 		final String txt = "one (.) two (..) three (...) four";
 		
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
