@@ -51,9 +51,13 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	private PhonScript script;
 
 	private ScriptPanel scriptPanel;
+	
+//	private InputField showDebuggerInputField = new InputField("showDebugger", "Show debug UI when executing this node",
+//			true, true, Boolean.class);
 
 	private InputField paramsInputField = new InputField("parameters", "Map of script parameters, these will override node settings.",
 			true, true, Map.class);
+	
 
 	private OutputField paramsOutputField = new OutputField("parameters",
 			"Parameters used for script, including those entered using the node settings dialog", true, Map.class);
@@ -75,9 +79,12 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		this.script = script;
 		addQueryLibrary();
 
+//		putField(showDebuggerInputField);
 		putField(paramsInputField);
 		putField(scriptOutputField);
 		putField(paramsOutputField);
+		
+		reloadFields();
 
 		putExtension(NodeSettings.class, this);
 	}
@@ -170,8 +177,10 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
+//		final boolean showDebugger = (context.get(showDebuggerInputField) != null ? (boolean)context.get(showDebuggerInputField) : false);
+		
 		final PhonScript phonScript = getScript();
-		final PhonScriptContext ctx = phonScript.getContext();
+		PhonScriptContext ctx = phonScript.getContext();
 
 		ScriptParameters scriptParams = new ScriptParameters();
 		try {
@@ -211,8 +220,44 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 			final Scriptable scope = ctx.getEvaluatedScope();
 			ctx.installParams(scope);
 
-			if(ctx.hasFunction(scope, "run", 1))
+			if(ctx.hasFunction(scope, "run", 1)) {
+//				if(showDebugger) {
+//					// reset context
+//					((BasicScript)phonScript).resetContext();
+//					ctx = phonScript.getContext();
+//					
+//					final Main debugger = Main.mainEmbedded("Debugger : " + getName());
+//					debugger.setBreakOnEnter(true);
+//					debugger.setBreakOnExceptions(true);
+//					
+//					final Context jsContext = ctx.enter();
+//					jsContext.setOptimizationLevel(-1);
+//					final ScriptableObject debugScope = jsContext.initStandardObjects();
+//					
+//					debugger.attachTo(jsContext.getFactory());
+//					debugger.setScope(debugScope);
+//					ctx.exit();
+//					
+//					final ScriptParameters newParams = ctx.getScriptParameters(ctx.getEvaluatedScope(debugScope));
+//					ScriptParameters.copyParams(scriptParams, newParams);
+//					
+//					debugger.setExitAction(new Runnable() {
+//						
+//						@Override
+//						public void run() {
+//							debugger.detach();
+//							debugger.setVisible(false);
+//						}
+//						
+//					});
+//					// break on entering main query script
+//					debugger.doBreak();
+//					debugger.pack();
+//					debugger.setVisible(true);
+////					debugger.go();
+//				} 
 				ctx.callFunction(scope, "run", context);
+			}
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
@@ -229,6 +274,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	public Component getComponent(GraphDocument document) {
 		if(this.scriptPanel == null) {
 			this.scriptPanel = new ScriptPanel(getScript());
+			scriptPanel.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
 		}
 		return this.scriptPanel;
 	}
