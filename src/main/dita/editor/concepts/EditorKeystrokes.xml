@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
+<topic id="topic-1">
+    <title>Session Editor - Keyboard Shortcuts</title>
+    <body>
+        <p>Editor keystrokes:</p>
+        <p>
+            <simpletable frame="all" id="simpletable_754b92cd-3648-4e44-8d14-33081058f721">
+                <sthead>
+                    <stentry>Command</stentry>
+                    <stentry>Mac</stentry>
+                    <stentry>Windows</stentry>
+                    <stentry>Notes</stentry>
+                </sthead>
+                <strow>
+                    <stentry>Save</stentry>
+                    <stentry><userinput>CMD+S</userinput></stentry>
+                    <stentry><userinput>CTRL+S</userinput></stentry>
+                    <stentry/>
+                </strow>
+                <strow>
+                    <stentry>New Record</stentry>
+                    <stentry><userinput>CMD+N</userinput></stentry>
+                    <stentry><userinput>CTRL+N</userinput></stentry>
+                    <stentry>The new record will be added after the current record in the
+                        session.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Cut Record</stentry>
+                    <stentry><userinput>Shift+CMD+X</userinput></stentry>
+                    <stentry><userinput>Shift+CRTL+X</userinput></stentry>
+                    <stentry>The current record will be deleted and its contents will be copied to your 
+                        system's clipboard.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Copy Record</stentry>
+                    <stentry><userinput>Shift+CMD+C</userinput></stentry>
+                    <stentry><userinput>Shift+CTRL+C</userinput></stentry>
+                    <stentry>All tiers and and tier content visible in <wintitle>Record Data</wintitle>
+                    will be copied to your system's clipboard.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Paste Record</stentry>
+                    <stentry><userinput>Shift+CMD+V</userinput></stentry>
+                    <stentry><userinput>Shift+CTRL+V</userinput></stentry>
+                    <stentry>The most recently copied or cut record will appear as a new record at the 
+                    current position in <wintitle>Record Data</wintitle>.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Next Record</stentry>
+                    <stentry><userinput>PAGE_UP</userinput></stentry>
+                    <stentry><userinput>PAGE_UP</userinput></stentry>
+                    <stentry/>
+                </strow>
+                <strow>
+                    <stentry>Previous Record</stentry>
+                    <stentry><userinput>PAGE_DOWN</userinput></stentry>
+                    <stentry><userinput>PAGE_DOWN</userinput></stentry>
+                    <stentry/>
+                </strow>
+                <strow>
+                    <stentry>Last Record</stentry>
+                    <stentry><userinput>CTRL+SHIFT+N</userinput></stentry>
+                    <stentry><userinput>ALT+SHIFT+N</userinput></stentry>
+                    <stentry/>
+                </strow>
+                <strow>
+                    <stentry>First Record</stentry>
+                    <stentry><userinput>CTRL+SHIFT+P</userinput></stentry>
+                    <stentry><userinput>ALT+SHIFT+P</userinput></stentry>
+                    <stentry/>
+                </strow>
+                <strow>
+                    <stentry>Play Segment (Media Player)</stentry>
+                    <stentry><userinput>CMD+R</userinput></stentry>
+                    <stentry><userinput>CTRL+R</userinput></stentry>
+                    <stentry>Only available when the external media player is open.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Play Segment/Selection (Speech Analysis)</stentry>
+                    <stentry><userinput>Shift+CMD+R</userinput></stentry>
+                    <stentry><userinput>Shift+CTRL+R</userinput></stentry>
+                    <stentry>Only available when the waveform is displayed.</stentry>
+                </strow>
+                <strow>
+                    <stentry>View IPA Chart</stentry>
+                    <stentry><userinput>CMD+M</userinput></stentry>
+                    <stentry><userinput>CTRL+M</userinput></stentry>
+                    <stentry/>
+                </strow>
+            </simpletable>
+        </p>
+        <p>The following keystrokes are available when a tier is focused:</p>
+        <p>
+            <simpletable frame="all" id="simpletable_300b6022-4f5f-43a6-8ba3-aa2f74259bb9">
+                <sthead>
+                    <stentry>Command</stentry>
+                    <stentry>Mac</stentry>
+                    <stentry>Windows</stentry>
+                    <stentry>Notes</stentry>
+                </sthead>
+                <strow>
+                    <stentry>Next Group/Tier</stentry>
+                    <stentry><userinput>Tab</userinput></stentry>
+                    <stentry><userinput>Tab</userinput></stentry>
+                    <stentry>Will move the caret to the beginning of the next group or the next
+                        tier.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Previous Group/Tier</stentry>
+                    <stentry><userinput>Shift+Tab</userinput></stentry>
+                    <stentry><userinput>Shift+Tab</userinput></stentry>
+                    <stentry>Will move the caret to the beginning of the previous group or previous
+                        tier.</stentry>
+                </strow>
+                <strow>
+                    <stentry>New Group</stentry>
+                    <stentry><userinput>CMD+G</userinput></stentry>
+                    <stentry><userinput>CTRL+G</userinput></stentry>
+                    <stentry>Creates a new group after the current (or end if no current group is
+                        focused.)</stentry>
+                </strow>
+                <strow>
+                    <stentry>Merge Group</stentry>
+                    <stentry><userinput>CTRL+ALT+G</userinput></stentry>
+                    <stentry><userinput>CTRL+ALT+G</userinput></stentry>
+                    <stentry>Merges the current group with the next group.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Split/New Group</stentry>
+                    <stentry><userinput>CTRL+ALT+K</userinput></stentry>
+                    <stentry><userinput>CTRL+ALT+K</userinput></stentry>
+                    <stentry>Creates a new group at the caret position.  Creates a new group at the
+                        beginning of the record if caret is at beginning of first group.</stentry>
+                </strow>
+                <strow>
+                    <stentry>Delete Group</stentry>
+                    <stentry><userinput>CMD+ALT+Shift+G</userinput></stentry>
+                    <stentry><userinput>CTRL+ALT+Shift+G</userinput></stentry>
+                    <stentry>Delete the current group.</stentry>
+                </strow>
+            </simpletable>
+        </p>
+    </body>
+</topic>

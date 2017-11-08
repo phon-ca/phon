@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Verify Alignment</title>
+    <shortdesc>Check to ensure proper alignment between <i>IPA Target</i> and <i>IPA Actual</i>
+        phones.</shortdesc>
+    <taskbody>
+        <context>In order for the Alignment module to work, the <i>IPA Target</i> and/or <i>IPA
+                    Actual</i> transcriptions must be completed (verified in the case of blind
+                transcriptions) and saved. From the <wintitle>Syllabification &amp;
+                    Alignment</wintitle> view:</context>
+        <steps>
+            <step>
+                <cmd>Select any phone in the <i>Alignment</i> tier which does not appear to be
+                    properly aligned.</cmd>
+                <stepresult>An outline will appear around the phone in question.</stepresult>
+            </step>
+            <step>
+                <cmd>Use <userinput>OPT/ALT+left/right arrows</userinput> to move the phone into
+                    proper alignment. Alternately, click and drag a phone to re-align it.</cmd>
+            </step>
+            <step>
+                <cmd>Use <userinput>OPT/ALT+up/down arrows</userinput> to alternate phone selection
+                    between Target phones and Actual phones. Repeat Step 2 until all phones are
+                    aligned to your satisfaction.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

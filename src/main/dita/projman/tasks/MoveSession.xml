@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Move Session</title>
+    <shortdesc>Move a session to a different corpus.</shortdesc>
+    <taskbody>
+        <context>From <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) on the session you wish to
+                    move, choose <uicontrol>Move Session To</uicontrol> from the context menu, and
+                    click on the corpus you wish to move your session to.</cmd>
+                <stepresult>A dialog will appear asking you to confirm that you would like to delete
+                    the session from its original location. Click <uicontrol>Yes</uicontrol>. Your
+                    session will be moved to the selected corpus.<note>You may move your session to
+                        a corpus within the current project, to another open project, or to any
+                        project in your workspace folder.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>
+

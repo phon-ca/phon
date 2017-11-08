@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="createSession">
+    <title>Create Session</title>
+    <shortdesc>Create a new session in an existing corpus.</shortdesc>
+    <taskbody>
+        <prereq>A project with at least one corpus must be open.</prereq>
+        <context>From the <wintitle>Project Manager</wintitle> window:</context>
+        <steps id="steps_b7a946aa-469f-4814-a629-fcf01f933f6e">
+            <step>
+                <cmd>Select the <menucascade>
+                        <uicontrol>Project</uicontrol>
+                        <uicontrol>New Session</uicontrol>
+                    </menucascade> menu item, or right-click (<userinput>CTRL+click</userinput>) in
+                    the <uicontrol>Corpus</uicontrol> list. </cmd>
+                <stepresult>The <wintitle>New Session</wintitle> dialog will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Enter a name for the new session, choose the destination corpus and click
+                        <uicontrol>Ok</uicontrol>. If you require a new corpus for the new session,
+                    click the plus sign to the right of the corpus selection field and enter the new
+                    corpus information as per the description at <xref href="CreateCorpus.xml"/>,
+                    and then select this new corpus as your destination.</cmd>
+                <stepresult>The new session will be created in the specified corpus and opened for
+                    editing. An error message will appear if a session with that name already
+                        exists.<note>Each new session is created with an empty record at the
+                        beginning of it.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

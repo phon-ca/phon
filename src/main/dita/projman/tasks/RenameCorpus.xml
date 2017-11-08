@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Rename Corpus</title>
+    <shortdesc>Rename a corpus in your project.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
+                    rename and choose <uicontrol>Rename Corpus</uicontrol> from the context
+                    menu.</cmd>
+                <stepresult>The <wintitle>Rename Corpus</wintitle> window will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Follow the instructions in the <wintitle>Rename Corpus</wintitle> window. If
+                    you are unsure whether you want to rename your corpus, click
+                        <uicontrol>Cancel</uicontrol>. To continue and rename the corpus, click
+                        <uicontrol>OK</uicontrol>.</cmd>
+                <stepresult>You will return to the <wintitle>Project Manager</wintitle> window and
+                    the corpus will be renamed accordingly.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

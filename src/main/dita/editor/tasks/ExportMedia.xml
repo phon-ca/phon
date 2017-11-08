@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Export Media from Media Player</title>
+    <shortdesc>Export clips of your media file from the <wintitle>Media Player</wintitle>
+        view.</shortdesc>
+    <taskbody>
+        <prereq>
+            A media file must be linked to your session.
+        </prereq>
+        <context>From the <wintitle>Media Player</wintitle> view:</context>
+        <steps id="steps_hhx_uek_fc">
+            <step>
+                <cmd>Click the arrow at the bottom right of the media field.</cmd>
+                <stepresult>This will open a context menu with the options <uicontrol>Take
+                        snapshot</uicontrol>, <uicontrol>Export media...</uicontrol>, <uicontrol>Go
+                        to...</uicontrol>, <uicontrol>Go to end of segmented
+                        media</uicontrol>.<note>If you wish to export the segment for a particular
+                        record, this record must be displayed in <wintitle>Record
+                        Data</wintitle>.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Click the <uicontrol>Export media...</uicontrol> menu item.</cmd>
+                <stepresult>This will bring you to the <wintitle>Export Media</wintitle>
+                    window.</stepresult>
+            </step>
+            <step>
+                <cmd>Select the destination directory for your exported media clip. To do so, click
+                    the <uicontrol>Browse</uicontrol> button to the right of the <uicontrol>Output
+                        file</uicontrol> field. Specify file name and location for your clip and
+                    click <uicontrol>Save</uicontrol>.</cmd>
+                <stepresult>The directory and file name you chose will appear in the
+                        <uicontrol>Output file</uicontrol> field.<note>By default, your media clip
+                        will save in
+                        <filepath>&lt;project_name>/__res/media/segments/</filepath>.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Specify <i>Extract segment</i>, <i>Include video</i>, <i>Include audio</i>, and
+                        <i>Other arguments</i> details and click <uicontrol>Next</uicontrol>.</cmd>
+                <stepresult>This action will activate the export.<note>If you choose not to
+                            <i>Extract segment</i>, the entire media file will be
+                    exported.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Once the <i>PhonWorker shutdown</i> alert appears at the bottom of the
+                        <uicontrol>Export media</uicontrol> window, click the
+                        <uicontrol>Close</uicontrol> button. </cmd>
+                <stepresult>Your media clip will be exported to the specified
+                    directory.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

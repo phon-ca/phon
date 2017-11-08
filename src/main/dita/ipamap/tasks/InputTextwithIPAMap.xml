@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Input Text with IPA Map</title>
+    <shortdesc>Create or modify phonetic transcriptions using the <wintitle>IPA
+        Map</wintitle>.</shortdesc>
+    <taskbody>
+        <context>
+            <p>The <wintitle>IPA Map</wintitle> can be used in any text-input field in
+                <i>Phon</i>.</p>
+        </context>
+        <steps>
+            <step>
+                <cmd>Place the cursor in a text-input field and select the <menucascade>
+                        <uicontrol>Tools</uicontrol>
+                        <uicontrol>IPA Map</uicontrol>
+                    </menucascade> (<userinput>CMD/CTRL+M</userinput>) menu item.</cmd>
+                <stepresult>This will generate a window containing the <wintitle>IPA
+                    Map</wintitle>.</stepresult>
+            </step>
+            <step>
+                <cmd>Click on the buttons in the <wintitle>IPA Map</wintitle> which correspond to
+                    the characters you would like to enter into the text-input field.</cmd>
+                <stepresult>The data in the text-input field will reflect your
+                        selections.<note>While the <wintitle>IPA Map</wintitle> is open, you may
+                        still proceed to type normally.</note></stepresult>
+            </step>
+            <step>
+                <cmd>To close the <wintitle>IPA Map</wintitle>, select the <menucascade>
+                        <uicontrol>Tools</uicontrol>
+                        <uicontrol>IPA Map</uicontrol>
+                    </menucascade> (<userinput>CMD/CTRL+M</userinput>) menu item.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

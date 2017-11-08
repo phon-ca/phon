@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Find and Replace</title>
+    <shortdesc>Find and replace text in records within a session.</shortdesc>
+    <taskbody>
+        <context>From <wintitle>Session Editor</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Select the <menucascade>
+                        <uicontrol>View</uicontrol>
+                        <uicontrol>Find &amp; Replace</uicontrol>
+                    </menucascade> menu item. </cmd>
+                <stepresult>The <wintitle>Find &amp; Replace</wintitle> view will appear in the
+                        <wintitle>Session Editor</wintitle>. <note>The <wintitle>Find &amp;
+                            Replace</wintitle> view will only show tiers visible in <wintitle>Record
+                            Data</wintitle>. To change tier visibility options, use the
+                            <wintitle>Tier Management</wintitle> view (see <xref
+                            href="EditTierDisplayOptions.xml"/> for more information).</note>
+                    <image placement="break" scale="30" href="../../images/FindReplace.png"
+                        id="image_wdr_vlm_sc1"/></stepresult>
+            </step>
+            <step>
+                <cmd>Using the keyboard or the <wintitle>IPA Map</wintitle>, enter a search term
+                    within the square brackets in the <i>Any tier</i> field or in any visible tier.
+                    You may enter search terms in multiple tiers at once.</cmd>
+            </step>
+            <step>
+                <cmd>If your search term is in plain text or a regular expression, you may specify
+                    whether the search should be <uicontrol>Case sensitive</uicontrol> by using the
+                    check box. Use the drop-down menu to select whether the search should use
+                        <uicontrol>Plain text</uicontrol>, <uicontrol>Regular
+                    expression</uicontrol>, or <uicontrol>Phonex</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>Enter a replacement term in the <i>Replace</i> field if desired. </cmd>
+            </step>
+            <step>
+                <cmd>Click <uicontrol>Find next</uicontrol> to find the next occurrence of the
+                    search term(s) in the session, or <uicontrol>Find previous</uicontrol> to find
+                    the previous occurrence.</cmd>
+                <stepresult>If the term is found in a record, that record will appear in the
+                        <wintitle>Record Data</wintitle> view with the term highlighted.<note>You
+                        may also select whether your search should <uicontrol>Wrap</uicontrol> by
+                        using the check box, and you may choose whether to <uicontrol>Search
+                            Fowards</uicontrol> or <uicontrol>Search
+                    Backwards</uicontrol>.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Click <uicontrol>Replace</uicontrol> to replace the highlighted string with the
+                    specified replacement.</cmd>
+                <stepresult>The highlighted string will be replaced in the <wintitle>Record
+                        Data</wintitle> view. Repeat Steps 5 and 6 until all occurrences of the
+                    string have been replaced.<note>Alternately, click <uicontrol>Replace &amp;
+                            Find</uicontrol> to replace the string highlighted in the current record
+                        and navigate to the next occurrence of the term. To replace all occurrences
+                        of the term in the session at once, click <uicontrol>Replace
+                        all</uicontrol>. You will be asked to confirm that you want to
+                            <uicontrol>Replace all</uicontrol>. If you are unsure, click
+                            <uicontrol>No</uicontrol>. To continue, click
+                        <uicontrol>Yes</uicontrol>; this will generate a dialog informing you of the
+                        number of times the string occured and was replaced.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

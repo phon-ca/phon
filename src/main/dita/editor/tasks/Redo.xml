@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Redo</title>
+    <shortdesc>Redo a previously undone action within a record.</shortdesc>
+    <taskbody>
+        <context>From the <uicontrol>Record Data</uicontrol> view:</context>
+        <steps>
+            <step>
+                <cmd>Select the <menucascade>
+                        <uicontrol>Edit</uicontrol>
+                        <uicontrol>Redo</uicontrol>
+                    </menucascade> (<userinput>CMD/CTRL+Y</userinput>) menu item.</cmd>
+                <stepresult>The last undone action within the selected record will be
+                        redone.<note>When you move between records the redo list becomes
+                        cleared.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

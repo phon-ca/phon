@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_w2m_ml1_3g">
+ <title>Using Phonex with Java</title>
+ <shortdesc>Examples of using phonex within the <i>Java<sup>TM</sup></i> programming
+  language.</shortdesc>
+ <conbody>
+  <p>The phonex API has been designed to be used almost exactly like <i>Java</i>'s built-it regular
+   expression engine.</p>
+  <section>
+   <title>Performing a simple match</title>
+   <p>
+    <codeblock>// convert string into an IPA transcript
+IPATranscript transcript = IPATranscript.parseTranscript("hello");
+
+// test if the transcript matches a given regular expression
+boolean endsWithVowel = transcript.matches(".*\\v");
+System.out.println("Ends with vowel: " + endsWithVowel);
+
+// same test using a compiled pattern and matcher
+PhonexPattern pattern = PhonexPattern.compile(".*\\v");
+PhonexMatcher matcher = pattern.matcher(transcript);
+
+boolean endsWithVowel = matcher.matches();
+System.out.println("Ends with vowel: " + endsWithVowel);</codeblock>
+   </p>
+            <p>Outputs:<codeblock>Ends with vowel: true
+Ends with vowel: true</codeblock></p>
+  </section>
+  <section>
+   <title>Find occurrences of a pattern</title>
+   <p>
+    <codeblock>IPATranscript transcript = IPATranscript.parseTranscript("hello");
+
+// expression, find repeated consonants
+String phonex = "\\c\\1";
+
+PhonexPattern pattern = PhonexPattern.compile(phonex);
+PhonexMatcher matcher = pattern.matcher(transcript);
+
+while(matcher.find()) {
+    System.out.println("Found: " + matcher.group());
+}</codeblock>
+   </p>
+            <p>Outputs:<codeblock>Found: ll</codeblock></p>
+  </section>
+        <section>
+            <title>Split a transcription</title>
+            <p>
+                <codeblock>IPATranscript transcript = IPATranscript.parseTranscript("baka");
+
+String phonex = "\\v";
+IPATranscript[] splits = transcript.split(phonex);
+
+for(IPATranscript split:splits) {
+    System.out.println(split);
+}</codeblock>
+            </p>
+            <p>Outputs:<codeblock>b
+k</codeblock></p>
+        </section>
+        <section>
+            <title>Replace occurrences of a pattern</title>
+            <p>
+                <codeblock>IPATranscript transcript = IPATranscript.parseTranscript("hello");
+
+transcript.replaceAll("\\c\\1", "ww");
+System.out.println(transcript);
+
+transcript.replaceFirst("\\c+", "b");
+System.out.println(transcript);</codeblock>
+            </p>
+            <p>Outputs:<codeblock>hewwo
+bewwo</codeblock></p>
+        </section>
+ </conbody>
+</concept>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>View Record List</title>
+    <shortdesc>View a list of records in a session.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Click the drop down menu on the left of the <uicontrol>Search</uicontrol> bar
+                    and select <uicontrol>Open Record List</uicontrol>, or click within the empty
+                        <uicontrol>Search</uicontrol> bar and press <userinput>Enter</userinput>.
+                    Alternately, you may enter a search term in the <uicontrol>Search</uicontrol>
+                    bar and open a list of only records containing that term.</cmd>
+                    <stepresult>This will open the <wintitle>Record List</wintitle> view, which
+                    shows a list of the records in a session with their <i>Record #</i> and all tier
+                        information.<note>To arrange by a column, click on its header. To reorder
+                        columns, click and drag their header to the left or
+                    right.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Click on any record in the list to navigate to it in the <wintitle>Session
+                        Editor</wintitle>.</cmd>
+            </step>
+            </steps>
+    </taskbody>
+</task>

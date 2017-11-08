@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Import from CSV file(s)</title>
+    <shortdesc>Import a folder of CSV (comma-separated values) files into <i>Phon</i> as
+        sessions.</shortdesc>
+    <taskbody>
+        <context><p>The CSV import module can import a folder of CSV files with identical column
+                formats into <i>Phon</i>. Where possible, CSV column labels should match <i>Phon</i>
+                default tiers. <i>Phon</i> can automatically extract session date information from a
+                CSV file if its name reflects its session date, in YYYY-MM-DD format.</p>From the
+                <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Select the <menucascade>
+                        <uicontrol>Plugins</uicontrol>
+                        <uicontrol>Import from CSV...</uicontrol>
+                    </menucascade> menu item.</cmd>
+                <stepresult>This action will generate a <uicontrol>CSV Import</uicontrol>
+                    window.</stepresult>
+            </step>
+            <step>
+                <cmd>Click the <uicontrol>Browse</uicontrol> button to the right of the
+                        <uicontrol>Folder</uicontrol> field and locate the directory containing the
+                    CSV files for import. Also, ensure you select the proper <uicontrol>File
+                        encoding</uicontrol> option from the drop-down menu. Click the
+                        <uicontrol>Next</uicontrol> button.</cmd>
+                <stepresult>This action will prompt you to select files for import and the
+                    destination corpus.</stepresult>
+            </step>
+            <step>
+                <cmd>Enter a corpus name in the <uicontrol>Destination Corpus</uicontrol> field and
+                    using the check boxes, select the files for import into that corpus. For each
+                    file, edit <uicontrol>Session Name</uicontrol> and <uicontrol>Session
+                        Date</uicontrol> as desired by double-clicking on either of them. Click the
+                        <uicontrol>Next</uicontrol> button.</cmd>
+                <stepresult>This will prompt you to set up the participants for that corpus: any
+                    participant information entered here will appear in all imported sessions for
+                    that corpus.</stepresult>
+            </step>
+            <step>
+                <cmd>Click the <uicontrol>Add Participant/+</uicontrol> button at the right of the
+                    window. Enter participant name, sex, date of birth, language and other pertinent
+                    information in the appropriate fields and click <uicontrol>Ok</uicontrol>. To
+                    delete a participant from the import, highlight the participant in the table and
+                    use the <userinput>Delete/Backspace</userinput> key. Then click the
+                        <uicontrol>Next</uicontrol> button.</cmd>
+                <stepresult/>
+            </step>
+            <step>
+                <cmd>Set up column mapping such that each CSV column header has been assigned a tier
+                    name in <i>Phon</i>. To do this, highlight an item in the <uicontrol>CSV
+                        column</uicontrol> on the left, then use the drop down menu on the right to
+                    select the appropriate <i>Phon</i>
+                    <uicontrol>Tier</uicontrol> or enter a new tier into <uicontrol>Tier
+                        Name</uicontrol> field. You may also select the <uicontrol>Don't
+                        Import</uicontrol> menu item for columns that are repetitive or unnecessary.
+                    In the <uicontrol>Options</uicontrol> section, you may use the
+                        <uicontrol>Syllabifier</uicontrol> drop down menu to specify the correct
+                    syllabifier and the <uicontrol>Transcription filter</uicontrol> to convert the
+                        <i>IPA Target</i> and/or <i>IPA Actual</i> tiers from YAPA, SAMPA, IPAPhon
+                    or IPAKiel. Click the <uicontrol>Next</uicontrol> button.</cmd>
+                <stepresult>This action will activate the import.<note>If the column name in the CSV
+                        file is the same as a <i>Phon</i> default tier name, the CSV column will be
+                        automatically mapped to the appropriate tier in <i>Phon</i>.</note><note>If
+                        mapping a CSV column to the <i>Segment</i> tier in <i>Phon</i>, segments
+                        times must be listed in mmm:ss.uuu format
+                        (minutes:seconds:milliseconds).</note></stepresult>
+            </step>
+            <step>
+                <cmd>Once the <i>Import finished</i> alert appears at the bottom of the
+                        <wintitle>CSV Import</wintitle> window, click the
+                        <uicontrol>Close</uicontrol> button.</cmd>
+                <stepresult>This action will return the user to the <wintitle>Project
+                        Manager</wintitle> window with the newly imported corpus. Each row from your
+                    CSV file will become one record in <i>Phon</i> with the tiers as specified. </stepresult>
+            </step>
+        </steps>
+        <result>
+            <p>After import, each CSV file should become a new session in Phon. The number of
+                records in the session should match the number of rows in the CSV file (minus the
+                header.) A file named <i>importsettings.xml</i> is also created in the source
+                folder. If this file is present when the directory is selected in Step 1 the
+                previous import settings are loaded (except for Syllabifier and Filter
+                settings).</p>
+        </result>
+    </taskbody>
+</task>

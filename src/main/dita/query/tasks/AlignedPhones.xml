@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Aligned Phones</title>
+    <shortdesc>Include aligned phones in your query results.</shortdesc>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Select the <uicontrol>Include aligned phones</uicontrol> check box to return
+                    aligned results from both the <i>IPA Target</i> and <i>IPA Actual</i>
+                    tiers.</cmd>
+                <stepresult><note>You may refine your <i>Phones</i> query to results which match additional expressions in the
+                            <i>IPA Target</i> and/or <i>IPA Actual</i> tiers by following the steps
+                        below.</note></stepresult>
+            </step>
+            <step>
+                <cmd>In the <uicontrol>IPA Target Matcher</uicontrol> and/or the <uicontrol>IPA
+                        Actual Matcher</uicontrol> section, select an <uicontrol>Expression
+                        Type</uicontrol> from the context menu.</cmd>
+            </step>
+            <step>
+                <cmd>Enter a search expression in the <uicontrol>Expression</uicontrol> field, using
+                    the key at the bottom as a guide if applicable.</cmd>
+            </step>
+            <step>
+                <cmd>Choose whether your query should be <uicontrol>Case sensitive</uicontrol> or an
+                        <uicontrol>Exact match</uicontrol> by selecting or deselecting the check
+                    boxes.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

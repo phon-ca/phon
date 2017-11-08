@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Open Query Script</title>
+    <shortdesc>Open a previously saved query so that you can edit or re-run it.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Select the <menucascade>
+                        <uicontrol>Query</uicontrol><uicontrol>Script Editor...</uicontrol>
+                    </menucascade> menu item.</cmd>
+                <stepresult>This will open the <wintitle>Query Project</wintitle> window.<note>This
+                        window is also accessible by opening any query type in the
+                            <uicontrol>Query</uicontrol> menu.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Click the <uicontrol>Open script</uicontrol> button above the currently visible
+                    form/script.</cmd>
+                <stepresult>A browse window will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Locate and select the script file that you wish to open and click
+                        <uicontrol>Open</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>Edit and/or run the query script as desired. To save changes to the script,
+                    click <uicontrol>Save script</uicontrol> above the form/script.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

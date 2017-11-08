@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Format</title>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Select whether to have the results printed as a <uicontrol>Table</uicontrol> or
+                    a <uicontrol>List</uicontrol>.</cmd>
+                <stepresult>For each <i>Result Set</i>, results will be printed in the CSV report as
+                    a table, or as a list with one field per line.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

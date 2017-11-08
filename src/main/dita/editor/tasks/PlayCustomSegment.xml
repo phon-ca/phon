@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Play Custom Segment</title>
+    <shortdesc>Play a user-defined segment of your media file.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Media Player</wintitle> view:</context>
+        <steps id="steps_kyp_31j_sk">
+            <step>
+                <cmd>Click the context menu in the bottom right corner and choose <uicontrol>Play
+                        custom segment</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>Select either <uicontrol>Current segment</uicontrol>, <uicontrol>Speaker
+                        turn</uicontrol>, <uicontrol>Adjacency sequence</uicontrol>,
+                        <uicontrol>Record range</uicontrol>, or <uicontrol>Specific
+                        range</uicontrol>. If you choose <uicontrol>Specific range</uicontrol>, type
+                    over the segment values to customize the segment. If you choose
+                        <uicontrol>Record range</uicontrol>, click and drag the arrows along the
+                    slider to specify a range of records (e.g. records 7 to 9).</cmd>
+                <stepresult>
+                    <note>It may be useful to click one of the first four segment types before
+                        selecting <uicontrol>Specific range</uicontrol>; the previously selected
+                        segment type will appear in the range window and you can adjust it from
+                        there.</note>
+                </stepresult>
+            </step>
+            <step>
+                <cmd>Click <uicontrol>Play</uicontrol> to play the specified segment, or click
+                        <uicontrol>Close</uicontrol> to cancel.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

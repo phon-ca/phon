@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Open Session: Default Mode</title>
+    <shortdesc>Open a session in the default mode.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Ensure that the <uicontrol>Blind transcription</uicontrol> box is deselected to
+                    open a session in default mode. Click the desired corpus, and double-click on
+                    the session that you would like to transcribe.</cmd>
+                <stepresult>The selected session will open in the <wintitle>Session
+                        Editor</wintitle>.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

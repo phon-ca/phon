@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/reference.dtd">
+<reference id="referenceId">
+    <title>Session</title>
+    <shortdesc>A reference to the session being queried is given to the methods <codeph
+            >begin_search</codeph> and <codeph>end_search. </codeph>
+    </shortdesc>
+    <refbody>
+        <section><title>Properties</title><keyword>date</keyword><p>The date for the session. Dates
+                are returned in the format YYYY-MM-DD (e.g., 1982-04-30).</p><keyword
+                >name</keyword><p>The name of the session. Session name is returned as <synph><kwd
+                        >corpus</kwd><delim>.</delim><kwd>session</kwd></synph>.</p><keyword>numberOfRecords</keyword><p>Number
+                of records in the
+                session.</p><codeblock>/**
+* begin_search
+* 
+* @param s - the session
+*/
+function begin_search(s)
+{
+    // print session name and date and number of records
+    out.println( "Session: " + s.name + "\n" + 
+                 "   Date: " + s.date + "\n" + 
+                 "   Size: " + s.numberOfRecords );
+}</codeblock><keyword
+                >tierNames</keyword><p>An array of string values providing all of the available
+                tiers in the session.</p></section>
+        <section><title>Functions</title><synph><kwd>isTierGrouped</kwd><delim>(</delim><parmname>tierName</parmname><delim>)</delim><oper>=</oper><var>true
+                    or false</var></synph><p>Tells if the provided <parmname>tierName</parmname> is
+                a grouped tier (e.g., Orthography, IPA Target/Actual) or not.</p><synph><kwd
+                    >getRecord</kwd><delim>(</delim><parmname>index</parmname><delim>)</delim><oper>=</oper><var>record
+                    or null</var></synph><p>Return the record at the given index. Useful for
+                cross-record searching. If <parmname>index</parmname> is less than zero or greater
+                than the <keyword>numberOfRecords</keyword> this method will return <codeph
+                    >null</codeph>.</p></section>
+    </refbody>
+</reference>

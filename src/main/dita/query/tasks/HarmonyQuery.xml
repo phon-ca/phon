@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Harmony Query</title>
+    <shortdesc>Search the IPA tiers for potential cases of consonant and/or vowel
+        harmony.</shortdesc>
+    <taskbody>
+        <context><image placement="break" scale="30"
+            href="../../images/Harmony.png" id="image_wdr_vlm_sc"/></context>
+        <steps>
+            <step>
+                <cmd>To run a query on patterns of harmony, specify the following criteria:</cmd>
+            </step>
+        </steps>
+    </taskbody>
+    <task id="id_49803627-50ef-45ca-b8de-bf54ae11e697" conref="Harmony.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_481f3bf2-e418-43f0-952e-ecfa09a92d6a" conref="GroupFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_6e0b4bb4-2e82-454b-ac62-495909ff4163" conref="ParticipantFilter.xml#taskId">
+        <title/>
+    </task>
+</task>

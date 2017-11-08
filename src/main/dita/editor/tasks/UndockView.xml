@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Undock View</title>
+    <shortdesc>Disconnect or "undock" a view from the <wintitle>Session Editor</wintitle>, making it
+        its own separate window.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle> window, with the view you wish to
+            undock open:</context>
+        <steps>
+            <step>
+                <cmd>In the top right corner of the view, click the button that looks like a window
+                    with an outward arrow (on mouseover it will say <uicontrol>Disconnects this
+                        panel from the frame</uicontrol>). Alternately, select the title bar of the
+                    view and press <userinput>CTRL+E</userinput>.<image placement="break" scale="30"
+                        href="../../images/UndockView.png" id="image_wdr_vlm_sc"/></cmd>
+                <stepresult>The view will appear as a separate window in front of the
+                        <wintitle>Session Editor</wintitle>.</stepresult>
+            </step>
+            <step>
+                <cmd>To move the view while it is undocked, click and drag on the small bar centred
+                    above the title bar. To resize the view, click and drag on any other edge or
+                    corner.</cmd>
+                <stepresult>The view will retain its undocked size and position when you exit and
+                    reopen <i>Phon</i>.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Data Tiers</title>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Enter the name of the tier in which you would like to search in the
+                        <uicontrol>Tier name</uicontrol> field.</cmd>
+            </step>
+            <step>
+                <cmd>Choose an <uicontrol>Expression Type</uicontrol> using the context menu.</cmd>
+            </step>
+            <step>
+                <cmd>Enter the expression you would like to search for in the
+                        <uicontrol>Expression</uicontrol> field.</cmd>
+            </step>
+            <step>
+                <cmd>Choose whether or not your query should be <uicontrol>Case
+                        sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using the
+                    check boxes.</cmd>
+                <stepresult>
+                    <note><uicontrol>Case sensitive</uicontrol> is not applicable to
+                            <uicontrol>Phonex</uicontrol>, <uicontrol>Stress pattern</uicontrol>, or
+                            <uicontrol>CGV pattern</uicontrol> expressions.</note>
+                </stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

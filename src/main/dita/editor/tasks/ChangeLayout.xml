@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Change to Preset Editor Layout</title>
+    <shortdesc>Quickly change the arrangement of views within the <wintitle>Session
+            Editor</wintitle> to the default layout or to a previously saved layout.</shortdesc>
+    <taskbody>
+        <context>
+            <p>From the <wintitle>Session Editor</wintitle>:</p>
+        </context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>Select layout</uicontrol> button at the top left of the
+                        <wintitle>Session Editor</wintitle> window, or go to the <menucascade>
+                        <uicontrol>View</uicontrol>
+                        <uicontrol>Load layout</uicontrol>
+                    </menucascade> menu and select the desired layout.</cmd>
+                <stepresult>The views in the <wintitle>Session Editor</wintitle> will move to
+                    reflect the chosen layout.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

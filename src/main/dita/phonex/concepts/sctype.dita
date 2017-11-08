@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_33z_pnm_gg">
+  <title>sctype</title>
+  <shortdesc>Description of the phonex <codeph>sctype</codeph> supplementary matcher.</shortdesc>
+  <conbody>
+    <p>The <codeph>sctype</codeph> supplementary matcher queries the syllable constituent type of a
+      phone. The expression given to the matcher must be a list of syllable constituent types from
+      the following list, separated by a <codeph>|</codeph> (pipe.)<ul id="ul_5vq_w4m_gg">
+        <li><codeph>LeftAppendix</codeph> or <codeph>L</codeph></li>
+        <li><codeph>Onset</codeph> or <codeph>O</codeph></li>
+        <li><codeph>Nucleus</codeph> or <codeph>N</codeph></li>
+        <li><codeph>Coda</codeph> or <codeph>C</codeph></li>
+        <li><codeph>RightAppendix</codeph> or <codeph>R</codeph></li>
+        <li><codeph>Ambisyllabic</codeph> or <codeph>A</codeph></li>
+        <li><codeph>OEHS</codeph> or <codeph>E</codeph></li>
+        <li><codeph>SyllableStress</codeph> or <codeph>S</codeph></li>
+        <li><codeph>SyllableBoundary</codeph> or <codeph>B</codeph></li>
+        <li><codeph>WordBoundary</codeph> or <codeph>W</codeph>
+        </li>
+        <li><codeph>Unknown</codeph> or <codeph>U</codeph></li>
+      </ul>All constituent types are case-insensitive. Constituent types can also be prefixed by a
+        <codeph>-</codeph> (minus) to indicate the constituent type is not-allowed.</p>
+    <p>The <codeph>sctype</codeph> matcher also has a shorthand within phonex. A single consitutuent
+      type may be queried on a phone matcher by specifying one of the single-character codes shown
+      above prefixed by a <codeph>:</codeph>.</p>
+    <example>
+      <p>Both of these expressions will search for 'b' in the onset
+        position:<codeblock>b:sctype("Onset")</codeblock>or<codeblock>b:O</codeblock></p>
+    </example>
+  </conbody>
+</concept>

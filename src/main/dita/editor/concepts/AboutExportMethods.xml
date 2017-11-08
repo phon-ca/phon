@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Export Methods</title>
+    <conbody>
+        <p>The export functions in the <wintitle>Media Player</wintitle> and the
+                <wintitle>Waveform</wintitle> views are fundamentally different. From the
+                <wintitle>Media</wintitle> view, exporting saves a portion of a linked video (or
+            audio) file in its original format. From the <wintitle>Waveform</wintitle> view,
+            exporting saves a portion of a WAVE file which is generated from the original media, but
+            is separate from it.</p>
+        <p>Since the two export functions operate on different media types (usually video vs.
+            audio), they have different behaviour.</p>
+        <p>Crucially, exporting media segments from the <wintitle>Media Player</wintitle> view may
+            cause <i>clipping</i>; that is, a small portion of your segment may be excluded from the
+            export. This is because this export operates on a video file, in which each video frame
+            is associated with a certain time interval. <i>Phon</i> does not export video frames in
+            parts; if the start or end time of a media segment falls in the middle of a frame's time
+            interval, then that frame will be excluded from the export. This may occur even if you
+            choose to extract only the audio portion of a segment from the <wintitle>Media
+                Player</wintitle> view.</p>
+        <p>To export audio segments for analysis without any clipping, it is best to export them
+            from the <wintitle>Waveform</wintitle> view. When you first open this view after you
+            have linked media to your session, you will be prompted to create a WAVE file from your
+            media. It is this audio-only file from which the <wintitle>Waveform</wintitle> view
+            extracts segments, thus avoiding clipping.</p>
+    </conbody>
+</concept>

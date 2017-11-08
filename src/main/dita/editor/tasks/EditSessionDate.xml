@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Edit Session Date</title>
+    <shortdesc>Edit a session's date to reflect the date of its associated media recording.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Information</wintitle> view:</context>
+        <steps>
+            <step>
+                <cmd>Click on the existing <uicontrol>Session Date</uicontrol> and type the new date
+                    over it.</cmd>
+                <stepresult>Participants' ages will be calculated using their birthday and the
+                    session date.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

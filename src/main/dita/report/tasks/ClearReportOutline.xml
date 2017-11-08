@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Clear Report Outline</title>
+    <shortdesc>Clear all sections from the <wintitle>Report Outline</wintitle> and begin a new empty
+        report.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Report</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>New empty report design...</uicontrol> button above the
+                        <uicontrol>Report Outline</uicontrol>.</cmd>
+                <stepresult>A dialog will appear, informing you that starting a new report design
+                    will remove any current changes, and asking whether you wish to save the current
+                    report design.</stepresult>
+            </step>
+            <step>
+                <cmd>To abort this operation without clearing the report design, click
+                        <uicontrol>Cancel</uicontrol>. To continue without saving the current report
+                    design, click <uicontrol>No</uicontrol>. To continue and save the current report
+                    design, click <uicontrol>Yes</uicontrol>, then specify a filename and directory
+                    for your current report design and click <uicontrol>Save</uicontrol>.</cmd>
+                <stepresult>All sections will be removed from the report design.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Change Default Media Folders</title>
+    <shortdesc>Change the default location for project media.</shortdesc>
+    <taskbody>
+        <context>
+            <p>From the <wintitle>Workspace</wintitle> window:</p>
+        </context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>Select Media Folders</uicontrol> button in the
+                        <wintitle>Other Actions</wintitle> pane.</cmd>
+                <stepresult>The <wintitle>Preferences</wintitle> dialog will open, with the
+                        <uicontrol>Media</uicontrol> tab selected. <note>This tab is accessible from
+                        any <i>Phon</i> window by choosing the <menucascade>
+                            <uicontrol>Edit</uicontrol>
+                            <uicontrol>Preferences </uicontrol>
+                        </menucascade> menu item and selecting <uicontrol>Media</uicontrol> from the
+                            <wintitle>Preferences</wintitle> dialog. </note></stepresult>
+            </step>
+            <step>
+                <cmd>Click the <uicontrol>Add folder to list.../+</uicontrol> button, locate 
+                    the desired folder in the resulting <wintitle>Browse</wintitle> window 
+                    and click <uicontrol>Open</uicontrol>.</cmd>
+                <stepresult>The selected folder will appear in the <uicontrol>Media
+                        Folders</uicontrol> field.</stepresult>
+            </step>
+            <step>
+                <cmd>Repeat Step 2 for all desired media folders.</cmd>
+            </step>
+            <step>
+                <cmd>To sort the list of media folders by priority, select a folder from the 
+                    list and click the <uicontrol>up/down arrows</uicontrol> to the right of 
+                    the <uicontrol>Media Folders</uicontrol> field.</cmd>
+                <stepresult>If media files in two or more default media folders have the same 
+                    name, the ones in the lower-priority folders will be displayed in <wintitle>
+                        Session Information</wintitle> with their full path.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

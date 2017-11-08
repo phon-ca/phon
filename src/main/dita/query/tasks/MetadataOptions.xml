@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Metadata Options</title>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Use the check boxes to select options to include metadata for search results.
+                    Metadata may include information about <i>Stress Pattern</i>, <i>CGV
+                    Pattern</i>, or standard or aligned <i>PCC/PVC</i> calculations.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>Matchers</title>
+    <shortdesc/>
+    <conbody>
+        <p>A phonex matcher is a sentence written in a language that Phon can understand, telling it
+            what to query for. </p>
+        <p>The matcher is the only required part of a phonex query. Phonex uses a matcher to find
+            (match) desired (meta)phones. Here is an example matcher: </p>
+        <p><b>{coronal, stop}</b></p>
+        <p>This will match all coronal stops transcribed in the selected session(s). If you want to
+            refine this query, you can add annotations to the matcher. Assuming you would like to
+            find coronal stops in onsets of unstressed syllables, the matcher together with its
+            annotations would be written as follows: </p>
+        <p><b>{coronal, stop}:NoStress,Onset </b></p>
+        <p> Every phone contained in <i>Phon</i> is defined as a set of features. The names of the
+            features will be familiar to most linguists. For instance, <i>Phon</i> defines [b] as
+            the set <b>{consonant, labial, bilabial, voiced, stop, obstruent}</b>. There are several
+            things to notice about these feature sets: <ol
+                id="ol_5ea6f238-9a81-472c-a16a-53654cfb1c4b">
+                <li>These are all features the phone has; negative features, like {-continuant}, are
+                    not included in the set</li>
+                <li>
+                    <i>Phon's</i> feature sets contain redundancies to maximize the possible
+                    queries. A matcher compares the input with all of the feature sets in
+                        <i>Phon</i> and returns results where there is a match. (See <i>Features</i>
+                    in this section for a full list of the features and feature shorthands defined
+                    in <i>Phon</i>.)</li>
+                <li>Features need not begin with a capital letter, since phonex searches are not
+                    case sensitive.</li>
+            </ol></p>
+        <p>Phones and their feature sets in <i>Phon</i>: </p>
+        <p>b = {consonant, labial, bilabial, voiced, stop, obstruent} </p>
+        <p>m = {consonant, labial, bilabial, voiced, stop, sonorant, nasal} </p>
+        <p>n = {consonant, coronal, anterior, alveolar, voiced, stop, sonorant, nasal} </p>
+        <p>k = {consonant, dorsal, velar, voiceless, stop, obstruent} </p>
+        <p>g = {consonant, dorsal, velar, voiced, stop, obstruent}</p>
+        <p>
+            <table frame="none" id="table_03d29321-3393-41fa-bde5-af543ei9da77">
+                <tgroup cols="3">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="2*"/>
+                    <colspec colname="c3" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry> Example Query </entry>
+                            <entry> Phonex Query </entry>
+                            <entry> Results</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry> All [+voice] phones </entry>
+                            <entry> {voiced} </entry>
+                            <entry> b; m; n; g </entry>
+                        </row>
+                        <row>
+                            <entry> All [+obstruent] phones </entry>
+                            <entry> {obstruent} </entry>
+                            <entry> b; k; g </entry>
+                        </row>
+                        <row>
+                            <entry> All phones with base character 'b'</entry>
+                            <entry>b </entry>
+                            <entry>b</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p>A phonex query can include more than one matcher. In this case, matchers are separated by
+            a space. Consider the following records and searches.</p>
+        <p>Record 1: bob </p>
+        <p>Record 2: deb </p>
+        <p>Record 3: brent </p>
+        <p>Record 4: mari </p>
+        <p>
+            <table frame="none" id="table_f6cfa45f-8532-46e5-9280-c62745e93j83">
+                <tgroup cols="3">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="2*"/>
+                    <colspec colname="c3" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Example Query</entry>
+                            <entry>Phonex Query</entry>
+                            <entry>Results</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>A consonant followed by a vowel </entry>
+                            <entry>{c} {v}</entry>
+                            <entry>bo; de; re; ma; ri </entry>
+                        </row>
+                        <row>
+                            <entry>A consonant followed by a consonant </entry>
+                            <entry>{c} {c}</entry>
+                            <entry>br; nt </entry>
+                        </row>
+                        <row>
+                            <entry>A labial consonant followed by a vowel </entry>
+                            <entry>{c, labial} {v}</entry>
+                            <entry>bo; ma</entry>
+                        </row>
+                        <row>
+                            <entry>An intervocalic consonant </entry>
+                            <entry>{v} {c} {v}</entry>
+                            <entry> ari </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p>In the case of epenthesis and deletion, it is also possible to search for null matchers.
+            Null matchers (i.e. {}) may be used to return any aligned element without specifying its
+            features, but are only relevant in Aligned Phones and Aligned Groups queries.</p>
+        <p><b>Additional Symbols</b></p>
+        <p>There are two additional symbols you should learn before continuing, exemplified
+            below:</p>
+        <p>
+        </p>
+        <p>
+            <table frame="none" id="table_809c87ed-b2cf-4c0c-af42-62df39cn3739">
+                <tgroup cols="5">
+                    <colspec colname="c1" colnum="1" colwidth="1*"/>
+                    <colspec colname="c2" colnum="2" colwidth="2*"/>
+                    <colspec colname="c3" colnum="3" colwidth="2*"/>
+                    <colspec colname="c4" colnum="4" colwidth="2*"/>
+                    <colspec colname="c5" colnum="5" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Phonex</entry>
+                            <entry>Description</entry>
+                            <entry>Example Phonex Query</entry>
+                            <entry>Oral Expression</entry>
+                            <entry>Results</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry> ,</entry>
+                            <entry>separates two or more features</entry>
+                            <entry>{voiced, obstruent}</entry>
+                            <entry> all voiced obstruents</entry>
+                            <entry>b; g</entry>
+                        </row>
+                        <row>
+                            <entry> - </entry>
+                            <entry>negation</entry>
+                            <entry>{-nasal}</entry>
+                            <entry>all phones which are not nasal</entry>
+                            <entry>b; k; g</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+    </conbody>
+</concept>

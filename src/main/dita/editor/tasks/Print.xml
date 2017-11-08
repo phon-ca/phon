@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Print or Export Session Data</title>
+    <shortdesc>Print the session information.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Choose the <menucascade>
+                        <uicontrol>File</uicontrol>
+                        <uicontrol>Print</uicontrol>
+                    </menucascade> (<userinput>CMD/CTRL+P</userinput>) menu item.</cmd>
+                <stepresult>The <wintitle>Print/Export Session Data</wintitle> dialog will
+                    appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Select or de-select the <uicontrol>Print participant information</uicontrol>
+                    box and select the option of printing or exporting <uicontrol>All
+                        records</uicontrol>, a subset of <uicontrol>Specific records</uicontrol>,
+                        <uicontrol>Records for participant(s)</uicontrol>, or <uicontrol>Records
+                        from search results</uicontrol>. Click <uicontrol>Preview</uicontrol>.</cmd>
+                <stepresult>The second page of the <wintitle>Print/Export Session Data</wintitle>
+                    dialog will appear.<note>If you choose to print or export only specific records,
+                        you will have to specify the relevant record numbers. To specify several
+                        individual record numbers, separate them with a comma and a space. To
+                        specify a range, separate the beginning and end record numbers with two
+                        periods. If you choose to print records for specific participants, you must
+                        select the participants from the list. If you choose the print records from
+                        search results, you must select a past search from the
+                    list.</note></stepresult>
+            </step>
+            <step>
+                <cmd>To print the session data, click the <uicontrol>Print</uicontrol> button. To
+                    save the session data as a document which may be printed at a later date, click
+                    the <uicontrol>Save</uicontrol> button, then enter a file name in the
+                        <uicontrol>Save As:</uicontrol> field and choose a format for the saved
+                    data.</cmd>
+                <stepresult>The file will be printed or exported to the specified save
+                    location.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

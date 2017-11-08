@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Phones Query</title>
+    <shortdesc>Search IPA tiers for <uicontrol>Plain text</uicontrol>, <uicontrol>Regular
+            expression</uicontrol>, <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+            pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol> and (optionally) return
+        aligned phones and/or related metadata.</shortdesc>
+    <taskbody>
+        <context><image placement="break" scale="30"
+            href="../../images/Phones.png" id="image_wdr_vlm_sc"/></context>
+        <steps>
+            <step>
+                <cmd>To run a query on phone alignment data (i.e. <i>IPA Target</i> and <i>IPA
+                        Actual</i> alignment), specify the following criteria:</cmd>
+            </step>
+        </steps>
+    </taskbody>
+    <task id="id_12b7dc3b-e126-43a0-8134-252c8afcbd89" conref="Phones.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_12b7dc3b-e126-43a0-8134-252c8afabcde" conref="AlignedPhones.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_12b7dc3b-e126-43a0-8134-252c8aeisd89" conref="GroupFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_ba7cb792-f897-4476-9bfb-87637be5536a" conref="WordFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_e10599b5-9ffb-4a3e-854b-7b96b693d3e4" conref="SyllableFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_e0682917-7c7b-4a18-b9d5-a43c19dd6eca" conref="ParticipantFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_e882120f-fa69-485c-ac9e-3d767eda3f18" conref="MetadataOptions.xml#taskId">
+        <title/>
+    </task>
+</task>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Input Session Language</title>
+    <shortdesc>The main language for each session can be specified in the
+            <uicontrol>Language</uicontrol> field in <wintitle>Session
+        Information</wintitle>.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Information</wintitle> view:</context>
+        <steps id="steps_tqd_glb_hc">
+            <step>
+                <cmd>Select the <menucascade>
+                <uicontrol>Tools</uicontrol><uicontrol>ISO-639-3 Language
+                        Codes</uicontrol></menucascade> menu item for a list of the ISO-639-3 language
+                    codes.</cmd>
+                <stepresult>This will bring up the <wintitle>ISO-639-3 Language Codes</wintitle>
+                    window, which displays a list of languages and language codes which you can look
+                        through.<note>By default, the list is organized by language code. To sort by
+                        language name, click on the <uicontrol>Language Name</uicontrol> column
+                        heading.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Find the desired language code. In the <wintitle>Session Information</wintitle>
+                    view, click in <uicontrol>Language</uicontrol> field and type language name or
+                    code.</cmd>
+                <stepresult>
+                    <note>The search field in the <wintitle>ISO-639-3 Language Codes</wintitle> is
+                        case-sensitive.</note>
+                </stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

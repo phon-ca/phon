@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Reset Phone Alignment</title>
+    <shortdesc>In the event of display issues in the <i>Alignment</i> tier of the
+            <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be necessary to reset
+        the phone alignment of <i>IPA Target</i> and <i>IPA Actual</i> transcriptions.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Select the <menucascade>
+                    <uicontrol>Project</uicontrol>
+                    <uicontrol>Check Transcriptions...</uicontrol>
+                </menucascade> menu item.</cmd>
+                <stepresult>This will open the <wintitle>Check Transcriptions</wintitle>
+                    window.</stepresult>
+            </step>
+            <step>
+                <cmd>Select the <uicontrol>Reset phone alignment</uicontrol> option.</cmd>
+            </step>
+            <step>
+                <cmd>Select the project, corpora, or sessions whose alignment you wish to reset, and
+                    click <uicontrol>Next</uicontrol>.</cmd>
+                <stepresult><i>Phon</i> will re-perform the alignment for each selected session.
+                        <note>After resetting syllabification or alignment, it will be necessary to
+                        visually verify these tiers.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

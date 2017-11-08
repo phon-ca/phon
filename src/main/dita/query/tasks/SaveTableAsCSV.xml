@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Save Table as CSV</title>
+    <shortdesc>Save the table visible in the <wintitle>Results</wintitle> window as a CSV
+        file.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Results</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Click <uicontrol>Save table as CSV...</uicontrol>.</cmd>
+                <stepresult>A browse window will appear, prompting you to choose a file name and
+                    directory in which to save the table.</stepresult>
+            </step>
+            <step>
+                <cmd>Choose a file name and directory for your table and click
+                        <uicontrol>Save</uicontrol>.</cmd>
+                <stepresult>The table in the <wintitle>Results</wintitle> window will be saved as a
+                    CSV file in the chosen directory.<note>If excluded records are currently
+                        visible, they will be included in the CSV file.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

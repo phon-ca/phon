@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Scroll to a Section</title>
+    <shortdesc>Jump to a specific section in the <wintitle>IPA Map</wintitle>.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>IPA Map</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) within any section of the
+                        <wintitle>IPA Map</wintitle> and select a section from the <uicontrol>Scroll
+                        to</uicontrol> list.</cmd>
+                <stepresult>The <wintitle>IPA Map</wintitle> will scroll such that the selected
+                    section appears within the window.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

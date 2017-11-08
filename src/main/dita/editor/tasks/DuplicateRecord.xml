@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Duplicate Record</title>
+    <shortdesc>Duplicate a record in an existing session.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Display the record which you would like to duplicate and click the
+                        <uicontrol>Duplicate record</uicontrol> button in the top left corner of the
+                        <wintitle>Session Editor</wintitle> or choose the <menucascade>
+                        <uicontrol>Session</uicontrol>
+                        <uicontrol>Duplicate record</uicontrol>
+                    </menucascade> (<userinput>CMD/CTRL+D</userinput>) menu item.</cmd>
+                <stepresult>This will create a duplicate record immediately following the original.
+                    The duplicate record will be visible from the <wintitle>Record Data</wintitle>
+                    view.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

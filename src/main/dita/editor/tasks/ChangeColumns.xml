@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Change Column View Options</title>
+    <shortdesc>Change which columns are visible in the <wintitle>Record List</wintitle>
+        view.</shortdesc>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Click the table options button to the right of the column headers in the
+                        <wintitle>Record List</wintitle> view.</cmd>
+            </step>
+            <step>
+                <cmd>Click on a column name with a check mark next to it to deselect it and hide it
+                    from the <wintitle>Record List</wintitle> view, or click on a column name
+                    without a check mark to select it and show it in the view.</cmd>
+            </step>
+            <step>
+                <cmd>Select <uicontrol>Horizontal scroll</uicontrol> to show a left/right scroll bar
+                    in the view. Select <uicontrol>Pack All Columns</uicontrol> to adjust all
+                    columns to the maximum required width for their content.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

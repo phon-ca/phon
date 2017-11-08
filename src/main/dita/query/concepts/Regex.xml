@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>Regex</title>
+    <shortdesc/>
+    <conbody>
+        <p>In computing, regular expressions, also referred to as regex or regexp, provide a concise
+            and flexible means for matching strings of text, such as particular characters, words,
+            or patterns of characters. A regular expression is written in a formal language.  </p>
+        <p>For further information and examples, see:</p>
+        <p>
+            <ul id="ul_bqq_1mn_nj">
+                <li><xref format="html" href="http://en.wikipedia.org/wiki/Regular_expression"/></li>
+                <li><xref format="html" href="https://help.libreoffice.org/3.3/Common/List_of_Regular_Expressions"/></li>
+            </ul>
+        </p>
+    </conbody>
+</concept>

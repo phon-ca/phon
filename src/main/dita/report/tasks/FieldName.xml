@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Field Name</title>
+    <taskbody>
+        <steps id="steps_tw4_3tr_t2">
+            <step>
+                <cmd>Enter a name for the data field in the <uicontrol>Field Name</uicontrol> text
+                    box.</cmd>
+                <stepresult>This will be the name of the data field as it appears in your report; it
+                    will be a column heading within a section.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

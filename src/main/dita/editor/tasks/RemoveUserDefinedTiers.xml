@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Remove User Defined Tiers</title>
+    <shortdesc>Remove an existing user-defined tier.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Tier Management</wintitle> view:</context>
+        <steps>
+            <step>
+                <cmd>Select an existing user defined tier and press <userinput>Delete</userinput> or
+                        <userinput>Backspace</userinput>, or right-click on a tier and choose
+                        <uicontrol>Delete tier &lt;tier name></uicontrol>.</cmd>
+                <stepresult>This action will generate a dialog asking you to confirm that you would
+                    like to delete the tier and informing you that this action cannot be undone.
+                        <note>Default <i>Phon</i> tiers (such as <i>Orthography</i>, <i>IPA
+                            Target</i>, <i>Notes</i>, etc.) cannot be deleted. If you do not wish to
+                        use one or more of these tiers, you can make them invisible following
+                        instructions at <xref href="EditTierDisplayOptions.xml"/>.</note></stepresult>
+            </step>
+            <step>
+                <cmd>If you are unsure about removing the tier, click <uicontrol>Cancel</uicontrol>.
+                    If you would like to continue and remove the tier and all its contents, click
+                        <uicontrol>Ok</uicontrol>.</cmd>
+                <stepresult>The user defined tier will no longer appear in the <uicontrol>Tier
+                        Management</uicontrol> or <uicontrol>Record Data</uicontrol> views for this
+                    session. </stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

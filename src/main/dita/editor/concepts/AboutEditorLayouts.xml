@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Editor Layouts</title>
+    <conbody>
+        <p>The <wintitle>Session Editor</wintitle> has several built-in view layouts to assist users
+            in session-related tasks.</p>
+        <p>The following layouts are available:</p>
+        <ul id="ul_ovn_flv_z3">
+            <li><uicontrol>Default</uicontrol>
+                <p>The default layout when you first open a session, corresponds to the
+                        <uicontrol>Segmentation</uicontrol> layout.</p></li>
+            <li><uicontrol>Find &amp; Replace</uicontrol>
+                <p>This layout facilitates searching and replacing terms across multiple records in
+                    a session. It includes the <wintitle>Media Player</wintitle>, <wintitle>Find
+                        &amp; Replace</wintitle>, <wintitle>Tier Management</wintitle>, and
+                        <wintitle>Record Data</wintitle> views.</p></li>
+            <li><uicontrol>Segmentation</uicontrol>
+                <p>Designed to facilitate media linkage and segmentation and other tasks in new
+                    sessions, this layout includes the <wintitle>Media Player</wintitle>,
+                        <wintitle>Segmentation</wintitle>, <wintitle>Waveform</wintitle>,
+                        <wintitle>Record Data</wintitle>, and <wintitle>Session
+                        Information</wintitle> views.</p></li>
+            <li><uicontrol>Syllabification &amp; Alignment</uicontrol>
+                <p>This layout facilitates manual verification of syllabification and alignment data
+                    in a session. It includes the <wintitle>Record Data</wintitle>,
+                        <wintitle>Syllabification &amp; Alignment</wintitle>, and
+                        <wintitle>Waveform</wintitle> views.</p></li>
+            <li><uicontrol>Transcription</uicontrol>
+                <p>This layout is designed to facilitate the transcription of records. It includes
+                    the <wintitle>Media Player</wintitle>, <wintitle>Waveform</wintitle>, and
+                        <wintitle>Record Data</wintitle> views; the <wintitle>IPA Lookup</wintitle>
+                    view is also included to streamline or automatize the transcription
+                process.</p></li>
+            <li><uicontrol>Validation</uicontrol><p>The <uicontrol>Validation</uicontrol> layout is
+                    designed for validating blind transcriptions. It includes the <wintitle>Media
+                        Player</wintitle>, <wintitle>IPA Validation</wintitle>, and <wintitle>Record
+                        Data</wintitle> views, with <wintitle>IPA Lookup</wintitle> and
+                        <wintitle>Waveform</wintitle> minimized at the bottom. Note that the
+                        <wintitle>IPA Validation</wintitle> view will not display blind
+                    transcriptions when in <i>Blind mode</i>, so that one user's blind
+                    transcriptions will not influence the other's.</p></li>
+            <li><i>User-defined layouts</i>
+                <p>Any layouts which have created and saved by the user will be available at the
+                    bottom of the list of views.</p></li>
+            <li><uicontrol>Previous</uicontrol>
+                <p>The previous user-defined layout is available here. User-defined layouts are
+                    automatically saved to <uicontrol>Previous</uicontrol> when the
+                        <wintitle>Session Editor</wintitle> window is closed.</p></li>
+        </ul>
+    </conbody>
+</concept>

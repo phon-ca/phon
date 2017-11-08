@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Maximize View</title>
+    <shortdesc>Maximize a view within the Session Editor window.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle> or an undocked view:</context>
+        <steps>
+            <step>
+                <cmd>Click the maximize button near the top right corner of the view you wish to
+                    maximize, or when the view is focused, press
+                    <userinput>CTRL+M</userinput>.</cmd>
+                <stepresult>If the view was docked, it will expand to fill the <wintitle>Session
+                        Editor</wintitle> window. If the view was undocked, it will expand to fill
+                    your computer screen.
+                    <image placement="break" scale="30"
+                        href="../../images/MaximizeView.png" id="image_wdr_vlm_sc"/></stepresult>
+            </step>
+            <step>
+                <cmd>To restore the view to its previous size, click the restore button near the top
+                    right corner (this button looks like two windows), or press
+                        <userinput>CTRL+N</userinput> when the view is in focus.</cmd>
+                <stepresult>The view will return to its previous unmaximized position.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

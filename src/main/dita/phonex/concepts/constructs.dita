@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_tpv_vc3_gg">
+ <title>Phonex Constructs</title>
+ <shortdesc>A summary of phonex 2.0 constructs.</shortdesc>
+ <conbody>
+  <p>
+   <table frame="all" id="table_ksg_pd3_gg">
+    <title>Phone matchers</title>
+    <tgroup cols="2">
+     <colspec colname="c1" colnum="1" colwidth="1*"/>
+     <colspec colname="c2" colnum="2" colwidth="3.44*"/>
+     <thead>
+      <row>
+       <entry>Construct</entry>
+       <entry>Matches</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry><i>x</i></entry>
+       <entry>The phone <i>x</i>. Matches regardless of diacritics.</entry>
+      </row>
+      <row>
+       <entry><i>x</i>_<i>y</i></entry>
+       <entry>The compound phone consisting of phones matched by <i>x</i> and <i>y</i>.</entry>
+      </row>
+      <row>
+       <entry>\u<i>nnnn</i></entry>
+       <entry>The phone with unicode value <i>nnnn</i> as a hexadecimal number.</entry>
+      </row>
+      <row>
+       <entry>\*</entry>
+       <entry>The * cover symbol.</entry>
+      </row>
+      <row>
+       <entry>\.</entry>
+       <entry>The . syllable boundary marker.</entry>
+      </row>
+      <row>
+       <entry>\+</entry>
+       <entry>The + compound word marker.</entry>
+      </row>
+      <row>
+       <entry>\^</entry>
+       <entry>The ^ intra-word pause maker.</entry>
+      </row>
+      <row>
+       <entry>'<i>s</i>'</entry>
+       <entry>The phone with text that matches the regular expression <i>s</i></entry>
+      </row>
+      <row>
+       <entry>{<i>f<sub>0</sub></i>, <i>f<sub>1</sub></i>..., <i>f<sub>n</sub></i>}</entry>
+       <entry>The phone with features <i>f<sub>0</sub></i> ... <i>f<sub>n</sub></i></entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </p>
+  <table frame="all" id="table_zpv_d23_gg">
+   <title>Phone classes</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.44*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>[<i>xyz</i>]</entry>
+      <entry><i>x</i>, <i>y</i>, or <i>z</i></entry>
+     </row>
+     <row>
+      <entry>[^<i>xyz</i>]</entry>
+      <entry>Not <i>x</i>, <i>y</i>, or <i>z</i></entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+  <table frame="all" id="table_jmg_s23_gg">
+   <title>Predefined phone classes</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.44*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>.</entry>
+      <entry>Anything</entry>
+     </row>
+     <row>
+      <entry>\c</entry>
+      <entry>Any consonant</entry>
+     </row>
+     <row>
+      <entry>\g</entry>
+      <entry>Any glide</entry>
+     </row>
+     <row>
+      <entry>\v</entry>
+      <entry>Any vowel</entry>
+     </row>
+     <row>
+      <entry>\p</entry>
+      <entry>Any intra-word pause (i.e., ^)</entry>
+     </row>
+     <row>
+      <entry>\P</entry>
+      <entry>Any inter-word pause (e.g., (.), (..), …)</entry>
+     </row>
+     <row>
+      <entry>\w</entry>
+      <entry>Any word character (i.e., consonants, vowels, syllable boundaries, and syllable
+       stress)</entry>
+     </row>
+     <row>
+      <entry>\W</entry>
+      <entry>Any non-word character (i.e., any character not matched by \w, e.g., same as
+       [-\w])</entry>
+     </row>
+     <row>
+      <entry>\s</entry>
+      <entry>Any stress marker</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+  <table frame="all" id="table_xnd_df3_gg">
+   <title>Boundary matchers</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.47*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>^</entry>
+      <entry>Beginning of input</entry>
+     </row>
+     <row>
+      <entry>$</entry>
+      <entry>End of input</entry>
+     </row>
+     <row>
+      <entry>\b</entry>
+      <entry>A word boundary including beginning of input, end of input, and whitespace.</entry>
+     </row>
+     <row>
+      <entry>\S</entry>
+      <entry>A syllable boundary including 'forced' syllable boundaries such as beginning of input,
+       end of input, and whitespace; and, if syllable constituent types are available, 'soft'
+       syllable boundaries detected at syllable edges.</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+  <table frame="all" id="table_gtc_wcm_gg">
+   <title>Plug-ins</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.55*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry><i>x</i>:<i>plugin</i>('<i>s</i>')</entry>
+      <entry><i>x</i> if, and only if, the plug-in matcher identified by <i>plugin</i> matches with
+       expression <i>s</i></entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+  <table frame="all" id="table_2cd_zf3_gg">
+   <title>Quantifiers (greedy)</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.46*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry><i>X</i>?</entry>
+      <entry><i>X</i>, once or not at all</entry>
+     </row>
+     <row>
+      <entry><i>X</i>*</entry>
+      <entry><i>X</i>, zero or more times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>+</entry>
+      <entry><i>X</i>, one or more times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>></entry>
+      <entry><i>X</i>, exactly <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>,></entry>
+      <entry><i>X</i>, at least <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;,<i>n</i>></entry>
+      <entry><i>X</i>, zero to <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>,<i>m</i>></entry>
+      <entry><i>X</i>, at least <i>n</i> but not more than <i>m</i> times</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+  <table frame="all" id="table_lgt_rxt_gg">
+   <title>Quantifiers (reluctant)</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.55*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry><i>X</i>??</entry>
+      <entry><i>X</i>, once or not at all</entry>
+     </row>
+     <row>
+      <entry><i>X</i>*?</entry>
+      <entry><i>X</i>, zero or more times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>+?</entry>
+      <entry><i>X</i>, one or more times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>>?</entry>
+      <entry><i>X</i>, exactly <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>,>?</entry>
+      <entry><i>X</i>, at least <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;,<i>n</i>>?</entry>
+      <entry><i>X</i>, zero to <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>,<i>m</i>>?</entry>
+      <entry><i>X</i>, at least <i>n</i> but not more than <i>m</i> times</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+  <table frame="all" id="table_qxw_hj1_3g">
+   <title>Quantifiers (possessive)</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.46*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry><i>X</i>?+</entry>
+      <entry><i>X</i>, once or not at all</entry>
+     </row>
+     <row>
+      <entry><i>X</i>*+</entry>
+      <entry><i>X</i>, zero or more times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>++</entry>
+      <entry><i>X</i>, one or more times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>>+</entry>
+      <entry><i>X</i>, exactly <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>,>+</entry>
+      <entry><i>X</i>, at least <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;,<i>n</i>>+</entry>
+      <entry><i>X</i>, zero to <i>n</i> times</entry>
+     </row>
+     <row>
+      <entry><i>X</i>&lt;<i>n</i>,<i>m</i>>+</entry>
+      <entry><i>X</i>, at least <i>n</i> but not more than <i>m</i> times</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+  <table frame="all" id="table_hln_dzl_gg">
+   <title>Grouping</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.55*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>(<i>X</i>)</entry>
+      <entry><i>X</i>, as a <i>capturing</i> group</entry>
+     </row>
+     <row>
+      <entry>(?=<i>X</i>)</entry>
+      <entry><i>X</i>, as a <i>non-capturing</i> group</entry>
+     </row>
+     <row>
+      <entry>(<i>name</i>=<i>X</i>)</entry>
+      <entry><i>X</i>, as a <i>named, capturing</i> group. <i>name</i> may consist of letters and
+       numbers, but must start with a letter.</entry>
+     </row>
+     <row>
+      <entry>\<i>n</i></entry>
+      <entry> The content matched by group <i>n</i></entry>
+     </row>
+     <row>
+      <entry>(?&lt;<i>X</i>)</entry>
+      <entry>Look behind and match <i>X</i> as a non-capturing group</entry>
+     </row>
+     <row>
+      <entry>(?><i>X</i>)</entry>
+      <entry>Look ahead and match <i>X</i> as a non-capturing group</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+ </conbody>
+</concept>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_djv_zhg_dn">
+ <title>tone</title>
+ <shortdesc>Description of the <codeph>tone</codeph> supplementary matcher.</shortdesc>
+ <conbody>
+  <p>The <codeph>tone</codeph> supplementary matcher queries the detected tone of the phone. The
+      superscript number diacritics for tone apply to all elements of a syllable.  One argument is
+      accepted denoting the allowed tones accepted, with multiple allowed values separated by a '|'.
+      The numbers 1-9 may be used to identifiy tone type with '*' being any tone.</p>
+   <example><p>Search for a cluster of phones with tone 1
+    <codeblock>.:tone("1")+</codeblock></p>
+   </example>
+ </conbody>
+</concept>

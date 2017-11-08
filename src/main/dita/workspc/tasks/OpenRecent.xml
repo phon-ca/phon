@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Open Recent Project</title>
+    <shortdesc>Re-open a recently opened project.</shortdesc>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>From the <menucascade>
+                    <uicontrol>File</uicontrol>
+                    <uicontrol>Recent projects</uicontrol>
+                </menucascade> menu, select the project you wish to open.</cmd>
+                <stepresult><note>If the project you're looking for is not in this list,
+                open as above.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Save Report Outline</title>
+    <shortdesc>Save a custom report design for future use.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Report</wintitle> window, with the <uicontrol>Report
+                Outline</uicontrol> modified as desired:</context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>Save report design...</uicontrol> button above the
+                        <uicontrol>Report Outline</uicontrol>.</cmd>
+                <stepresult>A <wintitle>Save</wintitle> dialog will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Specify filename and choose an appropriate directory for
+                your Report Outline, and click <uicontrol>Save</uicontrol>.</cmd>
+                <stepresult>The current report design will be saved in the specified directory, and
+                    can now be opened for future use in other Query reports. <note>The default
+                        directory for saved report designs is the <i>reports</i> folder in the
+                        workspace.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

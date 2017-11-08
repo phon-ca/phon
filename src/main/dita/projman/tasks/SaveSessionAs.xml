@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Copy Session to Disk/Other Application</title>
+    <shortdesc>Save a copy of a session to a location outside your project.</shortdesc>
+    <taskbody>
+        <context>From <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Select the sessions you wish to copy in the <wintitle>Project
+                        Manager</wintitle> window.</cmd>
+            </step>
+            <step>
+                <cmd>Drag the selected sessions from the <wintitle>Project Manager</wintitle> window
+                    to a location on your host computer. (e.g., To the Desktop, an open folder in
+                    explorer/Finder, or an open application such as a mail client.)</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>
+

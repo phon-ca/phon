@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Highlight Recently Used Characters</title>
+    <shortdesc>Highlight recently used characters in the <wintitle>IPA Map</wintitle>.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>IPA Map</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) within any section of the
+                        <wintitle>IPA Map</wintitle> and select <uicontrol>Highlight recently
+                        used</uicontrol> from the context menu.</cmd>
+                <stepresult>The last twenty characters entered with the <wintitle>IPA Map</wintitle>
+                    will be highlighted in yellow; the most recently used characters will be the
+                    brightest.</stepresult>
+            </step>
+            <step>
+                <cmd>To turn off this feature, right-click (<userinput>CTRL+click</userinput>)
+                    within any section of the <wintitle>IPA Map</wintitle> and deselect
+                        <uicontrol>Highlight recently used</uicontrol> from the context menu. </cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

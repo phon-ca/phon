@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Word Filter</title>
+    <shortdesc>Limit the results based on position or an expression defining the word.</shortdesc>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Open the <uicontrol>Word Filter</uicontrol> panel by clicking on its title
+                    bar.</cmd>
+            </step>
+            <step>
+                <cmd>Select the <uicontrol>Search by word</uicontrol> check box.</cmd>
+            </step>
+            <step>
+                <cmd>To filter by word position, select the word positions you would like to search
+                    (i.e. singleton words; or initial, medial and/or final words in groups with
+                    multiple words).</cmd>
+            </step>
+            <step>
+                <cmd>To filter by content, choose an <uicontrol>Expression Type</uicontrol> using
+                    the context menu.</cmd>
+            </step>
+            <step>
+                <cmd>Enter the expression you would like to search for in the
+                    <uicontrol>Expression</uicontrol> field.</cmd>
+                <stepresult>
+                    <note>A filter can be used to <i>exclude</i> results based on an expression
+                        defining the word group, depending on the filter expression. For example,
+                        you can use the following regular expression (where <codeph>PATTERN</codeph>
+                        is the pattern you wish to
+                        exclude):<codeblock>^(?:(?!PATTERN).)*$</codeblock></note>
+                </stepresult>
+            </step>
+            <step>
+                <cmd>Choose whether or not your query should be <uicontrol>Case
+                    sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using the
+                    check boxes.</cmd>
+                <stepresult>
+                    <note><uicontrol>Case sensitive</uicontrol> is not applicable to
+                        <uicontrol>Phonex</uicontrol>, <uicontrol>Stress pattern</uicontrol>, or
+                        <uicontrol>CGV pattern</uicontrol> expressions.</note>
+                </stepresult>
+            </step>
+        </steps>
+    </taskbody>    
+    <task id="id_12b7dc3b-e126-43a0-8134-252c8uuubd89" conref="AlignedWordFilter.xml#taskId">
+        <title/>
+    </task>
+</task>

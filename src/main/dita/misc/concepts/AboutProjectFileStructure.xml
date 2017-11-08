@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Project File Structure</title>
+    <conbody>
+        <p><i>Phon</i> projects are stored on a hard drive as directories.</p>
+        <p>The directory for each project will contain the following:</p>
+        <ul id="ul_dpz_jzj_rc">
+            <li>A <i>project.xml</i> file which contains the information <i>Phon</i> requires for
+                the project.</li>
+            <li>A series of folders which correspond to each of the project's <i>corpora</i>
+                (usually a collection of transcribed sessions for a specific target speaker).<ul
+                    id="ul_zkz_wak_rc">
+                    <li>Within each corpus folder are a series of xml files corresponding to each
+                        session. The xml files which are named beginning with '~' are session
+                        autosaves, created in order to prevent loss of data in the event of an
+                        unexpected shutdown.</li>
+                </ul></li>
+        </ul>
+        <p>The directory for each project may also contain the following:</p>
+        <ul>
+            <li>A project resources folder called '<i>__res</i>', which is a system directory
+                created by <i>Phon</i> to contain useful components for the project. This folder may
+                contain: <ul id="ul_vxt_xak_rc">
+                    <li>A media folder, which is the default location for the media for the project
+                        and may contain media segments exported from <i>Phon</i>.</li>
+                </ul></li>
+            <li>A folder to contain saved query results, called '<i>__search</i>'.</li>
+        </ul>
+        <p><note>Projects created using earlier versions of <i>Phon</i> may exist as <i>.phon</i> files. These
+                projects will need to be extracted (i.e. expanded to directories using the
+                    <wintitle>Workspace</wintitle> window) to be used with the current version of
+                    <i>Phon</i>.</note></p>
+    </conbody>
+</concept>

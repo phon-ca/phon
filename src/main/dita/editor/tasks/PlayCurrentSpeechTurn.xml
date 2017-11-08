@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Play Current Speech Turn</title>
+    <shortdesc>Play adjacent utterances produced by the current speaker, starting with the current
+        record.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Media Player</wintitle> view:</context>
+        <steps id="steps_fcd_kdj_sk">
+            <step>
+                <cmd>Click the context menu in the bottom right corner and choose <uicontrol>Play
+                        current speech turn</uicontrol>.</cmd>
+                <stepresult>The current record will be played, followed by subsequent adjacent
+                    records by the same speaker.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

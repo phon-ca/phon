@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Delete Session</title>
+    <shortdesc>Remove a session from your project.</shortdesc>
+    <taskbody>
+        <context>From <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) on the session you wish to
+                    delete, and choose <uicontrol>Delete Session</uicontrol> from the context
+                    menu.</cmd>
+                <stepresult>A dialog will appear asking you to confirm that you would like to delete
+                    this session and informing you that this action cannot be undone.</stepresult>
+            </step>
+            <step>
+                <cmd>If you are unsure, click <uicontrol>No</uicontrol>. To continue and delete the
+                    session, click <uicontrol>Yes</uicontrol>.</cmd>
+                <stepresult>The session will no longer appear in the <wintitle>Project
+                        Manager</wintitle> window.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

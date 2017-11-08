@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Duplicate Corpus</title>
+    <shortdesc>Dupliate a corpus folder in your project.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
+                    duplicate and choose <uicontrol>Duplicate Corpus</uicontrol> from the context
+                    menu.</cmd>
+                <stepresult>The corpus folder will be duplicated with an integer suffix (e.g.,
+                    '(1)') appended.</stepresult>
+            </step>
+            
+        </steps>
+        
+    </taskbody>
+</task>

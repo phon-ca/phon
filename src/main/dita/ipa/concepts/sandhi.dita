@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_omj_cyj_2n">
+  <title>Sandhi</title>
+  <shortdesc>Description of sandhi.</shortdesc>
+  <conbody>
+    <p>Linkers are symbols to express a phonological relation between two words, for example in the
+      case of external sandhi phenomenon. For example, while 'an' and 'apple' for two separate
+      words, the final 'n' of the determiner is syllabified within the onset of the following
+      syllable. We represent this relations as 'an‿apple' [əˈnæpəl].</p>
+    <section>
+      <title>Contraction</title>
+      <p>A contraction is a combination of two words within a phrase, involving the reduction of one
+        of the words. In Phon, contractions may be transcribed using the overtie character,
+          <codeph>0x2040</codeph>.</p>
+    </section>
+    <example>
+      <p>Contraction<codeblock>Orthography: [l'ami]
+IPA Actual:  [l⁀ami]</codeblock></p>
+    </example>
+    <section>
+      <title>Linkers (including Liaison)</title>
+      <p>Linkers are transcribed using the undertie character <codeph>0x203f</codeph>.</p>
+    </section>
+    <example>
+      <p>Liaison<codeblock>Orthography: [les‿ami]
+IPA Target:  [le‿zami]</codeblock></p>
+    </example>
+  </conbody>
+</concept>

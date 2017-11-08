@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Delete Corpus</title>
+    <shortdesc>Delete a corpus in your project.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
+                    delete and choose <uicontrol>Delete Corpus</uicontrol> from the context
+                    menu.</cmd>
+                
+                <stepresult>A dialog will appear asking you to confirm whether you would like to
+                    delete this corpus and informing you that this action cannot be
+                    undone.</stepresult>
+            </step>
+            <step>
+                <cmd>If you are unsure, click <uicontrol>No</uicontrol>. To continue and delete the
+                    corpus, click <uicontrol>Yes</uicontrol>.</cmd>
+                <stepresult>The deleted corpus will no longer appear in the <wintitle>Project
+                        Manager</wintitle> window.</stepresult>
+            </step>
+            
+        </steps>
+        
+    </taskbody>
+</task>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Phones</title>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Select a <uicontrol>Search Tier</uicontrol> from the context menu
+                        (<uicontrol>IPA Target</uicontrol> or <uicontrol>IPA
+                    Actual</uicontrol>).</cmd>
+            </step>
+            <step>
+                <cmd>Select an <uicontrol>Expression Type</uicontrol> from the context menu
+                        (<uicontrol>Plain text</uicontrol>, <uicontrol>Regular
+                        expression</uicontrol>, <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+                        pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol>).</cmd>
+            </step>
+            <step>
+                <cmd>Enter a search expression in the <uicontrol>Expression</uicontrol> field, using
+                    the key at the bottom as a guide if applicable.</cmd>
+            </step>
+            <step>
+                <cmd>Choose whether your query should be <uicontrol>Case sensitive</uicontrol> or an
+                        <uicontrol>Exact match</uicontrol> by selecting or deselecting the check
+                    boxes.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Export Results as CSV</title>
+    <shortdesc>Create a CSV file from Result Sets generated in a Query.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Query Project</wintitle> window with a <wintitle>Query
+        Tab</wintitle> open:</context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>Report</uicontrol> button at the top of the numbered
+                        <wintitle>Query Tab</wintitle>.</cmd>
+                <stepresult>The <wintitle>Report Wizard</wintitle> will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Choose <uicontrol>Export results as CSV</uicontrol> and click
+                        <uicontrol>Next</uicontrol>.</cmd>
+                <stepresult>The <wintitle>Report Wizard</wintitle> will prompt you to specify
+                    options for your CSV report.</stepresult>
+            </step>
+            <step>
+                <cmd>Enter a <uicontrol>Save</uicontrol> location by clicking the
+                        <uicontrol>Browse</uicontrol> button to the right of the <uicontrol>Save
+                        location</uicontrol> field, locating an appropriate directory, and clicking
+                        <uicontrol>Choose</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>Choose whether to <uicontrol>Export all searches to single file</uicontrol>.
+                    This allows you to include the results from separate sessions in the same file.
+                    Then, choose the sessions whose search results you would like to export and
+                    click <uicontrol>Next</uicontrol>.</cmd>
+                <stepresult>The <wintitle>Report Wizard</wintitle> will prompt you to setup the
+                    columns for your CSV export.</stepresult>
+            </step>
+            <step>
+                <cmd>To reorder tiers, select the column you would like to re-order and use the
+                        <userinput>up/down arrows</userinput> to rearrange it. To add a column, type
+                    its name in the provided field following instructions in the <wintitle>Report
+                        Wizard</wintitle> window and click <uicontrol>Add column/+</uicontrol>. To
+                    remove an unneccessary column from the export, select the column name and click
+                        <uicontrol>Remove column/-</uicontrol>. To choose the default column
+                    arrangement, click the <uicontrol>Reset to default</uicontrol> button at the
+                    bottom right corner of the <wintitle>Report Wizard</wintitle>. When you are
+                    satisfied with your column settings, click <uicontrol>Next</uicontrol>.</cmd>
+                <stepresult>Your report(s) will be generated in the specified save
+                    location.</stepresult>
+            </step>
+            <step>
+                <cmd>To open your report, click its name in the <wintitle>Report Wizard</wintitle>.
+                    Otherwise, click <uicontrol>Close</uicontrol> to close the <wintitle>Report
+                        Wizard</wintitle>.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>        

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Play Current Segment</title>
+    <shortdesc>Play the media segment specified in the currently visible record.</shortdesc>
+    <taskbody>
+        <context>With the <wintitle>Media Player</wintitle> open:</context>
+        <steps id="steps_ub5_zbj_sk">
+            <step>
+                <cmd>Click the <uicontrol>Play</uicontrol> button next to the <i>Segment</i> tier in
+                    the <wintitle>Record Data</wintitle> view (<userinput>CMD/CTRL+R</userinput>).
+                    Alternately, click on the context menu in the bottom right corner of the
+                        <wintitle>Media Player</wintitle> and select <uicontrol>Play current
+                        segment</uicontrol>.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

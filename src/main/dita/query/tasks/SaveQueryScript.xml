@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Save Query Script</title>
+    <shortdesc>Save your query script.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Query Project</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Click <uicontrol>Save script as...</uicontrol> at the top of the
+                    form/script.</cmd>
+                <stepresult>A <wintitle>Save Query</wintitle> dialog will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Enter a name for the query in the <uicontrol>Name</uicontrol> field, and choose
+                    whether or not to <uicontrol>Include current form setup</uicontrol> using the
+                    check box.</cmd>
+                <stepresult>By default, current form setup is included. This means that search
+                    parameters entered in the query form (rather than just the query script) will be
+                    saved.</stepresult>
+            </step>
+            <step>
+                <cmd>Choose whether to <uicontrol>Save in user library</uicontrol>, <uicontrol>Save
+                        in project resources</uicontrol>, or <uicontrol>Save in another
+                        location...</uicontrol> and click <uicontrol>Save</uicontrol>.</cmd>
+                <stepresult>Queries saved in the user library will be accessible in the
+                        <uicontrol>Query</uicontrol> menu for all projects. Queries saved in project
+                    resources will be accessible in only the current project's
+                        <uicontrol>Query</uicontrol> menu. Queries saved in other locations will not
+                    be available as menu selections.</stepresult>
+            </step>
+            <step>
+                <cmd>As you do further work on your script, click <uicontrol>Save script</uicontrol>
+                        (<userinput>CMD/CTRL+S</userinput>) to save your work.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

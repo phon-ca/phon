@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Table Quick Search</title>
+    <conbody>
+        <p>In this type of search field, the following syntax is accepted:</p>
+        <p><codeph>[&lt;column>(,&lt;column>)*:]&lt;expr>(;[&lt;column>(,&lt;column>)*:]&lt;expr>)*</codeph></p>
+        <p>Possible elements:</p>
+        <p>
+            <ul id="ul_wht_lyg_bj">
+                <li><codeph>&lt;column></codeph><p>The name of a column in the displayed
+                    table.</p></li>
+                <li>
+                    <codeph>&lt;expr></codeph><p>Either a regular expression (regex), a phone
+                        sequence expression (phonex) or plain text.</p></li>
+            </ul>
+        </p>
+        <p>Some example expressions:
+            <table frame="none" id="table_654bb29b-6724-4boe-b7f6-15470d928887">
+                <title/>
+                <tgroup cols="3">
+                    <colspec colname="c1" colnum="1" colwidth="1*"/>
+                    <colspec colname="c2" colnum="2" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Expression</entry>
+                            <entry>Matches</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>b</entry>
+                            <entry>Any row with a column that contains 'b'</entry>
+                        </row>
+                        <row>
+                            <entry>Speaker:Anne; b</entry>
+                            <entry>Any row where column 'Speaker' is 'Anne' and any other column contains
+                        'b'</entry>
+                        </row>
+                        <row>
+                            <entry>IPA Target:b{v}</entry>
+                            <entry>Any row where the IPA Target column contains 'b' followed by a
+                        vowel</entry>
+                        </row>
+                        <row>
+                            <entry>IPA Target,IPA Actual:k{v}</entry>
+                            <entry>Any row where either the IPA Target or the IPA Actual column contains
+                        'k' followed by a vowel</entry>
+                        </row>
+                        <row>
+                            <entry>Orthography:c; IPA Target:{c}{g}</entry>
+                            <entry>Any row where the Orthography column contains 'c' and IPA Target
+                        contains a consonant followed by a glide.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table></p>
+    </conbody>
+</concept>

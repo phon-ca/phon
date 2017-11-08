@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Open Session: Blind Transcription</title>
+    <shortdesc>Transcribe in multi-blind mode.</shortdesc>
+    <taskbody>
+        <context>
+            <p>From the <wintitle>Project Manager</wintitle> window:</p>
+        </context>
+        <steps>
+            <step>
+                <cmd>Select the <uicontrol>Blind transcription</uicontrol> check box and
+                    double-click on the session that you would like to transcribe.</cmd>
+                <stepresult>This will open a dialog prompting you to indicate whether you are a new
+                    or existing transcriber. </stepresult>
+            </step>
+            <step>
+                <cmd></cmd>
+                <choices>
+                    <choice>If you are a new transcriber, choose the first option and enter your full name
+                    as well as a username. If you wish to use a password, select <uicontrol>Use
+                        password</uicontrol> and enter your chosen password into the two fields
+                        provided (the text in both fields must match). There is no password reminder function in <i>Phon</i>. 
+                        Ensure that your password is memorable or store it in a safe location. Click <uicontrol>Ok</uicontrol> to continue.</choice>
+                    <choice>If you are a returning transcriber, choose the second option and select
+                        your username from the list. If you have chosen to use a password, you will
+                        be prompted to enter that password now. Do so and click
+                            <uicontrol>Ok</uicontrol>.</choice>
+                </choices>
+                <stepresult>This will open the <wintitle>Session Editor</wintitle> window.
+                        <note>Upon opening a session for the first time, there will be an empty
+                        record at the beginning of each session.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

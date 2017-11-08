@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About IPA Map</title>
+    <shortdesc>About the <wintitle>IPA Map</wintitle> in <i>Phon</i>.</shortdesc>
+    <conbody>
+        <p><i>Phon's</i>
+            <wintitle>IPA Map</wintitle> provides an easy-to-use interface for composing phonetic
+            transcriptions. There are eight sections in the window, each with a layout which aids in
+            the lookup of phones and diacritics. These sections may be collapsed or expanded by
+            clicking on the appropriate title bar.</p>
+        <p><b><wintitle>IPA Map</wintitle> sections:</b>
+            <ul id="ul_xkl_4km_pf">
+                <li>Consonants</li>
+                <li>Clicks and Implosives</li>
+                <li>Vowels</li>
+                <li>Suprasegmentals</li>
+                <li>Contours</li>
+                <li>Diacritics</li>
+                <li>Tones</li>
+                <li>ExtIPA</li>
+            </ul></p>
+        <p>Not all characters in the <wintitle>IPA Map</wintitle> are meant to be the base glyph in
+            a phone (e.g. suprasegmentals, word boundaries, diacritics). Often, a dependent
+            character is displayed in the <wintitle>IPA Map</wintitle> with a circle to represent
+            its relation to the base glyph.</p>
+        <p>To view the <i>Name</i>, <i>Unicode</i> value, and <i>Features</i> of a character in the
+                <wintitle>IPA Map</wintitle>, mouse over the character and a
+                <wintitle>Tooltip</wintitle> window will appear.</p>
+        <p><image placement="break" scale="50"
+            href="../../images/IPAMap-tooltip.png" id="image_wdr_vlm_sc"/> </p>
+    </conbody>
+</concept>

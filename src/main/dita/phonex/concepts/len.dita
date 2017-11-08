@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_l3n_zgn_gg">
+ <title>len</title>
+ <shortdesc>Description of the <codeph>len</codeph> supplementary matcher.</shortdesc>
+ <conbody>
+  <p>The <codeph>len</codeph> supplementary matcher queries the length of a phone.  It accepts a
+    <codeph>float</codeph> as a single parameter.  The matcher will match if the phone has the
+   specified length.  For more information about how phone length is specified, see the description
+   of <xref href="../../ipa/concepts/phone.dita"/>.</p>
+  <example>
+   <p>Search for a phone that has a single, long diacritic.<codeblock>.:len("1.0")</codeblock></p>
+  </example>
+ </conbody>
+</concept>

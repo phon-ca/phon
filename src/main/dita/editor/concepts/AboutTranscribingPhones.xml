@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Transcribing Phones</title>
+    <conbody>
+        <p>A phone object in <i>Phon</i> consists of a primary character, such as a consonant or
+            vowel, and any diacritics which modify the primary character. To ensure proper
+            syllabification of utterances, it is important that phones with diacritics are
+            transcribed correctly.  For more information, see the <i>IPA &amp; Phonex Reference</i>
+            available from the <uicontrol>Help</uicontrol> menu in <i>Phon</i>.</p>
+    </conbody>
+</concept>

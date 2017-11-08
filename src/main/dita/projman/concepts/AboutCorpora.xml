@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Corpora</title>
+    <conbody>
+        <p>Within a project, individual transcripts (or <i>sessions</i>) are organized into a series
+            of one or more <i>corpora</i>.</p>
+        <p>Each corpus typically contains a series of sessions relating to one specific participant
+            in a study. The corpus may contain as many sessions as desired for that participant,
+            spanning any length of time. This allows the user to easily search all transcripts
+            relating to one participant, by searching within the relevant corpus.</p>
+        <p>When a corpus is selected, the number of sessions and a description of that corpus is
+            displayed at the bottom of the list of corpora.</p>
+        <image placement="break" scale="40"
+            href="../../images/AboutCorpora.png" id="image_wdr_vlm_sc"/>
+    </conbody>
+</concept>

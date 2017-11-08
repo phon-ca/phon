@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Result Data</title>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Select or deselect <uicontrol>Include result value</uicontrol>.</cmd>
+                <stepresult>If selected, each distinct result in the selected Result Sets will be
+                    printed in the report. Occurrences of identical result values will be counted in
+                    the same line.</stepresult>
+            </step>
+            <step>
+                <cmd>Select or deselect <uicontrol>Include metadata in result value when counting</uicontrol>.</cmd>
+                <stepresult>If selected, results with distinct metadata (i.e. deletion, epenthesis,
+                    match, substitution) will be counted separately, even if the results appear to
+                    be the same.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

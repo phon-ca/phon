@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>Additional Syntax</title>
+    <shortdesc/>
+    <conbody>
+        <p>Tools to help further refine phonex queries:<ol
+                id="ol_c92690ae-b887-4965-b244-983a5456697a">
+                <li><b>Comma " , " </b>: Commas are used to separate features within the matcher. </li>
+                <li><b>Negation symbol " - "</b> : Features proceeded by a negation symbol will
+                    return only those phones which do NOT contain that feature. To illustrate,
+                    consider the query <b>{-voiced}</b>. This query does not return all phones which
+                    are [-vcd] since negative features are not included in Phon's feature sets.
+                    Neither does it return all phones which are voiceless. Rather it will return
+                    only those phones which do not contain {voiced} in their feature sets. This
+                    allows for some results which would otherwise appear questionable. For instance,
+                    Phon's feature set for the aspiration marker <sup>h</sup> is <b>{diacritic,
+                        aspirated}</b>. Since it does not contain <b>{voiced}</b> in its feature
+                    set, the query <b>{-voiced}</b> will also return this marker if it has been
+                    transcribed. This is also true for stress markers. </li>
+                <li><b>Pipe " | " </b>: Features separated by the pipe symbol are considered choices. </li>
+            </ol></p>
+        <p> Example queries: </p>
+        <p>b = {consonant, labial, bilabial, voiced, stop, obstruent} </p>
+        <p>m = {consonant, labial, bilabial, voiced, stop, sonorant, nasal} </p>
+        <p>n = {consonant, coronal, anterior, alveolar, voiced, stop, sonorant, nasal} </p>
+        <p>k = {consonant, dorsal, velar, voiceless, stop, obstruent} </p>
+        <p>g = {consonant, dorsal, velar, voiced, stop, obstruent}</p>
+        <table frame="none" id="table_654bb29b-6724-4boe-b7f6-15470d929b61">
+            <title/>
+            <tgroup cols="3">
+                <colspec colname="c1" colnum="1" colwidth="2*"/>
+                <colspec colname="c2" colnum="2" colwidth="2*"/>
+                <colspec colname="c3" colnum="3" colwidth="1*"/>
+                <thead>
+                    <row>
+                        <entry>Example Phonex Query</entry>
+                        <entry>Oral Expression</entry>
+                        <entry>Result</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>{labial, stop, voiceless} </entry>
+                        <entry>Voiceless, labial plosives </entry>
+                        <entry>m</entry>
+                    </row>
+                    <row>
+                        <entry>{-nasal} </entry>
+                        <entry>Phones or metaphones which are not nasal </entry>
+                        <entry>b; k; g </entry>
+                    </row>
+                    <row>
+                        <entry>{labial|coronal}</entry>
+                        <entry>Labials or coronals </entry>
+                        <entry>b; m; n </entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <p>These symbols can also be used in conjunction with one another. This is illustrated in
+            the examples below using the above phones and their feature sets.</p>
+        <p>
+            <table frame="none" id="table_c9a35b38-9740-4c74-8iie-e3e8994953e1">
+                <title/>
+                <tgroup cols="3">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="2*"/>
+                    <colspec colname="c3" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Example Phonex Query</entry>
+                            <entry>Oral Expression</entry>
+                            <entry>Results</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>{voiced, alveolar|velar}</entry>
+                            <entry>Voiced alveolars or voiced velars </entry>
+                            <entry>g; n </entry>
+                        </row>
+                        <row>
+                            <entry>{-voiceless, obstruent} </entry>
+                            <entry>Obstruents which do not contain {Voiceless} in their feature sets </entry>
+                            <entry>b; g </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p>Choices used together with negation may work slightly different than expected. All the
+            possible combinations of pipe and negation are listed below.</p>
+        <p>
+            <table frame="none" id="table_63248126-ed09-48da-be7d-5a3e724b6452">
+                <title/>
+                <tgroup cols="4">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="2*"/>
+                    <colspec colname="c3" colnum="3" colwidth="1*"/>
+                    <colspec colname="newCol4" colnum="4" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Example Phonex Query</entry>
+                            <entry>Oral Expression</entry>
+                            <entry>Results</entry>
+                            <entry>Not Returned</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>{labial|nasal} </entry>
+                            <entry>Phones which are labial or nasal </entry>
+                            <entry>b; m; n</entry>
+                            <entry>k; g</entry>
+                        </row>
+                        <row>
+                            <entry>{labial|-nasal} </entry>
+                            <entry>Phones which are labial or are not nasal </entry>
+                            <entry>b; m; k; g</entry>
+                            <entry>n</entry>
+                        </row>
+                        <row>
+                            <entry>{-labial|nasal} </entry>
+                            <entry>Phones which are not labial or are nasal </entry>
+                            <entry>m; n; k; g   </entry>
+                            <entry>b</entry>
+                        </row>
+                        <row>
+                            <entry>{-labial|-nasal} </entry>
+                            <entry>Phones which are not labial or not nasal </entry>
+                            <entry>b; n; k; g</entry>
+                            <entry>m</entry>
+                        </row>
+                        <row>
+                            <entry>{-labial, -nasal}</entry>
+                            <entry>Phones which are neither labial nor nasal</entry>
+                            <entry>k; g</entry>
+                            <entry>b; m; n</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p>Both the minus symbol and pipe can be used with a matcher's annotations as well as within
+            a matcher's feature set. If you have not already read the &lt;Stress Information> or
+            &lt;Syllable Information> sections, you are suggested to return to these first and then
+            come back to continue this section. </p>
+        <p><b>Additional Syntax in Annotations </b></p>
+        <p><b>Comma " , "</b> : In annotations, commas are only used to separate types of
+            annotations (e.g., syllable stress information from syllable constituent type). Since
+            there can only be one of each kind of annotation per matcher, commas cannot be used to
+            separate two pieces of syllable stress information or two pieces of syllable constituent
+            types. This is fairly intuitive as a syllable cannot be both stressed and unstressed, or
+            both with primary and secondary stress, etc. Neither can a single phone occupy two
+            positions (e.g., onset and nucleus). Ambisyllabics are exceptional cases. However, in
+            this case <b>Ambisyllabic</b> should be used. <b>Coda,Onset</b> will not return the
+            desired results. </p>
+        <p>
+            <table frame="none" id="table_4ffb3b09-9c3d-4ec7-8971-6c748c96dff1">
+                <title>Possible Queries </title>
+                <tgroup cols="2">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Example Phonex Query</entry>
+                            <entry>Oral Expression</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>{}:NoStress,Coda </entry>
+                            <entry>Codas of unstressed syllables </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p><b>Negation symbol " - " </b>: This works the same with annotations and the matcher.</p>
+        <p>
+            <table frame="none" id="table_670fa867-b1e9-431d-8e40-f6f4c5f3664c">
+                <title/>
+                <tgroup cols="2">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Example Phonex Query</entry>
+                            <entry>Oral Expression</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>{sonorant, dorsal}:NoStress,-Coda </entry>
+                            <entry>Dorsal sonorants in unstressed syllables that are NOT in a coda
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p><b>Pipe " | " </b>: This also works the same with annotations and the matcher.</p>
+        <p>
+            <table frame="none" id="table_f96b2a3k-2131-4b21-83a3-203e8c1c1983">
+                <title/>
+                <tgroup cols="2">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Example Phonex Query</entry>
+                            <entry>Oral Expression</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>{}:RightAppendix|Coda </entry>
+                            <entry>Any sound in right appendix or coda position</entry>
+                        </row>
+                        <row>
+                            <entry>{prstress}:LeftAppendix|Onset </entry>
+                            <entry>Any sound in left appendix or onset position of a primary
+                                stressed syllable</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p>Like in the case of the matcher, the additional syntax presented above can be used in
+            combination with each other. The use of comma in conjunction with negation and in
+            conjunction with pipe has already been illustrated. The use of pipe and negation
+            together works similarly. Exceptions are noted in the chart below. </p>
+        <p>
+            <table frame="none" id="table_6a948457-b1b5-450d-8642-814b9861b494">
+                <title>Exceptions</title>
+                <tgroup cols="2">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Example Phonex Query</entry>
+                            <entry>Oral Expression</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>{Onset|Coda} </entry>
+                            <entry>Phones which are in an onset or in a coda</entry>
+                        </row>
+                        <row>
+                            <entry><b>X</b> {Onset|-Coda}</entry>
+                            <entry><b>DO NOT USE</b>: this contains redundant information as an
+                                onset is intrinsically not a coda. Only onsets will be returned.
+                            </entry>
+                        </row>
+                        <row>
+                            <entry><b>X</b> {-Onset|Coda}</entry>
+                            <entry><b>DO NOT USE</b>: this contains redundant information as a coda
+                                is intrinsically not an onset. Only codas will be returned. </entry>
+                        </row>
+                        <row>
+                            <entry><b>X</b> {-Onset|-Coda} </entry>
+                            <entry><b>DO NOT USE</b>: this search returns phones which are not in an
+                                onset or not in a coda, and therefore will return phones in any
+                                position.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+    </conbody>
+</concept>

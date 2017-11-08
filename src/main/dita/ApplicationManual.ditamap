@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "http://docs.oasis-open.org/v1.1/OS/dtd/map.dtd">
+<map title="Phon Manual" class="- map/map ">
+    <topicref href="misc/concepts/Contributors.xml"/>
+    <topicref href="misc/concepts/Introduction.xml"/>
+    <topicref href="misc/concepts/AboutConventions.xml"/>
+    <topicref href="misc/concepts/out/markdown/Introduction.md" format="markdown">
+        <topicmeta>
+            <navtitle>Introduction</navtitle>
+        </topicmeta>
+    </topicref>
+    <topichead navtitle="Using Phon">
+        <topicref href="prefs/tasks/EditPreferences.xml"/>
+        <topicref href="prefs/tasks/ChangeDictionaryLanguage.xml"/>
+        <topicref href="prefs/tasks/ChangeSyllabifierLanguage.xml"/>
+        <topicref href="prefs/tasks/ChangeApplicationFonts.xml"/>
+        <topicref href="prefs/concepts/AboutAutosaves.xml"/>
+    </topichead>
+    <topichead navtitle="Project Management">
+        <topicref href="misc/concepts/AboutProjectFileStructure.xml"/>
+        <topicref href="workspc/concepts/AboutWorkspaceWindow.xml">
+            <topicref href="workspc/tasks/ChangeWorkspaceFolder.xml"/>
+            <topicref href="workspc/tasks/SortProjectList.xml"/>
+        </topicref>
+        <topicref href="workspc/tasks/CreateProject.xml"/>
+        <topicref href="workspc/tasks/ExtractProject.xml"/>
+        <topicref href="workspc/tasks/OpenProject.xml"/>
+        <topicref href="workspc/tasks/ShowInFileSystemViewer.xml"/>
+        <topicref href="workspc/tasks/ArchiveProject.xml"/>
+    </topichead>
+    <topichead navtitle="Corpus Management">
+        <topicref href="projman/concepts/AboutCorpora.xml"/>
+        <topicref href="projman/tasks/CreateCorpus.xml"/>
+        <topicref href="projman/tasks/DuplicateCorpus.xml"/>
+        <topicref href="projman/tasks/RenameCorpus.xml"/>
+        <topicref href="projman/tasks/DeleteCorpus.xml"/>
+        <topicref href="projman/tasks/CopyCorpus.xml"/>
+        <topicref href="projman/tasks/RefreshProject.xml"/>
+        <topicref href="projman/tasks/EditCorpusTemplate.xml"/>
+    </topichead>
+    <topichead navtitle="Session Management">
+        <topicref href="projman/concepts/AboutSessions.xml"/>
+        <topicref href="projman/tasks/CreateSession.xml"/>
+        <topicref href="projman/tasks/CSVImport.xml"/>
+        <topicref href="projman/tasks/CSVExport.xml"/>
+        <topicref href="projman/tasks/DuplicateSession.xml"/>
+        <topicref href="projman/tasks/RenameSession.xml"/>
+        <topicref href="projman/tasks/DeleteSession.xml"/>
+        <topicref href="projman/tasks/CopySession.xml"/>
+        <topicref href="projman/tasks/DeriveSession.xml"/>
+        <topicref href="projman/tasks/SaveSessionAs.xml"/>
+    </topichead>
+    <topichead navtitle="IPA Map">
+        <topicref href="ipamap/concepts/AboutIPAMap.xml"/>
+        <topicref href="ipamap/tasks/InputTextwithIPAMap.xml"/>
+        <topicref href="ipamap/tasks/CopyCharacter.xml"/>
+        <topicref href="ipamap/tasks/AddtoFavorites.xml"/>
+        <topicref href="ipamap/tasks/ScrolltoSection.xml"/>
+        <topicref href="ipamap/tasks/ResizeFontandWindow.xml"/>
+        <topicref href="ipamap/tasks/HighlightRecentlyUsed.xml"/>
+    </topichead>
+    <topichead navtitle="Session Editor">
+        <topichead navtitle="Editor Views">
+            <topicref href="editor/concepts/AboutEditorViews.xml"/>
+            <topicref href="editor/tasks/RelocateView.xml"/>
+            <topicref href="editor/tasks/UndockView.xml"/>
+            <topicref href="editor/tasks/DockView.xml"/>
+            <topicref href="editor/tasks/MinimizeView.xml"/>
+            <topicref href="editor/tasks/MaximizeView.xml"/>
+            <topicref href="editor/concepts/AboutEditorLayouts.xml"/>
+            <topicref href="editor/tasks/ChangeLayout.xml"/>
+            <topicref href="editor/tasks/SaveCurrentLayout.xml"/>
+            <topicref href="editor/tasks/DeleteSavedLayout.xml"/>
+        </topichead>
+        <topichead navtitle="General Session Tasks">
+            <topicref href="projman/tasks/OpenSessionDefault.xml"/>
+            <topicref href="editor/tasks/Navigate.xml"/>
+            <topicref href="editor/concepts/EditorKeystrokes.xml"/>
+            <topicref href="editor/tasks/Undo.xml"/>
+            <topicref href="editor/tasks/Redo.xml"/>
+            <topicref href="editor/tasks/EditSessionDate.xml"/>
+            <topicref href="editor/tasks/InputSessionLanguage.xml"/>
+            <topicref href="editor/tasks/SearchSession.xml">
+                <topicref href="editor/concepts/AboutTableQuickSearch.xml"/>
+            </topicref>
+        </topichead>
+        <topichead navtitle="Participants">
+            <topicref href="editor/concepts/AboutParticipants.xml"/>
+            <topicref href="editor/tasks/AddParticipant.xml"/>
+            <topicref href="editor/tasks/EditParticipants.xml"/>
+            <topicref href="editor/tasks/RemoveParticipant.xml"/>
+        </topichead>
+        <topichead navtitle="Multimedia">
+            <topicref href="editor/concepts/AboutMedia.xml"/>
+            <topicref href="prefs/concepts/AboutMediaDirs.xml"/>
+            <topicref href="prefs/tasks/ChangeMediaDirs.xml"/>
+            <topicref href="editor/tasks/LinkMedia.xml"/>
+            <topicref href="editor/tasks/OpenMedia.xml"/>
+            <topichead navtitle="Segmentation">
+                <topicref href="editor/tasks/SegmentMedia.xml"/>
+                <topicref href="editor/tasks/ViewWaveform.xml"/>
+                <topicref href="editor/tasks/AdjustSegmentTimes.xml"/>
+            </topichead>
+            <topicref href="editor/concepts/MediaFunctions.xml">
+                <topicref href="editor/tasks/TakeSnapshot.xml"/>
+                <topicref href="editor/tasks/PlayCustomSegment.xml"/>
+                <topicref href="editor/tasks/PlayCurrentSegment.xml"/>
+                <topicref href="editor/tasks/PlayCurrentSpeechTurn.xml"/>
+                <topicref href="editor/tasks/MoveMediaPositionWithRecord.xml"/>
+                <topicref href="editor/tasks/GoTo.xml"/>
+            </topicref>
+            <topichead navtitle="Exporting Media">
+                <topicref href="editor/concepts/AboutExportMethods.xml"/>
+                <topicref href="editor/tasks/ExportAudioSegment.xml"/>
+                <topicref href="editor/tasks/ExportMedia.xml"/>
+            </topichead>
+        </topichead>
+        <topichead navtitle="Records">
+            <topicref href="editor/tasks/AddNewRecord.xml"/>
+            <topicref href="editor/tasks/DuplicateRecord.xml"/>
+            <topicref href="editor/tasks/DeleteRecord.xml"/>
+            <topicref href="editor/tasks/CutRecord.xml"/>
+            <topicref href="editor/tasks/CopyRecord.xml"/>
+            <topicref href="editor/tasks/PasteRecord.xml"/>
+            <topicref href="editor/tasks/SortRecords.xml"/>
+            <topicref href="editor/tasks/ViewRecordList.xml">
+                <topicref href="editor/tasks/ChangeColumns.xml"/>
+            </topicref>
+        </topichead>
+        <topichead navtitle="Tiers">
+            <topicref href="editor/tasks/LockUnlockTiers.xml"/>
+            <topicref href="editor/tasks/EditTierDisplayOptions.xml"/>
+            <topicref href="editor/tasks/CreateUserDefinedTiers.xml"/>
+            <topicref href="editor/tasks/RemoveUserDefinedTiers.xml"/>
+        </topichead>
+        <topichead navtitle="Transcription">
+            <topicref href="editor/tasks/TranscribeData.xml">
+                <topichead navtitle="Word Groups">
+                    <topicref href="editor/tasks/NewGroup.xml"/>
+                    <topicref href="editor/tasks/MergeGroup.xml"/>
+                    <topicref href="editor/tasks/SplitGroup.xml"/>
+                    <topicref href="editor/tasks/DeleteGroup.xml"/>
+                </topichead>
+                <topicref href="editor/concepts/AboutTranscribingPhones.xml"/>
+                <topicref href="projman/tasks/CheckTranscriptions.xml"/>
+            </topicref>
+            <topicref href="editor/tasks/Auto-transcribe.xml"/>
+            <topicref href="editor/concepts/AboutIPALookupConsole.xml"/>
+            <topicref href="editor/tasks/FindReplace.xml"/>
+            <topichead navtitle="Blind Transcription">
+                <topicref href="editor/concepts/AboutBlindTranscription.xml"/>
+                <topicref href="projman/tasks/OpenSessionBlind.xml"/>
+                <topicref href="editor/tasks/ValidateBlindTranscriptions.xml"/>
+                <topicref href="editor/tasks/Auto-validate.xml"/>
+            </topichead>
+        </topichead>
+        <topichead navtitle="Syllabification and Alignment">
+            <topicref href="editor/concepts/AboutSyllabification.xml"/>
+            <topicref href="editor/tasks/VerifySyllabification.xml"/>
+            <topicref href="projman/tasks/ResetSyllabification.xml"/>
+            <topicref href="editor/concepts/AboutAlignment.xml"/>
+            <topicref href="editor/tasks/VerifyAlignment.xml"/>
+            <topicref href="projman/tasks/ResetPhoneAlignment.xml"/>
+        </topichead>
+    </topichead>
+    <topichead navtitle="Run Query">
+        <topicref href="query/tasks/QueryProject.xml"/>
+        <topicref href="query/tasks/SaveQueryScript.xml"/>
+        <topicref href="query/tasks/OpenQueryScript.xml"/>
+        <topicref href="query/tasks/ExcludeRecords.xml"/>
+        <topicref href="query/tasks/ViewResultSet.xml">
+            <topicref href="query/tasks/SaveTableAsCSV.xml"/>
+            <topicref href="query/tasks/EditTableColumns.xml"/>
+            <topicref href="query/tasks/FilterResults.xml">
+                <topicref href="editor/concepts/AboutTableQuickSearch.xml"/>
+            </topicref>
+        </topicref>
+        <topichead navtitle="Query Types">
+            <topicref href="query/tasks/DataTiersQuery.xml"/>
+            <topicref href="query/tasks/HarmonyQuery.xml"/>
+            <topicref href="query/tasks/MetathesisQuery.xml"/>
+            <topicref href="query/tasks/PCCQuery.xml">
+                <topicref href="query/concepts/AboutPCC.xml"/>
+            </topicref>
+            <topicref href="query/tasks/PhonesQuery.xml"/>
+        </topichead>
+        <topichead navtitle="Search Syntax">
+            <topicref href="query/concepts/PlainText.xml"/>
+            <topicref href="query/concepts/Regex.xml"/>
+            <topicref href="query/concepts/Phonex.xml">
+                <topicref href="phonex/concepts/constructs.dita"/>
+            </topicref>
+        </topichead>
+    </topichead>
+    <topicref href="report/tasks/GenerateReport.xml">
+        <topicref href="report/concepts/AboutReportOutline.xml">
+            <topicref href="report/tasks/EditReportOutline.xml">
+                <topicref href="report/tasks/SaveReportOutline.xml"/>
+                <topicref href="report/tasks/OpenReportOutline.xml"/>
+                <topicref href="report/tasks/ClearReportOutline.xml"/>
+            </topicref>
+            <topicref href="report/tasks/CommentSection.xml"/>
+            <topicref href="report/tasks/ParameterListingSection.xml"/>
+            <topicref href="report/tasks/SummarySection.xml"/>
+            <topicref href="report/tasks/AggregatedInventorySection.xml"/>
+            <topicref href="report/concepts/AboutReportSubsections.xml">
+                <topicref href="report/tasks/CommentSection.xml"/>
+                <topicref href="report/tasks/InventorySection.xml"/>
+                <topicref href="report/tasks/ResultListingSection.xml">
+                    <topicref href="report/tasks/EditFieldOutline.xml"/>
+                    <topicref href="report/tasks/SetFieldOptions.xml"/>
+                </topicref>
+            </topicref>
+        </topicref>
+    </topicref>
+    <topichead navtitle="Query History">
+        <topicref href="history/tasks/ViewQueryHistory.xml"/>
+        <topicref href="history/concepts/AboutStarredQueries.xml"/>
+        <topicref href="history/tasks/EditQueryDetails.xml"/>
+        <topicref href="history/tasks/DeleteQuery.xml"/>
+    </topichead>
+</map>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Relocate View</title>
+    <shortdesc>Move a view to a new position within the <wintitle>Session Editor</wintitle>. </shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Click on the view's title bar and drag it to the desired location within the
+                        <wintitle>Session Editor</wintitle> window.</cmd>
+                <stepresult>As you drag the view, the <wintitle>Session Editor</wintitle> will show
+                    the alternate position of that view. When it appears as you wish, release the
+                    mouse button. <image placement="break" scale="30"
+                        href="../../images/RelocateView.png" id="image_wdr_vlm_sc"/></stepresult>
+            </step>
+            <step>
+                <cmd>Two or more views may occupy the same location in the <wintitle>Session
+                        Editor</wintitle>. To do so, drag and drop one view to the title bar of the
+                    other view.</cmd>
+                <stepresult>You can switch between views in the same position by selecting the 
+                    appropriate tab at the bottom of either view.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Report Outline</title>
+    <conbody>
+        <p>The <uicontrol>Report Outline</uicontrol> lists all sections which will be included in
+            your Query report. Sections can be added and removed following instructions in <xref
+                href="../../report/tasks/EditReportOutline.xml"/>.</p>
+        <p>The available report sections are:</p>
+        <ul id="ul_76df7150-696c-4d9a-886b-33f09bb0e461">
+            <li><uicontrol>Comment</uicontrol>
+                <p>Output a text comment in the report.</p>
+            </li>
+            <li><uicontrol>Parameter listing</uicontrol>
+                <p>Output the list of parameters and values used in the query.</p>
+            </li>
+            <li><uicontrol>Search summary</uicontrol>
+                <p>Output session names and number of results for each <i>Result Set</i>.</p>
+            </li>
+            <li><uicontrol>Aggregated Inventory</uicontrol>
+                <p>Output a table of result values and the number of times they appear in all
+                    selected <i>Result Sets</i>.</p>
+            </li>
+            <li><uicontrol>New section</uicontrol>
+                <p>Add a new section with one or more report elements for each individual <i>Result
+                        Set</i>.</p>
+            </li>
+        </ul>
+        <p>When you add a new section to the <uicontrol>Report Outline</uicontrol>, you may add
+            several subsections to it (each subsection will be printed for each individual <i>Result
+                Set</i>):</p>
+        <ul id="ul_76df7150-696c-4d9a-886b-33f09bby7y01">
+            <li><uicontrol>Comment</uicontrol>
+                <p>Output a text comment for every <i>Result Set</i> in the report.</p>
+            </li>
+            <li><uicontrol>Inventory</uicontrol>
+                <p>Output a count of distinct result values for a <i>Result Set</i>.</p>
+            </li>
+            <li><uicontrol>Result listing</uicontrol>
+                <p>Output the data for each result in a <i>Result Set</i> as a table or a list.</p>
+            </li>
+            <li><uicontrol>New section</uicontrol>
+                <p>Add a new subsection to the report.</p></li>
+        </ul>
+    </conbody>
+</concept>

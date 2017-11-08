@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Fade Window</title>
+    <shortdesc>Set the <wintitle>IPA Map</wintitle> window to fade when your cursor leaves
+        it.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>IPA Map</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) within any section of the
+                        <wintitle>IPA Map</wintitle>, and use the <uicontrol>Fade
+                        opacity</uicontrol> slider in the context menu to set the degree to which
+                    you with the window to fade when your cursor leaves it. Moving the slider to the
+                    far left gives complete transparency.</cmd>
+            </step>
+            <step>
+                <cmd>Select <uicontrol>Fade window</uicontrol> from the context menu.</cmd>
+                <stepresult>When <i>Phon</i> is in focus, moving the cursor outside of the
+                        <wintitle>IPA Map</wintitle> window will cause the window to fade to the
+                    selected degree. Depending on the window opacity, this will allow you to see
+                    other windows behind the <wintitle>IPA Map</wintitle>.</stepresult>
+            </step>
+            <step>
+                <cmd>To deactivate window fading, right-click (<userinput>CTRL+click</userinput>)
+                    within any section of the <wintitle>IPA Map</wintitle> and deselect
+                        <uicontrol>Fade window</uicontrol>.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

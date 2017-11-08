@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Open Report Outline</title>
+    <shortdesc>Open a previously saved report design for use during a current report.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Report</wintitle> window:</context>
+        <steps id="steps_mmp_51g_52">
+            <step>
+                <cmd>Click the <uicontrol>Open report design...</uicontrol> button above the
+                        <uicontrol>Report Outline</uicontrol>.</cmd>
+                <stepresult>This will open a <wintitle>Browse</wintitle> window.</stepresult>
+            </step>
+            <step>
+                <cmd>Locate and select the desired report design and click
+                        <uicontrol>Open</uicontrol>.</cmd>
+                <stepresult>The selected report design will be loaded into the <wintitle>Phon :
+                        Report</wintitle> window for use with the current query.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

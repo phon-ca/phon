@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Create Printable Report</title>
+    <shortdesc>Create a detailed printable report of querys results.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Query Project</wintitle> window with a <wintitle>Query
+                Tab</wintitle> open:</context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>Report</uicontrol> button at the top of the numbered Query
+                    tab.</cmd>
+                <stepresult>The <wintitle>Report Wizard</wintitle> will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>Choose <uicontrol>Create printable report</uicontrol> and click
+                        <uicontrol>Next</uicontrol>.</cmd>
+                <stepresult>The <wintitle>Report Wizard</wintitle> will prompt you to specify
+                    options for your printable report.</stepresult>
+            </step>
+            <step>
+                <cmd>Enter a <i>Report name</i> and <i>Save location</i> and specify <i>Output
+                        formats</i> and <i>Pagination</i> and <i>Report Preview</i> details in
+                        <uicontrol>Report Wizard</uicontrol>. Click the <uicontrol>Next</uicontrol>
+                    button to continue.</cmd>
+                <stepresult>The Report Wizard then prompts you to select <uicontrol>Report
+                        Format</uicontrol> options.</stepresult>
+            </step>
+            <step>
+                <cmd>Use the <uicontrol>+</uicontrol> and <uicontrol>-</uicontrol> buttons to select
+                    the report structure from the hierarchy on the left. Clicking on each element in
+                    the report structure will allow you to specify options for each report section.
+                    When you have finished specifying report structure and section options, click
+                        <uicontrol>Next</uicontrol>.</cmd>
+                <stepresult>Your report will now be available in the <i>Save location</i> specified
+                    in Step 3. When the <i>Report worker shutdown</i> message appears and you have
+                    finished reviewing your <wintitle>Report Preview</wintitle> if you chose to
+                    generate one, click <uicontrol>Close</uicontrol> in the <wintitle>Report
+                        Wizard</wintitle> window.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

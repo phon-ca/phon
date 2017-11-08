@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Minimize View</title>
+    <shortdesc>Minimize a view within the <wintitle>Session Editor</wintitle> window.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle> or an undocked view:</context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>minimize/_</uicontrol> button near the top right corner of
+                    the view.</cmd>
+                <stepresult>A small title bar for that view will appear at an edge of the
+                        <wintitle>Session Editor</wintitle>. <image placement="break" scale="30"
+                        href="../../images/MinimizeView.png" id="image_wdr_vlm_sc1"/></stepresult>
+            </step>
+            <step>
+                <cmd>To make a minimized view temporarily reappear, click on its name or icon.</cmd>
+                <stepresult>When the focus is changed to another view (i.e. another view is
+                    selected), the view will return to its minimized position. <note>To make the
+                        view retain its opened position when focus is lost, click the thumbtack
+                        button near the top right corner of the title bar. To deactivate this
+                        option, click the thumbtack again.</note></stepresult>
+            </step>
+            <step>
+                <cmd>To restore the minimized view to a normal position within the <wintitle>Session
+                        Editor</wintitle> frame, click the restore button near the top right corner
+                    (this button looks like two windows), or press <userinput>CTRL+N</userinput>
+                    when the view is in focus.</cmd>
+                <stepresult>The view will return to its previous docked position in the
+                        <wintitle>Session Editor</wintitle>, even if it was undocked when you
+                    minimized it.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

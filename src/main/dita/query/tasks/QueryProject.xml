@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Query Project</title>
+    <shortdesc>Run a query for patterns across sessions in a project.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Project Manager</wintitle> or <wintitle>Session Editor</wintitle>
+                window:</context>
+        <steps>
+            <step>
+                <cmd>From the <uicontrol>Query</uicontrol> menu, select the type of query you would
+                    like to perform.</cmd>
+                <stepresult>This action generates a <wintitle>Query Project</wintitle>
+                    window.</stepresult>
+            </step>
+            <step>
+                <cmd>Use the check boxes to select the entire project, one or more corpora, or one
+                    or more sessions for the query. From the available panels select options for
+                    your search as per the descriptions in the <uicontrol>Query Types</uicontrol>
+                    section of the user manual.</cmd>
+            </step>
+            <step>
+                <cmd>Choose whether to <uicontrol>Include excluded records</uicontrol> by selecting
+                    or deselecting that check box, and click the <uicontrol>Run Query</uicontrol>
+                    button.</cmd>
+                <stepresult>This action will generate a <wintitle>Results</wintitle> tab, which
+                    calculates the number of results for each search and list the sessions searched;
+                    this is referred to as a <i>Result Set</i>. <note>To toggle between editing your
+                        script as a form or as a script, click the <uicontrol>Toggle
+                            script/form</uicontrol> button at the bottom right corner of the
+                        query.</note>
+                </stepresult>
+            </step>
+            <step><cmd>To view an individual <i>Result Set</i>, double-click on it in the
+                <wintitle>Results</wintitle> tab. </cmd><stepresult>A session will open with a <wintitle>Results</wintitle> window next to it. <note>To show
+                        only <i>Result Sets</i> with more than zero results, select <uicontrol>Hide
+                            empty result sets</uicontrol>. For further instructions on using the
+                            <wintitle>Results</wintitle> window, see <xref id="5648"
+                            href="../../query/tasks/ViewResultSet.xml"/></note></stepresult></step> 
+            
+            
+            <step>
+                <cmd>To view your search results in your <wintitle>Query History</wintitle> later,
+                    you must save them. To do so, click <uicontrol>Save results</uicontrol>. Enter a
+                    name for your results, choose whether or not the results should be
+                        <i>Starred</i>, enter any desired comments and click
+                        <uicontrol>Ok</uicontrol>.</cmd>
+                <stepresult>The search will be saved inside the project folder, in the
+                        '<i>__search</i>' directory, and can now be viewed using the <wintitle>Query
+                        History</wintitle> window.</stepresult>
+            </step>
+            <step>
+                <cmd>To get a detailed report of the results, click the
+                        <uicontrol>Report</uicontrol> button at the top of the
+                        <wintitle>Results</wintitle> tab and follow the instructions in the
+                        <i>Generate Report</i> section (<xref id="0123"
+                        href="../../report/tasks/GenerateReport.xml"/>).</cmd>
+                <stepresult>
+                    <note>To merge all records with results into a single session, see <xref
+                            id="0124" href="../../projman/tasks/DeriveSession.xml"/>.</note>
+                </stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>Syllable Information</title>
+    <shortdesc/>
+    <conbody>
+        <p>In the <i>Syllable Information</i> position of the template, you can specify the
+            matcher's syllable constituent.</p>
+        <p>The <i>Syllable Information</i> is also optional. The position of this information within
+            a query is important. When it is included, it must follow stress information and be
+            separated by a comma. If there is no stress information, it must be placed after the
+            matcher and be separated by a colon. The possible positional expressions are: </p>
+        <p>
+            <table frame="none" id="table_d6a804cc-798c-4f1c-9fb8-9d7a01c5feb9">
+                <title/>
+                <tgroup cols="3">
+                    <colspec colname="c1" colnum="1" colwidth="1*"/>
+                    <colspec colname="c2" colnum="2" colwidth="1*"/>
+                    <colspec colname="c3" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Phonex</entry>
+                            <entry>Syllable Constituent Type</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>LeftAppendix</entry>
+                            <entry>Left appendix</entry>
+                        </row>
+                        <row>
+                            <entry>Onset</entry>
+                            <entry>Onset</entry>
+                        </row>
+                        <row>
+                            <entry>Nucleus</entry>
+                            <entry>Nucleus</entry>
+                        </row>
+                        <row>
+                            <entry>Coda</entry>
+                            <entry>Coda</entry>
+                        </row>
+                        <row>
+                            <entry>RightAppendix</entry>
+                            <entry>Right appendix</entry>
+                        </row>
+                        <row>
+                            <entry>Ambisyllabic</entry>
+                            <entry>Ambisyllabic</entry>
+                        </row>
+                        <row>
+                            <entry>Unknown</entry>
+                            <entry>Unknown</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+        <p>Example records: </p>
+        <p>Record 1: [ˈmilk] </p>
+        <p>Record 2: [ˈlemiˌnejd] </p>
+        <p>Record 3: [ˈso:da]</p>
+        <p>
+            <table frame="none" id="table_b1332ad3-fa48-4933-931b-db9bfb59g36f">
+                <title/>
+                <tgroup cols="5">
+                    <colspec colname="c1" colnum="1" colwidth="2*"/>
+                    <colspec colname="c2" colnum="2" colwidth="2*"/>
+                    <colspec colname="c3" colnum="3" colwidth="1*"/>
+                    <colspec colname="c4" colnum="4" colwidth="1*"/>
+                    <colspec colname="c5" colnum="5" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry morerows="1">Example Phonex Query</entry>
+                            <entry morerows="1">Oral expression</entry>
+                            <entry namest="c3" nameend="c5">Results</entry>
+                        </row>
+                        <row>
+                            <entry>Record 1</entry>
+                            <entry>Record 2</entry>
+                            <entry>Record 3</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry> {c, voiced}:PrimaryStress| SecondaryStress,Coda </entry>
+                            <entry>Voiced consonants in codas of stressed syllables </entry>
+                            <entry>l</entry>
+                            <entry>d </entry>
+                            <entry> nil </entry>
+                        </row>
+                        <row>
+                            <entry> {c}:Nucleus </entry>
+                            <entry>Consonants (including glides) in a nucleus </entry>
+                            <entry> nil </entry>
+                            <entry>j </entry>
+                            <entry> nil</entry>
+                        </row>
+                        <row>
+                            <entry> {voiced, coronal}:Onset </entry>
+                            <entry>Voiced coronals in onsets </entry>
+                            <entry> nil</entry>
+                            <entry> l; n </entry>
+                            <entry>d</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </p>
+    </conbody>
+</concept>

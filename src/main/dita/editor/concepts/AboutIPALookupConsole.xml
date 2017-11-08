@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
+<topic id="topic-1">
+    <title>About IPA Lookup Console</title>
+    <body>
+        <p>The IPA Lookup Console is a function which allows users to lookup transcriptions, and to
+            create and edit IPA dictionaries in <i>Phon</i>. The window can be opened by clicking
+            the menu entry <menucascade>
+                <uicontrol>View</uicontrol>
+                <uicontrol>IPA Lookup</uicontrol>
+            </menucascade>, and then clicking the <uicontrol>Console</uicontrol> tab. Commands can
+            be entered into the text field located at the bottom of the window, use
+                <userinput>Enter</userinput> to run the command.</p>
+        <p><image placement="break" scale="30"
+            href="../../images/AboutIPALookupConsole.png" id="image_wdr_vlm_sc"/></p>
+        <p>The following commands can be performed on dictionary files (include any quotation
+            marks): <ul id="ul_76df7150-696c-4d9a-886b-33f09bb9f001">
+                <li><b>use &lt;dictionary></b>
+                    <p>Switch to the specified dictionary. This can also be done using the combo box
+                        at the top of the window.</p>
+                </li>
+                <li><b>create &lt;dictionary></b>
+                    <p>Create a new dictionary with the given name. You may choose to name your
+                        dictionary using an <i>ISO-639-3 Language Code</i>; for a list of these, see
+                        the <wintitle>ISO-639-3 Language Codes</wintitle> window.</p>
+                </li>
+                <li><b>drop &lt;dictionary></b>
+                    <p>Delete a user-created dictionary which you no longer wish to use.</p>
+                </li>
+                <li><b>list</b>
+                    <p>List the available dictionaries.</p>
+                </li>
+                <li><b>import "&lt;/full path/file>"</b>
+                    <p>Import entries from the given file into the current dictionary. The specified
+                        file should be in UTF-8 encoding with one entry per line in the format
+                        "&lt;orthography>&lt;tab>&lt;ipa>". Alternately, click the <uicontrol>Import
+                            IPA</uicontrol> button at the top of the <wintitle>IPA Lookup</wintitle>
+                        view, locate and select the file for import, and click
+                            <uicontrol>Open</uicontrol>.</p>
+                </li>
+                <li><b>export "&lt;/full path/file>"</b>
+                    <p>Export user-defined entries in the current dictionary to a UTF-8 encoded text
+                        file. Alternately, click the <uicontrol>Export IPA</uicontrol> button at the
+                        top of the <wintitle>IPA Lookup</wintitle> view, choose a filename and
+                        location for export, and click <uicontrol>Save</uicontrol>.</p>
+                </li>
+            </ul></p>
+        <p>The following commands can be performed on entries (include any quotation marks): <ul
+                id="ul_76df7150-696c-4d9a-886b-33f09bb8s301">
+                <li><b>add "&lt;orthography>"="&lt;ipa></b>" <p>Add an entry into the IPA database
+                        for the currently selected dictionary.<note>Characters in &lt;orthography>
+                            should be in lower-case.</note></p>
+                </li>
+                <li><b>lookup "&lt;orthography>"</b>
+                    <p>Look up the IPA transcription for the given orthography. The command can also
+                        be executed by entering only the orthography (without quotes) in the command
+                        field.</p>
+                </li>
+                <li><b>remove "&lt;orthography>"="&lt;ipa>"</b>
+                    <p>Remove the IPA transcription for a user-added entry in the currently selected
+                        dictionary.</p>
+                </li>
+                <li><b>remove all</b>
+                    <p>Remove the IPA transcriptions for all user-added entries in the currently
+                        selected dictionary.</p>
+                </li>
+            </ul></p>
+        <p>Other commands:
+            <ul id="ul_76df7150-696c-4d9a-886b-33f09bb9f661">
+                <li><b>help</b>
+                    <p>List all available <wintitle>Console</wintitle> commands.</p>
+                </li>
+            </ul>
+        </p>
+    </body>
+</topic>

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- $Id: fop.xconf 901793 2010-01-21 17:37:07Z jeremias $ -->
+
+<!--
+
+This is an example configuration file for FOP.
+This file contains the same settings as the default values
+and will have no effect if used unchanged.
+
+Relative config url's will be resolved relative to
+the location of this file.
+
+-->
+
+<!-- NOTE: This is the version of the configuration -->
+<fop version="1.0">
+<strict-validation>false</strict-validation>
+
+  <!-- Base URL for resolving relative URLs -->
+  <base>.</base>
+
+  <!-- Source resolution in dpi (dots/pixels per inch) for determining the size of pixels in SVG and bitmap images, default: 72dpi -->
+  <source-resolution>72</source-resolution>
+  <!-- Target resolution in dpi (dots/pixels per inch) for specifying the target resolution for generated bitmaps, default: 72dpi -->
+  <target-resolution>72</target-resolution>
+  <!-- Default page-height and page-width, in case
+       value is specified as auto -->
+  <default-page-settings height="11in" width="8.26in"/>
+  
+  <!-- Information for specific renderers -->
+  <!-- Uses renderer mime type for renderers -->
+  <renderers>
+    <renderer mime="application/pdf">
+
+      <fonts>
+
+	<font metrics-url="file:external-resources/fonts/CharisSIL-R.xml" kerning="yes" embed-url="file:external-resources/fonts/CharisSIL-R.ttf">
+		<font-triplet name="Charis SIL" style="normal" weight="normal"/>
+        </font>
+	<font metrics-url="file:external-resources/fonts/CharisSIL-B.xml" kerning="yes" embed-url="file:external-resources/fonts/CharisSIL-B.ttf">
+		<font-triplet name="Charis SIL" style="normal" weight="bold"/>
+        </font>
+	<font metrics-url="file:external-resources/fonts/CharisSIL-BI.xml" kerning="yes" embed-url="file:external-resources/fonts/CharisSIL-BI.ttf">
+		<font-triplet name="Charis SIL" style="italic" weight="bold"/>
+        </font>
+	<font metrics-url="file:external-resources/fonts/CharisSIL-I.xml" kerning="yes" embed-url="file:external-resources/fonts/CharisSIL-I.ttf">
+		<font-triplet name="Charis SIL" style="italic" weight="normal"/>
+        </font>
+    
+	<font metrics-url="file:external-resources/fonts/LiberationMono-Regular.xml" kerning="yes" embed-url="file:external-resources/fonts/LiberationMono-Regular.ttf">
+		<font-triplet name="LiberationMono" style="normal" weight="normal"/>
+        </font>
+	<font metrics-url="file:external-resources/fonts/LiberationMono-Bold.xml" kerning="yes" embed-url="file:external-resources/fonts/LiberationMono-Bold.ttf">
+		<font-triplet name="LiberationMono" style="normal" weight="bold"/>
+        </font>
+	<font metrics-url="file:external-resources/fonts/LiberationMono-BoldItalic.xml" kerning="yes" embed-url="file:external-resources/fonts/LiberationMono-BoldItalic.ttf">
+		<font-triplet name="LiberationMono" style="italic" weight="bold"/>
+        </font>
+	<font metrics-url="file:external-resources/fonts/LiberationMono-Italic.xml" kerning="yes" embed-url="file:external-resources/fonts/LiberationMono-Italic.ttf">
+		<font-triplet name="LiberationMono" style="italic" weight="normal"/>
+        </font>
+          
+
+    </fonts>
+
+
+    </renderer>
+  
+  </renderers>
+
+</fop>
+

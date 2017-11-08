@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Sessions</title>
+    <conbody>
+        <p>A session in <i>Phon</i> is a transcript of a portion of field data targeting one or more
+            participants in a project.</p>
+        <p><i>Phon</i> is designed to facilitate the transcription of media recordings (audio or
+            video) taken of participants in a study. As such, a <i>Phon</i> session usually
+            corresponds to one media recording and the transcript of this recording.</p>
+        <p>A session is organized into a series of records which correspond to individual
+            utterances.</p>
+        <p>Sessions can be viewed in the <wintitle>Project Manager</wintitle> window. When a session
+            is selected, the number of records in that session and the date it was last modified are
+            displayed at the bottom of the list of sessions.</p>
+        <image placement="break" scale="40"
+            href="../../images/AboutSessions.png" id="image_ydd_vlm_sc"/>
+    </conbody>
+</concept>

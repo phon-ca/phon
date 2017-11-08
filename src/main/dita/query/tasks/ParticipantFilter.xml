@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Participant Filter</title>
+    <shortdesc>Limit the results based on participant information.</shortdesc>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd></cmd>
+                <choices>
+                    <choice>To filter by participant names, enter one or more names in the
+                            <uicontrol>Participant names</uicontrol> field, separated by comma if
+                        applicable.</choice>
+                </choices>
+                <choices id="choices_xc1_d1j_sj">
+                    <choice>To filter by age, use the context menu to select equal to, less than, or
+                        greater than and enter a name in the first <uicontrol>Age</uicontrol> field
+                        (using the format yy;mm.dd).</choice>
+                </choices>
+                <choices id="choices_rp3_h1j_sj">
+                    <choice>To filter using an age range, select an operator using the context menu,
+                        and specify the relevant options and age in the second
+                            <uicontrol>Age</uicontrol> field.</choice>
+                </choices>
+            </step>
+        </steps>
+    </taskbody>
+</task>

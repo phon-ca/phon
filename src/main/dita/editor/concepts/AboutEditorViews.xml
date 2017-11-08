@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Editor Views</title>
+    <shortdesc>Information in each session is displayed in a series of small windows within the
+            <wintitle>Session Editor</wintitle>, called views. There are several types of
+        views:</shortdesc>
+    <conbody>
+        <ol>
+            <li>Views with access/reference to the entire session:<ul id="ul_edd_xdk_rc">
+                <li><wintitle>Session Information</wintitle></li>
+                <li><wintitle>Tier Management</wintitle></li>
+            </ul></li>
+            <li>Views with information relating to individual records:<ul id="ul_mjk_bek_rc">
+                <li><wintitle>Record Data</wintitle></li>
+                <li><wintitle>Syllabification &amp; Alignment</wintitle></li>
+                <li><wintitle>IPA Validation</wintitle></li>
+            </ul></li>
+            <li>Views with media functions:<ul id="ul_mrf_itk_rc">
+                <li><wintitle>Media Player</wintitle></li>
+                    <li><wintitle>Speech Analysis</wintitle> (formally
+                            <uicontrol>Waveform</uicontrol>)</li>
+                <li><wintitle>Segmentation</wintitle></li>
+            </ul></li>
+            <li>Views that allow you to search for text within a session:<ul id="ul_mrf_bek_rc">
+                <li><wintitle>Find &amp; Replace</wintitle></li>
+            </ul></li>
+            <li>Utility views which help with IPA transcription:<ul id="ul_xqc_gek_rc">
+                    <li><wintitle>IPA Lookup</wintitle></li>
+                </ul></li>
+        </ol>
+        <p> To open a view, select it from the <uicontrol>View</uicontrol> menu. Functions for open
+            views are available both within the views themselves, and in the
+                <uicontrol>View</uicontrol> menu. To close a view, click the
+                <uicontrol>Close/X</uicontrol> in the top right corner of that viewor choose the <menucascade>
+                <uicontrol>View</uicontrol>
+                <uicontrol>&lt;view title></uicontrol>
+                <uicontrol>Close</uicontrol>
+            </menucascade> menu selection.</p>
+        <p>Not all views must be open at any given time, and views may be moved around within the
+                <wintitle>Session Editor</wintitle> or "undocked" as their own separate window. </p>
+        <p>Views retain their currently defined size and position each time you exit
+            <i>Phon</i>.</p>
+    </conbody>
+</concept>

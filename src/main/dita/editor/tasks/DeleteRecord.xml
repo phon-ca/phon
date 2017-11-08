@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Delete Record</title>
+    <shortdesc>Delete a record from an existing session.</shortdesc>
+    <taskbody>
+        <context>From the <uicontrol>Session Editor</uicontrol> window:</context>
+        <steps>
+            <step>
+                <cmd>Display the record that you would like to delete and choose the <menucascade>
+                        <uicontrol>Session</uicontrol>
+                        <uicontrol>Delete Record</uicontrol>
+                    </menucascade> (<userinput>CMD/CTRL+E</userinput>) menu item.</cmd>
+                <stepresult>A dialog will appear asking you to confirm that you would like to delete
+                    this record and informing you that this action cannot be undone.</stepresult>
+            </step>
+            <step>
+                <cmd>If you are unsure, click <uicontrol>No</uicontrol>. To continue and delete the
+                    record, click <uicontrol>Yes</uicontrol>.</cmd>
+                <stepresult>The record will no longer appear in the <wintitle>Record Data</wintitle>
+                    view; the next record will be displayed.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>View Speech Analysis</title>
+    <shortdesc>View the speech analysis view for a particular segment.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Session Editor</wintitle>:</context>
+        <steps>
+            <step>
+                <cmd>Select the <menucascade>
+                        <uicontrol>View</uicontrol>
+                        <uicontrol>Speech Analysis</uicontrol>
+                    </menucascade> menu item. </cmd>
+                <stepresult>The waveform will appear. <note>The <wintitle>Speech Analysis</wintitle>
+                        view displays a buffer of 500ms on either end of each segment. This allows
+                        you to expand the segment when adjusting from the <wintitle>Speech
+                            Analysis</wintitle> view. To view a larger portion of the waveform,
+                        click <uicontrol>Show More</uicontrol>. This extends the displayed interval
+                        by one second on each side. To redisplay the 500ms buffer, click
+                            <uicontrol>Refresh</uicontrol>.</note></stepresult>
+            </step>
+            <step>
+                <cmd>To play back the entire waveform, click the <uicontrol>Play</uicontrol> button
+                    inside the <wintitle>Speech Analysis</wintitle> view. To play back a portion of
+                    the segmented audio, highlight that portion in the waveform. Click on the
+                        <uicontrol>Play</uicontrol> button inside the <wintitle>Speech
+                        Analysis</wintitle> view (<userinput>CMD/CTRL+Shift+R</userinput>). </cmd>
+                <stepresult>The sound will play with the cursor following the corresponding portion
+                    of the waveform.<note>If your media is not in <i>.wav</i> format, the first time
+                        you open the <wintitle>Speech Analysis</wintitle> view with your media
+                        linked, you will see a message in the <wintitle>Speech Analysis</wintitle>
+                        view saying "Audio file not found. Click here to create." Click on this
+                        message to export an audio-only version of your media to the project
+                        resources folder. The <wintitle>Speech Analysis</wintitle> view will access
+                        this file to draw the waveform.</note><note>You may generate a <i>.wav</i>
+                        version of your media file at any time, by clicking the <uicontrol>Generate
+                            wav...</uicontrol> button.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

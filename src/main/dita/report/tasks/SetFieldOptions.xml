@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Set Field Options</title>
+    <shortdesc>Set options for each field in a <i>Result Listing</i>.</shortdesc>
+    <task id="id_ce25d5ca-4484-4e7e-bb2c-be811fe12345" conref="FieldName.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_ce25d5ca-4484-4e7e-bb2c-be811fe45610" conref="ScriptOptions.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_ce25d5ca-4484-4e7e-bb2c-be811fe45678" conref="EditScript.xml#taskId">
+        <title/>
+    </task>
+</task>

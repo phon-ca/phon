@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Filter Results</title>
+    <shortdesc>Search within the results table.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Results</wintitle> window:</context>
+        <steps>
+        <step>
+            <cmd>Enter your search term in the <uicontrol>Filter results</uicontrol> bar.</cmd>
+            <stepresult>A list of all results containing your search term will be displayed, showing
+                    their <uicontrol>Record #</uicontrol>, <uicontrol>Speaker</uicontrol>, and
+                        <uicontrol>Result</uicontrol>. If there are no results, this list will be
+                        empty.<note>To search within a specific column (or multiple columns), click
+                        the drop down arrow to the left of the search bar and select it in the list.
+                        Options are also available to allow you to <uicontrol>Use regular
+                            expression</uicontrol> or to make your search <uicontrol>Case
+                            sensitive</uicontrol>.</note></stepresult>
+        </step>
+        <step>
+            <cmd>To clear the <uicontrol>Search</uicontrol> bar, click <uicontrol>Clear
+                field/X</uicontrol>.</cmd>
+        </step>
+        </steps>
+    </taskbody>
+</task>

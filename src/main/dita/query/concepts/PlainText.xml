@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>Plain Text</title>
+    <shortdesc/>
+    <conbody>
+        <p>In computing, plain text is the contents of an ordinary sequential file readable as
+            textual material without much processing, usually opposed to formatted text. For more
+            information, see http://en.wikipedia.org/wiki/Plain_text</p>
+    </conbody>
+</concept>

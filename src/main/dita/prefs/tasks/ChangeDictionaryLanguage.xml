@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Change Dictionary Language</title>
+    <shortdesc>Change the default <uicontrol>Dictionary Language</uicontrol> for use within
+        sessions.</shortdesc>
+    <taskbody>
+        <context>
+            <p>From the <uicontrol>Session Editor</uicontrol> tab of the
+                    <wintitle>Preferences</wintitle> dialog:</p>
+        </context>
+        <steps id="steps_qk4_p2p_z3">
+            <step>
+                <cmd>Click the <uicontrol>Dictionary Language</uicontrol> combo box and select the
+                    appropriate language.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

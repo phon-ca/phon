@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Default Media Folders</title>
+    <conbody>
+        <p>A list of <i>Media Folders</i> can be set up using the <uicontrol>Media</uicontrol> tab
+            of the <wintitle>Preferences</wintitle> dialog. <i>Phon</i> will look at each of these
+            folders (in the order in whicy they appear) for media files.</p>
+        <image placement="break" scale="30"
+            href="../../images/AboutMediaDirs.png" id="image_wdr_vlm_sc"/>
+        <p>The media folders can be internally structured to match <i>Phon's</i> project/corpus
+            layout. <i>Phon</i> will search the following locations for media (where &lt;media> is
+            the media folder defined in <wintitle>Preferences</wintitle>, &lt;project> is the
+            project name, &lt;corpus> is the corpus name, and &lt;session> is the session name): <ul
+                id="ul_zng_rtg_sh">
+                <li>&lt;media>/&lt;project>/&lt;corpus>/&lt;session>.[aif;avi;mov;mpg;mp4;wav;mp3;m4a;...]</li>
+                <li>&lt;media>/&lt;project>/&lt;session>.[...]</li>
+                <li>&lt;media>/&lt;corpus>/&lt;session>.[...]</li>
+                <li>&lt;media>/&lt;session>.[...]</li>
+            </ul></p>
+        <p>If the <uicontrol>Media</uicontrol> field in the <wintitle>Session Information</wintitle>
+            view of the <wintitle>Session Editor</wintitle> has been manually changed:<ul
+                id="ul_dtj_y5g_sh">
+                <li>if the path is absolute (or fully-specified), the above rules are ignored and
+                    the media file is loaded from the specified path</li>
+                <li>if the path is relative, the value of '&lt;session>' above is replaced by the
+                    value in the media field.</li>
+            </ul>
+        </p>
+    </conbody>
+</concept>

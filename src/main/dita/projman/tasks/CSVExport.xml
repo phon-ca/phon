@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Export to CSV file(s)</title>
+    <shortdesc>Export <i>Phon</i> sessions as CSV (comma-separated values) files.</shortdesc>
+    <taskbody>
+        <context>
+            <p>The CSV export module can export Phon sessions into a specified folder as UTF-8
+                encoded CSV files.</p>
+            <p>From the <uicontrol>Project Manager</uicontrol> window:</p>
+        </context>
+        <steps id="steps_3fbd2bb6-677b-4d56-b099-694f006388f9">
+            <step>
+                <cmd>Select the <menucascade>
+                        <uicontrol>Plugins</uicontrol>
+                        <uicontrol>Export to CSV...</uicontrol>
+                    </menucascade> menu item.</cmd>
+                <stepresult>This action will generate a <uicontrol>CSV Export</uicontrol>
+                    window.</stepresult>
+            </step>
+            <step>
+                <cmd>To select the destination folder for the export, click the <uicontrol>Browse
+                        for folder...</uicontrol> button to the right of the <uicontrol>Destination
+                        folder</uicontrol> field, locate the desired folder and click
+                        <uicontrol>Open</uicontrol>. Select the sessions you would like to export
+                    using the check boxes at the left of the <uicontrol>Sessions</uicontrol> list.
+                    Click the <uicontrol>Next</uicontrol> button.</cmd>
+                <stepresult>This action will prompt you to set up columns for the
+                    export.</stepresult>
+            </step>
+            <step>
+                <cmd> To add a column to the export, type its name in the provided field and press
+                        <userinput>Enter</userinput> or click <uicontrol>Add column/+</uicontrol>.
+                    To remove a tier from the list, select it and click the <uicontrol>Remove
+                        Column/-</uicontrol> button. To export a tier which is not available in the
+                    existing list, type <b>"</b><userinput>Tier:&lt;tier name></userinput><b>"</b>
+                    in the provided field and click the <uicontrol>Add Column/+</uicontrol> or press
+                        <userinput>Enter</userinput>. Click on any tier name in the list and use the
+                        <uicontrol>up/down arrow</uicontrol> buttons to change the column ordering.
+                    Click the <uicontrol>Next</uicontrol> button.</cmd>
+                <info/>
+                <stepresult>This action will activate the export.<note>The default column list for
+                        export includes: Session Name, Record #, and all default <i>Phon</i> tiers.
+                        The default can be restored by using the <uicontrol>Reset to
+                            default</uicontrol> button on the bottom right corner of the column
+                        list. This list of columns is saved after export and re-loaded the next time
+                        CSV export is opened.</note><note>To export blind user transcriptions, add
+                        the tier "<userinput>IPA [Target|Actual] (&lt;username>)</userinput>" (e.g.
+                        Tier:IPA Target (JSmith)).</note></stepresult>
+            </step>
+            <step>
+                <cmd>Once the <i>Export complete</i> alert appears at the bottom of the
+                        <uicontrol>CSV Export</uicontrol> window, click the
+                        <uicontrol>Close</uicontrol> button. </cmd>
+                <stepresult>Session files for all corpora in the exported project will appear in the
+                    chosen directory with the format <i>Corpus name-Session
+                    name.csv</i>.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>
