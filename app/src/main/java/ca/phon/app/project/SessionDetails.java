@@ -1,6 +1,7 @@
 package ca.phon.app.project;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,14 +9,18 @@ import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.swingx.JXTable;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.project.*;
 import ca.phon.project.ProjectEvent.ProjectEventProp;
 import ca.phon.session.*;
+import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 
@@ -36,6 +41,11 @@ public class SessionDetails extends JPanel {
 	
 	private UpdateTask currentUpdateTask;
 	
+	public final static String SHOW_FINDER_BUTTON = SessionDetails.class.getName() + ".showFinderButton";
+	public final static boolean DEFAULT_SHOW_FINDER_BUTTON = false;
+	
+	private boolean showFinderButton = PrefHelper.getBoolean(SHOW_FINDER_BUTTON, DEFAULT_SHOW_FINDER_BUTTON);
+	
 	public SessionDetails(Project project) {
 		super();
 		
@@ -54,6 +64,39 @@ public class SessionDetails extends JPanel {
 		
 		recordsLabel = new JLabel();
 		
+		final JPanel fileLabelPanel = new JPanel(new BorderLayout());
+		fileLabelPanel.setOpaque(false);
+		fileLabelPanel.add(fileLabel, BorderLayout.CENTER);
+		if(OSInfo.isMacOs() && showFinderButton) {
+			final ImageIcon finderIcn = 
+					IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
+			final JLabel finderLabel = new JLabel(finderIcn);
+			finderLabel.setToolTipText("Select file in Finder");
+			finderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			
+			finderLabel.addMouseListener(new MouseInputAdapter() {
+				
+				@Override
+				public void mouseClicked(MouseEvent me) {
+					final String sessionPath = project.getSessionPath(corpus, session);
+					final StringBuffer buffer = new StringBuffer();
+					buffer.append("tell application \"Finder\" to (activate) & ");
+					buffer.append("(reveal \"").append(sessionPath).append("\" as POSIX file) & return");
+					final String script = buffer.toString();		
+					
+					String[] args = { "osascript", "-e", script };
+					try {
+						Runtime.getRuntime().exec(args);
+					} catch (IOException e) {
+						LogUtil.severe(e);
+					}
+				}
+				
+			});
+			
+			fileLabelPanel.add(finderLabel, BorderLayout.WEST);
+		}
+		
 		final JPanel detailsPanel = new JPanel(new GridBagLayout());
 		detailsPanel.setOpaque(false);
 		final GridBagConstraints gbc = new GridBagConstraints();
@@ -69,7 +112,7 @@ public class SessionDetails extends JPanel {
 		++gbc.gridx;
 		gbc.weightx = 1.0;
 		gbc.insets = new Insets(0, 5, 0, 0);
-		detailsPanel.add(fileLabel, gbc);
+		detailsPanel.add(fileLabelPanel, gbc);
 		
 		++gbc.gridy;
 		gbc.gridx = 0;
