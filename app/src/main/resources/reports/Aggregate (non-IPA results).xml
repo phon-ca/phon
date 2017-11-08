@@ -51,9 +51,9 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="9a2033b0d2ae42bc" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="433776ad">
+            <graph id="c2b639c">
                 <ogcn:macro id="3d12d1e803384d88" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="44fc82f7">
+                    <graph id="449b9020">
                         <node id="76a527acc58d4743" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -169,8 +169,10 @@ function setup_params(params) {
             <extensions>
                 <oga:settings>
                     <oga:property key="dataTemplate"><![CDATA[
-#set($table = $tables.get("$DATA"))
-#printTable( $table [] )
+#set($caption = "<h2>Inventory</h2>")
+#set($tableName = "$DATA")
+#set($table = $tables.get($tableName))
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
@@ -195,7 +197,7 @@ function setup_params(params) {
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate">
+                <opqry:info format="html" title="Aggregate (non-IPA results)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="3790be87">

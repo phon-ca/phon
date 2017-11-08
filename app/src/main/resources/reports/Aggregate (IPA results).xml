@@ -50,9 +50,9 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="34801dc3769e47ac" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="74ce63c2">
+            <graph id="2e9d580">
                 <ogcn:macro id="75bcace187044ec1" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="35eddca2">
+                    <graph id="4be6964b">
                         <node id="69df273298df4694" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -170,14 +170,16 @@ function setup_params(params) {
             <extensions>
                 <oga:settings>
                     <oga:property key="dataTemplate"><![CDATA[
-#set($table = $tables.get("$DATA"))
-#printTable( $table [] )
+#set($caption = "<h2>Inventory</h2>")
+#set($tableName = "$DATA")
+#set($table = $tables.get($tableName))
+#printTableWithIdAndCaption( $table $tableName $caption [] )
 ]]></oga:property>
                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
                     <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                 </oga:settings>
-                <oga:meta x="804" y="515">
+                <oga:meta x="893" y="553">
                     <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
                     <oga:default for="append" type="java.lang.Boolean">true</oga:default>
                 </oga:meta>
@@ -195,7 +197,7 @@ function setup_params(params) {
         <link dest="4344070268264e76" destField="data" source="a7430a2b16d440a7" sourceField="buffer"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate (IPA)">
+                <opqry:info format="html" title="Aggregate (IPA results)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="c41947665b034a0e">
