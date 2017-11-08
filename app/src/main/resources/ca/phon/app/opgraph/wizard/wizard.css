@@ -10,18 +10,18 @@ h1:first-of-type {
 
 h1 {
     font-weight: bold;
-    font-size: xx-large;
+    font-size: x-large;
     margin-top: 1em;
     margin-bottom: 0.25em;
     color: rgb(0, 90, 140);
 }
 
 h2 {
-	font-size: x-large;
+	font-size: large;
 }
 
 h3 {
-	font-size: larger;
+	font-size: medium;
 }
 
 h2, h3 {
@@ -32,7 +32,7 @@ h2, h3 {
 }
 
 h4, h5  {
-	font-size: large;
+	font-size: medium;
     font-weight: bold;
     margin-top: 1em;
     margin-bottom: 0.5em;
@@ -197,16 +197,6 @@ img {
 
 #toc .h1 {
     font-weight: bold;
-    font-size: larger;
-    color: rgb(50, 50, 50);
-    
-    padding-bottom: 4px;
-    
-    display: flex;
-    align-items: center;
-}
-
-#toc .h2 {
     font-size: large;
     color: rgb(50, 50, 50);
     
@@ -216,7 +206,7 @@ img {
     align-items: center;
 }
 
-#toc .h3 {
+#toc .h2 {
     font-size: medium;
     color: rgb(50, 50, 50);
     
@@ -226,8 +216,18 @@ img {
     align-items: center;
 }
 
+#toc .h3 {
+    font-size: small;
+    color: rgb(50, 50, 50);
+    
+    padding-bottom: 4px;
+    
+    display: flex;
+    align-items: center;
+}
+
 #toc .h4 {
-    font-size: initial;
+    font-size: small;
     color: rgb(50, 50, 50);
     
     padding-bottom: 4px;
@@ -237,7 +237,7 @@ img {
 }
 
 #toc .h5 {
-    font-size: initial;
+    font-size: small;
     color: rgb(50, 50, 50);
     
     padding-bottom: 4px;
@@ -247,7 +247,7 @@ img {
 }
 
 #toc .h6 {
-    font-size: initial;
+    font-size: small;
     color: rgb(50, 50, 50);
     
     padding-bottom: 4px;
