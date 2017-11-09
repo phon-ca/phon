@@ -103,6 +103,20 @@ public class TestPredefinedPhoneClasses {
 	}
 	
 	@Test
+	public void testIntraWordPauseClass() throws ParseException {
+		final String phonex = "\\p";
+		final String txt = "pas^ta";
+		
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher pm = pattern.matcher(ipa);
+		
+		Assert.assertEquals(true, pm.find());
+		Assert.assertEquals(3, pm.start());
+	}
+	
+	@Test
 	public void testPauseClass() throws ParseException {
 		final String phonex = "\\P";
 		final String txt = "one (.) two (..) three (...) four";
