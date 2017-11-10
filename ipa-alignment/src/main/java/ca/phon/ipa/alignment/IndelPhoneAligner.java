@@ -23,14 +23,23 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 
 	@Override
 	protected int costSubstitute(IPAElement ele1, IPAElement ele2) {
-		int tally = 1;
+		int tally = 0;
+		
+		if( (ele1.getFeatureSet().hasFeature("Consonant")
+				&& ele2.getFeatureSet().hasFeature("Consonant")) ||
+			(ele1.getFeatureSet().hasFeature("Vowel") 
+				&& ele2.getFeatureSet().hasFeature("Vowel")) ) {
+			tally = 1;
+		} else {
+			return -1;
+		}
 		
 		final SyllableConstituentType t1 = ele1.getScType();
 		final SyllableConstituentType t2 = ele2.getScType();
 		if(t1 == t2) {
-			tally += 2;
+			++tally;
 		} else {
-			tally -= 2;
+			--tally;
 		}
 		
 		if(hasStressedSyllables) {
@@ -43,7 +52,30 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 			}
 		}
 		
+		final PhoneticProfile p1 = new PhoneticProfile(ele1);
+		final PhoneticProfile p2 = new PhoneticProfile(ele2);
+		if(p1.getDimensions().size() == 3) {
+			tally += checkDimension(p1, p2, PhoneDimension.PLACE);
+			tally += checkDimension(p1, p2, PhoneDimension.MANNER);
+		}
+		
 		return tally;
+	}
+	
+	private int checkDimension(PhoneticProfile p1, PhoneticProfile p2, PhoneDimension dimension) {
+		int retVal = 0;
+		
+		int v1 = p1.get(dimension);
+		int v2 = p2.get(dimension);
+		
+		if(v1 < 0 && v2 < 0) return retVal;
+		
+		if(v1 == v2)
+			retVal = 1;
+		else
+			retVal = -1;
+		
+		return retVal;
 	}
 
 	@Override
