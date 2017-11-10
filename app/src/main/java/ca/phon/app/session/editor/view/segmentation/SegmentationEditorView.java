@@ -61,11 +61,6 @@ public class SegmentationEditorView extends EditorView {
 		}
 	}
 	
-	/**
-	 * View title
-	 */
-	private final static String VIEW_TITLE = "Segmentation";
-	
 	private static final int DEFAULT_SEGMENT_WINDOW = 0;
 
 	private JTextField segmentWindowField;
