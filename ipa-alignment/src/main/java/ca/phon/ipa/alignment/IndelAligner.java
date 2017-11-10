@@ -83,6 +83,7 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 		score = matrix[width-1][height-1];
 		
 		alignment = this.retreiveAlignment(top, bottom, width-1, height-1, 0, matrix, tp, ap, score);
+		swapIndels(alignment);
 		
 		retVal.setTopElements(top);
 		retVal.setBottomElements(bottom);
@@ -92,6 +93,35 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 		lastAlignment = retVal;
 		
 		return retVal;
+	}
+	
+	/**
+	 * Swaps cases of adjacent indels where the ordering should be reversed
+	 * 
+	 * @param alignment
+	 */
+	private void swapIndels(Integer[][] alignment) {
+		for(int i = 0; i < alignment[0].length; i++) {
+			int top = alignment[0][i];
+			int bottom = alignment[1][i];
+			if(i > 0 && top == -1) {
+				for(int j = i-1; j >= 0; j--) {
+					int lastTop = alignment[0][j];
+					int lastBottom = alignment[1][j];
+					
+					if(lastBottom == -1 && lastTop >= bottom) {
+						// swap
+						alignment[0][j] = top;
+						alignment[1][j] = bottom;
+						
+						alignment[0][j+1] = lastTop;
+						alignment[1][j+1] = lastBottom;
+					} else {
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	/**

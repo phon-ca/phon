@@ -18,53 +18,73 @@
  */
 package ca.phon.ipa.alignment;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import java.io.*;
 
-@RunWith(JUnit4.class)
+import ca.phon.session.*;
+import ca.phon.session.io.*;
+
 public class TestPhoneAligner {
 
-	@Test
-	public void testAligner() throws Exception {
-		final PhoneAligner aligner = new PhoneAligner();
-//		
-//		final IPATranscript model = IPATranscript.parseIPATranscript("ˈhæpiː ˈbʌɹθˌdeɪ");
-//		final IPATranscript actual = IPATranscript.parseIPATranscript("ˈæpiː ˈbʌːˌteɪ");
-//		
-//		final PhoneMap pm = aligner.calculatePhoneMap(model, actual);
-//		Assert.assertNotNull(pm);
-//		Assert.assertEquals(pm.getAlignmentLength(), model.removePunctuation().length());
-//	
-//		// test individual alignment
-//		for(final IPAElement ele:model.removePunctuation()) {
-//			final List<IPAElement> top = Collections.singletonList(ele);
-//			final List<IPAElement> aligned = pm.getAligned(top);
-//			if(aligned.size() > 0) {
-//				final List<IPAElement> reverse = pm.getAligned(aligned);
-//				Assert.assertEquals(top, reverse);
-//			}
-//		}
-//		
-//		{
-//			final IPATranscript top = model.removePunctuation().subsection(0, 3);
-//			final IPATranscript expected = actual.removePunctuation().subsection(0, 2);
-//			final IPATranscript aligned = new IPATranscript(pm.getAligned(top.toList()));
-//			Assert.assertEquals(expected.toString(), aligned.toString());
-//			
-//			final List<IPAElement> reverse = pm.getAligned(aligned.toList());
-//			final List<IPAElement> expectedReverse = top.subsection(1, top.length()).toList();
-//			Assert.assertEquals(expectedReverse, reverse);
-//		}
-//		
-//		{
-//			final List<IPAElement> top = model.removePunctuation().subsection(6, 8).toList();
-//			final List<IPAElement> expected = Collections.emptyList();
-//			final List<IPAElement> aligned = pm.getAligned(top);
-//			Assert.assertEquals(expected, aligned);
-//		}
+	private final static String SESSION_FILE = "Alignment Examples.xml";
+	
+	private Session openSession() throws IOException {
+		final SessionInputFactory factory = new SessionInputFactory();
+		final SessionIO readerIO = factory.availableReaders().get(0);
+		final SessionReader reader = factory.createReader(readerIO);
 		
+		final InputStream is = getClass().getResourceAsStream(SESSION_FILE);
+		return reader.readSession(is);
 	}
 	
+	public void testAligner() throws Exception {
+		final Session session = openSession();
+		
+		int numExamples = session.getRecordCount();
+		int numOldCorrect = 0;
+		int numNewCorrect = 0;
+		
+		final PhoneAligner oldAligner = new PhoneAligner();
+		final IndelPhoneAligner newAligner = new IndelPhoneAligner();
+		
+		for(int rIdx = 0; rIdx < numExamples; rIdx++) {
+			final Record r = session.getRecord(rIdx);
+			final Group g = r.getGroup(0);
+			
+			final PhoneMap correctAlignment = g.getPhoneAlignment();
+		
+			final PhoneMap oldAlignment = oldAligner.calculatePhoneMap(g.getIPATarget(), g.getIPAActual());
+			final PhoneMap newAlignment = newAligner.calculatePhoneAlignment(g.getIPATarget(), g.getIPAActual());
+			
+			if(oldAlignment.toString().equals(correctAlignment.toString())) {
+				++numOldCorrect;
+			}
+			if(newAlignment.toString().equals(correctAlignment.toString())) {
+				++numNewCorrect;
+			} else {
+				System.out.println(correctAlignment);
+				System.out.println(newAlignment);
+				
+				System.out.println(rIdx+1);
+			}
+			
+			
+		}
+		
+		float pOldCorrect = (numOldCorrect/(float)numExamples) * 100.0f;
+		float pNewCorrect = (numNewCorrect/(float)numExamples) * 100.0f;
+		
+		System.out.println("Old: " + pOldCorrect);
+		System.out.println("New: " + pNewCorrect);
+	}
+	
+	public static void main(String[] args) {
+		TestPhoneAligner test = new TestPhoneAligner();
+		try {
+			test.testAligner();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }

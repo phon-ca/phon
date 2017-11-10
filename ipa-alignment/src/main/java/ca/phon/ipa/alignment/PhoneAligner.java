@@ -650,48 +650,4 @@ public class PhoneAligner implements Aligner<IPAElement> {
 		return lastAlignmentMap;
 	}
 
-	/* Class for internal workings */
-	private class Mapping implements Comparable {
-		int targetIndex;
-		int actualIndex;
-		
-		@Override
-		public boolean equals(Object b) {
-			Mapping bObj = (Mapping)b;
-			
-			return (bObj.targetIndex == targetIndex) && (bObj.actualIndex == actualIndex);
-		}
-
-		@Override
-		public int compareTo(Object arg0) {
-			Mapping m = (Mapping)arg0;
-			
-			if(targetIndex == -1 || m.targetIndex == -1) {
-				if(actualIndex > m.actualIndex)
-					return 1;
-				else if(actualIndex == m.actualIndex)
-					return 0;
-				else
-					return -1;
-			}			
-			
-			if(targetIndex == m.targetIndex) {
-				if(actualIndex > m.actualIndex)
-					return 1;
-				else if(actualIndex == m.actualIndex)
-					return 0;
-				else
-					return -1;
-			}
-			
-			if(targetIndex > m.targetIndex)
-				return 1;
-			else if(targetIndex < m.targetIndex)
-				return -1;
-			else
-				return 0;
-		}
-
-	}
-	
 }

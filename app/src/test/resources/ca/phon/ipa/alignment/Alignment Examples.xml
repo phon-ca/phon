@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<session xmlns="http://phon.ling.mun.ca/ns/phonbank" id="Alignment Examples" corpus="Anne" version="PB1.2">
+    <header>
+        <date>2017-11-07</date>
+    </header>
+    <participants>
+        <participant id="CHI">
+            <role>Target Child</role>
+            <name>Kiddo</name>
+            <language></language>
+        </participant>
+    </participants>
+    <transcribers/>
+    <userTiers/>
+    <tierOrder>
+        <tier tierName="Orthography" visible="true" locked="false" font="default"/>
+        <tier tierName="IPA Target" visible="true" locked="false" font="default"/>
+        <tier tierName="IPA Actual" visible="true" locked="false" font="default"/>
+        <tier tierName="Notes" visible="true" locked="false" font="default"/>
+        <tier tierName="Segment" visible="true" locked="false" font="default"/>
+    </tierOrder>
+    <transcript>
+        <u speaker="CHI" id="865d2e89-99b1-4cdd-b3b7-c036818bbc58" excludeFromSearches="false">
+            <orthography>
+                <g/>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>CCVC.CVC.CV</w>
+                    <sb>
+                        <ph indexes="0" scType="LA"/>
+                        <ph indexes="1" scType="O"/>
+                        <ph indexes="2" scType="N" hiatus="true"/>
+                        <ph indexes="3" scType="C"/>
+                        <ph indexes="4" scType="SB"/>
+                        <ph indexes="5" scType="O"/>
+                        <ph indexes="6" scType="N" hiatus="true"/>
+                        <ph indexes="7" scType="C"/>
+                        <ph indexes="8" scType="SB"/>
+                        <ph indexes="9" scType="O"/>
+                        <ph indexes="10" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>CVCC.VC.V</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="C"/>
+                        <ph indexes="3" scType="RA"/>
+                        <ph indexes="4" scType="SB"/>
+                        <ph indexes="5" scType="N" hiatus="true"/>
+                        <ph indexes="6" scType="C"/>
+                        <ph indexes="7" scType="SB"/>
+                        <ph indexes="8" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="10">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 0"/>
+                    <phomap value="2 1"/>
+                    <phomap value="3 2"/>
+                    <phomap value="-1 3"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 4"/>
+                    <phomap value="6 5"/>
+                    <phomap value="7 -1"/>
+                    <phomap value="8 6"/>
+                </ag>
+            </alignment>
+            <segment startTime="0.0" duration="0.0" unitType="ms"/>
+            <notes tierName="Notes">Feature-less example to show constitutent type rules</notes>
+        </u>
+        <u speaker="CHI" id="2e48d0df-7f17-4c9e-a752-e1c30fd3f62e" excludeFromSearches="false">
+            <orthography>
+                <g/>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>CVˌCV.CVˈCV.CV</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="SS"/>
+                        <ph indexes="3" scType="O"/>
+                        <ph indexes="4" scType="N" hiatus="true"/>
+                        <ph indexes="5" scType="SB"/>
+                        <ph indexes="6" scType="O"/>
+                        <ph indexes="7" scType="N" hiatus="true"/>
+                        <ph indexes="8" scType="SS"/>
+                        <ph indexes="9" scType="O"/>
+                        <ph indexes="10" scType="N" hiatus="true"/>
+                        <ph indexes="11" scType="SB"/>
+                        <ph indexes="12" scType="O"/>
+                        <ph indexes="13" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˌCVˈCV</w>
+                    <sb>
+                        <ph indexes="0" scType="SS"/>
+                        <ph indexes="1" scType="O"/>
+                        <ph indexes="2" scType="N" hiatus="true"/>
+                        <ph indexes="3" scType="SS"/>
+                        <ph indexes="4" scType="O"/>
+                        <ph indexes="5" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="10">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 0"/>
+                    <phomap value="3 1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 2"/>
+                    <phomap value="7 3"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                </ag>
+            </alignment>
+            <segment startTime="0.0" duration="0.0" unitType="ms"/>
+            <notes tierName="Notes">Feature-less example to demonstrate stress attraction</notes>
+        </u>
+        <u speaker="CHI" id="f74f1db6-1399-4eb7-b463-d5e85eb56897" excludeFromSearches="false">
+            <orthography>
+                <g/>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>VCˌCV.CVˈCV.CV</w>
+                    <sb>
+                        <ph indexes="0" scType="N" hiatus="true"/>
+                        <ph indexes="1" scType="C"/>
+                        <ph indexes="2" scType="SS"/>
+                        <ph indexes="3" scType="O"/>
+                        <ph indexes="4" scType="N" hiatus="true"/>
+                        <ph indexes="5" scType="SB"/>
+                        <ph indexes="6" scType="O"/>
+                        <ph indexes="7" scType="N" hiatus="true"/>
+                        <ph indexes="8" scType="SS"/>
+                        <ph indexes="9" scType="O"/>
+                        <ph indexes="10" scType="N" hiatus="true"/>
+                        <ph indexes="11" scType="SB"/>
+                        <ph indexes="12" scType="O"/>
+                        <ph indexes="13" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>ˌVCˈCV</w>
+                    <sb>
+                        <ph indexes="0" scType="SS"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="C"/>
+                        <ph indexes="3" scType="SS"/>
+                        <ph indexes="4" scType="O"/>
+                        <ph indexes="5" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="11">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 0"/>
+                    <phomap value="-1 1"/>
+                    <phomap value="4 -1"/>
+                    <phomap value="5 -1"/>
+                    <phomap value="6 2"/>
+                    <phomap value="7 3"/>
+                    <phomap value="8 -1"/>
+                    <phomap value="9 -1"/>
+                </ag>
+            </alignment>
+            <segment startTime="0.0" duration="0.0" unitType="ms"/>
+            <notes tierName="Notes">Feature-less example to demonstrate stress attraction with onset/coda indels</notes>
+        </u>
+        <u id="edbb751d-b45e-4da3-8903-2f4f17875703" excludeFromSearches="false">
+            <orthography>
+                <g/>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>CVC</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="C"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>CVC</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="C"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="3">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                </ag>
+            </alignment>
+            <segment startTime="0.0" duration="0.0" unitType="ms"/>
+        </u>
+        <u id="2687fad4-87c7-4cea-9cd4-6609ed83c13d" excludeFromSearches="false">
+            <orthography>
+                <g/>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>CV.CV</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="SB"/>
+                        <ph indexes="3" scType="O"/>
+                        <ph indexes="4" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>CV.CV</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="SB"/>
+                        <ph indexes="3" scType="O"/>
+                        <ph indexes="4" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="4">
+                    <phomap value="0 0"/>
+                    <phomap value="1 1"/>
+                    <phomap value="2 2"/>
+                    <phomap value="3 3"/>
+                </ag>
+            </alignment>
+            <segment startTime="0.0" duration="0.0" unitType="ms"/>
+        </u>
+        <u id="beabbc59-b10f-4da8-903c-fb81726bae13" excludeFromSearches="false">
+            <orthography>
+                <g/>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>CV.CV</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="SB"/>
+                        <ph indexes="3" scType="O"/>
+                        <ph indexes="4" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>CV</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="4">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 0"/>
+                    <phomap value="3 1"/>
+                </ag>
+            </alignment>
+            <segment startTime="0.0" duration="0.0" unitType="ms"/>
+        </u>
+        <u id="5d6b85d3-4a22-47d5-a529-6082311def5f" excludeFromSearches="false">
+            <orthography>
+                <g/>
+            </orthography>
+            <ipaTier form="model">
+                <pg>
+                    <w>CV.CV.CV</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                        <ph indexes="2" scType="SB"/>
+                        <ph indexes="3" scType="O"/>
+                        <ph indexes="4" scType="N" hiatus="true"/>
+                        <ph indexes="5" scType="SB"/>
+                        <ph indexes="6" scType="O"/>
+                        <ph indexes="7" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <ipaTier form="actual">
+                <pg>
+                    <w>CV</w>
+                    <sb>
+                        <ph indexes="0" scType="O"/>
+                        <ph indexes="1" scType="N" hiatus="true"/>
+                    </sb>
+                </pg>
+            </ipaTier>
+            <alignment type="segmental">
+                <ag length="6">
+                    <phomap value="0 -1"/>
+                    <phomap value="1 -1"/>
+                    <phomap value="2 -1"/>
+                    <phomap value="3 -1"/>
+                    <phomap value="4 0"/>
+                    <phomap value="5 1"/>
+                </ag>
+            </alignment>
+            <segment startTime="0.0" duration="0.0" unitType="ms"/>
+        </u>
+    </transcript>
+</session>
