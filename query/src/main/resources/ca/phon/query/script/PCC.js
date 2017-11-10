@@ -164,8 +164,7 @@ function query_record(recordIndex, record) {
 			var alignedMetadata = toSearch[j][2];
 			
 			var features = (filters.pcc.pcType.index == 0 ? "c" : "v");
-			var pc = (filters.pcc.useAlignment == true ? Pcc.calc_pc_aligned(word, features, filters.pcc.ignoreDiacritics == true)
-						: Pcc.calc_pc_standard(word, features, filters.pcc.ignoreDiacritics == true));
+			var pc = Pcc.calc_pc_aligned(word, features, filters.pcc.ignoreDiacritics == true);
 			
 			var ipaT = (word.IPATarget != null ? word.IPATarget : new IPATranscript());
 			var ipaA = (word.IPAActual != null ? word.IPAActual : new IPATranscript());
@@ -195,12 +194,12 @@ function query_record(recordIndex, record) {
 			result.metadata.put("# Target", pc.target + "");
 			result.metadata.put("# Actual", pc.actual + "");
 			result.metadata.put("# Correct", pc.correct + "");
-			result.metadata.put("# Substitued", (pc.actual - pc.correct) + "");
+			result.metadata.put("# Substituted", pc.substituted + "");
 			result.metadata.put("# Deleted", pc.deleted + "");
 			result.metadata.put("# Epenthesized", pc.epen + "");
 			
 			var pcColName = (filters.pcc.pcType.index == 0 ? "PCC" : "PVC");
-			var pcVal = (pc.target > 0 ? pc.correct / pc.target: 0) * 100;
+			var pcVal = (pc.target > 0 ? ( pc.correct / (pc.correct + pc.substituted + pc.deleted + pc.epen) ): 0) * 100;
 			result.metadata.put(pcColName, nf.format(pcVal));
 
 			for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {

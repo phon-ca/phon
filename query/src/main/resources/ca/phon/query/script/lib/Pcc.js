@@ -41,6 +41,7 @@ exports.Pcc = {
 		var numTarget = 0;
 		var numDeleted = 0;
 		var numActual = 0;
+		var numSubstituted = 0;
 		var numEpenthesized = 0;
 		var numCorrect = 0;
 
@@ -70,6 +71,8 @@ exports.Pcc = {
 
 						if (targetPhoneString == actualPhoneString) {
 							numCorrect++;
+						} else {
+							numSubstituted++;
 						}
 					} else {
 						numDeleted++;
@@ -106,88 +109,13 @@ exports.Pcc = {
 			target: numTarget,
 			actual: numActual,
 			correct: numCorrect,
-			deleted: numDeleted,
-			epen: numEpenthesized
-		};
-		return retVal;
-	},
-
-	/**
-	 * Calculates PCC (standard) for a pair of ipa transcriptions.
-	 * In this version, direct phone alignment is not considered.
-	 *
-	 * @param word
-	 * @param features
-	 * @param ignoreDiacritics
-	 *
-	 * @return {
-	 *     target: number of elements in target,
-	 *     correct: number of elements correct,
-	 *     epen: number of epenthesis
-	 * }
-	 */
-	calc_pc_standard: function (group, features, ignoreDiacritics) {
-		var numTarget = 0;
-		var numActual = 0;
-		var targetVals = new Array();
-		var numCorrect = 0;
-		var numEpenthesized = 0;
-		var numProduced = 0;
-
-		var targetGroup = (group.getIPATarget() == null ? new IPATranscript(): group.getIPATarget());
-		var actualGroup = (group.getIPAActual() == null ? new IPATranscript(): group.getIPAActual());
-
-		var alignment = group.getPhoneAlignment();
-
-		var featureSet = FeatureSet.fromArray(features.split(","));
-
-		// check target side for numTarget, numDeleted and numCorrect
-		for (pIdx = 0; pIdx < targetGroup.length();
-		pIdx++) {
-			var phone = targetGroup.elementAt(pIdx);
-
-			if (phone.featureSet.intersects(featureSet)) {
-				numTarget++;
-				var targetPhoneString =
-				(ignoreDiacritics == true ? (new IPATranscript([phone])).removePunctuation(true).stripDiacritics().toString(): phone.toString());
-				targetVals[targetPhoneString] =
-				(targetVals[targetPhoneString] ? targetVals[targetPhoneString] + 1: 1);
-			}
-		}
-
-		// check actual side for numActual, numEpenthesized
-		// check target side for numTarget, numDeleted and numCorrect
-		for (pIdx = 0; pIdx < actualGroup.length();
-		pIdx++) {
-			var phone = actualGroup.elementAt(pIdx);
-
-			if (phone.featureSet.intersects(featureSet)) {
-				numActual++;
-				var actualPhoneString =
-				(ignoreDiacritics == true ? (new IPATranscript([phone])).removePunctuation(true).stripDiacritics().toString(): phone.toString());
-
-				var amountInTarget = targetVals[actualPhoneString];
-				if (amountInTarget != null && amountInTarget > 0) {
-					numCorrect++;
-					targetVals[actualPhoneString] =-- amountInTarget;
-				}
-			}
-		}
-		if (numActual > numTarget)
-		numEpenthesized = numActual - numTarget;
-
-		numDeleted = (numTarget > numActual ? numTarget - numActual: 0);
-
-		// format PCC string
-		var retVal = {
-			target: numTarget,
-			actual: numActual,
-			correct: numCorrect,
+			substituted: numSubstituted,
 			deleted: numDeleted,
 			epen: numEpenthesized
 		};
 		return retVal;
 	}
+
 };
 
 exports.PccOptions = function (id, aligned) {
@@ -203,20 +131,11 @@ exports.PccOptions = function (id, aligned) {
 	var pcTypeParam;
 	this.pcType = { index:0, toString:pcTypeParamInfo.choices[0] };
 	
-	var useAlignmentParamInfo = {
-		"id": id + ".useAlignment",
-		"title": "",
-		"desc": "Include segment metathesis and migration as errors",
-		"def": true,
-	};
-	var useAlignmentParam;
-	this.useAlignment = useAlignmentParamInfo.def;
-	
 	var ignoreDiacriticsParamInfo = {
 		"id": id +(".ignoreDiacritics"),
 		"title": "",
 		"desc": "Ignore diacritics",
-		"def": false
+		"def": true
 	};
 	var ignoreDiacriticsParam;
 	this.ignoreDicacritics = ignoreDiacriticsParamInfo.def;
@@ -230,12 +149,6 @@ exports.PccOptions = function (id, aligned) {
 			pcTypeParamInfo.type,
 			pcTypeParamInfo.cols);
 	
-		useAlignmentParam = new BooleanScriptParam(
-			useAlignmentParamInfo.id,
-			useAlignmentParamInfo.desc,
-			useAlignmentParamInfo.title,
-			useAlignmentParamInfo.def);
-
 		ignoreDiacriticsParam = new BooleanScriptParam(
 			ignoreDiacriticsParamInfo.id,
 			ignoreDiacriticsParamInfo.desc,
@@ -244,7 +157,6 @@ exports.PccOptions = function (id, aligned) {
 
 		params.add(pcTypeParam);
 		params.add(ignoreDiacriticsParam);
-		params.add(useAlignmentParam);
 	};
 
 };
