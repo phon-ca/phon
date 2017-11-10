@@ -29,7 +29,7 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 				&& ele2.getFeatureSet().hasFeature("Consonant")) ||
 			(ele1.getFeatureSet().hasFeature("Vowel") 
 				&& ele2.getFeatureSet().hasFeature("Vowel")) ) {
-			tally = 1;
+			++tally;
 		} else {
 			return -1;
 		}
