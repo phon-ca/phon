@@ -19,6 +19,7 @@
 package ca.phon.app.ipalookup;
 
 import java.util.*;
+import java.util.regex.*;
 
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.*;
@@ -77,7 +78,21 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 		wordnet.putExtension(OrthoWordIPAOptions.class, wordnetExt);
 	}
 	
+	
+	private String stripTrailingPunctuation(String ortho) {
+		final Pattern p = Pattern.compile(".+(\\p{Punct}+)");
+		final Matcher m = p.matcher(ortho);
+		
+		if(m.matches()) {
+			int pIdx = m.start(1);
+			return ortho.substring(0, pIdx);
+		} else {
+			return ortho;
+		}
+	}
+	
 	private String[] lookup(String ortho) {
+		ortho = stripTrailingPunctuation(ortho);
 		String[] retVal = dictionary.lookup(ortho);
 		if(retVal.length == 0)
 			retVal = new String[]{ "*" };
