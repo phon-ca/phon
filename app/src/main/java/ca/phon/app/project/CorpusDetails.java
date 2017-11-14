@@ -119,6 +119,7 @@ public class CorpusDetails extends JPanel {
 		});
 		
 		final JScrollPane textScroller = new JScrollPane(corpusDescriptionArea);
+		textScroller.setOpaque(false);
 		textScroller.setBorder(BorderFactory.createTitledBorder("Description"));
 		
 		add(folderPanel, BorderLayout.NORTH);
