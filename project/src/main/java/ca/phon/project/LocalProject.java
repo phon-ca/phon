@@ -655,9 +655,23 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer,
 			UUID writeLock) throws IOException {
 		checkSessionWriteLock(corpus, sessionName, writeLock);
-
-		final File sessionFile = getSessionFile(corpus, sessionName);
+		
+		File sessionFile = getSessionFile(corpus, sessionName);
 		final boolean created = !sessionFile.exists();
+		
+		boolean needToDeleteExisting = false;
+		File oldSessionFile = null;
+		if(!created) {
+			final OriginalFormat format = session.getExtension(OriginalFormat.class);
+			if(format != null) {
+				// check for extension change
+				if(!sessionFile.getName().endsWith(format.getSessionIO().extension())) {
+					needToDeleteExisting = true;
+					oldSessionFile = new File(sessionFile.getAbsolutePath());
+					sessionFile = new File(getCorpusFolder(corpus), sessionName + "." + format.getSessionIO().extension());
+				}
+			}
+		}
 
 		// XXX safety checks, make sure we can read back in what we write.
 		// also make sure the number of records has not changed between
@@ -673,6 +687,10 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new IOException("Session serialization failed.");
 			}
 			bout.close();
+			
+			if(needToDeleteExisting) {
+				oldSessionFile.delete();
+			}
 		} catch (IOException e) {
 			// unable to write the session, bail!
 			throw new IOException("Session not written to disk", e);
