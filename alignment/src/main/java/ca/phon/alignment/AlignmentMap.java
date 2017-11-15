@@ -143,6 +143,23 @@ public class AlignmentMap<T> {
 		return retVal;
 	}
 	
+	/**
+	 * Get the element aligned with the given element.
+	 * 
+	 * @param ele
+	 * 
+	 * @return element (if present)
+	 */
+	public Optional<T> getAlignedElement(T ele) {
+		final List<T> eleList = Collections.singletonList(ele);
+		final List<T> alignedEles = getAligned(eleList);
+		if(alignedEles.size() > 0) {
+			return Optional.of(alignedEles.get(0));
+		} else {
+			return Optional.empty();
+		}
+	}
+	
 	/** Get the top alignment as an array of elements */
 	public List<T> getTopAlignmentElements() {
 //		if(this.topAlignment == null)

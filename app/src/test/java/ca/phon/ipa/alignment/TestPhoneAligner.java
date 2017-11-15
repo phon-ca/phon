@@ -29,6 +29,12 @@ public class TestPhoneAligner {
 
 	private final static String SESSION_FILE = "Alignment Examples.xml";
 	
+	private final int OLD_ALIGNER = 0;
+	private final int NEW_ALIGNER = 1;
+	
+	private final int CORRECT = 0;
+	private final int SUB = 1;
+	
 	private Session openSession() throws IOException {
 		final SessionInputFactory factory = new SessionInputFactory();
 		final SessionIO readerIO = factory.availableReaders().get(0);
@@ -41,9 +47,12 @@ public class TestPhoneAligner {
 	public void testAligner() throws Exception {
 		final Session session = openSession();
 		
-		int numTargets = 0;
-		int numOldCorrect = 0;
-		int numNewCorrect = 0;
+		 
+		int numWords = 0;
+		int numWordsCorrect[] = {0, 0};
+		
+		int numSegmentalCorrect[] = {0, 0};
+		int numSegmentalSub[] = {0, 0};
 		
 		final PhoneAligner oldAligner = new PhoneAligner();
 		final IndelPhoneAligner newAligner = new IndelPhoneAligner();
@@ -51,59 +60,65 @@ public class TestPhoneAligner {
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			final Record r = session.getRecord(rIdx);
 			final Group g = r.getGroup(0);
+			++numWords;
 			
 			final PhoneMap correctAlignment = g.getPhoneAlignment();
-			numTargets += correctAlignment.getAlignmentLength();
 		
 			final PhoneMap oldAlignment = oldAligner.calculatePhoneMap(g.getIPATarget(), g.getIPAActual());
 			final PhoneMap newAlignment = newAligner.calculatePhoneAlignment(g.getIPATarget(), g.getIPAActual());
 			
-			if(oldAlignment.toString().equals(correctAlignment.toString())) {
-				numOldCorrect += correctAlignment.getAlignmentLength();
-			} else {
-				numOldCorrect += checkCorrect(g, correctAlignment, oldAlignment);
+			int oldCheck[] = checkCorrect(g, correctAlignment, oldAlignment);
+			numSegmentalCorrect[OLD_ALIGNER] += oldCheck[CORRECT];
+			numSegmentalSub[OLD_ALIGNER] += oldCheck[SUB];
+			
+			if(oldCheck[CORRECT] == correctAlignment.getAlignmentLength()) {
+				numWordsCorrect[OLD_ALIGNER]++;
 			}
 			
-			if(newAlignment.toString().equals(correctAlignment.toString())) {
-				numNewCorrect += correctAlignment.getAlignmentLength();
-			} else {
-				numNewCorrect += checkCorrect(g, correctAlignment, newAlignment);
-				
-				System.out.println();
-				System.out.println("Record:\t" + (rIdx+1));
-				System.out.println("Correct:\t" + correctAlignment );
-				System.out.println("Old Aligner:\t" + oldAlignment + 
-						" (" + ((checkCorrect(g, correctAlignment, oldAlignment)/(float)correctAlignment.getAlignmentLength()) * 100.0f) + "%)");
-				System.out.println("New Aligner:\t" + newAlignment +
-						" (" + ((checkCorrect(g, correctAlignment, newAlignment)/(float)correctAlignment.getAlignmentLength()) * 100.0f) + "%)");
+			int newCheck[] = checkCorrect(g, correctAlignment, newAlignment);
+			numSegmentalCorrect[NEW_ALIGNER] += newCheck[CORRECT];
+			numSegmentalSub[NEW_ALIGNER] += newCheck[SUB];
+			
+			if(newCheck[CORRECT] == correctAlignment.getAlignmentLength()) {
+				numWordsCorrect[NEW_ALIGNER]++;
 			}
 		}
 		
-		float pOldCorrect = (numOldCorrect/(float)numTargets) * 100.0f;
-		float pNewCorrect = (numNewCorrect/(float)numTargets) * 100.0f;
+		float pWordsCorrect[] = new float[2];
+		pWordsCorrect[OLD_ALIGNER] = (numWordsCorrect[OLD_ALIGNER]/(float)numWords) * 100.0f;
+		pWordsCorrect[NEW_ALIGNER] = (numWordsCorrect[NEW_ALIGNER]/(float)numWords) * 100.0f;
 		
-		System.out.println("Old: " + pOldCorrect);
-		System.out.println("New: " + pNewCorrect);
+		float pSegmentalCorrect[] = new float[2];
+		pSegmentalCorrect[OLD_ALIGNER] = 
+				(numSegmentalCorrect[OLD_ALIGNER]/(float)(numSegmentalCorrect[OLD_ALIGNER]+numSegmentalSub[OLD_ALIGNER])) * 100.0f;
+		pSegmentalCorrect[NEW_ALIGNER] = 
+				(numSegmentalCorrect[NEW_ALIGNER]/(float)(numSegmentalCorrect[NEW_ALIGNER]+numSegmentalSub[NEW_ALIGNER])) * 100.0f;
+		
+		System.out.println("Word: \tO = " + pWordsCorrect[OLD_ALIGNER] + "%\t N = " + pWordsCorrect[NEW_ALIGNER] + "%");
+		System.out.println("Phone: \tO = " + pSegmentalCorrect[OLD_ALIGNER] + "%\t N = " + pSegmentalCorrect[NEW_ALIGNER] + "%");
 	}
 	
-	public int checkCorrect(Group g, PhoneMap correct, PhoneMap align) {
+	public int[] checkCorrect(Group g, PhoneMap correct, PhoneMap align) {
+		int retVal[] = new int[2];
+		
 		List<IPAElement> targetEles = new ArrayList<>();
 		for(IPAElement ele:g.getIPATarget().audiblePhones()) targetEles.add(ele);
 		
 		List<IPAElement> actualEles = new ArrayList<>();
 		for(IPAElement ele:g.getIPAActual().audiblePhones()) actualEles.add(ele);
 		
-		int tally = 0;
 		for(IPAElement ele:targetEles) {
 			List<IPAElement> correctAligned = correct.getAligned(new IPAElement[]{ele});
 			List<IPAElement> testAligned = align.getAligned(new IPAElement[]{ele});
 			
 			if(correctAligned.size() > 0 && correctAligned.size() == testAligned.size()
 					&& correctAligned.get(0) == testAligned.get(0)) {
-				++tally;
+				retVal[CORRECT]++;
 				actualEles.remove(correctAligned.get(0));
 			} else if(correctAligned.size() == 0 && testAligned.size() == 0) {
-				++tally;
+				retVal[CORRECT]++;
+			} else {
+				retVal[SUB]++;
 			}
 		}
 		
@@ -113,14 +128,15 @@ public class TestPhoneAligner {
 			
 			if(correctAligned.size() > 0 && correctAligned.size() == testAligned.size()
 					&& correctAligned.get(0) == testAligned.get(0)) {
-				++tally;
+				retVal[CORRECT]++;
 			} else if(correctAligned.size() == 0 && testAligned.size() == 0) {
-				++tally;
+				retVal[CORRECT]++;
+			} else {
+				retVal[SUB]++;
 			}
 		}
 		
-		
-		return tally;
+		return retVal;
 	}
 	
 	public static void main(String[] args) {
@@ -128,7 +144,6 @@ public class TestPhoneAligner {
 		try {
 			test.testAligner();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

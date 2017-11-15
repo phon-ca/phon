@@ -1,4 +1,4 @@
-package ca.phon.ipa.alignment;
+package ca.phon.alignment;
 
 import java.util.Stack;
 

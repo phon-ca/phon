@@ -2,7 +2,7 @@ package ca.phon.ipa.alignment;
 
 import java.util.List;
 
-import ca.phon.alignment.AlignmentMap;
+import ca.phon.alignment.*;
 import ca.phon.ipa.*;
 
 public class SyllableAligner extends IndelAligner<IPATranscript> {

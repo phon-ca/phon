@@ -2,7 +2,7 @@ package ca.phon.ipa.alignment;
 
 import java.util.List;
 
-import ca.phon.alignment.AlignmentMap;
+import ca.phon.alignment.*;
 import ca.phon.ipa.*;
 import ca.phon.syllable.*;
 
