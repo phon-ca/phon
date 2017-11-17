@@ -140,6 +140,7 @@
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		
 		<com.atlassian.commonmark.version>0.6.0</com.atlassian.commonmark.version>
+		<net.sourceforge.jexcelapi.version>2.6.12</net.sourceforge.jexcelapi.version>
 
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools.version>2.0</org.apache.velocity.velocity-tools.version>
@@ -395,14 +396,7 @@
 				<version>${net.lingala.zip4j.version}</version>
 			</dependency>
 			
-			<!-- 
-			<dependency>
-				<groupId>org.eclipse.birt.runtime</groupId>
-				<artifactId>org.eclipse.birt.runtime</artifactId>
-				<version>${org.eclipse.birt.runtime.version}</version>
-			</dependency>
-			-->
-			
+			<!-- Markdown support -->
 			<dependency>
 				<groupId>com.atlassian.commonmark</groupId>
 				<artifactId>commonmark</artifactId>
@@ -413,6 +407,12 @@
 			    <groupId>com.atlassian.commonmark</groupId>
 			    <artifactId>commonmark-ext-gfm-tables</artifactId>
 			    <version>${com.atlassian.commonmark.version}</version>
+			</dependency>
+			
+			<dependency>
+			      <groupId>net.sourceforge.jexcelapi</groupId>
+			      <artifactId>jxl</artifactId>
+			      <version>${net.sourceforge.jexcelapi.version}</version>
 			</dependency>
 			
 		</dependencies>
