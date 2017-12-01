@@ -58,6 +58,9 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 
 	private InputField appendField =
 			new InputField("append", "Append to buffer", true, true, Boolean.class);
+	
+	private InputField insertAtBeginningField = 
+			new InputField("insertAtBeginning", "Insert at beginning of buffer", true, true, Boolean.class);
 
 	private OutputField bufferNameOutputField =
 			new OutputField("buffer", "Buffer name, this may differ from the input buffer name if not appending and another buffer with the same name exists.",
@@ -85,6 +88,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		putField(dataField);
 		putField(bufferNameField);
 		putField(appendField);
+		putField(insertAtBeginningField);
 		putField(bufferNameOutputField);
 
 		putExtension(NodeSettings.class, this);
@@ -145,7 +149,10 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 				bufferPanel.setUserObject(data);
 			}
 
-			if(!append) {
+			final StringBuffer currentContent = new StringBuffer();
+			currentContent.append(bufferPanel.getLogBuffer().getText());
+			
+			if(!append || isInsertAtBeginning(context)) {
 				bufferPanel.getLogBuffer().setText("");
 			}
 
@@ -153,6 +160,11 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 					new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8"))) {
 				out.print(dataBuffer.toString());
 				out.flush();
+				
+				if(isInsertAtBeginning(context)) {
+					out.print(currentContent.toString());
+					out.flush();
+				}
 
 				if(isShowText()) {
 					out.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUFFER_CODE);
@@ -188,6 +200,10 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		return (ctx.get(appendField) != null ? (Boolean)ctx.get(appendField) : false);
 	}
 
+	public boolean isInsertAtBeginning(OpContext ctx) {
+		return (ctx.get(insertAtBeginningField) != null ? (Boolean)ctx.get(insertAtBeginningField) : false);
+	}
+	
 	public String getDataTemplate() {
 		return (this.dataInputArea != null ? this.dataInputArea.getText() : this.dataTemplate);
 	}
