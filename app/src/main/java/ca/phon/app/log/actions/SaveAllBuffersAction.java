@@ -20,7 +20,6 @@ package ca.phon.app.log.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.logging.*;
 
@@ -31,16 +30,16 @@ import ca.phon.app.log.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.*;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 
 public class SaveAllBuffersAction extends HookableAction {
 	
 	private final static Logger LOGGER = Logger.getLogger(SaveAllBuffersAction.class.getName());
 	
-	private final static String TXT = "Save all buffers to folder";
+	private final static String TXT = "Save all buffers to folder...";
 	
-	private final static String DESC = "Save all buffers to folder...";
+	private final static String DESC = "Save all buffers to a selected folder";
 	
 	private final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/save_all", IconSize.SMALL);
@@ -90,14 +89,14 @@ public class SaveAllBuffersAction extends HookableAction {
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
 				}
 				
-				if(bufferPanel == buffers.getCurrentBuffer()
-						&& bufferPanel.isOpenAfterSave()) {
-					try {
-						OpenFileLauncher.openURL(bufferFile.toURI().toURL());
-					} catch (MalformedURLException e) {
-						LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
-					}
-				}
+//				if(bufferPanel == buffers.getCurrentBuffer()
+//						&& bufferPanel.isOpenAfterSave()) {
+//					try {
+//						OpenFileLauncher.openURL(bufferFile.toURI().toURL());
+//					} catch (MalformedURLException e) {
+//						LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+//					}
+//				}
 			}
 		} else {
 			canceled = true;

@@ -18,11 +18,15 @@
  */
 package ca.phon.app.log.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 
 public class SaveCurrentBufferAction extends HookableAction {
@@ -32,26 +36,62 @@ public class SaveCurrentBufferAction extends HookableAction {
 	
 	private static final long serialVersionUID = -2827879669257916438L;
 	
-	private final static String CMD_NAME = "Save buffer";
+	private final static String CMD_NAME = "Save buffer...";
 	
-	private final static String SHORT_DESC = "Save buffer to file...";
+	private final static String SHORT_DESC = "Save buffer to file";
 	
 	private final static String ICON = "actions/document-save-as";
+	
+	private final BufferPanelContainer container;
 
-	public SaveCurrentBufferAction() {
+	public SaveCurrentBufferAction(BufferPanelContainer bufferPanel) {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
+		
+		this.container = bufferPanel;
 	}
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final BufferWindow window = BufferWindow.getInstance();
-		final BufferPanel panel = window.getCurrentBuffer();
+		final BufferPanel panel = this.container.getCurrentBuffer();
 		
-		if(panel != null) {
-			panel.onSaveBuffer();
+		final SaveDialogProperties props = new SaveDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setCanCreateDirectories(true);
+		
+		FileFilter filter = null;
+		if(panel.isShowingBuffer() == true) {
+			filter = new FileFilter("Text file", "txt");
+		} else if(panel.isShowingHtml() == true) {
+			filter = FileFilter.htmlFilter;
+		} else if(panel.isShowingTable()) {
+			filter = FileFilter.csvFilter;
 		}
+		props.setFileFilter(filter);
+		
+		props.setInitialFile(panel.getBufferName() + "." + filter.getDefaultExtension());
+		props.setRunAsync(true);
+		props.setListener( (e) -> {
+			if(e.getDialogResult() == NativeDialogEvent.OK_OPTION && e.getDialogData() != null) {
+				final String saveAs = e.getDialogData().toString();
+				
+				try {
+					if(panel.isShowingBuffer() || panel.isShowingHtml()) {
+						panel.writeToTextFile(saveAs, "UTF-8");
+					} else if(panel.isShowingTable()) {
+						panel.writeToCSV(saveAs, "UTF-8");
+					}
+					
+					
+				} catch (IOException ex) {
+					Toolkit.getDefaultToolkit().beep();
+					LogUtil.severe(ex);
+				}
+			}
+		});
+		
+		NativeDialogs.showSaveDialog(props);
 	}
 
 }

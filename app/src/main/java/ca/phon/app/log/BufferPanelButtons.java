@@ -107,8 +107,6 @@ public class BufferPanelButtons extends JComponent {
 				textButton.setSelected(bufferPanel.isShowingBuffer());
 				tableButton.setSelected(bufferPanel.isShowingTable());
 				htmlButton.setSelected(bufferPanel.isShowingHtml());
-				
-				bufferPanel.updateSaveButtonText();
 			}
 			
 		});

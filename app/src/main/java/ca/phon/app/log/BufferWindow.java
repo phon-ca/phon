@@ -20,6 +20,7 @@ package ca.phon.app.log;
 
 import java.awt.*;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -56,14 +57,14 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 		final JMenu fileMenu = menuBar.getMenu(0);
 		if(!fileMenu.getText().equals("File")) return;
 		
-		final SaveCurrentBufferAction saveBufferAct = new SaveCurrentBufferAction();
+		final SaveCurrentBufferAction saveBufferAct = new SaveCurrentBufferAction(bufferPanel);
 		fileMenu.add(new JMenuItem(saveBufferAct), 0);
 		fileMenu.add(new JSeparator(), 1);
 		
-		final CloseCurrentBufferAction closeBufferAct = new CloseCurrentBufferAction();
+		final CloseCurrentBufferAction closeBufferAct = new CloseCurrentBufferAction(bufferPanel);
 		fileMenu.add(new JMenuItem(closeBufferAct), 2);
 		
-		final CloseAllBuffersAction closeAllBuffersAct = new CloseAllBuffersAction();
+		final CloseAllBuffersAction closeAllBuffersAct = new CloseAllBuffersAction(bufferPanel);
 		fileMenu.add(new JMenuItem(closeAllBuffersAct), 3);
 		fileMenu.add(new JSeparator(), 4);
 	}
@@ -128,5 +129,35 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 		} else {
 			requestFocus();
 		}
+	}
+
+	@Override
+	public void addListener(BufferPanelContainerListener listener) {
+		bufferPanel.addListener(listener);
+	}
+
+	@Override
+	public void removeListener(BufferPanelContainerListener listener) {
+		bufferPanel.removeListener(listener);
+	}
+
+	@Override
+	public List<BufferPanelContainerListener> getListeners() {
+		return bufferPanel.getListeners();
+	}
+
+	@Override
+	public void addSelectionListener(BufferPanelSelectionListener listener) {
+		bufferPanel.addSelectionListener(listener);
+	}
+
+	@Override
+	public void removeSelectionListener(BufferPanelSelectionListener listener) {
+		bufferPanel.removeSelectionListener(listener);
+	}
+
+	@Override
+	public List<BufferPanelSelectionListener> getSelectionListeners() {
+		return bufferPanel.getSelectionListeners();
 	}
 }

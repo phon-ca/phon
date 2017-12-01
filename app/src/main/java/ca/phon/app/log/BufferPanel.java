@@ -22,8 +22,9 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
+import java.lang.Number;
 import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
+import java.time.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,15 +35,15 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableModel;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXTable;
 
-import com.jgoodies.forms.layout.*;
 import com.sun.javafx.application.PlatformImpl;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.*;
 import ca.phon.extensions.*;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.functor.Functor;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
@@ -53,17 +54,17 @@ import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.*;
-import ca.phon.util.icons.*;
 import javafx.application.Platform;
 import javafx.beans.value.*;
 import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebView;
+import jxl.Workbook;
+import jxl.write.*;
+import jxl.write.Label;
+import jxl.write.biff.RowsExceededException;
 import netscape.javascript.JSObject;
 
 /**
@@ -107,26 +108,12 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	private LogBuffer logBuffer;
 
+	/* Views */
 	private JXTable dataTable;
 
 	private JFXPanel fxPanel;
 
 	private WebView htmlView;
-
-	private JButton saveButton;
-
-	private BufferPanelButtons buttons;
-
-	private JCheckBox firstRowAsHeaderBox;
-
-	private JCheckBox openFileAfterSavingBox;
-
-	private JXBusyLabel busyLabel = new JXBusyLabel(new Dimension(16, 16));
-
-	public final static String OPEN_AFTER_SAVING_PROP = BufferPanel.class.getName() + ".openFileAfterSaving";
-
-	private boolean openFileAfterSaving =
-			PrefHelper.getBoolean(OPEN_AFTER_SAVING_PROP, Boolean.TRUE);
 
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 
@@ -214,7 +201,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 		logBuffer.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
 
-		firstRowAsHeaderBox.setVisible(false);
+//		firstRowAsHeaderBox.setVisible(false);
 
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
@@ -269,7 +256,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		}
 		final CSVReader reader = new CSVReader(new StringReader(logBuffer.getText()));
 		final CSVTableModel model = new CSVTableModel(reader);
-		model.setUseFirstRowAsHeader(firstRowAsHeaderBox.isSelected());
+		model.setUseFirstRowAsHeader(true);
 		dataTable.setModel(model);
 
 		dataTable.scrollCellToVisible(0, 0);
@@ -277,7 +264,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		cardLayout.show(contentPanel, TABLE_VIEW_ID);
 		currentView = dataTable;
 
-		firstRowAsHeaderBox.setVisible(true);
+//		firstRowAsHeaderBox.setVisible(true);
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 
@@ -342,41 +329,26 @@ public class BufferPanel extends JPanel implements IExtendable {
 	private void init() {
 		setLayout(new BorderLayout());
 
-		final FormLayout topLayout = new FormLayout(
-				"pref, pref,3dlu, pref, fill:pref:grow, pref, 3dlu, right:pref", "pref");
-		final CellConstraints cc = new CellConstraints();
-		final JPanel topPanel = new JPanel(topLayout);
-
-		final PhonUIAction saveAct = new PhonUIAction(this, "onSaveBuffer");
-		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save buffer...");
-		saveAct.putValue(PhonUIAction.SMALL_ICON,
-				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
-		saveButton = new JButton(saveAct);
-
-		openFileAfterSavingBox = new JCheckBox("Open after saving");
-		openFileAfterSavingBox.setSelected(openFileAfterSaving);
-		openFileAfterSavingBox.addChangeListener( e -> {
-			BufferPanel.this.openFileAfterSaving = openFileAfterSavingBox.isSelected();
-			PrefHelper.getUserPreferences().putBoolean(OPEN_AFTER_SAVING_PROP, BufferPanel.this.openFileAfterSaving);
-		});
-
-		final PhonUIAction firstRowAsHeaderAct = new PhonUIAction(this, "onToggleFirstRowAsHeader");
-		firstRowAsHeaderAct.putValue(PhonUIAction.NAME, "Use first row as column header");
-		firstRowAsHeaderAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
-		firstRowAsHeaderBox = new JCheckBox(firstRowAsHeaderAct);
-		firstRowAsHeaderBox.setVisible(false);
-
-		busyLabel.setVisible(false);
-
-		buttons = new BufferPanelButtons(this);
-
-		topPanel.add(firstRowAsHeaderBox, cc.xy(4, 1));
-		topPanel.add(saveButton, cc.xy(1,1));
-		topPanel.add(openFileAfterSavingBox, cc.xy(2, 1));
-		topPanel.add(busyLabel, cc.xy(6, 1));
-		topPanel.add(buttons, cc.xy(8, 1));
-
-		add(topPanel, BorderLayout.NORTH);
+//		final FormLayout topLayout = new FormLayout(
+//				"pref, pref,3dlu, pref, fill:pref:grow, pref, 3dlu, right:pref", "pref");
+//		final CellConstraints cc = new CellConstraints();
+//		final JPanel topPanel = new JPanel(topLayout);
+//
+//		final PhonUIAction firstRowAsHeaderAct = new PhonUIAction(this, "onToggleFirstRowAsHeader");
+//		firstRowAsHeaderAct.putValue(PhonUIAction.NAME, "Use first row as column header");
+//		firstRowAsHeaderAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
+//		firstRowAsHeaderBox = new JCheckBox(firstRowAsHeaderAct);
+//		firstRowAsHeaderBox.setVisible(false);
+//
+//		busyLabel.setVisible(false);
+//
+//		buttons = new BufferPanelButtons(this);
+//
+//		topPanel.add(firstRowAsHeaderBox, cc.xy(4, 1));
+//		topPanel.add(busyLabel, cc.xy(6, 1));
+//		topPanel.add(buttons, cc.xy(8, 1));
+//
+//		add(topPanel, BorderLayout.NORTH);
 
 		cardLayout = new CardLayout();
 		contentPanel = new JPanel(cardLayout);
@@ -389,21 +361,21 @@ public class BufferPanel extends JPanel implements IExtendable {
 		add(contentPanel, BorderLayout.CENTER);
 	}
 	
-	public void updateSaveButtonText() {
-		final StringBuffer buffer = new StringBuffer();
-		buffer.append("Save ").append(getBufferName());
-		buffer.append(" as");
-		
-		if(buttons.tableButton.isSelected()) {
-			buffer.append(" CSV");
-		} else if(buttons.textButton.isSelected()) {
-			buffer.append(" Text");
-		} else if(buttons.htmlButton.isSelected()) {
-			buffer.append(" HTML");
-		}
-		
-		saveButton.setText(buffer.toString());
-	}
+//	public void updateSaveButtonText() {
+//		final StringBuffer buffer = new StringBuffer();
+//		buffer.append("Save ").append(getBufferName());
+//		buffer.append(" as");
+//		
+//		if(buttons.tableButton.isSelected()) {
+//			buffer.append(" CSV");
+//		} else if(buttons.textButton.isSelected()) {
+//			buffer.append(" Text");
+//		} else if(buttons.htmlButton.isSelected()) {
+//			buffer.append(" HTML");
+//		}
+//		
+//		saveButton.setText(buffer.toString());
+//	}
 
 	public String getBufferName() {
 		return logBuffer.getBufferName();
@@ -426,25 +398,25 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return dataTable;
 	}
 
-	public boolean isOpenAfterSave() {
-		return openFileAfterSaving;
-	}
+//	public boolean isOpenAfterSave() {
+//		return openFileAfterSaving;
+//	}
 
 	public void setBusy(boolean busy) {
-		busyLabel.setBusy(busy);
-		busyLabel.setVisible(busy);
+//		busyLabel.setBusy(busy);
+//		busyLabel.setVisible(busy);
 	}
 
 	public void setFirstRowIsHeader(boolean firstRowIsColumnHeader) {
 		final CSVTableModel model = (CSVTableModel)getDataTable().getModel();
 		model.setUseFirstRowAsHeader(firstRowIsColumnHeader);
 		model.fireTableStructureChanged();
-		firstRowAsHeaderBox.setSelected(firstRowIsColumnHeader);
+//		firstRowAsHeaderBox.setSelected(firstRowIsColumnHeader);
 	}
 
 	public void onToggleFirstRowAsHeader() {
-		boolean isFirstRowHeader = firstRowAsHeaderBox.isSelected();
-		setFirstRowIsHeader(isFirstRowHeader);
+		boolean isFirstRowHeader = ((CSVTableModel)getDataTable().getModel()).isUseFirstRowAsHeader();
+		setFirstRowIsHeader(!isFirstRowHeader);
 	}
 
 	/**
@@ -463,53 +435,120 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return retVal;
 	}
 
-	public void onSaveBuffer() {
-		final SaveDialogProperties props = new SaveDialogProperties();
-		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-		props.setRunAsync(false);
-		props.setInitialFile(logBuffer.getBufferName());
-		final FileFilter filter =
-				(isShowingBuffer() ? new FileFilter("Text files (*.txt)", "txt") :
-					isShowingTable() ? FileFilter.csvFilter : FileFilter.htmlFilter);
-		props.setFileFilter(filter);
-		props.setCanCreateDirectories(true);
-
-		final String saveAs = NativeDialogs.showSaveDialog(props);
-
-		if(saveAs != null && saveAs.length() > 0) {
-			if(isShowingBuffer() || isShowingHtml()) {
-				// save buffer contents as text
-				try {
-					final File f = new File(saveAs);
-					final BufferedWriter out =
-							new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "UTF-8"));
-					out.write(logBuffer.getText());
-					out.flush();
-					out.close();
-				} catch (IOException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
-				}
-			} else if(isShowingTable()) {
-				// save table model as csv using UTF-16 so Excel will correctly open file
-				final CSVTableDataWriter writer = new CSVTableDataWriter("UTF-8");
-				try {
-					writer.writeTableToFile(dataTable, new File(saveAs));
-				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
+//	public void onSaveBuffer() {
+//		final SaveDialogProperties props = new SaveDialogProperties();
+//		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+//		props.setRunAsync(false);
+//		props.setInitialFile(logBuffer.getBufferName());
+//		final FileFilter filter =
+//				(isShowingBuffer() ? new FileFilter("Text files (*.txt)", "txt") :
+//					isShowingTable() ? FileFilter.excelFilter : FileFilter.htmlFilter);
+//		props.setFileFilter(filter);
+//		props.setCanCreateDirectories(true);
+//
+//		final String saveAs = NativeDialogs.showSaveDialog(props);
+//
+//		if(saveAs != null && saveAs.length() > 0) {
+//			if(isShowingBuffer() || isShowingHtml()) {
+//				// save buffer contents as text
+//				try {
+//					
+//				} catch (IOException e) {
+//					LOGGER
+//							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+//					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
+//				}
+//			} else if(isShowingTable()) {
+//				
+//				try {
+//					writeToExcelWorkbook(saveAs);
+//				} catch (IOException e) {
+//					LogUtil.severe(e);
+//				}
+////				// save table model as csv using UTF-16 so Excel will correctly open file
+//				
+//			}
+//
+////			if(openFileAfterSaving) {
+////				try {
+////					OpenFileLauncher.openURL(new File(saveAs).toURI().toURL());
+////				} catch (MalformedURLException e) {
+////					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+////					Toolkit.getDefaultToolkit().beep();
+////				}
+////			}
+//		}
+//	}
+	
+	public void writeToTextFile(String file, String encoding) throws IOException {
+		final File f = new File(file);
+		final BufferedWriter out =
+				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), encoding));
+		out.write(logBuffer.getText());
+		out.flush();
+		out.close();
+	}
+	
+	public void writeToCSV(String file, String encoding) throws IOException {
+		final CSVTableDataWriter writer = new CSVTableDataWriter(encoding);
+		writer.writeTableToFile(dataTable, new File(file));
+	}
+	
+	public void writeToExcelWorkbook(String file) throws IOException {
+		// create a new workbook at the file
+		final WritableWorkbook workbook = Workbook.createWorkbook(new File(file));
+		try {
+			createSheetInExcelWorkbook(workbook);
+			workbook.write();
+			workbook.close();
+		} catch (WriteException e) {
+			throw new IOException(e);
+		}
+	}
+	
+	public void createSheetInExcelWorkbook(WritableWorkbook workbook) throws RowsExceededException, WriteException {
+		final WritableSheet sheet = workbook.createSheet(getName(), workbook.getNumberOfSheets());
+		
+		if(getUserObject() != null && getUserObject() instanceof DefaultTableDataSource) {
+			final DefaultTableDataSource table = (DefaultTableDataSource)getUserObject();
+			
+			// write header
+			WritableCellFormat cFormat = new WritableCellFormat();
+            WritableFont font = new WritableFont(WritableFont.ARIAL, WritableFont.DEFAULT_POINT_SIZE, WritableFont.BOLD);
+            cFormat.setFont(font);
+			for(int i = 0; i < table.getColumnCount(); i++) {
+				final Label label = new Label(i, 0, table.getColumnTitle(i), cFormat);
+				sheet.addCell(label);
+			}
+			
+			for(int row = 0; row < table.getRowCount(); row++) {
+				final Object rowData[] = table.getRow(row);
+				for(int col = 0; col < table.getColumnCount(); col++) {
+					Object val = rowData[col];
+					
+					if(val != null && val instanceof Number) {
+						final jxl.write.Number cell = 
+								new jxl.write.Number(col, row+1, ((Number)val).doubleValue());
+						sheet.addCell(cell);
+					} else if (val instanceof LocalDate) {
+						final DateTime cell = new DateTime(col, row+1, 
+								Date.from(((LocalDate)val).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+						sheet.addCell(cell);
+					} else if(val instanceof LocalDateTime) {
+						final DateTime cell = new DateTime(col, row+1,
+								Date.from(((LocalDateTime)val).atZone(ZoneId.systemDefault()).toInstant()));
+						sheet.addCell(cell);
+					} else {
+						final Label cell = new Label(col, row+1, FormatterUtil.format(val));
+						sheet.addCell(cell);
+					}
 				}
 			}
-
-			if(openFileAfterSaving) {
-				try {
-					OpenFileLauncher.openURL(new File(saveAs).toURI().toURL());
-				} catch (MalformedURLException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					Toolkit.getDefaultToolkit().beep();
-				}
-			}
+			
+		} else {
+			final CSVTableModel tableModel = (CSVTableModel)dataTable.getModel();
+			
+			
 		}
 	}
 

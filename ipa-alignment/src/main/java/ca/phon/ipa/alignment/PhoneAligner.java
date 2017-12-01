@@ -1,653 +1,212 @@
-/*
- * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
- * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package ca.phon.ipa.alignment;
 
-import java.util.*;
+import java.util.List;
 
 import ca.phon.alignment.*;
 import ca.phon.ipa.*;
-import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.*;
 
-/**
- * Aligner for Phone objects with special contants setup for cost
- * susbstitutions.
- * 
- */
-public class PhoneAligner implements Aligner<IPAElement> {
+public class IndelPhoneAligner extends IndelAligner<IPAElement> {
+	
+	private IPATranscript targetRep;
+	
+	private IPATranscript actualRep;
+	
+	private List<IPATranscript> targetSylls;
+	
+	private List<IPATranscript> actualSylls;
+	
+	private boolean hasStressedSyllables = false;
 
-	/**
-	 * Creates a phone map
-	 * 
-	 * @param targetRep the target phonetic rep
-	 * @param actualRep the actual phonetic rep
-	 * @param rewardStress indicates weather the stress reward is used
-	 * @param rewardExactMatch
-	 * @param rewardStressedVowels
-	 * @param rewardPlace
-	 * @return Phone[2][] the mapping
-	 */
-	protected Integer[][] createPhoneMap(
-			IPATranscript targetRep, IPATranscript actualRep,
-			boolean rewardStress,
-			boolean rewardExactMatch,
-			boolean rewardStressedVowels,
-			boolean rewardPlace) {
-		final List<IPATranscript> targetSylls = targetRep.syllables();
-		final List<IPATranscript> actualSylls = actualRep.syllables();
+	public IndelPhoneAligner() {
+	}
+
+	@Override
+	protected int costSubstitute(IPAElement ele1, IPAElement ele2) {
+		int tally = 0;
 		
-		final IPATranscript targetPhones = targetRep.removePunctuation(true);
-		final IPATranscript actualPhones = actualRep.removePunctuation(true);
+		if( (ele1.getFeatureSet().hasFeature("Consonant")
+				&& ele2.getFeatureSet().hasFeature("Consonant")) ||
+			(ele1.getFeatureSet().hasFeature("Vowel") 
+				&& ele2.getFeatureSet().hasFeature("Vowel")) ) {
+			++tally;
+		} else {
+			return -1;
+		}
 		
-		int matrix[][];
-		int width, height, score;
-		Integer[][] retVal = new Integer[2][];
-		Stack<Integer> tp, ap;
+		final SyllableConstituentType t1 = ele1.getScType();
+		final SyllableConstituentType t2 = ele2.getScType();
+		if(t1 == t2) {
+			++tally;
+		} else {
+			--tally;
+		}
 		
-		width = targetPhones.length()+1;
-		height = actualPhones.length()+1;
-		tp = new Stack<Integer>();
-		ap = new Stack<Integer>();
-		
-		matrix = new int[width][height];
-		
-		// set the top row and left column to reflect the PIndel costs
-		matrix[0][0] = 0;
-		
-		for(int i = 1; i < width; i++)
-			matrix[i][0] = matrix[i-1][0] + this.costSkip(targetPhones.elementAt(i-1));
-		
-		for(int j = 1; j < height; j++)
-			matrix[0][j] = matrix[0][j-1] + this.costSkip(actualPhones.elementAt(j-1));
-		
-		// fill in the matrix
-		for(int i = 1; i < width; i++) {
-			for(int j = 1; j < height; j++) {
-				int values[] = new int[3];
-				
-				values[0] = matrix[i-1][j] + this.costSkip(targetPhones.elementAt(i-1));
-				values[1] = matrix[i][j-1] + this.costSkip(actualPhones.elementAt(j-1));
-				values[2] = matrix[i-1][j-1] + 
-					this.costSubstitute(targetRep, i-1,
-							actualRep, j-1,
-							targetPhones, actualPhones,
-							targetSylls, actualSylls,
-							rewardStress, rewardExactMatch,
-							rewardStressedVowels, rewardPlace);
-				
-				matrix[i][j] = this.max(values);
+		if(hasStressedSyllables) {
+			final SyllableStress s1 = stressForElement(ele1);
+			final SyllableStress s2 = stressForElement(ele2);
+			if(s1 == s2) {
+				++tally;
+			} else {
+				--tally;
 			}
 		}
 		
-		score = matrix[width-1][height-1];
-		
-		retVal = this.retreiveAlignment(
-				width-1, height-1, 0, matrix, targetRep, actualRep, 
-				targetPhones, actualPhones,
-				targetSylls, actualSylls,
-				tp, ap, rewardStress, rewardExactMatch, rewardStressedVowels, rewardPlace,score);
-		
-		
-		return retVal;
-	}
-	
-	/**
-	 * Return the cost to insert or delete a phone
-	 * 
-	 * @param p the phone
-	 * @return int
-	 */
-	protected int costSkip(IPAElement p) {
-		// check for indel
-		if(p == null || !isSpacer(p)) {
-			return PhoneAlignmentConstants.PIndel;
-		} else {
-			return PhoneAlignmentConstants.PSpacerToIndel;
+		final PhoneticProfile p1 = new PhoneticProfile(ele1);
+		final PhoneticProfile p2 = new PhoneticProfile(ele2);
+		if(p1.getDimensions().size() == 3) {
+			tally += checkDimension(p1, p2, PhoneDimension.PLACE);
+			tally += checkDimension(p1, p2, PhoneDimension.MANNER);
 		}
+		
+		return tally;
 	}
 	
-	/**
-	 * Return the max value
-	 * 
-	 * @param values
-	 * @return int
-	 */
-	private int max(int[] values) {
+	private int checkDimension(PhoneticProfile p1, PhoneticProfile p2, PhoneDimension dimension) {
 		int retVal = 0;
 		
-		for(int i = 0; i < values.length; i++)
-			if(values[i] > retVal)
-				retVal = values[i];
+		int v1 = p1.get(dimension);
+		int v2 = p2.get(dimension);
+		
+		if(v1 < 0 && v2 < 0) return retVal;
+		
+		if(v1 == v2)
+			retVal = 1;
+		else
+			retVal = -1;
 		
 		return retVal;
 	}
-	
-	/**
-	 * Return the similarity between two phones.
-	 * 
-	 * @param targetPhones
-	 * @param targetIndex
-	 * @param actualPhones
-	 * @param actualIndex
-	 * @param rewardStress
-	 * @param rewardExactMatch
-	 * @param rewardStressedVowels
-	 * @param rewardPlace
-	 * @return int
-	 */
-	protected int costSubstitute(
-			IPATranscript targetRep, int targetIndex,
-			IPATranscript actualRep, int actualIndex,
-			IPATranscript targetPhones, IPATranscript actualPhones,
-			List<IPATranscript> targetSylls, List<IPATranscript> actualSylls,
-			boolean rewardStress, boolean rewardExactMatch,
-			boolean rewardStressedVowels, boolean rewardPlace) {
-		int count = 0;
-		int tally = PhoneAlignmentConstants.FeatureMultiplier;
-		
-		final IPAElement a = (targetIndex < targetPhones.length() ? targetPhones.elementAt(targetIndex) : null);
-		final IPAElement b = (actualIndex < actualPhones.length() ? actualPhones.elementAt(actualIndex) : null);
-				
-		// check for spacers
-		if(isSpacer(a)) {
-			if(isSpacer(b)) {
-				if(PhoneAlignmentConstants.RSpacerToSpacer != 0) {
-					return PhoneAlignmentConstants.RSpacerToSpacer;
-				}
-			} else {
-				if(PhoneAlignmentConstants.PSpacerToPhone != 0) {
-					return PhoneAlignmentConstants.PSpacerToPhone;
-				}
-			}
-		}
-		
-		if(isSpacer(b)) {
-			if(isSpacer(a)) {
-				if(PhoneAlignmentConstants.RSpacerToSpacer != 0) {
-					return PhoneAlignmentConstants.RSpacerToSpacer;
-				}
-			} else {
-				if(PhoneAlignmentConstants.PSpacerToPhone != 0) {
-					return PhoneAlignmentConstants.PSpacerToPhone;
-				}
-			}
-		}
-		
-		// look for common features
-		FeatureSet interFs = FeatureSet.intersect(
-				a.getFeatureSet(), b.getFeatureSet());
-		count = interFs.size();
-		
-		if(
-				(a.getFeatureSet().hasFeature("Vowel") && 
-						b.getFeatureSet().hasFeature("Consonant"))
-				||
-				(a.getFeatureSet().hasFeature("Consonant") && 
-						b.getFeatureSet().hasFeature("Vowel"))
-		) {
-			if(PhoneAlignmentConstants.PVowelToConsonant != 0)
-				return PhoneAlignmentConstants.PVowelToConsonant;
-		}
-		
-		// reward for feature being in the same constituent
-		if(inSameSyllableConstituent(a,b)) {
-			tally += PhoneAlignmentConstants.RSyllableConstituent;
-		}
-		
-		if(isHelperVowel(a)
-				&& isVowel(b)
-				&& isInDiphthong(targetRep, targetIndex)) {
-			if(PhoneAlignmentConstants.PDiphthong != 0) {
-				return PhoneAlignmentConstants.PDiphthong;
-			}
-		} else if(isVowel(a)
-				&& isHelperVowel(b)
-				&& isInDiphthong(actualRep, actualIndex)) {
-			if(PhoneAlignmentConstants.PDiphthong != 0) {
-				return PhoneAlignmentConstants.PDiphthong;
-			}
-		}
-		
-		SyllableStress targetStress = getSyllableStress(targetRep, a, targetSylls);
-		SyllableStress actualStress = getSyllableStress(actualRep, b, actualSylls);
-		
-		// if we are rewarding stress ...
-		if(rewardStress) {
-			if(targetStress == SyllableStress.PrimaryStress && actualStress == SyllableStress.PrimaryStress) {
-				// match for primary stress
-				tally += (int)(
-						PhoneAlignmentConstants.RPrimaryStressMatch * PhoneAlignmentConstants.StressSyllableScore);
-				
-				if(isVowel(a) && isVowel(b)) {
-					tally += (int)(
-						PhoneAlignmentConstants.RStressedVowel * PhoneAlignmentConstants.StressSyllableScore);
-				}
-			} else if(
-					(targetStress == SyllableStress.PrimaryStress 
-							&& actualStress == SyllableStress.SecondaryStress) |
-					(targetStress == SyllableStress.SecondaryStress
-							&& actualStress == SyllableStress.PrimaryStress)) {
-				// match for different stress
-				tally += PhoneAlignmentConstants.RPrimaryToSecondaryStress;
-			} else if(targetStress == SyllableStress.SecondaryStress && actualStress == SyllableStress.SecondaryStress) {
-				// matched secondary stress
-				tally += PhoneAlignmentConstants.RSecondaryStressMatch;
-			}
-		}
-		
-		// check if we are rewarding only stressed vowels
-		if(rewardStressedVowels) {
-			if(isVowel(a) && isVowel(b)
-					&& targetStress == SyllableStress.PrimaryStress
-					&& actualStress == SyllableStress.PrimaryStress)
-				tally += PhoneAlignmentConstants.RStressedVowelOnly;
-		}
-		
-		if(isVowel(a) && isVowel(b))
-			tally += PhoneAlignmentConstants.RVowel;
-		
-		// check for same articulation
-		if(rewardPlace) {
-			FeatureSet intersection = FeatureSet.intersect(a.getFeatureSet(), b.getFeatureSet());
-			if(intersection.hasFeature("Coronal")
-					|| intersection.hasFeature("Labial")
-					|| intersection.hasFeature("Velar"))
-				tally += PhoneAlignmentConstants.RArticulationMatch;
-		}
-		
-		
-		// return tally multiplied by the number of common features
-		return count * tally;
+
+	@Override
+	protected int costSkip(IPAElement ele) {
+		return 0;
 	}
 	
-	/**
-	 * Get the alignment from the completed matrix
-	 * 
-	 * @param i the width of the matrix
-	 * @param j the height of the matrix
-	 * @param tally the total score accumulated in at each setp of the recursion
-	 * @param Matrix the completed dynamic algorithm
-	 * @param targetRep 
-	 * @param actualRep
-	 * @param tp the stack used to store the target alignment
-	 * @param ap the stack used to store the actual alignment
-	 * @param rewardStress
-	 * @param rewardExactMatch
-	 * @param rewardStressedVowels
-	 * @param rewardPlace
-	 * @param score
-	 */
-	protected Integer[][] retreiveAlignment(
-			int i, int j, int tally, int[][] matrix,
-			IPATranscript targetRep, IPATranscript actualRep,
-			IPATranscript targetPhones, IPATranscript actualPhones,
-			List<IPATranscript> targetSylls, List<IPATranscript> actualSylls,
-			Stack<Integer> tp, Stack<Integer> ap,
-			boolean rewardStress, boolean rewardExactMatch, 
-			boolean rewardStressedVowels, boolean rewardPlace,
-			int score) {
-		
-		
-		// the base case for our recursion, we are looking at a 0x0 matrix
-		if(i == 0 && j == 0) {
-			Integer[][] toReturn = new Integer[2][];
-			
-			Integer[] t = new Integer[tp.size()];
-			Integer[] a = new Integer[ap.size()];
-			
-			for(int k = 0; !tp.empty(); k++) {
-				t[k] = tp.pop();
-			}
-			
-			for(int l = 0; !ap.empty(); l++) {
-				a[l] = ap.pop();
-			}
-			
-			toReturn[0] = t;
-			toReturn[1] = a;
-			
-			return toReturn;
-		}
-		
-		// check if the maximum value is for a match
-		if(i > 0 && j > 0) {
-			int subVal = this.costSubstitute(
-					targetRep, i-1, actualRep, j-1,
-					targetPhones, actualPhones,
-					targetSylls, actualSylls,
-					rewardStress, rewardExactMatch, rewardStressedVowels,
-					rewardPlace);
-			
-			int chkVal = matrix[i-1][j-1] + subVal + tally;
-			
-			if(chkVal >= score) {
-				tp.push(i-1);
-				ap.push(j-1);
-				
-				int newTally = tally + subVal;
-				
-				return this.retreiveAlignment(
-						i-1, j-1, newTally,
-						matrix, targetRep, actualRep, 
-						targetPhones, actualPhones,
-						targetSylls, actualSylls,
-						tp, ap,
-						rewardStress, rewardExactMatch,
-						rewardStressedVowels, rewardPlace, score);
-			}
-		}
-		
-		// check if max value came from skipping target[i]
-		if(j > 0) {
-			int chkVal = matrix[i][j-1] + this.costSkip(actualPhones.elementAt(j-1)) + tally;
-			
-			if(chkVal >= score) {
-//				Phone stackPhone = null; // make an indel
-				
-				if(isSpacer(actualPhones.elementAt(j-1))) {
-					tp.push(AlignmentMap.SPACER_VALUE); // put the new phone
-				} else {
-					tp.push(AlignmentMap.INDEL_VALUE);
-				}
-				ap.push(j-1); // with actual
-				
-				int newTally = tally + this.costSkip(actualPhones.elementAt(j-1));
-				
-				return this.retreiveAlignment(
-						i, j-1, newTally,
-						matrix, targetRep, actualRep, 
-						targetPhones, actualPhones,
-						targetSylls, actualSylls,
-						tp, ap,
-						rewardStress, rewardExactMatch,
-						rewardStressedVowels, rewardPlace, score);
-			}
-		}
-		
-		// check if max value came from skipping actual[j]
-		if(i > 0) {
-//			Phone stackPhone = null; // make an indel
-			
-			if(isSpacer(targetPhones.elementAt(i-1))) {
-				ap.push(AlignmentMap.SPACER_VALUE);
-			} else {
-				ap.push(AlignmentMap.INDEL_VALUE);
-			}
-			
-			tp.push(i-1);
-//			ap.push(stackPhone);
-			
-			int newTally = tally + this.costSkip(targetPhones.elementAt(i-1));
-			
-			return this.retreiveAlignment(
-					i-1, j, newTally,
-					matrix, targetRep, actualRep, 
-					targetPhones, actualPhones,
-					targetSylls, actualSylls,
-					tp, ap,
-					rewardStress, rewardExactMatch,
-					rewardStressedVowels, rewardPlace, score);
-		} else {
-			// special case - i = 0, j = 1
-			// (_)XXXX
-			// (X)__XX
-			// We need to add an indel on the target side to align with the first
-			// actual phone
-			if(i == 0 && j > 0) {
-				tp.push(AlignmentMap.INDEL_VALUE);
-				ap.push(j-1);
-				
-				int newTally = tally + this.costSkip(targetPhones.elementAt(i));
-				
-				return this.retreiveAlignment(i, j-1, newTally, 
-						matrix, targetRep, actualRep,
-						targetPhones, actualPhones,
-						targetSylls, actualSylls,
-						tp, ap, 
-						rewardStress, rewardExactMatch, 
-						rewardStressedVowels, rewardPlace, score);
-			} else {
-				// return DEFAULT alignment
-				// NOTE: should never get here
-				//PhonLogger.warning("[Aligner] Could not determine an appropriate alignment, returning default.");
-				
-				
-				int maxLen = Math.max(targetPhones.length(), actualPhones.length());
-				Integer[][] toReturn = new Integer[2][];
-				toReturn[0] = new Integer[maxLen];
-				int tIndex = 0;
-				for( ; tIndex < targetPhones.length(); tIndex++)
-					toReturn[0][tIndex] = tIndex;
-				for(int pIndex = tIndex; pIndex < maxLen; pIndex++)
-					toReturn[0][pIndex] = AlignmentMap.INDEL_VALUE;
-				
-				toReturn[1] = new Integer[maxLen];
-				int aIndex = 0;
-				for( ; aIndex < actualPhones.length(); aIndex++)
-					toReturn[1][aIndex] = aIndex;
-				for(int pIndex = aIndex; pIndex < maxLen; pIndex++)
-					toReturn[1][pIndex] = AlignmentMap.INDEL_VALUE;
-				
-				return toReturn;
-			}
-		}
+	public List<IPATranscript> getTargetSyllables() {
+		return targetSylls;
+	}
+
+	public void setTargetSyllables(List<IPATranscript> targetSylls) {
+		this.targetSylls = targetSylls;
 	}
 	
-	/* Helper methods */
-	/**
-	 * Are the two phones in the same syllable constituent type?
-	 * 
-	 * @param a
-	 * @param b
-	 * @return boolean
-	 */
-	private boolean inSameSyllableConstituent(IPAElement targetPhone, IPAElement actualPhone) {
-		return targetPhone.getScType() == actualPhone.getScType();
+	public List<IPATranscript> getActualSyllables() {
+		return actualSylls;
 	}
 	
-	/**
-	 * Is the given phone a member of a diphthong?
-	 * @param phoReb
-	 * @param phoneIndex
-	 * @return boolean
-	 */
-	private boolean isInDiphthong(IPATranscript phoRep, int phoneIndex) {
-		boolean me = false;
-		boolean inFront = false;
-		boolean behind = false;
-		final AudiblePhoneVisitor soundPhoneVisitor = new AudiblePhoneVisitor();
-		phoRep.accept(soundPhoneVisitor);
-		IPAElement[] soundPhones = soundPhoneVisitor.getPhones().toArray(new IPAElement[0]);
-		
-		// get the phones
-		IPAElement p = null;
-		if(phoneIndex < soundPhones.length)
-			p = soundPhones[phoneIndex];
-		else return false;
-		
-		IPAElement i = null;
-		if(phoneIndex-1 > 0)
-			i = soundPhones[phoneIndex-1];
-		
-		IPAElement b = null;
-		if(phoneIndex+1 < soundPhones.length)
-			b = soundPhones[phoneIndex+1];
-		
-		if(isCoreVowel(p) || isHelperVowel(p))
-			me = true;
-		
-		if(isCoreVowel(i) || isHelperVowel(i))
-			inFront = true;
-		
-		if(isCoreVowel(b) || isHelperVowel(b))
-			behind = true;
-		
-		return  (
-				(me && inFront) || (me && behind) );
+	public void setActualSyllables(List<IPATranscript> actualSylls) {
+		this.actualSylls = actualSylls;
 	}
 	
-	/**
-	 * Get the syllable index of a phone
-	 * 
-	 * @param phoRep
-	 * @param p
-	 * @return int
-	 */
-	private int getSyllableIndex(IPATranscript phoRep, IPAElement p, List<IPATranscript> syllList) {
-		int retVal = -1;
+	public IPATranscript getTargetRep() {
+		return targetRep;
+	}
+
+	public void setTargetRep(IPATranscript targetRep) {
+		this.targetRep = targetRep;
+	}
+
+	public IPATranscript getActualRep() {
+		return actualRep;
+	}
+
+	public void setActualRep(IPATranscript actualRep) {
+		this.actualRep = actualRep;
+	}
+
+	private IPATranscript syllableContainingElement(IPAElement ele) {
+		for(IPATranscript syll:getTargetSyllables()) {
+			if(syll.indexOf(ele) >= 0)
+				return syll;
+		}
 		
-		if(p == null || phoRep == null || syllList == null)
-			return retVal;
-		for(int i = 0; i < syllList.size(); i++) {
-			IPATranscript syll = syllList.get(i);
-			if(syll.indexOf(p) >= 0) {
-				retVal = syll.indexOf(p);
+		for(IPATranscript syll:getActualSyllables()) {
+			if(syll.indexOf(ele) >= 0)
+				return syll;
+		}
+		
+		return null;
+	}
+	
+	private SyllableStress stressForElement(IPAElement ele) {
+		final IPATranscript syll = syllableContainingElement(ele);
+		return (syll != null ? syll.getExtension(SyllableStress.class) : null);
+	}
+	
+	public PhoneMap calculatePhoneAlignment(IPATranscript ipaTarget, IPATranscript ipaActual) {
+		setTargetRep(ipaTarget);
+		setActualRep(ipaActual);
+		
+		setTargetSyllables(ipaTarget.syllables());
+		setActualSyllables(ipaActual.syllables());
+		
+		for(IPATranscript syll:getTargetSyllables()) {
+			final SyllableStress stress = syll.getExtension(SyllableStress.class);
+			if(stress == SyllableStress.PrimaryStress || stress == SyllableStress.SecondaryStress) {
+				hasStressedSyllables = true;
 				break;
 			}
 		}
 		
+		final IPATranscript targetPhones = ipaTarget.audiblePhones();
+		final IPATranscript actualPhones = ipaActual.audiblePhones();
+		
+		final IPAElement targetEles[] = new IPAElement[targetPhones.length()];
+		for(int i = 0; i < targetPhones.length(); i++) targetEles[i] = targetPhones.elementAt(i);
+		
+		final IPAElement actualEles[] = new IPAElement[actualPhones.length()];
+		for(int i = 0; i < actualPhones.length(); i++) actualEles[i] = actualPhones.elementAt(i);
+		
+		final AlignmentMap<IPAElement> alignment = calculateAlignment(targetEles, actualEles);
+		
+		// sort mappings
+		Integer[] topAlignment = alignment.getTopAlignment();
+		Integer[] bottomAlignment = alignment.getBottomAlignment();
+//		Integer temp[][] = new Integer[2][];
+//		temp[0] = topAlignment;
+//		temp[1] = bottomAlignment;
+//		swapIndels(alignment);
+		
+		final PhoneMap retVal = new PhoneMap(ipaTarget, ipaActual);
+		retVal.setTopElements(targetEles);
+		retVal.setBottomElements(actualEles);
+		retVal.setTopAlignment(topAlignment);
+		retVal.setBottomAlignment(bottomAlignment);
+		
 		return retVal;
 	}
-
-	/**
-	 * Tells the stress of the syllable owning the phone.
-	 * @param phoRep
-	 * @param p
-	 * @return SyllableStress
-	 */
-	private SyllableStress getSyllableStress(IPATranscript phoRep, IPAElement p, List<IPATranscript> syllList) {
-		int syllIndex = getSyllableIndex(phoRep, p, syllList);
+	
+//	/**
+//	 * Swaps cases of adjacent indels where the ordering should be reversed
+//	 * 
+//	 * @param alignment
+//	 */
+//	private void swapIndels(Integer[][] alignment) {
+//		int lastTop = -2;
+//		int lastBottom = -2;
+//		
+//		for(int i = 0; i < alignment[0].length; i++) {
+//			int top = alignment[0][i];
+//			int bottom = alignment[1][i];
+//			if(i > 0) {
+//				// check for need to swap
+//				if(lastBottom == -1 && top == -1
+//						&& lastTop >=0 && bottom >= 0) {
+//					if(bottom < lastTop) {
+//						// swap
+//						alignment[0][i-1] = top;
+//						alignment[1][i-1] = bottom;
+//						
+//						alignment[0][i] = lastTop;
+//						alignment[1][i] = lastBottom;
+//					}
+//				}
+//			}
+//			
+//			lastTop = top;
+//			lastBottom = bottom;
+//		}
+//	}
 		
-		if(syllIndex == -1 || syllIndex >= syllList.size())
-			return SyllableStress.NoStress;
-		
-		IPATranscript syll = syllList.get(syllIndex);
-		if(syll.length() == 0) return SyllableStress.NoStress;
-		
-		if(syll.elementAt(0).getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
-			if(syll.elementAt(0).toString().equals(SyllableStress.PrimaryStress.getIpa()+""))
-				return SyllableStress.PrimaryStress;
-			else if(syll.elementAt(0).toString().equals(SyllableStress.SecondaryStress.getIpa() + ""))
-				return SyllableStress.SecondaryStress;
-		}
-		
-		return SyllableStress.NoStress;
-	}
-	
-	/**
-	 * For alignment purposes, define a 'spacer' as a phone
-	 * with value " "
-	 */
-	private boolean isSpacer(IPAElement p) {
-		if(isIndel(p)) return false;
-		return p.toString().equals(" ");
-	}
-	
-	private boolean isIndel(IPAElement p) {
-		return p == null;
-	}
-	
-	private boolean isVowel(IPAElement p) {
-		if(isIndel(p)) return false;
-		return p.getFeatureSet().hasFeature("Vowel");
-	}
-	
-	private boolean isConsonant(IPAElement p) {
-		if(isIndel(p)) return false;
-		return p.getFeatureSet().hasFeature("Consonant");
-	}
-	
-	private boolean isGlide(IPAElement p) {
-		if(isIndel(p)) return false;
-		return p.getFeatureSet().hasFeature("Glide");
-	}
-	
-	private boolean isHighLaxVowel(IPAElement p) {
-		if(isIndel(p)) return false;
-		return (
-				isVowel(p)
-				&& p.getFeatureSet().hasFeature("High")
-				&& !p.getFeatureSet().hasFeature("ATR")
-				);
-	}
-	
-	private boolean isTenseVowel(IPAElement p) {
-		if(isIndel(p)) return false;
-		return (
-				isVowel(p)
-				&& !isHighLaxVowel(p));
-	}
-	
-	private boolean isLowVowel(IPAElement p) {
-		if(isIndel(p)) return false;
-		
-		return (
-				isVowel(p)
-				&& p.getFeatureSet().hasFeature("Low"));
-	}
-	
-	private boolean isCoreVowel(IPAElement p) {
-		if(isIndel(p)) return false;
-		
-		if(isVowel(p)) {
-			if(p.getFeatureSet().hasFeature("High")) {
-				if(p.getFeatureSet().hasFeature("ATR"))
-					return true;
-				else
-					return false;
-			}
-			
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	private boolean isHelperVowel(IPAElement p) {
-		if(isIndel(p)) return false;
-		
-		return (
-				isGlide(p) || isHighLaxVowel(p));
-	}
-	
-	private PhoneMap lastAlignmentMap = null;
-	@Override
-	public AlignmentMap<IPAElement> calculateAlignment(IPAElement[] top, IPAElement[] bottom) {
-		lastAlignmentMap = calculatePhoneMap(new IPATranscript(top), new IPATranscript(bottom));
-		return getAlignmentMap();
-	}
-	
-	public PhoneMap calculatePhoneMap(IPATranscript target, IPATranscript actual) {
-		final Integer[][] alignment = createPhoneMap(target, actual, true, true, true, true);
-				
-		final PhoneMap pm = new PhoneMap(target, actual);
-		pm.setTopAlignment(alignment[0]);
-		pm.setBottomAlignment(alignment[1]);
-	
-		lastAlignmentMap = pm;
-		
-		return pm;
-	}
-
-	@Override
-	public AlignmentMap<IPAElement> getAlignmentMap() {
-		return lastAlignmentMap;
-	}
-
 }

@@ -21,7 +21,7 @@ package ca.phon.app.log.actions;
 import java.awt.event.ActionEvent;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.BufferWindow;
+import ca.phon.app.log.BufferPanelContainer;
 
 public class CloseAllBuffersAction extends HookableAction {
 
@@ -31,8 +31,12 @@ public class CloseAllBuffersAction extends HookableAction {
 	
 	private final static String SHORT_DESC = "Close all open buffers";
 	
-	public CloseAllBuffersAction() {
+	private BufferPanelContainer container;
+	
+	public CloseAllBuffersAction(BufferPanelContainer container) {
 		super();
+		
+		this.container = container;
 		
 		putValue(HookableAction.NAME, CMD_NAME);
 		putValue(HookableAction.SHORT_DESCRIPTION, SHORT_DESC);
@@ -40,8 +44,7 @@ public class CloseAllBuffersAction extends HookableAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final BufferWindow window = BufferWindow.getInstance();
-		window.closeAllBuffers();
+		this.container.closeAllBuffers();
 	}
 
 }

@@ -30,11 +30,9 @@ import javax.swing.table.AbstractTableModel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.log.actions.SaveAllBuffersAction;
+import ca.phon.app.log.actions.*;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.ByteSize;
+import ca.phon.util.*;
 import ca.phon.util.icons.*;
 
 /**
@@ -57,7 +55,18 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	private JComboBox<String> bufferNameBox;
 	private JButton toggleListButton;
 	
+	private JButton saveBufferButton;
+	
+	private JButton saveAsWorkbookButton;
+	
+	private JCheckBox openFileAfterSavingBox;
+	public final static String OPEN_AFTER_SAVING_PROP = MultiBufferPanel.class.getName() + ".openFileAfterSaving";
+	private boolean openFileAfterSaving =
+			PrefHelper.getBoolean(OPEN_AFTER_SAVING_PROP, Boolean.TRUE);
+	
 	private LinkedHashMap<String, BufferPanel> bufferPanelMap = new LinkedHashMap<>();
+	
+	private EventListenerList listenerList = new EventListenerList();
 	
 	public MultiBufferPanel() {
 		super();
@@ -71,41 +80,16 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		toolbar = setupToolbar();
 		add(toolbar, BorderLayout.NORTH);
 		
-		final JButton saveAllButton = new JButton(new SaveAllBuffersAction(this));
-		
-		final ImageIcon closeIcon = IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
-		final PhonUIAction closeBuffersAct = new PhonUIAction(this, "onRemoveSelectedBuffers");
-		closeBuffersAct.putValue(PhonUIAction.SMALL_ICON, closeIcon);
-		closeBuffersAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Close selected buffers");
-		closeBuffersAct.putValue(PhonUIAction.NAME, "Close");
-		final JButton closeBtn = new JButton(closeBuffersAct);
-		
 		bufferList = setupTable();
 		final JScrollPane scroller = new JScrollPane(bufferList);
-		
-		final FormLayout layout = new FormLayout(
-				"left:pref, fill:200px:grow, right:pref, pref",
-				"pref, pref, pref, fill:pref:grow");
-		final CellConstraints cc = new CellConstraints();
-		final JPanel leftPanel = new JPanel(layout);
-		
-		leftPanel.add(saveAllButton, cc.xy(1, 1));
-		leftPanel.add(closeBtn, cc.xy(3, 1));
-		leftPanel.add(scroller, cc.xywh(1, 2, 3, 3));
 		
 		cardLayout = new CardLayout();
 		bufferPanel = new JPanel(cardLayout);
 		bufferPanel.add(createNoSelectionPanel(), "no_selection");
 		
-		leftPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-		
-//		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, bufferPanel);
-//		splitPane.setOneTouchExpandable(true);		
-//		splitPane.setResizeWeight(0.0);
-		
 		listPane = new JXCollapsiblePane(Direction.LEFT);
 		listPane.getContentPane().setLayout(new BorderLayout());
-		listPane.getContentPane().add(leftPanel, BorderLayout.CENTER);
+		listPane.getContentPane().add(scroller, BorderLayout.CENTER);
 		listPane.setCollapsed(true);
 		
 		add(listPane, BorderLayout.WEST);
@@ -159,6 +143,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		bufferTableModel.fireBufferAdded();
 		bufferPanel.add(bp, bufferName);
 		
+		fireBufferAdded(bufferName);
+		
 		selectBuffer(bufferName);
 		
 		return bp;
@@ -184,6 +170,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		if(bp != null) {
 			bufferPanel.remove(bp);
 			bufferPanelMap.remove(bufferName);
+			
+			fireBufferRemoved(bufferName);
 		}
 	}
 	
@@ -199,6 +187,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			
 			if(bufferNameBox.getSelectedItem() != bufferName) {
 				bufferNameBox.setSelectedItem(bufferName);
+				
+				fireBufferSelected(bufferName);
 			}
 		}
 	}
@@ -217,6 +207,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		}
 	}
 	
+	@Override
 	public void closeAllBuffers() {
 		for(String name:bufferPanelMap.keySet()) {
 			final BufferPanel bp = bufferPanelMap.get(name);
@@ -231,13 +222,32 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		final JToolBar retVal = new JToolBar();
 		retVal.setFloatable(false);
 		
+		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction(this);
+		saveBufferButton = new JButton(saveAct);
+		retVal.add(saveBufferButton);
+		
+		final SaveBufferAsWorkbookAction saveAsWorkbookAct = new SaveBufferAsWorkbookAction(this);
+		saveAsWorkbookButton = new JButton(saveAsWorkbookAct);
+		retVal.add(saveAsWorkbookButton);
+				
+		openFileAfterSavingBox = new JCheckBox("Open after saving");
+		openFileAfterSavingBox.setSelected(openFileAfterSaving);
+		openFileAfterSavingBox.addChangeListener( e -> {
+			MultiBufferPanel.this.openFileAfterSaving = openFileAfterSavingBox.isSelected();
+			PrefHelper.getUserPreferences().putBoolean(OPEN_AFTER_SAVING_PROP, MultiBufferPanel.this.openFileAfterSaving);
+		});
+		retVal.add(openFileAfterSavingBox);
+		retVal.addSeparator();
+		
+		final ImageIcon toggleIcn = 
+				IconManager.getInstance().getIcon("actions/view-list-text", IconSize.SMALL);
 		final PhonUIAction toggleListAct = new PhonUIAction(this, "toggleList");
-		toggleListAct.putValue(PhonUIAction.NAME, "Show/hide list");
-		toggleListAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle buffer list visibility");
+		toggleListAct.putValue(PhonUIAction.NAME, "");
+		toggleListAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle buffer list");
+		toggleListAct.putValue(PhonUIAction.SMALL_ICON, toggleIcn);
 		toggleListButton = new JButton(toggleListAct);
 		
 		retVal.add(toggleListButton);
-		retVal.addSeparator();
 		
 		retVal.add(new JLabel("Buffer:"));
 		bufferNameBox = new JComboBox<>(new BufferBoxModel());
@@ -376,6 +386,54 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			bufferPanelMap.put(bp.getBufferName(), bp);
 		}
 		
+	}
+
+	@Override
+	public void addListener(BufferPanelContainerListener listener) {
+		listenerList.add(BufferPanelContainerListener.class, listener);
+	}
+
+	@Override
+	public void removeListener(BufferPanelContainerListener listener) {
+		listenerList.remove(BufferPanelContainerListener.class, listener);
+	}
+
+	@Override
+	public List<BufferPanelContainerListener> getListeners() {
+		return Arrays.asList(listenerList.getListeners(BufferPanelContainerListener.class));
+	}
+	
+	public void fireBufferAdded(String bufferName) {
+		for(BufferPanelContainerListener listener:getListeners()) {
+			listener.bufferAdded(bufferName);
+		}
+	}
+	
+	public void fireBufferRemoved(String bufferName) {
+		for(BufferPanelContainerListener listener:getListeners()) {
+			listener.bufferRemoved(bufferName);
+		}
+	}
+
+	@Override
+	public void addSelectionListener(BufferPanelSelectionListener listener) {
+		listenerList.add(BufferPanelSelectionListener.class, listener);
+	}
+
+	@Override
+	public void removeSelectionListener(BufferPanelSelectionListener listener) {
+		listenerList.remove(BufferPanelSelectionListener.class, listener);
+	}
+
+	@Override
+	public List<BufferPanelSelectionListener> getSelectionListeners() {
+		return Arrays.asList(listenerList.getListeners(BufferPanelSelectionListener.class));
+	}
+	
+	public void fireBufferSelected(String bufferName) {
+		for(BufferPanelSelectionListener listener:getSelectionListeners()) {
+			listener.bufferSelected(bufferName);
+		}
 	}
 
 }

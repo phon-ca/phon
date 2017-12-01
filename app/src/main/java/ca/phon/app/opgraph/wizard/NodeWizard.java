@@ -43,7 +43,7 @@ import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.*;
-import ca.phon.app.log.actions.SaveAllBuffersAction;
+import ca.phon.app.log.actions.*;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
@@ -168,26 +168,30 @@ public class NodeWizard extends WizardFrame {
 		super.setJMenuBar(menuBar);
 
 		final MenuBuilder builder = new MenuBuilder(menuBar);
-		builder.addSeparator("File@1", "report");
+		builder.addSeparator("File@1", "saveBuffers");
 
-		final PhonUIAction saveAllAct = new PhonUIAction(this, "onSaveAll");
-		saveAllAct.putValue(PhonUIAction.NAME, "Save all buffers to folder...");
-		saveAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save all buffers to a folder.");
+		final SaveAllBuffersAction saveAllAct = new SaveAllBuffersAction(getBufferPanel());
 		saveAllAct.putValue(PhonUIAction.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAllAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-		builder.addItem("File@report", saveAllAct);
-
-		final PhonUIAction saveAct = new PhonUIAction(this, "onSaveBuffer");
-		saveAct.putValue(PhonUIAction.NAME, "Save buffer...");
-		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save selected buffer to file.");
+		builder.addItem("File@saveBuffers", saveAllAct);
+		
+		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction(getBufferPanel());
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
-		builder.addItem("File@report", saveAct);
-
-		builder.addSeparator("File@Save all buffers to folder...", "other");
+		builder.addItem("File@saveBuffers", saveAct);
+		
+		builder.addSeparator("File@"+saveAllAct.getValue(PhonUIAction.NAME), "saveAsExcel");
+		
+		final SaveTablesToWorkbookAction saveAllToExcelAct = new SaveTablesToWorkbookAction(getBufferPanel());
+		builder.addItem("File@saveAsExcel", saveAllToExcelAct);
+		
+		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
+		builder.addItem("File@saveAsExcel", saveAsExcelAct);
+		
+		builder.addSeparator("File@"+saveAllToExcelAct.getValue(PhonUIAction.NAME), "openProject");
 	}
 
 	@Override

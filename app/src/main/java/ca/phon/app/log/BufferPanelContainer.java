@@ -18,7 +18,7 @@
  */
 package ca.phon.app.log;
 
-import java.util.Collection;
+import java.util.*;
 
 public interface BufferPanelContainer {
 
@@ -33,5 +33,20 @@ public interface BufferPanelContainer {
 	public void selectBuffer(String name);
 	
 	public BufferPanel getCurrentBuffer();
+	
+	public void closeAllBuffers();
+	
+	/* Listeners */
+	public void addListener(BufferPanelContainerListener listener);
+	
+	public void removeListener(BufferPanelContainerListener listener);
+	
+	public List<BufferPanelContainerListener> getListeners();
+	
+	public void addSelectionListener(BufferPanelSelectionListener listener);
+	
+	public void removeSelectionListener(BufferPanelSelectionListener listener);
+	
+	public List<BufferPanelSelectionListener> getSelectionListeners();
 	
 }
