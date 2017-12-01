@@ -68,6 +68,7 @@ public class StepIntoAction extends OpgraphEditorAction {
 			if(context.hasNext()) {
 				context.stepInto();
 				document.updateDebugState(context);
+				getEditor().getModel().getCanvas().updateDebugState(context);
 			}
 		}
 	}

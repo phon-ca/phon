@@ -54,6 +54,8 @@ public class StopAction extends OpgraphEditorAction {
 		final GraphDocument document = getEditor().getModel().getDocument();
 		if(document != null) {
 			document.setProcessingContext(null);
+			document.updateDebugState(null);
+			getEditor().getModel().getCanvas().updateDebugState(null);
 		}
 	}
 

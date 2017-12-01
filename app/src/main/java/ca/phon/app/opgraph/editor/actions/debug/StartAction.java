@@ -89,7 +89,7 @@ public class StartAction extends OpgraphEditorAction {
 					if(context.hasNext()) {
 						try {
 							context.stepAll();
-							SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
+							//SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
 						} catch (ProcessingException pe) {
 							document.updateDebugState(
 									(pe.getContext() != null ? pe.getContext() : context));

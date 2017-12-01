@@ -69,7 +69,11 @@ public class StepAction extends OpgraphEditorAction {
 				if(context.hasNext()) {
 					context.step();
 					
-					SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
+					
+					SwingUtilities.invokeLater( () -> {
+						document.updateDebugState(context);
+						getEditor().getModel().getCanvas().updateDebugState(context);
+					});
 				}
 			}
 		};

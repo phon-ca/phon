@@ -68,6 +68,7 @@ public class StepOutOfAction extends OpgraphEditorAction {
 			if(context.hasNext()) {
 				context.stepOutOf();
 				document.updateDebugState(context);
+				getEditor().getModel().getCanvas().updateDebugState(context);
 			}
 		}
 	}
