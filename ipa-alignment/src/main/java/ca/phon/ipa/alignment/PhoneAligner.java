@@ -6,7 +6,7 @@ import ca.phon.alignment.*;
 import ca.phon.ipa.*;
 import ca.phon.syllable.*;
 
-public class IndelPhoneAligner extends IndelAligner<IPAElement> {
+public class PhoneAligner extends IndelAligner<IPAElement> {
 	
 	private IPATranscript targetRep;
 	
@@ -18,7 +18,7 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 	
 	private boolean hasStressedSyllables = false;
 
-	public IndelPhoneAligner() {
+	public PhoneAligner() {
 	}
 
 	@Override
@@ -26,8 +26,9 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 		int tally = 0;
 		
 		if( (ele1.getFeatureSet().hasFeature("Consonant")
-				&& ele2.getFeatureSet().hasFeature("Consonant")) ||
-			(ele1.getFeatureSet().hasFeature("Vowel") 
+				&& ele2.getFeatureSet().hasFeature("Consonant")) ) {
+			++tally;
+		} else if( (ele1.getFeatureSet().hasFeature("Vowel") 
 				&& ele2.getFeatureSet().hasFeature("Vowel")) ) {
 			++tally;
 		} else {
@@ -54,10 +55,19 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 		
 		final PhoneticProfile p1 = new PhoneticProfile(ele1);
 		final PhoneticProfile p2 = new PhoneticProfile(ele2);
+		int featureTally = 0;
 		if(p1.getDimensions().size() == 3) {
-			tally += checkDimension(p1, p2, PhoneDimension.PLACE);
-			tally += checkDimension(p1, p2, PhoneDimension.MANNER);
+			featureTally += checkDimension(p1, p2, PhoneDimension.PLACE);
+			featureTally += checkDimension(p1, p2, PhoneDimension.MANNER);
+//			featureTally += checkDimension(p1, p2, PhoneDimension.VOICING);
+		} else {
+			featureTally += checkDimension(p1, p2, PhoneDimension.HEIGHT);
+			featureTally += checkDimension(p1, p2, PhoneDimension.BACKNESS);
+			featureTally += checkDimension(p1, p2, PhoneDimension.TENSENESS);
+//			featureTally += checkDimension(p1, p2, PhoneDimension.ROUNDING);
 		}
+		// if no features match, only subtract 1
+		tally += Math.max(-1, featureTally);
 		
 		return tally;
 	}
@@ -134,6 +144,27 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 		return (syll != null ? syll.getExtension(SyllableStress.class) : null);
 	}
 	
+	/**
+	 * Calculate phone alignment.
+	 * 
+	 * Method keep for API compatibility with older plug-ins/scripts.
+	 * 
+	 * @deprecated
+	 * @param ipaTarget
+	 * @param ipaActual
+	 * @return
+	 */
+	public PhoneMap calculatePhoneMap(IPATranscript ipaTarget, IPATranscript ipaActual) {
+		return calculatePhoneAlignment(ipaTarget, ipaActual);
+	}
+	
+	/**
+	 * Calculate phone alignment
+	 * 
+	 * @param ipaTarget
+	 * @param ipaActual
+	 * @return
+	 */
 	public PhoneMap calculatePhoneAlignment(IPATranscript ipaTarget, IPATranscript ipaActual) {
 		setTargetRep(ipaTarget);
 		setActualRep(ipaActual);
@@ -163,10 +194,6 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 		// sort mappings
 		Integer[] topAlignment = alignment.getTopAlignment();
 		Integer[] bottomAlignment = alignment.getBottomAlignment();
-//		Integer temp[][] = new Integer[2][];
-//		temp[0] = topAlignment;
-//		temp[1] = bottomAlignment;
-//		swapIndels(alignment);
 		
 		final PhoneMap retVal = new PhoneMap(ipaTarget, ipaActual);
 		retVal.setTopElements(targetEles);
@@ -177,36 +204,4 @@ public class IndelPhoneAligner extends IndelAligner<IPAElement> {
 		return retVal;
 	}
 	
-//	/**
-//	 * Swaps cases of adjacent indels where the ordering should be reversed
-//	 * 
-//	 * @param alignment
-//	 */
-//	private void swapIndels(Integer[][] alignment) {
-//		int lastTop = -2;
-//		int lastBottom = -2;
-//		
-//		for(int i = 0; i < alignment[0].length; i++) {
-//			int top = alignment[0][i];
-//			int bottom = alignment[1][i];
-//			if(i > 0) {
-//				// check for need to swap
-//				if(lastBottom == -1 && top == -1
-//						&& lastTop >=0 && bottom >= 0) {
-//					if(bottom < lastTop) {
-//						// swap
-//						alignment[0][i-1] = top;
-//						alignment[1][i-1] = bottom;
-//						
-//						alignment[0][i] = lastTop;
-//						alignment[1][i] = lastBottom;
-//					}
-//				}
-//			}
-//			
-//			lastTop = top;
-//			lastBottom = bottom;
-//		}
-//	}
-		
 }
