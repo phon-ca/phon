@@ -42,11 +42,9 @@ public interface Session extends IExtendable {
 	/** Get the language */
 	public String getLanguage();
 	
-	
 	/** Get/Set the media file location */
 	public String getMediaLocation();
-	
-	
+
 	/** Get/Set the tier view */
 	public List<TierViewItem> getTierView();
 	
