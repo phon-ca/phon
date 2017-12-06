@@ -20,13 +20,15 @@ package ca.phon.app.log.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
+import java.io.*;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.*;
 
 public class SaveCurrentBufferAction extends HookableAction {
@@ -42,9 +44,9 @@ public class SaveCurrentBufferAction extends HookableAction {
 	
 	private final static String ICON = "actions/document-save-as";
 	
-	private final BufferPanelContainer container;
+	private final MultiBufferPanel container;
 
-	public SaveCurrentBufferAction(BufferPanelContainer bufferPanel) {
+	public SaveCurrentBufferAction(MultiBufferPanel bufferPanel) {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
@@ -83,7 +85,9 @@ public class SaveCurrentBufferAction extends HookableAction {
 						panel.writeToCSV(saveAs, "UTF-8");
 					}
 					
-					
+					if(this.container.isOpenAfterSaving()) {
+						OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
+					}					
 				} catch (IOException ex) {
 					Toolkit.getDefaultToolkit().beep();
 					LogUtil.severe(ex);

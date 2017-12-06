@@ -96,6 +96,10 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		add(bufferPanel, BorderLayout.CENTER);
 	}
 	
+	public boolean isOpenAfterSaving() {
+		return this.openFileAfterSaving;
+	}
+	
 	public boolean isListShowing() {
 		return !this.listPane.isCollapsed();
 	}

@@ -2,7 +2,7 @@ package ca.phon.app.log.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
+import java.io.*;
 
 import javax.swing.ImageIcon;
 
@@ -10,7 +10,11 @@ import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.*;
+import jxl.Workbook;
+import jxl.write.*;
 
 public class SaveBufferAsWorkbookAction extends HookableAction {
 
@@ -20,13 +24,13 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 	
 	private final static String SHORT_DESC = "Save buffer to Excel\u2122 workbook";
 	
-	private final BufferPanelContainer container;
+	private final MultiBufferPanel container;
 
-	public SaveBufferAsWorkbookAction(BufferPanelContainer bufferPanel) {
+	public SaveBufferAsWorkbookAction(MultiBufferPanel bufferPanel) {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		
-		ImageIcon excelIcn = IconManager.getInstance().getSystemIconForFileType("xls", IconSize.SMALL);
+		ImageIcon excelIcn = IconManager.getInstance().getSystemIconForFileType("xlsx", IconSize.SMALL);
 		putValue(SMALL_ICON, excelIcn);
 		
 		this.container = bufferPanel;
@@ -45,12 +49,22 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 		props.setListener( (e) -> {
 			if(e.getDialogResult() == NativeDialogEvent.OK_OPTION && e.getDialogData() != null) {
 				final String saveAs = e.getDialogData().toString();
-				
 				try {
+					final WritableWorkbook workbook = Workbook.createWorkbook(new File(saveAs));
 					if(panel.isShowingTable()) {
-						panel.writeToExcelWorkbook(saveAs);
+						panel.createSheetInExcelWorkbook(workbook);
+					} else if(panel.isShowingHtml()) {
+						String html = panel.getLogBuffer().getText();
+						final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter((MultiBufferPanel)this.container);
+						writer.writeToWorkbook(workbook, html);
 					}
-				} catch (IOException ex) {
+					workbook.write();
+					workbook.close();
+				
+					if(this.container.isOpenAfterSaving()) {
+						OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
+					}
+				} catch (IOException | WriteException ex) {
 					Toolkit.getDefaultToolkit().beep();
 					LogUtil.severe(ex);
 				}

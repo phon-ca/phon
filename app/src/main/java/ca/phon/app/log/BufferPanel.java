@@ -22,9 +22,7 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
-import java.lang.Number;
 import java.lang.ref.WeakReference;
-import java.time.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -43,7 +41,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.*;
 import ca.phon.extensions.*;
-import ca.phon.formatter.FormatterUtil;
 import ca.phon.functor.Functor;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
@@ -63,7 +60,6 @@ import javafx.scene.Scene;
 import javafx.scene.web.WebView;
 import jxl.Workbook;
 import jxl.write.*;
-import jxl.write.Label;
 import jxl.write.biff.RowsExceededException;
 import netscape.javascript.JSObject;
 
@@ -511,44 +507,10 @@ public class BufferPanel extends JPanel implements IExtendable {
 		
 		if(getUserObject() != null && getUserObject() instanceof DefaultTableDataSource) {
 			final DefaultTableDataSource table = (DefaultTableDataSource)getUserObject();
-			
-			// write header
-			WritableCellFormat cFormat = new WritableCellFormat();
-            WritableFont font = new WritableFont(WritableFont.ARIAL, WritableFont.DEFAULT_POINT_SIZE, WritableFont.BOLD);
-            cFormat.setFont(font);
-			for(int i = 0; i < table.getColumnCount(); i++) {
-				final Label label = new Label(i, 0, table.getColumnTitle(i), cFormat);
-				sheet.addCell(label);
-			}
-			
-			for(int row = 0; row < table.getRowCount(); row++) {
-				final Object rowData[] = table.getRow(row);
-				for(int col = 0; col < table.getColumnCount(); col++) {
-					Object val = rowData[col];
-					
-					if(val != null && val instanceof Number) {
-						final jxl.write.Number cell = 
-								new jxl.write.Number(col, row+1, ((Number)val).doubleValue());
-						sheet.addCell(cell);
-					} else if (val instanceof LocalDate) {
-						final DateTime cell = new DateTime(col, row+1, 
-								Date.from(((LocalDate)val).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-						sheet.addCell(cell);
-					} else if(val instanceof LocalDateTime) {
-						final DateTime cell = new DateTime(col, row+1,
-								Date.from(((LocalDateTime)val).atZone(ZoneId.systemDefault()).toInstant()));
-						sheet.addCell(cell);
-					} else {
-						final Label cell = new Label(col, row+1, FormatterUtil.format(val));
-						sheet.addCell(cell);
-					}
-				}
-			}
-			
+			WorkbookUtils.addTableToSheet(sheet, 0, table);
 		} else {
 			final CSVTableModel tableModel = (CSVTableModel)dataTable.getModel();
-			
-			
+			WorkbookUtils.addTableToSheet(sheet, 0, tableModel);			
 		}
 	}
 

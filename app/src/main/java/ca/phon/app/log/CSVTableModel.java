@@ -62,7 +62,7 @@ public class CSVTableModel extends AbstractTableModel {
 		}
 		return colName;
 	}
-
+	
 	@Override
 	public int getRowCount() {
 		if(data.size() == 0) return 0;
