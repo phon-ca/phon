@@ -21,6 +21,8 @@ package ca.phon.ipamap;
 import java.awt.event.*;
 import java.util.Map;
 
+import javax.swing.JFrame;
+
 import ca.phon.plugin.*;
 
 @PhonPlugin(name="default")
@@ -52,10 +54,14 @@ public class IPAMapEP implements IPluginEntryPoint {
 			});
 			_window = window;
 		}
-
-		if(_window.isVisible())
-			_window.setVisible(false);
-		else {
+		
+		if(_window.isVisible()) {
+			if(_window.getExtendedState() == JFrame.ICONIFIED) {
+				_window.setExtendedState(JFrame.NORMAL);
+			} else {
+				_window.setVisible(false);
+			}
+		} else {
 			_window.showWindow();
 			_window.toFront();
 		}
