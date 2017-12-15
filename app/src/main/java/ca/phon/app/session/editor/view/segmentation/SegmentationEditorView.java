@@ -72,7 +72,7 @@ public class SegmentationEditorView extends EditorView {
 	/**
 	 * Combo box for selecting segmentation mode
 	 */
-	private JComboBox modeBox;
+	private JComboBox<SegmentationMode> modeBox;
 	
 	/**
 	 * Media player panel
@@ -103,7 +103,7 @@ public class SegmentationEditorView extends EditorView {
 		segmentLabel.setCurrentTime(0L);
 		segmentLabel.lockSegmentStartTime(-1L);
 
-		modeBox = new JComboBox(SegmentationMode.values());
+		modeBox = new JComboBox<>(SegmentationMode.values());
 		modeBox.setSelectedItem(SegmentationMode.INSERT_AFTER_CURRENT);
 
 		JPanel topPanel = new JPanel();
