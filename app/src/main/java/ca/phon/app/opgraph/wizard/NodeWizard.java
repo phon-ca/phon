@@ -515,11 +515,11 @@ public class NodeWizard extends WizardFrame {
 			}
 
 			processor.stepAll();
-
+			
 			// if the graph has a 'Report Suffix' template, add it to the 'Report Template' buffer
 			final NodeWizardReportTemplate reportSuffixTemplate = ext.getReportTemplate("Report Suffix");
 			final String reportSuffix = ( reportSuffixTemplate != null ? reportSuffixTemplate.getTemplate() : "");
-			if(reportPrefix.trim().length() > 0) {
+			if(reportSuffix.trim().length() > 0) {
 				final BufferPanel reportTemplateBuffer =
 						(bufferPanel.getBufferNames().contains(reportTemplateBufferName) ? bufferPanel.getBuffer(reportTemplateBufferName) :
 							bufferPanel.createBuffer(reportTemplateBufferName) );
@@ -537,8 +537,6 @@ public class NodeWizard extends WizardFrame {
 			} else {
 				template = reportTemplateBuffer.getLogBuffer().getText();
 			}
-
-
 
 			// create temp file
 			File tempFile = null;
