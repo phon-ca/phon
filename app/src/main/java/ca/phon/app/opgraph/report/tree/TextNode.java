@@ -19,7 +19,12 @@ public class TextNode extends ReportTreeNode {
 
 	@Override
 	public String getReportTemplateBlock() {
-		return this.text;
+		final StringBuffer buffer = new StringBuffer();
+		
+		buffer.append("#h").append(getLevel()).append("(\"").append(getTitle()).append("\")\n\n");
+		buffer.append(getText());
+		
+		return buffer.toString();
 	}
 
 }

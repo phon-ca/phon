@@ -21,4 +21,21 @@ public class ReportTree {
 		return this.root;
 	}
 	
+	public String getReportTemplate() {
+		final StringBuffer buffer = new StringBuffer();
+		
+		for(ReportTreeNode reportNode:root.getChildren()) {
+			append(buffer, reportNode);
+		}
+		
+		return buffer.toString();
+	}
+	
+	private void append(StringBuffer buffer, ReportTreeNode node) {
+		buffer.append(node.getReportTemplateBlock());
+		buffer.append("\n");
+		for(ReportTreeNode reportNode:node.getChildren())
+			append(buffer, reportNode);
+	}
+	
 }

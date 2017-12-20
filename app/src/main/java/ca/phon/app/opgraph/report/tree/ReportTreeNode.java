@@ -52,10 +52,12 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 	}
 
 	public boolean add(ReportTreeNode e) {
+		e.setParent(this);
 		return children.add(e);
 	}
 
 	public boolean remove(Object o) {
+		((ReportTreeNode)o).setParent(null);
 		return children.remove(o);
 	}
 
@@ -64,11 +66,14 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 	}
 
 	public void add(int index, ReportTreeNode element) {
+		element.setParent(this);
 		children.add(index, element);
 	}
 
 	public ReportTreeNode remove(int index) {
-		return children.remove(index);
+		ReportTreeNode retVal = children.remove(index);
+		retVal.setParent(null);
+		return retVal;
 	}
 
 	@Override
