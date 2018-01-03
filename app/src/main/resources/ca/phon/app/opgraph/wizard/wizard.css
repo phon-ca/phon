@@ -197,7 +197,7 @@ img {
 
 #toc .h1 {
     font-weight: bold;
-    font-size: large;
+    font-size: normal;
     color: rgb(50, 50, 50);
     
     padding-bottom: 4px;
@@ -207,7 +207,7 @@ img {
 }
 
 #toc .h2 {
-    font-size: medium;
+    font-size: small;
     color: rgb(50, 50, 50);
     
     padding-bottom: 4px;
