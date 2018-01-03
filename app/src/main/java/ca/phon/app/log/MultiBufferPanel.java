@@ -57,8 +57,6 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	
 	private JButton saveBufferButton;
 	
-	private JButton saveAsWorkbookButton;
-	
 	private JCheckBox openFileAfterSavingBox;
 	public final static String OPEN_AFTER_SAVING_PROP = MultiBufferPanel.class.getName() + ".openFileAfterSaving";
 	private boolean openFileAfterSaving =
@@ -229,10 +227,6 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction(this);
 		saveBufferButton = new JButton(saveAct);
 		retVal.add(saveBufferButton);
-		
-		final SaveBufferAsWorkbookAction saveAsWorkbookAct = new SaveBufferAsWorkbookAction(this);
-		saveAsWorkbookButton = new JButton(saveAsWorkbookAct);
-		retVal.add(saveAsWorkbookButton);
 				
 		openFileAfterSavingBox = new JCheckBox("Open after saving");
 		openFileAfterSavingBox.setSelected(openFileAfterSaving);
@@ -279,6 +273,20 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		});
 		
 		return retVal;
+	}
+	
+	public void setupSaveAsMenu(JMenu menu) {
+//		final SaveCurrentBufferAction saveBufferAct = new SaveCurrentBufferAction(this);
+//		menu.add(new JMenuItem(saveBufferAct));
+		
+		final SaveBufferAsWorkbookAction saveAsWorkbookAct = new SaveBufferAsWorkbookAction(this);
+		menu.add(new JMenuItem(saveAsWorkbookAct));
+		
+		final SaveAllBuffersAction saveAllBuffersAct = new SaveAllBuffersAction(this);
+		menu.add(new JMenuItem(saveAllBuffersAct));
+		
+		final SaveTablesToWorkbookAction saveTablesAct = new SaveTablesToWorkbookAction(this);
+		menu.add(new JMenuItem(saveTablesAct));
 	}
 	
 	private class BufferBoxModel implements ComboBoxModel<String> {

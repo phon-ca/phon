@@ -43,6 +43,14 @@ import ca.phon.util.*;
 public abstract class OpgraphEditorModel extends GraphEditorModel {
 
 	private Map<String, JComponent> viewMap;
+	
+	public static enum ViewLocation {
+		NORTH,
+		EAST,
+		SOUTH,
+		WEST,
+		CENTER;
+	}
 
 	public OpgraphEditorModel() {
 		this(new OpGraph());
@@ -191,6 +199,45 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 
 		default:
 			retVal.setBounds(0, 0, 200, 200);
+			break;
+		}
+		return retVal;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ViewLocation getDefaultViewLocation(String viewName) {
+		ViewLocation retVal = ViewLocation.CENTER;
+		
+		switch(viewName) {
+		case "Canvas":
+			retVal = ViewLocation.CENTER;
+			break;
+
+		case "Console":
+			retVal = ViewLocation.WEST;
+			break;
+
+		case "Debug":
+			retVal = ViewLocation.WEST;
+			break;
+
+		case "Connections":
+			retVal = ViewLocation.EAST;
+			break;
+
+		case "Library":
+			retVal = ViewLocation.WEST;
+			break;
+
+		case "Settings":
+			retVal = ViewLocation.EAST;
+			break;
+
+		case "Outline":
+			retVal = ViewLocation.WEST;
 			break;
 		}
 		return retVal;

@@ -220,6 +220,18 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 		}
 		return debugSettings;
 	}
+	
+	@Override
+	public ViewLocation getDefaultViewLocation(String viewName) {
+		ViewLocation retVal = super.getDefaultViewLocation(viewName);
+		
+		if(viewName.equals("Debug Settings")) {
+			retVal = ViewLocation.WEST;
+		} else if(viewName.equals("Report Template")) {
+			retVal = ViewLocation.WEST;
+		}
+		return retVal;
+	}
 
 	@Override
 	public Rectangle getInitialViewBounds(String viewName) {

@@ -36,6 +36,7 @@ import bibliothek.util.Filter;
 import ca.gedge.opgraph.app.*;
 import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
 import ca.gedge.opgraph.app.components.canvas.GridLayer;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel.ViewLocation;
 import ca.phon.app.opgraph.editor.actions.debug.*;
 import ca.phon.app.opgraph.editor.actions.file.*;
 import ca.phon.app.opgraph.editor.actions.graph.*;
@@ -418,10 +419,21 @@ public class OpgraphEditor extends CommonModuleFrame {
 		final CWorkingPerspective workPerspective = (CWorkingPerspective)defaultPerspective.getStation("work");
 
 		for(String viewName:getModel().getAvailableViewNames()) {
-			final Rectangle bounds = getModel().getInitialViewBounds(viewName);
+			final SingleCDockablePerspective dockablePerspective = new SingleCDockablePerspective(viewName);
 			if(getModel().isViewVisibleByDefault(viewName)) {
-				workPerspective.gridAdd(bounds.x, bounds.y, bounds.width, bounds.height,
-						new SingleCDockablePerspective(viewName));
+				final ViewLocation viewLocation = getModel().getDefaultViewLocation(viewName);
+				if(viewLocation == ViewLocation.CENTER) {
+					final Rectangle bounds = getModel().getInitialViewBounds(viewName);
+					workPerspective.gridAdd(bounds.x, bounds.y, bounds.width, bounds.height, dockablePerspective);
+				} else if(viewLocation == ViewLocation.NORTH) {
+					workPerspective.getPerspective().getContentArea().getNorth().add(dockablePerspective);
+				} else if(viewLocation == ViewLocation.EAST) {
+					workPerspective.getPerspective().getContentArea().getEast().add(dockablePerspective);
+				} else if(viewLocation == ViewLocation.SOUTH) {
+					workPerspective.getPerspective().getContentArea().getSouth().add(dockablePerspective);
+				} else if(viewLocation == ViewLocation.WEST) {
+					workPerspective.getPerspective().getContentArea().getWest().add(dockablePerspective);
+				}
 			}
 		}
 
