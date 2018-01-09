@@ -55,7 +55,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="7ca6b2ef" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-09T15:14:47.293-03:30" name="Data Tiers" uuid="e9671b40-27fa-430a-a6a0-8db90db19b2a">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-09T15:48:49.417-03:30" name="Data Tiers" uuid="c6f21200-0f2a-428c-8fcd-d8011034a1f0">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.primary.patternFilter.filter">.+</param>
@@ -1436,7 +1436,6 @@ function tableOp(context, table) {
                                                                 <oga:settings>
                                                                     <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.ipa)
 importPackage(Packages.ca.phon.ipa.alignment)
-importPackage(Packages.ca.phon.ipa.relations)
 
 function init(inputs, outputs) {
 	inputs.add("target", "", false, false);
@@ -1491,23 +1490,6 @@ function tableOp(context, table) {
 		}
 	}
 
-	// check segmental relations (consonants only)
-	var detector = new SegmentalRelations(true, false);
-	var segmentalRelations = detector.detect(alignment);
-	for(var i = 0; i < segmentalRelations.size(); i++) {
-		var segrel = segmentalRelations.get(i);
-
-		var rowData = new Array();
-		rowData[0] = (categoryPrinted == false ? category : "");
-		rowData[1] = segrel.toString();
-		rowData[2] = new java.lang.Integer(segrel.dimensions.size());
-		rowData[3] = "";
-		table.addRow(rowData);
-
-		total += segrel.dimensions.size();
-		categoryPrinted = true;
-	}
-	
 	// print sub-total
 	var rowData = new Array();
 	rowData[0] = (categoryPrinted == false ? category : "");
@@ -1520,7 +1502,7 @@ function tableOp(context, table) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="903" y="161"/>
+                                                                <oga:meta x="902" y="161"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="fb980b1aa2984dbb" name="Phone Checks" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -1531,6 +1513,7 @@ function tableOp(context, table) {
                                                             <extensions>
                                                                 <oga:settings>
                                                                     <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.phonex)
+importPackage(Packages.ca.phon.ipa.relations)
 
 function init(inputs, outputs) {
 	inputs.add("target", "", false, false);
@@ -1582,7 +1565,7 @@ function tableOp(context, table) {
 	}
 
 	// special cases
-	total += checkCompensatoryVowelLengthening(table, target, actual, alignment);
+	//total += checkCompensatoryVowelLengthening(table, target, actual, alignment);
 
 	// print sub-total
 	var rowData = new Array();
@@ -1652,6 +1635,7 @@ function checkCompensatoryVowelLengthening(table, target, actual, alignment) {
                                                                 <oga:settings>
                                                                     <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.ipa)
 importPackage(Packages.ca.phon.ipa.features)
+importPackage(Packages.ca.phon.ipa.relations)
 
 var placeFeatures = [
 	"{labial, -dental}",
@@ -1719,6 +1703,7 @@ function checkFeatures(table, featureList, title, tele, aele) {
 	var retVal = 0;
 	var targetFeatures = (tele != null ? getFeatures(featureList, tele) : "\u2205");
 	var actualFeatures = (aele != null ? getFeatures(featureList, aele) : "\u2205");
+	
 	if(!targetFeatures.equals(actualFeatures)) {
 		var rowData = new Array();
 		rowData[0] = (categoryPrinted == false ? category : "");
@@ -1736,6 +1721,8 @@ function checkFeatures(table, featureList, title, tele, aele) {
 function checkConsonantFeatures(table, tele, aele) {
 	var total = 0;
 
+	if(tele == null || aele == null) return total;
+
 	total += checkFeatures(table, placeFeatures, "Place", tele, aele);
 	total += checkFeatures(table, mannerFeatures, "Manner", tele, aele);
 	total += checkFeatures(table, voicingFeatures, "Voicing", tele, aele);
@@ -1745,6 +1732,8 @@ function checkConsonantFeatures(table, tele, aele) {
 
 function checkVowelFeatures(table, tele, aele) {
 	var total = 0;
+
+	if(tele == null || aele == null) return total;
 
 	var isSchwa = (tele != null && tele.featureSet.hasFeature("schwa"));
 	total += checkFeatures(table, heightFeatures, "Height", tele, aele);
@@ -1785,6 +1774,23 @@ function tableOp(context, table) {
 			}
 			total += checkVowelFeatures(table, targetEle, actualEle);
 		}
+	}
+
+	// check segmental relations (consonants only)
+	var detector = new SegmentalRelations(true, false);
+	var segmentalRelations = detector.detect(alignment);
+	for(var i = 0; i < segmentalRelations.size(); i++) {
+		var segrel = segmentalRelations.get(i);
+
+		var rowData = new Array();
+		rowData[0] = (categoryPrinted == false ? category : "");
+		rowData[1] = segrel.toString();
+		rowData[2] = new java.lang.Integer(segrel.dimensions.size());
+		rowData[3] = "";
+		table.addRow(rowData);
+
+		total += segrel.dimensions.size();
+		categoryPrinted = true;
 	}
 
 	// print sub-total

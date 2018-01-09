@@ -63,7 +63,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="7ca6b2ef" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-05T13:43:28.183-03:30" name="Data Tiers" uuid="6c5940a1-c403-418a-822f-dea860142a1d">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-08T15:04:07.255-03:30" name="Data Tiers" uuid="5b3b3882-1410-441a-a06b-396e05eeb9ac">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedWord.patternFilter.filter">AA+</param>
@@ -83,7 +83,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="b7c53c9330914507" name="Get Report Title" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="31db4a54">
+            <graph id="60427d52">
                 <node id="40d46ee05cb1462c" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -128,7 +128,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="7e7f6d0b48264831" name="Report" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="14175ee1">
+            <graph id="41ef43eb">
                 <node id="2564dd40d5ce4021" name="project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -142,7 +142,7 @@ function setup_params(params) {
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[[Lca.phon.query.db.ResultSet;]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="42" y="373"/>
+                        <oga:meta x="42" y="393"/>
                     </extensions>
                 </node>
                 <node id="a12ca1eed6584c87" name="selectedSessions" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -150,7 +150,7 @@ function setup_params(params) {
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="42" y="468"/>
+                        <oga:meta x="42" y="494"/>
                     </extensions>
                 </node>
                 <node id="76dc324150b34376" name="Setup Segmental Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -201,7 +201,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="810" y="547"/>
+                        <oga:meta x="778" y="504"/>
                     </extensions>
                 </node>
                 <node id="9a6b0aacb31f456e" name="selected participants" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -209,15 +209,7 @@ function run(context) {
                         <oga:settings>
                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="42" y="563"/>
-                    </extensions>
-                </node>
-                <node id="2fef4098" name="ReportTreeNode" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
-                        </oga:settings>
-                        <oga:meta x="38" y="677"/>
+                        <oga:meta x="42" y="595"/>
                     </extensions>
                 </node>
                 <node id="962abedafab34827" name="Setup Segmental Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -239,7 +231,15 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="791" y="697"/>
+                        <oga:meta x="778" y="625"/>
+                    </extensions>
+                </node>
+                <node id="2fef4098" name="ReportTreeNode" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="38" y="696"/>
                     </extensions>
                 </node>
                 <node id="10b0643dd8714757" name="Setup Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -407,7 +407,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="769" y="1014"/>
+                        <oga:meta x="782" y="822"/>
                     </extensions>
                 </node>
                 <node id="d3f36ac6e1334f27" name="Setup Prosodic CGV Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -429,7 +429,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="765" y="1227"/>
+                        <oga:meta x="782" y="943"/>
                     </extensions>
                 </node>
                 <node id="6004c22ee553432c" name="Setup Prosodic Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -451,7 +451,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="759" y="1367"/>
+                        <oga:meta x="782" y="1064"/>
                     </extensions>
                 </node>
                 <node id="781d5398835c4743" name="Setup Word Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -477,7 +477,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="777" y="1578"/>
+                        <oga:meta x="784" y="1245"/>
                     </extensions>
                 </node>
                 <node id="6a420b3ea1a74806" name="Setup Word Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -499,7 +499,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="777" y="1763"/>
+                        <oga:meta x="784" y="1366"/>
                     </extensions>
                 </node>
                 <node id="e7eb0f6277c94cc7" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -613,7 +613,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4bb42cb62a99463c" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="d279bc0">
+                    <graph id="2d675a1d">
                         <node id="4579a77279ca4a66" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -713,7 +713,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="e8ae4a39fdd74375" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="2f9a9be2">
+                            <graph id="3b070595">
                                 <node id="7a99452f69514e84" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -771,7 +771,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="e9d3beb84fbe42d4" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="4e3d32ff">
+                            <graph id="44703609">
                                 <node id="fda3b374aa2e4b57" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -845,7 +845,7 @@ function run(context) {
 }
 ]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="795" y="714"/>
+                                        <oga:meta x="628" y="717"/>
                                     </extensions>
                                 </node>
                                 <node id="5db72372" name="ReportTreeNode" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -875,7 +875,7 @@ function run(context) {
 }
 ]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="650" y="1112"/>
+                                        <oga:meta x="628" y="838"/>
                                     </extensions>
                                 </node>
                                 <node id="804e47177ea847a3" name="Setup Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1043,7 +1043,7 @@ function run(context) {
 }
 ]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="613" y="1487"/>
+                                        <oga:meta x="640" y="1048"/>
                                     </extensions>
                                 </node>
                                 <node id="dfaaabf7b0d14626" name="Setup Prosodic CGV Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1065,7 +1065,7 @@ function run(context) {
 }
 ]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="591" y="1951"/>
+                                        <oga:meta x="640" y="1169"/>
                                     </extensions>
                                 </node>
                                 <node id="f0d71e1be7cd4dd2" name="Setup Prosodic Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1087,7 +1087,7 @@ function run(context) {
 }
 ]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="591" y="2364"/>
+                                        <oga:meta x="640" y="1290"/>
                                     </extensions>
                                 </node>
                                 <node id="97fdb8b4a9849e3" name="Setup Word Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1113,7 +1113,7 @@ function run(context) {
 }
 ]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="577" y="2786"/>
+                                        <oga:meta x="644" y="1520"/>
                                     </extensions>
                                 </node>
                                 <node id="3d50035ed1d64160" name="Setup Word Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1135,7 +1135,7 @@ function run(context) {
 }
 ]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="574" y="3276"/>
+                                        <oga:meta x="644" y="1641"/>
                                     </extensions>
                                 </node>
                                 <node id="923b1235cde247a8" name="Split Table by Session" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -1251,134 +1251,8 @@ function tableOp(context, table) {
                                         <oga:meta x="655" y="451"/>
                                     </extensions>
                                 </node>
-                                <node id="e6d3148c2a344b00" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="621" y="829"/>
-                                    </extensions>
-                                </node>
-                                <node id="863c268" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="620" y="931"/>
-                                    </extensions>
-                                </node>
-                                <node id="a928a00eaef0461c" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="619" y="1228"/>
-                                    </extensions>
-                                </node>
-                                <node id="fe4f758ac329449b" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="618" y="1330"/>
-                                    </extensions>
-                                </node>
-                                <node id="8d12961f13a84c46" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="895" y="1614"/>
-                                    </extensions>
-                                </node>
-                                <node id="ceabe48643ce4f0e" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="887" y="1738"/>
-                                    </extensions>
-                                </node>
-                                <node id="a3bab2132d9c4d98" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="878" y="2006"/>
-                                    </extensions>
-                                </node>
-                                <node id="d98d39f71c874e53" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="870" y="2130"/>
-                                    </extensions>
-                                </node>
-                                <node id="5ff09b5e066f437b" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="879" y="2421"/>
-                                    </extensions>
-                                </node>
-                                <node id="5f26763b994e4bc8" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="871" y="2545"/>
-                                    </extensions>
-                                </node>
-                                <node id="ccc9aafc6ce94cb6" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="943" y="2919"/>
-                                    </extensions>
-                                </node>
-                                <node id="eb97ed4353244a3a" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="935" y="3043"/>
-                                    </extensions>
-                                </node>
-                                <node id="fb2540fa630c4160" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="892" y="3312"/>
-                                    </extensions>
-                                </node>
-                                <node id="55861ec1c12749b5" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
-                                    <input name="object1" optional="false">object in array</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="884" y="3436"/>
-                                    </extensions>
-                                </node>
                                 <ogcn:macro id="cd529cc9bedf4ecc" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                                    <graph id="59ccbe9">
+                                    <graph id="3db81372">
                                         <node id="9cd592ba93e14241" name="Session Name" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1469,7 +1343,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="d0e50cd137aa45c3" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="58f36adc">
+                                            <graph id="145f3d25">
                                                 <node id="6991d3ca2b8e4413" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1523,7 +1397,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c243d0cc85994d01" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="2b10e0f3">
+                                            <graph id="121c6c6a">
                                                 <node id="7481fcacc2964d6d" name="Integer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2174,7 +2048,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="6cca2ae5" name="For Each Row" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                                                    <graph id="40c49ef4">
+                                                    <graph id="2923cbee">
                                                         <node id="36e48cb9" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2273,7 +2147,7 @@ function run(context) {
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="4541ca3a0e544ebd" name="Get Row Data" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="4d17cbf6">
+                                                            <graph id="5a3569b8">
                                                                 <node id="3bd8dba5cdbd4ce8" name="row" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -2426,7 +2300,7 @@ function run(context) {
                                                             </extensions>
                                                         </ogcn:macro>
                                                         <ogcn:macro id="93e56a1c9e0d4fa8" name="WAP" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="7eae6f76">
+                                                            <graph id="cb34b94">
                                                                 <node id="429f5069103f4b19" name="Word" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -2451,7 +2325,7 @@ function run(context) {
                                                                         <oga:meta x="53" y="322"/>
                                                                     </extensions>
                                                                 </node>
-                                                                <node id="126f6847b0734271" name="PhoneMap" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                                                <node id="126f6847b0734271" name="Alignment" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.alignment.PhoneMap]]></oga:property>
@@ -2459,7 +2333,7 @@ function run(context) {
                                                                         <oga:meta x="54" y="465"/>
                                                                     </extensions>
                                                                 </node>
-                                                                <node id="7ff0063dcd5f4c55" name="Word Level" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                                                <node id="7ff0063dcd5f4c55" name="Word Level Analysis" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                                                     <input name="target" optional="false"/>
                                                                     <input name="actual" optional="false"/>
                                                                     <input name="alignment" optional="false"/>
@@ -2550,10 +2424,10 @@ function run(context) {
 }
 ]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="683" y="109"/>
+                                                                        <oga:meta x="689" y="73"/>
                                                                     </extensions>
                                                                 </node>
-                                                                <node id="d6964130060d4eac" name="Prosodic Level" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                                                <node id="d6964130060d4eac" name="Prosodic Level Analysis" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                                                     <input name="target" optional="false"/>
                                                                     <input name="actual" optional="false"/>
                                                                     <input name="alignment" optional="false"/>
@@ -2947,10 +2821,10 @@ function addCGVRows(table, target, actual, align, syllAlign) {
 }
 ]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="683" y="412"/>
+                                                                        <oga:meta x="681" y="438"/>
                                                                     </extensions>
                                                                 </node>
-                                                                <node id="feaa6135ab9f4863" name="Segmental Level" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                                                <node id="feaa6135ab9f4863" name="Segmental Level Analysis" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                                                     <input name="target" optional="false"/>
                                                                     <input name="actual" optional="false"/>
                                                                     <input name="alignment" optional="false"/>
@@ -3156,7 +3030,7 @@ function getSyllable(syllableAlignment, ele) {
 }
 ]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="683" y="780"/>
+                                                                        <oga:meta x="683" y="919"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="56e6371e" name="Word Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -3164,69 +3038,7 @@ function getSyllable(syllableAlignment, ele) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1094" y="140"/>
-                                                                    </extensions>
-                                                                </node>
-                                                                <node id="723d0f44" name="Prosodic Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                                                                    <extensions>
-                                                                        <oga:settings>
-                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
-                                                                        </oga:settings>
-                                                                        <oga:meta x="1094" y="295"/>
-                                                                    </extensions>
-                                                                </node>
-                                                                <node id="61720ed05820496e" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
-                                                                    <extensions>
-                                                                        <opqry:inventoryoptions>
-                                                                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
-                                                                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
-                                                                        </opqry:inventoryoptions>
-                                                                        <oga:settings/>
-                                                                        <oga:meta x="1094" y="444"/>
-                                                                    </extensions>
-                                                                </node>
-                                                                <node id="7fc3dff2ddd44a75" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
-                                                                    <extensions>
-                                                                        <opqry:inventoryoptions>
-                                                                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
-                                                                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
-                                                                        </opqry:inventoryoptions>
-                                                                        <oga:settings/>
-                                                                        <oga:meta x="1094" y="555"/>
-                                                                    </extensions>
-                                                                </node>
-                                                                <node id="1a9b10f5" name="Prosodic Subtotal" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                                                                    <extensions>
-                                                                        <oga:settings>
-                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
-                                                                        </oga:settings>
-                                                                        <oga:meta x="1094" y="679"/>
-                                                                    </extensions>
-                                                                </node>
-                                                                <node id="b7e1c97" name="Segmental Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                                                                    <extensions>
-                                                                        <oga:settings>
-                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
-                                                                        </oga:settings>
-                                                                        <oga:meta x="1409" y="770"/>
-                                                                    </extensions>
-                                                                </node>
-                                                                <node id="37b9418a" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
-                                                                    <extensions>
-                                                                        <opqry:inventoryoptions>
-                                                                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
-                                                                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
-                                                                        </opqry:inventoryoptions>
-                                                                        <oga:settings/>
-                                                                        <oga:meta x="1094" y="903"/>
-                                                                    </extensions>
-                                                                </node>
-                                                                <node id="257a7e47" name="Segmental Subtotal" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                                                                    <extensions>
-                                                                        <oga:settings>
-                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
-                                                                        </oga:settings>
-                                                                        <oga:meta x="1409" y="1026"/>
+                                                                        <oga:meta x="1104" y="41"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="eecf31cb778c485b" name="Word Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3262,7 +3074,69 @@ function run(context) {
 }
 ]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1409" y="140"/>
+                                                                        <oga:meta x="1105" y="177"/>
+                                                                    </extensions>
+                                                                </node>
+                                                                <node id="723d0f44" name="Prosodic Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                                                    <extensions>
+                                                                        <oga:settings>
+                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
+                                                                        </oga:settings>
+                                                                        <oga:meta x="1092" y="321"/>
+                                                                    </extensions>
+                                                                </node>
+                                                                <node id="61720ed05820496e" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+                                                                    <extensions>
+                                                                        <opqry:inventoryoptions>
+                                                                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
+                                                                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
+                                                                        </opqry:inventoryoptions>
+                                                                        <oga:settings/>
+                                                                        <oga:meta x="1092" y="470"/>
+                                                                    </extensions>
+                                                                </node>
+                                                                <node id="7fc3dff2ddd44a75" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+                                                                    <extensions>
+                                                                        <opqry:inventoryoptions>
+                                                                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
+                                                                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
+                                                                        </opqry:inventoryoptions>
+                                                                        <oga:settings/>
+                                                                        <oga:meta x="1092" y="581"/>
+                                                                    </extensions>
+                                                                </node>
+                                                                <node id="1a9b10f5" name="Prosodic Subtotal" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                                                    <extensions>
+                                                                        <oga:settings>
+                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                                                                        </oga:settings>
+                                                                        <oga:meta x="1092" y="705"/>
+                                                                    </extensions>
+                                                                </node>
+                                                                <node id="b7e1c97" name="Segmental Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                                                    <extensions>
+                                                                        <oga:settings>
+                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
+                                                                        </oga:settings>
+                                                                        <oga:meta x="1437" y="848"/>
+                                                                    </extensions>
+                                                                </node>
+                                                                <node id="37b9418a" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+                                                                    <extensions>
+                                                                        <opqry:inventoryoptions>
+                                                                            <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="false"/>
+                                                                            <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="false"/>
+                                                                        </opqry:inventoryoptions>
+                                                                        <oga:settings/>
+                                                                        <oga:meta x="1122" y="981"/>
+                                                                    </extensions>
+                                                                </node>
+                                                                <node id="257a7e47" name="Segmental Subtotal" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                                                    <extensions>
+                                                                        <oga:settings>
+                                                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                                                                        </oga:settings>
+                                                                        <oga:meta x="1437" y="1104"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="6e80e611" name="Prosodic Stress Inventory" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -3270,7 +3144,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1409" y="444"/>
+                                                                        <oga:meta x="1407" y="470"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="5d58298b" name="Prosodic CGV Inventory" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -3278,7 +3152,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1409" y="555"/>
+                                                                        <oga:meta x="1407" y="581"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="1e17e35e" name="Segmental Inventory" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -3286,7 +3160,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1409" y="903"/>
+                                                                        <oga:meta x="1437" y="981"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <link dest="d6964130060d4eac" destField="target" source="ac130279f6464980" sourceField="obj"/>
@@ -3309,13 +3183,14 @@ function run(context) {
                                                                 <link dest="7fc3dff2ddd44a75" destField="table" source="d6964130060d4eac" sourceField="cgvTable"/>
                                                                 <link dest="5d58298b" destField="obj" source="7fc3dff2ddd44a75" sourceField="table"/>
                                                                 <link dest="1a9b10f5" destField="obj" source="d6964130060d4eac" sourceField="counts"/>
-                                                                <link dest="eecf31cb778c485b" destField="wordTable" source="56e6371e" sourceField="obj"/>
+                                                                <link dest="eecf31cb778c485b" destField="wordTable" source="7ff0063dcd5f4c55" sourceField="table"/>
                                                                 <extensions>
                                                                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                                                     <oga:notes>
                                                                         <oga:note color="0xffff96" height="750" title="Inputs" width="431" x="21" y="50"/>
-                                                                        <oga:note color="0x9696ff" height="977" title="Analysis" width="496" x="518" y="50"/>
-                                                                        <oga:note color="0x96ff96" height="1110" title="Outputs" width="602" x="1050" y="50"/>
+                                                                        <oga:note color="0x96ff96" height="426" title="Segmental Level" width="1125" x="613" y="800"/>
+                                                                        <oga:note color="0xffc864" height="276" title="Word Level" width="1120" x="615" y="14"/>
+                                                                        <oga:note color="0x9696ff" height="505" title="Prosodic Level" width="1123" x="615" y="293"/>
                                                                     </oga:notes>
                                                                 </extensions>
                                                             </graph>
@@ -3369,12 +3244,13 @@ function run(context) {
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="394b481a" name="Setup Section Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="456aa14c">
+                                                            <graph id="cd5581e">
                                                                 <node id="584303a5" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                                                                         </oga:settings>
+                                                                        <oga:meta x="15" y="15"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="4da9275f" name="object2" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -3382,6 +3258,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                                                         </oga:settings>
+                                                                        <oga:meta x="15" y="156"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="10ece68d" name="object3" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -3389,6 +3266,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                                                         </oga:settings>
+                                                                        <oga:meta x="15" y="297"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="28f886aa" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
@@ -3399,7 +3277,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[3]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1460" y="167"/>
+                                                                        <oga:meta x="193" y="15"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="37285b91" type="class:ca.gedge.opgraph.nodes.general.TextNode">
@@ -3407,34 +3285,25 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[%s /%s/ \u2194 /%s/]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1638" y="161"/>
+                                                                        <oga:meta x="368" y="15"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <link dest="28f886aa" destField="object3" source="10ece68d" sourceField="obj"/>
                                                                 <link dest="28f886aa" destField="object2" source="4da9275f" sourceField="obj"/>
                                                                 <link dest="37285b91" destField="objects" source="28f886aa" sourceField="array"/>
                                                                 <link dest="28f886aa" destField="object1" source="584303a5" sourceField="obj"/>
+                                                                <extensions>
+                                                                    <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                                                                </extensions>
                                                             </graph>
                                                             <ogcn:published_input field="obj" name="orthography" ref="10ece68d"/>
                                                             <ogcn:published_input field="obj" name="target" ref="4da9275f"/>
                                                             <ogcn:published_input field="obj" name="actual" ref="584303a5"/>
                                                             <ogcn:published_output field="value" name="value" ref="37285b91"/>
                                                             <extensions>
-                                                                <oga:meta x="764" y="815"/>
+                                                                <oga:meta x="726" y="595"/>
                                                             </extensions>
                                                         </ogcn:macro>
-                                                        <node id="aa083d0b196e4847" name="Print Word WAP Table" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                                                            <input name="data" optional="false">Data to print</input>
-                                                            <extensions>
-                                                                <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
-                                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                                                                </oga:settings>
-                                                                <oga:meta x="1196" y="128"/>
-                                                            </extensions>
-                                                        </node>
                                                         <node id="d7870bab58fa43bb" name="Add to Word Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                                             <input name="inventory" optional="false"/>
                                                             <input name="sub-inventory" optional="false"/>
@@ -3470,7 +3339,19 @@ function run(context) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1692" y="142"/>
+                                                                <oga:meta x="1845" y="97"/>
+                                                            </extensions>
+                                                        </node>
+                                                        <node id="aa083d0b196e4847" name="Print Word WAP Table" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                                            <input name="data" optional="false">Data to print</input>
+                                                            <extensions>
+                                                                <oga:settings>
+                                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
+                                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
+                                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                                                                </oga:settings>
+                                                                <oga:meta x="1278" y="143"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="d76f2c1f13134b81" name="Word Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3531,19 +3412,7 @@ function run(context) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1691" y="278"/>
-                                                            </extensions>
-                                                        </node>
-                                                        <node id="c7525e49168a49f2" name="Print Prosodic WAP Table" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                                                            <input name="data" optional="false">Data to print</input>
-                                                            <extensions>
-                                                                <oga:settings>
-                                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
-                                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                                                                </oga:settings>
-                                                                <oga:meta x="1201" y="307"/>
+                                                                <oga:meta x="1845" y="233"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="5d2109e00f864104" name="Add to Prosodic Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3581,10 +3450,15 @@ function run(context) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1688" y="435"/>
+                                                                <oga:meta x="1845" y="526"/>
                                                             </extensions>
                                                         </node>
-                                                        <node id="5d81a99f" name="Print Segmental WAP Table" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                                        <node id="684ca6f5" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
+                                                            <extensions>
+                                                                <oga:meta x="929" y="589"/>
+                                                            </extensions>
+                                                        </node>
+                                                        <node id="c7525e49168a49f2" name="Print Prosodic WAP Table" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                             <input name="data" optional="false">Data to print</input>
                                                             <extensions>
                                                                 <oga:settings>
@@ -3593,7 +3467,7 @@ function run(context) {
                                                                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                                                                     <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1202" y="463"/>
+                                                                <oga:meta x="1278" y="643"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="6d8ef1bab8d74b05" name="Add to Prosodic CGV Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3631,7 +3505,7 @@ function run(context) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1685" y="573"/>
+                                                                <oga:meta x="1845" y="664"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="32cf3224f68544b0" name="Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3682,12 +3556,7 @@ function sumcounts(total, subtotal) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1699" y="714"/>
-                                                            </extensions>
-                                                        </node>
-                                                        <node id="684ca6f5" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
-                                                            <extensions>
-                                                                <oga:meta x="967" y="809"/>
+                                                                <oga:meta x="1845" y="805"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="31b394bd" name="Add to Segmental Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3725,7 +3594,19 @@ function run(context) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1695" y="862"/>
+                                                                <oga:meta x="1845" y="1007"/>
+                                                            </extensions>
+                                                        </node>
+                                                        <node id="5d81a99f" name="Print Segmental WAP Table" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                                            <input name="data" optional="false">Data to print</input>
+                                                            <extensions>
+                                                                <oga:settings>
+                                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
+                                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
+                                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                                                                </oga:settings>
+                                                                <oga:meta x="1278" y="1071"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="d295335" name="Segmental Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3762,7 +3643,7 @@ function sumcounts(total, subtotal) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1692" y="1006"/>
+                                                                <oga:meta x="1845" y="1151"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="6ba46b7e" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -3771,7 +3652,7 @@ function sumcounts(total, subtotal) {
                                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1208" y="809">
+                                                                <oga:meta x="1585" y="143">
                                                                     <oga:default for="sectionName" type="java.lang.String">Word Level</oga:default>
                                                                 </oga:meta>
                                                             </extensions>
@@ -3782,7 +3663,7 @@ function sumcounts(total, subtotal) {
                                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1208" y="981">
+                                                                <oga:meta x="1585" y="642">
                                                                     <oga:default for="sectionName" type="java.lang.String">Prosodic Level</oga:default>
                                                                 </oga:meta>
                                                             </extensions>
@@ -3793,7 +3674,7 @@ function sumcounts(total, subtotal) {
                                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1208" y="1141">
+                                                                <oga:meta x="1585" y="1065">
                                                                     <oga:default for="sectionName" type="java.lang.String">Segmental Level</oga:default>
                                                                 </oga:meta>
                                                             </extensions>
@@ -3841,9 +3722,9 @@ function sumcounts(total, subtotal) {
                                                         <extensions>
                                                             <oga:notes>
                                                                 <oga:note color="0xffff96" height="1634" title="Inputs" width="407" x="38" y="188"/>
-                                                                <oga:note color="0xffc864" height="564" title="Report" width="802" x="700" y="757"/>
-                                                                <oga:note color="0x96ff96" height="1102" title="Outputs" width="484" x="1588" y="90"/>
-                                                                <oga:note color="0x96ff96" height="595" title="Print WAP Tables" width="387" x="1131" y="84"/>
+                                                                <oga:note color="0xffc864" height="417" title="Word Level" width="926" x="1211" y="50"/>
+                                                                <oga:note color="0x96ff96" height="356" title="Segmental Level" width="943" x="1209" y="962"/>
+                                                                <oga:note color="0x9696ff" height="486" title="Prosodic Level" width="927" x="1211" y="472"/>
                                                             </oga:notes>
                                                             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                                         </extensions>
@@ -3869,7 +3750,7 @@ function sumcounts(total, subtotal) {
                                                         <oga:settings>
                                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.List]]></oga:property>
                                                         </oga:settings>
-                                                        <oga:meta x="915" y="162"/>
+                                                        <oga:meta x="1080" y="152"/>
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="2043e708" name="Setup Segmental Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -4448,7 +4329,7 @@ function addRow(table, category, total, correct, incorrect) {
                                                     <oga:notes>
                                                         <oga:note color="0xffff96" height="791" title="Published Inputs" width="310" x="25" y="100"/>
                                                         <oga:note color="0x96ff96" height="836" title="Segmental Inventory/Totals" width="1104" x="872" y="550">Segmental totals for session</oga:note>
-                                                        <oga:note color="0xff96ff" height="1280" title="Prosodic Level Information" width="1125" x="873" y="1406"/>
+                                                        <oga:note color="0x9696ff" height="1280" title="Prosodic Level Information" width="1125" x="873" y="1406"/>
                                                         <oga:note color="0xffc864" height="923" title="Word Level" width="1137" x="871" y="2700"/>
                                                     </oga:notes>
                                                 </extensions>
@@ -4767,6 +4648,7 @@ function run(context) {
                                         <link dest="b2abd77ee9084be3" destField="totals" source="5a76f6232e654ec7" sourceField="obj"/>
                                         <link dest="ad24c63f0459481b" destField="sub-inventory" source="c243d0cc85994d01" sourceField="word stress inventory"/>
                                         <link dest="ad24c63f0459481b" destField="inventory" source="eedb0526f33e4643" sourceField="obj"/>
+                                        <link dest="ad24c63f0459481b" destField="enabled" source="d0e50cd137aa45c3" sourceField="exists"/>
                                         <extensions>
                                             <oga:notes>
                                                 <oga:note color="0xffff96" height="1494" title="Published Inputs" width="374" x="26" y="187"/>
@@ -4796,145 +4678,26 @@ function run(context) {
                                         <oga:settings>
                                             <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.Set]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="999" y="288"/>
+                                        <oga:meta x="998" y="288"/>
                                     </extensions>
                                 </ogcn:macro>
-                                <node id="f01df4a584cc40a1" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Totals_%s]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="821" y="825"/>
-                                    </extensions>
-                                </node>
-                                <node id="de60a85" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Level Breakdown (%s)]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="820" y="927"/>
-                                    </extensions>
-                                </node>
-                                <node id="2c44f16673a540f3" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Inventory_%s]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="819" y="1224"/>
-                                    </extensions>
-                                </node>
-                                <node id="8d0824b5deae4eaf" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Level Inventory (%s)]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="818" y="1326"/>
-                                    </extensions>
-                                </node>
-                                <node id="9137201491eb4ae9" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level Breakdown_%s]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1075" y="1620"/>
-                                    </extensions>
-                                </node>
-                                <node id="cfe04c3badc14ae9" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level Breakdown (%s)]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1065" y="1745"/>
-                                    </extensions>
-                                </node>
-                                <node id="b1587f9fbed949ef" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic CGV Inventory_%s]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1058" y="2012"/>
-                                    </extensions>
-                                </node>
-                                <node id="c0f245b2fab640e9" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level CGV Inventory (%s)]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1048" y="2137"/>
-                                    </extensions>
-                                </node>
-                                <node id="b9795b8516174890" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Stress Inventory_%s]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1059" y="2427"/>
-                                    </extensions>
-                                </node>
-                                <node id="5728dab7dd32404d" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level Stress Inventory (%s)]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1049" y="2552"/>
-                                    </extensions>
-                                </node>
-                                <node id="879ed09a9f3f4e9a" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Level Accuracy_%s]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1123" y="2925"/>
-                                    </extensions>
-                                </node>
-                                <node id="490433fa4ce94dd5" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Level Accuracy (%s)]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1132" y="3041"/>
-                                    </extensions>
-                                </node>
-                                <node id="9b21fbe93b54d12" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Stress Inventory_%s]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1072" y="3318"/>
-                                    </extensions>
-                                </node>
-                                <node id="8455b26981ae4c4c" type="class:ca.gedge.opgraph.nodes.general.TextNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Level Stress Inventory (%s)]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1062" y="3443"/>
-                                    </extensions>
-                                </node>
-                                <ogcn:macro id="3073f698" name="Segmental Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="24590f30">
-                                        <node id="3908d6b3" name="buffer" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                <ogcn:macro id="78d3bb1a" name="Print Segmental Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                                    <graph id="28a84e5a">
+                                        <node id="c493495" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                                                 </oga:settings>
                                             </extensions>
                                         </node>
-                                        <node id="2e3abb9a" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                        <node id="4da5a52d" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                                 </oga:settings>
                                             </extensions>
                                         </node>
-                                        <node id="3215e1e7" name="sectionName" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                                            <extensions>
-                                                <oga:settings>
-                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
-                                                </oga:settings>
-                                            </extensions>
-                                        </node>
-                                        <node id="60c29c8" name="totals" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                        <node id="6afcc489" name="totals" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
@@ -5073,7 +4836,41 @@ function run(context) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1169" y="1073"/>
+                                                <oga:meta x="1328" y="691"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="e6d3148c2a344b00" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="905" y="866"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="863c268" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="904" y="968"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="f01df4a584cc40a1" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Totals_%s]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1105" y="862"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="de60a85" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Level Breakdown (%s)]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1104" y="964"/>
                                             </extensions>
                                         </node>
                                         <node id="3042292c7cbe4d0b" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
@@ -5085,7 +4882,7 @@ function run(context) {
                                                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1175" y="1216">
+                                                <oga:meta x="1342" y="816">
                                                     <oga:default for="buffer" type="java.lang.String">Segmental Totals_Speaker</oga:default>
                                                 </oga:meta>
                                             </extensions>
@@ -5096,54 +4893,84 @@ function run(context) {
                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1194" y="1378">
+                                                <oga:meta x="1338" y="979">
                                                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                                                 </oga:meta>
                                             </extensions>
                                         </node>
-                                        <link dest="3042292c7cbe4d0b" destField="buffer" source="3908d6b3" sourceField="obj"/>
-                                        <link dest="78029f403c7a488a" destField="totals" source="60c29c8" sourceField="obj"/>
-                                        <link dest="464997be" destField="tableName" source="3042292c7cbe4d0b" sourceField="buffer"/>
-                                        <link dest="464997be" destField="parent" source="2e3abb9a" sourceField="obj"/>
-                                        <link dest="464997be" destField="sectionName" source="3215e1e7" sourceField="obj"/>
+                                        <link dest="3042292c7cbe4d0b" destField="buffer" source="f01df4a584cc40a1" sourceField="value"/>
+                                        <link dest="78029f403c7a488a" destField="totals" source="6afcc489" sourceField="obj"/>
+                                        <link dest="464997be" destField="sectionName" source="de60a85" sourceField="value"/>
+                                        <link dest="f01df4a584cc40a1" destField="objects" source="e6d3148c2a344b00" sourceField="array"/>
+                                        <link dest="863c268" destField="object1" source="c493495" sourceField="obj"/>
+                                        <link dest="e6d3148c2a344b00" destField="object1" source="c493495" sourceField="obj"/>
+                                        <link dest="de60a85" destField="objects" source="863c268" sourceField="array"/>
+                                        <link dest="464997be" destField="parent" source="4da5a52d" sourceField="obj"/>
                                         <link dest="3042292c7cbe4d0b" destField="data" source="78029f403c7a488a" sourceField="table"/>
+                                        <link dest="464997be" destField="tableName" source="3042292c7cbe4d0b" sourceField="buffer"/>
                                     </graph>
-                                    <ogcn:published_input field="obj" name="buffer" ref="3908d6b3"/>
-                                    <ogcn:published_input field="obj" name="totals" ref="60c29c8"/>
-                                    <ogcn:published_input field="obj" name="parent" ref="2e3abb9a"/>
-                                    <ogcn:published_input field="obj" name="sectionName" ref="3215e1e7"/>
+                                    <ogcn:published_input field="obj" name="totals" ref="6afcc489"/>
+                                    <ogcn:published_input field="obj" name="object1" ref="c493495"/>
+                                    <ogcn:published_input field="obj" name="parent" ref="4da5a52d"/>
                                     <extensions>
-                                        <oga:meta x="1214" y="793"/>
+                                        <oga:meta x="1139" y="691"/>
                                     </extensions>
                                 </ogcn:macro>
-                                <ogcn:macro id="5c27f255" name="Segmental Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="4774ab7c">
-                                        <node id="7f91f7e8" name="buffer" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
-                                            <extensions>
-                                                <oga:settings>
-                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
-                                                </oga:settings>
-                                            </extensions>
-                                        </node>
-                                        <node id="478c798e" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                <ogcn:macro id="1aa05ac1" name="Print Segmental Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                                    <graph id="2d4f0e69">
+                                        <node id="713fbaa8" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                 </oga:settings>
                                             </extensions>
                                         </node>
-                                        <node id="3560daac" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                        <node id="77d39f3e" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="5e48ea1b" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
                                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                                 </oga:settings>
                                             </extensions>
                                         </node>
-                                        <node id="720bebb1" name="sectionName" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                        <node id="a928a00eaef0461c" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
                                             <extensions>
                                                 <oga:settings>
-                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
                                                 </oga:settings>
+                                                <oga:meta x="944" y="1112"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="fe4f758ac329449b" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="946" y="1214"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="2c44f16673a540f3" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Inventory_%s]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1144" y="1108"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="8d0824b5deae4eaf" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Segmental Level Inventory (%s)]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1143" y="1210"/>
                                             </extensions>
                                         </node>
                                         <node id="4e136032" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
@@ -5155,7 +4982,7 @@ function run(context) {
                                                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                                                     <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1182" y="715"/>
+                                                <oga:meta x="1328" y="1043"/>
                                             </extensions>
                                         </node>
                                         <node id="5d98ccdd" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -5164,31 +4991,57 @@ function run(context) {
                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1176" y="892">
+                                                <oga:meta x="1327" y="1228">
                                                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                                                 </oga:meta>
                                             </extensions>
                                         </node>
-                                        <link dest="4e136032" destField="buffer" source="7f91f7e8" sourceField="obj"/>
-                                        <link dest="4e136032" destField="data" source="478c798e" sourceField="obj"/>
-                                        <link dest="5d98ccdd" destField="parent" source="3560daac" sourceField="obj"/>
+                                        <link dest="5d98ccdd" destField="sectionName" source="8d0824b5deae4eaf" sourceField="value"/>
+                                        <link dest="4e136032" destField="buffer" source="2c44f16673a540f3" sourceField="value"/>
+                                        <link dest="8d0824b5deae4eaf" destField="objects" source="fe4f758ac329449b" sourceField="array"/>
+                                        <link dest="2c44f16673a540f3" destField="objects" source="a928a00eaef0461c" sourceField="array"/>
+                                        <link dest="a928a00eaef0461c" destField="object1" source="77d39f3e" sourceField="obj"/>
+                                        <link dest="4e136032" destField="data" source="713fbaa8" sourceField="obj"/>
+                                        <link dest="fe4f758ac329449b" destField="object1" source="77d39f3e" sourceField="obj"/>
+                                        <link dest="5d98ccdd" destField="parent" source="5e48ea1b" sourceField="obj"/>
                                         <link dest="5d98ccdd" destField="tableName" source="4e136032" sourceField="buffer"/>
-                                        <link dest="5d98ccdd" destField="sectionName" source="720bebb1" sourceField="obj"/>
                                     </graph>
-                                    <ogcn:published_input field="obj" name="buffer" ref="7f91f7e8"/>
-                                    <ogcn:published_input field="obj" name="data" ref="478c798e"/>
-                                    <ogcn:published_input field="obj" name="parent" ref="3560daac"/>
-                                    <ogcn:published_input field="obj" name="sectionName" ref="720bebb1"/>
+                                    <ogcn:published_input field="obj" name="object1" ref="77d39f3e"/>
+                                    <ogcn:published_input field="obj" name="data" ref="713fbaa8"/>
+                                    <ogcn:published_input field="obj" name="parent" ref="5e48ea1b"/>
                                     <extensions>
-                                        <oga:meta x="1199" y="1193"/>
+                                        <oga:meta x="1139" y="832"/>
                                     </extensions>
                                 </ogcn:macro>
-                                <node id="589c4934eec14513" name="Setup Prosodic Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
-                                    <input name="totals" optional="false"/>
-                                    <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
+                                <ogcn:macro id="674ba9c4" name="Print Prosodic Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                                    <graph id="4e206950">
+                                        <node id="2e51249" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="2259b4b2" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="7a27b396" name="totals" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="589c4934eec14513" name="Setup Prosodic Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                            <input name="totals" optional="false"/>
+                                            <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
 	inputs.add("totals", "", false, false);
 
 	outputs.add("table", "", false, Packages.ca.phon.query.report.datasource.DefaultTableDataSource);
@@ -5252,36 +5105,336 @@ function addRow(table, title, count, syllCount) {
 	table.addRow(rowData);
 }
 ]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1084" y="1484"/>
-                                    </extensions>
-                                </node>
-                                <node id="f5d4ff22b6894a57" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                                                </oga:settings>
+                                                <oga:meta x="1090" y="1489"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="8d12961f13a84c46" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="897" y="1615"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="ceabe48643ce4f0e" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="889" y="1739"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="9137201491eb4ae9" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level Breakdown_%s]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1077" y="1621"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="cfe04c3badc14ae9" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level Breakdown (%s)]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1067" y="1746"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="21adf64c36ae460c" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                            <input name="data" optional="false">Data to print</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
+                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
+                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1367" y="1530">
+                                                    <oga:default for="buffer" type="java.lang.String"/>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <node id="a80551e14a07461f" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1343" y="1684">
+                                                    <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <link dest="21adf64c36ae460c" destField="buffer" source="9137201491eb4ae9" sourceField="value"/>
+                                        <link dest="a80551e14a07461f" destField="parent" source="2259b4b2" sourceField="obj"/>
+                                        <link dest="9137201491eb4ae9" destField="objects" source="8d12961f13a84c46" sourceField="array"/>
+                                        <link dest="ceabe48643ce4f0e" destField="object1" source="2e51249" sourceField="obj"/>
+                                        <link dest="cfe04c3badc14ae9" destField="objects" source="ceabe48643ce4f0e" sourceField="array"/>
+                                        <link dest="a80551e14a07461f" destField="tableName" source="21adf64c36ae460c" sourceField="buffer"/>
+                                        <link dest="21adf64c36ae460c" destField="data" source="589c4934eec14513" sourceField="table"/>
+                                        <link dest="589c4934eec14513" destField="totals" source="7a27b396" sourceField="obj"/>
+                                        <link dest="a80551e14a07461f" destField="sectionName" source="cfe04c3badc14ae9" sourceField="value"/>
+                                        <link dest="8d12961f13a84c46" destField="object1" source="2e51249" sourceField="obj"/>
+                                    </graph>
+                                    <ogcn:published_input field="obj" name="parent" ref="2259b4b2"/>
+                                    <ogcn:published_input field="obj" name="object1" ref="2e51249"/>
+                                    <ogcn:published_input field="obj" name="totals" ref="7a27b396"/>
                                     <extensions>
-                                        <opqry:sortoptions>
-                                            <opqry:sortBy column="IPA Target" order="ascending" type="plain"/>
-                                            <opqry:sortBy column="IPA Actual" order="ascending" type="plain"/>
-                                        </opqry:sortoptions>
-                                        <oga:settings/>
-                                        <oga:meta x="1087" y="1915"/>
+                                        <oga:meta x="1144" y="1032"/>
                                     </extensions>
-                                </node>
-                                <node id="492784cf94a64f2b" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                                </ogcn:macro>
+                                <ogcn:macro id="3b9b4b3b" name="Print Prosodic CGV Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                                    <graph id="32f739ec">
+                                        <node id="728a95f5" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="6d6a62ac" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="196ff949" name="table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="f5d4ff22b6894a57" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                                            <extensions>
+                                                <opqry:sortoptions>
+                                                    <opqry:sortBy column="IPA Target" order="ascending" type="plain"/>
+                                                    <opqry:sortBy column="IPA Actual" order="ascending" type="plain"/>
+                                                </opqry:sortoptions>
+                                                <oga:settings/>
+                                                <oga:meta x="1087" y="1915"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="a3bab2132d9c4d98" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="878" y="2006"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="d98d39f71c874e53" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="870" y="2130"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="b1587f9fbed949ef" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic CGV Inventory_%s]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1058" y="2012"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="c0f245b2fab640e9" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level CGV Inventory (%s)]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1048" y="2137"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="617bb6561fd4e7d" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                            <input name="data" optional="false">Data to print</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
+                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
+                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1348" y="1921">
+                                                    <oga:default for="buffer" type="java.lang.String"/>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <node id="934cab300af844fe" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1324" y="2075">
+                                                    <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <link dest="b1587f9fbed949ef" destField="objects" source="a3bab2132d9c4d98" sourceField="array"/>
+                                        <link dest="f5d4ff22b6894a57" destField="table" source="196ff949" sourceField="obj"/>
+                                        <link dest="d98d39f71c874e53" destField="object1" source="728a95f5" sourceField="obj"/>
+                                        <link dest="617bb6561fd4e7d" destField="data" source="f5d4ff22b6894a57" sourceField="table"/>
+                                        <link dest="a3bab2132d9c4d98" destField="object1" source="728a95f5" sourceField="obj"/>
+                                        <link dest="617bb6561fd4e7d" destField="buffer" source="b1587f9fbed949ef" sourceField="value"/>
+                                        <link dest="c0f245b2fab640e9" destField="objects" source="d98d39f71c874e53" sourceField="array"/>
+                                        <link dest="934cab300af844fe" destField="parent" source="6d6a62ac" sourceField="obj"/>
+                                        <link dest="934cab300af844fe" destField="tableName" source="617bb6561fd4e7d" sourceField="buffer"/>
+                                        <link dest="934cab300af844fe" destField="sectionName" source="c0f245b2fab640e9" sourceField="value"/>
+                                    </graph>
+                                    <ogcn:published_input field="obj" name="table" ref="196ff949"/>
+                                    <ogcn:published_input field="obj" name="object1" ref="728a95f5"/>
+                                    <ogcn:published_input field="obj" name="parent" ref="6d6a62ac"/>
                                     <extensions>
-                                        <opqry:sortoptions>
-                                            <opqry:sortBy column="IPA Target" order="ascending" type="plain"/>
-                                            <opqry:sortBy column="IPA Actual" order="ascending" type="plain"/>
-                                        </opqry:sortoptions>
-                                        <oga:settings/>
-                                        <oga:meta x="1088" y="2330"/>
+                                        <oga:meta x="1144" y="1173"/>
                                     </extensions>
-                                </node>
-                                <node id="55bd1d6be6dd4544" name="Setup Word Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
-                                    <input name="totals" optional="false"/>
-                                    <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+                                </ogcn:macro>
+                                <ogcn:macro id="592af60c" name="Print Prosodic Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                                    <graph id="2c7366d7">
+                                        <node id="9c21137" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="7dc28117" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="293f9044" name="table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="492784cf94a64f2b" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                                            <extensions>
+                                                <opqry:sortoptions>
+                                                    <opqry:sortBy column="IPA Target" order="ascending" type="plain"/>
+                                                    <opqry:sortBy column="IPA Actual" order="ascending" type="plain"/>
+                                                </opqry:sortoptions>
+                                                <oga:settings/>
+                                                <oga:meta x="1088" y="2330"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="5ff09b5e066f437b" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="879" y="2421"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="5f26763b994e4bc8" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="871" y="2545"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="b9795b8516174890" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Stress Inventory_%s]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1059" y="2427"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="5728dab7dd32404d" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Prosodic Level Stress Inventory (%s)]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1050" y="2553"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="95c6ba8270ac4a98" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                            <input name="data" optional="false">Data to print</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
+                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
+                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1349" y="2336">
+                                                    <oga:default for="buffer" type="java.lang.String"/>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <node id="2d744ff0346d41c9" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1325" y="2490">
+                                                    <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <link dest="5ff09b5e066f437b" destField="object1" source="9c21137" sourceField="obj"/>
+                                        <link dest="5f26763b994e4bc8" destField="object1" source="9c21137" sourceField="obj"/>
+                                        <link dest="492784cf94a64f2b" destField="table" source="293f9044" sourceField="obj"/>
+                                        <link dest="2d744ff0346d41c9" destField="tableName" source="95c6ba8270ac4a98" sourceField="buffer"/>
+                                        <link dest="b9795b8516174890" destField="objects" source="5ff09b5e066f437b" sourceField="array"/>
+                                        <link dest="5728dab7dd32404d" destField="objects" source="5f26763b994e4bc8" sourceField="array"/>
+                                        <link dest="2d744ff0346d41c9" destField="sectionName" source="5728dab7dd32404d" sourceField="value"/>
+                                        <link dest="95c6ba8270ac4a98" destField="buffer" source="b9795b8516174890" sourceField="value"/>
+                                        <link dest="95c6ba8270ac4a98" destField="data" source="492784cf94a64f2b" sourceField="table"/>
+                                        <link dest="2d744ff0346d41c9" destField="parent" source="7dc28117" sourceField="obj"/>
+                                    </graph>
+                                    <ogcn:published_input field="obj" name="object1" ref="9c21137"/>
+                                    <ogcn:published_input field="obj" name="table" ref="293f9044"/>
+                                    <ogcn:published_input field="obj" name="parent" ref="7dc28117"/>
                                     <extensions>
-                                        <oga:settings>
-                                            <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
+                                        <oga:meta x="1144" y="1314"/>
+                                    </extensions>
+                                </ogcn:macro>
+                                <ogcn:macro id="3f52b69f" name="Print Word Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                                    <graph id="4ea8a939">
+                                        <node id="19bf134d" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="7caca3f7" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="5ce6decf" name="totals" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="55bd1d6be6dd4544" name="Setup Word Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                            <input name="totals" optional="false"/>
+                                            <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
 	inputs.add("totals", "", false, false);
 
 	outputs.add("table", "", false, Packages.ca.phon.query.report.datasource.DefaultTableDataSource);
@@ -5326,145 +5479,197 @@ function addRow(table, category, total, correct, incorrect) {
 	table.addRow(rowData);
 }
 ]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1012" y="2761"/>
-                                    </extensions>
-                                </node>
-                                <node id="106699053aba48fe" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                                                </oga:settings>
+                                                <oga:meta x="1012" y="2761"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="ccc9aafc6ce94cb6" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="943" y="2919"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="eb97ed4353244a3a" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="935" y="3043"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="879ed09a9f3f4e9a" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Level Accuracy_%s]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1123" y="2925"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="490433fa4ce94dd5" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Level Accuracy (%s)]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1132" y="3041"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="ec1ca0ff9b8b4947" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                            <input name="data" optional="false">Data to print</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
+                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
+                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1393" y="2817">
+                                                    <oga:default for="buffer" type="java.lang.String"/>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <node id="75d9f68da98e4bb5" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1369" y="2971">
+                                                    <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <link dest="55bd1d6be6dd4544" destField="totals" source="5ce6decf" sourceField="obj"/>
+                                        <link dest="ec1ca0ff9b8b4947" destField="data" source="55bd1d6be6dd4544" sourceField="table"/>
+                                        <link dest="ec1ca0ff9b8b4947" destField="buffer" source="879ed09a9f3f4e9a" sourceField="value"/>
+                                        <link dest="ccc9aafc6ce94cb6" destField="object1" source="19bf134d" sourceField="obj"/>
+                                        <link dest="879ed09a9f3f4e9a" destField="objects" source="ccc9aafc6ce94cb6" sourceField="array"/>
+                                        <link dest="75d9f68da98e4bb5" destField="sectionName" source="490433fa4ce94dd5" sourceField="value"/>
+                                        <link dest="75d9f68da98e4bb5" destField="parent" source="7caca3f7" sourceField="obj"/>
+                                        <link dest="75d9f68da98e4bb5" destField="tableName" source="ec1ca0ff9b8b4947" sourceField="buffer"/>
+                                        <link dest="eb97ed4353244a3a" destField="object1" source="19bf134d" sourceField="obj"/>
+                                        <link dest="490433fa4ce94dd5" destField="objects" source="eb97ed4353244a3a" sourceField="array"/>
+                                    </graph>
+                                    <ogcn:published_input field="obj" name="totals" ref="5ce6decf"/>
+                                    <ogcn:published_input field="obj" name="object1" ref="19bf134d"/>
+                                    <ogcn:published_input field="obj" name="parent" ref="7caca3f7"/>
                                     <extensions>
-                                        <opqry:sortoptions>
-                                            <opqry:sortBy column="IPA Target" order="ascending" type="plain"/>
-                                            <opqry:sortBy column="IPA Actual" order="ascending" type="plain"/>
-                                        </opqry:sortoptions>
-                                        <oga:settings/>
-                                        <oga:meta x="1131" y="3202"/>
+                                        <oga:meta x="1147" y="1520"/>
                                     </extensions>
-                                </node>
-                                <node id="21adf64c36ae460c" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                                    <input name="data" optional="false">Data to print</input>
+                                </ogcn:macro>
+                                <ogcn:macro id="20f336d" name="Print Word Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                                    <graph id="eba139c">
+                                        <node id="37ef1fc6" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="6481337b" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="da45134" name="table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
+                                                </oga:settings>
+                                            </extensions>
+                                        </node>
+                                        <node id="106699053aba48fe" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                                            <extensions>
+                                                <opqry:sortoptions>
+                                                    <opqry:sortBy column="IPA Target" order="ascending" type="plain"/>
+                                                    <opqry:sortBy column="IPA Actual" order="ascending" type="plain"/>
+                                                </opqry:sortoptions>
+                                                <oga:settings/>
+                                                <oga:meta x="1131" y="3202"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="fb2540fa630c4160" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="892" y="3312"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="55861ec1c12749b5" type="class:ca.gedge.opgraph.nodes.general.ArrayNode">
+                                            <input name="object1" optional="false">object in array</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[1]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="884" y="3436"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="9b21fbe93b54d12" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Stress Inventory_%s]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1072" y="3318"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="8455b26981ae4c4c" type="class:ca.gedge.opgraph.nodes.general.TextNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.gedge.opgraph.nodes.general.TextNode.text"><![CDATA[Word Level Stress Inventory (%s)]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1062" y="3443"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="2e732f3f6b024601" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                                            <input name="data" optional="false">Data to print</input>
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
+                                                    <oga:property key="showText"><![CDATA[false]]></oga:property>
+                                                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
+                                                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1362" y="3227">
+                                                    <oga:default for="buffer" type="java.lang.String"/>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <node id="65e58e4a25114820" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="1338" y="3381">
+                                                    <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                                </oga:meta>
+                                            </extensions>
+                                        </node>
+                                        <link dest="8455b26981ae4c4c" destField="objects" source="55861ec1c12749b5" sourceField="array"/>
+                                        <link dest="65e58e4a25114820" destField="sectionName" source="8455b26981ae4c4c" sourceField="value"/>
+                                        <link dest="65e58e4a25114820" destField="tableName" source="2e732f3f6b024601" sourceField="buffer"/>
+                                        <link dest="55861ec1c12749b5" destField="object1" source="37ef1fc6" sourceField="obj"/>
+                                        <link dest="2e732f3f6b024601" destField="buffer" source="9b21fbe93b54d12" sourceField="value"/>
+                                        <link dest="fb2540fa630c4160" destField="object1" source="37ef1fc6" sourceField="obj"/>
+                                        <link dest="9b21fbe93b54d12" destField="objects" source="fb2540fa630c4160" sourceField="array"/>
+                                        <link dest="2e732f3f6b024601" destField="data" source="106699053aba48fe" sourceField="table"/>
+                                        <link dest="65e58e4a25114820" destField="parent" source="6481337b" sourceField="obj"/>
+                                        <link dest="106699053aba48fe" destField="table" source="da45134" sourceField="obj"/>
+                                    </graph>
+                                    <ogcn:published_input field="obj" name="object1" ref="37ef1fc6"/>
+                                    <ogcn:published_input field="obj" name="parent" ref="6481337b"/>
+                                    <ogcn:published_input field="obj" name="table" ref="da45134"/>
                                     <extensions>
-                                        <oga:settings>
-                                            <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                                            <oga:property key="showText"><![CDATA[false]]></oga:property>
-                                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1365" y="1529">
-                                            <oga:default for="buffer" type="java.lang.String"/>
-                                        </oga:meta>
+                                        <oga:meta x="1147" y="1661"/>
                                     </extensions>
-                                </node>
-                                <node id="617bb6561fd4e7d" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                                    <input name="data" optional="false">Data to print</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                                            <oga:property key="showText"><![CDATA[false]]></oga:property>
-                                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1348" y="1921">
-                                            <oga:default for="buffer" type="java.lang.String"/>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="95c6ba8270ac4a98" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                                    <input name="data" optional="false">Data to print</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                                            <oga:property key="showText"><![CDATA[false]]></oga:property>
-                                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1349" y="2336">
-                                            <oga:default for="buffer" type="java.lang.String"/>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="ec1ca0ff9b8b4947" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                                    <input name="data" optional="false">Data to print</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                                            <oga:property key="showText"><![CDATA[false]]></oga:property>
-                                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1393" y="2817">
-                                            <oga:default for="buffer" type="java.lang.String"/>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="2e732f3f6b024601" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                                    <input name="data" optional="false">Data to print</input>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                                            <oga:property key="showText"><![CDATA[false]]></oga:property>
-                                            <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1362" y="3227">
-                                            <oga:default for="buffer" type="java.lang.String"/>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="a80551e14a07461f" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1341" y="1683">
-                                            <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="934cab300af844fe" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1324" y="2075">
-                                            <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="2d744ff0346d41c9" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1325" y="2490">
-                                            <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="75d9f68da98e4bb5" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1369" y="2971">
-                                            <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
-                                <node id="65e58e4a25114820" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
-                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="1338" y="3381">
-                                            <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
-                                        </oga:meta>
-                                    </extensions>
-                                </node>
+                                </ogcn:macro>
                                 <link dest="923b1235cde247a8" destField="table" source="fda3b374aa2e4b57" sourceField="obj"/>
                                 <link dest="cd529cc9bedf4ecc" destField="collection" source="923b1235cde247a8" sourceField="keySet"/>
                                 <link dest="cd529cc9bedf4ecc" destField="tableMap" source="923b1235cde247a8" sourceField="tableMap"/>
@@ -5475,83 +5680,38 @@ function addRow(table, category, total, correct, incorrect) {
                                 <link dest="cd529cc9bedf4ecc" destField="report node" source="6ced59c7" sourceField="section"/>
                                 <link dest="6ced59c7" destField="parent" source="5db72372" sourceField="obj"/>
                                 <link dest="cd529cc9bedf4ecc" destField="segmental inventory" source="bbe78aecd8f94ff5" sourceField="inventory"/>
-                                <link dest="de60a85" destField="objects" source="863c268" sourceField="array"/>
-                                <link dest="863c268" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="f01df4a584cc40a1" destField="objects" source="e6d3148c2a344b00" sourceField="array"/>
-                                <link dest="e6d3148c2a344b00" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="2c44f16673a540f3" destField="objects" source="a928a00eaef0461c" sourceField="array"/>
-                                <link dest="8d0824b5deae4eaf" destField="objects" source="fe4f758ac329449b" sourceField="array"/>
-                                <link dest="a928a00eaef0461c" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="fe4f758ac329449b" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="3073f698" destField="sectionName" source="de60a85" sourceField="value"/>
-                                <link dest="3073f698" destField="parent" source="6ced59c7" sourceField="section"/>
-                                <link dest="3073f698" destField="buffer" source="f01df4a584cc40a1" sourceField="value"/>
-                                <link dest="3073f698" destField="totals" source="cd529cc9bedf4ecc" sourceField="segmental totals"/>
-                                <link dest="5c27f255" destField="parent" source="6ced59c7" sourceField="section"/>
-                                <link dest="5c27f255" destField="data" source="cd529cc9bedf4ecc" sourceField="segmental inventory"/>
-                                <link dest="5c27f255" destField="buffer" source="2c44f16673a540f3" sourceField="value"/>
-                                <link dest="5c27f255" destField="sectionName" source="8d0824b5deae4eaf" sourceField="value"/>
                                 <link dest="cd529cc9bedf4ecc" destField="prosodic cgv inventory" source="dfaaabf7b0d14626" sourceField="inventory"/>
                                 <link dest="cd529cc9bedf4ecc" destField="prosodic stress inventory" source="f0d71e1be7cd4dd2" sourceField="inventory"/>
-                                <link dest="617bb6561fd4e7d" destField="data" source="f5d4ff22b6894a57" sourceField="table"/>
-                                <link dest="b1587f9fbed949ef" destField="objects" source="a3bab2132d9c4d98" sourceField="array"/>
-                                <link dest="934cab300af844fe" destField="tableName" source="617bb6561fd4e7d" sourceField="buffer"/>
-                                <link dest="617bb6561fd4e7d" destField="buffer" source="b1587f9fbed949ef" sourceField="value"/>
-                                <link dest="934cab300af844fe" destField="sectionName" source="c0f245b2fab640e9" sourceField="value"/>
-                                <link dest="c0f245b2fab640e9" destField="objects" source="d98d39f71c874e53" sourceField="array"/>
-                                <link dest="f5d4ff22b6894a57" destField="table" source="cd529cc9bedf4ecc" sourceField="prosodic cgv inventory"/>
-                                <link dest="a3bab2132d9c4d98" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="d98d39f71c874e53" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="934cab300af844fe" destField="parent" source="6ced59c7" sourceField="section"/>
-                                <link dest="95c6ba8270ac4a98" destField="buffer" source="b9795b8516174890" sourceField="value"/>
-                                <link dest="95c6ba8270ac4a98" destField="data" source="492784cf94a64f2b" sourceField="table"/>
-                                <link dest="2d744ff0346d41c9" destField="sectionName" source="5728dab7dd32404d" sourceField="value"/>
-                                <link dest="2d744ff0346d41c9" destField="tableName" source="95c6ba8270ac4a98" sourceField="buffer"/>
-                                <link dest="b9795b8516174890" destField="objects" source="5ff09b5e066f437b" sourceField="array"/>
-                                <link dest="5728dab7dd32404d" destField="objects" source="5f26763b994e4bc8" sourceField="array"/>
-                                <link dest="492784cf94a64f2b" destField="table" source="cd529cc9bedf4ecc" sourceField="prosodic stress inventory"/>
-                                <link dest="5ff09b5e066f437b" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="5f26763b994e4bc8" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="2d744ff0346d41c9" destField="parent" source="6ced59c7" sourceField="section"/>
                                 <link dest="cd529cc9bedf4ecc" destField="prosodic totals" source="804e47177ea847a3" sourceField="totals"/>
-                                <link dest="a80551e14a07461f" destField="tableName" source="21adf64c36ae460c" sourceField="buffer"/>
-                                <link dest="21adf64c36ae460c" destField="buffer" source="9137201491eb4ae9" sourceField="value"/>
-                                <link dest="a80551e14a07461f" destField="sectionName" source="cfe04c3badc14ae9" sourceField="value"/>
-                                <link dest="cfe04c3badc14ae9" destField="objects" source="ceabe48643ce4f0e" sourceField="array"/>
-                                <link dest="9137201491eb4ae9" destField="objects" source="8d12961f13a84c46" sourceField="array"/>
-                                <link dest="8d12961f13a84c46" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="ceabe48643ce4f0e" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="a80551e14a07461f" destField="parent" source="6ced59c7" sourceField="section"/>
-                                <link dest="589c4934eec14513" destField="totals" source="cd529cc9bedf4ecc" sourceField="prosodic totals"/>
-                                <link dest="21adf64c36ae460c" destField="data" source="589c4934eec14513" sourceField="table"/>
-                                <link dest="75d9f68da98e4bb5" destField="tableName" source="ec1ca0ff9b8b4947" sourceField="buffer"/>
-                                <link dest="ec1ca0ff9b8b4947" destField="data" source="55bd1d6be6dd4544" sourceField="table"/>
                                 <link dest="cd529cc9bedf4ecc" destField="word totals" source="97fdb8b4a9849e3" sourceField="totals"/>
-                                <link dest="55bd1d6be6dd4544" destField="totals" source="cd529cc9bedf4ecc" sourceField="word totals"/>
-                                <link dest="490433fa4ce94dd5" destField="objects" source="eb97ed4353244a3a" sourceField="array"/>
-                                <link dest="879ed09a9f3f4e9a" destField="objects" source="ccc9aafc6ce94cb6" sourceField="array"/>
-                                <link dest="ec1ca0ff9b8b4947" destField="buffer" source="879ed09a9f3f4e9a" sourceField="value"/>
-                                <link dest="75d9f68da98e4bb5" destField="sectionName" source="490433fa4ce94dd5" sourceField="value"/>
-                                <link dest="ccc9aafc6ce94cb6" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="eb97ed4353244a3a" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="75d9f68da98e4bb5" destField="parent" source="6ced59c7" sourceField="section"/>
                                 <link dest="cd529cc9bedf4ecc" destField="word stress inventory" source="3d50035ed1d64160" sourceField="inventory"/>
-                                <link dest="65e58e4a25114820" destField="tableName" source="2e732f3f6b024601" sourceField="buffer"/>
-                                <link dest="8455b26981ae4c4c" destField="objects" source="55861ec1c12749b5" sourceField="array"/>
-                                <link dest="2e732f3f6b024601" destField="data" source="106699053aba48fe" sourceField="table"/>
-                                <link dest="2e732f3f6b024601" destField="buffer" source="9b21fbe93b54d12" sourceField="value"/>
-                                <link dest="9b21fbe93b54d12" destField="objects" source="fb2540fa630c4160" sourceField="array"/>
-                                <link dest="65e58e4a25114820" destField="sectionName" source="8455b26981ae4c4c" sourceField="value"/>
-                                <link dest="106699053aba48fe" destField="table" source="cd529cc9bedf4ecc" sourceField="word stress inventory"/>
-                                <link dest="fb2540fa630c4160" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="55861ec1c12749b5" destField="object1" source="66eabc39" sourceField="value"/>
-                                <link dest="65e58e4a25114820" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="78d3bb1a" destField="totals" source="cd529cc9bedf4ecc" sourceField="segmental totals"/>
+                                <link dest="78d3bb1a" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="78d3bb1a" destField="object1" source="66eabc39" sourceField="value"/>
+                                <link dest="1aa05ac1" destField="data" source="cd529cc9bedf4ecc" sourceField="segmental inventory"/>
+                                <link dest="1aa05ac1" destField="object1" source="66eabc39" sourceField="value"/>
+                                <link dest="1aa05ac1" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="674ba9c4" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="674ba9c4" destField="object1" source="66eabc39" sourceField="value"/>
+                                <link dest="674ba9c4" destField="totals" source="cd529cc9bedf4ecc" sourceField="prosodic totals"/>
+                                <link dest="3b9b4b3b" destField="table" source="cd529cc9bedf4ecc" sourceField="prosodic cgv inventory"/>
+                                <link dest="3b9b4b3b" destField="object1" source="66eabc39" sourceField="value"/>
+                                <link dest="3b9b4b3b" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="592af60c" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="592af60c" destField="object1" source="66eabc39" sourceField="value"/>
+                                <link dest="592af60c" destField="table" source="cd529cc9bedf4ecc" sourceField="prosodic stress inventory"/>
+                                <link dest="3f52b69f" destField="totals" source="cd529cc9bedf4ecc" sourceField="word totals"/>
+                                <link dest="3f52b69f" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="3f52b69f" destField="object1" source="66eabc39" sourceField="value"/>
+                                <link dest="20f336d" destField="parent" source="6ced59c7" sourceField="section"/>
+                                <link dest="20f336d" destField="object1" source="66eabc39" sourceField="value"/>
+                                <link dest="20f336d" destField="table" source="cd529cc9bedf4ecc" sourceField="word stress inventory"/>
                                 <extensions>
                                     <oga:notes>
                                         <oga:note color="0xffff96" height="868" title="Published Inputs" width="302" x="68" y="117"/>
-                                        <oga:note color="0x96ff96" height="769" title="Segmental Totals" width="1032" x="572" y="650">Segmental totals for participant</oga:note>
-                                        <oga:note color="0xff96ff" height="1266" title="Prosodic Level Information" width="1051" x="571" y="1437"/>
-                                        <oga:note color="0xffc864" height="1254" title="Note" width="1089" x="571" y="2731"/>
+                                        <oga:note color="0x96ff96" height="351" title="Segmental Level" width="829" x="572" y="650"/>
+                                        <oga:note color="0x9696ff" height="447" title="Prosodic Level" width="832" x="572" y="1007"/>
+                                        <oga:note color="0xffc864" height="360" title="Word Level" width="836" x="571" y="1461"/>
                                     </oga:notes>
                                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                 </extensions>
@@ -5903,7 +6063,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6d9a4866" name="Segmental Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="d860f64">
+                    <graph id="78071a47">
                         <node id="737af0a8" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6089,11 +6249,11 @@ function run(context) {
                     <ogcn:published_input field="obj" name="totals" ref="5bc63bfd"/>
                     <ogcn:published_input field="obj" name="parent" ref="737af0a8"/>
                     <extensions>
-                        <oga:meta x="1103" y="545"/>
+                        <oga:meta x="1122" y="502"/>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="52b172ed" name="Segmental Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="71479ceb">
+                    <graph id="29866e39">
                         <node id="7f98a763" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6143,11 +6303,11 @@ function run(context) {
                     <ogcn:published_input field="obj" name="data" ref="7f98a763"/>
                     <ogcn:published_input field="obj" name="parent" ref="46c29ab1"/>
                     <extensions>
-                        <oga:meta x="1104" y="713"/>
+                        <oga:meta x="1122" y="623"/>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="d42675dc50334369" name="Prosodic Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4c36cb86">
+                    <graph id="75481d2">
                         <node id="6a2d7e06529d4c5e" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6274,11 +6434,11 @@ function addRow(table, title, count, syllCount) {
                     <ogcn:published_input field="obj" name="totals" ref="2499ec3b53a24e7a"/>
                     <ogcn:published_input field="obj" name="parent" ref="6a2d7e06529d4c5e"/>
                     <extensions>
-                        <oga:meta x="1149" y="1021"/>
+                        <oga:meta x="1126" y="829"/>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7702061f78f64893" name="Prosodic CGV Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="1e120036">
+                    <graph id="48b1b5bf">
                         <node id="b0691ed35b184032" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6328,11 +6488,11 @@ function addRow(table, title, count, syllCount) {
                     <ogcn:published_input field="obj" name="data" ref="b0691ed35b184032"/>
                     <ogcn:published_input field="obj" name="parent" ref="872623fe6a774e2d"/>
                     <extensions>
-                        <oga:meta x="1149" y="1235"/>
+                        <oga:meta x="1126" y="950"/>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6eeb2689d62148e1" name="Prosodic Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7d6cd5b3">
+                    <graph id="7783f2d">
                         <node id="3830ad66d23b4e68" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6385,11 +6545,11 @@ function addRow(table, title, count, syllCount) {
                     <ogcn:published_input field="obj" name="data" ref="3830ad66d23b4e68"/>
                     <ogcn:published_input field="obj" name="parent" ref="a558bde2e84b4044"/>
                     <extensions>
-                        <oga:meta x="1152" y="1365"/>
+                        <oga:meta x="1126" y="1071"/>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7bc6b64" name="Word Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="58982eb9">
+                    <graph id="7834d3ef">
                         <node id="8df3d41" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6497,11 +6657,11 @@ function addRow(table, category, total, correct, incorrect) {
                     <ogcn:published_input field="obj" name="totals" ref="67c63cfb"/>
                     <ogcn:published_input field="obj" name="parent" ref="8df3d41"/>
                     <extensions>
-                        <oga:meta x="1185" y="1589"/>
+                        <oga:meta x="1128" y="1256"/>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="85bbb8270e974342" name="Word Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7d435442">
+                    <graph id="4f7564f9">
                         <node id="589dda8180b54eca" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6554,7 +6714,7 @@ function addRow(table, category, total, correct, incorrect) {
                     <ogcn:published_input field="obj" name="data" ref="589dda8180b54eca"/>
                     <ogcn:published_input field="obj" name="parent" ref="930faf09b5934fbe"/>
                     <extensions>
-                        <oga:meta x="1147" y="1745"/>
+                        <oga:meta x="1128" y="1377"/>
                     </extensions>
                 </ogcn:macro>
                 <link dest="e7eb0f6277c94cc7" destField="results" source="a23f99c423d64c49" sourceField="obj"/>
@@ -6588,9 +6748,9 @@ function addRow(table, category, total, correct, incorrect) {
                 <extensions>
                     <oga:notes>
                         <oga:note color="0xffff96" height="979" title="Published Inputs" width="356" x="9" y="7"/>
-                        <oga:note color="0x96ff96" height="464" title="Segmental Level Information" width="751" x="688" y="467"/>
-                        <oga:note color="0xff96ff" height="563" title="Prosodic Level Information" width="738" x="689" y="950"/>
-                        <oga:note color="0xffc864" height="412" title="Word Level" width="739" x="688" y="1528"/>
+                        <oga:note color="0x96ff96" height="306" title="Segmental Level Information" width="663" x="688" y="467"/>
+                        <oga:note color="0x9696ff" height="425" title="Prosodic Level Information" width="664" x="688" y="779"/>
+                        <oga:note color="0xffc864" height="294" title="Word Level" width="662" x="688" y="1208"/>
                     </oga:notes>
                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                 </extensions>
@@ -6629,7 +6789,7 @@ Citations:
             </extensions>
         </node>
         <ogcn:macro id="4b787603" name="Print Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="2d93c1b7">
+            <graph id="16ff8107">
                 <node id="7a896d35" name="obj1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -6717,6 +6877,12 @@ Citations:
                 <opqry:report-template name="Report Suffix"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+            <oga:notes>
+                <oga:note color="0xffc864" height="41" title="Word Level" width="307" x="1223" y="150"/>
+                <oga:note color="0x9696ff" height="47" title="Prosodic Level" width="308" x="1223" y="200"/>
+                <oga:note color="0x96ff96" height="41" title="Segmental Level" width="309" x="1224" y="257"/>
+                <oga:note color="0xffff96" height="242" title="Colour Key" width="272" x="1110" y="74">Report sections are coloured by level</oga:note>
+            </oga:notes>
         </extensions>
     </graph>
 </opgraph>
