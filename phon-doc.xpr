@@ -748,6 +748,7 @@
     </meta>
     <projectTree name="phon-doc.xpr">
         <folder path="src/main/dita/"/>
+        <folder path="src/main/markdown/"/>
         <folder path="src/main/xslt/"/>
     </projectTree>
 </project>
