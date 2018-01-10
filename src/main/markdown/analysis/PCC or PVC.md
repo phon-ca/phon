@@ -23,7 +23,11 @@ An example table of contents is displayed below. Bold level elements are section
     
 ## Data Preparation
 
+Session data is queried by word and a WAP Table is produced for each IPA Target and IPA Actual tuple. Proper syllabification and phone alignment is required for accurate results.  All participants should have unique names/identification numbers and a speaker should be assigned to all records.
 
+## Parameters
+
+During execution of the analysis options for the *PCC/PVC* query are available.  The parameters for the query are printed in the report.
     
 ## PCC/PVC Summary
 
@@ -47,7 +51,7 @@ Example (Participant)
 
 ## PCC/PVC Listing
 
-The *PCC/PVC Listing* table displays # Target, # Correct, # Substituted, # Deleted, # Epenthesis, PCC/PVC  (Percent Consonant/Vowel Correct) for each word sampled.  The table will have the caption “Participant Name@Session Name”.
+The *PCC/PVC Listing* table displays # Target, # Correct, # Substituted, # Deleted, # Epenthesis, PCC/PVC  (Percent Consonant/Vowel Correct) for each word sampled.  The table will have the caption “Participant Name”.
 
 Example
 
