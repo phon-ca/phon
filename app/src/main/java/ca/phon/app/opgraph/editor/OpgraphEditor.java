@@ -19,7 +19,7 @@
 package ca.phon.app.opgraph.editor;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.List;
 
@@ -33,7 +33,7 @@ import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.perspective.*;
 import bibliothek.util.Filter;
-import ca.gedge.opgraph.app.*;
+import ca.gedge.opgraph.app.MenuProvider;
 import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
 import ca.gedge.opgraph.app.components.canvas.GridLayer;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel.ViewLocation;
@@ -46,8 +46,7 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.plugin.*;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.ui.menu.MenuManager;
+import ca.phon.ui.menu.*;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.RecentFiles;
 
@@ -89,7 +88,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 		setJMenuBar(menuBar);
 
 		initDockingView();
-		addWindowFocusListener(focusListener);
 	}
 
 	@Override
@@ -444,19 +442,6 @@ public class OpgraphEditor extends CommonModuleFrame {
 		defaultPerspective.shrink();
 		perspectives.setPerspective(defaultPerspective, true);
 	}
-
-	private final WindowFocusListener focusListener = new WindowFocusListener() {
-
-		@Override
-		public void windowLostFocus(WindowEvent e) {
-
-		}
-
-		@Override
-		public void windowGainedFocus(WindowEvent e) {
-			GraphEditorModel.setActiveEditorModel(model);
-		}
-	};
 
 	private final UndoableEditListener undoListener = (e) -> {
 		updateTitle();

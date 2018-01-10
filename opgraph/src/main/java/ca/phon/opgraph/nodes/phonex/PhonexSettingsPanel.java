@@ -24,18 +24,22 @@ import java.util.Properties;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.app.*;
+import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.edits.node.NodeSettingsEdit;
 
 /**
  * Phonex node settings panel.
  */
 public class PhonexSettingsPanel extends JPanel {
+	private GraphDocument document;
+	
 	// reference to parent node
 	private PhonexNode phonexNode;
 	
-	public PhonexSettingsPanel(PhonexNode node) {
+	public PhonexSettingsPanel(final GraphDocument document, PhonexNode node) {
 		super(new BorderLayout());
+		
+		this.document = document;
 		phonexNode = node;
 		
 		init();
@@ -49,7 +53,6 @@ public class PhonexSettingsPanel extends JPanel {
 				@Override
 				public void focusLost(FocusEvent e) {
 					// Post an undoable edit
-					final GraphDocument document = GraphEditorModel.getActiveDocument();
 					String phonex = phonexEditor.getText();
 					if(document != null) {
 						final Properties settings = new Properties();

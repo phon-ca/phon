@@ -192,7 +192,7 @@ public class PhonexFindNode extends MacroNode implements PhonexNode {
 	@Override
 	public Component getComponent(GraphDocument arg0) {
 		if(settingsPanel == null) {
-			settingsPanel = new PhonexSettingsPanel(this);
+			settingsPanel = new PhonexSettingsPanel(arg0, this);
 		}
 		return settingsPanel;
 	}

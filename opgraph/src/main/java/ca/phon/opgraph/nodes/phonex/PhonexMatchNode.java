@@ -147,7 +147,7 @@ public class PhonexMatchNode extends OpNode implements PhonexNode {
 	@Override
 	public Component getComponent(GraphDocument arg0) {
 		if(settingsPanel == null) {
-			settingsPanel = new PhonexSettingsPanel(this);
+			settingsPanel = new PhonexSettingsPanel(arg0, this);
 		}
 		return settingsPanel;
 	}
