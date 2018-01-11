@@ -59,7 +59,7 @@ exports.PatternFilter = function (id) {
 	};
 	var filterTypeParam;
 	this.filterType = {
-		"index": 0, "toString": "Plain text"
+		"index": 0, "toString": function () { return "Plain text"; }
 	};
 
 	var matchGroupParamInfo = {
@@ -345,7 +345,9 @@ exports.PatternFilter = function (id) {
 			}
 		};
 		filterTypeParam.addPropertyChangeListener(filterTypeParamInfo.id, filterTypeListener);
-
+		this.filterType = 
+			{ "index": filterTypeParamInfo.def, "toString": function () { return filterTypeParamInfo.desc[filterTypeParamInfo.def]; } };
+			
 		var helpLabelDesc = filterTypeHelpText[filterTypeParamInfo.def];
 		helpLabelParam = new LabelScriptParam(
 		helpLabelDesc,

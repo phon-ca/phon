@@ -10,228 +10,6 @@
                 <oga:meta x="62" y="69"/>
             </extensions>
         </node>
-        <opqry:queryNode id="1db7b6c2" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-11T06:05:53.906-03:30" name="Query Node" uuid="45aec2eb-347a-4609-a09b-20df0db067f0">
-                <script>
-                    <source>var GroupFilter = require("lib/GroupFilter").GroupFilter;
-var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
-var WordFilter = require("lib/WordFilter").WordFilter;
-var TierList = require("lib/TierList").TierList;
-var AlignedWordFilter = require("lib/TierFilter").TierFilter;
-var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
-var PatternFilter = require("lib/PatternFilter").PatternFilter;
-var PatternType = require("lib/PatternFilter").PatternType;
-var PPC = require("lib/PPC").PPC;
-var PPCOptions = require("lib/PPC").PPCOptions;
-var ResultType = require("lib/PhonScriptConstants").ResultType;
-
-/********************************
- * Setup params
- *******************************/
-var filters = {
-	"ppc": new PPCOptions("filters.ppc"),
-	"group": new GroupFilter("filters.group"),
-	"groupTiers": new TierList("filters.groupTiers"),
-	"groupPattern": new PatternFilter("filters.groupPattern"),
-	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
-	"word": new WordFilter("filters.word"),
-	"wordTiers": new TierList("filters.wordTiers"),
-	"wordPattern": new PatternFilter("filters.wordPattern"),
-	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
-	"speaker": new ParticipantFilter("filters.speaker")
-};
-
-function setup_params(params) {
-	var insertIdx = 0;
-
-	filters.ppc.param_setup(params);
-	
-	filters.group.param_setup(params);
-	filters.groupPattern.param_setup(params);
-
-	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Groups&lt;/b&gt;&lt;/html&gt;");
-	params.add(sep);
-	filters.groupTiers.param_setup(params);
-	var sep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group Filter&lt;/b&gt;&lt;/html&gt;");
-	params.add(sep2);
-	filters.alignedGroup.param_setup(params);
-
-	filters.word.searchByWordEnabled = false;
-	filters.word.param_setup(params);
-	filters.wordPattern.param_setup(params);
-	filters.wordPattern.setEnabled(false);
-
-	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Words&lt;/b&gt;&lt;/html&gt;");
-	params.add(wordsep);
-	filters.wordTiers.param_setup(params);
-
-	var wordsep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word Filter&lt;/b&gt;&lt;/html&gt;");
-	params.add(wordsep2);
-	filters.alignedWord.param_setup(params);
-	var searchByWordListener = new java.beans.PropertyChangeListener {
-		propertyChange: function (e) {
-			var enabled = e.source.getValue(e.source.paramId);
-			filters.wordPattern.setEnabled(enabled);
-			filters.alignedWord.setEnabled(enabled);
-		}
-	};
-	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
-	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
-	filters.wordPattern.setEnabled(enabled);
-	filters.alignedWord.setEnabled(enabled);
-
-	filters.speaker.param_setup(params);
-}
-
-var session;
-
-function begin_search(s) {
-	session = s;
-}
-
-var searchTier = "IPA Target";
-function query_record(recordIndex, record) {
-	var nf = java.text.NumberFormat.getNumberInstance();
-	nf.setMinimumFractionDigits(1);
-	nf.setMaximumFractionDigits(2);
-	// check participant filter
-	if (! filters.speaker.check_speaker(record.speaker)) return;
-
-	// check group+groupPattern filters
-	var groups = filters.group.getRequestedGroups(record);
-	if (filters.groupPattern.isUseFilter()) {
-		groups = filters.groupPattern.filter_groups(groups, searchTier);
-	}
-
-	// check aligned group for each group returned
-	if (filters.alignedGroup.isUseFilter()) {
-		groups = filters.alignedGroup.filter_groups(record, groups);
-	}
-
-	// perform searches
-	for (var i = 0; i &lt; groups.length; i++) {
-		var group = groups[i];
-
-		var groupAlignedData = filters.groupTiers.getAlignedTierData(record, group, "Group");
-
-		var groupAlignedResults = groupAlignedData[0];
-		var groupAlignedMeta = groupAlignedData[1];
-
-		if (filters.alignedGroup.isUseFilter()) {
-			var tierList = new TierList("group");
-			tierList.setTiers(filters.alignedGroup.tier);
-
-			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
-			for(var j = 0; j &lt; alignedGroupData[0].length; j++) {
-				groupAlignedResults.push(alignedGroupData[0][j]);
-			}
-		}
-
-		var toSearch = new Array();
-		toSearch.length = 0;
-		var selectedWords = filters.word.getRequestedWords(group, searchTier);
-		for (j = 0; j &lt; selectedWords.length; j++) {
-			var word = selectedWords[j];
-
-			var wordAlignedMeta = new java.util.LinkedHashMap();
-			wordAlignedMeta.putAll(groupAlignedMeta);
-
-			var wordAlignedResults = new Array();
-			for(var k = 0; k &lt; groupAlignedResults.length; k++) {
-				wordAlignedResults.push(groupAlignedResults[k]);
-			}
-
-			var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
-			for(var k = 0; k &lt; wordAlignedData[0].length; k++) {
-				wordAlignedResults.push(wordAlignedData[0][k]);
-			}
-			wordAlignedMeta.putAll(wordAlignedData[1]);
-
-			var wordIpa = (searchTier == "IPA Target" ? word.IPATarget : word.IPAActual);
-			var alignedIpa = (searchTier == "IPA Target" ? word.IPAActual : word.IPATarget);
-			var addWord = (wordIpa != null &amp;&amp; wordIpa.length() &gt; 0 &amp;&amp; alignedIpa != null &amp;&amp; alignedIpa.length() &gt; 0);
-			// check word pattern if necessary
-			if (filters.wordPattern.isUseFilter()) {
-				addWord = filters.wordPattern.check_filter(wordIpa);
-			}
-
-			// check aligned word pattern if necessary
-			if (filters.alignedWord.isUseFilter()) {
-				addWord = filters.alignedWord.check_word(word);
-
-				var tierList = new TierList("word");
-				tierList.setTiers(filters.alignedWord.tier);
-
-				var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
-				for(var k = 0; k &lt; alignedWordData[0].length; k++) {
-					wordAlignedResults.push(alignedWordData[0][k]);
-				}
-			}
-
-			if (addWord == true) {
-				toSearch.push([word, wordAlignedResults, wordAlignedMeta]);
-			}
-		}
-		
-		for(j = 0; j &lt; toSearch.length; j++) {
-			var word = toSearch[j][0];
-			var alignedResults = toSearch[j][1];
-			var alignedMetadata = toSearch[j][2];
-			
-			var pc = PPC.calc_ppc_aligned(word, filters.ppc.getPhonex(), filters.ppc.ignoreDiacritics == true);
-			
-			var ipaT = (word.IPATarget != null ? word.IPATarget : new IPATranscript());
-			var ipaA = (word.IPAActual != null ? word.IPAActual : new IPATranscript());
-			
-			var result = factory.createResult();
-		    result.schema = "ALIGNED";
-		    result.recordIndex = recordIndex;
-
-		    var rvt = factory.createResultValue();
-		    rvt.tierName = "IPA Target";
-	    	rvt.groupIndex = i;
-	    	var startIndex = word.getIPATargetWordLocation();
-	    	var endIndex = startIndex + ipaT.toString().length();
-	    	rvt.range = new Range(startIndex, endIndex, false);
-	    	rvt.data = ipaT;
-	    	result.addResultValue(rvt);
-
-	    	var rva = factory.createResultValue();
-	    	rva.tierName = "IPA Actual";
-	    	rva.groupIndex = i;
-	    	startIndex = word.getIPAActualWordLocation();
-	    	endIndex = startIndex + ipaA.toString().length();
-	    	rva.range = new Range(startIndex, endIndex, false);
-	    	rva.data = ipaA;
-	        result.addResultValue(rva);
-
-			result.metadata.put("# Target", pc.target + "");
-			result.metadata.put("# Actual", pc.actual + "");
-			result.metadata.put("# Correct", pc.correct + "");
-			result.metadata.put("# Substituted", pc.substituted + "");
-			result.metadata.put("# Deleted", pc.deleted + "");
-			result.metadata.put("# Epenthesized", pc.epen + "");
-			
-			var pcVal = (pc.target &gt; 0 ? ( pc.correct / (pc.correct + pc.substituted + pc.deleted + pc.epen) ): 0) * 100;
-			result.metadata.put(filters.ppc.getColumnName(), nf.format(pcVal));
-
-			for(var alignedResultIdx = 0; alignedResultIdx &lt; alignedResults.length; alignedResultIdx++) {
-					result.addResultValue(alignedResults[alignedResultIdx]);
-			}
-		    result.metadata.putAll(alignedMetadata);
-		    
-		    results.addResult(result);
-		}
-	}
-}
-</source>
-                </script>
-            </qry:query>
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="459" y="112"/>
-            </extensions>
-        </opqry:queryNode>
         <node id="5e629711" name="Selected Sessions" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
@@ -239,32 +17,6 @@ function query_record(recordIndex, record) {
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                 </oga:settings>
                 <oga:meta x="62" y="310"/>
-            </extensions>
-        </node>
-        <node id="10ac3417" name="PCC/PVC" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
-            <input name="params" optional="false"/>
-            <output name="pcType" type="java.lang.String"/>
-            <extensions>
-                <oga:settings>
-                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
-	inputs.add("params", "", false, false);
-
-	outputs.add("pcType", "", false, java.lang.String);
-}
-
-function run(context) {
-	var paramMap = context.get("params");
-
-	var pcType = paramMap.get("filters.pcc.pcType");
-
-	if(pcType.index == 0)
-		context.put("pcType", "PCC");
-	else
-		context.put("pcType", "PVC");
-}
-]]></oga:property>
-                </oga:settings>
-                <oga:meta x="457" y="365"/>
             </extensions>
         </node>
         <node id="6b8dfd59" name="Selected Participants" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -289,12 +41,16 @@ var PatternType = require("lib/PatternFilter").PatternType;
 var PPC = require("lib/PPC").PPC;
 var PPCOptions = require("lib/PPC").PPCOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
+
 
 /********************************
  * Setup params
  *******************************/
 var filters = {
 	"ppc": new PPCOptions("filters.ppc"),
+	"searchBy": new SearchByOptions("filters.searchBy"),
 	"group": new GroupFilter("filters.group"),
 	"groupTiers": new TierList("filters.groupTiers"),
 	"groupPattern": new PatternFilter("filters.groupPattern"),
@@ -303,12 +59,13 @@ var filters = {
 	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
+	"syllable": new SyllableFilter("filters.syllable")
 };
 
 var reportTitleParamInfo = {
 	"id": "reportTitle",
 	"title": "Report Title",
-	"def": "PCC",
+	"def": "PPC",
 	"prompt": "Enter report title"
 };
 var reportTitleParam;
@@ -321,30 +78,35 @@ function setup_params(params) {
 			reportTitleParamInfo.def);
 	reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
-	
-	var insertIdx = 0;
 
 	filters.ppc.param_setup(params);
+	filters.ppc.ppcTypeParameter.addPropertyChangeListener(filters.ppc.ppcTypeParameter.paramId, new java.beans.PropertyChangeListener() {
+		propertyChange: function(e) {
+			reportTitleParam.setValue(reportTitleParamInfo.id, filters.ppc.getColumnName());
+	
+		}
+	});
+	
+	var insertIdx = params.size();
 	
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
-
+	
 	var sep = new LabelScriptParam("", "<html><b>Add Aligned Groups</b></html>");
 	params.add(sep);
 	filters.groupTiers.param_setup(params);
 	var sep2 = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
 	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
-
-	filters.word.searchByWordEnabled = false;
+	
+	filters.word.searchByWordEnabled = true;
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
-	filters.wordPattern.setEnabled(false);
-
+	
 	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
-
+	
 	var wordsep2 = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
 	params.add(wordsep2);
 	filters.alignedWord.param_setup(params);
@@ -359,15 +121,281 @@ function setup_params(params) {
 	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
 	filters.wordPattern.setEnabled(enabled);
 	filters.alignedWord.setEnabled(enabled);
-
-}
-]]></oga:property>
+	
+	filters.syllable.param_setup(params);
+	
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
+}]]></oga:property>
+                    <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
+                    <oga:property key="filters.ppc.ppcType"><![CDATA[Percent Phones Correct (PPC)]]></oga:property>
+                    <oga:property key="filters.ppc.pattern.filter"><![CDATA[\w]]></oga:property>
                 </oga:settings>
                 <oga:meta x="62" y="570"/>
             </extensions>
         </node>
+        <opqry:queryNode id="1db7b6c2" name="Query : PPC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-11T10:34:02.242-03:30" name="Query : PPC" uuid="a6ec8f56-28d9-4d16-a879-13549461c3ca">
+                <script>
+                    <source>var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var TierList = require("lib/TierList").TierList;
+var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+var PatternType = require("lib/PatternFilter").PatternType;
+var PPC = require("lib/PPC").PPC;
+var PPCOptions = require("lib/PPC").PPCOptions;
+var ResultType = require("lib/PhonScriptConstants").ResultType;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
+
+
+/********************************
+ * Setup params
+ *******************************/
+var filters = {
+	"ppc": new PPCOptions("filters.ppc"),
+	"searchBy": new SearchByOptions("filters.searchBy"),
+	"group": new GroupFilter("filters.group"),
+	"groupTiers": new TierList("filters.groupTiers"),
+	"groupPattern": new PatternFilter("filters.groupPattern"),
+	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+	"word": new WordFilter("filters.word"),
+	"wordTiers": new TierList("filters.wordTiers"),
+	"wordPattern": new PatternFilter("filters.wordPattern"),
+	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
+	"syllable": new SyllableFilter("filters.syllable"),
+	"speaker": new ParticipantFilter("filters.speaker")
+};
+
+function setup_params(params) {
+	
+	filters.ppc.param_setup(params);
+	var insertIdx = params.size();
+	
+	filters.group.param_setup(params);
+	filters.groupPattern.param_setup(params);
+	
+	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Groups&lt;/b&gt;&lt;/html&gt;");
+	params.add(sep);
+	filters.groupTiers.param_setup(params);
+	var sep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group Filter&lt;/b&gt;&lt;/html&gt;");
+	params.add(sep2);
+	filters.alignedGroup.param_setup(params);
+	
+	filters.word.searchByWordEnabled = true;
+	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+	
+	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Words&lt;/b&gt;&lt;/html&gt;");
+	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
+	
+	var wordsep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word Filter&lt;/b&gt;&lt;/html&gt;");
+	params.add(wordsep2);
+	filters.alignedWord.param_setup(params);
+	var searchByWordListener = new java.beans.PropertyChangeListener {
+		propertyChange: function (e) {
+			var enabled = e.source.getValue(e.source.paramId);
+			filters.wordPattern.setEnabled(enabled);
+			filters.alignedWord.setEnabled(enabled);
+		}
+	};
+	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
+	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
+	filters.wordPattern.setEnabled(enabled);
+	filters.alignedWord.setEnabled(enabled);
+		
+	filters.syllable.param_setup(params);
+	
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
+	
+	filters.speaker.param_setup(params);
+}
+
+var session;
+
+function begin_search(s) {
+	session = s;
+}
+
+var searchTier = "IPA Target";
+function query_record(recordIndex, record) {
+	var nf = java.text.NumberFormat.getNumberInstance();
+	nf.setMinimumFractionDigits(1);
+	nf.setMaximumFractionDigits(2);
+	// check participant filter
+	if (! filters.speaker.check_speaker(record.speaker)) return;
+	
+	// check group+groupPattern filters
+	var groups = filters.group.getRequestedGroups(record);
+	if (filters.groupPattern.isUseFilter()) {
+		groups = filters.groupPattern.filter_groups(groups, searchTier);
+	}
+	
+	// check aligned group for each group returned
+	if (filters.alignedGroup.isUseFilter()) {
+		groups = filters.alignedGroup.filter_groups(record, groups);
+	}
+	
+	// perform searches
+	for (var i = 0; i &lt; groups.length; i++) {
+		var group = groups[i];
+		
+		var groupAlignedData = filters.groupTiers.getAlignedTierData(record, group, "Group");
+		
+		var groupAlignedResults = groupAlignedData[0];
+		var groupAlignedMeta = groupAlignedData[1];
+		
+		if (filters.alignedGroup.isUseFilter()) {
+			var tierList = new TierList("group");
+			tierList.setTiers(filters.alignedGroup.tier);
+			
+			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
+			for (var j = 0; j &lt; alignedGroupData[0].length; j++) {
+				groupAlignedResults.push(alignedGroupData[0][j]);
+			}
+		}
+		
+		var toSearch = new Array();
+		toSearch.length = 0;
+		var selectedWords = filters.word.getRequestedWords(group, searchTier);
+		for (j = 0; j &lt; selectedWords.length; j++) {
+			var word = selectedWords[j];
+			
+			var wordAlignedMeta = new java.util.LinkedHashMap();
+			wordAlignedMeta.putAll(groupAlignedMeta);
+			
+			var wordAlignedResults = new Array();
+			for (var k = 0; k &lt; groupAlignedResults.length; k++) {
+				wordAlignedResults.push(groupAlignedResults[k]);
+			}
+			
+			var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
+			for (var k = 0; k &lt; wordAlignedData[0].length; k++) {
+				wordAlignedResults.push(wordAlignedData[0][k]);
+			}
+			wordAlignedMeta.putAll(wordAlignedData[1]);
+			
+			var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
+			var alignedIpa = (searchTier == "IPA Target" ? word.IPAActual: word.IPATarget);
+			var addWord = (wordIpa != null &amp;&amp; wordIpa.length() &gt; 0 &amp;&amp; alignedIpa != null &amp;&amp; alignedIpa.length() &gt; 0);
+			// check word pattern if necessary
+			if (filters.wordPattern.isUseFilter()) {
+				addWord = filters.wordPattern.check_filter(wordIpa);
+			}
+			
+			// check aligned word pattern if necessary
+			if (filters.alignedWord.isUseFilter()) {
+				addWord = filters.alignedWord.check_word(word);
+				
+				var tierList = new TierList("word");
+				tierList.setTiers(filters.alignedWord.tier);
+				
+				var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
+				for (var k = 0; k &lt; alignedWordData[0].length; k++) {
+					wordAlignedResults.push(alignedWordData[0][k]);
+				}
+			}
+			
+			if (addWord == true) {
+				toSearch.push([word, wordAlignedResults, wordAlignedMeta]);
+			}
+		}
+		
+		for (j = 0; j &lt; toSearch.length; j++) {
+			var word = toSearch[j][0];
+			var alignedResults = toSearch[j][1];
+			var alignedMetadata = toSearch[j][2];
+			
+			var pc = PPC.calc_ppc_aligned(word, filters.ppc.pattern, filters.ppc.ignoreDiacritics == true);
+			
+			var ipaT = (word.IPATarget != null ? word.IPATarget: new IPATranscript());
+			var ipaA = (word.IPAActual != null ? word.IPAActual: new IPATranscript());
+			
+			var result = factory.createResult();
+			result.schema = "ALIGNED";
+			result.recordIndex = recordIndex;
+			
+			var rvt = factory.createResultValue();
+			rvt.tierName = "IPA Target";
+			rvt.groupIndex = i;
+			var startIndex = word.getIPATargetWordLocation();
+			var endIndex = startIndex + ipaT.toString().length();
+			rvt.range = new Range(startIndex, endIndex, false);
+			rvt.data = ipaT;
+			result.addResultValue(rvt);
+			
+			var rva = factory.createResultValue();
+			rva.tierName = "IPA Actual";
+			rva.groupIndex = i;
+			startIndex = word.getIPAActualWordLocation();
+			endIndex = startIndex + ipaA.toString().length();
+			rva.range = new Range(startIndex, endIndex, false);
+			rva.data = ipaA;
+			result.addResultValue(rva);
+			
+			result.metadata.put("# Target", pc.target + "");
+			result.metadata.put("# Actual", pc.actual + "");
+			result.metadata.put("# Correct", pc.correct + "");
+			result.metadata.put("# Substituted", pc.substituted + "");
+			result.metadata.put("# Deleted", pc.deleted + "");
+			result.metadata.put("# Epenthesized", pc.epen + "");
+			
+			var pcVal = (pc.target &gt; 0 ? (pc.correct / (pc.correct + pc.substituted + pc.deleted + pc.epen)): 0) * 100;
+			result.metadata.put(filters.ppc.getColumnName() + "", nf.format(pcVal));
+			
+			for (var alignedResultIdx = 0; alignedResultIdx &lt; alignedResults.length; alignedResultIdx++) {
+				result.addResultValue(alignedResults[alignedResultIdx]);
+			}
+			result.metadata.putAll(alignedMetadata);
+			
+			results.addResult(result);
+		}
+	}
+}</source>
+                    <param id="filters.ppc.pattern.filter">\w</param>
+                    <param id="filters.searchBy.searchBy">Word</param>
+                </script>
+            </qry:query>
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="462" y="111"/>
+            </extensions>
+        </opqry:queryNode>
+        <node id="10ac3417" name="Report Type" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <input name="params" optional="false"/>
+            <output name="pcType" type="java.lang.String"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
+	inputs.add("params", "", false, false);
+
+	outputs.add("pcType", "", false, java.lang.String);
+}
+
+function run(context) {
+	var paramMap = context.get("params");
+
+	var ppcType = paramMap.get("filters.ppc.ppcType");
+
+	var pcType = "PPC";
+
+	if(ppcType.index == 1) pcType = "PCC";
+	else if(ppcType.index == 2) pcType = "PVC";
+
+	context.put("pcType", pcType);
+}
+]]></oga:property>
+                </oga:settings>
+                <oga:meta x="457" y="365"/>
+            </extensions>
+        </node>
         <ogcn:macro id="4b18886ea00b48b3" name="Report" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="7a23a2be">
+            <graph id="747a6985">
                 <node id="e6d45b5e5a1847a0" name="reportTitle" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -615,7 +643,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="9be63edf7454f48" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="59ad70c5">
+                    <graph id="40729f38">
                         <node id="f07c16119afe452e" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -717,7 +745,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="cb86895b929e40c4" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="1dcbc94e">
+                            <graph id="403eb1ca">
                                 <node id="709f2e57dcf44ec5" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -775,7 +803,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="f597c5aaf39b442f" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="46ee98af">
+                            <graph id="637715f6">
                                 <node id="d779e16362c04d76" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -909,7 +937,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="44ede451a63843e8" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                                    <graph id="4cb714df">
+                                    <graph id="2b371a8c">
                                         <node id="f87a720cdb874d57" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                             <extensions>
                                                 <oga:settings>
@@ -953,7 +981,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="71b15afc5b9d47f5" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="1ac0d08d">
+                                            <graph id="24e84434">
                                                 <node id="257ee0628b94c4f" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1007,7 +1035,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="73704a9fac14603" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="218322d6">
+                                            <graph id="ae0e4d6">
                                                 <node id="c15eafc9d07d4fa3" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1161,7 +1189,7 @@ function tableOp(context, table) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="6e89d296" name="Print Participant Listing" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="6aea4482">
+                            <graph id="bd99151">
                                 <node id="1908a532" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1311,7 +1339,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="495563a1" name="Print Participant Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="2a7b3c92">
+                            <graph id="3ac784b3">
                                 <node id="5e637044" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1438,7 +1466,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2bc124ee" name="Print Global Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4301c135">
+                    <graph id="28a49d6">
                         <node id="1249c50e" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1565,9 +1593,16 @@ function run(context) {
         <link dest="4b18886ea00b48b3" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
         <link dest="57f440cf" destField="obj" source="4b18886ea00b48b3" sourceField="reportTree"/>
         <link dest="67c93d21" destField="data" source="57f440cf" sourceField="reportTemplate"/>
+        <link dest="1db7b6c2" destField="project" source="1d6fc11b" sourceField="obj"/>
+        <link dest="1db7b6c2" destField="sessions" source="5e629711" sourceField="obj"/>
+        <link dest="1db7b6c2" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
+        <link dest="4b18886ea00b48b3" destField="project" source="1db7b6c2" sourceField="project"/>
+        <link dest="4b18886ea00b48b3" destField="results" source="1db7b6c2" sourceField="results"/>
+        <link dest="4b18886ea00b48b3" destField="script" source="1db7b6c2" sourceField="script"/>
+        <link dest="10ac3417" destField="params" source="dc4dad38c60648c1" sourceField="parameters"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="PCC &amp; PVC">
+                <opqry:info format="html" title="PPC">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="dc4dad38c60648c1" showAsStep="true">
@@ -1581,7 +1616,7 @@ function run(context) {
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
             <oga:notes>
                 <oga:note color="0xffff96" height="542" title="Inputs" width="365" x="26" y="11">Default inputs for all Analysis documents</oga:note>
-                <oga:note color="0x9696ff" height="542" title="PCC Query" width="296" x="425" y="12">Creates a table of results, one for each word in the selected sessions, with the PCC calculations for each word.</oga:note>
+                <oga:note color="0x9696ff" height="542" title="PPC Query" width="296" x="425" y="12">Creates a table of results, one for each word in the selected sessions, with the PCC calculations for each word.</oga:note>
                 <oga:note color="0x96ff96" height="537" title="Report" width="345" x="750" y="14">Basic report with Summary and Breakdown sections.  Summary contains totals for the PCC columns created in Query stage</oga:note>
             </oga:notes>
         </extensions>
