@@ -19,7 +19,7 @@
 package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.*;
 import ca.phon.orthography.*;
 
 /**
@@ -117,6 +117,10 @@ public interface Word {
 	
 	public int getPhoneAlignmentLocation();
 	
+	public SyllableMap getSyllableAlignment();
+	
+	public int getSyllableAlignmentLocation();
+	
 	/**
 	 * Notes - this will be the same for every group!
 	 */
@@ -148,5 +152,22 @@ public interface Word {
 	 *  if not found
 	 */
 	public int getTierWordLocation(String tierName);
+	
+	/**
+	 * Return the number of aligned syllables in this
+	 * group.
+	 * 
+	 * @return number of aligned syllables
+	 */
+	public int getAlignedSyllableCount();
+	
+	/**
+	 * Return the aligned syllable at given index
+	 * 
+	 * @param index
+	 * 
+	 * @return aligned syllable
+	 */
+	public AlignedSyllable getAlignedSyllable(int index);
 	
 }

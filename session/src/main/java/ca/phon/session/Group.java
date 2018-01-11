@@ -19,7 +19,7 @@
  package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.*;
 import ca.phon.orthography.Orthography;
 
 /**
@@ -71,6 +71,8 @@ public interface Group {
 	public PhoneMap getPhoneAlignment();
 	
 	public void setPhoneAlignment(PhoneMap alignment);
+	
+	public SyllableMap getSyllableAlignment();
 	
 	/**
 	 * Notes - this will be the same for every group!
@@ -125,5 +127,22 @@ public interface Group {
 	 *  is empty or not a grouped tier
 	 */
 	public int getWordCount(String tierName);
+	
+	/**
+	 * Return the number of aligned syllables in this
+	 * group.
+	 * 
+	 * @return number of aligned syllables
+	 */
+	public int getAlignedSyllableCount();
+	
+	/**
+	 * Return the aligned syllable at given index
+	 * 
+	 * @param index
+	 * 
+	 * @return aligned syllable
+	 */
+	public AlignedSyllable getAlignedSyllable(int index);
 	
 }

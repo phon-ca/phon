@@ -185,8 +185,20 @@ public class GroupImpl implements Group {
 		return retVal;
 	}
 
+	@Override
 	public SyllableMap getSyllableAlignment() {
-		return new SyllableMap(getIPATarget(), getIPAActual(), getPhoneAlignment());
+		final SyllableAligner aligner = new SyllableAligner();
+		return aligner.calculateSyllableAlignment(getIPATarget(), getIPAActual(), getPhoneAlignment());
+	}
+
+	@Override
+	public int getAlignedSyllableCount() {
+		return getSyllableAlignment().getAlignmentLength();
+	}
+	
+	@Override
+	public AlignedSyllable getAlignedSyllable(int index) {
+		return new AlignedSyllableImpl(getRecord(), groupIndex, index);
 	}
 	
 }

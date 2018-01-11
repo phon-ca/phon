@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.*;
 import ca.phon.orthography.*;
 import ca.phon.session.*;
 
@@ -249,5 +249,26 @@ public class WordImpl implements Word {
 		}
 
 		return retVal;
+	}
+
+	@Override
+	public SyllableMap getSyllableAlignment() {
+		final SyllableAligner aligner = new SyllableAligner();
+		return aligner.calculateSyllableAlignment(getIPATarget(), getIPAActual(), getPhoneAlignment());
+	}
+
+	@Override
+	public int getSyllableAlignmentLocation() {
+		return getPhoneAlignmentLocation();
+	}
+
+	@Override
+	public int getAlignedSyllableCount() {
+		return getSyllableAlignment().getAlignmentLength();
+	}
+
+	@Override
+	public AlignedSyllable getAlignedSyllable(int index) {
+		return new AlignedSyllableImpl(recordRef.get(), groupIndex, wordIndex, index);
 	}
 }
