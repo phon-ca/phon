@@ -1,37 +1,41 @@
-# Analysis: PCC or PVC
+# Analysis: PPC
 
-This document describes the PCC or PVC report in Phon.
+This document describes the PPC report in Phon.
+
+## Information
+
+The PPC report will calculate the percent phones/consonants/vowels correct (PPC/PCC/PVC) in the sampled data. An option for selecting which report is generated is presented during execution of the graph along with other filtering options.
 
 ## Outline
 
 The report will be composed of two types of tables:
 
- * PCC/PVC Summary
- * PCC/PVC Listing
+ * PPC Summary
+ * PPC Listing
  
 An example table of contents is displayed below. Bold level elements are section headers while italic items are one of the tables listed above.  Other headings are standard Phon report elements or text blocks.
 
- * **PCC/PVC**
- * Parameters
- * **Summary**
-    - *PCC/PVC Summary* (All Participants)
-    - *PCC/PVC Summary* (Participant 1)
-    - ...
- * **Breakdown**
-    - *PCC/PVC Listing* (Participant 1)
-    - ...
+ * **PPC/PCC/PVC**
+    * Parameters
+    * **Summary**
+        - *PPC Summary* (All Participants)
+        - *PPC Summary* (Participant 1)
+        - ...
+    * **Breakdown**
+        - *PPC Listing* (Participant 1)
+        - ...
     
 ## Data Preparation
 
-Session data is queried by word and a WAP Table is produced for each IPA Target and IPA Actual tuple. Proper syllabification and phone alignment is required for accurate results.  All participants should have unique names/identification numbers and a speaker should be assigned to all records.
+Session data is queried by word for each IPA Target and IPA Actual tuple. Proper syllabification and phone alignment is required for accurate results.  All participants should have unique names/identification numbers and a speaker should be assigned to all records.
 
 ## Parameters
 
 During execution of the analysis options for the *PCC/PVC* query are available.  The parameters for the query are printed in the report.
     
-## PCC/PVC Summary
+## PPC Summary
 
-The *PCC/PVC Summary* tables displays # Target, # Correct, # Substituted, # Deleted, # Epenthesis, PCC/PVC  (Percent Consonant/Vowel Correct).  When displaying the summary for "All Participants" each row is the summary for a single speaker with a final row displaying totals for all speakers. When displaying the summary for a participant, each row is the totals for the participant in the indicated session.  The caption of the table will be “All Participants” or “Participant Name”.
+The *PPC Summary* tables display # Target, # Correct, # Substituted, # Deleted, # Epenthesis, PPC/PCC/PVC  (Percent Phone/Consonant/Vowel Correct) for the sampled data.  When displaying the summary for "All Participants" each row is the summary for a single speaker with a final row displaying totals for all speakers. When displaying the summary for a participant, each row shows the totals for the participant in the indicated session.  The caption of the table will be “All Participants” or “Participant Name”.
 
 Example (All Participants)
 
@@ -49,9 +53,9 @@ Example (Participant)
 | CHI.Session2 | Target Child | 01;11.22 | 445 | 254 | 106 | 85 | 30 | 53.47 |
 | CHI.Session3 | Target Child | 02;02.15 | 436 | 281 | 91 | 64 | 17 | 62.03 |
 
-## PCC/PVC Listing
+## PPC Listing
 
-The *PCC/PVC Listing* table displays # Target, # Correct, # Substituted, # Deleted, # Epenthesis, PCC/PVC  (Percent Consonant/Vowel Correct) for each word sampled.  The table will have the caption “Participant Name”.
+The *PPC Listing* table displays # Target, # Correct, # Substituted, # Deleted, # Epenthesis, PCC/PVC  (Percent Consonant/Vowel Correct) for each word sampled.  The table will have the caption “Participant Name”.
 
 Example
 
