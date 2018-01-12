@@ -184,7 +184,7 @@ function query_record(recordIndex, record) {
 
 						if (v.value instanceof IPATranscript) {
 							// we need to convert phone to string range
-							startIdx = word.getTier(searchTier).stringIndexOf(v.value);
+							startIdx = wordOffset + word.getTier(searchTier).stringIndexOf(v.value);
 							endIdx = startIdx + v.value.toString().length();
 						}
 
