@@ -49,6 +49,11 @@ public class PunctuationFilter extends VisitorAdapter<IPAElement> {
 	}
 	
 	@Visits
+	public void visitPause(Pause pause) {
+		builder.append(pause);
+	}
+	
+	@Visits
 	public void visitBasicPhone(Phone phone) {
 		builder.append(phone);
 	}
