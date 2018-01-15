@@ -26,6 +26,7 @@ import java.time.LocalDate;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.undo.CompoundEdit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
@@ -40,7 +41,7 @@ import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuManager;
+import ca.phon.ui.menu.*;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.*;
 import ca.phon.ui.text.PromptedTextField.FieldState;
@@ -206,6 +207,20 @@ public class SessionInfoEditorView extends EditorView {
 				}
 			}
 			
+			@Override
+			public void mousePressed(MouseEvent me) {
+				if(me.isPopupTrigger()) {
+					showParticipantContextMenu(me.getPoint());
+				}
+			}
+			
+			@Override
+			public void mouseReleased(MouseEvent me) {
+				if(me.isPopupTrigger()) {
+					showParticipantContextMenu(me.getPoint());
+				}
+			}
+			
 		});
 		
 		languageField = new LanguageField();
@@ -330,20 +345,26 @@ public class SessionInfoEditorView extends EditorView {
 		participantTable.setModel(tableModel);
 	}
 
-	private void updateSessionDate() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getDataModel().getSession();
+	private void showParticipantContextMenu(Point p) {
+		final JPopupMenu popupMenu = new JPopupMenu();
+		final MenuBuilder builder = new MenuBuilder(popupMenu);
 		
-		final LocalDate currentDate = session.getDate();
-		final LocalDate newDate = 
-				LocalDate.from(dateField.getDateTime());
-		
-		if(!currentDate.isEqual(newDate)) {
-			final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, currentDate);
-			edit.setSource(dateField);
-			editor.getUndoSupport().postEdit(edit);
+		final int viewIndex = participantTable.rowAtPoint(p);
+		if(viewIndex >= 0 && viewIndex < participantTable.getRowCount()) {
+			final int modelIndex = participantTable.convertRowIndexToModel(viewIndex);
+			final Participant participant = getEditor().getSession().getParticipant(modelIndex);
+			
+			builder.addItem(".", new EditParticipantAction(getEditor(), this, participant));
+			builder.addItem(".", new DeleteParticipantAction(getEditor(), this, participant));
+			
+			builder.addItem(".", new AssignUnidentifiedSpeakerAction(getEditor(), this, participant));
+			
+			builder.addSeparator(".", "participant_actions");
 		}
 		
+		builder.addItem(".", new NewParticipantAction(getEditor(), this));
+		
+		popupMenu.show(participantTable, p.x, p.y);
 	}
 	
 	public void editParticipant() {
@@ -358,6 +379,24 @@ public class SessionInfoEditorView extends EditorView {
 		}
 	}
 	
+	public void assignSpeakerToUnassignedRecords(Participant p) {
+		final SessionEditor editor = getEditor();
+		final Session session = editor.getSession();
+		
+		final CompoundEdit cmpEdit = new CompoundEdit();
+		
+		for(Record r:session.getRecords()) {
+			if(r.getSpeaker() == Participant.UNKNOWN) {
+				final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(editor, r, p);
+				edit.doIt();
+				cmpEdit.addEdit(edit);
+			}
+		}
+		
+		cmpEdit.end();
+		editor.getUndoSupport().postEdit(cmpEdit);
+	}
+	
 	public void deleteParticipant() {
 		int selectedRow = participantTable.getSelectedRow();
 		if(selectedRow < 0) return;
@@ -370,7 +409,6 @@ public class SessionInfoEditorView extends EditorView {
 			
 			final DeleteParticipantAction act = new DeleteParticipantAction(getEditor(), this, participant);
 			act.actionPerformed(new ActionEvent(this, 0, null));
-			
 		}
 	}
 	
@@ -446,6 +484,7 @@ public class SessionInfoEditorView extends EditorView {
 			final JMenu speakerMenu = new JMenu(p.getName());
 			
 			speakerMenu.add(new EditParticipantAction(getEditor(), this, p));
+			speakerMenu.add(new AssignUnidentifiedSpeakerAction(getEditor(), this, p));
 			speakerMenu.add(new DeleteParticipantAction(getEditor(), this, p));
 			
 			menu.add(speakerMenu);

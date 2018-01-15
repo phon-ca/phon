@@ -20,18 +20,24 @@ package ca.phon.app.session.editor.view.session_information.actions;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.*;
 import javax.swing.undo.CompoundEdit;
 
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.session.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 public class DeleteParticipantAction extends SessionInfoAction {
 	
 	private static final long serialVersionUID = -1353836110650283444L;
 
 	private final Participant participant;
+	
+	private final ImageIcon ICON = 
+			IconManager.getInstance().getIcon("actions/delete_user", IconSize.SMALL);
 
 	public DeleteParticipantAction(SessionEditor editor,
 			SessionInfoEditorView view, Participant participant) {
@@ -39,10 +45,29 @@ public class DeleteParticipantAction extends SessionInfoAction {
 		this.participant = participant;
 		
 		putValue(NAME, "Delete " + participant.getName());
+		putValue(SMALL_ICON, ICON);
 	}
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
+		
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setOptions(MessageDialogProperties.okCancelOptions);
+		props.setHeader("Delete Participant");
+		props.setTitle("Delete Participant");
+		props.setMessage("Are you sure you wish to delete participant '" + participant + "'?");
+		props.setRunAsync(true);
+		props.setParentWindow(getEditor());
+		props.setListener( (evt) -> {
+			if(evt.getDialogResult() == 0) {
+				SwingUtilities.invokeLater( () -> deleteParticipant() );
+			}
+		});
+		
+		NativeDialogs.showMessageDialog(props);
+	}
+
+	private int deleteParticipant() {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		
@@ -51,16 +76,38 @@ public class DeleteParticipantAction extends SessionInfoAction {
 		removePartEdit.doIt();
 		edit.addEdit(removePartEdit);
 		
+		int recordsChanged = 0;
 		for(Record r:session.getRecords()) {
 			if(r.getSpeaker() == participant) {
 				final ChangeSpeakerEdit chSpeakerEdit = new ChangeSpeakerEdit(editor, r, null);
 				chSpeakerEdit.doIt();
 				edit.addEdit(chSpeakerEdit);
+				
+				++recordsChanged;
 			}
 		}
 		edit.end();
 		
 		editor.getUndoSupport().postEdit(edit);
+		
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setOptions(new String[]{"Ok", "Undo"});
+		props.setTitle("Records Modified");
+		props.setHeader(String.format("%d Records Modified", recordsChanged));
+		props.setMessage("Speaker assigned to 'Unidentified'.");
+		props.setRunAsync(true);
+		props.setParentWindow(getEditor());
+		props.setListener( (e) -> {
+			if(e.getDialogResult() == 1) {
+				SwingUtilities.invokeLater( () -> {
+					getEditor().getUndoManager().undo();
+					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.RECORD_REFRESH_EVT));
+				});
+			}
+		});
+		NativeDialogs.showMessageDialog(props);
+		
+		return recordsChanged;
 	}
-
+	
 }

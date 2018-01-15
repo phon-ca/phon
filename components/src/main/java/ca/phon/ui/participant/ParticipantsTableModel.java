@@ -33,10 +33,12 @@ public class ParticipantsTableModel extends AbstractTableModel {
 	
 	private enum Columns {
 		Name,
+		Role,
 		Age;
 		
 		String[] names = {
 				"Participant Name",
+				"Role",
 				"Age"
 		};
 		
@@ -87,6 +89,8 @@ public class ParticipantsTableModel extends AbstractTableModel {
 					(p.getName() != null && p.getName().trim().length() > 0 
 						? p.getName() : p.getId() != null 
 							? p.getId() : p.getRole() );
+		} else if(col == Columns.Role) {
+			return p.getRole().toString();
 		} else if(col == Columns.Age) {
 			final Period age = p.getAge(null);
 			if(age != null) {

@@ -128,7 +128,7 @@ exports.PPCOptions = function (id, aligned) {
 	var ppcTypeParamInfo = {
 		"id": id + ".ppcType",
 		"title": "Report type:",
-		"choices": ["Percent Phones Correct (PPC)", "Percent Consonants Correct (PCC)", "Percent Vowels Correct (PVC)", "Other (specify below)"],
+		"choices": ["Percent Phones Correct (PPC)", "Percent Consonants Correct (PCC)", "Percent Vowels Correct (PVC)", "Percent Correct (custom)"],
 		"colnames": ["PPC", "PCC", "PVC", "PC"],
 		"phonex": ["\\w", "\\c", "\\v" ],
 		"def": 0,

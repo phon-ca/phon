@@ -20,11 +20,14 @@ package ca.phon.app.session.editor.view.session_information.actions;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.ImageIcon;
+
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.ParticipantUndoableEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.session.*;
 import ca.phon.ui.participant.ParticipantEditor;
+import ca.phon.util.icons.*;
 
 public class EditParticipantAction extends SessionInfoAction {
 
@@ -32,13 +35,16 @@ public class EditParticipantAction extends SessionInfoAction {
 
 	private final Participant participant;
 	
+	private final ImageIcon ICON = 
+			IconManager.getInstance().getIcon("actions/edit_user", IconSize.SMALL);
+	
 	public EditParticipantAction(SessionEditor editor,
 			SessionInfoEditorView view, Participant participant) {
 		super(editor, view);
 		this.participant = participant;
 		
+		putValue(SMALL_ICON, ICON);
 		putValue(NAME, "Edit " + participant.getName() + "...");
-		
 	}
 
 	@Override
