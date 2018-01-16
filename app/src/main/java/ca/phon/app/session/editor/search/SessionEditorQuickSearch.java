@@ -268,21 +268,23 @@ public class SessionEditorQuickSearch {
 		props.setCanCreateDirectories(true);
 		props.setInitialFile("record_list.csv");
 		props.setTitle("Save as CSV");
-		props.setRunAsync(false);
-		
-		final String saveAs = NativeDialogs.showSaveDialog(props);
-		if(saveAs != null) {
+		props.setRunAsync(true);
+		props.setListener( (e) -> {
+			if(e.getDialogData() == null) return;
+			final String saveAs = e.getDialogData().toString();
 			// create a new CSVTableWriter
 			final CSVTableDataWriter writer = new CSVTableDataWriter();
 			try {
 				writer.writeTableToFile(table, new File(saveAs));
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			} catch (IOException ex) {
+				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
 				
-				final Toast toast = ToastFactory.makeToast("Unable to save table: " + e.getLocalizedMessage());
+				final Toast toast = ToastFactory.makeToast("Unable to save table: " + ex.getLocalizedMessage());
 				toast.start(table);
 			}
-		}
+		});
+		
+		NativeDialogs.showSaveDialog(props);
 	}
 	
 	public void moveSelectionUp() {
