@@ -38,7 +38,7 @@ public class SaveCurrentBufferAction extends HookableAction {
 	
 	private static final long serialVersionUID = -2827879669257916438L;
 	
-	private final static String CMD_NAME = "Save buffer...";
+	private final static String CMD_NAME = "Save...";
 	
 	private final static String SHORT_DESC = "Save buffer to file";
 	

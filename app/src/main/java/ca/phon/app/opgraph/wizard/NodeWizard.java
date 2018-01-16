@@ -176,6 +176,9 @@ public class NodeWizard extends WizardFrame {
 		saveAllAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		builder.addItem("File@saveBuffers", saveAllAct);
+
+		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
+		builder.addItem("File@saveBuffers", saveAsExcelAct);
 		
 		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction(getBufferPanel());
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -183,15 +186,7 @@ public class NodeWizard extends WizardFrame {
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
 		builder.addItem("File@saveBuffers", saveAct);
 		
-		builder.addSeparator("File@"+saveAllAct.getValue(PhonUIAction.NAME), "saveAsExcel");
-		
-		final SaveTablesToWorkbookAction saveAllToExcelAct = new SaveTablesToWorkbookAction(getBufferPanel());
-		builder.addItem("File@saveAsExcel", saveAllToExcelAct);
-		
-		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
-		builder.addItem("File@saveAsExcel", saveAsExcelAct);
-		
-		builder.addSeparator("File@"+saveAllToExcelAct.getValue(PhonUIAction.NAME), "openProject");
+		builder.addSeparator("File@"+saveAllAct.getValue(PhonUIAction.NAME), "openProject");
 	}
 
 	@Override

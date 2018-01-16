@@ -20,9 +20,9 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 
 	private static final long serialVersionUID = -2827879669257916438L;
 	
-	private final static String CMD_NAME = "Save buffer as Excel\u2122 Workbook...";
+	private final static String CMD_NAME = "Export as Excel\u2122 Workbook...";
 	
-	private final static String SHORT_DESC = "Save buffer to Excel\u2122 workbook";
+	private final static String SHORT_DESC = "Save to Excel\u2122 workbook";
 	
 	private final MultiBufferPanel container;
 
