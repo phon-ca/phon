@@ -107,16 +107,6 @@ public class ReportLibrary implements OpGraphLibrary {
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 
-		final OpenSimpleReportComposerAction showSimpleComposerAct = new OpenSimpleReportComposerAction(project, queryId);
-		showSimpleComposerAct.putValue(Action.NAME, "Composer (simple)...");
-		builder.addItem(".@composer", showSimpleComposerAct);
-
-		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
-		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
-		builder.addItem(".@Composer (simple)...", showComposerAct);
-
-		builder.addSeparator(".", "composer");
 
 		for(URL reportURL:getStockGraphs()) {
 			final ReportAction act = new ReportAction(project, queryId, reportURL);
@@ -215,18 +205,20 @@ public class ReportLibrary implements OpGraphLibrary {
 			projectMenuBuilder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 		}
 
-//		builder.addSeparator(".", "legacy");
-//		final ReportAction reportAct = new ReportAction(project, queryId,
-//				getClass().getClassLoader().getResource(LEGACY_REPORT_DOCUMENT));
-//		builder.addItem(".@legacy", reportAct);
-
 		builder.addSeparator(".", "browse");
 		final PhonUIAction onBrowseAct = new PhonUIAction(ReportLibrary.class, "onBrowse", new Tuple<String, Project>(queryId, project));
 		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
 		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query report document.");
 		builder.addItem(".@browse", onBrowseAct);
 
-
+		final OpenSimpleReportComposerAction showSimpleComposerAct = new OpenSimpleReportComposerAction(project, queryId);
+		showSimpleComposerAct.putValue(Action.NAME, "Composer (simple)...");
+		builder.addItem(".", showSimpleComposerAct);
+		
+//		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
+//		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
+//		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
+//		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
 
 	public static void onBrowse(PhonActionEvent pae) {

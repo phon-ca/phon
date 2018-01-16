@@ -219,14 +219,12 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
 		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for analysis document.");
 		builder.addItem(".@browse", onBrowseAct);
+		builder.addItem(".", new OpenSimpleAnalysisComposerAction(project));
 
-		builder.addSeparator(".", "composer");
-		builder.addItem(".@composer", new OpenSimpleAnalysisComposerAction(project));
-
-		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
-		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
-		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
-		builder.addItem(".@Composer (simple)...", showComposerAct);
+//		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
+//		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
+//		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
+//		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
 
 	public static void onBrowse(PhonActionEvent pae) {
