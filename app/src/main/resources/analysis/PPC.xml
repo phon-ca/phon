@@ -135,7 +135,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="1db7b6c2" name="Query : PPC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-15T21:03:19.181-03:30" name="Query : PPC" uuid="4af141e3-82f3-4a15-8881-98f71009c6f7">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-16T18:26:53.305-03:30" name="Query : PPC" uuid="2d47709f-124d-4f59-a91c-de11cdc316f0">
                 <script>
                     <source>var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -260,61 +260,80 @@ function query_record(recordIndex, record) {
 			}
 		}
 		
+		var phoneMap = group.phoneAlignment;
 		var toSearch = new Array();
-		toSearch.length = 0;
-		var selectedWords = filters.word.getRequestedWords(group, searchTier);
-		for (j = 0; j &lt; selectedWords.length; j++) {
-			var word = selectedWords[j];
-			
-			var wordAlignedMeta = new java.util.LinkedHashMap();
-			wordAlignedMeta.putAll(groupAlignedMeta);
-			
-			var wordAlignedResults = new Array();
-			for (var k = 0; k &lt; groupAlignedResults.length; k++) {
-				wordAlignedResults.push(groupAlignedResults[k]);
-			}
-			
-			var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
-			for (var k = 0; k &lt; wordAlignedData[0].length; k++) {
-				wordAlignedResults.push(wordAlignedData[0][k]);
-			}
-			wordAlignedMeta.putAll(wordAlignedData[1]);
-			
-			var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
-			var alignedIpa = (searchTier == "IPA Target" ? word.IPAActual: word.IPATarget);
-			var addWord = (wordIpa != null &amp;&amp; wordIpa.length() &gt; 0 &amp;&amp; alignedIpa != null &amp;&amp; alignedIpa.length() &gt; 0);
-			// check word pattern if necessary
-			if (filters.wordPattern.isUseFilter()) {
-				addWord = filters.wordPattern.check_filter(wordIpa);
-			}
-			
-			// check aligned word pattern if necessary
-			if (filters.alignedWord.isUseFilter()) {
-				addWord = filters.alignedWord.check_word(word);
+		toSearch.push([group, groupAlignedResults, groupAlignedMeta]);
+
+		if(filters.word.isUseFilter()) {
+			toSearch.length = 0;
+			var selectedWords = filters.word.getRequestedWords(group, searchTier);
+			for (j = 0; j &lt; selectedWords.length; j++) {
+				var word = selectedWords[j];
 				
-				var tierList = new TierList("word");
-				tierList.setTiers(filters.alignedWord.tier);
+				var wordAlignedMeta = new java.util.LinkedHashMap();
+				wordAlignedMeta.putAll(groupAlignedMeta);
 				
-				var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
-				for (var k = 0; k &lt; alignedWordData[0].length; k++) {
-					wordAlignedResults.push(alignedWordData[0][k]);
+				var wordAlignedResults = new Array();
+				for (var k = 0; k &lt; groupAlignedResults.length; k++) {
+					wordAlignedResults.push(groupAlignedResults[k]);
 				}
-			}
-			
-			if (addWord == true) {
-				toSearch.push([word, wordAlignedResults, wordAlignedMeta]);
+				
+				var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
+				for (var k = 0; k &lt; wordAlignedData[0].length; k++) {
+					wordAlignedResults.push(wordAlignedData[0][k]);
+				}
+				wordAlignedMeta.putAll(wordAlignedData[1]);
+				
+				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
+				var alignedIpa = (searchTier == "IPA Target" ? word.IPAActual: word.IPATarget);
+				var addWord = (wordIpa != null &amp;&amp; wordIpa.length() &gt; 0 &amp;&amp; alignedIpa != null &amp;&amp; alignedIpa.length() &gt; 0);
+				// check word pattern if necessary
+				if (filters.wordPattern.isUseFilter()) {
+					addWord = filters.wordPattern.check_filter(wordIpa);
+				}
+				
+				// check aligned word pattern if necessary
+				if (filters.alignedWord.isUseFilter()) {
+					addWord = filters.alignedWord.check_word(word);
+					
+					var tierList = new TierList("word");
+					tierList.setTiers(filters.alignedWord.tier);
+					
+					var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
+					for (var k = 0; k &lt; alignedWordData[0].length; k++) {
+						wordAlignedResults.push(alignedWordData[0][k]);
+					}
+				}
+				
+				if (addWord == true) {
+					toSearch.push([word, wordAlignedResults, wordAlignedMeta]);
+				}
 			}
 		}
 		
+		// search by syllable?
+		if (filters.syllable.isUseFilter()) {
+			var syllList = new Array();
+			for (j = 0; j &lt; toSearch.length; j++) {
+				var obj = toSearch[j][0];
+				var sylls = filters.syllable.getRequestedAlignedSyllables(obj, searchTier);
+
+				for (k = 0; k &lt; sylls.size(); k++) {
+					syllList.push([sylls.get(k), toSearch[j][1], toSearch[j][2]]);
+				}
+			}
+			toSearch = syllList;
+		}
+		
 		for (j = 0; j &lt; toSearch.length; j++) {
-			var word = toSearch[j][0];
+			var obj = toSearch[j][0];
 			var alignedResults = toSearch[j][1];
 			var alignedMetadata = toSearch[j][2];
 			
-			var pc = PPC.calc_ppc_aligned(word, filters.ppc.pattern, filters.ppc.ignoreDiacritics == true);
+			var pc = PPC.calc_ppc_aligned(obj, filters.ppc.pattern, filters.ppc.ignoreDiacritics == true);
 			
-			var ipaT = (word.IPATarget != null ? word.IPATarget: new IPATranscript());
-			var ipaA = (word.IPAActual != null ? word.IPAActual: new IPATranscript());
+			var ipaT = (obj.IPATarget != null ? obj.IPATarget: new IPATranscript());
+			var ipaA = (obj.IPAActual != null ? obj.IPAActual: new IPATranscript());
 			
 			var result = factory.createResult();
 			result.schema = "ALIGNED";
@@ -323,7 +342,10 @@ function query_record(recordIndex, record) {
 			var rvt = factory.createResultValue();
 			rvt.tierName = "IPA Target";
 			rvt.groupIndex = i;
-			var startIndex = word.getIPATargetWordLocation();
+			var startIndex = (ipaT.length() == 0 ? 0 : 
+				(filters.word.isUseFilter() 
+					? (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : obj.getIPATargetWordLocation())
+					: (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : 0)));
 			var endIndex = startIndex + ipaT.toString().length();
 			rvt.range = new Range(startIndex, endIndex, false);
 			rvt.data = ipaT;
@@ -332,7 +354,10 @@ function query_record(recordIndex, record) {
 			var rva = factory.createResultValue();
 			rva.tierName = "IPA Actual";
 			rva.groupIndex = i;
-			startIndex = word.getIPAActualWordLocation();
+			startIndex = (ipaA.length() == 0 ? 0 :
+				(filters.word.isUseFilter() 
+					? (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : obj.getIPAActualWordLocation())
+					: (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : 0)) );
 			endIndex = startIndex + ipaA.toString().length();
 			rva.range = new Range(startIndex, endIndex, false);
 			rva.data = ipaA;
@@ -357,15 +382,8 @@ function query_record(recordIndex, record) {
 		}
 	}
 }</source>
-                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
-                    <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
-                    <param id="filters.groupPattern.filterType">Plain text</param>
                     <param id="filters.ppc.pattern.filter">\w</param>
-                    <param id="filters.ppc.ppcType">Percent Phones Correct (PPC)</param>
                     <param id="filters.searchBy.searchBy">Word</param>
-                    <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
-                    <param id="filters.syllable.syllableType">Any syllable</param>
-                    <param id="filters.wordPattern.filterType">Plain text</param>
                 </script>
             </qry:query>
             <extensions>
@@ -406,7 +424,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="4b18886ea00b48b3" name="Report" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="762e755a">
+            <graph id="20a13acc">
                 <node id="e6d45b5e5a1847a0" name="reportTitle" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -676,7 +694,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="9be63edf7454f48" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="92993a3">
+                    <graph id="53499e7a">
                         <node id="f07c16119afe452e" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -778,7 +796,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="cb86895b929e40c4" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="421892f8">
+                            <graph id="6945d757">
                                 <node id="709f2e57dcf44ec5" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -836,7 +854,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="f597c5aaf39b442f" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="11febb6b">
+                            <graph id="22c368fe">
                                 <node id="d779e16362c04d76" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -970,7 +988,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="44ede451a63843e8" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                                    <graph id="4ca5589e">
+                                    <graph id="78e50282">
                                         <node id="f87a720cdb874d57" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1014,7 +1032,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="71b15afc5b9d47f5" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="6cf0989b">
+                                            <graph id="185b52fc">
                                                 <node id="257ee0628b94c4f" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1068,7 +1086,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="73704a9fac14603" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="4a53c3fc">
+                                            <graph id="49807cd9">
                                                 <node id="c15eafc9d07d4fa3" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1222,7 +1240,7 @@ function tableOp(context, table) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="6e89d296" name="Print Participant Listing" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="2777687a">
+                            <graph id="4ca97272">
                                 <node id="1908a532" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1372,7 +1390,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="495563a1" name="Print Participant Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="52a2b7">
+                            <graph id="2bd2b4b6">
                                 <node id="5e637044" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1499,7 +1517,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2bc124ee" name="Print Global Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7b2b524d">
+                    <graph id="7d668bb2">
                         <node id="1249c50e" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>

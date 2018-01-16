@@ -4,6 +4,7 @@ import java.util.Set;
 
 import ca.phon.extensions.*;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 
 public abstract class AlignedSyllable implements IExtendable {
 	
@@ -33,6 +34,10 @@ public abstract class AlignedSyllable implements IExtendable {
 	
 	public abstract int getIPAActualLocation();
 
+	public abstract PhoneMap getPhoneAlignment();
+	
+	public abstract int getPhoneAlignmentLocation();
+	
 	public Set<Class<?>> getExtensions() {
 		return extSupport.getExtensions();
 	}

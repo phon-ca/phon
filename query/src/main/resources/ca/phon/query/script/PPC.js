@@ -177,11 +177,10 @@ function query_record(recordIndex, record) {
 			var syllList = new Array();
 			for (j = 0; j < toSearch.length; j++) {
 				var obj = toSearch[j][0];
-				var aligned = (phoneMap != null ? phoneMap: new Packages.ca.phon.ipa.alignment.PhoneMap());
-				var sylls = filters.syllable.getRequestedSyllables(obj.IPATarget, aligned);
+				var sylls = filters.syllable.getRequestedAlignedSyllables(obj, searchTier);
 
-				for (k = 0; k < sylls.length; k++) {
-					syllList.push([sylls[k], toSearch[j][1], toSearch[j][2]]);
+				for (k = 0; k < sylls.size(); k++) {
+					syllList.push([sylls.get(k), toSearch[j][1], toSearch[j][2]]);
 				}
 			}
 			toSearch = syllList;
@@ -204,7 +203,10 @@ function query_record(recordIndex, record) {
 			var rvt = factory.createResultValue();
 			rvt.tierName = "IPA Target";
 			rvt.groupIndex = i;
-			var startIndex = obj.getIPATargetWordLocation();
+			var startIndex = (ipaT.length() == 0 ? 0 : 
+				(filters.word.isUseFilter() 
+					? (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : obj.getIPATargetWordLocation())
+					: (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : 0)));
 			var endIndex = startIndex + ipaT.toString().length();
 			rvt.range = new Range(startIndex, endIndex, false);
 			rvt.data = ipaT;
@@ -213,7 +215,10 @@ function query_record(recordIndex, record) {
 			var rva = factory.createResultValue();
 			rva.tierName = "IPA Actual";
 			rva.groupIndex = i;
-			startIndex = obj.getIPAActualWordLocation();
+			startIndex = (ipaA.length() == 0 ? 0 :
+				(filters.word.isUseFilter() 
+					? (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : obj.getIPAActualWordLocation())
+					: (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : 0)) );
 			endIndex = startIndex + ipaA.toString().length();
 			rva.range = new Range(startIndex, endIndex, false);
 			rva.data = ipaA;

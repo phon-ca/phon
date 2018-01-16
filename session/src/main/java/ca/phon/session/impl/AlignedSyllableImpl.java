@@ -3,7 +3,7 @@ package ca.phon.session.impl;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.SyllableMap;
+import ca.phon.ipa.alignment.*;
 import ca.phon.session.*;
 
 public class AlignedSyllableImpl extends AlignedSyllable {
@@ -61,27 +61,58 @@ public class AlignedSyllableImpl extends AlignedSyllable {
 
 	@Override
 	public int getIPATargetLocation() {
-		if(getWordIndex() < 0) {
-			return getGroup().getIPATarget().indexOf(getIPATarget());
-		} else {
-			final Word word = getWord();
-			int wordStartLocation = word.getIPATargetWordLocation();
-			final IPATranscript target = word.getIPATarget();
-			
-			return wordStartLocation + target.indexOf(getIPATarget());
+		int retVal = -1;
+		
+		final IPATranscript target = getGroup().getIPATarget();
+		if(target != null) {
+			final IPATranscript ipa = getIPATarget();
+		
+			if(ipa != null) {
+				final int eleIdx = target.indexOf(ipa);
+				retVal = target.stringIndexOfElement(eleIdx);
+			}
 		}
+		
+		return retVal;
+	}
+	
+	@Override
+	public int getIPAActualLocation() {
+		int retVal = -1;
+		
+		final IPATranscript actual = getGroup().getIPAActual();
+		if(actual != null) {
+			final IPATranscript ipa = getIPAActual();
+		
+			if(ipa != null) {
+				final int eleIdx = actual.indexOf(ipa);
+				retVal = actual.stringIndexOfElement(eleIdx);
+			}
+		}
+		
+		return retVal;
 	}
 
 	@Override
-	public int getIPAActualLocation() {
-		if(getWordIndex() < 0) {
-			return getGroup().getIPAActual().indexOf(getIPAActual());
-		} else {
-			final Word word = getWord();
-			int wordStartLocation = word.getIPAActualWordLocation();
-			final IPATranscript actual = word.getIPAActual();
-			return wordStartLocation + actual.indexOf(getIPAActual());
-		}
+	public PhoneMap getPhoneAlignment() {
+		final IPATranscript ipaT = (getIPATarget() == null ? new IPATranscript() : getIPATarget());
+		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
+
+		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
+		if(grpAlignment == null) new PhoneMap();
+
+		return grpAlignment.getSubAlignment(ipaT, ipaA);
+	}
+	
+	@Override
+	public int getPhoneAlignmentLocation() {
+		final IPATranscript ipaT = (getIPATarget() == null ? new IPATranscript() : getIPATarget());
+		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
+
+		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
+		if(grpAlignment == null) return -1;
+		
+		return grpAlignment.getSubAlignmentIndex(ipaT, ipaA);
 	}
 
 	@Override

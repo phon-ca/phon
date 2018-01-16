@@ -231,10 +231,11 @@ exports.SyllableFilter = function (id) {
 
 	/**
 	 * Return a list of syllables with the requested position
-	 * and stress.
+	 * and stress.  This method works on a single IPATranscript
+	 * object.
 	 *
 	 * @param obj
-	 * @return list of syllables
+	 * @return list of syllables as IPATranscript objects
 	 */
 	this.getRequestedSyllables = function (ipaObj, aligned) {
 		var retVal = new java.util.ArrayList();
@@ -257,7 +258,7 @@ exports.SyllableFilter = function (id) {
 			if (sIndex == 0 && syllables.size() == 1) posOk = this.sSingleton;
 
 			var truncatedOk = true;
-			if (this.ignoreTruncated == true) {
+			if (aligned != null && this.ignoreTruncated == true) {
 				truncatedOk = (aligned != null && aligned.getAligned(syll.audiblePhones()).size() > 0);
 			}
 
@@ -269,6 +270,63 @@ exports.SyllableFilter = function (id) {
 		}
 
 		return retVal.toArray();
+	};
+	
+	/**
+	 * Get requested aligned syllables from the given object.
+	 * The object should be either a Group or AlignedWord.  The return
+	 * value will be a list of AlignedSyllables.
+	 * 
+	 * @param obj - either a record 'ca.phon.session.Group' or 'ca.phon.session.Word'
+	 * @param searchTier - 'IPA Target' (default) or 'IPA Actual'
+	 * @return java.util.List of aligned syllables as defined by the filter parameters
+	 */
+	this.getRequestedAlignedSyllables = function (obj, searchTier) {
+		var retVal = new java.util.ArrayList();
+		
+		if(obj == null) return retVal;
+		
+		var syllAlign = obj.syllableAlignment;
+		var targetSylls = syllAlign.topAlignmentElements;
+		var actualSylls = syllAlign.bottomAlignmentElements;
+		
+		var itrSylls = (searchTier == "IPA Target" ? targetSylls : actualSylls);
+		var numSylls = itrSylls.size();
+		
+		for(var alignIdx = 0; alignIdx < obj.alignedSyllableCount; alignIdx++) {
+			var alignedSyll = obj.getAlignedSyllable(alignIdx);
+			
+			var targetSyll = targetSylls.get(alignIdx);
+			var actualSyll = actualSylls.get(alignIdx);
+			
+			var syll = (searchTier == "IPA Target" ? targetSyll : actualSyll);
+			var otherSyll = (searchTier == "IPA Target" ? actualSyll : targetSyll);
+			if(syll == null) continue;
+			
+			var stressOk = this.checkStress(syll);
+			var typeOk = this.checkType(syll);
+			
+			var sIndex = itrSylls.indexOf(syll);
+			var posOk = false;
+			if (sIndex == 0 && this.sInitial == true) posOk = true;
+			if (sIndex > 0 && sIndex < numSylls -1 && this.sMedial == true) posOk = true;
+			if (sIndex == numSylls -1 && this.sFinal == true) posOk = true;
+
+			// take care of singleton cases
+			if (sIndex == 0 && numSylls == 1) posOk = this.sSingleton;
+			
+			var truncatedOk = true;
+			if(this.ignoreTruncated == true) {
+				var otherSyll = (searchTier == "IPA Target" ? actualSyll : targetSyll);
+				if(otherSyll == null) truncatedOk = false;
+			}
+			
+			if (posOk == true && stressOk == true && truncatedOk == true && typeOk) {
+				retVal.add(alignedSyll);
+			}		
+		}
+	
+		return retVal;
 	};
 
 	this.filter = function (record, ipaObjs) {
