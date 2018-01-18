@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
 <task id="taskId">
-    <title>Phones</title>
+    <title>Usage</title>
     <taskbody>
         <steps>
             <step>
@@ -26,4 +26,12 @@
             </step>
         </steps>
     </taskbody>
+    <related-links>
+        <link href="GroupFilter.xml#taskId"/>
+        <link href="AlignedGroupFilter.xml#taskId"/>
+        <link href="WordFilter.xml#taskId"/>
+        <link href="AlignedWordFilter.xml#taskId"/>
+        <link href="SyllableFilter.xml#taskId"/>
+        <link href="ParticipantFilter.xml#taskId"/>
+    </related-links>
 </task>

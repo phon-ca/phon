@@ -52,9 +52,7 @@
             <step>
                 <cmd>To get a detailed report of the results, click the
                         <uicontrol>Report</uicontrol> button at the top of the
-                        <wintitle>Results</wintitle> tab and follow the instructions in the
-                        <i>Generate Report</i> section (<xref id="0123"
-                        href="../../report/tasks/GenerateReport.xml"/>).</cmd>
+                        <wintitle>Results</wintitle> tab.</cmd>
                 <stepresult>
                     <note>To merge all records with results into a single session, see <xref
                             id="0124" href="../../projman/tasks/DeriveSession.xml"/>.</note>

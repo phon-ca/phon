@@ -10,8 +10,9 @@
         </booklists>
         <topicref href="misc/concepts/Introduction.xml"/>
         <topicref href="misc/concepts/AboutConventions.xml"/>
+        <topicref href="misc/concepts/Contributors.xml"/>
     </frontmatter>
-    <chapter navtitle="IPA Transcription">
+    <chapter navtitle="IPA Transcription" audience="novice">
         <topicref href="ipa/concepts/ipa_intro.dita"/>
         <topichead navtitle="IPA Elements">
             <topicref href="ipa/concepts/phone.dita"/>
@@ -30,7 +31,7 @@
         <topicref href="generated/ipa.xml"/>
         <topicref href="generated/features.xml"/>
     </chapter>
-    <chapter navtitle="Phonex">
+    <chapter navtitle="Phonex" audience="intermediate">
         <topicref href="phonex/concepts/intro.dita"/>
         <topichead navtitle="Language Reference">
             <topicref href="phonex/concepts/constructs.dita"/>
@@ -51,7 +52,7 @@
             <topicref href="phonex/concepts/tone_plugin.dita"/>
         </topichead>
     </chapter>
-    <chapter navtitle="User Interface">
+    <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.md" format="markdown">
             <topichead navtitle="Actions">
                 <topicref href="welcome/tasks/CreateProject.xml"/>
@@ -210,21 +211,34 @@
                 <topicref href="editor/tasks/FindReplace.xml"/>
             </topicref>
         </topichead>
-        <topichead navtitle="IPA Map">
-            <topicref href="ipamap/concepts/AboutIPAMap.xml"/>
-            <topicref href="ipamap/tasks/InputTextwithIPAMap.xml"/>
-            <topicref href="ipamap/tasks/CopyCharacter.xml"/>
-            <topicref href="ipamap/tasks/AddtoFavorites.xml"/>
-            <topicref href="ipamap/tasks/ScrolltoSection.xml"/>
-            <topicref href="ipamap/tasks/ResizeFontandWindow.xml"/>
-            <topicref href="ipamap/tasks/HighlightRecentlyUsed.xml"/>
+        <topichead navtitle="Tools">
+            <topichead navtitle="IPA Map">
+                <topicref href="ipamap/concepts/AboutIPAMap.xml"/>
+                <topicref href="ipamap/tasks/InputTextwithIPAMap.xml"/>
+                <topicref href="ipamap/tasks/CopyCharacter.xml"/>
+                <topicref href="ipamap/tasks/AddtoFavorites.xml"/>
+                <topicref href="ipamap/tasks/ScrolltoSection.xml"/>
+                <topicref href="ipamap/tasks/ResizeFontandWindow.xml"/>
+                <topicref href="ipamap/tasks/HighlightRecentlyUsed.xml"/>
+            </topichead>
+            <topicref href="tools/PhonShell.md" format="markdown"/>
+            <topicref href="tools/LanguageCodes.md" format="markdown"/>
         </topichead>
     </chapter>
     <chapter navtitle="CHAT Support"/>
-    <chapter navtitle="Queries">
+    <chapter navtitle="Queries" audience="intermediate">
         <topicref href="query/tasks/QueryProject.xml"/>
         <topicref href="query/tasks/SaveQueryScript.xml"/>
         <topicref href="query/tasks/OpenQueryScript.xml"/>
+        <topicref href="query/query-data_tiers.md" format="markdown">
+            <topicref href="query/tasks/DataTiers.xml"/>
+        </topicref>
+        <topicref href="query/query_phones.md" format="markdown">
+            <topicref href="query/tasks/Phones.xml"/>
+        </topicref>
+        <topicref href="query/query_deletions.md" format="markdown"/>
+        <topicref href="query/query_epenthesis.md" format="markdown"/>
+        <topicref href="query/query_segmental_relations.md" format="markdown"/>
         <topicref href="query/tasks/ViewResultSet.xml">
             <topicref href="query/tasks/SaveTableAsCSV.xml"/>
             <topicref href="query/tasks/EditTableColumns.xml"/>
@@ -246,10 +260,36 @@
             <topicref href="history/concepts/AboutStarredQueries.xml"/>
         </topicref>
     </chapter>
-    <chapter navtitle="Query Reports"/>
-    <chapter navtitle="Analyses">
+    <chapter navtitle="Query Reports" audience="intermediate">
+        <topicref href="report/report-aggregate_IPA.md" format="markdown"/>
+        <topicref href="report/report-aggregate_non-IPA.md" format="markdown"/>
+        <topicref href="report/report-inventory_by_session_IPA.md" format="markdown"/>
+        <topicref href="report/report-inventory_by_session_non-IPA.md" format="markdown"/>
+        <topicref href="report/report-listing.md" format="markdown"/>
+        <topicref href="report/report-listing_by_session.md" format="markdown"/>
+        <topicref href="report/report-phone_dispersion.md" format="markdown"/>
+        <topicref href="report/report-transcript_variability.md" format="markdown"/>
+        <topicref href="report/report-query_information.md" format="markdown"/>
+        <topicref href="report/acoustic_data_reports.md" format="markdown">
+            <topicref href="report/report-duration.md" format="markdown"/>
+            <topicref href="report/report-intensity.md" format="markdown"/>
+            <topicref href="report/report-pitch.md" format="markdown"/>
+            <topicref href="report/report-formants.md" format="markdown"/>
+            <topicref href="report/report-spectral_moments.md" format="markdown"/>
+        </topicref>
+        <topicref href="report/report_composer.md" format="markdown"/>
+    </chapter>
+    <chapter navtitle="Analyses" audience="intermediate">
         <topicref href="analysis/PPC.md" format="markdown"/>
+        <topicref href="analysis/Phone%20Inventory.md" format="markdown"/>
+        <topicref href="analysis/Phone%20Clusters.md" format="markdown"/>
+        <topicref href="analysis/Phonological%20Processes.md" format="markdown"/>
+        <topicref href="analysis/PMLU.md" format="markdown"/>
+        <topicref href="analysis/Vocalization.md" format="markdown"/>
+        <topicref href="analysis/Word%20List.md" format="markdown"/>
+        <topicref href="analysis/Word%20Match.md" format="markdown"/>
         <topicref href="analysis/Multisyllabic%20Noninear%20Analysis.md" format="markdown"/>
         <topicref href="analysis/WAP.md" format="markdown"/>
+        <topicref href="analysis/analysis_composer.md" format="markdown"/>
     </chapter>
 </bookmap>

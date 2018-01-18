@@ -35,8 +35,7 @@
             <step>
                 <cmd>To open the selected query for further editing, click <uicontrol>Open
                         Query</uicontrol>, and edit and run your query as desired. To generate a
-                    report, click <uicontrol>Report</uicontrol> and follow instructions under <xref
-                        href="../../report/tasks/GenerateReport.xml"/>.</cmd>
+                    report, click <uicontrol>Report</uicontrol>.</cmd>
             </step>
         </steps>
     </taskbody>
