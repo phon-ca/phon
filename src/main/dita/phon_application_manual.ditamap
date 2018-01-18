@@ -12,46 +12,6 @@
         <topicref href="misc/concepts/AboutConventions.xml"/>
         <topicref href="misc/concepts/Contributors.xml"/>
     </frontmatter>
-    <chapter navtitle="IPA Transcription" audience="novice">
-        <topicref href="ipa/concepts/ipa_intro.dita"/>
-        <topichead navtitle="IPA Elements">
-            <topicref href="ipa/concepts/phone.dita"/>
-            <topicref href="ipa/concepts/compound_phone.dita"/>
-            <topicref href="ipa/concepts/intrawordpause.dita"/>
-            <topicref href="ipa/concepts/pause.dita"/>
-            <topicref href="ipa/concepts/stress_marker.dita"/>
-            <topicref href="ipa/concepts/syllable_boundary.dita"/>
-            <topicref href="ipa/concepts/word_boundary.dita"/>
-        </topichead>
-        <topichead navtitle="Other Transcription Items">
-            <topicref href="ipa/concepts/intonation_group.dita"/>
-            <topicref href="ipa/concepts/compound_word.dita"/>
-            <topicref href="ipa/concepts/sandhi.dita"/>
-        </topichead>
-        <topicref href="generated/ipa.xml"/>
-        <topicref href="generated/features.xml"/>
-    </chapter>
-    <chapter navtitle="Phonex" audience="intermediate">
-        <topicref href="phonex/concepts/intro.dita"/>
-        <topichead navtitle="Language Reference">
-            <topicref href="phonex/concepts/constructs.dita"/>
-            <topicref href="phonex/concepts/phone-matchers.dita"/>
-            <topicref href="phonex/concepts/groups.dita"/>
-            <topicref href="phonex/concepts/boundaries.dita"/>
-            <topicref href="phonex/concepts/quantifiers.dita"/>
-            <topicref href="phonex/concepts/lookahead-behind.dita"/>
-        </topichead>
-        <topichead navtitle="Supplementary Matchers">
-            <topicref href="phonex/concepts/plug-ins.dita"/>
-            <topicref href="phonex/concepts/stress.dita"/>
-            <topicref href="phonex/concepts/sctype.dita"/>
-            <topicref href="phonex/concepts/diacritic_plugin.dita"/>
-            <topicref href="phonex/concepts/prefix.dita"/>
-            <topicref href="phonex/concepts/suffix.dita"/>
-            <topicref href="phonex/concepts/comb.dita"/>
-            <topicref href="phonex/concepts/tone_plugin.dita"/>
-        </topichead>
-    </chapter>
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.md" format="markdown">
             <topichead navtitle="Actions">
@@ -223,6 +183,46 @@
             </topichead>
             <topicref href="tools/PhonShell.md" format="markdown"/>
             <topicref href="tools/LanguageCodes.md" format="markdown"/>
+        </topichead>
+    </chapter>
+    <chapter navtitle="IPA Transcription" audience="novice">
+        <topicref href="ipa/concepts/ipa_intro.dita"/>
+        <topichead navtitle="IPA Elements">
+            <topicref href="ipa/concepts/phone.dita"/>
+            <topicref href="ipa/concepts/compound_phone.dita"/>
+            <topicref href="ipa/concepts/intrawordpause.dita"/>
+            <topicref href="ipa/concepts/pause.dita"/>
+            <topicref href="ipa/concepts/stress_marker.dita"/>
+            <topicref href="ipa/concepts/syllable_boundary.dita"/>
+            <topicref href="ipa/concepts/word_boundary.dita"/>
+        </topichead>
+        <topichead navtitle="Other Transcription Items">
+            <topicref href="ipa/concepts/intonation_group.dita"/>
+            <topicref href="ipa/concepts/compound_word.dita"/>
+            <topicref href="ipa/concepts/sandhi.dita"/>
+        </topichead>
+        <topicref href="generated/ipa.xml"/>
+        <topicref href="generated/features.xml"/>
+    </chapter>
+    <chapter navtitle="Phonex" audience="intermediate">
+        <topicref href="phonex/concepts/intro.dita"/>
+        <topichead navtitle="Language Reference">
+            <topicref href="phonex/concepts/constructs.dita"/>
+            <topicref href="phonex/concepts/phone-matchers.dita"/>
+            <topicref href="phonex/concepts/groups.dita"/>
+            <topicref href="phonex/concepts/boundaries.dita"/>
+            <topicref href="phonex/concepts/quantifiers.dita"/>
+            <topicref href="phonex/concepts/lookahead-behind.dita"/>
+        </topichead>
+        <topichead navtitle="Supplementary Matchers">
+            <topicref href="phonex/concepts/plug-ins.dita"/>
+            <topicref href="phonex/concepts/stress.dita"/>
+            <topicref href="phonex/concepts/sctype.dita"/>
+            <topicref href="phonex/concepts/diacritic_plugin.dita"/>
+            <topicref href="phonex/concepts/prefix.dita"/>
+            <topicref href="phonex/concepts/suffix.dita"/>
+            <topicref href="phonex/concepts/comb.dita"/>
+            <topicref href="phonex/concepts/tone_plugin.dita"/>
         </topichead>
     </chapter>
     <chapter navtitle="CHAT Support"/>
