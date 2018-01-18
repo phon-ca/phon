@@ -4,17 +4,59 @@
     <topicref href="misc/concepts/Contributors.xml"/>
     <topicref href="misc/concepts/Introduction.xml"/>
     <topicref href="misc/concepts/AboutConventions.xml"/>
-    <topicref href="misc/concepts/out/markdown/Introduction.md" format="markdown">
-        <topicmeta>
-            <navtitle>Introduction</navtitle>
-        </topicmeta>
-    </topicref>
     <topichead navtitle="Using Phon">
         <topicref href="prefs/tasks/EditPreferences.xml"/>
         <topicref href="prefs/tasks/ChangeDictionaryLanguage.xml"/>
         <topicref href="prefs/tasks/ChangeSyllabifierLanguage.xml"/>
         <topicref href="prefs/tasks/ChangeApplicationFonts.xml"/>
         <topicref href="prefs/concepts/AboutAutosaves.xml"/>
+    </topichead>
+    <topichead navtitle="IPA Transcription">
+        <topicref href="ipa/concepts/ipa_intro.dita"/>
+        <topichead navtitle="IPA Elements">
+            <topicref href="ipa/concepts/phone.dita"/>
+            <topicref href="ipa/concepts/compound_phone.dita"/>
+            <topicref href="ipa/concepts/intrawordpause.dita"/>
+            <topicref href="ipa/concepts/pause.dita"/>
+            <topicref href="ipa/concepts/stress_marker.dita"/>
+            <topicref href="ipa/concepts/syllable_boundary.dita"/>
+            <topicref href="ipa/concepts/word_boundary.dita"/>
+        </topichead>
+        <topichead navtitle="Other Transcription Items">
+            <topicref href="ipa/concepts/intonation_group.dita"/>
+            <topicref href="ipa/concepts/compound_word.dita"/>
+            <topicref href="ipa/concepts/sandhi.dita"/>
+        </topichead>
+    </topichead>
+    <topichead navtitle="Phonex">
+        <topicref href="phonex/concepts/intro.dita"/>
+        <topichead navtitle="Language Reference">
+            <topicref href="phonex/concepts/constructs.dita"/>
+            <topicref href="phonex/concepts/phone-matchers.dita"/>
+            <topicref href="phonex/concepts/groups.dita"/>
+            <topicref href="phonex/concepts/boundaries.dita"/>
+            <topicref href="phonex/concepts/quantifiers.dita"/>
+            <topicref href="phonex/concepts/lookahead-behind.dita"/>
+        </topichead>
+        <topichead navtitle="Supplementary Matchers">
+            <topicref href="phonex/concepts/plug-ins.dita"/>
+            <topicref href="phonex/concepts/stress.dita"/>
+            <topicref href="phonex/concepts/sctype.dita"/>
+            <topicref href="phonex/concepts/diacritic_plugin.dita"/>
+            <topicref href="phonex/concepts/prefix.dita"/>
+            <topicref href="phonex/concepts/suffix.dita"/>
+            <topicref href="phonex/concepts/comb.dita"/>
+            <topicref href="phonex/concepts/tone_plugin.dita"/>
+        </topichead>
+    </topichead>
+    <topichead navtitle="IPA Map">
+        <topicref href="ipamap/concepts/AboutIPAMap.xml"/>
+        <topicref href="ipamap/tasks/InputTextwithIPAMap.xml"/>
+        <topicref href="ipamap/tasks/CopyCharacter.xml"/>
+        <topicref href="ipamap/tasks/AddtoFavorites.xml"/>
+        <topicref href="ipamap/tasks/ScrolltoSection.xml"/>
+        <topicref href="ipamap/tasks/ResizeFontandWindow.xml"/>
+        <topicref href="ipamap/tasks/HighlightRecentlyUsed.xml"/>
     </topichead>
     <topichead navtitle="Project Management">
         <topicref href="misc/concepts/AboutProjectFileStructure.xml"/>
@@ -49,15 +91,6 @@
         <topicref href="projman/tasks/CopySession.xml"/>
         <topicref href="projman/tasks/DeriveSession.xml"/>
         <topicref href="projman/tasks/SaveSessionAs.xml"/>
-    </topichead>
-    <topichead navtitle="IPA Map">
-        <topicref href="ipamap/concepts/AboutIPAMap.xml"/>
-        <topicref href="ipamap/tasks/InputTextwithIPAMap.xml"/>
-        <topicref href="ipamap/tasks/CopyCharacter.xml"/>
-        <topicref href="ipamap/tasks/AddtoFavorites.xml"/>
-        <topicref href="ipamap/tasks/ScrolltoSection.xml"/>
-        <topicref href="ipamap/tasks/ResizeFontandWindow.xml"/>
-        <topicref href="ipamap/tasks/HighlightRecentlyUsed.xml"/>
     </topichead>
     <topichead navtitle="Session Editor">
         <topichead navtitle="Editor Views">
@@ -218,5 +251,9 @@
         <topicref href="history/concepts/AboutStarredQueries.xml"/>
         <topicref href="history/tasks/EditQueryDetails.xml"/>
         <topicref href="history/tasks/DeleteQuery.xml"/>
+    </topichead>
+    <topichead navtitle="Appendix">
+        <topicref href="../../../target/generated-resources/xml/xslt/features.xml"/>
+        <topicref href="../../../target/generated-resources/xml/xslt/ipa.xml"/>
     </topichead>
 </map>

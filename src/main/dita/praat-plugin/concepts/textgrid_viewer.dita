@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_dj5_xmx_qp">
+ <title>TextGrid Tier</title>
+ <shortdesc>The TextGrid viewer in Phon displays basic TextGrid information about the TextGrid
+  assigned to the current record.</shortdesc>
+ <conbody>
+  <p>To display the TextGrid view, choose <uicontrol>Show TextGrid</uicontrol> from the
+    <uicontrol>Praat</uicontrol> menu in the Speech Analysis view.  You can select audio segments by
+   clicking intevals in the displayed TextGrid.</p>
+ </conbody>
+</concept>

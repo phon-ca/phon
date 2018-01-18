@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Archive Project</title>
+    <shortdesc>Create a <i>.zip</i> archive of a <i>Phon</i> project in the workspace <i>backups</i>
+        folder. This is especially useful as a method of backing up your corpus before any major
+        change.</shortdesc>
+    <taskbody>
+        <context> From the <wintitle>Workspace</wintitle> window:</context>
+        <steps id="steps_ghx_bqu_sc">
+            <step>
+                <cmd>Mouse over the project you wish to archive in the <wintitle>Project
+                        List</wintitle> pane. </cmd>
+                <stepresult>Two buttons will appear next to your project name; <uicontrol>Create
+                        .zip archive of phon project...</uicontrol> and <uicontrol>Show project in
+                        file system viewer</uicontrol>.
+                    <image placement="break" scale="40"
+                        href="../../images/ArchiveProject.png" id="image_wdr_vlm_sc"/></stepresult>
+            </step>
+            <step>
+                <cmd>Click <uicontrol>Create .zip archive of phon project...</uicontrol>.
+                    Alternately, right-click (<userinput>CTRL+click</userinput>) on your project and
+                    choose <uicontrol>Archive project</uicontrol> from the context menu.</cmd>
+                <stepresult>A <i>.zip</i> archive of your project will be created in your workspace
+                        <i>backups</i> folder, with the current date affixed to its
+                    filename.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

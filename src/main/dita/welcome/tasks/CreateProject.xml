@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="createProject">
+    <title>Create Project</title>
+    <shortdesc>Create a new <i>Phon</i> project.</shortdesc>
+    <taskbody>
+        <context>
+            <p>From the <wintitle>Workspace</wintitle> window:</p>
+        </context>
+        <steps id="steps_dff51cb6-9a62-4818-b0db-9fe96f17131b">
+            <step>
+                <cmd>Click the <uicontrol>Create Project</uicontrol> button in the
+                        <wintitle>Workspace Actions</wintitle> pane.</cmd>
+                <stepresult>A text field will appear in which you can enter a project
+                    name.</stepresult>
+            </step>
+            <step>
+                <cmd>If you do not wish to create a project at this time, click <uicontrol>Cancel
+                        create new project/X</uicontrol> or press <userinput>ESC</userinput>.
+                    Otherwise, type a name for your project and click the <uicontrol>Create new
+                        project in workspace/+</uicontrol> button or press
+                        <userinput>Enter</userinput>.</cmd>
+            <stepresult>This action will save the project in your current workspace folder and open
+                    it in the <wintitle>Project Manager</wintitle>.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

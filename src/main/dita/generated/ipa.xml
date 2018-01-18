@@ -1,0 +1,3001 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept
+  PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_ipa_listing">
+   <title>Listing of IPA Characters</title>
+   <shortdesc>Listing of IPA characters.</shortdesc>
+   <conbody>
+      <p>The following is a lising of all supported IPA characters along with the glyph unicode value, name, token type and feature set.<table frame="all" id="table_kyq_t4l_3g">
+            <title>Supported IPA Characters</title>
+            <tgroup cols="5">
+               <colspec colname="c1" colnum="1" colwidth="1*"/>
+               <colspec colname="c2" colnum="2" colwidth="1.34*"/>
+               <colspec colname="c3" colnum="3" colwidth="2.18*"/>
+               <colspec colname="c4" colnum="4" colwidth="3.16*"/>
+               <colspec colname="c5" colnum="5" colwidth="6.58*"/>
+               <thead>
+                  <row>
+                     <entry>Glyph</entry>
+                     <entry>Unicode Value</entry>
+                     <entry>Name</entry>
+                     <entry>Type</entry>
+                     <entry>Features</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>∅</entry>
+                     <entry>0x2205</entry>
+                     <entry>Empty Set</entry>
+                     <entry>cover symbol</entry>
+                     <entry>null</entry>
+                  </row>
+                  <row>
+                     <entry> </entry>
+                     <entry>0x20</entry>
+                     <entry>Space</entry>
+                     <entry>space</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>$</entry>
+                     <entry>0x24</entry>
+                     <entry>Dollar Sign</entry>
+                     <entry>dollar sign</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>{</entry>
+                     <entry>0x7B</entry>
+                     <entry>Open Brace</entry>
+                     <entry>open brace</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>}</entry>
+                     <entry>0x7D</entry>
+                     <entry>Close Brace</entry>
+                     <entry>close brace</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>:</entry>
+                     <entry>0x3A</entry>
+                     <entry>Colon</entry>
+                     <entry>colon</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>0</entry>
+                     <entry>0x30</entry>
+                     <entry>Zero</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>1</entry>
+                     <entry>0x31</entry>
+                     <entry>One</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>2</entry>
+                     <entry>0x32</entry>
+                     <entry>Two</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>3</entry>
+                     <entry>0x33</entry>
+                     <entry>Three</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>4</entry>
+                     <entry>0x34</entry>
+                     <entry>Four</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>5</entry>
+                     <entry>0x35</entry>
+                     <entry>Five</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>6</entry>
+                     <entry>0x36</entry>
+                     <entry>Six</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>7</entry>
+                     <entry>0x37</entry>
+                     <entry>Seven</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>8</entry>
+                     <entry>0x38</entry>
+                     <entry>Eight</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>9</entry>
+                     <entry>0x39</entry>
+                     <entry>Nine</entry>
+                     <entry>digit</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>^</entry>
+                     <entry>0x5E</entry>
+                     <entry>Caret</entry>
+                     <entry>intra word pause</entry>
+                     <entry/>
+                  </row>
+                  <row>
+                     <entry>↔</entry>
+                     <entry>0x2194</entry>
+                     <entry>Left Right Arrow</entry>
+                     <entry>alignment</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>ǃ</entry>
+                     <entry>0x1C3</entry>
+                     <entry>Latin Letter Retroflex Click</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual alveolar voiceless stop obstruent click oral
+        ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>(</entry>
+                     <entry>0x28</entry>
+                     <entry>Left Parenthesis</entry>
+                     <entry>open paren</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>)</entry>
+                     <entry>0x29</entry>
+                     <entry>Right Parenthesis</entry>
+                     <entry>close paren</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>*</entry>
+                     <entry>0x2A</entry>
+                     <entry>Asterisk</entry>
+                     <entry>cover symbol</entry>
+                     <entry>unintelligible cover</entry>
+                  </row>
+                  <row>
+                     <entry>+</entry>
+                     <entry>0x2B</entry>
+                     <entry>Plus sign</entry>
+                     <entry>plus</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>.</entry>
+                     <entry>0x2E</entry>
+                     <entry>Full Stop</entry>
+                     <entry>period</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>A</entry>
+                     <entry>0x41</entry>
+                     <entry>Latin Capital Letter A</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>B</entry>
+                     <entry>0x42</entry>
+                     <entry>Latin Capital Letter B</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>C</entry>
+                     <entry>0x43</entry>
+                     <entry>Latin Capital Letter C</entry>
+                     <entry>cover symbol</entry>
+                     <entry>consonant cover oral</entry>
+                  </row>
+                  <row>
+                     <entry>D</entry>
+                     <entry>0x44</entry>
+                     <entry>Latin Capital Letter D</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>E</entry>
+                     <entry>0x45</entry>
+                     <entry>Latin Capital Letter E</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>F</entry>
+                     <entry>0x46</entry>
+                     <entry>Latin Capital Letter F</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover semiresonant</entry>
+                  </row>
+                  <row>
+                     <entry>G</entry>
+                     <entry>0x47</entry>
+                     <entry>Latin Capital Letter G</entry>
+                     <entry>cover symbol</entry>
+                     <entry>consonant glide cover oral</entry>
+                  </row>
+                  <row>
+                     <entry>H</entry>
+                     <entry>0x48</entry>
+                     <entry>Latin Capital Letter H</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>I</entry>
+                     <entry>0x49</entry>
+                     <entry>Latin Capital Letter I</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>J</entry>
+                     <entry>0x4A</entry>
+                     <entry>Latin Capital Letter J</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>K</entry>
+                     <entry>0x4B</entry>
+                     <entry>Latin Capital Letter K</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>L</entry>
+                     <entry>0x4C</entry>
+                     <entry>Latin Capital Letter L</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>M</entry>
+                     <entry>0x4D</entry>
+                     <entry>Latin Capital Letter M</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>N</entry>
+                     <entry>0x4E</entry>
+                     <entry>Latin Capital Letter N</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>O</entry>
+                     <entry>0x4F</entry>
+                     <entry>Latin Capital Letter O</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>P</entry>
+                     <entry>0x50</entry>
+                     <entry>Latin Capital Letter P</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>Q</entry>
+                     <entry>0x51</entry>
+                     <entry>Latin Capital Letter Q</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover quasiresonant</entry>
+                  </row>
+                  <row>
+                     <entry>R</entry>
+                     <entry>0x52</entry>
+                     <entry>Latin Capital Letter R</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover raspberry</entry>
+                  </row>
+                  <row>
+                     <entry>S</entry>
+                     <entry>0x53</entry>
+                     <entry>Latin Capital Letter S</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>T</entry>
+                     <entry>0x54</entry>
+                     <entry>Latin Capital Letter T</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>U</entry>
+                     <entry>0x55</entry>
+                     <entry>Latin Capital Letter U</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>V</entry>
+                     <entry>0x56</entry>
+                     <entry>Latin Capital Letter V</entry>
+                     <entry>cover symbol</entry>
+                     <entry>vowel cover</entry>
+                  </row>
+                  <row>
+                     <entry>W</entry>
+                     <entry>0x57</entry>
+                     <entry>Latin Capital Letter W</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>X</entry>
+                     <entry>0x58</entry>
+                     <entry>Latin Capital Letter X</entry>
+                     <entry>cover symbol</entry>
+                     <entry>unintelligible cover</entry>
+                  </row>
+                  <row>
+                     <entry>Y</entry>
+                     <entry>0x59</entry>
+                     <entry>Latin Capital Letter Y</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>Z</entry>
+                     <entry>0x5A</entry>
+                     <entry>Latin Capital Letter Z</entry>
+                     <entry>cover symbol</entry>
+                     <entry>cover</entry>
+                  </row>
+                  <row>
+                     <entry>&gt;</entry>
+                     <entry>0x3E</entry>
+                     <entry>Greater-than Sign</entry>
+                     <entry>glide</entry>
+                     <entry>consonant glide transition</entry>
+                  </row>
+                  <row>
+                     <entry>a</entry>
+                     <entry>0x61</entry>
+                     <entry>Latin Letter Small A</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel low lax central</entry>
+                  </row>
+                  <row>
+                     <entry>b</entry>
+                     <entry>0x62</entry>
+                     <entry>Latin Letter Small B</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiced stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>c</entry>
+                     <entry>0x63</entry>
+                     <entry>Latin Letter Small C</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiceless stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>d</entry>
+                     <entry>0x64</entry>
+                     <entry>Latin Letter Small D</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>e</entry>
+                     <entry>0x65</entry>
+                     <entry>Latin Letter Small E</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel mid tense atr front</entry>
+                  </row>
+                  <row>
+                     <entry>f</entry>
+                     <entry>0x66</entry>
+                     <entry>Latin Letter Small F</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial labiodental voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>g</entry>
+                     <entry>0x67</entry>
+                     <entry>Latin Letter Small G</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiced stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>h</entry>
+                     <entry>0x68</entry>
+                     <entry>Latin Letter Small H</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural laryngeal voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>i</entry>
+                     <entry>0x69</entry>
+                     <entry>Latin Letter Small I</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel high tense atr front</entry>
+                  </row>
+                  <row>
+                     <entry>j</entry>
+                     <entry>0x6A</entry>
+                     <entry>Latin Letter Small J</entry>
+                     <entry>glide</entry>
+                     <entry>consonant glide palatal coronal lingual posterior voiced approximant
+        continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>k</entry>
+                     <entry>0x6B</entry>
+                     <entry>Latin Letter Small K</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiceless stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>l</entry>
+                     <entry>0x6C</entry>
+                     <entry>Latin Letter Small L</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced approximant liquid
+        lateral continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>m</entry>
+                     <entry>0x6D</entry>
+                     <entry>Latin Letter Small M</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiced stop sonorant nasal</entry>
+                  </row>
+                  <row>
+                     <entry>n</entry>
+                     <entry>0x6E</entry>
+                     <entry>Latin Letter Small N</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced stop sonorant
+        nasal</entry>
+                  </row>
+                  <row>
+                     <entry>o</entry>
+                     <entry>0x6F</entry>
+                     <entry>Latin Letter Small O</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round mid tense atr back</entry>
+                  </row>
+                  <row>
+                     <entry>p</entry>
+                     <entry>0x70</entry>
+                     <entry>Latin Letter Small P</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiceless stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>q</entry>
+                     <entry>0x71</entry>
+                     <entry>Latin Letter Small Q</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiceless stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>r</entry>
+                     <entry>0x72</entry>
+                     <entry>Latin Letter Small R</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced approximant liquid
+        rhotic continuant sonorant trill oral</entry>
+                  </row>
+                  <row>
+                     <entry>s</entry>
+                     <entry>0x73</entry>
+                     <entry>Latin Letter Small S</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless continuant obstruent
+        fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>t</entry>
+                     <entry>0x74</entry>
+                     <entry>Latin Letter Small T</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>u</entry>
+                     <entry>0x75</entry>
+                     <entry>Latin Letter Small U</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round high tense atr back</entry>
+                  </row>
+                  <row>
+                     <entry>v</entry>
+                     <entry>0x76</entry>
+                     <entry>Latin Letter Small V</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial labiodental voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>w</entry>
+                     <entry>0x77</entry>
+                     <entry>Latin Letter Small W</entry>
+                     <entry>glide</entry>
+                     <entry>consonant glide labial bilabial dorsal velar lingual voiced approximant
+        continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>x</entry>
+                     <entry>0x78</entry>
+                     <entry>Latin Letter Small X</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>y</entry>
+                     <entry>0x79</entry>
+                     <entry>Latin Letter Small Y</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round high tense atr front</entry>
+                  </row>
+                  <row>
+                     <entry>z</entry>
+                     <entry>0x7A</entry>
+                     <entry>Latin Letter Small Z</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced continuant obstruent
+        fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>¡</entry>
+                     <entry>0xA1</entry>
+                     <entry>Inverted Exclamation Mark</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior voiceless stop click oral ingressive
+        subapical</entry>
+                  </row>
+                  <row>
+                     <entry>¹</entry>
+                     <entry>0xB9</entry>
+                     <entry>Superscript One (Number 1)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone1</entry>
+                  </row>
+                  <row>
+                     <entry>²</entry>
+                     <entry>0xB2</entry>
+                     <entry>Superscript Two (Number 2)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone2</entry>
+                  </row>
+                  <row>
+                     <entry>³</entry>
+                     <entry>0xB3</entry>
+                     <entry>Superscript Three (Number 3)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone3</entry>
+                  </row>
+                  <row>
+                     <entry>⁴</entry>
+                     <entry>0x2074</entry>
+                     <entry>Superscript Four (Number 4)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone4</entry>
+                  </row>
+                  <row>
+                     <entry>⁵</entry>
+                     <entry>0x2075</entry>
+                     <entry>Superscript Five (Number 5)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone5</entry>
+                  </row>
+                  <row>
+                     <entry>⁶</entry>
+                     <entry>0x2076</entry>
+                     <entry>Superscript Six (Number 6)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone6</entry>
+                  </row>
+                  <row>
+                     <entry>⁷</entry>
+                     <entry>0x2077</entry>
+                     <entry>Superscript Seven (Number 7)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone7</entry>
+                  </row>
+                  <row>
+                     <entry>⁸</entry>
+                     <entry>0x2078</entry>
+                     <entry>Superscript Eight (Number 8)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone8</entry>
+                  </row>
+                  <row>
+                     <entry>⁹</entry>
+                     <entry>0x2079</entry>
+                     <entry>Superscript Nine (Number 9)</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tone9</entry>
+                  </row>
+                  <row>
+                     <entry>æ</entry>
+                     <entry>0xE6</entry>
+                     <entry>Latin Letter Small AE</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel low lax front</entry>
+                  </row>
+                  <row>
+                     <entry>ç</entry>
+                     <entry>0xE7</entry>
+                     <entry>Latin Letter Small C with cedilla</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiceless continuant obstruent
+        fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ð</entry>
+                     <entry>0xF0</entry>
+                     <entry>Latin Letter Small Eth</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant interdental coronal lingual anterior distributed voiced
+        continuant obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ø</entry>
+                     <entry>0xF8</entry>
+                     <entry>Latin Letter Small O with Stroke</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round mid tense atr front</entry>
+                  </row>
+                  <row>
+                     <entry>ħ</entry>
+                     <entry>0x127</entry>
+                     <entry>Latin Letter Small H with Stroke</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural pharyngeal voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ŋ</entry>
+                     <entry>0x14B</entry>
+                     <entry>Latin Letter Small Eng</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiced stop sonorant nasal</entry>
+                  </row>
+                  <row>
+                     <entry>œ</entry>
+                     <entry>0x153</entry>
+                     <entry>Latin Small Ligature OE</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round mid rtr lax front</entry>
+                  </row>
+                  <row>
+                     <entry>ƀ</entry>
+                     <entry>0x180</entry>
+                     <entry>Latin Letter Small B with Stroke</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƈ</entry>
+                     <entry>0x188</entry>
+                     <entry>Latin Letter Small C with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiceless stop obstruent
+        implosive oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƙ</entry>
+                     <entry>0x199</entry>
+                     <entry>Latin Letter Small K with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiceless stop obstruent implosive
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƛ</entry>
+                     <entry>0x19B</entry>
+                     <entry>Latin Letter Small Lamda with Stroke</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless lateral obstruent
+        affricate oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƞ</entry>
+                     <entry>0x19E</entry>
+                     <entry>Latin Letter Small N with Long Right Leg</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced stop sonorant
+        nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ƥ</entry>
+                     <entry>0x1A5</entry>
+                     <entry>Latin Letter Small P with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiceless stop obstruent implosive
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƫ</entry>
+                     <entry>0x1AB</entry>
+                     <entry>Latin Letter Small T with Palatal Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual anterior posterior alveolar voiceless
+        stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƹ</entry>
+                     <entry>0x1B9</entry>
+                     <entry>Latin Letter Small Ezh Reversed</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural pharyngeal voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƺ</entry>
+                     <entry>0x1BA</entry>
+                     <entry>Latin Letter Small Ezh with Tail</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior alveopalatal distributed
+        voiced continuant obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ǀ</entry>
+                     <entry>0x1C0</entry>
+                     <entry>Latin Letter Dental Click</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dental coronal lingual anterior voiceless stop obstruent click
+        oral ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ǁ</entry>
+                     <entry>0x1C1</entry>
+                     <entry>Latin Letter Lateral Click</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless lateral stop
+        obstruent click oral ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ǂ</entry>
+                     <entry>0x1C2</entry>
+                     <entry>Latin Letter Alveopalatal Click</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior alveopalatal voiceless stop obstruent
+        click oral ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ȴ</entry>
+                     <entry>0x234</entry>
+                     <entry>Latin Letter Small L with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiced approximant liquid
+        lateral continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ȵ</entry>
+                     <entry>0x235</entry>
+                     <entry>Latin Letter Small N with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior alveopalatal voiced stop sonorant
+        nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ȶ</entry>
+                     <entry>0x236</entry>
+                     <entry>Latin Letter Small T with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior alveopalatal voiceless stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɐ</entry>
+                     <entry>0x250</entry>
+                     <entry>Latin Letter Small Turned A</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel low lax central</entry>
+                  </row>
+                  <row>
+                     <entry>ɑ</entry>
+                     <entry>0x251</entry>
+                     <entry>Latin Letter Small Alpha</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel low lax back</entry>
+                  </row>
+                  <row>
+                     <entry>ɒ</entry>
+                     <entry>0x252</entry>
+                     <entry>Latin Letter Small Turned Alpha</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round low lax back</entry>
+                  </row>
+                  <row>
+                     <entry>ɓ</entry>
+                     <entry>0x253</entry>
+                     <entry>Latin Letter Small B with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiced stop obstruent implosive
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɔ</entry>
+                     <entry>0x254</entry>
+                     <entry>Latin Letter Small Open O</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round mid rtr lax back</entry>
+                  </row>
+                  <row>
+                     <entry>ɕ</entry>
+                     <entry>0x255</entry>
+                     <entry>Latin Letter Small C with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal laminal coronal lingual posterior distributed voiceless
+        continuant obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ɖ</entry>
+                     <entry>0x256</entry>
+                     <entry>Latin Letter Small D with Tail</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiced stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɗ</entry>
+                     <entry>0x257</entry>
+                     <entry>Latin Letter Small D with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced stop obstruent
+        implosive oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɘ</entry>
+                     <entry>0x258</entry>
+                     <entry>Latin Letter Small Reversed E</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel mid tense atr central</entry>
+                  </row>
+                  <row>
+                     <entry>ə</entry>
+                     <entry>0x259</entry>
+                     <entry>Latin Letter Small Schwa</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel schwa mid rtr lax central</entry>
+                  </row>
+                  <row>
+                     <entry>ɚ</entry>
+                     <entry>0x25A</entry>
+                     <entry>Latin Letter Small Schwa with Hook</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel schwa rhotic mid rtr lax central</entry>
+                  </row>
+                  <row>
+                     <entry>ɛ</entry>
+                     <entry>0x25B</entry>
+                     <entry>Latin Letter Small Open E</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel mid rtr lax front</entry>
+                  </row>
+                  <row>
+                     <entry>ɜ</entry>
+                     <entry>0x25C</entry>
+                     <entry>Latin Letter Small Reversed Open E</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel mid rtr lax central</entry>
+                  </row>
+                  <row>
+                     <entry>ɝ</entry>
+                     <entry>0x25D</entry>
+                     <entry>Latin Letter Small Reversed Open E with Hook</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel rhotic mid rtr lax central</entry>
+                  </row>
+                  <row>
+                     <entry>ɞ</entry>
+                     <entry>0x25E</entry>
+                     <entry>Latin Letter Small Closed Reversed Open E</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round mid rtr lax central</entry>
+                  </row>
+                  <row>
+                     <entry>ɟ</entry>
+                     <entry>0x25F</entry>
+                     <entry>Latin Letter Small Dotless J with Stroke</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiced stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɠ</entry>
+                     <entry>0x260</entry>
+                     <entry>Latin Letter Small G with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiced stop obstruent implosive
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɡ</entry>
+                     <entry>0x261</entry>
+                     <entry>Latin Letter Small Script G</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiced stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɢ</entry>
+                     <entry>0x262</entry>
+                     <entry>Latin Letter Small Capital G</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiced stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɣ</entry>
+                     <entry>0x263</entry>
+                     <entry>Latin Letter Small Gamma</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɤ</entry>
+                     <entry>0x264</entry>
+                     <entry>Latin Letter Small Ram’s Horns</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel mid tense atr back</entry>
+                  </row>
+                  <row>
+                     <entry>ɥ</entry>
+                     <entry>0x265</entry>
+                     <entry>Latin Letter Small Turned H</entry>
+                     <entry>glide</entry>
+                     <entry>consonant glide labial bilabial palatal coronal lingual voiced approximant
+        continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɦ</entry>
+                     <entry>0x266</entry>
+                     <entry>Latin Letter Small H with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural laryngeal voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɧ</entry>
+                     <entry>0x267</entry>
+                     <entry>Latin Letter Small Heng with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar coronal lingual posterior alveopalatal voiceless
+        continuant obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɨ</entry>
+                     <entry>0x268</entry>
+                     <entry>Latin Letter Small I with Stroke</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel high tense atr central</entry>
+                  </row>
+                  <row>
+                     <entry>ɩ</entry>
+                     <entry>0x269</entry>
+                     <entry>Latin Letter Small Iota</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel high rtr lax front</entry>
+                  </row>
+                  <row>
+                     <entry>ɪ</entry>
+                     <entry>0x26A</entry>
+                     <entry>Latin Letter Small Capital I</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel high rtr lax front</entry>
+                  </row>
+                  <row>
+                     <entry>ɫ</entry>
+                     <entry>0x26B</entry>
+                     <entry>Latin Letter Small L with middle Tilde</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant velar coronal lingual anterior posterior voiced approximant
+        liquid lateral continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɬ</entry>
+                     <entry>0x26C</entry>
+                     <entry>Latin Letter Small L with Belt</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless lateral continuant
+        obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɭ</entry>
+                     <entry>0x26D</entry>
+                     <entry>Latin Letter Small L with Retroflex Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiced approximant liquid
+        lateral continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɮ</entry>
+                     <entry>0x26E</entry>
+                     <entry>Latin Letter Small LEzh</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced lateral continuant
+        obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɯ</entry>
+                     <entry>0x26F</entry>
+                     <entry>Latin Letter Small Turned M</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel high tense atr back</entry>
+                  </row>
+                  <row>
+                     <entry>ɰ</entry>
+                     <entry>0x270</entry>
+                     <entry>Latin Letter Small Turned M with Long Leg</entry>
+                     <entry>glide</entry>
+                     <entry>consonant glide dorsal velar lingual voiced approximant continuant
+        sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɱ</entry>
+                     <entry>0x271</entry>
+                     <entry>Latin Letter Small M with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial labiodental voiced stop sonorant nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ɲ</entry>
+                     <entry>0x272</entry>
+                     <entry>Latin Letter Small N with Left Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiced stop sonorant
+        nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ɳ</entry>
+                     <entry>0x273</entry>
+                     <entry>Latin Letter Small N with Retroflex Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiced stop sonorant
+        nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ɴ</entry>
+                     <entry>0x274</entry>
+                     <entry>Latin Letter Small Capital N</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiced stop sonorant nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ɵ</entry>
+                     <entry>0x275</entry>
+                     <entry>Latin Letter Small Barred O</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round mid tense atr central</entry>
+                  </row>
+                  <row>
+                     <entry>ɶ</entry>
+                     <entry>0x276</entry>
+                     <entry>Latin Letter Small Capital OE</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round low lax front</entry>
+                  </row>
+                  <row>
+                     <entry>ɷ</entry>
+                     <entry>0x277</entry>
+                     <entry>Latin Letter Small Closed Omega</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round high rtr lax back</entry>
+                  </row>
+                  <row>
+                     <entry>ɸ</entry>
+                     <entry>0x278</entry>
+                     <entry>Latin Letter Small Phi</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɹ</entry>
+                     <entry>0x279</entry>
+                     <entry>Latin Letter Small Turned R</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced approximant liquid
+        rhotic continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɺ</entry>
+                     <entry>0x27A</entry>
+                     <entry>Latin Letter Small Turned R with Long Leg</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced approximant liquid
+        lateral continuant sonorant flap oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɻ</entry>
+                     <entry>0x27B</entry>
+                     <entry>Latin Letter Small Turned R with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiced approximant liquid
+        rhotic continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɼ</entry>
+                     <entry>0x27C</entry>
+                     <entry>Latin Letter Small R with Long Leg</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual alveolar voiced approximant rhotic continuant
+        sonorant trill oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɽ</entry>
+                     <entry>0x27D</entry>
+                     <entry>Latin Letter Small R with Tail</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiced approximant liquid
+        rhotic continuant sonorant flap oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɾ</entry>
+                     <entry>0x27E</entry>
+                     <entry>Latin Letter Small R with Fish Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced approximant liquid
+        rhotic continuant sonorant flap oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʀ</entry>
+                     <entry>0x280</entry>
+                     <entry>Latin Letter Small Capital R</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiced approximant liquid rhotic
+        continuant sonorant trill oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʁ</entry>
+                     <entry>0x281</entry>
+                     <entry>Latin Letter Small Capital Inverted R</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiced rhotic continuant obstruent
+        fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʂ</entry>
+                     <entry>0x282</entry>
+                     <entry>Latin Letter Small S with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiceless continuant
+        obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʃ</entry>
+                     <entry>0x283</entry>
+                     <entry>Latin Letter Small Esh</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant laminal coronal lingual posterior alveopalatal distributed
+        voiceless continuant obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʄ</entry>
+                     <entry>0x284</entry>
+                     <entry>Latin Letter Small Dotless J with Stroke and Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiced stop obstruent
+        implosive oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʆ</entry>
+                     <entry>0x286</entry>
+                     <entry>Latin Letter Small Esh with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior alveopalatal distributed
+        voiceless continuant obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʇ</entry>
+                     <entry>0x287</entry>
+                     <entry>Latin Letter Small Turned T</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior voiceless stop obstruent click oral
+        ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ʈ</entry>
+                     <entry>0x288</entry>
+                     <entry>Latin Letter Small T with Retroflex Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiceless stop obstruent
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʉ</entry>
+                     <entry>0x289</entry>
+                     <entry>Latin Letter Small U Bar</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round high tense atr central</entry>
+                  </row>
+                  <row>
+                     <entry>ʊ</entry>
+                     <entry>0x28A</entry>
+                     <entry>Latin Letter Small Upsilon</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round high rtr lax back</entry>
+                  </row>
+                  <row>
+                     <entry>ʋ</entry>
+                     <entry>0x28B</entry>
+                     <entry>Latin Letter Small V with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant glide labial voiced approximant continuant sonorant
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʌ</entry>
+                     <entry>0x28C</entry>
+                     <entry>Latin Letter Small Turned V</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel mid rtr lax back</entry>
+                  </row>
+                  <row>
+                     <entry>ʍ</entry>
+                     <entry>0x28D</entry>
+                     <entry>Latin Letter Small Turned W</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial dorsal velar lingual voiceless continuant
+        obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʎ</entry>
+                     <entry>0x28E</entry>
+                     <entry>Latin Letter Small Turned Y</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiced approximant liquid
+        lateral continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʏ</entry>
+                     <entry>0x28F</entry>
+                     <entry>Latin Letter Small Capital Y</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round high rtr lax front</entry>
+                  </row>
+                  <row>
+                     <entry>ʐ</entry>
+                     <entry>0x290</entry>
+                     <entry>Latin Letter Small Z with Retroflex Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior retroflex voiced continuant obstruent
+        fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʑ</entry>
+                     <entry>0x291</entry>
+                     <entry>Latin Letter Small Z with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal laminal coronal lingual posterior distributed voiced
+        continuant obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʒ</entry>
+                     <entry>0x292</entry>
+                     <entry>Latin Letter Small Ezh</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant laminal coronal lingual posterior alveopalatal distributed
+        voiced continuant obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʓ</entry>
+                     <entry>0x293</entry>
+                     <entry>Latin Letter Small Ezh with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior alveopalatal distributed
+        voiced continuant obstruent fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʔ</entry>
+                     <entry>0x294</entry>
+                     <entry>Latin Letter Glottal Stop</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural laryngeal voiceless stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʕ</entry>
+                     <entry>0x295</entry>
+                     <entry>Latin Letter Pharyngeal Voiced Fricative</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural pharyngeal voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʖ</entry>
+                     <entry>0x296</entry>
+                     <entry>Latin Letter Inverted Glottal Stop</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless lateral stop
+        obstruent click oral ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ʗ</entry>
+                     <entry>0x297</entry>
+                     <entry>Latin Letter Stretched C</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless stop obstruent click
+        oral ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ʘ</entry>
+                     <entry>0x298</entry>
+                     <entry>Latin Letter Bilabial Click</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiceless stop obstruent click oral
+        ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ʙ</entry>
+                     <entry>0x299</entry>
+                     <entry>Latin Letter Small Capital B</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial labiodental voiced approximant continuant
+        sonorant trill oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʚ</entry>
+                     <entry>0x29A</entry>
+                     <entry>Latin Letter Small Closed Open E</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round mid rtr lax central</entry>
+                  </row>
+                  <row>
+                     <entry>ʛ</entry>
+                     <entry>0x29B</entry>
+                     <entry>Latin Letter Small Capital G with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiced stop obstruent implosive
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʜ</entry>
+                     <entry>0x29C</entry>
+                     <entry>Latin Letter Small Capital H</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural epiglottal voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʝ</entry>
+                     <entry>0x29D</entry>
+                     <entry>Latin Letter Small J with Crossed-Tail</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal coronal lingual posterior voiced continuant obstruent
+        fricative oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʞ</entry>
+                     <entry>0x29E</entry>
+                     <entry>Latin Letter Small Turned K</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiceless stop obstruent click oral
+        ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>ʟ</entry>
+                     <entry>0x29F</entry>
+                     <entry>Latin Letter Small Capital L</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal velar lingual voiced approximant liquid lateral
+        continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʠ</entry>
+                     <entry>0x2A0</entry>
+                     <entry>Latin Letter Small Q with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiceless stop obstruent implosive
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʡ</entry>
+                     <entry>0x2A1</entry>
+                     <entry>Latin Letter Glottal Stop with Stroke</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural epiglottal voiceless stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʢ</entry>
+                     <entry>0x2A2</entry>
+                     <entry>Latin Letter Reversed Glottal Stop with Stroke</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant guttural epiglottal voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʣ</entry>
+                     <entry>0x2A3</entry>
+                     <entry>Latin Letter Small DZ Digraph</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced obstruent affricate
+        oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʤ</entry>
+                     <entry>0x2A4</entry>
+                     <entry>Latin Letter Small DEzh Digraph</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant laminal coronal lingual posterior alveopalatal distributed
+        voiced obstruent affricate oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʥ</entry>
+                     <entry>0x2A5</entry>
+                     <entry>Latin Letter Small DZ Digraph with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal laminal coronal lingual posterior distributed voiced
+        obstruent affricate oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʦ</entry>
+                     <entry>0x2A6</entry>
+                     <entry>Latin Letter Small TS Digraph</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless obstruent affricate
+        oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʧ</entry>
+                     <entry>0x2A7</entry>
+                     <entry>Latin Letter Small TEsh Digraph</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant laminal coronal lingual posterior alveopalatal distributed
+        voiceless obstruent affricate oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʨ</entry>
+                     <entry>0x2A8</entry>
+                     <entry>Latin Letter Small TC Digraph with Curl</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant palatal laminal coronal lingual posterior distributed voiceless
+        obstruent affricate oral strident</entry>
+                  </row>
+                  <row>
+                     <entry>ʩ</entry>
+                     <entry>0x2A9</entry>
+                     <entry>Latin Letter Small FEng Digraph</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant obstruent fricative nasal velopharyngeal</entry>
+                  </row>
+                  <row>
+                     <entry>ʪ</entry>
+                     <entry>0x2AA</entry>
+                     <entry>Latin Letter Small LS Digraph</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless lateral continuant
+        obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʫ</entry>
+                     <entry>0x2AB</entry>
+                     <entry>Latin Letter Small LZ Digraph</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced lateral continuant
+        obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ʬ</entry>
+                     <entry>0x2AC</entry>
+                     <entry>Latin Letter Bilabial Percussive</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial stop obstruent oral percussive</entry>
+                  </row>
+                  <row>
+                     <entry>ʭ</entry>
+                     <entry>0x2AD</entry>
+                     <entry>Latin Letter Bidental Percussive</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dental stop obstruent oral lowerdental percussive</entry>
+                  </row>
+                  <row>
+                     <entry>ʮ</entry>
+                     <entry>0x2AE</entry>
+                     <entry>Latin Letter Small Turned H with Fish Hook</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel round high rtr lax back</entry>
+                  </row>
+                  <row>
+                     <entry>ʰ</entry>
+                     <entry>0x2B0</entry>
+                     <entry>Modifier Letter Small H</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic aspirated</entry>
+                  </row>
+                  <row>
+                     <entry>ʱ</entry>
+                     <entry>0x2B1</entry>
+                     <entry>Modifier Letter Small H with Hook</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic breathyvoiced</entry>
+                  </row>
+                  <row>
+                     <entry>ʲ</entry>
+                     <entry>0x2B2</entry>
+                     <entry>Modifier Letter Small J</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic palatal</entry>
+                  </row>
+                  <row>
+                     <entry>ʳ</entry>
+                     <entry>0x2B3</entry>
+                     <entry>Modifier Letter Small R</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic rhotic</entry>
+                  </row>
+                  <row>
+                     <entry>ʴ</entry>
+                     <entry>0x2B4</entry>
+                     <entry>Modifier Letter Small Turned R</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic rhotic</entry>
+                  </row>
+                  <row>
+                     <entry>ʵ</entry>
+                     <entry>0x2B5</entry>
+                     <entry>Modifier Letter Small Turned R with Hook</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic rhotic</entry>
+                  </row>
+                  <row>
+                     <entry>ʶ</entry>
+                     <entry>0x2B6</entry>
+                     <entry>Modifier Letter Small Capital Inverted R</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic rhotic</entry>
+                  </row>
+                  <row>
+                     <entry>ʷ</entry>
+                     <entry>0x2B7</entry>
+                     <entry>Modifier Letter Small W</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic labial</entry>
+                  </row>
+                  <row>
+                     <entry>ʸ</entry>
+                     <entry>0x2B8</entry>
+                     <entry>Modifier Letter Small Y</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic labial</entry>
+                  </row>
+                  <row>
+                     <entry>ʻ</entry>
+                     <entry>0x2BB</entry>
+                     <entry>Modifier Letter Turned Comma</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic aspirated</entry>
+                  </row>
+                  <row>
+                     <entry>ʼ</entry>
+                     <entry>0x2BC</entry>
+                     <entry>Modifier Letter Apostrophe</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic ejective</entry>
+                  </row>
+                  <row>
+                     <entry>ʽ</entry>
+                     <entry>0x2BD</entry>
+                     <entry>Modifier Letter Reversed Comma</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic weaklyaspirated</entry>
+                  </row>
+                  <row>
+                     <entry>ʾ</entry>
+                     <entry>0x2BE</entry>
+                     <entry>Modifier Letter Right Half Ring</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic morerounded</entry>
+                  </row>
+                  <row>
+                     <entry>ʿ</entry>
+                     <entry>0x2BF</entry>
+                     <entry>Modifier Letter Left Half Ring</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic lessrounded</entry>
+                  </row>
+                  <row>
+                     <entry>ˀ</entry>
+                     <entry>0x2C0</entry>
+                     <entry>Modifier Letter Glottal Stop</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic laryngeal</entry>
+                  </row>
+                  <row>
+                     <entry>ˁ</entry>
+                     <entry>0x2C1</entry>
+                     <entry>Modifier Letter Reversed Glottal Stop</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic epiglottal</entry>
+                  </row>
+                  <row>
+                     <entry>ˈ</entry>
+                     <entry>0x2C8</entry>
+                     <entry>Modifier Letter Vertical Line</entry>
+                     <entry>primary stress</entry>
+                     <entry>diacritic prstress</entry>
+                  </row>
+                  <row>
+                     <entry>ˌ</entry>
+                     <entry>0x2CC</entry>
+                     <entry>Modifier Letter Low Vertical Line</entry>
+                     <entry>secondary stress</entry>
+                     <entry>diacritic secstress</entry>
+                  </row>
+                  <row>
+                     <entry>ː</entry>
+                     <entry>0x2D0</entry>
+                     <entry>Modifier Letter Triangular Colon</entry>
+                     <entry>long</entry>
+                     <entry>diacritic long</entry>
+                  </row>
+                  <row>
+                     <entry>ˑ</entry>
+                     <entry>0x2D1</entry>
+                     <entry>Modifier Letter Half Triangular Colon</entry>
+                     <entry>half long</entry>
+                     <entry>diacritic halflong</entry>
+                  </row>
+                  <row>
+                     <entry>˞</entry>
+                     <entry>0x2DE</entry>
+                     <entry>Modifier Letter Rhotic Hook</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic rhotic</entry>
+                  </row>
+                  <row>
+                     <entry>ˠ</entry>
+                     <entry>0x2E0</entry>
+                     <entry>Modifier Letter Small Gamma</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic velar</entry>
+                  </row>
+                  <row>
+                     <entry>ˡ</entry>
+                     <entry>0x2E1</entry>
+                     <entry>Modifier Letter Small L</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic lateral</entry>
+                  </row>
+                  <row>
+                     <entry>˥</entry>
+                     <entry>0x2E5</entry>
+                     <entry>Modifier Letter Extra-High Tone Bar</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic toneextrahigh</entry>
+                  </row>
+                  <row>
+                     <entry>˦</entry>
+                     <entry>0x2E6</entry>
+                     <entry>Modifier Letter High Tone Bar</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic tonehigh</entry>
+                  </row>
+                  <row>
+                     <entry>˧</entry>
+                     <entry>0x2E7</entry>
+                     <entry>Modifier Letter Mid Tone Bar</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic tonemid</entry>
+                  </row>
+                  <row>
+                     <entry>˨</entry>
+                     <entry>0x2E8</entry>
+                     <entry>Modifier Letter Low Tone Bar</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic tonelow</entry>
+                  </row>
+                  <row>
+                     <entry>˩</entry>
+                     <entry>0x2E9</entry>
+                     <entry>Modifier Letter Extra-Low Tone Bar</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic toneextralow</entry>
+                  </row>
+                  <row>
+                     <entry>ˬ</entry>
+                     <entry>0x2EC</entry>
+                     <entry>Modifier Letter Voicing</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic voiced</entry>
+                  </row>
+                  <row>
+                     <entry>˭</entry>
+                     <entry>0x2ED</entry>
+                     <entry>Modifier Letter Unaspirated</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic unaspirated</entry>
+                  </row>
+                  <row>
+                     <entry>◌̀</entry>
+                     <entry>0x300</entry>
+                     <entry>Combining Grave Accent</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonelow</entry>
+                  </row>
+                  <row>
+                     <entry>◌́</entry>
+                     <entry>0x301</entry>
+                     <entry>Combining Acute Accent</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonehigh</entry>
+                  </row>
+                  <row>
+                     <entry>◌̂</entry>
+                     <entry>0x302</entry>
+                     <entry>Combining Circumflex Accent</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonefalling</entry>
+                  </row>
+                  <row>
+                     <entry>◌̃</entry>
+                     <entry>0x303</entry>
+                     <entry>Combining Tilde</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic nasal</entry>
+                  </row>
+                  <row>
+                     <entry>◌̄</entry>
+                     <entry>0x304</entry>
+                     <entry>Combining Macron</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonemid</entry>
+                  </row>
+                  <row>
+                     <entry>◌̆</entry>
+                     <entry>0x306</entry>
+                     <entry>Combining Breve</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic extrashort</entry>
+                  </row>
+                  <row>
+                     <entry>◌̇</entry>
+                     <entry>0x307</entry>
+                     <entry>Combining Dot Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic lenis</entry>
+                  </row>
+                  <row>
+                     <entry>◌̈</entry>
+                     <entry>0x308</entry>
+                     <entry>Combining Diaeresis</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic central</entry>
+                  </row>
+                  <row>
+                     <entry>◌̊</entry>
+                     <entry>0x30A</entry>
+                     <entry>Combining Ring Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic voiceless</entry>
+                  </row>
+                  <row>
+                     <entry>◌̋</entry>
+                     <entry>0x30B</entry>
+                     <entry>Combining Double Acute Accent</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic toneextrahigh</entry>
+                  </row>
+                  <row>
+                     <entry>◌̌</entry>
+                     <entry>0x30C</entry>
+                     <entry>Combining Caron</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonerising</entry>
+                  </row>
+                  <row>
+                     <entry>◌̏</entry>
+                     <entry>0x30F</entry>
+                     <entry>Combining Double Grave Accent</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic toneextralow</entry>
+                  </row>
+                  <row>
+                     <entry>◌̑</entry>
+                     <entry>0x311</entry>
+                     <entry>Combining Inverted Breve</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic fronted</entry>
+                  </row>
+                  <row>
+                     <entry>◌̘</entry>
+                     <entry>0x318</entry>
+                     <entry>Combining Left Tack Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic atr</entry>
+                  </row>
+                  <row>
+                     <entry>◌̙</entry>
+                     <entry>0x319</entry>
+                     <entry>Combining Right Tack Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic rtr</entry>
+                  </row>
+                  <row>
+                     <entry>◌̚</entry>
+                     <entry>0x31A</entry>
+                     <entry>Combining Left Angle Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic unreleased</entry>
+                  </row>
+                  <row>
+                     <entry>◌̜</entry>
+                     <entry>0x31C</entry>
+                     <entry>Combining Left Half Ring Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic lessrounded</entry>
+                  </row>
+                  <row>
+                     <entry>◌̝</entry>
+                     <entry>0x31D</entry>
+                     <entry>Combining Up Tack Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic raised</entry>
+                  </row>
+                  <row>
+                     <entry>◌̞</entry>
+                     <entry>0x31E</entry>
+                     <entry>Combining Down Tack Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic approximant sonorant lowered</entry>
+                  </row>
+                  <row>
+                     <entry>◌̟</entry>
+                     <entry>0x31F</entry>
+                     <entry>Combining Plus Sign Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic advanced</entry>
+                  </row>
+                  <row>
+                     <entry>◌̠</entry>
+                     <entry>0x320</entry>
+                     <entry>Combining Minus Sign Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic retracted</entry>
+                  </row>
+                  <row>
+                     <entry>◌̣</entry>
+                     <entry>0x323</entry>
+                     <entry>Combining Dot Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic lenis</entry>
+                  </row>
+                  <row>
+                     <entry>◌̤</entry>
+                     <entry>0x324</entry>
+                     <entry>Combining Diaeresis Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic breathyvoiced</entry>
+                  </row>
+                  <row>
+                     <entry>◌̥</entry>
+                     <entry>0x325</entry>
+                     <entry>Combining Ring Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic voiceless</entry>
+                  </row>
+                  <row>
+                     <entry>◌̩</entry>
+                     <entry>0x329</entry>
+                     <entry>Combining Vertical Line Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic syllabic</entry>
+                  </row>
+                  <row>
+                     <entry>◌̪</entry>
+                     <entry>0x32A</entry>
+                     <entry>Combining Bridge Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic dental</entry>
+                  </row>
+                  <row>
+                     <entry>◌̬</entry>
+                     <entry>0x32C</entry>
+                     <entry>Combining Caron Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic voiced</entry>
+                  </row>
+                  <row>
+                     <entry>◌̯</entry>
+                     <entry>0x32F</entry>
+                     <entry>Combining Inverted Breve Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic nonsyllabic</entry>
+                  </row>
+                  <row>
+                     <entry>◌̰</entry>
+                     <entry>0x330</entry>
+                     <entry>Combining Tilde Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic creakyvoiced</entry>
+                  </row>
+                  <row>
+                     <entry>◌̴</entry>
+                     <entry>0x334</entry>
+                     <entry>Combining Tilde Overlay</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic pharyngeal</entry>
+                  </row>
+                  <row>
+                     <entry>◌̹</entry>
+                     <entry>0x339</entry>
+                     <entry>Combining Right Half Ring Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic morerounded</entry>
+                  </row>
+                  <row>
+                     <entry>◌̺</entry>
+                     <entry>0x33A</entry>
+                     <entry>Combining Inverted Bridge Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic apical</entry>
+                  </row>
+                  <row>
+                     <entry>◌̻</entry>
+                     <entry>0x33B</entry>
+                     <entry>Combining Square Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic laminal</entry>
+                  </row>
+                  <row>
+                     <entry>◌̼</entry>
+                     <entry>0x33C</entry>
+                     <entry>Combining Seagull Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic labial</entry>
+                  </row>
+                  <row>
+                     <entry>◌̽</entry>
+                     <entry>0x33D</entry>
+                     <entry>Combining X Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic mid</entry>
+                  </row>
+                  <row>
+                     <entry>◌͆</entry>
+                     <entry>0x346</entry>
+                     <entry>Combining Bridge Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic lowerdental</entry>
+                  </row>
+                  <row>
+                     <entry>◌͇</entry>
+                     <entry>0x347</entry>
+                     <entry>Combining Equal Sign Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic alveolar</entry>
+                  </row>
+                  <row>
+                     <entry>◌͈</entry>
+                     <entry>0x348</entry>
+                     <entry>Combining Double Vertical Line Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic strongarticulation</entry>
+                  </row>
+                  <row>
+                     <entry>◌͉</entry>
+                     <entry>0x349</entry>
+                     <entry>Combining Left Angle Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic weakarticulation</entry>
+                  </row>
+                  <row>
+                     <entry>◌͊</entry>
+                     <entry>0x34A</entry>
+                     <entry>Combining Not Tilde Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic denasalized</entry>
+                  </row>
+                  <row>
+                     <entry>◌͋</entry>
+                     <entry>0x34B</entry>
+                     <entry>Combining Homothetic Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic nasal</entry>
+                  </row>
+                  <row>
+                     <entry>◌͌</entry>
+                     <entry>0x34C</entry>
+                     <entry>Combining Almost Equal To Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic velopharyngeal</entry>
+                  </row>
+                  <row>
+                     <entry>◌͍</entry>
+                     <entry>0x34D</entry>
+                     <entry>Combining Left Right Arrow Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic labialspread</entry>
+                  </row>
+                  <row>
+                     <entry>◌͎</entry>
+                     <entry>0x34E</entry>
+                     <entry>Combining Upwards Arrow Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic whistled</entry>
+                  </row>
+                  <row>
+                     <entry>◌͔</entry>
+                     <entry>0x354</entry>
+                     <entry>Combining Left Arrow Head Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic fronted</entry>
+                  </row>
+                  <row>
+                     <entry>◌͕</entry>
+                     <entry>0x355</entry>
+                     <entry>Combining Right Arrow Head Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic backed</entry>
+                  </row>
+                  <row>
+                     <entry>͜</entry>
+                     <entry>0x35C</entry>
+                     <entry>Combining Double Breve Below</entry>
+                     <entry>ligature</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>͡</entry>
+                     <entry>0x361</entry>
+                     <entry>Combining Double Inverted Breve</entry>
+                     <entry>ligature</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>͢</entry>
+                     <entry>0x362</entry>
+                     <entry>Combining Double Rightwards Arrow Below</entry>
+                     <entry>ligature</entry>
+                     <entry>diacritic sliding</entry>
+                  </row>
+                  <row>
+                     <entry>α</entry>
+                     <entry>0x3B1</entry>
+                     <entry>Greek Small Letter Alpha</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel low lax central</entry>
+                  </row>
+                  <row>
+                     <entry>β</entry>
+                     <entry>0x3B2</entry>
+                     <entry>Greek Small Letter Beta</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiced continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>δ</entry>
+                     <entry>0x3B4</entry>
+                     <entry>Greek Small Letter Delta</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dental coronal lingual anterior distributed voiced continuant
+        obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>θ</entry>
+                     <entry>0x3B8</entry>
+                     <entry>Greek Small Letter Theta</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant interdental coronal lingual anterior distributed voiceless
+        continuant obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>λ</entry>
+                     <entry>0x3BB</entry>
+                     <entry>Greek Small Letter Lamda</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiced lateral obstruent
+        affricate oral</entry>
+                  </row>
+                  <row>
+                     <entry>π</entry>
+                     <entry>0x3C0</entry>
+                     <entry>Greek Small Letter Pi</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial dental voiced stop obstruent oral</entry>
+                  </row>
+                  <row>
+                     <entry>χ</entry>
+                     <entry>0x3C7</entry>
+                     <entry>Greek Small Letter Chi</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant dorsal uvular lingual voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>ᵊ</entry>
+                     <entry>0x1D4A</entry>
+                     <entry>Modifier Letter Small Schwa</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic schwa</entry>
+                  </row>
+                  <row>
+                     <entry>ᵐ</entry>
+                     <entry>0x1D50</entry>
+                     <entry>Modifier Letter Small M</entry>
+                     <entry>prefix diacritic</entry>
+                     <entry>diacritic bilabial nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ᵑ</entry>
+                     <entry>0x1D51</entry>
+                     <entry>Modifier Letter Small Eng</entry>
+                     <entry>prefix diacritic</entry>
+                     <entry>diacritic velar nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ⁿ</entry>
+                     <entry>0x207F</entry>
+                     <entry>Modifier Letter Small N</entry>
+                     <entry>prefix diacritic</entry>
+                     <entry>diacritic nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ᶬ</entry>
+                     <entry>0x1DAC</entry>
+                     <entry>Modifier Letter Small M with Hook</entry>
+                     <entry>prefix diacritic</entry>
+                     <entry>diacritic labial dental nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ᶮ</entry>
+                     <entry>0x1DAE</entry>
+                     <entry>Modifier Letter Small N with Left Hook</entry>
+                     <entry>prefix diacritic</entry>
+                     <entry>diacritic palatal nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ᶯ</entry>
+                     <entry>0x1DAF</entry>
+                     <entry>Modifier Letter Small N with Retroflex Hook</entry>
+                     <entry>prefix diacritic</entry>
+                     <entry>diacritic retroflex nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ᶰ</entry>
+                     <entry>0x1DB0</entry>
+                     <entry>Modifier Letter Small Capital N</entry>
+                     <entry>prefix diacritic</entry>
+                     <entry>diacritic uvular nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ᶑ</entry>
+                     <entry>0x1D91</entry>
+                     <entry>Latin Letter Small D with Hook and Tail</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior alveolar retroflex voiced stop
+        implosive oral</entry>
+                  </row>
+                  <row>
+                     <entry>‖</entry>
+                     <entry>0x2016</entry>
+                     <entry>Double Vertical Line</entry>
+                     <entry>major group</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>|</entry>
+                     <entry>0x7C</entry>
+                     <entry>Vertical Line</entry>
+                     <entry>minor group</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>↑</entry>
+                     <entry>0x2191</entry>
+                     <entry>Upwards Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic egressive</entry>
+                  </row>
+                  <row>
+                     <entry>↓</entry>
+                     <entry>0x2193</entry>
+                     <entry>Downwards Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>↗</entry>
+                     <entry>0x2197</entry>
+                     <entry>Northeast Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneglobalrise</entry>
+                  </row>
+                  <row>
+                     <entry>↘</entry>
+                     <entry>0x2198</entry>
+                     <entry>Southeast Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneglobalfall</entry>
+                  </row>
+                  <row>
+                     <entry>ꜛ</entry>
+                     <entry>0xA71B</entry>
+                     <entry>Up Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneupstep</entry>
+                  </row>
+                  <row>
+                     <entry>ꜜ</entry>
+                     <entry>0xA71C</entry>
+                     <entry>Down Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonedownstep</entry>
+                  </row>
+                  <row>
+                     <entry>̵</entry>
+                     <entry>0x335</entry>
+                     <entry>Combining Short Stroke Overlay - Affix Diacritic Role Switcher</entry>
+                     <entry>role reversal</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>ƒ</entry>
+                     <entry>0x192</entry>
+                     <entry>Latin Letter Small F with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial bilabial voiceless continuant obstruent fricative
+        oral</entry>
+                  </row>
+                  <row>
+                     <entry>‿</entry>
+                     <entry>0x203F</entry>
+                     <entry>Undertie</entry>
+                     <entry>sandhi</entry>
+                     <entry>diacritic sandhi</entry>
+                  </row>
+                  <row>
+                     <entry>⁀</entry>
+                     <entry>0x2040</entry>
+                     <entry>Overtie</entry>
+                     <entry>sandhi</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>ƪ</entry>
+                     <entry>0x1AA</entry>
+                     <entry>Latin Letter Reversed Esh with Loop</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual posterior alveopalatal distributed voiceless
+        continuant obstruent fricative oral</entry>
+                  </row>
+                  <row>
+                     <entry>ƭ</entry>
+                     <entry>0x1AD</entry>
+                     <entry>Latin Letter Small T with Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant coronal lingual anterior alveolar voiceless stop obstruent
+        implosive oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɥ</entry>
+                     <entry>0x265</entry>
+                     <entry>Latin Letter Small Turned H</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant glide labial bilabial palatal coronal lingual voiced approximant
+        continuant sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ɰ</entry>
+                     <entry>0x270</entry>
+                     <entry>Latin Letter Small Turned M with Long Leg</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant glide dorsal velar lingual voiced approximant continuant
+        sonorant oral</entry>
+                  </row>
+                  <row>
+                     <entry>ı</entry>
+                     <entry>0x131</entry>
+                     <entry>Latin Letter Small Dotless I</entry>
+                     <entry>vowel</entry>
+                     <entry>vowel high tense atr front</entry>
+                  </row>
+                  <row>
+                     <entry>◌᷄</entry>
+                     <entry>0x1DC4</entry>
+                     <entry>Combining Macron-Acute</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonerising tonehigh</entry>
+                  </row>
+                  <row>
+                     <entry>◌᷅</entry>
+                     <entry>0x1DC5</entry>
+                     <entry>Combining Grave-Macron</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonelowrising</entry>
+                  </row>
+                  <row>
+                     <entry>◌᷆</entry>
+                     <entry>0x1DC6</entry>
+                     <entry>Combining Macron-Grave</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌᷇</entry>
+                     <entry>0x1DC7</entry>
+                     <entry>Combining Acute-Macron</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌᷈</entry>
+                     <entry>0x1DC8</entry>
+                     <entry>Combining Grave-Acute-Grave</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonerisingfalling</entry>
+                  </row>
+                  <row>
+                     <entry>↑</entry>
+                     <entry>0x2191</entry>
+                     <entry>Upwards Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic egressive</entry>
+                  </row>
+                  <row>
+                     <entry>↓</entry>
+                     <entry>0x2193</entry>
+                     <entry>Downwards Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic ingressive</entry>
+                  </row>
+                  <row>
+                     <entry>↗</entry>
+                     <entry>0x2197</entry>
+                     <entry>North-East arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneglobalrise</entry>
+                  </row>
+                  <row>
+                     <entry>↘</entry>
+                     <entry>0x2198</entry>
+                     <entry>South-East Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneglobalfall</entry>
+                  </row>
+                  <row>
+                     <entry>ꜛ</entry>
+                     <entry>0xA71B</entry>
+                     <entry>Modifier Letter Raised Up Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneupstep</entry>
+                  </row>
+                  <row>
+                     <entry>ꜜ</entry>
+                     <entry>0xA71C</entry>
+                     <entry>Modifier Letter Raised Down Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonedownstep</entry>
+                  </row>
+                  <row>
+                     <entry>˂</entry>
+                     <entry>0x2C2</entry>
+                     <entry>Modifier Letter Left Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic fronted</entry>
+                  </row>
+                  <row>
+                     <entry>˃</entry>
+                     <entry>0x2C3</entry>
+                     <entry>Modifier Letter Right Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic backed</entry>
+                  </row>
+                  <row>
+                     <entry>˄</entry>
+                     <entry>0x2C4</entry>
+                     <entry>Modifier Letter Up Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic raised</entry>
+                  </row>
+                  <row>
+                     <entry>˅</entry>
+                     <entry>0x2C5</entry>
+                     <entry>Modifier Letter Down Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic lowered</entry>
+                  </row>
+                  <row>
+                     <entry>ˆ</entry>
+                     <entry>0x2C6</entry>
+                     <entry>Modifier Letter Circumflex Accent</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonefalling</entry>
+                  </row>
+                  <row>
+                     <entry>ˇ</entry>
+                     <entry>0x2C7</entry>
+                     <entry>Caron</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonerising</entry>
+                  </row>
+                  <row>
+                     <entry>ˉ</entry>
+                     <entry>0x2C9</entry>
+                     <entry>Modifier Letter Macron</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonemid</entry>
+                  </row>
+                  <row>
+                     <entry>ˊ</entry>
+                     <entry>0x2CA</entry>
+                     <entry>Modifier Letter Acute Accent</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonehigh</entry>
+                  </row>
+                  <row>
+                     <entry>ˋ</entry>
+                     <entry>0x2CB</entry>
+                     <entry>Modifier Letter Grave Accent</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneextrahigh</entry>
+                  </row>
+                  <row>
+                     <entry>˔</entry>
+                     <entry>0x2D4</entry>
+                     <entry>Modifier Letter Up Tack</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic raised</entry>
+                  </row>
+                  <row>
+                     <entry>˕</entry>
+                     <entry>0x2D5</entry>
+                     <entry>Modifier Letter Down Tack</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic lowered</entry>
+                  </row>
+                  <row>
+                     <entry>˖</entry>
+                     <entry>0x2D6</entry>
+                     <entry>Modifier Letter Plus Sign</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic advanced</entry>
+                  </row>
+                  <row>
+                     <entry>˗</entry>
+                     <entry>0x2D7</entry>
+                     <entry>Modifier Letter Minus Sign</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic retracted</entry>
+                  </row>
+                  <row>
+                     <entry>˜</entry>
+                     <entry>0x2DC</entry>
+                     <entry>Small Tilde</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic nasal</entry>
+                  </row>
+                  <row>
+                     <entry>ˢ</entry>
+                     <entry>0x2E2</entry>
+                     <entry>Modifier Letter Small S</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic affricate</entry>
+                  </row>
+                  <row>
+                     <entry>ˣ</entry>
+                     <entry>0x2E3</entry>
+                     <entry>Modifier Letter Small X</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic velar</entry>
+                  </row>
+                  <row>
+                     <entry>ˤ</entry>
+                     <entry>0x2E4</entry>
+                     <entry>Modifier Letter Small Reversed Glottal Stop</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic pharyngeal</entry>
+                  </row>
+                  <row>
+                     <entry>˯</entry>
+                     <entry>0x2EF</entry>
+                     <entry>Modifier Letter Low Down Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic lowered</entry>
+                  </row>
+                  <row>
+                     <entry>˰</entry>
+                     <entry>0x2F0</entry>
+                     <entry>Modifier Letter Low Up Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic raised</entry>
+                  </row>
+                  <row>
+                     <entry>˱</entry>
+                     <entry>0x2F1</entry>
+                     <entry>Modifier Letter Low Left Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic fronted</entry>
+                  </row>
+                  <row>
+                     <entry>˲</entry>
+                     <entry>0x2F2</entry>
+                     <entry>Modifier Letter Low Right Arrowhead</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic backed</entry>
+                  </row>
+                  <row>
+                     <entry>˵</entry>
+                     <entry>0x2F5</entry>
+                     <entry>Modifier Letter Middle Double Grave Accent</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneextralow</entry>
+                  </row>
+                  <row>
+                     <entry>˶</entry>
+                     <entry>0x2F6</entry>
+                     <entry>Modifier Letter Middle Double Acute Accent</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic toneextrahigh</entry>
+                  </row>
+                  <row>
+                     <entry>˸</entry>
+                     <entry>0x2F8</entry>
+                     <entry>Modifier Letter Raised Colon</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic long</entry>
+                  </row>
+                  <row>
+                     <entry>˹</entry>
+                     <entry>0x2F9</entry>
+                     <entry>Modifier Letter Begin High Tone</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonehigh</entry>
+                  </row>
+                  <row>
+                     <entry>˺</entry>
+                     <entry>0x2FA</entry>
+                     <entry>Modifier Letter End High Tone</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonehigh</entry>
+                  </row>
+                  <row>
+                     <entry>˻</entry>
+                     <entry>0x2FB</entry>
+                     <entry>Modifier Letter Begin Low Tone</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonelow</entry>
+                  </row>
+                  <row>
+                     <entry>˼</entry>
+                     <entry>0x2FC</entry>
+                     <entry>Modifier Letter End Low Tone</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic tonelow</entry>
+                  </row>
+                  <row>
+                     <entry>˽</entry>
+                     <entry>0x2FD</entry>
+                     <entry>Modifier Letter Shelf</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>˾</entry>
+                     <entry>0x2FE</entry>
+                     <entry>Modifier Letter Open Shelf</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>˿</entry>
+                     <entry>0x2FF</entry>
+                     <entry>Modifier Letter Low Left Arrow</entry>
+                     <entry>tone</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>ᶻ</entry>
+                     <entry>0x1DBB</entry>
+                     <entry>Modifier Letter Small Z</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic affricate</entry>
+                  </row>
+                  <row>
+                     <entry>ᶴ</entry>
+                     <entry>0x1DB4</entry>
+                     <entry>Modifier Letter Small Esh</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic affricate</entry>
+                  </row>
+                  <row>
+                     <entry>ᶾ</entry>
+                     <entry>0x1DBE</entry>
+                     <entry>Modifier Letter Small Ezh</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic affricate</entry>
+                  </row>
+                  <row>
+                     <entry>ᶿ</entry>
+                     <entry>0x1DBF</entry>
+                     <entry>Modifier Letter Small Theta</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic dental coronal lingual anterior distributed voiceless continuant
+        obstruent</entry>
+                  </row>
+                  <row>
+                     <entry>ᵖ</entry>
+                     <entry>0x1D56</entry>
+                     <entry>Modifier Letter Small P</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic labial</entry>
+                  </row>
+                  <row>
+                     <entry>ᵗ</entry>
+                     <entry>0x1D57</entry>
+                     <entry>Modifier Letter Small T</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic coronal</entry>
+                  </row>
+                  <row>
+                     <entry>ᵏ</entry>
+                     <entry>0x1D4F</entry>
+                     <entry>Modifier Letter Small K</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic dorsal</entry>
+                  </row>
+                  <row>
+                     <entry>ᵇ</entry>
+                     <entry>0x1D47</entry>
+                     <entry>Modifier Letter Smalll B</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic labial</entry>
+                  </row>
+                  <row>
+                     <entry>ᵈ</entry>
+                     <entry>0x1D48</entry>
+                     <entry>Modifier Letter Small D</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic coronal</entry>
+                  </row>
+                  <row>
+                     <entry>ᵍ</entry>
+                     <entry>0x1D4D</entry>
+                     <entry>Modifier Letter Small G</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic dorsal</entry>
+                  </row>
+                  <row>
+                     <entry>⁼</entry>
+                     <entry>0x207C</entry>
+                     <entry>Superscript Equals Sign</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic unaspirated</entry>
+                  </row>
+                  <row>
+                     <entry>◌̉</entry>
+                     <entry>0x309</entry>
+                     <entry>Combining Hook Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌̐</entry>
+                     <entry>0x310</entry>
+                     <entry>Combining Candrabindu</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌̒</entry>
+                     <entry>0x312</entry>
+                     <entry>Combining Turned Comma Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic aspirated</entry>
+                  </row>
+                  <row>
+                     <entry>◌̔</entry>
+                     <entry>0x314</entry>
+                     <entry>Combining Reversed Comma Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic weaklyaspirated</entry>
+                  </row>
+                  <row>
+                     <entry>◌̖</entry>
+                     <entry>0x316</entry>
+                     <entry>Combining Grave Accent Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonerising</entry>
+                  </row>
+                  <row>
+                     <entry>◌̫</entry>
+                     <entry>0x32B</entry>
+                     <entry>Combining Inverted Double Arch Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌̮</entry>
+                     <entry>0x32E</entry>
+                     <entry>Combining Breve Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic derhoticized</entry>
+                  </row>
+                  <row>
+                     <entry>◌̱</entry>
+                     <entry>0x331</entry>
+                     <entry>Combining Macron Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic retracted</entry>
+                  </row>
+                  <row>
+                     <entry>◌̲</entry>
+                     <entry>0x332</entry>
+                     <entry>Combining Low Line</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic alveolar</entry>
+                  </row>
+                  <row>
+                     <entry>◌̳</entry>
+                     <entry>0x333</entry>
+                     <entry>Combining Double Low Line</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌̾</entry>
+                     <entry>0x33E</entry>
+                     <entry>Combining Vertical Tilde</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic distorted</entry>
+                  </row>
+                  <row>
+                     <entry>◌̿</entry>
+                     <entry>0x33F</entry>
+                     <entry>Combining Double Overline</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic unaspirated</entry>
+                  </row>
+                  <row>
+                     <entry>◌͐</entry>
+                     <entry>0x350</entry>
+                     <entry>Combining Right Arrowhead Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic backed</entry>
+                  </row>
+                  <row>
+                     <entry>◌͑</entry>
+                     <entry>0x351</entry>
+                     <entry>Combining Left Half Ring Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic lessrounded</entry>
+                  </row>
+                  <row>
+                     <entry>◌͒</entry>
+                     <entry>0x352</entry>
+                     <entry>Combining Fermata</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌͓</entry>
+                     <entry>0x353</entry>
+                     <entry>Combining X Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌͖</entry>
+                     <entry>0x356</entry>
+                     <entry>Combining Right Arrowhead and Up Arrowhead Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌͗</entry>
+                     <entry>0x357</entry>
+                     <entry>Combining Right Half Ring Above</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic morerounded</entry>
+                  </row>
+                  <row>
+                     <entry>◌͝</entry>
+                     <entry>0x35D</entry>
+                     <entry>Combining Double Breve</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌͞</entry>
+                     <entry>0x35E</entry>
+                     <entry>Combining Double Macron</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌͟</entry>
+                     <entry>0x35F</entry>
+                     <entry>Combining Double Macron Below</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌͠</entry>
+                     <entry>0x360</entry>
+                     <entry>Combining Double Tilde</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͣ</entry>
+                     <entry>0x363</entry>
+                     <entry>Combining Latin Letter Small A</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͤ</entry>
+                     <entry>0x364</entry>
+                     <entry>Combining Latin Letter Small E</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͥ</entry>
+                     <entry>0x365</entry>
+                     <entry>Combining Latin Letter Small I</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͦ</entry>
+                     <entry>0x366</entry>
+                     <entry>Combining Latin Letter Small O</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͧ</entry>
+                     <entry>0x367</entry>
+                     <entry>Combining Latin Letter Small U</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͨ</entry>
+                     <entry>0x368</entry>
+                     <entry>Combining Latin Letter Small C</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͩ</entry>
+                     <entry>0x369</entry>
+                     <entry>Combining Latin Letter Small D</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͪ</entry>
+                     <entry>0x36A</entry>
+                     <entry>Combining Latin Letter Small H</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic aspirated</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͫ</entry>
+                     <entry>0x36B</entry>
+                     <entry>Combining Latin Letter Small M</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic nasal</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͬ</entry>
+                     <entry>0x36C</entry>
+                     <entry>Combining Latin Letter Small R</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic rhotic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͭ</entry>
+                     <entry>0x36D</entry>
+                     <entry>Combining Latin Letter Small T</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͮ</entry>
+                     <entry>0x36E</entry>
+                     <entry>Combining Latin Letter Small V</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>◌ͯ</entry>
+                     <entry>0x36F</entry>
+                     <entry>Combining Latin Letter Small X</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic</entry>
+                  </row>
+                  <row>
+                     <entry>·</entry>
+                     <entry>0x387</entry>
+                     <entry>Greek Ano Teleia</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic halflong</entry>
+                  </row>
+                  <row>
+                     <entry>◌᷉</entry>
+                     <entry>0x1DC9</entry>
+                     <entry>Falling Rising Tone</entry>
+                     <entry>combining diacritic</entry>
+                     <entry>diacritic tonefallingrising</entry>
+                  </row>
+                  <row>
+                     <entry>ⱱ</entry>
+                     <entry>0x2C71</entry>
+                     <entry>Latin Letter Small V with Right Hook</entry>
+                     <entry>consonant</entry>
+                     <entry>consonant labial labiodental lingual voiced approximant continuant
+        sonorant flap oral</entry>
+                  </row>
+                  <row>
+                     <entry>ꜝ</entry>
+                     <entry>0xA71D</entry>
+                     <entry>MODIFIER LETTER AFRICANIST DOWNSTEP</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic tonedownstep</entry>
+                  </row>
+                  <row>
+                     <entry>ꜞ</entry>
+                     <entry>0xA71E</entry>
+                     <entry>MODIFIER LETTER AFRICANIST UPSTEP</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic toneupstep</entry>
+                  </row>
+                  <row>
+                     <entry>ᶦ</entry>
+                     <entry>0x1DA6</entry>
+                     <entry>MODIFIER LETTER SMALL CAPITAL I</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic palatal</entry>
+                  </row>
+                  <row>
+                     <entry>ᶷ</entry>
+                     <entry>0x1DB7</entry>
+                     <entry>MODIFIER LETTER SMALL UPSILON</entry>
+                     <entry>suffix diacritic</entry>
+                     <entry>diacritic labial</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </p>
+   </conbody>
+</concept>

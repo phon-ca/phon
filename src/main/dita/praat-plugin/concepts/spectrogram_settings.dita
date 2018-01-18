@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_tj1_2nx_qp">
+ <title>Spectrogram Settings</title>
+ <shortdesc>Configuring the spectrogram.</shortdesc>
+ <prolog>
+   <source>http://www.fon.hum.uva.nl/praat/manual/Intro_3_2__Configuring_the_spectrogram.html</source>
+ </prolog>
+ <conbody>
+  <p> Adapted from <xref
+        href="http://www.fon.hum.uva.nl/praat/manual/Intro_3_2__Configuring_the_spectrogram.html"
+        format="html" scope="external"/><dl>
+        <dlentry>
+          <dt><i>Max Frequency</i> (Hz) </dt>
+          <dd> the range of frequencies to display. The standard is 0 Hz at the bottom and 5000 Hz
+            at the top. If this maximum frequency is higher than the Nyquist frequency of the Sound
+            (which is half its sampling frequency), some values in the spectrogram will be zero, and
+            the higher frequencies will be drawn in white. You can see this if you record a Sound at
+            44100 Hz and set the view range from 0 Hz to 25000 Hz. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Window length</i></dt>
+          <dd> the duration of the analysis window. If this is 0.005 seconds (the standard), Praat
+            uses for each frame the part of the sound that lies between 0.0025 seconds before and
+            0.0025 seconds after the centre of that frame (for Gaussian windows, Praat actually uses
+            a bit more than that). The window length determines the <i>bandwidth</i> of the spectral
+            analysis, i.e. the width of the horizontal line in the spectrogram of a pure sine wave
+            (see below). For a Gaussian window, the -3 dB bandwidth is 2*sqrt(6*ln(2))/(π*<i>Window
+              length</i>), or 1.2982804 / <i>Window length</i>. To get a `broad-band' spectrogram
+            (bandwidth 260 Hz), keep the standard window length of 5 ms; to get a `narrow-band'
+            spectrogram (bandwidth 43 Hz), set it to 30 ms (0.03 seconds). The other window shapes
+            give slightly different values. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Dynamic range</i> (dB) </dt>
+          <dd> All values that are more than <i>Dynamic range</i> dB below the maximum will be drawn
+            in white. Values in-between have appropriate shades of grey. Thus, if the highest peak
+            in the spectrogram has a height of 30 dB/Hz, and the dynamic range is 50 dB (which is
+            the standard value), then values below -20 dB/Hz will be drawn in white, and values
+            between -20 dB/Hz and 30 dB/Hz will be drawn in various shades of grey. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Window shape</i></dt>
+          <dd> the shape of the analysis window. To compute the spectrum at, say, 3.850 seconds,
+            samples that lie close to 3.850 seconds are given more weight than samples further away.
+            The relative extent to which each sample contributes to the spectrum is given by the
+            window shape. You can choose from: Gaussian, Square (none, rectangular), Hamming (raised
+            sine-squared), Bartlett (triangular), Welch (parabolic), and Hanning (sine-squared). The
+            Gaussian window is superior, as it gives no <i>sidelobes</i> in your spectrogram (see
+            below); it analyzes a factor of 2 slower than the other window shapes, because the
+            analysis is actually performed on twice as many samples per frame. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Time step</i></dt>
+          <dd> the maximum number of points along the time window for which Praat has to compute the
+            spectrum. If your screen is not wider than 1200 pixels, then the standard of 1000 is
+            appropriate, since there is no point in computing more than one spectrum per
+            one-pixel-wide vertical line. If you have a really wide screen, you may see improvement
+            if you raise this number to 1500. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Frequency step</i></dt>
+          <dd> the maximum number of points along the frequency axis for which Praat has to compute
+            the spectrum. If your screen is not taller than 768 pixels, then the standard of 250 is
+            appropriate, since there is no point in computing more than one spectrum per
+            one-pixel-height horizontal line. If you have a really tall screen, you may see
+            improvement if you raise this number. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Window shape</i></dt>
+          <dd> the shape of the analysis window. To compute the spectrum at, say, 3.850 seconds,
+            samples that lie close to 3.850 seconds are given more weight than samples further away.
+            The relative extent to which each sample contributes to the spectrum is given by the
+            window shape. You can choose from: Gaussian, Square (none, rectangular), Hamming (raised
+            sine-squared), Bartlett (triangular), Welch (parabolic), and Hanning (sine-squared). The
+            Gaussian window is superior, as it gives no <i>sidelobes</i> in your spectrogram (see
+            below); it analyzes a factor of 2 slower than the other window shapes, because the
+            analysis is actually performed on twice as many samples per frame. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Preemphasis</i> (dB/octave) </dt>
+          <dd> determines the steepness of a high-pass filter, i.e., how much the power of higher
+            frequencies will be raised before drawing, as compared to lower frequencies. Since the
+            spectral slope of human vowels is approximately -6 dB per octave, the standard value for
+            this setting is +6 dB per octave, so that the spectrum is flattened and the higher
+            formants look as strong as the lower ones. When you raise the preemphasis, frequency
+            bands above 1000 Hz will become darker, those below 1000 Hz will become lighter. </dd>
+        </dlentry>
+        <dlentry>
+          <dt><i>Dynamic compression</i></dt>
+          <dd> determines how much stronger weak spectra should be made before drawing. Normally,
+            this parameter is between 0 and 1. If it is 0 (the standard value), there is no dynamic
+            compression. If it is 1, all spectra will be drawn equally strong, i.e., all of them
+            will contain frequencies that are drawn in black. If this parameter is 0.4 and the
+            global maximum is at 80 dB, then a spectrum with a maximum at 20 dB (which will normally
+            be drawn all white if the dynamic range is 50 dB), will be raised by 0.4 * (80 - 20) =
+            24 dB, so that its maximum will be seen at 44 dB (thus making this frame visible). </dd>
+        </dlentry>
+      </dl>
+    </p>
+ </conbody>
+</concept>

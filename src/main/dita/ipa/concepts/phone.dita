@@ -36,8 +36,7 @@
    <p>Tone diacritics (such as upstep or tone numbers) must appear as the last element in a phone.</p>
   </section>
   <section>
-   <note>Please consult <xref href="../../../../../target/generated-resources/xml/xslt/ipa.xml"/> for a list of possible IPA
-   elements and their character types.</note>
+   <note>Please consult  for a list of possible IPA elements and their character types.</note>
    <table id="table_dyv_gxz_pg">
     <tgroup cols="2">
      <thead>
@@ -69,4 +68,7 @@
   </section>
   
  </conbody>
+ <related-links>
+  <link href="../../generated/ipa.xml#concept_ipa_listing"/>
+ </related-links>
 </concept>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="task_qw3_1v4_rp">
+    <title>Generate TextGrids</title>
+    <shortdesc>Generate TextGrids from Phon records.</shortdesc>
+    <taskbody>
+        <context>
+            <p>The following procedure outlines how to generated new TextGrids from Phon record
+                data.</p>
+        </context>
+        <steps>
+            <step>
+                <note>You may also open the Generate TextGrids wizard from the <wintitle>Session
+                        Editor</wintitle> window, in which case skip step 2.</note>
+                <cmd>From the <wintitle>Project Manager</wintitle> window choose <menucascade>
+                        <uicontrol>Plugins</uicontrol>
+                        <uicontrol>Generate TextGrids...</uicontrol>
+                    </menucascade> from the window menu.</cmd>
+            </step>
+            <step>
+                <cmd>In the wizard window, select a single session for which TextGrids will be
+                    generated. Click <uicontrol>Next</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>Choose the records that will be processed.  Click
+                    <uicontrol>Next</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>Select the location for generated TextGrid files.  You can generated TextGrid
+                    data in the default project location (this is where Phon will look for TextGrid
+                    data for records) or into an external folder.  In the same screen, choose which
+                    Phon tiers will be exported in the TextGrid.  When done, click
+                        <uicontrol>Generate TextGrids</uicontrol>.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

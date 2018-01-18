@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_crs_fmx_qp">
+ <title>Spectrogram Tier</title>
+ <conbody>
+  <p>The Spectrogram tier for Phon allows for visualization of the segment spectrogram, formants,
+            pitch, and intensity from within Phon's Session Editor window. To display the
+            Spectrogram view choose <uicontrol>Show Spectrogram</uicontrol> from the
+                <uicontrol>Praat</uicontrol> menu in the Speech Analysis view. Options for toggling
+            the display of formant, pitch and intensity data can also be found in the
+                <uicontrol>Praat</uicontrol> menu.</p>
+ </conbody>
+</concept>

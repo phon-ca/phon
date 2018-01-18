@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_uwj_cnx_qp">
+ <title>Formant Settings</title>
+ <shortdesc>Settings for Formant analysis.</shortdesc>
+ <prolog>
+  <source>http://www.fon.hum.uva.nl/praat/manual/Sound__To_Formant__burg____.html</source>
+ </prolog>
+ <conbody>
+  <p>Adapted from <xref
+    href="http://www.fon.hum.uva.nl/praat/manual/Sound__To_Formant__burg____.html" format="html"
+    scope="external"/></p>
+  <p>The <wintitle>Formant settings</wintitle> window can be opened by choosing <uicontrol>Formant
+    settings...</uicontrol> from the <uicontrol>Praat</uicontrol> menu in the <uicontrol>Speech
+    Analysis</uicontrol> view of the <wintitle>Session Editor</wintitle> window.</p>
+  <p>
+   <dl>
+    <dlentry>
+     <dt><b>Time step (s)</b></dt>
+     <dd> the time between the centres of consecutive analysis frames. If the sound is 2 seconds
+      long, and the time step is 0.01 seconds, there will be approximately 200 analysis frames.</dd>
+    </dlentry>
+    <dlentry>
+     <dt><b>Maximum number of formants</b></dt>
+     <dd> for most analyses of human speech, you will want to extract 5 formants per frame. This, in
+      combination with the <b>Maximum formant</b> setting, is the only way in which this procedure
+      will give you results compatible with how people tend to interpret formants for vowels, i.e.
+      in terms of vowel height (F1) and vowel place (F2). Otherwise, the <b>Maximum number of
+       formants</b> can be any multiple of 0.5, you can choose 4, 4.5, 5, 5.5, 6, and so on.</dd>
+    </dlentry>
+    <dlentry>
+     <dt><b>Maximum formant (Hz)</b></dt>
+     <dd> the ceiling of the formant search range, in hertz. It is crucial that you set this to a
+      value suitable for your speaker. The standard value of 5500 Hz is suitable for an average
+      adult female. For a male, use 5000 Hz; if you use 5500 Hz for an adult male, you may end up
+      with too few formants in the low frequency region, e.g. analysing an [u] as having a single
+      formant near 500 Hz whereas you want two formants at 300 and 600 Hz. For a young child, use a
+      value much higher than 5500 Hz, for instance 8000 Hz (experiment with it on steady vowels).
+     </dd>
+    </dlentry>
+    <dlentry>
+     <dt><b>Window length (s)</b></dt>
+     <dd> the effective duration of the analysis window, in seconds. The actual length is twice this
+      value, because Praat uses a Gaussian-like analysis window with sidelobes below -120 dB. For
+      instance, if the <b>Window length</b> is 0.025 seconds, the actual Gaussian window duration is
+      0.050 seconds. This window has values below 4% outside the central 0.025 seconds, and its
+      frequency resolution (-3 dB point) is 1.298 / (0.025 s) = 51.9 Hz, as computed with the
+      formula given at <xref
+       href="http://www.fon.hum.uva.nl/praat/manual/Sound__To_Spectrogram___.html" format="html"
+       scope="external">Sound: To Spectrogram...</xref>. This is comparable to the bandwidth of a
+      Hamming window of 0.025 seconds, which is 1.303 / (0.025 s) = 52.1 Hz, but that window (which
+      is the window most often used in other analysis programs) has three spectral lobes of about
+      -42 dB on each side. </dd>
+    </dlentry>
+    <dlentry>
+     <dt><b>Pre-emphasis from (Hz)</b></dt>
+     <dd> the +3 dB point for an inverted low-pass filter with a slope of +6 dB/octave. If this
+      value is 50 Hz, then frequencies below 50 Hz are not enhanced, frequencies around 100 Hz are
+      amplified by 6 dB, frequencies around 200 Hz are amplified by 12 dB, and so forth. The point
+      of this is that vowel spectra tend to fall by 6 dB per octave; the pre-emphasis creates a
+      flatter spectrum, which is better for formant analysis because we want our formants to match
+      the local peaks, not the global spectral slope.</dd>
+    </dlentry>
+     <dlentry>
+       <dt><b>Dot size</b></dt>
+       <dd> Size of formant dots in the display.  Use increments of .5 (e.g., 1.5, 2, 2.5,
+            etc.).</dd>
+     </dlentry>
+   </dl>
+  </p>
+    <p>Settings for formant listings:</p>
+    <dl>
+      <dlentry>
+        <dt>Include num formants</dt>
+        <dd>Include number of formants column</dd>
+      </dlentry>
+      <dlentry>
+        <dt>Include intensity</dt>
+        <dd>Include intensity column</dd>
+      </dlentry>
+      <dlentry>
+        <dt>Include bandwidths</dt>
+        <dd>Include a bandwidth column for each formant</dd>
+      </dlentry>
+    </dl>
+ </conbody>
+</concept>

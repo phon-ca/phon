@@ -18,9 +18,7 @@
                         <uicontrol>IPA Validation</uicontrol>
                     </menucascade> menu item.</cmd>
                 <stepresult>The <wintitle>IPA Validation</wintitle> view will open, with two tiers:
-                        <i>IPA Target Validation</i> and <i>IPA Actual Validation</i>. <image
-                        placement="break" scale="30" href="../../images/Validation.png"
-                        id="image_wdr_vlm_sc"/></stepresult>
+                        <i>IPA Target Validation</i> and <i>IPA Actual Validation</i>. </stepresult>
             </step>
             <step>
                 <cmd>For each group in the tier(s) you are validating, select the most accurate

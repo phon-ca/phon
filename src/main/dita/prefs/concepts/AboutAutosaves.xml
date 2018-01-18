@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
 <concept id="conceptId">
-    <title>About Autosaves</title>
+    <title>Autosaves</title>
     <conbody>
         <p>To prevent loss of data in the event of an unexpected shutdown, <i>Phon</i> has the
             option of auto-saving sessions at regular intervals. Session autosaves are named with

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="task_myf_dpt_rp">
+    <title>List Formants</title>
+    <shortdesc>List formant values from the <uicontrol>Speech Analysis</uicontrol> view.</shortdesc>
+    <taskbody>
+        <context>
+            <p>A listing of formants can be obtained from the <uicontrol>Speech Analysis</uicontrol>
+                view.  To print a formant listing use the following procedure.</p>
+        </context>
+        <steps>
+            <step>
+                <cmd>(Optional) Make a selection in the <uicontrol>Speech Analysis</uicontrol>
+                    view.</cmd>
+            </step>
+            <step>
+                <cmd>From the <uicontrol>Praat</uicontrol> menu in the <uicontrol>Speech
+                        Analysis</uicontrol> view, select <menucascade>
+                        <uicontrol>Formant listing</uicontrol>
+                    </menucascade>.</cmd>
+            </step>
+            <step>
+                <note>Options for formant listings can be changed through the <uicontrol>Formant
+                        settings</uicontrol> window.</note>
+                <cmd>The list of formants will be displayed in a new <wintitle>Buffers</wintitle>
+                    window for the audio segment/selection.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

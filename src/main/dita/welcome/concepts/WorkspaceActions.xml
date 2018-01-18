@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>Workspace Actions</title>
+    <conbody>
+        <p>The following operations are available in the <wintitle>Workspace Actions</wintitle> pane
+            of the <wintitle>Workspace</wintitle> window: <ul>
+                <li><b>Create Project</b>
+                    <p>Create a new project in the current workspace folder.</p>
+                </li>
+                <li><b>Extract Project</b>
+                    <p>Browse to extract a project (<i>.phon</i> or <i>.zip</i> format) into the
+                        current workspace folder from another location on disk.</p>
+                </li>
+            </ul></p>
+    </conbody>
+</concept>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
 <concept id="conceptId">
-    <title>About Default Media Folders</title>
+    <title>Media Folders</title>
     <conbody>
         <p>A list of <i>Media Folders</i> can be set up using the <uicontrol>Media</uicontrol> tab
             of the <wintitle>Preferences</wintitle> dialog. <i>Phon</i> will look at each of these

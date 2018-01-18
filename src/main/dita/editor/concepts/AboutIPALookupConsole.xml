@@ -11,8 +11,6 @@
             </menucascade>, and then clicking the <uicontrol>Console</uicontrol> tab. Commands can
             be entered into the text field located at the bottom of the window, use
                 <userinput>Enter</userinput> to run the command.</p>
-        <p><image placement="break" scale="30"
-            href="../../images/AboutIPALookupConsole.png" id="image_wdr_vlm_sc"/></p>
         <p>The following commands can be performed on dictionary files (include any quotation
             marks): <ul id="ul_76df7150-696c-4d9a-886b-33f09bb9f001">
                 <li><b>use &lt;dictionary></b>

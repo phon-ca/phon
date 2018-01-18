@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_zqx_bnx_qp">
+ <title>Pitch Settings</title>
+ <shortdesc>Configuring the pitch contour.</shortdesc>
+  <prolog>
+    <source>http://www.fon.hum.uva.nl/praat/manual/Sound__To_Pitch__ac____.html; http://www.fon.hum.uva.nl/praat/manual/Sound__To_Pitch__cc____.html</source>
+  </prolog>
+ <conbody>
+  <p>Adapted from <xref href="http://www.fon.hum.uva.nl/praat/manual/Sound__To_Pitch__ac____.html"
+    format="html" scope="external"/> and <xref
+    href="http://www.fon.hum.uva.nl/praat/manual/Sound__To_Pitch__cc____.html" format="html"
+    scope="external"/></p>
+  <p>The <wintitle>Pitch settings</wintitle> window can be opened by choosing <uicontrol>Pitch
+        settings...</uicontrol> from the <uicontrol>Praat</uicontrol> menu in the <uicontrol>Speech
+        Analysis</uicontrol> view of the <wintitle>Session Editor</wintitle> window. The behaviour
+      of the <term>Time step</term> and <term>Pitch floor</term> parameters differ depending on the
+      choice of Auto-correlation or Cross-correlation.</p>
+  <p>Sound to Pitch (Auto-correlate)</p>
+  <dl>
+   <dlentry>
+    <dt><b>Time step (s)</b> (standard value: 0.0) </dt>
+    <dd> the measurement interval (frame duration), in seconds. If you supply 0, Praat will use a
+     time step of 0.75 / (<i>pitch floor</i>), e.g. 0.01 seconds if the pitch floor is 75 Hz; in
+     this example, Praat computes 100 pitch values per second. </dd>
+   </dlentry>
+   <dlentry>
+    <dt><b>Pitch floor (Hz)</b> (standard value: 75 Hz) </dt>
+    <dd> candidates below this frequency will not be recruited. This parameter determines the
+     effective length of the analysis window: it will be 3 longest periods long, i.e., if the pitch
+     floor is 75 Hz, the window will be effectively 3/75 = 0.04 seconds long.</dd>
+   </dlentry>
+  </dl>
+  <p>Sound to Pich (Cross-correlate)</p>
+  <dl>
+   <dlentry>
+    <dt><b>Time step (s)</b> (standard value: 0.0) </dt>
+    <dd> the measurement interval (frame duration), in seconds. If you supply 0, Praat will use a
+     time step of 0.25 / (<i>pitch floor</i>), e.g. 0.00333333 seconds if the pitch floor is 75 Hz;
+     in this example, Praat computes 300 pitch values per second. </dd>
+   </dlentry>
+   <dlentry>
+    <dt><b>Pitch floor (Hz)</b> (standard value: 75 Hz) </dt>
+    <dd> candidates below this frequency will not be recruited. This parameter determines the length
+     of the analysis window: it will be 1 longest period long, i.e., if the pitch floor is 75 Hz,
+     the window will be 1/75 = 0.01333333 seconds long. </dd>
+   </dlentry>
+  </dl>
+  <note>Note that if you set the time step to zero, the analysis windows for consecutive
+   measurements will overlap appreciably: Praat will always compute 4 pitch values within one window
+   length, i.e., the degree of <i>oversampling</i> is 4.</note>
+  <p>
+   <dl>
+    <dlentry>
+     <dt><b>Very accurate</b> (standard value: <i>off</i>) </dt>
+     <dd> if <i>off</i>, the window is a Hanning window with a physical length of 3 / (<i>pitch
+       floor</i>). If <i>on</i>, the window is a Gaussian window with a physical length of 6 /
+       (<i>pitch floor</i>), i.e. twice the effective length. </dd>
+    </dlentry>
+   </dl>
+  </p>
+  
+  <p>A post-processing algorithm seeks the cheapest path through the candidates. The settings that
+   determine the cheapest path are:</p>
+  <dl>
+   <dlentry>
+    <dt><b>Pitch ceiling (Hz)</b> (standard value: 600 Hz) </dt>
+    <dd> candidates above this frequency will be ignored. </dd>
+   </dlentry>
+   <dlentry>
+    <dt><b>Silence threshold</b> (standard value: 0.03) </dt>
+    <dd> frames that do not contain amplitudes above this threshold (relative to the global maximum
+     amplitude), are probably silent. </dd>
+   </dlentry>
+   <dlentry>
+    <dt><b>Voicing threshold</b> (standard value: 0.45) </dt>
+    <dd> the strength of the unvoiced candidate, relative to the maximum possible autocorrelation.
+     To increase the number of unvoiced decisions, increase this value. </dd>
+   </dlentry>
+   <dlentry>
+    <dt><b>Octave cost</b> (standard value: 0.01 per octave) </dt>
+    <dd> degree of favouring of high-frequency candidates, relative to the maximum possible
+     autocorrelation. This is necessary because even (or: especially) in the case of a perfectly
+     periodic signal, all undertones of <i>F</i>0 are equally strong candidates as <i>F</i>0 itself.
+     To more strongly favour recruitment of high-frequency candidates, increase this value. </dd>
+   </dlentry>
+   <dlentry>
+    <dt><b>Octave-jump cost</b> (standard value: 0.35) </dt>
+    <dd> degree of disfavouring of pitch changes, relative to the maximum possible autocorrelation.
+     To decrease the number of large frequency jumps, increase this value. In contrast with what is
+     described in the article, this value will be corrected for the time step: multiply by 0.01 s /
+      <i>TimeStep</i> to get the value in the way it is used in the formulas in the article. </dd>
+   </dlentry>
+   <dlentry>
+    <dt><b>Voiced / unvoiced cost</b> (standard value: 0.14) </dt>
+    <dd> degree of disfavouring of voiced/unvoiced transitions, relative to the maximum possible
+     autocorrelation. To decrease the number of voiced/unvoiced transitions, increase this value. In
+     contrast with what is described in the article, this value will be corrected for the time step:
+     multiply by 0.01 s / <i>TimeStep</i> to get the value in the way it is used in the formulas in
+     the article. </dd>
+   </dlentry>
+  </dl>
+    <p>Display settings:<dl>
+        <dlentry>
+          <dt>Dot size</dt>
+          <dd>Size of pitch dots in display.</dd>
+        </dlentry>
+      </dl></p>
+ </conbody>
+</concept>

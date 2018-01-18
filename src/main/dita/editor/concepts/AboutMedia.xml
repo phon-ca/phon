@@ -11,13 +11,10 @@
             built-in media player. This player is available in the <wintitle>Media Player</wintitle>
             view. To use the media player, you must first have a media file linked to your session
             (see <xref href="../../editor/tasks/LinkMedia.xml"/> for instructions).</p>
-        <image placement="break" scale="30"
-            href="../../images/AboutMedia.png" id="image_wdr_vlm_sc"/>
         <p><b>Basic Media functions:</b>
             <ul>
                 <li><b>Play</b><p>To play your media, click the play button in the <wintitle>Media
-                            Player</wintitle> view. To play a specific segment, see <xref
-                            href="MediaFunctions.xml"/>.</p></li>
+                            Player</wintitle> view.</p></li>
                 <li><b>Volume and Muting</b><p>To change the volume of playback, click the
                             <uicontrol>Volume</uicontrol> button to the right of the media progress
                         slider, move the volume slider to the desired level (or click the

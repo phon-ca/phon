@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="task_g5w_st4_rp">
+    <title>Import TextGrids</title>
+    <shortdesc>Import TextGrids as Phon records.</shortdesc>
+    <taskbody>
+        <context>
+            <p>TextGrids created with Praat may be imported as Phon records.  Data from tiers in
+                selected TextGrids will be mapped to Phon tier data.</p>
+        </context>
+        <steps>
+            <step>
+                <cmd>Open the Import TextGrids wizard by using the menu command <menucascade>
+                        <uicontrol>Plugins</uicontrol>
+                        <uicontrol>Import TextGrids...</uicontrol>
+                    </menucascade> from the <wintitle>Project Manager</wintitle> window.</cmd>
+            </step>
+            <step>
+                <cmd>In the first step of the wizard, select a folder containing the TextGrids you
+                    wish to import using the browse button on the right-hand side of the text field.
+                    When you select the folder, a list of detected tier names from the TextGrids
+                    will be displayed in the table.</cmd>
+            </step>
+            <step>
+                <cmd>For each TextGrid tier you wish to import, type the name of the Phon tier in
+                    the column titled <uicontrol>PhonTier</uicontrol>. You may assign more than one
+                    TextGrid tier to the same Phon tier. You may also assign a group marker for each
+                    imported tier. When a TextGrid interval with this marker as it's text is
+                    encountered a new group is created in the Phon record. By default, this is set
+                    to '#' as this is how Phon will generate TextGrid files. Click next.</cmd>
+            </step>
+            <step>
+                <cmd>Choose which session in the project to which you wish to add the imported
+                    records or specifiy a new session name to be created.  Click next.</cmd>
+            </step>
+            <step>
+                <cmd>The TextGrids will now be imported.  If any errors are encountered they will be
+                    displayed in the text area shown in the wizard.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>
