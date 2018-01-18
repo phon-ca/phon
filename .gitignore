@@ -6,4 +6,5 @@ external-resources/
 .classpath
 .settings
 .~lock.PhonManualScreenshots.ods
-
+out/
+temp/
