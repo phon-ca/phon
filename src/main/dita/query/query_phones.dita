@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="query_phones">
+    <title>Query: Phones</title>
+    <taskbody>
+        <context id="context_tvv_r1w_4cb">The <i>Phones</i> query allows searching within the <i>IPA
+            Target</i> and <i>IPA Actual</i> tiers.<div><image href="../images/Query_Phones.png" placement="break">
+                <alt>../images/Query_Phones.png</alt>
+            </image></div></context>
+        
+    </taskbody>
+    <task id="id_dlm_51w_4cb" conref="tasks/Phones.xml#taskId">
+        <title/>
+    </task>
+</task>

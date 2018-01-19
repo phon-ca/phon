@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="query_data_tiers">
+    <title>Query: Data Tiers</title>
+    <taskbody>
+        <context id="context_pcm_jzv_4cb">The <i>Data Tiers</i> query allows searching within any
+            record tier.<div><image href="../images/Query_DataTiers.png" placement="break">
+                <alt>../images/Query_DataTiers.png</alt>
+            </image></div></context>
+        
+    </taskbody>
+    <task id="id_oq3_nzv_4cb" conref="tasks/DataTiers.xml#taskId">
+        <title/>
+    </task>
+</task>

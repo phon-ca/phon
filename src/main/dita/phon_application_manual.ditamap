@@ -5,12 +5,10 @@
         <mainbooktitle>Phon Application Manual</mainbooktitle>
     </booktitle>
     <frontmatter>
+        <topicref href="misc/concepts/Introduction.xml"/>
         <booklists>
             <toc/>
         </booklists>
-        <topicref href="misc/concepts/Introduction.xml"/>
-        <topicref href="misc/concepts/AboutConventions.xml"/>
-        <topicref href="misc/concepts/Contributors.xml"/>
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.md" format="markdown">
@@ -230,12 +228,16 @@
         <topicref href="query/tasks/QueryProject.xml"/>
         <topicref href="query/tasks/SaveQueryScript.xml"/>
         <topicref href="query/tasks/OpenQueryScript.xml"/>
-        <topicref href="query/query-data_tiers.md" format="markdown">
-            <topicref href="query/tasks/DataTiers.xml"/>
-        </topicref>
-        <topicref href="query/query_phones.md" format="markdown">
-            <topicref href="query/tasks/Phones.xml"/>
-        </topicref>
+        <topichead navtitle="Common Query Filters">
+            <topicref href="query/tasks/GroupFilter.xml"/>
+            <topicref href="query/tasks/AlignedGroupFilter.xml"/>
+            <topicref href="query/tasks/WordFilter.xml"/>
+            <topicref href="query/tasks/AlignedWordFilter.xml"/>
+            <topicref href="query/tasks/SyllableFilter.xml"/>
+            <topicref href="query/tasks/ParticipantFilter.xml"/>
+        </topichead>
+        <topicref href="query/query-data_tiers.dita" format="dita"/>
+        <topicref href="query/query_phones.dita" format="dita"/>
         <topicref href="query/query_deletions.md" format="markdown"/>
         <topicref href="query/query_epenthesis.md" format="markdown"/>
         <topicref href="query/query_segmental_relations.md" format="markdown"/>
@@ -246,14 +248,6 @@
                 <topicref href="editor/concepts/AboutTableQuickSearch.xml"/>
             </topicref>
         </topicref>
-        <topichead navtitle="Common Query Filters">
-            <topicref href="query/tasks/GroupFilter.xml"/>
-            <topicref href="query/tasks/AlignedGroupFilter.xml"/>
-            <topicref href="query/tasks/WordFilter.xml"/>
-            <topicref href="query/tasks/AlignedWordFilter.xml"/>
-            <topicref href="query/tasks/SyllableFilter.xml"/>
-            <topicref href="query/tasks/ParticipantFilter.xml"/>
-        </topichead>
         <topicref href="history/tasks/ViewQueryHistory.xml">
             <topicref href="history/tasks/DeleteQuery.xml"/>
             <topicref href="history/tasks/EditQueryDetails.xml"/>

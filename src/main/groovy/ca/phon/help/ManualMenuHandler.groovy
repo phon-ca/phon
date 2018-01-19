@@ -2,17 +2,10 @@ package ca.phon.help
 
 import java.awt.Window;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.*
 
 import ca.phon.app.VersionInfo;
-
-import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.IPluginMenuFilter;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.OpenFileLauncher;
 
@@ -22,9 +15,7 @@ import ca.phon.util.OpenFileLauncher;
  */
 class ManualMenuHandler implements IPluginMenuFilter {
 
-	private final static APP_MANUAL = "META-INF/doc/pdf/ApplicationManual.pdf";
-	
-	private final static IPA_MANUAL = "META-INF/doc/pdf/src/main/dita/phon-ipa.pdf";
+	private final static APP_MANUAL = "META-INF/doc/pdf/phon_application_manual.pdf";
 	
 	private final static API_URL = "https://www.phon.ca/phon_" +
 		VersionInfo.getInstance().getVersion().replaceAll("\\.", "_") + "_apidocs";
@@ -41,13 +32,8 @@ class ManualMenuHandler implements IPluginMenuFilter {
 		
 		PhonUIAction action = new PhonUIAction(ManualMenuHandler.class, "onShowManual");
 		action.setData(APP_MANUAL);
-		action.putValue(PhonUIAction.NAME, "Phon Manual");
+		action.putValue(PhonUIAction.NAME, "Phon Application Manual");
 		JMenuItem manualItem = new JMenuItem(action);
-		
-		action = new PhonUIAction(ManualMenuHandler.class, "onShowManual");
-		action.setData(IPA_MANUAL);
-		action.putValue(PhonUIAction.NAME, "IPA & Phonex Reference");
-		JMenuItem ipaItem = new JMenuItem(action);
 		
 		action = new PhonUIAction(ManualMenuHandler.class, "onShowAPI");
 		action.setData(API_URL);
@@ -56,8 +42,7 @@ class ManualMenuHandler implements IPluginMenuFilter {
 		JMenuItem apiItem = new JMenuItem(action);
 		
 		menu.add(manualItem, 0);
-		menu.add(ipaItem, 1);
-		menu.add(apiItem, 2);
+		menu.add(apiItem, 1);
 	}
 	
 	public static void onShowAPI(String url) {
