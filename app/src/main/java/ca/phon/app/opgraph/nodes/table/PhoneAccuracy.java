@@ -38,7 +38,7 @@ import ca.phon.ui.text.PromptedTextField;
 
 @OpNodeInfo(
 		name="Phone Accuracy",
-		category="Report",
+		category="IPA Table Analysis",
 		description="Inventory of IPA Target values with num accurate, substituted, and deleted columns.",
 		showInLibrary = true
 )

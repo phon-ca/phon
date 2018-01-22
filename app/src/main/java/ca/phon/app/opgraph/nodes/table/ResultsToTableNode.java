@@ -44,7 +44,7 @@ import ca.phon.session.*;
 
 @OpNodeInfo(name="Results To Table",
 	description="Convert a set of result to a table",
-	category="Report")
+	category="Table")
 public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 	private final static Logger LOGGER = Logger.getLogger(ResultsToTableNode.class.getName());
@@ -181,17 +181,17 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 					}
 
 					rowData.add(result);
-					
+
 					// add result objects from record
 					for(String tierName:tierNames) {
 						final List<ResultValue> resultValues = StreamSupport.stream(result.spliterator(), false)
 							.filter( (rv) -> rv.getName().equals(tierName) )
 							.collect(Collectors.toList());
-						
+
 						Object resultVal = new String();
 						Formatter<Object> formatter = null;
 						StringBuffer buffer = new StringBuffer();
-						
+
 						for(ResultValue rv:resultValues) {
 							final Group group = record.getGroup(rv.getGroupIndex());
 							Object tierValue = group.getTier(rv.getTierName());
@@ -203,17 +203,17 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							}
 							final String tierTxt =
 									(formatter != null ? formatter.format(tierValue) : tierValue.toString());
-							
+
 							String resultTxt =
 									(rv.getRange().getFirst() >= 0 && rv.getRange().getLast() >= rv.getRange().getFirst() ?
 									tierTxt.substring(
 											Math.max(0, rv.getRange().getFirst()),
 											Math.max(0, Math.min(rv.getRange().getLast(), tierTxt.length()))) : "");
-							
+
 							if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
 								resultTxt = "\u2205";
 							}
-							
+
 							if(buffer.length() > 0) buffer.append("..");
 							buffer.append(resultTxt);
 						}

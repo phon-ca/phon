@@ -17,7 +17,7 @@ import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.*;
 
-@OpNodeInfo(name="Table Section", category="Report Tree", description="Add/Create a new table section for the report", showInLibrary=true)
+@OpNodeInfo(name="Table Section", category="Report", description="Add/Create a new table section for the report", showInLibrary=true)
 public class TableSectionNode extends ReportSectionNode implements NodeSettings {
 
 	private final InputField tableNameField =
