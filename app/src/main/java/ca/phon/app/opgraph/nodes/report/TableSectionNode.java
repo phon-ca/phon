@@ -19,44 +19,44 @@ import ca.phon.app.opgraph.report.tree.*;
 
 @OpNodeInfo(name="Table Section", category="Report Tree", description="Add/Create a new table section for the report", showInLibrary=true)
 public class TableSectionNode extends ReportSectionNode implements NodeSettings {
-	
-	private final InputField tableNameField = 
+
+	private final InputField tableNameField =
 			new InputField("tableName", "Name of table (buffer)", true, true, String.class);
-	
+
 	/* UI */
 	private JPanel settingsPanel;
 	private JRadioButton includeColumnsButton;
 	private JRadioButton excludeColumnsButton;
 	private JTextArea columnsArea;
-	
+
 	private final static String INCLUDE_COLUMNS_PROP = TableSectionNode.class.getName() + ".includeColumns";
 	private boolean includeColumns = true;
-	
+
 	private final static String COLUMNS_PROP = TableSectionNode.class.getName() + ".columns";
 	private List<String> columns = new ArrayList<>();
-	
+
 	public TableSectionNode() {
 		super();
-		
+
 		putField(tableNameField);
-		
+
 		putExtension(NodeSettings.class, this);
 	}
 
 	@Override
 	protected ReportTreeNode createReportSectionNode(OpContext context) {
-		final String title = 
+		final String title =
 				(context.get(sectionNameInput) != null ? context.get(sectionNameInput).toString() : "");
-		final String tableName = 
+		final String tableName =
 				(context.get(tableNameField) != null ? context.get(tableNameField).toString() : "");
-		
+
 		return new TableNode(title, tableName, isIncludeColumns(), getColumns());
 	}
-	
+
 	public boolean isIncludeColumns() {
 		return (this.includeColumnsButton != null ? this.includeColumnsButton.isSelected() : this.includeColumns);
 	}
-	
+
 	public void setIncludeColumns(boolean includeColumns) {
 		this.includeColumns = includeColumns;
 		if(this.includeColumnsButton != null) {
@@ -64,18 +64,18 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 			this.excludeColumnsButton.setSelected(!includeColumns);
 		}
 	}
-	
+
 	public List<String> getColumns() {
 		return this.columns;
 	}
-	
+
 	public void setColumns(String columnTxt) {
 		updateColumns(columnTxt);
 		if(this.columnsArea != null) {
 			this.columnsArea.setText(columnTxt);
 		}
 	}
-	
+
 	public void setColumns(List<String> columns) {
 		this.columns = columns;
 		if(this.columnsArea != null) {
@@ -83,11 +83,10 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 					this.columns.stream().collect(Collectors.joining("\n")) );
 		}
 	}
-	
+
 	private void updateColumns(String txt) {
-		if(columnsArea == null) return;
 		columns.clear();
-		
+
 		try ( BufferedReader reader = new BufferedReader(new StringReader(txt)) ) {
 			String line = null;
 			while((line = reader.readLine()) != null) {
@@ -104,7 +103,7 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
 			settingsPanel = new JPanel(new BorderLayout());
-			
+
 			final ButtonGroup bg = new ButtonGroup();
 			includeColumnsButton = new JRadioButton("Include columns");
 			excludeColumnsButton = new JRadioButton("Exclude columns");
@@ -112,31 +111,32 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 			excludeColumnsButton.setSelected(!includeColumns);
 			bg.add(includeColumnsButton);
 			bg.add(excludeColumnsButton);
-			
+
 			columnsArea = new JTextArea();
+			columnsArea.setText(getColumns().stream().collect(Collectors.joining("\n")));
 			final JScrollPane scroller = new JScrollPane(columnsArea);
 			columnsArea.getDocument().addDocumentListener(new DocumentListener() {
-				
+
 				@Override
 				public void removeUpdate(DocumentEvent e) {
 					updateColumns(columnsArea.getText());
 				}
-				
+
 				@Override
 				public void insertUpdate(DocumentEvent e) {
 					updateColumns(columnsArea.getText());
 				}
-				
+
 				@Override
 				public void changedUpdate(DocumentEvent e) {
 				}
-			
+
 			});
-			
+
 			final JPanel topPanel = new JPanel(new VerticalLayout());
 			topPanel.add(includeColumnsButton);
 			topPanel.add(excludeColumnsButton);
-			
+
 			settingsPanel.add(topPanel, BorderLayout.NORTH);
 			settingsPanel.add(scroller, BorderLayout.CENTER);
 		}
