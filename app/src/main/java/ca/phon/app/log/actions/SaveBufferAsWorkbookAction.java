@@ -19,27 +19,40 @@ import jxl.write.*;
 public class SaveBufferAsWorkbookAction extends HookableAction {
 
 	private static final long serialVersionUID = -2827879669257916438L;
-	
+
 	private final static String CMD_NAME = "Export as Excel\u2122 Workbook...";
-	
+
 	private final static String SHORT_DESC = "Save to Excel\u2122 workbook";
-	
+
 	private final MultiBufferPanel container;
 
+	private final String bufferName;
+
 	public SaveBufferAsWorkbookAction(MultiBufferPanel bufferPanel) {
+		this(bufferPanel, null);
+	}
+
+	public SaveBufferAsWorkbookAction(MultiBufferPanel bufferPanel, String bufferName) {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
-		
+
 		ImageIcon excelIcn = IconManager.getInstance().getSystemIconForFileType("xlsx", IconSize.SMALL);
 		putValue(SMALL_ICON, excelIcn);
-		
+
+		this.bufferName = bufferName;
 		this.container = bufferPanel;
 	}
-	
+
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final BufferPanel panel = this.container.getCurrentBuffer();
-		
+		final BufferPanel panel =
+				(this.bufferName == null ? this.container.getCurrentBuffer()
+						: this.container.getBuffer(bufferName));
+		if(panel == null) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setCanCreateDirectories(true);
@@ -60,7 +73,7 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 					}
 					workbook.write();
 					workbook.close();
-				
+
 					if(this.container.isOpenAfterSaving()) {
 						OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
 					}
@@ -70,7 +83,7 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 				}
 			}
 		});
-		
+
 		NativeDialogs.showSaveDialog(props);
 	}
 }

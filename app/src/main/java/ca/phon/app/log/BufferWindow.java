@@ -57,7 +57,7 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 		final JMenu fileMenu = menuBar.getMenu(0);
 		if(!fileMenu.getText().equals("File")) return;
 		
-		final SaveCurrentBufferAction saveBufferAct = new SaveCurrentBufferAction(bufferPanel);
+		final SaveBufferAction saveBufferAct = new SaveBufferAction(bufferPanel);
 		fileMenu.add(new JMenuItem(saveBufferAct), 0);
 		fileMenu.add(new JSeparator(), 1);
 		

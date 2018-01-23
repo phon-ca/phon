@@ -226,7 +226,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		final JToolBar retVal = new JToolBar();
 		retVal.setFloatable(false);
 		
-		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction(this);
+		final SaveBufferAction saveAct = new SaveBufferAction(this);
 		saveBufferButton = new JButton(saveAct);
 		retVal.add(saveBufferButton);
 		
@@ -282,7 +282,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	}
 	
 //	public void setupSaveAsMenu(JMenu menu) {
-////		final SaveCurrentBufferAction saveBufferAct = new SaveCurrentBufferAction(this);
+////		final SaveBufferAction saveBufferAct = new SaveBufferAction(this);
 ////		menu.add(new JMenuItem(saveBufferAct));
 //		
 //		final SaveBufferAsWorkbookAction saveAsWorkbookAct = new SaveBufferAsWorkbookAction(this);

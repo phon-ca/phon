@@ -145,17 +145,12 @@ public class NodeWizard extends WizardFrame {
 
 	private volatile boolean running = false;
 
-	private boolean modified = false;
-
 	private WebViewInterface webViewInterface = new WebViewInterface();
 
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
 		setBreadcrumbVisible(true);
 		setWindowName(title);
-
-		setUnsavedChangesTitle("Save data?");
-		setUnsavedChangesMessage("Save buffers before closing?");
 
 		this.processor = processor;
 		this.graph = graph;
@@ -180,7 +175,7 @@ public class NodeWizard extends WizardFrame {
 		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
 		builder.addItem("File@saveBuffers", saveAsExcelAct);
 
-		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction(getBufferPanel());
+		final SaveBufferAction saveAct = new SaveBufferAction(getBufferPanel());
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
@@ -203,13 +198,53 @@ public class NodeWizard extends WizardFrame {
 			props.setListener( (e) -> {
 				if(e.getDialogResult() == 0) {
 					stopExecution();
-					super.close();
+					SwingUtilities.invokeLater( () -> super.close() );
 				}
 			});
 			NativeDialogs.showMessageDialog(props);
 		} else {
-			super.close();
+			final boolean hasReport = getBufferPanel().getBufferNames().contains("Report");
+			if(hasReport) {
+				// ask to save report
+				final MessageDialogProperties props = new MessageDialogProperties();
+				final String[] options = new String[] { "Save Report as HTML", "Export Report as XSLX", "Close without saving", "Cancel" };
+				props.setTitle("Save Results");
+				props.setHeader("Save Results");
+				props.setMessage("Save results before closing?");
+				props.setRunAsync(true);
+				props.setOptions(options);
+				props.setDefaultOption(options[2]);
+				props.setListener( (e) -> {
+					final int result = e.getDialogResult();
+					if(result == 0) {
+						saveReportAsHTML();
+					} else if(result == 1) {
+						saveReportAsXSLX();
+					} else if(result == 3) {
+						return;
+					}
+					SwingUtilities.invokeLater( () -> super.close() );
+				});
+				NativeDialogs.showMessageDialog(props);
+			} else {
+				super.close();
+			}
 		}
+	}
+
+	private void saveReportAsHTML() {
+		final SaveBufferAction saveBufferAct = new SaveBufferAction(getBufferPanel(), "Report");
+		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save")) );
+	}
+
+	private void saveReportAsXSLX() {
+		final SaveBufferAsWorkbookAction saveBufferAct = new SaveBufferAsWorkbookAction(getBufferPanel(), "Report");
+		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "export")) );
+	}
+
+	private void saveAllResultsToFolder() {
+		final SaveAllBuffersAction saveBufferAct = new SaveAllBuffersAction(getBufferPanel());
+		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save_all")) );
 	}
 
 	private void init() {
@@ -423,8 +458,6 @@ public class NodeWizard extends WizardFrame {
 			SwingUtilities.invokeLater( () -> {
 				if(!busyLabel.isBusy()) {
 					busyLabel.setBusy(true);
-
-					setModified(false);
 				}
 				statusLabel.setText(nodeName + "...");
 				btnBack.setEnabled(false);
@@ -600,8 +633,6 @@ public class NodeWizard extends WizardFrame {
 
 				breadCrumbViewer.setEnabled(true);
 
-				setModified(true);
-				modified = true;
 			});
 		} catch (ProcessingException pe) {
 			SwingUtilities.invokeLater( () -> {
@@ -956,29 +987,6 @@ public class NodeWizard extends WizardFrame {
 		super.cancel();
 	}
 
-	@Override
-	public boolean saveData() throws IOException {
-		// save all buffers to folder
-		final SaveAllBuffersAction saveAct = new SaveAllBuffersAction(bufferPanel);
-		saveAct.actionPerformed(new ActionEvent(this, 0, "saveData"));
-
-		modified = saveAct.wasCanceled();
-
-		return !saveAct.wasCanceled();
-	}
-
-	@Override
-	public void setModified(boolean modified) {
-		this.modified = modified;
-
-		super.getRootPane().putClientProperty("Window.documentModified", hasUnsavedChanges());
-	}
-
-	@Override
-	public boolean hasUnsavedChanges() {
-		return modified;
-	}
-
 	public class WebViewInterface {
 
 		public void openSession(String sessionName) {
@@ -1153,7 +1161,6 @@ public class NodeWizard extends WizardFrame {
 
 			menu.show(optionalsTree, e.getX(), e.getY());
 		}
-
 
 	}
 
