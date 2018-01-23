@@ -161,6 +161,8 @@ plugin_matcher
 	->  ^(PLUGIN["diacritic"] MINUS? class_matcher)
 	|	EXC MINUS? stress_type
 	->	^(PLUGIN["stress"] MINUS? stress_type)
+	|	TRIANGULAR_COLON
+	->	^(PLUGIN["diacritic"] TRIANGULAR_COLON)
 	;
 
 argument
@@ -316,6 +318,10 @@ CLOSE_BRACE
 
 COLON
 	:	':'
+	;
+
+TRIANGULAR_COLON
+	:	'\u02d0'
 	;
 
 SEMICOLON
