@@ -207,7 +207,7 @@ public class NodeWizard extends WizardFrame {
 			if(hasReport) {
 				// ask to save report
 				final MessageDialogProperties props = new MessageDialogProperties();
-				final String[] options = new String[] { "Save Report as HTML", "Export Report as XSLX", "Close without saving", "Cancel" };
+				final String[] options = new String[] { "Save Report as HTML", "Export Report as XLSX", "Close without saving", "Cancel" };
 				props.setTitle("Save Results");
 				props.setHeader("Save Results");
 				props.setMessage("Save results before closing?");
@@ -602,7 +602,7 @@ public class NodeWizard extends WizardFrame {
 									window.setMember("app", webViewInterface);
 
 									// call functions to display app-specific UI elements
-									webView.getEngine().executeScript("addShowBufferButtons()");
+									webView.getEngine().executeScript("addMenuButtons()");
 									webView.getEngine().executeScript("addSessionLinks()");
 								}
 							}

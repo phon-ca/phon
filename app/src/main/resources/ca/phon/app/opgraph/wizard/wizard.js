@@ -16,7 +16,7 @@ function openNav() {
     document.getElementById("main").style.marginLeft = "300px";
     document.getElementById("toc").style.display = "block";
     document.getElementById("menuicon").setAttribute('src', closeIcn);
-    
+
     document.getElementById("bannercontent").style.display = origDisplay;
 }
 
@@ -25,7 +25,7 @@ function closeNav() {
     document.getElementById("main").style.marginLeft = "26px";
     document.getElementById("toc").style.display = "none";
     document.getElementById("menuicon").setAttribute('src', openIcn);
-    
+
     document.getElementById("bannercontent").style.display = "none";
 }
 
@@ -43,7 +43,7 @@ function toggleTocSection(toggleBtn, sectionId) {
     var tocSection = document.getElementById(sectionId);
     var currentHeight = tocSection.clientHeight;
     var img = toggleBtn.getElementsByTagName("img")[0];
- 
+
     if(currentHeight == 0) {
         tocSection.clientHeight = tocHeights[sectionId];
         tocSection.style.display = "block";
@@ -54,46 +54,46 @@ function toggleTocSection(toggleBtn, sectionId) {
         tocSection.style.display = "none";
         img.setAttribute('src', tocClosedIcn);
     }
-    
+
     tocSection.parentNode.style.zIndex = 1;
 }
 
 function htmlTableOfContents (documentRef) {
     var documentRef = documentRef || document;
-    
+
     var toc = documentRef.getElementById('toc');
     var containerStack =[];
     containerStack.push(toc);
-    
+
     var tocSectionIdx = 1;
     var h1Section = documentRef.createElement('div');
     h1Section.setAttribute('class', 'toc_l1');
     h1Section.setAttribute('id', 'toc_section_' + (tocSectionIdx++));
     toc.appendChild(h1Section);
     containerStack.push(h1Section);
-    
+
     var headerStack =[];
-    
+
     var lastHeading = null;
     var lastLink = null;
-    
+
     var headings =[].slice.call(documentRef.body.querySelectorAll('h1, h2, h3, h4, h5, h6'));
     headings.forEach(function (heading, index) {
         var anchor = documentRef.createElement('a');
         anchor.setAttribute('name', 'toc' + index);
         anchor.setAttribute('id', 'toc' + index);
-        
+
         heading.setAttribute('id', '#toc' + index);
-        
+
         var link = documentRef.createElement('a');
         link.setAttribute('href', '#toc' + index);
         link.setAttribute('onClick', 'document.getElementById(\'#toc' + index + '\').scrollIntoView(true)');
         link.textContent = heading.textContent;
-        
+
         var div = documentRef.createElement('div');
         div.setAttribute('class', heading.tagName.toLowerCase());
         div.appendChild(link);
-        
+
         if (lastHeading != null) {
             // if we have moved up in heading level,
             // add a new container to the stack
@@ -103,10 +103,10 @@ function htmlTableOfContents (documentRef) {
                 var tocDiv = document.createElement('div');
                 tocDiv.setAttribute('class', 'toc_l' + containerStack.length);
                 tocDiv.setAttribute('id', 'toc_section_' + (tocSectionIdx++));
-                
+
                 containerStack[containerStack.length -1].appendChild(tocDiv);
                 containerStack.push(tocDiv);
-                
+
                 // add last heading to stack, this will
                 // be the 'parent' of our toc section
                 headerStack.push(lastLink);
@@ -114,44 +114,44 @@ function htmlTableOfContents (documentRef) {
                 while(cmp > 0) {
                     var tocContainer = containerStack.pop();
                     var controlHeading = headerStack.pop();
-                    
+
                     var toggleBtn = document.createElement('div');
                     toggleBtn.setAttribute('class', 'toc_toggle_btn');
                     toggleBtn.setAttribute('onclick', "toggleTocSection(this, '" + tocContainer.getAttribute('id') + "')");
-                    
+
                     var toggleImg = document.createElement('img');
                     toggleImg.setAttribute('src', tocExpandedIcn);
                     toggleBtn.appendChild(toggleImg);
-                    
+
                     controlHeading.style.paddingLeft = "2px";
                     controlHeading.parentNode.insertBefore(toggleBtn, controlHeading);
-                    
+
                     lastH = controlHeading.parentNode.getAttribute('class');
                     cmp = lastH.localeCompare(heading.localName);
                 }
             }
         }
-        
+
         containerStack[containerStack.length -1].appendChild(div);
-        
+
         heading.parentNode.insertBefore(anchor, heading);
         lastHeading = heading;
-        
+
         lastLink = link;
     });
-    
+
     while (headerStack.length > 0) {
         var tocContainer = containerStack.pop();
         var controlHeading = headerStack.pop();
-        
+
         var toggleBtn = document.createElement('div');
         toggleBtn.setAttribute('class', 'toc_toggle_btn');
-        
+
         var toggleImg = document.createElement('img');
         toggleImg.setAttribute('src', tocExpandedIcn);
         toggleBtn.setAttribute('onclick', "toggleTocSection(this, '" + tocContainer.getAttribute('id') + "')");
         toggleBtn.appendChild(toggleImg);
-        
+
         controlHeading.style.paddingLeft = "4px";
         controlHeading.parentNode.insertBefore(toggleBtn, controlHeading);
     }
@@ -159,19 +159,19 @@ function htmlTableOfContents (documentRef) {
 
 function tableToCSV(table) {
     var retVal = "";
-    
+
     var tableRows =[].slice.call(table.querySelectorAll("tr"));
     tableRows.forEach(function (tableRow, index) {
         var rowData = "";
-        
+
         var tableData =[].slice.call(tableRow.querySelectorAll("th, td"));
         for (var i = 0; i < tableData.length; i++) {
             rowData += (rowData.length > 0 ? ",": "") + "\"" + tableData[i].textContent.trim() + "\"";
         }
-        
+
         retVal += rowData + "\n";
     });
-    
+
     return retVal;
 }
 
@@ -179,38 +179,38 @@ function onCopyTableData(button, tableId) {
     var table = document.getElementById(tableId);
     if (table != null) {
         var tableCSV = tableToCSV(table);
-        
+
         if (buffer == undefined) {
             var textArea = document.createElement("textarea");
             textArea.style.position = 'fixed';
             textArea.style.top = 0;
             textArea.style.left = 0;
-            
+
             // Ensure it has a small width and height. Setting to 1px / 1em
             // doesn't work as this gives a negative w/h on some browsers.
             textArea.style.width = '2em';
             textArea.style.height = '2em';
-            
+
             // We don't need padding, reducing the size if it does flash render.
             textArea.style.padding = 0;
-            
+
             // Clean up any borders.
             textArea.style.border = 'none';
             textArea.style.outline = 'none';
             textArea.style.boxShadow = 'none';
-            
+
             // Avoid flash of white box if rendered for any reason.
             textArea.style.background = 'transparent';
-            
-            
+
+
             textArea.value = tableCSV;
-            
+
             document.body.appendChild(textArea);
-            
+
             textArea.select();
-            
+
             var successful = document.execCommand('copy');
-            
+
             document.body.removeChild(textArea);
         } else {
             buffer.copyTextToClipboard(tableCSV);
@@ -224,24 +224,24 @@ function addCopyTableButtons(documentRef) {
     tables.forEach(function (table, index) {
         var tableId = table.getAttribute("id");
         var buttonId = "copyTable" + (index + 1);
-        
+
         var div = document.createElement("div");
         div.setAttribute("class", "tableButtonRow");
         var buttonRowId = "tableButtonRow" + (index + 1);
         div.setAttribute("id", buttonRowId);
-        
+
         var tableCaption = table.querySelector("caption");
         var button = documentRef.createElement("div");
         button.setAttribute("class", "tableButton");
         button.setAttribute("id", buttonId);
         button.setAttribute("onclick", "onCopyTableData(this, '" + tableId + "')");
-        
+
         var copyImg = documentRef.createElement("img");
         copyImg.setAttribute("src", copyIcn);
         copyImg.setAttribute("style", "padding-right: 2px;");
         button.appendChild(copyImg);
         button.append("Copy to clipboard");
-        
+
         div.appendChild(button);
         tableCaption.appendChild(div);
     });
@@ -251,9 +251,9 @@ function page_init(documentRef) {
     var documentRef = documentRef || document;
     htmlTableOfContents(documentRef);
     addCopyTableButtons(documentRef);
-    
+
     origDisplay = document.getElementById("bannercontent").style.display;
-    
+
     var menuicon = document.getElementById('menuicon');
     menuicon.setAttribute('src', closeIcn);
 }
@@ -265,33 +265,96 @@ function showBuffer(bufferName) {
     buffers.selectBuffer(bufferName);
 }
 
+function showTableMenu(tablePopupId) {
+	document.getElementById(tablePopupId).classList.toggle("show");
+}
+
+function saveTableAsCSV(tableId) {
+	buffers.saveAsCSV(tableId);
+}
+
+function saveTableAsExcel(tableId) {
+	buffers.saveAsWorkbook(tableId);
+}
+
+function addMenuButtons(documentRef) {
+	var documentRef = documentRef || document;
+
+	var tables = [].slice.call(documentRef.body.querySelectorAll('table'));
+	tables.forEach(function (table, index) {
+		var buttonRowId = "tableButtonRow" + (index + 1);
+
+		var tableCaption = table.querySelector("caption");
+		var div = tableCaption.lastChild;
+
+		var tablePopupId = table.getAttribute("id") + "_popup";
+
+		var button = documentRef.createElement("div");
+		button.setAttribute("class", "tableButton");
+		button.setAttribute("onclick", "showTableMenu('" + tablePopupId + "')");
+
+		var menuImg = documentRef.createElement("img");
+		menuImg.setAttribute("src", showIcn);
+		menuImg.setAttribute("style", "padding-right: 2px;");
+		menuImg.setAttribute("class", "tableMenuButton");
+		button.appendChild(menuImg);
+
+		var tableMenu = documentRef.createElement("div");
+		tableMenu.setAttribute("class", "tablePopupMenu");
+		tableMenu.setAttribute("id", tablePopupId);
+
+		// add actions
+		var saveAsCSVItem = document.createElement("div");
+		saveAsCSVItem.setAttribute("onclick", "saveTableAsCSV('" + table.getAttribute("id") + "')");
+		saveAsCSVItem.setAttribute("class", "tableMenuItem");
+		saveAsCSVItem.append("Save table as CSV...");
+		tableMenu.appendChild(saveAsCSVItem);
+
+		var saveAsExcelItem = document.createElement("div");
+		saveAsExcelItem.setAttribute("onclick", "saveTableAsExcel('" + table.getAttribute("id") + "')");
+		saveAsExcelItem.setAttribute("class", "tableMenuItem");
+		saveAsExcelItem.append("Save table as Excel\u2122 Workbook...");
+		tableMenu.appendChild(saveAsExcelItem);
+
+		var showBufferItem = document.createElement("div");
+		showBufferItem.setAttribute("onclick", "showBuffer('" + table.getAttribute("id") + "')");
+		showBufferItem.setAttribute("class", "tableMenuItem");
+		showBufferItem.append("Show table");
+		tableMenu.appendChild(showBufferItem);
+
+		button.appendChild(tableMenu);
+
+		div.insertBefore(button, div.firstChild);
+	});
+}
+
 function addShowBufferButtons(documentRef) {
     var documentRef = documentRef || document;
-    
+
     var tables =[].slice.call(documentRef.body.querySelectorAll('table'));
     tables.forEach(function (table, index) {
         var buttonRowId = "tableButtonRow" + (index + 1);
-        
+
         var tableCaption = table.querySelector("caption");
         var div = tableCaption.lastChild;
-        
+
         var button = documentRef.createElement("div");
         button.setAttribute("class", "tableButton");
         button.setAttribute("onclick", "showBuffer('" + table.getAttribute("id") + "')");
-        
+
         var copyImg = documentRef.createElement("img");
         copyImg.setAttribute("src", showIcn);
         copyImg.setAttribute("style", "padding-right: 2px;");
         button.appendChild(copyImg);
         button.append("Show data");
-        
+
         div.appendChild(button);
     });
 }
 
 function getColumnIndex(table, columnName) {
     var retVal = -1;
-    
+
     var headerCols =[].slice.call(table.querySelectorAll("th"));
     for (var i = 0; i < headerCols.length; i++) {
         var headerCol = headerCols[i];
@@ -300,7 +363,7 @@ function getColumnIndex(table, columnName) {
             break;
         }
     }
-    
+
     return retVal;
 }
 
@@ -309,25 +372,25 @@ function highlightResult(sessionName, result) {
 
 function makeSessionLink(documentRef, cell, onclick) {
     var documentRef = documentRef || document;
-    
+
     var div = documentRef.createElement("div");
     div.setAttribute("class", "sessionLink");
     div.setAttribute("onclick", onclick);
-    
+
     var cellText = cell.textContent;
     cell.textContent = "";
     div.textContent = cellText;
-    
+
     cell.appendChild(div);
 }
 
 function addSessionLinks(documentRef) {
     var documentRef = documentRef || document;
-    
+
     var tables =[].slice.call(documentRef.body.querySelectorAll("table"));
     tables.forEach(function (table, index) {
         var tableId = table.getAttribute("id");
-        
+
         if (buffers) {
             var buffer = buffers.getBuffer(tableId);
             if (buffer != null) {
@@ -336,18 +399,18 @@ function addSessionLinks(documentRef) {
                     // check for session and Record # columns
                     var hasSession = (tableModel.getColumnIndex("Session") >= 0);
                     var hasRecord = (tableModel.getColumnIndex("Record #") >= 0);
-                    
+
                     // find column indicies in HTML table
                     var sessionColIdx = getColumnIndex(table, "Session");
                     var recordColIdx = getColumnIndex(table, "Record #");
-                    
+
                     if (hasSession && sessionColIdx >= 0) {
                         // add session links
                         var trs =[].slice.call(table.querySelectorAll("tr"));
                         for (var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
                             var row = trs[rowIdx];
                             var cols =[].slice.call(row.querySelectorAll("td"));
-                            
+
                             if (sessionColIdx < cols.length) {
                                 var col = cols[sessionColIdx];
                                 var sessionName = col.textContent;
@@ -355,14 +418,14 @@ function addSessionLinks(documentRef) {
                             }
                         }
                     }
-                    
+
                     if (hasSession && hasRecord && recordColIdx >= 0) {
                         // add session links
                         var trs =[].slice.call(table.querySelectorAll("tr"));
                         for (var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
                             var row = trs[rowIdx];
                             var cols =[].slice.call(row.querySelectorAll("td"));
-                            
+
                             if (recordColIdx < cols.length) {
                                 var col = cols[recordColIdx];
                                 var rowData = tableModel.getRow(rowIdx -1);
@@ -373,7 +436,7 @@ function addSessionLinks(documentRef) {
                             }
                         }
                     }
-                    
+
                     var resultCol = tableModel.getColumnIndex("Result");
                     if (resultCol >= 0) {
                         var trs =[].slice.call(table.querySelectorAll("tr"));
@@ -382,16 +445,16 @@ function addSessionLinks(documentRef) {
                             var modelSessionIdx = tableModel.getColumnIndex("Session");
                             var sessionName = rowData[modelSessionIdx];
                             var result = rowData[resultCol];
-                            
+
                             for (var i = 0; i < result.getNumberOfResultValues();
                             i++) {
                                 var rv = result.getResultValue(i);
                                 var tableColIdx = getColumnIndex(table, rv.getName());
-                                
+
                                 if (tableColIdx >= 0) {
                                     var row = trs[rowIdx];
                                     var cols =[].slice.call(row.querySelectorAll("td"));
-                                    
+
                                     if (tableColIdx < cols.length) {
                                         var col = cols[tableColIdx];
                                         makeSessionLink(documentRef, col,
@@ -405,4 +468,18 @@ function addSessionLinks(documentRef) {
             }
         }
     });
+}
+
+window.onclick = function(event) {
+  if (!event.target.matches('.tableMenuButton')) {
+
+    var dropdowns = document.getElementsByClassName("tablePopupMenu");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
 }
