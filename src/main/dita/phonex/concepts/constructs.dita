@@ -2,7 +2,7 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_tpv_vc3_gg">
  <title>Phonex Constructs</title>
- <shortdesc>A summary of phonex 2.0 constructs.</shortdesc>
+ <shortdesc>A summary of phonex constructs.</shortdesc>
  <conbody>
   <p>
    <table frame="all" id="table_ksg_pd3_gg">
@@ -182,6 +182,20 @@
       <entry><i>x</i>:<i>plugin</i>('<i>s</i>')</entry>
       <entry><i>x</i> if, and only if, the plug-in matcher identified by <i>plugin</i> matches with
        expression <i>s</i></entry>
+     </row>
+     <row>
+      <entry><i>x</i>&amp;<i>y</i></entry>
+      <entry><i>x</i> if, and only if, a diacritic attached to <i>x</i> matches the expression
+        <i>y</i>.  (e.g., <i>h&amp;{aspirated}</i>will match all 'h's with aspirated
+       diacritics.)</entry>
+     </row>
+     <row>
+      <entry><i>x</i>ː</entry>
+      <entry>Same as <i>x&amp;{long}</i>.</entry>
+     </row>
+     <row>
+      <entry><i>x</i>!<i>s</i></entry>
+      <entry><i>x</i> if, and only if, the syllable stress of the phone matches <i>s</i>. </entry>
      </row>
     </tbody>
    </tgroup>
