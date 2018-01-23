@@ -87,7 +87,8 @@ public class QueryHistoryNode extends OpNode {
 		if(selectedQuery.isPresent()) {
 
 			final List<ResultSet> resultSets = rsManager.getResultSetsForQuery(project, selectedQuery.get());
-
+			// make sure result sets are sorted
+			Collections.sort(resultSets, (r1, r2) -> r1.getSessionPath().toString().compareTo(r2.getSessionPath().toString()) );
 
 			context.put(projectOutput, project);
 			context.put(queryField, selectedQuery.get());
