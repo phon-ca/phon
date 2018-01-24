@@ -316,6 +316,10 @@ scope {
 		stressMatcher.addType($st.value);
 		$value = stressMatcher;
 	}
+	|	^(PLUGIN TRIANGULAR_COLON)
+	{
+		$value = new AnyDiacriticPhoneMatcher("{long}");
+	}
 	;
 
 sctype returns [SyllableConstituentType value]
@@ -523,7 +527,7 @@ predefined_phone_class returns [PhoneMatcher value]
 			IntraWordPauseMatcher pauseMatcher = new IntraWordPauseMatcher();
 			$value = pauseMatcher;
 			break;
-			
+
 		case 'P':
 			RegexMatcher rm = new RegexMatcher("\\(\\.{1,3}\\)");
 			$value = rm;

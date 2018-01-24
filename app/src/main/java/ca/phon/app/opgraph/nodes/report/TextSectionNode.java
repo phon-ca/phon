@@ -10,30 +10,30 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.app.opgraph.report.tree.*;
 
-@OpNodeInfo(name="Text Section", description="Add Text to Report template", category="Report Tree", showInLibrary=true)
+@OpNodeInfo(name="Text Section", description="Add Text to Report template", category="Report", showInLibrary=true)
 public class TextSectionNode extends ReportSectionNode implements NodeSettings {
 
 	private final InputField textInput =
 			new InputField("text", "Text input (overrides settings)", true, true, String.class);
-	
+
 	private JPanel settingsPanel;
 	private JTextArea textArea;
-	
+
 	private final static String TEXT_PROP = TextSectionNode.class.getName() + ".text";
 	private String text;
-	
+
 	public TextSectionNode() {
 		super();
-		
+
 		putField(textInput);
-		
+
 		putExtension(NodeSettings.class, this);
 	}
-	
+
 	public String getText() {
 		return (textArea != null ? textArea.getText() : this.text);
 	}
-	
+
 	public void setText(String text) {
 		this.text = text;
 		if(this.textArea != null) {
@@ -45,7 +45,7 @@ public class TextSectionNode extends ReportSectionNode implements NodeSettings {
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
 			settingsPanel = new JPanel(new BorderLayout());
-			
+
 			textArea = new JTextArea();
 			textArea.setText(text);
 			JScrollPane scroller = new JScrollPane(textArea);
@@ -71,7 +71,7 @@ public class TextSectionNode extends ReportSectionNode implements NodeSettings {
 		final String title = (context.get(sectionNameInput) != null ? context.get(sectionNameInput).toString() : "");
 		final String inputText = (context.get(textInput) != null ? context.get(textInput).toString() : null);
 		final String sectionText = (inputText != null ? inputText : getText() );
-		
+
 		return new TextNode(title, sectionText);
 	}
 

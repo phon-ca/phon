@@ -489,25 +489,25 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	private Set<String> getSessionExtensions() {
 		final Set<String> retVal = new LinkedHashSet<>();
-		
+
 		final SessionInputFactory factory = new SessionInputFactory();
 		for(SessionIO sessionIO:factory.availableReaders()) {
 			retVal.add(sessionIO.extension());
 		}
-		
+
 		return retVal;
 	}
-	
+
 	private File getSessionFile(String corpus, String session) {
-		final List<File> potentialFiles = 
+		final List<File> potentialFiles =
 				getSessionExtensions().stream()
 					.map( (ext) -> new File(getCorpusFolder(corpus), session + "." + ext) )
 					.collect( Collectors.toList() );
 		final Optional<File> optionalFile = potentialFiles.stream()
-					.filter( File::exists ) 
+					.filter( File::exists )
 					.findFirst();
 		File retVal = optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
-		
+
 		// check to see if session file path has been defined in xml
 		final SessionType st = getSessionInfo(corpus,  session);
 		if(st != null && st.getLoc() != null) {
@@ -655,10 +655,10 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer,
 			UUID writeLock) throws IOException {
 		checkSessionWriteLock(corpus, sessionName, writeLock);
-		
+
 		File sessionFile = getSessionFile(corpus, sessionName);
 		final boolean created = !sessionFile.exists();
-		
+
 		boolean needToDeleteExisting = false;
 		File oldSessionFile = null;
 		if(!created) {
@@ -687,7 +687,7 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new IOException("Session serialization failed.");
 			}
 			bout.close();
-			
+
 			if(needToDeleteExisting) {
 				oldSessionFile.delete();
 			}
@@ -879,7 +879,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			throws IOException {
 		final File sessionFile = getSessionFile(corpus, session);
 		int retVal = 0;
-		
+
 		if(sessionFile.exists() && sessionFile.getName().endsWith(".xml") ) {
 			// it's faster to use an xpath expression
 			// to determine the number of records.
@@ -1087,10 +1087,6 @@ public class LocalProject implements Project, ProjectRefresh {
 			s.setName(session);
 		} else {
 			s = factory.createSession(corpus, session);
-
-			final Record r = factory.createRecord();
-			r.addGroup();
-			s.addRecord(r);
 		}
 
 		final UUID writeLock = getSessionWriteLock(s);

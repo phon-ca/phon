@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,48 +47,48 @@ import ca.phon.util.*;
 /**
  * <p>Main UI for the application.  This window provides the interface for
  * creating and modifying Phon {@link Session}s.</p>
- * 
+ *
  * <p>This window supports plug-ins.  Plug-ins can provide custom EditorViews.</p>
  */
 public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	private final static long serialVersionUID = 2831713307191769522L;
-	
-	public final static String BACKUP_WHEN_SAVING = 
+
+	public final static String BACKUP_WHEN_SAVING =
 			SessionEditor.class.getName() + ".backupWhenSaving";
 	private boolean backupWhenSaving = PrefHelper.getBoolean(BACKUP_WHEN_SAVING, Boolean.TRUE);
-	
+
 	private final static Logger LOGGER = Logger
 			.getLogger(SessionEditor.class.getName());
-	
+
 	private final static String WINDOW_NAME = "Session Editor";
-	
+
 	/**
 	 * UI Model
 	 */
 	private final transient AtomicReference<EditorViewModel> viewModelRef;
-	
+
 	/**
 	 * Data model
 	 */
 	private final transient AtomicReference<EditorDataModel> dataModelRef;
-	
+
 	/**
 	 * Event manager
 	 */
 	private final transient AtomicReference<EditorEventManager> eventManagerRef;
-	
+
 	/**
 	 * Selection model
 	 */
 	private final transient AtomicReference<EditorSelectionModel> selectionModelRef;
-	
+
 	/**
 	 * Index of the current record
-	 * 
+	 *
 	 */
 	private volatile transient int currentRecord = 0;
-	
+
 	/*
 	 * Undo/Redo support
 	 */
@@ -96,67 +96,67 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * Undo support for the editor
 	 */
 	private final SessionEditorUndoSupport undoSupport = new SessionEditorUndoSupport(this);
-	
+
 	/**
 	 * Undo manager
 	 */
 	private final UndoManager undoManager = new UndoManager();
-	
+
 	private final UndoableEditListener undoListener = new UndoableEditListener() {
-		
+
 		@Override
 		public void undoableEditHappened(UndoableEditEvent e) {
 			undoManager.addEdit(e.getEdit());
 			setModified(true);
 		}
-		
+
 	};
-	
+
 	/**
 	 * Toolbar
 	 */
 	private SessionEditorToolbar toolbar;
-	
+
 	/**
 	 * Status bar
-	 * 
+	 *
 	 */
 	private SessionEditorStatusBar statusBar;
-	
+
 	/**
 	 * Constructor
 	 */
 	public SessionEditor(Project project, Session session, Transcriber transcriber) {
 		super(project);
 		putExtension(Session.class, session);
-		
-		this.dataModelRef = 
+
+		this.dataModelRef =
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));
 		getDataModel().setTranscriber(transcriber);
-		this.viewModelRef = 
+		this.viewModelRef =
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
-		this.eventManagerRef = 
+		this.eventManagerRef =
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
-		this.selectionModelRef = 
+		this.selectionModelRef =
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
-		
-		
+
+
 		// check to ensure that the session has a tier view
 		if(session.getTierView() == null || session.getTierView().size() == 0) {
 			session.setTierView(SessionFactory.newFactory().createDefaultTierView(session));
 		}
-	
+
 		// setup title
 		final String title = generateTitle();
 		setTitle(title);
-		
+
 		// add default undo listener
 		undoSupport.addUndoableEditListener(undoListener);
-		
+
 		// setup undo support and manager extensions
 		putExtension(UndoManager.class, undoManager);
 		putExtension(UndoableEditSupport.class, undoSupport);
-		
+
 		// setup syllabification info
 		final SyllabifierInfo info = new SyllabifierInfo(session);
 		final Language defaultSyllabifierLanguage = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage();
@@ -165,11 +165,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		if(info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName()) == null)
 			info.setSyllabifierLanguageForTier(SystemTierType.IPAActual.getName(), defaultSyllabifierLanguage);
 		session.putExtension(SyllabifierInfo.class, info);
-		
+
 		init();
-		
+
 //		PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
-//			
+//
 //			@Override
 //			public void preferenceChange(PreferenceChangeEvent evt) {
 //				if(evt.getKey().equals(FontPreferences.TIER_FONT)) {
@@ -178,16 +178,16 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 //				}
 //			}
 //		});
-		
+
 		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
 		setJMenuBar(menuBar);
 	}
-	
+
 	@Override
 	public String getTitle() {
 		return generateTitle();
 	}
-	
+
 	@RunOnEDT
 	private void _dispose() {
 		setVisible(false);
@@ -195,75 +195,75 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		setJMenuBar(null);
 		getEventManager().shutdown();
 		getViewModel().cleanup();
-		
+
 		undoSupport.removeUndoableEditListener(undoListener);
-		
+
 		eventManagerRef.set(null);
 		viewModelRef.set(null);
 		selectionModelRef.set(null);
 		dataModelRef.set(null);
-		
+
 		System.gc();
-		
+
 		super.dispose();
 	}
-	
+
 	@Override
 	public void dispose() {
 		getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, new EditorAction() {
-			
+
 			@Override
 			public void eventOccured(EditorEvent ee) {
 				SwingUtilities.invokeLater( () -> { _dispose(); } );
 			}
-			
+
 		});
 		// send out closing event
 		final EditorEvent ee = new EditorEvent(EditorEventType.EDITOR_CLOSING, this);
 		getEventManager().queueEvent(ee);
 	}
-	
+
 	private void init() {
 		final BorderLayout layout = new BorderLayout();
 		final Container contentPane = getContentPane();
 		contentPane.setLayout(layout);
-		
+
 		// window has 3 main elements: toolbar, dock area, status bar
 		// each element is retrieved using the view model
 		final EditorViewModel viewModel = getViewModel();
-		
+
 		// toolbar
 		final SessionEditorToolbar tb = getToolbar();
 		add(tb, BorderLayout.NORTH);
-		
+
 		// status bar
 		final JXStatusBar sb = (JXStatusBar) getStatusBar();
 		add(sb, BorderLayout.SOUTH);
-		
+
 		// setup content/dock area
 		final Container dock = viewModel.getRoot();
 		contentPane.add(dock, BorderLayout.CENTER);
-		
+
 		setupEditorActions();
 	}
-	
+
 	private void setupEditorActions() {
-		final EditorAction modifiedChangedAct = 
+		final EditorAction modifiedChangedAct =
 				new DelegateEditorAction(this, "onModifiedChanged");
 		getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED, modifiedChangedAct);
-		
+
 		final EditorAction recordAddedAct =
 				new DelegateEditorAction(this, "onRecordAdded");
 		getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, recordAddedAct);
-		
-		final EditorAction recordDeletedAct = 
+
+		final EditorAction recordDeletedAct =
 				new DelegateEditorAction(this, "onRecordDeleted");
 		getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, recordDeletedAct);
 	}
-	
+
 	/**
 	 * Get the editor toolbar.
-	 * 
+	 *
 	 * @return toolbar
 	 */
 	public SessionEditorToolbar getToolbar() {
@@ -272,10 +272,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 		return this.toolbar;
 	}
-	
+
 	/**
 	 * Get the editor status bar
-	 * 
+	 *
 	 * @return statusBar
 	 */
 	public SessionEditorStatusBar getStatusBar() {
@@ -284,11 +284,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 		return this.statusBar;
 	}
-	
+
 	/*---- Menu Setup ------------------------------*/
 	/**
 	 * Setup editor window menu
-	 * 
+	 *
 	 * @param menu
 	 */
 	@Override
@@ -297,7 +297,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			setupMenu(menuBar);
 		super.setJMenuBar(menuBar);
 	}
-	
+
 	public void setupMenu(JMenuBar menuBar) {
 		// get 'File' menu reference
 		final JMenu fileMenu = menuBar.getMenu(0);
@@ -305,22 +305,22 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final JMenuItem saveItem = new JMenuItem(saveAct);
 		fileMenu.add(saveItem, 0);
 		fileMenu.addMenuListener(new MenuListener() {
-			
+
 			@Override
 			public void menuSelected(MenuEvent e) {
 				saveItem.setEnabled(hasUnsavedChanges());
 			}
-			
+
 			@Override
 			public void menuDeselected(MenuEvent e) {
 			}
-			
+
 			@Override
 			public void menuCanceled(MenuEvent e) {
 			}
-			
+
 		});
-		
+
 		// save as.. menu
 		final JMenu saveAsMenu = new JMenu("Save as...");
 		final SessionOutputFactory factory = new SessionOutputFactory();
@@ -329,34 +329,34 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 		fileMenu.add(saveAsMenu, 1);
 		fileMenu.add(new JSeparator(), 2);
-		
+
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");
 		sessionMenu.add(new NewRecordAction(this));
 		sessionMenu.add(new DuplicateRecordAction(this));
 		sessionMenu.add(new DeleteRecordAction(this));
 		sessionMenu.addSeparator();
-		
+
 		sessionMenu.add(new MoveRecordToBeginningAction(this));
 		sessionMenu.add(new MoveRecordBackwardAction(this));
 		sessionMenu.add(new MoveRecordForwardAction(this));
 		sessionMenu.add(new MoveRecordToEndAction(this));
 		sessionMenu.add(new SortRecordsAction(this));
 		sessionMenu.addSeparator();
-		
+
 		sessionMenu.add(new CutRecordAction(this));
 		sessionMenu.add(new CopyRecordAction(this));
 		sessionMenu.add(new PasteRecordAction(this));
 		sessionMenu.addSeparator();
-		
+
 		sessionMenu.add(new FirstRecordAction(this));
 		sessionMenu.add(new PreviousRecordAction(this));
 		sessionMenu.add(new NextRecordAction(this));
 		sessionMenu.add(new LastRecordAction(this));
-		
+
 		sessionMenu.addSeparator();
 		sessionMenu.add(new SessionCheckAction(this));
-		
+
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is
 		// setup
@@ -369,29 +369,29 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				viewMenu.addSeparator();
 				getViewModel().setupViewMenu(viewMenu);
 			}
-			
+
 			@Override
 			public void menuDeselected(MenuEvent e) {
 			}
-			
+
 			@Override
 			public void menuCanceled(MenuEvent e) {
 			}
 		};
 		viewMenu.addMenuListener(viewMenuListener);
-		
+
 		if(getViewModel() != null) {
 			final MenuEvent me = new MenuEvent(viewMenu);
 			viewMenuListener.menuSelected(me);
 		}
-		
+
 		menuBar.add(viewMenu, 3);
 		menuBar.add(sessionMenu, 3);
 	}
-	
+
 	/**
 	 * Retrieve the data model
-	 * 
+	 *
 	 * @return the editor data model
 	 */
 	public EditorDataModel getDataModel() {
@@ -400,57 +400,57 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	/**
 	 * Retrieve the view model
-	 * 
+	 *
 	 * @return the editor view model
 	 */
 	public EditorViewModel getViewModel() {
 		return (viewModelRef != null ? viewModelRef.get() : null);
 	}
-	
+
 	/**
 	 * Get the event manager
-	 * 
+	 *
 	 * @return the editor event model
 	 */
 	public EditorEventManager getEventManager() {
 		return (eventManagerRef != null ? eventManagerRef.get() : null);
 	}
-	
+
 	/**
 	 * Get the selection model
-	 * 
-	 * 
+	 *
+	 *
 	 * @return editor selection model
 	 */
 	public EditorSelectionModel getSelectionModel() {
 		return (selectionModelRef != null ? selectionModelRef.get() : null);
 	}
-	
+
 	/**
 	 * Get session
-	 * 
+	 *
 	 * @return session
 	 */
 	public Session getSession() {
 		final EditorDataModel dataModel = getDataModel();
 		return (dataModel != null ? dataModel.getSession() : null);
 	}
-	
+
 	/*
 	 * RECORD POSITION
 	 */
 	/**
 	 * Return the index of the current record.
-	 * 
+	 *
 	 * @return index of current record
 	 */
 	public int getCurrentRecordIndex() {
 		return this.currentRecord;
 	}
-	
+
 	/**
 	 * Set the index of the current record.
-	 * 
+	 *
 	 * @return index
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
@@ -462,54 +462,56 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_CHANGED_EVT, this, currentRecord());
 		getEventManager().queueEvent(ee);
 	}
-	
+
 	/**
 	 * Return the current record
-	 * 
+	 *
 	 * @return current record
 	 */
 	public Record currentRecord() {
 		final EditorDataModel dataModel = getDataModel();
-		return dataModel.getRecord(getCurrentRecordIndex());
+		return (getCurrentRecordIndex() >= 0 && getCurrentRecordIndex() < dataModel.getRecordCount()
+				? dataModel.getRecord(getCurrentRecordIndex())
+				: null);
 	}
-	
+
 	/**
 	 * Get undo support for the editor
-	 * 
+	 *
 	 * @return undo support
 	 */
 	public SessionEditorUndoSupport getUndoSupport() {
 		return this.undoSupport;
 	}
-	
+
 	/**
 	 * Get undo manager for the editor
-	 * 
+	 *
 	 * @return undo manager
 	 */
 	public UndoManager getUndoManager() {
 		return this.undoManager;
 	}
-	
+
 	/**
 	 * Set the modified flag
-	 * 
+	 *
 	 * @param modified
 	 */
 	public void setModified(boolean modified) {
 		final boolean lastVal = super.hasUnsavedChanges();
 		super.setModified(modified);
-		
+
 		if(lastVal != modified) {
 			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFIED_FLAG_CHANGED, this);
 			getEventManager().queueEvent(ee);
-			
+
 		}
 	}
-	
+
 	/**
 	 * Generate the window title
-	 * 
+	 *
 	 * @return window title
 	 */
 	private String generateTitle() {
@@ -522,7 +524,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 		return retVal;
 	}
-	
+
 	/*
 	 * Editor actions
 	 */
@@ -531,7 +533,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final String title = generateTitle();
 		setTitle(title);
 	}
-	
+
 	@RunOnEDT
 	public void onRecordAdded(EditorEvent ee) {
 		if(ee.getEventData() != null && ee.getEventData() instanceof Record) {
@@ -540,7 +542,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			setCurrentRecordIndex(recordIndex);
 		}
 	}
-	
+
 	@RunOnEDT
 	public void onRecordDeleted(EditorEvent ee) {
 		if(getCurrentRecordIndex() >= getDataModel().getRecordCount()) {
@@ -550,26 +552,26 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			getEventManager().queueEvent(refreshAct);
 		}
 	}
-	
+
 	@Override
-	public boolean saveData() 
+	public boolean saveData()
 			throws IOException {
 		final Project project = getProject();
 		final Session session = getSession();
-		
+
 		/*
 		 * Check for an OriginalFormat extension, if found and not in Phon format
 		 * ask if the users wishes to save in the original format or Phon's format.
 		 */
 		final SessionOutputFactory outputFactory = new SessionOutputFactory();
-		
+
 		// get default session writer
 		SessionWriter sessionWriter = outputFactory.createWriter();
 		OriginalFormat origFormat = session.getExtension(OriginalFormat.class);
-		
+
 		// check for non-native format
 		if(origFormat != null && !origFormat.getSessionIO().group().equals("ca.phon")) {
-			
+
 			// only issue the format warning once...
 			if(origFormat.isIssueWarning()) {
 				final MessageDialogProperties props = new MessageDialogProperties();
@@ -585,7 +587,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				props.setRunAsync(false);
 				props.setParentWindow(this);
 				props.setTitle(props.getHeader());
-				
+
 				int retVal = NativeDialogs.showMessageDialog(props);
 				if(retVal == 0) {
 					// save in original format
@@ -603,19 +605,19 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				sessionWriter = outputFactory.createWriter(origFormat.getSessionIO());
 			}
 		}
-		
+
 		UUID writeLock = null;
 		try {
 			LOGGER.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
 			writeLock = project.getSessionWriteLock(session);
 			project.saveSession(session.getCorpus(), session.getName(), session, sessionWriter, writeLock);
-			
+
 			final long byteSize = project.getSessionByteSize(session);
-			
-			final String msg = "Save finished.  " + 
+
+			final String msg = "Save finished.  " +
 					ByteSize.humanReadableByteCount(byteSize, true) + " written to disk.";
 			LOGGER.info(msg);
-			
+
 			// show a short messgae next to the save button to indicate save completed
 			ToastFactory.makeToast(msg).start(getToolbar());
 			setModified(false);
@@ -628,15 +630,15 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			props.setHeader("Unable to save session");
 			props.setOptions(MessageDialogProperties.okOptions);
 			NativeDialogs.showMessageDialog(props);
-			
+
 			throw e;
 		} finally {
-			if(writeLock != null) 
+			if(writeLock != null)
 				project.releaseSessionWriteLock(session, writeLock);
 		}
 	}
 
 	@Override
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {}
-	
+
 }

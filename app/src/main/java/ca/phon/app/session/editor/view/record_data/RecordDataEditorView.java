@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -53,15 +53,15 @@ import ca.phon.util.icons.*;
  *
  */
 public class RecordDataEditorView extends EditorView {
-	
+
 	private final static Logger LOGGER = Logger.getLogger(RecordDataEditorView.class.getName());
 
 	private static final long serialVersionUID = 2961561720211049250L;
-	
+
 	public final static String VIEW_NAME = "Record Data";
-	
+
 	public final static String VIEW_ICON = "misc/record";
-	
+
 	/*
 	 * Common data for all records
 	 */
@@ -71,7 +71,7 @@ public class RecordDataEditorView extends EditorView {
 	 * speaker selection
 	 */
 	private JComboBox<Participant> speakerBox;
-	
+
 	private volatile boolean updating = false;
 
 	/**
@@ -79,180 +79,182 @@ public class RecordDataEditorView extends EditorView {
 	 */
 	private JCheckBox excludeFromSearchesBox;
 	private final static String excludeFromSearchesText = "Exclude from searches";
-	
-	/** 
+
+	/**
 	 * content pane
 	 */
 	private TierDataLayoutPanel contentPane;
-	
+
 	/**
 	 * Status panel
 	 */
 	private JPanel statusPanel;
-	
+
 	private JLabel recordIdLbl;
-	
+
 	private JLabel currentTierLbl;
-	
+
 	private JLabel currentGroupLbl;
-	
+
 	private JLabel currentCharLbl;
-	
+
 	private RecordNumberField recNumField;
-	
+
 	/*
 	 * Keep track of 'current' group and tier.  This is done by tracking
 	 * focus of the various TierEditors.
 	 */
 	private final AtomicReference<Tier<?>> currentTierRef = new AtomicReference<Tier<?>>();
-	
+
 	private final AtomicInteger currentGroupIndex = new AtomicInteger(-1);
-	
+
 	private final AtomicInteger currentRecordIndex = new AtomicInteger(-1);
-	
+
 	private final AtomicInteger currentCharIndex = new AtomicInteger(-1);
-	
+
 	private final Map<String, List<TierEditor>> editorMap = new LinkedHashMap<>();
-	
+
 	public RecordDataEditorView(SessionEditor editor) {
 		super(editor);
 		init();
 	}
-	
+
 	private void init() {
 		setLayout(new BorderLayout());
-		
+
 		setBackground(Color.white);
-		
+
 		contentPane = new TierDataLayoutPanel();
 		contentPane.setBackground(Color.white);
-		
+
 		final JScrollPane scroller = new JScrollPane(contentPane);
 		scroller.setBackground(Color.white);
 		add(scroller, BorderLayout.CENTER);
-		
+
 		final JPanel panel = getTopPanel();
 		add(panel, BorderLayout.NORTH);
-		
-		final FormLayout statusLayout = 
+
+		final FormLayout statusLayout =
 				new FormLayout("pref, pref, fill:pref:grow, "
 						+ "right:pref, right:pref, right:pref, right:pref, right:pref, right:pref", "pref");
 		final CellConstraints cc = new CellConstraints();
 		statusPanel = new JPanel(statusLayout);
-		
+
 		final Font font = Font.decode("monospace-PLAIN-10");
 		final JLabel idLbl = new JLabel("Id: ");
 		idLbl.setFont(font);
-		
+
 		recordIdLbl = new JLabel();
 		recordIdLbl.setFont(font);
-		
+
 		statusPanel.add(idLbl, cc.xy(1,1));
 		statusPanel.add(recordIdLbl, cc.xy(2,1));
-		
+
 		final JLabel tierLbl = new JLabel("Tier: ");
 		tierLbl.setFont(font);
-		
+
 		currentTierLbl = new JLabel();
 		currentTierLbl.setFont(font);
-		
+
 		statusPanel.add(tierLbl, cc.xy(4,1));
 		statusPanel.add(currentTierLbl, cc.xy(5,1));
-		
+
 		final JLabel grpLbl = new JLabel(" Group: ");
 		grpLbl.setFont(font);
-		
+
 		currentGroupLbl = new JLabel();
 		currentGroupLbl.setFont(font);
-		
+
 		statusPanel.add(grpLbl, cc.xy(6,1));
 		statusPanel.add(currentGroupLbl, cc.xy(7,1));
-		
+
 		final JLabel charLbl = new JLabel(" Character: ");
 		charLbl.setFont(font);
-		
+
 		currentCharLbl = new JLabel();
 		currentCharLbl.setFont(font);
-		
+
 		statusPanel.add(charLbl, cc.xy(8,1));
 		statusPanel.add(currentCharLbl, cc.xy(9,1));
-		
+
 		add(statusPanel, BorderLayout.SOUTH);
-		
+
 		update();
 		updateStatus();
 		setupEditorActions();
-		getEditor().getSelectionModel().addSelectionModelListener(selectionListener); 
+		getEditor().getSelectionModel().addSelectionModelListener(selectionListener);
 	}
-	
+
 	private void setupEditorActions() {
-		final EditorAction onTierViewChangeAct = 
+		final EditorAction onTierViewChangeAct =
 				new DelegateEditorAction(this, "onTierViewChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, onTierViewChangeAct);
-	
+
 		final EditorAction onRecordChangeAct =
 				new DelegateEditorAction(this, "onRecordChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, onRecordChangeAct);
-		
+
 		final EditorAction onGroupListChangeAct =
 				new DelegateEditorAction(this, "onGroupsChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, onGroupListChangeAct);
-		
+
 		final EditorAction onParticipantsChangedAct =
 				new DelegateEditorAction(this, "onParticipantsChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantsChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantsChangedAct);
-		
-		final EditorAction onNumRecordsChangeAct = 
+
+		final EditorAction onNumRecordsChangeAct =
 				new DelegateEditorAction(this, "onNumRecordsChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, onNumRecordsChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, onNumRecordsChangeAct);
-		
-		final EditorAction onSessionLocationChangedAct = 
+
+		final EditorAction onSessionLocationChangedAct =
 				new DelegateEditorAction(this, "onSessionLocationChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, onSessionLocationChangedAct);
 	}
-	
+
 	/**
 	 * Upadte the current tier view.
-	 * 
+	 *
 	 */
 	private void update() {
 		updating = true;
-		
+
 		editorMap.clear();
-		
+
 		contentPane.removeAll();
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
-		final Record record = editor.getDataModel().getRecord(editor.getCurrentRecordIndex());
+		final Record record = editor.currentRecord();
+		if(record == null) return;
+
 		final RecordTierEditorListener tierEditorListener = new RecordTierEditorListener(record);
 
 		// update speaker and query exclusion
 		recNumField.setText("" + (editor.getCurrentRecordIndex()+1));
 		speakerBox.setSelectedItem(record.getSpeaker());
 		excludeFromSearchesBox.setSelected(record.isExcludeFromSearches());
-		
+
 		final TierEditorFactory tierEditorFactory = new TierEditorFactory();
-		
+
 		final List<TierViewItem> tierView = session.getTierView();
 		int row = 0;
-		
+
 		JComponent toFocus = null;
 		for(TierViewItem tierItem:tierView) {
 			if(!tierItem.isVisible()) continue;
-			
+
 			final String tierName = tierItem.getTierName();
 			final JLabel tierLabel = new JLabel(tierName);
 			tierLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 			tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-			
+
 			contentPane.add(tierLabel, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
-			
+
 			final SystemTierType systemTier = SystemTierType.tierFromString(tierName);
 			TierDescription tierDesc = null;
-			
+
 			final SessionFactory factory = SessionFactory.newFactory();
 			if(systemTier != null) {
 				tierDesc = factory.createTierDescription(tierName, systemTier.isGrouped());
@@ -264,18 +266,18 @@ public class RecordDataEditorView extends EditorView {
 					}
 				}
 			}
-			
+
 			if(tierDesc == null) continue;
-			
+
 			boolean isGrouped = tierDesc.isGrouped();
-			
+
 			// load tier font
 			final String fontString = tierItem.getTierFont();
 			Font tierFont = FontPreferences.getTierFont();
 			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
 				tierFont = Font.decode(fontString);
 			}
-			
+
 			Tier<?> tier = record.getTier(tierName);
 			if(tier == null) {
 				tier = factory.createTier(tierDesc.getName(), tierDesc.getDeclaredType(), isGrouped);
@@ -297,14 +299,14 @@ public class RecordDataEditorView extends EditorView {
 						final JTextComponent textComp = (JTextComponent)tierComp;
 						addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, gIdx);
 						textComp.addCaretListener(caretListener);
-						
+
 						if(tierItem.isTierLocked()) {
 							textComp.setEditable(false);
 						}
 					} else if(tierItem.isTierLocked()) {
 						tierComp.setEnabled(false);
 					}
-					
+
 					if(toFocus == null) {
 						toFocus = (JComponent)tierComp;
 					}
@@ -318,19 +320,19 @@ public class RecordDataEditorView extends EditorView {
 					tierComp.setFont(tierFont);
 				tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
 				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
-				
+
 				if(tierComp instanceof JTextComponent) {
 					final JTextComponent textComp = (JTextComponent)tierComp;
 					addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, 0);
 					textComp.addCaretListener(caretListener);
-					
+
 					if(tierItem.isTierLocked()) {
 						textComp.setEditable(false);
 					}
 				} else if(tierItem.isTierLocked()) {
 					tierComp.setEnabled(false);
 				}
-				
+
 				if(toFocus == null) {
 					toFocus = (JComponent)tierComp;
 				}
@@ -338,37 +340,39 @@ public class RecordDataEditorView extends EditorView {
 			}
 			row++;
 		}
-		
+
 		if(isFocusOwner() && toFocus != null) {
 			toFocus.requestFocusInWindow();
 		}
-		
+
 		// update location
-		
-		
+
+
 		updating = false;
 		revalidate();
 	}
-	
+
 	private void updateStatus() {
 		final Record r = getEditor().currentRecord();
+		if(r == null) return;
+
 		recordIdLbl.setText(r.getUuid().toString());
-		
+
 		final Tier<?> currentTier = currentTier();
 		if(currentTier != null) {
 			currentTierLbl.setText(currentTier.getName());
-		
+
 			currentGroupLbl.setText((currentGroupIndex()+1) + " ");
-			
+
 			currentCharLbl.setText(currentCharIndex() + " ");
 		}
 	}
-	
+
 	/*
 	 * Session selections
 	 */
 	private final EditorSelectionModelListener selectionListener =  new EditorSelectionModelListener() {
-		
+
 		@Override
 		public void selectionsCleared(EditorSelectionModel model) {
 			for(String tierName:editorMap.keySet()) {
@@ -383,14 +387,14 @@ public class RecordDataEditorView extends EditorView {
 				}
 			}
 		}
-		
+
 		@Override
 		public void selectionSet(EditorSelectionModel model,
 				SessionEditorSelection selection) {
 			selectionsCleared(model);
 			selectionAdded(model, selection);
 		}
-		
+
 		@Override
 		public void selectionAdded(EditorSelectionModel model,
 				SessionEditorSelection selection) {
@@ -403,7 +407,7 @@ public class RecordDataEditorView extends EditorView {
 						final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
 						final Range r = selection.getGroupRange();
 						try {
-							hl.addHighlight(r.getFirst(), r.getLast(), 
+							hl.addHighlight(r.getFirst(), r.getLast(),
 									new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
 						} catch (BadLocationException e) {
 							LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
@@ -412,11 +416,11 @@ public class RecordDataEditorView extends EditorView {
 				}
 			}
 		}
-		
+
 	};
-	
+
 	private void addSelectionHighlights(JTextComponent textComp, int recordIndex, String tierName, int groupIndex) {
-		final List<SessionEditorSelection> selections = 
+		final List<SessionEditorSelection> selections =
 				getEditor().getSelectionModel().getSelectionsForGroup(recordIndex,
 						tierName, groupIndex);
 		final Highlighter hl = new GroupFieldHighlighter();
@@ -433,27 +437,27 @@ public class RecordDataEditorView extends EditorView {
 		for(SessionEditorSelection selection:selections) {
 			final Range r = selection.getGroupRange();
 			try {
-				hl.addHighlight(r.getFirst(), r.getLast(), 
+				hl.addHighlight(r.getFirst(), r.getLast(),
 						new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
 			} catch (BadLocationException e) {
 				LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
 			}
 		}
 	}
-	
+
 	private JPanel getTopPanel() {
 		if(topPanel == null) {
 			final TierDataLayout tdl = (TierDataLayout)contentPane.getLayout();
 			final TierDataLayoutButtons layoutButtons = new TierDataLayoutButtons(contentPane, tdl);
-			
+
 			final SessionEditor editor = getEditor();
 			final Session session = editor.getSession();
-			
+
 			final FormLayout layout = new FormLayout(
 					"pref, pref, 3dlu, pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref",
 					"pref");
 			topPanel = new JPanel(layout);
-			
+
 			final JLabel recNumLbl = new JLabel("<html><u>#</u></html>");
 			recNumLbl.setForeground(Color.blue);
 			recNumLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -465,9 +469,9 @@ public class RecordDataEditorView extends EditorView {
 					recNumField.setEnabled(true);
 					recNumField.requestFocus();
 				}
-				
+
 			});
-			
+
 			recNumField = new RecordNumberField(1, getEditor().getSession().getRecordCount());
 			recNumField.setColumns(3);
 			recNumField.setText("" + (getEditor().getCurrentRecordIndex()+1));
@@ -475,9 +479,9 @@ public class RecordDataEditorView extends EditorView {
 			moveRecordAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit to set this record's position in session");
 			recNumField.setAction(moveRecordAct);
 			recNumField.addFocusListener(new FocusListener() {
-				
+
 				int initialNum = 0;
-				
+
 				@Override
 				public void focusLost(FocusEvent e) {
 					if(recNumField.getText().length() == 0) {
@@ -489,23 +493,23 @@ public class RecordDataEditorView extends EditorView {
 					}
 					recNumField.setEnabled(false);
 				}
-				
+
 				@Override
 				public void focusGained(FocusEvent e) {
 					initialNum = getEditor().getCurrentRecordIndex();
 				}
-				
+
 			});
 			recNumField.setEnabled(false);
-			
+
 			final CellConstraints cc = new CellConstraints();
 			int rowIdx = 1;
 			int colIdx = 1;
-			
+
 			topPanel.add(recNumLbl, cc.xy(colIdx++, rowIdx));
 			topPanel.add(recNumField, cc.xy(colIdx++, rowIdx));
 			colIdx++;  // 3dlu spacer
-			
+
 			final DefaultComboBoxModel<Participant> speakerBoxModel = new DefaultComboBoxModel<>();
 			speakerBoxModel.addElement(Participant.UNKNOWN);
 			for(Participant participant:session.getParticipants()) {
@@ -514,42 +518,42 @@ public class RecordDataEditorView extends EditorView {
 			speakerBox = new JComboBox<>(speakerBoxModel);
 			speakerBox.setRenderer(speakerRenderer);
 			speakerBox.addItemListener(speakerListener);
-			
+
 			final PhonUIAction excludeAct = new PhonUIAction(this, "onExclude");
 			excludeAct.putValue(PhonUIAction.NAME, excludeFromSearchesText);
 			excludeFromSearchesBox = new JCheckBox(excludeAct);
-			
+
 			topPanel.add(new JLabel("Speaker: "), cc.xy(colIdx++, rowIdx));
 			topPanel.add(speakerBox, cc.xy(colIdx++, rowIdx));
 			colIdx++; // spacer
-			
+
 			topPanel.add(excludeFromSearchesBox, cc.xy(colIdx++, rowIdx));
 			colIdx++; // filler
-			
+
 			// create group management buttons
 			final JPanel btnPanel = new JPanel(new HorizontalLayout());
-			
+
 			final NewGroupCommand newGroupAct = new NewGroupCommand(this);
 			newGroupAct.putValue(NewGroupCommand.SHORT_DESCRIPTION, newGroupAct.getValue(NewGroupCommand.NAME));
 			newGroupAct.putValue(NewGroupCommand.NAME, null);
 			final JButton newGroupBtn = new JButton(newGroupAct);
 			newGroupBtn.setFocusable(false);
 			btnPanel.add(newGroupBtn);
-			
+
 			final MergeGroupCommand mergeGroupAct = new MergeGroupCommand(this);
 			mergeGroupAct.putValue(MergeGroupCommand.SHORT_DESCRIPTION, mergeGroupAct.getValue(MergeGroupCommand.NAME));
 			mergeGroupAct.putValue(MergeGroupCommand.NAME, null);
 			final JButton mergeGroupBtn = new JButton(mergeGroupAct);
 			mergeGroupBtn.setFocusable(false);
 			btnPanel.add(mergeGroupBtn);
-			
+
 			final SplitGroupCommand splitGroupAct = new SplitGroupCommand(this);
 			splitGroupAct.putValue(SplitGroupCommand.SHORT_DESCRIPTION, splitGroupAct.getValue(SplitGroupCommand.NAME));
 			splitGroupAct.putValue(SplitGroupCommand.NAME, null);
 			final JButton splitGroupBtn = new JButton(splitGroupAct);
 			splitGroupBtn.setFocusable(false);
 			btnPanel.add(splitGroupBtn);
-			
+
 			/*
 			 * XXX removed in Phon 2.2
 			 */
@@ -561,46 +565,46 @@ public class RecordDataEditorView extends EditorView {
 			delGroupBtn.setFocusable(false);
 			btnPanel.add(delGroupBtn);
 			*/
-			
+
 			topPanel.add(btnPanel, cc.xy(colIdx++, rowIdx));
 			colIdx++; // spacer
-			
+
 			topPanel.add(layoutButtons, cc.xy(colIdx++, rowIdx));
 		}
-		
+
 		return topPanel;
 	}
-	
+
 	private SessionEditorUndoableEdit updateRecordAlignment(Record record, int group) {
 		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
 		final Tier<IPATranscript> ipaActual = record.getIPAActual();
-		
+
 		final IPATranscript targetGroup = (group < ipaTarget.numberOfGroups() ? ipaTarget.getGroup(group) : new IPATranscript());
 		final IPATranscript actualGroup = (group < ipaActual.numberOfGroups() ? ipaActual.getGroup(group) : new IPATranscript());
 		final PhoneAligner aligner = new PhoneAligner();
 		final PhoneMap pm = aligner.calculatePhoneMap(targetGroup, actualGroup);
-		
+
 		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), group, pm);
-	
+
 		return pmEdit;
 	}
-	
+
 	private class RecordTierEditorListener implements TierEditorListener {
-		
+
 		private final Record record;
-		
+
 		public RecordTierEditorListener(Record record) {
 			this.record = record;
 		}
-		
+
 		@Override
 		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
 				T oldValue) {
 			final TierEdit<T> tierEdit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
 			tierEdit.setFireHardChangeOnUndo(true);
-			
+
 			UndoableEdit edit = tierEdit;
-			
+
 			// XXX
 			// Special case for IPA tiers, alignment must be updated as well
 			if(SystemTierType.IPATarget.getName().equals(tier.getName()) ||
@@ -608,18 +612,18 @@ public class RecordDataEditorView extends EditorView {
 				edit = new CompoundEdit();
 				tierEdit.doIt();
 				edit.addEdit(tierEdit);
-				
+
 				final SessionEditorUndoableEdit alignEdit = updateRecordAlignment(record, groupIndex);
 				alignEdit.doIt();
 				edit.addEdit(alignEdit);
-				
+
 				((CompoundEdit)edit).end();
-				
+
 				// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
 				final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
 				getEditor().getEventManager().queueEvent(ee);
 			}
-			
+
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 
@@ -629,9 +633,9 @@ public class RecordDataEditorView extends EditorView {
 			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, RecordDataEditorView.this, tier.getName());
 			getEditor().getEventManager().queueEvent(ee);
 		}
-		
+
 	};
-	
+
 	private final DefaultListCellRenderer speakerRenderer = new DefaultListCellRenderer() {
 
 		@Override
@@ -641,7 +645,7 @@ public class RecordDataEditorView extends EditorView {
 					cellHasFocus);
 			if(value != null) {
 				final Participant participant = (Participant)value;
-				final String val = 
+				final String val =
 						(participant.getName() != null && participant.getName().length() > 0 ? participant.getName() :
 							participant.getId() != null ? participant.getId() : participant.getRole().toString());
 				retVal.setText(val);
@@ -650,9 +654,9 @@ public class RecordDataEditorView extends EditorView {
 			}
 			return retVal;
 		}
-		
+
 	};
-	
+
 	private final ItemListener speakerListener = new ItemListener() {
 
 		@Override
@@ -666,69 +670,69 @@ public class RecordDataEditorView extends EditorView {
 				editor.getUndoSupport().postEdit(edit);
 			}
 		}
-		
+
 	};
-	
+
 	public void onExclude() {
 		final boolean exclude = excludeFromSearchesBox.isSelected();
 		final RecordExcludeEdit edit = new RecordExcludeEdit(getEditor(), getEditor().currentRecord(), exclude);
 		getEditor().getUndoSupport().postEdit(edit);
 	}
-	
+
 	/**
 	 * Return the record of the last tier that was focused.
-	 * 
+	 *
 	 * @return record index
 	 */
 	public int currentRecordIndex() {
 		return (currentRecordIndex != null ? currentRecordIndex.get() : -1);
 	}
-	
+
 	/**
 	 * Return the 'current' tier.  This is the last tier that
 	 * was focused within the editor.
-	 * 
+	 *
 	 * @param current tier or <code>null</code> if not
 	 *  set
 	 */
 	public Tier<?> currentTier() {
 		return (currentTierRef != null ? currentTierRef.get() : null);
 	}
-	
+
 	/**
 	 * Return the current group index.
-	 * 
+	 *
 	 * @param the current group index, < 0 if not set
 	 */
 	public int currentGroupIndex() {
 		return (currentGroupIndex != null ? currentGroupIndex.get() : -1);
 	}
-	
+
 	public int currentWordIndex() {
 		int retVal = -1;
-		
+
 		final JComponent lastComp = lastFocusedRef.get();
 		if(lastComp != null && lastComp instanceof JTextComponent) {
 			final JTextComponent textComp = (JTextComponent)lastComp;
-			
+
 			final String text = textComp.getText();
 			final int caretIdx = textComp.getCaretPosition();
 			retVal = 0;
 			for(int i = 0; i < caretIdx; i++) {
-				if(text.charAt(i) == ' ') 
+				if(text.charAt(i) == ' ')
 					retVal++;
 			}
 			if(caretIdx == text.length() || text.charAt(caretIdx) == ' ')
 				retVal++;
 		}
-		
+
 		return retVal;
 	}
-	
+
 	public int currentCharIndex() {
 		return currentCharIndex.get();
 	}
-	
+
 	public SessionLocation getSessionLocation() {
 		if(currentTierRef.get() == null) return null;
 		final GroupLocation grpLoc = new GroupLocation(currentGroupIndex(), currentCharIndex());
@@ -736,13 +740,13 @@ public class RecordDataEditorView extends EditorView {
 		final SessionLocation sessionLoc = new SessionLocation(currentRecordIndex(), recLoc);
 		return sessionLoc;
 	}
-	
+
 	public void fireSessionLocationChanged() {
 		final EditorEvent ee = new EditorEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, this,
 				getSessionLocation());
 		getEditor().getEventManager().queueEvent(ee);
 	}
-	
+
 	/*
 	 * Editor Actions
 	 */
@@ -750,20 +754,20 @@ public class RecordDataEditorView extends EditorView {
 	public void onNumRecordsChanged(EditorEvent event) {
 		recNumField.setMaxNumber(getEditor().getSession().getRecordCount());
 	}
-	
+
 	@RunOnEDT
 	public void onTierViewChange(EditorEvent event) {
 		update();
 		repaint();
 	}
-	
+
 	@RunOnEDT
 	public void onRecordChange(EditorEvent event) {
 		update();
 		updateStatus();
 		repaint();
 	}
-	
+
 	@RunOnEDT
 	public void onGroupsChange(EditorEvent event) {
 		final SessionLocation location = getSessionLocation();
@@ -776,7 +780,7 @@ public class RecordDataEditorView extends EditorView {
 		update();
 		repaint();
 	}
-	
+
 	@RunOnEDT
 	public void onParticipantsChanged(EditorEvent event) {
 		remove(topPanel);
@@ -786,21 +790,21 @@ public class RecordDataEditorView extends EditorView {
 		revalidate();
 		repaint();
 	}
-	
+
 	@RunOnEDT
 	public void onSessionLocationChanged(EditorEvent event) {
 		updateStatus();
 	}
-	
+
 	public void moveRecord() {
 		final Integer newRecordNumber = Integer.parseInt(recNumField.getText())-1;
-		
+
 		if(newRecordNumber >= 0 && newRecordNumber < getEditor().getSession().getRecordCount()) {
 			final RecordMoveEdit edit = new RecordMoveEdit(getEditor(), getEditor().currentRecord(), newRecordNumber);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 		return VIEW_NAME;
@@ -818,11 +822,11 @@ public class RecordDataEditorView extends EditorView {
 
 	private AtomicReference<JComponent> lastFocusedRef = new AtomicReference<JComponent>();
 	private final class TierEditorComponentFocusListener implements FocusListener {
-		
+
 		private final Tier<?> tier;
-		
+
 		private final int group;
-		
+
 		public TierEditorComponentFocusListener(Tier<?> tier, int group) {
 			super();
 			this.tier = tier;
@@ -833,18 +837,18 @@ public class RecordDataEditorView extends EditorView {
 		public void focusGained(FocusEvent e) {
 			final JComponent tierComp = (JComponent)e.getComponent();
 			lastFocusedRef.getAndSet(tierComp);
-			
+
 			currentRecordIndex.getAndSet(getEditor().getCurrentRecordIndex());
 			currentTierRef.getAndSet(tier);
 			currentGroupIndex.getAndSet(group);
-			
+
 			if(tierComp instanceof JTextComponent) {
 				final JTextComponent textComp = (JTextComponent)tierComp;
 				currentCharIndex.getAndSet(textComp.getCaretPosition());
 			} else {
 				currentCharIndex.getAndSet(0);
 			}
-			
+
 			fireSessionLocationChanged();
 		}
 
@@ -859,11 +863,11 @@ public class RecordDataEditorView extends EditorView {
 //				}
 //			}
 		}
-		
+
 	}
-	
+
 	private final CaretListener caretListener = new CaretListener() {
-		
+
 		@Override
 		public void caretUpdate(CaretEvent e) {
 			if(((JComponent)e.getSource()).hasFocus()) {
@@ -873,7 +877,7 @@ public class RecordDataEditorView extends EditorView {
 				}
 			}
 		}
-		
+
 	};
-	
+
 }

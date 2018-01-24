@@ -145,17 +145,12 @@ public class NodeWizard extends WizardFrame {
 
 	private volatile boolean running = false;
 
-	private boolean modified = false;
-
 	private WebViewInterface webViewInterface = new WebViewInterface();
 
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
 		setBreadcrumbVisible(true);
 		setWindowName(title);
-
-		setUnsavedChangesTitle("Save data?");
-		setUnsavedChangesMessage("Save buffers before closing?");
 
 		this.processor = processor;
 		this.graph = graph;
@@ -179,39 +174,77 @@ public class NodeWizard extends WizardFrame {
 
 		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
 		builder.addItem("File@saveBuffers", saveAsExcelAct);
-		
-		final SaveCurrentBufferAction saveAct = new SaveCurrentBufferAction(getBufferPanel());
+
+		final SaveBufferAction saveAct = new SaveBufferAction(getBufferPanel());
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
 		builder.addItem("File@saveBuffers", saveAct);
-		
+
 		builder.addSeparator("File@"+saveAllAct.getValue(PhonUIAction.NAME), "openProject");
 	}
 
 	@Override
 	public void close() {
-		boolean okToClose = true;
-
 		if(running) {
 			// ask to cancel current analysis
 			final MessageDialogProperties props = new MessageDialogProperties();
-			props.setRunAsync(false);
+			props.setRunAsync(true);
 			props.setTitle("Close Window");
 			props.setHeader(props.getTitle());
-			props.setMessage("Cancel running analyses and close window?");
+			props.setMessage("Cancel running process and close window?");
 			props.setOptions(MessageDialogProperties.yesNoOptions);
 			props.setParentWindow(this);
-
-			okToClose = (NativeDialogs.showMessageDialog(props) == 0);
-		}
-
-		if(okToClose) {
-			if(running) {
-				stopExecution();
+			props.setListener( (e) -> {
+				if(e.getDialogResult() == 0) {
+					stopExecution();
+					SwingUtilities.invokeLater( () -> super.close() );
+				}
+			});
+			NativeDialogs.showMessageDialog(props);
+		} else {
+			final boolean hasReport = getBufferPanel().getBufferNames().contains("Report");
+			if(hasReport) {
+				// ask to save report
+				final MessageDialogProperties props = new MessageDialogProperties();
+				final String[] options = new String[] { "Save Report as HTML", "Export Report as XLSX", "Close without saving", "Cancel" };
+				props.setTitle("Save Results");
+				props.setHeader("Save Results");
+				props.setMessage("Save results before closing?");
+				props.setRunAsync(true);
+				props.setOptions(options);
+				props.setDefaultOption(options[2]);
+				props.setListener( (e) -> {
+					final int result = e.getDialogResult();
+					if(result == 0) {
+						saveReportAsHTML();
+					} else if(result == 1) {
+						saveReportAsXSLX();
+					} else if(result == 3) {
+						return;
+					}
+					SwingUtilities.invokeLater( () -> super.close() );
+				});
+				NativeDialogs.showMessageDialog(props);
+			} else {
+				super.close();
 			}
-			super.close();
 		}
+	}
+
+	private void saveReportAsHTML() {
+		final SaveBufferAction saveBufferAct = new SaveBufferAction(getBufferPanel(), "Report");
+		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save")) );
+	}
+
+	private void saveReportAsXSLX() {
+		final SaveBufferAsWorkbookAction saveBufferAct = new SaveBufferAsWorkbookAction(getBufferPanel(), "Report");
+		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "export")) );
+	}
+
+	private void saveAllResultsToFolder() {
+		final SaveAllBuffersAction saveBufferAct = new SaveAllBuffersAction(getBufferPanel());
+		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save_all")) );
 	}
 
 	private void init() {
@@ -425,8 +458,6 @@ public class NodeWizard extends WizardFrame {
 			SwingUtilities.invokeLater( () -> {
 				if(!busyLabel.isBusy()) {
 					busyLabel.setBusy(true);
-
-					setModified(false);
 				}
 				statusLabel.setText(nodeName + "...");
 				btnBack.setEnabled(false);
@@ -510,7 +541,7 @@ public class NodeWizard extends WizardFrame {
 			}
 
 			processor.stepAll();
-			
+
 			// if the graph has a 'Report Suffix' template, add it to the 'Report Template' buffer
 			final NodeWizardReportTemplate reportSuffixTemplate = ext.getReportTemplate("Report Suffix");
 			final String reportSuffix = ( reportSuffixTemplate != null ? reportSuffixTemplate.getTemplate() : "");
@@ -571,7 +602,7 @@ public class NodeWizard extends WizardFrame {
 									window.setMember("app", webViewInterface);
 
 									// call functions to display app-specific UI elements
-									webView.getEngine().executeScript("addShowBufferButtons()");
+									webView.getEngine().executeScript("addMenuButtons()");
 									webView.getEngine().executeScript("addSessionLinks()");
 								}
 							}
@@ -602,8 +633,6 @@ public class NodeWizard extends WizardFrame {
 
 				breadCrumbViewer.setEnabled(true);
 
-				setModified(true);
-				modified = true;
 			});
 		} catch (ProcessingException pe) {
 			SwingUtilities.invokeLater( () -> {
@@ -855,14 +884,14 @@ public class NodeWizard extends WizardFrame {
 
 				props.setListener( (e) -> {
 					final int retVal = e.getDialogResult();
-					
+
 					if(retVal == 1) return;
-					
+
 					SwingUtilities.invokeLater( () -> {
 						bufferPanel.closeAllBuffers();
 						PhonWorker.getInstance().invokeLater( () -> executeGraph() );
 					});
-					
+
 				});
 				NativeDialogs.showMessageDialog(props);
 			} else {
@@ -939,10 +968,10 @@ public class NodeWizard extends WizardFrame {
 			props.setRunAsync(true);
 			props.setListener( (e) -> {
 				final int retVal = e.getDialogResult();
-				
+
 				if(retVal == 0) return;
 				stopExecution();
-				
+
 				if(retVal == 2) {
 					SwingUtilities.invokeLater( () -> _cancel() );
 				}
@@ -953,38 +982,16 @@ public class NodeWizard extends WizardFrame {
 			super.cancel();
 		}
 	}
-	
+
 	private void _cancel() {
 		super.cancel();
-	}
-
-	@Override
-	public boolean saveData() throws IOException {
-		// save all buffers to folder
-		final SaveAllBuffersAction saveAct = new SaveAllBuffersAction(bufferPanel);
-		saveAct.actionPerformed(new ActionEvent(this, 0, "saveData"));
-
-		modified = saveAct.wasCanceled();
-
-		return !saveAct.wasCanceled();
-	}
-
-	public void setModified(boolean modified) {
-		this.modified = modified;
-
-		super.getRootPane().putClientProperty("Window.documentModified", hasUnsavedChanges());
-	}
-
-	@Override
-	public boolean hasUnsavedChanges() {
-		return modified;
 	}
 
 	public class WebViewInterface {
 
 		public void openSession(String sessionName) {
 			final SessionPath sessionPath = new SessionPath(sessionName);
-	
+
 			// call open session module
 			final EntryPointArgs args = new EntryPointArgs();
 			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
@@ -996,7 +1003,7 @@ public class NodeWizard extends WizardFrame {
 
 		public void openSessionAtRecord(String sessionName, int recordIndex) {
 			final SessionPath sessionPath = new SessionPath(sessionName);
-			
+
 			// call open session module
 			final EntryPointArgs args = new EntryPointArgs();
 			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
@@ -1031,14 +1038,14 @@ public class NodeWizard extends WizardFrame {
 
 			final Result result = (Result) rowData[resultCol];
 			if(result == null) return;
-			
+
 			// create a temporary result object
 			final QueryFactory factory = new XMLQueryFactory();
 			final Result tempResult = factory.createResult();
 			tempResult.setRecordIndex(result.getRecordIndex());
 			tempResult.setExcluded(result.isExcluded());
 			tempResult.setSchema(result.getSchema());
-			
+
 			// find result value using columnName - which should be the tier name
 			for(int i = 0; i < result.getNumberOfResultValues(); i++) {
 				final ResultValue rv = result.getResultValue(i);
@@ -1046,9 +1053,9 @@ public class NodeWizard extends WizardFrame {
 					tempResult.addResultValue(rv);
 				}
 			}
-			
+
 			final SessionPath sessionPath = new SessionPath(sessionName);
-			
+
 			// call open session module
 			final EntryPointArgs args = new EntryPointArgs();
 			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
@@ -1154,7 +1161,6 @@ public class NodeWizard extends WizardFrame {
 
 			menu.show(optionalsTree, e.getX(), e.getY());
 		}
-
 
 	}
 

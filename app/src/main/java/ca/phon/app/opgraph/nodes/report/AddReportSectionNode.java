@@ -3,15 +3,15 @@ package ca.phon.app.opgraph.nodes.report;
 import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 
-@OpNodeInfo(name="Add Report Section", category="Report Tree", description="Add section to report tree", showInLibrary=true)
+@OpNodeInfo(name="Add Report Section", category="Report", description="Add section to report tree", showInLibrary=true)
 public class AddReportSectionNode extends ReportSectionNode {
-	
-	private InputField existingSectionInput = 
+
+	private InputField existingSectionInput =
 			new InputField("child", "Child node to be added", false, true, ReportTreeNode.class);
 
 	public AddReportSectionNode() {
 		super();
-		
+
 		putField(existingSectionInput);
 	}
 
