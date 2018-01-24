@@ -18,6 +18,7 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.*;
 
 import javax.swing.KeyStroke;
@@ -39,7 +40,7 @@ public class NextRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-next";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0);
+			KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 					
 	public NextRecordAction(SessionEditor editor) {
 		super(editor);

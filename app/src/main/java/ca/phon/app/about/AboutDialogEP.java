@@ -34,7 +34,8 @@ public class AboutDialogEP implements IPluginEntryPoint {
 	@Override
 	public void pluginStart(Map<String, Object> args) {
 		final AboutDialog dialog = new AboutDialog();
-		dialog.setSize(600, 500);
+//		dialog.setSize(600, 500);
+		dialog.pack();
 		dialog.centerWindow();
 		dialog.setVisible(true);
 	}

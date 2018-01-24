@@ -18,6 +18,7 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.*;
 
 import javax.swing.KeyStroke;
@@ -39,7 +40,7 @@ public class PreviousRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-previous";
 	
 	private final static KeyStroke KS =
-			KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
+			KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 	
 	public PreviousRecordAction(SessionEditor editor) {
 		super(editor);

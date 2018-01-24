@@ -18,34 +18,18 @@
  */
 package ca.phon.app.about;
 
-import java.awt.BorderLayout;
-import java.io.IOException;
-import java.net.URL;
-import java.util.logging.*;
+import java.awt.*;
 
 import javax.swing.*;
 
 import ca.phon.app.VersionInfo;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.util.icons.*;
 
 public class AboutDialog extends CommonModuleFrame {
-	
-	private static final Logger LOGGER = Logger
-			.getLogger(AboutDialog.class.getName());
 
 	private static final long serialVersionUID = 1L;
-	
-	private final static String INFO_FILE = "about_phon.htm";
-	
-	private JEditorPane infoPane;
-	
-	private DialogHeader header;
-	
-	private JButton closeButton;
-	
+
 	public AboutDialog() {
 		super("About Phon");
 		
@@ -53,25 +37,35 @@ public class AboutDialog extends CommonModuleFrame {
 	}
 
 	private void init() {
-		setLayout(new BorderLayout());
+		final ImageIcon phonIcn = IconManager.getInstance().getIcon("apps/database-phon", IconSize.XXLARGE);
+		final JLabel icnLbl = new JLabel(phonIcn);
+		icnLbl.setVerticalAlignment(JLabel.TOP);
 		
-		header = new DialogHeader("About Phon", "Version: " + VersionInfo.getInstance().getLongVersion());
-		add(header, BorderLayout.NORTH);
+		final JLabel versionLbl = new JLabel();
+		versionLbl.setText("Phon " + VersionInfo.getInstance().getVersion());
 		
-		final URL aboutPhonURL = getClass().getResource(INFO_FILE);
-		try {
-			infoPane = new JEditorPane(aboutPhonURL);
-			infoPane.setEditable(false);
-			final JScrollPane sp = new JScrollPane(infoPane);
-			add(sp, BorderLayout.CENTER);
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
+		final GridBagLayout layout = new GridBagLayout();
+		setLayout(layout);
 		
-		final PhonUIAction closeAction = new PhonUIAction(this, "close");
-		closeAction.putValue(PhonUIAction.NAME, "Close");
-		closeButton = new JButton(closeAction);
-		add(ButtonBarBuilder.buildOkBar(closeButton), BorderLayout.SOUTH);
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 0.0;
+		gbc.weighty = 1.0;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.gridheight = 4;
+		gbc.gridwidth = 1;
+		add(icnLbl, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.0;
+		gbc.gridwidth = 2;
+		gbc.gridheight = 1;
+		add(versionLbl, gbc);
 	}
 	
 }
