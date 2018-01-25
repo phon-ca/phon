@@ -63,7 +63,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="7ca6b2ef" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-10T15:14:57.771-03:30" name="Data Tiers" uuid="009ec5b6-8c69-48a6-809a-a848b42c3259">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-01-25T09:41:22.924-03:30" name="Data Tiers" uuid="72970b22-7156-4660-8473-7e8f6cdae6bf">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedWord.patternFilter.filter">AA+</param>
@@ -83,7 +83,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="b7c53c9330914507" name="Get Report Title" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="32fb418d">
+            <graph id="215d4113">
                 <node id="40d46ee05cb1462c" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -128,7 +128,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="7e7f6d0b48264831" name="Report" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4c73a6ab">
+            <graph id="7d531d4c">
                 <node id="2564dd40d5ce4021" name="project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -613,7 +613,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4bb42cb62a99463c" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6eeffc51">
+                    <graph id="4b329f04">
                         <node id="4579a77279ca4a66" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -713,7 +713,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="e8ae4a39fdd74375" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="1dcd85c6">
+                            <graph id="189c8c3e">
                                 <node id="7a99452f69514e84" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -771,7 +771,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="e9d3beb84fbe42d4" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="5259f917">
+                            <graph id="710a6b2c">
                                 <node id="fda3b374aa2e4b57" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1252,7 +1252,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="cd529cc9bedf4ecc" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                                    <graph id="2df6756a">
+                                    <graph id="718bb688">
                                         <node id="9cd592ba93e14241" name="Session Name" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1343,7 +1343,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="d0e50cd137aa45c3" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="38c1062d">
+                                            <graph id="64772e30">
                                                 <node id="6991d3ca2b8e4413" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1397,7 +1397,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c243d0cc85994d01" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="7ce70ba9">
+                                            <graph id="3da1ad45">
                                                 <node id="7481fcacc2964d6d" name="Integer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1803,7 +1803,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="6cca2ae5" name="For Each Row" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                                                    <graph id="36d3b7db">
+                                                    <graph id="5180d170">
                                                         <node id="36e48cb9" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1902,7 +1902,7 @@ function run(context) {
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="4541ca3a0e544ebd" name="Get Row Data" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="4774ab7c">
+                                                            <graph id="64bfa79a">
                                                                 <node id="3bd8dba5cdbd4ce8" name="row" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -2055,7 +2055,7 @@ function run(context) {
                                                             </extensions>
                                                         </ogcn:macro>
                                                         <ogcn:macro id="93e56a1c9e0d4fa8" name="WAP" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="42c4256e">
+                                                            <graph id="5c01a4a3">
                                                                 <node id="429f5069103f4b19" name="Word" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -2730,10 +2730,18 @@ function run(context) {
 
 				typeTxt += "Correct";
 			} else {
-				objCount.substitution.count++;
-				objCount.substitution.positions.push(i);
+				if(targetEle.basePhone == actualEle.basePhone) {
+					// distortion
+					objCount.distortion.count++;
+					objCount.distortion.positions.push(i);
 
-				typeTxt += "Substitution";
+					typeTxt += "Distortion";
+				} else {
+					objCount.substitution.count++;
+					objCount.substitution.positions.push(i);
+	
+					typeTxt += "Substitution";
+				}
 			}
 		} else if(targetEle != null && actualEle == null) {
 			if(!syllDeleted) {
@@ -2999,7 +3007,7 @@ function run(context) {
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="394b481a" name="Setup Section Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                            <graph id="5b547374">
+                                                            <graph id="15a6f7fb">
                                                                 <node id="584303a5" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -3509,7 +3517,7 @@ function sumcounts(total, subtotal) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="1866f2d6" name="Print Segmental Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="macro1866f2d6">
+                                                    <graph id="1b287fa4">
                                                         <node id="1c103704" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3754,7 +3762,7 @@ function run(context) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="42e3777a" name="Print Segmental Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="macro42e3777a">
+                                                    <graph id="bb71cc0">
                                                         <node id="11f459df" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3874,7 +3882,7 @@ function run(context) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="24ad622f" name="Print Prosodic Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="macro24ad622f">
+                                                    <graph id="2d83d4e8">
                                                         <node id="15777049" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4057,7 +4065,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="5c8d81fa" name="Print Prosodic CGV Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="macro5c8d81fa">
+                                                    <graph id="4279abed">
                                                         <node id="69631dde" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4177,7 +4185,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="1d24b4ef" name="Print Prosodic Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="macro1d24b4ef">
+                                                    <graph id="fb5799f">
                                                         <node id="19ee6a60" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4297,7 +4305,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="a65548d" name="Print Word Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="macroa65548d">
+                                                    <graph id="7c37682f">
                                                         <node id="4c9b63df" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4465,7 +4473,7 @@ function addRow(table, category, total, correct, incorrect) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="513f7b3" name="Print Word Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                                    <graph id="macro513f7b3">
+                                                    <graph id="5825363d">
                                                         <node id="6932ecdf" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4989,7 +4997,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="78d3bb1a" name="Print Segmental Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="78fba36">
+                                    <graph id="66a9fa97">
                                         <node id="c493495" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5224,7 +5232,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="1aa05ac1" name="Print Segmental Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="6f582265">
+                                    <graph id="36437156">
                                         <node id="713fbaa8" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5321,7 +5329,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="674ba9c4" name="Print Prosodic Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="4a2cd954">
+                                    <graph id="70b7b000">
                                         <node id="2e51249" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5494,7 +5502,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="3b9b4b3b" name="Print Prosodic CGV Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="91faa5">
+                                    <graph id="1a007c9d">
                                         <node id="728a95f5" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5604,7 +5612,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="592af60c" name="Print Prosodic Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="21fc7973">
+                                    <graph id="505b896e">
                                         <node id="9c21137" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5714,7 +5722,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="3f52b69f" name="Print Word Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="74d930b5">
+                                    <graph id="53c923a5">
                                         <node id="19bf134d" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5868,7 +5876,7 @@ function addRow(table, category, total, correct, incorrect) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="20f336d" name="Print Word Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="e0a7eb2">
+                                    <graph id="52170707">
                                         <node id="37ef1fc6" name="object1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -6373,7 +6381,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6d9a4866" name="Segmental Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="93e0bb1">
+                    <graph id="15904d25">
                         <node id="737af0a8" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6563,7 +6571,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="52b172ed" name="Segmental Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6f9b17ad">
+                    <graph id="69b722fc">
                         <node id="7f98a763" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6617,7 +6625,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="d42675dc50334369" name="Prosodic Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4529d1b5">
+                    <graph id="20a8a457">
                         <node id="6a2d7e06529d4c5e" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6748,7 +6756,7 @@ function addRow(table, title, count, syllCount) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7702061f78f64893" name="Prosodic CGV Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="4e94b070">
+                    <graph id="1d314b74">
                         <node id="b0691ed35b184032" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6802,7 +6810,7 @@ function addRow(table, title, count, syllCount) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="6eeb2689d62148e1" name="Prosodic Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="243943ff">
+                    <graph id="4a7dae01">
                         <node id="3830ad66d23b4e68" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6859,7 +6867,7 @@ function addRow(table, title, count, syllCount) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7bc6b64" name="Word Totals" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7372bb63">
+                    <graph id="7b15ab6">
                         <node id="8df3d41" name="parent" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -6971,7 +6979,7 @@ function addRow(table, category, total, correct, incorrect) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="85bbb8270e974342" name="Word Stress Inventory" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3f3c28fe">
+                    <graph id="58fd78d5">
                         <node id="589dda8180b54eca" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -7099,7 +7107,7 @@ Citations:
             </extensions>
         </node>
         <ogcn:macro id="4b787603" name="Print Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="201e7b4b">
+            <graph id="1c927fbf">
                 <node id="7a896d35" name="obj1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
