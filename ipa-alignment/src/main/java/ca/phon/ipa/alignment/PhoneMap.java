@@ -206,26 +206,34 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		retVal.setBottomAlignment(alignment[1]);
 		return retVal;
 	}
-	
-	public int getSubAlignmentIndex(IPATranscript ipaT, IPATranscript ipaA) {
-		final IPATranscript filteredT = ipaT.removePunctuation(true);
-		final IPATranscript filteredA = ipaA.removePunctuation(true);
 
+	public int getSubAlignmentIndex(IPATranscript ipaT, IPATranscript ipaA) {
 		final PhoneMap grpAlignment = this;
 		final int ipaTAlignStart =
-				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(0)) : -1);
+				(ipaT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(ipaT.elementAt(0)) : -1);
 		final int ipaAAlignStart =
-				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(0)) : -1);
+				(ipaA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(ipaA.elementAt(0)) : -1);
 		final int alignStart = Math.min(ipaTAlignStart, ipaAAlignStart);
 		return alignStart;
 	}
-	
+
+	public int getSubAlignmentEnd(IPATranscript ipaT, IPATranscript ipaA) {
+		final PhoneMap grpAlignment = this;
+		final int ipaTAlignEnd =
+				(ipaT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(ipaT.elementAt(ipaT.length()-1)) : -1);
+		final int ipaAAlignEnd =
+				(ipaA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(ipaA.elementAt(ipaA.length()-1)) : -1);
+		final int alignEnd = Math.max(ipaTAlignEnd, ipaAAlignEnd);
+
+		return alignEnd;
+	}
+
 	/**
 	 * Get the sub-alignment from the given elements.
-	 * 
+	 *
 	 * @param topElements
 	 * @param btmElements
-	 * 
+	 *
 	 * @return sub-alignment containing the given top/bottom elements
 	 */
 	public PhoneMap getSubAlignment(IPATranscript ipaT, IPATranscript ipaA) {
@@ -234,21 +242,14 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		final IPATranscript filteredA = ipaA.removePunctuation(true);
 
 		final PhoneMap grpAlignment = this;
-		final int ipaTAlignStart =
-				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(0)) : -1);
-		final int ipaAAlignStart =
-				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(0)) : -1);
-		final int alignStart = Math.min(ipaTAlignStart, ipaAAlignStart);
-
-		final int ipaTAlignEnd =
-				(filteredT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(filteredT.elementAt(filteredT.length()-1)) : -1);
-		final int ipaAAlignEnd =
-				(filteredA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(filteredA.elementAt(filteredA.length()-1)) : -1);
-		final int alignEnd = Math.max(ipaTAlignEnd, ipaAAlignEnd);
+		final int alignStart = getSubAlignmentIndex(filteredT, filteredA);
+		final int alignEnd = getSubAlignmentEnd(filteredT, filteredA);
 
 		if(alignStart >= 0 && alignEnd >= alignStart) {
 			final int alignLen = alignEnd - alignStart + 1;
 
+			final IPATranscriptBuilder target = new IPATranscriptBuilder();
+			final IPATranscriptBuilder actual = new IPATranscriptBuilder();
 			final Integer topElements[] = new Integer[alignLen];
 			final Integer btmElements[] = new Integer[alignLen];
 
@@ -259,15 +260,20 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 				final IPAElement tEle = alignedPair.get(0);
 				final IPAElement aEle = alignedPair.get(1);
 
+				if(tEle != null) target.append(tEle);
+				if(aEle != null) actual.append(aEle);
+
 				final Integer tIdx =
-						(tEle == null ? AlignmentMap.INDEL_VALUE : filteredT.indexOf(tEle));
+						(tEle == null ? AlignmentMap.INDEL_VALUE : target.size()-1);
 				final Integer aIdx =
-						(aEle == null ? AlignmentMap.INDEL_VALUE : filteredA.indexOf(aEle));
+						(aEle == null ? AlignmentMap.INDEL_VALUE : actual.size()-1);
 
 				topElements[i] = tIdx;
 				btmElements[i] = aIdx;
 			}
 
+			retVal.setTargetRep(target.toIPATranscript());
+			retVal.setActualRep(actual.toIPATranscript());
 			retVal.setTopAlignment(topElements);
 			retVal.setBottomAlignment(btmElements);
 		} else {
