@@ -207,23 +207,25 @@ public class NodeWizard extends WizardFrame {
 			if(hasReport) {
 				// ask to save report
 				final MessageDialogProperties props = new MessageDialogProperties();
-				final String[] options = new String[] { "Save Report as HTML", "Export Report as XLSX", "Close without saving", "Cancel" };
+				final String[] options = new String[] { "Close without saving", "Save Report as HTML", "Export Report as Excel\u2122 Workbook", "Cancel" };
 				props.setTitle("Save Results");
 				props.setHeader("Save Results");
 				props.setMessage("Save results before closing?");
 				props.setRunAsync(true);
 				props.setOptions(options);
-				props.setDefaultOption(options[2]);
+				props.setDefaultOption(options[0]);
+				props.setParentWindow(this);
 				props.setListener( (e) -> {
 					final int result = e.getDialogResult();
 					if(result == 0) {
-						saveReportAsHTML();
+						SwingUtilities.invokeLater( () -> super.close() );
 					} else if(result == 1) {
-						saveReportAsXSLX();
+						saveReportAsHTML();
+					} else if(result == 2) {
+						saveReportAsExcel();
 					} else if(result == 3) {
 						return;
 					}
-					SwingUtilities.invokeLater( () -> super.close() );
 				});
 				NativeDialogs.showMessageDialog(props);
 			} else {
@@ -234,19 +236,20 @@ public class NodeWizard extends WizardFrame {
 
 	private void saveReportAsHTML() {
 		final SaveBufferAction saveBufferAct = new SaveBufferAction(getBufferPanel(), "Report");
-		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save")) );
+		SwingUtilities.invokeLater( () -> {
+			saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save"));
+			super.close();
+		});
 	}
 
-	private void saveReportAsXSLX() {
+	private void saveReportAsExcel() {
 		final SaveBufferAsWorkbookAction saveBufferAct = new SaveBufferAsWorkbookAction(getBufferPanel(), "Report");
-		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "export")) );
+		SwingUtilities.invokeLater( () -> {
+			saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "export"));
+			super.close();
+		});
 	}
-
-	private void saveAllResultsToFolder() {
-		final SaveAllBuffersAction saveBufferAct = new SaveAllBuffersAction(getBufferPanel());
-		SwingUtilities.invokeLater( () -> saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save_all")) );
-	}
-
+	
 	private void init() {
 		// turn off parent navigation controls
 		super.btnBack.setVisible(false);

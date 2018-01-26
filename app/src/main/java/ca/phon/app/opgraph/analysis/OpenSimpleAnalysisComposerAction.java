@@ -57,7 +57,7 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 							props.setHeader("Unable to create analysis from query");
 							props.setMessage(e.getLocalizedMessage());
 							props.setOptions(MessageDialogProperties.okOptions);
-							props.setRunAsync(false);
+							props.setRunAsync(true);
 							props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 							NativeDialogs.showMessageDialog(props);
 						}

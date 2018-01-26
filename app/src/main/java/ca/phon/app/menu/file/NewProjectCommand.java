@@ -77,7 +77,7 @@ private final static String TXT = "New project...";
 					p2.setHeader("Create Project Failed");
 					p2.setMessage("Cannot create project, an item already exists at path " + folderName);
 					p2.setOptions(MessageDialogProperties.okOptions);
-					p2.setRunAsync(false);
+					p2.setRunAsync(true);
 					NativeDialogs.showMessageDialog(p2);
 
 					return;
@@ -91,7 +91,7 @@ private final static String TXT = "New project...";
 					p2.setHeader("Create Project Failed");
 					p2.setMessage("Cannot create project inside of another");
 					p2.setOptions(MessageDialogProperties.okOptions);
-					p2.setRunAsync(false);
+					p2.setRunAsync(true);
 					NativeDialogs.showMessageDialog(p2);
 
 					return;
@@ -123,7 +123,7 @@ private final static String TXT = "New project...";
 					p2.setHeader("Create Project Failed");
 					p2.setMessage("Cannot create project: " + ex.getLocalizedMessage());
 					p2.setOptions(MessageDialogProperties.okOptions);
-					p2.setRunAsync(false);
+					p2.setRunAsync(true);
 					NativeDialogs.showMessageDialog(p2);
 				}
 			}

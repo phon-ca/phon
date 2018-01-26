@@ -69,18 +69,19 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 			props.setTitle("Unable to find required fonts");
 			props.setHeader("Unable to find required fonts");
 			props.setOptions(new String[]{"More Information", "Ok"});
-			props.setRunAsync(false);
-			
-			int retVal = NativeDialogs.showMessageDialog(props);
-			if(retVal == 0) {
-				// show information page
-				try {
-					OpenFileLauncher.openURL(new URL(FONT_INFO_PAGE));
-				} catch (MalformedURLException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			props.setRunAsync(true);
+			props.setListener( (e) -> {
+				int retVal = e.getDialogResult();
+				if(retVal == 0) {
+					// show information page
+					try {
+						OpenFileLauncher.openURL(new URL(FONT_INFO_PAGE));
+					} catch (MalformedURLException ex) {
+						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+					}
 				}
-			}
+			});
+			NativeDialogs.showMessageDialog(props);
 		}
 	}
 	

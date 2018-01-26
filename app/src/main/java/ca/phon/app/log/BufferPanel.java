@@ -431,51 +431,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return retVal;
 	}
 
-//	public void onSaveBuffer() {
-//		final SaveDialogProperties props = new SaveDialogProperties();
-//		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-//		props.setRunAsync(false);
-//		props.setInitialFile(logBuffer.getBufferName());
-//		final FileFilter filter =
-//				(isShowingBuffer() ? new FileFilter("Text files (*.txt)", "txt") :
-//					isShowingTable() ? FileFilter.excelFilter : FileFilter.htmlFilter);
-//		props.setFileFilter(filter);
-//		props.setCanCreateDirectories(true);
-//
-//		final String saveAs = NativeDialogs.showSaveDialog(props);
-//
-//		if(saveAs != null && saveAs.length() > 0) {
-//			if(isShowingBuffer() || isShowingHtml()) {
-//				// save buffer contents as text
-//				try {
-//					
-//				} catch (IOException e) {
-//					LOGGER
-//							.log(Level.SEVERE, e.getLocalizedMessage(), e);
-//					ToastFactory.makeToast(e.getLocalizedMessage()).start(logBuffer);
-//				}
-//			} else if(isShowingTable()) {
-//				
-//				try {
-//					writeToExcelWorkbook(saveAs);
-//				} catch (IOException e) {
-//					LogUtil.severe(e);
-//				}
-////				// save table model as csv using UTF-16 so Excel will correctly open file
-//				
-//			}
-//
-////			if(openFileAfterSaving) {
-////				try {
-////					OpenFileLauncher.openURL(new File(saveAs).toURI().toURL());
-////				} catch (MalformedURLException e) {
-////					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-////					Toolkit.getDefaultToolkit().beep();
-////				}
-////			}
-//		}
-//	}
-	
 	public void writeToTextFile(String file, String encoding) throws IOException {
 		final File f = new File(file);
 		final BufferedWriter out =

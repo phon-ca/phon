@@ -227,7 +227,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 				if(retVal == 0) {
 					try {
 						if(saveData()) {
-							dispose();
+							SwingUtilities.invokeLater( () -> dispose() );
 						}
 					} catch (IOException ex) {
 						Toolkit.getDefaultToolkit().beep();
@@ -236,7 +236,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 						showMessageDialog("Save Failed", ex.getLocalizedMessage(), MessageDialogProperties.okOptions);
 					}
 				} else if(retVal == 1) {
-					dispose();
+					SwingUtilities.invokeLater( () -> dispose() );
 				}
 			});
 			NativeDialogs.showMessageDialog(props);
@@ -304,7 +304,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 				@Override
 				public void windowClosed(WindowEvent e) {
-					if(e.getWindow() == parentFrame) {
+					if(e.getWindow() == parentFrame && isVisible()) {
 						close();
 						parentFrame.removeWindowListener(parentFrameListener);
 					}
