@@ -236,37 +236,38 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		props.setCanChooseDirectories(false);
 		props.setCanChooseFiles(true);
 		props.setAllowMultipleSelection(false);
-		props.setRunAsync(false);
-
-		final List<String> selectedFiles =
-				NativeDialogs.showOpenDialog(props);
-		if(selectedFiles != null && selectedFiles.size() == 1) {
-			final File selectedFile = new File(selectedFiles.get(0));
-
-			// attempt to run file as an analysis
-			try {
-				final OpGraph graph = OpgraphIO.read(selectedFile);
-
-				final WizardExtension ext = graph.getExtension(WizardExtension.class);
-				if(ext == null || !(ext instanceof AnalysisWizardExtension)) {
-					throw new IOException("Selected document is not an anlaysis");
+		props.setRunAsync(true);
+		props.setListener( (e) -> {
+			@SuppressWarnings("unchecked")
+			final String selectedFile = (e.getDialogData() != null ? e.getDialogData().toString() : null);
+			if(selectedFile != null) {
+				// attempt to run file as an analysis
+				try {
+					final OpGraph graph = OpgraphIO.read(new File(selectedFile));
+					
+					final WizardExtension ext = graph.getExtension(WizardExtension.class);
+					if(ext == null || !(ext instanceof AnalysisWizardExtension)) {
+						throw new IOException("Selected document is not an anlaysis");
+					}
+					
+					final AnalysisRunner runner = new AnalysisRunner(graph, project);
+					PhonWorker.getInstance().invokeLater(runner);
+				} catch (IOException ex) {
+					Toolkit.getDefaultToolkit().beep();
+					LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+					
+					final MessageDialogProperties mprops = new MessageDialogProperties();
+					mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
+					mprops.setTitle("Analysis : Error");
+					mprops.setHeader("Unable to run selected analysis");
+					mprops.setMessage(ex.getLocalizedMessage());
+					mprops.setOptions(MessageDialogProperties.okOptions);
+					mprops.setRunAsync(true);
+					NativeDialogs.showMessageDialog(mprops);
 				}
-
-				final AnalysisRunner runner = new AnalysisRunner(graph, project);
-				PhonWorker.getInstance().invokeLater(runner);
-			} catch (IOException e) {
-				Toolkit.getDefaultToolkit().beep();
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-
-				final MessageDialogProperties mprops = new MessageDialogProperties();
-				mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
-				mprops.setTitle("Analysis : Error");
-				mprops.setHeader("Unable to run selected analysis");
-				mprops.setMessage(e.getLocalizedMessage());
-				mprops.setOptions(MessageDialogProperties.okOptions);
-				NativeDialogs.showMessageDialog(mprops);
 			}
-		}
+		});
+		NativeDialogs.showOpenDialog(props);
 	}
 	
 	private static Map<String, String> loadReportMap() {
