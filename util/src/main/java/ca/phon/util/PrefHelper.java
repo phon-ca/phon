@@ -22,7 +22,10 @@ import java.awt.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
+import java.util.function.LongUnaryOperator;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 
@@ -89,6 +92,11 @@ public class PrefHelper {
 	public static Preferences getUserPreferences() {
 		Preferences retVal = 
 				Preferences.userRoot().node(PREF_ROOT);
+		try {
+			retVal.sync();
+		} catch (BackingStoreException e) {
+			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+		}
 		return retVal;
 	}
 	
